@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ezbob - Payment details</title>
+    <link rel="icon shortcut" type="image/png" href="https://www.secpay.com/users/secpay/ezbob-favicon32x32.png" />
+    <!-- for mobile -->
+    <link rel="apple-touch-icon" href="https://www.secpay.com/users/secpay/ezbob-favicon57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://www.secpay.com/users/secpay/ezbob-favicon72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="https://www.secpay.com/users/secpay/ezbob-favicon114x114.png" />
+    <link type="text/css" rel="stylesheet" href="https://www.secpay.com/users/secpay/ezbob-bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="https://www.secpay.com/users/secpay/ezbob-wizard.css" />
+    <link type="text/css" rel="stylesheet" href="https://www.secpay.com/users/secpay/ezbob-styles.css" />
+    <link type="text/css" rel="stylesheet" href="https://www.secpay.com/users/secpay/ezbob-template-styles.css" />
+    
+    <script src="https://www.secpay.com/users/secpay/jquery-1.7.1.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/livechat.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/bootstrap.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/jquery.maskedinput-1.2.2.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/jquery.maskedinput-1.2.2.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/underscore.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/backbone.js" type="text/javascript"></script>
+    <script src="https://www.secpay.com/users/secpay/ezbo.contactUs.js" type="text/javascript"></script>
+    
+    <base href="https://www.secpay.com/users/" /> 
+</head>
+<body>
+    <script type="text/javascript">
+        var WRInitTime = (new Date()).getTime();
+    </script>
+    <div id='LP_DIV_CHAT_BUTTON' style='width: 120px; height: 28px; display: none;'>
+    </div>
+    <div class="main-header">
+        <div class="sunrise-container">
+            <div class="sunrise">
+            </div>
+        </div>
+    </div>
+  
+    <div class="container">
+        <div id="my-profile">
+            <div class="top-profile-button">
+                <a href="https://www.ezbob.com/Customer/Profile">&gt;&nbsp;&nbsp;&nbsp;my profile</a>
+            </div>
+        </div>
+        <div class="container-inner">
+            <a href="https://www.ezbob.com/" class="ezbob-logo"></a>
+            <div id="top-button">
+                <div class="top-buttons">
+                    <ul>
+                        <li><a href="#" onclick="$('.lpchat-label').click();return false;"><img src="https://www.secpay.com/users/secpay/ezbob-chat.png" align="left">live chat</a></li>
+                          <li>|</li>
+                           <li class="contactUs-small-container"><a href="#" class="contactUsTop">contact us</a></li>
+                        <li>|</li>
+                        <li class="login-small-container"><a class="logoff" href="https://www.ezbob.com/Account/LogOff?isUnderwriterPage=False"style="">log out</a> </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="nav nav-pills pull-right how-it-works">
+                    <li class="left"><a href="https://www.ezbob.com/HowItWorks">How It Works?</a></li>
+                    <li><a href="https://www.ezbob.com/WhatIsEZBob">Why EZBOB?</a></li>
+                    <li><a href="https://www.ezbob.com/AboutUs">About Us</a></li>
+                    <li class="right"><a href="http://blog.ezbob.com/">Blog</a></li>
+                </ul>
+            </div>
+            <div id="wizard">
+                <div class="row-fluid">
+                    <div class="pages">
+                        <div style="">
+                            <div class="row-fluid">
+                                <div class="span8">
+
+
+                                    <div class="wizard-steps narrow-wizard-header">
+                                        <ul>
+                                            <li data-step-num="0" class="completed">
+                                                <div class="arrow-left"></div>
+                                                <div class="wizard-step-no wizard-step-no1">1</div>
+                                                <div class="step-text"><span>Choose<br/>Amount</span></div>
+                                                <div class="completition"></div>
+                                                <div class="arrow-right arrow-last"></div>
+                                            </li>
+                                            <li data-step-num="1" class="active">
+                                                <div class="arrow-left"></div>
+                                                <div class="wizard-step-no wizard-step-no2">2</div>
+                                                <div class="step-text"><span>Enter<br/>Debit Card</span></div>
+                                                <div class="completition"></div>
+                                                <div class="arrow-right arrow-last"></div>
+                                            </li>
+                                            <li data-step-num="2" class="">
+                                                <div class="arrow-left"></div>
+                                                <div class="wizard-step-no wizard-step-no3">3</div>
+                                                <div class="step-text"><span>Get<br/>Cash</span></div>
+                                                <div class="completition"></div>
+                                                <div class="arrow-right arrow-last"></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="error">
+                                        ${error_table}
+                                    </div>
+                                    <form class="form-horizontal" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off">
+                                    <div class="control-group">
+                                        <label class="control-label" for="customer">
+                                            ${customer_Text:=Name of Cardholder}<span class="mand">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" class="input-xlarge" id="customer" name="customer" value="${customer}"size="20"/>
+                                        </div>
+                                    </div>
+                                    ${start_card_type}
+                                    <div class="control-group">
+                                        <label class="control-label" for="card_type">${card_type_Text:=Card Type}<span class="mand">*</span></label>
+                                        <div class="controls">
+                                             <select name="card_type">
+						                        <option value="Visa" ${card_type="Visa}">${Visa_Text:=Visa}</option>
+                                                <option value="Master Card" ${card_type="Master" card}="">${Master_Card_Text:=Master Card}</option>
+                                                <option value="Debit Master Card" ${card_type="Debit" master="" card}="">${Debit_Master_Card_Text:=Debit Master Card}</option>
+                                                <option value="Delta" ${card_type="Delta}">${Delta_Text:=Visa Debit, Delta or Connect}</option>
+                                                ${StartIssue}
+                                                <option value="Maestro" ${card_type="Maestro}">${Maestro_Text:=Maestro}</option>
+                                                <option value="Solo" ${card_type="Solo}">${Solo_Text:=Solo}</option>
+                                                ${EndIssue}
+                                                ${card_types} 
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="card_no">
+                                            ${card_no_Text:=Card Number}<span class="mand">*</span></label>
+                                        <div class="controls">
+                                            <input type="text" class="input-xlarge" id="card_no" autocomplete="off" name="card_no" value="${card_no}" maxlength="16" size="16"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="cv2">${cv2_Text:=CV2 (security code)}<span class="mand">*</span></label>
+                                        <div class="controls">
+                                            <input type="password" class="input-xlarge" id="cv2" autocomplete="off" name="cv2" value="${cv2}" maxlength="4" size="4"/>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="expiry">${expiry_Text:=Expiry Date (MM/YY)}<span class="mand">*</span></label>
+                                        <div class="controls">
+                                            <input id="date" type="text" class="input-xlarge" id="expiry" autocomplete="off" name="expiry" value="${expiry}" maxlength="5" size="5"/>
+                                        </div>
+                                    </div>
+                                    <div id="amount-group" class="control-group" style="display: none">
+                                        <label class="control-label" for="amount">Amount</label>
+                                        <div class="controls">
+                                            <label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <input type="submit" name="accept" value="Confirm" class="btn-back pull-right">
+                                        <input type="button" name="back" value="Back" class="btn-back pull-right">
+                                    </div>
+                                    <input type="hidden" name="merchant" value="${merchant}">
+                                    <input type="hidden" name="trans_id" value="${trans_id}">
+                                    <input type="hidden" name="callback" value="${callback}">
+                                    <input type="hidden" name="backcallback" value="${backcallback}">
+                                    <input type="hidden" name="order" value="${order}">
+                                    <input type="hidden" name="shipping" value="${shipping}">
+                                    <input type="hidden" name="billing" value="${billing}">
+                                    <input type="hidden" name="template" value="${template}">
+                                    <input type="hidden" name="err_template" value="${err_template}">
+                                    <input type="hidden" name="options" value="${options}">
+                                    <input type="hidden" class="amount" name="amount" value="${amount}">
+                                    <input type="hidden" name="currency" value="${currency}">
+                                    <input type="hidden" name="cb_list" value="${cb_list}">
+                                    <input type="hidden" name="cb_flds" value="${cb_flds}">
+                                    <input type="hidden" name="map_flds" value="${map_flds}">
+                                    <input type="hidden" name="md_flds" value="${md_flds}">
+                                    <input type="hidden" name="background" value="${background}">
+                                    <input type="hidden" name="bgcolor" value="${bgcolor}">
+                                    <input type="hidden" name="font_face" value="${font_face}">
+                                    <input type="hidden" name="font_color" value="${font_color}">
+                                    <input type="hidden" name="font_size" value="${font_size}">
+                                    <input type="hidden" name="branding" value="${branding}">
+                                    <input type="hidden" name="mail_message" value="${mail_message}">
+                                    <input type="hidden" name="cb_message" value="${cb_message}">
+                                    <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
+                                    <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
+                                    <input type="hidden" name="customer_Text" value="${customer_Text}">
+                                    <input type="hidden" name="card_type_Text" value="${card_type_Text}">
+                                    <input type="hidden" name="card_no_Text" value="${card_no_Text}">
+                                    <input type="hidden" name="expiry_Text" value="${expiry_Text}">
+                                    <input type="hidden" name="issue_Text" value="${issue_Text}">
+                                    <input type="hidden" name="start_date_Text" value="${start_date_Text}">
+                                    <input type="hidden" name="authorise_Text" value="${authorise_Text}">
+                                    <input type="hidden" name="wait_Text" value="${wait_Text}">
+                                    <input type="hidden" name="error_table_Text" value="${error_table_Text}">
+                                    <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
+                                    <input type="hidden" name="Delta_Text" value="${Delta_Text}">
+                                    <input type="hidden" name="Visa_Text" value="${Visa_Text}">
+                                    <input type="hidden" name="JCB_Text" value="${JCB_Text}">
+                                    <input type="hidden" name="Solo_Text" value="${Solo_Text}">
+                                    <input type="hidden" name="Switch_Text" value="${Switch_Text}">
+                                    <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
+                                    <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
+                                    <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
+                                    <input type="hidden" name="cv2_Text" value="${cv2_Text}">
+                                    <input type="hidden" name="start_date_Error" value="${start_date_Error}">
+                                    <input type="hidden" name="card_no_Error" value="${card_no_Error}">
+                                    <input type="hidden" name="card_type_Error" value="${card_type_Error}">
+                                    <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
+                                    <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
+                                    <input type="hidden" name="issue_Error" value="${issue_Error}">
+                                    <input type="hidden" name="email_Error" value="${email_Error}">
+                                    <input type="hidden" name="cv2_Error" value="${cv2_Error}">
+                                    <input type="hidden" name="save_other_pay" value="${save_other_pay}">
+                                    <input type="hidden" name="usercallback" value="${usercallback}">
+                                    <input type="hidden" name="token" value="${token}">
+                                    <input type="hidden" name="error_table">
+                                    <input type="hidden" name="error_list">
+                                    </form>
+                                    <div id="buttons" align="center" class="span7">
+                                        ${other_pay}<br>
+                                    </div>
+                                    <div class="row">
+                                        <div class="span7" align="center">
+                                            ${3ds}
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="sidebarBox">
+                                      <div class="bottom">
+                                        <div class="mid">
+                                          <h1><img alt="" src="https://www.secpay.com/users/secpay/ico-tutorial.png"><span>Tutorial</span></h1>
+                                          <span>Featuring  - Getting Started</span> <img alt="" src="https://www.secpay.com/users/secpay/video-ph.png"><br>
+                                          <br>
+                                          <hr class="spacer">
+                                          <h1><img alt="" src="https://www.secpay.com/users/secpay/ico-tips.png"><span style="margin-left:-3px;">Quick Tips</span></h1>
+                                          <ul class="gtarr">
+                                            <li
+                                                rel="popover" 
+                                                data-content="Once you enter your debit card information you will be able to repay your loan automatically from your account. We advise you to check your charges in your account on a monthly basis. For any disputes please contact customer care."
+                                                data-original-title="">
+                                                Entering your debit card detail allows for automatic payments.
+                                            </li>
+                                            <li
+                                                rel="popover" 
+                                                data-content="In order to avoid late fees please make sure that you have sufficient funds in your account. Be advise that late payments will effect your credit history."
+                                                data-original-title="">
+                                                make sure to have funds in your account.
+                                            </li>
+                                          </ul>
+                                          <hr class="spacer">
+                                          <h1><img alt="" src="https://www.secpay.com/users/secpay/ico-24h.png"><span>Need More Help?</span></h1>
+                                          <ul class="gtarr">
+                                            <li>Contact us 24/7</li>
+                                            <li>Email: customer care</li>
+                                            <li>Live Chat</li>
+                                            <li>Phone: +44 203 514 1838</li>
+                                            </li>
+                                          </ul>
+                                          <hr class="spacer">
+                                          <h1><img alt="" src="https://www.secpay.com/users/secpay/ico-safesecure2.png"><span>Safe & Secure</span></h1>
+                                          <p>Security comes first. We safeguard <br>your data.</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span11">
+                                <hr>
+                                ${paypal:=<table id="paypal_table">
+                                    <tbody>
+                                        <tr>
+                                            <td id="paypal_text">
+                                                <p>Pay with PayPal</p>
+                                            </td>
+                                            <td id="paypal_link">
+                                                <a href="javascript:PPHelp()">What is PayPal?</a>
+                                            </td>
+                                            <td id="paypal_button">
+                                                <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" 
+                                                    value="PayByPayPal" name="paypal_transaction"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr id="paypal_line">
+                                }
+                                <div id="secure">
+                                    <table border="0" width="100%" class="secure_table">
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center; width: 150px;">
+                                                    <a href="https://www.paypoint.net/" target="_blank" title="PayPoint.net">
+                                                        <img src="small_logo.gif" width="125px" height="22px" alt="PayPoint.net logo" title="PayPoint.net logo"
+                                                            style="border: 0;" />
+                                                    </a>
+                                                </td>
+                                                <td valign="top" rowspan="2">
+                                                    ${wait_Text:=You have now entered a secure transaction environment. Your personal
+                                                    information will be encrypted before transmission. Please check that the address
+                                                    bar of your browser is visible and that the address begins with <b>https://</b>.
+                                                    For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
+                                                    incorporates the SECPay service.}
+                                                </td>
+                                                <td valign="top" rowspan="2" style="text-align: center; width: 150px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center;">
+                                                    Secure Payment<br>
+                                                    <img src="lock.png" alt="The secure padlock" width="16px" height="16px">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12">
+                    <div class="five-icons">
+                        <hr />
+                        <ul>
+                            <li>
+                                <div class="five-icon icon-partnership">
+                                </div>
+                                <span>Partnership</span>
+                                <p>
+                                    Your growth<br />
+                                    is our business
+                                </p>
+                            </li>
+                            <li>
+                                <div class="five-icon icon-secure">
+                                </div>
+                                <span>SAFE &amp; SECURE</span>
+                                <p>
+                                    Security comes first<br />
+                                    We safeguard your data
+                                </p>
+                            </li>
+                            <li>
+                                <div class="five-icon icon-reliable">
+                                </div>
+                                <span>Reliable</span>
+                                <p>
+                                    Always there when<br />
+                                    you need us
+                                </p>
+                            </li>
+                            <li>
+                                <div class="five-icon icon-easy">
+                                </div>
+                                <span>Easy to use</span>
+                                <p>
+                                    Easy is our<br />
+                                    first name
+                                </p>
+                            </li>
+                            <li>
+                                <div class="five-icon icon-fast">
+                                </div>
+                                <span>Fast</span>
+                                <p>
+                                    Get instant cash<br />
+                                    in minutes
+                                </p>
+                            </li>
+                        </ul>
+                        <img width="910" src="https://www.secpay.com/users/secpay/bottom-line.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+            <div class="footer-images">
+            </div>
+            <div class="footer-copyright">
+                <div class="reflection">
+                    <span>
+                        EZBOB is the trading name of Orange Money Ltd.<br>
+                        Company No. 7852687   OFE Standart Licence No. 647816<br>
+                         ICO Registration Number: Z2946778<br/>
+                        Registered address: 145 – 157 John Street, London EC1V 4PW<br>
+                        Business Addres: 39-41 North Road, London N7 9DP<br>
+                    </span>
+                </div>     
+            </div>
+            <div class="footer-black">
+                <div class="container">
+                        <div class="footer-infos clearfix">
+                <div class="security-icons divider-right pull-left">
+                    <ul class="footer-ssl">
+                        <li class="norton-secured">
+                            <script type="text/javascript" src="https://seal.verisign.com/getseal?host_name=www.ezbob.com&amp;size=S&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script>
+                        </li>
+                        <li>
+                            <div id="05e2e3f7-3f8d-4968-b85e-c0d6ba74d080" class="truste-container">
+                                    <script type="text/javascript" src="//privacy-policy.truste.com/privacy-seal/Orange-Money/asc?rid=05e2e3f7-3f8d-4968-b85e-c0d6ba74d080"></script>
+                                    <a href="//privacy.truste.com/privacy-seal/Orange-Money/validation?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" title="TRUSTe online privacy certification" target="_blank"><img style="border: none" src="//privacy-policy.truste.com/privacy-seal/Orange-Money/seal?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" alt="TRUSTe online privacy certification"/></a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="http://www.ccta.co.uk/" target="_blank"><img height="46" width="96" src="https://www.secpay.com/users/secpay/ezbob-CCTA-Logo.png"></a>
+                        </li>
+                    </ul>                            
+                </div>
+        
+                <div class="contactUs divider-right pull-left">
+                    <b>Contact us:</b>
+                    <p>Call: +44 203 514 1838</p>
+                    <p>EMail: <a class="cusLink" href="mailto:customercare@ezbob.com">Customer Care</a></p>
+                    <p>Skype: <a href="callto:ezbob.customercare">ezbob.customercare</a></p>
+                    <p><a href="https://www.ezbob.com/Customer/Start?ReturnUrl=%2fCustomer%2fProfile#" onclick="$('.lpchat-label').click()">Live chat</a></p>
+                </div>
+
+                <div class="follow-us divider-right pull-left">
+                    <b>follow us on:</b>
+                    <ul class="folow-list">
+                        <li><a class="btn-follow follow-youtube" href="http://youtube.com/"></a></li>
+                        <li><a class="btn-follow follow-facebook" href="http://www.facebook.com/ezbob.loans"></a></li>
+                        <li><a class="btn-follow follow-linkedin" href="http://www.linkedin.com/company/2646245"></a></li>
+                    </ul>
+                </div>
+        
+                <div class="terms-and-conditions pull-left">
+                    <p>
+                        ©2012 EZBOB Inc. All rights reserved.<br>
+                        Orange Money Ltd. is trading as EZBOB<br>
+                        Terms, conditions, features, availability,<br>
+                        pricing, fees, service &amp; support options<br>
+                        subject to change without notice.
+                    </p>
+                    <p><a href="https://www.ezbob.com/AboutUs/Privacy" style="color: #0B73B4;">Terms &amp; Conditions</a></p>
+                    <p><a href="https://www.ezbob.com/AboutUs/Landing" style="color: #0B73B4;">Privacy Policy</a></p>
+                    <p><a href="https://www.ezbob.com/PrivatePolicy/Conditions" style="color: #0B73B4;">Responsible landing</a></p>
+                </div>
+            </div>
+                    <hr>
+                    <div class="footer-sitemap">
+                    <div class="pull-left" style="width: 140px;">                       
+                    <b><a class="link-tab" href="https://www.ezbob.com/HowItWorks">How it works</a></b>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks">Overview</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/SignUp">Sign Up</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/Costs">Costs &amp; Repayments</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/MyProfile">My Profile</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/Shops">Supported Shops</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/Secure">Safe &amp; Secure</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/HowItWorks/FAQ">FAQ</a></p>
+                    
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <b><a class="link-tab" href="https://www.ezbob.com/WhyEzBob">Why Ezbob?</a></b>
+                    <p><a class="link-tab" href="https://www.ezbob.com/WhyEzBob">Our Benefits</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/WhyEzBob/Profits">Grow Your Profits</a></p>
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <b><a class="link-tab" href="https://www.ezbob.com/AboutUs">About Us</a></b>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs">About EZBOB</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Vision">Vision &amp; Mission</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Values">Our values</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Team">Our Team</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Privacy">Privacy Policy</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Landing">Responsible Landing</a></p>
+                    <p><a class="link-tab" href="https://www.ezbob.com/AboutUs/Conditions">Term &amp; Conditions</a></p>
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <b><a href="http://blog.ezbob.com">Blog</a></b>
+                </div>
+                <div class="pull-left seo-block" style="width: 380px;">
+                    EZBOB is an easy, fast, and secure online small business lender. We provide small business loans to finance working capital to online sellers on marketplaces such as Amazon, eBay, and soon to be on Google Shopping and Play.com Traditional banks have not succeeded in providing small business loans to online shops. EZBOB provides financing for e-retail so that small business owners can purchase inventory, hire employees for Christmas, buy new office equipment and more.  EZBOB is a reliable and trustworthy small business lender provides instant capital over a web based system. EZBOB uses the Faster Payments System to guarantee that financing arrives in 30 minutes or less in our customers account. If  you are looking for cash  and you  are a small business in the UK  EZBOB is your reliable and secure financing partner. EZBOB finances small business that sell on Amazon or eBay, and soon Google Shopping and Play.com
+                </div>
+            </div>
+                </div>
+            </div>
+        </footer>
+    <script id="login-template" type="text/template">
+
+            <form action="/Account/LogOn" method="post">    <div style="padding-left: 15px;padding-top: 18px;" class="clearfix">
+                    <input id="UserName" name="UserName" placeholder="login" tabindex="11" type="text" value="" />
+                    <input id="Password" name="Password" placeholder="password" tabindex="12" type="password" value="" />
+                    <br/>
+                    
+                    <label class="checkbox">Remember Me <input id="RememberMe" name="RememberMe" type="checkbox" value="true" /><input name="RememberMe" type="hidden" value="false" /></label>
+                    
+                    <input id="returnUrl" name="returnUrl" type="hidden" value="" />
+                    <br/>
+                    <input class="btn-back" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn"/>
+                    <br/>
+                    <a href="/Account/ForgotPassword">Forgot password?</a>
+                </div>
+            </form>
+    </script>
+    <script language="JavaScript" type="text/javascript">
+              $(function () {
+                    $("#date").mask("99/99");
+                    $("#card_no").mask("9999999999999999");
+                   
+                    var amount=$('.amount').val();
+                    if (amount!=0.01){
+                            $('#amount-group').show();
+                       }
+                    
+                    $('li[rel]').popover({ placement: 'left' });
+
+                    $('input[name="back"]').click(function(){
+                             history.go(-1);
+                         });
+
+                    var contactUs = new EzBob.ContactUsView();
+                    contactUs.template = $(".contactUs").html();
+                    contactUs.render();
+
+               });
+               $('form').submit(function(){
+                  $('input[name="accept"]').attr('disabled', 'disabled');
+               });
+    </script>
+</body>
+</html>

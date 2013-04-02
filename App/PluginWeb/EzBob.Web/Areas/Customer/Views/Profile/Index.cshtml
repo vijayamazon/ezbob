@@ -1,0 +1,273 @@
+﻿@using EzBob.Web.Infrastructure
+@model EzBob.Web.Models.WizardModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css {
+    @BundleHelper.RenderProfileCss()
+}
+
+<div id="profile-content">
+    <div id="profile-main">
+        <div class="clearfix">
+            <div class="cart-logo @{ if(Model.Customer.Medal != null){ @Model.Customer.Medal.ToLower()}}-cart"></div>
+            <div class="profile-headlines">
+                <div id="message-sign" class=""></div>
+                <h1 style="margin-top: -10px;">My Account</h1>
+                <div class="proccessing-message"></div>
+            </div>
+            <div class="notifications"></div>
+        </div>
+
+        <div class="d-widgets clearfix">
+        </div>
+
+        <div class="navbar profile-menu">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <ul class="nav">
+                        <li class="active"><a href="#AccountActivity">Account Activity</a></li>
+                        <li class="divider-vertical"></li>
+                        <li><a href="#YourStores">Shops</a></li>
+                        <li class="divider-vertical"></li>
+                        <li><a href="#PaymentAccounts">Payment Accounts</a></li>
+                        <li class="divider-vertical"></li>
+                        <li><a href="#YourDetails">My Information</a></li>
+                        <li class="divider-vertical"></li>
+                        <li><a href="#Settings">Settings</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    
+        <div class="profile-widgets">
+        </div>
+    </div>
+
+    <div id="get-cash"></div>
+    <div id="pay-early"></div>
+    <div id="loan-detail"></div>
+</div>
+
+@section Js
+{
+    <script id="d-payEarly-template" type="text/template">
+            <h3>Loans</h3>
+            <dl>
+                <dt>
+                    Total Balance:
+                </dt>
+                <dd>
+                    <%-EzBob.formatPounds(TotalBalance)%>
+                </dd>
+                <dt>
+                    Next Payment:
+                </dt>
+                <dd class="next-due-amount" >
+                    <%-EzBob.formatPounds(NextPayment)%> <i><%-EzBob.formatDate(NextPaymentDate)%></i>
+                </dd>
+            </dl>
+            <button class="button orange">Pay Early</button>
+    </script>
+    
+    <script id="d-lateLoan-template" type="text/template">
+            <dl>
+                <dt>
+                    Total Balance:
+                </dt>
+                <dd>
+                    <%-EzBob.formatPounds(TotalBalance)%>
+                </dd>
+                <dt style="line-height: 14px;">
+                    Amount Past Due:
+                </dt>
+                <dd style="color: red;" >
+                    <%-EzBob.formatPounds(TotalDue)%>
+                </dd>
+            </dl>
+            <button class="button orange pay-late">Pay Now</button>    
+    </script>
+    
+    <script id="d-getCash-template" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>
+                Available Credit:
+            </dt>
+            <dd>
+                <span class="UpToTextBlock">Up to</span> <%-EzBob.formatPounds(availableCredit)%>
+            </dd>
+            <dt>
+                Offer Valid for:
+            </dt>
+            <dd class="offerValidFor">
+                <%-countDown%> hrs
+            </dd>
+        </dl>
+        
+        <button class="button orange get-cash" >Choose Amount</button>        
+    </script>
+    
+    <script id="d-getCash-template-late" type="text/template">
+            <dl>
+                <dt>
+                    Available Credit:
+                </dt>
+                <dd class="dashes">
+                    ---
+                </dd>
+                <dt>
+                    Offer Valid:
+                </dt>
+                <dd class="dashes">
+                    ---
+                </dd>
+            </dl>
+            <button 
+                rel="popover" 
+                data-content="To get more cash, please pay your minimum amount due." 
+                data-original-title="Get More Cash" 
+                class="button orange disabled get-cash"> Get More Cash
+            </button>
+    </script>
+    
+    <script id="d-getCash-template-apply" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>
+                Available Credit:
+            </dt>
+            <dd class="dashes">
+                ---
+            </dd>
+            <dt>
+                Offer Valid:
+            </dt>
+            <dd class="dashes">
+                ---
+            </dd>
+        </dl>
+        <button class="button orange apply-for-loan">Request Cash</button>
+    </script>
+
+    <script id="processing-message-template" type="text/template">
+        <h2 class="header-message <%-cls%>" ><%=Message%></h2>
+    </script>
+    
+    <script id="d-getCash-template-wait" type="text/template">
+        <h3>Cash</h3>
+        <dl>
+            <dt>
+                Available Credit:
+            </dt>
+            <dd style="font-weight: bold;font-size: 13px; text-align: center;">
+                Under Review
+            </dd>
+            <dt>
+                Offer Valid:
+            </dt>
+            <dd class="dashes">
+                ---
+            </dd>
+        </dl>
+        <button 
+            class="button orange disabled">
+            Choose Amount
+        </button>    
+    </script>
+        
+    <script id="d-getCash-template-bad" type="text/template">
+            <h3>Cash</h3>
+            <dl>
+                <dt>
+                    Available Credit:
+                </dt>
+                <dd style="font-weight: bold;font-size: 13px;text-align: center;">
+                    None
+                </dd>
+                <dt>
+                    Offer Valid:
+                </dt>
+                <dd class="dashes">
+                    ---
+                </dd>
+            </dl>
+            <button 
+                class="button orange apply-for-loan disabled">
+                Choose Amount
+            </button>
+    </script>
+    
+    <div class="modal" id="payEarly-modal" style="display: none;">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Information</h3>
+        </div>
+        <div class="modal-body">
+            <p>Your don't have any loan to repay</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn-back" data-dismiss="modal">Close</a>
+        </div>
+    </div>
+   
+    <script id="sign-template" type="text/template">
+        <div class="<%-color%>-sign pull-right">
+            <a href="#"><%=text%></a>
+        </div>
+    </script>
+       
+    <script id="sign-welcome-template" type="text/template">
+        <div class="welcome-sign pull-right">
+            <%=text%>
+        </div>
+    </script>
+
+
+
+    @{Html.RenderPartial("EbayStoreInfo");}
+    @{Html.RenderPartial("AmazonStoreInfo");}
+    @{Html.RenderPartial("StoreButton");}
+    @{Html.RenderPartial("PayPalInstructions");}
+    @{Html.RenderPartial("_CompanyDetails");}
+    @{Html.RenderPartial("BankAccountInstructions");}
+    @{Html.RenderPartial("ApplyForLoanTemplate");}
+    @{Html.RenderPartial("PayEarlyTemplate");}
+    @{Html.RenderPartial("AccountActivityTemplate");}
+    @{Html.RenderPartial("LoanDetailsTemplate");}
+    @{Html.RenderPartial("PaymentAccountsTemplate");}
+    @{Html.RenderPartial("StoresTemplate");}
+    @{Html.RenderPartial("SettingsTemplate");}
+    @{Html.RenderPartial("_ProfileSummary");}
+    @{Html.RenderPartial("_YourInfo");}
+    @{Html.RenderPartial("StoreInfoMain");}
+    @{Html.RenderPartial("PayPalInstructions");}
+    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Profile/_PayPointCardSelectViewTemplate.cshtml");}
+    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/EKMAccoutInfoTemplate.cshtml");}
+
+    <script type="text/javascript">
+        $(function () {
+            var options = new EzBob.CustomerModel (@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer)));
+            EzBob.Config.GetCashSliderStep = @Model.Config.GetCashSliderStep.ToString();
+            EzBob.Config.MinLoan = @Model.Config.MinLoan.ToString();
+            EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
+            EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
+            EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+            
+            var profileView = new EzBob.Profile.ProfileView(options);
+            profileView.render();
+            
+            var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+            notifications.render();
+
+            var r = new EzBob.LiveChat.LiveChatRouter();
+
+            Backbone.history.start();
+
+        });
+    </script>
+    @BundleHelper.RenderProfileJs()
+}

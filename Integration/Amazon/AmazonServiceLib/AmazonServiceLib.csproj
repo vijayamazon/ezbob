@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9E536824-37AD-4CC7-B597-11B882091DBD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.AmazonServiceLib</RootNamespace>
+    <AssemblyName>AmazonServiceLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Fizzler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.3.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\Lib\3rdparty\Moq\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Plugins">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Plugins.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AmazonSecurityInfo.cs" />
+    <Compile Include="AmazonServiceInfo.cs" />
+    <Compile Include="Common\AmazonDeveloperAccessInfo.cs" />
+    <Compile Include="Common\AmazonApiType.cs" />
+    <Compile Include="Common\AmazonServiceConfigurationFactory.cs" />
+    <Compile Include="Common\AmazonServiceCountry.cs" />
+    <Compile Include="Common\AmazonServiceUrlFactory.cs" />
+    <Compile Include="Common\AmazonRequestInfoBase.cs" />
+    <Compile Include="Common\AmazonWaitBeforeRetryController.cs" />
+    <Compile Include="Config\AmazonEnvConnectionConfig.cs" />
+    <Compile Include="Config\AmazonEvnSettings.cs" />
+    <Compile Include="Config\AmazonMarketPlaceTypeConnection.cs" />
+    <Compile Include="Config\AmazonMarketPlaceTypeConnectionBase.cs" />
+    <Compile Include="Config\IAmazonMarketplaceSettings.cs" />
+    <Compile Include="Config\IAmazonMarketPlaceTypeConnection.cs" />
+    <Compile Include="Inventory\AmazonServiceUrlFactoryInventory.cs" />
+    <Compile Include="Inventory\Configurator\AmazonServiceInventoryConfiguratorMock.cs" />
+    <Compile Include="Inventory\Model\AmazonInventorySupply.cs" />
+    <Compile Include="Inventory\Model\AmazonInventoryRequestInfo.cs" />
+    <Compile Include="Inventory\Model\AmazonInventorySupplyList.cs" />
+    <Compile Include="Inventory\Model\AmazonInventorySupplyDetail.cs" />
+    <Compile Include="Inventory\Model\AmazonInventorySupplyDetailList.cs" />
+    <Compile Include="Inventory\Model\AmazonProductsRequestInfoByAsin.cs" />
+    <Compile Include="Inventory\Model\AmazonTimePoint.cs" />
+    <Compile Include="MarketWebService\AmazonWebServiceUrlFactory.cs" />
+    <Compile Include="MarketWebService\Configurator\AmazonWebServiceConfiguratorFactory.cs" />
+    <Compile Include="MarketWebService\Configurator\AmazonWebServiceConfiguratorLive.cs" />
+    <Compile Include="MarketWebService\Configurator\AmazonWebServiceConfiguratorMock.cs" />
+    <Compile Include="MarketWebService\Configurator\IAmazonServiceReportsConfigurator.cs" />
+    <Compile Include="MarketWebService\Model\AmazonUserInventoryData.cs" />
+    <Compile Include="Orders\AmazonServiceUrlFactoryOrders.cs" />
+    <Compile Include="Common\AmazonApplicationInfo.cs" />
+    <Compile Include="Common\AmazonServiceConnectionInfo.cs" />
+    <Compile Include="Inventory\Configurator\AmazonServiceInventoryConfiguratorLive.cs" />
+    <Compile Include="Inventory\Configurator\AmazonServiceInventoryConfiguratorFactory.cs" />
+    <Compile Include="Common\Configuration\AmazonServiceConfiguratorLiveBase.cs" />
+    <Compile Include="Orders\Configurator\AmazonServiceOrdersConfiguratorFactory.cs" />
+    <Compile Include="Orders\Configurator\AmazonServiceOrdersConfiguratorLive.cs" />
+    <Compile Include="Common\AmazonServiceType.cs" />
+    <Compile Include="Inventory\Configurator\IAmazonServiceInventoryConfigurator.cs" />
+    <Compile Include="Orders\Configurator\AmazonServiceOrdersConfiguratorMock.cs" />
+    <Compile Include="Orders\Configurator\IAmazonServiceOrdersConfigurator.cs" />
+    <Compile Include="PluginRegistry.cs" />
+    <Compile Include="Products\AmazonServiceUrlFactoryProducts.cs" />
+    <Compile Include="Products\Configurator\AmazonServiceOrdersConfiguratorFactory.cs" />
+    <Compile Include="Products\Configurator\AmazonServiceProductsConfiguratorLive.cs" />
+    <Compile Include="Products\Configurator\AmazonServiceProductsConfiguratorMock.cs" />
+    <Compile Include="Products\Configurator\IAmazonServiceProductsConfigurator.cs" />
+    <Compile Include="ServiceCalls\AmazonServiceAskville.cs" />
+    <Compile Include="ServiceCalls\AmazonServiceInventory.cs" />
+    <Compile Include="ServiceCalls\AmazonServiceOrders.cs" />
+    <Compile Include="Orders\Model\AmazonOrdersRequestInfo.cs" />
+    <Compile Include="AmazonServiceHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceCalls\AmazonServiceProducts.cs" />
+    <Compile Include="ServiceCalls\AmazonServiceReports.cs" />
+    <Compile Include="Tests\AmazonServiceAskvilleTests.cs" />
+    <Compile Include="Tests\BaseTest.cs" />
+    <Compile Include="UserInfo\AmazonRateInfo.cs" />
+    <Compile Include="UserInfo\FeedbackPeriod.cs" />
+    <Compile Include="UserInfo\AmazonUserRatingInfo.cs" />
+    <Compile Include="UserInfo\AmazonUserInfo.cs" />
+    <Compile Include="UserInfo\FeedbackHistoryInfo.cs" />
+    <Compile Include="UserInfo\FeedbackHistoryItem.cs" />
+    <Compile Include="UserInfo\FeedbackType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonProductServiceMWS\MarketplaceWebServiceProducts.csproj">
+      <Project>{4675187D-6CC7-369C-AEEF-121AD4508FF5}</Project>
+      <Name>MarketplaceWebServiceProducts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FBAInventoryServiceMWS\FBAInventoryServiceMWS.csproj">
+      <Project>{329D8BC9-D820-37CA-9B18-098625CA0158}</Project>
+      <Name>FBAInventoryServiceMWS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarketplaceWebServiceOrders\MarketplaceWebServiceOrders.csproj">
+      <Project>{09CE7DF4-1B19-47A5-847E-FE7C72263D8D}</Project>
+      <Name>MarketplaceWebServiceOrders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MarketplaceWebService\MarketplaceWebService.csproj">
+      <Project>{D121D692-FF26-3836-8115-E63D9FC3A3B1}</Project>
+      <Name>MarketplaceWebService</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

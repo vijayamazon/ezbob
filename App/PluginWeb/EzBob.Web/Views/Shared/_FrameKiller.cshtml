@@ -1,0 +1,11 @@
+﻿@model dynamic
+
+<script>
+    function CTIsPlayback() {
+        try { return parent && parent.WebPlayer; }
+        catch (e) { return false; }
+    }
+    if (!CTIsPlayback())
+        if (top != self)
+            top.location = location;
+</script>

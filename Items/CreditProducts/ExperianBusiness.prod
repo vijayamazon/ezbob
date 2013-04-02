@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<CreditProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId xmlns="ScortoPatron">19</UserId>
+  <Id xmlns="ScortoPatron">124</Id>
+  <Name xmlns="ScortoPatron">ExperianBusiness</Name>
+  <CreationDate xmlns="ScortoPatron">2012-06-04T12:04:40.33</CreationDate>
+  <Parameters xmlns="ScortoPatron">
+    <CreditProductParam>
+      <CreditProductId>124</CreditProductId>
+      <Id>3132</Id>
+      <Name>ScoreLimitedLowRisk</Name>
+      <ParamValue xsi:type="xsd:string">90</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>124</CreditProductId>
+      <Id>3133</Id>
+      <Name>ScoreLimitedHighRisk</Name>
+      <ParamValue xsi:type="xsd:string">40</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>124</CreditProductId>
+      <Id>3134</Id>
+      <Name>ScoreNonLimitedR</Name>
+      <ParamValue xsi:type="xsd:string">35</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>124</CreditProductId>
+      <Id>3135</Id>
+      <Name>ScoreNonLimitedW</Name>
+      <ParamValue xsi:type="xsd:string">40</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+  </Parameters>
+  <LinkedStrategies xmlns="ScortoPatron" />
+</CreditProduct>

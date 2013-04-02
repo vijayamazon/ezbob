@@ -1,0 +1,9 @@
+1#CreateApplication##CreateApplication#1#0####
+2#AllApplications##AllApplications#1#1####
+3#AllApplicationsOld##~/ScortoCoreWeb/OldAllApplications.aspx#1#2####
+4#CreateApplication##CreateApplication#6#0####
+5#AllApplications##AllApplications#6#1####
+6#MyApplications##AllApplications#1#3##{"Data":"{\"MyOnly\":true,\"TodayOnly\":false,\"Name\":\"MyTodayFilter\"}","TypeName":"Scorto.Filters.Sample.Data.MyTodayFilterData, Scorto.Filters.Sample.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}#
+7#ToDayApplications##AllApplications#1#4##{"Data":"{\"MyOnly\":false,\"TodayOnly\":true,\"Name\":\"MyTodayFilter\"}","TypeName":"Scorto.Filters.Sample.Data.MyTodayFilterData, Scorto.Filters.Sample.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}#
+8#ArchiveApplications##AllApplications#1#5##{"Data":"{\"Name\":\"Standard\",\"Permisssions\":[[true,true],[true,true],[true,true]],\"SelectedStatuses\":[],\"StatusFilterEnabled\":false,\"SelectedStates\":[\"2\"],\"StatesFilterEnabled\":true,\"ReadOnlyNodes\":[],\"ReadOnlyEnabled\":false}","TypeName":"Scorto.Filters.Standard.Data.StandardFilterData, Scorto.Filters.Standard.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}#
+9#ErrorApplications##AllApplications#1#6##{"Data":"{\"Name\":\"Standard\",\"Permisssions\":[[true,true],[true,true],[true,true]],\"SelectedStatuses\":[],\"StatusFilterEnabled\":false,\"SelectedStates\":[\"5\"],\"StatesFilterEnabled\":true,\"ReadOnlyNodes\":[],\"ReadOnlyEnabled\":false}","TypeName":"Scorto.Filters.Standard.Data.StandardFilterData, Scorto.Filters.Standard.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"}#

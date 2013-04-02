@@ -1,0 +1,57 @@
+﻿@using EzBob.Web.Infrastructure
+@using Scorto.NHibernate.Model
+@using StructureMap
+@model dynamic
+@{
+    var captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
+    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+}
+
+@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix form-horizontal"}))
+{
+    <div class="simple-well">
+        <div class="control-group">
+            <label class="control-label">Email Address</label>
+            <div class="controls">
+                <input id="signupEmail" name="EMail" type="text" placeholder="" class="input-medium" tabindex="1" value="<%-userName||''%>"/>
+            </div>
+        </div>
+        <div id="strength-password-view" class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <input id="signupPass1" name="signupPass1" type="password" placeholder="" class="input-medium"  tabindex="2" autocomplete="off"/>
+                <p id="message" class="help-block"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Confirm Password</label>
+            <div class="controls">
+                <input id="signupPass2" name="signupPass2" type="password" placeholder="" class="input-medium"  tabindex="3" autocomplete="off"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Select Secret Question</label>
+            <div class="controls">
+                <select name="securityQuestion" id="securityQuestion" class="chzn-select input-medium" tabindex="4">
+                    @if (securityQuestions != null)
+                    {
+                        foreach (SecurityQuestion item in securityQuestions)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Answer</label>
+            <div class="controls">
+                <input type="text" name="SecurityAnswer" id="SecurityAnswer" placeholder="" class="input-medium"  tabindex="5" value="<%-AccountSettings ? AccountSettings.SecurityQuestionModel.Answer : ''%>"/>
+            </div>
+        </div>
+        @EzForm.Captcha(captchamode)
+    </div>
+    <div class="control-group" id="submitArea">
+        <input id="btn" type="submit" value="Continue" class="button orange pull-right"  tabindex="6"/>
+    </div>
+}

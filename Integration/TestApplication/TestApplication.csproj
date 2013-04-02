@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D3A1CE56-CD53-4A83-B8EC-65B55DB5839F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestApplication</RootNamespace>
+    <AssemblyName>TestApplication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=1.3.0.722, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonExtensions.cs" />
+    <Compile Include="EBayTestFixture.cs" />
+    <Compile Include="EZBobDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EZBobDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NHibernateHelper.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SSSEZBobDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SSSEZBobDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="TestApplicationRegistry.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EZBobDataSet.xsc">
+      <DependentUpon>EZBobDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="EZBobDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>EZBobDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="EZBobDataSet.xss">
+      <DependentUpon>EZBobDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="SSSEZBobDataSet.xsc">
+      <DependentUpon>SSSEZBobDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="SSSEZBobDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>SSSEZBobDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SSSEZBobDataSet.xss">
+      <DependentUpon>SSSEZBobDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="TestApplication.exe.log4net">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
+      <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
+      <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CustomSchedulers\CustomSchedulers.csproj">
+      <Project>{47d73896-1b70-4347-beb5-a0ad94a45421}</Project>
+      <Name>CustomSchedulers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBay\eBayDbLib\eBayDbLib.csproj">
+      <Project>{FB3EAC65-AB2B-4A7E-ADA5-AAE0651CAAF6}</Project>
+      <Name>eBayDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBay\eBayLib\eBayLib.csproj">
+      <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>
+      <Name>eBayLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBay\eBayServiceLib\eBayServiceLib.csproj">
+      <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
+      <Name>eBayServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob\EzBob.csproj">
+      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
+      <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
+      <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
+      <Name>TeraPeakServiceLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

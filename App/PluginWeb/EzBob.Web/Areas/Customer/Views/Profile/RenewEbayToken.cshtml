@@ -1,0 +1,41 @@
+﻿@using EzBob.Web.Infrastructure
+@{
+    ViewBag.Title = "Renew eBay token | EZBOB";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section css {
+    @BundleHelper.RenderProfileCss()
+}
+
+<div class="well">
+    <div class="row-fluid notifications"></div>
+    <h2> Please login again to eBay for update token</h2>
+    <a id="ebay-redirect-link" href="@Url.Action("AttachEbay","EbayMarketPlaces", new{ isUpdate = true })" target="_blank">Click for redirecting to eBay</a>
+    <a id="profile-link" href="@Url.Action("Index", "Profile")" style="display: none;">Go to profile</a>
+</div>
+
+@section Js{
+    <script type="text/javascript">
+        var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+        notifications.render();
+        
+        window.AlertToken = function (name) {
+            EzBob.App.trigger('clear');
+            $.getJSON(window.gRootPath + "Customer/EbayMarketplaces/FetchToken?callback=?", { username: name })
+                .success(function (result) {
+                    if (result.error) {
+                        EzBob.App.trigger('error', result.error);
+                        return;
+                    }
+                    $("h2").html(result.msg);
+                    $("#ebay-redirect-link").hide();
+                    $("#profile-link").show();
+                })
+                .error(function () {
+                    EzBob.App.trigger('error', 'Ebay account failed to update');
+                });
+        };
+        
+    </script>
+}

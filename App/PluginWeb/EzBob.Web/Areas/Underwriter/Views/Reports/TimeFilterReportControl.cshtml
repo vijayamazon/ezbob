@@ -1,0 +1,24 @@
+﻿@using EzBob.Web.Areas.Underwriter.Models.Reports
+@model ReportModelBase
+
+<div class="reportDiv">
+    <input type="submit" value="Recalculate"/>
+</div>
+<div class="reportDiv">
+    @Html.TextBoxFor(x => @Model.DateFilter.StringFrom, new { @class = "datepicker reportDatePicker", style = "display: none", @id = "dpFrom" })
+</div>
+<div class="reportDiv" style = "display: none" id="divTo">
+    to
+</div>
+<div class="reportDiv">
+    @Html.TextBoxFor(x => @Model.DateFilter.StringTo, new { @class = "datepicker reportDatePicker", style = "display: none", @id = "dpTo" })
+</div>
+<div class="reportDiv" style = "display: none" id="divFrom">
+    From
+</div>
+<div class="reportDiv">
+    @Html.DropDownListFor(x => @Model.DateFilter.TimeFilterString, ReportModelBase.FilterTypes, new {id = "timeFilter", style = "width: 140px"})
+</div>
+<div class="reportDiv">
+    Range
+</div>

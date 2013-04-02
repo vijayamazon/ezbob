@@ -1,0 +1,35 @@
+﻿@using EzBob.Web.Infrastructure
+
+@model EzBob.Web.Models.MenuModel[]
+
+@section css{
+    @BundleHelper.RenderOverviewCss()
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var action = ViewContext.Controller.ValueProvider.GetValue("action").RawValue as string;
+}
+
+<div class="container about-container">
+    <div class="row">
+        <div class="span3">
+            <div class="tabbable tabs-left">
+                <ul class="nav nav-pills pull-right how-its-work-menu">
+                    @foreach(var item in Model)
+                    {
+                        <li @if(action == item.Action){ <text>class="active"</text>} >@Html.ActionLink(item.Title, item.Action)</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="span9 info-pages">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Js
+{
+    @RenderSection("Js", false)
+}

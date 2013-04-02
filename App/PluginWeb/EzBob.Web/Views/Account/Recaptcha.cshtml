@@ -1,0 +1,18 @@
+﻿@{
+    Layout = null;
+    var captcha = new Recaptcha.RecaptchaControl
+        {
+            ID = "captcha",
+            PrivateKey = "6Le8aM8SAAAAAGGFIOwlLu23_L",
+            PublicKey = "6Le8aM8SAAAAAFeTTn1qU2sNYROvowK9S1jyJCJd",
+            Theme = "white"
+
+        };
+    var htmlWriter = new HtmlTextWriter(new StringWriter());
+    captcha.RenderControl(htmlWriter);
+
+    var captchaHtml = new MvcHtmlString(htmlWriter.InnerWriter.ToString());
+}
+
+@* ====================== Captcha ======================= *@
+@captchaHtml

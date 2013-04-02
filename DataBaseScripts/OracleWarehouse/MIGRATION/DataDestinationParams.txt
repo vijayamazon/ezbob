@@ -1,0 +1,4 @@
+0#Score#Number###NULL#1
+1#Risk#String##High;Low#6#1
+2#Score#Number###NULL#2
+3#Risk#String##High;Low#6#2

@@ -1,0 +1,65 @@
+<Project ToolsVersion="4.0" DefaultTargets="StartBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 	<Import Project="BuildMain.proj"/>
+	<Import Project="..\Publish.proj"/>
+	<Import Project="..\LoadTests.proj"/>
+	
+	<!-- build properties-->
+	<PropertyGroup>
+		<Src>d:\Loadtests\build\WD\Sources</Src>
+		<BuildBin>d:\Loadtests\build\WD\Binaries</BuildBin>
+		<LoadTestFolder>LoadTestFramework</LoadTestFolder>
+		<FakeData>d:\Loadtests\import</FakeData>
+	</PropertyGroup>
+	
+	<!-- deploy properties -->
+	<PropertyGroup>
+		<ServerBaseFolder>d:\loadtests\deploy</ServerBaseFolder>
+		<UsedEdition>standard</UsedEdition>
+		<serviceName>ScortoLoadTest</serviceName>
+		<LogsDir>Logs</LogsDir>
+		<LogsArchive>d:\Loadtests\LoadTestArchive</LogsArchive>
+		<DatabaseString>vm-loadtest sa sa LoadTest</DatabaseString>
+		<DatabaseDeployFolder>MsSql</DatabaseDeployFolder>
+		<WebBaseUrl>http://vm-loadtest:9999</WebBaseUrl>
+		<EnvFilePath>d:\Loadtests\Environment_config.xml</EnvFilePath>
+		<EnvId>LoadTest</EnvId>
+		<MainConnectionString>Data Source=vm-loadtest;Initial Catalog=LoadTest;Persist Security Info=True;User ID=sa;Password=sa;Asynchronous Processing=true;MultipleActiveResultSets=True</MainConnectionString>
+		<LoadStatisticsConnection>Data Source=vm-loadtest;Initial Catalog=LoadStatistics;Persist Security Info=True;User ID=sa;Password=sa</LoadStatisticsConnection>
+		<DBCommonFile>DBSQLServer.dll</DBCommonFile>
+		<DbPrefix>mssql</DbPrefix>
+		<Culture>en-US</Culture>
+		<TempStatesPath>d:\loadtests\deploy\TempResults\Db</TempStatesPath>
+	</PropertyGroup>
+	
+	<!-- additional build -->
+	<ItemGroup>
+		<ProjectToBuild Include="$(Src)\tools\LoadTestFramework\LoadTest.sln"/>
+    </ItemGroup>
+	
+	<!-- Tools log files for archive -->
+	<ItemGroup>
+        <LogFiles Include="$(ServerBaseFolder)\$(LoadTestFolder)\**\*.log*"/>
+		<LogFiles Include="$(ServerBaseFolder)\$(LoadTestFolder)\**\*.db3"/>
+		<LogFiles Include="$(ServerBaseFolder)\$(LoadTestFolder)\**\*.xlsx"/>
+    </ItemGroup>
+	
+
+	
+	<Target Name="StartBuild">
+		<CallTarget Targets="RestartMssql;SCLoadBuild;MakeLoadDeploy;RestartMssql;RunTests" />	  
+	</Target>
+	
+	<Target Name="SCLoadBuild" DependsOnTargets="CompilationScenario">
+		<CallTarget Targets="LoadBinaryCreate" />  
+	</Target>
+
+	<Target Name="MakeLoadDeploy">
+		<!--EnvironmentConfigure turn on demand-->
+		<CallTarget Targets="SCStop;LogArchive;Deploy;ConfigureLoadClients;ReCreateDB;AddonDBLoad;ImportDB;SCStart;Publish" />  
+	</Target>
+	
+	<Target Name="RunTests">
+		<CallTarget Targets="LoadTest" />  
+	</Target>
+
+</Project>

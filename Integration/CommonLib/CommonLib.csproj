@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.CommonLib</RootNamespace>
+    <AssemblyName>CommonLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionInfo.cs" />
+    <Compile Include="ConvertedTypeInfo.cs" />
+    <Compile Include="ElapsedTimeHelper.cs" />
+    <Compile Include="ElapsedTimeInfo.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IDatabaseDataHelper.cs" />
+    <Compile Include="IDatabaseEnumTypeConverter.cs" />
+    <Compile Include="MarketplaceSpecificTypes\TeraPeakOrdersData\TeraPeakDatabaseSellerData.cs" />
+    <Compile Include="MarketplaceSpecificTypes\TeraPeakOrdersData\TeraPeakDatabaseSellerDataItem.cs" />
+    <Compile Include="ReceivedDataListLogic\IReceivedDataList.cs" />
+    <Compile Include="ReceivedDataListLogic\IReceivedDataListFactory.cs" />
+    <Compile Include="ReceivedDataListLogic\MixedReceivedDataItem.cs" />
+    <Compile Include="ReceivedDataListLogic\MixedReceivedDataList.cs" />
+    <Compile Include="ReceivedDataListLogic\ReceivedDataListBase.cs" />
+    <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeDependentBase.cs" />
+    <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeMarketTimeDependentBase.cs" />
+    <Compile Include="Tests\ExtensionsFixture.cs" />
+    <Compile Include="TimePeriodLogic\ReceivedDataListTimeDependentInfo.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodEnum.cs" />
+    <Compile Include="ErrorRetryingInfo.cs" />
+    <Compile Include="ErrorRetryingWaiter.cs" />
+    <Compile Include="ErrorRetryingWaiterBase.cs" />
+    <Compile Include="IErrorRetryingWaiter.cs" />
+    <Compile Include="IMarketPlaceInfo.cs" />
+    <Compile Include="IMarketplaceServiceInfo.cs" />
+    <Compile Include="TimePeriodLogic\BoundaryCalculation\ITimeBoundaryCalculationStrategy.cs" />
+    <Compile Include="TimePeriodLogic\ITimeDependentData.cs" />
+    <Compile Include="ITrapForThrottling.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestsCounterData.cs" />
+    <Compile Include="SerializeDataHelper.cs" />
+    <Compile Include="SerializerCache.cs" />
+    <Compile Include="TimePeriodLogic\BoundaryCalculation\TimeBoundaryCalculationStrategyBase.cs" />
+    <Compile Include="TimePeriodLogic\BoundaryCalculation\TimeBoundaryCalculationStrategyByEntire.cs" />
+    <Compile Include="TimePeriodLogic\BoundaryCalculation\TimeBoundaryCalculationStrategyByStep.cs" />
+    <Compile Include="TimePeriodLogic\BoundaryCalculation\TimeBoundaryCalculationStrategyFactory.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\Factories\ITimePeriodNodesCreationTreeFactory.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\Factories\TimePeriodNodesCreationTreeFactoryMizedHardcodeimeBoundaryCalculationStrategy.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\Factories\TimePeriodNodesCreationTreeFactorySameTimeBoundaryCalculationStrategy.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\ITimePeriodNodeFactory.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodChain.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodChainContructor.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodChainWithData.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodNode.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodNodeFactory.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodNodeWithData.cs" />
+    <Compile Include="TimePeriodLogic\DependencyChain\TimePeriodNodeWithDataFactory.cs" />
+    <Compile Include="TimePeriodLogic\ITimePeriod.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodBase.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodFactory.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodLifeTime.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodMonthly.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodNone.cs" />
+    <Compile Include="TimePeriodLogic\TimePeriodYearly.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingBase.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingFixture.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingFixedCountOfRequests.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingController.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingSettings.cs" />
+    <Compile Include="TrapForThrottlingLogic\TrapForThrottlingSimpleWait.cs" />
+    <Compile Include="UsefulFunctions.cs" />
+    <Compile Include="WaitBeforeRetryController.cs" />
+    <Compile Include="WaitBeforeRetryHelper.cs" />
+    <Compile Include="WriteLoggerHelper.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

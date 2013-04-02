@@ -1,0 +1,17 @@
+﻿@{ Layout = "~/Areas/Underwriter/Views/Reports/_LayoutDayReport.cshtml"; }
+
+@using EzBob.Web.Areas.Underwriter.Controllers.Reports
+@model EzBob.Web.Areas.Underwriter.Models.Reports.ReportModelDay<EzBob.Web.Areas.Underwriter.Models.Reports.ExpectationReportData>
+           
+@section Report
+{
+    @ReportTableCreator.CreateTable(Model.Model, false)
+}
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#liExtendedDaily").addClass("active");
+        });
+    </script>
+}

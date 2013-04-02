@@ -1,0 +1,33 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "EzBob";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+@helper Approve(){
+    <div class="row">
+    <div class="span8 offset2">
+        <legend>Thank you for your store confirmation!</legend>
+         Now your Amazon shop is verified! Please continue working with EZBOB system.
+    </div>
+    
+</div>
+}
+
+@helper DisApprove(){
+    <div class="row">
+    <div class="span8 offset2">
+        <legend>Thank you for giving us information about erroneous store usage.</legend>
+          We recommend you to change your Amazon account password.
+    </div>
+    
+</div>
+}
+@if(ViewData["Approve"]!=null && ((bool) ViewData["Approve"]))
+{
+    @Approve()
+}else
+{
+    @DisApprove()
+}

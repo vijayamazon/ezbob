@@ -1,0 +1,20 @@
+﻿@model dynamic
+
+@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
+{
+    <div style="padding-left: 11px;padding-top: 18px;" class="clearfix">
+        @Html.TextBox("UserName", "", new {@class="simle-login-input", placeholder = "enter your email", tabindex = "11", autofocus="autofocus" })
+        @Html.Password("Password", "", new {@class="simle-login-input", placeholder = "password", tabindex = "12", autocomplete="off" })
+        <br/>
+        
+        @*
+        <label class="checkbox">Remember Me @Html.CheckBox("RememberMe", false)</label>
+        *@
+
+        @Html.Hidden("returnUrl",ViewData["returnUrl"])
+        <br/>
+        <input class="button orange" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn"/>
+        <br/>
+        @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { Area="" }, new { })
+    </div>
+}

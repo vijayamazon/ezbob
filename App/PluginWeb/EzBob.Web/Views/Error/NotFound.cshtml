@@ -1,0 +1,21 @@
+﻿@if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+{
+    Layout = null;
+    <text>Page not found</text>
+    return;
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Sorry, an error has occurred.";
+}
+
+<div class="row-fluid">
+    <div class="span1">&nbsp;</div>
+    <div class="span10">
+        <div class="well" style="color: #565656">
+        
+            <h2>Page not found</h2>
+            <b><i>Please go back to your account page.</i></b>
+        </div>
+    </div>
+</div>

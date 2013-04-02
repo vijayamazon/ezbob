@@ -1,0 +1,111 @@
+﻿@using System.Reflection
+@model dynamic
+
+@helper FooterRowInfos()
+{
+    <div class="footer-infos clearfix">
+        <div class="security-icons divider-right pull-left">
+            <ul class="footer-ssl" style="height: 49px;">
+                <li class="norton-secured" style="width: 64px; height: 49px;">
+                    <script type="text/javascript" src="https://seal.verisign.com/getseal?host_name=www.ezbob.com&amp;size=S&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script>
+                </li>
+                <li style="width: 137px; height: 49px;">
+                    @{
+                        Html.RenderPartial("_Truste");
+                    }
+                </li>
+                <li style="width: 96px; height: 49px;">
+                    <a href="http://www.ccta.co.uk" target="_blank"><img alt="CCTA" height="46" width="96" src='@Url.Content("~/Content/img/CCTA-Logo.png")'/></a>
+                </li>
+            </ul>
+            <div class="footer-ssl-reflection"></div>
+            <div>
+                <br/>
+                <p class="link-tab" style="font-size: 10px;">All loan subject to status and approval. 18+ only.</p>
+            </div>
+        </div>
+        
+        <div class="contactUs divider-right pull-left">
+            <b>Contact us:</b>
+            <p>Call: 0800 011 4787</p>
+            <p>EMail: <a class="cusLink" target="_blank" href="mailto:customercare@ezbob.com">Customer Care</a></p>
+            <p>Skype: <a href="callto:ezbob.customercare">ezbob.customercare</a></p>
+            <p><a href="#" onclick="$('.lpchat-label').click()">Live Chat</a></p>
+        </div>
+
+        <div class="follow-us divider-right pull-left">
+            <b>follow us on:</b>
+            <ul class="folow-list">
+                <li><a class="btn-follow follow-youtube" target="_blank" href="http://www.youtube.com/user/EZBOBGLOBAL "></a></li>
+                <!-- <li><a class="btn-follow follow-twitter" target="_blank" href="https://twitter.com/ez_bob"></a></li> -->
+                <li><a class="btn-follow follow-facebook" target="_blank" href="http://www.facebook.com/ezbob.loans"></a></li>
+                <!-- <li><a class="btn-follow follow-google" target="_blank" href="http://plus.google.com"></a></li> -->
+                <li><a class="btn-follow follow-linkedin" target="_blank" href="http://www.linkedin.com/company/2646245"></a></li>
+            </ul>
+        </div>
+        
+        <div class="terms-and-conditions pull-left">
+            <p>
+                &copy;2012 EZBOB Inc. All rights reserved.<br />
+                Orange Money Ltd. is trading as EZBOB<br />
+                Terms, conditions, features, availability,<br/>
+                pricing, fees, service &amp; support options<br/>
+                subject to change without notice.
+            </p>
+            <p><a class="link-tab" href="@Url.Action("Conditions", "AboutUs", new{Area=""})" style="color: #0B73B4;">Terms &amp; Conditions</a></p>
+            <p><a class="link-tab" href="@Url.Action("Privacy", "AboutUs", new{Area=""})" style="color: #0B73B4;">Privacy Policy</a></p>
+            <p><a class="link-tab" href="@Url.Action("Landing", "AboutUs", new{Area=""})" style="color: #0B73B4;">Responsible Lending</a></p>
+        </div>
+    </div>
+}
+<footer>
+    <div class="footer-images">
+    </div>
+    <div class="footer-copyright">
+        <div class="reflection">
+            @{Html.RenderPartial("_Copyright");}
+        </div>     
+    </div>
+    <div class="footer-black">
+        <div class="container">
+            @FooterRowInfos()
+            
+            <hr style="margin-top: 10px;"/>
+            <div class="footer-sitemap">
+                <div class="pull-left" style="width: 140px;">                       
+                    <b><a href="http://www.ezbob.com/HowItWorks/Index" class="link-tab">How it works</a></b>
+                    <p><a href="http://www.ezbob.com/HowItWorks/Index" class="link-tab">Overview</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/SignUp" class="link-tab">Sign Up</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/Costs" class="link-tab">Payment Schedule</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/MyProfile" class="link-tab">My Profile</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/Shops" class="link-tab">Supported Shops</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/Secure" class="link-tab">Safe & Secure</a></p>
+                    <p><a href="http://www.ezbob.com/HowItWorks/FAQ" class="link-tab">FAQ</a></p>
+                    
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <b><a href="http://www.ezbob.com/WhyEzBob/Index" class="link-tab">Why Ezbob?</a></b>
+                    <p><a href="http://www.ezbob.com/WhyEzBob/Index" class="link-tab">Our Benefits</a></p>
+                    <p><a href="http://www.ezbob.com/WhyEzBob/Profits" class="link-tab">Grow Your Profits</a></p>
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <li><a href="http://www.ezbob.com/AboutUs/Index" class="link-tab">About Us</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Index" class="link-tab">About EZBOB</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Vision" class="link-tab">Vision & Mission</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Values" class="link-tab">Our values</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Team" class="link-tab">Our Team</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Privacy" class="link-tab">Privacy Policy</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Landing" class="link-tab">Responsible Lending</a></li>
+                    <li><a href="http://www.ezbob.com/AboutUs/Conditions" class="link-tab">Term & Conditions</a></li>
+                </div>
+                <div class="pull-left" style="width: 140px;">
+                    <b><a href="http://blog.ezbob.com">Blog</a></b>
+                </div>
+                <div class="pull-left seo-block" style="width: 380px;">
+                    EZBOB is an easy, fast, and secure online small business lender. We provide small business loans to finance working capital to online sellers on marketplaces such as Amazon, eBay, and soon to be on Google Shopping and Play.com Traditional banks have not succeeded in providing small business loans to online shops. EZBOB provides financing for e-retail so that small business owners can purchase inventory, hire employees for Christmas, buy new office equipment and more.  EZBOB is a reliable and trustworthy small business lender provides instant capital over a web based system. EZBOB uses the Faster Payments System to guarantee that financing arrives in 30 minutes or less in our customers account. If  you are looking for cash  and you  are a small business in the UK  EZBOB is your reliable and secure financing partner. EZBOB finances small business that sell on Amazon or eBay, and soon Google Shopping and Play.com
+                </div>
+            </div>
+            <div class="fb-like" data-href="https://www.ezbob.com/" data-send="true" data-width="450" data-show-faces="false" data-colorscheme="dark" data-font="arial"></div>
+        </div>
+    </div>
+</footer>

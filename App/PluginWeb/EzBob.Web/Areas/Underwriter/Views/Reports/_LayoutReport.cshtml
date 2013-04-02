@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Areas/Underwriter/Views/Shared/_Layout.cshtml";
+}
+
+<div style="padding-left: 10px" >
+    <div>
+        @RenderSection( "filterPanel", false )
+    </div>
+    <div>
+        @RenderSection( "report", false )
+    </div>
+</div>
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#liReports").addClass("active");
+            $("#liApplications").removeClass("active");
+            $("#liCAIS").removeClass("active");
+
+            var el = $("#timeFilter");
+            el.change(function () {
+                    if (el.val() == "user") {
+                        $("#divTo").show();
+                        $("#divFrom").show();
+                        $("#dpTo").show();
+                        $("#dpFrom").show();
+                    } else {
+                        {
+                            $("#divTo").hide();
+                            $("#divFrom").hide();
+                            $("#dpTo").hide();
+                            $("#dpFrom").hide();
+                        }
+                    }
+                });
+            });
+    </script>
+    @RenderSection("Js", false)
+}
+
+

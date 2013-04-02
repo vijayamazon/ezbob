@@ -1,0 +1,2 @@
+0#Single
+1#Married

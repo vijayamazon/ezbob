@@ -1,0 +1,1 @@
+ALTER TABLE [MP_AmazonOrderItem2] ALTER COLUMN [AmazonOrderId] int NULL

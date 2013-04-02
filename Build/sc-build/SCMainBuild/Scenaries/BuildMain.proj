@@ -1,0 +1,82 @@
+<Project ToolsVersion="4.0" DefaultTargets="StartBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="..\SCBuild.proj" /> 
+	<Import Project="..\BinariesCreator.proj"/>
+	<Import Project="..\deploy.proj"/>
+	<Import Project="..\Utility.proj"/>
+	<Import Project="..\NUnit.proj"/>
+	<Import Project="..\Publish.proj"/>
+	<Import Project="..\..\libs\Scorto.BuildTasks.tasks"/>
+	<Import Project="..\..\libs\MSBuild.ExtensionPack.tasks"/>
+
+	<!-- build properties-->
+	<PropertyGroup>
+		<BuildConfiguration>Debug</BuildConfiguration>
+		<ClientsFolder>clients</ClientsFolder>
+		<ServicesFolder>services</ServicesFolder>
+		<WebFolder>websites</WebFolder>
+		<ConfigFolder>configtemplates</ConfigFolder>
+		<ToolsFolder>Tools</ToolsFolder>
+		<PublisherFolder>$(ToolsFolder)\Publisher</PublisherFolder>
+		<SDKFolder>SDK</SDKFolder>
+		<Database>Database</Database>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Edition Include="Standard"><FullName>Standard edition</FullName></Edition>
+	</ItemGroup>	
+	
+	<Target Name="ProjectToBuildConfig" >
+		<ItemGroup>
+			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
+			<!--
+			<ProjectToBuild Include="$(Src)\app\admin\admin.sln"/>
+			<ProjectToBuild Include="$(Src)\app\agents\agents.sln"/>
+			<ProjectToBuild Include="$(Src)\app\auditor\auditor.sln"/>
+			<ProjectToBuild Include="$(Src)\app\FormsDesigner\FormsDesigner.sln"/>
+			<ProjectToBuild Include="$(Src)\app\pluginweb\pluginweb.sln"/>
+			<ProjectToBuild Include="$(Src)\app\Maven\Maven.sln"/>
+			<ProjectToBuild Include="$(Src)\app\Patron\Patron.sln"/>
+			<ProjectToBuild Include="$(Src)\app\ScortoServices\ScortoScoringServices.sln"/>
+			
+			<ProjectToBuild Include="$(Src)\tools\Publisher\Publisher.sln"/> 
+			<ProjectToBuild Include="$(Src)\tools\LogViewer\LogViewer.sln"/>
+			<ProjectToBuild Include="$(Src)\tools\EnvironmentConfigValidation\EnvironmentConfigValidation.sln"/> 
+			<ProjectToBuild Include="$(Src)\tools\IncrementalUpdate\DBBuilder.sln"/> 
+			-->
+		</ItemGroup>
+	</Target>
+	
+	<!-- 	rd1 stable  -->
+	<Target Name="StableBuildConfig" >
+		<PropertyGroup>
+			<Src>c:\build\compilation\sc_stable\Sources</Src>
+			<BuildBin>c:\build\compilation\sc_stable\Binaries</BuildBin>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="StableBuild" DependsOnTargets="StableBuildConfig;CompilationScenario" />
+	<!-- 	rd1 trunk  -->
+	<Target Name="TrunkBuildConfig" >
+		<PropertyGroup>
+			<Src>c:\build\compilation\sc_trunk\Sources</Src>
+			<BuildBin>c:\build\compilation\sc_trunk\Binaries</BuildBin>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="TrunkBuild" DependsOnTargets="TrunkBuildConfig;CompilationScenario" />
+
+	<!-- 	sss-build trunk continious -->
+	<Target Name="TrunkBuildContiniousConfig" >
+		<PropertyGroup>
+			<Src>c:\build\Continious-trunk\Sources</Src>
+			<NunitLogs>c:\build\Continious-trunk\Nunitlog</NunitLogs>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="TrunkBuildContinious" DependsOnTargets="TrunkBuildContiniousConfig;ContiniousScenario" />
+
+	<!-- 	compilation  -->
+	<Target Name="CompilationScenario" DependsOnTargets="ProjectToBuildConfig;BeforeBuild;Build;AfterBuild"/>
+	<Target Name="ContiniousScenario" DependsOnTargets="ProjectToBuildConfig;BeforeBuild;Build;AfterBuild"/>
+
+</Project>

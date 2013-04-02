@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<PMML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="2.1" xmlns="http://www.dmg.org/PMML-2_1">
+  <Header copyright="2006 Scorto Corp., All Rights Reserved." description="ezbob model">
+    <Application name="CreditDecision" version="2.3" />
+    <Timestamp>6/15/2012 1:54:16 PM</Timestamp>
+  </Header>
+  <DataDictionary numberOfFields="12">
+    <Extension extender="CreditDecision" name="goodClass" value="Above" />
+    <DataField name="ExperianScore" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="40" />
+      <Value value="-680" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="40" />
+      </Value>
+      <Value value="681-760" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="40" />
+      </Value>
+      <Value value="761-840" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="80" />
+      </Value>
+      <Value value="841-920" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="120" />
+      </Value>
+      <Value value="921-1000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="160" />
+      </Value>
+      <Value value="1001+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="200" />
+      </Value>
+    </DataField>
+    <DataField name="MarketplaceSeniority" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="14" />
+      <Value value="-1" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="28" />
+      </Value>
+      <Value value="2-3" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="42" />
+      </Value>
+      <Value value="4+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="56" />
+      </Value>
+    </DataField>
+    <DataField name="MaritalStatus" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="8" />
+      <Value value="Married" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="32" />
+      </Value>
+      <Value value="Divorced" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="24" />
+      </Value>
+      <Value value="Single" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="16" />
+      </Value>
+      <Value value="Widower" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="32" />
+      </Value>
+    </DataField>
+    <DataField name="PositiveFeedbackCount" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="18" />
+      <Value value="-5000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="36" />
+      </Value>
+      <Value value="5001-50000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="54" />
+      </Value>
+      <Value value="50001+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="90" />
+      </Value>
+    </DataField>
+    <DataField name="Gender" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="6" />
+      <Value value="Male" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="12" />
+      </Value>
+      <Value value="Female" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="24" />
+      </Value>
+    </DataField>
+    <DataField name="TargetField" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="isTarget" value="true" />
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Value value="Above" property="valid">
+        <Extension extender="CreditDecision" name="rowsCount" value="0" />
+      </Value>
+      <Value value="Below" property="valid">
+        <Extension extender="CreditDecision" name="rowsCount" value="0" />
+      </Value>
+    </DataField>
+    <DataField name="AnnualTurnover" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="10" />
+      <Value value="-12000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="10" />
+      </Value>
+      <Value value="12001-28000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="40" />
+      </Value>
+      <Value value="28001-82000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="50" />
+      </Value>
+      <Value value="82001-120000" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="30" />
+      </Value>
+      <Value value="120001+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="10" />
+      </Value>
+    </DataField>
+    <DataField name="NumberOfStores" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="4" />
+      <Value value="1-2" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="4" />
+      </Value>
+      <Value value="3-4" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="12" />
+      </Value>
+      <Value value="5+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="20" />
+      </Value>
+    </DataField>
+    <DataField name="EZBOBSeniority" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="0" />
+      <Value value="-6M" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="6M-18M" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="18M+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+    </DataField>
+    <DataField name="EZBOBNumberOfLoans" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="0" />
+      <Value value="0-1" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="2-3" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="4+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+    </DataField>
+    <DataField name="EZBOBPrevLatePayments" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="0" />
+      <Value value="0" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="1" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="2+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+    </DataField>
+    <DataField name="EZBOBPrevEarlyPayments" optype="categorical" dataType="string">
+      <Extension extender="CreditDecision" name="x-storageType" value="string" />
+      <Extension extender="CreditDecision" name="fieldGroup" value="" />
+      <Extension extender="CreditDecision" name="hasPoints" value="true" />
+      <Extension extender="CreditDecision" name="neutralScore" value="0" />
+      <Extension extender="CreditDecision" name="fieldWeight" value="0" />
+      <Value value="0" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="1-2" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+      <Value value="3+" property="valid">
+        <Extension extender="CreditDecision" name="Points" value="0" />
+      </Value>
+    </DataField>
+  </DataDictionary>
+  <RegressionModel modelName="ezbob" functionName="regression" algorithmName="CAExpert" modelType="linearRegression" targetFieldName="TargetField">
+    <Extension extender="CreditDecision" name="modelGuid" value="d9f73dd6-be68-4252-b5d0-56ca5eb3ef7c" />
+    <Extension extender="CreditAnalyst" name="cutPoint" value="0" />
+    <Extension extender="CreditDecision" name="precision" value="0" />
+    <ModelStats />
+    <RegressionTable intercept="0" targetCategory="Above">
+      <CategoricalPredictor name="ExperianScore" value="-680" coefficient="1" />
+      <CategoricalPredictor name="ExperianScore" value="681-760" coefficient="1" />
+      <CategoricalPredictor name="ExperianScore" value="761-840" coefficient="2" />
+      <CategoricalPredictor name="ExperianScore" value="841-920" coefficient="3" />
+      <CategoricalPredictor name="ExperianScore" value="921-1000" coefficient="4" />
+      <CategoricalPredictor name="ExperianScore" value="1001+" coefficient="5" />
+      <CategoricalPredictor name="MarketplaceSeniority" value="-1" coefficient="2" />
+      <CategoricalPredictor name="MarketplaceSeniority" value="2-3" coefficient="3" />
+      <CategoricalPredictor name="MarketplaceSeniority" value="4+" coefficient="4" />
+      <CategoricalPredictor name="MaritalStatus" value="Married" coefficient="4" />
+      <CategoricalPredictor name="MaritalStatus" value="Divorced" coefficient="3" />
+      <CategoricalPredictor name="MaritalStatus" value="Single" coefficient="2" />
+      <CategoricalPredictor name="MaritalStatus" value="Widower" coefficient="4" />
+      <CategoricalPredictor name="PositiveFeedbackCount" value="-5000" coefficient="2" />
+      <CategoricalPredictor name="PositiveFeedbackCount" value="5001-50000" coefficient="3" />
+      <CategoricalPredictor name="PositiveFeedbackCount" value="50001+" coefficient="5" />
+      <CategoricalPredictor name="Gender" value="Male" coefficient="2" />
+      <CategoricalPredictor name="Gender" value="Female" coefficient="4" />
+      <CategoricalPredictor name="AnnualTurnover" value="-12000" coefficient="1" />
+      <CategoricalPredictor name="AnnualTurnover" value="12001-28000" coefficient="4" />
+      <CategoricalPredictor name="AnnualTurnover" value="28001-82000" coefficient="5" />
+      <CategoricalPredictor name="AnnualTurnover" value="82001-120000" coefficient="3" />
+      <CategoricalPredictor name="AnnualTurnover" value="120001+" coefficient="1" />
+      <CategoricalPredictor name="NumberOfStores" value="1-2" coefficient="1" />
+      <CategoricalPredictor name="NumberOfStores" value="3-4" coefficient="3" />
+      <CategoricalPredictor name="NumberOfStores" value="5+" coefficient="5" />
+      <CategoricalPredictor name="EZBOBSeniority" value="-6M" coefficient="2" />
+      <CategoricalPredictor name="EZBOBSeniority" value="6M-18M" coefficient="3" />
+      <CategoricalPredictor name="EZBOBSeniority" value="18M+" coefficient="4" />
+      <CategoricalPredictor name="EZBOBNumberOfLoans" value="0-1" coefficient="1" />
+      <CategoricalPredictor name="EZBOBNumberOfLoans" value="2-3" coefficient="3" />
+      <CategoricalPredictor name="EZBOBNumberOfLoans" value="4+" coefficient="4" />
+      <CategoricalPredictor name="EZBOBPrevLatePayments" value="0" coefficient="5" />
+      <CategoricalPredictor name="EZBOBPrevLatePayments" value="1" coefficient="2" />
+      <CategoricalPredictor name="EZBOBPrevLatePayments" value="2+" coefficient="0" />
+      <CategoricalPredictor name="EZBOBPrevEarlyPayments" value="0" coefficient="2" />
+      <CategoricalPredictor name="EZBOBPrevEarlyPayments" value="1-2" coefficient="3" />
+      <CategoricalPredictor name="EZBOBPrevEarlyPayments" value="3+" coefficient="5" />
+    </RegressionTable>
+  </RegressionModel>
+</PMML>

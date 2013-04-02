@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="UnitTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!-- Use cmd line utility to run test for the list of assemblies --> 
+	<Target Name="UnitTest">
+		<RemoveDir Directories="$(NunitLogs)" />
+		<ScortoNunit AsmDirectory="$(Src)" Command="$(Src)\Lib\3rdparty\NUnit\nunit-console-x86.exe /nologo " LogsDir="$(NunitLogs)" />
+	</Target>
+</Project>

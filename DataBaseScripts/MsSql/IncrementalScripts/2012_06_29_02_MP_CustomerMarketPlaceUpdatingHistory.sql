@@ -1,0 +1,1 @@
+ALTER TABLE [MP_CustomerMarketPlaceUpdatingHistory] ALTER COLUMN [UpdatingEnd] datetime NULL

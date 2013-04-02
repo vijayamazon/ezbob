@@ -1,0 +1,43 @@
+﻿@model dynamic
+
+@helper RenderRow(string marketplace, string storeid, string lastcall, string revenue, string turnover){
+    <tr>
+        <td>@marketplace</td>
+        <td>@storeid</td>
+        <td>@lastcall</td>
+        <td>@revenue</td>
+        <td>@turnover</td>
+    </tr>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Market place</th>
+            <th>Store ID</th>
+            <th>Date of last call</th>
+            <th>Revenue</th>
+            <th>Turnover</th>
+        </tr>
+    </thead>
+    <tbody>
+        @RenderRow("Amazon", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+        @RenderRow("Amazon", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+        @RenderRow("Ebay", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+        @RenderRow("Amazon", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+        @RenderRow("Amazon", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+        @RenderRow("Amazon", "23487sdf", @DateTime.Now.ToString(), "21500", "321548")
+    </tbody>
+</table>
+<div class="row">
+    <div class="span12">
+        Total Revenue: 23348
+    </div>
+
+</div>
+<div class="row">
+    <div class="span12">
+        Total TurnOver: 234325
+    </div>
+</div>
+@{Html.RenderPartial("_ExportToExcel");}

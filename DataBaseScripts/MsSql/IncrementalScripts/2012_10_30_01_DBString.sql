@@ -1,0 +1,1 @@
+update [dbo].[DbString] set [Value] = 'Please enter a password that is 6 characters or more.' where [Key] = 'PasswordPolicyCheck'

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A3D7CD63-C1D8-41D0-93A7-776C0E6A20D8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZohoCRM</RootNamespace>
+    <AssemblyName>ZohoCRM</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EzBobZohoApi.cs" />
+    <Compile Include="IZohoFacade.cs" />
+    <Compile Include="Zoho.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZohoConfigTest.cs" />
+    <Compile Include="ZohoFacade.cs" />
+    <Compile Include="ZohoFacadeFake.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
+      <Project>{9e536824-37ad-4cc7-b597-11b882091dbd}</Project>
+      <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Deveel\Deveel.ZohoCRM\Deveel.ZohoCRM.csproj">
+      <Project>{b2206902-86e2-4ec7-8be3-6e36514ad46e}</Project>
+      <Name>Deveel.ZohoCRM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">
+      <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
+      <Name>EzBob.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Name>EzBob.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob\EzBob.csproj">
+      <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

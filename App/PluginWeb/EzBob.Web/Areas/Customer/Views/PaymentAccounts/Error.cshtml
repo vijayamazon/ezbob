@@ -1,0 +1,23 @@
+﻿@model string
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Error</title>
+    </head>
+    <body>
+        <div>
+            <h2>error</h2>
+            If this windows is not automatically closed, close it.
+        </div>
+        <script type="text/javascript">
+            window.opener.PayPalAddingError("@Model");
+            self.close();
+        </script>
+    </body>
+</html>

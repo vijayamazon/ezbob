@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx?wsdl" docRef="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx" xmlns:q1="http://www.uk.experian.com/WASP/" binding="q1:TokenServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

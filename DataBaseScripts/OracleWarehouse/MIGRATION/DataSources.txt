@@ -1,0 +1,2 @@
+1#Credit Approval DataSource#1#NULL#CreditApprovalView#ID#MASTERID###0#HISTORICALID
+2#Credit Approval DataSource with Nulls#1#NULL#CreditApprovalViewNulls#ID#MASTERID###0#HISTORICALID

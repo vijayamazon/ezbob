@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+<script id="payment-rollover-template" type="text/template">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel"><%-model.title%></h3>
+    </div>
+
+    <div class="modal-body">
+        <form id="rollover-dialog" class="form-horizontal" action="/" method="POST">
+            
+            <input type="hidden" value="<%-model.hasActive%>" name="isEditCurrent"/>
+            <input type="hidden" value="<%-model.rollover.Id%>" name="rolloverId"/>
+
+            <div class="control-group">
+                <label class="control-label" for="installment">Installment</label>
+                <div class="controls">
+                    <select id="installment" name="ScheduleId">
+                        <% _.each(model.schedule, function(item, i){
+                        var selected = (model.hasActive && model.rollover.LoanScheduleId == item.Id) ? "selected='selected'" : "";
+                        %>
+                        <% if( item.Status == 'Late' || item.Status == 'StillToPay'){ %>
+                        <option  <%= selected  %> value="<%-item.Id%>" >#<%-item.Id%> (<%- moment.utc(item.Date).local().format("MMM DD YYYY") %>)</option>
+                        <%}%>
+                        <%});%>
+                    </select>
+                </div>
+            </div>
+            
+            @EzForm.DateInput("ExperiedDate", "Rollover Expiry Date", true, new[] { DateTime.Now, DateTime.Now.AddYears(1), DateTime.Now.AddDays(3) })
+            @EzForm.InputText("MounthCount", "Amount of Months to Move", "1", "", false)
+            @EzForm.InputText("Payment", "Rollover Amount", "", "", true)
+
+            @EzForm.InputText("rolloverFees", "Rollover fee","<%-model.configValues.rolloverCharge%>", "", true)
+            @EzForm.InputText("interest", "Interest","", "", true)
+            @EzForm.InputText("lateFees", "Late fees","", "", true)
+        </form>
+    </div>
+    
+    <div class="modal-footer">
+        <%if( model.hasActive ){%>
+        <button class="btn btn-danger remove">Remove Rollover</button>
+        <%}%>
+        <button class="btn btn-primary confirm">OK</button>    
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</script>

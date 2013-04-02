@@ -1,0 +1,19 @@
+﻿@using EzBob.Web.Infrastructure
+@using EzBob.Web.Models.Strings
+@model dynamic
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Congratulations!</h3>
+
+@section Js{
+    <script type="text/javascript">
+        var username = new Uri(document.location.href).getQueryParamValue('username');
+        if (username) {
+            window.opener.AlertToken(username);
+        }
+        self.close();
+    </script>
+} 

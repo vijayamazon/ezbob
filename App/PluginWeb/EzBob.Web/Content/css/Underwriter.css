@@ -1,0 +1,449 @@
+﻿textarea.reason {
+    width: 480px;
+    resize:none;
+    height: 80px;
+}
+.underwriter-body 
+{
+    padding: 10px;
+    background-color: #fefefe;
+    background-color: #F9F9F9;
+    background-position: right top;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 13px rgba(50, 50, 50, 0.75);
+    min-height: 600px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+
+    behavior: url(CSS3PIE);
+    position: relative;
+}
+
+#profile-view fieldset legend {
+    font-style: italic;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    display: inline;
+    padding-right: 20px;
+    padding-left: 0px;
+    margin-left: -20px;
+    border: none;
+    width: auto;
+}
+
+#profile-view fieldset {
+    border: 1px solid #EEE;
+    padding: 10px 10px 10px 30px;
+    margin-bottom: 20px;
+}
+
+.check, .cross, .question {
+    height: 22px;width: 22px;
+    display: inline-block;
+    line-height: 22px;
+    vertical-align: bottom;    
+}
+.check {
+    background-image: url(../img/check.png);
+}
+
+.cross {
+    background-image: url(../img/cross.png);
+}
+.question {
+    background-image: url(../img/question_mark.png);
+}
+
+.alertWarning {
+    background-color: rgb(248, 252, 157);
+}
+.alertError {
+    background-color: rgb(254, 148, 219);
+}
+.alertReject {
+    background-color: rgb(250, 80, 42);
+}
+.marketplace-table td {
+    cursor: pointer;
+}
+.marketplace-table tbody tr:hover td, .marketplace-table tbody tr:hover th {
+    background-color: #E5E5E5;
+}
+.marketplaceDetail tbody tr:hover td, .marketplace-table tbody tr:hover th {
+    background-color: #F5F5F5;
+    cursor: auto;
+}
+.marketplaceDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar{
+    border-bottom: 1px solid #ddd !important;
+}
+.marketplaceDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
+    min-height: 0px !important;
+}
+
+.marketplaceDetail .marketplaceTitle {
+    display: none;
+    
+}
+
+#marketplace-details {
+    overflow: auto;
+}
+
+.paypalDetail tbody tr:hover td, .marketplace-table tbody tr:hover th {
+    background-color: #F5F5F5;
+    cursor: auto;
+}
+.paypalDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar{
+    border-bottom: 1px solid #ddd !important;
+}
+.paypalDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
+    min-height: 0px !important;
+}
+
+.paypalDetail .paypalDetailTitle {
+    display: none;
+    
+}
+
+#payPal-details {
+    overflow: auto;
+}
+
+
+.nav-tabs {
+    border-bottom: 1px solid #DDDDDD;
+}
+
+.reportTableHeader {
+    text-align: center !important;
+    background-color: #E5E5E5;
+}
+.left-underwriter-pane {
+    
+}
+
+.reportDatePicker {
+    width: 70px !important;
+}
+
+.reportDiv {
+    float: right;
+    padding-left: 10px;
+}
+
+.numberTd {
+    text-align: right !important;
+}
+
+.underwriter-loan-details h1 { display: none;margin-bottom: 0px!important; }
+
+td b.marking
+{
+    background-repeat: no-repeat;
+    padding-right: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    position: relative;
+}
+
+td b.NoChecked
+{
+    background-image: url(../img/cross.png);
+}
+
+td b.Checked
+{
+    background-image: url(../img/ok16.png);
+}
+
+table.rright tbody td:not(:first-child) {
+    text-align: right;
+}
+
+
+.profile-person-info .table-bordered,
+.profile-loan-info .table-bordered{
+    behavior: none; /* conflict with overflow: auto. Must be none!*/
+}
+
+
+
+.shop-eBay, .shop-Amazon, .shop-EKM {
+    background-image: url(../img/store-logos.png);
+    width: 119px;
+    height: 35px;
+    margin-left: 25px;
+}
+
+.shop-Amazon {
+}
+
+.shop-eBay {
+    background-position: 0 -35px;
+    margin-left: 20px;
+}
+
+.shop-EKM {
+    background-position: 0 -70px;
+}
+
+.marketplace-table tr {
+    vertical-align: middle;
+}
+
+ .show-test-customers {
+     margin-top: 20px;
+ }
+
+ #spl {
+	width: 100%;
+    height: 1000px;
+}
+#spl > div {
+	overflow: visible;
+}
+
+.left-underwriter-pane {
+    width: 400px;
+}
+
+.vsplitbar {
+	width: 5px;
+	background: #aaa;
+    margin: 0 5px;
+}
+
+.profile-tabs {
+    padding-left: 10px;
+}
+
+.blue-header{
+    border-radius: 4px;
+}
+
+.blue-header thead tr{
+    background-color: #9AB1D1;
+    color: white;
+}
+
+.green-header{
+    border-radius: 4px;
+}
+
+.green-header  thead tr{
+    background-color: #B1B1B1;
+    color: white;
+}
+
+.centered thead tr th{
+    text-align: center;
+}
+table.squeezed tbody tr td{
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.table-striped.darker tbody tr:nth-child(odd) td, .table-striped.darker tbody tr:nth-child(odd) th{
+    background-color: #F1F1F1;
+}
+
+.api-check-first-column {
+    width: 140px;
+}
+.api-check-seccond-column {
+    width: 200px;
+}
+
+table.table{
+    font-family: Tahoma;
+}
+
+.view-collection-status .control-label {
+    float: left;
+    width: 130px;
+    padding-top: 5px;
+}
+.view-collection-status textarea {
+    resize: none; 
+}
+.controls.error input.error, .controls.error select, .controls.error textarea, .controls select.error, .controls textArea.error {
+  color: #b94a48;
+  border: 2px solid #b94a48;
+}
+
+.cais-comment{
+    overflow: auto;
+    width: 320px;
+    height: 174px;
+    border: solid 1px #C5C5C5;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.calculated-status {
+    margin-top: 10px;
+    border-top: solid 1px #C5C5C5;
+}
+#loanhistory-table table tr td {
+    cursor: pointer;
+}
+
+.payment-schedule-table td {
+    color: #7BB224;
+}
+
+#functionsPopup h3 {
+    font-size: 16px;
+}
+
+.table-selected td{cursor: pointer}
+
+.table-selected tbody tr:hover td, .table-selected tbody tr:hover th{background-color: #E5E5E5}
+
+/* Permissions */
+[name="editEmail"], 
+[name="changeDisabledState"],
+[name="isTestEditButton"],
+[name="updateCRM"],
+[name="newCreditLineBtn"],
+[name="loanType"],
+[name="allowSendingEmail"],
+[name="openCreditLineChangeButton"],
+[name="repaymentPeriodChangeButton"],
+[name="startingDateChangeButton"],
+[name="offerValidUntilDateChangeButton"],
+[name="interestRateChangeButton"],
+[name="setupFeeEditButton"],
+#ApproveBtn, #RejectBtn,
+#EscalateBtn,
+.reCheck-amazon,
+.checkeBankAccount,
+.reCheck-paypal,
+#RunCheckBtn,
+#btnAMLInformation,
+#btnAMLandBWAInformation,
+#btnBWAInformation,
+.edit-loan,
+a[data-bug-type],
+.addNewDebitCard,
+.setDefault,
+.payment-cards-buttons > *,
+.rollover,
+.make-payment,
+#btn-options,
+#addNewDoc,
+#deleteDocs,
+#RunBWAReCheckBtn,
+#RunAMLReCheckBtn,
+#RunReCheckBtn,
+#RunAMLCheckBtn,
+#RunAMLBWACheckBtn,
+#RunBWACheckBtn,
+.recheck-mp,
+#recheck-main-strat
+{
+    display: none;
+}
+
+.permission-EmailConfirmationButton [name="editEmail"],
+.permission-CustomerStatus [name="changeDisabledState"],
+.permission-TestUser [name="isTestEditButton"],
+.permission-CRM [name="updateCRM"],
+.permission-NewCreditLineButton [name="newCreditLineBtn"],
+.permission-CreditLineFields [name="loanType"],
+.permission-CreditLineFields [name="allowSendingEmail"],
+.permission-CreditLineFields [name="openCreditLineChangeButton"],
+.permission-CreditLineFields [name="repaymentPeriodChangeButton"],
+.permission-CreditLineFields [name="startingDateChangeButton"],
+.permission-CreditLineFields [name="offerValidUntilDateChangeButton"],
+.permission-CreditLineFields [name="interestRateChangeButton"],
+.permission-CreditLineFields [name="setupFeeEditButton"],
+.permission-ApproveReject #ApproveBtn,
+.permission-ApproveReject #RejectBtn,
+.permission-Escalate #EscalateBtn,
+.permission-RecheckMarketplaces .reCheck-amazon,
+.permission-CheckBankAccount .checkeBankAccount,
+.permission-RecheckPayPal .reCheck-paypal,
+.permission-RunCreditBureauChecks #RunCheckBtn,
+.permission-SendingMessagesToClients #btnAMLInformation,
+.permission-SendingMessagesToClients #btnAMLandBWAInformation,
+.permission-SendingMessagesToClients #btnBWAInformation,
+.permission-EditLoanDetails .edit-loan,
+.permission-OpenBug a[data-bug-type],
+.permission-AddBankAccount .addNewDebitCard,
+.permission-ChangeBankAccount .setDefault,
+.permission-AddDebitCard .payment-cards-buttons > *,
+.permission-RunCreditBureauChecks #RunBWAReCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLReCheckBtn,
+.permission-RunCreditBureauChecks #RunReCheckBtn,
+.permission-RunCreditBureauChecks #RunReCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLBWACheckBtn,
+.permission-RunCreditBureauChecks #RunBWACheckBtn,
+.permission-RerunningMarketplaces .recheck-mp,
+.permission-RerunningCreditCheck #recheck-main-strat,
+
+.role-manager .rollover,
+.role-Underwriter .rollover,
+.role-manager .make-payment,
+.role-Underwriter .make-payment,
+.role-manager #btn-options,
+.role-Underwriter #btn-options,
+.role-manager #addNewDoc,
+.role-Underwriter #addNewDoc,
+.role-manager #deleteDocs,
+.role-Underwriter #deleteDocs
+{
+    display: inline-block;
+}
+
+.table-fixed {table-layout: fixed;}
+
+.break-word {
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.roleImg {
+    margin-top: 5px;
+}
+
+#installment-edit-form, #fee-edit-form {
+    margin-top: 20px;
+}
+
+table tr.editing td{
+    background-color: beige !important;
+}
+.profile-person-info{
+    margin-top: 58px;
+}
+
+.ui-jqgrid-htable {
+    position: fixed;
+    z-index: 10;
+    -webkit-box-shadow:  0 3px 3px rgba(0, 0, 0, 0.4);
+    box-shadow:  0 3px 3px rgba(0, 0, 0, 0.4);
+}
+.ui-jqgrid-bdiv {
+    margin-top: 44px !important;
+}
+
+.left-underwriter-menu {
+    display: block;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    z-index: 11;
+    background-color: white;
+    width: 177px;
+    padding: 10px;
+}
+
+.customer-grids {
+    margin-left: 178px;
+}

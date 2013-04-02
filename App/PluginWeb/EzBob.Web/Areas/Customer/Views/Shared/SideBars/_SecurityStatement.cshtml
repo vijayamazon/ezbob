@@ -1,0 +1,44 @@
+﻿@model dynamic
+
+@{
+    Layout = "_SideBarLayout.cshtml";
+}
+
+<h1><img alt="tips icon" src="@Url.Content("~/Content/img/sidebar/ico-tips.png")"><span style="margin-left:-3px;">Quick Tips</span></h1>
+<ul class="gtarr">
+    <li
+        rel="popover" 
+        data-content="A strong password  consists of at least 6 characters  and is a combination  of  letters, numbers, capital letters and signs."
+        data-original-title="">
+        Choosing a strong password
+    </li>
+    <li
+        rel="popover" 
+        data-content="You are asked to select a question and provide an answer for verification purposes should you forget or wish to change your password. Please choose a memorable answer to a question that only you would know."
+        data-original-title="">
+        Choose an answer that only you will know and remember.
+    </li>
+</ul>
+
+@section Video
+{
+    <div style="position:relative">
+        <span>Featuring - Getting Started</span>
+        <img alt="video placeholder" src="@Url.Content("~/Content/Video/poster.jpg")" style="width: 320px; height:140px" class="poster-picture"/>
+        <a href="javascript:;" 
+            class="play-link" 
+            data-videoDivId="introDiv"
+            data-videoId ="intro"
+            >Play</a>    
+    </div>
+    
+    <div id="introDiv" style="display: none;">
+        <video id="intro" class="video-js vjs-default-skin" controls preload="none" width="640" height="360" 
+               poster="@Url.Content("~/Content/Video/poster.jpg")"
+               data-setup="{}">
+            <source src="@Url.Content("~/Content/Video/Intro.mp4")" type='video/mp4' />
+            <source src="@Url.Content("~/Content/Video/Intro.webm")" type='video/webm' />
+            <source src="@Url.Content("~/Content/Video/Intro.ogv")" type='video/ogg' />
+        </video>    
+    </div>
+}

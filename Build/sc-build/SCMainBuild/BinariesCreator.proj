@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="BinaryCreate">
+
+<Target Name="LogOffSessions">
+		<Exec Command="logoff 1" IgnoreExitCode="true"/>
+		<Exec Command="logoff 2" IgnoreExitCode="true"/>
+		<Exec Command="logoff 3" IgnoreExitCode="true"/>
+		<Exec Command="logoff 4" IgnoreExitCode="true"/>
+		<Exec Command="logoff 5" IgnoreExitCode="true"/>
+		<Exec Command="logoff 6" IgnoreExitCode="true"/>
+		<Exec Command="logoff 7" IgnoreExitCode="true"/>
+		<Exec Command="logoff 8" IgnoreExitCode="true"/>
+		<Exec Command="logoff 9" IgnoreExitCode="true"/>
+		<Exec Command="logoff 10" IgnoreExitCode="true"/>
+</Target>
+
+
+	<Target Name="BinaryCreate">
+		<RemoveDir Directories="$(BuildBin)"/>
+		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
+		
+		<AppCopy CopyFrom="$(Src)\App\Clients\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\"/> 
+		
+		<AppCopy CopyFrom="$(Src)\App\web" CopyTo="$(BuildBin)\%(Edition.Identity)\web\"/> 
+		
+		<!-- <WebCopy CopyFrom="$(Src)\App\pluginweb\pluginwebapp\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\PluginWebapp\" /> -->
+		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
+		
+		<AppCopy CopyFrom="$(Src)\App\service\agent\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\agent\"/>
+		
+		<MultiCopy CopyFrom="$(Src)\Tools\Publisher\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
+		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
+		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
+		<MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/>
+		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
+		
+		<MultiCopy CopyFrom="$(Src)\Items\" CopyTo="$(BuildBin)\%(Edition.Identity)\Items\"/>
+		<MultiCopy CopyFrom="$(Src)\DataBaseScripts\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\"/>
+		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
+		
+		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\CustomSchedulers\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Signals\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\EKM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		
+		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
+		
+		<WriteLinesToFile ContinueOnError="true" File="$(BuildBin)\%(Edition.Identity)\label=$(CCNetLabel).txt" Lines="Build label is $(CCNetLabel)" Overwrite="true"/>
+	</Target>
+</Project>

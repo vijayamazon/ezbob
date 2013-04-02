@@ -1,0 +1,1 @@
+update [dbo].[DbString] set [Value] = 'Please enter a password that is 7 characters or more.' where [Key] = 'PasswordPolicyCheck'

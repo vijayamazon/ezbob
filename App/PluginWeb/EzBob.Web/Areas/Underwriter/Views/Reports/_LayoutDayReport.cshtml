@@ -1,0 +1,26 @@
+﻿@model EzBob.Web.Areas.Underwriter.Models.Reports.ReportModelDayBase
+@{ Layout = "~/Areas/Underwriter/Views/Reports/_LayoutReport.cshtml"; }
+
+@section filterPanel
+{
+    @using (Html.BeginForm())
+    {
+    <div class="well">
+        @Html.Partial("DayFilterReportControl", Model)
+    </div>
+    }    
+    
+}
+@section report
+{
+    <div id="report" style="overflow-x: auto;"> 
+        @RenderSection("Report") 
+    </div>
+    <div class="pull-right">
+        <a class="btn-back" href="@Url.Action( Model.DownloadAction, new{date = Model.DayDate.StringDate})" id="exportAmountBtn">Export</a>
+    </div>
+}
+@section Js
+{
+    @RenderSection("Js", false)
+}

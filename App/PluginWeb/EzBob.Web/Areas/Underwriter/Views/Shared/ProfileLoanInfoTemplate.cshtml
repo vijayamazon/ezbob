@@ -1,0 +1,290 @@
+﻿@model dynamic
+
+@helper RawCell(params string[] arguments){
+    @EzTable.RawCell(Html, arguments)
+}
+
+@helper RawEditable(params string[] arguments)
+    {
+    <tr>
+        <td>@Html.Raw(arguments[0])
+        </td>    
+        <td>
+            <input style="width:90%" type="text" value = "@Html.Raw(arguments[1])" name="@Html.Raw(arguments[2])"/>
+        </td>
+    </tr>
+}
+@helper RawCellWithButton(params string[] arguments)
+    {
+    <tr>
+        <td>@Html.Raw(arguments[0])
+        </td>    
+        <td>
+            <table width = "100%">
+                <tr>
+                    <td>
+                        @Html.Raw(arguments[1])
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        <input type="button" class="btn-back" value="..." name="@Html.Raw(arguments[2])" />
+                    </td>
+                </tr>
+            </table>
+            
+        </td>
+    </tr>
+}
+
+@helper RawCellWithButtonNear(string title, string val1, string val2)
+    {
+    <tr>
+        <td>@Html.Raw(title)
+        </td>    
+        <td>
+            @Html.Raw(val1) &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-pencil"/></button>
+        </td>
+    </tr>
+}
+
+@helper RawCellWithButtonNearUpdate(string title, string val1, string val2)
+    {
+    <tr>
+        <td>@Html.Raw(title)
+        </td>    
+        <td>
+            @Html.Raw(val1) &nbsp;&nbsp;&nbsp;
+            <button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-refresh"/></button>
+        </td>
+    </tr>
+}
+
+
+<div id="simpleEditDlg" name="simpleEditDlg" style="display: none">
+    <form name="simpleEditDlg">        
+    </form>
+</div>
+
+<script id="simple-value-editor-cb-template" type="text/template">
+    <select name='simpleValueEdit'>
+        <%_.each(options, function(o){%>
+                <option value="<%=o.value%>"><%=o.text%></option>              
+        <%});%>        
+    </select>
+</script>
+
+<script id="profile-person-info-template" type="text/template">
+    <table class="table table-bordered table-striped green-header squeezed darker rright" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th colspan="2">Customer Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @RawCell("Account #", "<%- RefNumber %>")
+            @RawCell("Id", "<%- Id %>")
+            @RawCell("Name", "<%- Name %>")
+
+            <tr>
+                <td>
+                    E-mail 
+                    <i data-title="<%- EmailState %>" class="tltp <%=getIcon()%>"></i>
+                </td>
+                <td>
+                    <button class="btn btn-mini" name="editEmail"><i class="icon-pencil"></i></button>
+                    <%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
+                    <i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
+                </td>
+            </tr>
+            
+            @RawCell("Mobile Phone #", "<%- MobilePhone %>")
+            @RawCell("Daytime Phone #", "<%- DaytimePhone %>")
+
+            @RawCell("Cart", "<%- Medal %>")
+            @RawCell("User score", "<%- CreditScore %>")
+            @RawCell("Registration date", "<%- EzBob.formatDate(RegistrationDate) %>")
+            <%
+            _.each(IndustryFields, function(v){
+            %>
+            <tr>
+                <td>Industry field</td>
+                <td><%=TopCategories.length != 0 ? TopCategories.join("; <br />") : "-"%></td>
+            </tr>
+            <%
+            });
+            %>
+            
+            @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
+
+            @RawCell("User status", "<%- UserStatus %>")
+    
+            @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
+            
+            @RawCellWithButtonNearUpdate("CRM:", "<%= ZohoId ? 'Yes' : 'No' %>", "updateCRM")
+            
+        </tbody>
+    </table>
+
+
+</script>
+
+<script id="profile-loan-info-template" type="text/template">
+    <table class="table table-bordered table-striped green-header squeezed darker rright">
+        <thead>
+            <tr>
+                <th colspan="2">Offer Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @RawCell("System decision", "<%- m.SystemDecision %>")
+            @RawCell("System calculated amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
+            
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
+            <%} else{%>
+            @RawCell("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
+            <%}%>
+    
+            @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
+            @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
+    
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Repayment period", "<%- m.RepaymentPerion %>", "repaymentPeriodChangeButton")
+            <%} else{%>
+            @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
+            <%}%>
+    
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Starting from date", "<%- m.StartingFromDate %>", "startingDateChangeButton")
+            <%} else{%>
+            @RawCell("Starting from date", "<%- m.StartingFromDate %>")
+            <%}%>
+    
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Offer valid until", "<%- m.OfferValidateUntil %>", "offerValidUntilDateChangeButton")
+            <%} else{%>
+            @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
+            <%}%>
+        
+            @*
+            @RawCell("Offer expired", "<%- m.OfferExpired ? 'Yes': 'No'%>")
+            *@
+
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Interest Rate", "<%- EzBob.formatPercents(m.InterestRate) %>", "interestRateChangeButton")
+            <%} else{%>
+            @RawCell("Interest Rate", "<%- EzBob.formatPercents(m.InterestRate) %>")
+            <%}%>
+    
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Enable Setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
+            <%} else{%>
+            @RawCell("Setup fee:", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
+            <%}%>
+    
+            @RawCell("Funds avaliable", "<%- m.FundsAvaliable %>")
+            @*
+            @RawCellWithButton("Details", "<%- m.Details || '' %>", "editDetails")
+            *@
+            @RawCellWithButtonNear("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
+            @RawCellWithButtonNear("Loan Type:", "<%= m.LoanType %>", "loanType")
+
+        </tbody>
+    </table>
+    <div class="control-group">
+        <input type="button" class="btn" value="New Credit Line" name="newCreditLineBtn" />
+    </div>
+
+</script>
+
+
+<script id="email-edit-template" type="text/template">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Customer Email Edit</h3>
+    </div>
+    <div class="modal-body">
+        <form id="email-edit-form">
+            <label>Email</label>
+            <input type="text" id="edit-email" name="edit-email" value="<%- Email %>">
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary email-change-address">Change Email</button>
+        <button class="btn btn-primary email-send-new-request">Send New Request</button>
+        <button class="btn btn-primary email-confirm-manually">Confirm Manually</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</script>
+
+
+<script id="collection-status-layout-template" type="text/template">
+    
+    <form id ="collection-status-dialog" class="view-collection-status" action="/" method="POST">
+        <input name="currentStatus" type="hidden"/>
+        <input name="customerId" type="hidden"/>
+        <div id ="list-items">
+
+        </div>
+        <div id ="collection-view">
+
+        </div>
+    </form>
+</script>
+
+<script id="collection-status-items-template" type="text/template">
+    <select id="collection-status-items">
+        <option value="0">Enabled</option>
+        <option value="1">Disabled</option>
+        <option value="2">Fraud</option>
+        <option value="3">Bankruptcy</option>
+        <option value="4">Default</option>
+    </select>
+</script>
+
+<script id="collection-status-template" type="text/template">
+    <div id="date" class="control-group">
+        <label for="collectionDateOfDeclaration" class="control-label">Date of declaration:</label>
+        <div class="controls input-append">
+            <input id="collectionDateOfDeclaration" name="collectionDateOfDeclaration" type="text" class="valid">
+        </div>
+    </div>
+    <%  if (Items.length!=0) {%>
+    <div id="installments">
+       
+        <table style="width:100%;" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Collection fee</th>
+                    <th>Loan Ref</th>
+                </tr>
+            </thead>
+            <%var i = 0; _.each(Items, function(item) {%>
+            <tr>
+                <td style="width:50%;">
+                    <div class="controls">
+                        <label for="items[<%=i%>].isAddCollectionFee" class="checkbox">
+                            <input class="isAddCollectionFee" name="items[<%=i%>].isAddCollectionFee" data-items-num="<%=i%>" <%=item.IsAddCollectionFee ? 'checked="checked"' : ""%> type="checkbox" value="<%=item.IsAddCollectionFee%>"/>Add collection fee
+                        </label>
+                    </div>
+                </td>
+                <td style="width:30%;">
+                    <input class="collectionFee"  style="width:80px"name="items[<%=i%>].collectionFee" type="text"  <%=!item.IsAddCollectionFee ? 'readonly="readonly"' : ''%> value="<%=item.CollectionFee%>"/></td>
+                <td style="width:30%;"> "<%=item.LoanRefNumber%>"</td>
+                <input  name="items[<%=i%>].LoanId" type="hidden" value="<%=item.LoanId%>"/>
+            </tr>
+            <% i++; });%>
+        </table>
+    </div>
+    <%}%>
+    <div class="control-group">
+        <label class="control-label">Description:</label>
+        <div class="controls">
+            <textarea id="collectionDescription" name="collectionDescription"/>
+        </div>
+    </div>
+    <a href="#" class="uploadFiles btn">Upload files</a>
+</script>

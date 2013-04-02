@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="DatabaseLib" namespace="EZBob.DatabaseLib.Model.Database">
+  <sql-query name="ExposurePerUnderwriterReport" >
+    <query-param name="dateStart" type="System.DateTime"/>
+    <query-param name="dateEnd" type="System.DateTime"/>
+    <return class="ExposurePerUnderwriterDataRow" >
+      <return-property column="IdUnderwriter" name="IdUnderwriter"/>
+      <return-property column="Underwriter" name="Underwriter"/>
+      <return-property column="Processed" name="Processed"/>
+      <return-property column="ProcessedAmount" name="ProcessedAmount"/>
+      <return-property column="Approved" name="Approved"/>
+      <return-property column="ApprovedAmount" name="ApprovedAmount"/>
+      <return-property column="Paid" name="Paid"/>
+      <return-property column="PaidAmount" name="PaidAmount"/>
+      <return-property column="Late30" name="Late30"/>
+      <return-property column="Late30Amount" name="Late30Amount"/>
+      <return-property column="Late60" name="Late60"/>
+      <return-property column="Late60Amount" name="Late60Amount"/>
+      <return-property column="Late90" name="Late90"/>
+      <return-property column="Late90Amount" name="Late90Amount"/>
+      <return-property column="Defaults" name="Defaults"/>
+      <return-property column="DefaultsAmount" name="DefaultsAmount"/>
+      <return-property column="Exposure" name="Exposure"/>
+      <return-property column="OpenCreditLine" name="OpenCreditLine"/>
+    </return>
+    EXEC [GetExposurePerUnderwriterReport] @dateStart=:dateStart, @dateEnd=:dateEnd
+  </sql-query>
+</hibernate-mapping>

@@ -1,0 +1,60 @@
+using EzBob.eBayServiceLib;
+using NUnit.Framework;
+using Scorto.RegistryScanner;
+
+namespace EzBob.eBayLib
+{
+	[TestFixture]
+	public class EBayTestFixture
+	{
+		[SetUp]
+		public void Init()
+		{
+			Scanner.Register();
+		}
+
+		[Test]
+		public void AddEBayCustomerMarketplace()
+		{
+			int customerId = 1;
+
+			var tokens = new[]
+				{
+					"AgAAAA**AQAAAA**aAAAAA**/zT8Tw**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wJkYGoD5KHogmdj6x9nY+seQ**kXgBAA**AAMAAA**ZtzWCT7y/CDuAWGaA082vd91NFpT+178ZI43eyd/xsxP+ugZ3XbSslbtCT01q7rzfueXYDYfh7+X09O4lt1DRFvLNmfZjTwsy2U13rLLJLAQoREyEOWerVyZUiBemb0YhSJItaV9NlioKMk4x7wXEnjVThOxfTHSW3KkKQYdwf2itfUM8FGRHrQGpLr+9MVaHAvHk7j6Ns1LV+/S75ylttXIk7m/e8E4qpFlMUqLdgl3xB0pIOc9mnNsQYhHBlNkYzzbi9/44SovH/e730UJGaNI3YiU7xVn6OeedFyUEiOx4cY/eN8Z7lN47ofNyY8j7aUEfvr364pGdVzgqUsBiTzTg8DwrsMcEwaK89eIdiHaaybaKX0W7HM6TwXO/iNgNzR9/RPhpk4qSDuJI2pqJdC+bJ3pL986o52puLcXAAo4X2QyxK/xM3MR79K0XFPgbQ5PlQld8J50VrnIhX62Jur3Ig/LDwga1pTaxYVEZC506nP9lMx0XG8QzfzS6BP5lfPpFXV+7GhlQ7LnQxQDiocaMEOqg9svYFXG4s47Y875Bg4b7kFXGVIQ3TKhOblDJE1ADyb0aZ9GoyUbabYdt3Q8rMi1X+44r9FGGR5UHNopUMM2zOgsVFFgRnkVnJDu/mKUXyZEbKiek8BeDHkv1El/2vOXhI5Ncf1/CMmHleCPAH5Sdo/Q7843WUM+MUd804PHu5bzZI4/pYgelS4AgXhW4wTgoZwGF6WUB7g8GDcQESAIBmRh1vLKPu25gWCN",
+					"AgAAAA**AQAAAA**aAAAAA**CzQDUA**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFkIqnCJOFpQydj6x9nY+seQ**kXgBAA**AAMAAA**ahr1JPnT4xKHh6+OIWluq09/FMw3xh7idxmn23CRX1tOkG4F4aJVA1w1Pg0gSupMbufldol55jMP3JyCzKEY233PqLHg0DWQFAf2dZYqw0vK8u5izDCSXANUM66ceANzfO9Zft+ntKFG183jb7vM3l+r1vF1yO37YcD7zPTKppBH59Uq7QFz5VbvvpfwoPJVxrLYg5zOMhsLw9hDz3XpZBKrldeOmYTvCFUTqWpiEgaDz45Y2DRP+3PjBXr457lbkXtVSqYo77xOHzz5E1yL5S2lImd3Ryr3Iay3V68UU7n3JCYpXIXKJE4s9aZu5MEvWHanBl613+vxbX/Cwzib1SfWW6fztwmhpti4J/w2Im8QboJOuccpG+jKvKh+3fKNok5kgUm+9bFyaCqVMWrOMRkgeV46yfbof1rlREQiBZAYqnXbgMkWJR1caKARwkxg0M0vPwMv404g6l3DnxiyAsQvkbhM+wJgQxfyKPW5ZDO7qT4jdvfa+qO+4wSJLDu+ljltX7cKO8o9MuyfrsSk04a+EBi/ayw8eSMhioN6eyqMswySGr7ZHWrMiV0oItl1Hje6KB8hboOQ4SG4B5DwgcDL7VONcHewmqTCh5AN8Nv03YZd0wKa2jdjkL2OB6vlN4qjY3z12eZDLXesCSiO43a9aJuAqczYLkMw3O+nw4h9VNPHjcA00IQmR+PaNSuqLgA+I+S4GLb5MFGVU/MvwG3Dse+lvN8TujgWgmtrdrYKftQCZmiULQ0LszP1w60t",
+					"AgAAAA**AQAAAA**aAAAAA**s04FUA**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wGkYWlC5KDpwWdj6x9nY+seQ**kXgBAA**AAMAAA**Z5sECiktbsYxtpGHEeMbkuCtbwRnETUFkqKFSuZ9skyVGGuwLCTPdapIBeFhWptgVUqj0rjds2NXZSk5QXBjmWwQe912xM8ypB0uFsBJ3ux5MRct6UmRqOU5SXfo0aCIqfXLgsx1qU7odZ42Bn/+m0c82rqLlLVA1+PrhMEloPelNJI6mqH7cFbKmIJl8QQ58vs/FjVbDoiU3o5rZwAyKKVLm7ZjM4Ry3tPFUN2zoel9ctS5iFjBe5PbPxZbO3oZIhCgyNiFAT8y9qUJ/ee2rYhu2ivVvisCWeo4ks5Q+6Plp3cQx2cmaxNMehSpm1u8VmsrLYGzoYEu5+DHKhd1Xk/r0IG4tdJLpRwCHLmRJ8NcIBj8HAp9LvgUyYgUh1Y+ofQtbrwxIl6v007Ng0K0Kcj0c4GY2EkdwtKoQUZbGtKxiiYFKabe4ktCrB0V8/s2zNqyhLL2gLmR9unmyeRwyxTKKz8Z2o8/7FKOGHhb7MDN+ATaQhy9MlP4c4TWQcZVQUm62bTRuFt0GUk1mja9nGwi5nGmTnzinGvaE4fFL1wxnBFCbleN8K6U0aUbNqlHiegImAFZu3VetQ7zhtcc52p1in5Q83kAXy25d0YXj2v16fcxdhIXYqf6hxD75bg5cTWrYefaM75tFK9RG+aJEwLRev5AzeCYn/ZWbS6Wq7/LMI90IF1U4Yd/Z4IQmMS/NkZJ4GCMfTHGekbWF7ZZXRPjvqXCsyGbETgANVJq2ozXYby2EcN4KmVslHVDMTin",
+					"AgAAAA**AQAAAA**aAAAAA**Q1IuUA**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wJkYSiD5GCoAidj6x9nY+seQ**kXgBAA**AAMAAA**kPXyR8U7iT2Ljf4RgCjM06+VmvifC2biBQRfiAc8AQo5gcBK9wxW1h1J1YiYvaVpiNUnco+pfrBnhli33tyvsN+2u+fslclDnraqKMuf1WmRBoUvBrTDT1wfBEGdLy+U+3BW73imKeJ5PPP4dSrgjYO4xVuFIpY2xos8/MAx7q8YlS3sEgCGrxCCmEjIDGWh3TK5VAyZcFvC22frmTUwerFyAE9DwiTZPGrB0oTIJjwVIERxvRg6yNpks2qh7ne0b7iMYvZjDui/nCZR2+pEd1VTm8hMbyF8RTSqvRT74KQIyepP5VltwZXk5mumyQFv3aCWuFo2aYzJ3Sc7AB5tKigDMqOOEX9i08E7/J1pQ+WFwJpKNwIz4cx4lEyHq6uf5rcuNmBTkyIgiPZqZImv2EwfFSpXbTUAQx1t8gXHVRfzLwl7UdLuN1i6OYtB9ooQOzS10dF/C+ZPDHXf9e2nEpeUNLWeNTgcoRcv/MQgyA7LHzwSvMN8syK0t1Ns0iMpGtZA7xM3T63LZAwb5fYoh2F+HjiB6RIt1IrhSw9mW84NZdM4U6UPT3N4QuCzS9HQ+FkuTuMsh3HilxQkKzs6UOOXJVyGOBrVWo1rYLKkkmwDV9nfS894gWnLgTtWrn+gkkuxmGHMT35UnPhz0D18q8FvrZY5hm0WrGdWfxvYQbRNsgxujkSKJSWDfAJspr6M7GB4Y3Nhdbpx7Gm1fAH8w2Z4Slm494D96DWnu8tjJgbMAyo2XEeDCtkVEATyxCp1",
+				};
+			//string token = @"AgAAAA**AQAAAA**aAAAAA**O3k6Tw**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wHkYKiDJOLqQmdj6x9nY+seQ**qWEBAA**AAMAAA**nRW2tLgiukfpQJQ6eiLxXbzXO0C7UHhoQMFnXihl+AWomDL6Tw+5IZ/7FZ/EWSjap1znb/GbXnNQxRXJOrmlcBNgdf0FKxvfBjJFq4XSr6X6tjdmIbZLKoX89VrwmRd7Gcf7PuvxQBM0Jncr5LTQ+/ycA2dHcWQ5VFSujWYfn0E6ixMeDtRdUTGhXzng5OOrgTQfZztde6erYLeO5YnaWzSVypoui5tVOBP5EYTHQxzQPOZ1GV0/w7ww5ar3aLnZ56UMfungRscgz5lN+kTo4/lgbgDsv/GUBvUUjb0ZsYEGGJWHUGFK8X7AN40KtcQW9q+TGcgz5QU1G70IGDy+etg3xa9pPmhRA6+ZGbp+cKw8wzZLja/iMz5jEfLlCngBytHSTy4/KRdyLraWpR2ZDNoc0HKjnlew6mDmsGejV6J1EPm/r22vIOzpiPJa4Ndu5kDRISv9FHuUt3fgNANbu0j6abMIAhhb6VS6pby0m5NOxx7SDilEf8iFIMgBJ5U5DV9mXvjmzFNLf+GD6okyJ8uH5MvxRLRBD/PW/ybN5MMRWqF1ZA2NkNCUPKciUNxtIkTrDPc7Nr4nksEoZh+cEPcL9lFVBU8emMjhwF7HIioJMiC7KsOeJ3uCISYZpRwFEPIYzC5Qm3JiuD71T1PBCTKzVfhfcx4XfQyb7HZuhPU6qwkqm1sjoId9mJBGP1+QS85fo9wE8sCeBfZOrfHw89nX2G7chz4/zI5pbomXUAn0Wuqb4wtvQ+fNMWM7ssIp";
+
+			var eBayRetriveDataHelper = eBayTest.EBayRetriveDataHelper;
+
+			var customer = eBayRetriveDataHelper.GetCustomerInfo( customerId );
+
+			Assert.NotNull( customer );
+
+			foreach (var token in tokens)
+			{
+				var data = new eBaySecurityInfo
+				{
+					Token = token
+				};
+
+				var info = eBayRetriveDataHelper.GetCustomerUserInfo( data );
+				var marketplaceName = info.UserID;
+
+				eBayRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo( customer, data, marketplaceName );	
+			}
+
+			
+
+		}
+
+		[Test]
+		public void GetFunctionAnalysisValuesByCustomerMarketPlace()
+		{
+			int umi = 90;
+			var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace( umi );
+		}
+	}
+}

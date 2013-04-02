@@ -1,0 +1,16 @@
+﻿@model dynamic
+           
+@{
+    var shop = Session["Shop"] as string;
+    shop = shop ?? "";
+    shop = shop.ToLower();
+}
+
+@if (shop == "ebay")
+{
+    <h2><img alt="ebay" src="@Url.Content("~/Content/img/ebay.png")" width="100px;"/> Sellers!</h2>
+}
+else
+{
+    <h2>Online Sellers!</h2>
+}

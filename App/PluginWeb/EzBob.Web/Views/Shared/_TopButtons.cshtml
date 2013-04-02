@@ -1,0 +1,22 @@
+﻿@model dynamic
+@{
+    var isAuth = User.Identity.IsAuthenticated;
+}
+
+
+<div id="pre_header">
+    <div class="inner_nopadding">
+        <div id="header_description">
+            @if (isAuth)
+            {
+                @User.Identity.Name
+                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log off</a>
+            }
+            else
+            {
+                <text>Already have an account?</text>
+                <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">LOGIN</a>
+            }
+        </div>
+    </div>
+</div>

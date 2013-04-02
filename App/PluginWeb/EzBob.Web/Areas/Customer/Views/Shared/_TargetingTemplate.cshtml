@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+}
+<script type="text/template" id="CompanyTargets">
+    @Targetting()
+</script>
+
+@helper Targetting()
+{
+
+    <div class="well">
+        <ul class="targets"></ul>
+        <div style="margin-left: 90px; height: 45px;">
+            <input class="btnTargetOk button orange pull-right" type="button" value="OK" />
+            <input class="btnTargetCancel button orange pull-right" type="button" value="Cancel" />
+        </div>
+    </div>
+    
+}

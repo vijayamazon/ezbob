@@ -1,0 +1,6 @@
+-- Create table
+create table EXPORT_TEMPLATESTRATREL
+(
+  TEMPLATEID NUMBER,
+  STRATEGYID NUMBER
+);

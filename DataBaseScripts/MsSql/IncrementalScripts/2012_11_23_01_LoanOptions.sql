@@ -1,0 +1,1 @@
+﻿ EXEC sys.sp_rename N'[dbo].[LoanOptions].DailyReinder', 'LatePaymentNotification' 

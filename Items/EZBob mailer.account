@@ -1,0 +1,15 @@
+<SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<SOAP-ENV:Body>
+<a1:SmtpAccountDTO id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/Scorto.Email.Accounts.DTO/Scorto.Email%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
+<SmtpServerAddress id="ref-3">mail.scorto.com</SmtpServerAddress>
+<Port>25</Port>
+<UserName id="ref-4">ezbob@scorto.com</UserName>
+<PasswordEncrypted id="ref-5">Qjx64rQJeFP9ydXG7XH+Vw==</PasswordEncrypted>
+<EncryptionType id="ref-6">None</EncryptionType>
+<RequireAuthenication>true</RequireAuthenication>
+<Name id="ref-7">EZBob mailer</Name>
+<Description id="ref-8"></Description>
+<EmailFrom id="ref-9">ezbob@scorto.com</EmailFrom>
+</a1:SmtpAccountDTO>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

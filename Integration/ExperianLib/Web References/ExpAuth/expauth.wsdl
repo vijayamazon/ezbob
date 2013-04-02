@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.uk.experian.com/WASP/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.uk.experian.com/WASP/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.uk.experian.com/WASP/">
+      <s:element name="STS">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="authenticationBlock" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="STSResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="STSResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="STSSoapIn">
+    <wsdl:part name="parameters" element="tns:STS" />
+  </wsdl:message>
+  <wsdl:message name="STSSoapOut">
+    <wsdl:part name="parameters" element="tns:STSResponse" />
+  </wsdl:message>
+  <wsdl:message name="STSHttpGetIn">
+    <wsdl:part name="authenticationBlock" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="STSHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="STSHttpPostIn">
+    <wsdl:part name="authenticationBlock" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="STSHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="TokenServiceSoap">
+    <wsdl:operation name="STS">
+      <wsdl:input message="tns:STSSoapIn" />
+      <wsdl:output message="tns:STSSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="TokenServiceHttpGet">
+    <wsdl:operation name="STS">
+      <wsdl:input message="tns:STSHttpGetIn" />
+      <wsdl:output message="tns:STSHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="TokenServiceHttpPost">
+    <wsdl:operation name="STS">
+      <wsdl:input message="tns:STSHttpPostIn" />
+      <wsdl:output message="tns:STSHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="TokenServiceSoap" type="tns:TokenServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="STS">
+      <soap:operation soapAction="http://www.uk.experian.com/WASP/STS" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TokenServiceHttpGet" type="tns:TokenServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="STS">
+      <http:operation location="/STS" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="TokenServiceHttpPost" type="tns:TokenServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="STS">
+      <http:operation location="/STS" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TokenService">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Experian Token Service</documentation>
+    <wsdl:port name="TokenServiceSoap" binding="tns:TokenServiceSoap">
+      <soap:address location="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="TokenServiceHttpGet" binding="tns:TokenServiceHttpGet">
+      <http:address location="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="TokenServiceHttpPost" binding="tns:TokenServiceHttpPost">
+      <http:address location="http://secure.wasp.uat.uk.experian.com:16501/WASPAuthenticator/tokenService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

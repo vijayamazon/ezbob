@@ -1,0 +1,56 @@
+﻿<script id="alerts-template" type="text/template">
+    <fieldset>
+        <legend>Alerts</legend>
+        <table class="table table-bordered " style="table-layout: fixed">
+            <col style="width: 100px;">
+            <col style="width: 300px;">
+            <thead>
+                <tr>
+                    <th>Alert type</th>
+                    <th>Alert text</th>
+                    <th>Status</th>
+                    <th>Action made</th>
+                    <th>Date of action</th>
+                    <th>Employee name</th>
+                    <th>Role</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                _.each(m, function(v,i){
+                if(typeof(v)=='object'){
+                var alertText = (v.AlertText+"").replace(/,/g,', ');
+                %>
+                <tr class="<%-v.CssRow%>">
+                            <td style="text-overflow: ellipsis; overflow: auto;">
+                                <a rel="tooltip" data-trigger="hover" title="<%-v.AlertType%>" class='alert-link underwriter-tooltip' href='#' data-id='<%-v.AlertId%>'><%-v.AlertType%></a>
+                            </td>
+                            <td style="overflow: auto; display: block; max-height: 200px; min-height: 50px;"><%-alertText%></td>
+                            <td><%-v.Status%></td>
+                            <td><%-v.ActionMade%></td>
+                            <td><%-EzBob.formatDateTime(v.DateOfAction)%></td>
+                            <td><%-v.EmployeeName%></td>
+                            <td><%-v.Role%></td>                    
+                            <td><%-v.Details%></td>
+                        </tr>
+                        <%
+                    }
+                });
+                %>
+            </tbody>
+        </table>
+    </fieldset>
+
+</script>
+
+<div class="alertDialog" style="display: none">
+    Status: <select name="status">
+                <option value="In progress">In progress</option>
+                <option value="Outstanding">Outstanding</option>
+                <option value="Done">Done</option>
+            </select><br/>
+    Details: <textarea name="details" style="height: 120px; resize: none;" maxlength="1000"></textarea>
+
+    <input type="button" name="save" value="Save" class="btn-back pull-right"></input>
+</div>

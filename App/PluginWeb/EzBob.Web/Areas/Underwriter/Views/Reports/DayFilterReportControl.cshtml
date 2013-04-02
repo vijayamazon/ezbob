@@ -1,0 +1,12 @@
+﻿@using EzBob.Web.Areas.Underwriter.Models.Reports
+@model ReportModelDayBase
+
+<div class="reportDiv">
+    <input type="submit" value="Recalculate"/>
+</div>
+<div class="reportDiv">
+    <input type="text" name="DayDate" id="dp" value="@Model.DayDate.StringDate" class = "datepicker reportDatePicker"/>
+</div>
+<div class="reportDiv" id="divTo">
+    Date
+</div>

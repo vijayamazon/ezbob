@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.Models</RootNamespace>
+    <AssemblyName>EzBob.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApplicationMng">
+      <HintPath>..\..\Lib\Scorto.Core\ApplicationMng.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Nustache.Core">
+      <HintPath>..\..\Lib\3rdparty\Nustache\Nustache.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountSettingsModel.cs" />
+    <Compile Include="Agreements\AgreementModel.cs" />
+    <Compile Include="Agreements\AgreementRenderer.cs" />
+    <Compile Include="Agreements\AgreementsTemplatesProvider.cs" />
+    <Compile Include="ChangeLoanDetailsModelBuilder.cs" />
+    <Compile Include="ConfigurationVariableModel.cs" />
+    <Compile Include="CustomerExtensions.cs" />
+    <Compile Include="CustomerModel.cs" />
+    <Compile Include="DecisionHistoryModel.cs" />
+    <Compile Include="DirectorModel.cs" />
+    <Compile Include="EditLoanDetailsModel.cs" />
+    <Compile Include="Encryptor.cs" />
+    <Compile Include="FormattingUtils.cs" />
+    <Compile Include="IPayEarlyCalculator.cs" />
+    <Compile Include="LoanAgreementModel.cs" />
+    <Compile Include="LoanChargesModel.cs" />
+    <Compile Include="LoanDetails.cs" />
+    <Compile Include="LoanModel.cs" />
+    <Compile Include="LoanScheduleItemModel.cs" />
+    <Compile Include="LoanTransactionModel.cs" />
+    <Compile Include="MarketPlaceModel.cs" />
+    <Compile Include="MarketPlacesFacade.cs" />
+    <Compile Include="PayPalAccountDetailPaymentsInfoModel.cs" />
+    <Compile Include="PayPalAccountGeneralPaymentsInfoModel.cs" />
+    <Compile Include="PayPalAccountInfoModel.cs" />
+    <Compile Include="PayPalAccountModel.cs" />
+    <Compile Include="PayPalGeneralDataRowModel.cs" />
+    <Compile Include="PayPalModel.cs" />
+    <Compile Include="PayPointCardModel.cs" />
+    <Compile Include="PersonalInfoModel.cs" />
+    <Compile Include="ProfileSummaryModel.cs" />
+    <Compile Include="ProfileSummaryModelBuilder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepaymentCalculator.cs" />
+    <Compile Include="SchedultItemModel.cs" />
+    <Compile Include="SecurityQuestionModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Amazon\AmazonDbLib\AmazonDbLib.csproj">
+      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
+      <Name>AmazonDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45eb1597-4c92-4ab8-b615-5206d5a9f472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
+      <Project>{9e536824-37ad-4cc7-b597-11b882091dbd}</Project>
+      <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBay\eBayLib\eBayLib.csproj">
+      <Project>{ac296ac1-dd5a-4aa4-a299-dd708e5f1a10}</Project>
+      <Name>eBayLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExperianLib\ExperianLib.csproj">
+      <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
+      <Name>ExperianLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob\EzBob.csproj">
+      <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

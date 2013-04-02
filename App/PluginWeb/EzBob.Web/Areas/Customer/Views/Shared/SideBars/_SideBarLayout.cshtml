@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="sidebarBox">
+    <div class="bottom">
+        <div class="mid">
+            <h1><img alt="tutorial icon" src="@Url.Content("~/Content/img/sidebar/ico-tutorial.png")"><span>Tutorial</span></h1>
+            
+            @(IsSectionDefined("Video") ? RenderSection("Video") : FakeVideoHelper())
+            
+            <hr class="spacer">
+            @RenderBody()
+            <hr class="spacer">
+            <h1><img alt="24 hours" src="@Url.Content("~/Content/img/sidebar/ico-24h.png")"><span>Need More Help?</span></h1>
+            <ul class="gtarr">
+                <li>Contact us 24/7</li>
+                <li>Email: <a class="cusLink" href="mailto:customercare@ezbob.com">customer care</a></li>
+                <li><a href="#" onclick="$('.lpchat-label').click();return false;">Live Chat</a></li>
+                <li>Phone: 0800 011 4787</li>
+            </ul>
+            <hr class="spacer">
+            <h1><img alt="safe and secure" src="@Url.Content("~/Content/img/sidebar/ico-safesecure2.png")"><span>Safe & Secure</span></h1>
+            <ul class="gtarr">
+                <li>Security comes first. We safeguard <br>your data.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@helper FakeVideoHelper(){
+    Html.RenderPartial("SideBars/FakeVideo", "");
+}

@@ -1,0 +1,10 @@
+﻿@model string
+           
+@{
+    var title = string.IsNullOrEmpty(Model) ? "Featuring  - Getting Started" : Model;
+}
+
+<span>@title</span>
+<img alt="video tutorial placeholder" src="@Url.Content("~/Content/img/sidebar/video-ph.png")" />
+<br />
+<br /> 

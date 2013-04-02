@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.eBayLib</RootNamespace>
+    <AssemblyName>eBayLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\EbayEvnConnection.cs" />
+    <Compile Include="Config\EbayEvnSettings.cs" />
+    <Compile Include="Config\EbayMarketPlaceTypeSettings.cs" />
+    <Compile Include="Config\EbayMarketPlaceTypeSettingsBase.cs" />
+    <Compile Include="eBayDatabaseMarketPlace.cs" />
+    <Compile Include="Config\EbayMarketplaceTypeConnection.cs" />
+    <Compile Include="Config\EbayMarketplaceTypeConnectionBase.cs" />
+    <Compile Include="eBayRetriveDataHelper.cs" />
+    <Compile Include="EbayServiceDataProvider.cs" />
+    <Compile Include="eBayServiceHelper.cs" />
+    <Compile Include="eBayTest.cs" />
+    <Compile Include="Config\IEbayMarketplaceTypeConnection.cs" />
+    <Compile Include="EBayOrdersAggregator.cs" />
+    <Compile Include="MixedOrdersAggregator.cs" />
+    <Compile Include="PluginRegistry.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
+      <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
+      <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
+      <Name>TeraPeakServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBayDbLib\eBayDbLib.csproj">
+      <Project>{FB3EAC65-AB2B-4A7E-ADA5-AAE0651CAAF6}</Project>
+      <Name>eBayDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eBayServiceLib\eBayServiceLib.csproj">
+      <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
+      <Name>eBayServiceLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

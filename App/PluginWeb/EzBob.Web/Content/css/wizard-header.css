@@ -1,0 +1,137 @@
+﻿.wizard-steps {
+    margin-bottom: 10px;
+    background-image: url(../img/wizard-bg.png);
+    background-repeat: repeat-x;
+    background-position: left center;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.wizard-steps ul 
+{
+
+}
+.wizard-steps ul, .wizard-steps ul li, .wizard-steps ul > li > div {
+    margin: 0;
+    padding: 0;
+    height: 50px;
+}
+.wizard-steps ul li {
+    display: block;
+    float: left;
+    margin-left: -15px;
+    cursor: pointer;
+}
+
+.wizard-steps ul li:first-child
+{
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-left: 0;
+}
+.wizard-steps ul li:first-child .arrow-left {
+    display: none;
+}
+.wizard-steps li > div {
+    display: inline-block;
+}
+.wizard-steps div.arrow-left {
+    background-image: url(../img/arrow-grey.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 15px;
+}
+
+.wizard-steps div.arrow-right {
+    background-image: url(../img/arrow-grey.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 15px;
+}
+
+.wizard-steps div.arrow-last {
+    background-image: url(../img/arrow-last.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 15px;
+}
+
+.wizard-steps ul li:first-child div.arrow-left {
+    background-image: none;
+}
+
+.wizard-steps li.active div.arrow-left {
+    background-image: url(../img/arrow-blue-left.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 15px;
+}
+
+.wizard-steps li.active div.arrow-right {
+    background-image: url(../img/arrow-blue-right.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+    width: 15px;
+}
+.wizard-steps li.active {
+    background-image: url(../img/wizard-bg-active.png);
+    background-repeat: repeat-x;
+    background-position: left center;
+}
+
+.wizard-steps div.completition {
+    width: 35px;
+}
+.wizard-steps li.completed div.completition {
+    background-image: url(../img/wizard-mark-completed.png);
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+.wizard-steps .step-text 
+{
+    vertical-align: top;
+    padding: 10px 5px 0 5px;
+    height: 40px;
+    line-height: 13px;
+    color: #515051;
+    font-weight: bold;
+    font-style: italic;
+    font-family: arial;
+    font-size: 16px;
+}
+
+.wizard-steps .step-text span 
+{
+    line-height: 15px;
+}
+
+.wizard-steps li.active .step-text{
+    color: white;
+}
+
+.wizard-steps .wizard-step-no {
+    font-family: georgia;
+    font-size: 60px;
+    font-style: italic;
+    color: white;
+    line-height: 50px;
+    vertical-align: top;
+    padding: 0 3px;
+    overflow: hidden;
+    text-shadow: 0px 0px 10px rgba(150, 150, 150, 1);
+}
+
+.wizard-steps .wizard-step-no1{line-height: 35px; font-size: 100px;}
+.wizard-steps .wizard-step-no2{line-height: 35px; font-size: 100px;}
+.wizard-steps .wizard-step-no3{line-height: 25px; font-size: 85px;}
+.wizard-steps .wizard-step-no4{line-height: 28px; font-size: 85px;}
+
+
+.narrow-wizard-header .wizard-steps .wizard-step-no, .narrow-wizard-header .wizard-steps .step-text{
+    padding-left: 0;padding-right: 0;
+}
+
+.narrow-wizard-header ul li{ cursor:default !important;}

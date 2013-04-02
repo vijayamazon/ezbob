@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<Target Name="ClickOnceCreate" DependsOnTargets="GenerateClearCCNetLabel">
+	    <PropertyGroup>
+			<WindowsSDKPath>$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx40Tools@InstallationFolder)</WindowsSDKPath>
+		</PropertyGroup>
+		<ItemGroup>
+			<ClientApp Include="Administrator"/>
+			<ClientApp Include="Auditor"/>
+			<ClientApp Include="FormsDesigner"/>
+			<ClientApp Include="Master"/>
+			<ClientApp Include="Maven"/>
+		</ItemGroup>  
+		
+		<Message Text="Using SDK: $(WindowsSDKPath)"/>
+		<Exec ContinueOnError="true" Command="mage.exe -New Application -Processor x86 -ToFile $(ServerBaseFolder)\$(ClientsFolder)\%(ClientApp.Identity)\%(ClientApp.Identity).exe.manifest -name &quot;Scorto %(ClientApp.Identity)_$(EnvId)&quot; -Version $(ClearedCCNetLabel) -FromDirectory $(ServerBaseFolder)\$(ClientsFolder)\%(ClientApp.Identity)\ -IconFile app.ico"  WorkingDirectory="$(WindowsSDKPath)" />
+		<Exec ContinueOnError="true" Command="mage.exe  -New Deployment -Processor x86 -Install true -Publisher &quot;Scorto&quot; -ProviderUrl &quot;$(ClickOnceUrl)/%(ClientApp.Identity)_$(EnvId).application&quot; -AppManifest $(ServerBaseFolder)\$(ClientsFolder)\%(ClientApp.Identity)\%(ClientApp.Identity).exe.manifest -ToFile $(ServerBaseFolder)\$(ClientsFolder)\%(ClientApp.Identity)_$(EnvId).application -Version  $(ClearedCCNetLabel)"  WorkingDirectory="$(WindowsSDKPath)" />  
+		<File ContinueOnError="true"  TaskAction="Replace" RegexPattern="&lt;expiration maximumAge=&quot;0&quot; unit=&quot;days&quot; /&gt;" Files="$(ServerBaseFolder)\$(ClientsFolder)\%(ClientApp.Identity)_$(EnvId).application" Replacement="&lt;beforeApplicationStartup /&gt;" />
+	</Target>
+	
+</Project>

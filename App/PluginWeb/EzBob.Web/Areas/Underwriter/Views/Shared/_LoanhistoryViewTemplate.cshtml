@@ -1,0 +1,151 @@
+﻿@model dynamic
+
+<script id="loanhistory-view-template" type="text/template">    
+    <div id="loanhistory-table">
+    </div>
+    <div id="loanhistory-details">
+    </div>
+    <div id="loan-editor">
+    </div>
+</script>
+
+
+<script id="loanhistory-template" type="text/template">
+    @Loans()
+    @Offers()
+    @{Html.RenderPartial("_ExportToExcel");}
+</script>
+
+@helper Loans(){
+    <table class="table table-bordered table-selected table-striped blue-header centered">
+        <thead>
+            <tr>        
+                <th>Loan ref#</th>
+                <th>Loan amount</th>
+                <th>Repayments</th>
+                <th>Date Applyed</th>
+                <th>Date closed</th>
+                <th>Outstanding</th>
+                <th>Outstanding<br/>Principal</th>
+                <th>Type</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%    var sumLoanAmount = 0,
+            sumRepayments = 0,
+            sumBalance = 0;
+            sumPrincipal = 0;
+            %>
+            <%
+            _.each(loans, function(loan){
+            %>   
+            <tr data-id="<%- loan.Id %>" class="loans tr-link">
+                <td>
+                    <%- loan.RefNumber %>
+                    <% if (loan.Modified) {%>
+                        *
+                    <%}%>
+                    <a href="#" class="btn btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="icon-pencil"></i></a>
+                </td>
+                <td><%- EzBob.formatPounds(loan.LoanAmount) %></td>
+                <td><%- EzBob.formatPounds(loan.Repayments) %></td>
+                <td><%- EzBob.formatDateHumanFull(loan.Date) %></td>
+                <td><%- EzBob.formatDateHumanFull(loan.DateClosed ) %></td>
+                <td><%- EzBob.formatPounds(loan.TotalBalance) %></td>
+                <td><%- EzBob.formatPounds(loan.Principal) %></td>
+                <td><%- loan.LoanType %></td>
+                <td><%- loan.StatusDescription %></td>
+            </tr>
+            <%
+            sumLoanAmount +=!isNaN(loan.LoanAmount)?loan.LoanAmount:0 ;
+            sumRepayments += !isNaN(loan.Repayments)?loan.Repayments:0;
+            sumBalance += !isNaN(loan.TotalBalance)?loan.TotalBalance:0;
+            sumPrincipal += !isNaN(loan.Principal)?loan.Principal:0;
+            });
+            %>
+        </tbody>
+        <tfoot>
+            <tr> 
+                <td>Total</td>
+                <td><%- EzBob.formatPounds(sumLoanAmount) %></td>
+                <td><%- EzBob.formatPounds(sumRepayments) %></td>
+                <td></td>
+                <td></td>
+                <td><%- EzBob.formatPounds(sumBalance) %></td>
+                <td><%- EzBob.formatPounds(sumPrincipal) %></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@helper Offers(){
+<table class="table table-bordered table-striped blue-header centered">
+    <thead>
+        <tr>
+            <th>Offer</th>        
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Amount</th>
+            <th>Interest Rate</th>
+            <th>Setup Fee</th>
+            <th>Repayment Period</th>
+            <th>Type</th>
+            <th>Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        <%
+        _.each(offers, function(offer){
+            if(offer.UnderwriterDecision === "Approved") {
+        %>   
+        <tr>
+            <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-mini show-schedule"><i class="icon-calendar"></i></button></td>
+            <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
+            <td><%- EzBob.formatDateHumanFull(offer.EndDate) %></td>
+            <td><%- EzBob.formatPounds(offer.Amount) %></td>
+            <td><%- EzBob.formatPercents(offer.InterestRate) %></td>
+            <td><%- offer.SetupFee %></td>
+            <td><%- offer.RepaymentPeriod %></td>
+            <td><%- offer.LoanType %></td>
+            <td><%- offer.Comments %></td>
+        </tr>
+        <%}});%>
+    </tbody>
+</table>    
+}
+
+<script id="manualPayment-template" type="text/template">
+    @ManualPayment()
+</script>
+
+@helper ManualPayment(){
+    <input type="hidden" name="loanId" value="<%-loanId%>"/>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Manual Payment</h3>
+    </div>
+
+    <div class="modal-body">
+        
+        <form id="payment-form" class="form-horizontal" action="/" method="POST">
+            @EzForm.Select("paymentMethod", "Payment method", new List<string>{ "Cheque", "Cash", "Bank transfer", "Other" })
+            @EzForm.InputText("totalSumPaid", "Total sum paid","")
+            @EzForm.DateInput("paymentDate", "Date", false, new[]{ DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
+            @EzForm.InputText("fees", "Fees","", "", true)
+            @EzForm.InputText("interest", "Interest","", "", true)
+            @EzForm.InputText("principal", "Principal","", "", true)
+            @EzForm.CheckBox("sendemail", "Send confirmation email")
+            @EzForm.TextAreaSmall("description", "Description", "")
+        </form>
+        
+        <a href="#" class="uploadFiles">Upload files</a>
+    </div>
+    
+    <div class="modal-footer">
+        <button class="btn btn-primary confirm">OK</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+}

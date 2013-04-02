@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="DatabaseLib" namespace="EZBob.DatabaseLib.Model.Database">
+  <sql-query name="GetMedalStatisticReport" >
+    <query-param name="dateStart" type="System.DateTime"/>
+    <query-param name="dateEnd" type="System.DateTime"/>
+    <return class="MedalStatisticDataRow" >
+      <return-property column="Medal" name="Medal"/>
+      <return-property column="EbayStoresCount" name="EbayStoresCount"/>
+      <return-property column="EbayStoresAverage" name="EbayStoresAverage"/>
+      <return-property column="PayPalStoresCount" name="PayPalStoresCount"/>
+      <return-property column="PayPalStoresAverage" name="PayPalStoresAverage"/>
+      <return-property column="AmazonStoresCount" name="AmazonStoresCount"/>
+      <return-property column="AmazonStoresAverage" name="AmazonStoresAverage"/>
+      <return-property column="ScorePointsMin" name="ScorePointsMin"/>
+      <return-property column="ScorePointsMax" name="ScorePointsMax"/>
+      <return-property column="ScorePointsAverage" name="ScorePointsAverage"/>
+      <return-property column="ExperianRatingMin" name="ExperianRatingMin"/>
+      <return-property column="ExperianRatingMax" name="ExperianRatingMax"/>
+      <return-property column="ExperianRatingAverage" name="ExperianRatingAverage"/>
+      <return-property column="AnualTurnoverMin" name="AnualTurnoverMin"/>
+      <return-property column="AnualTurnoverMax" name="AnualTurnoverMax"/>
+      <return-property column="AnualTurnoverAverage" name="AnualTurnoverAverage"/>
+      <return-property column="CustomersCount" name="CustomersCount"/>
+      <return-property column="AmazonReviews" name="AmazonReviews"/>
+      <return-property column="AmazonRating" name="AmazonRating"/>
+      <return-property column="EbayReviews" name="EbayReviews"/>
+      <return-property column="EbayRating" name="EbayRating"/>
+    </return>
+    EXEC [GetMedalStatisticReport] @dateStart=:dateStart, @dateEnd=:dateEnd
+  </sql-query>
+</hibernate-mapping>

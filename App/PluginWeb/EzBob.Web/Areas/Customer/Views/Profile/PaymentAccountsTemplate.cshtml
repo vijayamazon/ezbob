@@ -1,0 +1,31 @@
+﻿@model dynamic
+
+@helper PaymentAccountsContent(){
+    <table class="table grey-table account-activity-table">
+        <thead>
+            <tr>
+                <th style="width: 250px;">Payment Account</th>
+                <th style="width: 250px;">Account</th>
+                <th style="width: 250px;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(accounts, function(account, i){%>
+                <%var last = accounts.length - 1 == i;%>
+                <tr class="<%- last ? 'last' : '' %>" >
+                    <td class="first"><div class="payment-account-<%-account.type%>"></div></td>
+                    <td>X - <%-account.displayName.substring(4)%></td>
+                    <td class="last Live">LIVE</td>
+                </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <div style="padding-left: 260px;">
+        <a href="#" style="margin-left: 80px;" class="btn-continue button orange add-paypal">Add PayPal</a><br/>
+        <span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
+    </div>
+}
+
+<script id="payment-accounts-template" type="text/template">
+    @PaymentAccountsContent()
+</script>

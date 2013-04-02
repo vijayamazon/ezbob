@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<CreditProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId xmlns="ScortoPatron">27</UserId>
+  <Id xmlns="ScortoPatron">38</Id>
+  <Name xmlns="ScortoPatron">Experian Actions</Name>
+  <CreationDate xmlns="ScortoPatron">2012-06-25T18:20:03.18</CreationDate>
+  <Parameters xmlns="ScortoPatron">
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>806</Id>
+      <Name>BureauScore</Name>
+      <ParamValue xsi:type="xsd:string">Check there are no excess debts or high balances on recently opened credit cards. Check for Status 1 on high balance accounts</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>807</Id>
+      <Name>CreditCardExposure</Name>
+      <ParamValue xsi:type="xsd:string">Check to see if the credit cards are recently opened. If recent reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>808</Id>
+      <Name>CreditCards</Name>
+      <ParamValue xsi:type="xsd:string">Okay if 1 or 2 cards are unused / low balances</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>809</Id>
+      <Name>CreditCardUtilisation</Name>
+      <ParamValue xsi:type="xsd:string">Okay  if they only have one or two cards</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>810</Id>
+      <Name>CreditCardOverLimit</Name>
+      <ParamValue xsi:type="xsd:string">Okay If the card over limit is one out of two or more. but not okay if it’s their only card.</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>811</Id>
+      <Name>CreditCardStatus</Name>
+      <ParamValue xsi:type="xsd:string">Reject if this is a card less than 3 months old</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>812</Id>
+      <Name>ExcessUnsecuredBorrowing</Name>
+      <ParamValue xsi:type="xsd:string">Check for how recent the debts are. The more recent they are the higher the risk</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>813</Id>
+      <Name>ExcessPersonalLoans</Name>
+      <ParamValue xsi:type="xsd:string">Check loan types. If callback required check loan purpose</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>814</Id>
+      <Name>PersonalLoanStatus</Name>
+      <ParamValue xsi:type="xsd:string">Reject if this is a loan less than 3 months old</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>815</Id>
+      <Name>ExcessDebt</Name>
+      <ParamValue xsi:type="xsd:string">Check proportion of debt on mortgage.</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>816</Id>
+      <Name>ThinFile</Name>
+      <ParamValue xsi:type="xsd:string">Out bound call required</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>817</Id>
+      <Name>CountyCourtJudgements</Name>
+      <ParamValue xsi:type="xsd:string">Ignore low value CCJs (ie a low proportion of total debt)</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>818</Id>
+      <Name>Enquiries6M</Name>
+      <ParamValue xsi:type="xsd:string">Check the enquiry types. If all cards and loans then reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>819</Id>
+      <Name>Enquiries3M</Name>
+      <ParamValue xsi:type="xsd:string">Check the enquiry types. If all cards and loans then reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>820</Id>
+      <Name>HomeOwner</Name>
+      <ParamValue xsi:type="xsd:string">Requires an outbound call to confirm situation</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>821</Id>
+      <Name>HomeOwnerStatus</Name>
+      <ParamValue xsi:type="xsd:string">Look at overall debt and decide if they just can’t afford the mortgage</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>822</Id>
+      <Name>DSRHome owner</Name>
+      <ParamValue xsi:type="xsd:string">Outbound call to establish other income source</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>823</Id>
+      <Name>DSRRenting</Name>
+      <ParamValue xsi:type="xsd:string">Outbound call to establish other income source</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>824</Id>
+      <Name>DSRLivingWithParents</Name>
+      <ParamValue xsi:type="xsd:string">Outbound call to establish other income source</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>825</Id>
+      <Name>CreditCardCash</Name>
+      <ParamValue xsi:type="xsd:string">How many cards have they got. Is this a sign they are in a mess</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>826</Id>
+      <Name>MinimumRepayment</Name>
+      <ParamValue xsi:type="xsd:string">Look for signs of over-borrowing</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>827</Id>
+      <Name>TimeSinceLastAccountOpened</Name>
+      <ParamValue xsi:type="xsd:string">If account is not a personal loan then okay</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>828</Id>
+      <Name>Age</Name>
+      <ParamValue xsi:type="xsd:string">Outbound call to establish circumstances</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>829</Id>
+      <Name>NOCNOD</Name>
+      <ParamValue xsi:type="xsd:string">Ignore NOC. Read NOD and if suggests risk reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>830</Id>
+      <Name>SatisfiedJudgement</Name>
+      <ParamValue xsi:type="xsd:string">Okay if over 1 year old</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>831</Id>
+      <Name>CAISSpecialInstruction</Name>
+      <ParamValue xsi:type="xsd:string">Read instruction. If it suggests risk then reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>832</Id>
+      <Name>OtherBankruptcy</Name>
+      <ParamValue xsi:type="xsd:string">Read bankruptcy section. If it suggests risk then reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>833</Id>
+      <Name>OtherPublicInfo</Name>
+      <ParamValue xsi:type="xsd:string">Read public info section. If it suggests risk then reject</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>834</Id>
+      <Name>ExistingBusinessLoan</Name>
+      <ParamValue xsi:type="xsd:string">Review overall borrowing. Are we lender of last resort</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>835</Id>
+      <Name>AMLAuthentication</Name>
+      <ParamValue xsi:type="xsd:string">The underwriter will need to ask the applicant for copies of proof of Identity</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>836</Id>
+      <Name>AMLMortality</Name>
+      <ParamValue xsi:type="xsd:string">The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>837</Id>
+      <Name>AMLAccommodationAddress</Name>
+      <ParamValue xsi:type="xsd:string">If this is a personal address then reject; if it is a business address the ask for the personal address</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>838</Id>
+      <Name>AMLRedirection</Name>
+      <ParamValue xsi:type="xsd:string">Contact client and confirm reason for redirection. Why is this person’s mail being redirected? Might be a legitimate way of doing e-business</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>839</Id>
+      <Name>AMLInconsistencies</Name>
+      <ParamValue xsi:type="xsd:string">The underwriter will need to ask the applicant for copies of proof of Identity</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>840</Id>
+      <Name>AMLPEP</Name>
+      <ParamValue xsi:type="xsd:string">The underwriter needs to confirm that the applicant is not a politician or relative of a politician with the same surname</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>841</Id>
+      <Name>BWAAccountStatus</Name>
+      <ParamValue xsi:type="xsd:string">Underwriter to confirm the account details by asking for copy of statement</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>842</Id>
+      <Name>BWANameError</Name>
+      <ParamValue xsi:type="xsd:string">Underwriter to confirm the account details by asking for copy of statement</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>38</CreditProductId>
+      <Id>843</Id>
+      <Name>BWAAddressError</Name>
+      <ParamValue xsi:type="xsd:string">Underwriter to confirm the account details by asking for copy of statement</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+  </Parameters>
+  <LinkedStrategies xmlns="ScortoPatron" />
+</CreditProduct>

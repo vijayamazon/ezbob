@@ -1,0 +1,167 @@
+.content {
+    text-align: center;
+}
+
+a {
+    color: #777777;
+}
+
+hr {
+    clear: both;
+}
+
+#mandatory_text {
+    font-weight: bold;
+    text-align: center;
+}
+
+#authorise_text {
+    font-weight: bold;
+    text-align: center;
+}
+
+#buttons {
+    margin-top: 0;
+    color: #000000;
+}
+
+#paypal {
+    margin: 5px auto;
+    clear: both;
+    text-align: left;
+}
+
+#paypal_table {
+    width: 100%;
+}
+
+#paypal_button {
+    text-align: right;
+}
+
+#paypal_link {
+    text-align: center;
+}
+
+.error {
+    margin: 5px auto;
+    color: red;
+    font-size: larger;
+}
+
+.formtable {
+    margin: 5px auto;
+}
+
+
+.floatright {
+    float: right;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.mand {
+    font-weight: bold;
+    color: #f00;
+}
+
+.pressed {
+    background-color: #FFFF99;
+    color: red;
+}
+
+.secure_table {
+    font-size: 10pt;
+}
+
+a.ezbob-logo {
+    background-image: url(ezbob-logo.png);
+}
+
+.btn-follow {
+    background-image: url(ezbob-icons-follow.png);
+}
+
+div.sunrise {
+    background-image: url(ezbob-header-light.png);
+}
+
+.footer-images {
+    background-image: url(ezbob-footer-city.png);
+}
+
+.main-header {
+    background-image: url(ezbob-header-gradient.png);
+}
+
+
+.top-buttons ul {
+    background-image: url(ezbob-top-buttons-bg.png);
+}
+
+
+select {
+  width: 282px;
+}
+
+.btn-back, input.btn-back {
+    background-image: url(ezbob-btn-continue.png);
+    background-color: transparent;
+    color: #404040;
+    font: bold 16px Arial;
+    border: none;
+    width: 160px;
+    height: 44px;
+    line-height: 12px;
+    display: inline-block;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+
+    text-align: center;
+    display: inline-block;
+}
+
+.how-it-works{
+    background-image:    url(how-it-works-ul-bg.png);
+}
+
+
+
+.five-icons .five-icon {
+background-image: url(ezbob-five-icons.png);
+}
+
+
+.top-profile-button {
+background-image: url(ezbob-top-buttons-bg.png);
+}
+
+
+input {
+   height:18px;
+}
+
+
+.sidebarBox {width:303px; float:right; clear:none;background:url(side-top.png) 0 0 no-repeat; padding-top:30px;display:block; font-size:12px; line-height:18px; font-family:Arial, Helvetica, sans-serif; color:#585858;}
+.sidebarBox a {color:#585858;}
+.sidebarBox a:hover {text-decoration:underline;}
+.sidebarBox h1 {font-size:16px; font-weight:normal; font-family:Arial, Helvetica, sans-serif; color:#0b73b4;}
+.sidebarBox h1 img, .sidebarBox h1 span {vertical-align:middle;display:inline-block;zoom:1;*display:inline;}
+.sidebarBox h1 img {margin-right:5px; margin-left:-5px;}
+.sidebarBox .bottom {background:url(side-b.png) left bottom no-repeat; padding-bottom:30px;display:block;}
+.sidebarBox .mid {padding:5px 35px;display:block;background:url(side-m.png) 0 0 repeat-y;}
+ul.gtarr {padding:0; list-style:none outside;}
+ul.gtarr li {padding-left:15px; background:url(arrgt.png) left 5px no-repeat;list-style:none outside; display:block; margin-left:3px;}
+
+.sidebarBox hr.spacer, .sidebarBox ul, .sidebarBox p, .sidebarBox  h1 {margin:0 0 15px;}
+
+
+.form-horizontal{
+  width:450px;
+}
+
+.wizard-steps{
+  margin-top:20px;
+}

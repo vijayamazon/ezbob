@@ -1,0 +1,164 @@
+﻿.store-logo {
+     width: 207px; height: 147px; cursor: pointer; background-repeat: no-repeat;
+    background-image: url(../img/store-sprites.png);
+}
+
+.amazon-logo:hover {
+    background-position: 0px 0px;
+}
+
+.amazon-logo {
+    background-position: 0px -147px;
+}
+
+.ebay-logo:hover {
+    background-position: 0px -294px;
+}
+
+.ebay-logo {
+    background-position: 0px -443px;
+}
+
+.paypal-logo {
+    background-position: 0px -735px;
+}
+
+.paypal-logo:hover {
+    background-position: 0px -588px;
+}
+
+.bank-account-logo {
+    background-position: 0px -1029px;
+}
+
+.bank-account-logo:hover {
+    background-position: 0px -882px;
+}
+
+.ekm-logo {
+    background-position: 0px -1324px;
+}
+
+.ekm-logo:hover {
+    background-position: 0px -1176px;
+}
+
+
+
+
+.instructions-header h2.one-line {
+    vertical-align: middle;
+    line-height: 55px;
+}
+
+.instructions-header h2 p {
+    padding-left: 50px;
+    padding-top: 10px;
+    font-style: normal;
+    font-size: 16px;
+    font-family: Arial;
+    color: white;
+}
+
+.instructions-header h2 a {
+    font-style: normal;
+    font-size: 16px;
+    font-family: Arial;
+}
+
+.instructions-header .exclamation {
+    font-family: arial;
+    font-size: 46px;
+    font-weight: bold;
+    font-style: italic;
+    color: #f3b91e;
+    float: left;
+    line-height: 54px;
+    height: 54px;
+}
+
+.instructions-header h2{
+    font-family: arial;
+    font-size: 16px;
+    line-height: 16px;
+    color: white;
+    background-color: #353333;
+    padding: 2px 5px 2px 10px;
+    margin-bottom: 10px;
+    min-height: 55px;
+
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+
+    background: rgb(89,89,89); /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU5NTk1OSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMzFmMjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(89,89,89,1) 0%, rgba(35,31,32,1) 100%); /* FF3.6+ !2!!1!*/
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(89,89,89,1)), color-stop(100%,rgba(35,31,32,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* IE10+ !1!*/
+    background: linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */
+    -pie-background: linear-gradient(top,  rgba(89,89,89,1) 0%,rgba(35,31,32,1) 100%); /* W3C */    
+    
+    behavior: url(CSS3PIE);
+    position:relative\0/;
+}
+
+.ebay-instructions img 
+{
+    /*margin-left: 20px;*/
+}
+
+.ebay-instructions-list span {
+    float: left;
+}
+
+
+.amazon-instructions .amazon-blackbox h2
+{
+    font-family: arial;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    
+    background-color: #353333;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    color: white;
+    padding: 8px 8px 8px 20px;
+    margin-left: 160px;
+    margin-top: 2px;
+    margin-right: 2px;
+}
+.amazon-instructions .simple-well {
+    padding: 0 20px;
+}
+
+.wizard-top-notification h2 {
+
+}
+
+img.help-btn {
+    float: right;
+}
+
+.help-btn, .help-btn:hover, .help-btn:active {
+    color: #0b73b4;
+    font: bold 16px Airal;
+}
+.ebay-instructions-list p {
+    margin-right: 20px;
+    padding-left: 20px;   
+}
+
+.ebay-instructions-list, .ebay-instructions-list p {
+    font-family: arial;
+    font-size: 16px;
+    color: #565656;
+}
+
+.ebay-instructions-list {
+}

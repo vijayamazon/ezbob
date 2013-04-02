@@ -1,0 +1,134 @@
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Xml.Serialization;
+using Raven.API;
+using log4net;
+
+namespace PaymentServices.PacNet
+{
+    public class PacnetService : IPacnetService
+    {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PacnetService));
+        private static readonly XmlSerializer Serializer = new XmlSerializer(typeof(RavenResponse));
+
+        private const string RoutingNumber = "857151";
+        private const string PaymentType = "fp_credit";
+
+        public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
+        {
+            try
+            {
+                var request = new RavenRequest("submit");
+
+                request.Set("PaymentRoutingNumber", RoutingNumber);
+                request.Set("PaymentType", PaymentType);
+                request.Set("Amount", ((int)(amount * 100)).ToString(CultureInfo.InvariantCulture));
+                request.Set("CurrencyCode", currencyCode);
+                request.Set("BankNumber", bankNumber);
+                request.Set("AccountNumber", accountNumber);
+                request.Set("AccountName", accountName);
+                request.Set("Description", description);
+                if (!String.IsNullOrEmpty(fileName)) request.Set("Filename", fileName);
+
+                var response = request.Send();
+                using (var wr = new StringWriter())
+                {
+                    Serializer.Serialize(wr, response);
+                    Log.DebugFormat("SendMoney result: " + wr);
+                }
+                
+                var pacnetReturnData = new PacnetReturnData(response);
+
+                if (pacnetReturnData.HasError)
+                {
+                    //transaction failed;
+                    Log.Error("SendMoney failed");
+                    throw new PacnetException(pacnetReturnData.Error);
+                }
+
+                if (pacnetReturnData.Status.Contains("Invalid"))
+                {
+                    Log.ErrorFormat("SendMoney failed: {0}", pacnetReturnData.Status);
+                    throw new PacnetException(pacnetReturnData.Status);
+                }
+
+                Log.InfoFormat("SendMoney completed successfully");        
+
+                return pacnetReturnData;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                throw;
+            }
+        }
+
+        //-----------------------------------------------------------------------------------
+        public PacnetReturnData CheckStatus(int customerId, string trackingNumber)
+        {
+            Log.DebugFormat("CheckStatus: trackingNumber={0}", trackingNumber);
+            try
+            {
+                var request = new RavenRequest("status");
+                request.Set("PaymentRoutingNumber", RoutingNumber);
+                request.Set("TrackingNumber", trackingNumber);
+                request.Set("PymtType", PaymentType);
+
+                RavenResponse response = request.Send();
+                using (var wr = new StringWriter())
+                {
+                    Serializer.Serialize(wr, response);
+                    Log.DebugFormat("Result: " + wr);
+                }
+                Log.DebugFormat("CheckStatus completed successfully");
+                return new PacnetReturnData(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return new PacnetReturnData { Error = ex.Message };
+            }
+        }
+
+        //-----------------------------------------------------------------------------------
+        public PacnetReturnData CloseFile(int customerId, string fileName)
+        {
+            Log.DebugFormat("CloseFile: trackingNumber={0}", fileName);
+            try
+            {
+                var request = new RavenRequest("closefile");
+                request.Set("Filename", fileName);
+
+                RavenResponse response = request.Send();
+                using (var wr = new StringWriter())
+                {
+                    Serializer.Serialize(wr, response);
+                    Log.DebugFormat("Result: " + wr);
+                }
+                Log.DebugFormat("CloseFile completed successfully");
+                return new PacnetReturnData(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return new PacnetReturnData { Error = ex.Message };
+            }
+        }
+
+        //-----------------------------------------------------------------------------------
+        public PacnetReturnData CloseTodayAndYesterdayFiles(int customerId)
+        {
+            var currentDate = DateTime.Now;
+            string currentFile = "orangemoney.wf-RT" + currentDate.ToString("yyyy-MM-dd");
+            string currentFilePrev = "orangemoney.wf-RT" + currentDate.AddDays(-1).ToString("yyyy-MM-dd");
+            var result = CloseFile(customerId,currentFile);
+            if (!result.HasError)
+            {
+                result = CloseFile(customerId,currentFilePrev);
+            }
+            return result;
+        }
+
+    }
+}

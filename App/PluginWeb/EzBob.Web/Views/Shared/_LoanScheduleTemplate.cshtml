@@ -1,0 +1,83 @@
+﻿@model dynamic
+
+<script id="loan-schedule-template" type="text/template">
+    @talbe()
+    @footer()
+    <div>
+        <%if(setupFee){%>
+            <div class="setupFeeFooter">
+                * origination fee will be deducted from the loan transfer
+            </div>
+        <%}%>
+    </div>
+</script>
+
+@helper talbe(){
+        <table class="table table-bordered table-striped payment-schedule-table">
+        <thead>
+            <tr>
+                <th width="80" >Due Date</th>
+                <th >Principal</th>
+                <th >Interest</th>
+                <th >
+                    Fees
+                    <%if(setupFee){%>
+                        *
+                    <%}%>
+                </th>
+                <th >Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(schedule, function(line, i){%>
+                <tr>
+                    <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
+                    <td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
+                    <td><%-EzBob.formatPounds(line.Interest)%></td>
+                    
+                    <td style="text-align: center">
+                        <%var fee = setupFee > 0 && i == 0 ? setupFee : 0;%>
+                        <%-fee !=0 ? EzBob.formatPounds(fee):'-'%><%-setupFee && i == 0 ? '*' : ''%>
+                    </td>
+                    
+                    <td>
+                        <b class="apply-loan-total" ><%-EzBob.formatPounds(line.AmountDue)%></b>
+                    </td>
+                </tr>
+            <%});%>
+        </tbody>
+    </table>
+}
+@helper footer()
+{
+    <div class="simple-well clearfix apply-for-loan-total-block">
+        <div class="total-block-total">
+            <p>Loan<br/>
+                <b><%-EzBob.formatPounds(totalPrincipal)%></b>
+            </p>
+        </div>
+        <div class="total-block-cost">
+            <p>
+                Cost<br/>
+                <b><%-EzBob.formatPounds(totalInterest)%></b>
+            </p>
+        </div>
+        <div class="total-block-total-due">
+            <p>Total<br/>
+                <b><%-EzBob.formatPounds(total)%></b>
+            </p>
+        </div>
+        <span class="ric">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %>, &nbsp;&nbsp;&nbsp; APR = <%- apr %>%</span>
+        <%if(isShowGift){%>
+            <div  class="free-gift-block free-gift">
+                <p>Did you know: You can always pay any amount at any time, <br/>
+                   above the specified amount, and save on interest costs.<br/>
+                   There are no pre-payment penalties or charges.
+                </p>
+            </div>
+        <%}%>
+        <i class="separator-image1"></i>
+        <i class="separator-image2"></i>
+        
+    </div>
+}

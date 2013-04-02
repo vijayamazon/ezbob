@@ -1,0 +1,113 @@
+﻿@using EzBob.Web.Infrastructure
+@model dynamic
+
+@{
+    ViewBag.Title = "EZBOB Landing Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        @{ Html.RenderPartial("_FavIcon"); }
+        @BundleHelper.RenderCss()
+        @{Html.RenderPartial("_GoogleAnalytics");}
+        <script type="text/javascript">
+            var WRInitTime = (new Date()).getTime();
+        </script>
+    </head>
+
+    <body>
+        <div class="main-header">
+            <div class="sunrise-container">
+                <div class="sunrise"></div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="container-inner">
+                <a href='@Url.Action("Index", "Profile", new{Area = "Customer"}, "https")' class="ezbob-logo"></a>
+                <div id="top-button">
+                </div>
+                <div class="row" style="height: 150px;"> 
+                </div>
+                
+                <div class="row-fluid">
+                    <div class="span1">&nbsp;</div>
+                    <div class="span10">
+                        <h2 style="color: black; font-style: normal;font-size: 18px;text-align: center;">If you have recieved invitation to test the site, please enter your email below to proceed</h2>
+                
+                        @using(Html.BeginForm("Index", "Landing", null, FormMethod.Post, new{@class="form-horizontal", style="padding-left: 150px;"}))
+                        {
+                            <div class="control-group">
+                                <label class="control-label">Email</label>
+                                <div class="controls">
+                                    <input type="text" name="email"/>
+                                </div>
+                            </div>
+                            <input style="margin-left: 225px;" class="btn-continue" type="submit" value="Submit"/>
+                            <input type="hidden" name="returnUrl" value='@ViewData["ReturnUrl"]'/>
+                        }
+                        <div style="text-align: right;padding-right: 245px;">
+                            Don't have an invitation? Register for site testing <a href="http://storefunding.e-zoteric.net/">http://storefunding.e-zoteric.net</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                @{Html.RenderPartial("_FiveIcons");}
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-images">
+            </div>
+            <div class="footer-copyright">
+                <div class="reflection">
+                    <span>
+                        ezbob.com is a trading style of Orange Money Ltd. t/a EZBOB. Registered in England and Wales.<br/>
+                        Registered Number: 7852687. Registered Address: 145-157 St John Street, London England, EC1V 4PW.<br/>
+                        ezbob.com's consumer credit activities are licensed by the OFT, licence number 0647816.
+                    </span>
+                      <div>
+                    
+                      </div>
+                </div>
+     
+            </div>
+            <div class="footer-black">
+                <div class="container">
+                    <div class="footer-infos row">
+                        <div class="span3">
+                            <ul class="footer-ssl">
+                                <li>
+                                    <a href="http://www.ccta.co.uk" target="_blank"><img src='@Url.Content("~/Content/img/CCTA-Logo.png")'/></a>
+                                </li>
+                            </ul>                            
+                        </div>
+                        <div class="span2">
+                            <b>Contact us:</b>
+                            <p>EMail: <a href="mailto:support@ezbob.com">support@ezbob.com</a></p>
+                        </div>
+                        <div class="span3">
+                            &nbsp;
+                        </div>
+                        <div class="span4">
+                            <p>
+                                &copy;2011 Orange Money Ltd. All rights reserved.<br />
+                                EZBOB is a registered trademark of Orange Money Ltd.<br />
+                                Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        @{Html.RenderPartial("_ClickTale");}
+    </body>
+</html>
+
+
+

@@ -1,0 +1,56 @@
+﻿@model EzBob.Web.Models.LogOnModel
+
+@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
+{
+    <div>
+        <div style="padding-left: 20px;">
+            <h1 style="color: #0099E7; font-style: normal;">Login:</h1>
+            <p style="color: #0099E7; font-size: 20px;">Welcome Back</p>            
+        </div>
+        @*if it has errors - show them instead of welcome back*@
+        <div class="simple-well login-form" style="padding-top: 25px;">
+            
+            <div class="control-group">
+                <label class="control-label">User name</label>
+                <div class="controls">
+                    @Html.TextBoxFor(x => x.ReturnUrl,new {type = "hidden"})
+                    @Html.TextBoxFor(m => m.UserName, new{autofocus = "autofocus"})
+                    @Html.ValidationMessageFor(m => m.UserName)
+                </div>
+            </div>            
+
+            <div class="control-group">
+                <label class="control-label">Password</label>
+                <div class="controls">
+                    @Html.PasswordFor(m => m.Password, new { autocomplete="off" })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
+                    <label class="checkbox" for="RememberMe">
+                        Remember Me
+                        <input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
+                    </label>                    
+                </div>
+            </div>
+            
+            <div class="control-group" style="margin-bottom: 0;">
+                <div class="controls">
+                    <input type="submit" value="Log In" class="button orange pull-right" style="margin-right: 20px;"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="" style="margin-bottom: 5px; margin-left: 10px; margin-top: 10px;">
+            @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { }, new { }) <br />
+            @Html.ActionLink("Don't have an EZBOB account, sign up here", "Index", "Wizard", new { Area = "Customer" }, new { })
+        </div>
+
+    </div>
+    <div id="DontHaveAccount">
+
+    </div>
+}

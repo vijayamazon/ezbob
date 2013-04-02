@@ -1,0 +1,2 @@
+1#Credit Approval Calculations##ID#MASTERID#CAHistFacts#SEQ_CA_HistFact#CA_H2HR#CreditApprovalHist#1#0
+2#Credit Approval with Nulls Calculations##ID#MASTERID#CAHistFacts#SEQ_CA_HistFact#CA_H2HR#CreditApprovalHist#2#0

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<scripts>
+  <script name="Top" DoNotReplaceCondition = "(&lt;!-- ClickTale Top part --&gt;)">
+    <![CDATA[
+        <script type="text/javascript">
+            var WRInitTime = (new Date()).getTime();
+        </script>
+    ]]>
+  </script>
+  <script name="Bottom" DoNotReplaceCondition = "(&lt;!-- ClickTale Bottom part --&gt;)">
+    <![CDATA[
+<div id="ClickTaleDiv" style="display: none;"></div>
+<script type='text/javascript'>
+document.write(unescape("%3Cscript%20src='"+
+ (document.location.protocol=='https:'?
+  'https://clicktale.pantherssl.com/':
+  'http://s.clicktale.net/')+
+ "WRd.js'%20type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var ClickTaleSSL=1;
+if(typeof ClickTale=='function') ClickTale(24806,1,"www02");
+</script>
+    ]]>
+  </script>
+</scripts>

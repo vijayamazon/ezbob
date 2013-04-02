@@ -1,0 +1,54 @@
+﻿@model dynamic
+
+<script id="medal-calculation-template" type="text/template">
+    <table class="table table-bordered table-striped blue-header centered">
+        <thead>
+            <%
+            medals.Score = medals.Score || {};
+            %>
+            <tr>
+                <th>Medal</th>
+                <th>Points</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><%-medals.Score.Medal%></td>
+                <td><%-medals.Score.Points%></td>
+                <td><%- EzBob.formatPercents(medals.Score.Result, 1) %></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-bordered table-striped blue-header centered">
+        <thead>
+            <tr>
+                <th>Customer Characteristic</th>
+                <th>Weight Used</th>
+                <th>Points Obtained</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <%
+                _.each( medals.MedalCharacteristics, function(medal, i){%> 
+                <td><%-medal.CustomerCharacteristic%></td>
+                <td><%-Math.round(medal.WeightUsed)%>%</td>
+                <td><%-Math.round(medal.ACParameters)+' from ' + Math.round(medal.MaxPoss)%> (<%-EzBob.roundNumber(medal.PointsObtainedPercent, 1) %>%)</td>
+            </tr>
+            <%}) %>
+        </tbody>
+        <tfoot>
+            <tr> 
+                <td>Total (not normalized)</td>
+                <td><%-medals.TotalWeightUsed != undefined ? medals.TotalWeightUsed : "-"%>%</td>
+                <td>
+                    <%-(medals.TotalACParameters != undefined ? EzBob.roundNumber(medals.TotalACParameters, 1) : "-") + ' from ' + (medals.TotalMaxPoss != undefined ? EzBob.roundNumber(medals.TotalMaxPoss, 1) : "-")%> 
+                    (<%-(medals.TotalPointsObtainedPercent != undefined ? EzBob.roundNumber(medals.TotalPointsObtainedPercent, 1) : "-")%>%)
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    @{Html.RenderPartial("_ExportToExcel");}
+</script>

@@ -1,0 +1,304 @@
+<?xml version="1.0"?>
+<CreditProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId xmlns="ScortoPatron">27</UserId>
+  <Id xmlns="ScortoPatron">711</Id>
+  <Name xmlns="ScortoPatron">Ebay Elimination Varables </Name>
+  <CreationDate xmlns="ScortoPatron">2012-08-21T13:18:57.753</CreationDate>
+  <Parameters xmlns="ScortoPatron">
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16130</Id>
+      <Name>StoreSite</Name>
+      <ParamValue xsi:type="xsd:string">UK</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16131</Id>
+      <Name>GoodStanding</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16132</Id>
+      <Name>IDVerified</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16133</Id>
+      <Name>NewUser</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16134</Id>
+      <Name>PayPalAccountStatusClosed</Name>
+      <ParamValue xsi:type="xsd:string">Closed</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16135</Id>
+      <Name>PayPalAccountStatusInvalid</Name>
+      <ParamValue xsi:type="xsd:string">Invalid</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16136</Id>
+      <Name>PayPalAccountStatusLocked</Name>
+      <ParamValue xsi:type="xsd:string">Locked</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16137</Id>
+      <Name>PayPalAccountStatusUnknown</Name>
+      <ParamValue xsi:type="xsd:string">Unknown</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16138</Id>
+      <Name>PayPalAccountStatusHighRestricted</Name>
+      <ParamValue xsi:type="xsd:string">HighRestricted</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16139</Id>
+      <Name>PayPalAccountStatusLowRestricted</Name>
+      <ParamValue xsi:type="xsd:string">LowRestricted</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16140</Id>
+      <Name>PayPalAccountStatusWireOff</Name>
+      <ParamValue xsi:type="xsd:string">WireOff</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16141</Id>
+      <Name>PayPalAccountTypeBusiness</Name>
+      <ParamValue xsi:type="xsd:string">Business</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16142</Id>
+      <Name>PayPalAccountTypePersonal</Name>
+      <ParamValue xsi:type="xsd:string">Personal</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16143</Id>
+      <Name>PayPalAccountTypePremier</Name>
+      <ParamValue xsi:type="xsd:string">Premier</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16144</Id>
+      <Name>QualifiesForSelling</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16145</Id>
+      <Name>RegistrationDatePeriod</Name>
+      <ParamValue xsi:type="xsd:string">365</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16146</Id>
+      <Name>StoreOwner</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16147</Id>
+      <Name>UserIDChanged</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16148</Id>
+      <Name>AccountStateInactive</Name>
+      <ParamValue xsi:type="xsd:string">Inactive</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16149</Id>
+      <Name>AccountStatePending</Name>
+      <ParamValue xsi:type="xsd:string">Pending</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16150</Id>
+      <Name>AmountPastDue</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16151</Id>
+      <Name>PastDue</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16152</Id>
+      <Name>ItemsInInventory</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16153</Id>
+      <Name>ValueOfInventory</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16154</Id>
+      <Name>FeedbackScore</Name>
+      <ParamValue xsi:type="xsd:string">50</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16155</Id>
+      <Name>FeedbackPositive1Y</Name>
+      <ParamValue xsi:type="xsd:string">50</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16156</Id>
+      <Name>UniqueBuyerCount</Name>
+      <ParamValue xsi:type="xsd:string">50</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16157</Id>
+      <Name>NumberOfOrders1M</Name>
+      <ParamValue xsi:type="xsd:string">45</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16158</Id>
+      <Name>NumberOfOrders3M</Name>
+      <ParamValue xsi:type="xsd:string">120</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16159</Id>
+      <Name>NumberOfOrders1Y</Name>
+      <ParamValue xsi:type="xsd:string">600</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16160</Id>
+      <Name>ItemsOrdered1M</Name>
+      <ParamValue xsi:type="xsd:string">45</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16161</Id>
+      <Name>ItemsOrdered3M</Name>
+      <ParamValue xsi:type="xsd:string">120</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16162</Id>
+      <Name>ItemsOrdered1Y</Name>
+      <ParamValue xsi:type="xsd:string">600</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16163</Id>
+      <Name>SumOfOrders1M</Name>
+      <ParamValue xsi:type="xsd:string">1000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16164</Id>
+      <Name>SumOfOrders3M</Name>
+      <ParamValue xsi:type="xsd:string">2500</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16165</Id>
+      <Name>SumOfOrders1Y</Name>
+      <ParamValue xsi:type="xsd:string">15000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16166</Id>
+      <Name>CancelledOrders1M</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16167</Id>
+      <Name>CancelledOrders3M</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16168</Id>
+      <Name>CancelledOrders1Y</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16169</Id>
+      <Name>CancellationRate1M</Name>
+      <ParamValue xsi:type="xsd:string">0.07</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16170</Id>
+      <Name>CancellationRate3M</Name>
+      <ParamValue xsi:type="xsd:string">0.07</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>711</CreditProductId>
+      <Id>16171</Id>
+      <Name>CancellationRate1Y</Name>
+      <ParamValue xsi:type="xsd:string">0.07</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+  </Parameters>
+  <LinkedStrategies xmlns="ScortoPatron" />
+</CreditProduct>

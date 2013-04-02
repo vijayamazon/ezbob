@@ -1,0 +1,2757 @@
+<?xml version='1.0' encoding='UTF-8'?><definitions name="Endpoint" targetNamespace="http://schema.uk.experian.com/eih/endpoint" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:core="http://schema.uk.experian.com/eih/2011/03" xmlns:meta="http://schema.uk.experian.com/eih/core/metadata" xmlns:ns="http://schema.uk.experian.com/eih/core/request" xmlns:ns0="http://schema.uk.experian.com/eih/core/response" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://j2ee.netbeans.org/wsdl/SynchronousApplication/C1" xmlns:tns1="http://schema.uk.experian.com/eih/endpoint" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:core="http://schema.uk.experian.com/eih/2011/03" xmlns:header="http://schema.uk.experian.com/eih/2011/03/EIHHeader" xmlns:meta="http://schema.uk.experian.com/eih/core/metadata" xmlns:ns="http://schema.uk.experian.com/eih/core/request" xmlns:ns0="http://schema.uk.experian.com/eih/core/response" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://j2ee.netbeans.org/wsdl/SynchronousApplication/C1" xmlns:tns1="http://schema.uk.experian.com/eih/endpoint" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+            <annotation>
+                <documentation xml:lang="en">
+		       Experian Identity Hub Separated EIHHeader Schema
+                </documentation>
+            </annotation>
+
+            <xsd:element name="EIHHeader" type="header:EIHHeaderType" />
+
+            <xsd:complexType name="EIHHeaderType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> ClientUser : the End User at the client site accessing      </xsd:documentation>
+                    <xsd:documentation xml:lang="en">              the system through XML                         </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> ReferenceId: a client supplied identifier, for example a    </xsd:documentation>
+                    <xsd:documentation xml:lang="en">              session id or internal reference.              </xsd:documentation>
+                    <xsd:documentation xml:lang="en" />
+                    <xsd:documentation xml:lang="en"> Both items are present for tracability and logging purposes.</xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ClientUser" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ReferenceId" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+        </xsd:schema>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://schema.uk.experian.com/eih/2011/03/BankWizard" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:bws="http://schema.uk.experian.com/eih/2011/03/BankWizard" xmlns:core="http://schema.uk.experian.com/eih/2011/03" xmlns:eih="http://schema.uk.experian.com/eih/2011/03" xmlns:header="http://schema.uk.experian.com/eih/2011/03/EIHHeader" xmlns:meta="http://schema.uk.experian.com/eih/core/metadata" xmlns:ns="http://schema.uk.experian.com/eih/core/request" xmlns:ns0="http://schema.uk.experian.com/eih/core/response" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://j2ee.netbeans.org/wsdl/SynchronousApplication/C1" xmlns:tns1="http://schema.uk.experian.com/eih/endpoint" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader" />
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03" />
+
+            <annotation>
+                <documentation xml:lang="en">
+			       Experian Identity Hub Bank Wizard Extension Schema
+
+			       @Author : Neil Flinn
+			       @Date   : 06 April 2011
+			       @Version: Major 0 Minor 1
+
+			       Copyright (c) Experian Limited 1997-2011. All Rights Reserved.
+                </documentation>
+            </annotation>
+
+            <xsd:complexType name="GetCountriesRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Request a list of all available countries on the server, with
+			        an indication of those that are the user is licensed for.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                </xsd:sequence>
+                <xsd:attribute default="en" name="language" type="eih:LanguageEIH" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetCountriesResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Response containing the countries available on the server, with
+			        an indication of those that are licensed for the user.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="country" type="bws:CountryInformation" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetCountryInputRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Request the Bank Wizard checking levels available for an ISO 3166-1 two-alpha country code the input BBAN details
+			        associated with the checking levels.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="bws:ISO3166-1">
+                        <xsd:attribute default="en" name="language" type="eih:LanguageEIH" use="optional" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetCountryInputResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        The BBAN inputs for various Bank Wizard checking levels associated the requested ISO 3166-1 two-alpha country code.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="4" minOccurs="1" name="validationCheck" type="bws:BankWizardCheckType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ValidateIBANRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Validation of an IBAN.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="bws:IBAN">
+                        <xsd:attribute default="en" name="language" type="eih:LanguageEIH" use="optional" />
+                        <xsd:attribute name="reportString" type="bws:ReportString" use="optional" />
+                        <xsd:attribute name="itemisationID" type="bws:ItemisationID" use="optional" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="ValidateIBANResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Validation of an IBAN response.
+
+			       For a successful validation the
+			         *
+                        <code>BBAN</code>: decomposed IBAN
+			         *
+                        <code>dataAccessKey</code>: for accessing lookup functions and
+			         *
+                        <code>conditions</code>: BankWizard core conditions
+			         *
+                        <code>ISOcountry</code>: country code associated with the IBAN
+			        are returned.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="5" minOccurs="0" name="BBAN" type="bws:BBANResponseType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="dataAccessKey" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="conditions" type="bws:Conditions" />
+                </xsd:sequence>
+                <xsd:attribute name="ISOcountry" type="bws:ISO3166-1" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="ValidateRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Validation of a bank account from BBANs request.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <complexContent>
+                    <xsd:extension base="bws:ValidationBBANRequestType">
+                        <xsd:sequence />
+                        <xsd:attribute default="en" name="language" type="eih:LanguageEIH" use="optional" />
+                        <xsd:attribute name="reportString" type="bws:ReportString" use="optional" />
+                        <xsd:attribute name="itemisationID" type="bws:ItemisationID" use="optional" />
+                    </xsd:extension>
+                </complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="ValidateResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			       Validation of a bank account response.
+
+			       For a successful validation the
+			         *
+                        <code>BBAN</code>: transposed BBANs
+			         *
+                        <code>IBAN</code>
+			         *
+                        <code>dataAccessKey</code>: for accessing lookup functions and
+			         *
+                        <code>conditions</code>: BankWizard core conditions
+			        are returned.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="5" minOccurs="0" name="BBAN" type="bws:BBANBaseType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="IBAN" type="bws:IBAN" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="dataAccessKey" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="conditions" type="bws:Conditions" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ValidationBBANRequestType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+                        <code>ValidationRequestType</code>element, containing a
+                        <code>BBAN</code>element
+			        with
+                        <code>ISOCountry</code>and
+                        <code>checkingLevel</code>attributes.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="5" minOccurs="1" name="BBAN" type="bws:BBANBaseType" />
+                </xsd:sequence>
+                <xsd:attribute name="ISOCountry" type="bws:ISO3166-1" use="required" />
+                <xsd:attribute name="checkingLevel" type="bws:CheckingLevel" use="required" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetBranchDataRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Lookup a Branch address based on
+                        <code>dataAccessKey</code>.
+
+			        The
+                        <code>returnSubBranches</code>attribute is used to indicate if sub-branches are to be returned.
+			        If false or missing only the main branch is requested.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="bws:DataAccessKeyType">
+                        <xsd:sequence />
+                        <xsd:attribute default="false" name="returnSubBranches" type="xsd:boolean" />
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetBranchDataResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Branch details response.
+
+			        If the
+                        <code>returnSubBranches</code>was false or missing, only the main branch is returned and
+                        <code>subBranchesAvailable</code>
+			        is set to indicate if sub-branches exist.
+
+			        If the
+                        <code>returnSubBranches</code>was true, then sub-branches are also returned in the response as additional
+                        <code>branchData</code>elements.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="branchData" type="bws:BranchDataType" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchesAvailable" type="xsd:boolean" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetSWIFTDataRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Lookup a SWIFT data based on the based on
+                        <code>dataAccessKey</code>.
+
+			        The
+                        <code>returnSubBranches</code>attribute is used to indicate if sub-branches are to be returned.
+			        If false or missing only the main branch is requested.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="bws:DataAccessKeyType">
+                        <xsd:sequence />
+                        <xsd:attribute default="false" name="returnSubBranches" type="xsd:boolean" />
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetSWIFTDataResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        SWIFT branch details response.
+
+			        If the
+                        <code>returnSubBranches</code>was false or missing, only the main branch is returned and
+                        <code>subBranchesAvailable</code>
+			        is set to indicate if sub-branches exist.
+
+			        If the
+                        <code>returnSubBranches</code>was true, then sub-branches are also returned in the response as additional
+                        <code>swiftData</code>elements.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="swiftData" type="bws:SWIFTDataType" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchesAvailable" type="xsd:boolean" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetSEPADataRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Lookup a SEPA data based on the based on
+                        <code>dataAccessKey</code>.
+
+			        The
+                        <code>returnSubBranches</code>attribute is used to indicate if sub-branches are to be returned.
+			        If false or missing only the main branch is requested.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="bws:DataAccessKeyType">
+                        <xsd:sequence />
+                        <xsd:attribute default="false" name="returnSubBranches" type="xsd:boolean" />
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetSEPADataResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        SEPA branch details response.
+
+			        If the
+                        <code>returnSubBranches</code>was false or missing, only the main branch is returned and
+                        <code>subBranchesAvailable</code>
+			        is set to indicate if sub-branches exist.
+
+			        If the
+                        <code>returnSubBranches</code>was true, then sub-branches are also returned in the response as additional
+                        <code>sepaData</code>elements.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="sepaData" type="bws:SEPADataType" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchesAvailable" type="xsd:boolean" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetFasterPaymentsDataRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Lookup a Faster Payment data based on the
+                        <code>dataAccessKey</code>.
+
+			        The
+                        <code>returnSubBranches</code>attribute is used to indicate if sub-branches are to be returned.
+			        If false or missing only the main branch is requested.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="bws:DataAccessKeyType">
+                        <xsd:sequence />
+                        <xsd:attribute default="false" name="returnSubBranches" type="xsd:boolean" />
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetFasterPaymentsDataResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Faster payments branch details response.
+
+			        If the
+                        <code>returnSubBranches</code>was false or missing, only the main branch is returned and
+                        <code>subBranchesAvailable</code>
+			        is set to indicate if sub-branches exist.
+
+			        If the
+                        <code>returnSubBranches</code>was true, then sub-branches are also returned in the response as additional
+                        <code>fasterPaymentsData</code>elements.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="fasterPaymentsData" type="bws:FasterPaymentDataType" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchesAvailable" type="xsd:boolean" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="GetAdditionalDataRequest">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Request all the additional country specific data based on the
+                        <code>dataAccessKey</code>.
+
+			        The
+                        <code>returnSubBranches</code>attribute is used to indicate if sub-branches are to be returned.
+			        If false or missing only the main branch is requested.
+
+			        An optional language attribute can be passed in. English (en) is the
+			        default if the requested type is not supported.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexContent>
+                    <xsd:extension base="bws:DataAccessKeyType">
+                        <xsd:sequence />
+                        <xsd:attribute default="false" name="returnSubBranches" type="xsd:boolean" />
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="GetAdditionalDataResponse">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Additional data response.
+
+			        If the
+                        <code>returnSubBranches</code>was false or missing, only the main branch is returned and
+                        <code>subBranchesAvailable</code>
+			        is set to indicate if sub-branches exist.
+
+			        If the
+                        <code>returnSubBranches</code>was true, then sub-branches are also returned in the response as additional
+			        elements of the
+                        <code>additionalBranchData</code>element.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="additionalBranchData" type="bws:AdditionalBranchDataType" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchesAvailable" type="xsd:boolean" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="DataAccessKeyType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+                        <code>key</code>is that returned from the Validate or Verify operation, which can be used to
+			        access branch data
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="dataAccessKey" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute default="en" name="language" type="eih:LanguageEIH" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="AdditionalBranchDataType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Additional Branch Data.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="branchInfo" type="bws:AdditionalBranchElement" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchNumber" type="xsd:integer" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="AdditionalBranchElement">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			         Complete listing of branch related data, where
+			         code : intended for use by software to provide an algorithmic mechanism to identify the condition.
+			         description : human readable description of the data
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string">
+                        <xsd:attribute name="code" type="xsd:integer" use="required" />
+                        <xsd:attribute name="description" type="xsd:string" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="FasterPaymentDataType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Faster Payments Data.
+			        For the main branch the
+                        <code>subBranchNumber</code>will be zero.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="status" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="agencyType" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="lastChangeDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="redirectedToBranch" type="xsd:boolean" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="redirectingSortcode" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="clearingClosedDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="handlingBankConnType" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="handlingBankCode" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="accountsNumberedFlag" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="settlementBankConnection" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="settlementBankcode" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchNumber" type="xsd:integer" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="SWIFTDataType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        SWIFT Data.
+			        For the main branch the
+                        <code>subBranchNumber</code>will be zero.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="swiftBranchBIC" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="chipsUID" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="swiftCategory" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="swiftService" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="paymentRoutingBIC" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="institutionPOBoxNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="institutionPOBoxPostcode" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="institutionPOBoxLocation" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="institutionPOBoxCountry" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="swiftExtraInformation" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchNumber" type="xsd:integer" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="SEPADataType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        SWIFT Data.
+			        For the main branch the
+                        <code>subBranchNumber</code>will be zero.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ibanBIC" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="SSIBIC" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="creditTransferAdherenceDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="creditTransferNonComplianceDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="directDebitAdherenceDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="directDebitNonComplianceDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="priorityPaymentAdherenceDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="priorityPaymentNonComplianceDate" type="xsd:date" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchNumber" type="xsd:integer" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="BranchDataType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Standard Bank Wizard branch data type.
+			        For the main branch the
+                        <code>subBranchNumber</code>will be zero.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="institutionName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="branchName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="address" type="bws:BranchAddressType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="telephoneNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="faxNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="closureDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="redirectedTo" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="subBranchNumber" type="xsd:integer" use="optional" />
+            </xsd:complexType>
+
+            <xsd:complexType name="BranchAddressType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Branch Address Type.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="5" minOccurs="0" name="addressLine" type="bws:AddressLineType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="postOrZipCode" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="AddressLineType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Branch Address line.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string">
+                        <xsd:attribute name="line" type="bws:RestrictedInteger" use="required" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="CountryInformation">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Country element contains the country name  and the following attributes
+			          * ISO3166  : the 2-alpha 3166-1 ISO code for the country.
+			          * Licensed : boolean indication to identify the country module is licensed.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string">
+                        <xsd:attribute name="ISOCountry" type="bws:ISO3166-1" use="required" />
+                        <xsd:attribute name="licensed" type="xsd:boolean" use="required" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BankWizardCheckType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        The BBAN required to be passed in for a specific validation checking level.
+			        The element is made up of the following:
+			         * BBAN  : input BBAN details
+			         * checkingLevel : the validation checking level
+			         * description : the country modules description of the checking level
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="5" minOccurs="1" name="BBAN" type="bws:BBANResponseType" />
+                </xsd:sequence>
+                <xsd:attribute name="checkingLevel" type="bws:CheckingLevel" />
+                <xsd:attribute name="description" type="xsd:string" />
+            </xsd:complexType>
+
+            <xsd:complexType name="BBANResponseType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Extension of
+                        <code>BBANBase</code>element to include the following optional attributes
+			        *
+                        <code>description</code>of the BBAN field.
+			        *
+                        <code>maxSize</code>maximum size for the BBAN.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="bws:BBANBaseType">
+                        <xsd:attribute name="description" type="xsd:string" />
+                        <xsd:attribute name="maxSize" type="xsd:integer" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BBANBaseType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        BBAN element which contains the BBAN value (string) and its input index for Bank Wizard validation.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string">
+                        <xsd:attribute name="index" type="bws:RestrictedInteger" use="required" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:simpleType name="RestrictedInteger">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			         Restricted integer used for BBAN indexes and Branch address elements.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1" />
+                    <xsd:maxInclusive value="5" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="CheckingLevel">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Validation checking levels.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="Branch" />
+                    <xsd:enumeration value="Account" />
+                    <xsd:enumeration value="Domestic" />
+                    <xsd:enumeration value="BIC" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="IBAN">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        ISO 13616:2003 International Bank Account Number representation.
+			        It consists of
+			        1. ISO 3166-1 2-alpha country code
+			        2. two check digits
+			        3. Up to 36 alphanumeric representing the domestic bank account number. This allows for printed and electronic formats.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <!-- xsd:pattern value="[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9 ]{1,36}"/>  -->
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ISO3166-1">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        ISO 3166-1 2-alpha code.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[A-Z]{2,2}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ItemisationID">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        4 digit itemisation number, to be used for itemised billing.
+			        The availability of this functionality and value(s) supported
+			        will be advised by Experian Payments.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{3,4}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ReportString">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			         Report string (up to 30 character) used for reporting.
+			         The availability of this functionality will be advised by Experian Payments.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[a-zA-Z0-9 ]{1,30}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="Conditions">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Conditions element made up of conditions.
+			        The
+                        <code>severity</code>and
+                        <code>code</code>within a condition will be unique.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="condition" type="bws:Condition">
+                        <xsd:unique name="uniqueConditions">
+                            <xsd:selector xpath="condition" />
+                            <xsd:field xpath="@severity" />
+                            <xsd:field xpath="@code" />
+                        </xsd:unique>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="Condition">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Condition element which contains a human readable description of the condition with
+			        the following attributes:
+			          *
+                        <code>severity</code>: the severity of the condition.
+			          *
+                        <code>code</code>: intended for use by software to provide an algorithmic mechanism to identify the condition.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string">
+                        <xsd:attribute name="severity" type="bws:ConditionSeverity" use="required" />
+                        <xsd:attribute name="code" type="xsd:integer" use="required" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:simpleType name="ConditionSeverity">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Severity enumeration.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="error" />
+                    <xsd:enumeration value="warning" />
+                    <xsd:enumeration value="information" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="AccountType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Verification account type enumeration.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="Current" />
+                    <xsd:enumeration value="ISA" />
+                    <xsd:enumeration value="Mortgage" />
+                    <xsd:enumeration value="Basic" />
+                    <xsd:enumeration value="Savings" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="OwnerType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			         Verification owner type enumeration.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="Joint" />
+                    <xsd:enumeration value="Single" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="CheckContextType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			        Verification check context enumeration.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="Direct Debit" />
+                    <xsd:enumeration value="Direct Credit" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            
+			<xsd:complexType name="BacsCodeType">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">
+						BacsCode element has the following attributes:
+						*<code>code</code>: Code returned from Bank Wizard inside BacsCode Tag
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+						<xsd:attribute name="code" type="xsd:string" use="optional" />
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>            
+
+            <xsd:simpleType name="VerifyScoreType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+			         Verification match scores.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1" />
+                    <xsd:maxInclusive value="9" />
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:schema>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://schema.uk.experian.com/eih/2011/03/QAS" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:core="http://schema.uk.experian.com/eih/2011/03" xmlns:header="http://schema.uk.experian.com/eih/2011/03/EIHHeader" xmlns:meta="http://schema.uk.experian.com/eih/core/metadata" xmlns:ns="http://schema.uk.experian.com/eih/core/request" xmlns:ns0="http://schema.uk.experian.com/eih/core/response" xmlns:qas="http://schema.uk.experian.com/eih/2011/03/QAS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://j2ee.netbeans.org/wsdl/SynchronousApplication/C1" xmlns:tns1="http://schema.uk.experian.com/eih/endpoint" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader" />
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+		       Experian Identity Hub QAS Extension Schema
+
+		       @Author : Neil Flinn
+		       @Date   : 25 March 2011
+		       @Version: Major 0 Minor 1
+
+		       Copyright (c) Experian Limited 1997-2011. All Rights Reserved.
+                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:complexType name="ExecuteQASearchType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="QASearch" type="qas:QASearch" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> QASearch defines a search request                             </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Country  : The country data set to use                        </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Engine   : The search engine to use, and any engine specific  </xsd:documentation>
+                <xsd:documentation xml:lang="en">            configuration settings                             </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Layout   : The layout to use when creating a formatted        </xsd:documentation>
+                <xsd:documentation xml:lang="en">            address (required by verification engine only)     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Search   : The actual search string                           </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="QASearch">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Country" type="qas:DataIDType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Engine" type="qas:EngineType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Layout" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Search" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="Language" type="qas:LanguageIDType" />
+            </xsd:complexType>
+
+            <xsd:simpleType name="DataIDType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[A-Za-z0-9][A-Za-z0-9][A-Za-z0-9]" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> EngineType specifies the engine to use for a search, and any  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> engine options                                                </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The various attributes are as follows:                        </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Flatten       : Whether or not to flatten the picklist        </xsd:documentation>
+                <xsd:documentation xml:lang="en">                 returned by the search                        </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Intensity     : How hard the search engine will search to get </xsd:documentation>
+                <xsd:documentation xml:lang="en">                 a match                                       </xsd:documentation>
+                <xsd:documentation xml:lang="en"> PromptSet     : The prompt set to apply to the search string  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Threshold     : The typedown threshold (typedown engine only) </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Timeout       : The time out period in milliseconds           </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="EngineType">
+                <xsd:simpleContent>
+                    <xsd:extension base="qas:EngineEnumType">
+                        <xsd:attribute name="Flatten" type="xsd:boolean" />
+                        <xsd:attribute name="Intensity" type="qas:EngineIntensityType" />
+                        <xsd:attribute name="PromptSet" type="qas:PromptSetType" />
+                        <xsd:attribute name="Threshold" type="qas:ThresholdType" />
+                        <xsd:attribute name="Timeout" type="qas:TimeoutType" />
+                    </xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> The available engines </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType name="EngineEnumType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Singleline" />
+                    <xsd:enumeration value="Typedown" />
+                    <xsd:enumeration value="Verification" />
+                    <xsd:enumeration value="Keyfinder" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ThresholdType">
+                <xsd:restriction base="xsd:positiveInteger">
+                    <xsd:minInclusive value="5" />
+                    <xsd:maxInclusive value="750" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="EngineIntensityType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Exact" />
+                    <xsd:enumeration value="Close" />
+                    <xsd:enumeration value="Extensive" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="TimeoutType">
+                <xsd:restriction base="xsd:nonNegativeInteger">
+                    <xsd:minInclusive value="0" />
+                    <xsd:maxInclusive value="600000" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="PromptSetType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="OneLine" />
+                    <xsd:enumeration value="Default" />
+                    <xsd:enumeration value="Generic" />
+                    <xsd:enumeration value="Optimal" />
+                    <xsd:enumeration value="Alternate" />
+                    <xsd:enumeration value="Alternate2" />
+                    <xsd:enumeration value="Alternate3" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="ExecuteQAGetAddressType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="QAGetAddress" type="qas:QAGetAddress" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> QAGetAddress defines a request for a formatted address        </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Layout   : The layout to use                                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Moniker  : The Search Point Moniker of the picklist entry to  </xsd:documentation>
+                <xsd:documentation xml:lang="en">            format                                             </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="QAGetAddress">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Layout" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Moniker" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="Language" type="qas:LanguageIDType" />
+            </xsd:complexType>
+
+            <xsd:simpleType name="LanguageIDType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{0,3}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> QASearchResult describes the results of a search              </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> QAPicklist  : The picklist produced by the search             </xsd:documentation>
+                <xsd:documentation xml:lang="en"> QAAddress   : A formatted address produced by the search.     </xsd:documentation>
+                <xsd:documentation xml:lang="en">               Note that only the verification engine will     </xsd:documentation>
+                <xsd:documentation xml:lang="en">               ever produce a formatted address. Other         </xsd:documentation>
+                <xsd:documentation xml:lang="en">               engines will only ever produce a picklist.      </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The attributes are as follows:                                </xsd:documentation>
+                <xsd:documentation xml:lang="en"> VerifyLevel : Specifies the level to which the verification   </xsd:documentation>
+                <xsd:documentation xml:lang="en">               engine has verified the input address.          </xsd:documentation>
+                <xsd:documentation xml:lang="en">               It can be ignored when using all other engines. </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="QASearchResultType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="QAPicklist" type="qas:QAPicklistType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="QAAddress" type="qas:QAAddressType" />
+                </xsd:sequence>
+                <xsd:attribute default="None" name="VerifyLevel" type="qas:VerifyLevelType" />
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> QAPicklistType describes a picklist                           </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> FullPicklistMoniker : The Search Point Moniker that describes </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       the entire picklist                     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> PicklistEntry       : The actual picklist entries             </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Prompt              : The prompt to display to the user,      </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       indicating what information they should </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       enter next                              </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Total               : The total number of available results   </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The attributes are as follows:                                </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AutoFormatSafe      : It is suggested that you immediately    </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       format the first picklist item          </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AutoFormatPastClose : There is only one exact match, so you   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       may want immediately to format the      </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       first picklist item                     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AutoStepInSafe      : It is suggested that you immediately    </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       step-in to the first picklist item      </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AutoStepInPastClose : There is only one exact match, so you   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       may want immediately to step-in to the  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       first picklist item                     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> LargePotential      : Potentially, there are too many results </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       to display                              </xsd:documentation>
+                <xsd:documentation xml:lang="en"> MaxMatches          : The number of results exceeded the      </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       maximum allowed                         </xsd:documentation>
+                <xsd:documentation xml:lang="en"> MoreOtherMatches    : There are additional matches that can   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       be displayed                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> OverThreshold       : There are more picklist items than the  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       threshold value                         </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Timeout             : The search/refinement timed out         </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="QAPicklistType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="FullPicklistMoniker" type="xsd:string" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="PicklistEntry" type="qas:PicklistEntryType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Prompt" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Total" type="xsd:nonNegativeInteger" />
+                </xsd:sequence>
+                <xsd:attribute default="false" name="AutoFormatSafe" type="xsd:boolean" />
+                <xsd:attribute default="false" name="AutoFormatPastClose" type="xsd:boolean" />
+                <xsd:attribute default="false" name="AutoStepinSafe" type="xsd:boolean" />
+                <xsd:attribute default="false" name="AutoStepinPastClose" type="xsd:boolean" />
+                <xsd:attribute default="false" name="LargePotential" type="xsd:boolean" />
+                <xsd:attribute default="false" name="MaxMatches" type="xsd:boolean" />
+                <xsd:attribute default="false" name="MoreOtherMatches" type="xsd:boolean" />
+                <xsd:attribute default="false" name="OverThreshold" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Timeout" type="xsd:boolean" />
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> PicklistEntryType describes an entry in a picklist            </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Moniker             : The Search Point Moniker that represents</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       this picklist entry                     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> PartialAddress      : The full details of the address captured</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       so far                                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Picklist            : The picklist text to display            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Postcode            : The postcode to display                 </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Score               : The percentage score assigned to the    </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       match                                   </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The attributes are as follows:                                </xsd:documentation>
+                <xsd:documentation xml:lang="en"> FullAddress         : This picklist entry is a full           </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       deliverable address                     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Multiples           : This entry represents multiple address  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       lines                                   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> CanStep             : This entry can be stepped into          </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AliasMatch          : This match is an alias                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> PostcodeRecoded     : This entry has a recoded postcode       </xsd:documentation>
+                <xsd:documentation xml:lang="en"> CrossBorderMatch    : This entry represents a nearby area,    </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       outside the strict initial boundaries of</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       the search                              </xsd:documentation>
+                <xsd:documentation xml:lang="en"> DummyPOBox          : This entry is the dummy PO Box entry    </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Name                : This entry is a Names result            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Information         : This entry is an informational prompt   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> WarnInformation     : This entry is a warning informational   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       prompt                                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> IncompleteAddr      : This entry is the dummy item (for       </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       premise-less countries)                 </xsd:documentation>
+                <xsd:documentation xml:lang="en"> UnresolvableRange   : This entry is a static range item that  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       cannot be expanded                      </xsd:documentation>
+                <xsd:documentation xml:lang="en"> PhantomPrimaryPoint : This entry is a Phantom Primary Point   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                       (AUS only)                              </xsd:documentation>
+                <xsd:documentation xml:lang="en"> SubsidiaryData      : This entry is from the subsidiary rather</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       than the base data set                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ExtendedData        : This entry is from the base data set but</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       extended by the subsidiary data set     </xsd:documentation>
+                <xsd:documentation xml:lang="en"> EnhancedData        : This entry is from the base data set but</xsd:documentation>
+                <xsd:documentation xml:lang="en">                       enhanced by the subsidiary data set     </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="PicklistEntryType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Moniker" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="PartialAddress" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Picklist" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Postcode" type="xsd:string" />
+                    <xsd:element name="Score" type="xsd:nonNegativeInteger" />
+                </xsd:sequence>
+                <xsd:attribute default="false" name="FullAddress" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Multiples" type="xsd:boolean" />
+                <xsd:attribute default="false" name="CanStep" type="xsd:boolean" />
+                <xsd:attribute default="false" name="AliasMatch" type="xsd:boolean" />
+                <xsd:attribute default="false" name="PostcodeRecoded" type="xsd:boolean" />
+                <xsd:attribute default="false" name="CrossBorderMatch" type="xsd:boolean" />
+                <xsd:attribute default="false" name="DummyPOBox" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Name" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Information" type="xsd:boolean" />
+                <xsd:attribute default="false" name="WarnInformation" type="xsd:boolean" />
+                <xsd:attribute default="false" name="IncompleteAddr" type="xsd:boolean" />
+                <xsd:attribute default="false" name="UnresolvableRange" type="xsd:boolean" />
+                <xsd:attribute default="false" name="PhantomPrimaryPoint" type="xsd:boolean" />
+                <xsd:attribute default="false" name="SubsidiaryData" type="xsd:boolean" />
+                <xsd:attribute default="false" name="ExtendedData" type="xsd:boolean" />
+                <xsd:attribute default="false" name="EnhancedData" type="xsd:boolean" />
+            </xsd:complexType>
+
+            <xsd:simpleType name="VerifyLevelType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="None" />
+                    <xsd:enumeration value="Verified" />
+                    <xsd:enumeration value="InteractionRequired" />
+                    <xsd:enumeration value="PremisesPartial" />
+                    <xsd:enumeration value="StreetPartial" />
+                    <xsd:enumeration value="Multiple" />
+                    <xsd:enumeration value="VerifiedPlace" />
+                    <xsd:enumeration value="VerifiedStreet" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="GetQAAddressResponseType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="QAAddress" type="qas:QAAddressType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> QAAddressType describes a formatted address                   </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> AddressLine  : The individual lines of the address            </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The attributes are as follows:                                </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Overflow     : There are not enough address lines configured  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                to display the whole address                   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Truncated    : Truncation has occurred on one or more address </xsd:documentation>
+                <xsd:documentation xml:lang="en">                lines                                          </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="QAAddressType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="AddressLine" type="qas:AddressLineType" />
+                </xsd:sequence>
+                <xsd:attribute default="false" name="Overflow" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Truncated" type="xsd:boolean" />
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> AddressLineType describes one line of a formatted address     </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The child elements are as follows:                            </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Label            : The name of any address element fixed to   </xsd:documentation>
+                <xsd:documentation xml:lang="en">                    this line                                  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Line             : The formatted address line                 </xsd:documentation>
+                <xsd:documentation xml:lang="en"> DataplusGroup    : Dataplus groups associated with this line  </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> The attributes are as follows:                                </xsd:documentation>
+                <xsd:documentation xml:lang="en"> LineContent      : The type of data on this line              </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Overflow         : Some address elements were lost from this  </xsd:documentation>
+                <xsd:documentation xml:lang="en">                    line                                       </xsd:documentation>
+                <xsd:documentation xml:lang="en"> Truncated        : Truncation occurred on this line           </xsd:documentation>
+            </xsd:annotation>
+            <xsd:complexType name="AddressLineType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Label" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Line" type="xsd:string" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="DataplusGroup" type="qas:DataplusGroupType" />
+                </xsd:sequence>
+                <xsd:attribute default="Address" name="LineContent" type="qas:LineContentType" />
+                <xsd:attribute default="false" name="Overflow" type="xsd:boolean" />
+                <xsd:attribute default="false" name="Truncated" type="xsd:boolean" />
+            </xsd:complexType>
+
+            <xsd:complexType name="DataplusGroupType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="DataplusGroupItem" type="xsd:string" />
+                </xsd:sequence>
+                <xsd:attribute name="GroupName" type="xsd:string" />
+            </xsd:complexType>
+
+            <xsd:simpleType name="LineContentType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="None" />
+                    <xsd:enumeration value="Address" />
+                    <xsd:enumeration value="Name" />
+                    <xsd:enumeration value="Ancillary" />
+                    <xsd:enumeration value="DataPlus" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+        </xsd:schema>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://schema.uk.experian.com/eih/2011/03" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:bws="http://schema.uk.experian.com/eih/2011/03/BankWizard" xmlns:core="http://schema.uk.experian.com/eih/2011/03" xmlns:eih="http://schema.uk.experian.com/eih/2011/03" xmlns:header="http://schema.uk.experian.com/eih/2011/03/EIHHeader" xmlns:meta="http://schema.uk.experian.com/eih/core/metadata" xmlns:ns="http://schema.uk.experian.com/eih/core/request" xmlns:ns0="http://schema.uk.experian.com/eih/core/response" xmlns:qas="http://schema.uk.experian.com/eih/2011/03/QAS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:tns="http://j2ee.netbeans.org/wsdl/SynchronousApplication/C1" xmlns:tns1="http://schema.uk.experian.com/eih/endpoint" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03/BankWizard" />
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03/QAS" />
+            <xsd:import namespace="http://schema.uk.experian.com/eih/2011/03/EIHHeader" />
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+			       Experian Identity Hub Schema
+
+			       @Author : Neil Flinn
+			       @Date   : 24 March 2011
+			       @Version: Major 1 Minor 5
+
+			       Copyright (c) Experian Limited 1997-2011. All Rights Reserved.
+                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+
+			    SCHEMA DESCRIPTION:
+			    This XML Schema details the request and response messages available through the Experian Identity Hub.
+
+			    Both request and response messages will consist of a generic header, followed by a request or response structure.
+
+			    The following table details the messages and associated service.
+
+			    =================================================================================================================
+			    SERVICE......................................|..REQUEST ELEMENT NAME.......... |..RESPONSE ELEMENT NAME..........
+			    =============================================|=================================|=================================
+			    Generic Header for all messages..............|..EIHHeader......................|..EIHHeader......................
+			    Execute Process Configuration Request........|..ExecuteRequest.................|..ProcessConfigResponse..........
+			    Find Process Configuration(s)................|..FindProcessConfiguration.......|..FindProcessConfigResponse......
+			    List Process Config Field Optionality........|..ListFieldOptionality...........|..ListOptionalityResponse........
+			    Execute Quick Address Search.................|..ExecuteQASearch................|..QASearchResult.................
+			    Execute Quick Address Get Address............|..ExecuteQAGetAddress............|..GetQAAddressResponse...........
+			    Bank Wizard Get Countries Request............|..BWGetCountriesRequest..........|..BWGetCountriesResponse.........
+			    Bank Wizard Get Faster Payments Data Request.|..BWGetCountryInputRequest.......|..BWGetCountryInputResponse......
+			    Bank Wizard Get Branch Data Request..........|..BWGetBranchDataRequest.........|..BWGetBranchDataResponse........
+			    Bank Wizard Get SWIFT Data Request...........|..BWGetSWIFTDataRequest..........|..BWGetSWIFTDataResponse.........
+			    Bank Wizard Get SEPA Data Request............|..BWGetSEPADataRequest...........|..BWGetSEPADataResponse..........
+			    Bank Wizard Get Faster Payments Data Request.|..BWGetFasterPaymentsDataRequest.|..BWGetFasterPaymentsDataResponse
+			    Bank Wizard Get Additional Data Request......|..BWGetAdditionalDataRequest.....|..BWGetAdditionalDataResponse....
+			    Bank Wizard Validate IBAN Request............|..BWValidateIBANRequest..........|..BWValidateIBANResponse.........
+			    Bank Wizard Validate Request.................|..BWValidateRequest..............|..BWValidateResponse.............
+			    =================================================================================================================
+
+                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ############### EIH FAULT SESSION #################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="EIHFault" type="eih:EIHFaultType" />
+
+            <xsd:complexType name="EIHFaultType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element name="Exception" type="eih:ExceptionType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ExceptionType">
+                <xsd:sequence>
+                    <xsd:element name="code" type="xsd:string" />
+                    <xsd:element maxOccurs="unbounded" name="description" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ################# HEADERS SECTION ################## </xsd:documentation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> Data Structures for message headers                  </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ======== Generic Request and Response Header ======= </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ################# REQUESTS SECTION ################# </xsd:documentation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> Data Structures for request messages                 </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ======= Execute Process Configuration Request ====== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ExecuteRequest" type="eih:ExecuteRequestType" />
+
+            <xsd:complexType name="ExecuteRequestType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigReference" type="eih:ProcessConfigReferenceType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ResponseType" type="eih:ResponseType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Consent" type="eih:ConsentType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="PersonalData" type="eih:PersonalDataType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Addresses" type="eih:AddressesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="EmployerInformation" type="eih:EmployerInformationType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Telephones" type="eih:TelephonesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="BankInformation" type="eih:BankInformationType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ReferenceNumbers" type="eih:ReferenceNumbersType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Other" type="eih:OtherType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Card" type="eih:CardType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="ResponseType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Decision Only" />
+                    <xsd:enumeration value="Summary" />
+                    <xsd:enumeration value="Detail" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ConsentType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Yes" />
+                    <xsd:enumeration value="No" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="PersonalDataType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Name" nillable="false" type="eih:NameType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Alias" type="eih:NameType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Gender" type="eih:GenderType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="BirthDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="MothersMaidenName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="MaritalStatus" type="eih:MaritalStatusType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ResidentialStatus" type="eih:ResidentialStatusType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="CountryOfBirth" type="eih:ISO1366CountryType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumberOfDependants" type="xsd:nonNegativeInteger" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="PlaceOfBirth" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="NameType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Title" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Forename" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="MiddleName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Surname" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="SurnameAtBirth" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="MaidenName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Suffix" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="GenderType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Male" />
+                    <xsd:enumeration value="Female" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="MaritalStatusType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Married" />
+                    <xsd:enumeration value="Single" />
+                    <xsd:enumeration value="Divorced" />
+                    <xsd:enumeration value="Widowed" />
+                    <xsd:enumeration value="To be Married" />
+                    <xsd:enumeration value="Cohabiting" />
+                    <xsd:enumeration value="Separated" />
+                    <xsd:enumeration value="Other" />
+                    <xsd:enumeration value="Not Asken" />
+                    <xsd:enumeration value="Not Given" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ResidentialStatusType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Owner" />
+                    <xsd:enumeration value="Living with Parents" />
+                    <xsd:enumeration value="Tenant-Furnished" />
+                    <xsd:enumeration value="Tenant-Unfurnished" />
+                    <xsd:enumeration value="Council Tenant" />
+                    <xsd:enumeration value="Other Tenant" />
+                    <xsd:enumeration value="Joint Owner" />
+                    <xsd:enumeration value="Other" />
+                    <xsd:enumeration value="Not Given" />
+                    <xsd:enumeration value="Not Asked" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ISO1366CountryType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> This field will contain either the ISO1366-1 or </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> ISO1366-2 country code.                         </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> For example:                                    </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "AU" = Australia (ISO1366-1)                    </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "BR" = Brazil (ISO1366-1)                       </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "GB" = Great Britain (ISO1366-1)                </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "GB-ENG" = England (ISO1366-2)                  </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "GB-NIR" = Northern Ireland (ISO1366-2)         </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "GB-SCT" = Scotland (ISO1366-2)                 </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> "GB-WLS" = Wales (ISO1366-2)                    </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[A-Z]{2,2}" />
+                    <xsd:pattern value="[A-Z]{2,2}-[A-Z]{3,3}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="AddressesType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="5" minOccurs="1" name="Address" type="eih:AddressType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="AddressType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AddressDetail" type="eih:AddressDetailType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="TypeOfAddress" type="eih:TypeOfAddressType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AddressStatus" type="eih:AddressStatusType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ResidentFrom" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ResidentTo" type="xsd:date" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="AddressDetailType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="FlatOrApartmentNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="HouseName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="HouseNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Address1" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Address2" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Address3" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Address4" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Address5" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Address6" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="PostCode" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Country" type="eih:ISO1366CountryType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="POBox" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="TypeOfAddressType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Currently only UK addresses are supported </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> Additional values will be added in future </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="UK" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="AddressStatusType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Second, Third and Fourth previous addresses are </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> only supported through XML Access.  These items </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> are not currently available through the UI.     </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Current" />
+                    <xsd:enumeration value="First Previous" />
+                    <xsd:enumeration value="Second Previous" />
+                    <xsd:enumeration value="Third Previous" />
+                    <xsd:enumeration value="Fourth Previous" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="EmployerInformationType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="TimeWithEmployer" type="eih:DurationType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="TelephonesType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="Telephone" type="eih:TelephoneType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="TelephoneType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Code" type="xsd:nonNegativeInteger" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Number" type="xsd:nonNegativeInteger" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="TypeOfTelephone" type="eih:TypeOfTelephoneType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="TypeOfTelephoneType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Currently, only HOME and WORK options are supported.       </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> Support for MOBILE phone numbers will be introduced later. </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Home" />
+                    <xsd:enumeration value="Mobile" />
+                    <xsd:enumeration value="Work" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="BankInformationType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="5" minOccurs="1" name="AccountReference" type="eih:AccountReferenceType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AccountSetupDate" type="xsd:date" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="CheckContext" type="bws:CheckContextType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AccountType" type="bws:AccountType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="OwnerType" type="bws:OwnerType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="AccountReferenceType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ReferenceIndex" type="eih:ReferenceIndexType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Reference" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="TypeOfReference" type="eih:TypeOfReferenceType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="TypeOfReferenceType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> This field controls the types of bank reference that can be supplied. </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Bank Branch Code" />
+                    <xsd:enumeration value="Bank Code" />
+                    <xsd:enumeration value="Branch Code" />
+                    <xsd:enumeration value="Account Number" />
+                    <xsd:enumeration value="Check Digit" />
+                    <xsd:enumeration value="IBAN" />
+                    <xsd:enumeration value="Roll Number" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="ReferenceIndexType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Restricted integer used to index accounts </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1" />
+                    <xsd:maxInclusive value="5" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="ReferenceNumbersType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="1" name="ReferenceNumber" type="eih:ReferenceNumberType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ReferenceNumberType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Number" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ReferenceNumberSource" type="eih:ReferenceNumberSourceType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="ReferenceNumberSourceType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Currently, only DRIVERS_LICENCE and PASSPORT options are supported. </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> Support for the BILL_REFERENCE option will be introduced later.     </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Drivers Licence" />
+                    <xsd:enumeration value="Passport" />
+                    <xsd:enumeration value="Bill Reference" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="OtherType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> The fields detailed in this section are currently unused. </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> These items will be introduced in a later version of EIH. </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Email" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="IPAddress" type="eih:IPAddressType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DeviceId" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ChannelOfCapture" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ChannelOfProduct" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ValueOfProduct" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DescriptionOfCapture" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="OwnCustomerIdNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Profession" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="IPAddressType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle IP Addresses </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="CardType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="CardNumber" type="eih:CardNumberType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="CardStartDate" type="eih:MonthYearDateType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="CardExpireDate" type="eih:MonthYearDateType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="CardSecurityCode" type="eih:CardSecurityCodeType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="TypeOfCardType" type="eih:TypeOfCardType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="CardIssueNumber" type="eih:CardIssueNumberType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="CardNumberType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> ISO/IEC 7812 standard card number </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{9,20}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="CardSecurityCodeType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Three digit card security code </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{3,3}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="TypeOfCardType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Currently the only active options for this field are </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> VISA and MASTERCARD.                                 </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="VISA" />
+                    <xsd:enumeration value="Mastercard" />
+                    <xsd:enumeration value="Discover" />
+                    <xsd:enumeration value="Diners Club" />
+                    <xsd:enumeration value="Carte Blanche" />
+                    <xsd:enumeration value="JCB JCL" />
+                    <xsd:enumeration value="Enroute" />
+                    <xsd:enumeration value="AmEx" />
+                    <xsd:enumeration value="Electron" />
+                    <xsd:enumeration value="US Check" />
+                    <xsd:enumeration value="PAYPAL" />
+                    <xsd:enumeration value="Bill Me Later" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="CardIssueNumberType">
+
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> One or two digit card issue number </xsd:documentation>
+                </xsd:annotation>
+
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{1,2}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ======= Find Process Configuration(s) Request ====== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="FindProcessConfiguration" type="eih:FindProcessConfigurationType" />
+
+            <xsd:complexType name="FindProcessConfigurationType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigurationDetails" type="eih:ProcessConfigurationDetailsType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ProcessConfigurationDetailsType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ProcessConfigReference" type="eih:ProcessConfigReferenceType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigStatus" type="eih:ProcessConfigStatusType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="ProcessConfigStatusType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Active" />
+                    <xsd:enumeration value="Inactive" />
+                    <xsd:enumeration value="All" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ========== List Field Optionality Request ========== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ListFieldOptionality" type="eih:ListFieldOptionalityType" />
+
+            <xsd:complexType name="ListFieldOptionalityType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigReference" type="eih:ProcessConfigReferenceType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> =========== Quick Address Search Request =========== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ExecuteQASearch" type="eih:ExecuteQASearchType" />
+
+            <xsd:complexType name="ExecuteQASearchType">
+                <xsd:complexContent>
+                    <xsd:extension base="qas:ExecuteQASearchType">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ======== Quick Address Get Address Request ========= </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ExecuteQAGetAddress" type="eih:ExecuteQAGetAddressType" />
+
+            <xsd:complexType name="ExecuteQAGetAddressType">
+                <xsd:complexContent>
+                    <xsd:extension base="qas:ExecuteQAGetAddressType">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> =========== Bank Wizard Service Requests =========== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="BWGetCountriesRequest" type="eih:BWGetCountries" />
+            <xsd:element name="BWGetAdditionalDataRequest" type="eih:BWGetAdditionalData" />
+            <xsd:element name="BWGetFasterPaymentsDataRequest" type="eih:BWGetFasterPaymentsData" />
+            <xsd:element name="BWGetSEPADataRequest" type="eih:BWGetSEPAData" />
+            <xsd:element name="BWGetSWIFTDataRequest" type="eih:BWGetSWIFTData" />
+            <xsd:element name="BWGetBranchDataRequest" type="eih:BWGetBranchData" />
+            <xsd:element name="BWValidateRequest" type="eih:BWValidate" />
+
+            <xsd:element name="BWGetCountryInputRequest" type="eih:BWGetCountryInput" />
+            <xsd:element name="BWValidateIBANRequest" type="eih:BWValidateIBAN" />
+
+            <xsd:complexType name="BWValidateIBAN">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element name="ValidateIBANRequest" type="bws:ValidateIBANRequest" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetCountryInput">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element name="BWGetCountryInput" type="bws:GetCountryInputRequest" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetCountries">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetCountriesRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetAdditionalData">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetAdditionalDataRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetFasterPaymentsData">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetSEPADataRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetSEPAData">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetSEPADataRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetSWIFTData">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetSWIFTDataRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWGetBranchData">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:GetBranchDataRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="BWValidate">
+                <xsd:complexContent>
+                    <xsd:extension base="bws:ValidateRequest">
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ################# RESPONSE SECTION ################# </xsd:documentation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> Data Structures for response messages                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ============== Service Error Messages ============== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> This data block will report any encountered error </xsd:documentation>
+                <xsd:documentation xml:lang="en"> messages.  The messages reported will be as per   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> those displayed on the UI.  These will provide    </xsd:documentation>
+                <xsd:documentation xml:lang="en"> clients with a meaningful message rather than just</xsd:documentation>
+                <xsd:documentation xml:lang="en"> directly passing on the explicit details of the   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> technical error.  If numerous unexpected errors   </xsd:documentation>
+                <xsd:documentation xml:lang="en"> are returned by called services (such as multiple </xsd:documentation>
+                <xsd:documentation xml:lang="en"> timeout messages), these will be identified as a  </xsd:documentation>
+                <xsd:documentation xml:lang="en"> single EIH error rather than as multiple failures </xsd:documentation>
+                <xsd:documentation xml:lang="en"> at a lower level.                                 </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="EIHErrorMessage" type="eih:MessageType" />
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ====== Execute Process Configuration Response ====== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ProcessConfigResponse" type="eih:ProcessConfigResponseType" />
+
+            <xsd:complexType name="ProcessConfigResponseType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="DecisionHeader" type="eih:DecisionHeaderType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ProcessConfigResultsBlock" type="eih:ProcessConfigResultsBlockType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="DecisionHeaderType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ProcessConfigurationId" type="eih:ProcessConfigurationIdType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="UniqueReferenceNo" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AuthenticationDecision" type="eih:AuthenticationDecisionType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AuthenticationText" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="AuthenticationDecisionType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> The "No Decision" value is currently not returned.      </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> This functionality will be included in a later release. </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Authenticated" />
+                    <xsd:enumeration value="Not Authenticated" />
+                    <xsd:enumeration value="Refer" />
+                    <xsd:enumeration value="No Decision" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="ProcessConfigResultsBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="EIVResultBlock" type="eih:EIAAndEIVCommonResultsBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="EIVMessageBlock" type="eih:MessageType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="EIAResultBlock" type="eih:EIAResultBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="EIAMessageBlock" type="eih:MessageType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="BWAResultBlock" type="eih:BWAResultBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="BWAMessageBlock" type="eih:MessageType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AVSCVVResultBlock" type="eih:AVSCVVResultBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="AVSCVVMessageBlock" type="eih:MessageType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="PassportResultBlock" type="eih:PassportResultBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="PassportMessageBlock" type="eih:MessageType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DrivingLicenceResultBlock" type="eih:DrivingLicenceResultBlockType" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="DrivingLicenceMessageBlock" type="eih:MessageType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="EIAResultBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AuthenticationIndex" type="eih:AuthenticationIndexType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="AuthIndexText" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="EIAResults" type="eih:EIAAndEIVCommonResultsBlockType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="AuthenticationIndexType">
+                <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="0" />
+                    <xsd:maxInclusive value="99" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="BWAResultBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NameScore" type="bws:VerifyScoreType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AddressScore" type="bws:VerifyScoreType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AccountOpenDateScore" type="bws:VerifyScoreType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="OwnerTypeResult" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AccountStatus" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="BacsCode" type="bws:BacsCodeType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="AVSCVVResultBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="OverallResult" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AVSAddressResult" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="AVSPostcodeResult" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="CVVResult" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Condition" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="PassportResultBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="OverallResult" type="eih:OverallResultType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Length" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Nationality" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DocumentNumber" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DateOfBirth" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Gender" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ExpiryDate" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="DrivingLicenceResultBlockType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="OverallResult" type="eih:OverallResultType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Length" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Surname" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DateOfBirth" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="Initials" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="OverallResultType">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Pass" />
+                    <xsd:enumeration value="Fail" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ====== Find Process Configuration(s) Response ====== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="FindProcessConfigResponse" type="eih:FindProcessConfigResponseType" />
+
+            <xsd:complexType name="FindProcessConfigResponseType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="ProcessConfigResponseDetails" type="eih:ProcessConfigResponseDetailsType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ProcessConfigResponseDetailsType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Identifier" type="eih:ProcessConfigurationIdType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Active" type="xsd:boolean" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Name" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ========== List Field Optionality Response ========= </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="ListOptionalityResponse" type="eih:ListOptionalityResponseType" />
+
+            <xsd:complexType name="ListOptionalityResponseType">
+                <xsd:sequence>
+                    <xsd:element ref="header:EIHHeader" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="eih:OptionalityGroupType" />
+                </xsd:sequence>
+            </xsd:complexType>
+            			
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> =========== Quick Address Search Response ========== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="QASearchResult" type="qas:QASearchResultType" />
+
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ======== Quick Address Get Address Response ======== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="GetQAAddressResponse" type="qas:GetQAAddressResponseType" />
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> =========== Bank Wizard Service Responses ========== </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ==================================================== </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:element name="BWGetCountriesResponse" type="bws:GetCountriesResponse" />
+            <xsd:element name="BWGetCountryInputResponse" type="bws:GetCountryInputResponse" />
+            <xsd:element name="BWGetBranchDataResponse" type="bws:GetBranchDataResponse" />
+            <xsd:element name="BWGetSWIFTDataResponse" type="bws:GetSWIFTDataResponse" />
+            <xsd:element name="BWGetSEPADataResponse" type="bws:GetSEPADataResponse" />
+            <xsd:element name="BWGetFasterPaymentsDataResponse" type="bws:GetFasterPaymentsDataResponse" />
+            <xsd:element name="BWGetAdditionalDataResponse" type="bws:GetAdditionalDataResponse" />
+            <xsd:element name="BWValidateIBANResponse" type="bws:ValidateIBANResponse" />
+            <xsd:element name="BWValidateResponse" type="bws:ValidateResponse" />
+
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> ############### COMMON TYPES SECTION ############### </xsd:documentation>
+                <xsd:documentation xml:lang="en"> #################################################### </xsd:documentation>
+                <xsd:documentation xml:lang="en" />
+                <xsd:documentation xml:lang="en"> Common Types shared by multiple messages             </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:complexType name="ProcessConfigReferenceType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> This Type is used where either a Process Config Name    </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> or Process Config Identifier is required (but not both) </xsd:documentation>
+                </xsd:annotation>
+                <xsd:choice>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigName" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="ProcessConfigId" type="eih:ProcessConfigurationIdType" />
+                </xsd:choice>
+            </xsd:complexType>
+
+            <xsd:simpleType name="ProcessConfigurationIdType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Unique Process Configuration Identifier </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[a-z0-9]{8,8}-[a-z0-9]{4,4}-[a-z0-9]{4,4}-[a-z0-9]{4,4}-[a-z0-9]{12,12}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="DurationType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle durations in years and months </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Years" type="eih:YearType" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Months" type="eih:MonthType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:simpleType name="YearType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle durations in years </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{1,2}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="MonthType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle durations in years </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0-9]{1,1}" />
+                    <xsd:pattern value="[1]{1,1}[0-2]{1,1}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="MonthYearDateType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle dates in the format MMYY </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> as used by most credit and debit cards.         </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> The first digit must be either a zero or one,   </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> the remaining digits are all 0-9.  This allows  </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> a month to be specified from 01 to 12 and the   </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> year to be specified from 00 to 99.             </xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:pattern value="[0][1-9][0-9]{2,2}" />
+                    <xsd:pattern value="[1][0-2][0-9]{2,2}" />
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:complexType name="EIAAndEIVCommonResultsBlockType">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> IDandLocDataAtCL  - Matches on Name and Current Address </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> LocDataOnlyAtCLoc - Matches on Current Address only     </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> IDandLocDataAtPL  - Matches on Name and Previous Address</xsd:documentation>
+                    <xsd:documentation xml:lang="en"> LocDataOnlyAtPLoc - Matches on Previous Address only    </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> DataMatchCounts   - Data Match Counts                   </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> ReturnedHRPCount  - Count of Returned HRP Rules         </xsd:documentation>
+                    <xsd:documentation xml:lang="en"> ReturnedHRP       - Returned High Risk Policy Rules     </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="IDandLocDataAtCL" type="eih:DataMatchesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="LocDataOnlyAtCLoc" type="eih:DataMatchesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="IDandLocDataAtPL" type="eih:DataMatchesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="LocDataOnlyAtPLoc" type="eih:DataMatchesType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="DataMatchCounts" type="eih:DataMatchCountsType" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="ReturnedHRPCount" type="xsd:integer" />
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="ReturnedHRP" type="eih:ReturnedHRPType" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="DataMatchesType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumPrimDataItems" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumPrimDataSources" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="StartDateOldestPrim" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumSecDataItems" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumSecDataSources" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="StartDateOldestSec" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="DataMatchCountsType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumAgeMatchesToPrimSource" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumAgeMatchToSecSource" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumTimeAtCLMtchPrimSource" type="xsd:integer" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="NumTimeAtCLMatchSecSource" type="xsd:integer" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ReturnedHRPType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="0" name="HighRiskPolRuleID" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="0" name="HighRiskPolRuleText" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="MessageType">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Code" type="xsd:string" />
+                    <xsd:element maxOccurs="1" minOccurs="1" name="Description" type="xsd:string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            
+            <xsd:complexType name="baseOptionality">
+				<xsd:sequence />
+				<xsd:attribute name="name" type="xsd:string" />
+				<xsd:attribute name="optionality" type="eih:OptionalityType" />
+			</xsd:complexType>
+		
+			<xsd:complexType name="OptionalityFieldType">
+				<xsd:complexContent>
+					<xsd:extension base="eih:baseOptionality">
+						<xsd:sequence />
+						<xsd:attribute name="value" type="xsd:string" />
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+		
+			<xsd:complexType name="OptionalityGroupType">
+				<xsd:complexContent>
+					<xsd:extension base="eih:baseOptionality">
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="field" type="eih:OptionalityFieldType" />
+							<xsd:element maxOccurs="unbounded" minOccurs="0" name="group" type="eih:OptionalityGroupType" />
+						</xsd:sequence>
+					</xsd:extension>
+				</xsd:complexContent>
+			</xsd:complexType>
+		
+			<xsd:simpleType name="OptionalityType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Mandatory" />
+					<xsd:enumeration value="Optional" />
+					<xsd:enumeration value="Not Used" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			
+            <xsd:simpleType id="LanguageEIH" name="LanguageEIH">
+           		 <xsd:annotation>
+                    <xsd:documentation xml:lang="en"> Generic type to handle languages </xsd:documentation>
+                </xsd:annotation>
+				 <xsd:restriction base="xsd:token">
+				 <xsd:pattern value="([a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*)?" />
+				 </xsd:restriction>
+			</xsd:simpleType>
+        </xsd:schema>
+  </types>
+  <message name="BWGetBranchDataResponse">
+    <part element="core:BWGetBranchDataResponse" name="BWGetBranchDataResponse">
+    </part>
+  </message>
+  <message name="FindProcessConfigurationOperationResponse">
+    <part element="core:FindProcessConfigResponse" name="FindProcessConfigResponse">
+    </part>
+  </message>
+  <message name="FindProcessConfigurationOperationRequest">
+    <part element="core:FindProcessConfiguration" name="FindProcessConfiguration">
+    </part>
+  </message>
+  <message name="ListFieldOptionalityOperationResponse">
+    <part element="core:ListOptionalityResponse" name="ListFieldOptionalityResponse">
+    </part>
+  </message>
+  <message name="ExecuteRequestOperationResponse">
+    <part element="core:ProcessConfigResponse" name="ExecuteRequestResponse">
+    </part>
+  </message>
+  <message name="BWGetCountryInputResponse">
+    <part element="core:BWGetCountryInputResponse" name="BWGetCountryInputResponse">
+    </part>
+  </message>
+  <message name="BWGetAdditionalDataRequest">
+    <part element="core:BWGetAdditionalDataRequest" name="BWGetAdditionalDataRequest">
+    </part>
+  </message>
+  <message name="BWGetSWIFTDataResponse">
+    <part element="core:BWGetSWIFTDataResponse" name="BWGetSWIFTDataResponse">
+    </part>
+  </message>
+  <message name="ExecuteQAGetAddressOperationRequest">
+    <part element="core:ExecuteQAGetAddress" name="ExecuteQAGetAddress">
+    </part>
+  </message>
+  <message name="BWGetCountriesResponse">
+    <part element="core:BWGetCountriesResponse" name="BWGetCountriesResponse">
+    </part>
+  </message>
+  <message name="ExecuteQAGetAddressOperationResponse">
+    <part element="core:GetQAAddressResponse" name="ExecuteQAGetAddressResponse">
+    </part>
+  </message>
+  <message name="BWGetSWIFTDataRequest">
+    <part element="core:BWGetSWIFTDataRequest" name="BWGetSWIFTDataRequest">
+    </part>
+  </message>
+  <message name="BWGetAdditionalDataResponse">
+    <part element="core:BWGetAdditionalDataResponse" name="BWGetAdditionalDataResponse">
+    </part>
+  </message>
+  <message name="ExecuteQASearchOperationRequest">
+    <part element="core:ExecuteQASearch" name="ExecuteQASearch">
+    </part>
+  </message>
+  <message name="BWGetSEPADataRequest">
+    <part element="core:BWGetSEPADataRequest" name="BWGetSEPADataRequest">
+    </part>
+  </message>
+  <message name="BWValidateResponse">
+    <part element="core:BWValidateResponse" name="BWValidateResponse">
+    </part>
+  </message>
+  <message name="ListFieldOptionalityOperationRequest">
+    <part element="core:ListFieldOptionality" name="ListFieldOptionality">
+    </part>
+  </message>
+  <message name="ExecuteRequestOperationRequest">
+    <part element="core:ExecuteRequest" name="ExecuteRequest">
+    </part>
+  </message>
+  <message name="ExecuteQASearchOperationResponse">
+    <part element="core:QASearchResult" name="ExecuteQASearchResponse">
+    </part>
+  </message>
+  <message name="BWGetCountriesRequest">
+    <part element="core:BWGetCountriesRequest" name="BWGetCountriesRequest">
+    </part>
+  </message>
+  <message name="BWGetFasterPaymentsDataRequest">
+    <part element="core:BWGetFasterPaymentsDataRequest" name="BWGetFasterPaymentsDataRequest">
+    </part>
+  </message>
+  <message name="BWGetFasterPaymentsDataResponse">
+    <part element="core:BWGetFasterPaymentsDataResponse" name="BWGetFasterPaymentsDataResponse">
+    </part>
+  </message>
+  <message name="BWGetBranchDataRequest">
+    <part element="core:BWGetBranchDataRequest" name="BWGetBranchDataRequest">
+    </part>
+  </message>
+  <message name="BWValidateIBANResponse">
+    <part element="core:BWValidateIBANResponse" name="BWValidateIBANResponse">
+    </part>
+  </message>
+  <message name="BWGetCountryInputRequest">
+    <part element="core:BWGetCountryInputRequest" name="BWGetCountryInputRequest">
+    </part>
+  </message>
+  <message name="BWValidateRequest">
+    <part element="core:BWValidateRequest" name="BWValidateRequest">
+    </part>
+  </message>
+  <message name="BWValidateIBANRequest">
+    <part element="core:BWValidateIBANRequest" name="BWValidateIBANRequest">
+    </part>
+  </message>
+  <message name="BWGetSEPADataResponse">
+    <part element="core:BWGetSEPADataResponse" name="BWGetSEPADataResponse">
+    </part>
+  </message>
+  <message name="EIHFault">
+    <part element="core:EIHFault" name="EIHFault">
+    </part>
+  </message>
+  <portType name="EndpointPortType">
+    <operation name="FindProcessConfigurationOperation">
+      <input message="tns1:FindProcessConfigurationOperationRequest" name="inputFindProcessConfiguration">
+    </input>
+      <output message="tns1:FindProcessConfigurationOperationResponse" name="outputFindProcessConfiguration">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="ExecuteQASearchOperation">
+      <input message="tns1:ExecuteQASearchOperationRequest" name="inputQASearch">
+    </input>
+      <output message="tns1:ExecuteQASearchOperationResponse" name="outputQASearch">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="ExecuteQAGetAddressOperation">
+      <input message="tns1:ExecuteQAGetAddressOperationRequest" name="inputQADetail">
+    </input>
+      <output message="tns1:ExecuteQAGetAddressOperationResponse" name="outputQADetail">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="ListFieldOptionalityOperation">
+      <input message="tns1:ListFieldOptionalityOperationRequest" name="inputListFieldOptionality">
+    </input>
+      <output message="tns1:ListFieldOptionalityOperationResponse" name="outputListFieldOptionality">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="ExecuteRequestOperation">
+      <input message="tns1:ExecuteRequestOperationRequest" name="inputExecuteRequest">
+    </input>
+      <output message="tns1:ExecuteRequestOperationResponse" name="outputExecuteRequest">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetAdditionalDataOperation">
+      <input message="tns1:BWGetAdditionalDataRequest" name="inputBWGetAdditionalData">
+    </input>
+      <output message="tns1:BWGetAdditionalDataResponse" name="outputBWGetAdditionalData">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetCountriesOperation">
+      <input message="tns1:BWGetCountriesRequest" name="inputBWGetCountries">
+    </input>
+      <output message="tns1:BWGetCountriesResponse" name="outputBWGetCountries">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetCountryInputOperation">
+      <input message="tns1:BWGetCountryInputRequest" name="inputBWGetCountryInput">
+    </input>
+      <output message="tns1:BWGetCountryInputResponse" name="outputBWGetCountryInput">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetBranchDataOperation">
+      <input message="tns1:BWGetBranchDataRequest" name="inputBWGetBranchData">
+    </input>
+      <output message="tns1:BWGetBranchDataResponse" name="outputBWGetBranchData">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetSWIFTDataOperation">
+      <input message="tns1:BWGetSWIFTDataRequest" name="inputBWGetSWIFTData">
+    </input>
+      <output message="tns1:BWGetSWIFTDataResponse" name="outputBWGetSWIFTData">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetSEPADataOperation">
+      <input message="tns1:BWGetSEPADataRequest" name="inputBWGetSEPAData">
+    </input>
+      <output message="tns1:BWGetSEPADataResponse" name="outputBWGetSEPAData">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWGetFasterPaymentsDataOperation">
+      <input message="tns1:BWGetFasterPaymentsDataRequest" name="inputBWGetFasterPaymentsData">
+    </input>
+      <output message="tns1:BWGetFasterPaymentsDataResponse" name="outputBWGetFasterPaymentsData">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWValidateIBANOperation">
+      <input message="tns1:BWValidateIBANRequest" name="inputBWValidateIBAN">
+    </input>
+      <output message="tns1:BWValidateIBANResponse" name="outputBWValidateIBAN">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+    <operation name="BWValidateOperation">
+      <input message="tns1:BWValidateRequest" name="inputBWValidate">
+    </input>
+      <output message="tns1:BWValidateResponse" name="outputBWValidate">
+    </output>
+      <fault message="tns1:EIHFault" name="EIHFault">
+    </fault>
+    </operation>
+  </portType>
+  <binding name="EndpointBinding" type="tns1:EndpointPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="FindProcessConfigurationOperation">
+      <soap:operation />
+      <input name="inputFindProcessConfiguration">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputFindProcessConfiguration">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="ExecuteQASearchOperation">
+      <soap:operation />
+      <input name="inputQASearch">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputQASearch">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="ExecuteQAGetAddressOperation">
+      <soap:operation />
+      <input name="inputQADetail">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputQADetail">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="ListFieldOptionalityOperation">
+      <soap:operation />
+      <input name="inputListFieldOptionality">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputListFieldOptionality">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="ExecuteRequestOperation">
+      <soap:operation />
+      <input name="inputExecuteRequest">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputExecuteRequest">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetAdditionalDataOperation">
+      <soap:operation />
+      <input name="inputBWGetAdditionalData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetAdditionalData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetCountriesOperation">
+      <soap:operation />
+      <input name="inputBWGetCountries">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetCountries">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetCountryInputOperation">
+      <soap:operation />
+      <input name="inputBWGetCountryInput">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetCountryInput">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetBranchDataOperation">
+      <soap:operation />
+      <input name="inputBWGetBranchData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetBranchData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetSWIFTDataOperation">
+      <soap:operation />
+      <input name="inputBWGetSWIFTData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetSWIFTData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetSEPADataOperation">
+      <soap:operation />
+      <input name="inputBWGetSEPAData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetSEPAData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWGetFasterPaymentsDataOperation">
+      <soap:operation />
+      <input name="inputBWGetFasterPaymentsData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWGetFasterPaymentsData">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWValidateIBANOperation">
+      <soap:operation />
+      <input name="inputBWValidateIBAN">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWValidateIBAN">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+    <operation name="BWValidateOperation">
+      <soap:operation />
+      <input name="inputBWValidate">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_input1_Policy" />
+      </input>
+      <output name="outputBWValidate">
+        <soap:body use="literal" />
+    <wsp:PolicyReference URI="#casaBinding1_output1_Policy" />
+      </output>
+      <fault name="EIHFault">
+        <soap:fault name="EIHFault" use="literal" />
+      </fault>
+    </operation>
+  </binding>
+  <service name="EndpointService">
+    <port binding="tns1:EndpointBinding" name="EndpointPort">
+      <soap:address location="https://ukid.uat.uk.experian.com/EIHEndpoint" />
+    </port>
+  </service>
+    <wsp:Policy wsu:Id="casaBinding1Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsaw:UsingAddressing wsp:Optional="false" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" />
+                <sp:AsymmetricBinding>
+                    <wsp:Policy>
+                        <sp:InitiatorToken>
+                            <wsp:Policy>
+                                <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                                    <wsp:Policy>
+                                        <sp:WssX509V3Token10 />
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:InitiatorToken>
+                        <sp:RecipientToken>
+                            <wsp:Policy>
+                                <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:WssX509V3Token10 />
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:RecipientToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Strict />
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp />
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128Sha256 />
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                    </wsp:Policy>
+                </sp:AsymmetricBinding>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="casaBinding1_input1_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body />
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body />
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="casaBinding1_output1_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body />
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body />
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+</definitions>

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E924EB3E-508D-4EF2-AF66-6D81F44A3526}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GuiNodeEzBobLib</RootNamespace>
+    <AssemblyName>GuiNodeEzBobLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BNSCommonLib">
+      <HintPath>..\..\Lib\Scorto.Core\BNSCommonLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Maven.Application">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Maven.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Maven.Base">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Maven.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Maven.Mixed">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Maven.Mixed.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WorkflowLibrary">
+      <HintPath>..\..\Lib\Scorto.Core\WorkflowLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EzBobUpdateCustomerDataNode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EzBobUpdateCustomerDataNodePropertiesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EzBobUpdateCustomerDataNodePropertiesForm.Designer.cs">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EzBobUpdateCustomerMarketPlaceDataNode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EzBobUpdateDataNodeBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NodeEzBobLib\NodeEzBobLib.csproj">
+      <Project>{3D779B2E-C845-44BC-A76A-273015AD8C71}</Project>
+      <Name>NodeEzBobLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EzBobUpdateCustomerDataNodePropertiesForm.de-DE.resx">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EzBobUpdateCustomerDataNodePropertiesForm.es.resx">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EzBobUpdateCustomerDataNodePropertiesForm.resx">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EzBobUpdateCustomerDataNodePropertiesForm.ru.resx">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EzBobUpdateCustomerDataNodePropertiesForm.uk.resx">
+      <DependentUpon>EzBobUpdateCustomerDataNodePropertiesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

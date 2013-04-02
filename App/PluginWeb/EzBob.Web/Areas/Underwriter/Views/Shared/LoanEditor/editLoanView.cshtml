@@ -1,0 +1,110 @@
+﻿@model dynamic
+
+<script type="text/template" id="loan_editor_template">
+    <div class="editloan-schedule-region"></div>
+    <div class="editloan-item-editor-region"></div>
+    <div class="buttons">
+        <hr/>
+        <button class="btn  pull-right cancel">Cancel</button>
+        <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save</button>
+    </div>
+</script>
+
+<script type="text/template" id="loan_editor_schedule_template">
+    <table class="table table-bordered table-selected table-striped blue-header centered">
+        <thead>
+            <tr>
+                <th width="90">#</th>
+                <th>Date</th>
+                <th>Principal</th>
+                <th>Balance</th>
+                <th>Interest<br/>Rate</th>
+                <th>Interest</th>
+                <th>Fees</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th width="200">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(Items, function(item, i){%>
+                <% var editClass = editItemIndex == i ? "editing" : "";%>
+                <tr class="<%= editClass %>">
+                    <td>
+                        <%- i+1 %>&nbsp;
+                        
+                        <% if(item.Editable){%>
+                            <button class="btn btn-mini edit-schedule-item" data-id="<%- i %>"><i class="icon-pencil"></i></button>
+                        <%}%>
+
+                        <% if(item.Deletable){%>
+                            <button class="btn btn-mini remove-schedule-item" data-id="<%- i %>"><i class="icon-trash"></i></button>
+                        <%}%>
+                    </td>
+
+
+
+                    <td><%- EzBob.formatDateWithoutTime(item.Date) %></td>
+
+                    <% if (item.Type == "Fee"){%>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><%- EzBob.formatPounds(item.Fees) %></td>
+                        <td><%- item.Status %></td>
+                        <td></td>
+                        <td><%- item.Description %></td>
+
+                    <%} else if (item.Type == "Installment") {%>
+                        <td><%- EzBob.formatPounds(item.Principal) %></td>
+                        <td><%- EzBob.formatPounds(item.Balance) %></td>                   
+                        <td><%- EzBob.formatPercents (item.InterestRate) %></td>
+                        <td><%- EzBob.formatPounds(item.Interest) %></td>
+                        <td><%- EzBob.formatPounds(item.Fees) %></td>
+                        <td><%- item.Status %></td>                    
+                        <td><%- EzBob.formatPounds(item.Total) %></td>
+                        <td></td>
+
+                    <%} else if (item.Type == "Pacnet"){%>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><%- EzBob.formatPounds(item.Fees) %></td>
+                        <td><%- item.Status %></td>
+                        <td><%- EzBob.formatPounds(item.Total) %></td>
+                        <td><%- item.Description %></td>
+
+                    <%} else {%>
+                        <td><%- EzBob.formatPounds(item.Principal) %></td>
+                        <td><%- EzBob.formatPounds(item.Balance) %></td>                   
+                        <td><%- EzBob.formatPercents (item.InterestRate) %></td>
+                        <td><%- EzBob.formatPounds(item.Interest) %></td>
+                        <td><%- EzBob.formatPounds(item.Fees) %></td>
+                        <td><%- item.Status %></td>                    
+                        <td><%- EzBob.formatPounds(item.Total) %></td>
+                        <td><%- item.Description %></td>
+                    <%}%>
+                </tr>
+            <%});%>
+        </tbody>
+    </table>
+
+    <% if(HasErrors) {%>
+        <div class="alert alert-error">
+            Following conditions(s) were not satisfied:
+            <ul>
+                <% _.each(Errors, function(e){%>
+                    <li><%- e %></li>
+                <%});%>
+            </ul>
+        </div>
+    <%}%>
+
+
+    <div>
+        <button class="btn add-installment">Add Installment</button>
+        <button class="btn add-fee">Add Fee</button>
+    </div>
+</script>

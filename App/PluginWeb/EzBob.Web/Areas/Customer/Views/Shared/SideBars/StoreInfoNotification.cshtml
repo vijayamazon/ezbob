@@ -1,0 +1,49 @@
+﻿@using EzBob.Web.Models.Strings
+@model dynamic
+
+@{
+    Layout = "_SideBarLayout.cshtml";
+}
+
+<h1><img alt="" src="@Url.Content("~/Content/img/sidebar/ico-tips.png")"><span style="margin-left:-3px;">Quick Tips</span></h1>
+<ul class="gtarr">
+    <li
+        rel="popover" 
+        data-content="EZBOB requires at least one shop with a minimum annual turnover of £15,000 with a seniority of 1 year to be qualified. However, the more shops you add the more cash you get at better terms, so we encourage you to add as many as you can."
+        data-original-title=""
+        data-placement="left">
+        More shops  means more cash and better terms.
+    </li>
+    <li
+        rel="popover" 
+        data-content="You can literally sign up in less then 10 minutes. The process was designed to be easy, simple and fast.  To make it even easier we added video tutorials that take you step by step through the process."
+        data-original-title=""
+        data-placement="left">
+        Please watch the tutorial  for even easier sign up.
+    </li>
+</ul>
+
+@section Video
+{
+    <div style="position:relative">
+        <span>Featuring - Add your eBay shop</span>
+
+        <img src="@Url.Content("~/Content/Video/poster.jpg")" alt="" style="width: 320px; height:140px" class="poster-picture"/>
+
+        <a href="javascript:;" 
+            class="play-link" 
+            data-videoDivId="mv-shopsDiv"
+            data-videoId ="mv-shops"
+            >Play</a>    
+    </div>
+    
+    <div id="mv-shopsDiv" style="display: none;">
+        <video id="mv-shops" class="video-js vjs-default-skin" controls preload="none" width="640" height="360" 
+               poster="@Url.Content("~/Content/Video/poster.jpg")"
+               data-setup="{}">
+            <source src="@Url.Content("~/Content/Video/eBay-tutorial.mp4")" type='video/mp4' />
+            <source src="@Url.Content("~/Content/Video/eBay-tutorial.webm")" type='video/webm' />
+            <source src="@Url.Content("~/Content/Video/eBay-tutorial.ogv")" type='video/ogg' />
+        </video>    
+    </div>
+}

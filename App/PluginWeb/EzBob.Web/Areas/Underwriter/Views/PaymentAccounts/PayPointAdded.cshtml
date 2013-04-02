@@ -1,0 +1,13 @@
+﻿@model dynamic
+
+PayPoint added
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            window.opener.paypointAdded();
+            self.close();
+        });
+    </script>
+}

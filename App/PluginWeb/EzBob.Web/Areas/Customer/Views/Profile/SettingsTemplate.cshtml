@@ -1,0 +1,124 @@
+﻿@model dynamic
+
+@helper MainContent(){
+    <div class="form-horizontal settings-form">
+        <%
+        var questionName = settings.SecurityQuestions!=null && settings.SecurityQuestions.get(settings.SecurityQuestionId) ?
+             settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name') : null;
+        %>
+        <div class="row">
+            <div class="span8" style="margin-left: 130px; margin-top: 8px;">
+                <div class="control-group">
+                    <label class="control-label">Password:</label>
+                    <div class="controls">
+                        <input type="text" readonly="readonly" value="**********" width="120px;" />
+                        <a href="#" class="btn-details button orange edit-password  pull-right">Edit</a>
+                    </div>
+                </div>
+    
+                <div class="control-group">
+                    <label class="control-label">Security Question:</label>
+                    <div class="controls">
+                        <input type="text" readonly="readonly" class="security-answer" width="120px;" value="<%-questionName%>" />
+                        <a href="#" class="btn-details button orange edit-question pull-right">Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@helper PasswordContent(){
+
+            <form id="change-password" action="" method ="POST" class="form-horizontal">
+                <fieldset>
+                    <legend style="padding-left: 18px;">Select Your New Password</legend>
+                    <div class="row">
+                        <div class="span5 offset2">
+                            <div class="control-group">
+                                <label class="control-label">Current Password:</label>
+                                <div class="controls">
+                                    <input id="password" type="password" name="password" class="input-medium" value="" autocomplete="off"/>
+                                </div>
+                            </div>
+            
+                            <div class="control-group">
+                                <label class="control-label">New Password:</label>
+                                <div class="controls">
+                                    <input id="new_password" type="password" name="new_password" class="input-medium" value="" autocomplete="off"/>
+                                </div>
+                            </div>
+            
+                            <div class="control-group">
+                                <label class="control-label">Confirm Password:</label>
+                                <div class="controls">
+                                    <input id="new_password2" type="password" name="new_password2" class="input-medium" value="" autocomplete="off"/>
+                                </div>
+                            </div>
+
+                            <div style="width: 330px; margin-right: -6px;" class="clearfix pull-right">
+                                <a href="#" class="btn-continue button orange  submit pull-right">Submit</a>
+                                <a href="#" class="btn-back button orange back pull-right">Back</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </fieldset>
+            </form>    
+}
+
+
+<script id="settings-main-template" type="text/template">
+    @MainContent()
+</script>
+
+<script id="settings-password-template" type="text/template">
+    @PasswordContent()
+</script>
+
+<script id="settings-question-template" type="text/template">
+    <form class="form-horizontal changePassword">
+        <fieldset>
+            <legend style="padding-left: 18px;">
+                Security Question:
+            </legend>
+            <div class="row">
+                <div class="span6 offset2">
+                    <div class="control-group">
+                        <label class="control-label">Current Password:</label>
+                        <div class="controls">
+                            <input type="password" name="password" class="input-medium" value="" autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Question:</label>
+                        <div class="controls">
+                            <select>
+                                <%_.each(settings.SecurityQuestions.toJSON(), function(question){%>
+                                <%if(settings.SecurityQuestionId!=undefined){%>
+                                <option value="<%-question.Id%>" <%if ( question.Id == settings.SecurityQuestionId){%> selected="selected" <%}%>  ><%-question.Name%></option>
+                                <%}else{%>
+                                <option value="<%-question.Id%>"><%-question.Name%></option>
+                                <%}%>
+                                <%});%>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Answer:</label>
+                        <div class="controls">
+                            <input type="text" name="answer" class="input-medium" value=""/>
+                        </div>
+                    </div>
+                    
+                    <div style="width: 470px;" class="clearfix">
+                        <a href="#" class="btn-continue button orange submit pull-right disabled">Submit</a>
+                        <a href="#" class="btn-back back button orange  pull-right">Back</a>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    
+</script>

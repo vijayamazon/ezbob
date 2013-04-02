@@ -1,0 +1,26 @@
+CREATE TABLE dbo.LoanHistory
+	(
+	Id int NOT NULL,
+	[Date] datetime NOT NULL,
+	[Status] [nchar](50) NOT NULL,
+	Balance decimal(18, 4) NOT NULL,
+	Interest decimal(18, 4) NOT NULL,
+	Principal decimal(18, 4) NOT NULL,
+	Fees decimal(18, 4) NOT NULL,
+	LoanId int NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.LoanHistory ADD CONSTRAINT
+	PK_LoanHistory PRIMARY KEY CLUSTERED 
+	(
+	Id
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+CREATE NONCLUSTERED INDEX IX_LoanHistory_Date ON dbo.LoanHistory
+	(
+	Date
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE dbo.LoanHistory SET (LOCK_ESCALATION = TABLE)
+GO

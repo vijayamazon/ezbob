@@ -1,0 +1,1 @@
+execute immediate 'ALTER TABLE MenuItem ADD  Filter clob NULL';

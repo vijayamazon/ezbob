@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaymentServices</RootNamespace>
+    <AssemblyName>PaymentServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Calculators\APRCalculator.cs" />
+    <Compile Include="Calculators\IPayEarlyCalculatorFactory.cs" />
+    <Compile Include="Calculators\LoanPaymentFacade.cs" />
+    <Compile Include="Calculators\LoanScheduleCalculator.cs" />
+    <Compile Include="Calculators\PayEarlyCalculator2.cs" />
+    <Compile Include="Calculators\PayEarlyCalculator.cs" />
+    <Compile Include="Calculators\PayEarlyCalculator2Event.cs" />
+    <Compile Include="Calculators\PayFastResult.cs" />
+    <Compile Include="Calculators\SetupFeeCalculator.cs" />
+    <Compile Include="PacNet\IPacnetService.cs" />
+    <Compile Include="PacNet\FakePacnetService.cs" />
+    <Compile Include="PacNet\LogPacnet.cs" />
+    <Compile Include="PacNet\PacnetException.cs" />
+    <Compile Include="PacNet\PacnetRegistry.cs" />
+    <Compile Include="PacNet\PacnetService.cs" />
+    <Compile Include="PacNet\PacnetReturnData.cs" />
+    <Compile Include="PayPoint\PayPointException.cs" />
+    <Compile Include="PayPoint\PayPointReturnData.cs" />
+    <Compile Include="PayPoint\PayPointStatusTranslator.cs" />
+    <Compile Include="Tests\BaseTest.cs" />
+    <Compile Include="PacNet\Api\HexConvertor.cs" />
+    <Compile Include="PacNet\Api\KeyValueConfigurableReadableAPI.cs" />
+    <Compile Include="PacNet\Api\KeyValueReadableAPI.cs" />
+    <Compile Include="PacNet\Api\KeyValueWritableAPI.cs" />
+    <Compile Include="PacNet\Api\Raven.cs" />
+    <Compile Include="PacNet\Api\RavenAuthenticationException.cs" />
+    <Compile Include="PacNet\Api\RavenBDPAuthorization.cs" />
+    <Compile Include="PacNet\Api\RavenBDPRequest.cs" />
+    <Compile Include="PacNet\Api\RavenBDPResponse.cs" />
+    <Compile Include="PacNet\Api\RavenConfigurationException.cs" />
+    <Compile Include="PacNet\Api\RavenException.cs" />
+    <Compile Include="PacNet\Api\RavenIncompleteSignatureException.cs" />
+    <Compile Include="PacNet\Api\RavenNoResponseException.cs" />
+    <Compile Include="PacNet\Api\RavenNoSuchOperationException.cs" />
+    <Compile Include="PacNet\Api\RavenRequest.cs" />
+    <Compile Include="PacNet\Api\RavenResponse.cs" />
+    <Compile Include="PacNet\Api\RavenSecureAPI.cs" />
+    <Compile Include="PacNet\Api\SignatureProvider.cs" />
+    <Compile Include="PacNet\Api\TimestampProvider.cs" />
+    <Compile Include="PacNet\Api\XMLConfiguration.cs" />
+    <Compile Include="Tests\PacnetTests.cs" />
+    <Compile Include="PayPoint\PayPointApi.cs" />
+    <Compile Include="Tests\PayPointTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web References\PayPoint\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\PayPoint\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\PayPoint\SECCardService.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">
+      <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
+      <Name>EzBob.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Name>EzBob.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

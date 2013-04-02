@@ -1,0 +1,19 @@
+﻿@using System.Globalization
+@model EzBob.Web.Models.PaymentConfirmationModel
+
+@{
+    Html.RenderPartial("PayPointResult");
+    ViewBag.Title = "Payment Confirm: Payment Confirmation | EZBOB";
+}
+
+<div id="paypoint-message"></div>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            var infoPage = _.template($('#infoPageTemplate').html());
+            $('#paypoint-message').html(infoPage(@Model.ToJSON()));
+        });
+    </script>
+}

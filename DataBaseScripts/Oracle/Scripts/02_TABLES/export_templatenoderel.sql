@@ -1,0 +1,7 @@
+-- Create table
+create table EXPORT_TEMPLATENODEREL
+(
+  TEMPLATEID NUMBER,
+  NODEID     NUMBER,
+  OUTPUTTYPE NUMBER
+);

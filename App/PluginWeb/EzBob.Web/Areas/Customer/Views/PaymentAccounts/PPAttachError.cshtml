@@ -1,0 +1,36 @@
+﻿@model dynamic
+@{
+}
+<h2>Adding paypal takes longer than we've expected. Please wait a minute.</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            var attempts = 5;
+            setTimeout(timeoutFunction, 2000);
+            
+            function timeoutFunction () {
+                $.get('@Url.Action("GetRequestPermissionsUrl", "PaymentAccounts", new{Area="Customer"})')
+                 .success(function (data) {
+                     if (data.error) {
+                         attempts = attempts - 1;
+                         if(attempts <= 0) {
+                             window.opener.PayPalAddingError("Error occurred while adding paypal account");
+                             self.close();
+                         }
+                         setTimeout(timeoutFunction, 1000);
+                         return;
+                     }
+                     if (data.url) {
+                         window.location.href = data.url;
+                     }
+                 })
+                 .error(function () {
+                     window.opener.PayPalAddingError("Error occurred while adding paypal account");
+                     self.close();
+                 });
+            }
+        });
+    </script>
+}

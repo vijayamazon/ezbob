@@ -1,0 +1,12 @@
+-1#SE##0
+1#ScortoCoreWeb##1
+2#Strategy Builder Server##0
+3#Admin Server##0
+4#Patron Server##0
+6#CreditInspector##1
+7#Auditor Server##0
+8#SE (Autonodes)##2
+9#Scorto Scoring Services##0
+10#Scorto Authentication Service##0
+11#Scorto Supervisor##0
+12#FormsDesigner Server##0

@@ -1,0 +1,27 @@
+﻿@model dynamic
+
+<table class="table table-bordered table-striped blue-header centered">
+    <thead>
+        <tr>
+            <th>Date Added</th>
+            <th>PayPoint Card Transaction ID</th>
+            <th>Card No</th>
+            <th>ExpireDate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <% _.each(paymentAccounts.PayPointCards, function(pp, i){%>
+            <td><%- EzBob.formatDateHumanFull(pp.DateAdded) %></td>
+            <td><%- pp.TransactionId %></td>
+            <td><%- pp.CardNo %></td>
+            <td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
+        </tr>
+        <%}) %>
+       
+    </tbody>
+</table>
+<div class="payment-cards-buttons">
+    <a class="btn" href="@Url.Action("AddPayPoint", "PaymentAccounts", new{Area = "Underwriter"})/<%-customerId%>" target="_blank">Add New</a>
+    <button class="btn add-existing" >Add Existing</button>
+</div>

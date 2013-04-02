@@ -1,0 +1,1 @@
+ALTER TABLE PaymentRollover ALTER COLUMN [PaidPaymentAmount] [decimal] NULL

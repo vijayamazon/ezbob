@@ -1,0 +1,36 @@
+﻿@model dynamic
+
+<script type="text/template" id="PayPointCardSelectViewTemplate">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Select Card</h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group">
+        	<div class="controls controls-inline">
+				<label class="radio span3">
+				  <input type="radio" name="cardOptions" id="cardOption1" value="useExisting" checked>
+				  Use credit card ending:
+				</label>
+
+				<select class="span3">
+					<% _.each(cards, function(c, i){%>
+						<option value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> (<%-EzBob.formatDate(c.DateAdded)%>)</option>
+					<%});%>
+				</select>
+			</div>
+			<div class="controls controls-inline">
+				<label class="radio span3">
+				  <input type="radio" name="cardOptions" id="cardOption2" value="useNew">
+				  Enter new credit card
+				</label>
+			</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button style ="width: 110px" class="btn-continue button orange">Continue</button>
+        <button style ="width: 110px" class="btn-back  button orange cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>        
+    </div>
+    
+</script>

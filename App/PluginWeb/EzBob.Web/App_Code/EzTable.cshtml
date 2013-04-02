@@ -1,0 +1,9 @@
+﻿@helper RawCell(System.Web.Mvc.HtmlHelper html, params string[] arguments)
+    {
+    <tr>
+        <td width="40%">@html.Raw(arguments[0])
+        </td>    
+        <td>@html.Raw(arguments[1])
+        </td>    
+    </tr>
+}

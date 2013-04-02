@@ -1,0 +1,26 @@
+﻿@model EzBob.Web.Areas.Underwriter.Models.Reports.ReportModelStandartBase
+@{ Layout = "~/Areas/Underwriter/Views/Reports/_LayoutReport.cshtml"; }
+
+@section filterPanel
+{
+    @using (Html.BeginForm())
+    {
+    <div class="well">
+        @Html.Partial("TimeFilterReportControl", Model)
+    </div>
+    }    
+    
+}
+@section report
+{
+    <div id="report"> 
+        @RenderSection("Report") 
+            <div class="pull-right">
+                <a class="btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadAction, Model.DateFilter))" id="exportAmountBtn" onclick="exportToExcel()">Export</a> 
+            </div>
+    </div>
+}
+@section Js
+{
+    @RenderSection("Js", false)
+}

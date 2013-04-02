@@ -1,0 +1,127 @@
+﻿@model dynamic
+
+@helper ProfileTemplateMain()
+    {
+    <div id="spl">
+        <div class="left-underwriter-pane">
+            <div class="profile-person-info">
+            </div>
+            <div class="profile-loan-info">
+            </div>
+        </div>
+        <div class="profile-tabs">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
+                    
+                    <% if(!EzBob.Config.HideAlertsTab){%>
+                        <li><a href="#alerts-main" data-toggle="tab">Alerts</a></li>    
+                    <%};%>
+                    
+                    <% if(!EzBob.Config.HidePassedAlertsTab){%>
+                        <li><a href="#alerts-passed" data-toggle="tab">Passed Alerts</a></li>
+                    <%};%>                    
+
+                    <li><a href="#marketplaces" data-toggle="tab">Marketplaces</a></li>
+                    <li><a href="#payment-accounts" data-toggle="tab">Payment Accounts</a></li>
+                    <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
+                    <li><a href="#medal-calculator" data-toggle="tab">Medal calculator</a></li>
+                    <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
+                    <li><a href="#customer-info" data-toggle="tab">Customer info</a></li>
+                    <li><a href="#messages-tab" data-toggle="tab">Messages</a></li>
+                    <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="profile-summary"></div>
+                    <div class="tab-pane" id="alerts-main">
+                        <div id="alerts"></div>
+                    </div>
+                    <div class="tab-pane" id="alerts-passed"></div>
+                    <div class="tab-pane" id="marketplaces"></div>
+                    <div class="tab-pane" id="payment-accounts"></div>
+                    <div class="tab-pane" id="credit-bureau"></div>
+                    <div class="tab-pane" id="medal-calculator"></div>
+                    <div class="tab-pane" id="loanhistorys"></div>
+                    <div class="tab-pane" id="customer-info"></div>
+                    <div class="tab-pane" id="messages-tab">
+                        <div id="messages" class="clearfix"></div>
+                        <div id="alert-docs"></div>
+                    </div>
+                    <div class="tab-pane" id="apiChecks"></div>
+                    
+
+                </div>
+            </div>
+            <div id="controlButtoons" class="well" style="margin-top:10px;">
+            </div>
+        </div>
+    </div>
+}
+
+<script id="controls-button-template" type="text/template">
+    <a  class="btn back" href="#"><i class="icon-arrow-left"/>Go back</a> 
+    <a href="#" class="btn" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="icon-tag" />Report Bug</a> 
+    <div class="pull-right">
+        <button class="btn" id="RejectBtn"><i class="icon-remove-sign" />Reject</button> 
+        <button class="btn" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button> 
+        <button class="btn" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
+    </div>
+</script>
+
+<script id="profile-template-main" type="text/template">
+    @ProfileTemplateMain()
+</script>
+
+@{Html.RenderPartial("_MarketplaceValuesTemplate");}
+@{Html.RenderPartial("_LoanhistoryViewTemplate");}
+@{Html.RenderPartial("LoanDetails/LoanDetails");}
+@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/PaymentAccounts/_PaymentAccountsTemplate.cshtml");}
+@{Html.RenderPartial("ProfileLoanInfoTemplate");}
+@{Html.RenderPartial("ProfileSummary");}
+@{Html.RenderPartial("CreditBureau");}
+@{Html.RenderPartial("Alerts");}
+@{Html.RenderPartial("_MedalCalculationTemplate");}
+@{Html.RenderPartial("_ApiChecksLog");}
+@{Html.RenderPartial("_DocsTemplate");}
+@{Html.RenderPartial("LoanEditor/_loan_editor");}
+@{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
+@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/Bugs/_ReportBug.cshtml"); }
+@{Html.RenderPartial("_CaisReportsHistory"); }
+
+@helper FunctionsDialog()
+{
+    <div id="functionsPopup" style="overflow: visible">
+        <div class="loan-schedule"></div>
+        <div id="details"></div>
+        <h3>Reason:</h3>
+        <textarea class="reason" maxlength="200"></textarea>
+        <div class="pull-right">
+            <input class="btn button-ok" type="button" value="OK" />
+            <input class="btn button-cancel" type="button" value="Cancel" />
+        </div>
+    </div>  
+}
+<script id="functionsDialogTemplate" type="text/template">
+    @FunctionsDialog()
+</script>
+
+<script id="approve-details" type="text/template">
+    <p class="offer-status"></p>
+    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%><br/>
+    Repayment period: <b><%- RepaymentPerion %></b><br/>
+    Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br/>
+    Loan type: <b><%- LoanType %></b><br><br>
+    <div id="loan-schedule"></div>
+    <div>
+        <button class="btn btn-danger change-offer-details"><i class="icon-pencil"></i> Edit</button>
+    </div>
+</script>
+
+<script id="message-template" type="text/template">
+    @{Html.RenderPartial("_Messages");}
+    <div class="pull-right" style="margin-bottom: 10px;">
+        <button class="btn" id="btnAMLInformation" >AML</button> 
+        <button class="btn" id="btnAMLandBWAInformation">AML and BWA</button> 
+        <button class="btn"  id="btnBWAInformation">BWA</button>
+    </div>
+</script>

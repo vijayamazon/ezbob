@@ -1,0 +1,15 @@
+15#autotest#Virtual tester#46GuqD4iXqgbSqbKt3AumzqAHBg=#2009-01-01 12:00:00#0#####1#########
+500#9#9#3daqR4Aerg2WFEWwuV6xM7Jj3Rw=#2007-01-19 13:15:41#0#####1#########
+16#SCORTO\vmoshenok#Vasya##2009-01-01 12:00:00#0#####1#########
+17#SCORTO\krygyn#Serega##2009-01-01 12:00:00#0#####1#########
+18#ole#ole#qHkuiD9mII+3kUN69029S/DjIcg=#2010-02-26 17:02:56#0#####1########04E52A8DB863F482CAC670970AA51FDBF4BCA657#
+19#s#Serega#7Il6qiSKtFi/O703+j0J3HoIxEw=#2009-01-01 12:00:00#0#####1########C3C3EADF6B78C9C2E7DCA890C068FF2C052BA879#
+20#3#3#76KjvPAVBAKyQED33cK/Pz5s57Uk=#2010-03-30 11:05:03#0#####1########04E52A8DB863F482CAC670970AA51FDBF4BCA657#
+21#SCORTO\tymoshenko#kateryna tymoshenko##2009-01-01 12:00:00#0#####1#########
+22#SCORTO\dzhyvotchenko#Dmitriy Zhyvotchenko##2009-01-01 12:00:00#0#####1#########
+23#SCORTO\manunia#Marina##2009-01-01 12:00:00#0#####1##########
+200#dsse#Digital signature se#Sr3hozrGd4ZdpMlfPvKF56LvXxQ=#2010-12-03 18:57:16#0#####1########bb245cc5c803cac3e07268dca4b4bdf5ba1b4e7c#
+504#SCORTO\kaydash#Andrey Kaydash##2009-01-01 12:00:00#0#####1#########
+24#SCORTO\yantonets#Yulia##2009-01-01 12:00:00#0#####1#########
+25#SCORTO\kiktyova#Irina Kiktyova##2009-01-01 12:00:00#0#####1#########
+26#SCORTO\yulia#Yulia Miroshnichenko##2009-01-01 12:00:00#0#####1#########

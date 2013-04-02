@@ -1,0 +1,28 @@
+﻿<script id="apiChecksLog" type="text/template">
+    @ApiChecksLog()
+</script>
+
+@helper ApiChecksLog(){
+    <table class="table table-bordered table-striped blue-header centered table-fixed">
+        <thead>
+            <tr>
+                <th class="api-check-first-column">Date/time</th>
+                <th class="api-check-seccond-column">API Type</th>
+                <th>Marketplace</th>
+                <th style="width: 130px;">Status</th>
+                <th>Error message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(vals, function(val){%>
+            <tr>
+                <td><%-val.DateTime%></td>
+                <td class="break-word"><%-val.ApiType%></td>
+                <td class="break-word"><%-val.Marketplace || ''%></td>
+                <td><%-val.Status%></td>
+                <td class="break-word"><%-val.ErrorMessage || ''%></td>
+            </tr>
+            <%})%>
+        </tbody>
+    </table>
+}

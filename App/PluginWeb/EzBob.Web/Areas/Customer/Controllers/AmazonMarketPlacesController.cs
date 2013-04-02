@@ -1,0 +1,200 @@
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Repository;
+using ExperianLib;
+using EzBob.AmazonLib;
+using EzBob.AmazonServiceLib;
+using EzBob.AmazonServiceLib.ServiceCalls;
+using EzBob.AmazonServiceLib.UserInfo;
+using EzBob.Web.ApplicationCreator;
+using EzBob.Web.Areas.Customer.Models;
+using EzBob.Web.Code.MpUniq;
+using EzBob.Web.Infrastructure;
+using EzBob.Web.Infrastructure.csrf;
+using EzBob.Web.Models.Strings;
+using NHibernate;
+using Scorto.Web;
+using log4net;
+
+namespace EzBob.Web.Areas.Customer.Controllers
+{
+    public class AmazonMarketPlacesController : Controller
+    {
+        private readonly IEzbobWorkplaceContext _context;
+        private readonly DatabaseDataHelper _helper;
+        private readonly IAppCreator _creator;
+        private readonly ISession _session;
+        private readonly IEzBobConfiguration _config;
+        private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
+        private readonly AskvilleRepository _askvilleRepository;
+        private readonly IMPUniqChecker _mpChecker;
+
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AmazonMarketPlacesController));
+        private readonly AmazonServiceAskville _askvilleService;
+        private readonly CustomerRepository _customerRepository;
+
+        public AmazonMarketPlacesController(
+            IEzbobWorkplaceContext context, 
+            DatabaseDataHelper helper, 
+            IAppCreator creator, 
+            ISession session, 
+            IEzBobConfiguration config, 
+            CustomerMarketPlaceRepository customerMarketPlaceRepository, 
+            AskvilleRepository askvilleRepository,
+            IMPUniqChecker mpChecker, AmazonServiceAskville askvilleService, CustomerRepository customerRepository)
+        {
+            _context = context;
+            _helper = helper;
+            _creator = creator;
+            _session = session;
+            _config = config;
+            _customerMarketPlaceRepository = customerMarketPlaceRepository;
+            _askvilleRepository = askvilleRepository;
+            _mpChecker = mpChecker;
+            _askvilleService = askvilleService;
+            _customerRepository = customerRepository;
+        }
+        //--------------------------------------------------------
+        [Ajax]
+        [Transactional]
+        [Authorize]
+        public AskvilleStatus Askville(int? customerMarketPlaceId, string merchantId, string marketplaceId, string askvilleGuid = "")
+        {
+            var marketplace = _customerMarketPlaceRepository.GetAll().FirstOrDefault(x => x.Id == customerMarketPlaceId);
+            if (marketplace == null)
+            {
+                throw new Exception(string.Format("Marketplace {0} does not found", customerMarketPlaceId));
+            }
+
+            var securityInfo = (AmazonSecurityInfo) RetrieveDataHelper.RetrieveCustomerSecurityInfo(marketplace.Id);
+
+            merchantId = merchantId ?? securityInfo.MerchantId;
+            marketplaceId = marketplaceId ?? securityInfo.MarketplaceId[0];
+
+            var guid = askvilleGuid == "" ? Guid.NewGuid().ToString() : askvilleGuid;
+
+            var acceptUrl = Url.Action("ActivateStore", "Home", new { Area = "", id = guid, approve = true.ToString().ToLower() }, "https");
+            var disAcceptUrl = Url.Action("ActivateStore", "Home", new { Area = "", id = guid, approve = false.ToString().ToLower() }, "https");
+
+            var message = @"
+            Confirm your store on Amazon.
+
+            Your Amazon shop has been added on EZBOB (www.ezbob.com).
+            To confirm store please follow the link:
+            " + acceptUrl + @"
+
+            If you have not added the store on EZBOB please click the following link:
+            " + disAcceptUrl + @"
+
+            Thank you!
+
+            Kindest regards,
+            EZBOB team,
+            www.ezbob.com
+            contacts@ezbob.com
+            +44.800.011.4787";
+            
+            var sendingStatus = _askvilleService.AskQuestion(merchantId, marketplaceId, 31, message);
+            var askville = askvilleGuid == ""
+                               ? (new Askville
+                               {
+                                   Guid = guid,
+                                   IsPassed = false,
+                                   MarketPlace = marketplace,
+                                   SendStatus = sendingStatus,
+                                   MessageBody = message,
+                                   CreationDate = DateTime.UtcNow
+                               })
+                               : _askvilleRepository.GetAskvilleByGuid(askvilleGuid);
+
+            askville.Status = askvilleGuid == "" ? AskvilleStatus.NotPerformed : AskvilleStatus.ReCheck;
+            _askvilleRepository.SaveOrUpdate(askville);
+            Utils.WriteLog("Send askville message", sendingStatus.ToString(), "Askville", marketplace.Customer.Id);
+            return askville.Status;
+        }
+        
+        //--------------------------------------------------------
+        [HttpGet]
+        [Transactional]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        [Authorize]
+        public string IsAmazonUserCorrect(string amazonMerchantId)
+        {
+			return RetrieveDataHelper.IsAmazonUserCorrect( new AmazonUserInfo { MerchantId = amazonMerchantId } ) ? "true" : "false";
+        }
+
+        //-------------------------------------------------------
+        [Authorize]
+        [Transactional]
+        public JsonNetResult Index()
+        {
+            return this.JsonNet(_context.Customer.GetAmazonMarketPlaces());
+        }
+
+        //-------------------------------------------------------
+        [HttpPost]
+        [Authorize]
+        [Transactional]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult ConnectAmazon(string marketplaceId, string merchantId)
+        {
+            try
+            {
+                Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
+
+                //only UK for now...
+                marketplaceId = "A1F83G8C2ARO7P";
+                if (string.IsNullOrEmpty(marketplaceId) || string.IsNullOrEmpty(merchantId))
+                {
+                    return Json(new{});
+                }
+
+                var customer = _context.Customer;
+
+                var amazon = new AmazonDatabaseMarketPlace();
+                
+                var sellerInfo = AmazonRateInfo.GetUserRatingInfo(merchantId);
+
+                _mpChecker.Check(amazon.InternalId, customer, sellerInfo.Name);
+
+                var amazonSecurityInfo = new AmazonSecurityInfo(merchantId);
+                amazonSecurityInfo.AddMarketplace(marketplaceId);
+
+                var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer);
+
+                _session.Flush();
+                _creator.AmazonAdded(_context.Customer, marketplace.Id);
+
+                if (_config.AskvilleEnabled)
+                {
+                    Askville(marketplace.Id, merchantId, marketplaceId);
+                }
+
+                if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+                    customer.WizardStep = WizardStepType.Marketplace;
+                _customerRepository.SaveOrUpdate(customer);
+
+                return Json(new { msg = "Congratulations. Your shop was added successfully." });
+            }
+            catch (MarketPlaceAddedByThisCustomerException)
+            {
+                return Json(new { error = DbStrings.StoreAddedByYou }, JsonRequestBehavior.AllowGet);
+            }
+            catch (MarketPlaceIsAlreadyAddedException)
+            {
+                return Json(new { error = DbStrings.StoreAlreadyExistsInDb }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                throw;
+            }
+        }
+    }
+}

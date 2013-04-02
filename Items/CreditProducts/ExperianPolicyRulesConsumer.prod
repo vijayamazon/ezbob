@@ -1,0 +1,374 @@
+<?xml version="1.0"?>
+<CreditProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId xmlns="ScortoPatron">27</UserId>
+  <Id xmlns="ScortoPatron">784</Id>
+  <Name xmlns="ScortoPatron">ExperianPolicyRulesConsumer</Name>
+  <CreationDate xmlns="ScortoPatron">2012-08-24T15:40:15.733</CreationDate>
+  <Parameters xmlns="ScortoPatron">
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17596</Id>
+      <Name>WarningsToRejectNumber</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17597</Id>
+      <Name>WarningsToReferredNumber</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17598</Id>
+      <Name>BureauScoreR</Name>
+      <ParamValue xsi:type="xsd:string">850</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17599</Id>
+      <Name>BureauScoreW</Name>
+      <ParamValue xsi:type="xsd:string">875</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17600</Id>
+      <Name>CreditCardExposureR</Name>
+      <ParamValue xsi:type="xsd:string">15000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17601</Id>
+      <Name>CreditCardExposureW</Name>
+      <ParamValue xsi:type="xsd:string">10000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17602</Id>
+      <Name>CreditCardsNumberR</Name>
+      <ParamValue xsi:type="xsd:string">4</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17603</Id>
+      <Name>CreditCardsNumberW</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17604</Id>
+      <Name>CreditCardUtilisationW</Name>
+      <ParamValue xsi:type="xsd:string">0.8</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17605</Id>
+      <Name>ExcessUnsecuredBorrowingR</Name>
+      <ParamValue xsi:type="xsd:string">40000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17606</Id>
+      <Name>ExcessUnsecuredBorrowingW</Name>
+      <ParamValue xsi:type="xsd:string">25000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17607</Id>
+      <Name>ExcessPersonalLoansR</Name>
+      <ParamValue xsi:type="xsd:string">30000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17608</Id>
+      <Name>ExcessPersonalLoansW</Name>
+      <ParamValue xsi:type="xsd:string">20000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17609</Id>
+      <Name>ExcessDebtR</Name>
+      <ParamValue xsi:type="xsd:string">500000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17610</Id>
+      <Name>ExcessDebtW</Name>
+      <ParamValue xsi:type="xsd:string">400000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17611</Id>
+      <Name>CountyCourtJudgementsW</Name>
+      <ParamValue xsi:type="xsd:string">24</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17612</Id>
+      <Name>Enquiries6MR</Name>
+      <ParamValue xsi:type="xsd:string">4</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17613</Id>
+      <Name>Enquiries6MW</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17614</Id>
+      <Name>Enquiries3MR</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17615</Id>
+      <Name>Enquiries3MW</Name>
+      <ParamValue xsi:type="xsd:string">2</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17616</Id>
+      <Name>CreditCardStatusR</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17617</Id>
+      <Name>CreditCardStatusW</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17618</Id>
+      <Name>PersonalLoanStatusR</Name>
+      <ParamValue xsi:type="xsd:string">2</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17619</Id>
+      <Name>PersonalLoanStatusW</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17620</Id>
+      <Name>HomeOwnerStatus</Name>
+      <ParamValue xsi:type="xsd:string">yes</ParamValue>
+      <TypeString>System.String</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17621</Id>
+      <Name>MortgagesBalance</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17622</Id>
+      <Name>HomeOwnerAgeR</Name>
+      <ParamValue xsi:type="xsd:string">25</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17623</Id>
+      <Name>HomeOwnerMortgageAccountStatusR</Name>
+      <ParamValue xsi:type="xsd:string">2</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17624</Id>
+      <Name>HomeOwnerMortgageAccountStatusW</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17625</Id>
+      <Name>DSRHomeOwnerR</Name>
+      <ParamValue xsi:type="xsd:string">350</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17626</Id>
+      <Name>DSRHomeOwnerW</Name>
+      <ParamValue xsi:type="xsd:string">450</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17627</Id>
+      <Name>DSRRentingR</Name>
+      <ParamValue xsi:type="xsd:string">850</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17628</Id>
+      <Name>DSRRentingW</Name>
+      <ParamValue xsi:type="xsd:string">950</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17629</Id>
+      <Name>DSRLivingWithParentsR</Name>
+      <ParamValue xsi:type="xsd:string">200</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17630</Id>
+      <Name>DSRLivingWithParentsW</Name>
+      <ParamValue xsi:type="xsd:string">300</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17631</Id>
+      <Name>CreditCardCashWithdrawalsR</Name>
+      <ParamValue xsi:type="xsd:string">4</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17632</Id>
+      <Name>CreditCardCashWithdrawalsW</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17633</Id>
+      <Name>CreditCardsWithMinimumRepaymentR</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17634</Id>
+      <Name>CreditCardsWithMinimumRepaymentW</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17635</Id>
+      <Name>TimeSinceLastLoanAccountOpenedMR</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17636</Id>
+      <Name>TimeSinceLastLoanAccountOpenedMW</Name>
+      <ParamValue xsi:type="xsd:string">0</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17637</Id>
+      <Name>AgeR</Name>
+      <ParamValue xsi:type="xsd:string">21</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17638</Id>
+      <Name>AgeWMin</Name>
+      <ParamValue xsi:type="xsd:string">23</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17639</Id>
+      <Name>CreditCardUtilisationR</Name>
+      <ParamValue xsi:type="xsd:string">1</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17640</Id>
+      <Name>CountyCourtJudgementsR</Name>
+      <ParamValue xsi:type="xsd:string">12</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17641</Id>
+      <Name>AgeWMax</Name>
+      <ParamValue xsi:type="xsd:string">70</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17642</Id>
+      <Name>PublicData</Name>
+      <ParamValue xsi:type="xsd:string">100</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17643</Id>
+      <Name>CAISDefaults</Name>
+      <ParamValue xsi:type="xsd:string">100</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17644</Id>
+      <Name>BadDebt</Name>
+      <ParamValue xsi:type="xsd:string">3</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17645</Id>
+      <Name>ConsumerIndebtedness</Name>
+      <ParamValue xsi:type="xsd:string">40</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17646</Id>
+      <Name>OverIndebtedness</Name>
+      <ParamValue xsi:type="xsd:string">40000</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+    <CreditProductParam>
+      <CreditProductId>784</CreditProductId>
+      <Id>17647</Id>
+      <Name>OverIndebtednessPerc</Name>
+      <ParamValue xsi:type="xsd:string">0.75</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+  </Parameters>
+  <LinkedStrategies xmlns="ScortoPatron" />
+</CreditProduct>

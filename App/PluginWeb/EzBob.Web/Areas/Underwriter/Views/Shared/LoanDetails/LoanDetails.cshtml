@@ -1,0 +1,235 @@
+﻿@model dynamic
+
+@helper TransactionsShedule()
+{
+    <div>
+        <label class="checkbox">
+            <input type="checkbox" class="filter-errors" <%= showFailed ? "checked='true'" : "" %> > Show failed transactions
+        </label>
+    </div>
+
+    <table class="payment-schedule-table table-bordered table table-striped blue-header centered">
+        <% var rollovers = rollovers || [];
+        
+        %>
+    <thead>
+        <tr>
+            <th style="width: 30px;" ></th>
+            <th style="width: 75px;">Date</th>
+            <th style="width: 75px;">Principal</th>
+            <th style="width: 60px;">Interest </th>
+            <th style="width: 60px;">Fees</th>
+            <th style="width: 75px;">Rebate</th>
+            <th style="width: 75px;">Total</th>
+            @*<th style="width: 75px;">Balance</th>*@
+            <th style="width:60px;">Status</th>
+            <th style="width:60px;">Description</th>
+        </tr>
+    </thead>
+        <tbody>            
+            @Pacnet()
+            @Paypoint()
+            @Rollovers()
+            @Charges()
+            @Installments()
+        </tbody>
+    </table>
+    <p class="offer-status"></p>
+}
+
+@helper LoanDetailsTemplate()
+{
+    <h1 style="margin-bottom: 30px;">Loan Details</h1>
+    <div style="padding-left: 0; padding-bottom: 30px;">
+    </div>   
+    <h2 style="margin-bottom: 10px;">Loan Summary</h2>
+    <div class="simple-well" style="margin-bottom: 30px;">
+        <div class="row-fluid form-horizontal loan-details">
+            <div class="span4">                
+                <dl>
+                    <dt>Loan Amount:</dt>
+                    <dd><%-EzBob.formatPounds(loan.LoanAmount)%></dd>
+                    
+                    <dt>Origination Date:</dt>
+                    <dd> <%- moment.utc(loan.Date).local().format('MMM DD, YYYY') %> </dd>
+                    
+                    <dt>Interest Rate:</dt>
+                    <dd> <%- EzBob.formatPercents(loan.InterestRate) %></dd>
+                </dl>
+            </div>
+            
+            <div class="span4">
+                <dl>
+                    <dt>Open Balance:</dt>
+                    <dd><%-EzBob.formatPounds(loan.TotalBalance)%></dd>
+                
+                    <dt>Total Paid:</dt>
+                    <dd><%- EzBob.formatPounds(loan.Repayments)%></dd>
+                    
+                    <dt>Setup Fee:</dt>
+                    <dd><%- EzBob.formatPounds(loan.SetupFee)%></dd>
+                </dl>
+            </div>
+
+            <div class="span4">
+                <dl style="margin-bottom: 0;" class="loan-deteils-status">
+                    <dt>EzBob Status:</dt>
+                    <dd class="status<%-loan.Status%>"><%-loan.Status%></dd>
+                    
+                    <dt>Bureau Status:</dt>
+                    <dd class="status<%-loan.Status%>"><%-loan.BureauStatus || "-"%></dd>
+                    
+                    <dt>CAIS Status reported:</dt>
+                    <dd><%-loan.LastReportedCaisStatus || "-"%></dd>
+                    
+                    <dt>CAIS Status reported Date:</dt>
+                    <dd><%- loan.LastReportedCaisStatusDate ? moment.utc(loan.LastReportedCaisStatusDate).local().format('MMM DD, YYYY') : "-" %></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="float_right">
+                <!-- rollover -->
+                <%
+                    var  title = _.any(rollovers, function(i){ return i.Status == 0; }) ? "Edit Roll over" : "Add Roll over";
+                %>
+                <button class="btn rollover pull-right" style="width: 150px; margin-right: 5px;" ><%-title%>(<%-rolloverCount || '0'%>)</button>
+                <button  class="btn make-payment pull-right" style="width: 150px; margin-right: 5px;" >Make Payment</button>
+                <button  id="btn-options" class="btn pull-right" style="width: 150px; margin-right: 5px;" >Options</button>
+            </div>
+        </div>
+    </div>
+    
+    <h2 style="margin-bottom: 10px;">Payment Schedule</h2>
+
+    @TransactionsShedule()
+
+    <div class="loan_apr_block">
+        Loan APR: <%- loan.APR %> %
+    </div>
+    
+    <h2 style="margin-bottom: 10px; margin-top: 30px;">Loan Agreement</h2>
+    <div class="simple-well" style="margin-bottom: 30px;">
+        <div class="row-fluid form-horizontal loan-agreements">
+            <ul>
+                <% _.each(loan.Agreements, function(item, i){%>
+                <li><a href="@Url.Action("Download", "Agreements", new { Area = "" })/<%=item.Id%>"><%=item.Name%></a></li>
+                <%});%>
+            </ul>
+        </div>
+    </div>
+}
+
+<script id="loan-details-template" type="text/template">
+    @LoanDetailsTemplate()
+</script>
+
+@helper Pacnet(){
+    <text>
+        <% _.each(pacnetTransactions, function(transaction, i){%>
+            <tr style="height: 56px;">
+                <td><img style="width:24px" src='@Url.Content("~/Content/img/payment-to-customer.png")' /></td>
+                <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                <td class="bold left"><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+                <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
+                <td class='left'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                <td class='left bold'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                @*<td></td>*@
+                <td class="hm_black"><%- transaction.StatusDescription %></td>
+                <td><%-transaction.Description%></td>
+            </tr>
+        <%}) %>
+    </text>
+}
+
+@helper Paypoint(){
+    <text>
+        <% _.each(transactions, function(transaction, i){
+            if(showFailed || (!showFailed && transaction.StatusDescription != 'Error')){%>
+                <tr style="height: 56px;">
+                    <td><img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")' /></td>
+                    <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
+                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
+                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
+                    <td class='left'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                    @*<td><%- EzBob.formatPoundsWidhDash(transaction.Balance) %></td>*@
+                    <td class="hm_black"><%- transaction.StatusDescription %></td>
+                    <td><%-transaction.Description%></td>
+                </tr>
+            <%}%>
+        <%}) %>
+    </text>
+}
+
+@helper Rollovers(){
+    <text>
+        <% _.each(rollovers, function(rollover, i){%>
+            <tr style="height: 56px;">
+                <td><img  height="31"  src='@Url.Content("~/Content/img/two_arrows.png")' /></td>
+                <td class="hm_black"><%- moment.utc(rollover.ExperyDate).local().format("MMM DD YYYY")  %></td>
+                <td></td>
+                <td></td>
+                <td class='right hm_black'><%- EzBob.formatPoundsWidhDash(rollover.Payment) %></td>
+                <td></td>
+                <td></td>
+                <td class="hm_black">Roll Over</td>
+                <td></td>
+            </tr>
+        <%}) %>
+    </text>
+}
+
+@helper Charges(){
+    <text>
+        <% _.each(charges, function(charge, i){%>
+            <% if ( charge.State !== 'Paid' ){%>
+                <tr style="height: 56px;">
+                    <td><img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")' /></td>
+                    <td class="hm_black"><%- moment.utc(charge.Date).local().format("MMM DD YYYY")  %></td>
+                    <td></td>
+                    <td></td>
+                    <td class='right hm_black'><%- EzBob.formatPoundsWidhDash(charge.Amount) %></td>
+                    <td></td>
+                    <td></td>
+                    @*<td><%- EzBob.formatPoundsWidhDash(transaction.Balance) %></td>*@
+                    <td class="hm_black"><%- charge.State %></td>
+                    <td><%- charge.Description %></td>
+                </tr>
+            <%}%>
+        <%}) %>
+    </text>
+}
+
+@helper Installments(){
+    <text>
+        <% _.each(schedule, function(item, i){%>
+        <% if ( (item.Status !== 'PaidEarly') && (item.Status !== 'PaidOnTime') && (item.Status !== 'Paid')){%>
+                <%var styleForLate = item.Status === 'Late' ? "hm_red" : "hm_black"%>
+                <tr style="height: 56px;" data-scheduleId="<%-item.Id%>">
+                    <%var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")"%>
+                    <td><img src="<%-urlImage%>"></td>
+                    <td class="hm_black"><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
+                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
+                    <td class='right <%-styleForLate%> %>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
+                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LateCharges)%></td>
+                    <td class='left <%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
+                    @*<td><%-EzBob.formatPoundsWidhDash(item.Balance)%></td>*@
+                    <td class='<%-styleForLate%>'><%-item.StatusDescription%></td>
+                    <td></td>
+                </tr>
+            <%}%>
+        <%}) %>
+    </text>
+}
+
+
+@{
+    Html.RenderPartial("LoanDetails/PaymentRollover");
+}
+@{
+    Html.RenderPartial("LoanDetails/LoanOptions");
+}

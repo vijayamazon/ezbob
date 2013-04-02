@@ -1,0 +1,1 @@
+ALTER TABLE dbo.Customer ALTER COLUMN LimitedCompanyNumber NVARCHAR(255)

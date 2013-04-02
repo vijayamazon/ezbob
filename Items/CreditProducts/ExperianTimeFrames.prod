@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<CreditProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId xmlns="ScortoPatron">27</UserId>
+  <Id xmlns="ScortoPatron">328</Id>
+  <Name xmlns="ScortoPatron">ExperianTimeFrames</Name>
+  <CreationDate xmlns="ScortoPatron">2012-07-25T18:31:32.253</CreationDate>
+  <Parameters xmlns="ScortoPatron">
+    <CreditProductParam>
+      <CreditProductId>328</CreditProductId>
+      <Id>8150</Id>
+      <Name>DefaultDays</Name>
+      <ParamValue xsi:type="xsd:string">90</ParamValue>
+      <TypeString>System.Double</TypeString>
+    </CreditProductParam>
+  </Parameters>
+  <LinkedStrategies xmlns="ScortoPatron" />
+</CreditProduct>

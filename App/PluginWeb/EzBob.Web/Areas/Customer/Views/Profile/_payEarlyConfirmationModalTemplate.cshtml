@@ -1,0 +1,22 @@
+﻿@model dynamic
+
+<script id="pay-early-confirmation" type="text/template">
+    <div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3><%-name%> <%-surname%> - Early Payment Confirmation</h3>
+        </div>
+        <div class="modal-body">
+            <p class="bold" style="display: none;">Loan Ref. Number: <%-refnum%></p>
+            <p>Your debit card xxxx-<%- card_no %> will be charged:</p>
+            <p>
+                <strong>Payment Amount:</strong> <%-EzBob.formatPounds(amount)%><br/>
+                <strong>Payment Date:</strong> <%-EzBob.currentDateFormatted()%> <br/>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="button orange save pull-right">Ok</a>
+            <a href="#" class="button orange cancel pull-right">Cancel</a>            
+        </div>
+    </div>
+</script>

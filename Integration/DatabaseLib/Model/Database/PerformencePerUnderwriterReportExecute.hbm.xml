@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="DatabaseLib" namespace="EZBob.DatabaseLib.Model.Database">
+  <sql-query name="PerformencePerUnderwriterReport" >
+    <query-param name="dateStart" type="System.DateTime"/>
+    <query-param name="dateEnd" type="System.DateTime"/>
+    <return class="PerformencePerUnderwriterDataRow" >
+      <return-property column="IdUnderwriter" name="IdUnderwriter"/>
+      <return-property column="Underwriter" name="Underwriter"/>
+      <return-property column="Processed" name="Processed"/>
+      <return-property column="ProcessedAmount" name="ProcessedAmount"/>
+      <return-property column="Approved" name="Approved"/>
+      <return-property column="ApprovedAmount" name="ApprovedAmount"/>
+      <return-property column="Rejected" name="Rejected"/>
+      <return-property column="RejectedAmount" name="RejectedAmount"/>
+      <return-property column="Escalated" name="Escalated"/>
+      <return-property column="EscalatedAmount" name="EscalatedAmount"/>
+      <return-property column="HighSide" name="HighSide"/>
+      <return-property column="HighSideAmount" name="HighSideAmount"/>
+      <return-property column="LowSide" name="LowSide"/>
+      <return-property column="LowSideAmount" name="LowSideAmount"/>
+      <return-property column="LatePayments" name="LatePayments"/>
+      <return-property column="LatePaymentsAmount" name="LatePaymentsAmount"/>
+      <return-property column="MaxTime" name="MaxTime"/>
+      <return-property column="AvgTime" name="AvgTime"/>
+    </return>
+    EXEC [GetPerformencePerUnderwriterReport] @dateStart=:dateStart, @dateEnd=:dateEnd
+  </sql-query>
+</hibernate-mapping>

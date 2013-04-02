@@ -1,0 +1,9 @@
+﻿@model dynamic
+
+
+@using (Html.BeginForm("Generate", "GenerateAgreements", new{Area = "Underwriter"}, FormMethod.Post)) {
+    <input type="submit" value="Generate" class="btn"/>
+    <p>@Html.ActionLink("Reload Agreement", "ReloadAgreementsModel", "GenerateAgreements")</p>
+    <p>@Html.ActionLink("Reload Consent Agreement", "GenerateConsentAgreement", "GenerateAgreements")</p>
+}
+ 

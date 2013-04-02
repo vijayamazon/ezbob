@@ -1,0 +1,38 @@
+﻿@model dynamic
+
+<div style="overflow: auto">
+    <% if(paymentAccounts.PayPalAccounts && paymentAccounts.PayPalAccounts.length > 0){%>
+        <table class="table table-bordered table-striped marketplace-table paypalAccounts blue-header centered">
+            <thead>
+                <tr>
+                    <th>PayPal Account</th>
+                    <th>Number of Transactions</th>
+                    <th>Total In Payments</th>
+                    <th>Total Out Payments</th>
+                    <th>Seniority</th>
+                    <th>Updated</th>
+                    <th>Recheck API</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% _.each(paymentAccounts.PayPalAccounts, function(payPalAccount, i){
+                var age = (payPalAccount.Seniority != undefined) ? EzBob.SeniorityFormat(payPalAccount.Seniority, 0) : "-";
+                %>
+                <tr data-id="<%-payPalAccount.id%>">
+                    <td><%-payPalAccount.displayName%></td>
+                    <td><%-payPalAccount.TranzactionsNumber%></td>
+                    <td><%-EzBob.formatPounds(payPalAccount.TotalNetInPayments)%></td>
+                    <td><%-EzBob.formatPounds(payPalAccount.TotalNetOutPayments)%></td>     
+                    <td><%-age%></td>
+                    <td><%-payPalAccount.Status%></td>
+                    <td>
+                        <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- payPalAccount.id %>"><i class="icon-repeat"></i>Recheck</a>
+                        <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- payPalAccount.id %>" ><i class="icon-tag"></i></a>
+                    </td>
+                </tr>
+                <%}) %>
+       
+            </tbody>
+        </table>
+    <%} %>    
+</div>

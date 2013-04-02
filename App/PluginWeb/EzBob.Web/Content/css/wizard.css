@@ -1,0 +1,219 @@
+﻿.PersonalturnOver {
+    margin-top: 10px;
+    border-color: #ccc !important;
+}
+.PersonalturnOver legend {
+    padding-bottom: 0px !important;
+    padding-right: 10px !important;
+}
+#signupEmail, #signupPass1, #signupPass2, #SecurityAnswer {
+    width: 200px;
+}
+#securityQuestion{
+    width: 208px;
+}
+
+
+#wizard {
+    padding: 0 61px;    
+}
+
+form.signup input[type="text"], form.signup input[type="password"], form.signup select{
+    margin-bottom: 0;
+}
+form.signup button[rel] {
+    margin-left: 20px;
+}
+
+.ebay-iframe {
+    height: 800px;
+    width: 100%;
+}
+
+#ebay-connect-modal {
+    width: 1000px;
+    margin-left: -500px;
+}
+
+body .SecurityStatement {
+    border: solid #d3d3d3 3px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -o-border-radius: 8px;
+    border-radius: 8px;
+
+    -webkit-box-shadow: 0 0 10px #CCC;
+    -moz-box-shadow: 0 0 10px #CCC;
+    -o-box-shadow: 0 0 10px #CCC;
+    box-shadow: 0 0 10px #CCC;
+    
+
+    padding: 18px;
+
+    color: #585858;
+    background-color: #FFF;
+
+    font: normal 12px Arial;
+}
+
+.SecurityStatement h4 {
+    font: normal 16px Arial;
+    margin-bottom: 22px;
+    color: #585858;
+}
+
+.pages fieldset legend {
+    font-style: italic;
+    color: #0B73B4;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    display: inline;
+    padding-right: 20px;
+    padding-left: 10px;
+    border: none;
+    width: auto;
+    margin-bottom: 0;
+    padding-bottom: 12px;
+}
+
+.pages fieldset {
+    border-top: 1px solid #EEE;
+}
+
+.AmazonForm, .AmazonForm label {
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Arial;
+    color: black;
+}
+
+body .bank-account legend {
+    color: #515051;
+    font-size: 16px;
+}
+
+body .andenter {
+    font-weight: normal;
+    padding: 15px 0 5px 0px;
+}
+
+#wizard .pages h1, #wizard .pages h2{
+    padding-left: 10px;
+}
+
+#wizard .SecurityStatement {
+    /*margin-top: 10px;*/
+}
+
+label {
+    color: #585858;
+}
+
+.CompanyDetailForm {
+    padding-top: 15px;
+}
+
+.yellow-link, a.yellow-link, a.yellow-link:visited, a.yellow-link:active,  a.yellow-link:hover {
+    color: #f3b91e;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.blue-link, a.blue-link, a.blue-link:visited, a.blue-link:active,  a.blue-link:hover {
+    color: #0B73B4;
+    text-decoration: underline;
+}
+
+
+#amazon-gallery {/*
+    width: 960px;
+    height: 533px;
+    left: 36%;*/
+}
+
+#amazon-gallery .modal-header, #amazon-gallery .modal-footer {
+    display: none;
+}
+
+#amazon-gallery .cs-title {
+    display: none;
+}
+
+#amazon-gallery  .cs-buttons {
+}
+
+.consent-dialog {
+    overflow-y: auto;
+}
+
+.consent-dialog a {
+    color: blue;
+}
+
+.consent-dialog li{
+    line-height: 22px;
+}
+
+ol.list_i {
+    list-style-type: lower-roman;
+}
+
+ol.list_a {
+    list-style-type: lower-alpha;
+}
+
+ol.list_1 {
+    list-style-type: decimal;
+}
+
+ul.list_none
+{
+    list-style-type: none;
+}
+
+.consent-dialog {
+    font: 11pt Calibri;
+    color: black;
+}
+.consent-dialog h1
+{
+    font: 18pt Calibri;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+    color: black;
+}
+
+.consent-dialog span.lock {
+    background-image: url(../img/lock.png);
+    width: 19px;
+    height: 30px;
+    display: inline-block;
+}
+.consent-dialog h2
+{
+    font: 14pt Calibri;
+    font-weight: bold;
+    text-align: left;
+    color: black;
+    margin: 10px 0;
+}
+
+.AccountNumber {
+    width: 207px;
+}
+
+#SortCode2, #SortCode3 {
+    width: 54px;
+}
+#SortCode1 {
+    width: 53px;
+}
+#wizard .notifications > div { margin-right: 18px;}
+
+.buttons-list > div {
+    margin-left: 0!important;
+}
+
+#AccountNumber { width: 215px;}

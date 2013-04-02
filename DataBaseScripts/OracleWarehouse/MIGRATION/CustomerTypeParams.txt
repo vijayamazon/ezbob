@@ -1,0 +1,11 @@
+0#1#Sex#Number#1
+1#1#Age#Number#NULL
+2#1#AddressTime#Number#NULL
+3#1#MaritalStatus#Number#2
+4#1#JobTime#Number#NULL
+5#1#Checking#Number#3
+6#1#Savings#Number#4
+7#1#PaymentHistory#Number#NULL
+8#1#HomeOwnership#Number#5
+9#1#FinRatio1#Number#NULL
+10#1#FinRatio2#Number#NULL

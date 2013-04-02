@@ -1,0 +1,15 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Payment failure: Payment Failure | EZBOB";
+}
+
+<div class="row-fluid " style="padding-top:  20px;">
+    <div class="span2">&nbsp;</div>
+    <div class="span8">
+        <h2>
+            Payment request was unsuccessfull. Please check your card or contact EZBOB for details.
+        </h2>
+        <a href='@Url.Action("Index", "Profile", new {Area="Customer"})'  class="btn-continue button orange">Go to My Account</a>
+    </div>
+</div>

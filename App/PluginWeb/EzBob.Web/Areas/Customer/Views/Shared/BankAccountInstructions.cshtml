@@ -1,0 +1,78 @@
+﻿@using EzBob.Web.Models.Strings
+@model dynamic
+
+@helper BankAccountInstruction()
+    {
+    <div class="row-fluid">
+        <div class="row-fluid ">
+           <div class="span7" style="padding-top: 2px;">
+                <div class="wizard-top-notification">
+                    <h1> Add Bank account</h1>
+                    <h2>So we can send you cash</h2>
+                </div>
+               <form id="bankAccount">
+                                  
+                   <div class="simple-well bank-account-instructions clearfix form-horizontal">
+                       <div class="bank-account">
+                           <legend class="bold">Bank Account Details:</legend>
+                           <div class="control-group">
+                               <label for="AccountNumber" class="control-label">Account number:</label>
+                               <div class="controls">
+                                   <input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus = "autofocus" class="AccountNumber" maxlength="8" />
+                               </div>
+                           </div>
+                    
+                           <div class="control-group" id="SortCode">
+                               <label for="SortCode" class="control-label">Sort Code:</label>
+                               <div class="controls">
+                                   <input class="input-mini" id="SortCode1" name="SortCode1" nextSerial="#SortCode2"  type="text" maxlength="2" /> -
+                                   <input class="input-mini" id="SortCode2" name="SortCode2" nextSerial="#SortCode3"  type="text" maxlength="2" /> -
+                                   <input class="input-mini" id="SortCode3" name="SortCode3"  type="text"  maxlength="2" />
+                                   <input type="hidden" class="SortCodeSplit" name="SortCode" id="SortCodeSplit"/>
+                               </div>
+                           </div>
+                           
+                           <div class="controlgroup">
+                             <div class="controls">
+                                <label class="radio">
+                                  <input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked>
+                                    Personal
+                                </label>
+                                <label class="radio">
+                                  <input type="radio" name="bankAccountType" id="baPersonal" value="Business">
+                                    Business
+                                </label>
+                             </div>
+                           </div>
+
+                           <div class="control-group clearfix" style="padding-right: 50px;">
+                               <a href="#" class="button orange  connect-bank  disabled pull-right">Continue</a>
+                               <a href="#" class="back button orange pull-right">Back</a>
+                           </div>
+
+                           <hr/>
+                        
+                           To locate your sort code and account number
+                           <a href="#" data-toggle="collapse" data-target="#demo" onclick="return false;">
+                               click here
+                           </a>
+ 
+                           <div id="demo" class="collapse" style="height: 0;">
+                               <img class="pull-right" src='@Url.Content("~/Content/img/debitcard.png")' alt=""/>
+                               <img class="pull-right" src='@Url.Content("~/Content/img/cheque.png")' alt=""/>
+                           </div>
+                       </div>
+                   </div>
+               </form>
+              @{Html.RenderPartial("_SecureDisclaimer");}
+        </div>
+            <div class="span1">&nbsp;</div>
+            <div class="span4">
+                @{Html.RenderPartial("SideBars/BankAccountNtification");}
+            </div>
+        </div>
+    </div>
+}           
+<script id="bank-account-instructions" type="text/template">
+    @BankAccountInstruction()
+</script>

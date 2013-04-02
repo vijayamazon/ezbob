@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="DatabaseLib" namespace="EZBob.DatabaseLib.Model.Database">
+  <sql-query name="GetPayPalIncomeDetails" >
+    <query-param name="marketplaceId" type="System.Int32"/>
+    <return class="PayPalGeneralDetailDataRow" >
+      <return-property column="Payer" name="Type"/>
+      <return-property column="M1" name="M1"/>
+      <return-property column="M3" name="M3"/>
+      <return-property column="M6" name="M6"/>
+      <return-property column="M12" name="M12"/>
+      <return-property column="M15" name="M15"/>
+      <return-property column="M18" name="M18"/>
+      <return-property column="M24" name="M24"/>
+      <return-property column="M24Plus" name="M24Plus"/>
+    </return>
+    EXEC [GetPayPalIncomeDetails] @marketplaceId=:marketplaceId
+  </sql-query>
+</hibernate-mapping>

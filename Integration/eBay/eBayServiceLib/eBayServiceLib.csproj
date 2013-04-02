@@ -1,0 +1,856 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.eBayServiceLib</RootNamespace>
+    <AssemblyName>eBayServiceLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\..\Lib\3rdparty\DotNetZipLib\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\EbayServiceType.cs" />
+    <Compile Include="Common\IEbayMarketplaceSettings.cs" />
+    <Compile Include="ConvertTypesHelper.cs" />
+    <Compile Include="eBayServiceInfo.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ResultDownloadFileRequest.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ResultInfoByBulkDataServiveResponseBase.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ResultInfoByFiletransferServiveResponseBase.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ResultInfoDownloadJobRequest.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ResultInfoJobRequest.cs" />
+    <Compile Include="Service References\eBayShopingService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\FileTransferServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Test\EBayServiceTestFixture.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\DataInfo.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\DataInfoString.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\DataInfoTypeEnum.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\IEbayDataInfo.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\IParamsDataInfo.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersBase.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersFromDateToDateBase.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersFromDateToDateCreated.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersFromDateToDateModified.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersParamsType.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\Orders\ParamsDataInfoGetOrdersSimple.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoAppId.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoCertId.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoDevId.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoRuName.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoSessionId.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoToken.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoTokenEmpty.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceProviderDataInfoUserId.cs" />
+    <Compile Include="TradingServiceCore\DataInfos\ServiceVersion.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureHelper.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureInfo.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureType.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureTypeEnum.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureTypeSimple.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Data\CallProcedureTypeTokenDependent.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Factory\DataProviderFactory.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\DataProviderCreationInfo.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\DataProviderSimpleBase.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\DataProviderSimpleBaseTyped.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\DataProviderTokenDependentBase.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\DataProviderTokenDependentBaseTyped.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\IDataProvider.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Base\IDataProviderBaseTyped.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Simple\DataProviderConfirmIdentity.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Simple\DataProviderFetchToken.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\Simple\DataProviderSessionID.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderCheckAuthenticationToken.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGetAccount.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGetItemInfo.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGetSiteCategories.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGeteBayDetails.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGetFeedBack.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderGetTokenStatus.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\DataProviderUserInfo.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\DataProviderGetOrders.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\GetOrdersExecutorBase.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\GetOrdersExecutorFactory.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\GetOrdersExecutorFromDateToDateCreated.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\GetOrdersExecutorFromDateToDateModified.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\GetOrdersExecutorSimple.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\IGetOrdersExecutor.cs" />
+    <Compile Include="TradingServiceCore\DataProviders\Model\TokenDependant\GetOrders\InternalDataProviderGetOrders.cs" />
+    <Compile Include="Common\EbayTradingServiceProvider.cs" />
+    <Compile Include="TradingServiceCore\EbayServiceProviderBase.cs" />
+    <Compile Include="Common\IEbayServiceProvider.cs" />
+    <Compile Include="Common\IServiceEndPointFactory.cs" />
+    <Compile Include="TradingServiceCore\FailServiceRequestException.cs" />
+    <Compile Include="TradingServiceCore\IServiceSignInUrlFactory.cs" />
+    <Compile Include="TradingServiceCore\IWaitWebResponseProvider.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ErrorInfo.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\IResultDataInfo.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\Orders\ResultDataByResponseOrders.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\Orders\ResultInfoOrders.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\EbayResultInfoBase.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoByServerResponseBase.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayAccount.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayCategories.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayDetails.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayFeedBack.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayItemInfo.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoEbayUser.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoError.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoSessionInfo.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoTikenInfo.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoTokenStatus.cs" />
+    <Compile Include="TradingServiceCore\ResultInfos\ResultInfoUserIdInfo.cs" />
+    <Compile Include="TradingServiceCore\EbayServiceConnectionInfo.cs" />
+    <Compile Include="TradingServiceCore\TokenProvider\IServiceTokenProvider.cs" />
+    <Compile Include="TradingServiceCore\TokenProvider\ServiceTokenProviderBase.cs" />
+    <Compile Include="TradingServiceCore\TokenProvider\ServiceTokenProviderBySession.cs" />
+    <Compile Include="TradingServiceCore\TokenProvider\ServiceTokenProviderCustom.cs" />
+    <Compile Include="TradingServiceCore\TokenProvider\ServiceTokenProviderEmpty.cs" />
+    <Compile Include="eBaySecurityInfo.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ActiveInventoryReportRequest.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\LargeMerchantServiceRequestBase.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\BulkData\BulkDataExchangeServicePort.cs" />
+    <Compile Include="LargeMerchantServiceCore\BulkDataReportType.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\BulkData\EbayBulkDataServiceProvider.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\FileTransfer\EbayFileTransferServiceProvider.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\EbayLargeMerchantServicesProviderBase.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\FileTransfer\EbayFileTransferService.cs" />
+    <Compile Include="LargeMerchantServiceCore\Requests\ILargeMerchantServiceRequestBase.cs" />
+    <Compile Include="LargeMerchantServiceCore\ServiceLogic\LargeMerchantServiceWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\com.ebay.developer.soap.bulkdataexchange\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\com.ebay.developer.soap\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://developer.ebay.com/webservices/757/ebaySvc.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\com.ebay.developer.soap\</RelPath>
+      <UpdateFromURL>http://developer.ebay.com/webservices/757/ebaySvc.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>eBayServiceLib_com_ebay_developer_soap_eBayAPIInterfaceService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://developer.ebay.com/webservices/bulk-data-exchange/latest/BulkDataExchangeService.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\com.ebay.developer.soap.bulkdataexchange\</RelPath>
+      <UpdateFromURL>http://developer.ebay.com/webservices/bulk-data-exchange/latest/BulkDataExchangeService.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>eBayServiceLib_com_ebay_developer_soap_bulkdataexchange_BulkDataExchangeService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.FindHalfProductsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.FindPopularItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.FindPopularSearchesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.FindProductsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.FindReviewsAndGuidesResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetCategoryInfoResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GeteBayTimeResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetItemStatusResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetMultipleItemsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetShippingCostsResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetSingleItemResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\EzBob.eBayServiceLib.eBayShopingService.GetUserProfileResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\eBayShopingService\ShoppingService.wsdl" />
+    <None Include="Service References\FileTransferServiceReference\EzBob.eBayServiceLib.FileTransferServiceReference.DownloadFileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FileTransferServiceReference\EzBob.eBayServiceLib.FileTransferServiceReference.UploadFileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FileTransferServiceReference\FileTransferService.wsdl" />
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\AbortJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\AbortRecurringJobExecutionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\ActivateRecurringJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\BulkDataExchangeService.wsdl" />
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\CreateRecurringJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\CreateUploadJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\DeleteRecurringJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\GetJobsResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\GetJobStatusResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\GetRecurringJobExecutionHistoryResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\GetRecurringJobExecutionStatusResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\GetRecurringJobsResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\StartDownloadJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\StartUploadJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap.bulkdataexchange\SuspendRecurringJobResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddDisputeResponseResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddDisputeResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddFixedPriceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddItemFromSellingManagerTemplateResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddItemsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddMemberMessageAAQToPartnerResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddMemberMessageRTQResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddMemberMessagesAAQToBidderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddOrderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddSecondChanceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddSellingManagerInventoryFolderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddSellingManagerProductResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddSellingManagerTemplateResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddToItemDescriptionResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddToWatchListResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\AddTransactionConfirmationItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\CompleteSaleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ConfirmIdentityResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteMyMessagesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteSellingManagerInventoryFolderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteSellingManagerItemAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteSellingManagerProductResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteSellingManagerTemplateAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DeleteSellingManagerTemplateResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\DisableUnpaidItemAssistanceResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ebaySvc.wsdl" />
+    <None Include="Web References\com.ebay.developer.soap\EndFixedPriceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\EndItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\EndItemsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ExtendSiteHostedPicturesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\FetchTokenResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetAccountResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetAdFormatLeadsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetAllBiddersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetApiAccessRulesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetAttributesCSResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetAttributesXSLResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetBestOffersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetBidderListResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCategoriesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCategory2CSResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCategoryFeaturesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCategoryMappingsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCategorySpecificsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetChallengeTokenResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCharitiesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetClientAlertsAuthTokenResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetContextualKeywordsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetCrossPromotionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetDescriptionTemplatesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetDisputeResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GeteBayDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GeteBayOfficialTimeResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetFeedbackResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetHighBiddersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetItemRecommendationsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetItemsAwaitingFeedbackResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetItemShippingResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetItemTransactionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMemberMessagesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMessagePreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMyeBayBuyingResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMyeBayRemindersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMyeBaySellingResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetMyMessagesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetNotificationPreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetNotificationsUsageResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetOrdersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetOrderTransactionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetPictureManagerDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetPictureManagerOptionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetPopularKeywordsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductFamilyMembersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductFinderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductFinderXSLResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductSearchPageResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductSearchResultsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductSellingPagesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetProductsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetPromotionalSaleDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetPromotionRulesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellerDashboardResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellerEventsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellerListResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellerPaymentsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellerTransactionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerAlertsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerEmailLogResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerInventoryFolderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerInventoryResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerItemAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerSaleRecordResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerSoldListingsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerTemplateAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSellingManagerTemplatesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSessionIDResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetShippingDiscountProfilesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetStoreCategoryUpdateStatusResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetStoreCustomPageResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetStoreOptionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetStorePreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetStoreResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetSuggestedCategoriesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetTaxTableResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetTokenStatusResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetUserContactDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetUserDisputesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetUserPreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetUserResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetVeROReasonCodeDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetVeROReportStatusResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetWantItNowPostResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\GetWantItNowSearchResultsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\IssueRefundResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\LeaveFeedbackResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\MoveSellingManagerInventoryFolderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\PlaceOfferResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RelistFixedPriceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RelistItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RemoveFromWatchListResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RespondToBestOfferResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RespondToFeedbackResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RespondToWantItNowPostResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseCheckoutStatusResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseFixedPriceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseInventoryStatusResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseMyMessagesFoldersResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseMyMessagesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseSellingManagerInventoryFolderResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseSellingManagerProductResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseSellingManagerSaleRecordResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ReviseSellingManagerTemplateResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\RevokeTokenResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SaveItemToSellingManagerTemplateResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SellerReverseDisputeResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SendInvoiceResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetMessagePreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetNotificationPreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetPictureManagerDetailsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetPromotionalSaleListingsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetPromotionalSaleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetSellingManagerFeedbackOptionsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetSellingManagerItemAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetSellingManagerTemplateAutomationRuleResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetShippingDiscountProfilesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetStoreCategoriesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetStoreCustomPageResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetStorePreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetStoreResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetTaxTableResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetUserNotesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\SetUserPreferencesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\UploadSiteHostedPicturesResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ValidateChallengeInputResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\ValidateTestUserRegistrationResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\VerifyAddFixedPriceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\VerifyAddItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\VerifyAddSecondChanceItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\VerifyRelistItemResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\com.ebay.developer.soap\VeROReportItemsResponseType1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="LargeMerchantServiceCore\ResultInfo\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\eBayShopingService\" />
+    <WCFMetadataStorage Include="Service References\FileTransferServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileTransferServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileTransferServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FileTransferServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\eBayShopingService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\eBayShopingService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\eBayShopingService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

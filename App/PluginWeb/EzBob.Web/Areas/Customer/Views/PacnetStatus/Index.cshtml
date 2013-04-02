@@ -1,0 +1,141 @@
+﻿@using EzBob.Web.Code
+@using EzBob.Web.Infrastructure
+@{
+    ViewBag.Title = "Loan Confirmation: Loan Confirmation | EZBOB";
+}
+
+@section css {
+    @BundleHelper.RenderProfileCss()
+}
+
+<div class="row-fluid ">
+    <div class="span8">
+        <div id="profile-content" style="padding-right: 20px; padding-top: 16px;">
+            <div id="header-container"></div>
+            <h1>Congratulations</h1>
+            <h2 style="font-size: 22px;margin-bottom: 20px;">
+                Funds are being transfered to your account.
+            </h2>
+            
+            <h2 style="margin-bottom: 15px;">Loan Summary:</h2>
+                        
+            <input type="hidden" id="loanid" value="@ViewData["LoanId"]"/>
+
+            <dl class="loan-schedule-info clearfix">               
+                <dt>Name:</dt>
+                <dd>@ViewData["name"]</dd>
+                
+                <dt>Loan Ref. Number:</dt>
+                <dd>@ViewData["loanNo"]</dd>
+                
+                <dt>Origination Date:</dt>
+                <dd>@FormattingUtils.FormatDateToString(DateTime.Now))</dd>
+                
+                <dt>Loan Amount:</dt>
+                <dd>
+                    £ @ViewData["Amount"]
+                    @if (!String.IsNullOrEmpty((string)ViewData["SetupFee"]))
+                    {
+                        <span style="color: #b7b7b7; font-size: 11px;">An origination fee of £ @ViewData["SetupFee"] was deducted from the transfer</span>
+                    }
+                </dd>
+                
+                <dt>
+                    Total Repayments:
+                    <span style="font-size: 11px;">(inc. interest and fees)</span>
+                </dt>
+                <dd style="height: 40px;">£ @ViewData["Total"]</dd>
+
+                <dt>Bank Account:</dt>
+                <dd>@ViewData["bankNumber"]</dd>
+                
+                <dt>Debit Card:</dt>
+                <dd>XXXX-XXXX-XXXX-@ViewData["card_no"]</dd>
+
+            </dl>
+            
+            <div class="row-fluid">
+                <div class="span12">
+                    <h2 style="font-size: 22px; margin-bottom: 20px;" class="repayments-table-header">Payment schedule:</h2>
+                    <div id="schedule"></div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12" style="padding-top: 30px;">
+                    <a href="#" class="schedule-print-link pull-left print-link" style="margin-top: 8px;" onClick="window.print();return false;"> Print for your records</a>
+                    <a href='@Url.Action("Index", "Profile", new {Area="Customer"})'  class="btn-continue button orange pull-right btn-fix">Go to My Account</a>
+                </div>
+            </div>
+                                
+        </div>
+    </div>
+    <div class="span4">
+        <div style="margin-right: 40px;">
+            @{Html.RenderPartial("SideBars/CashConfirmationNotification");}
+        </div>
+    </div>
+</div>
+
+<script id="paypoint-schedule-template" type="text/template">
+    <table class="table table-bordered table-striped payment-schedule-table">
+        <thead>
+            <tr>
+                <th width="80" >Due Date</th>
+                <th >Principal</th>
+                <th >Interest</th>
+                <th >Fees</th>
+                <th >Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+            var totalAmount = 0, totalPrincipal = 0, totalInterest = 0, totalFees = 0;
+            %>
+            <%_.each(schedule, function(line, i){%>
+            <%
+            totalAmount += line.AmountDue;
+            totalPrincipal += line.LoanRepayment;
+            totalInterest += line.Interest;
+            totalFees += 0;
+            %>
+            <tr>
+                <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
+                <td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
+                <td><%-EzBob.formatPounds(line.Interest)%></td>
+                <td><%-EzBob.formatPounds(0)%></td>
+                <td>
+                    <b class="apply-loan-total" ><%-EzBob.formatPounds(line.AmountDue)%></b>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <p style="margin-top: 25px;color: #767676;">A confirmation email will be sent to your email address: @ViewData["email"]</p>
+</script>
+
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({ el: $('#schedule'), schedule:  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))});
+            scheduleView.render();
+            $('#header-container').html(_.template($('#wizard-bar-template').html()));
+            $('.sidebarBox').find('li[rel]').setPopover('left');
+        })
+    </script>
+    <script id="wizard-bar-template" type="text/template">
+        <div class="narrow-wizard-header">
+            <%
+                var steps = [
+                    { num: 0, title: "Choose<br/>Amount", css: "completed" },
+                    { num: 1, title: "Enter<br/>Debit Card", css: "completed" },
+                    { num: 2, title: "Get<br/>Cash", css: "active completed" }
+                ];
+        %>
+                @{Html.RenderPartial("_Steps");}
+            </div>
+    </script>
+    
+    @BundleHelper.RenderProfileJs()
+}

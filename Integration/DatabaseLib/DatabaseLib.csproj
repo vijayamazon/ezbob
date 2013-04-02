@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FA67314A-0560-41D4-BC19-6524663E9D0D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EZBob.DatabaseLib</RootNamespace>
+    <AssemblyName>DatabaseLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ApplicationMng">
+      <HintPath>..\..\Lib\Scorto.Core\ApplicationMng.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalysisDataInfo.cs" />
+    <Compile Include="AnalysisDataParameterInfo.cs" />
+    <Compile Include="AnalysisDataParameterInfoBase.cs" />
+    <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="AvailableFunds.cs" />
+    <Compile Include="Common\DatabaseFunction.cs" />
+    <Compile Include="Common\DatabaseFunctionStorage.cs" />
+    <Compile Include="Common\IMarketplaceRetrieveDataHelper.cs" />
+    <Compile Include="Common\IMarketPlaceSecurityInfo.cs" />
+    <Compile Include="Common\MarketplaceRetrieveDataHelperBase.cs" />
+    <Compile Include="CompositeServiceRequestException.cs" />
+    <Compile Include="DataAggregatorBase.cs" />
+    <Compile Include="DataAggregatorHelper.cs" />
+    <Compile Include="DatabaseCustomerMarketplaceUpdateActionData.cs" />
+    <Compile Include="DatabaseDataHelper.cs" />
+    <Compile Include="DatabaseWrapper\AccountInfo\IDatabaseEbayAccountInfo.cs" />
+    <Compile Include="DatabaseWrapper\AccountInfo\PayPalPersonalData.cs" />
+    <Compile Include="DatabaseWrapper\DatabaseCustomerMarketPlace.cs" />
+    <Compile Include="DatabaseWrapper\DatabaseCustomer.cs" />
+    <Compile Include="DatabaseWrapper\DatabaseMarketPlaceBase.cs" />
+    <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackDataByPeriod.cs" />
+    <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackData.cs" />
+    <Compile Include="DatabaseWrapper\EbayFeedbackData\DatabaseEbayRaitingDataByPeriod.cs" />
+    <Compile Include="DatabaseWrapper\EbayFeedbackData\DatabaseEbayFeedbackData.cs" />
+    <Compile Include="DatabaseWrapper\EbayFeedbackData\DatabaseEbayFeedbackDataByPeriod.cs" />
+    <Compile Include="DatabaseWrapper\EbayFeedbackData\DataByPeriodBase.cs" />
+    <Compile Include="DatabaseWrapper\EbayFeedbackData\EbayRaitingInfo.cs" />
+    <Compile Include="DatabaseWrapper\FindDatabaseCustomerInfo.cs" />
+    <Compile Include="DatabaseWrapper\Functions\IDatabaseFunction.cs" />
+    <Compile Include="DatabaseWrapper\FunctionValues\DatabaseAnalysisFunctionValueInfo.cs" />
+    <Compile Include="DatabaseWrapper\FunctionValues\DatabaseFunctionValuesWriterHelper.cs" />
+    <Compile Include="DatabaseWrapper\FunctionValues\IDatabaseAnalysisFunctionValues.cs" />
+    <Compile Include="DatabaseWrapper\FunctionValues\WriteDataInfo.cs" />
+    <Compile Include="DatabaseWrapper\IDatabaseCustomerMarketPlace.cs" />
+    <Compile Include="DatabaseWrapper\IDatabaseCustomer.cs" />
+    <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
+    <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
+    <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
+    <Compile Include="DatabaseWrapper\Products\AmazonProductsList.cs" />
+    <Compile Include="IDataAggregatorFactory.cs" />
+    <Compile Include="IUpdateActionResultInfo.cs" />
+    <Compile Include="Model\ConfigurationVariable.cs" />
+    <Compile Include="Model\ConfigurationVariablesRepository.cs" />
+    <Compile Include="Model\Database\Bug.cs" />
+    <Compile Include="Model\Database\CaisFlag.cs" />
+    <Compile Include="Model\Database\CaisFlagMap.cs" />
+    <Compile Include="Model\Database\CAISReportsHistory.cs" />
+    <Compile Include="Model\Database\CaisReportsHistoryMap.cs" />
+    <Compile Include="Model\Database\CardInfo.cs" />
+    <Compile Include="Model\Database\CustomerAddress.cs" />
+    <Compile Include="Model\Database\ExperianConsentAgreement.cs" />
+    <Compile Include="Model\Database\ExperianConsentAgreementMap.cs" />
+    <Compile Include="Model\Database\LoanOptions.cs" />
+    <Compile Include="Model\Database\LoanOptionsMap.cs" />
+    <Compile Include="Model\Database\DecisionHistory.cs" />
+    <Compile Include="Model\Email\EmailConfirmationRequest.cs" />
+    <Compile Include="Model\Email\EmailConfirmationRequestRepository.cs" />
+    <Compile Include="Model\Email\IEmailConfirmationRequestRepository.cs" />
+    <Compile Include="Model\Loans\LoanAgreement.cs" />
+    <Compile Include="Model\Loans\LoanChangesHistory.cs" />
+    <Compile Include="Model\Loans\LoanCharge.cs" />
+    <Compile Include="Model\Loans\LoanChargesRepository.cs" />
+    <Compile Include="Model\Loans\LoanType.cs" />
+    <Compile Include="Model\Loans\PaymentRallover.cs" />
+    <Compile Include="Model\DatabaseElapsedTimeInfo.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounter.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounterMap.cs" />
+    <Compile Include="Model\Database\DailyReportRow.cs" />
+    <Compile Include="Model\Database\DailyReportRowMap.cs" />
+    <Compile Include="Model\Database\ExportResult.cs" />
+    <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
+    <Compile Include="Model\PayPointCard.cs" />
+    <Compile Include="Model\Plain\MarketPlaceModel.cs" />
+    <Compile Include="Model\Database\OfferExpiredException.cs" />
+    <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />
+    <Compile Include="Model\Database\PayPalGeneralDetailDataRow.cs" />
+    <Compile Include="Model\Database\PayPalGeneralDetailDataRowMap.cs" />
+    <Compile Include="Model\Loans\ILoanScheduleRepository.cs" />
+    <Compile Include="Model\Loans\ILoanTransactionRepository.cs" />
+    <Compile Include="Model\Loans\LoanHistory.cs" />
+    <Compile Include="Model\Loans\LoanScheduleRepository.cs" />
+    <Compile Include="Model\Loans\LoanTransactionRepository.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetail.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetailCatgory.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayExternalTransaction.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayExternalTransactionMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLog.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLogMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_WhiteList.cs" />
+    <Compile Include="PyaPalDetails\PayPalDetailsModel.cs" />
+    <Compile Include="PyaPalDetails\PayPalDetailsRepository.cs" />
+    <Compile Include="PyaPalDetails\IPayPalDetailsRepository.cs" />
+    <Compile Include="RepositoryRegistry.cs" />
+    <Compile Include="Repository\CaisFlagRepository.cs" />
+    <Compile Include="Repository\CaisReportsHistoryRepository.cs" />
+    <Compile Include="Repository\CustomerAddressRepository.cs" />
+    <Compile Include="Repository\DailyReportRepository.cs" />
+    <Compile Include="Repository\AskvilleRepository.cs" />
+    <Compile Include="Repository\ExperianConsentAgreementRepository.cs" />
+    <Compile Include="Repository\ExportResultRepository.cs" />
+    <Compile Include="Repository\EzbobMailNodeAttachRelationRepository.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetailCatgoryMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetailMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayAmazonCategory.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayAmazonCategoryMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EBayOrderItemDetail.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EBayOrderItemDetailMap.cs" />
+    <Compile Include="Repository\AmazonOrderItemDetailRepository.cs" />
+    <Compile Include="Repository\EbayAmazonCategoryRepository.cs" />
+    <Compile Include="Repository\EBayOrderItemInfoRepository.cs" />
+    <Compile Include="Repository\IMP_WhiteListRepository.cs" />
+    <Compile Include="Repository\LoanOptionsRepository.cs" />
+    <Compile Include="Repository\PacnetPaypointServiceLogRepository.cs" />
+    <Compile Include="Model\Database\PostcodeServiceLog.cs" />
+    <Compile Include="Repository\PaymentRolloverRepository.cs" />
+    <Compile Include="Repository\PostcodeServiceLogRepository.cs" />
+    <Compile Include="Repository\ServiceLogRepository.cs" />
+    <Compile Include="ServiceFaultDetail.cs" />
+    <Compile Include="ServiceRequestException.cs" />
+    <Compile Include="ServiceRequestExceptionFactory.cs" />
+    <Compile Include="ServiceRequestListException.cs" />
+    <Compile Include="Tests\DatabaseDataHelperTest.cs" />
+    <Compile Include="Tests\ReceivedDataListTest.cs" />
+    <Compile Include="Tests\ScannerTest.cs" />
+    <Compile Include="Tests\TestRegistry.cs" />
+    <Compile Include="Tests\TimeDependentDataTest.cs" />
+    <Compile Include="Tests\TimePeriodDataAggregationFixture.cs" />
+    <Compile Include="DatabaseWrapper\UsersData\IDatabaseEbayUserData.cs" />
+    <Compile Include="DatabaseWrapper\IDatabaseFunctionFactory.cs" />
+    <Compile Include="DatabaseWrapper\Inventory\DatabaseInvetory.cs" />
+    <Compile Include="DatabaseWrapper\Order\AmazonOrdersList.cs" />
+    <Compile Include="DatabaseWrapper\Order\EbayDatabaseOrdersList.cs" />
+    <Compile Include="DatabaseWrapper\Order\DatabaseShipingAddress.cs" />
+    <Compile Include="DatabaseWrapper\Order\EbayDatabaseTransactionDataItem.cs" />
+    <Compile Include="DatabaseWrapper\Transactions\PayPalTransactionItem.cs" />
+    <Compile Include="Exceptions\InvalidCustomerException.cs" />
+    <Compile Include="DatabaseWrapper\ValueType\DatabaseValueType.cs" />
+    <Compile Include="DatabaseWrapper\ValueType\DatabaseValueTypeFactory.cs" />
+    <Compile Include="DatabaseWrapper\ValueType\IDatabaseValueType.cs" />
+    <Compile Include="DatabaseWrapper\IDatabaseMarketPlace.cs" />
+    <Compile Include="Common\AmountInfo.cs" />
+    <Compile Include="Exceptions\InvalidCustomerMarketPlaceException.cs" />
+    <Compile Include="IAnalysisDataParameterInfo.cs" />
+    <Compile Include="ICurrencyConvertor.cs" />
+    <Compile Include="MarketplaceException.cs" />
+    <Compile Include="Model\Database\CashRequest.cs" />
+    <Compile Include="Model\Database\CashRequestMap.cs" />
+    <Compile Include="Model\Database\MedalStatisticDataRow.cs" />
+    <Compile Include="Model\Database\MedalStatisticDataRowMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_AlertDocument.cs" />
+    <Compile Include="Model\Marketplaces\MP_ExperianBankCache.cs" />
+    <Compile Include="Model\Currency\Currency.cs" />
+    <Compile Include="Model\Currency\CurrencyRateHistory.cs" />
+    <Compile Include="Model\Database\ExposurePerMedalDataRowMap.cs" />
+    <Compile Include="Model\Database\ExposurePerUnderwriterDataRowMap.cs" />
+    <Compile Include="Model\Database\ExposureDataBaseRow.cs" />
+    <Compile Include="Model\Database\ExposurePerMedalDataRow.cs" />
+    <Compile Include="Model\Database\ExposurePerUnderwriterDataRow.cs" />
+    <Compile Include="Model\Marketplaces\MP_Alert.cs" />
+    <Compile Include="Model\Marketplaces\MP_ServiceLog.cs" />
+    <Compile Include="Model\Database\Askville.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Database\Director.cs" />
+    <Compile Include="Model\Loans\Loan.cs" />
+    <Compile Include="Model\Loans\LoanScheduleItem.cs" />
+    <Compile Include="Model\Loans\LoanTransaction.cs" />
+    <Compile Include="Model\Loans\PaypointTransaction.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2Map.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2Payment.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem2PaymentMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransaction.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransactionMap.cs" />
+    <Compile Include="Model\Loans\PacnetTransaction.cs" />
+    <Compile Include="Model\Marketplaces\MP_ExperianDataCache.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedback.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItem.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrder.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalyisisFunction.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionValue.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalyisisFunctionValueMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalysisFunctionTimePeriod.cs" />
+    <Compile Include="Model\Marketplaces\MP_AnalysisFunctionTimePeriodMap.cs" />
+    <Compile Include="Model\Database\Customer.cs" />
+    <Compile Include="Model\Database\CustomerMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketPlace.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketPlaceMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingHistory.cs" />
+    <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingHistoryMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayFeedback.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayFeedbackItem.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayFeedbackItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayFeedbackMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayRaitingItem.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayRaitingItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAccountData.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAccountDataMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAdditionalAccountData.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAdditionalAccountDataMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAddressData.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserAddressDataMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserData.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayUserDataMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventory.cs" />
+    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryItem.cs" />
+    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryItemMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryMap.cs" />
+    <Compile Include="Model\Marketplaces\MP_MarketplaceType.cs" />
+    <Compile Include="Model\Marketplaces\MP_MarketplaceTypeMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrder.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalPersonalInfo.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalPersonalInfoMap.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrder.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransaction.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItemMap.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionMap.cs" />
+    <Compile Include="Model\Database\PerformencePerMedalDataRow.cs" />
+    <Compile Include="Model\Database\PerformencePerMedalDataRowMap.cs" />
+    <Compile Include="Model\Database\PerformencePerUnderwriterDataRow.cs" />
+    <Compile Include="Model\Database\PerformencePerUnderwriterDataRowMap.cs" />
+    <Compile Include="Model\Database\PersonalInfoHistory.cs" />
+    <Compile Include="Model\Database\PersonalInfoHistoryMap.cs" />
+    <Compile Include="Repository\AnalyisisFunctionRepository.cs" />
+    <Compile Include="Repository\AnalyisisFunctionValueRepository.cs" />
+    <Compile Include="Repository\AnalysisFunctionTimePeriodRepository.cs" />
+    <Compile Include="Repository\ExperianBankCacheRepository.cs" />
+    <Compile Include="Repository\ExposurePerUnderwriterReportRepository.cs" />
+    <Compile Include="Repository\CurrencyRateRepository.cs" />
+    <Compile Include="Repository\AlertRepository.cs" />
+    <Compile Include="Repository\CustomerMarketPlaceRepository.cs" />
+    <Compile Include="Repository\CustomerMarketPlaceUpdatingHistoryRepository.cs" />
+    <Compile Include="Repository\CustomerRepository.cs" />
+    <Compile Include="Repository\EbayUserAddressDataRepository.cs" />
+    <Compile Include="Repository\CashRequestsRepository.cs" />
+    <Compile Include="Repository\ExposurePerMedalReportRepository.cs" />
+    <Compile Include="Repository\MarketPlaceRepository.cs" />
+    <Compile Include="Repository\MedalStatisticReportRepository.cs" />
+    <Compile Include="Repository\PacnetTransactiontRepository.cs" />
+    <Compile Include="Repository\PerformencePerMedalReportRepository.cs" />
+    <Compile Include="Repository\PerformencePerUnderwriterReportRepository.cs" />
+    <Compile Include="Repository\PersonalInfoHistoryRepository.cs" />
+    <Compile Include="Model\Database\ScoringResultMap.cs" />
+    <Compile Include="Repository\ValueTypeRepository.cs" />
+    <Compile Include="Model\Marketplaces\MP_ValueType.cs" />
+    <Compile Include="Model\Marketplaces\MP_ValueTypeMap.cs" />
+    <Compile Include="Exceptions\NoMarketPlaceForCustomerException.cs" />
+    <Compile Include="Model\Database\PerformenceDataBaseRow.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PerformencePerUnderwriterReportExecute.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PerformencePerMedalReportExecute.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\ExposurePerMedalReportExecute.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\ExposurePerUnderwriterReportExecute.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\MedalStatisticReportExecute.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\DailyReportExecute.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PayPalIncomeDetails.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PayPalExpensesDetails.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PayPalTotalExpenses.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PayPalTotalIncome.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model\Database\PayPalTotalTransactions.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

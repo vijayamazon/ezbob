@@ -1,0 +1,54 @@
+﻿.captcha-head {
+    color: #585858;
+    font-size: 14px;
+    margin-left: -34px;
+}
+
+.captcha 
+{
+    width: 328px;
+    margin-left: -58px;
+   /* border: 1px solid #EEEEEE;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;*/
+}
+.simpleCaptcha {
+    padding: 0 54px 15px;
+}
+
+.simpleCaptcha img {
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    width: 212px;
+}
+
+#recaptcha_area {
+    margin: 5px;
+    margin-left: -40px;
+}
+
+.captcha legend, #questionArea legend {
+    margin-bottom: 0;
+    border: none;
+    width: auto;
+    padding: 0 10px;
+}
+
+.restorePasswordArea .captcha-head {
+    margin-left: 5px;
+}
+
+.restorePasswordArea .captcha {
+    margin-left: -5px;
+}
+
+.restorePasswordArea #recaptcha_area{
+    margin: 5px;
+}
+
+.restorePasswordArea .simpleCaptcha {
+    margin-left: -47px;
+}

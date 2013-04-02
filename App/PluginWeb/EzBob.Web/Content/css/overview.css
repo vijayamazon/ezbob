@@ -1,0 +1,92 @@
+.osContent .tabsCosts  .nav-pills .active > a, .nav-pills .active > a:hover {
+    text-decoration: none;
+     background-color: transparent;  
+}
+
+.osContent .tabsCosts li a{background-color: transparent;}
+
+.label { background-color: transparent;}
+
+.osContent .tabsCosts li.silverTab.active a {background-position:0 -45px;}
+.osContent .tabsCosts li.goldTab.active a {background-position:-136px -45px;}
+.osContent .tabsCosts li.platinumTab.active a {background-position:-272px -45px;}
+
+.placeholderContent h1 {margin-bottom: 15px;}
+
+.osContent .signupReq .gray {
+    color: #67666b;
+}
+
+.faq-pages h1, .termsAndConditions h1, .responsible-landing h1, .private-policy h1 {
+    color: #0B73B4;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-style: italic;
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 1.2;
+}
+
+.osContent .repaymentType .sellson {width:165px;  font-size:11px;}
+.osContent .repaymentType .sellson strong{ font-size: 11px;}
+
+ .terms{margin-bottom: 25px;}
+
+ ul.responsible-landing-list {
+    list-style-type: disc;
+    list-style-image: url(../img/responsible-points.png);
+    list-style-position: inside;
+}
+
+.termsAndConditions h2 {text-decoration: underline;}
+
+.termsAndConditions, .termsAndConditions p,  .termsAndConditions h2 {
+    font-size: 12pt;
+    font-family: 'Times New Roman';
+    font-style: normal;
+    color: black;
+}
+
+.osContent .boxPie li {
+    margin-bottom: 8px;
+    line-height: 24px;
+}
+
+.osContent .repaymentType#silver, .osContent .repaymentType#gold, .osContent .repaymentType#platinum  {
+    margin-top: 10px;
+}
+
+.osContent h1.big {
+    margin-top:15px;
+}
+
+.text-obligation {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 14px;
+color: #383536;
+line-height: 18px;
+}
+
+
+.ui-tabs .tabsCosts.ui-tabs-nav li.ui-tabs-selected a,
+.ui-tabs .tabsCosts.ui-tabs-nav li.ui-state-disabled a,
+.ui-tabs .tabsCosts.ui-tabs-nav li.ui-state-processing a,
+.ui-tabs .tabsCosts.ui-tabs-nav li.ui-tabs-active a {
+
+  background-color: transparent;
+  border: 0px none;
+  border-bottom-color: transparent;
+  cursor: default;
+  color:gray;
+  outline:none;
+}
+
+.ui-tabs .tabsCosts.ui-tabs-nav li:hover, .ui-tabs .tabsCosts.ui-tabs-nav li a:hover{
+  background: transparent;
+  border-bottom:0px none;
+  padding-bottom:0px;
+   color:#00438A;
+}
+
+.key-terms {
+    font-size: 15px;
+}

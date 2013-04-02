@@ -1,0 +1,21 @@
+﻿@{ Layout = "~/Areas/Underwriter/Views/Reports/_LayoutAmountCountReport.cshtml"; }
+
+@using EzBob.Web.Areas.Underwriter.Controllers.Reports
+@model EzBob.Web.Areas.Underwriter.Models.Reports.ReportCountAmountModel<EzBob.Web.Areas.Underwriter.Models.Reports.PerformencePerMedalData>
+           
+@section AmountReport
+{
+    @ReportTableCreator.CreateTable(Model.AmountModel)    
+}
+@section CountReport
+{
+    @ReportTableCreator.CreateTable(Model.CountModel)
+}
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#liPerformenceReportPerMedal").addClass("active");
+        });
+    </script>
+}

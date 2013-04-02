@@ -1,0 +1,726 @@
+﻿<?xml version="1.0"?>
+<environment id="${environmentId}">
+    <property name="DBPasswordKey" value="D9C52449F5AA345610C4BEC59EDE3C6CD42DEAE81BA9A50D0CF21ECB0AE5512AC9231FC2709FA14D2C7D04196D5CD3275075E6AD6A5769C33EAB59BDE6273C94" />
+    <property name="AppCulture" value="${culture}" />
+    <property name="NHProfEnabled" value="False" />
+    <property name="DbLib" value="MainConnection" />
+    <property name="SecurityPolicy" value="SecurityPolicyConfig" />
+    <property name="Log4Net" value="scortoSrvLog" />
+    <property name="LogFile" value="log.log" />
+    <property name="NHibernateConfig" value="${HibernateId}" />
+    <property name="HostUserId" value="1" />
+    <property name="EnableDatabaseLog" value="false" />
+    <property name="SessionConnection" value="${sessionConnectionString}" />
+    <property name="Player" value="PlayerConfiguration" />
+    <property name="AssembliesCachePath" value="${tempDBPath}\Assemblies" />
+    <property name="WorkflowCacheParameters" value="WorkflowCacheParameters" />
+    <property name="ApplicationService" value="scortoSrv" />
+    <!--property name="PayPalConfig" value="PayPalDevSandbox"/-->
+    <property name="PayPalConfig" value="PayPalDevProduction" />
+    <property name="AmazonConfig" value="AmazonDev" />
+    <property name="EbayConfig" value="EbayTrunkServer" />
+    <property name="PacNet" value="PacNet" />
+    <property name="PayPoint" value="PayPoint" />
+    <property name="Experian" value="Experian" />
+    <property name="TeraPeakConfig" value="TeraPeak" />
+    <property name="EbaySettings" value ="EbaySettingsData"/>
+    <property name="PayPalSettings" value ="PayPalSettingsData"/>
+    <property name="AmazonSetings" value ="AmazonSetingsData"/>
+    <property name="ZohoCRM" value="ZohoCRM"/>
+    <module id="ZohoCRM">
+      <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
+      <property name="Enabled" value="True"/>
+    </module>
+
+    <module id="EbaySettingsData">
+	<property name="DownloadCategories" value="False"/>
+        <property name="ErrorRetryingInfo" value ="eBayRetryingInfo"/>
+        <property name="OrdersFromTeraPeakOnly" value="True"/>
+        <property name="DisableUpdate" value="false"/>
+    </module>
+
+    <module id="PayPalSettingsData">
+	  <property name="ErrorRetryingInfo" value ="PayPalRetryingInfo"/>
+          <property name="TransactionSerchMonthsBack" value="12"/>
+          <property name="MaxMonthsPerRequest" value="12"/>
+          <property name="OpenTimeOutInMinutes" value="2"/>
+          <property name="SendTimeoutInMinutes" value="2"/> 
+    </module>
+
+    <module id="AmazonSetingsData">
+	  <property name="ErrorRetryingInfo" value ="AmazonRetryingInfo"/>
+    </module>
+
+
+  <configuration id = "eBayRetryingInfo">
+	<ErrorRetryingInfo UseLastTimeOut="false" MinorTimeoutInSeconds="60" EnableRetrying="true">
+		<IterationSettings Index = "1" CountRequestsExpectError="5" TimeOutAfterRetryingExpiredInMinutes="0" />
+	</ErrorRetryingInfo>
+  </configuration>
+
+
+  <configuration id = "PayPalRetryingInfo">
+	<ErrorRetryingInfo UseLastTimeOut="false" MinorTimeoutInSeconds="60" EnableRetrying="true">
+		<IterationSettings Index = "1" CountRequestsExpectError="2" TimeOutAfterRetryingExpiredInMinutes="720" />
+		<IterationSettings Index = "2" CountRequestsExpectError="2" TimeOutAfterRetryingExpiredInMinutes="1080" />
+		<IterationSettings Index = "3" CountRequestsExpectError="2" TimeOutAfterRetryingExpiredInMinutes="0" />
+	</ErrorRetryingInfo>
+  </configuration>
+
+  <configuration id = "AmazonRetryingInfo">
+	<ErrorRetryingInfo UseLastTimeOut="false" MinorTimeoutInSeconds="60" EnableRetrying="true">
+		<IterationSettings Index = "1" CountRequestsExpectError="10" TimeOutAfterRetryingExpiredInMinutes="30" />
+		<IterationSettings Index = "2" CountRequestsExpectError="5" TimeOutAfterRetryingExpiredInMinutes="0" />
+	</ErrorRetryingInfo>
+  </configuration>
+
+
+    <module id="TeraPeakSandbox">
+        <property name="Token" value="bc00857c449858c17e83f6c1cf7659" />
+        <property name="UserToken" value="369d4fa5b86b4a32ca86374b44e564" />
+        <property name="DeveloperName" value="user_testebay_testebay" />
+    </module>
+    <module id="TeraPeakProduction">
+        <property name="Token" value="bf69db0c2ad55c207ec9c01f793cf0" />
+        <property name="UserToken" value="5d4f3089986df6cced1e367dda87ee" />
+        <property name="DeveloperName" value="alex_syrotyuk_alex_syrotyuk" />
+    </module>
+    <module id="TeraPeak">
+        <property name="Url" value="http://api.terapeak.com/v1/research/xml/restricted" />
+        <property name="ApiKey" value="xdz8d8hw4cp5x9napc4s7tpq" />
+    </module>
+	<!-- Production account, used in service server, DON'T USE it IN TEST -->
+	<module id="EbayProduction">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="e5f86656-1547-4745-abc4-09846cb813f2" />
+        <property name="AppId" value="test8c677-69fb-4ff4-a22f-06d1b0e001e" />
+        <property name="CertId" value="7c840fe4-9beb-4d98-b36e-677e8b5aa1fd" />
+        <property name="RuName" value="test-test8c677-69fb--hdwtiapem" />
+    </module>
+	<!-- Production accounts, can use in web or service servers -->
+	<module id="EbayProduction2">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="aeeefa7b-caa8-4880-b687-743af3c99d59" />
+        <property name="AppId" value="Ezbobca10-62e9-419b-bf05-700f73908b8" />
+        <property name="CertId" value="7290cc7b-d326-4cd5-b27a-c34b53cb5574" />
+        <property name="RuName" value="Ezbob-Ezbobca10-62e9--zkcmnnzot" />
+    </module>	
+	<module id="EbayProduction3">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="53a76996-c281-48ca-b872-c7b0a651873a" />
+        <property name="AppId" value="Ezbob7cb5-d5ce-4eb5-88b0-51c96d33acd" />
+        <property name="CertId" value="040a25b2-1e4b-4cd1-b347-c1bf3b76b1d0" />
+        <property name="RuName" value="Ezbob-Ezbob7cb5-d5ce--xlzqh" />
+    </module>
+	<module id="EbayProduction4">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="df438ac6-ee81-4214-aa7c-edced11e10e9" />
+        <property name="AppId" value="Ezbob24cf-5ff5-47f7-b9c2-95381bc558f" />
+        <property name="CertId" value="2499ca11-c630-4640-8fa5-2fa2b67457b8" />
+        <property name="RuName" value="Ezbob-Ezbob24cf-5ff5--musrpxyix" />
+    </module>	
+    <module id="EbayTestKot">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="87cffac6-4c2c-4352-bc88-7cdba02b8085" />
+        <property name="AppId" value="test8f473-e17f-4c46-8ee7-22418d11dd2" />
+        <property name="CertId" value="aea6ac5f-7a80-48ff-820d-355f1979a6e5" />
+        <property name="RuName" value="test-test8f473-e17f--xjwup" />
+    </module>
+    <module id="EbayTrunkServer">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="86135fbd-a367-4f81-ba05-d6f52a80c2dd" />
+        <property name="AppId" value="purposed8-055a-4c39-b776-07367eef3c7" />
+        <property name="CertId" value="381f4b0b-5794-4d80-a5e2-6b6a08beffe8" />
+        <property name="RuName" value="purpose-purposed8-055a--wtsog" />
+    </module>
+    <module id="EbayReleaseServer">
+        <property name="ServiceType" value="Production" />
+        <property name="DevId" value="b322e279-e402-4435-9f8e-dc3e602a1b72" />
+        <property name="AppId" value="Scortoe95-67d5-4848-afe4-99ae20ec497" />
+        <property name="CertId" value="90286b4e-1af1-4844-80f1-a97891583bd8" />
+        <property name="RuName" value="Scorto-Scortoe95-67d5--lffmtxnt" />
+    </module>
+	<module id="EbayStageServer">
+		<property name="ServiceType" value="Production" />
+		<property name="DevId" value="5708fed8-dc37-41c2-9891-35e19ea1a3f7" />
+		<property name="AppId" value="Ezbob342e-6544-4f5f-872b-81572859bff" />
+		<property name="CertId" value="37ba3c68-c0ce-4d51-83c0-e0c754999654" />
+		<property name="RuName" value="Ezbob-Ezbob342e-6544--arxujwkun" />
+	</module>
+    <module id="AmazonDev">
+        <property name="KeyId" value="AKIAJXUDX6A3XIMZLWFA" />
+        <property name="SecretKeyId" value="4yQzxltFZjlytmkKmlHhkAAcZTTZUbHpJekTOFj2" />
+        <property name="ServiceType" value="Live" />
+        <property name="MarketCountry" value="UK" />
+        <property name="AskvilleAmazonLogin" value="nimrodk@ezbob.com" />
+        <property name="AskvilleAmazonPass" value="1qazxsw2" />
+    </module>
+    <module id="PayPalDevSandbox">
+        <property name="ApiAuthenticationMode" value="ThreeToken" />
+        <property name="PPApplicationId" value="APP-80W284485P519543T" />
+        <property name="ApiUsername" value="test_1330798552_biz_api1.gmail.com" />
+        <property name="ApiPassword" value="1330798576" />
+        <property name="ApiSignature" value="AE7EXJWc1StWpskzGiv6CfiP5WFtAti3ySlXlN3pGbkuMxoqTVXpOIoP" />
+        <property name="ApiRequestformat" value="SOAP11" />
+        <property name="ApiResponseformat" value="SOAP11" />
+        <property name="TrustAll" value="True" />
+        <property name="ServiceType" value="Sandbox" />
+    </module>
+    <module id="PayPalDevProduction">
+        <property name="ApiAuthenticationMode" value="ThreeToken" />
+        <property name="PPApplicationId" value="APP-3UB991847T1143334" />
+        <property name="ApiUsername" value="caroles_api1.ezbob.com" />
+        <property name="ApiPassword" value="8RYKUCVNC5PXWLPD" />
+        <property name="ApiSignature" value="AFcWxV21C7fd0v3bYYYRCpSSRl31Aoui-O9-IwfGEuUAgSnmws-LttVZ" />
+        <property name="ApiRequestformat" value="SOAP11" />
+        <property name="ApiResponseformat" value="SOAP11" />
+        <property name="TrustAll" value="True" />
+        <property name="ServiceType" value="Production" />
+
+    </module>
+    <module id="PacNet">
+        <property name="SERVICE_TYPE" value="Testing" />
+        <!-- Production , Testing-->
+        <property name="RAVEN_USERNAME" value="orangemoney.wf" />
+        <property name="RAVEN_SECRET" value="oranges are a good source of vitamin c" />
+        <property name="RAVEN_GATEWAY" value="https://raven.pacnetservices.com/realtime" />
+        <property name="RAVEN_DEBUG_OUTPUT" value="off" />
+        <property name="RAVEN_PREFIX" value="EzBob" />
+    </module>
+    <module id="PayPoint">
+        <property name="ServiceUrl" value="https://www.secpay.com/java-bin/services/SECCardService" />
+        <property name="Mid" value="secpay" />
+        <property name="VpnPassword" value="secpay" />
+        <property name="RemotePassword" value="secpay" />
+        <property name="TemplateUrl" value="https://www.secpay.com/users/orange06/ezbob-template-test.html" />
+        <property name="Options" value="test_status=true" />
+        <property name="ValidateName" value="True" />
+		<!-- debug -->
+		<property name="DebugMode" value="False" />
+		<property name="IsValidCard" value="True" />
+		<property name="EnableCardLimit" value="False" />
+		<property name="CardLimitAmount" value="False" />
+    </module>
+    <module id="Experian">
+        <!--consumer-->
+        <property name="CertificateThumb" value="9F63413AE1EE1756270B4D4FEE276249ADB8BB83" />
+        <property name="InteractiveService" value="https://scems.uat.uk.experian.com/experian/wbsv/v100/interactive.asmx" />
+        <property name="AuthTokenService" value="https://secure.wasp.uat.uk.experian.com/WASPAuthenticator/tokenService.asmx" />
+        <property name="UpdateConsumerDataPeriodDays" value="90" />
+		<!-- by default: INTERACTIVE -->
+		<property name="InteractiveMode" value="Oneshot" />
+        <!-- IDhub -->
+        <property name="AuthTokenServiceIdHub" value="https://secure.wasp.uat.uk.experian.com/WASPAuthenticator/tokenService.asmx" />
+        <property name="IdHubService" value="https://ukid.uat.uk.experian.com/EIHEndpoint" />
+        <property name="UIdCertificateThumb" value="F6D0B8CBB6F77B390C368B7B481352FBFAC31D34" />
+		<!-- IDhub PRODUCTION-->
+        <!-- <property name="AuthTokenServiceIdHub" value="https://secure.authenticator.uk.experian.com/WASPAuthenticator/TokenService.asmx" />
+        <property name="IdHubService" value="https://ukid.uk.experian.com/EIHEndpoint" />
+        <property name="UIdCertificateThumb" value="e9634d253c482d58d1a59318a4df8cf66c1a79bc" /> -->
+        <!-- Testing -->
+        <property name="ESeriesUrl" value="http://vm-demo1:8080/e-series/Controller" />
+        <!-- Production -->
+        <!-- <property name="ESeriesUrl" value="http://31.24.36.26:8888/e-series/Controller"/> -->
+        <property name="UpdateBusinessDataPeriodDays" value="365" />
+		<property name="SecureFtpHostName" value="https://secureftp.experian.co.uk/Upload"/>
+		<property name="SecureFtpUserName" value="PIF1160_AyCpjxzt25"/>
+		<property name="SecureFtpUserPassword" value="dWiPyfo5>V"/>
+    </module>
+    <module id="WorkflowCacheParameters">
+        <property name="CachePath" value="${tempDBPath}\Workflows" />
+        <property name="CacheSize" value="4" />
+        <property name="CacheExpirationTimeout" value="20" />
+    </module>
+    <!-- for using log4net in Unit test -->
+    <application id="units" path="test">
+        <property name="ApplicationId" value="1" />
+        <property name="LogFile" value="units.log" />
+    </application>
+    <application id="formsdesigner" path="${clientDeployFolder}formsdesigner\formsdesigner.exe">
+        <property name="FormsDesignerServer" value="formsdesigner-server" />
+    </application>
+    <application id="formsdesigner-server" path="${webDeployFolder}formsdesignerserver\">
+        <property name="LogFile" value="FormsDesigner_Log.log" />
+        <property name="ApplicationId" value="12" />
+        <property name="Url" value="${url}/FormsDesignerServer/Service.asmx" />
+    </application>
+    <application id="maven" path="${clientDeployFolder}maven\maven.exe">
+        <property name="MavenServer" value="maven-server" />
+    </application>
+    <application id="maven-server" path="${webDeployFolder}mavenserver\">
+        <property name="LogFile" value="Maven_Log.log" />
+        <property name="AppJournal" value="MavenServer" />
+        <property name="ApplicationId" value="2" />
+        <property name="Url" value="${url}/MavenServer/Service.asmx" />
+    </application>
+    <application id="admin" path="${clientDeployFolder}admin\admin.exe">
+        <property name="AdminServer" value="admin-server" />
+    </application>
+    <application id="admin-server" path="${webDeployFolder}adminserver\">
+        <property name="AppJournal" value="AdminServer" />
+        <property name="LogFile" value="Admin_Log.log" />
+        <property name="ApplicationId" value="3" />
+        <property name="Url" value="${url}/AdminServer/Service.asmx" />
+    </application>
+    <application id="master" path="${clientDeployFolder}master\master.exe">
+        <property name="PatronServer" value="master-server" />
+    </application>
+    <application id="master-server" path="${webDeployFolder}masterserver\">
+        <property name="LogFile" value="Master_Log.log" />
+        <property name="AppJournal" value="MasterServer" />
+        <property name="ApplicationId" value="4" />
+        <property name="Url" value="${url}/MasterServer/Service.asmx" />
+    </application>
+    <application id="auditor" path="${clientDeployFolder}auditor\auditor.exe">
+        <property name="AuditorServer" value="auditor-server" />
+    </application>
+    <application id="auditor-server" path="${webDeployFolder}auditorserver\">
+        <property name="LogFile" value="Auditor_Log.log" />
+        <property name="AppJournal" value="AuditorServer" />
+        <property name="ApplicationId" value="7" />
+        <property name="Url" value="${url}/AuditorServer/Service.asmx" />
+        <property name="Plugins" value="auditor-server-plugins" />
+    </application>
+    <module id="auditor-server-plugins">
+        <item name="ApplicationsOperationJournal" value="applications-operation-journal" />
+    </module>
+    <module id="applications-operation-journal">
+        <!--property name="GridDataRequestMode" value="WebService"/-->
+        <property name="GridDataRequestMode" value="Direct" />
+    </module>
+    <application id="EzBob.Web" path="${webDeployFolder}EzBob.Web\">
+        <path value="${webDeployFolder}EzBob.Web2\" />
+        <property name="ApplicationId" value="1" />
+        <property name="LogFile" value="EzBob.Web.log" />
+        <property name="GreetingStrategyName" value="Greeting" />
+        <property name="CashTransferedStrategyName" value="Cash_Transfered" />
+        <!-- <property name="GetCashFailedStrategyName" value="Get_Cash_Failed" /> -->
+        <property name="GetCashFailed4TimesStrategyName" value="Get_Cash_Failed" />
+        <property name="PayEarlyStrategyName" value="PayEarly" />
+        <property name="PayPointNameValidationFailedStrategyName" value="PayPointNameValidationFailed" />
+        <property name="RestoretrategyName" value="RestorePassword" />
+        <property name="ApprovedUserStrategyName" value="Approved_User" />
+        <property name="RejectUserStrategyName" value="Rejected_User" />
+        <property name="MoreAMLInformationStrategyName" value="More_AML_Information" />
+        <property name="MoreAMLandBWAStrategyName" value="More_AML_and_BWA_Information" />
+        <property name="MoreBWAInformationStrategyName" value="More_BWA_Information" />
+        <property name="ChangePasswordStrategyName" value="Change_Password" />
+        <property name="ThreeInvalidAttemptsStrategyName" value="Three_Invalid_Attempts_Password" />
+        <property name="ScoringResultStrategyName" value="Main_Strategy" />
+        <property name="PayPalStrategyName" value="Update Customer Market Place Data" />
+        <property name="EbayStrategyName" value="Update Customer Market Place Data" />
+        <property name="AmazonStrategyName" value="Update Customer Market Place Data" />
+		<property name="UpdateCustomerMarketplacesName" value="Update Customer Data" />
+        <property name="ConfirmationEmailStrategyName" value="ConfirmationEmailStrategy" />
+		<property name="EmailRolloverAddedStrategyName" value="Email Rollover Added" />
+		<property name="RecheckEbayTokenStrategyName" value="ReneweBayToken" />
+        <property name="FeeAddedStrategyName" value="FeeAdded" />
+        <property name="CustomerEscalatedStrategyName" value="CustomerEscalated" />
+        <property name="ReneweBayTokenStrategyName" value="ReneweBayToken" />
+		<property name="CAISNoUploadStrategyName" value="CAIS_NO_Upload" />
+        <property name="CheckStoreUniqueness" value="False" />
+        <property name="WizardTopNaviagtionEnabled" value="False" />
+        <property name="LandingPageEnabled" value="False" />
+        <property name="ManagementPartEnabled" value="True" />
+        <property name="GetCashSliderStep" value="100" />
+        <property name="MaxLoan" value="20000" />
+        <property name="ManagerMaxLoan" value="40000" />
+        <property name="MinLoan" value="1000" />
+        <property name="XMinLoan" value="100" />
+        <property name="PayPalEnabled" value="True" />
+		<!-- Days from last marketplace update end date (days) -->
+		<property name="UpdateOnReapplyLastDays" value="14" />
+        <!-- Test -->
+        <!--<property name="PostcodeConnectionKey" value="W_2E72AD4F2C3749DA87C709B5F64491" />-->
+        <!-- production -->
+		<property name="PostcodeConnectionKey" value="W_AD4D9278AEF24B4FA8E581A493A2C1" /> 
+        <!-- Captcha: off, simple, reCaptcha -->
+        <property name="CaptchaMode" value="off" />
+        <property name="AskvilleEnabled" value="False" />
+        <property name="TargetsEnabled" value="False" />
+        <property name="PostcodeAnywhereConfig" value="PostcodeAnywhereConfigEzBob"/>
+        <property name="HideAlertsTab" value="True" />
+        <property name="HidePassedAlertsTab" value="True" />
+		<property name="GetSatisfactionEnabled" value="True" />	
+		<!-- simple, hard -->
+		<property name="PasswordPolicyType" value="simple" />	
+		<property name="CAISDisplayedPath" value="\\\\192.168.1.200\\c:\\1.txt" />	
+    </application>
+
+    <module id="PostcodeAnywhereConfigEzBob">
+      <property name="Key" value="UW24-ZZ45-DF74-XP85"/>
+      <property name="Enabled" value="True"/>
+      <property name="MaxBankAccountValidationAttempts" value="1"/>
+    </module>
+
+
+    <application id="authentication-server" path="${webDeployFolder}authenticationserver\">
+        <property name="LogFile" value="Authentication_Srv.log" />
+        <property name="ApplicationId" value="10" />
+        <property name="Url" value="${url}/AuthenticationServer/" />
+    </application>
+    <application id="upgradetool" path="${ToolsFolder}\IncrementalUpdate\UpgradeDatabase.exe">
+        <property name="OutputDir" value="${DatabaseDir}" />
+    </application>
+    <application id="scortoSrv" path="${serviceDeployFolder}scortosrv.exe">
+        <path value="${serviceDeployFolder}agentwindowsapp.exe" />
+        <property name="LogFile" value="Service.log" />
+        <property name="AppJournal" value="SE" />
+        <property name="ServiceName" value="${serviceName}" />
+        <property name="ApplicationId" value="-1" />
+        <property name="NewSignalsCheckingPeriod" value="1000" />
+        <property name="StoreResultValue" value="false" />
+        <property name="MessagesCountLowBound" value="-1" />
+        <property name="ExternalModules" value="scortoSrv_ExternalModules" />
+        <property name="SignalHandlers" value="scortoSrv_SignalHandlers" />
+        <property name="ThreadCount" value="4" />
+        <property name="Schedulers" value="scortoSrv_Schedulers" />
+        <property name="NodesModules" value="scortoSrv_NodesModules" />
+        <property name="RunHandlers" value="scortoSrv_RunHandlers" />
+        <property name="LogWebDataSources" value="true" />
+        <property name="AlwaysCreateInformationVariables" value="false" />
+        <property name="NonpagedSystemMemoryLimit" value="500" />
+        <property name="PagedMemorySizeLimit" value="1500" />
+        <property name="CommandProcessorAddress" value="net.tcp://localhost:1212/wcf" />
+        <property name="MemoryLimit" value="943718400" />
+        <property name="SynchronousDatasourcesExecution" value="true" />
+    </application>
+    <!-- NunitTest Application -->
+    <application id="units" path="test">
+        <property name="ApplicationId" value="1" />
+        <!-- это Security App Id под которым будут наши юнит тесты, можно под любым, т.к. это не играет роли -->
+        <property name="LogFile" value="units.log" />
+        <!-- это имя лог файла, если логи пишутся в файл log4netом -->
+    </application>
+    <module id="scortoSrv_RunHandlers">
+        <item name="ScheduledRunHandlers" value="ScheduledRunHandlers" />
+    </module>
+    <module id="scortoSrv_NodesModules">
+        <item name="NodesCustomLibrary" value="NodesCustomLibrary.dll" />
+        <item name="NodesCustomLibraryBehavioral" value="Scorto.Agents.NodesCustomLibraryBehavioral.dll" />
+        <item name="Autofill" value="Scorto.Autofill.Runtime.dll" />
+        <item name="StatusNode" value="Scorto.StatusNode.Runtime.dll" />
+        <item name="DumpNode" value="Scorto.DumpNode.Runtime.dll" />
+        <item name="MailNode" value="Scorto.MailNode.Runtime.dll" />
+        <item name="PrintNode" value="Scorto.PrintNode.Runtime.dll" />
+        <item name="NodeEzBobLib" value="NodeEzBobLib.dll" />
+    </module>
+    <module id="scortoSrv_ExternalModules">
+        <item name="SE" value="Engine" />
+        <item name="WaitingNode" value="WaitingNode" />
+        <item name="RandomNode" value="TestNodes" />
+        <item name="ExceptionNode" value="TestNodes" />
+        <item name="CopyAppVarsNode" value="TestNodes" />
+        <item name="RndGeneratorNode" value="TestNodes" />
+        <item name="SuspendNodeTest" value="TestNodes" />
+        <item name="RefreshStatusNode" value="TestNodes" />
+    </module>
+    <module id="scortoSrv_SignalHandlers">
+        <item name="ScortoFlowSignalFinishStrategy" value="ScortoFlowSignalFinishStrategy" />
+        <item name="ScortoFlowSignalCreateOlapCube" value="ScortoFlowSignalCreateOlapCube" />
+        <item name="ExternalNodeExecutionResetSignalHandler" value="ExternalNodeExecutionResetSignalHandler" />
+        <item name="RenderAgreementsHandler" value="RenderAgreementsHandler" />
+		<item name="ZohoHandler" value="ZohoHandler" />
+    </module>
+	
+	<module id="ZohoHandler" path="EzBob.Signals.dll" />
+	
+    <module id="RenderAgreementsHandler" path="EzBob.Signals.dll">
+      <property name="PdfLoanAgreement" value="${tempDBPath}\pdf1" />
+      <property name="PdfLoanAgreement2" value="${tempDBPath}\pdf2" />
+	  <property name="PdfConsentAgreement" value="${tempDBPath}\consent01" />
+      <property name="PdfConsentAgreement2" value="${tempDBPath}\consent02" />
+    </module>    
+	
+    <module id="ScheduledRunHandlers" path="${serviceDeployFolder}Scorto.ApplicationRunHandlers.dll" />
+    <module id="ScortoFlowSignalFinishStrategy" path="${serviceDeployFolder}Scorto.Flow.Signal.FinishStrategy.dll" />
+    <module id="ScortoFlowSignalCreateOlapCube" path="${serviceDeployFolder}Scorto.Flow.Signal.CreateOlapCube.dll" />
+    <module id="ExternalNodeExecutionResetSignalHandler" path="${serviceDeployFolder}Scorto.Flow.Signal.ExternalNodeExecutionReset.dll" />
+    <module id="scortoSrv_Schedulers">
+        <item name="ExternalNodeExecutionResetChecker" value="ExternalNodeExecutionResetChecker" />
+        <item name="CurrencyUpdater" value="CurrencyUpdater" />
+    </module>
+    <module id="ExternalNodeExecutionResetChecker" path="${serviceDeployFolder}Scorto.Flow.Signal.ExternalNodeExecutionReset.dll" />
+    <!-- Disables expired sessions. Period in ms. -->
+    <module id="SessionExpirationScheduler" path="SessionExpiration.dll">
+        <property name="Period" value="20000" />
+    </module>
+    <module id="CurrencyUpdater" path="CustomSchedulers.dll">
+        <property name="Period" value="43200000" />
+    </module>
+    <module id="Engine" path="${serviceDeployFolder}Engine.dll" />
+    <module id="TestNodes" path="${serviceDeployFolder}TestNodes.dll" />
+    <module id="WaitingNode" path="${serviceDeployFolder}Scorto.Autonodes.WaitingNode.dll" />
+    <property name="ApplicationStatesLocalStoragePath" value="${tempDBPath}\AppState" />
+    <module id="BehavioralStrategyExecuterSettings">
+        <property name="DatabaseFolder" value="${tempDBPath}" />
+        <property name="ReportFolder" value="${tempReportsPath}" />
+        <property name="PerformResultsComparison" value="true" />
+        <property name="ResultsEtalonFolder" value="C:\Tests" />
+    </module>
+    <property name="DataProviders" value="AllDataProviders" />
+    <module id="AllDataProviders">
+        <item name="Oracle" value="${oracleDBlibraryPath}" />
+        <item name="MsSql" value="${msSqlDBlibraryPath}" />
+        <item name="DB2" value="${db2DBlibraryPath}" />
+    </module>
+    <module id="MainConnection">
+        <property name="ConnectionString" value="${connectionString}" />
+        <property name="LibraryPath" value="${libraryPath}" />
+    </module>
+    <module id="PlayerConfiguration">
+        <property name="IsEnabled" value="false" />
+        <property name="ExternalModules" value="player_ExternalModules" />
+    </module>
+    <module id="player_ExternalModules">
+        <item name="SE" value="" />
+        <item name="WaitingNode" value="" />
+    </module>
+    <module id="SecurityPolicyConfig">
+        <property name="LoginValidationString" value="(^[.\-@_a-zA-Z0-9\\]{1,40}$)|(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)" />
+        <property name="LoginValidationStringForWeb" value="(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)" />
+        <property name="PasswordValidationString" value="(^.{6,}$)" />
+        <property name="MaxNotRepeatablePasswords" value="1" />
+        <property name="InvalidPasswordAttempts" value="3" />
+        <property name="InvalidPasswordAttemptsPeriodSeconds" value="30" />
+        <!-- resets InvalidPasswordAttempts -->
+        <property name="InvalidPasswordBlockSeconds" value="30" />
+        <!-- blocks user after InvalidPasswordAttempts -->
+        <property name="AuthServer" value="authentication-server" />
+        <property name="AuthType" value="Scorto" />
+        <!-- Scorto, Windows -->
+        <property name="DigitalSignatureRequired" value="false" />
+        <property name="VerifySignatureOnly" value="false" />
+        <property name="CurrentDigitalSignatureProviderName" value="Default" />
+        <property name="DigitalSignatureProviders" value="DigitalSignatureProviders" />
+        <property name="HostAddressCheck" value="false" />
+        <!-- Security Session timeout in minutes -->
+        <property name="SessionTimeout" value="6000" />
+        <!-- Promt user for pin -->
+        <property name="SilentMode" value="False" />
+        <property name="Debug" value="true" />
+    </module>
+    <module id="DigitalSignatureProviders">
+        <item name="Default" value="DefaultDigitalSignatureProvider" />
+    </module>
+    <module id="DefaultDigitalSignatureProvider" path="${securityDefaultLibPath}DefaultSigningProvider.dll" />
+    <configuration id="scortoSrvLog">
+        <log4net>
+            <appender name="Console" type="log4net.Appender.ColoredConsoleAppender">
+                <mapping>
+                    <level value="FATAL" />
+                    <foreColor value="Red, HighIntensity" />
+                </mapping>
+                <mapping>
+                    <level value="ERROR" />
+                    <foreColor value="Red" />
+                </mapping>
+                <mapping>
+                    <level value="WARN" />
+                    <foreColor value="Blue" />
+                </mapping>
+                <mapping>
+                    <level value="INFO" />
+                    <foreColor value="Yellow" />
+                </mapping>
+                <mapping>
+                    <level value="DEBUG" />
+                    <foreColor value="Green" />
+                </mapping>
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%5thread] [%5level] %property{appid} %logger - %message%newline" />
+                </layout>
+            </appender>
+            <appender name="RollingFile" type="log4net.Appender.RollingFileAppender">
+                <file value="${serverBaseFolder}\Logs" />
+                <encoding value="utf-8" />
+                <appendToFile value="true" />
+                <maximumFileSize value="10000KB" />
+                <maxSizeRollBackups value="20" />
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%thread] %5level appid = %5property{appid} UserId = %5property{UserId} %property{Controller}.%property{Action} (%file:%line) %logger %message%newline" />
+                </layout>
+            </appender>
+            <appender name="RollingFile2" type="log4net.Appender.RollingFileAppender">
+                <file value="${serverBaseFolder}\Logs\Marketplace.log" />
+                <encoding value="utf-8" />
+                <appendToFile value="true" />
+                <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+                <maximumFileSize value="1000KB" />
+                <maxSizeRollBackups value="20" />
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%thread] %5level appid = %5property{appid} SecAppId = %5property{SecAppId} UserId = %5property{UserId} %logger %message%newline" />
+                </layout>
+            </appender>
+            <appender name="Auditing" type="log4net.Appender.RollingFileAppender">
+                <filter type="log4net.Filter.LoggerMatchFilter">
+                    <LoggerToMatch value="Scorto.Security.UserManagement.Sessions.SessionManager" />
+                </filter>
+                <filter type="log4net.Filter.DenyAllFilter" />
+                <file value="${serverBaseFolder}\Logs\Auditing.log" />
+                <appendToFile value="true" />
+                <maximumFileSize value="10000KB" />
+                <maxSizeRollBackups value="20" />
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%5level] %property{IP} %property{UserId} %logger - %message%newline" />
+                </layout>
+            </appender>
+            <!-- EventLog Appender -->
+            <appender name="EventLogAppender" type="log4net.Appender.EventLogAppender">
+                <LogName value="Scorto" />
+                <ApplicationName value="Service" />
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%5level] %property{appid} %logger - %message%newline" />
+                </layout>
+                <filter type="log4net.Filter.LevelRangeFilter">
+                    <levelMin value="WARN" />
+                    <levelMax value="FATAL" />
+                </filter>
+            </appender>
+            <!-- ADO.NET Appender -->
+            <appender name="AdoNetAppender" type="Log4NetCustomAppenders.ScortoAdoNetAppender,Log4NetCustomAppenders">
+                <bufferSize value="10" />
+                <ReconnectOnError value="true" />
+                <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+                <connectionString value="" />
+                <commandText value="INSERT INTO Log4Net ([Date], [Thread], [AppID], [Level], [Logger], [Message], [Exception]) VALUES (@log_date, @thread, @appid, @log_level, @logger, @message, @exception)" />
+                <parameter>
+                    <parameterName value="@log_date" />
+                    <dbType value="DateTime" />
+                    <layout type="log4net.Layout.RawTimeStampLayout" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@thread" />
+                    <dbType value="String" />
+                    <size value="255" />
+                    <layout type="log4net.Layout.PatternLayout" value="%thread" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@appid" />
+                    <dbType value="String" />
+                    <size value="20" />
+                    <layout type="log4net.Layout.PatternLayout" value="%property{appid}" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@log_level" />
+                    <dbType value="String" />
+                    <size value="50" />
+                    <layout type="log4net.Layout.PatternLayout" value="%level" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@logger" />
+                    <dbType value="String" />
+                    <size value="255" />
+                    <layout type="log4net.Layout.PatternLayout" value="%logger" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@message" />
+                    <dbType value="String" />
+                    <size value="4000" />
+                    <layout type="log4net.Layout.PatternLayout" value="%message" />
+                </parameter>
+                <parameter>
+                    <parameterName value="@exception" />
+                    <dbType value="String" />
+                    <size value="2000" />
+                    <layout type="log4net.Layout.PatternLayout" value="%exception" />
+                </parameter>
+            </appender>
+			<!-- Askville mail appender -->
+            <appender name="MailAppenderWithSSLForAskville" type="Log4NetCustomAppenders.MailAppenderWithSSL,Log4NetCustomAppenders">
+                <to value="prodlogs@ezbob.com" />
+                <from value="ezbobdev@gmail.com" />
+                <subject value="${MailSubject}" />
+                <smtpHost value="smtp.gmail.com" />
+                <authentication value="Basic" />
+                <username value="ezbobdev@gmail.com" />
+                <password value="not1977NOT" />
+                <port value="587" />
+                <lossy value="false" />
+                <bufferSize value="1" />
+                <filter type="log4net.Filter.LevelRangeFilter">
+                    <levelMin value="ERROR" />
+                    <levelMax value="FATAL" />
+                </filter>
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%thread] %5level UserId = %5property{UserId} %property{Controller}.%property{Action} %logger %message%newline" />
+                </layout>
+            </appender>
+            <!-- Mail appender -->
+            <appender name="MailAppenderWithSSL" type="Log4NetCustomAppenders.MailAppenderWithSSL,Log4NetCustomAppenders">
+                <to value="rzakharov@scorto.com.ua,a.kaydash@scorto.com.ua,tisichenko@scorto.com.ua" />
+                <from value="ezbobdev@gmail.com" />
+                <subject value="${MailSubject}" />
+                <smtpHost value="smtp.gmail.com" />
+                <authentication value="Basic" />
+                <username value="ezbobdev@gmail.com" />
+                <password value="not1977NOT" />
+                <port value="587" />
+                <lossy value="false" />
+                <bufferSize value="50" />
+                <filter type="log4net.Filter.LevelRangeFilter">
+                    <levelMin value="ERROR" />
+                    <levelMax value="FATAL" />
+                </filter>
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%date [%thread] %5level UserId = %5property{UserId} %property{Controller}.%property{Action} %logger %message%newline" />
+                </layout>
+            </appender>
+            <!-- NunitTest Appender -->
+            <appender name="Console2" type="log4net.Appender.ConsoleAppender">
+                <layout type="log4net.Layout.PatternLayout">
+                    <conversionPattern value="%message%newline" />
+                </layout>
+            </appender>
+            <root>
+                <level value="DEBUG" />
+                <appender-ref ref="RollingFile" />
+                <!-- <appender-ref ref="EventLogAppender"/> -->
+                <!-- <appender-ref ref="AdoNetAppender"/> -->
+                <appender-ref ref="MailAppenderWithSSL" />
+                <!-- Add display log in the NunitTest window-->
+                <!-- <appender-ref ref="Console2"/> -->
+            </root>
+            <logger name="NHibernate">
+                <level value="WARN" />
+            </logger>
+            <logger name="NHibernate.SQL">
+                <level value="WARN" />
+            </logger>
+            <logger name="AbstractBatcher.SQL">
+                <level value="WARN" />
+            </logger>
+            <logger name="Scorto.Schedulers.SessionExpirationScheduler">
+                <level value="INFO" />
+            </logger>
+            <logger additivity="false" name="EzBob.CommonLib.WriteLoggerHelper">
+                <level value="DEBUG" />
+                <appender-ref ref="RollingFile2" />
+            </logger>
+            <logger additivity="false" name="Scorto.Security.UserManagement.Sessions.SessionManager">                
+                <appender-ref ref="Auditing" />
+                <appender-ref ref="AdoNetAppender" />
+            </logger>
+			<logger additivity="false" name="EzBob.AmazonServiceLib.ServiceCalls.AmazonServiceAskville">
+                <level value="ERROR" />
+                <appender-ref ref="MailAppenderWithSSLForAskville" />
+            </logger>
+        </log4net>
+    </configuration>
+    <!-- NHibernateConfig for MSSQL -->
+    <configuration id="NHibernateConfig_mssql">
+        <hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+            <session-factory>
+                <property name="cache.provider_class">NHibernate.Caches.SysCache2.SysCacheProvider, NHibernate.Caches.SysCache2</property>
+                <property name="cache.use_query_cache">true</property>
+                <property name="connection.provider">NHibernate.Connection.DriverConnectionProvider</property>
+                <property name="dialect">NHibernate.Dialect.MsSql2005Dialect</property>
+                <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
+                <property name="show_sql">false</property>
+                <property name="cache.use_second_level_cache">true</property>
+                <property name="adonet.batch_size">50</property>
+                <property name='prepare_sql'>true</property>
+            </session-factory>
+        </hibernate-configuration>
+    </configuration>
+</environment>

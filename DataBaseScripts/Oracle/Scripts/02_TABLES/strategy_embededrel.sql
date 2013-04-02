@@ -1,0 +1,6 @@
+-- Create table
+create table STRATEGY_EMBEDEDREL
+(
+  STRATEGYID    NUMBER,
+  EMBSTRATEGYID NUMBER
+);

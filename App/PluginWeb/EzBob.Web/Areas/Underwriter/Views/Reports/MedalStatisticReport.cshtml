@@ -1,0 +1,18 @@
+﻿@{ Layout = "~/Areas/Underwriter/Views/Reports/_LayoutStandartReport.cshtml"; }
+
+@using EzBob.Web.Areas.Underwriter.Controllers.Reports
+@model EzBob.Web.Areas.Underwriter.Models.Reports.ReportModel<EzBob.Web.Areas.Underwriter.Models.Reports.MedalStatisticData>
+           
+@section Report
+{
+    @ReportTableCreator.CreateTable(Model.Model)    
+}
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#liMedalStatisticReport").addClass("active");
+        });
+    </script>
+}
+

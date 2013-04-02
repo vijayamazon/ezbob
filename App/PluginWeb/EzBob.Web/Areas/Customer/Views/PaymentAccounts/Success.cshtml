@@ -1,0 +1,24 @@
+﻿@using Newtonsoft.Json
+@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>title</title>
+    </head>
+    <body>
+        <div>
+            <h2>success</h2>
+            If this windows is not automatically closed, close it.
+        </div>
+        <script type="text/javascript">
+            window.opener.PayPalAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+            self.close();
+        </script>
+    </body>
+</html>

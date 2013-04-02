@@ -1,0 +1,60 @@
+﻿@model dynamic
+
+@helper RenderRow(string loanNumber, string loanAmount, string repayments, string dateApplyed, string dateClosed, string onTime, string late1, string late2, string pastDues, string amountPassedDue, string status){
+    <tr>
+        <td>@loanNumber</td>
+        <td>@loanAmount</td>
+        <td>@repayments</td>
+        <td>@dateApplyed</td>
+        <td>@dateClosed</td>
+        <td>@onTime</td>
+        <td>@late1</td>
+        <td>@late2</td>
+        <td>@pastDues</td>
+        <td>@amountPassedDue</td>
+        <td>@status</td>
+    </tr>
+}
+
+<table id="loanhistory-table" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Loan number</th>
+            <th>Loan amount</th>
+            <th>Repayments</th>
+            <th>Date Applyed</th>
+            <th>Date closed</th>
+            <th>on time</th>
+            <th>Late 1-30 days</th>
+            <th>Late 30+ days</th>
+            <th>Past dues</th>
+            <th>Amount passed due</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @RenderRow("1", "5000", "2", DateTime.Now.ToString(), DateTime.Now.ToString(), "0", "0", "0", "0", "0", "Waiting")
+        @RenderRow("2", "8000", "3", DateTime.Now.ToString(), DateTime.Now.ToString(), "0", "3", "0", "0", "0", "Payed off")
+        @RenderRow("3", "2000", "1", DateTime.Now.ToString(), DateTime.Now.ToString(), "0", "0", "0", "0", "0", "Payed off")
+        @RenderRow("4", "7500", "3", DateTime.Now.ToString(), DateTime.Now.ToString(), "1", "0", "0", "0", "1000", "Collection")
+        @RenderRow("Total", "22500", "9", DateTime.Now.ToString(), DateTime.Now.ToString(), "0", "0", "0", "0", "0", "Collection")
+    </tbody>
+</table>
+
+@{Html.RenderPartial("_ExportToExcel");}
+
+
+<div id="loan-transactions-modal">
+    @{Html.RenderPartial("_LoanTransactions");}
+</div>
+@section Js
+{
+    <script type="text/javascript">
+        $(function() {
+            $('#loanhistory-table').on('dblclick', 'tr', function() {
+                var loan = $(this).find('td:first').text();
+                $('#loan-transactions-modal > div').modal();
+            });
+        });
+    </script>
+}

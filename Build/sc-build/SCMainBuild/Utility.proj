@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="BeforeBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="BeforeBuild">
+		<CallTarget Targets="AssemblyInfoUpdate" />
+	</Target>
+	
+	<Target Name="AfterBuild">
+		<CallTarget Targets="ClearCommonInfo" />
+	</Target>	
+	
+	<PropertyGroup>
+		<t><![CDATA[<data>
+			<culture>$(SDKFolder)</culture>
+			<environmentId>mssql2008</environmentId>
+		</data>]]></t>
+	</PropertyGroup>
+	<Target Name="Test">
+		<TemplateTask TemplatePath = "e:\src\SC\Build\CCNET\EnvironmentTemplate.xml" OutPath = "e:\out.xml"
+                               DataXml = "$(t)" /> 
+	</Target>
+	
+	<Target Name="AssemblyInfoUpdate" DependsOnTargets="GenerateClearCCNetLabel" >
+		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
+		<File  TaskAction="Replace" RegexPattern="[\d]+\.[\d]+\.[\d]+\.[\d]+" Files="$(Src)\Common\CommonAssemblyInfo.cs" Replacement="$(ClearedCCNetLabel)" />
+	</Target>
+	
+	<Target Name="GenerateClearCCNetLabel">
+		<DynamicExecute TaskAction="Run" Outputs="string result" UsingNamespaces="System.Text.RegularExpressions" Code='Match match = Regex.Match("$(CCNetLabel)", "[\\d]+\\.[\\d]+\\.[\\d]+\\.[\\d]+"); if (match.Success) result = match.Value; else result="$(CCNetLabel)";'>
+				<Output TaskParameter="Output1" PropertyName="ClearedCCNetLabel"/>
+			</DynamicExecute>
+	</Target>
+	
+	
+	<Target Name="ClearCommonInfo">
+		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs" />
+		<Delete Files="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
+	</Target>
+	
+	<Target Name="UpdateWebConfig">	  
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\AdminServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\AuditorServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\MavenServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\MasterServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\FormsDesignerServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+    </Target>
+
+	  <Target Name="TfsUpdate">
+		<UpdateWIs TeamFoundationServerUrl="$(TfsUrl)" BuildId="$(CCNetLabel)" GlobalListName="Builds - $(TfsProject)" 
+				                  Query="SELECT [System.Id], [System.WorkItemType], [System.AssignedTo], [System.Reason], [Microsoft.VSTS.Common.Priority], [System.Title] FROM WorkItems WHERE [System.TeamProject] = '$(TfsProject)'  AND  [System.WorkItemType] = 'Defect'  AND  [System.State] = 'Resolved' ORDER BY [Microsoft.VSTS.Common.Priority], [System.Id]"
+				   ContinueOnError="true"/>
+  </Target>
+	
+	<Target Name="CopyStableToDc">
+		<Message Text="Copy release to dc..." Importance="high"/>
+		<Exec Command="xcopy %22$(ServerBaseFolder)%22 \\dc\Releases\ScortoScoringSolutions\InProgress_SSS\$(CCNetLabel) /E /C /I /Q /R /Y" ContinueOnError="true"/>
+	</Target>
+	
+</Project>

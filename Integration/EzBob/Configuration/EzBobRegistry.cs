@@ -1,0 +1,42 @@
+﻿using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model.Database;
+using EzBob.AmazonServiceLib.Config;
+using EzBob.CommonLib;
+using EzBob.PayPalServiceLib;
+using EzBob.PayPalServiceLib.Common;
+using EzBob.TeraPeakServiceLib;
+using EzBob.eBayLib.Config;
+using Scorto.Configuration;
+using StructureMap.Configuration.DSL;
+
+namespace EzBob.Configuration
+{
+	public class EzBobRegistry : Registry
+	{
+		public EzBobRegistry()
+		{
+			var ezBobConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<EzBobConfigRoot>();
+			if ( ezBobConfigRoot != null )
+			{
+				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
+				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
+				For<IEbayMarketplaceTypeConnection>().Use( ezBobConfigRoot.eBayConfig);
+				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
+				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
+				For<IAmazonMarketplaceSettings>().Use( ezBobConfigRoot.AmazonSetings );
+			}
+			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
+			if ( ezBobConfigRoot != null )
+			{
+				For<ITeraPeakCredentionProvider>().Singleton().Use( teraPeakConfigRoot.TeraPeakCredentionProvider );
+				For<ITeraPeakConnectionProvider>().Singleton().Use( teraPeakConfigRoot.TeraPeakCredentionProvider );
+			}
+
+			
+			For<IServiceEndPointFactory>().Use( new ServiceEndPointFactory() );
+
+			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
+            For<IBugRepository>().Use<BugRepository>();
+		}
+	}
+}

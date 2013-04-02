@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="LoadTest">
+		<AsyncExec ContinueOnError='true' Command='LoadRunner.exe' WorkingDirectory='$(ServerBaseFolder)\$(LoadTestFolder)\LoadRunner'/>
+	</Target>
+		
+	<Target Name="LoadBinaryCreate" DependsOnTargets="BinaryCreate" >
+		<AppCopy CopyFrom="$(Src)\Tools\LoadTestFramework\SCApiTests\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(LoadTestFolder)\SCApiTests\" />
+		<AppCopy CopyFrom="$(Src)\Tools\LoadTestFramework\LoadRunner\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(LoadTestFolder)\LoadRunner\" />
+		
+		<MultiCopy CopyFrom="$(Src)\TestData\ScortoTestFramework\PublisherItems\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\" />
+		<MultiCopy CopyFrom="$(Src)\TestData\ScortoTestFramework\AdditionalDatabaseScripts\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\" />
+		<MultiCopy CopyFrom="$(Src)\TestData\ScortoTestFramework\ConfigTemplates\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ConfigFolder)\" />
+	</Target>
+	
+	<Target Name="LogArchive">
+		<DateAndTime TaskAction="Get" Format="dd_MM_yy_HH_mm_ss">
+			<Output TaskParameter="Result" PropertyName="CurrentDate"/>
+        </DateAndTime>
+		<Copy SourceFiles="@(LogFiles)" DestinationFolder="$(ServerBaseFolder)\$(LogsDir)\ToolsLogs" ContinueOnError="true"/>
+		<LoadReportTask ConnectionString="$(MainConnectionString)" ConnectionStringStatistics="$(LoadStatisticsConnection)" OutDir="$(ServerBaseFolder)\$(LogsDir)\ToolsLogs" ContinueOnError="true"/>
+		<ZipCreator Directories="$(ServerBaseFolder)\$(LogsDir)\" ZipFile="$(LogsArchive)\$(CurrentDate).zip" ContinueOnError="true"/>
+		<ScortoMail Smtp="smtp.gmail.com" From="buildserver.scorto@gmail.com" To="s.krygyn@scorto.com.ua;a.kaydash@scorto.com.ua;a.bulaev@scorto.com.ua;v.moshenok@scorto.com.ua" Password="&lt;bklCrjhnj2011" UseSsl="true" 
+			Port="587" Body = "&lt;html&gt;Результаты нагрузки: &lt;a href=&quot;\\vm-loadtest\LoadTestArchive\$(CurrentDate).zip&quot;&gt;\\vm-loadtest\LoadTestArchive\$(CurrentDate).zip&lt;/a&gt;&lt;html&gt;"
+			Subject = "Load test results" ContinueOnError="true"/>
+	</Target>
+	
+	<Target Name="ImportDB">
+		<Exec Command="start_all.bat $(DatabaseString)" WorkingDirectory="$(FakeData)" ContinueOnError="true" />
+	</Target>
+	
+	<Target Name="AddonDBLoad">
+		<Exec Command="addon-run.bat $(DatabaseString)" WorkingDirectory="$(ServerBaseFolder)\$(Database)\$(DatabaseDeployFolder)" ContinueOnError="true" />
+	</Target>
+	
+	<Target Name="ConfigureLoadClients" DependsOnTargets="ConfigureClients">
+		<PropertyGroup>
+			<ConfigData><![CDATA[<data>
+				<ServerBaseFolder>$(ServerBaseFolder)</ServerBaseFolder>
+				<WebBaseUrl>$(WebBaseUrl)</WebBaseUrl>
+			</data>]]></ConfigData>
+		</PropertyGroup>
+		<TemplateTask TemplatePath = "$(ServerBaseFolder)\$(ConfigFolder)\LoadRunner.exe.config" OutPath = "$(ServerBaseFolder)\$(LoadTestFolder)\LoadRunner\LoadRunner.exe.config"
+                               DataXml = "$(ConfigData)" /> 
+		<TemplateTask TemplatePath = "$(ServerBaseFolder)\$(ConfigFolder)\SCApiTests.exe.config" OutPath = "$(ServerBaseFolder)\$(LoadTestFolder)\SCApiTests\SCApiTests.exe.config"
+                               DataXml = "$(ConfigData)" /> 
+		<XmlUpdate XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='Login']/value"
+		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
+		  Value="dsse"/>
+		<XmlUpdate XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='Password']/value"
+		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
+		  Value="dsse"/>
+	</Target>
+	
+	<Target Name="SCStop">
+		<Message Text="ScortoStopEnvironment" Importance="high"/>
+		<Message Text="Stoping service..."/>
+		<ServiceRestarter ServiceName="$(ServiceName)" Action="Stop" ContinueOnError="true"/>
+		<Message Text="Stoping sites..."/>
+		<Exec Command="iisreset /stop" ContinueOnError="true"/>
+		<Message Text="Stoping share server..."/>
+		<Exec Command="net stop server /y" ContinueOnError="true"/>
+	</Target>
+  
+	<Target Name="SCStart">
+		<Message Text="ScortoStartEnvironment" Importance="high"/>
+		<Message Text="Starting service..."/>
+		<ServiceRestarter ServiceName="$(ServiceName)" Action="Start" ContinueOnError="true"/>
+		<Message Text="Starting sites..."/>
+		<Exec Command="iisreset /start" ContinueOnError="true"/>
+		<Message Text="Starting share server..."/>
+		<Exec Command="net start server /y" ContinueOnError="true"/>
+	</Target>
+</Project>

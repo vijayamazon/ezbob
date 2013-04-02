@@ -1,0 +1,1468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{829AA60E-CC9F-4BE6-95E1-BC7990147D15}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EzBob.Web</RootNamespace>
+    <AssemblyName>EzBob.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxMin">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\AjaxMin.dll</HintPath>
+    </Reference>
+    <Reference Include="ApplicationMng, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\ApplicationMng.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=1.1.0.188, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Automapper\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="CaptchaMVC, Version=2.1.1.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\CaptchaMVC\CaptchaMVC.dll</HintPath>
+    </Reference>
+    <Reference Include="ClickTaleIntegrationModule">
+      <HintPath>..\..\..\Lib\ClickTale\ClickTaleIntegrationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="DB, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\DB.dll</HintPath>
+    </Reference>
+    <Reference Include="DBCommon, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\DBCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="dotless.Core">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\dotless.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EcmaScript.NET.modified">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\EcmaScript.NET.modified.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="GenericCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\GenericCache.dll</HintPath>
+    </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0774796e73ebf640, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLibRusSupport, Version=0.85.5.452, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\ICSharpCode.SharpZipLibRusSupport\ICSharpCode.SharpZipLibRusSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\..\..\Lib\Scorto.Core\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\Lib\Scorto.Core\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder">
+      <HintPath>..\..\..\Lib\Scorto.Core\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq, Version=1.0.11522.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\MoreLinq\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="MsieJavaScriptEngine">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\MsieJavaScriptEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Caches.SysCache2">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
+    </Reference>
+    <Reference Include="Nustache.Core">
+      <HintPath>..\..\..\Lib\3rdparty\Nustache\Nustache.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\ReCaptcha\Recaptcha.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Flow.Signal, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Flow.Signal.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate, Version=6.2.62.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Security.UserManagement">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Security.UserManagement.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Web">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="SquishIt.CoffeeScript">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.CoffeeScript.dll</HintPath>
+    </Reference>
+    <Reference Include="SquishIt.Framework">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="SquishIt.Less">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.Less.dll</HintPath>
+    </Reference>
+    <Reference Include="SquishIt.MsIeCoffeeScript">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.MsIeCoffeeScript.dll</HintPath>
+    </Reference>
+    <Reference Include="SquishIt.Mvc">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WorkflowLibrary, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\WorkflowLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Yahoo.Yui.Compressor">
+      <HintPath>..\..\..\Lib\3rdparty\SquishIt\Yahoo.Yui.Compressor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
+    <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
+    <Compile Include="Areas\Customer\Controllers\EKMAccounts.cs" />
+    <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CollectionStatusController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanOptionsController.cs" />
+    <Compile Include="Areas\Customer\Models\CashRequestModel.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\EmailVerificationController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Helper.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\LoanAmountPerDay.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\LoanEditorController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Reports\CaisReportsHistoryController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Reports\ReportsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
+    <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\IdHubCustomAddressModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
+    <Compile Include="Code\AgreementsGenerator.cs" />
+    <Compile Include="Code\AgreementsModelBuilder.cs" />
+    <Compile Include="Code\ConcentAgreementHelper.cs" />
+    <Compile Include="Code\Email\EmailConfirmation.cs" />
+    <Compile Include="Code\Email\EmailConfirmationRequestInvalidStateException.cs" />
+    <Compile Include="Code\Email\EmailConfirmationRequestNotFoundException.cs" />
+    <Compile Include="Code\Email\IEmailConfirmation.cs" />
+    <Compile Include="Code\LoanBuilder.cs" />
+    <Compile Include="Code\LoanCreator.cs" />
+    <Compile Include="Code\LoanLimit.cs" />
+    <Compile Include="Controllers\AgreementsController.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\DailyReportData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ExpectationReportData.cs" />
+    <Compile Include="Code\DailyReportBuilder.cs" />
+    <Compile Include="Code\LoanHistoryExelReportGenerator.cs" />
+    <Compile Include="Code\LoanHistoryExelReportResult.cs" />
+    <Compile Include="Code\MedalExcelReportGenerator.cs" />
+    <Compile Include="Code\MedalExcelReportResult.cs" />
+    <Compile Include="Code\MpUniq\FakeMPUniqChecker.cs" />
+    <Compile Include="Code\MpUniq\IMPUniqChecker.cs" />
+    <Compile Include="Code\MpUniq\MarketPlaceAddedByThisCustomerException.cs" />
+    <Compile Include="Code\MpUniq\MarketPlaceIsAlreadyAddedException.cs" />
+    <Compile Include="Code\MpUniq\MPUniqChecker.cs" />
+    <Compile Include="Areas\Customer\Controllers\ConsentController.cs" />
+    <Compile Include="Areas\Underwriter\Models\MessagesModel.cs" />
+    <Compile Include="Code\CustomerNameValidator.cs" />
+    <Compile Include="Areas\Customer\Controllers\Exceptions\CustomerIsNotApprovedException.cs" />
+    <Compile Include="Areas\Customer\Controllers\Exceptions\CustomerIsNotFullyRegistered.cs" />
+    <Compile Include="Areas\Customer\Controllers\Exceptions\NameValidationException.cs" />
+    <Compile Include="Areas\Customer\Controllers\GetCashController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustomerDetailsController.cs" />
+    <Compile Include="Controllers\ConfirmEmailController.cs" />
+    <Compile Include="Controllers\HeartBeatController.cs" />
+    <Compile Include="Areas\Customer\Controllers\LoanController.cs" />
+    <Compile Include="Areas\Customer\Controllers\PacnetStatusController.cs" />
+    <Compile Include="Areas\Customer\Controllers\PaymentAccountsController.cs" />
+    <Compile Include="Areas\Customer\Controllers\AmazonMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\EbayMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\PaypointController.cs" />
+    <Compile Include="Areas\Customer\Controllers\ProfileController.cs" />
+    <Compile Include="Areas\Customer\Controllers\ScheduleController.cs" />
+    <Compile Include="Areas\Customer\Controllers\StartController.cs" />
+    <Compile Include="Areas\Customer\Controllers\StoreInfoController.cs" />
+    <Compile Include="Controllers\PaypointTemplateController.cs" />
+    <Compile Include="Areas\Customer\Controllers\WizardController.cs" />
+    <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Customer\Models\PayPointFacade.cs" />
+    <Compile Include="Areas\Customer\Models\PersonalInfoEditHistory.cs" />
+    <Compile Include="Areas\Customer\Models\Person.cs" />
+    <Compile Include="Areas\Customer\Models\PostcodeFullAddressModel.cs" />
+    <Compile Include="Areas\Customer\Models\PostcodeSearchListModel.cs" />
+    <Compile Include="Areas\Customer\Models\CustomerModelBuilder.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertDocsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ApiChecksLogController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ApplicationInfoController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CrossCheckController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerInfoController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanHistoryController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MedalCalculationsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MessagesController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\PaymentAccountsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CreditBureauController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\MarketPlacesController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ProfileController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Reports\CartImageProvider.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Reports\IImageProvider.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\Reports\ReportTableCreator.cs" />
+    <Compile Include="Areas\Underwriter\GridHelpers.cs" />
+    <Compile Include="Areas\Underwriter\Models\AlertDoc.cs" />
+    <Compile Include="Areas\Underwriter\Models\ApiChecksLogModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\ApplicationInfoModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\CrossCheckModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\CustomerGridModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\CreditBureauModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\FunctionValueModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\LoanHistoryModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\MedalCalculator.cs" />
+    <Compile Include="Areas\Underwriter\Models\PaymentsAccountModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\DateFilter.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ExposureDataBase.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ExposurePerMedalData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ExposurePerUnderwriterData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\MedalStatisticData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\PercentObtainer.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\PerformenceDataBase.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\PerformencePerMedalData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\PerformencePerUnderwriterData.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ReportCountAmountModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ReportManager.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ReportTableColumn.cs" />
+    <Compile Include="Areas\Underwriter\Models\Reports\ReportTableModel.cs" />
+    <Compile Include="Areas\Underwriter\UnderwriterAreaRegistration.cs" />
+    <Compile Include="Code\ApplicationCreator\AppCreator.cs" />
+    <Compile Include="Code\ApplicationCreator\IAppCreator.cs" />
+    <Compile Include="Code\CashRequestBuilder.cs" />
+    <Compile Include="Code\LoanDetailsBuilder.cs" />
+    <Compile Include="Code\PayPal\PersonalData.cs" />
+    <Compile Include="Code\RefNumberGenerator.cs" />
+    <Compile Include="Code\UnderwriterGridResult.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LandingController.cs" />
+    <Compile Include="Controllers\PieController.cs" />
+    <Compile Include="Controllers\PostcodeController.cs" />
+    <Compile Include="Controllers\PrivatePolicyController.cs" />
+    <Compile Include="Areas\Underwriter\Models\CrossCheckStatus.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\DecimalModelBinder.cs" />
+    <Compile Include="Infrastructure\Filters\CaptchaValidationFilter.cs" />
+    <Compile Include="Infrastructure\csrf\AntiForgeryHtmlHelper.cs" />
+    <Compile Include="Infrastructure\BundleHelper.cs" />
+    <Compile Include="Infrastructure\EzbobCaptchaManager.cs" />
+    <Compile Include="Infrastructure\EzBobConfiguration.cs" />
+    <Compile Include="Infrastructure\EzBobContext.cs" />
+    <Compile Include="Infrastructure\EzBobHandleErrorAttribute.cs" />
+    <Compile Include="Infrastructure\EzBobWebRegistry.cs" />
+    <Compile Include="Infrastructure\Filters\GlobalAreaAuthorizationFilter.cs" />
+    <Compile Include="Infrastructure\IEzbobWorkplaceContext.cs" />
+    <Compile Include="Infrastructure\Filters\IsSuccessfullyRegisteredFilter.cs" />
+    <Compile Include="Infrastructure\csrf\JsonAntiForgeryHttpContextWrapper.cs" />
+    <Compile Include="Infrastructure\Filters\LoggingContextFilter.cs" />
+    <Compile Include="Infrastructure\Membership\EmptyAnswerExeption.cs" />
+    <Compile Include="Infrastructure\Membership\RoleNotFoundException.cs" />
+    <Compile Include="Infrastructure\Membership\ScortoMembershipProvider.cs" />
+    <Compile Include="Infrastructure\Membership\ScortoRoleProvider.cs" />
+    <Compile Include="Infrastructure\Membership\SimpleMembershipProvider.cs" />
+    <Compile Include="Infrastructure\NoIISHeaderModule.cs" />
+    <Compile Include="Infrastructure\csrf\ValidateJsonAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Infrastructure\Filters\WhiteListFilter.cs" />
+    <Compile Include="Infrastructure\PermissionAttribute.cs" />
+    <Compile Include="Infrastructure\PostcodeAnywhereConfig.cs" />
+    <Compile Include="Infrastructure\RestfullErrorHandlingAttribute.cs" />
+    <Compile Include="Infrastructure\TransactionHelper.cs" />
+    <Compile Include="Infrastructure\XFrameOptionsModule.cs" />
+    <Compile Include="Models\AllowedEmail.cs" />
+    <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\NewsItem.cs" />
+    <Compile Include="Models\PaymentConfirmationModel.cs" />
+    <Compile Include="Models\Strings\DbString.cs" />
+    <Compile Include="Models\ForgotPasswordModel.cs" />
+    <Compile Include="Infrastructure\ScortoHttpApplication.cs" />
+    <Compile Include="Models\LogOnModel.cs" />
+    <Compile Include="Models\Repository\DbStringRepository.cs" />
+    <Compile Include="Models\Strings\DbStrings.cs" />
+    <Compile Include="Models\WizardModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\alertify.css" />
+    <Content Include="Content\css\bootstrap-modal.css" />
+    <Content Include="Content\css\captcha.css" />
+    <Content Include="Content\css\choosen\chosen-sprite.png" />
+    <Content Include="Content\css\choosen\chosen.css" />
+    <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\customer.css" />
+    <Content Include="Content\css\images\play-icon-hover.png" />
+    <Content Include="Content\css\images\play-icon-sprite.png" />
+    <Content Include="Content\css\images\play-icon.png" />
+    <Content Include="Content\css\jquery.jqplot.css" />
+    <Content Include="Content\css\loanDetails.css">
+      <DependentUpon>loanDetails.less</DependentUpon>
+    </Content>
+    <Content Include="Content\css\popover.css" />
+    <Content Include="Content\css\shops.css" />
+    <Content Include="Content\css\sidebar.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\video.css" />
+    <Content Include="Content\css\wizard-header.css" />
+    <Content Include="Content\flash\ZeroClipboard.swf" />
+    <Content Include="Content\img\calendar-late.png" />
+    <Content Include="Content\img\check-min.png" />
+    <Content Include="Content\img\businessguardianange.png" />
+    <Content Include="Content\img\check-min.png" />
+    <Content Include="Content\img\ebay-small.png" />
+    <Content Include="Content\img\ebay.png" />
+    <Content Include="Content\img\ecommerce bytes.png" />
+    <Content Include="Content\img\free-gift-icon.png" />
+    <Content Include="Content\img\huffingtonpost.jpeg" />
+    <Content Include="Content\img\logo-amazon-small.png" />
+    <Content Include="Content\img\logo_ir.jpg" />
+    <Content Include="Content\img\london-the-news.jpg" />
+    <Content Include="Content\img\ok16.png" />
+    <Content Include="Content\img\pdf-logo.jpg" />
+    <Content Include="Content\img\printer.png" />
+    <Content Include="Content\img\responsible-points.png" />
+    <Content Include="Content\img\roles\crm.png" />
+    <Content Include="Content\img\roles\manager.png" />
+    <Content Include="Content\img\roles\underwriter.png" />
+    <Content Include="Content\img\securedisclaimer-new.png" />
+    <Content Include="ClickTaleScripts.xml" />
+    <Content Include="Content\css\addition.css" />
+    <Content Include="Content\css\overview.css" />
+    <Content Include="Content\css\coin-slider-styles.css" />
+    <Content Include="Content\css\images\ajax-loader.gif" />
+    <Content Include="Content\css\jquery.jscrollpane.css" />
+    <Content Include="Content\css\notifications.css" />
+    <Content Include="Content\css\print.css" />
+    <Content Include="Content\css\Underwriter.css" />
+    <Content Include="Content\css\video-js.css" />
+    <Content Include="Content\css\video-js.png" />
+    <Content Include="Content\img\1-how-it-works-steps.jpg" />
+    <Content Include="Content\img\2-Require.jpg" />
+    <Content Include="Content\img\accounts-paypal.png" />
+    <Content Include="Content\img\amazon-instructions.png" />
+    <Content Include="Content\img\arr-blue.png" />
+    <Content Include="Content\img\arrow-last.png" />
+    <Content Include="Content\img\arrow-right.png" />
+    <Content Include="Content\img\avatarPlaceholder.png" />
+    <Content Include="Content\img\badge-example.png" />
+    <Content Include="Content\img\bank_account.png" />
+    <Content Include="Content\img\basket-gold.png" />
+    <Content Include="Content\img\basket-platinum.png" />
+    <Content Include="Content\img\basket-silver.png" />
+    <Content Include="Content\img\betterTerms.png" />
+    <Content Include="Content\img\bg-scrollbar-thumb-y.png" />
+    <Content Include="Content\img\bg-scrollbar-track-y.png" />
+    <Content Include="Content\img\bg-scrollbar-trackend-y.png" />
+    <Content Include="Content\img\blue-boxes.jpg" />
+    <Content Include="Content\img\bottom-line.png" />
+    <Content Include="Content\img\btn-back-bg.png" />
+    <Content Include="Content\img\btn-con-background.png" />
+    <Content Include="Content\img\btn-continue.png" />
+    <Content Include="Content\img\btn-profile-bg.png" />
+    <Content Include="Content\img\btn-signup.png" />
+    <Content Include="Content\img\calendarx32.png" />
+    <Content Include="Content\img\card.png" />
+    <Content Include="Content\img\cart_diamond.png" />
+    <Content Include="Content\img\cart_gold.png" />
+    <Content Include="Content\img\cart_platinum.png" />
+    <Content Include="Content\img\cart_silver.png" />
+    <Content Include="Content\img\cb-big-b.png" />
+    <Content Include="Content\img\cb-big-m.png" />
+    <Content Include="Content\img\cb-big-t.png" />
+    <Content Include="Content\img\CCTA-Logo.png" />
+    <Content Include="Content\img\chat.png" />
+    <Content Include="Content\img\check-new.png" />
+    <Content Include="Content\img\check.png" />
+    <Content Include="Content\img\check2.png" />
+    <Content Include="Content\img\click-here-button.png" />
+    <Content Include="Content\img\clock.png" />
+    <Content Include="Content\img\coins-1.png" />
+    <Content Include="Content\img\coins-2.png" />
+    <Content Include="Content\img\coins-g-1.png" />
+    <Content Include="Content\img\coins-g-2.png" />
+    <Content Include="Content\img\coins-g-3.png" />
+    <Content Include="Content\img\coins-s-1.png" />
+    <Content Include="Content\img\coins-s-2.png" />
+    <Content Include="Content\img\coins.png" />
+    <Content Include="Content\img\company.png" />
+    <Content Include="Content\img\cross.png" />
+    <Content Include="Content\img\details-btn.png" />
+    <Content Include="Content\img\ebay-box-bg.png" />
+    <Content Include="Content\img\ebay-link.png" />
+    <Content Include="Content\img\ebay-logo.png" />
+    <Content Include="Content\img\empty-big-sign.png" />
+    <Content Include="Content\img\favicon.png" />
+    <Content Include="Content\img\favicon114x114.png" />
+    <Content Include="Content\img\favicon32x32.png" />
+    <Content Include="Content\img\favicon57x57.png" />
+    <Content Include="Content\img\favicon72x72.png" />
+    <Content Include="Content\img\five-icons.png" />
+    <Content Include="Content\img\footer-copyright-bg.png" />
+    <Content Include="Content\img\gold-1.png" />
+    <Content Include="Content\img\gold-2.png" />
+    <Content Include="Content\img\gold-3.png" />
+    <Content Include="Content\img\gold-4.png" />
+    <Content Include="Content\img\gold-btn.png" />
+    <Content Include="Content\img\gr-gold.png" />
+    <Content Include="Content\img\gr-platinum.png" />
+    <Content Include="Content\img\gr-silver.png" />
+    <Content Include="Content\img\gradient-line.png" />
+    <Content Include="Content\img\green-sign.png" />
+    <Content Include="Content\img\guarantee.png" />
+    <Content Include="Content\img\guided-tour-container.png" />
+    <Content Include="Content\img\house.png" />
+    <Content Include="Content\img\how-it-works-gradient.png" />
+    <Content Include="Content\img\how-it-works-ul-bg.png" />
+    <Content Include="Content\img\how-its-work-menu-active-a-fon.png" />
+    <Content Include="Content\img\how-its-work-menu-fon.png" />
+    <Content Include="Content\img\how-its-work-menu-li-fon.png" />
+    <Content Include="Content\img\ico-cal1.png" />
+    <Content Include="Content\img\ico-easytouse.png" />
+    <Content Include="Content\img\ico-financing.png" />
+    <Content Include="Content\img\ico-magnified.png" />
+    <Content Include="Content\img\ico-paper.png" />
+    <Content Include="Content\img\ico-partnership.png" />
+    <Content Include="Content\img\ico-reliable.png" />
+    <Content Include="Content\img\ico-safesecure.png" />
+    <Content Include="Content\img\ico-secured.png" />
+    <Content Include="Content\img\ico-superfast.png" />
+    <Content Include="Content\img\ico-timer.png" />
+    <Content Include="Content\img\icon-down.png" />
+    <Content Include="Content\img\icon-play.png" />
+    <Content Include="Content\img\icos-security.png" />
+    <Content Include="Content\img\image-cash.png" />
+    <Content Include="Content\img\image-money-plus.png" />
+    <Content Include="Content\img\image-money32.png" />
+    <Content Include="Content\img\image-money64.png" />
+    <Content Include="Content\img\inventory.png" />
+    <Content Include="Content\img\left-shadow.png" />
+    <Content Include="Content\img\light_bulb.png" />
+    <Content Include="Content\img\little-big-carts.jpg" />
+    <Content Include="Content\img\lock.png" />
+    <Content Include="Content\img\lock2.jpg" />
+    <Content Include="Content\img\logo-amazon.png" />
+    <Content Include="Content\img\logo-dpa.png" />
+    <Content Include="Content\img\logo-ebay.png" />
+    <Content Include="Content\img\logo-esty.png" />
+    <Content Include="Content\img\logo-paypal.png" />
+    <Content Include="Content\img\logo-playcom.png" />
+    <Content Include="Content\img\logo-shopify.png" />
+    <Content Include="Content\img\logo-shopping.png" />
+    <Content Include="Content\img\logo-truste.png" />
+    <Content Include="Content\img\logo-verisign.png" />
+    <Content Include="Content\img\logo-yahooshop.png" />
+    <Content Include="Content\img\ok.png" />
+    <Content Include="Content\img\online-shop-more-cash.jpg" />
+    <Content Include="Content\img\overview-arr.png" />
+    <Content Include="Content\img\overview-image.jpg" />
+    <Content Include="Content\img\payment-from-customer.png" />
+    <Content Include="Content\img\payment-to-customer.png" />
+    <Content Include="Content\img\paypal-bank-acounts.jpg" />
+    <Content Include="Content\img\paypal-link.png" />
+    <Content Include="Content\img\person-bailey.png" />
+    <Content Include="Content\img\person-gupta.png" />
+    <Content Include="Content\img\person-jamie.png" />
+    <Content Include="Content\img\pie.png" />
+    <Content Include="Content\img\platinum-1.png" />
+    <Content Include="Content\img\platinum-2.png" />
+    <Content Include="Content\img\platinum-3.png" />
+    <Content Include="Content\img\platinum-4.png" />
+    <Content Include="Content\img\platinum-btn.png" />
+    <Content Include="Content\img\plus.png" />
+    <Content Include="Content\img\question.png" />
+    <Content Include="Content\img\question_mark.png" />
+    <Content Include="Content\img\quick_restart.png" />
+    <Content Include="Content\img\rating-img1.jpg" />
+    <Content Include="Content\img\rating-img2.jpg" />
+    <Content Include="Content\img\rating-img3.jpg" />
+    <Content Include="Content\img\rating-img4.jpg" />
+    <Content Include="Content\img\refl.png" />
+    <Content Include="Content\img\repaymentSprite.png" />
+    <Content Include="Content\img\right-shadow.png" />
+    <Content Include="Content\img\safe.jpg" />
+    <Content Include="Content\img\secure-icons.png" />
+    <Content Include="Content\img\securedisclaimer.png" />
+    <Content Include="Content\img\security.jpg" />
+    <Content Include="Content\img\sidebar\1-how-it-works-steps.jpg" />
+    <Content Include="Content\img\sidebar\2-Require.jpg" />
+    <Content Include="Content\img\sidebar\arr-blue.png" />
+    <Content Include="Content\img\sidebar\arrgt.png" />
+    <Content Include="Content\img\sidebar\avatarPlaceholder.png" />
+    <Content Include="Content\img\sidebar\badge-example.png" />
+    <Content Include="Content\img\sidebar\basket-gold.png" />
+    <Content Include="Content\img\sidebar\basket-platinum.png" />
+    <Content Include="Content\img\sidebar\basket-silver.png" />
+    <Content Include="Content\img\sidebar\betterTerms.png" />
+    <Content Include="Content\img\sidebar\btn-signup.png" />
+    <Content Include="Content\img\sidebar\card.png" />
+    <Content Include="Content\img\sidebar\cb-big-b.png" />
+    <Content Include="Content\img\sidebar\cb-big-m.png" />
+    <Content Include="Content\img\sidebar\cb-big-t.png" />
+    <Content Include="Content\img\sidebar\check.png" />
+    <Content Include="Content\img\sidebar\check2.png" />
+    <Content Include="Content\img\sidebar\coins-1.png" />
+    <Content Include="Content\img\sidebar\coins-2.png" />
+    <Content Include="Content\img\sidebar\coins-g-1.png" />
+    <Content Include="Content\img\sidebar\coins-g-2.png" />
+    <Content Include="Content\img\sidebar\coins-g-3.png" />
+    <Content Include="Content\img\sidebar\coins-s-1.png" />
+    <Content Include="Content\img\sidebar\coins-s-2.png" />
+    <Content Include="Content\img\sidebar\coins.png" />
+    <Content Include="Content\img\sidebar\ebay-box-bg.png" />
+    <Content Include="Content\img\sidebar\gr-gold.png" />
+    <Content Include="Content\img\sidebar\gr-platinum.png" />
+    <Content Include="Content\img\sidebar\gr-silver.png" />
+    <Content Include="Content\img\sidebar\ico-24h.png" />
+    <Content Include="Content\img\sidebar\ico-cal1.png" />
+    <Content Include="Content\img\sidebar\ico-easytouse.png" />
+    <Content Include="Content\img\sidebar\ico-financing.png" />
+    <Content Include="Content\img\sidebar\ico-magnified.png" />
+    <Content Include="Content\img\sidebar\ico-paper.png" />
+    <Content Include="Content\img\sidebar\ico-partnership.png" />
+    <Content Include="Content\img\sidebar\ico-reliable.png" />
+    <Content Include="Content\img\sidebar\ico-safesecure.png" />
+    <Content Include="Content\img\sidebar\ico-safesecure2.png" />
+    <Content Include="Content\img\sidebar\ico-secured.png" />
+    <Content Include="Content\img\sidebar\ico-superfast.png" />
+    <Content Include="Content\img\sidebar\ico-timer.png" />
+    <Content Include="Content\img\sidebar\ico-tips.png" />
+    <Content Include="Content\img\sidebar\ico-tutorial.png" />
+    <Content Include="Content\img\sidebar\icos-security.png" />
+    <Content Include="Content\img\sidebar\inventory.png" />
+    <Content Include="Content\img\sidebar\logo-amazon.png" />
+    <Content Include="Content\img\sidebar\logo-dpa.png" />
+    <Content Include="Content\img\sidebar\logo-ebay.png" />
+    <Content Include="Content\img\sidebar\logo-esty.png" />
+    <Content Include="Content\img\sidebar\logo-paypal.png" />
+    <Content Include="Content\img\sidebar\logo-playcom.png" />
+    <Content Include="Content\img\sidebar\logo-shopify.png" />
+    <Content Include="Content\img\sidebar\logo-shopping.png" />
+    <Content Include="Content\img\sidebar\logo-truste.png" />
+    <Content Include="Content\img\sidebar\logo-verisign.png" />
+    <Content Include="Content\img\sidebar\logo-yahooshop.png" />
+    <Content Include="Content\img\sidebar\overview-arr.png" />
+    <Content Include="Content\img\sidebar\person-bailey.png" />
+    <Content Include="Content\img\sidebar\person-gupta.png" />
+    <Content Include="Content\img\sidebar\person-jamie.png" />
+    <Content Include="Content\img\sidebar\pie.png" />
+    <Content Include="Content\img\sidebar\repaymentSprite.png" />
+    <Content Include="Content\img\sidebar\safe.jpg" />
+    <Content Include="Content\img\sidebar\securedisclaimer.png" />
+    <Content Include="Content\img\sidebar\security.jpg" />
+    <Content Include="Content\img\sidebar\side-b.png" />
+    <Content Include="Content\img\sidebar\side-m.png" />
+    <Content Include="Content\img\sidebar\side-top.png" />
+    <Content Include="Content\img\sidebar\video-ph.png" />
+    <Content Include="Content\img\signup-button.png" />
+    <Content Include="Content\img\sign_wide.jpg" />
+    <Content Include="Content\img\silver-1.png" />
+    <Content Include="Content\img\silver-2.png" />
+    <Content Include="Content\img\silver-3.png" />
+    <Content Include="Content\img\silver-btn.png" />
+    <Content Include="Content\img\silver.png" />
+    <Content Include="Content\img\start-main-bg.jpg" />
+    <Content Include="Content\img\store-logos.png" />
+    <Content Include="Content\img\store-sprites.png" />
+    <Content Include="Content\img\superfast-app.jpg" />
+    <Content Include="Content\img\Tamebay.png" />
+    <Content Include="Content\img\TechCrunch.png" />
+    <Content Include="Content\img\three-steps.jpg" />
+    <Content Include="Content\img\no-face.png" />
+    <Content Include="Content\css\profile.css" />
+    <Content Include="Content\img\container-bg.png" />
+    <Content Include="Content\img\prosess-diagram.png" />
+    <Content Include="Content\img\scoreband.png" />
+    <Content Include="Content\img\store-icon-amazon.png" />
+    <Content Include="Content\img\store-icon-ebay.png" />
+    <Content Include="Content\img\summery.jpg" />
+    <Content Include="Content\img\thank-you.png" />
+    <Content Include="Content\img\tray.png" />
+    <Content Include="Content\img\Tutorial\amazon1.jpg" />
+    <Content Include="Content\img\Tutorial\amazon2.jpg" />
+    <Content Include="Content\img\Tutorial\amazon3.jpg" />
+    <Content Include="Content\img\Tutorial\amazon4.jpg" />
+    <Content Include="Content\img\Tutorial\tn_amazon1.jpg" />
+    <Content Include="Content\img\two_arrows.png" />
+    <Content Include="Content\img\vertical-menu-active.png" />
+    <Content Include="Content\img\waitFon.png" />
+    <Content Include="Content\img\what-ezbob-overview.png" />
+    <Content Include="Content\img\yahoonews.png" />
+    <Content Include="Content\img\your-profile-picture.jpg" />
+    <Content Include="Content\js\App\ezbob.bindings.js">
+      <DependentUpon>ezbob.bindings.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\App\ezbob.clicktale.js" />
+    <Content Include="Content\js\App\ezbob.GA.js">
+      <DependentUpon>ezbob.GA.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\App\ezbob.validation.js" />
+    <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
+    <Content Include="Content\js\controls\Captcha.js" />
+    <Content Include="Content\js\controls\ezbob.BoundItemView.js">
+      <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\controls\ezbob.jqmodal.js">
+      <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\controls\ezbob.livechat.livechatrouter.js" />
+    <Content Include="Content\js\controls\ezbob.LoanScheduleView.js">
+      <DependentUpon>ezbob.LoanScheduleView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\controls\ezbob.LoanScheduleView.min.js">
+      <DependentUpon>ezbob.LoanScheduleView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\controls\ezbob.simpleValueEditDlg.js" />
+    <Content Include="Content\js\controls\ezbob.video.js" />
+    <Content Include="Content\js\ezbob.csrf.js" />
+    <Content Include="Content\js\ezbob.customerModel.js" />
+    <Content Include="Content\js\lib\alertify.js" />
+    <Content Include="Content\js\lib\backbone.marionette.js" />
+    <Content Include="Content\js\lib\Backbone.ModelBinder.js" />
+    <Content Include="Content\js\lib\bootstrap-modal.js" />
+    <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
+    <Content Include="Content\js\lib\handlebars.js" />
+    <Content Include="Content\js\lib\html5shiv.js" />
+    <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.barRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.BezierCurveRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.blockRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.bubbleRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.canvasAxisLabelRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.canvasAxisTickRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.canvasOverlay.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.canvasTextRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.categoryAxisRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.ciParser.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.cursor.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.dateAxisRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.donutRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.dragable.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.enhancedLegendRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.funnelRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.highlighter.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.json2.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.logAxisRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.mekkoAxisRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.mekkoRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.meterGaugeRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.mobile.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.ohlcRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.pieRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.pointLabels.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.pyramidAxisRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.pyramidGridRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.pyramidRenderer.js" />
+    <Content Include="Content\js\lib\jqplot\plugins\jqplot.trendline.js" />
+    <Content Include="Content\js\lib\jquery-1.8.3.js" />
+    <Content Include="Content\js\lib\jquery-ui-1.8.24.custom.js" />
+    <Content Include="Content\js\lib\jquery.blockUI.js" />
+    <Content Include="Content\js\lib\jquery.form.js" />
+    <Content Include="Content\js\lib\jquery.jscrollpane.js" />
+    <Content Include="Content\js\lib\jquery.mousewheel.js" />
+    <Content Include="Content\js\lib\autoNumeric-1.7.4.js" />
+    <Content Include="Content\js\Calculator.js" />
+    <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\datepicker.css" />
+    <Content Include="Content\css\ellipsis-xbl.xml" />
+    <Content Include="Content\css\ui.jqgrid.css" />
+    <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_glass_75_ffffff_1x400.png" />
+    <Content Include="Content\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\css\images\ui-bg_inset-soft_95_fef1ec_1x100.png" />
+    <Content Include="Content\css\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\css\images\ui-icons_f6cf3b_256x240.png" />
+    <Content Include="Content\css\jquery-ui-1.8.16.custom.css" />
+    <Content Include="Content\css\jquery.ui.1.8.16.ie.css" />
+    <Content Include="Content\css\wizard.css" />
+    <Content Include="Content\img\apply-now-gradient.png" />
+    <Content Include="Content\img\arrow-blue-left.png" />
+    <Content Include="Content\img\arrow-blue-right.png" />
+    <Content Include="Content\img\arrow-grey.png" />
+    <Content Include="Content\img\big-bob.png" />
+    <Content Include="Content\img\cheque.png" />
+    <Content Include="Content\img\debitcard.png" />
+    <Content Include="Content\img\ebay-inst1.png" />
+    <Content Include="Content\img\ebay-inst2.png" />
+    <Content Include="Content\img\ebay-inst3.png" />
+    <Content Include="Content\img\ebay-man.jpg" />
+    <Content Include="Content\img\ezbob-logo.png" />
+    <Content Include="Content\img\footer-city.png" />
+    <Content Include="Content\img\footer-ssl.png" />
+    <Content Include="Content\img\footer-truste.png" />
+    <Content Include="Content\img\furley_bg.png" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\graphy.png" />
+    <Content Include="Content\css\styles.css" />
+    <Content Include="Content\js\lib\jquery.zclip.js" />
+    <Content Include="Content\js\lib\splitter.js" />
+    <Content Include="Areas\Underwriter\Views\CAIS\Index.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editLoanView.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editInstallment.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editFee.cshtml" />
+    <Content Include="App_Browsers\generic.browser" />
+    <None Include="Content\js\login\ezbob.restorePassword.coffee" />
+    <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
+      <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js">
+      <DependentUpon>makeEarlyPaymentModel.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js">
+      <DependentUpon>makeEarlyPaymentView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js">
+      <DependentUpon>ezbob.underwriter.bugs.reporter.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\Copy of ezbob.underwriter.app.js">
+      <DependentUpon>ezbob.underwriter.caisReportsHistory.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\editLoan\editLoanView.js">
+      <DependentUpon>editLoanView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\editLoan\installmentEditor.js">
+      <DependentUpon>installmentEditor.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\editLoan\loanModel.js">
+      <DependentUpon>loanModel.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.AlertDocsView.js">
+      <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.app.js">
+      <DependentUpon>ezbob.underwriter.app.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.caisReportsHistory.min.js">
+      <DependentUpon>ezbob.underwriter.caisReportsHistory.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.collectionStatus.min.js">
+      <DependentUpon>ezbob.underwriter.collectionStatus.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanHistoryDetail.js">
+      <DependentUpon>ezbob.underwriter.loanHistoryDetail.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanHistorys.js">
+      <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanHistorys.min.js">
+      <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanInfo.js">
+      <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanInfo.min.js">
+      <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.LoanOptions.js">
+      <DependentUpon>ezbob.underwriter.LoanOptions.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.LoanOptions.min.js">
+      <DependentUpon>ezbob.underwriter.LoanOptions.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.marketplaces.js">
+      <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.personInfo.js">
+      <DependentUpon>ezbob.underwriter.personInfo.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.profile.js">
+      <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.rollover.js">
+      <DependentUpon>ezbob.underwriter.rollover.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.summaryInfo.js">
+      <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.AddBankAccount.js">
+      <DependentUpon>ezbob.underwriter.AddBankAccount.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.addPayPointCardView.js">
+      <DependentUpon>ezbob.underwriter.addPayPointCardView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.bankAccountDetails.js">
+      <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.paymentAccounts.js">
+      <DependentUpon>ezbob.underwriter.paymentAccounts.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.payPalAccountDetails.js">
+      <DependentUpon>ezbob.underwriter.payPalAccountDetails.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\css\postcode.css" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
+      <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
+      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.js">
+      <DependentUpon>ezbob.shopbuttonlist.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
+      <DependentUpon>ezbob.shops.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.js">
+      <DependentUpon>ezbob.shopslistview.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
+      <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
+    </Content>
+    <Content Include="favicon.ico" />
+    <Content Include="Content\img\header-gradient.png" />
+    <Content Include="Content\img\header-light.png" />
+    <Content Include="Content\img\icons_follow.png" />
+    <Content Include="Content\img\main-background.png" />
+    <Content Include="Content\img\paypal-inst1.png" />
+    <Content Include="Content\img\paypal-inst2.png" />
+    <Content Include="Content\img\paypal-inst3.png" />
+    <Content Include="Content\img\top-buttons-bg.png" />
+    <Content Include="Content\img\wizard-bg-active.png" />
+    <Content Include="Content\img\wizard-bg.png" />
+    <Content Include="Content\img\wizard-mark-completed.png" />
+    <Content Include="Content\js\App\ezbob.app.js" />
+    <Content Include="Content\js\lib\backbone.js" />
+    <Content Include="Content\js\lib\chosen.jquery.js" />
+    <Content Include="Content\js\lib\coin-slider.js" />
+    <Content Include="Content\js\lib\grid.locale-en.js" />
+    <Content Include="Content\js\lib\jqgridHelpers.js" />
+    <Content Include="Content\js\lib\jquery.ba-throttle-debounce.js" />
+    <Content Include="Content\js\lib\jquery.jqGrid.src.js" />
+    <Content Include="Content\js\lib\jquery.maskedinput-1.2.2.js" />
+    <Content Include="Content\js\lib\jquery.numeric.js" />
+    <Content Include="Content\js\lib\jquery.placeholder.js" />
+    <Content Include="Content\js\lib\jsuri-1.1.1.js" />
+    <Content Include="Content\js\lib\livechat.js" />
+    <Content Include="Content\js\lib\moment.js" />
+    <Content Include="Content\js\lib\notifications.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.Agreements.js">
+      <DependentUpon>ezbob.profile.Agreements.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\ezbob.profile.applyForLoan.js">
+      <DependentUpon>ezbob.profile.applyForLoan.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.emaileditview.js">
+      <DependentUpon>ezbob.underwriter.emaileditview.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.idHubCustomAddress.js" />
+    <Content Include="Content\PIE_uncompressed.htc" />
+    <Content Include="Content\Video\GetCash.mp4" />
+    <Content Include="Content\Video\GetCash.ogv" />
+    <Content Include="Content\Video\GetCash.webm" />
+    <Content Include="Content\Video\Intro.mp4" />
+    <Content Include="Content\Video\Intro.ogv" />
+    <Content Include="Content\Video\Intro.webm" />
+    <Content Include="Content\Video\PayPal-tutorial.mp4" />
+    <Content Include="Content\Video\PayPal-tutorial.ogv" />
+    <Content Include="Content\Video\PayPal-tutorial.webm" />
+    <Content Include="Content\Video\eBay-tutorial.mp4" />
+    <Content Include="Content\Video\eBay-tutorial.ogv" />
+    <Content Include="Content\Video\eBay-tutorial.webm" />
+    <Content Include="Content\Video\Bank-account.mp4" />
+    <Content Include="Content\Video\Bank-account.ogv" />
+    <Content Include="Content\Video\Bank-account.webm" />
+    <Content Include="Content\Video\Amazon.mp4" />
+    <Content Include="Content\Video\Amazon.ogv" />
+    <Content Include="Content\Video\Amazon.webm" />
+    <Content Include="Content\Video\video-js.swf" />
+    <Content Include="Content\js\lib\video.js" />
+    <Content Include="Content\js\login\ezbob.login.js" />
+    <Content Include="Content\js\ezbob.strengthPassword.js" />
+    <Content Include="Views\Shared\_FBSDK.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_DocsTemplate.cshtml" />
+    <Content Include="Content\js\controls\ezbob.jqmodal.coffee" />
+    <Content Include="Content\js\App\ezbob.GA.coffee" />
+    <Content Include="Content\js\App\ezbob.bindings.coffee" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\_loan_editor.cshtml" />
+    <Content Include="Content\css\editLoan.less" />
+    <Content Include="Content\js\controls\ezbob.LoanScheduleView.coffee" />
+    <Content Include="Areas\Customer\Views\Paypoint\ErrorOfferDate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Profile\_PayPointCardSelectViewTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\PaymentAccounts\PayPointAdded.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Bugs\_ReportBug.cshtml" />
+    <Content Include="App_Code\EzTable.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccountDetails.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\PayPalAccountDetails.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\PayPalAccounts.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccounts.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\DebitCards.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\AddDebitCard.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\AddBankAccount.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanDetails.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanOptions.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\PaymentRollover.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\LatePaymentNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\RenewEbayToken.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_CaisReportsHistory.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\EKMShopNtification.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Helper\PermissionClasses.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Helper\RolesClasses.cshtml" />
+    <None Include="Content\js\controls\ezbob.BoundItemView.coffee" />
+    <None Include="Content\js\Profile\ezbob.profile.Agreements.coffee" />
+    <Content Include="Content\js\Profile\ezbob.profile.paypointSchedule.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.signWidget.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.smallNotification.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.Stores.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.paymentAccounts.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.loanDetails.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.accountActivity.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.profileView.js" />
+    <Content Include="Areas\Underwriter\Views\Reports\ExpectationReport.cshtml" />
+    <Content Include="Content\css\loanDetails.less" />
+    <Content Include="Areas\Underwriter\Views\GenerateAgreements\Index.cshtml" />
+    <Content Include="Areas\Underwriter\Views\LoanAmountPerDay\Index.cshtml" />
+    <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.getCash.js" />
+    <Content Include="Content\js\lib\recaptcha_ajax.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.AccountSummary.js" />
+    <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsQuestion.js" />
+    <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsPassword.js" />
+    <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsMain.js" />
+    <Content Include="Content\js\Profile\Settings\ezbob.profile.settingsMaster.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.apiChecksLog.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.crosscheck.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.medalCalculations.js" />
+    <Content Include="Content\js\Underwriter\ezbob.undewriter.messages.js" />
+    <Content Include="Content\js\Wizard\accounts\ezbob.accounts.bank.js" />
+    <Content Include="Content\js\controls\ezbob.address.js" />
+    <Content Include="Content\js\Wizard\accounts\ezbob.accounts.js" />
+    <Content Include="Content\js\Wizard\accounts\ezbob.accounts.paypal.js" />
+    <Content Include="Content\js\controls\ezbob.notifications.js" />
+    <Content Include="Content\js\Wizard\ezbob.ct.bindShopToCT.js" />
+    <Content Include="Content\js\Wizard\ezbob.signupwizard.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.companyTarget.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.directors.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.notLimitedInformation.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.limitedInformation.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfoBase.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.personinfo.js" />
+    <Content Include="Content\js\Wizard\ezbob.storebase.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.ebay.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.signupstep.js" />
+    <Content Include="Content\js\lib\underscore.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.payEarly.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfo.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.alerts.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.experianInfo.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.customerGrid.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.customers.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.marketplaceDetails.js" />
+    <Content Include="Content\PIE.htc" />
+    <Content Include="Content\Video\EZBOB-Movie.mp4" />
+    <Content Include="Content\Video\EZBOB_Movie.webm" />
+    <Content Include="Content\Video\poster.jpg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\js\lib\bootstrap-datepicker.js" />
+    <Content Include="Content\js\lib\bootstrap.js" />
+    <Content Include="Content\js\ezbob.design.js" />
+    <Content Include="Content\js\lib\jquery.validate-vsdoc.js" />
+    <Content Include="Content\js\lib\jquery.validate.js" />
+    <Content Include="Content\js\lib\modernizr-1.7.js" />
+    <Content Include="robots.txt" />
+    <Content Include="sitemap.xml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\js\lib\jquery.unobtrusive-ajax.js" />
+    <Content Include="Content\js\lib\jquery.validate.unobtrusive.js" />
+    <Content Include="Content\js\lib\MicrosoftAjax.js" />
+    <Content Include="Content\js\lib\MicrosoftAjax.debug.js" />
+    <Content Include="Content\js\lib\MicrosoftMvcAjax.js" />
+    <Content Include="Content\js\lib\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Content\js\lib\MicrosoftMvcValidation.js" />
+    <Content Include="Content\js\lib\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\ConfirmEmail\Index.cshtml" />
+    <Content Include="Views\ConfirmEmail\ConfirmationError.cshtml" />
+    <Content Include="Views\Shared\_FeaturedIn.cshtml" />
+    <Content Include="Views\Shared\_OnlineSellers.cshtml" />
+    <Content Include="Views\Shared\_GetSatisfaction.cshtml" />
+    <Content Include="Views\Shared\_LivePerson.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="App_Code\EzForm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Customer\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Customer\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Customers\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\ProfileSummary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\Marketplaces.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\CreditBureau.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\_ExportToExcel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\MedalCalculator.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\LoanHistory.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\_LoanTransactions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Underwriter\Views\Shared\CustomerInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\LogOn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_SignUp.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
+      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
+      <Name>AmazonDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
+      <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
+      <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib %28Integration\CommonLib%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
+      <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
+      <Name>eBayDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\eBay\eBayLib\eBayLib.csproj">
+      <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>
+      <Name>eBayLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\eBay\eBayServiceLib\eBayServiceLib.csproj">
+      <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
+      <Name>eBayServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EKM\EKM.csproj">
+      <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
+      <Name>EKM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ExperianLib\ExperianLib.csproj">
+      <Project>{D91F3FD0-9E1B-41FF-AE2E-67F051198F51}</Project>
+      <Name>ExperianLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
+      <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
+      <Name>EzBob.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Name>EzBob.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob.Signals\EzBob.Signals.csproj">
+      <Project>{0b94f193-9310-4a4d-98b2-3a55c851c6ad}</Project>
+      <Name>EzBob.Signals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob\EzBob.csproj">
+      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPal.Base\PayPal.Base.csproj">
+      <Project>{e16b6793-6589-412f-9798-5e99e7112d84}</Project>
+      <Name>PayPal.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPal.Permissions\PayPal.Permissions.csproj">
+      <Project>{96e238ae-ce18-4299-87c4-0924ebcefa80}</Project>
+      <Name>PayPal.Permissions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalDbLib\PayPalDbLib.csproj">
+      <Project>{F80EB367-9E8A-4317-A6BC-C3FC2FD9770E}</Project>
+      <Name>PayPalDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
+      <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
+      <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
+      <Name>ZohoCRM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Log4NetCustomAppenders\Log4NetCustomAppenders.csproj">
+      <Project>{9b99cd18-9414-4842-9792-e33b6605f330}</Project>
+      <Name>Log4NetCustomAppenders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PostcodeAnywhere\PostcodeAnywhere.csproj">
+      <Project>{083973a7-25ed-4b16-9bb4-65bdd4aa1aa8}</Project>
+      <Name>PostcodeAnywhere</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\js\min\web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Customer\Views\StoreInfo\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\StoreInfoMain.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\EbayStoreInfo.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\EbayConnected.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\AmazonStoreInfo.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Wizard.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\StoreButton.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\PayPalInstructions.cshtml" />
+    <Content Include="Areas\Customer\Views\PaymentAccounts\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\PaymentAccounts\Success.cshtml" />
+    <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_CompanyDetails.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityStatement.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_ProfileTemplateMain.cshtml" />
+    <Content Include="Areas\Customer\Views\PaymentAccounts\Error.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\BankAccountInstructions.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\PayEarlyTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\AccountActivityTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\LoanDetailsTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\PaymentAccountsTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\StoresTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\SettingsTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_ProfileSummary.cshtml" />
+    <Content Include="Areas\Customer\Views\Paypoint\Callback.cshtml" />
+    <Content Include="Areas\Customer\Views\Paypoint\Error.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\PacnetStatus.cshtml" />
+    <Content Include="Areas\Customer\Views\PacnetStatus\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\StoreInfoNotification.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Alerts.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\PayPointResult.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_AddressPopupTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_AddressTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Consent\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Consent\Personal.cshtml" />
+    <Content Include="Areas\Customer\Views\Consent\Commercial.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\PerformenceReportPerUnderWriter.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\_LayoutReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\_LayoutAmountCountReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\PerformenceReportPerMedal.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\ExposureReportPerMedal.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\ExposureReportPerUnderwriter.cshtml" />
+    <Content Include="Areas\Customer\Views\PaymentAccounts\PPAttachError.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\BetaTesterCompanyLoan.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\BetaTesterPreContract.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\CreditActAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\GuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\Pre-Contract-Agreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\PrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\MedalStatisticReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\ProfileLoanInfoTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\CrossCheck\Index.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\_LayoutStandartReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_ApiChecksLog.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\TimeFilterReportControl.cshtml" />
+    <Content Include="Views\Shared\_LoanScheduleTemplate.cshtml" />
+    <EmbeddedResource Include="Aspose.Total.lic" />
+    <Content Include="Areas\Underwriter\Views\Shared\_MarketplaceValuesTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_LoanhistoryViewTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_SecureDisclaimer.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_SideBarLayout.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\AmazonStoreNtification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\EbayStoreNtification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\BankAccountNtification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PaymentAccountsNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPalNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\DetailsNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\GetCashNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PayEarlyNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Steps.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\CashConfirmationNotification.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Reports\DayFilterReportControl.cshtml" />
+    <Content Include="Areas\Customer\Views\Pacnet\PacnetError.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\FakeVideo.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\_GetCashConfirmationModalTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\_payEarlyConfirmationModalTemplate.cshtml" />
+    <Content Include="Content\css\min\web.config" />
+    <Content Include="Areas\Customer\Views\Shared\_TargetingTemplate.cshtml" />
+    <None Include="Content\files\consent_letter.pdf" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.functionsDialog.js" />
+    <Content Include="Content\Video\EZBOB_Movie.ogv" />
+    <Content Include="Content\js\controls\ezbob.modal.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.applyForLoan.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.rollover.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.emaileditview.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.LoanOptions.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.AlertDocsView.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.marketplaces.coffee" />
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanHistorys.coffee" />
+    <None Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.coffee" />
+    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.coffee" />
+    <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentView.coffee" />
+    <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.summaryInfo.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanInfo.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.personInfo.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.profile.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.app.coffee" />
+    <Content Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.AddBankAccount.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.collectionStatus.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.manualPayment.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanHistoryDetail.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.controlButtons.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.caisReportsHistory.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.ProfilePopupView.coffee" />
+    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.coffee" />
+    <Content Include="Content\js\Underwriter\editLoan\loanModel.coffee" />
+    <Content Include="Content\js\Underwriter\editLoan\editLoanView.coffee" />
+    <Content Include="Content\js\Underwriter\editLoan\installmentEditor.coffee" />
+    <Content Include="Content\js\Underwriter\editLoan\editFee.coffee" />
+    <None Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
+    <None Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
+    <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Shared\_Start.cshtml" />
+    <Content Include="Views\Shared\_LoginSimple.cshtml" />
+    <Content Include="Views\Shared\_HowItWorks.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_DynamicLogin.cshtml" />
+    <Content Include="Views\Shared\_TopButtons.cshtml" />
+    <Content Include="Views\Shared\_FiveIcons.cshtml" />
+    <Content Include="Views\Account\AdminLogOn.cshtml" />
+    <Content Include="Views\Shared\_FooterSimple.cshtml" />
+    <Content Include="Views\Shared\_MyProfile.cshtml" />
+    <Content Include="Views\Landing\Index.cshtml" />
+    <Content Include="Views\Home\ActivateStore.cshtml" />
+    <Content Include="Views\Account\SimpleCaptcha.cshtml" />
+    <Content Include="Views\Shared\_ClickTale.cshtml" />
+    <Content Include="Views\Shared\_GoogleAnalytics.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Shared\_Truste.cshtml" />
+    <Content Include="Views\Shared\_FavIcon.cshtml" />
+    <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
+    <Content Include="Views\Shared\_AddRoll.cshtml" />
+    <Content Include="Views\Shared\_StaticPageLayout.cshtml" />
+    <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
+    <Content Include="Views\PaypointTemplate\Index.cshtml" />
+    <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />
+    <Content Include="Views\Shared\_Copyright.cshtml" />
+    <Content Include="Views\Shared\_FrameKiller.cshtml" />
+    <Content Include="Views\Account\Recaptcha.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6531</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44300/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

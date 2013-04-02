@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+<table class="table table-bordered table-striped table-selected bankAccounts blue-header centered">
+    <thead>
+        <tr>
+            <th>Bank Account</th>
+            <th>Sort Code</th>
+            <th>Bank Account Сheck</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%var current = paymentAccounts.CurrentBankAccount || {}; %>
+        @BankAccountLine("current", false)
+                
+        <% _.each(paymentAccounts.BankAccounts, function(ba, i){%>
+            @BankAccountLine("ba", true)
+        <%}) %>       
+    </tbody>
+</table>
+    
+<button class="btn addNewDebitCard">Add New</button>
+
+@helper BankAccountLine(string current, bool setDefault){
+    <tr data-card-id="<%-(@current).Id%>" >
+        <td>
+            <%if(!(@current).StatusInformation){%>
+                <i class="icon-question-sign" data-title="Not validated"></i>
+            <%} else if((@current).StatusInformation == "OK"){%>
+                <i class="icon-ok" data-title="Validated"></i>
+            <%} else {%>
+                <i class="icon-exclamation-sign" data-title="<%- (@current).StatusInformation %>"></i>
+            <%}%>
+            <%-(@current).BankAccount%>
+        </td>
+        <td><%-(@current).SortCode%></td>
+        <td><%-(@current).StatusInformation || "-"%></td>
+        <td><%-(@current).Type%></td>
+        <td>
+            <button class="btn btn-mini checkeBankAccount">Check</button>
+            @if(setDefault){
+                <button class="btn btn-mini setDefault">Set Default</button>
+            }
+        </td>
+    </tr>
+}
