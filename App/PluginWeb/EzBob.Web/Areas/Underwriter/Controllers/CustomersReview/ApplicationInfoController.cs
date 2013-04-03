@@ -310,6 +310,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             customer.OfferStart = DateTime.UtcNow;
             customer.OfferValidUntil = DateTime.UtcNow.AddDays(1);
             customer.CashRequests.Add(cashRequest);
+            customer.CreditResult = null;
 
             cashRequest.OfferStart = customer.OfferStart;
             cashRequest.OfferValidUntil = customer.OfferValidUntil;

@@ -128,10 +128,11 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         false
 
     RunCustomerCheck: ->
+        BlockUi "on"
         $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine",
             Id: @model.get("CustomerId")
         ).done((response) =>
-            updater = new ModelUpdater(@personalInfo, 'CreditResult', 'WaitingForDecision')
+            updater = new ModelUpdater(@personalInfo, 'CreditResult')
             updater.start()
         ).fail (data) ->
             console.error data.responseText
@@ -179,8 +180,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @personalInfo.fetch()
 
 class ModelUpdater
-    constructor: (@model, @property, @value) ->
-        BlockUi 'on'
+    constructor: (@model, @property) ->
 
     start: =>
         xhr = @model.fetch()
@@ -188,7 +188,7 @@ class ModelUpdater
             @check()
     
     check: ->
-        if @model.get(@property) is @value
+        if not @model.get(@property).isNullOrEmpty()
             BlockUi 'off'
             return
         else
