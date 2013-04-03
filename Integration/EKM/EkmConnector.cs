@@ -1,7 +1,7 @@
 ﻿namespace EKM
 {
     // The API service reference was generated from http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx
-    using EKM.EkmApiNS;
+    using EKM.API;
 
     public class EkmConnector
     {
@@ -9,17 +9,9 @@
 
         public bool Validate(string id, string password, out string errMsg)
         {
-            errMsg = "fake reason";
-            return false;
-        }
-
-        public bool test(string id, string password, out string errMsg)
-        {
+            
             // should i encrypt decrypt?
             //var decrypted = Encryptor.Decrypt(password);
-
-
-
 
             errMsg = string.Empty;
 

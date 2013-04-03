@@ -1,7 +1,3 @@
-IF OBJECT_ID ('dbo.MP_EkmOrderItem') IS NOT NULL
-	DROP TABLE dbo.MP_EkmOrderItem
-GO
-
 CREATE TABLE dbo.MP_EkmOrderItem
 	(
 	  Id                 INT IDENTITY NOT NULL

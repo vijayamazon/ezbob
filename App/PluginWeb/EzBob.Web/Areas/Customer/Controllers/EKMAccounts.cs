@@ -7,6 +7,7 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using Scorto.Web;
+using EKM;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -17,6 +18,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
         private EZBob.DatabaseLib.Model.Database.Customer _customer;
+        private readonly EkmConnector _validator = new EkmConnector();
 
         public EkmAccountsController(IEzbobWorkplaceContext context, ICustomerRepository customers, IRepository<MP_MarketplaceType> mpTypes, IRepository<MP_CustomerMarketPlace> marketplaces)
         {
@@ -39,6 +41,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [HttpPost]
         public JsonNetResult Accounts(EKMAccountModel model)
         {
+            string errorMsg;
+            if (!_validator.Validate(model.login, model.password, out errorMsg))
+            {
+                var errorObject = new { error = errorMsg };
+                return this.JsonNet(errorObject);
+            }
+
             var mp = new MP_CustomerMarketPlace
                          {
                              Marketplace = _mpTypes.Get(4),

@@ -29,3 +29,4 @@ App/PluginWeb/EzBob.Web/Content/js/min/*.js
 App/PluginWeb/EzBob.Web/Content/css/min/*.css
 App/PluginWeb/EzBob.Web/bin/
 Tools/DownloadScript/run.log
+Tools/IncrementalUpdate/run.log

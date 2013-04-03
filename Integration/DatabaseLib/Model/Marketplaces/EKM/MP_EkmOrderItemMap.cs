@@ -19,7 +19,6 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.LastName, "LastName").Length(300);
             Map(x => x.OrderDate, "OrderDate").CustomType<UtcDateTimeType>();
             Map(x => x.OrderNumber, "OrderNumber").Length(300);
-            Map(x => x.OrderStatus, "OrderStatus").Length(300);
             Map(x => x.OrderStatusColour, "OrderStatusColour").Length(300);
             Map(x => x.TotalCost, "TotalCost");
 		}
