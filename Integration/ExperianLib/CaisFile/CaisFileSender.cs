@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -46,9 +47,11 @@ namespace ExperianLib.CaisFile
             try
             {
                 _client.UploadFile(Hostname, fileName);
+                SaveToBase(fileName, CaisUploadStatus.Uploaded);
             }
             catch (Exception exception)
             {
+                SaveToBase(fileName, CaisUploadStatus.UploadError);
                 Log.Error(exception.Message);
             }
         }
@@ -64,26 +67,29 @@ namespace ExperianLib.CaisFile
                     file.InputStream.CopyTo(target);
                     var data = target.ToArray();
                     _client.UploadData(Hostname + file.FileName, data);
+                    SaveToBase(Hostname + file.FileName, CaisUploadStatus.Uploaded);
                 }
             }
             catch (Exception exception)
             {
+                SaveToBase(Hostname + file.FileName, CaisUploadStatus.UploadError);
                 Log.Error(exception.Message);
                 throw;
             }
         }
-        public void SaveToBase(CaisReportType type, int ofItems, int goodUsers,CaisReportUploadStatus uploadStatus, string filePath)
+        public void SaveToBase(string filePath, CaisUploadStatus status)
         {
-            var caisReportsHistory = new CaisReportsHistory()
-                                                        {
-                                                            Date = DateTime.UtcNow,
-                                                            FileName = System.IO.Path.GetFileNameWithoutExtension(filePath),
-                                                            OfItems = ofItems,
-                                                            GoodUsers = goodUsers,
-                                                            UploadStatus = uploadStatus,
-                                                            FilePath = filePath
-                                                        };
-            _caisReportsHistoryRepository.Save(caisReportsHistory);
+            var caisReportsHistory = _caisReportsHistoryRepository.GetAll()
+                .FirstOrDefault(x => x.FilePath == filePath) ??
+                new CaisReportsHistory
+                {
+                    Date = DateTime.Now,
+                    FilePath = filePath,
+                    FileName = Path.GetFileName(filePath),
+                    UploadStatus = status
+                };
+            caisReportsHistory.UploadStatus = status;
+            _caisReportsHistoryRepository.SaveOrUpdate(caisReportsHistory);
         }
     }
 }

@@ -12,7 +12,14 @@
 
 <script id="loanhistory-template" type="text/template">
     @Loans()
-    @Offers()
+    <div>
+        <label class="checkbox">
+            <input type="checkbox" class="show-rejections" checked="checked"> Show rejections
+        </label>
+    </div>
+    <div id="offers-conteiner">
+    </div>
+    
     @{Html.RenderPartial("_ExportToExcel");}
 </script>
 
@@ -44,7 +51,7 @@
                 <td>
                     <%- loan.RefNumber %>
                     <% if (loan.Modified) {%>
-                        *
+                    *
                     <%}%>
                     <a href="#" class="btn btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="icon-pencil"></i></a>
                 </td>
@@ -81,42 +88,65 @@
     </table>
 }
 
+<script id="offrers-template" type="text/template">
+    @Offers()
+</script>
+
 @helper Offers(){
-<table class="table table-bordered table-striped blue-header centered">
-    <thead>
-        <tr>
-            <th>Offer</th>        
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Amount</th>
-            <th>Interest Rate</th>
-            <th>Setup Fee</th>
-            <th>Repayment Period</th>
-            <th>Type</th>
-            <th>Comments</th>
-        </tr>
-    </thead>
-    <tbody>
-        <%
-        _.each(offers, function(offer){
-            if(offer.UnderwriterDecision === "Approved") {
-        %>   
-        <tr>
-            <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-mini show-schedule"><i class="icon-calendar"></i></button></td>
-            <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
-            <td><%- EzBob.formatDateHumanFull(offer.EndDate) %></td>
-            <td><%- EzBob.formatPounds(offer.Amount) %></td>
-            <td><%- EzBob.formatPercents(offer.InterestRate) %></td>
-            <td><%- offer.SetupFee %></td>
-            <td><%- offer.RepaymentPeriod %></td>
-            <td><%- offer.LoanType %></td>
-            <td><%- offer.Comments %></td>
-        </tr>
-        <%}});%>
-    </tbody>
-</table>    
+   
+    <table class="table table-bordered table-striped blue-header centered">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Offer</th>        
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Amount</th>
+                <th>Interest Rate</th>
+                <th>Setup Fee</th>
+                <th>Repayment Period</th>
+                <th>Type</th>
+                <th>Comments</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(offers, function(offer){%>   
+                <% if (offer.UnderwriterDecision === "Approved") {%>
+                    @TableRowsOfferApproved()
+                <%} else if (offer.UnderwriterDecision === "Rejected") {%>
+                    @TableRowsOfferReject()
+                <%}%>
+            <%});%>
+        </tbody>
+    </table>    
 }
 
+@helper TableRowsOfferApproved () {
+    <tr>
+        <td><%- offer.UnderwriterDecision %></td>
+        <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-mini show-schedule"><i class="icon-calendar"></i></button></td>
+        <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
+        <td><%- EzBob.formatDateHumanFull(offer.EndDate) %></td>
+        <td><%- EzBob.formatPounds(offer.Amount) %></td>
+        <td><%- EzBob.formatPercents(offer.InterestRate) %></td>
+        <td><%- offer.SetupFee %></td>
+        <td><%- offer.RepaymentPeriod %></td>
+        <td><%- offer.LoanType %></td>
+        <td><%- offer.Comments %></td>
+    </tr>
+}
+
+@helper TableRowsOfferReject () {
+    <tr>
+        <td><%- offer.UnderwriterDecision %></td>
+        <td class="centered"></td>
+        <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
+        <td colspan="6"></td>
+        
+        <td><%- offer.Comments %></td>
+    </tr>
+}
 <script id="manualPayment-template" type="text/template">
     @ManualPayment()
 </script>

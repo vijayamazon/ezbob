@@ -134,9 +134,9 @@ namespace ezmanage
             throw new NotImplementedException();
         }
 
-        public void CAISNOUpload(User customer)
+        public void CAISGenerate(User customer, string caisFilesLocationPath, string filePath)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

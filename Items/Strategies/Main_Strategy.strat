@@ -16,40 +16,41 @@
     <NodeElement Name="Amazon Alerts Passed" NodeId="ConditionalAssignment2030132" />
     <NodeElement Name="Amazon Elimination Variables" NodeId="CreditProduct8059170" />
     <NodeElement Name="Amazon Select" NodeId="Select45785693" />
-    <NodeElement Name="AML" NodeId="ConditionalAssignment10489022" />
     <NodeElement Name="AML" NodeId="ScriptNode64112402" />
-    <NodeElement Name="AML &amp; BWA" NodeId="Comparison14055177" />
-    <NodeElement Name="AML &amp; BWA" NodeId="Comparison19237173" />
+    <NodeElement Name="AML" NodeId="ConditionalAssignment10489022" />
     <NodeElement Name="AML &amp; BWA" NodeId="Comparison26121432" />
+    <NodeElement Name="AML &amp; BWA" NodeId="Comparison19237173" />
+    <NodeElement Name="AML &amp; BWA" NodeId="Comparison14055177" />
     <NodeElement Name="AML Alerts" NodeId="ScriptNode39606272" />
     <NodeElement Name="AML Prev" NodeId="ScriptNode63142667" />
     <NodeElement Name="Amount is null check" NodeId="ConditionalAssignment57612135" />
     <NodeElement Name="AmzonCounter" NodeId="Comparison20944062" />
     <NodeElement Name="Approve" NodeId="MultiAssignmentB66326724" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB39624552" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB51964767" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB33910007" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB18596172" />
     <NodeElement Name="Assignment" NodeId="AssignmentB52547616" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB18596172" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB33910007" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB51964767" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB39624552" />
     <NodeElement Name="Bank Account is Business" NodeId="Comparison56939344" />
     <NodeElement Name="Bureau Score R" NodeId="Comparison61864166" />
     <NodeElement Name="Bureau Score W" NodeId="Comparison10268880" />
     <NodeElement Name="BWA" NodeId="ScriptNode27366939" />
-    <NodeElement Name="BWA &amp; AML" NodeId="ScriptNode25270568" />
     <NodeElement Name="BWA &amp; AML" NodeId="ScriptNode5436632" />
+    <NodeElement Name="BWA &amp; AML" NodeId="ScriptNode25270568" />
     <NodeElement Name="BWA Alerts" NodeId="ScriptNode27212590" />
     <NodeElement Name="BWA Prev" NodeId="ScriptNode28699853" />
-    <NodeElement Name="BWABusinessCheckFlag" NodeId="DataSourceNodeScalar64555384" />
-    <NodeElement Name="Comparison" NodeId="Comparison64333366" />
-    <NodeElement Name="Comparison" NodeId="Comparison26359507" />
-    <NodeElement Name="Comparison" NodeId="Comparison43741994" />
-    <NodeElement Name="Comparison" NodeId="Comparison53767959" />
+    <NodeElement Name="BWABusinessCheckFlag" NodeId="DataSourceNodeScalar28748943" />
     <NodeElement Name="Comparison" NodeId="Comparison34055499" />
-    <NodeElement Name="Conditional" NodeId="ConditionalAssignment35393524" />
-    <NodeElement Name="Conditional" NodeId="ConditionalAssignment65927667" />
+    <NodeElement Name="Comparison" NodeId="Comparison53767959" />
+    <NodeElement Name="Comparison" NodeId="Comparison43741994" />
+    <NodeElement Name="Comparison" NodeId="Comparison26359507" />
+    <NodeElement Name="Comparison" NodeId="Comparison64333366" />
+    <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison63218898" />
     <NodeElement Name="Conditional" NodeId="ConditionalAssignment45490280" />
-    <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment18896952" />
+    <NodeElement Name="Conditional" NodeId="ConditionalAssignment65927667" />
+    <NodeElement Name="Conditional" NodeId="ConditionalAssignment35393524" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment17277859" />
+    <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment18896952" />
     <NodeElement Name="Consumer" NodeId="Comparison53881646" />
     <NodeElement Name="Consumer Alerts" NodeId="ScriptNode51986291" />
     <NodeElement Name="Consumer Error" NodeId="ScriptNode37196205" />
@@ -62,15 +63,15 @@
     <NodeElement Name="Credit card exposure W" NodeId="Comparison24481429" />
     <NodeElement Name="Credit Card Status R" NodeId="Comparison11887525" />
     <NodeElement Name="Credit Card Status W" NodeId="Comparison60622023" />
-    <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison4221766" />
     <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison64156767" />
-    <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison59045447" />
+    <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison4221766" />
     <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison46902148" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB67077397" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB35228179" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB17590785" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65313131" />
+    <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison59045447" />
     <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65999348" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65313131" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB17590785" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB35228179" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB67077397" />
     <NodeElement Name="CustomerEliminated" NodeId="AssignmentB680073" />
     <NodeElement Name="CustomerNonEliminated" NodeId="AssignmentB16960185" />
     <NodeElement Name="CustomerScoringResult_Insert" NodeId="DataSourceNodeScalar51289140" />
@@ -84,9 +85,10 @@
     <NodeElement Name="eBay Warnings" NodeId="ConditionalAssignment3670804" />
     <NodeElement Name="eBayCounter" NodeId="Comparison28073419" />
     <NodeElement Name="Elimination Not Passed" NodeId="AssignmentB56596130" />
-    <NodeElement Name="Elimination Passed" NodeId="AssignmentB25114417" />
     <NodeElement Name="Elimination Passed" NodeId="AssignmentB26825449" />
+    <NodeElement Name="Elimination Passed" NodeId="AssignmentB25114417" />
     <NodeElement Name="Empty Sales Totals" NodeId="ConditionalAssignment14570343" />
+    <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison2387659" />
     <NodeElement Name="Enquiries Number 3M R" NodeId="Comparison22919578" />
     <NodeElement Name="Enquiries Number 3M W" NodeId="Comparison21901376" />
     <NodeElement Name="Enquiries Number 6M R" NodeId="Comparison30215163" />
@@ -100,12 +102,12 @@
     <NodeElement Name="ExperianPolicyRulesConsumer" NodeId="CreditProduct34857263" />
     <NodeElement Name="ezbob_scoring_model" NodeId="NestedStrategy23238696" />
     <NodeElement Name="Get data" NodeId="GetRowDataNode13424586" />
-    <NodeElement Name="Get data from row" NodeId="GetRowDataNode60663320" />
-    <NodeElement Name="Get data from row" NodeId="GetRowDataNode26386209" />
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode53514187" />
+    <NodeElement Name="Get data from row" NodeId="GetRowDataNode26386209" />
+    <NodeElement Name="Get data from row" NodeId="GetRowDataNode60663320" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode37336053" />
-    <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar55330634" />
+    <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar16854755" />
     <NodeElement Name="Get_Other_Directors_Address" NodeId="DataSourceBehavioral20197855" />
     <NodeElement Name="GetAmazonData" NodeId="DataSourceBehavioral56474739" />
@@ -119,97 +121,101 @@
     <NodeElement Name="is 2 Errors" NodeId="Comparison29253371" />
     <NodeElement Name="is AML Error" NodeId="Comparison61741779" />
     <NodeElement Name="Is Approved" NodeId="Comparison1806776" />
-    <NodeElement Name="is BWA Error" NodeId="Comparison30760515" />
-    <NodeElement Name="is BWA Error" NodeId="Comparison3821339" />
     <NodeElement Name="is BWA Error" NodeId="Comparison51358920" />
+    <NodeElement Name="is BWA Error" NodeId="Comparison3821339" />
+    <NodeElement Name="is BWA Error" NodeId="Comparison30760515" />
     <NodeElement Name="is Error" NodeId="Comparison29275518" />
     <NodeElement Name="Is rejected" NodeId="Comparison17338192" />
     <NodeElement Name="IsAMLStartedFromWeb" NodeId="Comparison45780660" />
     <NodeElement Name="IsCustomerMPUpdated" NodeId="Comparison66184812" />
-    <NodeElement Name="Limited Alerts" NodeId="ScriptNode16276544" />
     <NodeElement Name="Limited Alerts" NodeId="ConditionalAssignment24989057" />
+    <NodeElement Name="Limited Alerts" NodeId="ScriptNode16276544" />
     <NodeElement Name="Limited business" NodeId="ScriptNode7845620" />
     <NodeElement Name="Limited Company" NodeId="Comparison22234547" />
     <NodeElement Name="Limited Low Risk" NodeId="Comparison31904988" />
-    <NodeElement Name="Limited Medium Risk" NodeId="Comparison31845254" />
     <NodeElement Name="Limited Medium Risk" NodeId="Comparison29344809" />
-    <NodeElement Name="Mail Node" NodeId="MailNode3521800" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38679314" />
-    <NodeElement Name="Mail Node" NodeId="MailNode34221815" />
-    <NodeElement Name="Mail Node" NodeId="MailNode61074547" />
+    <NodeElement Name="Limited Medium Risk" NodeId="Comparison31845254" />
     <NodeElement Name="Mail Node" NodeId="MailNode30425207" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61074547" />
+    <NodeElement Name="Mail Node" NodeId="MailNode34221815" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38679314" />
+    <NodeElement Name="Mail Node" NodeId="MailNode3521800" />
+    <NodeElement Name="Mail Node" NodeId="MailNode7642424" />
+    <NodeElement Name="Reject" NodeId="MailNode62386338" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct64925487" />
-    <NodeElement Name="Manual" NodeId="MultiAssignmentB13176872" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct37031506" />
     <NodeElement Name="Manual" NodeId="MailNode2693411" />
+    <NodeElement Name="Manual" NodeId="MultiAssignmentB13176872" />
     <NodeElement Name="Minimum repayment R" NodeId="Comparison7078897" />
     <NodeElement Name="Minimum repayment W" NodeId="Comparison31262001" />
-    <NodeElement Name="MP Alerts" NodeId="ScriptNode61442565" />
-    <NodeElement Name="MP Alerts" NodeId="ScriptNode6647602" />
     <NodeElement Name="MP Alerts" NodeId="ScriptNode31892610" />
+    <NodeElement Name="MP Alerts" NodeId="ScriptNode6647602" />
+    <NodeElement Name="MP Alerts" NodeId="ScriptNode61442565" />
     <NodeElement Name="MP_Get_Orders" NodeId="DataSourceNodeScalar27141505" />
     <NodeElement Name="MP_GetAmountOfNotEliminatedMPs" NodeId="DataSourceNodeScalar47123429" />
     <NodeElement Name="MP_GetMPNumber" NodeId="DataSourceNodeScalar20480353" />
     <NodeElement Name="MP_GetScoreCardData" NodeId="DataSourceNodeScalar24312641" />
     <NodeElement Name="MP_IsCustomerMarketPlacesUpdated" NodeId="DataSourceNodeScalar36868397" />
-    <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar10118767" />
     <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar29579681" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar53497695" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar32004531" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar20128515" />
+    <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar10118767" />
     <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar10213674" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56906283" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22748702" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28788730" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB24529445" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB49986958" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21003110" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28803687" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB26789609" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB23190036" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43665743" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB10714073" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB6289252" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB4207559" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28570570" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60306634" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB54363918" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60693691" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB36526857" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31284468" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB63457740" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB61643912" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22931619" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB13964701" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28132937" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB35693119" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38038751" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8981466" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21510403" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57986812" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43281866" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1768962" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB44610037" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB62674112" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56076321" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57391878" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28168778" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50848458" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8634708" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB46589783" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64978768" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1786593" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12193174" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21355384" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28189346" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12433334" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38972142" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64681005" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar20128515" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar32004531" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar53497695" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60001781" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64681005" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38972142" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12433334" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28189346" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21355384" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12193174" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1786593" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64978768" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB46589783" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8634708" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50848458" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28168778" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57391878" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56076321" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB62674112" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB44610037" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1768962" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43281866" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57986812" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21510403" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8981466" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38038751" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB35693119" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28132937" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB13964701" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22931619" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB61643912" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB63457740" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31284468" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB36526857" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60693691" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB54363918" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60306634" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28570570" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB4207559" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB6289252" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB10714073" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43665743" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB23190036" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB26789609" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28803687" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21003110" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB49986958" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB24529445" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28788730" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22748702" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56906283" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31186707" />
     <NodeElement Name="Non limited Alerts" NodeId="ScriptNode65232460" />
     <NodeElement Name="Non limited Business" NodeId="ScriptNode66781859" />
     <NodeElement Name="Non-limited " NodeId="Comparison41806244" />
-    <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison48521438" />
     <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison26779025" />
+    <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison48521438" />
     <NodeElement Name="Not Passed" NodeId="AssignmentB28507060" />
     <NodeElement Name="Not Performed" NodeId="ConditionalAssignment5791838" />
     <NodeElement Name="Number Of Credit Cards R" NodeId="Comparison26293412" />
@@ -220,62 +226,63 @@
     <NodeElement Name="OverIndebtedness" NodeId="MultiAssignmentB42605986" />
     <NodeElement Name="Over-indebtedness Alert" NodeId="ScriptNode64395379" />
     <NodeElement Name="Over-Indebtedness R" NodeId="ConditionalAssignment65096334" />
-    <NodeElement Name="Passed" NodeId="ConditionalAssignment20840602" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB61893686" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB33179059" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB9100489" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB25782746" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB38632660" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB64273592" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB22777043" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB44050452" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB14965585" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB9805685" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB49662088" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB16803633" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB7030785" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB66395971" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB45635198" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB37857788" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB28561426" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB24169717" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB62092003" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB66564778" />
-    <NodeElement Name="Passed" NodeId="AssignmentB31639646" />
     <NodeElement Name="Passed" NodeId="ConditionalAssignment15176678" />
+    <NodeElement Name="Passed" NodeId="AssignmentB31639646" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB66564778" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB62092003" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB24169717" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB28561426" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB37857788" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB45635198" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB66395971" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB7030785" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB16803633" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB49662088" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB9805685" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB14965585" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB44050452" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB22777043" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB64273592" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB38632660" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB25782746" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB9100489" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB33179059" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB61893686" />
+    <NodeElement Name="Passed" NodeId="ConditionalAssignment20840602" />
     <NodeElement Name="Personal Loan Status R " NodeId="Comparison15830649" />
     <NodeElement Name="Personal Loan Status W" NodeId="Comparison37287068" />
     <NodeElement Name="Personal loans R" NodeId="Comparison20035339" />
     <NodeElement Name="Personal loans W" NodeId="Comparison41778047" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode40306186" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode17826361" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode53255599" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode2225260" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode11519133" />
-    <NodeElement Name="Re-approval" NodeId="Comparison22785027" />
-    <NodeElement Name="Re-approval" NodeId="Comparison13079191" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode2225260" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode53255599" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode17826361" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode40306186" />
     <NodeElement Name="Re-approval" NodeId="Comparison7876644" />
+    <NodeElement Name="Re-approval" NodeId="Comparison13079191" />
+    <NodeElement Name="Re-approval" NodeId="Comparison22785027" />
     <NodeElement Name="ReApproved" NodeId="MailNode5325067" />
     <NodeElement Name="Referred" NodeId="Comparison39862831" />
-    <NodeElement Name="Reject" NodeId="MultiAssignmentB54404718" />
     <NodeElement Name="Reject" NodeId="MailNode24415962" />
-    <NodeElement Name="Rejected" NodeId="ConditionalAssignment3951668" />
-    <NodeElement Name="Rejected" NodeId="Comparison37862992" />
-    <NodeElement Name="Rejected" NodeId="AssignmentB17124613" />
+    <NodeElement Name="Reject" NodeId="MultiAssignmentB54404718" />
+    <NodeElement Name="Reject" NodeId="MultiAssignmentB8084077" />
     <NodeElement Name="Rejected" NodeId="Comparison3438497" />
+    <NodeElement Name="Rejected" NodeId="AssignmentB17124613" />
+    <NodeElement Name="Rejected" NodeId="Comparison37862992" />
+    <NodeElement Name="Rejected" NodeId="ConditionalAssignment3951668" />
     <NodeElement Name="rejection exception" NodeId="Comparison66725580" />
     <NodeElement Name="Scotland and N Ireland" NodeId="ConditionalAssignment13082596" />
     <NodeElement Name="Start Node" NodeId="StartNode20530434" />
     <NodeElement Name="Stop Node" NodeId="StopNode50556185" />
-    <NodeElement Name="StopNode" NodeId="StopNode5692201" />
-    <NodeElement Name="StopNode" NodeId="StopNode40458108" />
     <NodeElement Name="StopNode" NodeId="StopNode53017596" />
-    <NodeElement Name="Subject" NodeId="MultiAssignmentB15301361" />
-    <NodeElement Name="Subject" NodeId="MultiAssignmentB33104529" />
+    <NodeElement Name="StopNode" NodeId="StopNode40458108" />
+    <NodeElement Name="StopNode" NodeId="StopNode5692201" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB49341743" />
-    <NodeElement Name="Suspend" NodeId="SuspendNode38974653" />
-    <NodeElement Name="Suspend" NodeId="SuspendNode443785" />
+    <NodeElement Name="Subject" NodeId="MultiAssignmentB33104529" />
+    <NodeElement Name="Subject" NodeId="MultiAssignmentB15301361" />
     <NodeElement Name="Suspend" NodeId="SuspendNode32700027" />
+    <NodeElement Name="Suspend" NodeId="SuspendNode443785" />
+    <NodeElement Name="Suspend" NodeId="SuspendNode38974653" />
     <NodeElement Name="Thin File R" NodeId="Comparison53318662" />
     <NodeElement Name="Time To Suspend " NodeId="CreditProduct18329995" />
     <NodeElement Name="TotalSumOfStores" NodeId="MultiAssignmentB17780513" />
@@ -286,15 +293,15 @@
     <NodeElement Name="Update_Main_Strat_Finish_Date" NodeId="DataSourceNodeScalar56085180" />
     <NodeElement Name="UpdateCashRequests" NodeId="DataSourceNodeScalar60720175" />
     <NodeElement Name="UpdateCashRequestsReApproval" NodeId="DataSourceNodeScalar4655559" />
-    <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64293435" />
     <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64432673" />
+    <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64293435" />
     <NodeElement Name="UpdateExperianBWA_AML" NodeId="DataSourceNodeScalar35577239" />
-    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar28993732" />
-    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar57450688" />
     <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar5204239" />
+    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar57450688" />
+    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar28993732" />
     <NodeElement Name="UpdateScoringResult" NodeId="DataSourceNodeScalar16522434" />
-    <NodeElement Name="Warning" NodeId="ConditionalAssignment14932284" />
     <NodeElement Name="Warning" NodeId="AssignmentB56236929" />
+    <NodeElement Name="Warning" NodeId="ConditionalAssignment14932284" />
     <NodeElement Name="Withdrawals M R" NodeId="Comparison18563872" />
     <NodeElement Name="Withdrawals M W" NodeId="Comparison36701957" />
   </Workspace>
@@ -2744,8 +2751,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB54404718</Name>
       <PointF>
-        <X>5436</X>
-        <Y>1496</Y>
+        <X>5416</X>
+        <Y>1576</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -4149,8 +4156,8 @@ eBayAccountStateScalar != CP_eBay_AccountStatePending&lt;/condition&gt;&lt;posit
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison54319070</Name>
       <PointF>
-        <X>5285.592</X>
-        <Y>1576</Y>
+        <X>5265.592</X>
+        <Y>1656</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -4319,8 +4326,8 @@ eBayAccountStateScalar != CP_eBay_AccountStatePending&lt;/condition&gt;&lt;posit
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison17338192</Name>
       <PointF>
-        <X>4592.07129</X>
-        <Y>1736</Y>
+        <X>4492.07129</X>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -6268,8 +6275,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB13176872</Name>
       <PointF>
-        <X>5436</X>
-        <Y>1676</Y>
+        <X>5416</X>
+        <Y>1736</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -6362,7 +6369,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>Comparison22785027</Name>
       <PointF>
         <X>5532.07129</X>
-        <Y>1576</Y>
+        <Y>1656</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -8402,45 +8409,19 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
+      <DefaultPinName />
       <Description />
-      <DisplayName>BWABusinessCheckFlag</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;BWABusinessCheckFlagiz6g0rjyTC4RU+OWE0yCDA==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;BWABusinessCheck&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
+      <DisplayName>Enable Automatic Rejection</DisplayName>
+      <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar64555384</Name>
+      <Name>Comparison63218898</Name>
       <PointF>
-        <X>7655.13135</X>
-        <Y>1336</Y>
+        <X>4568.587</X>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -9004,8 +8985,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode2693411</Name>
       <PointF>
-        <X>4856</X>
-        <Y>1636</Y>
+        <X>4776</X>
+        <Y>1596</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -9022,7 +9003,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>Comparison13079191</Name>
       <PointF>
         <X>5590.904</X>
-        <Y>1576</Y>
+        <Y>1656</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -9038,8 +9019,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB66326724</Name>
       <PointF>
-        <X>5436</X>
-        <Y>1816</Y>
+        <X>5416</X>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -9056,7 +9037,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>Comparison7876644</Name>
       <PointF>
         <X>5587.28027</X>
-        <Y>1816</Y>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -9072,8 +9053,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment17277859</Name>
       <PointF>
-        <X>5278.59326</X>
-        <Y>1816</Y>
+        <X>5258.59326</X>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
@@ -9089,7 +9070,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison1806776</Name>
       <PointF>
-        <X>4468.008</X>
+        <X>4368.008</X>
         <Y>1516</Y>
       </PointF>
       <SuperNodeName />
@@ -9107,7 +9088,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>ConditionalAssignment57612135</Name>
       <PointF>
         <X>5686.32471</X>
-        <Y>1816</Y>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
@@ -9123,8 +9104,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode24415962</Name>
       <PointF>
-        <X>4856</X>
-        <Y>1736</Y>
+        <X>4816</X>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -9157,8 +9138,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB15301361</Name>
       <PointF>
-        <X>4716</X>
-        <Y>1636</Y>
+        <X>4676</X>
+        <Y>1596</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -9175,7 +9156,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>MultiAssignmentB33104529</Name>
       <PointF>
         <X>4716</X>
-        <Y>1736</Y>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -9192,7 +9173,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>MultiAssignmentB49341743</Name>
       <PointF>
         <X>4716</X>
-        <Y>1836</Y>
+        <Y>1916</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -9208,8 +9189,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison66725580</Name>
       <PointF>
-        <X>4550.904</X>
-        <Y>1636</Y>
+        <X>4450.904</X>
+        <Y>1596</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -9883,7 +9864,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>DataSourceNodeScalar4655559</Name>
       <PointF>
-        <X>4393.118</X>
+        <X>4293.118</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -9901,10 +9882,171 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>MailNode5325067</Name>
       <PointF>
         <X>4846.67871</X>
-        <Y>1836</Y>
+        <Y>1916</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>BWABusinessCheckFlag</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;BWABusinessCheckFlagjYlDWoL2J0E5bov9CVPc4w==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;BWABusinessCheck&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;EnableAutomaticRejection&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar28748943</Name>
+      <PointF>
+        <X>7655.13135</X>
+        <Y>1336</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Multi-Assignment</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "EZBOB cannot make you a loan offer at this time"&lt;/assignment&gt;&lt;assignment&gt;FAQPage := "http://www.ezbob.com/Customer/HowItWorks#Faq"&lt;/assignment&gt;&lt;assignment&gt;EzbobAccount := "https://app.ezbob.com/Customer/Profile"&lt;/assignment&gt;&lt;assignment&gt;EMailCC := ""&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB31186707</Name>
+      <PointF>
+        <X>4454.626</X>
+        <Y>1816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail_addresses</DisplayName>
+      <InitialValue>Mail_addresses</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>CreditProduct37031506</Name>
+      <PointF>
+        <X>4698.45264</X>
+        <Y>1816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeCreditProduct</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode7642424</Name>
+      <PointF>
+        <X>4612.67</X>
+        <Y>1816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Reject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode62386338</Name>
+      <PointF>
+        <X>4816</X>
+        <Y>1816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Enable Automatic Rejection</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison2387659</Name>
+      <PointF>
+        <X>5468.587</X>
+        <Y>1536</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Reject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;CreditResult := "Rejected"&lt;/assignment&gt;&lt;assignment&gt;UserStatus := "Rejected"&lt;/assignment&gt;&lt;assignment&gt;SystemDecision := "Reject"&lt;/assignment&gt;&lt;assignment&gt;FAQPage := "https://www.ezbob.com/Customer/HowItWorks#Faq"&lt;/assignment&gt;&lt;assignment&gt;ModelLoanOffer := 0&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB8084077</Name>
+      <PointF>
+        <X>5416</X>
+        <Y>1496</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -15746,6 +15888,30 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <Name>LoanOffer_ReApprovalSum</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>EnableAutomaticRejection</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>EzbobAccount</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -27512,38 +27678,26 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar64555384</OwnerName>
-      <Name>BWABusinessCheck</Name>
+      <OwnerName>Comparison63218898</OwnerName>
+      <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue />
+      <InitialValue>EnableAutomaticRejection = "1"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar64555384</OwnerName>
-      <Name>DataSourceName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description>Variable for setting name of Data Source that will be used in current node</Description>
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar64555384</OwnerName>
-      <Name>ScortoInternalErrorMessage</Name>
+      <OwnerName>Comparison63218898</OwnerName>
+      <Name>Comparison63218898EnableAutomaticRejection</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
       <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -29215,6 +29369,246 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <Description />
       <IsInput>true</IsInput>
       <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28748943</OwnerName>
+      <Name>BWABusinessCheck</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28748943</OwnerName>
+      <Name>EnableAutomaticRejection</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28748943</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28748943</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct37031506</OwnerName>
+      <Name>CP_AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>dev@ezbob.com</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct37031506</OwnerName>
+      <Name>CP_AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>FirstName_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>EzBob account_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>FAQPage_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>FirstName_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>EzBob account_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>FAQPage_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison2387659</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>EnableAutomaticRejection = "1"</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison2387659</OwnerName>
+      <Name>Comparison63218898EnableAutomaticRejection</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -31034,16 +31428,21 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar47020346</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar64555384</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar28748943</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode34221815</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Exception</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-23296</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>7620</X>
+          <Y>1340</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignmentB22931619</SourceNodeName>
@@ -33716,7 +34115,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison22785027</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB54404718</TargetNodeName>
+      <TargetNodeName>Comparison2387659</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -34343,12 +34742,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>5360</X>
-          <Y>1540</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct34857263</SourceNodeName>
@@ -34632,7 +35026,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison17338192</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB33104529</TargetNodeName>
+      <TargetNodeName>Comparison63218898</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -34666,7 +35060,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar64555384</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar28748943</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>Comparison45780660</TargetNodeName>
       <SuperNodeName />
@@ -34678,21 +35072,16 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar64555384</SourceNodeName>
-      <SourceNodeOutletName>Exception</SourceNodeOutletName>
-      <TargetNodeName>MailNode34221815</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar47020346</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar28748943</TargetNodeName>
       <SuperNodeName />
-      <Caption>Exception</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-23296</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>7620</X>
-          <Y>1340</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment14570343</SourceNodeName>
@@ -34731,7 +35120,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints>
         <PointF>
           <X>5620</X>
-          <Y>1700</Y>
+          <Y>1760</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -34789,7 +35178,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints>
         <PointF>
           <X>5580</X>
-          <Y>1840</Y>
+          <Y>1860</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -34841,11 +35230,11 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>4420</X>
+          <X>4340</X>
           <Y>1680</Y>
         </PointF>
         <PointF>
-          <X>4420</X>
+          <X>4340</X>
           <Y>1420</Y>
         </PointF>
       </IntermediatePoints>
@@ -34874,8 +35263,8 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>4480</X>
-          <Y>1860</Y>
+          <X>4380</X>
+          <Y>1940</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -35011,11 +35400,11 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>4420</X>
+          <X>4340</X>
           <Y>1980</Y>
         </PointF>
         <PointF>
-          <X>4420</X>
+          <X>4340</X>
           <Y>1420</Y>
         </PointF>
       </IntermediatePoints>
@@ -35053,6 +35442,119 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison63218898</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB31186707</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison63218898</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB33104529</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB31186707</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode7642424</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode7642424</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct37031506</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>CreditProduct37031506</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode62386338</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode62386338</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode23831707</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison2387659</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB8084077</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB8084077</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison54319070</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>5320</X>
+          <Y>1520</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison2387659</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB54404718</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -40173,19 +40675,19 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64555384</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28748943</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64555384</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28748943</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>BWABusinessCheck</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64555384</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28748943</TargetVariableOwnerName>
       <TargetVariableName>BWABusinessCheck</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -40805,6 +41307,108 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SourceVariableName>App_BankAccountType</SourceVariableName>
       <TargetVariableOwnerName>Comparison56939344</TargetVariableOwnerName>
       <TargetVariableName>Comparison56939344App_BankAccountType</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EnableAutomaticRejection</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28748943</TargetVariableOwnerName>
+      <TargetVariableName>EnableAutomaticRejection</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EnableAutomaticRejection</SourceVariableName>
+      <TargetVariableOwnerName>Comparison63218898</TargetVariableOwnerName>
+      <TargetVariableName>Comparison63218898EnableAutomaticRejection</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailTo</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct37031506</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct37031506</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EzbobAccount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>FAQPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>FAQPage_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EzbobAccount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>FAQPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>FAQPage_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode62386338</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxidxYYx022955CnwMJ4GQmA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode7642424</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EnableAutomaticRejection</SourceVariableName>
+      <TargetVariableOwnerName>Comparison2387659</TargetVariableOwnerName>
+      <TargetVariableName>Comparison63218898EnableAutomaticRejection</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -42977,7 +43581,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceNodeScalar64555384</OwnerName>
+      <OwnerName>Comparison63218898</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -43154,6 +43758,62 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>MailNode5325067</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar28748943</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MultiAssignmentB31186707</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>CreditProduct37031506</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode7642424</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode62386338</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison2387659</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MultiAssignmentB8084077</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

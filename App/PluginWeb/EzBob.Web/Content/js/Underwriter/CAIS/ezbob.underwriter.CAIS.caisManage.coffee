@@ -3,53 +3,99 @@ root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter or {}
 EzBob.Underwriter.CAIS = EzBob.Underwriter.CAIS or {}
 
+class EzBob.Underwriter.CAIS.ListOfFilesModel extends Backbone.Model
+    url: "#{gRootPath}Underwriter/CAIS/ListOfFiles"
+    default:
+        cais: {}
+
+    initialize: -> 
+        interval = setInterval (=>
+            @fetch()
+        ), 2000
+        @set "interval", interval
+
+class EzBob.Underwriter.CAIS.SelectedFile extends Backbone.Model
+    default:
+        path: ""
+
+class EzBob.Underwriter.CAIS.SelectedFiles extends Backbone.Collection
+    model: EzBob.Underwriter.CAIS.SelectedFile
+
+    getModelByPath: (path)->
+       @filter (val) -> return val.get("path") == path
+
 class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     template: _.template(if $("#cais-template").length>0 then $("#cais-template").html() else "")
 
-    events:
-        "click .generate":"generateClicked"
-        "click .OpenFiles":"OpenFilesClicked"
-        "change [name='files']": "filesFieldChanged"
-
+    initialize: ->
+        @model = new EzBob.Underwriter.CAIS.ListOfFilesModel()
+        @bindTo @model, "change reset", @render, @
+        BlockUi "on"
+        @model.fetch().done => BlockUi "off"
+        @checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles()
+        @bindTo @checkedModel, "add remove", @checkedFileModelChanged, @
+   
     ui:
-        "form":"form"
+        count:".reports-count"
+        send: ".send"
 
-    generateClicked: ->
+    onRender: ->
+        @$el.find('[data-toggle="tooltip"]').tooltip()
+        @checkedFileModelChanged()
+        
+    serializeData: ->
+        model: @model.get "cais"
+        path: @model.get "path"
+
+    checkedFileModelChanged: ->
+        if @checkedModel.length == 0
+            @ui.send.hide()
+        else
+            @ui.send.show()
+            @ui.count.text  @checkedModel.length
+
+    events:
+        "click .generate": "generateClicked"
+        "click [data-path]": "fileSelected"
+        "click [data-file-path]": "fileChecked"
+    
+    fileChecked: (e) ->
+        $el = $(e.currentTarget)
+        checked = $el.hasClass("checked")
+        filePath = $el.data "file-path"
+        $el.toggleClass "checked", !checked
+        $el.css "border-collapse", ""
+        if not checked then @checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({ path: filePath })) else
+            @checkedModel.remove(@checkedModel.getModelByPath(filePath))
+
+    generateClicked: (e)->
+        $el = $(e.currentTarget)
+        return if $el.hasClass "disabled"
+        $el.addClass "disabled"
         $.post(gRootPath + 'Underwriter/CAIS/Generate')
         .done (response)->
             if response.error != undefined
                 EzBob.ShowMessage "Something went wrong", "Error occured"
                 return
-            EzBob.ShowMessage "Generating current CAIS reports was starting. Please wait few minute", "Successful"
+            EzBob.ShowMessage "Generating current CAIS reports. Please wait few minutes.", "Successful"
+        .always ->
+            $el.removeClass "disabled"
             
-    OpenFilesClicked: ->
-        $('[name="files"]').click()
-
-    filesFieldChanged: (e)->
-        $el = $(e.currentTarget)[0]
-        files = if $el.files then $el.files else $el.val()
-        fileNames = [];
-        _.each files, (val)=>
-            fileNames.push val.name #val.replace(/.*\\/g,'')
-
-        okAction = => 
-            BlockUi "on"
-            @ui.form.ajaxSubmit
-                cache:false
-                success: (response)=>
-                    if response.error != undefined
-                         EzBob.ShowMessage response.error, "Error occured"
-                         return
-                    EzBob.ShowMessage "File{0} successfully downloaded".f(if fileNames.length == 1 then "" else "s"), "Successful"
-                error: (response)=>
-                    error = response.responseText
-                    if response.responseText.indexOf("<title>") > 0
-                        #parse error
-                        x1 = response.responseText.indexOf("<title>")+7;
-                        x2 = response.responseText.indexOf("</title>") - x1;
-                        error = response.responseText.substr(x1, x2);
-                    EzBob.ShowMessage error, "Error"
-                complete: =>
-                    BlockUi "off"
-
-        EzBob.ShowMessage("Do you want to sent <b>{0}</b>?".f(fileNames), "Warning",  okAction, "OK", null, "Cancel")
+    fileSelected: (e)->
+        $el = $(e.currentTarget)
+        filePath = $el.data "path"
+        BlockUi "on"
+        ($.get "#{gRootPath}Underwriter/CAIS/GetOneFile", {path: filePath})
+        .done (response) -> 
+            if response.error
+                EzBob.ShowMessage response.error, "Error"
+                return
+            dialog = $('<div/>').html("<pre class='cais-file-view'>#{response}</pre>")
+            dialog.dialog({
+                title: filePath
+                width: '75%'
+                height: 600
+                modal: true
+                draggable: false
+            })
+        .always =>BlockUi "off"

@@ -27,6 +27,5 @@ EzBob.Config = {
     PayPalEnabled: false,
     HideAlertsTab: false,
     HidePassedAlertsTab: false,
-    PasswordPolicyType: "simple",
-    CAISDisplayedPath: ""
+    PasswordPolicyType: "simple"
 }

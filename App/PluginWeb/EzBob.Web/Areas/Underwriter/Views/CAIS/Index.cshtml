@@ -4,14 +4,13 @@
     ViewBag.Title = "CAIS";
     Layout = "../Shared/_Layout.cshtml";
 }
-<div class="content">
-    
-</div>
+
+<div class="content file-list"></div>
 
 <div id="loan_editor_schedule_template"></div>
 
 <script type="text/template" id="cais-template">
-    @Content()
+    @CaisReports()
 </script>
 
 @section Js{
@@ -19,21 +18,42 @@
         $("#liReports").removeClass("active");
         $("#liApplications").removeClass("active");
         $("#liCAIS").addClass("active");
-        EzBob.Config.CAISDisplayedPath = '@ViewData["CAISDisplayedPath"]';
-
         var view = new EzBob.Underwriter.CAIS.CaisManageView({ el: ".content" });
-        view.render();
     </script>
 }
 
-@helper Content(){
-    <form class="form-horizontal" method="POST" action="@Url.Action("SendCAISFile", "CAIS", new{Area="Underwriter"})">
-        <fieldset>
-            <legend>CAIS reports</legend>
-            @EzForm.Button("","Generate current CAIS reports", "Generate", "generate")
-            @EzForm.Button("","Upload CAIS files", "Open & Upload", "OpenFiles")
-            (<i>Default path of file: <b><% print(EzBob.Config.CAISDisplayedPath)%></b></i>)
-            <input type="file" name="files" multiple style="display: none"/>
-        </fieldset>
-    </form>
+@helper CaisReports()
+{
+    <fieldset>
+        <legend>CAIS reports</legend>
+        <div class="simple-well cais-manage-controls">
+            <button class="generate btn btn-primary"><i class="icon-cog"></i>Generate current reports</button>
+            <button class="send btn btn-success"><i class="icon-upload"></i>Send selected reports (<span class="reports-count"></span>)</button>
+        </div>
+        
+        <table class="table-bordered blue-header table table-striped cais-table">
+            <thead>
+                @EzForm.RawHeaderCell("Reports history", "","","","","")
+            </thead>
+            <tbody>
+                @EzForm.RawCellBold("Data", "Name", "Type", "# of items", "Good Users", "Upload status")
+                <% var currentCollor = "light-grey";
+                _.each(model, function(val, i){ 
+                var timeDiffWithPreviousInHour = i > 0 ? ((new Date(model[i-1].Date)) - (new Date(val.Date)) )/3600000 : 0;
+                if( !( timeDiffWithPreviousInHour <= 1 && timeDiffWithPreviousInHour >= 0) ){
+                currentCollor = currentCollor == "grey" ? "light-grey" : "grey";
+                }
+                %>
+                <tr class="<%- currentCollor %>" data-file-path ="<%-val.FilePath%>">
+                    <td><%-EzBob.formatDateTime(val.Date)%></td>
+                    <td data-path ="<%-val.FilePath%>" class="blue-link"><div  data-toggle="tooltip" title="<%-val.FilePath%>"><%-val.FileName%></div></td>
+                    <td><%-val.Type%></td>
+                    <td><%-val.OfItems%></td>
+                    <td><%-val.GoodUsers%></td>
+                    <td><%-val.CaisUploadStatus%></td>
+                </tr>
+                <%})%>
+            </tbody>
+        </table>
+    </fieldset>
 }

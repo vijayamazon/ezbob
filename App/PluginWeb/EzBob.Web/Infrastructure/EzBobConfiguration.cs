@@ -51,7 +51,6 @@ namespace EzBob.Web.Infrastructure
         string ReneweBayTokenStrategyName { get; }
         string PasswordPolicyType { get; }
         string CAISNoUploadStrategyName { get; }
-        string CAISDisplayedPath { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -78,9 +77,7 @@ namespace EzBob.Web.Infrastructure
         public string PasswordPolicyType { get { return GetValueWithDefault<string>("PasswordPolicyType", "simple"); }  }
         public string CAISNoUploadStrategyName {
             get { return GetValueWithDefault<string>("CAISNoUploadStrategyName", "CAIS_NO_Upload"); }
-        }
-
-        public string CAISDisplayedPath { get { return GetValueWithDefault<string>("CAISDisplayedPath", @"\\\\192.168.1.200\\c:\\1.txt"); } }
+        }        
 
         public virtual bool HideAlertsTab { get { return GetValueWithDefault<bool>("HideAlertsTab", "False"); } }
         public virtual bool HidePassedAlertsTab { get { return GetValueWithDefault<bool>("HidePassedAlertsTab", "False"); } }

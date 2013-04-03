@@ -160,6 +160,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @summaryInfoModel.fetch()
         @personalInfoModel.fetch()
         @loanInfoModel.fetch() 
+        @loanHistory.fetch()
         @makeDecisionFunctionEnabled()
 
     show: (id) ->

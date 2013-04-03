@@ -369,9 +369,14 @@ namespace EzBob.Web.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.CustomerEscalatedStrategyName);
         }
 
-        public void CAISNOUpload(User user)
+        public void CAISGenerate(User user, string path, string path2)
         {
-            CreateApplication(user, new StrategyParameter[]{}, _config.CAISNoUploadStrategyName);
+            var strategyParameters = new[]
+                {
+                    new StrategyParameter("path", path),
+                    new StrategyParameter("path2", path2)
+                };
+            CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
         }
     }
 }

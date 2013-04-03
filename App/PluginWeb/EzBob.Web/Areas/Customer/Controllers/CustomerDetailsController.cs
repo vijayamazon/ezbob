@@ -83,7 +83,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 IdCustomer = customer.Id,
                 InterestRate = 0.06M,
                 LoanType = _loanTypes.GetDefault(),
-                RepaymentPeriod = _loanTypes.GetDefault().RepaymentPeriod
+                RepaymentPeriod = _loanTypes.GetDefault().RepaymentPeriod,
+                UseSetupFee = false
             };
 
             customer.WizardStep = WizardStepType.AllStep;

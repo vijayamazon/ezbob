@@ -38,14 +38,22 @@
     LoanHistoryView.prototype.initialize = function() {
       this.template = _.template($("#loanhistory-template").html());
       this.templateView = _.template($("#loanhistory-view-template").html());
-      return this.bindTo(this.model, "reset fetch change", this.render, this);
+      this.offersTemplate = _.template($("#offrers-template").html());
+      this.bindTo(this.model, "reset fetch change", this.render, this);
+      return this.isRejections = true;
     };
 
     LoanHistoryView.prototype.events = {
       "click tr.loans.tr-link": "rowClick",
       "click .export-to-exel": "exportExcel",
       "click .edit-loan": "editLoan",
-      "click .show-schedule": "showSchedule"
+      "click .show-schedule": "showSchedule",
+      "click .show-rejections": "showRejections"
+    };
+
+    LoanHistoryView.prototype.showRejections = function() {
+      this.isRejections = this.$el.find('.show-rejections').is(':checked');
+      return this.renderOffers();
     };
 
     LoanHistoryView.prototype.exportExcel = function() {
@@ -102,7 +110,31 @@
       this.table = this.$el.find("#loanhistory-table");
       viewModel = this.model.toJSON();
       this.table.html(this.template(viewModel));
+      this.renderOffers();
       return this;
+    };
+
+    LoanHistoryView.prototype.renderOffers = function() {
+      var data;
+      data = {
+        offers: this.filterOffers()
+      };
+      this.offersConteiner = this.$el.find("#offers-conteiner");
+      this.offersConteiner.html(this.offersTemplate(data));
+      return this;
+    };
+
+    LoanHistoryView.prototype.filterOffers = function() {
+      var ofers;
+      if (this.isRejections) {
+        return ofers = _.filter(this.model.get("offers"), function(o) {
+          return o.UnderwriterDecision === "Rejected" || o.UnderwriterDecision === "Approved";
+        });
+      } else {
+        return ofers = _.filter(this.model.get("offers"), function(o) {
+          return o.UnderwriterDecision === "Approved";
+        });
+      }
     };
 
     LoanHistoryView.prototype.showSchedule = function(e) {

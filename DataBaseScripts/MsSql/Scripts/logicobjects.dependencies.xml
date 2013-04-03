@@ -1609,6 +1609,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>InsertCaisReportsHistory</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertCaisReportsHistory.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>InsertStrategyCustomerUpdateTime</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\InsertStrategyCustomerUpdateTime.sql</oFileName>

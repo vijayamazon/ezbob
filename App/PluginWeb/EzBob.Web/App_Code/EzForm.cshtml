@@ -306,3 +306,29 @@
         </div>
     </div>
 }
+@helper RawHeaderCell(params string[] arguments)
+    {
+    <tr>
+        <th colspan="@arguments.Length">@arguments[0]</th>
+    </tr>
+}
+
+@helper RawCell(params string[] arguments)
+    {
+    <tr>
+        @foreach (var s in arguments)
+        {
+            <td>@(new HtmlString(s))</td>    
+        }
+    </tr>
+}
+
+@helper RawCellBold(params string[] arguments)
+    {
+    <tr>
+        @foreach (var s in arguments)
+        {
+            <td><b>@(new HtmlString(s))</b></td>
+        }
+    </tr>
+}

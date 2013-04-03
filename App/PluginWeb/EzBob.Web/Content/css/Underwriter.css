@@ -447,3 +447,41 @@ table tr.editing td{
 .customer-grids {
     margin-left: 178px;
 }
+
+.with-border {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+.file-list tbody tr:hover td {
+    background-color: #a9a9a9 !important;
+    cursor: pointer;
+}
+
+.cais-file-view {
+    overflow: auto;
+}
+
+.grey td {
+    background-color: #ddd !important;
+}
+
+.light-grey td {
+    background-color: #eee !important;
+}
+[data-path] {
+    text-decoration: underline;
+}
+
+.checked td {
+    background-color:lightgreen !important;    
+}
+
+.cais-manage-controls {
+    position: fixed;
+    width: 95%;
+}
+
+.cais-table {
+    margin-top: 65px;
+}
