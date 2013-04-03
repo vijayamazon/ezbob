@@ -1,0 +1,2 @@
+INSERT INTO ConfigurationVariables (Name, [Value], [Description]) VALUES ('CAISPath', '\\ezbob\c$\CAIS\', 'Path to CAIS reports folder')
+INSERT INTO ConfigurationVariables (Name, [Value], [Description]) VALUES ('CAISPath2', '\\ezbob\c$\CAISBACKUP\', 'Path to Backup of CAIS reports folder')
