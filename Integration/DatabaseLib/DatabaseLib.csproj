@@ -133,6 +133,10 @@
     <Compile Include="Model\Loans\LoanType.cs" />
     <Compile Include="Model\Loans\PaymentRallover.cs" />
     <Compile Include="Model\DatabaseElapsedTimeInfo.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrder.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderItem.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounter.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounterMap.cs" />
     <Compile Include="Model\Database\DailyReportRow.cs" />

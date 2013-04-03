@@ -65,6 +65,10 @@ namespace EZBob.DatabaseLib.Model.Database
 			HasMany( x => x.AnalysysFunctionValues ).
 				KeyColumn( "CustomerMarketPlaceId" )
 				.Cascade.All();
+
+            HasMany(x => x.EkmOrders).
+                KeyColumn("CustomerMarketPlaceId")
+                .Cascade.All();
         }
     }
 }

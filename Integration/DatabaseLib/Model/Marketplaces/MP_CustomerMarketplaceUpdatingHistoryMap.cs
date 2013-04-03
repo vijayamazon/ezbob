@@ -55,7 +55,11 @@ namespace EZBob.DatabaseLib.Model.Database
 			
 			HasOne( x => x.PayPalTransaction )
 				.PropertyRef( p => p.HistoryRecord )
-				.Cascade.All();			
+				.Cascade.All();
+
+            HasOne(x => x.EkmOrder)
+                .PropertyRef(p => p.HistoryRecord)
+                .Cascade.All();
 		}
 	}
 }

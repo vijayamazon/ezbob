@@ -30,6 +30,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual MP_EbayUserData EbayUserData { get; set; }
 		public virtual MP_PayPalTransaction PayPalTransaction { get; set; }
 
+        public virtual MP_EkmOrder EkmOrder { get; set; }
 		public virtual string Error { get; set; }
 	}
 }
