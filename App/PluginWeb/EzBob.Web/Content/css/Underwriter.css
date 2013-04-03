@@ -232,9 +232,6 @@ table.rright tbody td:not(:first-child) {
     background-image: -moz-linear-gradient(top, #9AB1D1, #6e7d91);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9AB1D1), to(#6e7d91));
     background-repeat: repeat-x;
-
-    background-color: #9AB1D1;
-    color: white;
 }
 
 .green-header{
@@ -244,6 +241,12 @@ table.rright tbody td:not(:first-child) {
 .green-header  thead tr{
     background-color: #B1B1B1;
     color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #B1B1B1;
+    border-color: #B1B1B1 #B1B1B1 #919191;
+    background-image: -moz-linear-gradient(top, #B1B1B1, #919191);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B1B1B1), to(#919191));
+    background-repeat: repeat-x;
 }
 
 .centered thead tr th{
@@ -506,4 +509,5 @@ table tr.editing td{
 .cais-file-view {
     width: 98%;
     height: 95%;
+    resize: none; 
 }

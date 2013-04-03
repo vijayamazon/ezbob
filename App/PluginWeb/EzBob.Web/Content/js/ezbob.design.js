@@ -13,6 +13,8 @@ $(function () {
     $.ajaxSetup({
         cache: false
     });
+
+    $.ui.dialog.prototype.options.zIndex = 1040;
     
     $("[autofocus = autofocus]").focus();
     $('input[placeholder], textarea[placeholder]').placeholder();

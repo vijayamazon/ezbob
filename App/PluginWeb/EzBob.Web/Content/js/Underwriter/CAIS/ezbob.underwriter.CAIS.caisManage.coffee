@@ -43,6 +43,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     onRender: ->
         @$el.find('[data-toggle="tooltip"]').tooltip()
         @checkedFileModelChanged()
+        @ui.save.addClass "disabled"
         
     serializeData: ->
         model: @model.get "cais"
@@ -94,7 +95,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
             if response.error
                 EzBob.ShowMessage response.error, "Error"
                 return
-            dialog = $('<div/>').html("<textarea class='cais-file-view'>#{response}</textarea>")
+            dialog = $('<div/>').html("<textarea class='cais-file-view'>#{response}</textarea>" )
             dialog.dialog({
                 title: filePath
                 width: '75%'
@@ -107,3 +108,6 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                 ]
             })
         .always =>BlockUi "off"
+
+    saveFileChange: ->
+        $
