@@ -37,11 +37,11 @@
             </thead>
             <tbody>
                 @EzForm.RawCellBold("Data", "Name", "Type", "# of items", "Good Users", "Upload status")
-                <% var currentCollor = "light-grey";
+                <% var currentCollor = "first";
                 _.each(model, function(val, i){ 
-                var timeDiffWithPreviousInHour = i > 0 ? ((new Date(model[i-1].Date)) - (new Date(val.Date)) )/3600000 : 0;
+                var timeDiffWithPreviousInHour = i > 0 ? ((new Date(model[i-1].Date)) - (new Date(val.Date)) )/1000/60 : 0;
                 if( !( timeDiffWithPreviousInHour <= 1 && timeDiffWithPreviousInHour >= 0) ){
-                currentCollor = currentCollor == "grey" ? "light-grey" : "grey";
+                currentCollor = currentCollor == "first" ? "seccond" : "first";
                 }
                 %>
                 <tr class="<%- currentCollor %>" data-file-path ="<%-val.FilePath%>">

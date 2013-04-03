@@ -225,6 +225,14 @@ table.rright tbody td:not(:first-child) {
 }
 
 .blue-header thead tr{
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #9AB1D1;
+    border-color: #9AB1D1 #9AB1D1 #6e7d91;
+    background-image: -moz-linear-gradient(top, #9AB1D1, #6e7d91);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9AB1D1), to(#6e7d91));
+    background-repeat: repeat-x;
+
     background-color: #9AB1D1;
     color: white;
 }
@@ -453,8 +461,8 @@ table tr.editing td{
     border-radius: 5px;
 }
 
-.file-list tbody tr:hover td {
-    background-color: #a9a9a9 !important;
+.file-list tbody tr:hover:not(:first-child) td {
+    background-color: #FFFFEE !important;
     cursor: pointer;
 }
 
@@ -462,26 +470,40 @@ table tr.editing td{
     overflow: auto;
 }
 
-.grey td {
-    background-color: #ddd !important;
+.first td {
+    background: #eeffff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #eeffff 0%, #ddffff 50%, #eeffff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeffff), color-stop(50%,#ddffff), color-stop(100%,#eeffff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #eeffff 0%,#ddffff 50%,#eeffff 100%); /* Chrome10+,Safari5.1+ */
+    background: linear-gradient(to bottom,  #eeffff 0%,#ddffff 50%,#eeffff 100%); /* W3C */
 }
 
-.light-grey td {
-    background-color: #eee !important;
+.seccond td {
+    background: #ffeeff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ffeeff 0%, #ffddee 50%, #ffeeff 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffeeff), color-stop(50%,#ffddee), color-stop(100%,#ffeeff)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffeeff 0%,#ffddee 50%,#ffeeff 100%); /* Chrome10+,Safari5.1+ */
+    background: linear-gradient(to bottom,  #ffeeff 0%,#ffddee 50%,#ffeeff 100%); /* W3C */
 }
 [data-path] {
     text-decoration: underline;
 }
 
 .checked td {
-    background-color:lightgreen !important;    
-}
-
-.cais-manage-controls {
-    position: fixed;
-    width: 95%;
+    color: #ffffff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #5bb75b;
+    border-color: #51a351 #51a351 #387038;
+    background-image: -moz-linear-gradient(top, #62c462, #51a351);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351));
+    background-repeat: repeat-x;
 }
 
 .cais-table {
-    margin-top: 65px;
+    margin-top: 10px;
+}
+
+.cais-file-view {
+    width: 98%;
+    height: 95%;
 }

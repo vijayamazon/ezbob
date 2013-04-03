@@ -38,6 +38,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     ui:
         count:".reports-count"
         send: ".send"
+        save: ".save-change"
 
     onRender: ->
         @$el.find('[data-toggle="tooltip"]').tooltip()
@@ -57,7 +58,11 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         "click .generate": "generateClicked"
         "click [data-path]": "fileSelected"
         "click [data-file-path]": "fileChecked"
+        "keyup .cais-file-view": "fileViewChanged"
     
+    fileViewChanged: ->
+        @ui.save.disable()
+
     fileChecked: (e) ->
         $el = $(e.currentTarget)
         checked = $el.hasClass("checked")
@@ -85,16 +90,20 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         filePath = $el.data "path"
         BlockUi "on"
         ($.get "#{gRootPath}Underwriter/CAIS/GetOneFile", {path: filePath})
-        .done (response) -> 
+        .done (response) => 
             if response.error
                 EzBob.ShowMessage response.error, "Error"
                 return
-            dialog = $('<div/>').html("<pre class='cais-file-view'>#{response}</pre>")
+            dialog = $('<div/>').html("<textarea class='cais-file-view'>#{response}</textarea>")
             dialog.dialog({
                 title: filePath
                 width: '75%'
                 height: 600
                 modal: true
                 draggable: false
+                resizable: false
+                buttons:[
+                    text: "Save file changes", click: @saveFileChange, class:'btn btn-primary save-change'
+                ]
             })
         .always =>BlockUi "off"
