@@ -4,8 +4,8 @@
   <Description />
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
@@ -18,6 +18,7 @@
     <NodeElement Name="Folder Creation" NodeId="ScriptNode20822872" />
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode4733890" />
     <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral61244824" />
+    <NodeElement Name="Get_CAIS_Folders_Paths" NodeId="DataSourceNodeScalar37560342" />
     <NodeElement Name="InsertCaisHistoryBusiness" NodeId="DataSourceNodeScalar4639251" />
     <NodeElement Name="InsertCaisHistoryConsumer" NodeId="DataSourceNodeScalar33894036" />
     <NodeElement Name="Mail Node" NodeId="MailNode14931696" />
@@ -27,7 +28,6 @@
     <NodeElement Name="Name and Address" NodeId="MultiAssignmentB19030416" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode20166237" />
     <NodeElement Name="Start Node" NodeId="StartNode35329809" />
-    <NodeElement Name="StartDateTime" NodeId="AssignmentB23016507" />
     <NodeElement Name="Status Codes" NodeId="ConditionalAssignment6295723" />
     <NodeElement Name="Stop Node" NodeId="StopNode49532829" />
     <NodeElement Name="Subject &amp; Current Date" NodeId="MultiAssignmentB57354364" />
@@ -84,7 +84,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode34708966</Name>
       <PointF>
-        <X>733.6154</X>
+        <X>713.6154</X>
         <Y>536</Y>
       </PointF>
       <SuperNodeName />
@@ -317,7 +317,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB12268704</Name>
       <PointF>
-        <X>348.537018</X>
+        <X>308.537018</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
@@ -890,7 +890,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>DataSourceBehavioral61244824</Name>
       <PointF>
-        <X>238.538742</X>
+        <X>198.538727</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
@@ -1354,19 +1354,61 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
-      <DefaultPinName />
+      <DefaultPinName>Next</DefaultPinName>
       <Description />
-      <DisplayName>StartDateTime</DisplayName>
-      <InitialValue />
+      <DisplayName>Get_CAIS_Folders_Paths</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;Get_CAIS_Folders_Paths1gHDq/K//UV1P/nG8lTPgA==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISPath&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISPath2&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>AssignmentB23016507</Name>
+      <Name>DataSourceNodeScalar37560342</Name>
       <PointF>
-        <X>421.619049</X>
+        <X>393.028748</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -2662,7 +2704,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <InitialValue />
       <DefaultValue />
       <Description />
-      <IsInput>true</IsInput>
+      <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -2674,7 +2716,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <InitialValue />
       <DefaultValue />
       <Description />
-      <IsInput>true</IsInput>
+      <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -2684,18 +2726,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>dir_path2</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>CAIS_NO_Upload</OwnerName>
-      <Name>StartDateTime</Name>
-      <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -4372,14 +4402,50 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>AssignmentB23016507</OwnerName>
-      <Name>Expression</Name>
+      <OwnerName>DataSourceNodeScalar37560342</OwnerName>
+      <Name>CAISPath</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>StartDateTime:=NOW()</InitialValue>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar37560342</OwnerName>
+      <Name>CAISPath2</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar37560342</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar37560342</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -4598,7 +4664,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>AssignmentB12268704</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB23016507</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar37560342</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -4752,7 +4818,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>AssignmentB23016507</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar37560342</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>ScriptNode20822872</TargetNodeName>
       <SuperNodeName />
@@ -5505,6 +5571,12 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>localtime</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>BusinessFileName</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
       <TargetVariableName>FileName</TargetVariableName>
@@ -5526,6 +5598,12 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>localtime</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5565,15 +5643,27 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>StartDateTime</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>StartDateTime</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>path</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>CAISPath</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>path2</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>CAISPath2</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -5802,7 +5892,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>AssignmentB23016507</OwnerName>
+      <OwnerName>DataSourceNodeScalar37560342</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -6055,14 +6145,14 @@ sending .UploadFile(dir_path+"\\PIF1160B.txt")
       <Script>import System.IO
 import time
 
-localtime = time.localtime()
-timeString  = time.strftime("%Y-%m-%d-%H-%M-%S", localtime)
+localtime1   = time.localtime()
+timeString  = time.strftime("%Y-%m-%d-%H-%M-%S", localtime1)
 
 dir_path = path + timeString
 dir_path2 = path2 + timeString
 System.IO.Directory.CreateDirectory(dir_path)
 System.IO.Directory.CreateDirectory(dir_path2)
-
+localtime = localtime1
  </Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>

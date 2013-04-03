@@ -13,60 +13,62 @@
     <NodeElement Name="Counter = 0" NodeId="AssignmentB29632966" />
     <NodeElement Name="Counter &gt; 3" NodeId="Comparison10199126" />
     <NodeElement Name="Counter=0" NodeId="AssignmentB20069106" />
+    <NodeElement Name="DateTime to Date" NodeId="ScriptNode3863764" />
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment29402138" />
     <NodeElement Name="Error subject" NodeId="MultiAssignmentB62967777" />
     <NodeElement Name="Get data " NodeId="GetRowDataNode63474072" />
     <NodeElement Name="Get Payment Amount" NodeId="ScriptNode8190892" />
+    <NodeElement Name="Get Payment Amount" NodeId="ScriptNode37612860" />
     <NodeElement Name="Get PayPoint Payment" NodeId="ScriptNode57352691" />
-    <NodeElement Name="DateTime to Date" NodeId="ScriptNode3863764" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar4581796" />
+    <NodeElement Name="Get_Schedule_Interest" NodeId="DataSourceNodeScalar64550954" />
     <NodeElement Name="GetCustomersForPayPoint" NodeId="DataSourceBehavioral42889836" />
     <NodeElement Name="GetPersonalDataForCollection" NodeId="DataSourceNodeScalar40621687" />
     <NodeElement Name="Initial AmountDue" NodeId="AssignmentB51503150" />
-    <NodeElement Name="Is first late period" NodeId="Comparison13557507" />
-    <NodeElement Name="Is first late period" NodeId="Comparison61113790" />
-    <NodeElement Name="Is first late period" NodeId="Comparison7576359" />
     <NodeElement Name="Is first late period" NodeId="Comparison35968927" />
+    <NodeElement Name="Is first late period" NodeId="Comparison7576359" />
+    <NodeElement Name="Is first late period" NodeId="Comparison61113790" />
+    <NodeElement Name="Is first late period" NodeId="Comparison13557507" />
     <NodeElement Name="Is first late period &amp; Full Papayment" NodeId="Comparison38320646" />
-    <NodeElement Name="Is Late?" NodeId="Comparison62080932" />
     <NodeElement Name="Is Late?" NodeId="Comparison58473705" />
+    <NodeElement Name="Is Late?" NodeId="Comparison62080932" />
     <NodeElement Name="Is second late period &amp; Full Papayment" NodeId="Comparison65026297" />
     <NodeElement Name="Is Second late period &amp; NO Partial Papayment" NodeId="Comparison24851438" />
     <NodeElement Name="Is Second late period &amp; Partial Papayment" NodeId="Comparison3518485" />
-    <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison61362333" />
     <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison8873464" />
-    <NodeElement Name="Mail Node" NodeId="MailNode48150975" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14793173" />
-    <NodeElement Name="Mail Node" NodeId="MailNode43928661" />
-    <NodeElement Name="Mail Node" NodeId="MailNode27594809" />
-    <NodeElement Name="Mail Node" NodeId="MailNode49608012" />
-    <NodeElement Name="Mail Node" NodeId="MailNode43406392" />
-    <NodeElement Name="Mail Node" NodeId="MailNode41019402" />
-    <NodeElement Name="Mail Node" NodeId="MailNode11790008" />
-    <NodeElement Name="Mail Node" NodeId="MailNode11090052" />
-    <NodeElement Name="Mail Node" NodeId="MailNode61667623" />
-    <NodeElement Name="Mail Node" NodeId="MailNode29562961" />
+    <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison61362333" />
     <NodeElement Name="Mail Node" NodeId="MailNode51960593" />
+    <NodeElement Name="Mail Node" NodeId="MailNode29562961" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61667623" />
+    <NodeElement Name="Mail Node" NodeId="MailNode11090052" />
+    <NodeElement Name="Mail Node" NodeId="MailNode11790008" />
+    <NodeElement Name="Mail Node" NodeId="MailNode41019402" />
+    <NodeElement Name="Mail Node" NodeId="MailNode43406392" />
+    <NodeElement Name="Mail Node" NodeId="MailNode49608012" />
+    <NodeElement Name="Mail Node" NodeId="MailNode27594809" />
+    <NodeElement Name="Mail Node" NodeId="MailNode43928661" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14793173" />
+    <NodeElement Name="Mail Node" NodeId="MailNode48150975" />
     <NodeElement Name="mail settings" NodeId="MultiAssignmentB19971501" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct48024466" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct18312477" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct17083557" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct434129" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct4100215" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct19519970" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct66471668" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct26734618" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB55416040" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB29476029" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB2817790" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB7353023" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50518786" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct66471668" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct19519970" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct4100215" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct434129" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct17083557" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct18312477" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct48024466" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB51416507" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50518786" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB7353023" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB2817790" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB29476029" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB55416040" />
     <NodeElement Name="not enough money" NodeId="Comparison30445668" />
     <NodeElement Name="Part Payment" NodeId="ConditionalAssignment17305987" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode60057706" />
-    <NodeElement Name="Reject Email" NodeId="MailNode13737660" />
     <NodeElement Name="Reject Email" NodeId="MailNode59479928" />
+    <NodeElement Name="Reject Email" NodeId="MailNode13737660" />
     <NodeElement Name="Start Node" NodeId="StartNode29083691" />
     <NodeElement Name="Stop Node" NodeId="StopNode60426628" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode10295489" />
@@ -2322,6 +2324,80 @@ Communication problem. Trying again later may well work
       <TypeName>WorkflowObjects.NodeScript</TypeName>
       <PrototypeName />
     </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Get Payment Amount</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode37612860</Name>
+      <PointF>
+        <X>364.152252</X>
+        <Y>816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>Get_Schedule_Interest</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;Get_Schedule_InterestWQ2lf4zbk0EjQ8T6Q06Vbw==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;Interest&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LoanSchedule&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar64550954</Name>
+      <PointF>
+        <X>220.23941</X>
+        <Y>816</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
   </NodeDescriptors>
   <VariableDescriptors>
     <VariableDescriptor>
@@ -3921,6 +3997,18 @@ Communication problem. Trying again later may well work
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Get_PayPoint</OwnerName>
+      <Name>SCRIPT_AmountDueNew</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>ReadNextNode60057706</OwnerName>
       <Name>@InputDataLayerName</Name>
       <TypeName>System.String</TypeName>
@@ -5208,36 +5296,12 @@ Communication problem. Trying again later may well work
       <OwnerName>Comparison35968927</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW() AND SCRIPT_AmountDue &lt; SCRIPT_AmountDue_Initial  AND SCRIPT_AmountDue &gt;= (LateChargesScalar+InterestScalar)
+      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW() AND SCRIPT_AmountDueNew &lt;&gt; 0 AND InterestScalar = 0
 AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
 </InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison35968927</OwnerName>
-      <Name>Comparison35968927SCRIPT_AmountDue</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison35968927</OwnerName>
-      <Name>Comparison35968927SCRIPT_AmountDue_Initial</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -5268,21 +5332,9 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison35968927</OwnerName>
-      <Name>Comparison35968927LateChargesScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison35968927</OwnerName>
       <Name>Comparison35968927ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5295,6 +5347,18 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <Name>Comparison35968927LatePaymentNotificationScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison35968927</OwnerName>
+      <Name>Comparison35968927SCRIPT_AmountDueNew</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5378,24 +5442,12 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <OwnerName>Comparison7576359</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW() AND SCRIPT_AmountDue &lt; (LateChargesScalar+InterestScalar) AND (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
+      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW() AND InterestScalar &lt;&gt; 0 AND (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
 
 </InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison7576359</OwnerName>
-      <Name>Comparison7576359SCRIPT_AmountDue</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -5426,21 +5478,9 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison7576359</OwnerName>
-      <Name>Comparison7576359LateChargesScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison7576359</OwnerName>
       <Name>Comparison7576359ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5620,34 +5660,10 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <OwnerName>Comparison38320646</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW()  AND SCRIPT_AmountDue = SCRIPT_AmountDue_Initial   AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)</InitialValue>
+      <InitialValue>ADDDAYS(ScheduledDateScalar,0) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num) &gt;= NOW()  AND SCRIPT_AmountDueNew = 0 AND InterestScalar = 0 AND (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison38320646</OwnerName>
-      <Name>Comparison38320646SCRIPT_AmountDue</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison38320646</OwnerName>
-      <Name>Comparison38320646SCRIPT_AmountDue_Initial</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -5666,9 +5682,21 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison38320646</OwnerName>
+      <Name>Comparison38320646InterestScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison38320646</OwnerName>
       <Name>Comparison38320646ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5681,6 +5709,18 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <Name>Comparison38320646LatePaymentNotificationScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison38320646</OwnerName>
+      <Name>Comparison38320646SCRIPT_AmountDueNew</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5764,7 +5804,7 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <OwnerName>Comparison24851438</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW()  AND SCRIPT_AmountDue &lt; (LateChargesScalar+InterestScalar) AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
+      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW()  AND InterestScalar &lt;&gt; 0 AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
 </InitialValue>
       <DefaultValue />
       <Description />
@@ -5775,7 +5815,7 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669SCRIPT_AmountDue</Name>
+      <Name>Comparison24851438CollectionPeriod1Num</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -5787,7 +5827,7 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669CollectionPeriod1Num</Name>
+      <Name>Comparison24851438CollectionPeriod2Num</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -5799,7 +5839,7 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669CollectionPeriod2Num</Name>
+      <Name>Comparison24851438InterestScalar</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -5811,33 +5851,9 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669InterestScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669LateChargesScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669ScheduledDateScalar</Name>
+      <Name>Comparison24851438ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -5847,7 +5863,7 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison24851438</OwnerName>
-      <Name>Comparison18021669LatePaymentNotificationScalar</Name>
+      <Name>Comparison24851438LatePaymentNotificationScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -6005,36 +6021,12 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <OwnerName>Comparison3518485</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW() AND SCRIPT_AmountDue &lt; SCRIPT_AmountDue_Initial  AND SCRIPT_AmountDue &gt;= (LateChargesScalar+InterestScalar)
+      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW() AND SCRIPT_AmountDueNew &lt;&gt; 0 AND InterestScalar = 0
 AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
 </InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison3518485</OwnerName>
-      <Name>Comparison3518485SCRIPT_AmountDue</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison3518485</OwnerName>
-      <Name>Comparison3518485SCRIPT_AmountDue_Initial</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -6077,21 +6069,9 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison3518485</OwnerName>
-      <Name>Comparison3518485LateChargesScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison3518485</OwnerName>
       <Name>Comparison3518485ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -6104,6 +6084,18 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <Name>Comparison3518485LatePaymentNotificationScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison3518485</OwnerName>
+      <Name>Comparison3518485SCRIPT_AmountDueNew</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -6187,35 +6179,11 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <OwnerName>Comparison65026297</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW() AND SCRIPT_AmountDue = SCRIPT_AmountDue_Initial   AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
+      <InitialValue>ADDDAYS(ScheduledDateScalar,CollectionPeriod1Num + 1) &lt;= NOW()  AND ADDDAYS(ScheduledDateScalar,CollectionPeriod2Num) &gt;= NOW() AND SCRIPT_AmountDueNew = 0 AND InterestScalar = 0 AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NULL)
 </InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison65026297</OwnerName>
-      <Name>Comparison65026297SCRIPT_AmountDue</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison65026297</OwnerName>
-      <Name>Comparison65026297SCRIPT_AmountDue_Initial</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -6246,9 +6214,21 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Comparison65026297</OwnerName>
+      <Name>Comparison65026297InterestScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison65026297</OwnerName>
       <Name>Comparison65026297ScheduledDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <InitialValue>1/1/1900</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -6261,6 +6241,18 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <Name>Comparison65026297LatePaymentNotificationScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison65026297</OwnerName>
+      <Name>Comparison65026297SCRIPT_AmountDueNew</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -7722,6 +7714,54 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar64550954</OwnerName>
+      <Name>Interest</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar64550954</OwnerName>
+      <Name>LoanSchedule</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar64550954</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar64550954</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors>
     <VariableConstraintDescriptor>
@@ -8261,25 +8301,16 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison58473705</SourceNodeName>
-      <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>Comparison7576359</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar64550954</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode37612860</TargetNodeName>
       <SuperNodeName />
-      <Caption>Yes</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16744448</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>120</X>
-          <Y>840</Y>
-        </PointF>
-        <PointF>
-          <X>540</X>
-          <Y>840</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison58473705</SourceNodeName>
@@ -8972,6 +9003,61 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar64550954</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode43928661</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Exception</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-23296</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>1040</X>
+          <Y>820</Y>
+        </PointF>
+        <PointF>
+          <X>1040</X>
+          <Y>200</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison58473705</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar64550954</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>120</X>
+          <Y>840</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode37612860</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison7576359</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>540</X>
+          <Y>840</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
     <VariableConnectionDescriptor>
@@ -9636,198 +9722,6 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>InterestScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359InterestScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LateChargesScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359LateChargesScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
-      <TargetVariableName>Comparison7576359LatePaymentNotificationScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue_Initial</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927SCRIPT_AmountDue_Initial</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>InterestScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927InterestScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LateChargesScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927LateChargesScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
-      <TargetVariableName>Comparison35968927LatePaymentNotificationScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
-      <TargetVariableName>Comparison38320646SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue_Initial</SourceVariableName>
-      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
-      <TargetVariableName>Comparison38320646SCRIPT_AmountDue_Initial</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
-      <TargetVariableName>Comparison38320646CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
-      <TargetVariableName>Comparison38320646ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
-      <TargetVariableName>Comparison38320646LatePaymentNotificationScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue_Initial</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485SCRIPT_AmountDue_Initial</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485CollectionPeriod2Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>InterestScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485InterestScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LateChargesScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485LateChargesScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
-      <TargetVariableName>Comparison3518485LatePaymentNotificationScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue_Initial</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297SCRIPT_AmountDue_Initial</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297CollectionPeriod2Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
-      <TargetVariableName>Comparison65026297LatePaymentNotificationScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
       <TargetVariableOwnerName>CreditProduct17083557</TargetVariableOwnerName>
       <TargetVariableName>CP_AddressTo</TargetVariableName>
@@ -9987,48 +9881,6 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <SourceVariableName>CP_AddressCC</SourceVariableName>
       <TargetVariableOwnerName>MailNode61667623</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>SCRIPT_AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669SCRIPT_AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669CollectionPeriod1Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669CollectionPeriod2Num</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>InterestScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669InterestScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LateChargesScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669LateChargesScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669ScheduledDateScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
-      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
-      <TargetVariableName>Comparison18021669LatePaymentNotificationScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
@@ -10732,6 +10584,216 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <TargetVariableOwnerName>MailNode61667623</TargetVariableOwnerName>
       <TargetVariableName>ChargeDate_fullrepayment.docx6AhQGK85kI79wwJADvxERg==</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
+      <TargetVariableName>Comparison24851438CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
+      <TargetVariableName>Comparison24851438CollectionPeriod2Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
+      <TargetVariableName>Comparison24851438InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
+      <TargetVariableName>Comparison24851438ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison24851438</TargetVariableOwnerName>
+      <TargetVariableName>Comparison24851438LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
+      <TargetVariableName>Comparison35968927CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
+      <TargetVariableName>Comparison35968927InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
+      <TargetVariableName>Comparison35968927ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
+      <TargetVariableName>Comparison35968927LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>SCRIPT_AmountDueNew</SourceVariableName>
+      <TargetVariableOwnerName>Comparison35968927</TargetVariableOwnerName>
+      <TargetVariableName>Comparison35968927SCRIPT_AmountDueNew</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485CollectionPeriod2Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>SCRIPT_AmountDueNew</SourceVariableName>
+      <TargetVariableOwnerName>Comparison3518485</TargetVariableOwnerName>
+      <TargetVariableName>Comparison3518485SCRIPT_AmountDueNew</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
+      <TargetVariableName>Comparison38320646CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
+      <TargetVariableName>Comparison38320646InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
+      <TargetVariableName>Comparison38320646ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
+      <TargetVariableName>Comparison38320646LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>SCRIPT_AmountDueNew</SourceVariableName>
+      <TargetVariableOwnerName>Comparison38320646</TargetVariableOwnerName>
+      <TargetVariableName>Comparison38320646SCRIPT_AmountDueNew</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod2Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297CollectionPeriod2Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>SCRIPT_AmountDueNew</SourceVariableName>
+      <TargetVariableOwnerName>Comparison65026297</TargetVariableOwnerName>
+      <TargetVariableName>Comparison65026297SCRIPT_AmountDueNew</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64550954</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64550954</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64550954</TargetVariableOwnerName>
+      <TargetVariableName>Interest</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>IdScalar</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64550954</TargetVariableOwnerName>
+      <TargetVariableName>LoanSchedule</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>CollectionPeriod1Num</SourceVariableName>
+      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
+      <TargetVariableName>Comparison7576359CollectionPeriod1Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>InterestScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
+      <TargetVariableName>Comparison7576359InterestScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>ScheduledDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
+      <TargetVariableName>Comparison7576359ScheduledDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Get_PayPoint</SourceVariableOwnerName>
+      <SourceVariableName>LatePaymentNotificationScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison7576359</TargetVariableOwnerName>
+      <TargetVariableName>Comparison7576359LatePaymentNotificationScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -11294,6 +11356,22 @@ AND  (LatePaymentNotificationScalar = "1" OR LatePaymentNotificationScalar = NUL
       <SigningOutlets />
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ScriptNode37612860</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar64550954</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
   </SigningNodeDescriptors>
   <ScriptDescriptors>
     <ScriptDescriptor>
@@ -11391,6 +11469,40 @@ time.strftime("%Y-%m-%d", _)
 
 from EzBob.Web.Code import FormattingUtils
 ScheduledDateScalarStr =  FormattingUtils.FormatDateToString(ScheduledDateScalar)</Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode53069193</OwnerName>
+      <Script>clr.AddReference("PaymentServices")
+from System import *
+from PaymentServices.PayPoint import *
+
+papi = PayPointApi()
+#RepeatTransaction(string transactionId, decimal amount)
+#MakeAutomaticPayment(int loanScheduleId, decimal amount)
+result = papi.GetAmountToPay(IdScalar)
+
+SCRIPT_AmountDueNew = result
+
+
+</Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode37612860</OwnerName>
+      <Script>clr.AddReference("PaymentServices")
+from System import *
+from PaymentServices.PayPoint import *
+
+papi = PayPointApi()
+#RepeatTransaction(string transactionId, decimal amount)
+#MakeAutomaticPayment(int loanScheduleId, decimal amount)
+result = papi.GetAmountToPay(IdScalar)
+
+SCRIPT_AmountDueNew = result
+
+
+</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
   </ScriptDescriptors>
