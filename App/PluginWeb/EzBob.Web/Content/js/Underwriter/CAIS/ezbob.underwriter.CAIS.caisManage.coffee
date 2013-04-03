@@ -45,7 +45,6 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         
     serializeData: ->
         model: @model.get "cais"
-        path: @model.get "path"
 
     checkedFileModelChanged: ->
         if @checkedModel.length == 0

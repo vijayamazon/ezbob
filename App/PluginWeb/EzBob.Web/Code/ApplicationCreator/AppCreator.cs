@@ -4,19 +4,20 @@ using ApplicationMng;
 using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
 using NHibernate;
 using Scorto.Strategy;
 using log4net;
 
-namespace EzBob.Web.ApplicationCreator
+namespace EzBob.Web.Code.ApplicationCreator
 {
     public class AppCreator : IAppCreator
     {
         private readonly IStrategyRepository _strategies;
         private readonly IEzBobConfiguration _config;
         private readonly IUsersRepository _users;
-        private static readonly ILog _log = log4net.LogManager.GetLogger(typeof(AppCreator));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AppCreator));
         private readonly StrategyManager _sm;
         private readonly ISession _session;
 
@@ -88,7 +89,7 @@ namespace EzBob.Web.ApplicationCreator
             }
             catch (Exception ex)
             {
-                _log.Error(ex);
+                Log.Error(ex);
             }
             return null;
         }
@@ -158,7 +159,7 @@ namespace EzBob.Web.ApplicationCreator
                                              new StrategyParameter("idhubCounty", county),
                                              new StrategyParameter("idhubPostCode", postcode),
                                              new StrategyParameter("idhubAccountNumber", bankAccount),
-                                             new StrategyParameter("idhubBranchCode", sortCode),
+                                             new StrategyParameter("idhubBranchCode", sortCode)
                                          };
             CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
         }
@@ -181,7 +182,7 @@ namespace EzBob.Web.ApplicationCreator
                                              {
                                                  new StrategyParameter("email", user.EMail),
                                                  new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("FirstName", firstName),
+                                                 new StrategyParameter("FirstName", firstName)
                                              };
             CreateApplication(user, strategyParameters, _config.GetCashFailedStrategyName);
         }
@@ -209,7 +210,7 @@ namespace EzBob.Web.ApplicationCreator
                                                  new StrategyParameter("userId", customer.Id),
                                                  new StrategyParameter("name", customer.PersonalInfo.FirstName),
                                                  new StrategyParameter("surname", customer.PersonalInfo.Surname),
-                                                 new StrategyParameter("cardHodlerName", cardHodlerName),
+                                                 new StrategyParameter("cardHodlerName", cardHodlerName)
                                              };
             CreateApplication(user, strategyParameters, _config.PayPointNameValidationFailedStrategyName);
         }
@@ -369,14 +370,9 @@ namespace EzBob.Web.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.CustomerEscalatedStrategyName);
         }
 
-        public void CAISGenerate(User user, string path, string path2)
+        public void CAISGenerate(User user)
         {
-            var strategyParameters = new[]
-                {
-                    new StrategyParameter("path", path),
-                    new StrategyParameter("path2", path2)
-                };
-            CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
+            CreateApplication(user, new StrategyParameter[]{}, _config.CAISNoUploadStrategyName);
         }
     }
 }

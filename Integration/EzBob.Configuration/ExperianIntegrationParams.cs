@@ -68,13 +68,5 @@ namespace EzBob.Configuration
         {
             get { return GetValue<string>("InteractiveMode"); }
         }
-        public string CAISFilesLocationPath
-        {
-            get { return GetValue<string>("CAISFilesLocationPath"); }
-        }
-        public string CAISFilesLocationPath2
-        {
-            get { return GetValue<string>("CAISFilesLocationPath2"); }
-        }
     }
 }

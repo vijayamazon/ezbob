@@ -18,6 +18,7 @@ using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Controllers;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code.Agreements;
+using EzBob.Web.Code.ApplicationCreator;
 using EzBob.Web.Code.Email;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Repository;

@@ -32,6 +32,6 @@ namespace EzBob.Web.ApplicationCreator
         void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate);
         void RenewEbayToken(Customer customer, string marketplaceName, string url);
         void Escalated(Customer customer);
-        void CAISGenerate(User customer, string filePath, string filePath2);
+        void CAISGenerate(User customer);
     }
 }
