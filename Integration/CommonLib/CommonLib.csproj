@@ -62,6 +62,8 @@
     <Compile Include="ReceivedDataListLogic\ReceivedDataListBase.cs" />
     <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeDependentBase.cs" />
     <Compile Include="ReceivedDataListLogic\ReceivedDataListTimeMarketTimeDependentBase.cs" />
+    <Compile Include="Security\CipherUtility.cs" />
+    <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Tests\ExtensionsFixture.cs" />
     <Compile Include="TimePeriodLogic\ReceivedDataListTimeDependentInfo.cs" />
     <Compile Include="TimePeriodLogic\TimePeriodEnum.cs" />
