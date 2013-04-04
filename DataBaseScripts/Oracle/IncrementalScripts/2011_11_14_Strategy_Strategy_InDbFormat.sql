@@ -1,1 +1,0 @@
-execute immediate 'ALTER TABLE Strategy_Strategy ADD InDbFormat BLOB NULL';

@@ -1,6 +1,0 @@
-1#Sex Dictionary#DictSex
-2#Marital Status Dictionary#DictMaritalStatus
-3#Checking Account Dictionary#DictChecking
-4#Savings Account Dictionary#DictSavings
-5#Home Ownership Dictionary#DictHomeOwn
-6#Risk Dictionary#DictRisk

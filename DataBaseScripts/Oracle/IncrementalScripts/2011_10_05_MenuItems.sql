@@ -1,1 +1,0 @@
-execute immediate 'ALTER TABLE MenuItem ADD  Description VARCHAR2(255) NULL';

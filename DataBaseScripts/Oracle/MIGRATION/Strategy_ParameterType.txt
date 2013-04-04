@@ -1,8 +1,0 @@
-1#System.Int32#NULL
-2#System.Double#NULL
-3#System.String#NULL
-4#System.Boolean#NULL
-5#WorkflowObjects.VariableConstrained#NULL
-6#WorkflowObjects.NodeStart#NULL
-7#WorkflowObjects.NodeStop#NULL
-8#DPTest#NULL

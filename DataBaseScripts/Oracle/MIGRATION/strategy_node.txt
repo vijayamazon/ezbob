@@ -1,4 +1,0 @@
-9#1#NodeBlackList#Black List#Used to check borrower’s presence in some list, i.e. in “black” list#-1#0#
-12#0#NodeCustomerIdentification#Customer Identification#Used to find borrower information in external data source#-1#0#
-13#0#NodeForceDecision#Force Decision#Used to give the user possibility to make a decision on loan#3600#0#
-14#0#NodePolicyDecision#Policy Decision#Used to inform the user about decision made on loan. It is supposed that informed user has no possibility to change the decision.##0#

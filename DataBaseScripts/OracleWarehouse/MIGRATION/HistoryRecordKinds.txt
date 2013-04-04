@@ -1,4 +1,0 @@
-0#Current#1
-1#Strategy changes#0
-2#Bank changes#0
-3#End-of-Month fixed state#1

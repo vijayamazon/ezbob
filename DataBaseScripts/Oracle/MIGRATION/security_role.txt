@@ -1,9 +1,0 @@
-1#Admin#Administrator - Manage users
-22#SuperUser#SuperUser - Have rights to all applications
-23#Nova#Nova
-24#Inspector#Inspector - Web working place
-25#CreditAnalyst#Credit Analyst - Manage strategies and workflow, uses Maven and Patron
-26#Maven#Maven - Creates workflow for strategies
-27#Patron#Patron - Manage nodes and strategies
-28#Auditor#Auditor - Monitoring system
-29#FormsDesigner#FormsDesigner - Develop node interface
