@@ -90,6 +90,13 @@ namespace EzBob.Web.Controllers
                     ModelState.AddModelError("", "User not found or incorrect password.");
                     
                 }else{
+                    
+                    var customer = _customers.Get(user.Id);
+                    if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
+                    {
+                        ModelState.AddModelError("", "This account is closed, you cannot use it, please contact EZBOB customer care customercare@ezbob.com");
+                        return View(model);
+                    }
 
                     if (_membershipProvider.ValidateUser(model.UserName, model.Password))
                     {
