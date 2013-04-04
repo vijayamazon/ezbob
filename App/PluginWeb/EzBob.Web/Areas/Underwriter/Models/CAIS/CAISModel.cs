@@ -32,4 +32,9 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
                     }).ToList();
         }
     }
+
+    public class CaisSendModel
+    {
+        public string Path { get; set; }
+    }
 }

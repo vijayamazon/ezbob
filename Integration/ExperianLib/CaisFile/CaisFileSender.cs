@@ -8,7 +8,6 @@ using System.Web;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Configuration;
-using Scorto.Configuration;
 using StructureMap;
 using log4net;
 
@@ -53,6 +52,7 @@ namespace ExperianLib.CaisFile
             {
                 SaveToBase(fileName, CaisUploadStatus.UploadError);
                 Log.Error(exception.Message);
+                throw;
             }
         }
 
@@ -77,6 +77,23 @@ namespace ExperianLib.CaisFile
                 throw;
             }
         }
+        public void UploadData(string fileData, string filePath)
+        {
+            ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
+            _client.Credentials = new NetworkCredential(UserName, Password);
+            try
+            {
+                var fileName = Path.GetFileName(filePath);
+                _client.UploadData(Hostname + fileName, GetBytes(fileData));
+                SaveToBase(filePath, CaisUploadStatus.Uploaded);
+            }
+            catch (Exception exception)
+            {
+                SaveToBase(filePath, CaisUploadStatus.UploadError);
+                Log.Error(exception.Message);
+                throw;
+            }
+        }
         public void SaveToBase(string filePath, CaisUploadStatus status)
         {
             var caisReportsHistory = _caisReportsHistoryRepository.GetAll()
@@ -90,6 +107,13 @@ namespace ExperianLib.CaisFile
                 };
             caisReportsHistory.UploadStatus = status;
             _caisReportsHistoryRepository.SaveOrUpdate(caisReportsHistory);
+        }
+
+        private static byte[] GetBytes(string str)
+        {
+            var bytes = new byte[str.Length * sizeof(char)];
+            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
         }
     }
 }

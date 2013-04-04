@@ -47,7 +47,7 @@
                 var checkedClass = _.filter(checkedModel, function(value){  return value.path == val.FilePath }).length === 0 ? '':'checked';
                 %>
                 <tr class="<%- currentCollor %> <%- checkedClass %>" data-file-path ="<%-val.FilePath%>">
-                    <td><%-EzBob.formatDateTime(val.Date)%></td>
+                    <td><%-val.Date%></td>
                     <td data-path ="<%-val.FilePath%>" class="blue-link"><div  data-toggle="tooltip" title="<%-val.FilePath%>"><%-val.FileName%></div></td>
                     <td><%-val.Type%></td>
                     <td><%-val.OfItems%></td>

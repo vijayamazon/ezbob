@@ -24,6 +24,11 @@ class EzBob.Underwriter.CAIS.SelectedFiles extends Backbone.Collection
     getModelByPath: (path)->
        @filter (val) -> return val.get("path") == path
 
+    url: "#{gRootPath}Underwriter/CAIS/SendFiles"
+
+    sendToServer: ->
+        Backbone.sync "create", @, url: @url
+
 class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     template: _.template(if $("#cais-template").length>0 then $("#cais-template").html() else "")
 
@@ -56,8 +61,25 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
 
     events:
         "click .generate": "generateClicked"
+        "click .send ": "sendFile"
         "click [data-path]": "fileSelected"
         "click [data-file-path]": "fileChecked"
+
+    sendFile: ->
+        sendFn = =>
+            BlockUi "on"
+            xhr = @checkedModel.sendToServer()
+            xhr.done (response)->
+                if response and response.error != undefined
+                    EzBob.ShowMessage response.error, "Error occured"
+                    return
+                EzBob.ShowMessage "File(s) successfully sended ", "Successful"
+            xhr.fail ()->
+                EzBob.ShowMessage "Something went wrong", "Error occured"
+            xhr.always ->
+                BlockUi "off"
+                
+        EzBob.ShowMessage "Are you sure you want to send selected files?", "Confirmation", sendFn, "Send", null, "Cancel"
     
     fileViewChanged: (e)->
         $el = $(e.currentTarget)

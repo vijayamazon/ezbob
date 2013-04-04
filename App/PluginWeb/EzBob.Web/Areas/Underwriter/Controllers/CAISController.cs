@@ -1,6 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Repository;
+using ExperianLib.CaisFile;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
 using Scorto.Web;
@@ -58,6 +62,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             using (var file = new StreamWriter(fullFileName))
             {
                 file.Write(fileContent);
+            }
+        }
+
+        [Ajax]
+        [HttpPost]
+        public void SendFiles(IEnumerable<CaisSendModel> model)
+        {
+            var sender = new CaisFileSender();
+            foreach (var el in model)
+            {
+                using (var file = new StreamReader(el.Path))
+                {
+                    sender.UploadData(file.ReadToEnd(), el.Path);
+                }
             }
         }
     }
