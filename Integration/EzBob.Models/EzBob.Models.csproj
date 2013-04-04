@@ -87,7 +87,6 @@
     <Compile Include="DecisionHistoryModel.cs" />
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
-    <Compile Include="Encryptor.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="IPayEarlyCalculator.cs" />
     <Compile Include="LoanAgreementModel.cs" />
