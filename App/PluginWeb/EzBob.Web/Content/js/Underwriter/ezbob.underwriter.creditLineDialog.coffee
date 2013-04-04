@@ -55,8 +55,9 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         @modelBinder.bind @cloneModel, @el, @bindings
         @$el.find("#startingFromDate, #offerValidUntil").datepicker({ autoclose: true, format: 'dd/mm/yyyy' }).datepicker('show');
         
-        #@$el.find("#offeredCreditLine").autoNumeric (EzBob.moneyFormat)
-        #@$el.find("#interestRate").autoNumeric (EzBob.percentFormat)
+        @$el.find("#offeredCreditLine").autoNumeric (EzBob.moneyFormat)
+        @$el.find("#interestRate").autoNumeric (EzBob.percentFormat)
+        @$el.find(".cashInput").cashEdit();
         @setValidator()
 
     setValidator: ->

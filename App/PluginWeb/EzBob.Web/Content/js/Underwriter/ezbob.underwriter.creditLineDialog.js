@@ -91,6 +91,9 @@
         autoclose: true,
         format: 'dd/mm/yyyy'
       }).datepicker('show');
+      this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
+      this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
+      this.$el.find(".cashInput").cashEdit();
       return this.setValidator();
     };
 

@@ -23,17 +23,12 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="control-group">
-                        <label for="offeredCreditLine" class="control-label">Offered credit line:</label>
-                        <div class="controls">
-                            <input name="offeredCreditLine" id="offeredCreditLine" type="text">
-                        </div>
-                    </div>
+                     @EzForm.InputTextCash("offeredCreditLine", "Offered credit line:", "")
+                    
 
                     <div class="control-group">
                         <label for="interestRate" class="control-label">Interest rate:</label>
-                        <div class="controls">
+                        <div class="controls cashControlls">
                             <input name="interestRate" id="interestRate" type="text" >
                         </div>
                     </div>
@@ -47,15 +42,17 @@
 
                     <div class="control-group">
                         <label for="startingFromDate" class="control-label">Starting from date:</label>
-                        <div class="controls">
-                            <input name="startingFromDate" id="startingFromDate" type="text" >
+                        <div class="input-append">
+                            <input style="width:180px; margin-left: 20px;" name="startingFromDate" id="startingFromDate" type="text" >
+                            <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label for="offerValidUntil" class="control-label">Offer valid until:</label>
-                        <div class="controls">
-                            <input name="offerValidUntil" id="offerValidUntil" type="text" >
+                        <div class="input-append">
+                            <input style="width:180px; margin-left: 20px;" name="offerValidUntil" id="offerValidUntil" type="text" >
+                            <span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                     </div>
 
@@ -73,7 +70,4 @@
         <button class="btn btn-primary btnOk">OK</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
-    
 }
-
-
