@@ -77,8 +77,8 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
 
 class EzBob.EKMAccountModel extends Backbone.Model
-    urlRoot: "#{window.gRootPath}Customer/EKMAccounts/Accounts"
+    urlRoot: "#{window.gRootPath}Customer/EkmMarketPlaces/Accounts"
 
 class EzBob.EKMAccounts extends Backbone.Collection
     model: EzBob.EKMAccountModel
-    url: "#{window.gRootPath}Customer/EKMAccounts/Accounts"
+    url: "#{window.gRootPath}Customer/EkmMarketPlaces/Accounts"

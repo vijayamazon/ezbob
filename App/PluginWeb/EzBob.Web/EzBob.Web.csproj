@@ -214,7 +214,7 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
-    <Compile Include="Areas\Customer\Controllers\EKMAccounts.cs" />
+    <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
@@ -912,6 +912,9 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.js">
       <DependentUpon>ezbob.shopbuttonlist.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
+      <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>

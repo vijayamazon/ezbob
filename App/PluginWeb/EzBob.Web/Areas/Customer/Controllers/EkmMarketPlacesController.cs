@@ -4,30 +4,40 @@ using System.Web.Mvc;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.CommonLib.Security;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using Scorto.Web;
 using EKM;
+using EzBob.Web.Code.MpUniq;
+using EzBob.Web.Models.Strings;
+using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class EkmAccountsController: Controller
+    public class EkmMarketPlacesController: Controller
     {
+        private static readonly ILog _log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
         private readonly ICustomerRepository _customers;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
         private EZBob.DatabaseLib.Model.Database.Customer _customer;
+        private readonly IMPUniqChecker _mpChecker;
         private readonly EkmConnector _validator = new EkmConnector();
 
-        public EkmAccountsController(IEzbobWorkplaceContext context, ICustomerRepository customers, IRepository<MP_MarketplaceType> mpTypes, IRepository<MP_CustomerMarketPlace> marketplaces)
+        public EkmMarketPlacesController(
+            IEzbobWorkplaceContext context, 
+            ICustomerRepository customers, 
+            IRepository<MP_MarketplaceType> mpTypes, 
+            IRepository<MP_CustomerMarketPlace> marketplaces, 
+            IMPUniqChecker mpChecker)
         {
             _context = context;
             _customers = customers;
             _mpTypes = mpTypes;
             _marketplaces = marketplaces;
             _customer = context.Customer;
+            _mpChecker = mpChecker;
         }
 
         [Transactional]
@@ -48,22 +58,41 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var errorObject = new { error = errorMsg };
                 return this.JsonNet(errorObject);
             }
+            try
+            {
+                var customer = _context.Customer;
+                var username = model.login;
+                var ekm = new EkmDatabaseMarketPlace();
+                _mpChecker.Check(ekm.InternalId, customer, username);
+                var mp = new MP_CustomerMarketPlace
+                             {
+                                 Marketplace = _mpTypes.Get(4),
+                                 DisplayName = model.login,
+                                 SecurityData = Encryptor.EncryptBytes(model.password),
+                                 Customer = _customer,
+                                 Created = DateTime.UtcNow,
+                                 UpdatingStart = DateTime.UtcNow,
+                                 Updated = DateTime.UtcNow,
+                                 UpdatingEnd = DateTime.UtcNow
+                             };
 
-            var mp = new MP_CustomerMarketPlace
-                         {
-                             Marketplace = _mpTypes.Get(4),
-                             DisplayName = model.login,
-                             SecurityData = Encryptor.EncryptBytes(model.password),
-                             Customer = _customer,
-                             Created = DateTime.UtcNow,
-                             UpdatingStart = DateTime.UtcNow,
-                             Updated = DateTime.UtcNow,
-                             UpdatingEnd = DateTime.UtcNow
-                         };
-
-            _customer.CustomerMarketPlaces.Add(mp);
-
-            return this.JsonNet(EKMAccountModel.ToModel(mp));
+                _customer.CustomerMarketPlaces.Add(mp);
+                return this.JsonNet(EKMAccountModel.ToModel(mp));
+            }
+            catch (MarketPlaceAddedByThisCustomerException e)
+            {
+                return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
+            }
+            catch (MarketPlaceIsAlreadyAddedException e)
+            {
+                return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
+            }
+            catch (Exception e)
+            {
+                _log.Error(e);
+                return this.JsonNet(new { error = e.Message });
+            }
+           
         }
     }
 
