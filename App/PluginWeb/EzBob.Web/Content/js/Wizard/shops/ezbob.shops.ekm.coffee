@@ -53,7 +53,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr.done (res) =>
             if (res.error)
-                EzBob.App.trigger 'error', 'ekm account saving error'
+                EzBob.App.trigger 'error', res.error
                 return false
 
             @model.add(acc)
