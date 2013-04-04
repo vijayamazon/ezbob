@@ -12,12 +12,12 @@ namespace EZBob.DatabaseLib.Model.Database
 
 
         public virtual string OrderNumber { get; set; }
-        public virtual int CustomerId { get; set; }
+        public virtual int? CustomerId { get; set; }
         public virtual string CompanyName { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
         public virtual string EmailAddress { get; set; }
-        public virtual decimal TotalCost { get; set; }
+        public virtual double? TotalCost { get; set; }
         public virtual string OrderDate { get; set; }
         public virtual string OrderStatus { get; set; }
         public virtual string OrderStatusColour { get; set; }

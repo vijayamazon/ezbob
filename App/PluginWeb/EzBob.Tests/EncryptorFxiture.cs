@@ -1,6 +1,6 @@
 ﻿using EzBob.Web.Code;
 using NUnit.Framework;
-
+using EzBob.CommonLib.Security;
 namespace EzBob.Tests
 {
     [TestFixture]

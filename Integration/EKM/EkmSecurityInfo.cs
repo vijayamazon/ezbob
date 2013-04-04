@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EKM
 {
-    class EkmSecurityInfo : IMarketPlaceSecurityInfo
+    public class EkmSecurityInfo : IMarketPlaceSecurityInfo
     {
         public EkmSecurityInfo()
         {

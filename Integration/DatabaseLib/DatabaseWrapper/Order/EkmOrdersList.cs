@@ -22,22 +22,23 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
 	public class EkmOrderItem : TimeDependentRangedDataBase
 	{
-        public string EkmOrderId { get; set; }
+        public int? EkmOrderId { get; set; }
         public string OrderNumber { get; set; }
-        public string CustomerID { get; set; }
+        public int? CustomerID { get; set; }
         public string CompanyName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
-        public decimal TotalCost { get; set; }
+        public double? TotalCost { get; set; }
         public string OrderDate { get; set; }
-        public DateTime OrderDateIso { get; set; }
+        public string OrderStatus { get; set; }
+        public string OrderDateIso { get; set; }
 
         public string OrderStatusColour { get; set; }
 
 		public override DateTime RecordTime
 		{
-			get { return OrderDateIso; }
+			get { return DateTime.Parse(OrderDateIso); }
 		}
 	}
 }

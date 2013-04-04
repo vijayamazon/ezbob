@@ -51,6 +51,7 @@
     <Compile Include="EKMDatabaseFunctionStorage.cs" />
     <Compile Include="EkmDatabaseMarketPlace.cs" />
     <Compile Include="EKMRegistry.cs" />
+    <Compile Include="EkmSecurityInfo.cs" />
     <Compile Include="EkmServiceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\API\Reference.cs">
