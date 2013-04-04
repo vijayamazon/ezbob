@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ApplicationMng;
 using ApplicationMng.Model;
 using ApplicationMng.Repository;
@@ -20,13 +21,15 @@ namespace EzBob.Web.Code.ApplicationCreator
         private static readonly ILog Log = LogManager.GetLogger(typeof(AppCreator));
         private readonly StrategyManager _sm;
         private readonly ISession _session;
+        private readonly ApplicationRepository _applicationRepository;
 
-        public AppCreator(IStrategyRepository strategies, IEzBobConfiguration config, IUsersRepository users, ISession session)
+        public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository, IStrategyRepository strategies)
         {
-            _strategies = strategies;
             _config = config;
             _users = users;
             _session = session;
+            _applicationRepository = applicationRepository;
+            _strategies = strategies;
             _sm = new StrategyManager();
         }
 
@@ -372,6 +375,18 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void CAISGenerate(User user)
         {
+            var caisStrategies = _strategies.GetAll().Where(x => x.DisplayName == _config.CAISNoUploadStrategyName);
+            var caisStrat = caisStrategies.FirstOrDefault(x => x.Id == caisStrategies.Max(y => y.Id));
+            var caisStratStatus = _applicationRepository.GetAll().Where(x => x.Strategy == caisStrat).Select(x=>x.State);
+            if (caisStratStatus.Any(x => 
+                   x != ApplicationStrategyState.SecurityViolation &&
+                   x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
+                   x != ApplicationStrategyState.StrategyFinishedWithErrors &&
+                   x != ApplicationStrategyState.Error 
+                ))
+            {
+                throw new Exception("Strategy already started");
+            }
             CreateApplication(user, new StrategyParameter[]{}, _config.CAISNoUploadStrategyName);
         }
     }
