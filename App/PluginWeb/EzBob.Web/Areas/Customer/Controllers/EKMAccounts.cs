@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.CommonLib.Security;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using Scorto.Web;

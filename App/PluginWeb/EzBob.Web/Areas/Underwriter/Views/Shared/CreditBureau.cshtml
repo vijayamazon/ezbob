@@ -115,7 +115,7 @@
 
 @helper DisplayConsumerData()
 {
-    <fieldset style="width: 100%;"><legend>Consumer</legend>
+    <fieldset><legend>Consumer</legend>
         <div class="row-fluid">
             <div class="accordion page-content-frame" id="accordion-credit-bureau">
                 <div class="accordion-heading">
@@ -382,13 +382,13 @@
                     <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianResponseErrors">
                         <b class="play"></b>Experian response parsing errors</a>
                 </div>
-                <div id="collapseExperianResponseErrors" class="accordion-body collapse" style="width: 900px;">
+                <div id="collapseExperianResponseErrors" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <div class="row-fluid">
                             <div class="span12">
                                 <ul>
                                     <% _.each(experianInfo.ErrorList, function(errMessage){ %>
-                                    <li>@Html.Raw("<%- errMessage %>")</li>
+                                    <li>@Html.Raw("<%- errMessage.replace(/,/g, ', ') %>")</li>
                                     <% }); %>
                                 </ul>
                             </div>
@@ -468,7 +468,7 @@
 
 @helper DisplayNonLimitedData()
 {
-    <fieldset style="width: 100%"><legend>Business</legend>
+    <fieldset><legend>Business</legend>
         <div class="row-fluid">
             <div class="span9 accordion page-content-frame" id="accordion-nonlimited">
             
@@ -756,13 +756,13 @@
                     <a class="accordion-toggle" data-toggle="collapse" href="#<%-collapseExperianResponseErrorsId%>">
                         <b class="play"></b>Experian response parsing errors</a>
                 </div>
-                <div id="<%-collapseExperianResponseErrorsId%>" class="accordion-body collapse" style="width: 900px;">
+                <div id="<%-collapseExperianResponseErrorsId%>" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <div class="row-fluid">
                             <div class="span12">
                                 <ul>
                                     <% _.each(model.ErrorList, function(errMessage){ %>
-                                    <li>@Html.Raw("<%- errMessage %>")</li>
+                                    <li>@Html.Raw("<%- errMessage.replace(/,/g, ', ') %>")</li>
                                     <% }); %>
                                 </ul>
                             </div>

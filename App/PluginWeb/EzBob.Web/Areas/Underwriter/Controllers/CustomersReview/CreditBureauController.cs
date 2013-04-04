@@ -150,7 +150,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                         AML = model.AmlInfo.AMLResult,
                         AMLnum = model.AmlInfo.AuthenticationIndexType.ToString(CultureInfo.InvariantCulture),
                         BWA = model.BavInfo.BankAccountVerificationResult,
-                        BWAnum = "?",
+                        BWAnum = GetBwaScoreInfo(model.BavInfo),
                         Businesstype = model.BorrowerType,
                         BusinessScore = GetBusinessScore(model),
                         RiskLevel = model.Summary !=null ? model.Summary.RiskLevel : "-",
@@ -949,6 +949,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 return model.NonLimitedInfo.CompanyNotFoundOnBureau.ToString(CultureInfo.InvariantCulture);
             }
             return "-";
+        }
+
+        private static string GetBwaScoreInfo(BankAccountVerificationInfo info)
+        {
+            return
+                string.Format("{0}, {1}, {2}",
+                info.NameScore, 
+                info.AddressScore,
+                string.IsNullOrEmpty(info.AccountStatus) ? "-" : info.AccountStatus);
         }
     }
 }
