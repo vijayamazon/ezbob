@@ -4,8 +4,9 @@
   <Description />
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
+    <NodeElement Name="StratSatartDate" NodeId="AssignmentB951548" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
@@ -68,7 +69,7 @@
       <Name>StopNode49532829</Name>
       <PointF>
         <X>111.46965</X>
-        <Y>536</Y>
+        <Y>576</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeStop</TypeName>
@@ -351,7 +352,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment56530712</Name>
       <PointF>
-        <X>706.925659</X>
+        <X>706.9257</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
@@ -890,7 +891,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>DataSourceBehavioral61244824</Name>
       <PointF>
-        <X>198.538727</X>
+        <X>198.538742</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
@@ -1409,6 +1410,23 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>StratSatartDate</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>AssignmentB951548</Name>
+      <PointF>
+        <X>539.1296</X>
+        <Y>16</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -2734,6 +2752,30 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>CAIS_NO_Upload</OwnerName>
+      <Name>StratSatartDate</Name>
+      <TypeName>System.DateTime</TypeName>
+      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CAIS_NO_Upload</OwnerName>
+      <Name>temp</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>ReadNextNode20166237</OwnerName>
       <Name>@InputDataLayerName</Name>
       <TypeName>System.String</TypeName>
@@ -3110,6 +3152,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>IsDefaultedScalar</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode4733890</OwnerName>
+      <Name>ManualCaisAccountStatusScalar</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -3503,6 +3557,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
+      <Name>ManualCaisAccountStatus</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>CollectionStatus</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3577,7 +3643,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <OwnerName>Comparison28830314</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ManualCaisAccountStatusScalar &lt;&gt; NULL OR ManualCaisAccountStatusScalar &lt;&gt; "" OR ManualCaisAccountStatusScalar &lt;&gt; "Calculated value"</InitialValue>
+      <InitialValue> ManualCaisAccountStatusScalar &lt;&gt; NULL AND ManualCaisAccountStatusScalar &lt;&gt; "" AND ManualCaisAccountStatusScalar &lt;&gt; "Calculated value"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -4449,6 +4515,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>AssignmentB951548</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>StratSatartDate:=NOW()</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -4616,7 +4694,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison28830314</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment6295723</TargetNodeName>
+      <TargetNodeName>AssignmentB66097328</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -4628,7 +4706,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison28830314</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB66097328</TargetNodeName>
+      <TargetNodeName>ConditionalAssignment6295723</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -4677,18 +4755,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SourceNodeName>CreditProduct27789888</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>MultiAssignmentB57354364</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>ConditionalAssignment56530712</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison28830314</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -4820,7 +4886,31 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar37560342</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB951548</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>AssignmentB951548</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>ScriptNode20822872</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ConditionalAssignment56530712</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison28830314</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5175,12 +5265,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ManualCaisAccountStatusScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison28830314</TargetVariableOwnerName>
-      <TargetVariableName>Comparison28830314ManualCaisAccountStatusScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>SceduledRepayments</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>SceduledRepaymentsScalar</TargetVariableName>
@@ -5340,6 +5424,144 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SourceVariableName>CP_AddressCC</SourceVariableName>
       <TargetVariableOwnerName>MailNode14931696</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>RETURN_VALUE</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>RETURN_VALUE</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>BusinessGoodCounter</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>GoodUsers</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>BusinessCounter</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>NumberOfItems</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>BusinessPath</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>FilePath</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>BusinessFileName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>FileName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>RETURN_VALUE</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>RETURN_VALUE</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ConsumerFilename</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>FileName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ConsumerCompanyType</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>Type</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ConsumerCounter</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>NumberOfItems</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ConsumerGoodCounter</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>GoodUsers</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ConsumerPath</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>FilePath</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>BusinessCompanyType</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>Type</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>path</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>CAISPath</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>path2</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
+      <TargetVariableName>CAISPath2</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>StratSatartDate</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>StratSatartDate</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ManualCaisAccountStatus</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>ManualCaisAccountStatusScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5535,135 +5757,15 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>DataSourceName</TargetVariableName>
+      <SourceVariableName>ManualCaisAccountStatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>ManualCaisAccountStatus</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>RETURN_VALUE</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>RETURN_VALUE</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>BusinessGoodCounter</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>GoodUsers</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>BusinessCounter</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>NumberOfItems</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>BusinessPath</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>FilePath</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>localtime</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>BusinessFileName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>FileName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>DataSourceName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>RETURN_VALUE</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>RETURN_VALUE</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>localtime</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ConsumerFilename</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>FileName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ConsumerCompanyType</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>Type</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ConsumerCounter</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>NumberOfItems</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ConsumerGoodCounter</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>GoodUsers</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ConsumerPath</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar33894036</TargetVariableOwnerName>
-      <TargetVariableName>FilePath</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>BusinessCompanyType</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar4639251</TargetVariableOwnerName>
-      <TargetVariableName>Type</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
-      <TargetVariableName>DataSourceName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
-      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>path</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
-      <TargetVariableName>CAISPath</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>path2</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar37560342</TargetVariableOwnerName>
-      <TargetVariableName>CAISPath2</TargetVariableName>
+      <SourceVariableName>ManualCaisAccountStatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison28830314</TargetVariableOwnerName>
+      <TargetVariableName>Comparison28830314ManualCaisAccountStatusScalar</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -5893,6 +5995,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar37560342</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>AssignmentB951548</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
