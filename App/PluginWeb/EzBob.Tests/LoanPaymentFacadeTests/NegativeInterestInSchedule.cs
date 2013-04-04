@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
@@ -9,19 +8,9 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    [TestFixture]
-    public class NegativeInterestInSchedule
+
+    public class NegativeInterestInSchedule : LoanPaymentsTestBase
     {
-        private Loan _loan;
-        private LoanPaymentFacade _facade;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _loan = new Loan();
-            _facade = new LoanPaymentFacade();
-        }
-
         [Test]
         [Description("Modeling loan case 37")]
         public void loan_37()
@@ -1016,19 +1005,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Console.WriteLine(_loan);
 
             MakePayment(1000.0m, Parse("2013-01-11 23:16:28.000"));
-        }
-
-        private static DateTime Parse(string date)
-        {
-            return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);
-        }
-
-
-        private void MakePayment(decimal amount, DateTime date)
-        {
-            Console.WriteLine("Making payment {0} on {1}", amount, date);
-            _facade.PayLoan(_loan, "", amount, "", date);
-            Console.WriteLine(_loan);
         }
     }
 }

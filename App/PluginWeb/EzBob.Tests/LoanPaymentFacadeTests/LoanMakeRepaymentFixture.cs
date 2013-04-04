@@ -5,22 +5,17 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    [TestFixture]
-    public class LoanMakeRepaymentFixture
+    public class LoanMakeRepaymentFixture : LoanPaymentsTestBase
     {
-        private Loan _loan;
         private decimal _takenMoney = 3000;
-        private LoanPaymentFacade _facade;
         private DateTime _startDate;
 
-        [SetUp]
-        public void SetUp()
+        protected override void SetUp()
         {
-            _loan = new Loan();
             var calculator = new LoanScheduleCalculator();
             _startDate = new DateTime(2012, 1, 1);
             calculator.Calculate(_takenMoney, _loan, _startDate);
-            _facade = new LoanPaymentFacade();
+            base.SetUp();
         }
 
         [Test]

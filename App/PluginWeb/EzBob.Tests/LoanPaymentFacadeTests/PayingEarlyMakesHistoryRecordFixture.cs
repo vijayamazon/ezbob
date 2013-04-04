@@ -1,11 +1,8 @@
 ﻿using System;
-using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using Moq;
-using NHibernate;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 using UnitTests.Utils;

@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Globalization;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    [TestFixture]
-    public class PayTotalLateFixture
+    public class PayTotalLateFixture : LoanPaymentsTestBase
     {
-        private LoanPaymentFacade _facade;
         private LoanScheduleCalculator _calculator;
         private Customer _customer;
 
-        [SetUp]
-        public void SetUp()
+        protected override void SetUp()
         {
             _calculator = new LoanScheduleCalculator();
-            _facade = new LoanPaymentFacade();
             _customer = new Customer();
         }
 
@@ -158,11 +152,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Assert.That(loan1.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
             Assert.That(loan2.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.Paid));
-        }
-
-        private static DateTime Parse(string date)
-        {
-            return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);
         }
     }
 }

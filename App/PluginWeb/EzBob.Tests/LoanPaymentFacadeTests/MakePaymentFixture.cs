@@ -7,23 +7,20 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    [TestFixture]
-    public class MakePaymentFixture
+    public class MakePaymentFixture : LoanPaymentsTestBase
     {
-        private Loan _loan;
         private decimal _takenMoney = 3000;
-        private LoanPaymentFacade _facade;
         private DateTime _startDate;
         private Customer _customer;
 
-        [SetUp]
-        public void SetUp()
+        protected override void SetUp()
         {
-            _loan = new Loan(){Id = 1, Status = LoanStatus.Live};
+            _loan.Id = 1;
+            _loan.Status = LoanStatus.Live;
+
             var calculator = new LoanScheduleCalculator();
             _startDate = new DateTime(2012, 1, 1);
             calculator.Calculate(_takenMoney, _loan, _startDate);
-            _facade = new LoanPaymentFacade();
             _customer = new Customer();
             _customer.Loans.Add(_loan);
             _loan.Customer = _customer;

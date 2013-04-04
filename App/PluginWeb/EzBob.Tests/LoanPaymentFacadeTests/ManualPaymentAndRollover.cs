@@ -1,25 +1,12 @@
 ﻿using System;
-using System.Globalization;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    [TestFixture]
-    public class ManualPaymentAndRollover
+    public class ManualPaymentAndRollover : LoanPaymentsTestBase
     {
-        private Loan _loan;
-        private LoanPaymentFacade _facade;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _loan = new Loan();
-            _facade = new LoanPaymentFacade();
-        }
-
         [Test]
         public void loan_276()
         {
@@ -46,20 +33,5 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Assert.That(rollover.Payment, Is.EqualTo(57m));
         }
-
-
-        private static DateTime Parse(string date)
-        {
-            return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);
-        }
-
-
-        private void MakePayment(decimal amount, DateTime date)
-        {
-            Console.WriteLine("Making payment {0} on {1}", amount, date);
-            _facade.PayLoan(_loan, "", amount, "", date);
-            Console.WriteLine(_loan);
-        }
-
     }
 }

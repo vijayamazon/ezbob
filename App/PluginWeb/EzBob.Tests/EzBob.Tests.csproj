@@ -92,6 +92,7 @@
     <Compile Include="LoanPaymentFacadeTests\FlexibleInerestRateFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\GetStateAtFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\LateChargesFixture.cs" />
+    <Compile Include="LoanPaymentFacadeTests\LoanPaymentsTestBase.cs" />
     <Compile Include="LoanPaymentFacadeTests\ManualPaymentAndRollover.cs" />
     <Compile Include="LoanPaymentFacadeTests\NegativeInterestInSchedule.cs" />
     <Compile Include="LoanPaymentFacadeTests\PayTotalLateFixture.cs" />

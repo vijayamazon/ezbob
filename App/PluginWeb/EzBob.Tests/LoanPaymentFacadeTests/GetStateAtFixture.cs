@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NUnit.Framework;
@@ -7,20 +6,8 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    public class GetStateAtFixture
+    public class GetStateAtFixture : LoanPaymentsTestBase
     {
-        private Loan _loan;
-        private LoanPaymentFacade _facade;
-
-
-        [SetUp]
-        public void SetUp()
-        {
-            _loan = new Loan();
-            _facade = new LoanPaymentFacade();
-        }
-
-
         [Test]
         [Description("Every unpaid installment adds amount to pay")]
         public void state_at_installment_dates()
@@ -114,17 +101,5 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             //Assert.That(state.LoanRepayment, Is.EqualTo(0));
             //Assert.That(state.Interest, Is.EqualTo(0));
         }
-
-        private void MakePayment(decimal amount, DateTime date)
-        {
-            Console.WriteLine("Making payment {0} on {1}", amount, date);
-            _facade.PayLoan(_loan, "", amount, "", date);
-            Console.WriteLine(_loan);
-        }
-
-        private static DateTime Parse(string date)
-        {
-            return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);
-        } 
     }
 }

@@ -1,26 +1,13 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
-    public class LateChargesFixture
+    public class LateChargesFixture : LoanPaymentsTestBase
     {
-        private Loan _loan;
-        private LoanPaymentFacade _facade;
-
-
-        [SetUp]
-        public void SetUp()
-        {
-            _loan = new Loan();
-            _facade = new LoanPaymentFacade();
-        }
-
         [Test]
         [Description("add late charge after missed payment")]
         public void simple_late_charge()
@@ -112,19 +99,5 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(_loan.Schedule.Sum(x => x.Fees), Is.EqualTo(60));
             Assert.That(_loan.Schedule[2].Fees, Is.EqualTo(60));
         }
-
-
-        private void MakePayment(decimal amount, DateTime date)
-        {
-            Console.WriteLine("Making payment {0} on {1}", amount, date);
-            _facade.PayLoan(_loan, "", amount, "", date);
-            Console.WriteLine(_loan);
-        }
-
-        private static DateTime Parse(string date)
-        {
-            return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);
-        }
-
     }
 }
