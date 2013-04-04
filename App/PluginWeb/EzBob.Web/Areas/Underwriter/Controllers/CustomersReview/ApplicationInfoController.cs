@@ -331,5 +331,27 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _creator.Evaluate(_users.Get(Id), false);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
+
+        [HttpPost]
+        [Transactional]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee)
+        {
+            var cr = _cashRequestsRepository.Get(id);
+            var loanT = _loanTypes.Get(loanType);
+            cr.LoanType = loanT;
+            cr.ManagerApprovedSum = amount;
+            cr.InterestRate = interestRate;
+            cr.RepaymentPeriod = repaymentPeriod;
+            cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
+            cr.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
+            cr.UseSetupFee = useSetupFee;
+            cr.LoanTemplate = null;
+
+            _crm.UpdateCashRequest(cr);
+       
+            return this.JsonNet(true);
+        }
     }
 }

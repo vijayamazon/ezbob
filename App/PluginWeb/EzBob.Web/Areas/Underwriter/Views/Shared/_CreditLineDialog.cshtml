@@ -1,0 +1,79 @@
+﻿<script id="credit-line-dialog-template" type="text/template">
+    @CreditLineDialog()
+</script>
+
+
+@helper  CreditLineDialog()
+{
+   
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>New Credit Line</h3>
+    </div>
+    <div class="modal-body">
+        <form id="credit-line-form" class="form-horizontal" action="/" method="POST" >
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <label for="loan-type" class="control-label">Loan Type:</label>
+                        <div class="controls">
+                            <select name="loan-type" class="valid">
+                                <option value="1">Standard Loan</option>
+                                <option value="2">HalfWay Loan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="offeredCreditLine" class="control-label">Offered credit line:</label>
+                        <div class="controls">
+                            <input name="offeredCreditLine" id="offeredCreditLine" type="text">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="interestRate" class="control-label">Interest rate:</label>
+                        <div class="controls">
+                            <input name="interestRate" id="interestRate" type="text" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="repaymentPeriod" class="control-label">Repayment period:</label>
+                        <div class="controls">
+                            <input name="repaymentPeriod" id="repaymentPeriod" type="text" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="startingFromDate" class="control-label">Starting from date:</label>
+                        <div class="controls">
+                            <input name="startingFromDate" id="startingFromDate" type="text" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="offerValidUntil" class="control-label">Offer valid until:</label>
+                        <div class="controls">
+                            <input name="offerValidUntil" id="offerValidUntil" type="text" >
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="enableSetupFee" class="control-label">Enable setup fee:</label>
+                        <div class="controls">
+                            <input name="enableSetupFee" id="enableSetupFee" type="checkbox" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>   
+    <div class="modal-footer">
+        <button class="btn btn-primary btnOk">OK</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+    
+}
+
+

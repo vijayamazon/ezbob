@@ -228,6 +228,7 @@ namespace EzBob.Web.Infrastructure
                             .Add("~/Content/js/Underwriter/ezbob.underwriter.caisReportsHistory.coffee")
                             .Add("~/Content/js/Underwriter/ezbob.underwriter.ProfilePopupView.coffee")
                             .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
+                            .Add("~/Content/js/Underwriter/ezbob.underwriter.creditLineDialog.coffee")
                             
                             .MvcRender("~/Content/js/min/underwriter_#.js");
         }

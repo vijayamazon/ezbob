@@ -815,6 +815,9 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editInstallment.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editFee.cshtml" />
     <Content Include="App_Browsers\generic.browser" />
+    <Content Include="Areas\Underwriter\Views\Shared\_CreditLineDialog.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
@@ -1393,6 +1396,7 @@
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\editFee.coffee" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.creditLineDialog.coffee" />
     <None Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />

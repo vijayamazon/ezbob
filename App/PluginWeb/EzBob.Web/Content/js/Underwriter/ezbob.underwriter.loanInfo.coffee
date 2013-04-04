@@ -10,6 +10,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @personalInfo = options.personalInfo
         @bindTo @personalInfo, "change", @UpdateNewCreditLineState, this
         @bindTo @personalInfo, "change:CreditResult", @changeCreditResult, this
+        EzBob.App.vent.on 'newCreditLine:done', @showCreditLineDialog, this
 
     events:
         "click [name='startingDateChangeButton']"           : "editStartingDate"
@@ -179,6 +180,13 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @model.fetch()
         @personalInfo.fetch()
 
+    showCreditLineDialog: ->
+        xhr = @model.fetch()
+        xhr.done =>
+            dialog = new EzBob.Underwriter.CreditLineDialog (model: @model)
+            dialog.render()
+            EzBob.App.modal.show dialog 
+
 class ModelUpdater
     constructor: (@model, @property) ->
 
@@ -190,6 +198,7 @@ class ModelUpdater
     check: ->
         if not @model.get(@property).isNullOrEmpty()
             BlockUi 'off'
+            EzBob.App.vent.trigger('newCreditLine:done')
             return
         else
             setTimeout @start, 1000
