@@ -93,7 +93,6 @@
       }).datepicker('show');
       this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
       this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
-      this.$el.find(".cashInput").cashEdit();
       return this.setValidator();
     };
 
@@ -102,13 +101,13 @@
         rules: {
           offeredCreditLine: {
             required: true,
-            min: EzBob.Config.XMinLoan,
-            max: EzBob.Config.MaxLoan
+            autonumericMin: EzBob.Config.XMinLoan,
+            autonumericMax: EzBob.Config.MaxLoan
           },
           repaymentPeriod: {
             required: true,
-            min: 1,
-            max: 100
+            autonumericMin: 1,
+            autonumericMax: 100
           },
           interestRate: {
             required: true,
