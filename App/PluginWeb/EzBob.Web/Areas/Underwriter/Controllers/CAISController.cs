@@ -50,5 +50,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 return file.ReadToEnd();
             }
         }
+        [Ajax]
+        [HttpPost]
+        [NoCache]
+        public void SaveFileChange(string fileContent, string fullFileName)
+        {
+            using (var file = new StreamWriter(fullFileName))
+            {
+                file.Write(fileContent);
+            }
+        }
     }
 }

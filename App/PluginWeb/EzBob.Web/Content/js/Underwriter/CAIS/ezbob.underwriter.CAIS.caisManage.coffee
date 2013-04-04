@@ -38,15 +38,14 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     ui:
         count:".reports-count"
         send: ".send"
-        save: ".save-change"
 
     onRender: ->
         @$el.find('[data-toggle="tooltip"]').tooltip()
         @checkedFileModelChanged()
-        @ui.save.addClass "disabled"
         
     serializeData: ->
         model: @model.get "cais"
+        checkedModel: @checkedModel.toJSON()
 
     checkedFileModelChanged: ->
         if @checkedModel.length == 0
@@ -59,17 +58,17 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         "click .generate": "generateClicked"
         "click [data-path]": "fileSelected"
         "click [data-file-path]": "fileChecked"
-        "keyup .cais-file-view": "fileViewChanged"
     
-    fileViewChanged: ->
-        @ui.save.disable()
+    fileViewChanged: (e)->
+        $el = $(e.currentTarget)
+        ($ ".save-change").removeClass "disabled"
+        $el.css "border", "1px solid lightgreen"
 
     fileChecked: (e) ->
         $el = $(e.currentTarget)
         checked = $el.hasClass("checked")
         filePath = $el.data "file-path"
         $el.toggleClass "checked", !checked
-        $el.css "border-collapse", ""
         if not checked then @checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({ path: filePath })) else
             @checkedModel.remove(@checkedModel.getModelByPath(filePath))
 
@@ -95,8 +94,8 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
             if response.error
                 EzBob.ShowMessage response.error, "Error"
                 return
-            dialog = $('<div/>').html("<textarea class='cais-file-view'>#{response}</textarea>" )
-            dialog.dialog({
+            dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>#{response}</textarea>" )    
+            dialog.dialog
                 title: filePath
                 width: '75%'
                 height: 600
@@ -104,10 +103,28 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                 draggable: false
                 resizable: false
                 buttons:[
-                    text: "Save file changes", click: @saveFileChange, class:'btn btn-primary save-change'
+                    text: "Save file changes", click: @saveFileChange, class:'btn btn-primary save-change disabled', 'data-file-path': filePath
                 ]
-            })
+            (dialog.find ".cais-file-view").on("keypress keyup keydown", @fileViewChanged)
         .always =>BlockUi "off"
 
-    saveFileChange: ->
-        $
+    saveFileChange: (e)->
+        $el = $(e.currentTarget)
+        return if $el.hasClass "disabled"
+        $caisTextarea = ($ "textarea:visible")
+        caisContent = $caisTextarea.val()
+        filePath = $el.data "file-path"
+        saveFn = ->
+            BlockUi "on"
+            xhr = $.post "#{gRootPath}CAIS/SaveFileChange", { fileContent: caisContent, fullFileName: filePath }
+            xhr.done (response)->
+                if response.error 
+                    EzBob.ShowMessage response.error, "Something went wrong"
+                    return false
+                EzBob.ShowMessage "File #{filePath} successfully saved ", "Successful"
+                $caisTextarea.css "border", "1px solid #cccccc"
+            xhr.fail ->
+                EzBob.ShowMessage "Error occured", "Something went wrong"
+            xhr.always ->
+                BlockUi "off"
+        EzBob.ShowMessage "Are you sure you want to save the change?", "Confirmation", saveFn, "Save", null, "Cancel"
