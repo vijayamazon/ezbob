@@ -109,7 +109,7 @@
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar55330634" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar16854755" />
-    <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar50616587" />
+    <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar2488896" />
     <NodeElement Name="Get_Other_Directors_Address" NodeId="DataSourceBehavioral20197855" />
     <NodeElement Name="GetAmazonData" NodeId="DataSourceBehavioral56474739" />
     <NodeElement Name="GeteBayData" NodeId="DataSourceBehavioral60622501" />
@@ -3902,7 +3902,7 @@ eBayAccountStateScalar != CP_eBay_AccountStatePending&lt;/condition&gt;&lt;posit
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB33910007</Name>
       <PointF>
-        <X>6268.537</X>
+        <X>6248.537</X>
         <Y>1576</Y>
       </PointF>
       <SuperNodeName />
@@ -5848,7 +5848,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment18896952</Name>
       <PointF>
-        <X>5998.59326</X>
+        <X>5978.59326</X>
         <Y>1576</Y>
       </PointF>
       <SuperNodeName />
@@ -7945,7 +7945,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>NestedStrategy23238696</Name>
       <PointF>
-        <X>6122.726</X>
+        <X>6102.726</X>
         <Y>1576</Y>
       </PointF>
       <SuperNodeName />
@@ -10098,7 +10098,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
 &lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar50616587</Name>
+      <Name>DataSourceNodeScalar2488896</Name>
       <PointF>
         <X>5831.176</X>
         <Y>1716</Y>
@@ -23071,7 +23071,7 @@ ExperianMortgageBalance = CPExperianMortgagesBalance
       <OwnerName>Comparison17338192</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000
+      <InitialValue>Inintial_ExperianConsumerScore &lt; 550 OR TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000
 
 
 
@@ -29671,7 +29671,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar50616587</OwnerName>
+      <OwnerName>DataSourceNodeScalar2488896</OwnerName>
       <Name>EKMNum</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -29683,7 +29683,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar50616587</OwnerName>
+      <OwnerName>DataSourceNodeScalar2488896</OwnerName>
       <Name>CustomerId</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -29695,7 +29695,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar50616587</OwnerName>
+      <OwnerName>DataSourceNodeScalar2488896</OwnerName>
       <Name>DataSourceName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -29707,7 +29707,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar50616587</OwnerName>
+      <OwnerName>DataSourceNodeScalar2488896</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -35245,7 +35245,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar15935071</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar50616587</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar2488896</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -35665,7 +35665,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar50616587</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar2488896</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>ConditionalAssignment57612135</TargetNodeName>
       <SuperNodeName />
@@ -35677,7 +35677,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar50616587</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar2488896</SourceNodeName>
       <SourceNodeOutletName>Exception</SourceNodeOutletName>
       <TargetNodeName>MailNode61074547</TargetNodeName>
       <SuperNodeName />
@@ -40863,6 +40863,72 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192TotalSumOfOrders3MTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192TotalSumOfOrders1YTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
+      <TargetVariableName>Comparison17338192Inintial_ExperianConsumerScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar15935071</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
@@ -41481,93 +41547,27 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192PolicyRulesStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192AmountOfMPsPassed</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ModelLoanOffer</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192ModelLoanOffer</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192ExperianRiskSegment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192ExperianBusinessResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianAMLResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192ExperianAMLResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192ExperianOverIndebtednessReject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>CustomerEliminated</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192CustomerEliminated</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192TotalSumOfOrders3MTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192TotalSumOfOrders1YTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>Comparison17338192</TargetVariableOwnerName>
-      <TargetVariableName>Comparison17338192Inintial_ExperianConsumerScore</TargetVariableName>
+      <SourceVariableName>userId</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar2488896</TargetVariableOwnerName>
+      <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar50616587</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar2488896</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar50616587</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar2488896</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_EKMStoresNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar50616587</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar2488896</TargetVariableOwnerName>
       <TargetVariableName>EKMNum</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>userId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar50616587</TargetVariableOwnerName>
-      <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -43980,7 +43980,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceNodeScalar50616587</OwnerName>
+      <OwnerName>DataSourceNodeScalar2488896</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
