@@ -71,10 +71,8 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
     },
 
     inputsChanged: function () {
-        var accNum = this.$el.find('#AccountNumber').val(),
-            sortCode = this.$el.find('#SortCodeSplit').val(),
-            button = this.$el.find('a.connect-bank');
-        if (accNum && sortCode) {
+        var button = this.$el.find('a.connect-bank');
+        if (this.form.valid()) {
             button.removeAttr('disabled');
             button.removeClass('disabled');
         } else {
@@ -82,6 +80,7 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
             button.addClass('disabled');
         }
     },
+    
     back: function () {
         this.trigger('back');
         return false;

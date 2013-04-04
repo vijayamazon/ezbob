@@ -823,7 +823,7 @@ EzBob.validateSortCode = function (el) {
             AccountNumber: { required: true, minlength: 8, maxlength: 8, digits: true }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+       // unhighlight: EzBob.Validation.unhighlight
     });
 };
 
