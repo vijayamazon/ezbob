@@ -278,5 +278,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             return this.JsonNet(new {});
         }
+        [Ajax]
+        [Transactional]
+        [HttpPost]
+        public void SetPaypointDefaultCard(string transactionid, int customerId)
+        {
+            var customer = _customers.GetChecked(customerId);
+            customer.PayPointTransactionId = transactionid;
+        }
     }
 }

@@ -6,16 +6,25 @@
             <th>Date Added</th>
             <th>PayPoint Card Transaction ID</th>
             <th>Card No</th>
-            <th>ExpireDate</th>
+            <th>Expire Date</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
+        <% _.each(paymentAccounts.PayPointCards, function(pp, i){%>
         <tr>
-            <% _.each(paymentAccounts.PayPointCards, function(pp, i){%>
-            <td><%- EzBob.formatDateHumanFull(pp.DateAdded) %></td>
+            <td>
+                <% if(pp.IsDefault){%><i class="icon-ok"></i><%}%>
+                <%- EzBob.formatDateHumanFull(pp.DateAdded) %>
+            </td>
             <td><%- pp.TransactionId %></td>
             <td><%- pp.CardNo %></td>
             <td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
+            <td>
+                <% if(!pp.IsDefault){%>
+                <button class="btn btn-mini set-paypoint-default" data-transactionid="<%- pp.TransactionId %>"><i class="icon-ok"></i>Set Default</button>
+                <%}%>
+            </td>
         </tr>
         <%}) %>
        

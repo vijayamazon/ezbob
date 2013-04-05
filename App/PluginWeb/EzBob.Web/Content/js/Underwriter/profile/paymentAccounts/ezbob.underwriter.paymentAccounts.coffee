@@ -33,10 +33,21 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
         "click .add-existing"            : "addExistingCard"
         "click .setDefault"              : "setDefault"
         "click .addNewDebitCard"         : "addNewDebitCard"
+        "click .set-paypoint-default"    : "setPaypointDefault"
 
     onRender: ->
         #@$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
         @$el.find('.bankAccounts i[data-title]').tooltip({placement: "right"})
+
+    setPaypointDefault: (e)->
+        $el = ($ e.currentTarget)
+        transactionId = $el.data "transactionid"
+        BlockUi "on"
+        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/SetPaypointDefaultCard", {customerId: @model.customerId, transactionId: transactionId }
+        xhr.complete ->
+            BlockUi "off"
+        xhr.done =>
+            @model.fetch()
 
     showBankAccount: (e) ->
         return false if e.target.tagName == 'BUTTON'

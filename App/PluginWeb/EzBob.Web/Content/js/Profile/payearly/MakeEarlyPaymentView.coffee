@@ -86,7 +86,8 @@ class EzBob.Profile.MakeEarlyPayment extends Backbone.Marionette.ItemView
         loanId: @model.get("loan").id
         cardId: cardId
         rolloverId: @model.get("currentRollover") && @model.get("currentRollover").Id
-
+      
+      BlockUi "on"  
       $.post(window.gRootPath + "Customer/Paypoint/PayFast", data).done((res) =>
         if res.error
           EzBob.App.trigger "error", res.error
@@ -111,6 +112,7 @@ class EzBob.Profile.MakeEarlyPayment extends Backbone.Marionette.ItemView
         EzBob.App.trigger "clear"
       ).complete =>
         @ui.submit.removeClass "disabled"
+        BlockUi "off"  
 
   backToProfile: ->
     @customerModel.fetch()

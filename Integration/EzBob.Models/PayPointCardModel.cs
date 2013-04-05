@@ -10,6 +10,7 @@ namespace EzBob.Models
         public string TransactionId { get; set; }
         public string CardNo { get; set; }
         public DateTime? ExpireDate { get; set; }
+        public bool IsDefault { get; set; }
 
         public static PayPointCardModel FromCard(PayPointCard card)
         {
@@ -19,7 +20,8 @@ namespace EzBob.Models
                            CardNo = card.CardNo,
                            DateAdded = card.DateAdded,
                            ExpireDate = card.ExpireDate,
-                           TransactionId = card.TransactionId
+                           TransactionId = card.TransactionId,
+                           IsDefault = card.Customer.PayPointTransactionId == card.TransactionId
                        };
         }
     }

@@ -1,12 +1,12 @@
-﻿@using EzBob.Web.Areas.Underwriter.Models
-@model dynamic
+﻿@model dynamic
 <script id="profile-summary-template" type="text/template">
     @ProfileSummary()
 </script>
 
-@helper ButtonLights(string buttonStyle, string icon, string caption)
+@helper ButtonLights(string buttonStyle, string icon, string caption, string onClick = "")
 {
-    <button class="btn btn-mini @Html.Raw(buttonStyle) pull-right"><i class="@Html.Raw(icon)"></i> @Html.Raw(caption)</button>
+    onClick = string.IsNullOrEmpty(onClick) ? "" : onClick + ";window.scrollTop();";
+    <button class="btn btn-mini @Html.Raw(buttonStyle) pull-right" onclick="@Html.Raw(onClick)"><i class="@Html.Raw(icon)"></i> @Html.Raw(caption)</button>
 }
 
 @helper ProfileSummary()
@@ -34,7 +34,7 @@
             <table class="table table-striped blue-header rright">
                 <thead>
                     <tr>
-                        <th colspan="2">Marketplaces @ButtonLights("<%- mp.Lighter.ButtonStyle %>", "<%- mp.Lighter.Icon %>", "<%- mp.Lighter.Caption %>")</th>
+                        <th colspan="2">Marketplaces @ButtonLights("<%- mp.Lighter.ButtonStyle %>", "<%- mp.Lighter.Icon %>", "<%- mp.Lighter.Caption %>", "$('[href=\\'#marketplaces\\']').tab('show')")</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,7 +124,7 @@
             <table class="table table-striped blue-header rright">
                 <thead>
                     <tr>
-                        <th colspan="3">Credit Bureau @ButtonLights("<%- cb.Lighter.ButtonStyle %>", "<%- cb.Lighter.Icon %>", "<%- cb.Lighter.Caption %>")</th>
+                        <th colspan="3">Credit Bureau @ButtonLights("<%- cb.Lighter.ButtonStyle %>", "<%- cb.Lighter.Icon %>", "<%- cb.Lighter.Caption %>", "$('[href=\\'#credit-bureau\\']').tab('show')")</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -190,7 +190,7 @@
             <table class="table table-striped  blue-header rright">
                 <thead>
                     <tr>
-                        <th colspan="2">AML & Bank @ButtonLights("<%- ab.Lighter.ButtonStyle %>", "<%- ab.Lighter.Icon %>", "<%- ab.Lighter.Caption %>")</th>
+                        <th colspan="2">AML & Bank @ButtonLights("<%- ab.Lighter.ButtonStyle %>", "<%- ab.Lighter.Icon %>", "<%- ab.Lighter.Caption %>", "$('[href=\\'#credit-bureau\\']').tab('show')")</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -227,7 +227,7 @@
             <table class="table table-striped blue-header rright">
                 <thead>
                     <tr>
-                        <th colspan="2">Loans Activity @ButtonLights("<%- la.Lighter.ButtonStyle %>", "<%- la.Lighter.Icon %>", "<%- la.Lighter.Caption %>")</th>
+                        <th colspan="2">Loans Activity @ButtonLights("<%- la.Lighter.ButtonStyle %>", "<%- la.Lighter.Icon %>", "<%- la.Lighter.Caption %>", "$('[href=\\'#loanhistorys\\']').tab('show')")</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -299,7 +299,7 @@
             <%if(m.DecisionHistory.length > 0){%>
             <fieldset>
                 <legend>Decisions History:</legend>
-                <table class="table table-bordered table-striped blue-header contered">
+                <table class="table table-bordered table-striped blue-header centered">
                     <thead>
                         <tr>
                             <th> Action </th>
