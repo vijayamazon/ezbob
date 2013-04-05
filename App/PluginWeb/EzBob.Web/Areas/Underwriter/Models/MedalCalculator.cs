@@ -39,9 +39,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public MedalCalculators(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            if (customer.ScoringResults.Count == 0) return ;
-            var maxdate = customer.ScoringResults.ToList().Max(s => s.ScoreDate);
-            var scoringResult = customer.ScoringResults.ToList().SingleOrDefault(s => s.ScoreDate == maxdate);
+            var scorRes = customer.ScoringResults.ToList();
+            if (scorRes.Count == 0) return;
+            var maxdate = scorRes.Max(s => s.ScoreDate);
+            var scoringResult = scorRes.FirstOrDefault(s => s.ScoreDate == maxdate);
             BuildScore(scoringResult);
             BuildCharecteristic(scoringResult);  
             GetTotal();
