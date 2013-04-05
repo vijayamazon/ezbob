@@ -17,18 +17,18 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
 
     save:-> 
         return unless @ui.form.valid()
-        postData = @serializeData()
+        postData = @getPostData()
         action = "#{window.gRootPath}Underwriter/ApplicationInfo/ChangeCreditLine"
         post = $.post action, postData 
         post.done => @model.fetch()
         @close()
     
-    serializeData:->
+    getPostData:->
         m = @cloneModel.toJSON()
         data=
             id:m.CashRequestId
-            loanType:m.LoanTypeId
-            amount:m.OfferedCreditLine
+            loanType:$("#loan-type option:selected").val()
+            amount:parseFloat(@$el.find("#offeredCreditLine").autoNumericGet())
             interestRate:m.InterestRate
             repaymentPeriod:m.RepaymentPerion
             offerStart:m.StartingFromDate
