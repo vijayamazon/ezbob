@@ -1,5 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
+EzBob.Underwriter = EzBob.Underwriter or {}
 
 class EzBob.Underwriter.BugModel extends Backbone.Model
     url: -> "#{window.gRootPath}Underwriter/Bugs/Report"

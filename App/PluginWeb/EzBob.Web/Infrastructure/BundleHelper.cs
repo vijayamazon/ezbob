@@ -168,6 +168,7 @@ namespace EzBob.Web.Infrastructure
         public static MvcHtmlString RenderUnderwriterJs()
         {
             return Bundle.JavaScript()
+                            //3rd party libs
                             .Add("~/Content/js/lib/alertify.js")
                             .Add("~/Content/js/lib/jquery.zclip.js")
                             .Add("~/Content/js/lib/grid.locale-en.js")
@@ -175,7 +176,6 @@ namespace EzBob.Web.Infrastructure
                             .Add("~/Content/js/lib/jqgridHelpers.js")
                             .Add("~/Content/js/lib/jquery.form.js")
                             .Add("~/Content/js/lib/splitter.js")
-                            
                             .Add("~/Content/js/lib/jqplot/jquery.jqplot.js")
                             .Add("~/Content/js/lib/jqplot/plugins/jqplot.dateAxisRenderer.js")
                             .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")
@@ -183,53 +183,69 @@ namespace EzBob.Web.Infrastructure
                             .Add("~/Content/js/lib/jqplot/plugins/jqplot.trendline.js")
 
                             .Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
-
                             .Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
-
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.customerGrid.js")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.customers.js")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.emaileditview.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.personInfo.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.loanInfo.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.summaryInfo.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.marketplaceDetails.js")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.marketplaces.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.profile.coffee")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.experianInfo.js")
-                            .Add("~/Content/js/underwriter/ezbob.underwriter.idHubCustomAddress.js")
-                            .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
-                            .Add("~/Content/js/underwriter/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")
-                            .Add("~/Content/js/underwriter/paymentAccounts/ezbob.underwriter.AddBankAccount.coffee")
-                            .Add("~/Content/js/underwriter/paymentAccounts/ezbob.underwriter.payPalAccountDetails.coffee")
-                            .Add("~/Content/js/underwriter/paymentAccounts/ezbob.underwriter.bankAccountDetails.coffee")
-                            .Add("~/Content/js/underwriter/paymentAccounts/ezbob.underwriter.paymentAccounts.coffee")
-                            .Add ( "~/Content/js/Underwriter/ezbob.underwriter.loanHistorys.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.functionsDialog.js")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.loanHistoryDetail.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.alerts.js")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.AlertDocsView.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.medalCalculations.js")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.crosscheck.js")
-                            .Add("~/Content/js/Underwriter/ezbob.undewriter.messages.js")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.apiChecksLog.js")
                             .Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
-                            .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.rollover.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.manualPayment.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.LoanOptions.coffee")
+                            //Underwriter
 
+                            .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
+
+                            //Customer grid
+                            .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.js")
+                            .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customers.js")
+                            .Add("~/Content/js/Underwriter/customersGrid/ezbob.underwriter.ProfilePopupView.coffee")
+
+                            //profile
+                            .Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.coffee")
+
+                            .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.coffee")
+                            .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.coffee")
+                            .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
+                            .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.coffee")
+                            .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.coffee")
+
+                            .Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.rollover.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
+                            .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")
+
+                            .Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
+
+                            .Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
+                            .Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
+
+                            .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
+                            .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
+
+                            .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")
+                            .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.AddBankAccount.coffee")
+                            .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.payPalAccountDetails.coffee")
+                            .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.bankAccountDetails.coffee")
+                            .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.paymentAccounts.coffee")
+
+                            .Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.alerts.js")
+                            .Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.coffee")
+
+                            .Add("~/Content/js/Underwriter/profile/medalCalculator/ezbob.underwriter.medalCalculations.js")
+
+                            .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
+
+                            .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
+
+                            .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
+
+                            //----
                             .Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")
                             .Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")
                             .Add("~/Content/js/Underwriter/editLoan/editFee.coffee")
                             .Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
-
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.collectionStatus.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.controlButtons.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.caisReportsHistory.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.ProfilePopupView.coffee")
-                            .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
-                            .Add("~/Content/js/Underwriter/ezbob.underwriter.creditLineDialog.coffee")
                             
+                            .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
+
+                            .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+
                             .MvcRender("~/Content/js/min/underwriter_#.js");
         }
 
