@@ -330,6 +330,14 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// </summary>
         public virtual int BankAccountValidationInvalidAttempts { get; set; }
 
+        public virtual bool HasLateLoans
+        {
+            get
+            {
+                return Loans.Any(l => l.Status == LoanStatus.Late);
+            }
+        }
+
         public virtual void ValidateOfferDate(DateTime? offerDate = null)
         {
             var offer = offerDate ?? DateTime.UtcNow;

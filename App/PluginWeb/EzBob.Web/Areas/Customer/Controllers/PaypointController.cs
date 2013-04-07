@@ -107,8 +107,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 return View(TempData.Get<PaymentConfirmationModel>());
             }
 
-            var hasLateLoans = customer.Loans.Any(l => l.Status == LoanStatus.Late);
-
             var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customer);
 
             _appCreator.PayEarly(_context.User, DateTime.Now, amount, customer.PersonalInfo.FirstName);
@@ -129,18 +127,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var confirmation = new PaymentConfirmationModel
                 {
-                                       amount = amount.ToString(CultureInfo.InvariantCulture),
-                                       saved = res.Saved,
-                                       savedPounds = res.SavedPounds,
-                                       card_no = customer.CreditCardNo,
-                                       email = customer.Name,
-                                       surname = customer.PersonalInfo.Surname,
-                                       name = customer.PersonalInfo.FirstName,
-                                       refnum = refNumber,
-                                       transRefnums = res.TransactionRefNumbersFormatted,
-                                       hasLateLoans = hasLateLoans,
-                                       isRolloverPaid = res.RolloverWasPaid
-                                   };
+                    amount = amount.ToString(CultureInfo.InvariantCulture),
+                    saved = res.Saved,
+                    savedPounds = res.SavedPounds,
+                    card_no = customer.CreditCardNo,
+                    email = customer.Name,
+                    surname = customer.PersonalInfo.Surname,
+                    name = customer.PersonalInfo.FirstName,
+                    refnum = refNumber,
+                    transRefnums = res.TransactionRefNumbersFormatted,
+                    hasLateLoans = customer.HasLateLoans,
+                    isRolloverPaid = res.RolloverWasPaid
+                };
 
             _crm.UpdateLoans(_context.Customer);
             TempData.Put(confirmation);
