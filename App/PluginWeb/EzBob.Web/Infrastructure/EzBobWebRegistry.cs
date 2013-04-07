@@ -20,6 +20,7 @@ using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Code.Email;
 using EzBob.Web.Code.MpUniq;
+using EzBob.Web.Code.PostCode;
 using EzBob.Web.Models.Repository;
 using EzBob.eBayLib.Config;
 using PayPal.Platform.SDK;
@@ -129,7 +130,7 @@ namespace EzBob.Web.Infrastructure
             For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
             For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
             For<IAvailableFundsRepository>().Use<AvailableFundsRepository>();
-
+            For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
         }
     }
 }

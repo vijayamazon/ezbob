@@ -246,6 +246,8 @@
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
     <Compile Include="Code\LoanLimit.cs" />
+    <Compile Include="Code\PostCode\IPostCodeFacade.cs" />
+    <Compile Include="Code\PostCode\SimplyPostCodeFacade.cs" />
     <Compile Include="Controllers\AgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\DailyReportData.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\ExpectationReportData.cs" />
@@ -285,8 +287,8 @@
     <Compile Include="Areas\Customer\Models\PayPointFacade.cs" />
     <Compile Include="Areas\Customer\Models\PersonalInfoEditHistory.cs" />
     <Compile Include="Areas\Customer\Models\Person.cs" />
-    <Compile Include="Areas\Customer\Models\PostcodeFullAddressModel.cs" />
-    <Compile Include="Areas\Customer\Models\PostcodeSearchListModel.cs" />
+    <Compile Include="Code\PostCode\PostcodeFullAddressModel.cs" />
+    <Compile Include="Code\PostCode\PostcodeSearchListModel.cs" />
     <Compile Include="Areas\Customer\Models\CustomerModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertDocsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertsController.cs" />
