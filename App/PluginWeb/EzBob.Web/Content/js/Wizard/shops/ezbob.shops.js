@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
-
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      return StoreInfoView.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoView.prototype.attributes = {
@@ -20,6 +20,8 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
+      var j, _i, _len, _ref1;
+
       this.ebayStores = this.model.get("ebayStores");
       this.amazonMarketplaces = this.model.get("amazonMarketplaces");
       this.EbayButtonView = new EzBob.EbayButtonView({
@@ -41,19 +43,29 @@
         model: this.ekmAccounts
       });
       this.stores = {
-        ebay: {
+        "eBay": {
           view: this.EbayStoreView,
-          button: this.EbayButtonView
+          button: this.EbayButtonView,
+          active: 0
         },
-        amazon: {
+        "Amazon": {
           view: this.AmazonStoreInfoView,
-          button: this.AmazonButtonView
+          button: this.AmazonButtonView,
+          active: 0
         },
-        ekm: {
+        "EKM": {
           view: this.EKMAccountInfoView,
-          button: this.ekmButtonView
+          button: this.ekmButtonView,
+          active: 0
         }
       };
+      _ref1 = EzBob.Config.ActiveMarketPlaces;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        j = _ref1[_i];
+        if (this.stores[j]) {
+          this.stores[j].active = 1;
+        }
+      }
       this.name = "shops";
       return StoreInfoView.__super__.initialize.call(this);
     };

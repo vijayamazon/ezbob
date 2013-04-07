@@ -20,17 +20,28 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
 
+        # alexbo [ Apr 3 2013
+        # Added active field
 
         @stores =
-            ebay:
+            "eBay":
                 view: @EbayStoreView
                 button: @EbayButtonView
-            amazon:
+                active: 0
+            "Amazon":
                 view: @AmazonStoreInfoView
                 button: @AmazonButtonView
-            ekm:
+                active: 0
+            "EKM":
                 view: @EKMAccountInfoView
                 button: @ekmButtonView
+                active: 0
+
+         for j in EzBob.Config.ActiveMarketPlaces
+             if @stores[j]
+                 @stores[j].active = 1
+
+        # alexbo ] Apr 3 2013
 
         @name = "shops"
         super()

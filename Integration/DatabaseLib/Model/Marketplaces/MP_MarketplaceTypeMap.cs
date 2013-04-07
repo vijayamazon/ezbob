@@ -12,6 +12,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Name).Column("Name").Not.Nullable().Length(255);
 			Map(x => x.InternalId).Not.Nullable();
 			Map(x => x.Description);
+			Map(x => x.Active); // alexbo Apr 4 2013
         }
     }
 }

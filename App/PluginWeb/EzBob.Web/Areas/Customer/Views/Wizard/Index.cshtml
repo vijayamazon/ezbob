@@ -30,7 +30,8 @@
     <script type="text/javascript">
         $(function () {
 
-            EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+        	EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+        	EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"])); // alexbo Apr 4 2013
             SetCaptchaMode();
             EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
             EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)
@@ -40,7 +41,7 @@
                                           else
                                           {
                                               <text>false</text>
-                                          };
+                                         };
             EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
             EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
         

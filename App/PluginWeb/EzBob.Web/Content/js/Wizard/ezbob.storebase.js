@@ -55,6 +55,11 @@ EzBob.StoreInfoBaseView = Backbone.View.extend({
             i = 0;
 
         _.each(this.stores, function (store) {
+			// alexbo [ Apr 3 2013
+        	if (!store.active)
+        		return;
+			// alexbo ] Apr 3 2013
+
             if ((i % 2) == 0) {
                 row = $("<div class='row-fluid'/>");
                 row.appendTo(buttonList);
