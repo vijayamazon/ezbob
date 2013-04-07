@@ -1,9 +1,12 @@
 ﻿using EKM.API;
 using EzBob.CommonLib;
 using EzBob.CommonLib.Security;
+using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
+using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
+using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
 using System;
@@ -11,9 +14,9 @@ using System.Collections.Generic;
 
 namespace EKM
 {
-    public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EKMDatabaseFunctionType>
+    public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType>
     {
-        public EkmRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<EKMDatabaseFunctionType> marketplace)
+        public EkmRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<EkmDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
 
@@ -58,15 +61,25 @@ namespace EKM
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-            EkmOrdersList list = new EkmOrdersList(DateTime.UtcNow, Iwant);
+            EkmOrdersList allOrders = new EkmOrdersList(DateTime.UtcNow, Iwant);
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
-                                    () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, list, historyRecord));
+                                    () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));
+
+
+            //store agregated
+            var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                                    ElapsedDataMemberType.AggregateData,
+                                    () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
+            // Save
+            ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                            ElapsedDataMemberType.StoreAggregatedData,
+                            () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
         }
 
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
         {
-            //store agregated
+          
 
         }
 
@@ -79,5 +92,34 @@ namespace EKM
             ekmSecurityInfo.MarketplaceId = customerMarketPlace.Id;
             return ekmSecurityInfo;
         }
+
+        private IEnumerable<IWriteDataInfo<EkmDatabaseFunctionType>> CreateOrdersAggregationInfo(EkmOrdersList orders, ICurrencyConvertor currencyConverter)
+        {
+
+            var aggregateFunctionArray = new[]
+					{
+						EkmDatabaseFunctionType.AverageSumOfOrder, 
+						EkmDatabaseFunctionType.NumOfOrders, 						
+						EkmDatabaseFunctionType.TotalSumOfOrders, 
+					};
+
+            var updated = orders.SubmittedDate;
+
+            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
+            TimePeriodChainWithData<EkmOrderItem> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<EkmOrderItem>(), orders, nodesCreationFactory);
+
+            if (timeChain.HasNoData)
+            {
+                return null;
+            }
+
+            var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+
+            var factory = new EkmOrdersAgregatorFactory();
+
+            return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
+
+        }
+
     }
 }

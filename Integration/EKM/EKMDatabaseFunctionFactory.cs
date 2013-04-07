@@ -4,9 +4,9 @@ using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
 namespace EKM
 {
-    public class EKMDatabaseFunctionFactory : IDatabaseFunctionFactory<EKMDatabaseFunctionType>
+    public class EKMDatabaseFunctionFactory : IDatabaseFunctionFactory<EkmDatabaseFunctionType>
     {
-        public IDatabaseFunction Create(EKMDatabaseFunctionType type)
+        public IDatabaseFunction Create(EkmDatabaseFunctionType type)
         {
             return EKMDatabaseFunctionStorage.Instance.GetFunction(type);
         }

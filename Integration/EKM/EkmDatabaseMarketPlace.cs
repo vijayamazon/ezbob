@@ -6,7 +6,7 @@ using EzBob.CommonLib;
 
 namespace EKM
 {
-	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseMarketPlace, EKMDatabaseFunctionType>
+	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseMarketPlace, EkmDatabaseFunctionType>
     {
         public EkmDatabaseMarketPlace()
             : base(new EkmServiceInfo())
@@ -18,7 +18,7 @@ namespace EKM
             return new EkmRetriveDataHelper( helper, this );
         }
 
-        public override IDatabaseFunctionFactory<EKMDatabaseFunctionType> FunctionFactory
+        public override IDatabaseFunctionFactory<EkmDatabaseFunctionType> FunctionFactory
         {
             get { return new EKMDatabaseFunctionFactory(); }
         }
