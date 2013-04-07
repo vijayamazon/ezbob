@@ -18,7 +18,8 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual string LastName { get; set; }
         public virtual string EmailAddress { get; set; }
         public virtual double? TotalCost { get; set; }
-        public virtual string OrderDate { get; set; }
+        public virtual DateTime OrderDate { get; set; }
+        public virtual DateTime OrderDateIso { get; set; }
         public virtual string OrderStatus { get; set; }
         public virtual string OrderStatusColour { get; set; }
 		

@@ -1,4 +1,6 @@
-﻿using EzBob.CommonLib;
+﻿using EKM.API;
+using EzBob.CommonLib;
+using EzBob.CommonLib.Security;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
@@ -14,65 +16,33 @@ namespace EKM
         public EkmRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<EKMDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
-            
+
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-           // var securityInfo = RetrieveCustomerSecurityInfo<EkmSecurityInfo>(databaseCustomerMarketPlace);
-            
-            //retreive data from ekm api
-            //calculate agregated data
+            EkmSecurityInfo securityInfo = (EkmSecurityInfo)this.RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
+
             //store orders
+            UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
 
-            
+            //calculate agregated data
+            //TODO
 
-            UpdateClientOrdersInfo(databaseCustomerMarketPlace, /*securityInfo*/null, ActionAccessType.Full, historyRecord);
-
-            
         }
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            EKM.API.GetOrdersResponse res = new API.GetOrdersResponse();
-            res.Body = new API.GetOrdersResponseBody();
-            var order1 = new API.Order() {
-                OrderDateISO="2013-04-03", 
-                OrderDate = "2013-04-03",
-                FirstName = "Stas", 
-                LastName = "Du", 
-                OrderNumber = "1", 
-                OrderStatus = "Success",
-                TotalCost = 12.4,
-                CustomerID=2,
-                CompanyName="dsf",
-                EmailAddress="sdgf",
-                OrderStatusColour = "fsdfs"
-                
-            };
-            var order2 = new API.Order()
-            {
-                OrderDateISO = "2013-04-02",
-                OrderDate = "2013-04-02",
-                FirstName = "Yuly",
-                LastName = "Sa",
-                OrderNumber = "2",
-                OrderStatus = "Success",
-                TotalCost = 15.5,
-                CustomerID = 2,
-                CompanyName = "dsf",
-                EmailAddress = "sdgf",
-                OrderStatusColour = "fsdfs"
-            };
-            var orders = new[] { order1, order2};
-            res.Body.GetOrdersResult = new API.OrdersObject() { Orders = orders, TotalOrders = 2 };
+            //retreive data from ekm api
+           var ordersList = EkmConnector.GetOrders(securityInfo.Name, securityInfo.Password);
+
             var Iwant = new List<EkmOrderItem>();
-            foreach(EKM.API.Order order in  res.Body.GetOrdersResult.Orders)
+            foreach (EKM.API.Order order in ordersList)
             {
                 Iwant.Add(new EkmOrderItem()
                 {
-                    EkmOrderId= order.OrderID,
+                    EkmOrderId = order.OrderID,
                     OrderNumber = order.OrderNumber,
                     CustomerID = order.CustomerID,
                     CompanyName = order.CompanyName,
@@ -80,23 +50,18 @@ namespace EKM
                     LastName = order.LastName,
                     EmailAddress = order.EmailAddress,
                     TotalCost = order.TotalCost,
-                    OrderDate = order.OrderDate,
+                    OrderDate = DateTime.Parse(order.OrderDate),
                     OrderStatus = order.OrderStatus,
-                    OrderDateIso = order.OrderDateISO,
+                    OrderDateIso = DateTime.Parse(order.OrderDateISO),
                     OrderStatusColour = order.OrderStatusColour,
                 });
             }
-            
-            var elapsedTimeInfo = new ElapsedTimeInfo();
-            EkmOrdersList list = new EkmOrdersList(DateTime.UtcNow,Iwant);
-            
-             
-            
 
+            var elapsedTimeInfo = new ElapsedTimeInfo();
+            EkmOrdersList list = new EkmOrdersList(DateTime.UtcNow, Iwant);
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
                                     () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, list, historyRecord));
-            
         }
 
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
@@ -107,7 +72,12 @@ namespace EKM
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            return RetrieveCustomerSecurityInfo<EkmSecurityInfo>(GetDatabaseCustomerMarketPlace(customerMarketPlaceId));
+            EkmSecurityInfo ekmSecurityInfo = new EkmSecurityInfo();
+            IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
+            ekmSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
+            ekmSecurityInfo.Name = customerMarketPlace.DisplayName;
+            ekmSecurityInfo.MarketplaceId = customerMarketPlace.Id;
+            return ekmSecurityInfo;
         }
     }
 }

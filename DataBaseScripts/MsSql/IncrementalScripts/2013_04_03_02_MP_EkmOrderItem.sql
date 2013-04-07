@@ -9,7 +9,8 @@ CREATE TABLE dbo.MP_EkmOrderItem
     , LastName           NVARCHAR(300)
     , EmailAddress       NVARCHAR(300)
     , TotalCost          NUMERIC(18,2) 
-    , OrderDate          NVARCHAR(300)
+    , OrderDate          DATETIME
+    , OrderDateIso       DATETIME
     , OrderStatus        NVARCHAR(300)
     , OrderStatusColour  NVARCHAR(300)
 	, CONSTRAINT PK_MP_EkmOrderItem PRIMARY KEY (Id)

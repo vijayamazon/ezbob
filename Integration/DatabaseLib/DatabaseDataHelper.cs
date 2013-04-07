@@ -790,12 +790,12 @@ namespace EZBob.DatabaseLib
             {
                 return;
             }
-
-            DateTime submittedDate = DateTime.Today;// ordersData.;
+            
+            DateTime submittedDate = DateTime.UtcNow;;
             var mpOrder = new MP_EkmOrder
             {
                 CustomerMarketPlace = customerMarketPlace,
-                Created = submittedDate.ToUniversalTime(),
+                Created = submittedDate,
                 HistoryRecord = historyRecord
             };
 
@@ -811,6 +811,7 @@ namespace EZBob.DatabaseLib
                         FirstName = dataItem.EmailAddress,
                         LastName = dataItem.LastName,
                         OrderDate = dataItem.OrderDate,
+                        OrderDateIso = dataItem.OrderDateIso,
                         OrderNumber = dataItem.OrderNumber,
                         OrderStatus = dataItem.OrderStatus,
                         OrderStatusColour = dataItem.OrderStatusColour,

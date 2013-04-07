@@ -30,15 +30,14 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
         public string LastName { get; set; }
         public string EmailAddress { get; set; }
         public double? TotalCost { get; set; }
-        public string OrderDate { get; set; }
         public string OrderStatus { get; set; }
-        public string OrderDateIso { get; set; }
-
+        public DateTime OrderDateIso { get; set; }
+        public DateTime OrderDate { get; set; }
         public string OrderStatusColour { get; set; }
 
 		public override DateTime RecordTime
 		{
-			get { return DateTime.Parse(OrderDateIso); }
+			get { return OrderDateIso; }
 		}
 	}
 }
