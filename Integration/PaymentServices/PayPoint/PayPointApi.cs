@@ -6,7 +6,6 @@ using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Configuration;
 using PaymentServices.Calculators;
 using PaymentServices.Web_References.PayPoint;
-using Scorto.Configuration;
 using StructureMap;
 using log4net;
 
@@ -18,13 +17,11 @@ namespace PaymentServices.PayPoint
 
         readonly SECVPNService _service = new SECVPNService();
         private readonly PayPointConfiguration _config;
-        private readonly LoanChargesRepository _loanChargesRepository;
-        private ILoanRepository _loans;
-        private ConfigurationVariablesRepository _vars;
+        private readonly ILoanRepository _loans;
+        private readonly ConfigurationVariablesRepository _vars;
 
         public PayPointApi()
         {
-            _loanChargesRepository = ObjectFactory.GetInstance<LoanChargesRepository>();
             _vars = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
             _loans = ObjectFactory.GetInstance<ILoanRepository>();
             _config = ConfigurationRootBob.GetConfiguration().PayPoint;
