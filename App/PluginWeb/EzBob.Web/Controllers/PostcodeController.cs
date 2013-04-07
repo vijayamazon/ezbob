@@ -32,6 +32,7 @@ namespace EzBob.Web.Controllers
 
         [Authorize]
         [OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
+        [Transactional]
         public JsonNetResult GetAddressFromPostCode(string postCode)
         {
             return
@@ -42,6 +43,7 @@ namespace EzBob.Web.Controllers
         //-------------------------------------------------------------------
         [Authorize]
         [OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
+        [Transactional]
         public JsonNetResult GetFullAddressFromPostCode(string id)
         {
             return
@@ -49,7 +51,7 @@ namespace EzBob.Web.Controllers
                     "http://www.simplylookupadmin.co.uk/JSONservice/JSONGetAddressRecord.aspx?datakey=" + _datakey + "&id=" + id, 1);
         }
         //-------------------------------------------------------------------
-        [Transactional]
+        
         private JsonNetResult PostToPostcodeService(string url, byte typePost)
         {
             var postcodeServiseRepository = new NHibernateRepositoryBase<PostcodeServiceLog>(_session);

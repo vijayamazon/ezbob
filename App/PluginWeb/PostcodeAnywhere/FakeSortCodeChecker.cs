@@ -5,7 +5,7 @@ namespace PostcodeAnywhere
 {
     public class FakeSortCodeChecker : ISortCodeChecker
     {
-        public CardInfo Check(Customer customer, string accountNumnber, string sortcode, string BankAccountType)
+        public CardInfo Check(Customer customer, string accountNumnber, string sortcode, string bankAccountType)
         {
             return null;
         }

@@ -17,9 +17,9 @@ namespace PostcodeAnywhere
             _config = config;
         }
 
-        public CardInfo Check(Customer customer, string accountNumber, string sortcode, string BankAccountType)
+        public CardInfo Check(Customer customer, string accountNumber, string sortcode, string bankAccountType)
         {
-            var card = new CardInfo() { BankAccount = accountNumber, SortCode = sortcode, Customer = customer, Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), BankAccountType) };
+            var card = new CardInfo() { BankAccount = accountNumber, SortCode = sortcode, Customer = customer, Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), bankAccountType) };
 
             if (customer.BankAccountValidationInvalidAttempts < Math.Max(_config.MaxBankAccountValidationAttempts , 1))
             {
