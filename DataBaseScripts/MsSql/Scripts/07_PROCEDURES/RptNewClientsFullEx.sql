@@ -70,8 +70,7 @@ INTO #AnualTurnover
 FROM #tmp1 A
 JOIN CashRequests R ON R.IdCustomer = A.CustomerId
 WHERE R.CreationDate = A.CreationDate
- 
---------------------------------------------------------------------------
+
 SELECT
                    Customer.Id,
                    Customer.Name AS eMail,
@@ -81,16 +80,16 @@ SELECT
                    Customer.DaytimePhone,
                    Customer.MobilePhone,
                    #Shops.Shops,
-                   #MaxOffer.MaxApproved,
-                   #SumOfLoans.SumOfLoans,
-                   T.AnualTurnover,
+                   parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), #MaxOffer.MaxApproved))),1),2) MaxApproved,
+                   parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), #SumOfLoans.SumOfLoans))),1),2) SumOfLoans,
+                   parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), T.AnualTurnover))),1),2) AnualTurnover,
                    T.ExpirianRating,
                    T.MedalType,
                    CASE
-                   WHEN T.MedalType='Silver' THEN ROUND(T.AnualTurnover*0.06,0)
-                   WHEN T.MedalType='Gold' THEN ROUND(T.AnualTurnover*0.08,0)
-                   WHEN T.MedalType='Platinum' THEN ROUND(T.AnualTurnover*0.10,0)
-                   WHEN T.MedalType='Diamond' THEN ROUND(T.AnualTurnover*0.12,0)
+                   WHEN T.MedalType='Silver' THEN parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), ROUND(T.AnualTurnover*0.06,0)))),1),2)
+                   WHEN T.MedalType='Gold' THEN parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), ROUND(T.AnualTurnover*0.08,0)))),1),2)
+                   WHEN T.MedalType='Platinum' THEN parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), ROUND(T.AnualTurnover*0.10,0)))),1),2)
+                   WHEN T.MedalType='Diamond' THEN parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), ROUND(T.AnualTurnover*0.12,0)))),1),2)
                    END PhoneOffer
 FROM   Customer
  

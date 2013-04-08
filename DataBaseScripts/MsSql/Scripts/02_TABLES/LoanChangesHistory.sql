@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[LoanChangesHistory](
 	[Id] [int] NOT NULL,
-	[Date] [date] NOT NULL,
+	[Date] [datetime] NOT NULL,
 	[LoanId] [int] NOT NULL,
 	[Data] [nvarchar](max) NOT NULL,
 	[UserId] [int] NOT NULL,

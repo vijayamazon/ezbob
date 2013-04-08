@@ -5,7 +5,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*-------------------------------*/
 Create PROCEDURE RptNewClientsFull
 	@DateStart    DATETIME,
 	@DateEnd      DATETIME
@@ -72,9 +71,9 @@ SELECT
 	Customer.IsSuccessfullyRegistered,
 	Customer.Status,
 	Customer.MedalType,
-	#tmpOffer.MaxApproved,
-	Loan.LoanAmount,
-	Customer.CreditSum CreditLeft,
+	parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), #tmpOffer.MaxApproved))),1),2) MaxApproved,
+	parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), Loan.LoanAmount))),1),2) LoanAmount,
+	parsename(convert(VARCHAR, (CONVERT(MONEY, CONVERT(DECIMAL(13,0), Customer.CreditSum ))),1),2) CreditLeft,
 	Loan.[Date],
 	datepart(dw,Loan.[Date]) LoanDayOfWeek
 	
@@ -89,7 +88,6 @@ WHERE
 	GreetingMailSentDate <  @DateEnd  AND 
 	IsTest = 0
 
-	
 SELECT * FROM #tmp1 WHERE Name NOT like '%ezbob%' AND Name NOT LIKE '%q.q%' AND Name NOT LIKE '%liatvanir%' 
 
 END

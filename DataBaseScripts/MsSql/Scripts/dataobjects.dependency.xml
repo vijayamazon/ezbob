@@ -499,6 +499,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -955,8 +961,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_CustomerMarketplaceUpdatingActionLog</oName>
-    <oRank>1</oRank>
+    <oRank>5</oRank>
     <oFileName>02_TABLES\MP_CustomerMarketplaceUpdatingActionLog.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -968,7 +980,7 @@
   </DependencyData>
   <DependencyData>
     <oName>MP_CustomerMarketplaceUpdatingCounter</oName>
-    <oRank>2</oRank>
+    <oRank>6</oRank>
     <oFileName>02_TABLES\MP_CustomerMarketplaceUpdatingCounter.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -1027,8 +1039,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_EbayExternalTransaction_MP_EbayOrderItem</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EbayExternalTransaction_MP_EbayOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_EbayExternalTransaction</oName>
-    <oRank>1</oRank>
+    <oRank>6</oRank>
     <oFileName>02_TABLES\MP_EbayExternalTransaction.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -1085,6 +1103,12 @@
     <oRank>5</oRank>
     <oFileName>02_TABLES\MP_EbayOrderItem.sql</oFileName>
     <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory.sql</oFileName>
+    <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
     <oName>FK_MP_EBayOrderItemInfo_MP_EbayCategory_FreeAddedCategory</oName>
@@ -1327,6 +1351,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>PacNetBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\PacNetBalance.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>PacnetPaypointServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PacnetPaypointServiceLog.sql</oFileName>
@@ -1354,6 +1384,36 @@
     <oName>PostcodeServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PostcodeServiceLog.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportScheduler</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ReportScheduler.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportScheduler_ReportID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportScheduler_ReportID.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportUsers_UserID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportUsers_UserID.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportsUsersMap</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\ReportsUsersMap.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportUsers</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ReportUsers.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1804,12 +1864,6 @@
     <oName>TaskedStrategyParams</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\TaskedStrategyParams.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>ZZ_ExpXml</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\ZZ_ExpXml.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
 </DocumentElement>
