@@ -87,6 +87,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         $el.css "border", "1px solid lightgreen"
 
     fileChecked: (e) ->
+        return if _.keys($(e.target).data()).length > 0
         $el = $(e.currentTarget)
         checked = $el.hasClass("checked")
         filePath = $el.data "file-path"

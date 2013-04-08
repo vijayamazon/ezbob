@@ -18,25 +18,32 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
     },
     render: function () {
         var that = this;
-        var content = (this.template({ marketplaces: [this.model.toJSON()], summary: null, customerId: this.options.customerId }));
+        var shop = this.model.at(this.options.currentId);
+        var content = (this.template({ marketplaces: [shop.toJSON()], summary: null, customerId: this.options.customerId }));
+        if (this.container) {
+            this.container.html(content);
+        } else {
+            this.container = $('<div/>');
+            this.container.dialog({
+                modal: true,
+                resizable: false,
+                title: that.model.get('Name'),
+                position: "center",
+                draggable: false,
+                width: "73%",
+                height: "600",
+                dialogClass: "marketplaceDetail",
+                close: function () { $(this).remove(); },
+                open: function () {
+                    $(this).html(content);
+                }
+            });
+        }
         
-        this.container = $('<div/>');
-        this.container.dialog({
-            modal: true,
-            resizable: false,
-            title: that.model.get('Name'),
-            position: "center",
-            draggable: false,
-            width: "73%",
-            height: "600",
-            dialogClass: "marketplaceDetail",
-            close: function () { $(this).remove(); },
-            open: function () {
-                $(this).html(content);
-                $("#recheck-askville").click(that.recheckAskville);
-            }
+        this.container.find("#recheck-askville").click(function (e) {
+            that.recheckAskville.call(that, e);
         });
-
+        
         this.container.find(".reCheck-amazon, .reCheck-ebay").click(function (e) {
             that.reCheck.call(that, e);
         });

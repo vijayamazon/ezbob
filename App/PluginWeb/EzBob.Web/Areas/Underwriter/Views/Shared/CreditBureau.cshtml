@@ -1,5 +1,4 @@
-﻿@using EzBob.Web.Areas.Underwriter.Models
-@model dynamic
+﻿@model dynamic
 
 @helper ButtonStatus(string checkStatus, string checkIcon, string btnStyle)
 {
@@ -132,8 +131,8 @@
                                 <table class="table table-condensed table-striped">
                                     <tbody>
                                         @{
-                                            var amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
-                                            var bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
+                                            const string amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
+                                            const string bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
                                         }
                                         <% if (experianInfo.AmlInfo != null) { %>
                                         @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>" + amlBugBtn)
@@ -659,7 +658,7 @@
                                 %>
                                 <div style="overflow: scroll;">
                                     <h2>Account #<%=index+1%></h2>
-                                    <table class="table table-bordered table-striped" style="margin-bottom: 0px;">
+                                    <table class="table table-bordered table-striped" style="margin-bottom: 0;">
                                         <thead>
                                             <tr>
                                                 <th>Start Date</th>
@@ -899,7 +898,7 @@
                         %>
                         <div style="overflow: scroll;">
                             <h2>Account #<%=index+1%></h2>
-                            <table class="table table-bordered table-striped" style="margin-bottom: 0px; padding: 4px;">
+                            <table class="table table-bordered table-striped" style="margin-bottom: 0; padding: 4px;">
                                 <thead>
                                     <tr>
                                         <th>Start Date</th>
@@ -1029,38 +1028,38 @@
                 </table>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12">
-                <table class="table table-condensed table-striped blue-header">
-                    <thead>
-                        @RawHeaderCell("Account Overview","","","")
-                    </thead>
-                    <tbody>
-                        @RawCell("Type","Open Accounts","Worst Arrears","Total Balance")
-                        @RawCell("Credit Cards",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_CC %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_CC %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_CC %>")
-                        @RawCell("Mortgages",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Mtg %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Mtg %>")
-                        @RawCell("Personal Loans",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_PL %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_PL %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_PL %>")
-                        @RawCell("Other",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Other %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Other %>",
-                                 "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Other %>")
-                    </tbody>
-                    <tfoot>                    
-                        @RawCell("Total",
-                                "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Total %>",
-                                "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Total %>",
-                                "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Total %>")
-                    </tfoot>
-                </table>        
-            </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table table-condensed table-striped blue-header">
+                <thead>
+                    @RawHeaderCell("Account Overview","","","")
+                </thead>
+                <tbody>
+                    @RawCell("Type","Open Accounts","Worst Arrears","Total Balance")
+                    @RawCell("Credit Cards",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_CC %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_CC %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_CC %>")
+                    @RawCell("Mortgages",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Mtg %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Mtg %>")
+                    @RawCell("Personal Loans",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_PL %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_PL %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_PL %>")
+                    @RawCell("Other",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Other %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Other %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Other %>")
+                </tbody>
+                <tfoot>                    
+                    @RawCell("Total",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Total %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Total %>",
+                             "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Total %>")
+                </tfoot>
+            </table>        
         </div>
+    </div>
 }

@@ -23,12 +23,14 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     template: "#marketplace-template"
 
     initialize: ->
-        @model.on "reset", @render, this
+        @model.on "reset change", @render, this
         @rendered = false
 
     onRender: ->
         @$el.find('.mp-error-description').tooltip(({placement: "bottom"}));
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
+        if @detailView!= undefined
+            @detailView.render()
 
     events:
         "click .reCheck-amazon": "reCheckmarketplaces"
@@ -42,16 +44,13 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return if e.target.tagName is 'I'
         id = e.currentTarget.getAttribute("data-id")
         return unless id
-
         shop = @model.at(id)
-
         return if shop.get('Name') is 'EKM'
 
-        view = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: shop, customerId: @model.customerId
-        view.on("reCheck", @reCheckmarketplaces)
-        view.on("recheck-token", @renewToken)
-        view.customerId = @model.customerId
-        view.render()
+        @detailView = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: @model, currentId: id, customerId: @model.customerId
+        @detailView.on "reCheck", @reCheckmarketplaces, @
+        @detailView.on("recheck-token", @renewToken)
+        @detailView.render()
 
     showMPError: -> false
 
@@ -81,31 +80,34 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return data
 
     reCheckmarketplaces: (e) ->
-        that = this
-        EzBob.ShowMessage "", "Are you sure?", (->
-            el = $(e.currentTarget)
-            $.post(window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces",
-                customerId: that.model.customerId
-                umi: el.attr("umi")
-                marketplaceType: el.attr("marketplaceType")
-            ).done(->
-                EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck was starting. ", null, "OK"
-                that.trigger "rechecked",
-                    umi: el.attr("umi")
-                    el: el
-
-            ).fail (data) ->
+        $el = $(e.currentTarget)
+        umi = $el.attr "umi"
+        mpType = $el.attr "marketplaceType"
+        customerId = @model.customerId
+        okFn = =>
+            xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/ReCheckMarketplaces",
+                customerId: customerId
+                umi: umi
+                marketplaceType: mpType
+            xhr.done (response)=>
+                if response and response.error != undefined
+                    EzBob.ShowMessage response.error, "Error occured"
+                else
+                    EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck was starting. ", null, "OK"
+                @trigger "rechecked",
+                    umi: umi
+                    el: $el
+            xhr.fail (data) ->
                 console.error data.responseText
-
-        ), "Yes", null, "No"
+        EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
         false
 
     renewTokenClicked: (e)->
-        umi = $(e.currentTarget).data "umi"        
+        umi = $(e.currentTarget).data "umi"
         @renewToken(umi);
         false
 
     renewToken: (umi) ->
-        req = $.post "#{window.gRootPath}Underwriter/MarketPlaces/RenewEbayToken", umi: umi
-        req.done ->
+        xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/RenewEbayToken", umi: umi
+        xhr.done ->
             EzBob.ShowMessage "Renew started successfully", "Successfully"
