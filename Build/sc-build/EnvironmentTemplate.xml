@@ -224,7 +224,7 @@
         <property name="UpdateBusinessDataPeriodDays" value="365" />
 		<property name="SecureFtpHostName" value="https://secureftp.experian.co.uk/Upload"/>
 		<property name="SecureFtpUserName" value="PIF1160_AyCpjxzt25"/>
-		<property name="SecureFtpUserPassword" value="dWiPyfo5>V"/>
+		<property name="SecureFtpUserPassword" value="dWiPyfo5\>V"/>
     </module>
     <module id="WorkflowCacheParameters">
         <property name="CachePath" value="${tempDBPath}\Workflows" />
