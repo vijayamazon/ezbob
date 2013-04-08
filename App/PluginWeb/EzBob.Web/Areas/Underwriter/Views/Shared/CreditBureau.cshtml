@@ -114,291 +114,287 @@
 
 @helper DisplayConsumerData()
 {
-    <fieldset><legend>Consumer</legend>
-        <div class="row-fluid">
-            <div class="accordion page-content-frame" id="accordion-credit-bureau">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseSummary">
-                        <b class="play"></b>Credit Bureau Summary for  <%-experianInfo.FullName%></a>
-                </div>
-                <div id="collapseSummary" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        @BureauSummary("<%-experianInfo.CheckStatus%>", "<%-experianInfo.CheckIcon%>", "<%-experianInfo.ButtonStyle%>",
-                                       "<%-experianInfo.Score%>", "<%-experianInfo.BorrowerType%>",
-                                       "<%-experianInfo.CheckDate%>", "<%-experianInfo.CheckValidity%>")
-                        <div class="row">
-                            <div class="span6">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @{
-                                            const string amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
-                                            const string bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
-                                        }
-                                        <% if (experianInfo.AmlInfo != null) { %>
-                                        @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>" + amlBugBtn)
-                                        <% } else { %>
-                                        @RawCell("AML Check Result", "No information" + amlBugBtn)
-                                        <% } %>
+    <div class="accordion page-content-frame" id="accordion-credit-bureau">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseSummary">
+                <b class="play"></b>Credit Bureau Summary for  <%-experianInfo.FullName%></a>
+        </div>
+        <div id="collapseSummary" class="accordion-body collapse">
+            <div class="accordion-inner">
+                @BureauSummary("<%-experianInfo.CheckStatus%>", "<%-experianInfo.CheckIcon%>", "<%-experianInfo.ButtonStyle%>",
+                               "<%-experianInfo.Score%>", "<%-experianInfo.BorrowerType%>",
+                               "<%-experianInfo.CheckDate%>", "<%-experianInfo.CheckValidity%>")
+                <div class="row">
+                    <div class="span6">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @{
+                                    const string amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
+                                    const string bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"icon-tag\"></i></a>";
+                                }
+                                <% if (experianInfo.AmlInfo != null) { %>
+                                @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>" + amlBugBtn)
+                                <% } else { %>
+                                @RawCell("AML Check Result", "No information" + amlBugBtn)
+                                <% } %>
 
-                                        <% if (experianInfo.BavInfo != null) { %>
-                                        @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>" + bwaBugBtn)
-                                        <% } else { %>
-                                        @RawCell("BWA CheckResult", "No information" + bwaBugBtn)
-                                        <% } %>
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>               
-                        <% if(experianInfo.ModelType == "Consumer") { %>
-                        @RunCheckButton()
-                        <% } %>
+                                <% if (experianInfo.BavInfo != null) { %>
+                                @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>" + bwaBugBtn)
+                                <% } else { %>
+                                @RawCell("BWA CheckResult", "No information" + bwaBugBtn)
+                                <% } %>
+                            </tbody>
+                        </table>        
+                    </div>
+                </div>               
+                <% if(experianInfo.ModelType == "Consumer") { %>
+                @RunCheckButton()
+                <% } %>
+            </div>
+        </div>
+
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseDetails">
+                <b class="play"></b>Delphi Score Details</a>
+        </div>
+        <div id="collapseDetails" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row-fluid">
+                    <div class="span12">
+                        @ScoreMark("<%- experianInfo.Score %>",
+                                   "<%- experianInfo.ScorePosition %>",
+                                   "<%- experianInfo.ScoreValuePosition %>",
+                                   "<%- experianInfo.ScoreColor %>",
+                                   "<%- experianInfo.ScoreAlign %>")
                     </div>
                 </div>
-
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseDetails">
-                        <b class="play"></b>Delphi Score Details</a>
-                </div>
-                <div id="collapseDetails" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span12">
-                                @ScoreMark("<%- experianInfo.Score %>",
-                                           "<%- experianInfo.ScorePosition %>",
-                                           "<%- experianInfo.ScoreValuePosition %>",
-                                           "<%- experianInfo.ScoreColor %>",
-                                           "<%- experianInfo.ScoreAlign %>")
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("Delphi Score is", "<%- experianInfo.Score %>")
-                                        @RawCell("Consumer Indebtedness Index", "<%- experianInfo.CII %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("Delphi Score is", "<%- experianInfo.Score %>")
+                                @RawCell("Consumer Indebtedness Index", "<%- experianInfo.CII %>")
+                            </tbody>
+                        </table>        
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseAML">
-                        <b class="play"></b>AML and BWA Checks</a>
-                </div>
-                <div id="collapseAML" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <% if (experianInfo.AmlInfo != null) { %>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>")
-                                        @RawCell("Authentication Index", "<%- experianInfo.AmlInfo.AuthenticationIndexType %>")
-                                        @RawCell("Description", "<%- experianInfo.AmlInfo.AuthIndexText %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span6 control-group form-horizontal">
-                                @InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
-                                @InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
-                                @InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
-                            </div>
-                            <div class="span6 control-group form-horizontal">
-                                @InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
-                                @InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
-                                @InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
-                            </div>
-                        </div>
-                        <% } else { %>
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("AML Check Result", "No information")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
-                        <% } %>
-                        <% if (experianInfo.BavInfo != null) { %>
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>")
-                                        @RawCell("Description", "<%- experianInfo.BavInfo.AuthenticationText %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span6 control-group form-horizontal">
-                                @InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
-                                @InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
-                                @InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
-                            </div>
-                        </div>
-                        <% } else { %>
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("BWA Check Result", "No information")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
-                        <% } %>
-                        @RunIdHubChecksButtons()
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseAML">
+                <b class="play"></b>AML and BWA Checks</a>
+        </div>
+        <div id="collapseAML" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <% if (experianInfo.AmlInfo != null) { %>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>")
+                                @RawCell("Authentication Index", "<%- experianInfo.AmlInfo.AuthenticationIndexType %>")
+                                @RawCell("Description", "<%- experianInfo.AmlInfo.AuthIndexText %>")
+                            </tbody>
+                        </table>        
                     </div>
                 </div>
-
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseCharacteristics">
-                        <b class="play"></b>Summary characteristics</a>
-                </div>
-                <div id="collapseCharacteristics" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span6 control-group form-horizontal">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("Number of accounts", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfAccounts %>")
-                                        @RawCell("Number of accounts in last 3 months", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfAccounts3M %>")
-                                        @RawCell("Worst current status", "<%- experianInfo.ConsumerSummaryCharacteristics.WorstCurrentStatus %>")
-                                        @RawCell("Worst historical status", "<%- experianInfo.ConsumerSummaryCharacteristics.WorstCurrentStatus3M %>")
-                                        @RawCell("Number of defaults", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfDefaults %>")
-                                        @RawCell("Number of CCJs", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfCCJs %>")
-                                        @RawCell("Age of most recent CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ %>")
-                                        @RawCell("Number credit cards over limit", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfCCOverLimit %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                            <div class="span6 control-group form-horizontal">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("Enquiries in last 3 months", "<%- experianInfo.ConsumerSummaryCharacteristics.EnquiriesLast3M %>")
-                                        @RawCell("Enquiries in last 6 months", "<%- experianInfo.ConsumerSummaryCharacteristics.EnquiriesLast6M %>")
-                                        @RawCell("Credit card utilization", "<%- experianInfo.ConsumerSummaryCharacteristics.CreditCardUtilization %>")
-                                        @RawCell("DSR and ownership type", "<%- experianInfo.ConsumerSummaryCharacteristics.DSRandOwnershipType %>")
-                                        @RawCell("Has NOCs on CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCCJ %>")
-                                        @RawCell("Has NOCs on CAIS", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCAIS %>")
-                                        @RawCell("CAIS Special Instruction Flag", "<%- experianInfo.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
-                                        @RawCell("Satisfied judgements", "<%- experianInfo.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
+                <div class="row-fluid">
+                    <div class="span6 control-group form-horizontal">
+                        @InputTextSmallReadOnly("aml-prim-items", "Data items", "<%- experianInfo.AmlInfo.NumPrimDataItems %>")
+                        @InputTextSmallReadOnly("aml-prim-srcs", "Data sources", "<%- experianInfo.AmlInfo.NumPrimDataSources %>")
+                        @InputTextSmallReadOnly("aml-prim-date", "From date", "<%- experianInfo.AmlInfo.StartDateOldestPrim %>")
+                    </div>
+                    <div class="span6 control-group form-horizontal">
+                        @InputTextSmallReadOnly("aml-sec-items", "Sec items", "<%- experianInfo.AmlInfo.NumSecDataItems %>")
+                        @InputTextSmallReadOnly("aml-sec-date", "Sec date", "<%- experianInfo.AmlInfo.StartDateOldestSec %>")
+                        @InputTextSmallReadOnly("aml-hrp-count", "HRP", "<%- experianInfo.AmlInfo.ReturnedHRPCount %>")
                     </div>
                 </div>
-
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseAccountOverview">
-                        <b class="play"></b>Account Overview</a>
-                </div>
-                <div id="collapseAccountOverview" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span12 control-group form-horizontal">
-                                <table class="table table-condensed table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Open Accounts</th>
-                                            <th>Worst Arrears</th>
-                                            <th>Total Current Limits</th>
-                                            <th>Total Balance</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @RawCell("Credit Cards",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_CC %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_CC %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_CC %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.Balance_CC %>")
-                                        @RawCell("Mortgages",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Mtg %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.Balance_Mtg %>")
-                                        @RawCell("Personal Loans",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_PL %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_PL %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_PL %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.Balance_PL %>")
-                                        @RawCell("Other",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Other %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Other %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Other %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.Balance_Other %>")
-                                    </tbody>
-                                    <tfoot>                    
-                                        @RawCell("Total",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Total %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Total %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Total %>",
-                                                 "<%- experianInfo.ConsumerAccountsOverview.Balance_Total %>")
-                                    </tfoot>
-                                </table>        
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                @FinancialAccounts()
-
-                <% if (experianInfo.HasNOCs) { %>
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseNOCs">
-                        <b class="play"></b>Notices of Correction (NOCs)</a>
-                </div>
-                <div id="collapseNOCs" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span12 control-group form-horizontal">    
-                                <%
-                                _.each(experianInfo.NOCs, function(noc){
-                                %>   
-                                <table>
-                                    @RawCell("NOC Reference", "<%- noc.NOCReference %>")
-                                    @RawCell("NOC Lines", "<%- noc.NOCLines %>")
-                                </table>
-                                <%
-                                });
-                                %>
-                            </div>
-                        </div>
+                <% } else { %>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("AML Check Result", "No information")
+                            </tbody>
+                        </table>        
                     </div>
                 </div>
                 <% } %>
-    
-                <% if (experianInfo.IsError) { %>
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianResponseErrors">
-                        <b class="play"></b>Experian response parsing errors</a>
-                </div>
-                <div id="collapseExperianResponseErrors" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span12">
-                                <ul>
-                                    <% _.each(experianInfo.ErrorList, function(errMessage){ %>
-                                    <li>@Html.Raw("<%- errMessage.replace(/,/g, ', ') %>")</li>
-                                    <% }); %>
-                                </ul>
-                            </div>
-                        </div>
+                <% if (experianInfo.BavInfo != null) { %>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>")
+                                @RawCell("Description", "<%- experianInfo.BavInfo.AuthenticationText %>")
+                            </tbody>
+                        </table>        
                     </div>
                 </div>
-                <% }%>
+                <div class="row-fluid">
+                    <div class="span6 control-group form-horizontal">
+                        @InputTextSmallReadOnly("bav-name-score", "Name score", "<%- experianInfo.BavInfo.NameScore %>")
+                        @InputTextSmallReadOnly("bav-addr-srcs", "Address score", "<%- experianInfo.BavInfo.AddressScore %>")
+                        @InputTextSmallReadOnly("bav-status", "Status", "<%- experianInfo.BavInfo.AccountStatus %>")
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="row-fluid">
+                    <div class="span6">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("BWA Check Result", "No information")
+                            </tbody>
+                        </table>        
+                    </div>
+                </div>
+                <% } %>
+                @RunIdHubChecksButtons()
             </div>
-            <div id="idhub-custom-address"></div>
-        </div>   
-    </fieldset> 
+        </div>
+
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseCharacteristics">
+                <b class="play"></b>Summary characteristics</a>
+        </div>
+        <div id="collapseCharacteristics" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row-fluid">
+                    <div class="span6 control-group form-horizontal">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("Number of accounts", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfAccounts %>")
+                                @RawCell("Number of accounts in last 3 months", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfAccounts3M %>")
+                                @RawCell("Worst current status", "<%- experianInfo.ConsumerSummaryCharacteristics.WorstCurrentStatus %>")
+                                @RawCell("Worst historical status", "<%- experianInfo.ConsumerSummaryCharacteristics.WorstCurrentStatus3M %>")
+                                @RawCell("Number of defaults", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfDefaults %>")
+                                @RawCell("Number of CCJs", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfCCJs %>")
+                                @RawCell("Age of most recent CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ %>")
+                                @RawCell("Number credit cards over limit", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfCCOverLimit %>")
+                            </tbody>
+                        </table>        
+                    </div>
+                    <div class="span6 control-group form-horizontal">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                                @RawCell("Enquiries in last 3 months", "<%- experianInfo.ConsumerSummaryCharacteristics.EnquiriesLast3M %>")
+                                @RawCell("Enquiries in last 6 months", "<%- experianInfo.ConsumerSummaryCharacteristics.EnquiriesLast6M %>")
+                                @RawCell("Credit card utilization", "<%- experianInfo.ConsumerSummaryCharacteristics.CreditCardUtilization %>")
+                                @RawCell("DSR and ownership type", "<%- experianInfo.ConsumerSummaryCharacteristics.DSRandOwnershipType %>")
+                                @RawCell("Has NOCs on CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCCJ %>")
+                                @RawCell("Has NOCs on CAIS", "<%- experianInfo.ConsumerSummaryCharacteristics.NOCsOnCAIS %>")
+                                @RawCell("CAIS Special Instruction Flag", "<%- experianInfo.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
+                                @RawCell("Satisfied judgements", "<%- experianInfo.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
+                            </tbody>
+                        </table>        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseAccountOverview">
+                <b class="play"></b>Account Overview</a>
+        </div>
+        <div id="collapseAccountOverview" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row-fluid">
+                    <div class="span12 control-group form-horizontal">
+                        <table class="table table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Open Accounts</th>
+                                    <th>Worst Arrears</th>
+                                    <th>Total Current Limits</th>
+                                    <th>Total Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @RawCell("Credit Cards",
+                                         "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_CC %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_CC %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_CC %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_CC %>")
+                                @RawCell("Mortgages",
+                                         "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Mtg %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Mtg %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Mtg %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Mtg %>")
+                                @RawCell("Personal Loans",
+                                         "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_PL %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_PL %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_PL %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_PL %>")
+                                @RawCell("Other",
+                                         "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Other %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Other %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Other %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Other %>")
+                            </tbody>
+                            <tfoot>                    
+                                @RawCell("Total",
+                                         "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Total %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Total %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Total %>",
+                                         "<%- experianInfo.ConsumerAccountsOverview.Balance_Total %>")
+                            </tfoot>
+                        </table>        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @FinancialAccounts()
+
+        <% if (experianInfo.HasNOCs) { %>
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseNOCs">
+                <b class="play"></b>Notices of Correction (NOCs)</a>
+        </div>
+        <div id="collapseNOCs" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row-fluid">
+                    <div class="span12 control-group form-horizontal">    
+                        <%
+                        _.each(experianInfo.NOCs, function(noc){
+                        %>   
+                        <table>
+                            @RawCell("NOC Reference", "<%- noc.NOCReference %>")
+                            @RawCell("NOC Lines", "<%- noc.NOCLines %>")
+                        </table>
+                        <%
+                        });
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    
+        <% if (experianInfo.IsError) { %>
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianResponseErrors">
+                <b class="play"></b>Experian response parsing errors</a>
+        </div>
+        <div id="collapseExperianResponseErrors" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <ul>
+                            <% _.each(experianInfo.ErrorList, function(errMessage){ %>
+                            <li>@Html.Raw("<%- errMessage.replace(/,/g, ', ') %>")</li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }%>
+    </div>
+    <div id="idhub-custom-address"></div>
     }
 
 @helper DisplayExperianError()
