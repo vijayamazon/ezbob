@@ -523,6 +523,18 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>ExperianAccountStatuses</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianAccountStatuses.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianAccountTypes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianAccountTypes.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_ExperianConsentAgreement_Customer</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_ExperianConsentAgreement_Customer.sql</oFileName>
@@ -532,6 +544,36 @@
     <oName>ExperianConsentAgreement</oName>
     <oRank>3</oRank>
     <oFileName>02_TABLES\ExperianConsentAgreement.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianDataAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianDataAgentConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_CustomerId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_CustomerId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ExperianAccountType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ExperianAccountType.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ServiceLogId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ServiceLogId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianDefaultAccountsData</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\ExperianDefaultAccountsData.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -700,6 +742,12 @@
     <oName>MenuItem_Status_Rel</oName>
     <oRank>2</oRank>
     <oFileName>02_TABLES\MenuItem_Status_Rel.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MonitoredSites</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MonitoredSites.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1150,6 +1198,30 @@
     <oName>MP_EbayUserData</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\MP_EbayUserData.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EkmOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_EkmOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_EkmOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EkmOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_EkmOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_EkmOrderItem.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1633,6 +1705,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>SupportAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SupportAgentConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_SV_ReportingInfo_Security_User</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_SV_ReportingInfo_Security_User.sql</oFileName>
@@ -1726,6 +1804,12 @@
     <oName>TaskedStrategyParams</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\TaskedStrategyParams.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ZZ_ExpXml</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ZZ_ExpXml.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
 </DocumentElement>
