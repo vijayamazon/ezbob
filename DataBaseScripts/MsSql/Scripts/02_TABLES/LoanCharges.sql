@@ -11,13 +11,12 @@ CREATE TABLE [dbo].[LoanCharges](
 	[LoanId] [int] NOT NULL,
 	[ConfigurationVariableId] [int] NULL,
 	[Date] [datetime] NULL,
-	[InstallmentId] [int] NULL,
 	[AmountPaid] [decimal](18, 4) NULL,
 	[State] [nvarchar](50) NULL,
 	[Description] [nvarchar](max) NULL,
  CONSTRAINT [PK_LoanCharges] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 90) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

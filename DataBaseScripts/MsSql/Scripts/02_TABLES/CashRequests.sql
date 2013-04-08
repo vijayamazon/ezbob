@@ -35,12 +35,12 @@ CREATE TABLE [dbo].[CashRequests](
 	[EmailSendingBanned] [bit] NULL,
 	[LoanTypeId] [int] NULL,
 	[UnderwriterComment] [nvarchar](200) NULL,
-	[HasLoans] [bit] NULL,
 	[LoanTemplate] [nvarchar](max) NULL,
+	[HasLoans] [bit] NULL,
  CONSTRAINT [PK_CasheRequests] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 90) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_CashRequests_IDCust] ON [dbo].[CashRequests] 
