@@ -8,6 +8,8 @@ using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Infrastructure.csrf;
 using EzBob.Web.Models;
+using NHibernate;
+using NHibernate.Linq;
 using Scorto.Web;
 using System.Linq;
 
@@ -20,6 +22,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IAppCreator _creator;
         private readonly IEzBobConfiguration _config;
         private readonly ILoanTypeRepository _loanTypes;
+        private readonly ISession _session;
 
         //----------------------------------------------------------------------
         public ProfileController(
@@ -27,13 +30,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IEzbobWorkplaceContext context, 
             IAppCreator creator, 
             IEzBobConfiguration config,
-            ILoanTypeRepository loanTypes)
+            ILoanTypeRepository loanTypes,
+            ISession session)
         {
             _customerModelBuilder = customerModelBuilder;
             _context = context;
             _creator = creator;
             _config = config;
             _loanTypes = loanTypes;
+            _session = session;
         }
 
         //----------------------------------------------------------------------
@@ -43,6 +48,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
         {
             var wizardModel = new WizardModel() {Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config};
             ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
+
+            ViewData["ActiveMarketPlaces"] = _session
+                .Query<MP_MarketplaceType>()
+                .Where(x => x.Active)
+                .Select(x => x.Name)
+                .ToArray();
 
             return View("Index", wizardModel);
         }

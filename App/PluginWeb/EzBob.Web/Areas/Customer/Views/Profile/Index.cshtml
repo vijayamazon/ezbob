@@ -256,6 +256,7 @@
             EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
             EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
             EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+            EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
             
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();
