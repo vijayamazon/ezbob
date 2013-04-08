@@ -9,6 +9,7 @@ using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
+using NHibernate;
 using PaymentServices.Calculators;
 using PaymentServices.PacNet;
 using Scorto.Configuration;
@@ -31,6 +32,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
         private readonly IZohoFacade _crm;
+        private readonly ISession _session;
 
         //-------------------------------------------------------------------------------
         public GetCashController(
@@ -40,7 +42,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ICustomerNameValidator validator,
             IPacnetPaypointServiceLogRepository logRepository,
             ICustomerRepository customerRepository,
-            ILoanCreator loanCreator, IZohoFacade crm)
+            ILoanCreator loanCreator,
+            IZohoFacade crm,
+            ISession session)
         {
             _context = context;
             _payPointFacade = payPointFacade;
@@ -50,6 +54,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customerRepository = customerRepository;
             _loanCreator = loanCreator;
             _crm = crm;
+            _session = session;
             _config = ConfigurationRootBob.GetConfiguration().PayPoint;
         }
 
@@ -100,6 +105,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [NoCache]
         public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry)
         {
+            //_session.Lock(_context.Customer, LockMode.Upgrade);
 
             if (test_status == "true")
             {
