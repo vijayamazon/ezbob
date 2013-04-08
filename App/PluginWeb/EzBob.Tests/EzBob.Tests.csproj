@@ -102,7 +102,6 @@
     <Compile Include="CustomerNameValidatorFixture.cs" />
     <Compile Include="CustomerTests\TryAddPayPointCardTests.cs" />
     <Compile Include="ExpectationReportFixture.cs" />
-    <Compile Include="GetCashFixture.cs" />
     <Compile Include="GlobalAreaAuthorizationFilterFixture.cs" />
     <Compile Include="LoanAddTransactionFixture.cs" />
     <Compile Include="LoanHistoryRepoFixture.cs" />
