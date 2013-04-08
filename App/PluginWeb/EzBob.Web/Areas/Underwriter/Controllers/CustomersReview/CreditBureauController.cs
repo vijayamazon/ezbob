@@ -153,7 +153,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                         BWAnum = GetBwaScoreInfo(model.BavInfo),
                         Businesstype = model.BorrowerType,
                         BusinessScore = GetBusinessScore(model),
-                        RiskLevel = model.Summary !=null ? model.Summary.RiskLevel : "-",
+                        RiskLevel = model.LimitedInfo != null ? model.LimitedInfo.RiskLevel : "-",
                         Existingbusinessloans = GetExistingBusinessLoans(model),
                         ConsumerAccountsOverview = model.ConsumerAccountsOverview
                     };
