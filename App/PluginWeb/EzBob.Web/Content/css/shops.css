@@ -3,19 +3,19 @@
     background-image: url(../img/store-sprites.png);
 }
 
-.amazon-logo:hover {
+.Amazon-logo:hover {
     background-position: 0px 0px;
 }
 
-.amazon-logo {
+.Amazon-logo {
     background-position: 0px -147px;
 }
 
-.ebay-logo:hover {
+.eBay-logo:hover {
     background-position: 0px -294px;
 }
 
-.ebay-logo {
+.eBay-logo {
     background-position: 0px -443px;
 }
 
@@ -35,11 +35,11 @@
     background-position: 0px -882px;
 }
 
-.ekm-logo {
+.EKM-logo {
     background-position: 0px -1324px;
 }
 
-.ekm-logo:hover {
+.EKM-logo:hover {
     background-position: 0px -1176px;
 }
 

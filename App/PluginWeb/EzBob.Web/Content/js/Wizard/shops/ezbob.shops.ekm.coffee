@@ -4,7 +4,7 @@ root.EzBob = root.EzBob or {}
 class EzBob.EKMAccountButtonView extends EzBob.StoreButtonWithListView
     initialize: ->
         @listView = new EzBob.StoreListView({ model: this.model })
-        super({name: 'ekm', logoText: ''})
+        super({name: 'EKM', logoText: ''})
     update: ->
         @model.fetch()
 

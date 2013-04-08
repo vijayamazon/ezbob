@@ -20,7 +20,7 @@
         model: this.model
       });
       return EKMAccountButtonView.__super__.initialize.call(this, {
-        name: 'ekm',
+        name: 'EKM',
         logoText: ''
       });
     };
@@ -93,7 +93,7 @@
       });
       xhr.done(function(res) {
         if (res.error) {
-          EzBob.App.trigger('error', 'ekm account saving error');
+          EzBob.App.trigger('error', res.error);
           return false;
         }
         _this.model.add(acc);

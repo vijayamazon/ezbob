@@ -131,7 +131,7 @@ EzBob.AmazonStoreModels = Backbone.Collection.extend({
 EzBob.AmazonButtonView = EzBob.StoreButtonWithListView.extend({
     initialize: function () {
         this.listView = new EzBob.StoreListView({ model: this.model });
-        this.constructor.__super__.initialize.apply(this, [{ name: "amazon", logoText:"" }]);
+        this.constructor.__super__.initialize.apply(this, [{ name: "Amazon", logoText:"" }]);
     },
     update: function () {
         this.model.fetch();
