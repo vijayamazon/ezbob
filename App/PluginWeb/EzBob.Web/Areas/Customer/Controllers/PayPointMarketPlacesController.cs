@@ -26,7 +26,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private EZBob.DatabaseLib.Model.Database.Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
-        private readonly PayPointConnector _validator = new PayPointConnector();
 
         public PayPointMarketPlacesController(
             IEzbobWorkplaceContext context, 
@@ -59,7 +58,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public JsonNetResult Accounts(PayPointAccountModel model)
         {
             string errorMsg;
-            if (!_validator.Validate(model.login, model.password, out errorMsg))
+            if (!PayPointConnector.Validate(model.mid, model.vpnPassword, model.remotePassword, out errorMsg))
             {
                 var errorObject = new { error = errorMsg };
                 return this.JsonNet(errorObject);
@@ -67,14 +66,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
             try
             {
                 var customer = _context.Customer;
-                var username = model.login;
+                var username = model.mid;
                 var payPoint = new PayPointDatabaseMarketPlace();
-                _mpChecker.Check(ekm.InternalId, customer, username);
+                _mpChecker.Check(payPoint.InternalId, customer, username);
                 var mp = new MP_CustomerMarketPlace
                              {
                                  Marketplace = _mpTypes.Get(7), // 7 should be marketplace id from db
-                                 DisplayName = model.login,
-                                 SecurityData = Encryptor.EncryptBytes(model.password),
+                                 DisplayName = model.mid,
+                                 SecurityData = Encryptor.EncryptBytes(model.vpnPassword), // what does it mean?
                                  Customer = _customer,
                                  Created = DateTime.UtcNow,
                                  UpdatingStart = DateTime.UtcNow,
@@ -117,7 +116,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                        {
                            id = account.Id,
                            mid = account.DisplayName,
-                           password = Encryptor.Decrypt(account.SecurityData),
+                           vpnPassword = Encryptor.Decrypt(account.SecurityData),
                            remotePassword = Encryptor.Decrypt(account.SecurityData) // should be another password
                        };
         }

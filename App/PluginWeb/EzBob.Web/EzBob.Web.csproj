@@ -1256,7 +1256,7 @@
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
-      <Project>{7d8c6619-27a6-40a3-a2b7-e0a45ab8f4f2}</Project>
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
       <Name>PayPoint</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">

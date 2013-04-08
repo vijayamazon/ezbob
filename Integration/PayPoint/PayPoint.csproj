@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D8C6619-27A6-40A3-A2B7-E0A45AB8F4F2}</ProjectGuid>
+    <ProjectGuid>{4E55DFA2-822F-4B94-9105-E77F6AC568DB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EKM</RootNamespace>
-    <AssemblyName>EKM</AssemblyName>
+    <RootNamespace>PayPoint</RootNamespace>
+    <AssemblyName>PayPoint</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,13 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
@@ -46,16 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PayPointConnector.cs" />
+    <Compile Include="PayPointDatabaseFunctionFactory.cs" />
+    <Compile Include="PayPointDatabaseFunctionStorage.cs" />
+    <Compile Include="PayPointDatabaseMarketPlace.cs" />
     <Compile Include="PayPointDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PayPointOrdersAgregator.cs" />
-    <Compile Include="PayPointConnector.cs" />
-    <Compile Include="PayPointRetriveDataHelper.cs" />
-    <Compile Include="PayPointDatabaseFunctionFactory.cs" />
-    <Compile Include="PayPointDatabaseFunctionStorage.cs" />
-    <Compile Include="PayPointDatabaseMarketPlace.cs" />
     <Compile Include="PayPointRegistry.cs" />
+    <Compile Include="PayPointRetriveDataHelper.cs" />
     <Compile Include="PayPointSecurityInfo.cs" />
     <Compile Include="PayPointServiceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,12 +68,6 @@
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
