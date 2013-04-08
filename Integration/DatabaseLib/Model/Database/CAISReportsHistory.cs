@@ -25,5 +25,6 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual int? GoodUsers { get; set; }
         public virtual CaisUploadStatus? UploadStatus { get; set; }
         public virtual string FilePath { get; set; }
+        public virtual int? Defaults { get; set; }
     }
 }

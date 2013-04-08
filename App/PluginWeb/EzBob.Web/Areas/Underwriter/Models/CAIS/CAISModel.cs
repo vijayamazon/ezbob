@@ -15,6 +15,7 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
         public virtual string GoodUsers { get; set; }
         public virtual string CaisUploadStatus { get; set; }
         public virtual string FilePath { get; set; }
+        public virtual string Defaults { get; set; }
 
         public static List<CaisModel> FromModel(IEnumerable<CaisReportsHistory>  reportsHistory)
         {
@@ -28,7 +29,8 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
                         FileName = x.FileName,
                         FilePath = x.FilePath,
                         Type = x.Type.ToString(),
-                        OfItems = x.OfItems.ToString()
+                        OfItems = x.OfItems.ToString(),
+                        Defaults = x.Defaults.HasValue ? x.Defaults.Value.ToString(CultureInfo.InvariantCulture) : "-"
                     }).ToList();
         }
     }

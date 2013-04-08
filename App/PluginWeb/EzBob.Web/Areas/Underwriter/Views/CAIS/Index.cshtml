@@ -31,12 +31,12 @@
             <button class="send btn btn-success"><i class="icon-upload"></i>Send selected reports (<span class="reports-count"></span>)</button>
         </div>
         
-        <table class="table-bordered blue-header table table-striped cais-table">
+        <table class="table-bordered blue-header table cais-table">
             <thead>
-                @EzForm.RawHeaderCell("Reports history", "","","","","", "")
+                @EzForm.RawHeaderCell("Reports history", "","","","","", "","")
             </thead>
             <tbody>
-                @EzForm.RawCellBold("Data", "Name", "Type", "Number of users", "Good Users","Bad Users", "Upload status")
+                @EzForm.RawCellBold("Data", "Name", "Type", "Total account", "Good accounts","Late accounts", "Upload status", "Defaults")
                 <% var currentCollor = "first";%>
                 <% _.each(model, function(val, i){ %>
                 <% 
@@ -54,6 +54,7 @@
                     <td><%-val.GoodUsers%></td>
                     <td><%-val.OfItems - val.GoodUsers%></td>
                     <td><%-val.CaisUploadStatus%></td>
+                    <td><%-val.Defaults%></td>
                 </tr>
                 <%})%>
             </tbody>
