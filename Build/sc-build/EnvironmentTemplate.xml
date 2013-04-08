@@ -29,7 +29,7 @@
     <property name="ZohoCRM" value="ZohoCRM"/>
     <module id="ZohoCRM">
       <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
-      <property name="Enabled" value="True"/>
+      <property name="Enabled" value="False"/>
     </module>
 
     <module id="EbaySettingsData">
