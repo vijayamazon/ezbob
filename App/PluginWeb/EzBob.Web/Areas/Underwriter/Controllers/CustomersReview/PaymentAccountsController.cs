@@ -230,8 +230,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Transactional]
         public RedirectResult AddPayPoint(int id)
         {
-            var customer = _customers.GetChecked(id);
-
             var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id }, "https");
             var url = _payPointFacade.GeneratePaymentUrl(5m, callback);
             
@@ -239,6 +237,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         }
 
         [Transactional]
+        [HttpGet]
         public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string expiry, int customerId)
         {
             if (test_status == "true")
