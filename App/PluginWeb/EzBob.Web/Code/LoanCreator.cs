@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Globalization;
+using System.Linq;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Controllers.Exceptions;
-using EzBob.Web.Areas.Underwriter.Controllers;
 using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
 using PaymentServices.PacNet;
 using ZohoCRM;
+using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -31,6 +31,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IAgreementsGenerator _agreementsGenerator;
         private readonly IEzbobWorkplaceContext _context;
         private readonly LoanBuilder _loanBuilder;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof (LoanCreator));
 
         public LoanCreator(IPacnetPaypointServiceLogRepository logRepository, ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService, IAppCreator appCreator, IZohoFacade crm, IAgreementsGenerator agreementsGenerator, IEzbobWorkplaceContext context, LoanBuilder loanBuilder)
         {
@@ -51,6 +53,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ValidateAmount(loan_amount, cus);
 
             ValidateOffer(cus);
+
+            ValidateLoanDelay(cus, now);
 
             var fee = 0M;
 
@@ -120,6 +124,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return loan;
         }
 
+        private void ValidateLoanDelay(EZBob.DatabaseLib.Model.Database.Customer customer, DateTime now)
+        {
+            var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
+            if (lastLoan == null) return;
+            var diff = now.Subtract(lastLoan.Date);
+            if (diff < TimeSpan.FromMinutes(1))
+            {
+                var msg = string.Format("New loan requested within {0} seconds.", diff.TotalSeconds);
+                log.Error(msg);
+                throw new LoanDelayViolationException(msg);
+            }
+        }
+
         public virtual void ValidateOffer(EZBob.DatabaseLib.Model.Database.Customer cus)
         {
             cus.ValidateOfferDate();
@@ -183,6 +200,5 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             return name;
         }
-
     }
 }

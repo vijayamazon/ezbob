@@ -245,6 +245,7 @@
     <Compile Include="Code\Email\IEmailConfirmation.cs" />
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
+    <Compile Include="Code\LoanDelayViolationException.cs" />
     <Compile Include="Code\LoanLimit.cs" />
     <Compile Include="Code\PostCode\IPostCodeFacade.cs" />
     <Compile Include="Code\PostCode\SimplyPostCodeFacade.cs" />
