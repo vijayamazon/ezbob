@@ -105,6 +105,7 @@
     <Compile Include="DatabaseWrapper\IDatabaseCustomer.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
+    <Compile Include="DatabaseWrapper\Order\PayPointOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
     <Compile Include="DatabaseWrapper\Products\AmazonProductsList.cs" />
@@ -145,6 +146,10 @@
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
     <Compile Include="Model\PayPointCard.cs" />
+    <Compile Include="Model\PayPoint\MP_PayPointOrder.cs" />
+    <Compile Include="Model\PayPoint\MP_PayPointOrderItem.cs" />
+    <Compile Include="Model\PayPoint\MP_PayPointOrderItemMap.cs" />
+    <Compile Include="Model\PayPoint\MP_PayPointOrderMap.cs" />
     <Compile Include="Model\Plain\MarketPlaceModel.cs" />
     <Compile Include="Model\Database\OfferExpiredException.cs" />
     <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />

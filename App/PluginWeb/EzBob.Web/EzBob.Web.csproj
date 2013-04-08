@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
+    <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
@@ -1253,6 +1254,10 @@
     <ProjectReference Include="..\..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{7d8c6619-27a6-40a3-a2b7-e0a45ab8f4f2}</Project>
+      <Name>PayPoint</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
