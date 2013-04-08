@@ -28,8 +28,8 @@ EzBob.AccountsView = EzBob.StoreInfoBaseView.extend({
         this.BankAccountInfoView = new EzBob.BankAccountInfoView({ model: this.model });
 
         this.stores = {
-            "paypal": { "view": this.PayPalInfoView, "button": this.PayPalButtonView },
-            "bank-account": { "view": this.BankAccountInfoView, "button": this.BankAccountButtonView }
+            "paypal": { "view": this.PayPalInfoView, "button": this.PayPalButtonView, active: 1 },
+            "bank-account": { "view": this.BankAccountInfoView, "button": this.BankAccountButtonView, active: 1 }
         };
 
         this.name = "accounts";
