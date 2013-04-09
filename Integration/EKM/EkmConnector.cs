@@ -4,6 +4,9 @@
     using System;
     using System.Text;
     using System.Collections.Generic;
+    using System.ServiceModel;
+    using System.ServiceModel.Description;
+    using System.ServiceModel.Channels;
 
     /// <summary>
     /// Here we use EKM API classes
@@ -13,8 +16,34 @@
     {
         private static string PartnerKey = "4kNLfm+jv37k0sWb8ojpxGSQ7yx169xz/nS3mmKGiCwUn7fJIl5UxAZthlm44iiEJynebcGHOG/9fJV2/cM4BQ==";
         private static string PartnerEndpointName = "PartnerAPISoap";
+        private static string PartnerContractName = "API.PartnerAPISoap";
         private static string NoErrorIndication = "No data returned";
         private static string LineBreak = "<br/>";
+        private static readonly PartnerAPISoapClient shopClient;
+
+        static EkmConnector()
+        {
+            Binding myBinding = new BasicHttpBinding() { Name = PartnerEndpointName };
+            EndpointAddress myEndpoint = new EndpointAddress("http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx");
+
+
+            /*
+              <client>
+      <endpoint address="http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx"
+          binding="basicHttpBinding" bindingConfiguration="PartnerAPISoap"
+          contract="API.PartnerAPISoap" name="PartnerAPISoap" />
+    </client>
+             */
+            //// Instantiate Soap Client to access shop data
+            //shopClient = new PartnerAPISoapClient(myBinding, myEndpoint);
+            //shopClient.Endpoint.Binding = myBinding;
+            //shopClient.Endpoint.Contract.Name = PartnerContractName;
+            //shopClient.Endpoint.Name = PartnerEndpointName;
+
+
+            shopClient = new PartnerAPISoapClient();
+
+        }
 
         public bool Validate(string userName, string password, out string errMsg)
         {
@@ -50,8 +79,7 @@
 
         public static ApiKey GetApiKey(string userName, string password)
         {
-            // Instantiate Soap Client to access shop data
-            var shopClient = new PartnerAPISoapClient();
+
 
             // Form request to retrieve shop data (Shop details)
             var getKeyRequest = new GetKeyRequest();
@@ -74,7 +102,6 @@
         public static List<Order> GetOrders(string userName, string password)
         {
             var apiKey = EkmConnector.GetApiKey(userName, password);
-            var shopClient = new PartnerAPISoapClient(PartnerEndpointName, apiKey.EndPoint);
             var getOrdersRequest = new GetOrdersRequest();
 
             // Your unique APIKey must be passed with each request
@@ -133,10 +160,10 @@
                 // Output the errors explaining why the request failed
                 foreach (var error in orders.Errors)
                 {
-                    if (error == NoErrorIndication)
-                    {
-                        return true;
-                    }
+                    //   if (error == NoErrorIndication) //causing infite loop
+                    //{
+                    return true;
+                    //}
                 }
             }
             return false;

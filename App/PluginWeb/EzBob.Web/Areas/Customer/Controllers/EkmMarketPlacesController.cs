@@ -13,6 +13,7 @@ using EzBob.Web.Models.Strings;
 using log4net;
 using EzBob.CommonLib.Security;
 using EzBob.Web.ApplicationCreator;
+using NHibernate;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -27,6 +28,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
         private readonly EkmConnector _validator = new EkmConnector();
+        private readonly ISession _session;
 
         public EkmMarketPlacesController(
             IEzbobWorkplaceContext context, 
@@ -34,7 +36,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IRepository<MP_MarketplaceType> mpTypes, 
             IRepository<MP_CustomerMarketPlace> marketplaces, 
             IMPUniqChecker mpChecker,
-            IAppCreator appCreator)
+            IAppCreator appCreator,
+            ISession session)
         {
             _context = context;
             _customers = customers;
@@ -43,6 +46,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customer = context.Customer;
             _mpChecker = mpChecker;
             _appCreator = appCreator;
+            _session = session;
         }
 
         [Transactional]
@@ -81,7 +85,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                  UpdatingEnd = DateTime.UtcNow
                              };
 
+
+
                 _customer.CustomerMarketPlaces.Add(mp);
+                _customers.Update(_customer);
+
+                _session.Flush();
+
                 _appCreator.EbayAdded(customer, mp.Id);
                 return this.JsonNet(EKMAccountModel.ToModel(mp));
             }
@@ -100,6 +110,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
            
         }
+
+       
     }
 
     public class EKMAccountModel
