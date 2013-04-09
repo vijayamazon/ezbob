@@ -12,8 +12,7 @@ namespace PayPoint
 
         public Guid InternalId
         {
-            // qqq - add entry to DB and make sure GUID matches + load GUID from DB here
-            get { return new Guid("{57ABA690-EDBA-4D95-89CF-13A34B40E2F6}"); }
+            get { return new Guid("{FC8F2710-AEDA-481D-86FF-539DD1FB76E0}"); }
         }
 
         public string Description
