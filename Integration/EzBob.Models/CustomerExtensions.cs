@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using EKM;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonLib;
 using EzBob.PayPal;
 using EzBob.eBayLib;
+using Integration.Volusion;
 using NHibernate;
 using NHibernate.Linq;
 using StructureMap;
@@ -94,12 +96,19 @@ namespace EzBob.Web.Areas.Customer.Models
             return simpleMarketPlaceModels;
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.Id == 4);
-            var simpleMarketPlaceModels = marketplaces.Select((m) => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+        public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this EZBob.DatabaseLib.Model.Database.Customer customer) {
+	        var oEsi = new EkmServiceInfo();
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
+            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         }
+
+        public static IEnumerable<SimpleMarketPlaceModel> GetVolusionShops(this EZBob.DatabaseLib.Model.Database.Customer customer) {
+	        var oVsi = new VolusionServiceInfo();
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oVsi.InternalId);
+            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+            return simpleMarketPlaceModels;
+        } // GetVolusionShops
 
         public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this EZBob.DatabaseLib.Model.Database.Customer customer)
         {

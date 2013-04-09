@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EkmOrdersAgregator.cs" />
+    <Compile Include="EkmOrdersAggregator.cs" />
     <Compile Include="EkmConnector.cs" />
     <Compile Include="EkmRetriveDataHelper.cs" />
     <Compile Include="EKMDatabaseFunctionFactory.cs" />

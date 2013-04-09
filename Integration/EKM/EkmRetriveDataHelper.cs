@@ -115,7 +115,7 @@ namespace EKM
 
             var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
 
-            var factory = new EkmOrdersAgregatorFactory();
+            var factory = new EkmOrdersAggregatorFactory();
 
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 

@@ -20,6 +20,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
         
+        @volusionAccounts = new EzBob.VolusionAccounts()
+        @volusionAccounts.fetch()
+        @volusionButtonView = new EzBob.VolusionAccountButtonView(model: @volusionAccounts)
+        @volusionAccountInfoView = new EzBob.VolusionAccountInfoView(model: @volusionAccounts)
+
         @PayPointAccounts = new EzBob.PayPointAccounts()
         @PayPointAccounts.fetch()
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
@@ -42,12 +47,14 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 view: @PayPointAccountInfoView
                 button: @PayPointButtonView
                 active: 0
+            "Volusion":
+                view: @volusionAccountInfoView
+                button: @volusionButtonView
+                active: 0
 
          for j in EzBob.Config.ActiveMarketPlaces
              if @stores[j]
                  @stores[j].active = 1
-
-        # alexbo ] Apr 3 2013
 
         @name = "shops"
         super()

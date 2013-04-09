@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.MarketPlaceModel = (function(_super) {
-
     __extends(MarketPlaceModel, _super);
 
     function MarketPlaceModel() {
-      return MarketPlaceModel.__super__.constructor.apply(this, arguments);
+      _ref = MarketPlaceModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     MarketPlaceModel.prototype.initialize = function() {
@@ -24,6 +24,7 @@
 
     MarketPlaceModel.prototype.recalculate = function() {
       var accountAge, age, ai, anualSales, inventory;
+
       ai = this.get('AnalysisDataInfo');
       accountAge = this.get('AccountAge');
       age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
@@ -43,11 +44,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.MarketPlaces = (function(_super) {
-
     __extends(MarketPlaces, _super);
 
     function MarketPlaces() {
-      return MarketPlaces.__super__.constructor.apply(this, arguments);
+      _ref1 = MarketPlaces.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     MarketPlaces.prototype.model = EzBob.Underwriter.MarketPlaceModel;
@@ -61,11 +62,11 @@
   })(Backbone.Collection);
 
   EzBob.Underwriter.MarketPlacesView = (function(_super) {
-
     __extends(MarketPlacesView, _super);
 
     function MarketPlacesView() {
-      return MarketPlacesView.__super__.constructor.apply(this, arguments);
+      _ref2 = MarketPlacesView.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     MarketPlacesView.prototype.template = "#marketplace-template";
@@ -94,6 +95,7 @@
 
     MarketPlacesView.prototype.rowClick = function(e) {
       var id, shop, view;
+
       if (e.target.getAttribute('href')) {
         return;
       }
@@ -108,10 +110,13 @@
       if (shop.get('Name') === 'EKM') {
         return;
       }
+      if (shop.get('Name') === 'Volusion') {
+        return;
+      }
       view = new EzBob.Underwriter.MarketPlaceDetailsView({
         el: this.$el.find('#marketplace-details'),
         model: shop,
-        customerId: this.customerId
+        customerId: this.model.customerId
       });
       view.on("reCheck", this.reCheckmarketplaces);
       view.on("recheck-token", this.renewToken);
@@ -124,7 +129,8 @@
     };
 
     MarketPlacesView.prototype.serializeData = function() {
-      var data, m, total, _i, _len, _ref;
+      var data, m, total, _i, _len, _ref3;
+
       data = {
         customerId: this.model.customerId,
         marketplaces: this.model.toJSON(),
@@ -136,9 +142,9 @@
           neutral: 0
         }
       };
-      _ref = data.marketplaces;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        m = _ref[_i];
+      _ref3 = data.marketplaces;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        m = _ref3[_i];
         data.summary.anualSales += m.anualSales;
         data.summary.inventory += m.inventory;
         data.summary.positive += m.PositiveFeedbacks;
@@ -152,9 +158,11 @@
 
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
       var that;
+
       that = this;
       EzBob.ShowMessage("", "Are you sure?", (function() {
         var el;
+
         el = $(e.currentTarget);
         return $.post(window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
           customerId: that.model.customerId,
@@ -175,6 +183,7 @@
 
     MarketPlacesView.prototype.renewTokenClicked = function(e) {
       var umi;
+
       umi = $(e.currentTarget).data("umi");
       this.renewToken(umi);
       return false;
@@ -182,6 +191,7 @@
 
     MarketPlacesView.prototype.renewToken = function(umi) {
       var req;
+
       req = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/RenewEbayToken", {
         umi: umi
       });

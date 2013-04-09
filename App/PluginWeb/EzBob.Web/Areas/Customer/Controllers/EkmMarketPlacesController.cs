@@ -50,9 +50,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
         }
 
         [Transactional]
-        public JsonNetResult Accounts()
-        {
-            var ekms = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == 4).Select(a => EKMAccountModel.ToModel(a)).ToList();
+        public JsonNetResult Accounts() {
+	        var oEsi = new EkmServiceInfo();
+
+            var ekms = _customer
+				.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
+				.Select(EKMAccountModel.ToModel)
+				.ToList();
             return this.JsonNet(ekms);
         }
 
@@ -73,9 +78,17 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var username = model.login;
                 var ekm = new EkmDatabaseMarketPlace();
                 _mpChecker.Check(ekm.InternalId, customer, username);
+
+				var oEsi = new EkmServiceInfo();
+
+	            int marketPlaceId = _mpTypes
+		            .GetAll()
+					.First(a => a.InternalId == oEsi.InternalId)
+					.Id;
+
                 var mp = new MP_CustomerMarketPlace
                              {
-                                 Marketplace = _mpTypes.Get(4),
+                                 Marketplace = _mpTypes.Get(marketPlaceId),
                                  DisplayName = model.login,
                                  SecurityData = Encryptor.EncryptBytes(model.password),
                                  Customer = _customer,

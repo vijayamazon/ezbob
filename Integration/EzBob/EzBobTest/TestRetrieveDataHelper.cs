@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using EKM;
+using Integration.Volusion;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
@@ -46,6 +47,7 @@ namespace EzBobTest
 			NHibernateManager.FluentAssemblies.Add( typeof( AmazonDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add( typeof( PayPalDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add(typeof (EkmDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof (VolusionDatabaseMarketPlace).Assembly);
 			Scanner.Register();
 			ObjectFactory.Configure( x =>
 			{

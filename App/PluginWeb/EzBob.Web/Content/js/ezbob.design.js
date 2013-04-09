@@ -930,3 +930,16 @@ EzBob.validatePayPointShopForm = function (el) {
         unhighlight: EzBob.Validation.unhighlight
     });
 }
+
+EzBob.validateVolusionShopForm = function(el) {
+    var e = el || $('form');
+
+    return e.validate({
+        rules: {
+            volusion_login: { required: true, minlength: 2, maxlength: 30 },
+            volusion_password: { required: true, minlength: 2, maxlength: 300 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+}
