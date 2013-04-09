@@ -11,14 +11,15 @@ CREATE PROCEDURE [dbo].[InsertCaisReportsHistory]
  @Type int,
  @NumberOfItems int, 
  @GoodUsers int,
+ @DefaultUsers int,
  @FilePath nvarchar(400))
       
            
 AS
 BEGIN
 
-insert INTO  [dbo].[CaisReportsHistory] (Date, FileName, Type, OfItems, GoodUsers, UploadStatus, FilePath)
-     VALUES (@Date, @FileName, @Type, @NumberOfItems, @GoodUsers, 2, @FilePath);
+insert INTO  [dbo].[CaisReportsHistory] (Date, FileName, Type, OfItems, GoodUsers, Defaults, UploadStatus, FilePath)
+     VALUES (@Date, @FileName, @Type, @NumberOfItems, @GoodUsers, @DefaultUsers, 2, @FilePath);
 
 SET NOCOUNT ON;
 SELECT @@IDENTITY;
