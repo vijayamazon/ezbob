@@ -36,7 +36,7 @@
                 @EzForm.RawHeaderCell("Reports history", "","","","","", "","")
             </thead>
             <tbody>
-                @EzForm.RawCellBold("Data", "Name", "Type", "Total account", "Good accounts","Late accounts", "Upload status", "Defaults")
+                @EzForm.RawCellBold("Data", "Name", "Type", "Total account", "Good accounts","Late accounts", "Defaults", "Upload status" )
                 <% var currentCollor = "first";%>
                 <% _.each(model, function(val, i){ %>
                 <% 
@@ -53,8 +53,8 @@
                     <td><%-val.OfItems%></td>
                     <td><%-val.GoodUsers%></td>
                     <td><%-val.OfItems - val.GoodUsers%></td>
-                    <td><%-val.CaisUploadStatus%></td>
                     <td><%-val.Defaults%></td>
+                    <td><%-val.CaisUploadStatus%></td>
                 </tr>
                 <%})%>
             </tbody>
