@@ -45,7 +45,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public int value { get; set; }
         public string text { get; set; }
-
+        public int  RepaymentPeriod { get; set; }
         public static LoanTypesModel Create(LoanType lt)
         {
             return new LoanTypesModel()
@@ -53,7 +53,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
                            Id = lt.Id,
                            Name = lt.Name,
                            value = lt.Id,
-                           text = lt.Name
+                           text = lt.Name,
+                           RepaymentPeriod = lt.RepaymentPeriod
                        };
         }
     }

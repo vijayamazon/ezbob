@@ -503,3 +503,7 @@ table tr.editing td{
     height: 95%;
     resize: none; 
 }
+
+#credit-line-form .tooltip {
+    white-space: pre-wrap;
+} 

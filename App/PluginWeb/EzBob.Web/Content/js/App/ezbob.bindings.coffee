@@ -21,3 +21,10 @@ EzBob.BidingConverters.dateTime = (direction, value) ->
         moment.utc(value).format('DD/MM/YYYY')
     else
         moment.utc(value, "DD/MM/YYYY").toDate()
+
+EzBob.BidingConverters.percentsFormat = (direction, value) ->
+    result = EzBob.BidingConverters.percents(direction, value)
+    if direction == 'ModelToView'
+        return $.fn.autoNumeric.Format('', result, EzBob.percentFormat)
+    else
+        return result
