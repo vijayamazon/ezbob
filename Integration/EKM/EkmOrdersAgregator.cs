@@ -29,7 +29,7 @@ namespace EKM
 
         private int GetShipedOrdersCount(IEnumerable<EkmOrderItem> orders)
         {
-            //TODO check status field
+            //TODO check status field!!!
             return orders.Count();//o => o.OrderStatus == EkmOrdersList2ItemStatusType.Shipped);
         }
 
@@ -43,7 +43,7 @@ namespace EKM
        
         private double GetTotalSumOfOrders(IEnumerable<EkmOrderItem> orders)
         {
-            //TODO check status field
+            //TODO check status field!!!
             return orders./*Where(o => o.OrderStatus == EkmOrdersList2ItemStatusType.Shipped).*/Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
         }
 

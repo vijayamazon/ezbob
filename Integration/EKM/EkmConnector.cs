@@ -18,32 +18,9 @@
         private static string PartnerEndpointName = "PartnerAPISoap";
         private static string PartnerContractName = "API.PartnerAPISoap";
         private static string NoErrorIndication = "No data returned";
-        private static string LineBreak = "<br/>";
-        private static readonly PartnerAPISoapClient shopClient;
+        private static string LineBreak = "<br />";
 
-        static EkmConnector()
-        {
-            Binding myBinding = new BasicHttpBinding() { Name = PartnerEndpointName };
-            EndpointAddress myEndpoint = new EndpointAddress("http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx");
-
-
-            /*
-              <client>
-      <endpoint address="http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx"
-          binding="basicHttpBinding" bindingConfiguration="PartnerAPISoap"
-          contract="API.PartnerAPISoap" name="PartnerAPISoap" />
-    </client>
-             */
-            //// Instantiate Soap Client to access shop data
-            //shopClient = new PartnerAPISoapClient(myBinding, myEndpoint);
-            //shopClient.Endpoint.Binding = myBinding;
-            //shopClient.Endpoint.Contract.Name = PartnerContractName;
-            //shopClient.Endpoint.Name = PartnerEndpointName;
-
-
-            shopClient = new PartnerAPISoapClient();
-
-        }
+      
 
         public bool Validate(string userName, string password, out string errMsg)
         {
@@ -79,8 +56,14 @@
 
         public static ApiKey GetApiKey(string userName, string password)
         {
-
-
+            var myBinding = new BasicHttpBinding() { Name = PartnerEndpointName };
+            var myEndpoint = new EndpointAddress("http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx");
+            //// Instantiate Soap Client to access shop data
+            var shopClient = new PartnerAPISoapClient(myBinding, myEndpoint);
+            shopClient.Endpoint.Binding = myBinding;
+            shopClient.Endpoint.Contract.Name = PartnerContractName;
+            shopClient.Endpoint.Name = PartnerEndpointName;
+         
             // Form request to retrieve shop data (Shop details)
             var getKeyRequest = new GetKeyRequest();
 
@@ -102,6 +85,9 @@
         public static List<Order> GetOrders(string userName, string password)
         {
             var apiKey = EkmConnector.GetApiKey(userName, password);
+            var myBinding = new BasicHttpBinding() { Name = PartnerEndpointName };
+            var shopClient = new PartnerAPISoapClient(myBinding, new EndpointAddress(apiKey.EndPoint));
+            
             var getOrdersRequest = new GetOrdersRequest();
 
             // Your unique APIKey must be passed with each request
@@ -123,17 +109,8 @@
                 {
                     Orders.AddRange(getOrdersResponse.Orders);
                 }
-            } while (!IsEndOfOrders(getOrdersResponse));
+            } while (getOrdersResponse.Status != StatusCodes.Failure);
 
-
-            //var totalRev = string.Format("Total Store Revenue: {0:###,###,###}", revenue);
-            //var totalCount = string.Format("Total Sales #: {0:###,###}", sales);
-            //mailText.Append("<h1>New EKM Shop what added for User:").Append(customerId).Append("</h1>");
-            //mailText.Append("<h2>Shop Name:").Append(login).Append("</h2>");
-            //mailText.Append("<p>").Append(totalRev);
-            //mailText.Append("<p>").Append(totalCount);
-            //Logger.Info(totalRev);
-            //Logger.Info(totalCount);
             return Orders;
         }
 
