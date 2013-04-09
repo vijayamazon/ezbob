@@ -8,6 +8,7 @@ using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
+using PaymentServices.Web_References.PayPoint;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,9 +28,9 @@ namespace PayPoint
         }
     }
 
-    public class PayPointRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPointDatabaseFunctionType>
+    public class PayPointRetrieveDataHelper : MarketplaceRetrieveDataHelperBase<PayPointDatabaseFunctionType>
     {
-        public PayPointRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace)
+        public PayPointRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
 
@@ -40,12 +41,7 @@ namespace PayPoint
         {
             PayPointSecurityInfo securityInfo = (PayPointSecurityInfo)this.RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
-            //store orders
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-
-            //calculate agregated data
-            //TODO
-
         }
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -63,20 +59,10 @@ namespace PayPoint
             var Iwant = new List<PayPointOrderItem>();
             foreach (var x in payPointDataSet.Transaction)
             {
+                int h = 9;
+                int hh = h + 9; // qqq - debug this line and init object properly
                 Iwant.Add(new PayPointOrderItem()
                 {
-                    //EkmOrderId = order.OrderID,
-                    //OrderNumber = order.OrderNumber,
-                    //CustomerID = order.CustomerID,
-                    //CompanyName = order.CompanyName,
-                    //FirstName = order.FirstName,
-                    //LastName = order.LastName,
-                    //EmailAddress = order.EmailAddress,
-                    //TotalCost = order.TotalCost,
-                    //OrderDate = DateTime.Parse(order.OrderDate),
-                    //OrderStatus = order.OrderStatus,
-                    //OrderDateIso = DateTime.Parse(order.OrderDateISO),
-                    //OrderStatusColour = order.OrderStatusColour,
                 });
             }
 
@@ -108,7 +94,7 @@ namespace PayPoint
             PayPointSecurityInfo payPointSecurityInfo = new PayPointSecurityInfo();
             IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
             payPointSecurityInfo.VpnPassword = Encryptor.Decrypt(customerMarketPlace.SecurityData);
-            payPointSecurityInfo.RemotePassword = Encryptor.Decrypt(customerMarketPlace.SecurityData); // should be something else
+            payPointSecurityInfo.RemotePassword = Encryptor.Decrypt(customerMarketPlace.SecurityData); // qqq - should be something else - add column to MP_CustomerMarketPlace
             payPointSecurityInfo.Mid = customerMarketPlace.DisplayName;
             payPointSecurityInfo.MarketplaceId = customerMarketPlace.Id;
             return payPointSecurityInfo;
@@ -116,10 +102,9 @@ namespace PayPoint
 
         private IEnumerable<IWriteDataInfo<PayPointDatabaseFunctionType>> CreateOrdersAggregationInfo(PayPointOrdersList orders, ICurrencyConvertor currencyConverter)
         {
-
             var aggregateFunctionArray = new[]
 					{
-						PayPointDatabaseFunctionType.BLAH, 
+						PayPointDatabaseFunctionType.NumOfOrders, 
 					};
 
             var updated = orders.SubmittedDate;
@@ -137,8 +122,6 @@ namespace PayPoint
             var factory = new PayPointOrdersAgregatorFactory();
 
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-
         }
-
     }
 }

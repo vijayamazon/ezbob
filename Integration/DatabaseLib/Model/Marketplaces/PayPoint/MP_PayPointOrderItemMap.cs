@@ -3,25 +3,43 @@ using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-	public class MP_EkmOrderItemMap : ClassMap<MP_EkmOrderItem>
+	public class MP_PayPointOrderItemMap : ClassMap<MP_PayPointOrderItem>
 	{
-		public MP_EkmOrderItemMap()
+		public MP_PayPointOrderItemMap()
 		{
-			Table("MP_EkmOrderItem");
+			Table("MP_PayPointOrderItem");
 			Id(x => x.Id);
 			References( x => x.Order, "OrderId" );
 
-            Map(x => x.CompanyName, "CompanyName").Length(300);
-            Map(x => x.CustomerId, "CustomerId");
-            Map(x => x.EmailAddress, "EmailAddress").Length(300);
-            Map(x => x.OrderStatus, "OrderStatus").Length(300);
-            Map(x => x.FirstName, "FirstName").Length(300);
-            Map(x => x.LastName, "LastName").Length(300);
-            Map(x => x.OrderDate, "OrderDate").CustomType<UtcDateTimeType>();
-            Map(x => x.OrderDateIso, "OrderDateIso").CustomType<UtcDateTimeType>();
-            Map(x => x.OrderNumber, "OrderNumber").Length(300);
-            Map(x => x.OrderStatusColour, "OrderStatusColour").Length(300);
-            Map(x => x.TotalCost, "TotalCost");
+            Map(x => x.acquirer, "acquirer").Length(300);
+            Map(x => x.amount, "amount");
+            Map(x => x.auth_code, "auth_code").Length(300);
+            Map(x => x.authorised, "authorised").Length(300);
+            Map(x => x.card_type, "card_type").Length(300);
+            Map(x => x.cid, "cid").Length(300);
+            Map(x => x.classType, "classType").Length(300);
+            Map(x => x.company_no, "company_no").Length(300);
+            Map(x => x.country, "country").Length(300);
+            Map(x => x.currency, "currency").Length(300);
+            Map(x => x.cv2avs, "cv2avs").Length(300);
+            Map(x => x.date, "date").CustomType<UtcDateTimeType>();
+            Map(x => x.deferred, "deferred").Length(300);
+            Map(x => x.emvValue, "emvValue").Length(300);
+            Map(x => x.ExpiryDate, "ExpiryDate").CustomType<UtcDateTimeType>();
+            Map(x => x.fraud_code, "fraud_code").Length(300);
+            Map(x => x.FraudScore, "FraudScore").Length(300);
+            Map(x => x.ip, "ip").Length(300);
+            Map(x => x.lastfive, "lastfive").Length(300);
+            Map(x => x.merchant_no, "merchant_no").Length(300);
+            Map(x => x.message, "message").Length(300);
+            Map(x => x.MessageType, "MessageType").Length(300);
+            Map(x => x.mid, "mid").Length(300);
+            Map(x => x.name, "name").Length(300);
+            Map(x => x.options, "options").Length(300);
+            Map(x => x.start_date, "start_date").CustomType<UtcDateTimeType>();
+            Map(x => x.status, "status").Length(300);
+            Map(x => x.tid, "tid").Length(300);
+            Map(x => x.trans_id, "trans_id").Length(300);
 		}
 	}
 }

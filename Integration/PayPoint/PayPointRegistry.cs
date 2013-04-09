@@ -11,7 +11,7 @@ namespace PayPoint
         {
             For<IDatabaseMarketplace>().Use<PayPointDatabaseMarketPlace>().Named("PayPoint");
             For<DatabaseMarketplaceBase<PayPointDatabaseFunctionType>>().Use<PayPointDatabaseMarketPlace>();
-            For<IMarketplaceRetrieveDataHelper>().Use<PayPointRetriveDataHelper>().Named("PayPoint");
+            For<IMarketplaceRetrieveDataHelper>().Use<PayPointRetrieveDataHelper>().Named("PayPoint");
         }
     }
 }

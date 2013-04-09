@@ -53,11 +53,10 @@
     </Compile>
     <Compile Include="PayPointOrdersAgregator.cs" />
     <Compile Include="PayPointRegistry.cs" />
-    <Compile Include="PayPointRetriveDataHelper.cs" />
+    <Compile Include="PayPointRetrieveDataHelper.cs" />
     <Compile Include="PayPointSecurityInfo.cs" />
     <Compile Include="PayPointServiceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SECVPNService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
@@ -67,6 +66,10 @@
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaymentServices\PaymentServices.csproj">
+      <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

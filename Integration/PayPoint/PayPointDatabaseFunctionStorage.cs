@@ -7,8 +7,8 @@ namespace PayPoint
 {
     public enum PayPointDatabaseFunctionType
 	{
-        //test
-        BLAH,
+        NumOfOrders,
+        //qqq define all aggregations wanted in paypoint
 	}
 
     internal class PayPointDatabaseFunctionStorage : DatabaseFunctionStorage<PayPointDatabaseFunctionType>
@@ -18,9 +18,8 @@ namespace PayPoint
         private PayPointDatabaseFunctionStorage()
             : base(new PayPointDatabaseFunctionTypeConverter())
         {
-            //Stas test
-            CreateFunctionAndAddToCollection(PayPointDatabaseFunctionType.BLAH, DatabaseValueTypeEnum.Integer, "{fa09ce65-d6a9-4656-b00c-5e635d2083c2}");
-            
+            // qqq - what is this guid used for? how should it be generated\kept?
+            CreateFunctionAndAddToCollection(PayPointDatabaseFunctionType.NumOfOrders, DatabaseValueTypeEnum.Integer, "{fa09ce65-d6a9-4656-b00c-5e635d2083c2}");            
         }
 
         public static PayPointDatabaseFunctionStorage Instance
@@ -36,7 +35,6 @@ namespace PayPoint
 	{
 		public ConvertedTypeInfo Convert(PayPointDatabaseFunctionType type)
 		{
-            //Stas test
             string displayName = string.Empty;
             string description = string.Empty;
 
@@ -44,7 +42,7 @@ namespace PayPoint
 
             switch (type)
             {
-                case PayPointDatabaseFunctionType.BLAH:
+                case PayPointDatabaseFunctionType.NumOfOrders:
                     displayName = "Num of Orders";
                     break;
                     

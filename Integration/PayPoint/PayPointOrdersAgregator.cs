@@ -27,32 +27,12 @@ namespace PayPoint
             return orders.Count();
         }
 
-        private int GetShipedOrdersCount(IEnumerable<PayPointOrderItem> orders)
-        {
-            //TODO check status field
-            return orders.Count();//o => o.OrderStatus == PayPointOrdersList2ItemStatusType.Shipped);
-        }
-
-        /*
-         private double GetAverageSumOfOrder(IEnumerable<PayPointOrderItem> orders)
-         {
-             var sum = GetTotalSumOfOrders(orders);
-             var count = GetShipedOrdersCount(orders);
-
-             return count == 0 ? 0 : sum / count;
-         }
-         private double GetTotalSumOfOrders(IEnumerable<PayPointOrderItem> orders)
-         {
-             //TODO check status field
-             return orders.Sum(o => (double)o.TotalCost );
-         }
-         */
         protected override object InternalCalculateAggregatorValue(PayPointDatabaseFunctionType functionType, IEnumerable<PayPointOrderItem> orders)
         {
             switch (functionType)
             {
-                case PayPointDatabaseFunctionType.BLAH:
-                    return null;
+                case PayPointDatabaseFunctionType.NumOfOrders:
+                    return GetOrdersCount(orders);
                 
                 default:
                     throw new NotImplementedException();

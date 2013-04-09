@@ -47,6 +47,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [Transactional]
         public JsonNetResult Accounts()
         {
+            // qqq
+            // insert to MP_MarketPlaceType
+            // here i should fetch this number from DB
             // 7 should be marketplace id from db
             var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == 7).Select(a => PayPointAccountModel.ToModel(a)).ToList();
             return this.JsonNet(payPoints);
@@ -71,9 +74,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 _mpChecker.Check(payPoint.InternalId, customer, username);
                 var mp = new MP_CustomerMarketPlace
                              {
-                                 Marketplace = _mpTypes.Get(7), // 7 should be marketplace id from db
+                                 Marketplace = _mpTypes.Get(7), // qqq 7 should be marketplace id from db
                                  DisplayName = model.mid,
-                                 SecurityData = Encryptor.EncryptBytes(model.vpnPassword), // what does it mean?
+                                 SecurityData = Encryptor.EncryptBytes(model.vpnPassword), // qqq what does it mean?
+                                 // probably should add column to MP_CustomerMarketPlace to hold the second password...
                                  Customer = _customer,
                                  Created = DateTime.UtcNow,
                                  UpdatingStart = DateTime.UtcNow,
@@ -82,7 +86,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                              };
 
                 _customer.CustomerMarketPlaces.Add(mp);
-                _appCreator.EbayAdded(customer, mp.Id); // should be different strategy
+                _appCreator.EbayAdded(customer, mp.Id); // qqq - should be different strategy
                 return this.JsonNet(PayPointAccountModel.ToModel(mp));
             }
             catch (MarketPlaceAddedByThisCustomerException e)
@@ -117,7 +121,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                            id = account.Id,
                            mid = account.DisplayName,
                            vpnPassword = Encryptor.Decrypt(account.SecurityData),
-                           remotePassword = Encryptor.Decrypt(account.SecurityData) // should be another password
+                           remotePassword = Encryptor.Decrypt(account.SecurityData) // qqq - should be another password (new coulm in MP_CustomerMarketPlace)
                        };
         }
     }

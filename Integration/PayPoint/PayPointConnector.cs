@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using System.Collections.Generic;
+    using PaymentServices.Web_References.PayPoint;
 
     public class PayPointConnector
     {

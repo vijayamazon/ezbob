@@ -15,7 +15,7 @@ namespace PayPoint
 
         public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper)
         {
-            return new PayPointRetriveDataHelper( helper, this );
+            return new PayPointRetrieveDataHelper( helper, this );
         }
 
         public override IDatabaseFunctionFactory<PayPointDatabaseFunctionType> FunctionFactory
