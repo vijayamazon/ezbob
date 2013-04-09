@@ -131,6 +131,7 @@
     <Compile Include="PostcodeAnywhereTests\CheckFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefNumberFixture.cs" />
+    <Compile Include="SerializeDataHelperFixture.cs" />
     <Compile Include="ZohoCRMTests\RegisterLead.cs" />
     <Compile Include="ZohoCRMTests\ZohoFixture.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -557,13 +557,14 @@ namespace EZBob.DatabaseLib
             }
         }
 
-        public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace<TSecurityData>(string displayname, IDatabaseMarketplace marketplaceType, TSecurityData securityData, Customer customer)
-            where TSecurityData : IMarketPlaceSecurityInfo
+        public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IDatabaseMarketplace marketplaceType, IMarketPlaceSecurityInfo securityData, Customer customer)
         {
             var serializedSecurityData = SerializeDataHelper.Serialize(securityData);
             int customerMarketPlaceId;
-            MP_CustomerMarketPlace customerMarketPlace = GetExistsCustomerMarketPlace(displayname, marketplaceType, customer.Id);
             var now = DateTime.UtcNow;
+
+            var customerMarketPlace = GetExistsCustomerMarketPlace(displayname, marketplaceType, customer.Id);
+            
             if (customerMarketPlace != null)
             {
                 customerMarketPlaceId = customerMarketPlace.Id;
