@@ -34,7 +34,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         private static readonly ILog log = LogManager.GetLogger(typeof (LoanCreator));
 
-        public LoanCreator(IPacnetPaypointServiceLogRepository logRepository, ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService, IAppCreator appCreator, IZohoFacade crm, IAgreementsGenerator agreementsGenerator, IEzbobWorkplaceContext context, LoanBuilder loanBuilder)
+        public LoanCreator(
+            IPacnetPaypointServiceLogRepository logRepository, 
+            ILoanHistoryRepository loanHistoryRepository, 
+            IPacnetService pacnetService, 
+            IAppCreator appCreator, 
+            IZohoFacade crm, 
+            IAgreementsGenerator agreementsGenerator, 
+            IEzbobWorkplaceContext context, 
+            LoanBuilder loanBuilder)
         {
             _logRepository = logRepository;
             _loanHistoryRepository = loanHistoryRepository;
@@ -124,7 +132,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return loan;
         }
 
-        private void ValidateLoanDelay(EZBob.DatabaseLib.Model.Database.Customer customer, DateTime now)
+        public virtual void ValidateLoanDelay(EZBob.DatabaseLib.Model.Database.Customer customer, DateTime now)
         {
             var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
             if (lastLoan == null) return;
