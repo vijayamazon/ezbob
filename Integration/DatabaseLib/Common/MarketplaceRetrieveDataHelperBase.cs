@@ -52,7 +52,7 @@ namespace EZBob.DatabaseLib.Common
 			InternalUpdateInfo( databaseCustomerMarketPlace, historyRecord );
 		}
 
-		public IDatabaseCustomer GetCustomerInfo( int customerId )
+		public Customer GetCustomerInfo( int customerId )
 		{
 			return Helper.GetCustomerInfo( customerId );
 		}
@@ -80,14 +80,12 @@ namespace EZBob.DatabaseLib.Common
 		public IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace( int customerMarketPlaceId )
 		{
 			MP_CustomerMarketPlace marketPlace = Helper.GetCustomerMarketPlace( customerMarketPlaceId );
-			IDatabaseCustomer customer = Helper.CreateDatabaseCustomer( marketPlace.Customer );
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace = Helper.CreateDatabaseCustomerMarketPlace( marketPlace.DisplayName, _Marketplace, customer );
+            IDatabaseCustomerMarketPlace databaseCustomerMarketPlace = Helper.CreateDatabaseCustomerMarketPlace(marketPlace.DisplayName, _Marketplace, marketPlace.Customer);
 
 			return GetAnalysisValuesByCustomerMarketPlace( databaseCustomerMarketPlace );
 		}
 
-		public void StoreOrUpdateCustomerSecurityInfo<TSecurityData>( IDatabaseCustomer databaseCustomer, TSecurityData securityData, string marketPlaceName )
-			where TSecurityData : IMarketPlaceSecurityInfo
+        public void StoreOrUpdateCustomerSecurityInfo(Customer databaseCustomer, IMarketPlaceSecurityInfo securityData, string marketPlaceName)
 		{
 			Helper.SaveOrUpdateCustomerMarketplace( marketPlaceName, _Marketplace, securityData, databaseCustomer );
 		}
@@ -97,7 +95,7 @@ namespace EZBob.DatabaseLib.Common
 			Helper.AddEbayOrdersData( databaseCustomerMarketPlace, databaseOrdersList, historyRecord );
 		}
 
-		protected void UpdateAllDataFor( Action<IDatabaseCustomerMarketPlace> action, IDatabaseCustomer databaseCustomer )
+		protected void UpdateAllDataFor( Action<IDatabaseCustomerMarketPlace> action, Customer databaseCustomer )
 		{
 			IEnumerable<IDatabaseCustomerMarketPlace> customerMarketPlaces = GetCustomerMarketPlaces( databaseCustomer );
 
@@ -112,7 +110,7 @@ namespace EZBob.DatabaseLib.Common
 			return SerializeDataHelper.DeserializeType<TSecurityData>( databaseCustomerMarketPlace.SecurityData );
 		}
 
-		private IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaces( IDatabaseCustomer customer )
+		private IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaces( Customer customer )
 		{
 			var marketPlaces = Helper.GetCustomerMarketPlaceList( customer, _Marketplace );
 

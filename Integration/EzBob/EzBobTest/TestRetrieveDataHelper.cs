@@ -245,7 +245,7 @@ namespace EzBobTest
 
 		}
 
-		private IDatabaseCustomer GetCustomerInfo( int customerId )
+		private Customer GetCustomerInfo( int customerId )
 		{
 			return _Helper.GetCustomerInfo( customerId );
 		}

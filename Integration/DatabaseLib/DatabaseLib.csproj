@@ -86,7 +86,6 @@
     <Compile Include="DatabaseWrapper\AccountInfo\IDatabaseEbayAccountInfo.cs" />
     <Compile Include="DatabaseWrapper\AccountInfo\PayPalPersonalData.cs" />
     <Compile Include="DatabaseWrapper\DatabaseCustomerMarketPlace.cs" />
-    <Compile Include="DatabaseWrapper\DatabaseCustomer.cs" />
     <Compile Include="DatabaseWrapper\DatabaseMarketPlaceBase.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackDataByPeriod.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackData.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="DatabaseWrapper\FunctionValues\IDatabaseAnalysisFunctionValues.cs" />
     <Compile Include="DatabaseWrapper\FunctionValues\WriteDataInfo.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseCustomerMarketPlace.cs" />
-    <Compile Include="DatabaseWrapper\IDatabaseCustomer.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrderItem.cs" />

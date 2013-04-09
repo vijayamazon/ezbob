@@ -102,37 +102,19 @@ namespace EZBob.DatabaseLib
             get { return _CurrencyConvertor; }
         }
 
-        public IDatabaseCustomer GetCustomerInfo(int clientId)
+        public Customer GetCustomerInfo(int clientId)
         {
-            Customer customer = FindCustomer(clientId);
-            return CreateDatabaseCustomer(customer);
+            return FindCustomer(clientId);
         }
 
-        public IDatabaseCustomer CreateDatabaseCustomer(Customer customer)
+        private Customer FindCustomer(int id)
         {
-            return new DatabaseCustomer(customer.Id, customer.Name);
-        }
-
-        private Customer FindCustomer(int clientId)
-        {
-            return FindCustomer(new FindDatabaseCustomerInfo(clientId));
-        }
-
-        public Customer FindCustomer(IDatabaseCustomer databaseCustomer)
-        {
-            return FindCustomer(new FindDatabaseCustomerInfo(databaseCustomer.Id));
-        }
-
-        private Customer FindCustomer(FindDatabaseCustomerInfo databaseCustomer)
-        {
-            var customerId = databaseCustomer.Id;
-            var client = _CustomerRepository.Get(customerId);
-            var all = _CustomerRepository.GetAll();
-            if (client != null)
+            var client = _CustomerRepository.Get(id);
+            if (client == null)
             {
-                return client;
+                throw new InvalidCustomerException(id);
             }
-            throw new InvalidCustomerException(customerId);
+            return client;
         }
 
         public void InitDatabaseMarketPlace<TEnum>(DatabaseMarketplaceBase<TEnum> databaseMarketPlace)
@@ -163,10 +145,8 @@ namespace EZBob.DatabaseLib
         {
             var oldData = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-            var databaseCustomer = databaseCustomerMarketPlace.Customer;
+            var customer = databaseCustomerMarketPlace.Customer;
             IDatabaseMarketplace databaseMarketplaceType = databaseCustomerMarketPlace.Marketplace;
-
-            Customer customer = FindCustomer(databaseCustomer);
 
             MP_MarketplaceType marketplaceType = GetMarketPlace(databaseMarketplaceType);
             oldData.Customer = customer;
@@ -175,38 +155,15 @@ namespace EZBob.DatabaseLib
             oldData.DisplayName = databaseCustomerMarketPlace.DisplayName;
 
             _CustomerMarketplaceRepository.Update(oldData);
-
         }
 
-        public void AddOrUpdateCustomer(IDatabaseCustomer databaseCustomer)
+        public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(Customer customer, IDatabaseMarketplace databaseMarketplace)
         {
-            var exists = FindCustomer(databaseCustomer);
-
-            var customer = new Customer
-            {
-                Id = exists != null ? exists.Id : 0,
-                Name = databaseCustomer.Name
-            };
-
-            _CustomerRepository.SaveOrUpdate(customer);
-        }
-
-        internal bool IsAnyCustomerMarketPlaceExists(IDatabaseCustomer databaseCustomer, IDatabaseMarketplace databaseMarketplace)
-        {
-            var customer = FindCustomer(databaseCustomer);
-            var marketPlace = GetMarketPlace(databaseMarketplace);
-
-            return _CustomerMarketplaceRepository.Exists(customer, marketPlace);
-        }
-
-        public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(IDatabaseCustomer databaseCustomer, IDatabaseMarketplace databaseMarketplace)
-        {
-            Customer customer = FindCustomer(databaseCustomer);
             MP_MarketplaceType marketplaceType = GetMarketPlace(databaseMarketplace);
 
             var data = _CustomerMarketplaceRepository.Get(customer, marketplaceType);
 
-            return data.Select(cm => CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, cm, cm.Id)).ToList();
+            return data.Select(cm => CreateDatabaseCustomerMarketPlace(customer, databaseMarketplace, cm, cm.Id)).ToList();
         }
 
         public MP_CustomerMarketPlace GetCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -217,7 +174,7 @@ namespace EZBob.DatabaseLib
         public IDatabaseCustomerMarketPlace GetDatabaseCustomerMarketPlace(IDatabaseMarketplace marketplaceType, int customerMarketPlaceId)
         {
             MP_CustomerMarketPlace mp = GetCustomerMarketPlace(customerMarketPlaceId);
-            IDatabaseCustomer customer = CreateDatabaseCustomer(mp.Customer);
+            var customer = mp.Customer;
             return CreateDatabaseCustomerMarketPlace(mp.DisplayName, marketplaceType, customer);
         }
 
@@ -588,21 +545,13 @@ namespace EZBob.DatabaseLib
 
             customerMarketPlace.Updated = now;
 
-            return CreateDatabaseCustomerMarketPlace(CreateDatabaseCustomer(customer), marketplaceType, customerMarketPlace, customerMarketPlaceId);
+            return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
         }
 
         public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IDatabaseMarketplace marketplaceType, int customerId)
         {
             return _CustomerMarketplaceRepository.Get(customerId, marketplaceType.InternalId, marketPlaceName);
         }
-
-        public void SaveOrUpdateCustomerMarketplace<TSecurityData>(string displayname, IDatabaseMarketplace marketplaceType, TSecurityData securityData, IDatabaseCustomer databaseCustomer)
-            where TSecurityData : IMarketPlaceSecurityInfo
-        {
-            var customer = FindCustomer(databaseCustomer);
-            SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, securityData, customer);
-        }
-
 
         public MP_MarketplaceType GetMarketPlace(int marketPlaceId)
         {
@@ -615,13 +564,13 @@ namespace EZBob.DatabaseLib
         }
 
 
-        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IDatabaseMarketplace databaseMarketplace, IDatabaseCustomer databaseCustomer)
+        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IDatabaseMarketplace databaseMarketplace, Customer databaseCustomer)
         {
             MP_CustomerMarketPlace mpCustomerMarketPlace = GetExistsCustomerMarketPlace(marketPlaceName, databaseMarketplace, databaseCustomer.Id);
             return CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, mpCustomerMarketPlace, mpCustomerMarketPlace.Id);
         }
 
-        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(IDatabaseCustomer databaseCustomer, IDatabaseMarketplace databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
+        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IDatabaseMarketplace databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
         {
             return new DatabaseCustomerMarketPlace(customerMarketPlaceId, cm.DisplayName, cm.SecurityData, databaseCustomer, databaseMarketplace);
         }

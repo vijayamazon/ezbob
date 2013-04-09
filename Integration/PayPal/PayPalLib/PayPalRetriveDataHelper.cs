@@ -63,7 +63,7 @@ namespace EzBob.PayPal
 			Helper.SaveOrUpdateAcctountInfo( databaseCustomerMarketPlace, personalData );
 		}
 
-		public void UpdateAccountInfo( IDatabaseCustomer databaseCustomer )
+		public void UpdateAccountInfo( Customer databaseCustomer )
 		{
 			base.UpdateAllDataFor( UpdateAccountInfo, databaseCustomer );
 		}

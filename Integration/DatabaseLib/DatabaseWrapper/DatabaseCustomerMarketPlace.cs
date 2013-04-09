@@ -1,8 +1,10 @@
+using EZBob.DatabaseLib.Model.Database;
+
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
 	class DatabaseCustomerMarketPlace : IDatabaseCustomerMarketPlace
 	{
-		public DatabaseCustomerMarketPlace( int id, string name, byte[] securityData, IDatabaseCustomer customer, IDatabaseMarketplace marketplace )
+		public DatabaseCustomerMarketPlace( int id, string name, byte[] securityData, Customer customer, IDatabaseMarketplace marketplace )
 		{
 			Id = id;
 			DisplayName = name;
@@ -15,7 +17,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		public string DisplayName { get; private set; }
 
 		public byte[] SecurityData { get; private set; }
-		public IDatabaseCustomer Customer { get; private set; }
+		public Customer Customer { get; private set; }
 		public IDatabaseMarketplace Marketplace { get; private set; }
 	}
 }

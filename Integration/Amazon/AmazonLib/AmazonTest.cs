@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper;
+using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonServiceLib;
 using NUnit.Framework;
 using Scorto.RegistryScanner;
@@ -56,28 +56,28 @@ namespace EzBob.AmazonLib
 			}
 		}
 
-		private static IDatabaseCustomer GetCustomerInfo( int customerId )
+		private static Customer GetCustomerInfo( int customerId )
 		{
 			return AmazonRetriveDataHelper.GetCustomerInfo( customerId );
 		}
 
 		public static void TestRetrieveAmazonOrdersData(int customerId)
 		{
-            IDatabaseCustomer databaseCustomer = GetCustomerInfo(customerId);
+            var databaseCustomer = GetCustomerInfo(customerId);
 						
 			UpdateClientOrdersInfo( databaseCustomer);
 		}
 
 		public static void TestRetrieveAmazonInventoryData( int customerId )
 		{
-            IDatabaseCustomer databaseCustomer = GetCustomerInfo(customerId);
+            var databaseCustomer = GetCustomerInfo(customerId);
 
 			UpdateClientInventoriesInfo( databaseCustomer );
 		}
 
 		public static void TestRetrieveAmazonUserFeedbackInfo( int customerId )
 		{
-            IDatabaseCustomer databaseCustomer = GetCustomerInfo(customerId);
+            var databaseCustomer = GetCustomerInfo(customerId);
 
 			UpdateAmazonUserFeedbackInfo( databaseCustomer );
 		}
@@ -113,17 +113,17 @@ namespace EzBob.AmazonLib
             AmazonRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo(databaseCustomer, amazonSecurityInfo, "Test3");
 		}*/
 
-		private static void UpdateClientOrdersInfo( IDatabaseCustomer databaseCustomer )
+        private static void UpdateClientOrdersInfo(Customer databaseCustomer)
 		{
             //AmazonRetriveDataHelper.UpdateClientOrdersInfo(databaseCustomer, ActionAccessType.Full);
 		}
 
-		private static void UpdateClientInventoriesInfo( IDatabaseCustomer databaseCustomer )
+        private static void UpdateClientInventoriesInfo(Customer databaseCustomer)
 		{
             //AmazonRetriveDataHelper.UpdateClientInventoryInfo(databaseCustomer, ActionAccessType.Full);
 		}
 
-		private static void UpdateAmazonUserFeedbackInfo( IDatabaseCustomer databaseCustomer )
+        private static void UpdateAmazonUserFeedbackInfo(Customer databaseCustomer)
 		{
             //AmazonRetriveDataHelper.UpdateClientFeedbackInfo(databaseCustomer);
 		}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ApplicationMng.Model;
+using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
 using Iesi.Collections.Generic;
@@ -120,7 +121,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         AllStep = 4
     }
 
-    public class Customer 
+    public class Customer
 	{
         
         public Customer() 

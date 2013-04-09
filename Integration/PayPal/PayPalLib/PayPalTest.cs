@@ -1,5 +1,6 @@
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
+using EZBob.DatabaseLib.Model.Database;
 using EzBob.PayPalDbLib.Models;
 using EzBob.PayPalServiceLib.com.paypal.service;
 using StructureMap;
@@ -49,7 +50,7 @@ namespace EzBob.PayPal
 		public static void StoreTestData( int customerId )
 		{
 			// SandBox			
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+			var customer = GetCustomerInfo( customerId );
 			var payPalRermissionsGranted = new PayPalRermissionsGranted
 				{
 					RequestToken = "AAAAAAAVmrAQ76F.gMx3",
@@ -64,10 +65,10 @@ namespace EzBob.PayPal
 					UserId = "cvitaly@ukr.net"
 				};
 
-			PayPalRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo( databaseCustomer, secData, "Test PayPal Account" );
+			PayPalRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo( customer, secData, "Test PayPal Account" );
 		}
 
-		private static IDatabaseCustomer GetCustomerInfo( int customerId )
+		private static Customer GetCustomerInfo( int customerId )
 		{
 			return PayPalRetriveDataHelper.GetCustomerInfo( customerId );
 		}
