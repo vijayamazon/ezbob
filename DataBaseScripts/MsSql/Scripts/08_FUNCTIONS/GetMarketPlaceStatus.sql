@@ -43,8 +43,11 @@ set @status='Error'
 ELSE
 	IF (select COUNT (*) FROM @mt WHERE STATUS='Updating')>0
 	SET @status= 'Updating'
-	ELSE 
-		SET @status ='Completed'
+	ELSE
+		IF (select COUNT (*) FROM @mt WHERE STATUS='Completed')>0
+		SET @status= 'Completed'
+		ELSE 
+			SET @status ='N/A'
 RETURN @status
 end
 GO
