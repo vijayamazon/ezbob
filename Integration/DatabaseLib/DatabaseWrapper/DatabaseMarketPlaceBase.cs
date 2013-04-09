@@ -33,7 +33,9 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 			get { return _MarketplaceSeriveInfo.Description; }
 		}
 
-		public abstract IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper);
+	    public abstract IEnumerable<IDatabaseFunction> DatabaseFunctionList { get; }
+
+	    public abstract IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper);
 		public abstract IDatabaseFunction GetDatabaseFunctionById(Guid id);
 	}
 
@@ -52,8 +54,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		{
 		}
 
-		// for internal use only!!! 
-		protected internal IEnumerable<IDatabaseFunction> DatabaseFunctionList
+	    public override IEnumerable<IDatabaseFunction> DatabaseFunctionList
 		{
 			get
 			{
@@ -73,17 +74,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 	public abstract class DatabaseMarketplaceBase<T, TEnum> : DatabaseMarketplaceBase<TEnum>
 		where T : DatabaseMarketplaceBase<TEnum>, new()
 	{	
-		static DatabaseMarketplaceBase()
-		{			
-			InitDatabaseMarketplace(new T());
-		}
-
-		private static void InitDatabaseMarketplace(DatabaseMarketplaceBase<TEnum> mp)
-		{
-			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();			
-			helper.InitDatabaseMarketPlace(mp);
-		}
-
 		protected DatabaseMarketplaceBase(IMarketplaceServiceInfo marketplaceSeriveInfo) 
 			: base(marketplaceSeriveInfo)
 		{

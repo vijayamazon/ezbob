@@ -1,18 +1,10 @@
 using System;
-using EZBob.DatabaseLib.Common;
 using EzBob.CommonLib;
-using StructureMap;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.ValueType
 {
 	public class DatabaseValueType : IDatabaseValueType
 	{
-		static DatabaseValueType()
-		{
-            var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-			helper.InitValueTypes();
-		}
-
 		public static readonly IDatabaseValueType String	= new DatabaseValueType( DatabaseValueTypeEnum.String, new Guid( "{8F1988BD-2E11-4F86-9FEB-296FA70DA2CC}" ) );
 		public static readonly IDatabaseValueType DateTime	= new DatabaseValueType( DatabaseValueTypeEnum.DateTime, new Guid( "{1BA61EEA-982D-4A26-A3D2-9CA66DB9CA17}" ) );
 		public static readonly IDatabaseValueType Double	= new DatabaseValueType( DatabaseValueTypeEnum.Double, new Guid( "{97594E98-6B09-46AB-83ED-618678B327BE}" ) );
