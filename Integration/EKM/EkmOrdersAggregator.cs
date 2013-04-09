@@ -7,17 +7,17 @@ using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EKM
 {
-    internal class EkmOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<EkmOrderItem>, EkmOrderItem, EkmDatabaseFunctionType>
+    internal class EkmOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<EkmOrderItem>, EkmOrderItem, EkmDatabaseFunctionType>
     {
         public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<EkmOrderItem>, EkmOrderItem, EkmDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<EkmOrderItem> data, ICurrencyConvertor currencyConverter)
         {
-            return new EkmOrdersAgregator(data, currencyConverter);
+            return new EkmOrdersAggregator(data, currencyConverter);
         }
     }
 
-    internal class EkmOrdersAgregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<EkmOrderItem>, EkmOrderItem, EkmDatabaseFunctionType>
+    internal class EkmOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<EkmOrderItem>, EkmOrderItem, EkmDatabaseFunctionType>
     {
-        public EkmOrdersAgregator(ReceivedDataListTimeDependentInfo<EkmOrderItem> orders, ICurrencyConvertor currencyConvertor)
+        public EkmOrdersAggregator(ReceivedDataListTimeDependentInfo<EkmOrderItem> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
         }

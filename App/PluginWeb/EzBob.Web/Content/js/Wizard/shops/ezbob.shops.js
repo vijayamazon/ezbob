@@ -42,6 +42,7 @@
       this.EKMAccountInfoView = new EzBob.EKMAccountInfoView({
         model: this.ekmAccounts
       });
+<<<<<<< HEAD
       this.PayPointAccounts = new EzBob.PayPointAccounts();
       this.PayPointAccounts.fetch();
       this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
@@ -49,6 +50,15 @@
       });
       this.PayPointAccountInfoView = new EzBob.PayPointAccountInfoView({
         model: this.PayPointAccounts
+=======
+      this.volusionAccounts = new EzBob.VolusionAccounts();
+      this.volusionAccounts.fetch();
+      this.volusionButtonView = new EzBob.VolusionAccountButtonView({
+        model: this.volusionAccounts
+      });
+      this.volusionAccountInfoView = new EzBob.VolusionAccountInfoView({
+        model: this.volusionAccounts
+>>>>>>> Volusion Connector - first pre-alfa
       });
       this.stores = {
         "eBay": {
@@ -66,9 +76,15 @@
           button: this.ekmButtonView,
           active: 0
         },
+<<<<<<< HEAD
         "PayPoint": {
           view: this.PayPointAccountInfoView,
           button: this.PayPointButtonView,
+=======
+        "Volusion": {
+          view: this.volusionAccountInfoView,
+          button: this.volusionButtonView,
+>>>>>>> Volusion Connector - first pre-alfa
           active: 0
         }
       };

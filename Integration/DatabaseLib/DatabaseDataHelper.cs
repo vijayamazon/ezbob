@@ -836,6 +836,39 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(customerMarketPlace);
         }
 
+        public void StoreVolusionOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, VolusionOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+            LogData("Volusion Orders Data", customerMarketPlace, ordersData);
+
+            if (ordersData == null)
+                return;
+            
+            DateTime submittedDate = DateTime.UtcNow;;
+            var mpOrder = new MP_VolusionOrder {
+                CustomerMarketPlace = customerMarketPlace,
+                Created = submittedDate,
+                HistoryRecord = historyRecord
+            };
+
+            ordersData.ForEach(dataItem => {
+				var mpOrderItem = new MP_VolusionOrderItem {
+					Order = mpOrder,
+					NativeOrderId = dataItem.NativeOrderId,
+					TotalCost = dataItem.TotalCost,
+					CurrencyCode = dataItem.CurrencyCode,
+					PaymentDate = dataItem.PaymentDate,
+					PurchaseDate = dataItem.PurchaseDate,
+					OrderStatus = dataItem.OrderStatus,
+				};
+
+				mpOrder.OrderItems.Add(mpOrderItem);
+            });
+
+            customerMarketPlace.VolusionOrders.Add(mpOrder);
+            _CustomerMarketplaceRepository.Update(customerMarketPlace);
+        } // StoreVolusionOrdersData
+
         private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
         {
             if (categories == null)

@@ -62,13 +62,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ViewData["TargetsEnabled"] = _config.TargetsEnabled;
             ViewData["Config"] = _config;
 
-			// alexbo [ Apr 4 2013
 			ViewData["ActiveMarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
 				.Where(x => x.Active)
 				.Select(x => x.Name)
 				.ToArray();
-			// alexbo ] Apr 4 2013
 
             var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
 

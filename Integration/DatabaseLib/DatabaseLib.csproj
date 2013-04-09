@@ -104,6 +104,7 @@
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\VolusionOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
@@ -144,6 +145,10 @@
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrder.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderMap.cs" />
     <Compile Include="Model\PayPointCard.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrder.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItem.cs" />

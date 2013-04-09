@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
+    <Compile Include="Areas\Customer\Controllers\VolusionMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
@@ -859,6 +860,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editInstallment.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editFee.cshtml" />
     <Content Include="App_Browsers\generic.browser" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\VolusionShopNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointShopNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Login.cshtml" />
@@ -965,6 +968,9 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
+      <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
       <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
@@ -1306,6 +1312,10 @@
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
       <Name>PayPoint</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Volusion\Volusion.csproj">
+      <Project>{48fec03d-c021-4c8c-89e3-9f6dee55a55d}</Project>
+      <Name>Volusion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
       <Name>ZohoCRM</Name>
@@ -1459,6 +1469,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />

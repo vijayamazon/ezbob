@@ -19,6 +19,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			TeraPeakOrders = new HashedSet<MP_TeraPeakOrder>();
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
             EkmOrders = new HashedSet<MP_EkmOrder>();
+            VolusionOrders = new HashedSet<MP_VolusionOrder>();
 		}
         public virtual int Id { get; set; }
         public virtual MP_MarketplaceType Marketplace { get; set; }
@@ -48,6 +49,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual ISet<MP_AnalyisisFunctionValue> AnalysysFunctionValues { get; set; }
 
         public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
+        public virtual ISet<MP_VolusionOrder> VolusionOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
     }
 }

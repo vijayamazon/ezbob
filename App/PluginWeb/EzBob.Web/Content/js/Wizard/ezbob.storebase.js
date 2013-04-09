@@ -55,10 +55,8 @@ EzBob.StoreInfoBaseView = Backbone.View.extend({
             i = 0;
 
         _.each(this.stores, function (store) {
-			// alexbo [ Apr 3 2013
         	if (!store.active)
         		return;
-			// alexbo ] Apr 3 2013
 
             if ((i % 2) == 0) {
                 row = $("<div class='row-fluid'/>");
@@ -104,6 +102,9 @@ EzBob.StoreInfoBaseView = Backbone.View.extend({
         switch (storeName) {
             case "ekm":
                 this.$el.find('#ekm_login').focus();
+                break;
+            case 'volusion':
+                this.$el.find('#volusion_login').focus();
                 break;
             case "payPoint":
                 this.$el.find('#payPoint_login').focus();

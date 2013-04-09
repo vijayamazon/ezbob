@@ -128,6 +128,10 @@
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Volusion\Volusion.csproj">
+      <Project>{48FEC03D-C021-4C8C-89E3-9F6DEE55A55D}</Project>
+      <Name>Volusion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EzBob.csproj">
       <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
       <Name>EzBob</Name>
