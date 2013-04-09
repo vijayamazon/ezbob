@@ -5,8 +5,8 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.ApplicationCreator;
+using EzBob.Web.Areas.Customer.Controllers;
 using EzBob.Web.Areas.Customer.Controllers.Exceptions;
-using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
@@ -14,16 +14,15 @@ using PaymentServices.PacNet;
 using ZohoCRM;
 using log4net;
 
-namespace EzBob.Web.Areas.Customer.Controllers
+namespace EzBob.Web.Code
 {
     public interface ILoanCreator
     {
-        Loan CreateLoan(EZBob.DatabaseLib.Model.Database.Customer cus, decimal loan_amount, PayPointCard card, DateTime now);
+        Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
     }
 
     public class LoanCreator : ILoanCreator
     {
-        private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly ILoanHistoryRepository _loanHistoryRepository;
         private readonly IPacnetService _pacnetService;
         private readonly IAppCreator _appCreator;
@@ -32,10 +31,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IEzbobWorkplaceContext _context;
         private readonly LoanBuilder _loanBuilder;
 
-        private static readonly ILog log = LogManager.GetLogger(typeof (LoanCreator));
+        private static readonly ILog Log = LogManager.GetLogger(typeof (LoanCreator));
 
         public LoanCreator(
-            IPacnetPaypointServiceLogRepository logRepository, 
             ILoanHistoryRepository loanHistoryRepository, 
             IPacnetService pacnetService, 
             IAppCreator appCreator, 
@@ -44,7 +42,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IEzbobWorkplaceContext context, 
             LoanBuilder loanBuilder)
         {
-            _logRepository = logRepository;
             _loanHistoryRepository = loanHistoryRepository;
             _pacnetService = pacnetService;
             _appCreator = appCreator;
@@ -54,15 +51,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _loanBuilder = loanBuilder;
         }
 
-        public Loan CreateLoan(EZBob.DatabaseLib.Model.Database.Customer cus, decimal loan_amount, PayPointCard card, DateTime now)
+        public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
         {
             ValidateCustomer(cus);
 
-            ValidateAmount(loan_amount, cus);
+            ValidateAmount(loanAmount, cus);
 
             ValidateOffer(cus);
 
-            ValidateLoanDelay(cus, now);
+            ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
 
             var fee = 0M;
 
@@ -71,21 +68,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
             if (!cr.HasLoans && cr.UseSetupFee)
             {
                 var calculator = new SetupFeeCalculator();
-                fee = calculator.Calculate(loan_amount);
+                fee = calculator.Calculate(loanAmount);
             }
 
-            var transfered = loan_amount - fee;
+            var transfered = loanAmount - fee;
 
-            var name = GetCustomerNameForPacNet(cus);
-            string description = string.Format("EZBOB");
-
-            var ret = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
-                                                                  cus.BankAccount.AccountNumber, name, "ezbob", "GBP", description);
-            _pacnetService.CloseFile(cus.Id, "ezbob");
+            var ret = SendMoney(cus, transfered);
 
             cr.HasLoans = true;
 
-            var loan = _loanBuilder.CreateLoan(cr, loan_amount, now);
+            var loan = _loanBuilder.CreateLoan(cr, loanAmount, now);
 
             loan.Customer = cus;
             loan.Status = LoanStatus.Live;
@@ -107,18 +99,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                       };
             loan.AddTransaction(loanTransaction);
 
-            try
-            {
-                var aprCalc = new APRCalculator();
-                loan.APR = (decimal)aprCalc.Calculate(loan_amount, loan.Schedule, fee, now);
-            }
-            catch (Exception e)
-            {
-                //apr sometimes throws overflow exceptions
-            }
+            var aprCalc = new APRCalculator();
+            loan.APR = (decimal)aprCalc.Calculate(loanAmount, loan.Schedule, fee, now);
 
             cus.AddLoan(loan);
-            cus.CreditSum = cus.CreditSum - loan_amount;
+            cus.CreditSum = cus.CreditSum - loanAmount;
             if (fee > 0) cus.SetupFee = fee;
 
             _loanHistoryRepository.Save(new LoanHistory(loan, now));
@@ -132,25 +117,35 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return loan;
         }
 
-        public virtual void ValidateLoanDelay(EZBob.DatabaseLib.Model.Database.Customer customer, DateTime now)
+        private PacnetReturnData SendMoney(Customer cus, decimal transfered)
+        {
+            var name = GetCustomerNameForPacNet(cus);
+
+            var ret = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
+                                               cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
+            _pacnetService.CloseFile(cus.Id, "ezbob");
+            return ret;
+        }
+
+        public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period)
         {
             var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
             if (lastLoan == null) return;
             var diff = now.Subtract(lastLoan.Date);
-            if (diff < TimeSpan.FromMinutes(1))
+            if (diff < period)
             {
                 var msg = string.Format("New loan requested within {0} seconds.", diff.TotalSeconds);
-                log.Error(msg);
+                Log.Error(msg);
                 throw new LoanDelayViolationException(msg);
             }
         }
 
-        public virtual void ValidateOffer(EZBob.DatabaseLib.Model.Database.Customer cus)
+        public virtual void ValidateOffer(Customer cus)
         {
             cus.ValidateOfferDate();
         }
 
-        public virtual void ValidateCustomer(EZBob.DatabaseLib.Model.Database.Customer cus)
+        public virtual void ValidateCustomer(Customer cus)
         {
             if (cus == null || cus.PersonalInfo == null || cus.BankAccount == null)
             {
@@ -178,27 +173,27 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         }
 
-        public virtual void ValidateAmount(decimal loanAmount, EZBob.DatabaseLib.Model.Database.Customer cus)
+        public virtual void ValidateAmount(decimal loanAmount, Customer customer)
         {
             if (loanAmount <= 0)
             {
                 throw new ArgumentException();
             }
 
-            if (cus.CreditSum < loanAmount)
+            if (customer.CreditSum < loanAmount)
             {
                 throw new ArgumentException();
             }
         }
 
 
-        public virtual string GetCustomerNameForPacNet(EZBob.DatabaseLib.Model.Database.Customer cus)
+        public virtual string GetCustomerNameForPacNet(Customer customer)
         {
-            string name = string.Format("{0} {1}", cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname);
+            string name = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname);
 
             if (name.Length > 18)
             {
-                name = cus.PersonalInfo.Surname;
+                name = customer.PersonalInfo.Surname;
             }
 
             if (name.Length > 18)

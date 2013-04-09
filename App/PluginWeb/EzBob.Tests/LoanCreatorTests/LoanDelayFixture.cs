@@ -21,7 +21,7 @@ namespace EzBob.Tests.LoanCreatorTests
         {
             Assert.DoesNotThrow(() =>
             {
-                _lc.ValidateLoanDelay(_customer, DateTime.UtcNow);
+                _lc.ValidateLoanDelay(_customer, DateTime.UtcNow, TimeSpan.FromMinutes(1));
             });
         }
 
@@ -34,7 +34,7 @@ namespace EzBob.Tests.LoanCreatorTests
             
             Assert.Throws<LoanDelayViolationException>(() =>
             {
-                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(20));
+                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(20), TimeSpan.FromMinutes(1));
             });
         }
 
@@ -50,7 +50,7 @@ namespace EzBob.Tests.LoanCreatorTests
             
             Assert.Throws<LoanDelayViolationException>(() =>
             {
-                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(20));
+                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(20), TimeSpan.FromMinutes(1));
             });
         }
 
@@ -63,7 +63,7 @@ namespace EzBob.Tests.LoanCreatorTests
             
             Assert.DoesNotThrow(() =>
             {
-                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(80));
+                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(80), TimeSpan.FromMinutes(1));
             });
         }
 
@@ -79,7 +79,7 @@ namespace EzBob.Tests.LoanCreatorTests
 
             Assert.DoesNotThrow(() =>
             {
-                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(80));
+                _lc.ValidateLoanDelay(_customer, loanStart.AddSeconds(80), TimeSpan.FromMinutes(1));
             });
         }
     }

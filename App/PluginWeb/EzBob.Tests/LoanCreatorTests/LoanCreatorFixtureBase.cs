@@ -23,8 +23,6 @@ namespace EzBob.Tests.LoanCreatorTests
         [SetUp]
         public void Init()
         {
-
-            var logRepository = new Mock<IPacnetPaypointServiceLogRepository>();
             var loanHistoryRepository = new Mock<ILoanHistoryRepository>();
 
             var pacnetService = new Mock<IPacnetService>();
@@ -37,7 +35,7 @@ namespace EzBob.Tests.LoanCreatorTests
             var context = new Mock<IEzbobWorkplaceContext>();
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
-            _lc = new LoanCreator(logRepository.Object, loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder);
+            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder);
             SetUp();
         }
 
