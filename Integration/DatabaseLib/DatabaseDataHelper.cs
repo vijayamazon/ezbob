@@ -780,6 +780,11 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(customerMarketPlace);
         }
 
+        public void StorePayPointOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+        {
+            // qqq - do stuff
+        }
+
         public void StoreEkmOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
