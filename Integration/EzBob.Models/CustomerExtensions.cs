@@ -101,6 +101,13 @@ namespace EzBob.Web.Areas.Customer.Models
             return simpleMarketPlaceModels;
         }
 
+        public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.Id == 5); // qqq - should take this number from DB
+            var simpleMarketPlaceModels = marketplaces.Select((m) => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+            return simpleMarketPlaceModels;
+        }
+
         public static List<MP_CustomerMarketPlace> GetAmazonMP(this EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             var amazon = new AmazonDatabaseMarketPlace();

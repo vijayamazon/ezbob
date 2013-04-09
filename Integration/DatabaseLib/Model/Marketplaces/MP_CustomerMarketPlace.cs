@@ -48,5 +48,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual ISet<MP_AnalyisisFunctionValue> AnalysysFunctionValues { get; set; }
 
         public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
+        public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
     }
 }

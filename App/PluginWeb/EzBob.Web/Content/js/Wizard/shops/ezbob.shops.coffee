@@ -19,9 +19,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @ekmAccounts.fetch()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
-
-        # alexbo [ Apr 3 2013
-        # Added active field
+        
+        @PayPointAccounts = new EzBob.PayPointAccounts()
+        @PayPointAccounts.fetch()
+        @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
+        @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
         @stores =
             "eBay":
@@ -35,6 +37,10 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
             "EKM":
                 view: @EKMAccountInfoView
                 button: @ekmButtonView
+                active: 0
+            "PayPoint":
+                view: @PayPointAccountInfoView
+                button: @PayPointButtonView
                 active: 0
 
          for j in EzBob.Config.ActiveMarketPlaces

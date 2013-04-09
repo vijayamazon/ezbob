@@ -43,6 +43,14 @@
     background-position: 0px -1176px;
 }
 
+.PayPoint-logo {
+    background-position: 0px -1920px;
+}
+
+.PayPoint-logo:hover {
+    background-position: 0px -1764px;
+}
+
 
 
 

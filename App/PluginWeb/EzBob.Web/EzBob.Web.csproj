@@ -819,6 +819,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editInstallment.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanEditor\editFee.cshtml" />
     <Content Include="App_Browsers\generic.browser" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointShopNotification.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
@@ -922,6 +924,9 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
+      <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.js">
       <DependentUpon>ezbob.shopslistview.coffee</DependentUpon>
@@ -1413,6 +1418,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

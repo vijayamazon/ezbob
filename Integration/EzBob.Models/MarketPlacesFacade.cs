@@ -233,6 +233,10 @@ namespace EzBob.Web.Areas.Underwriter
             {
                 sellerInfoStoreUrl = "https://www.google.com/search?q=ekm+" + mp.DisplayName;
             }
+            else if (mp.Marketplace.Name == "PayPoint")
+            {
+                sellerInfoStoreUrl = "https://www.google.com/search?q=payPoint+" + mp.DisplayName;
+            }
             else if (!isAmazon)
             {
                 sellerInfoStoreUrl = ebayUserData != null &&

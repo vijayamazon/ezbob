@@ -42,6 +42,14 @@
       this.EKMAccountInfoView = new EzBob.EKMAccountInfoView({
         model: this.ekmAccounts
       });
+      this.PayPointAccounts = new EzBob.PayPointAccounts();
+      this.PayPointAccounts.fetch();
+      this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
+        model: this.PayPointAccounts
+      });
+      this.PayPointAccountInfoView = new EzBob.PayPointAccountInfoView({
+        model: this.PayPointAccounts
+      });
       this.stores = {
         "eBay": {
           view: this.EbayStoreView,
@@ -56,6 +64,11 @@
         "EKM": {
           view: this.EKMAccountInfoView,
           button: this.ekmButtonView,
+          active: 0
+        },
+        "PayPoint": {
+          view: this.PayPointAccountInfoView,
+          button: this.PayPointButtonView,
           active: 0
         }
       };

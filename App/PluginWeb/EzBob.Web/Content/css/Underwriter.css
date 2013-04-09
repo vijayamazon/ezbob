@@ -171,7 +171,7 @@ table.rright tbody td:not(:first-child) {
 
 
 
-.shop-eBay, .shop-Amazon, .shop-EKM {
+.shop-eBay, .shop-Amazon, .shop-EKM, .shop-PayPoint {
     background-image: url(../img/store-logos.png);
     width: 119px;
     height: 35px;
@@ -188,6 +188,11 @@ table.rright tbody td:not(:first-child) {
 
 .shop-EKM {
     background-position: 0 -70px;
+}
+
+.shop-PayPoint {
+    background-position: 0 -105px;
+    margin-left: 20px;
 }
 
 .marketplace-table tr {

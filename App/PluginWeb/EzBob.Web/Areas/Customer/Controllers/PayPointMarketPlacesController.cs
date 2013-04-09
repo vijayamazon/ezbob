@@ -13,6 +13,9 @@ using EzBob.Web.Models.Strings;
 using log4net;
 using EzBob.CommonLib.Security;
 using EzBob.Web.ApplicationCreator;
+using EZBob.DatabaseLib;
+using EzBob.CommonLib;
+using EzBob.CommonLib.Security;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -26,9 +29,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private EZBob.DatabaseLib.Model.Database.Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
+        private readonly DatabaseDataHelper _helper;
+        private int payPointMarketTypeId;
 
         public PayPointMarketPlacesController(
-            IEzbobWorkplaceContext context, 
+            IEzbobWorkplaceContext context,
+            DatabaseDataHelper helper, 
             ICustomerRepository customers, 
             IRepository<MP_MarketplaceType> mpTypes, 
             IRepository<MP_CustomerMarketPlace> marketplaces, 
@@ -36,22 +42,20 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IAppCreator appCreator)
         {
             _context = context;
+            _helper = helper;
             _customers = customers;
             _mpTypes = mpTypes;
             _marketplaces = marketplaces;
             _customer = context.Customer;
             _mpChecker = mpChecker;
             _appCreator = appCreator;
+            payPointMarketTypeId = 5; // qqq - SELECT Id FROM MP_MarketPlaceType WHERE Name = 'PayPoint'
         }
 
         [Transactional]
         public JsonNetResult Accounts()
         {
-            // qqq
-            // insert to MP_MarketPlaceType
-            // here i should fetch this number from DB
-            // 7 should be marketplace id from db
-            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == 7).Select(a => PayPointAccountModel.ToModel(a)).ToList();
+            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == payPointMarketTypeId).Select(a => PayPointAccountModel.ToModel(a)).ToList();
             return this.JsonNet(payPoints);
         }
 
@@ -70,11 +74,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 var customer = _context.Customer;
                 var username = model.mid;
-                var payPoint = new PayPointDatabaseMarketPlace();
-                _mpChecker.Check(payPoint.InternalId, customer, username);
+                var payPoint1 = new PayPointDatabaseMarketPlace();
+
+                _mpChecker.Check(payPoint1.InternalId, customer, username);
+
+                var payPointSecurityInfo = new PayPointSecurityInfo(model.id, model.remotePassword, model.vpnPassword, model.mid);
+
+                var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPoint1, payPointSecurityInfo, customer);
+
+
+                /* all of this code happens in SaveOrUpdateCustomerMarketplace (qqq - i should make sure)
                 var mp = new MP_CustomerMarketPlace
                              {
-                                 Marketplace = _mpTypes.Get(7), // qqq 7 should be marketplace id from db
+                                 Marketplace = _mpTypes.Get(payPointMarketTypeId),
                                  DisplayName = model.mid,
                                  SecurityData = Encryptor.EncryptBytes(model.vpnPassword), // qqq what does it mean?
                                  // probably should add column to MP_CustomerMarketPlace to hold the second password...
@@ -85,9 +97,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                  UpdatingEnd = DateTime.UtcNow
                              };
 
-                _customer.CustomerMarketPlaces.Add(mp);
-                _appCreator.EbayAdded(customer, mp.Id); // qqq - should be different strategy
-                return this.JsonNet(PayPointAccountModel.ToModel(mp));
+                _customer.CustomerMarketPlaces.Add(mp);*/
+                _appCreator.EbayAdded(customer, payPoint.Id); // qqq - should be different strategy
+                //return this.JsonNet(PayPointAccountModel.ToModel(payPoint.Marketplace));
+
+                return this.JsonNet(new { msg = "Congratulations. Your PayPoint was added successfully." });
             }
             catch (MarketPlaceAddedByThisCustomerException e)
             {
@@ -116,12 +130,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         public static PayPointAccountModel ToModel(MP_CustomerMarketPlace account)
         {
+            PayPointSecurityInfo i = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
+             
             return new PayPointAccountModel()
                        {
-                           id = account.Id,
-                           mid = account.DisplayName,
-                           vpnPassword = Encryptor.Decrypt(account.SecurityData),
-                           remotePassword = Encryptor.Decrypt(account.SecurityData) // qqq - should be another password (new coulm in MP_CustomerMarketPlace)
+                           id = i.MarketplaceId,
+                           mid = i.Mid,
+                           vpnPassword = i.VpnPassword,
+                           remotePassword = i.RemotePassword
                        };
         }
     }

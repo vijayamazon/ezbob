@@ -91,13 +91,8 @@ namespace PayPoint
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            PayPointSecurityInfo payPointSecurityInfo = new PayPointSecurityInfo();
             IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-            payPointSecurityInfo.VpnPassword = Encryptor.Decrypt(customerMarketPlace.SecurityData);
-            payPointSecurityInfo.RemotePassword = Encryptor.Decrypt(customerMarketPlace.SecurityData); // qqq - should be something else - add column to MP_CustomerMarketPlace
-            payPointSecurityInfo.Mid = customerMarketPlace.DisplayName;
-            payPointSecurityInfo.MarketplaceId = customerMarketPlace.Id;
-            return payPointSecurityInfo;
+            return SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(customerMarketPlace.SecurityData);
         }
 
         private IEnumerable<IWriteDataInfo<PayPointDatabaseFunctionType>> CreateOrdersAggregationInfo(PayPointOrdersList orders, ICurrencyConvertor currencyConverter)

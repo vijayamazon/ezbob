@@ -783,7 +783,64 @@ namespace EZBob.DatabaseLib
 
         public void StorePayPointOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            // qqq - do stuff
+            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+            LogData("PayPoint Orders Data", customerMarketPlace, ordersData);
+
+            if (ordersData == null)
+            {
+                return;
+            }
+
+            DateTime submittedDate = DateTime.UtcNow;
+            var mpOrder = new MP_PayPointOrder
+            {
+                CustomerMarketPlace = customerMarketPlace,
+                Created = submittedDate,
+                HistoryRecord = historyRecord
+            };
+
+            ordersData.ForEach(
+                dataItem =>
+                {
+                    var mpOrderItem = new MP_PayPointOrderItem
+                    {
+                        Order = mpOrder,
+                        acquirer = dataItem.acquirer,
+                        amount = dataItem.amount,
+                        auth_code = dataItem.auth_code,
+                        authorised = dataItem.authorised,
+                        card_type = dataItem.card_type,
+                        cid = dataItem.cid,
+                        classType = dataItem.classType,
+                        company_no = dataItem.company_no,
+                        country = dataItem.country,
+                        currency = dataItem.currency,
+                        cv2avs = dataItem.cv2avs,
+                        date = dataItem.date,
+                        deferred = dataItem.deferred,
+                        emvValue = dataItem.emvValue,
+                        ExpiryDate = dataItem.ExpiryDate,
+                        fraud_code = dataItem.fraud_code,
+                        FraudScore = dataItem.FraudScore,
+                        ip = dataItem.ip,
+                        lastfive = dataItem.lastfive,
+                        merchant_no = dataItem.merchant_no,
+                        message = dataItem.message,
+                        MessageType = dataItem.MessageType,
+                        mid = dataItem.mid,
+                        name = dataItem.name,
+                        options = dataItem.options,
+                        start_date = dataItem.start_date,
+                        status = dataItem.status,
+                        tid = dataItem.tid,
+                        trans_id = dataItem.trans_id
+                    };
+                    mpOrder.OrderItems.Add(mpOrderItem);
+                });
+
+            customerMarketPlace.PayPointOrders.Add(mpOrder);
+            _CustomerMarketplaceRepository.Update(customerMarketPlace);
         }
 
         public void StoreEkmOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)

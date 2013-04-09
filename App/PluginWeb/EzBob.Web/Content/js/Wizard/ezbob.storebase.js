@@ -105,6 +105,9 @@ EzBob.StoreInfoBaseView = Backbone.View.extend({
             case "ekm":
                 this.$el.find('#ekm_login').focus();
                 break;
+            case "payPoint":
+                this.$el.find('#payPoint_login').focus();
+                break;
             case 'bank-account':
                 this.$el.find('#AccountNumber').focus();
                 break;
