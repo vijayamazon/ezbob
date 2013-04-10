@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
@@ -14,6 +15,11 @@ namespace EKM
         public IDatabaseFunction GetById(Guid id)
         {
             return EKMDatabaseFunctionStorage.Instance.GetFunctionById(id);
+        }
+
+        public IEnumerable<IDatabaseFunction> GetAll()
+        {
+            return EKMDatabaseFunctionStorage.Instance.AllFunctions();
         }
     }
 }

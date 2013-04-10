@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
@@ -14,6 +15,11 @@ namespace PayPoint
         public IDatabaseFunction GetById(Guid id)
         {
             return PayPointDatabaseFunctionStorage.Instance.GetFunctionById(id);
+        }
+
+        public IEnumerable<IDatabaseFunction> GetAll()
+        {
+            return PayPointDatabaseFunctionStorage.Instance.AllFunctions();
         }
     }
 }
