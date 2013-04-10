@@ -7,7 +7,7 @@ using StructureMap;
 
 namespace EzBob.PayPal
 {
-	public class PayPalDatabaseMarketPlace : DatabaseMarketplaceBase<PayPalDatabaseMarketPlace, PayPalDatabaseFunctionType>
+	public class PayPalDatabaseMarketPlace : DatabaseMarketplaceBase<PayPalDatabaseFunctionType>
 	{
 		/*static PayPalDatabaseMarketPlace()
 		{

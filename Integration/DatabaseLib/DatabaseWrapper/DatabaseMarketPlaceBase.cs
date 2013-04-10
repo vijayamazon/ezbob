@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 using EzBob.CommonLib;
-using StructureMap;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
@@ -41,14 +39,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 
 	public abstract class DatabaseMarketplaceBase<TEnum> : DatabaseMarketplaceBaseBase		
 	{		
-		/*protected static void InitDatabaseMarketplace<T>()
-			where T : DatabaseMarketplaceBase<TEnum>, new()
-		{
-			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-			var mp = new T();
-			helper.InitDatabaseMarketPlace(mp);
-		}*/
-
 		protected DatabaseMarketplaceBase( IMarketplaceServiceInfo marketplaceSeriveInfo ) 
 			: base(marketplaceSeriveInfo)
 		{
@@ -70,15 +60,4 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		}
 	
 	}
-
-	public abstract class DatabaseMarketplaceBase<T, TEnum> : DatabaseMarketplaceBase<TEnum>
-		where T : DatabaseMarketplaceBase<TEnum>, new()
-	{	
-		protected DatabaseMarketplaceBase(IMarketplaceServiceInfo marketplaceSeriveInfo) 
-			: base(marketplaceSeriveInfo)
-		{
-		}
-	}
-
-	
 }
