@@ -207,7 +207,7 @@ ul.star li{background:url(images/star.png) no-repeat 0 0; padding:0 0 0 30px;}
 .form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
 .form_field:focus{border:1px #666 solid;}
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
-label span.required{color:#c00;}
+label span.required, p span.required {color:#c00;}
 
 /*----table for payment schedule-----*/
 table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;

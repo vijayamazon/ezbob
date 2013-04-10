@@ -7,7 +7,7 @@
 	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix form-horizontal"}))
+@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
 {
 	<div class="inner">
 		<section id="content">
@@ -18,14 +18,14 @@
 			<p>Complete the details below to begin</p>
 			<form name="form" action="#" method="post">
 				<label>Email Address <span class="required">*</span></label>
-				<input type="text" name="text" id="" value="" size="60" tabindex="1" class="form_field">
+				<input type="text" name="Email" id="signupEmail" value="" tabindex="1" />
 				<label>Password <span class="required">*</span></label>
-				<input type="password" name="password" id="password" value="" size="60" tabindex="2" class="form_field">
+				<input type="password" name="signupPass1" id="signupPass1" value="" tabindex="2" />
 				<label>Confirm Password <span class="required">*</span></label>
-				<input type="password" name="confirm_password" id="confirm_password" value="" size="60" tabindex="3" class="form_field">
+				<input type="password" name="signupPass2" id="signupPass2" value="" tabindex="3" />
 
 				<label>Select a Secret Question <span class="required">*</span></label>
-				<select name="secret_question" id="secret_question" class="form_field" tabindex="4">
+				<select name="securityQuestion" id="securityQuestion" class="chzn-select" tabindex="4">
 					@if (securityQuestions != null) {
 						foreach (SecurityQuestion item in securityQuestions) {
 							<option value="@item.Id">@item.Name</option>
@@ -34,12 +34,12 @@
 				</select>
 
 				<label>Secret Answer <span class="required">*</span></label>
-				<input type="text" name="secret_answer" id="secret_answer" value="" size="60" tabindex="5" class="form_field">
+				<input type="text" name="SecurityAnswer" id="SecurityAnswer" value="" size="60" tabindex="5" />
 
 				@EzForm.Captcha(captchamode)
 
 				<br><br>
-				<input type="submit" name="submit" id="btn" value="Conitnue &raquo;" class="button green"> 
+				<input type="submit" id="btn" value="Conitnue &raquo;" class="button green"> 
 			</form>
 		</section>
 	</div>

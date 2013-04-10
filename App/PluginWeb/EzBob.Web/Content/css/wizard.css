@@ -6,13 +6,9 @@
     padding-bottom: 0px !important;
     padding-right: 10px !important;
 }
-#signupEmail, #signupPass1, #signupPass2, #SecurityAnswer {
-    width: 200px;
-}
-#securityQuestion{
-    width: 208px;
-}
+#signupEmail, #signupPass1, #signupPass2, #SecurityAnswer { width: 400px; }
 
+#securityQuestion{ width: 408px; }
 
 #wizard {
     padding: 0 61px;    
