@@ -10,30 +10,27 @@
             {
                 <li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated</a></li>
             }
+            <li><a href="#customers/pending" data-target="#pending" data-toggle="tab">Pending</a></li>
             <li><a href="#customers/approved" data-target="#approved" data-toggle="tab">Approved</a></li>
             <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
             <li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
             <li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
             <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered customers</a></li>
+            <li><a href="#customers/loans" data-target="#loans" data-toggle="tab">Loans</a></li>
         </ul>
         <div class="tab-content customer-grids">
-            <div class="tab-pane active" id="waiting">
-            </div>
+            <div class="tab-pane active" id="waiting"></div>
             @if (Model.Escalated != null)
             {
-            <div class="tab-pane" id="escalated">
-            </div>
+                <div class="tab-pane" id="escalated"></div>
             }
-            <div class="tab-pane" id="approved">
-            </div>
-            <div class="tab-pane" id="late">
-            </div>
-            <div class="tab-pane" id="rejected">
-            </div>
-            <div class="tab-pane" id="all">
-            </div>
-            <div class="tab-pane" id="RegisteredCustomers">
-            </div>
+            <div class="tab-pane" id="pending"></div>
+            <div class="tab-pane" id="approved"></div>
+            <div class="tab-pane" id="late"></div>
+            <div class="tab-pane" id="rejected"></div>
+            <div class="tab-pane" id="all"></div>
+            <div class="tab-pane" id="RegisteredCustomers"></div>
+            <div class="tab-pane" id="loans"></div>
         </div>
     </div>
 </div>
@@ -66,11 +63,13 @@
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
                     },
+                    { el: '#pending', url: '@Url.Action(@Model.Pending.Action, new {Area = "Underwriter"})', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
                     { el: '#approved', url: '@Url.Action(@Model.Approved.Action, new {Area = "Underwriter"})', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
                     { el: '#late', url: '@Url.Action(@Model.Late.Action, new {Area = "Underwriter"})', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
                     { el: '#rejected', url: '@Url.Action(@Model.Rejected.Action, new {Area = "Underwriter"})', model: @Model.Rejected.ColModel, names: @Model.Rejected.ColNames },
                     { el: '#all', url: '@Url.Action(@Model.All.Action, new {Area = "Underwriter"})', model: @Model.All.ColModel, names: @Model.All.ColNames },
-                    { el: '#RegisteredCustomers', url: '@Url.Action(@Model.RegisteredCustomers.Action, new {Area = "Underwriter"})', model: @Model.RegisteredCustomers.ColModel, names: @Model.RegisteredCustomers.ColNames }
+                    { el: '#RegisteredCustomers', url: '@Url.Action(@Model.RegisteredCustomers.Action, new {Area = "Underwriter"})', model: @Model.RegisteredCustomers.ColModel, names: @Model.RegisteredCustomers.ColNames },
+                    { el: '#loans', url: '@Url.Action(@Model.Loans.Action, new {Area = "Underwriter"})', model: @Model.Loans.ColModel, names: @Model.Loans.ColNames },
                 ]
             };
 

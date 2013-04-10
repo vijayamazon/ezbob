@@ -74,11 +74,11 @@ namespace EzBob.Web.Areas.Underwriter
                 });
         }
 
-        public static void CreateCartColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateCartColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel, bool showIcon = false)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Cart",
+                    Caption = "Cart Icon",
                     Name = "Medal",
                     Index = "Medal",
                     Resizable = false,
@@ -89,6 +89,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Search = false,
                     Width = 50,
                     DataType = TypeCode.String,
+                    Formatter = showIcon ? "showMedalIcon" : "",
                     Data = x => x.Medal.HasValue ? x.Medal.ToString() : "-"
                 });
         }
@@ -414,6 +415,25 @@ namespace EzBob.Web.Areas.Underwriter
             });
         }
 
+        public static void CreateEkmStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Ekm status",
+                Name = "EkmStatus",
+                Index = "EkmStatus",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Width = 115,
+                Search = false,
+                DataType = TypeCode.String,
+                Data = x => x.EkmStatus
+            });
+        }
+
         public static void CreatePayPalStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -471,6 +491,8 @@ namespace EzBob.Web.Areas.Underwriter
                 Data = x => GetDelinquency(x)
             });
         }
+
+        
 
         public static int GetDelinquency(EZBob.DatabaseLib.Model.Database.Customer customer)
         {

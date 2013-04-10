@@ -95,6 +95,12 @@ $.fn.fmatter.profileWithTypeLink = function (cellval, opts) {
     return link;
 };
 
+$.fn.fmatter.showMedalIcon = function (cellval) {
+    var text = cellval.text || cellval;
+    var element = "<i data-toggle=\"tooltip\" title=\"{1}\" class=\"{0}\"></i>".f(text.toLowerCase(), text);
+    return element;
+};
+
 $.fn.fmatter.profileLink = function (cellval, opts) {
     var href = "#profile/" + (cellval.id || cellval);
     var text = cellval.text || cellval;

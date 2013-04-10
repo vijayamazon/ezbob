@@ -198,6 +198,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
             Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
+            Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
             Map(x => x.WizardStep).CustomType(typeof(WizardStepType));
 
 		}

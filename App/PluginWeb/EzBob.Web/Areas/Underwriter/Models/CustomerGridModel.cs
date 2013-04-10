@@ -14,11 +14,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
     {
         public CustomerGridModel WaitingForDecision { get; set; }
         public CustomerGridModel Escalated { get; set; }
+        public CustomerGridModel Pending { get; set; }
         public CustomerGridModel Approved { get; set; }
         public CustomerGridModel Rejected { get; set; }
         public CustomerGridModel All { get; set; }
         public CustomerGridModel RegisteredCustomers { get; set; }
         public CustomerGridModel Late { get; set; }
+        public CustomerGridModel Loans { get; set; }
         public IEzBobConfiguration Config { get; set; }
         public decimal MaxLoan { get; set; }
     }

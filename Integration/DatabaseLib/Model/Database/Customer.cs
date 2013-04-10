@@ -316,6 +316,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string EbayStatus { get; set; }
         public virtual string AmazonStatus { get; set; }
         public virtual string PayPalStatus { get; set; }
+        public virtual string EkmStatus { get; set; }
         public virtual WizardStepType WizardStep { get; set; }
 
         public virtual CollectionStatus CollectionStatus

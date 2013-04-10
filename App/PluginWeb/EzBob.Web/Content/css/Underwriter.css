@@ -503,3 +503,21 @@ table tr.editing td{
     height: 95%;
     resize: none; 
 }
+
+i.gold,i.silver,i.platinum {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    background-repeat: no-repeat;
+}
+i.gold {
+    background-image: url(../img/basket-gold-32.png);
+}
+
+i.silver {
+    background-image: url(../img/basket-silver-32.png);
+}
+
+i.platinum {
+    background-image: url(../img/basket-platinum-32.png);
+}
