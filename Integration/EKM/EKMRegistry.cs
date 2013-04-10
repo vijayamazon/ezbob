@@ -9,7 +9,7 @@ namespace EKM
     {
         public PluginRegistry()
         {
-            For<IDatabaseMarketplace>().Use<EkmDatabaseMarketPlace>().Named("EKM");
+            For<IMarketplaceType>().Use<EkmDatabaseMarketPlace>().Named("EKM");
             For<DatabaseMarketplaceBase<EkmDatabaseFunctionType>>().Use<EkmDatabaseMarketPlace>();
             For<IMarketplaceRetrieveDataHelper>().Use<EkmRetriveDataHelper>().Named("EKM");
         }
