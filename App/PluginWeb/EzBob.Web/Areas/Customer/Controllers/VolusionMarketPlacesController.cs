@@ -85,8 +85,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			try {
 				var customer = _context.Customer;
 				var username = model.login;
-				var ekm = new VolusionDatabaseMarketPlace();
-				_mpChecker.Check(ekm.InternalId, customer, username);
+				var volusion = new VolusionDatabaseMarketPlace();
+
+				_mpChecker.Check(volusion.InternalId, customer, username);
 
 				var oVsi = new VolusionServiceInfo();
 

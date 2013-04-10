@@ -4,7 +4,7 @@ root.EzBob = root.EzBob or {}
 class EzBob.VolusionAccountButtonView extends EzBob.StoreButtonWithListView
     initialize: ->
         @listView = new EzBob.StoreListView({ model: this.model })
-        super({name: 'volusion', logoText: ''})
+        super({name: 'Volusion', logoText: ''})
     update: ->
         @model.fetch()
 
