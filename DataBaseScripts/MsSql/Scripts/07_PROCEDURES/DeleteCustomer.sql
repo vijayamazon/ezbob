@@ -159,7 +159,7 @@ BEGIN TRANSACTION DeleteCustomer
 		(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID)
 
 	DELETE FROM MP_AnalyisisFunctionValues WHERE CustomerMarketPlaceId IN 
-		(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = CustomerID)
+		(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID)
 		
 	DELETE FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID
 
