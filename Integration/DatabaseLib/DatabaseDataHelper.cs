@@ -71,7 +71,7 @@ namespace EZBob.DatabaseLib
         private readonly MP_EbayOrderRepository _MP_EbayOrderRepository;
         private readonly MP_EbayTransactionsRepository _MP_EbayTransactionsRepository;
         private readonly ConcurrentDictionary<string, MP_EBayOrderItemDetail> _CacheEBayOrderItemInfo = new ConcurrentDictionary<string, MP_EBayOrderItemDetail>();
-        private readonly ConcurrentDictionary<IDatabaseMarketplace, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IDatabaseMarketplace, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
+        private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
         private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
         private ISession _session;
 
@@ -146,7 +146,7 @@ namespace EZBob.DatabaseLib
             var oldData = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
             var customer = databaseCustomerMarketPlace.Customer;
-            IDatabaseMarketplace databaseMarketplaceType = databaseCustomerMarketPlace.Marketplace;
+            IMarketplaceType databaseMarketplaceType = databaseCustomerMarketPlace.Marketplace;
 
             MP_MarketplaceType marketplaceType = GetMarketPlace(databaseMarketplaceType);
             oldData.Customer = customer;
@@ -157,7 +157,7 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(oldData);
         }
 
-        public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(Customer customer, IDatabaseMarketplace databaseMarketplace)
+        public IEnumerable<IDatabaseCustomerMarketPlace> GetCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace)
         {
             MP_MarketplaceType marketplaceType = GetMarketPlace(databaseMarketplace);
 
@@ -171,7 +171,7 @@ namespace EZBob.DatabaseLib
             return GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
         }
 
-        public IDatabaseCustomerMarketPlace GetDatabaseCustomerMarketPlace(IDatabaseMarketplace marketplaceType, int customerMarketPlaceId)
+        public IDatabaseCustomerMarketPlace GetDatabaseCustomerMarketPlace(IMarketplaceType marketplaceType, int customerMarketPlaceId)
         {
             MP_CustomerMarketPlace mp = GetCustomerMarketPlace(customerMarketPlaceId);
             var customer = mp.Customer;
@@ -193,7 +193,7 @@ namespace EZBob.DatabaseLib
             return _AnalyisisFunctionRepository.Get(databaseFunction.InternalId);
         }
 
-        private void AddFunctionIfNotExists(IDatabaseFunction func, IDatabaseMarketplace databaseMarketplace)
+        private void AddFunctionIfNotExists(IDatabaseFunction func, IMarketplaceType databaseMarketplace)
         {
             MP_ValueType mpValueType = GetValueType(func.FunctionValueType);
 
@@ -514,7 +514,7 @@ namespace EZBob.DatabaseLib
             }
         }
 
-        public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IDatabaseMarketplace marketplaceType, IMarketPlaceSecurityInfo securityData, Customer customer)
+        public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IMarketplaceType marketplaceType, IMarketPlaceSecurityInfo securityData, Customer customer)
         {
             var serializedSecurityData = SerializeDataHelper.Serialize(securityData);
             int customerMarketPlaceId;
@@ -548,7 +548,7 @@ namespace EZBob.DatabaseLib
             return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
         }
 
-        public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IDatabaseMarketplace marketplaceType, int customerId)
+        public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, int customerId)
         {
             return _CustomerMarketplaceRepository.Get(customerId, marketplaceType.InternalId, marketPlaceName);
         }
@@ -558,19 +558,19 @@ namespace EZBob.DatabaseLib
             return _MarketPlaceRepository.Get(marketPlaceId);
         }
 
-        private MP_MarketplaceType GetMarketPlace(IDatabaseMarketplace databaseMarketplace)
+        private MP_MarketplaceType GetMarketPlace(IMarketplaceType databaseMarketplace)
         {
             return _MarketPlaceRepository.Get(databaseMarketplace.InternalId);
         }
 
 
-        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IDatabaseMarketplace databaseMarketplace, Customer databaseCustomer)
+        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer)
         {
             MP_CustomerMarketPlace mpCustomerMarketPlace = GetExistsCustomerMarketPlace(marketPlaceName, databaseMarketplace, databaseCustomer.Id);
             return CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, mpCustomerMarketPlace, mpCustomerMarketPlace.Id);
         }
 
-        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IDatabaseMarketplace databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
+        public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IMarketplaceType databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
         {
             return new DatabaseCustomerMarketPlace(customerMarketPlaceId, cm.DisplayName, cm.SecurityData, databaseCustomer, databaseMarketplace);
         }
@@ -1633,7 +1633,7 @@ namespace EZBob.DatabaseLib
             return item;
         }
 
-        public MP_EbayAmazonCategory FindEBayAmazonCategory(IDatabaseMarketplace marketplace, string categoryId, ElapsedTimeInfo elapsedTimeInfo)
+        public MP_EbayAmazonCategory FindEBayAmazonCategory(IMarketplaceType marketplace, string categoryId, ElapsedTimeInfo elapsedTimeInfo)
         {
             MP_EbayAmazonCategory value;
             var cache = GetCache(marketplace);
@@ -1653,7 +1653,7 @@ namespace EZBob.DatabaseLib
             return value;
         }
 
-        public MP_EbayAmazonCategory AddEbayCategory(IDatabaseMarketplace marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo)
+        public MP_EbayAmazonCategory AddEbayCategory(IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo)
         {
             var item = new MP_EbayAmazonCategory
             {
@@ -1672,7 +1672,7 @@ namespace EZBob.DatabaseLib
             return item;
         }
 
-        private ConcurrentDictionary<string, MP_EbayAmazonCategory> GetCache(IDatabaseMarketplace marketplace)
+        private ConcurrentDictionary<string, MP_EbayAmazonCategory> GetCache(IMarketplaceType marketplace)
         {
             ConcurrentDictionary<string, MP_EbayAmazonCategory> cache;
             if (!_CacheEBayamazonCategory.TryGetValue(marketplace, out cache))
@@ -1688,14 +1688,14 @@ namespace EZBob.DatabaseLib
             return cache;
         }
 
-        private void AddCategoryToCache(IDatabaseMarketplace marketplace, MP_EbayAmazonCategory item)
+        private void AddCategoryToCache(IMarketplaceType marketplace, MP_EbayAmazonCategory item)
         {
             var cache = GetCache(marketplace);
 
             cache.TryAdd(item.CategoryId, item);
         }
 
-        public MP_EbayAmazonCategory[] AddAmazonCategories(IDatabaseMarketplace marketplace, AmazonProductItemBase productItem, ElapsedTimeInfo elapsedTimeInfo)
+        public MP_EbayAmazonCategory[] AddAmazonCategories(IMarketplaceType marketplace, AmazonProductItemBase productItem, ElapsedTimeInfo elapsedTimeInfo)
         {
             var categories = new List<MP_EbayAmazonCategory>();
 
@@ -1711,7 +1711,7 @@ namespace EZBob.DatabaseLib
             return categories.ToArray();
         }
 
-        private MP_EbayAmazonCategory AddAmazonCategory(IDatabaseMarketplace marketplace, AmazonProductCategory amazonProductCategory, ElapsedTimeInfo elapsedTimeInfo)
+        private MP_EbayAmazonCategory AddAmazonCategory(IMarketplaceType marketplace, AmazonProductCategory amazonProductCategory, ElapsedTimeInfo elapsedTimeInfo)
         {
             var cat = new MP_EbayAmazonCategory
             {

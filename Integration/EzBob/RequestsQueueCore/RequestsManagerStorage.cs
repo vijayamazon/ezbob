@@ -18,7 +18,7 @@ namespace EzBob.RequestsQueueCore
 			_Managers.Clear();
 		}
 
-		public ExternalRequestsManager GetManager( IDatabaseMarketplace marketplace )
+		public ExternalRequestsManager GetManager( IMarketplaceType marketplace )
 		{
 			lock ( _Locker )
 			{
@@ -41,7 +41,7 @@ namespace EzBob.RequestsQueueCore
 			
 		}
 
-		private ExternalRequestsManager CreateManager( IDatabaseMarketplace marketplace )
+		private ExternalRequestsManager CreateManager( IMarketplaceType marketplace )
 		{
 			return new ExternalRequestsManager( marketplace );
 		}

@@ -17,7 +17,7 @@ namespace EzBob.RequestsQueueCore.TaskExecutors
 		//private readonly EventWaitHandle _Finish = new ManualResetEvent( false );
 		private readonly ConcurrentQueue<IExecutionTask> _Queue = new ConcurrentQueue<IExecutionTask>();
 
-		public TaskExecutor( IDatabaseMarketplace marketplace )
+		public TaskExecutor( IMarketplaceType marketplace )
 		{
 			_Thread = new Thread( MainCicle )
 			          	{

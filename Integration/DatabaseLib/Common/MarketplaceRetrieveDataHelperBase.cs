@@ -72,7 +72,7 @@ namespace EZBob.DatabaseLib.Common
 			return Helper.GetDatabaseCustomerMarketPlace( _Marketplace, customerMarketPlaceId );
 		}
 
-		public IDatabaseMarketplace Marketplace
+		public IMarketplaceType Marketplace
 		{
 			get { return _Marketplace; }
 		}

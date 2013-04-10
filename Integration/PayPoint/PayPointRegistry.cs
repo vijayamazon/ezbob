@@ -9,7 +9,7 @@ namespace PayPoint
     {
         public PluginRegistry()
         {
-            For<IDatabaseMarketplace>().Use<PayPointDatabaseMarketPlace>().Named("PayPoint");
+            For<IMarketplaceType>().Use<PayPointDatabaseMarketPlace>().Named("PayPoint");
             For<DatabaseMarketplaceBase<PayPointDatabaseFunctionType>>().Use<PayPointDatabaseMarketPlace>();
             For<IMarketplaceRetrieveDataHelper>().Use<PayPointRetrieveDataHelper>().Named("PayPoint");
         }

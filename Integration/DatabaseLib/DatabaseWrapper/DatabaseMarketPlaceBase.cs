@@ -9,7 +9,7 @@ using StructureMap;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
-	public abstract class DatabaseMarketplaceBaseBase : IDatabaseMarketplace
+	public abstract class DatabaseMarketplaceBaseBase : IMarketplaceType
 	{		
 		private readonly IMarketplaceServiceInfo _MarketplaceSeriveInfo;
 

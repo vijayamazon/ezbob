@@ -9,6 +9,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		byte[] SecurityData { get; }
 
 		Customer Customer {get; }
-		IDatabaseMarketplace Marketplace { get; }
+		IMarketplaceType Marketplace { get; }
 	}
 }

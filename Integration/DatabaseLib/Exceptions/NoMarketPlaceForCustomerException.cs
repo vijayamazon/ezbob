@@ -6,7 +6,7 @@ namespace EZBob.DatabaseLib.Exceptions
 {
 	public class NoMarketPlaceForCustomerException : Exception
 	{
-		public NoMarketPlaceForCustomerException(Customer customer, IDatabaseMarketplace marketplace)
+		public NoMarketPlaceForCustomerException(Customer customer, IMarketplaceType marketplace)
 			:base(string.Format("Market place \"{0}\" for customer \"{1}\" does not exist", marketplace.DisplayName, customer.Name))
 		{
 		}

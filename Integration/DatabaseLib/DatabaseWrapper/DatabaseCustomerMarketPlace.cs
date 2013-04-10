@@ -4,7 +4,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 {
 	class DatabaseCustomerMarketPlace : IDatabaseCustomerMarketPlace
 	{
-		public DatabaseCustomerMarketPlace( int id, string name, byte[] securityData, Customer customer, IDatabaseMarketplace marketplace )
+		public DatabaseCustomerMarketPlace( int id, string name, byte[] securityData, Customer customer, IMarketplaceType marketplace )
 		{
 			Id = id;
 			DisplayName = name;
@@ -18,6 +18,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 
 		public byte[] SecurityData { get; private set; }
 		public Customer Customer { get; private set; }
-		public IDatabaseMarketplace Marketplace { get; private set; }
+		public IMarketplaceType Marketplace { get; private set; }
 	}
 }

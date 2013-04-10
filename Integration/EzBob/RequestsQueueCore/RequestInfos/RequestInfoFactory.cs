@@ -7,7 +7,7 @@ namespace EzBob.RequestsQueueCore.RequestInfos
 {
 	internal static class RequestInfoFactory
 	{
-		public static IRequestData CreateSingleRequest( IDatabaseMarketplace marketplace, Action action, string name = "RequestDataSingle" )
+		public static IRequestData CreateSingleRequest( IMarketplaceType marketplace, Action action, string name = "RequestDataSingle" )
 		{
 			return RequestDataSingle.Create(marketplace, action, name);
 		}

@@ -7,7 +7,7 @@ namespace EZBob.DatabaseLib.Common
 		void UpdateCustomerMarketplaceFirst( int customerMarketPlaceId );
 		void UpdateCustomerMarketplaceRegular( int customerMarketPlaceId );		
 		
-		IDatabaseMarketplace Marketplace { get; }
+		IMarketplaceType Marketplace { get; }
 		IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace( int customerMarketPlaceId );
 
 		IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId);			

@@ -216,7 +216,7 @@
     <Compile Include="DatabaseWrapper\ValueType\DatabaseValueType.cs" />
     <Compile Include="DatabaseWrapper\ValueType\DatabaseValueTypeFactory.cs" />
     <Compile Include="DatabaseWrapper\ValueType\IDatabaseValueType.cs" />
-    <Compile Include="DatabaseWrapper\IDatabaseMarketPlace.cs" />
+    <Compile Include="DatabaseWrapper\IMarketplaceType.cs" />
     <Compile Include="Common\AmountInfo.cs" />
     <Compile Include="Exceptions\InvalidCustomerMarketPlaceException.cs" />
     <Compile Include="IAnalysisDataParameterInfo.cs" />

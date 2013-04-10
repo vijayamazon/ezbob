@@ -9,15 +9,15 @@ namespace EzBob.RequestsQueueCore.RequestInfos
 {
 	internal class RequestDataSingle : RequestDataBase
 	{	
-		private readonly IDatabaseMarketplace _Marketplace;
+		private readonly IMarketplaceType _Marketplace;
 		private readonly Action _Action;
 
-		public static IRequestData Create(IDatabaseMarketplace marketplace, Action action, string name)
+		public static IRequestData Create(IMarketplaceType marketplace, Action action, string name)
 		{
 			return new RequestDataSingle( marketplace, action, name );
 		}
 
-		private RequestDataSingle(IDatabaseMarketplace marketplace, Action action, string name)
+		private RequestDataSingle(IMarketplaceType marketplace, Action action, string name)
 			:base(name)
 		{
 			_Action = action;
