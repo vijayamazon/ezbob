@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Repository;
 using ExperianLib.CaisFile;
@@ -54,6 +53,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 return file.ReadToEnd();
             }
         }
+
         [Ajax]
         [HttpPost]
         [NoCache]
@@ -79,14 +79,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     {
                         sender.UploadData(file.ReadToEnd(), el.Path);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         error.Add(e.Message);
                     }
                 }
             }
-            error.Add("FIrst");
-            error.Add("Sect");
             if (error.Count > 0)
             {
                 throw new Exception(string.Join(Environment.NewLine, error));
