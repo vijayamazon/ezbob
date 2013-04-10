@@ -19,9 +19,7 @@
             @Html.ValidationMessageFor(m => m.Password)
 
             <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
-            <label class="checkbox" for="RememberMe">
-                Remember Me
-                        <input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
+            <label class="checkbox" for="RememberMe" style="font-weight:normal">Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
             </label>
             <br />
             <br />
