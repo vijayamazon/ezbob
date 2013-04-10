@@ -20,7 +20,7 @@
         model: this.model
       });
       return VolusionAccountButtonView.__super__.initialize.call(this, {
-        name: 'volusion',
+        name: 'Volusion',
         logoText: ''
       });
     };

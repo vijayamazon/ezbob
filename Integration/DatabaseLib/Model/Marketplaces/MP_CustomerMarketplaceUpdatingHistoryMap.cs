@@ -64,6 +64,10 @@ namespace EZBob.DatabaseLib.Model.Database
             HasOne(x => x.PayPointOrder)
                 .PropertyRef(p => p.HistoryRecord)
                 .Cascade.All();
+
+			HasOne(x => x.VolusionOrder)
+				.PropertyRef(p => p.HistoryRecord)
+				.Cascade.All();
 		}
 	}
 }
