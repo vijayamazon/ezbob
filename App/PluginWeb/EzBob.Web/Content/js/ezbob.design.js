@@ -522,7 +522,7 @@ EzBob.formatNumberLength = function (num, length) {
 };
 
 EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText) {
-    var modalpopup = $('<div>');
+    var modalpopup = $('<div/>');
     modalpopup.html(message);
 
     var buttonModel = [{

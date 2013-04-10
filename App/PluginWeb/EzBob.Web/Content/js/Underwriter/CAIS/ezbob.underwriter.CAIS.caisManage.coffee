@@ -71,7 +71,8 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
             xhr = @checkedModel.sendToServer()
             xhr.done (response)->
                 if response and response.error != undefined
-                    EzBob.ShowMessage response.error, "Error occured"
+                    console.info "<pre>{0}<pre>".f(response.error), response.error
+                    EzBob.ShowMessage "<pre>{0}<pre>".f(response.error), "Error"
                     return
                 EzBob.ShowMessage "File(s) successfully sended ", "Successful"
             xhr.fail ()->
@@ -85,6 +86,10 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         $el = $(e.currentTarget)
         ($ ".save-change").removeClass "disabled"
         $el.css "border", "1px solid lightgreen"
+
+    resetFileView: ->
+        ($ "textarea").css "border", "1px solid #cccccc"
+        ($ ".save-change").addClass "disabled"
 
     fileChecked: (e) ->
         return if _.keys($(e.target).data()).length > 0
@@ -109,6 +114,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
             $el.removeClass "disabled"
             
     fileSelected: (e)->
+        self = @
         $el = $(e.currentTarget)
         filePath = $el.data "path"
         BlockUi "on"
@@ -126,12 +132,23 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                 draggable: false
                 resizable: false
                 buttons:[
-                    text: "Save file changes", click: @saveFileChange, class:'btn btn-primary save-change disabled', 'data-file-path': filePath
+                    { 
+                        text: "Save file changes"
+                        click: (e)-> self.saveFileChange(e)
+                        class:'btn btn-primary save-change disabled',
+                        'data-file-path': filePath 
+                    }
+                    {
+                        text: "Close"
+                        click: -> dialog.dialog('destroy')
+                        class: 'btn'
+                    }
                 ]
             (dialog.find ".cais-file-view").on("keypress keyup keydown", @fileViewChanged)
         .always =>BlockUi "off"
 
     saveFileChange: (e)->
+        self = @
         $el = $(e.currentTarget)
         return if $el.hasClass "disabled"
         $caisTextarea = ($ "textarea:visible")
@@ -145,7 +162,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                     EzBob.ShowMessage response.error, "Something went wrong"
                     return false
                 EzBob.ShowMessage "File #{filePath} successfully saved ", "Successful"
-                $caisTextarea.css "border", "1px solid #cccccc"
+                self.resetFileView()
             xhr.fail ->
                 EzBob.ShowMessage "Error occured", "Something went wrong"
             xhr.always ->
