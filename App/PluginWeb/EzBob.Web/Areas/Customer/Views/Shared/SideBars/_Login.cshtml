@@ -1,19 +1,3 @@
 ﻿<aside id="sidebar">
-
-    <a href="#">
-        <img src="@Url.Content("~/Content/css/images/live_help.jpg")" alt="Need help? Click here to use our live chat service" /></a>
-
-    <div style="margin: 10px 0; font-size: 16px;">
-        <strong>Call:</strong> 0800 011 4787<br>
-        <strong>Email:</strong> <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>
-    </div>
-
-    <br />
-    <hr />
-    <br />
-
-    <p style="font-size: 11px;">
-        <img src="@Url.Content("~/Content/css/images/lock_64.png")" class="alignleft" style="margin: 0px 10px 25px 0;" alt="Safe and Secure">We never see, have access, or store any of your passwords to your shops and payment accounts. We use the information for one purpose only, to determine your eligibility.
-    </p>
-    <img src="@Url.Content("~/Content/css/images/secure.png")" />
+    @{Html.RenderPartial("SideBars/_Bottom");}
 </aside>

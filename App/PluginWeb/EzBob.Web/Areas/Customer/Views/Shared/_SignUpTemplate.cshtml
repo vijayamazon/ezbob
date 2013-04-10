@@ -2,16 +2,11 @@
 @model dynamic
 
 <script id="signup-template" type="text/template">
-    <div class="row-fluid">
-        <div class="span7">
-            @{Html.RenderPartial("_SignUp");}
-        </div>
-        <div class="span1">
-        &nbsp;
-        </div>
-        <div class="span4">
-            @{Html.RenderPartial("SideBars/_SecurityStatement");}
-        </div>
-    </div>
-
+    <section id="content">
+        @{Html.RenderPartial("_SignUp");}
+    </section>
+    <aside  id="sidebar">
+        @{Html.RenderPartial("SideBars/_SecurityStatement");}
+    </aside>
+    <div class="clear"/>
 </script>

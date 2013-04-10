@@ -165,7 +165,7 @@ EzBob.Wizard = Backbone.View.extend({
         if (!this.steps[num].ready) {
             this.steps[num].ready = true;
         }
-        this.$el.find('.wizard-steps > ul li').eq(num).addClass('completed');
+        this.$el.find('.wizard-steps > ul li').eq(num).addClass('completed complete');
         this.router.maxStepNum = this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0;
     },
 
@@ -211,7 +211,7 @@ EzBob.Wizard = Backbone.View.extend({
     stepChanged: function () {
         var current = this.model.get('current'),
             allowed = this.model.get('allowed');
-        this.$el.find('.wizard-steps > ul li').removeClass('active').eq(current).addClass('active');
+        this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
         this.$el.find('.pages > div').hide().eq(current).show();
     }
 });

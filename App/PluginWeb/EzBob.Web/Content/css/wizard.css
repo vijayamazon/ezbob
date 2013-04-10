@@ -9,11 +9,6 @@
 #signupEmail, #signupPass1, #signupPass2, #SecurityAnswer { width: 400px; }
 
 #securityQuestion{ width: 408px; }
-
-#wizard {
-    padding: 0 61px;    
-}
-
 form.signup input[type="text"], form.signup input[type="password"], form.signup select{
     margin-bottom: 0;
 }
