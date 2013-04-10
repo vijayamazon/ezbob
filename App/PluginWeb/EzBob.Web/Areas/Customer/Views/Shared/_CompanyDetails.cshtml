@@ -1,6 +1,5 @@
 ﻿@using EzBob.Web.Models.Strings
 @model dynamic
-           
 @helper PersonalInfo()
 {
     <div class="row-fluid">
@@ -14,37 +13,37 @@
                     <div class="control-group">
                         <label class="control-label">First Name</label>
                         <div class="controls">
-                            <input type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>"/>
+                            <input type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">Middle Initial</label>
                         <div class="controls">
-                            <input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>"/>
+                            <input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">Surname</label>
                         <div class="controls">
-                            <input type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>"/>
+                            <input type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" />
                         </div>
                     </div>
                     <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
                     @EzForm.DateInput("DateOfBirth", "Date of Birth")
 
-                  <div class="control-group">
-                      <label class="control-label" for="Gender">Gender</label>
-                      <div class="controls">
-                          <select id="Gender" name="Gender" class="" >
-                              <option value="-">-</option>
-                              <option value="M">Male</option>
-                              <option value="F">Female</option>
-                          </select>
-                      </div>
-                  </div>
+                    <div class="control-group">
+                        <label class="control-label" for="Gender">Gender</label>
+                        <div class="controls">
+                            <select id="Gender" name="Gender" class="">
+                                <option value="-">-</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                    </div>
 
                     @EzForm.Select("MartialStatus", "Martial Status", new[] { "Single", "Married", "Divorced", "Widow/er", "Other" }, "select")
 
@@ -53,23 +52,23 @@
                     @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
                     @EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")
 
-                    <hr/>
+                    <hr />
 
                     <div class="control-group">
                         <label class="control-label">Daytime Phone #</label>
                         <div class="controls">
-                            <input type="text" class="phonenumber" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>"/>
+                            <input type="text" class="phonenumber" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label">Mobile Phone #</label>
                         <div class="controls">
-                            <input type="text" class="phonenumber" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>"/>
+                            <input type="text" class="phonenumber" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
                         </div>
                     </div>
                     
-                    <hr/>
+                    <hr />
 
                     <div>
                         <div class="control-group typeOfBussiness">
@@ -82,11 +81,11 @@
                                     <option value="PShip3P">Partnership (Up to 3)</option>
                                     <option value="PShip">Partnership (More than 3)</option>
                                     <option value="Limited">Limited Company</option>
-                                    <option value="LLP">LLP</option>                                    
+                                    <option value="LLP">LLP</option>
                                 </select>
                             </div>
                         </div>
-                        
+
                         <fieldset class="PersonalturnOver turnOver">
                             <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
                             @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
@@ -94,35 +93,35 @@
                         </fieldset>
                     </div>
 
-                    <hr/>
+                    <hr />
 
-                    <div class="control-group">      
+                    <div class="control-group">
                         <div class="controls">
                             <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                                <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true"/>
-                                 I have read and accept the <a>terms and conditions</a> of the credit bureau search
+                                <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
+                                I have read and accept the <a>terms and conditions</a> of the credit bureau search
                             </label>
                         </div>
                     </div>
-                }    
+                }
             </div>
 
             <div class="">
                 <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
                 <a href="#" class="btn-back button orange back pull-right">Back</a>
             </div>
-         </div>
-         <div class="span1">&nbsp;</div>
-         @{Html.RenderPartial("SideBars/DetailsNotification");}
+        </div>
+        <div class="span1">&nbsp;</div>
+        @{Html.RenderPartial("SideBars/DetailsNotification");}
     </div>
 }
 @helper Director()
 {
     <fieldset>
         <legend>Additional Directors (Optional)</legend>
-            
+
         <div class="directorArea"></div>
-        
+
         <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
 
         <a href="#" id="addDirector"><b>Add directors</b> and qualify for more cash.</a>
@@ -131,7 +130,7 @@
 
 
 @helper LimitedInfo()
-    {
+{
     <div class="row-fluid">
         <div class="span7">
             <h1>&nbsp;Business Info:</h1>
@@ -144,7 +143,7 @@
                         @EzForm.InputText("LimitedCompanyNumber", "Registration #", "")
                         @EzForm.InputText("LimitedCompanyName", "Name", "")
                         @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-                        @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "","phonenumber")
+                        @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "", "phonenumber")
                         <input type="hidden" name="LimitedRefNum" class="RefNum" />
                     </fieldset>
                     
@@ -157,72 +156,60 @@
                     <div class="directors">
                     </div>
                 }
-                
+
 
             </div>
             <div class="">
                 <a href="#" class="next btn-continue button orange pull-right">Complete</a>
                 <a href="#" class="back btn-back button orange pull-right">Back</a>
             </div>
-            </div>
-            <div class="span1">&nbsp;</div>
-            @{Html.RenderPartial("SideBars/DetailsNotification");}
-    </div>
-}
-
-@helper Nonlimitedinfo()
-    {
-    <div class="row-fluid">
-        <div class="span7" style="padding-top: 10px;">
-            <h1>&nbsp;Business Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
-                    @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                    {
-                        <fieldset>
-                            <legend>Company</legend>
-                            <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-                            @EzForm.InputText("NonLimitedCompanyName", "Name", "")        
-                            @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
-                            @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
-                            @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
-                            @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "","phonenumber")
-
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Turnover</legend>
-                            @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                            @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                        </fieldset>
-                        <div class="directors">
-                        </div>  
-                    }
-                    
-            </div>
-            <div class="">
-                <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
-                <a href="#" class="back btn-back button orange pull-right">Back</a>
-            </div>
-            </div>
+        </div>
         <div class="span1">&nbsp;</div>
         @{Html.RenderPartial("SideBars/DetailsNotification");}
     </div>
 }
 
-@helper LastWizardPage()
-    {
+@helper Nonlimitedinfo()
+{
     <div class="row-fluid">
-    <div class="span7">                          
-        <div class="thankyou-loan">
-            We are processing your data in the Credit Bureau and will notify you about you validation in 24 hours. <br /> You can edit you personal and business information in your dashboard.
+        <div class="span7" style="padding-top: 10px;">
+            <h1>&nbsp;Business Info:</h1>
+            <h2>Safe &amp; Secure!</h2>
+            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
+                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
+                {
+                    <fieldset>
+                        <legend>Company</legend>
+                        <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+                        @EzForm.InputText("NonLimitedCompanyName", "Name", "")
+                        @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+                        @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
+                        @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
+                        @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "", "phonenumber")
+
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Turnover</legend>
+                        @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
+                        @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
+                    </fieldset>
+                    <div class="directors">
+                    </div>  
+                }
+
+            </div>
+            <div class="">
+                <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
+                <a href="#" class="back btn-back button orange pull-right">Back</a>
+            </div>
         </div>
-        <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Go to My Profile</a>
+        <div class="span1">&nbsp;</div>
+        @{Html.RenderPartial("SideBars/DetailsNotification");}
     </div>
-    <div class="span1">&nbsp;</div>
-    @{Html.RenderPartial("SideBars/DetailsNotification");}
-</div>
 }
+
+
 
 
 
@@ -290,16 +277,23 @@
 </script>
 
 <script id="lastWizardThankYouPage" type="text/template">
-<div class="row-fluid">
-    <div class="span7">                          
-        <div class="thankyou-loan">
-            We are processing your application and will notify you in the next business day.
-        </div>
-        <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Go to My Account</a>
+    <div>
+        <section id="full_width">
+            <div style="margin: 50px auto; width: 600px;">
+                <div style="padding: 20px; margin: 0 0 20px 0; background: #fff; border: 1px #ccc solid;">
+                    <h2>Thank you</h2>
+                    <p>We have the infomation we need and are processing your application. You will be notified by email as soon as it's ready</p>
+                    <p>If you haven't already we would suggest that you read through <a href="#">Our Loans Explained</a> and understand what repayment method best suits your business needs.</p>
+                    <p><strong>Remember you can pay any amount at any time during the loan period and there are not penalties for early repayments.</strong></p>
+                </div>
+                <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Back to account</a>
+            </div>
+        </section>
+        <div class="clear"></div>
+        <br />
+        <br />
+        <br />
     </div>
-    <div class="span1">&nbsp;</div>
-    @{Html.RenderPartial("SideBars/DetailsNotification");}
-</div>
 </script>
 
 
