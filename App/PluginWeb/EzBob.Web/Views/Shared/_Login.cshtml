@@ -11,11 +11,11 @@
 
             <label>Email Address <span class="required">*</span></label>
             @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
-            @Html.TextBoxFor(m => m.UserName, new { autofocus = "autofocus" })
+            @Html.TextBoxFor(m => m.UserName, new { @class="form_field", size="50", autofocus = "autofocus" })
             @Html.ValidationMessageFor(m => m.UserName)
             <br />
             <label>Password <span class="required">*</span></label>
-            @Html.PasswordFor(m => m.Password, new { autocomplete = "off" })
+            @Html.PasswordFor(m => m.Password, new {  @class="form_field", size="50", autocomplete = "off" })
             @Html.ValidationMessageFor(m => m.Password)
 
             <input name="RememberMe" type="hidden" value="@Model.RememberMe" />

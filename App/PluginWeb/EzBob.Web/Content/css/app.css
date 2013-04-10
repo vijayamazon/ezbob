@@ -205,3 +205,37 @@ table.dashboard_sources th, table.dashboard_sources td{padding:5px; border-botto
         .cboxSlideshow_off #cboxSlideshow{background-position:-100px 0px; right:44px;}
         .cboxSlideshow_off #cboxSlideshow:hover{background-position:-75px -25px;}
 
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  display: inline-block;
+  height: 20px;
+  padding: 4px 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #555555;
+  vertical-align: middle;
+  -webkit-border-radius: 0px;
+     -moz-border-radius: 0px;
+          border-radius: 0px;
+}
+
+.form_field {
+    width:auto !important;
+}

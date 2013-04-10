@@ -394,15 +394,55 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\alertify.css" />
+    <Content Include="Content\css\app.css" />
     <Content Include="Content\css\bootstrap-modal.css" />
     <Content Include="Content\css\captcha.css" />
     <Content Include="Content\css\choosen\chosen-sprite.png" />
     <Content Include="Content\css\choosen\chosen.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
+    <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\apply_now.png" />
+    <Content Include="Content\css\images\arrow.png" />
+    <Content Include="Content\css\images\bank_details.png" />
+    <Content Include="Content\css\images\body_bg.jpg" />
+    <Content Include="Content\css\images\cb\controls.png" />
+    <Content Include="Content\css\images\cb\controls_old.png" />
+    <Content Include="Content\css\images\cb\loading.gif" />
+    <Content Include="Content\css\images\companies\bloomberg.png" />
+    <Content Include="Content\css\images\companies\ccta.png" />
+    <Content Include="Content\css\images\companies\internet_retailing.png" />
+    <Content Include="Content\css\images\companies\tamebay.png" />
+    <Content Include="Content\css\images\companies\techcrunch.png" />
+    <Content Include="Content\css\images\companies\yahoo.png" />
+    <Content Include="Content\css\images\current_arrow.png" />
+    <Content Include="Content\css\images\ezbob_logo.png" />
+    <Content Include="Content\css\images\favicon114x114.png" />
+    <Content Include="Content\css\images\favicon57x57.png" />
+    <Content Include="Content\css\images\favicon72x72.png" />
+    <Content Include="Content\css\images\footer_bg.png" />
+    <Content Include="Content\css\images\gauge.png" />
+    <Content Include="Content\css\images\help_ebay.jpg" />
+    <Content Include="Content\css\images\live_help.jpg" />
+    <Content Include="Content\css\images\lock_64.png" />
+    <Content Include="Content\css\images\nav_bg.png" />
+    <Content Include="Content\css\images\nav_bg_on.png" />
+    <Content Include="Content\css\images\pdf.png" />
     <Content Include="Content\css\images\play-icon-hover.png" />
     <Content Include="Content\css\images\play-icon-sprite.png" />
     <Content Include="Content\css\images\play-icon.png" />
+    <Content Include="Content\css\images\points.png" />
+    <Content Include="Content\css\images\pound.png" />
+    <Content Include="Content\css\images\progress_tip.png" />
+    <Content Include="Content\css\images\secure.png" />
+    <Content Include="Content\css\images\source_small_sprite.png" />
+    <Content Include="Content\css\images\source_sprite.png" />
+    <Content Include="Content\css\images\sprites\contact_sprite.png" />
+    <Content Include="Content\css\images\sprites\secure_sprite.png" />
+    <Content Include="Content\css\images\sprites\social_sprite.png" />
+    <Content Include="Content\css\images\sprites\social_sprite_round.png" />
+    <Content Include="Content\css\images\star.png" />
+    <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\jquery.jqplot.css" />
     <Content Include="Content\css\loanDetails.css">
       <DependentUpon>loanDetails.less</DependentUpon>
@@ -821,6 +861,7 @@
     <Content Include="App_Browsers\generic.browser" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointShopNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_Login.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>

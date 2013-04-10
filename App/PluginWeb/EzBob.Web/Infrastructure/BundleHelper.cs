@@ -36,6 +36,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/video-js.css")
                 .Add("~/Content/css/shops.css")
                 
+                
                 .MvcRender("~/Content/css/min/combined_#.css");
         }
 
@@ -60,6 +61,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/popover.css")
                 .Add("~/Content/css/shops.css")
                 .Add("~/Content/css/choosen/chosen.css")
+                .Add("~/Content/css/app.css")
                 .MvcRender("~/Content/css/min/customer_#.css");
         }
         public static MvcHtmlString RenderPrintCss()
