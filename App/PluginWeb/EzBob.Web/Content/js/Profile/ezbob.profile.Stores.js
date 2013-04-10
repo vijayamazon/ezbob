@@ -9,7 +9,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
             ebayMarketPlaces: this.model.get('ebayMarketPlaces'),
             amazonMarketPlaces: this.model.get('amazonMarketPlaces'),
             ekmShops: this.model.get('ekmShops'),
-            volusionShops: this.model.get('volusionShops')
+            volusionShops: this.model.get('volusionShops'),
             payPointAccounts: this.model.get('payPointAccounts')
         });
 

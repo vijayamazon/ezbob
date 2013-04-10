@@ -7,7 +7,7 @@ namespace Integration.Volusion {
 		public PluginRegistry() {
 			var oVsi = new VolusionServiceInfo();
 
-			For<IDatabaseMarketplace>().Use<VolusionDatabaseMarketPlace>().Named(oVsi.DisplayName);
+			For<IMarketplaceType>().Use<VolusionDatabaseMarketPlace>().Named(oVsi.DisplayName);
 			For<DatabaseMarketplaceBase<VolusionDatabaseFunctionType>>().Use<VolusionDatabaseMarketPlace>();
 			For<IMarketplaceRetrieveDataHelper>().Use<VolusionRetriveDataHelper>().Named(oVsi.DisplayName);
 		} // constructor

@@ -36,11 +36,8 @@
 				<label>Secret Answer <span class="required">*</span></label>
 				<input type="text" name="secret_answer" id="secret_answer" value="" size="60" tabindex="5" class="form_field">
 
-				@if (captchamode != "off") {
-					<text>
-					<div class="captcha">@EzForm.Captcha(captchamode)</div>
-					</text>
-				}
+				@EzForm.Captcha(captchamode)
+
 				<br><br>
 				<input type="submit" name="submit" id="btn" value="Conitnue &raquo;" class="button green"> 
 			</form>
