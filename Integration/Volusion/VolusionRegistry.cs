@@ -1,4 +1,4 @@
-﻿using EZBob.DatabaseLib.Common;
+using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using StructureMap.Configuration.DSL;
 
