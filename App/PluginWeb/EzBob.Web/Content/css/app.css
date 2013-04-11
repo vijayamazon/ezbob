@@ -103,6 +103,9 @@ box-shadow: 0 0 10px #71a61f;
 .source_header .source_labels.ekm{ background-position: -557px 0; width:150px;}
 .source_header .source_labels.paypal{ background-position: -751px 0; width:117px;}
 
+.source_header .source_labels.paypoint{ background-position: -1010px 0; width:180px;}
+.source_header .source_labels.volusion{ background-position: -868px 0; width:140px;}
+
 .source_header_on .source_labels.ebay{background-position: 0 -40px; width:86px;}
 .source_header_on .source_labels.amazon{ background-position: -86px -40px; width:109px;}
 .source_header_on .source_labels.play{ background-position: -195px -40px; width:119px;}
@@ -111,6 +114,9 @@ box-shadow: 0 0 10px #71a61f;
 .source_header_on .source_labels.etsy{ background-position: -502px -40px; width:55px;}
 .source_header_on .source_labels.ekm{ background-position: -557px -40px; width:150px;}
 .source_header_on .source_labels.paypal{ background-position: -751px -40px; width:117px;}
+
+.source_header_on .source_labels.paypoint{ background-position: -1010px -40px; width:180px;}
+.source_header_on .source_labels.volusion{ background-position: -868px -40px; width:140px;}
 
 .source_table{width:100%;}
 .source_table th{text-align:left; font-weight:bold; color:#333;}
