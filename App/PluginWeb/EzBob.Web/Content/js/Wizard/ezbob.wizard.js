@@ -211,9 +211,10 @@ EzBob.Wizard = Backbone.View.extend({
     stepChanged: function () {
         var current = this.model.get('current'),
             allowed = this.model.get('allowed');
+
         this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
         this.$el.find('.pages > div').hide().eq(current).show();
-        this.$el.find('.wizard-header').text(this.steps[current].header);
+        if (this.steps[current])  this.$el.find('.wizard-header').text(this.steps[current].header);
     }
 });
 

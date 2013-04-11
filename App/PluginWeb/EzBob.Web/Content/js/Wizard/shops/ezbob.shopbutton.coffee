@@ -2,21 +2,22 @@
 root.EzBob = root.EzBob or {}
 
 class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
-    attributes:
-        class: "span6"
-
     events:
-        "click .store-logo": "clicked"
+        "click .button": "clicked"
 
     template: "#store-button-template"
 
     initialize: (options) ->
         @name = options.name
         @logoText = options.logoText
+        @shops = options.shops
+        @shopClass = options.name.toLowerCase().replace(' ', '')
 
     serializeData: ->
         name: @name
         logoText: @logoText
+        shopClass: @shopClass
+        shops: if @shops then @shops.toJSON() else []
 
     clicked: ->
         if @disabled

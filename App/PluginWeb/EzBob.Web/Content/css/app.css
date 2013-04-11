@@ -235,6 +235,7 @@ input[type="color"],
           border-radius: 0px;
 }
 
-.form_field {
-    width:auto !important;
-}
+.form_field { width:auto !important; }
+
+
+.label.label-success{ line-height: 25px;}

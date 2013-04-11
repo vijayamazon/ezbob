@@ -110,10 +110,9 @@ class EzBob.AmazonStoreModels extends Backbone.Collection
     url: "#{window.gRootPath}Customer/AmazonMarketPlaces"
 
 
-class EzBob.AmazonButtonView extends EzBob.StoreButtonWithListView
+class EzBob.AmazonButtonView extends EzBob.StoreButtonView
     initialize: ->
-        @listView = new EzBob.StoreListView(model: @model)
-        super({name: "Amazon", logoText: ""})
+        super({name: "Amazon", logoText: "", shops: @model})
 
     update: ->
         @model.fetch()
