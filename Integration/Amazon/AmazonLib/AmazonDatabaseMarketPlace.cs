@@ -7,7 +7,7 @@ using StructureMap;
 
 namespace EzBob.AmazonLib
 {
-	public class AmazonDatabaseMarketPlace : DatabaseMarketplaceBase<AmazonDatabaseMarketPlace, AmazonDatabaseFunctionType>
+	public class AmazonDatabaseMarketPlace : DatabaseMarketplaceBase<AmazonDatabaseFunctionType>
 	{
 		/*static AmazonDatabaseMarketPlace()
 		{

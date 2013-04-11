@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
@@ -23,5 +24,10 @@ namespace EzBob.RequestsQueueCore
 		{
 			throw new NotImplementedException();
 		}
+
+	    public override IEnumerable<IDatabaseFunction> DatabaseFunctionList
+	    {
+	        get { throw new NotImplementedException(); }
+	    }
 	}
 }

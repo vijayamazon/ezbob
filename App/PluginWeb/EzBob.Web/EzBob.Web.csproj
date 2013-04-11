@@ -919,9 +919,6 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\ezbob.underwriter.loanInfo.min.js">
-      <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\ezbob.underwriter.LoanOptions.js">
       <DependentUpon>ezbob.underwriter.LoanOptions.coffee</DependentUpon>
     </Content>

@@ -1,12 +1,10 @@
-﻿using System;
-using EZBob.DatabaseLib;
+﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib;
 
 namespace EKM
 {
-	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseMarketPlace, EkmDatabaseFunctionType>
+	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseFunctionType>
     {
         public EkmDatabaseMarketPlace()
             : base(new EkmServiceInfo())

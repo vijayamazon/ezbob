@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using ApplicationMng.Model;
 using Aspose.Cells;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Underwriter.Models.Reports;
 using EzBob.Web.Infrastructure;
@@ -87,6 +88,10 @@ namespace EzBob.Web
             InitAspose();
             Bundle.RegisterScriptPreprocessor(new CoffeeScriptPreprocessor());
             Bundle.RegisterScriptPreprocessor(new LessPreprocessor());
+
+            var bs = ObjectFactory.GetInstance<MarketPlacesBootstrap>();
+            bs.InitValueTypes();
+            bs.InitDatabaseMarketPlaceTypes();
 
         }
 
