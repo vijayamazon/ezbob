@@ -223,8 +223,6 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   display: inline-block;
-  height: 20px;
-  padding: 4px 6px;
   margin-bottom: 10px;
   font-size: 14px;
   line-height: 20px;
@@ -233,9 +231,11 @@ input[type="color"],
   -webkit-border-radius: 0px;
      -moz-border-radius: 0px;
           border-radius: 0px;
+
+  padding: 4px 6px;
+  height: 20px;
 }
 
-.form_field { width:auto !important; }
-
+/* .form_field { width:auto !important; } */
 
 .label.label-success{ line-height: 25px;}
