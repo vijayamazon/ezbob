@@ -16,17 +16,17 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @ebayStores.on "reset change", @marketplacesChanged, this
 
         @ekmAccounts = new EzBob.EKMAccounts()
-        @ekmAccounts.fetch()
+        @ekmAccounts.fetch().done => @render()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
         
         @volusionAccounts = new EzBob.VolusionAccounts()
-        @volusionAccounts.fetch()
+        @volusionAccounts.fetch().done => @render()
         @volusionButtonView = new EzBob.VolusionAccountButtonView(model: @volusionAccounts)
         @volusionAccountInfoView = new EzBob.VolusionAccountInfoView(model: @volusionAccounts)
 
         @PayPointAccounts = new EzBob.PayPointAccounts()
-        @PayPointAccounts.fetch()
+        @PayPointAccounts.fetch().done => @render()
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 

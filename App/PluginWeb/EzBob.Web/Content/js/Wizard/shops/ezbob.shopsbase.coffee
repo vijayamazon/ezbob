@@ -4,15 +4,17 @@ root.EzBob = root.EzBob or {}
 class EzBob.StoreInfoBaseView extends Backbone.View
     initialize: ->
         that = this
+        @storeList = $($("#store-info").html())
+        @isReady = false
+
         _.each @stores, (store) ->
             store.button.on "selected", that.connect, that
             store.view.on "completed", _.bind(that.completed, that, store.button.name)
             store.view.on "back", that.back, that
             store.button.on "ready", that.ready, that
 
-        @storeList = $($("#store-info").html())
         EzBob.App.on "ct:storebase." + @name + ".connect", @connect, this
-        @isReady = false
+        
 
     completed: (name) ->
         @stores[name].button.update()
@@ -41,21 +43,19 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         that = this
         shopsList = @storeList.find(".shops-list")
         accountsList = @storeList.find(".accounts-list")
-        row = null
-        _.each @stores, (store) ->
-            return unless store.active
-            return unless store.isShop
-            store.button.render().$el.appendTo shopsList
-            store.view.render().$el.hide().appendTo that.$el
 
-        _.each @stores, (store) ->
-            return unless store.active
-            return if store.isShop
-            store.button.render().$el.appendTo accountsList
-            store.view.render().$el.hide().appendTo that.$el
+        sortedShops = _.sortBy(@stores, (s) -> s.button.model.length).reverse()
+
+        for shop in sortedShops when shop.active and shop.isShop is 1
+            shop.button.render().$el.appendTo shopsList
+            shop.view.render().$el.hide().appendTo that.$el
+
+        for shop in sortedShops when shop.active and shop.isShop is 0
+            shop.button.render().$el.appendTo accountsList
+            shop.view.render().$el.hide().appendTo that.$el
 
         @storeList.appendTo @$el
-        that.ready()    if @stores["bank-account"].button.model.get("bankAccountAdded")    if @stores["bank-account"]?
+        that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded")    if @stores["bank-account"]?
         this
 
     events:

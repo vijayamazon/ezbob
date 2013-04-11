@@ -61,7 +61,6 @@
     StoreInfoBaseView.prototype.render = function() {
       var accountsList, row, shopsList, that;
 
-      console.log("render shops");
       that = this;
       shopsList = this.storeList.find(".shops-list");
       accountsList = this.storeList.find(".accounts-list");
@@ -74,7 +73,8 @@
           return;
         }
         store.button.render().$el.appendTo(shopsList);
-        return store.view.render().$el.hide().appendTo(that.$el);
+        store.view.render().$el.hide().appendTo(that.$el);
+        return console.log(store.button.model);
       });
       _.each(this.stores, function(store) {
         if (!store.active) {
