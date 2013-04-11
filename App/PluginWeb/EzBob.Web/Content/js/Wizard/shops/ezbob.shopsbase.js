@@ -32,8 +32,8 @@
 
     StoreInfoBaseView.prototype.completed = function(name) {
       this.stores[name].button.update();
-      this.$el.find(">div").hide();
-      this.storeList.show();
+      this.$el.empty();
+      this.render();
       return this.trigger("completed");
     };
 
@@ -61,6 +61,7 @@
     StoreInfoBaseView.prototype.render = function() {
       var accountsList, row, shopsList, that;
 
+      console.log("render shops");
       that = this;
       shopsList = this.storeList.find(".shops-list");
       accountsList = this.storeList.find(".accounts-list");

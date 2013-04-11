@@ -16,8 +16,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     completed: (name) ->
         @stores[name].button.update()
-        @$el.find(">div").hide()
-        @storeList.show()
+        @$el.empty()
+        @render()
         @trigger "completed"
 
     back: ->
