@@ -21,7 +21,6 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
         @captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 3 });
         @captcha.render();
         @ui.email.data "changed", true
-        @ui.email.withoutSpaces()
         @
 
     events:

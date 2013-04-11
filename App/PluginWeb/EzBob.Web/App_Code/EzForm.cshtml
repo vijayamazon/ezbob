@@ -33,7 +33,7 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value, string cls = "", bool isDisabled = false)
+@helper InputText(string id, string caption, string value, string cls = "", bool isDisabled = false, int size = 0)
 {
     
     var identificator=new HtmlString(id);
@@ -50,8 +50,12 @@
                 @if (isDisabled)
                 {
                     @:disabled="disabled"
-                }  
-            />
+                } 
+                @if (size > 0)
+                {
+                    @:size = "@size"
+                } 
+                />
         </div>
     </div>
 }
