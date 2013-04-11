@@ -3,7 +3,7 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.EKMAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
-        super({name: 'EKM', logoText: ''})
+        super({name: 'EKM', logoText: '', shops: @model})
     update: ->
         @model.fetch()
 
