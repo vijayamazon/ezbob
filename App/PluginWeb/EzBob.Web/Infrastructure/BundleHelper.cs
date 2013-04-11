@@ -183,7 +183,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
 
                 //Customer grid
-                         .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.js")
+                         .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")
                          .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customers.js")
                          .Add("~/Content/js/Underwriter/customersGrid/ezbob.underwriter.ProfilePopupView.coffee")
 

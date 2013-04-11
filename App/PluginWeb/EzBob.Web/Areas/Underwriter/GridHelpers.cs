@@ -87,7 +87,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Search = false,
-                    Width = 50,
+                    Width = 60,
                     DataType = TypeCode.String,
                     Formatter = showIcon ? "showMedalIcon" : "",
                     Data = x => x.Medal.HasValue ? x.Medal.ToString() : "-"
@@ -492,27 +492,95 @@ namespace EzBob.Web.Areas.Underwriter
             });
         }
 
-        
+        public static void CreateMpList(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "MP",
+                Name = "MP",
+                Index = "Mp",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 115,
+                DataType = TypeCode.String,
+                Formatter = "showMPsIcon",
+                Data = x => x.CustomerMarketPlaces.Select(y=>y.Marketplace.Name).ToList()
+            });
+        }
 
+        public static void CreateLastStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Last Status",
+                Name = "LastStatus",
+                Index = "LastStatus",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 115,
+                DataType = TypeCode.String,
+                Data = x => CalculateStatus(x)
+            });
+        }
+
+        public static void CreateOutstandingBalance(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Outstanding Balance",
+                Name = "OutstandingBalance",
+                Index = "OutstandingBalance",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 115,
+                DataType = TypeCode.String,
+                Data = x => x.Loans.Sum(y=>y.Balance)
+            });
+        }
+    /*
+     * Helpers
+     */
         public static int GetDelinquency(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             var result = 0;
-            
-            var loans = customer.Loans.Where(l=>l.Status == LoanStatus.Late).ToList();
+
+            var loans = customer.Loans.Where(l => l.Status == LoanStatus.Late).ToList();
             if (!loans.Any()) return 0;
 
-            var scheduleDate=DateTime.UtcNow;
+            var scheduleDate = DateTime.UtcNow;
 
             foreach (var loanScheduleItem in loans.SelectMany(loan => loan.Schedule.Where(loanScheduleItem => loanScheduleItem.Date < scheduleDate && loanScheduleItem.Status == LoanScheduleStatus.Late)))
             {
                 scheduleDate = loanScheduleItem.Date;
             }
-            
+
             var currentDate = DateTime.UtcNow.ToUniversalTime();
             if (scheduleDate <= currentDate)
                 result = (currentDate - scheduleDate).Days;
 
             return result;
+        }
+
+        public static string CalculateStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            var cr = customer.LastCashRequest;
+
+            return cr.UnderwriterDecision != null ? cr.UnderwriterDecision.ToString() : cr.SystemDecision.ToString();
         }
     }
 }

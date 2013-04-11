@@ -1,10 +1,10 @@
 ﻿textarea.reason {
     width: 480px;
-    resize:none;
+    resize: none;
     height: 80px;
 }
-.underwriter-body 
-{
+
+.underwriter-body {
     padding: 10px;
     background-color: #fefefe;
     background-color: #F9F9F9;
@@ -40,107 +40,80 @@
 }
 
 .check, .cross, .question {
-    height: 22px;width: 22px;
+    height: 22px;
+    width: 22px;
     display: inline-block;
     line-height: 22px;
-    vertical-align: bottom;    
-}
-.check {
-    background-image: url(../img/check.png);
+    vertical-align: bottom;
 }
 
-.cross {
-    background-image: url(../img/cross.png);
-}
-.question {
-    background-image: url(../img/question_mark.png);
-}
+.check { background-image: url(../img/check.png); }
 
-.alertWarning {
-    background-color: rgb(248, 252, 157);
-}
-.alertError {
-    background-color: rgb(254, 148, 219);
-}
-.alertReject {
-    background-color: rgb(250, 80, 42);
-}
-.marketplace-table td {
-    cursor: pointer;
-}
-.marketplace-table tbody tr:hover td, .marketplace-table tbody tr:hover th {
-    background-color: #E5E5E5;
-}
+.cross { background-image: url(../img/cross.png); }
+
+.question { background-image: url(../img/question_mark.png); }
+
+.alertWarning { background-color: rgb(248, 252, 157); }
+
+.alertError { background-color: rgb(254, 148, 219); }
+
+.alertReject { background-color: rgb(250, 80, 42); }
+
+.marketplace-table td { cursor: pointer; }
+
+.marketplace-table tbody tr:hover td, .marketplace-table tbody tr:hover th { background-color: #E5E5E5; }
+
 .marketplaceDetail tbody tr:hover td, .marketplace-table tbody tr:hover th {
     background-color: #F5F5F5;
     cursor: auto;
 }
-.marketplaceDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar{
-    border-bottom: 1px solid #ddd !important;
-}
-.marketplaceDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
-    min-height: 0px !important;
-}
 
-.marketplaceDetail .marketplaceTitle {
-    display: none;
-    
-}
+.marketplaceDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar { border-bottom: 1px solid #ddd !important; }
 
-#marketplace-details {
-    overflow: auto;
-}
+.marketplaceDetail .ui-dialog-content, .functionsPopup .ui-dialog-content { min-height: 0px !important; }
+
+.marketplaceDetail .marketplaceTitle { display: none; }
+
+#marketplace-details { overflow: auto; }
 
 .paypalDetail tbody tr:hover td, .marketplace-table tbody tr:hover th {
     background-color: #F5F5F5;
     cursor: auto;
 }
-.paypalDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar{
-    border-bottom: 1px solid #ddd !important;
-}
-.paypalDetail .ui-dialog-content, .functionsPopup .ui-dialog-content {
-    min-height: 0px !important;
-}
 
-.paypalDetail .paypalDetailTitle {
-    display: none;
-    
-}
+.paypalDetail .ui-dialog-titlebar, .functionsPopup .ui-dialog-titlebar { border-bottom: 1px solid #ddd !important; }
 
-#payPal-details {
-    overflow: auto;
-}
+.paypalDetail .ui-dialog-content, .functionsPopup .ui-dialog-content { min-height: 0px !important; }
+
+.paypalDetail .paypalDetailTitle { display: none; }
+
+#payPal-details { overflow: auto; }
 
 
-.nav-tabs {
-    border-bottom: 1px solid #DDDDDD;
-}
+.nav-tabs { border-bottom: 1px solid #DDDDDD; }
 
 .reportTableHeader {
     text-align: center !important;
     background-color: #E5E5E5;
 }
-.left-underwriter-pane {
-    
-}
 
-.reportDatePicker {
-    width: 70px !important;
-}
+.left-underwriter-pane { }
+
+.reportDatePicker { width: 70px !important; }
 
 .reportDiv {
     float: right;
     padding-left: 10px;
 }
 
-.numberTd {
-    text-align: right !important;
+.numberTd { text-align: right !important; }
+
+.underwriter-loan-details h1 {
+    display: none;
+    margin-bottom: 0px!important;
 }
 
-.underwriter-loan-details h1 { display: none;margin-bottom: 0px!important; }
-
-td b.marking
-{
+td b.marking {
     background-repeat: no-repeat;
     padding-right: 10px;
     width: 16px;
@@ -149,25 +122,15 @@ td b.marking
     position: relative;
 }
 
-td b.NoChecked
-{
-    background-image: url(../img/cross.png);
-}
+td b.NoChecked { background-image: url(../img/cross.png); }
 
-td b.Checked
-{
-    background-image: url(../img/ok16.png);
-}
+td b.Checked { background-image: url(../img/ok16.png); }
 
-table.rright tbody td:not(:first-child) {
-    text-align: right;
-}
+table.rright tbody td:not(:first-child) { text-align: right; }
 
 
 .profile-person-info .table-bordered,
-.profile-loan-info .table-bordered{
-    behavior: none; /* conflict with overflow: auto. Must be none!*/
-}
+.profile-loan-info .table-bordered { behavior: none; /* conflict with overflow: auto. Must be none!*/ }
 
 
 
@@ -178,53 +141,39 @@ table.rright tbody td:not(:first-child) {
     margin-left: 25px;
 }
 
-.shop-Amazon {
-}
+.shop-Amazon { }
 
 .shop-eBay {
     background-position: 0 -35px;
     margin-left: 20px;
 }
 
-.shop-EKM {
-    background-position: 0 -70px;
-}
+.shop-EKM { background-position: 0 -70px; }
 
-.marketplace-table tr {
-    vertical-align: middle;
-}
+.marketplace-table tr { vertical-align: middle; }
 
- .show-test-customers {
-     margin-top: 20px;
- }
+.show-test-customers { margin-top: 20px; }
 
- #spl {
-	width: 100%;
+#spl {
+    width: 100%;
     height: 1000px;
 }
-#spl > div {
-	overflow: visible;
-}
 
-.left-underwriter-pane {
-    width: 400px;
-}
+#spl > div { overflow: visible; }
+
+.left-underwriter-pane { width: 400px; }
 
 .vsplitbar {
-	width: 5px;
-	background: #aaa;
+    width: 5px;
+    background: #aaa;
     margin: 0 5px;
 }
 
-.profile-tabs {
-    padding-left: 10px;
-}
+.profile-tabs { padding-left: 10px; }
 
-.blue-header{
-    border-radius: 4px;
-}
+.blue-header { border-radius: 4px; }
 
-.blue-header thead tr{
+.blue-header thead tr {
     color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #9AB1D1;
@@ -234,11 +183,9 @@ table.rright tbody td:not(:first-child) {
     background-repeat: repeat-x;
 }
 
-.green-header{
-    border-radius: 4px;
-}
+.green-header { border-radius: 4px; }
 
-.green-header  thead tr{
+.green-header thead tr {
     background-color: #B1B1B1;
     color: white;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -249,43 +196,35 @@ table.rright tbody td:not(:first-child) {
     background-repeat: repeat-x;
 }
 
-.centered thead tr th{
-    text-align: center;
-}
-table.squeezed tbody tr td{
+.centered thead tr th { text-align: center; }
+
+table.squeezed tbody tr td {
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
-.table-striped.darker tbody tr:nth-child(odd) td, .table-striped.darker tbody tr:nth-child(odd) th{
-    background-color: #F1F1F1;
-}
+.table-striped.darker tbody tr:nth-child(odd) td, .table-striped.darker tbody tr:nth-child(odd) th { background-color: #F1F1F1; }
 
-.api-check-first-column {
-    width: 140px;
-}
-.api-check-seccond-column {
-    width: 200px;
-}
+.api-check-first-column { width: 140px; }
 
-table.table{
-    font-family: Tahoma;
-}
+.api-check-seccond-column { width: 200px; }
+
+table.table { font-family: Tahoma; }
 
 .view-collection-status .control-label {
     float: left;
     width: 130px;
     padding-top: 5px;
 }
-.view-collection-status textarea {
-    resize: none; 
-}
+
+.view-collection-status textarea { resize: none; }
+
 .controls.error input.error, .controls.error select, .controls.error textarea, .controls select.error, .controls textArea.error {
-  color: #b94a48;
-  border: 2px solid #b94a48;
+    color: #b94a48;
+    border: 2px solid #b94a48;
 }
 
-.cais-comment{
+.cais-comment {
     overflow: auto;
     width: 320px;
     height: 174px;
@@ -299,24 +238,20 @@ table.table{
     margin-top: 10px;
     border-top: solid 1px #C5C5C5;
 }
-#loanhistory-table table tr td {
-    cursor: pointer;
-}
 
-.payment-schedule-table td {
-    color: #7BB224;
-}
+#loanhistory-table table tr td { cursor: pointer; }
 
-#functionsPopup h3 {
-    font-size: 16px;
-}
+.payment-schedule-table td { color: #7BB224; }
 
-.table-selected td{cursor: pointer}
+#functionsPopup h3 { font-size: 16px; }
 
-.table-selected tbody tr:hover td, .table-selected tbody tr:hover th{background-color: #E5E5E5}
+.table-selected td { cursor: pointer }
+
+.table-selected tbody tr:hover td, .table-selected tbody tr:hover th { background-color: #E5E5E5 }
 
 /* Permissions */
-[name="editEmail"], 
+
+[name="editEmail"],
 [name="changeDisabledState"],
 [name="isTestEditButton"],
 [name="updateCRM"],
@@ -355,10 +290,7 @@ a[data-bug-type],
 #RunAMLBWACheckBtn,
 #RunBWACheckBtn,
 .recheck-mp,
-#recheck-main-strat
-{
-    display: none;
-}
+#recheck-main-strat { display: none; }
 
 .permission-EmailConfirmationButton [name="editEmail"],
 .permission-CustomerStatus [name="changeDisabledState"],
@@ -407,42 +339,31 @@ a[data-bug-type],
 .role-manager #addNewDoc,
 .role-Underwriter #addNewDoc,
 .role-manager #deleteDocs,
-.role-Underwriter #deleteDocs
-{
-    display: inline-block;
-}
+.role-Underwriter #deleteDocs { display: inline-block; }
 
-.table-fixed {table-layout: fixed;}
+.table-fixed { table-layout: fixed; }
 
 .break-word {
     -ms-word-wrap: break-word;
     word-wrap: break-word;
 }
 
-.roleImg {
-    margin-top: 5px;
-}
+.roleImg { margin-top: 5px; }
 
-#installment-edit-form, #fee-edit-form {
-    margin-top: 20px;
-}
+#installment-edit-form, #fee-edit-form { margin-top: 20px; }
 
-table tr.editing td{
-    background-color: beige !important;
-}
-.profile-person-info{
-    margin-top: 58px;
-}
+table tr.editing td { background-color: beige !important; }
+
+.profile-person-info { margin-top: 58px; }
 
 .ui-jqgrid-htable {
     position: fixed;
     z-index: 10;
-    -webkit-box-shadow:  0 3px 3px rgba(0, 0, 0, 0.4);
-    box-shadow:  0 3px 3px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4);
 }
-.ui-jqgrid-bdiv {
-    margin-top: 44px !important;
-}
+
+.ui-jqgrid-bdiv { margin-top: 44px !important; }
 
 .left-underwriter-menu {
     display: block;
@@ -455,9 +376,7 @@ table tr.editing td{
     padding: 10px;
 }
 
-.customer-grids {
-    margin-left: 178px;
-}
+.customer-grids { margin-left: 178px; }
 
 .with-border {
     border: 1px solid #aaa;
@@ -469,20 +388,13 @@ table tr.editing td{
     cursor: pointer;
 }
 
-.cais-file-view {
-    overflow: auto;
-}
+.cais-file-view { overflow: auto; }
 
-.first td {
-    background: #ffffff; 
-}
+.first td { background: #ffffff; }
 
-.seccond td {
-    background: #f9f9f9; 
-}
-[data-path] {
-    text-decoration: underline;
-}
+.seccond td { background: #f9f9f9; }
+
+[data-path] { text-decoration: underline; }
 
 .checked td {
     color: #ffffff;
@@ -494,30 +406,38 @@ table tr.editing td{
     background-repeat: repeat-x;
 }
 
-.cais-table {
-    margin-top: 10px;
-}
+.cais-table { margin-top: 10px; }
 
 .cais-file-view {
     width: 98%;
     height: 95%;
-    resize: none; 
+    resize: none;
 }
 
-i.gold,i.silver,i.platinum {
+i.gold,
+i.silver,
+i.platinum,
+i.amazon,
+i.ekm,
+i.ebay,
+i.paypal {
     display: inline-block;
     height: 32px;
     width: 32px;
     background-repeat: no-repeat;
-}
-i.gold {
-    background-image: url(../img/basket-gold-32.png);
+    margin: 3px 3px 0;
 }
 
-i.silver {
-    background-image: url(../img/basket-silver-32.png);
-}
+i.gold { background-image: url(../img/basket-gold-32.png); }
 
-i.platinum {
-    background-image: url(../img/basket-platinum-32.png);
-}
+i.silver { background-image: url(../img/basket-silver-32.png); }
+
+i.platinum { background-image: url(../img/basket-platinum-32.png); }
+
+i.amazon { background-image: url(../img/mp-icons-32/icon-amazon-32.png); }
+
+i.ekm { background-image: url(../img/mp-icons-32/icon-ekm-32.png); }
+
+i.ebay { background-image: url(../img/mp-icons-32/icon-ebay-32.png); }
+
+i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }

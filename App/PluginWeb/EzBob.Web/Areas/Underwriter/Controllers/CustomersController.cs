@@ -138,7 +138,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             _gridRejected = CreateColumnsApproved();
 
-            _gridAll = CreateColumnsApproved();
+            _gridAll = CreateColumnsAll();
 
             _gridLate = CreateColumnsLate();
             _gridLate.GetColumnByIndex("RejectedReason").Hidden = true;
@@ -210,7 +210,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public UnderwriterGridResult All(GridSettings settings)
         {
-            var result = new UnderwriterGridResult(_session, null, _gridRejected, settings)
+            var result = new UnderwriterGridResult(_session, null, _gridAll, settings)
                 {
                     CustomizeFilter = crit => crit.Add(Restrictions.IsNotNull("CreditResult"))
                 };
@@ -270,6 +270,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             };
             return result;
         }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsAll()
+        {
+            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateIdColumn(gridModel);
+            return gridModel;
+        }
+
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRegisteredCustomers()
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
@@ -291,13 +301,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
-            GridHelpers.CreateRefNumColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
-            GridHelpers.CreateLoanAmountColumn(gridModel);
-            GridHelpers.CreateDateApplyedColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
-            GridHelpers.CreateStatusColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateLastStatusColumn(gridModel);
+            GridHelpers.CreateLoanAmountColumn(gridModel);
+            GridHelpers.CreateOutstandingBalance(gridModel);
+
             return gridModel;
         }
 

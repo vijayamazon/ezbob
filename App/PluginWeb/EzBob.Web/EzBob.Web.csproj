@@ -425,6 +425,11 @@
     <Content Include="Content\img\logo-amazon-small.png" />
     <Content Include="Content\img\logo_ir.jpg" />
     <Content Include="Content\img\london-the-news.jpg" />
+    <Content Include="Content\img\mp-icons-32\icon-amazon-32.png" />
+    <Content Include="Content\img\mp-icons-32\icon-credit-32.png" />
+    <Content Include="Content\img\mp-icons-32\icon-ebay-32.png" />
+    <Content Include="Content\img\mp-icons-32\icon-ekm-32.png" />
+    <Content Include="Content\img\mp-icons-32\icon-paypal-32.png" />
     <Content Include="Content\img\ok16.png" />
     <Content Include="Content\img\pdf-logo.jpg" />
     <Content Include="Content\img\printer.png" />
@@ -995,7 +1000,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfo.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.alerts.js" />
     <Content Include="Content\js\Underwriter\profile\creditBureau\ezbob.underwriter.experianInfo.js" />
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js" />
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customers.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaceDetails.js" />
     <Content Include="Content\PIE.htc" />
@@ -1324,6 +1328,7 @@
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\editFee.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.coffee" />
+    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
