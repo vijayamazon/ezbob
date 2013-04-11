@@ -3,10 +3,9 @@
 @helper PersonalInfo()
 {
     <div class="row-fluid">
-        <div class="span7">
             <h1>&nbsp;Personal Info:</h1>
             <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px;">
+            <div>
                 @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
                 {
 
@@ -110,9 +109,6 @@
                 <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
                 <a href="#" class="btn-back button orange back pull-right">Back</a>
             </div>
-        </div>
-        <div class="span1">&nbsp;</div>
-        @{Html.RenderPartial("SideBars/DetailsNotification");}
     </div>
 }
 @helper Director()
@@ -132,80 +128,72 @@
 @helper LimitedInfo()
 {
     <div class="row-fluid">
-        <div class="span7">
-            <h1>&nbsp;Business Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
-                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                {
-                    <fieldset>
-                        <legend>Company</legend>
-                        @EzForm.InputText("LimitedCompanyNumber", "Registration #", "")
-                        @EzForm.InputText("LimitedCompanyName", "Name", "")
-                        @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-                        @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "", "phonenumber")
-                        <input type="hidden" name="LimitedRefNum" class="RefNum" />
-                    </fieldset>
+        <h1>&nbsp;Business Info:</h1>
+        <h2>Safe &amp; Secure!</h2>
+        <div style="margin-bottom: 10px;">
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
+            {
+                <fieldset>
+                    <legend>Company</legend>
+                    @EzForm.InputText("LimitedCompanyNumber", "Registration #", "")
+                    @EzForm.InputText("LimitedCompanyName", "Name", "")
+                    @EzForm.AddressInput("LimitedCompanyAddress", "Address")
+                    @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "", "phonenumber")
+                    <input type="hidden" name="LimitedRefNum" class="RefNum" />
+                </fieldset>
                     
-                    <fieldset>
-                        <legend>Turnover Past 12 Months</legend>
-                        @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                        @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                    </fieldset>
+                <fieldset>
+                    <legend>Turnover Past 12 Months</legend>
+                    @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
+                    @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
+                </fieldset>
 
-                    <div class="directors">
-                    </div>
-                }
+                <div class="directors">
+                </div>
+            }
 
 
-            </div>
-            <div class="">
-                <a href="#" class="next btn-continue button orange pull-right">Complete</a>
-                <a href="#" class="back btn-back button orange pull-right">Back</a>
-            </div>
         </div>
-        <div class="span1">&nbsp;</div>
-        @{Html.RenderPartial("SideBars/DetailsNotification");}
+        <div class="">
+            <a href="#" class="next btn-continue button orange pull-right">Complete</a>
+            <a href="#" class="back btn-back button orange pull-right">Back</a>
+        </div>
     </div>
 }
 
 @helper Nonlimitedinfo()
 {
     <div class="row-fluid">
-        <div class="span7" style="padding-top: 10px;">
-            <h1>&nbsp;Business Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
-                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                {
-                    <fieldset>
-                        <legend>Company</legend>
-                        <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-                        @EzForm.InputText("NonLimitedCompanyName", "Name", "")
-                        @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
-                        @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
-                        @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
-                        @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "", "phonenumber")
+        <h1>&nbsp;Business Info:</h1>
+        <h2>Safe &amp; Secure!</h2>
+        <div style="margin-bottom: 10px;">
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
+            {
+                <fieldset>
+                    <legend>Company</legend>
+                    <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+                    @EzForm.InputText("NonLimitedCompanyName", "Name", "")
+                    @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+                    @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
+                    @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
+                    @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "", "phonenumber")
 
-                    </fieldset>
+                </fieldset>
 
-                    <fieldset>
-                        <legend>Turnover</legend>
-                        @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                        @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                    </fieldset>
-                    <div class="directors">
-                    </div>  
-                }
+                <fieldset>
+                    <legend>Turnover</legend>
+                    @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
+                    @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
+                </fieldset>
+                <div class="directors">
+                </div>  
+            }
 
-            </div>
-            <div class="">
-                <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
-                <a href="#" class="back btn-back button orange pull-right">Back</a>
-            </div>
         </div>
-        <div class="span1">&nbsp;</div>
-        @{Html.RenderPartial("SideBars/DetailsNotification");}
+        <div class="">
+            <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
+            <a href="#" class="back btn-back button orange pull-right">Back</a>
+        </div>
     </div>
 }
 

@@ -149,9 +149,9 @@ EzBob.Wizard = Backbone.View.extend({
         this.router.navTo(newCurrent);
         return false;
     },
-    addStep: function (title, view) {
+    addStep: function (title, view, header) {
         var num = this.steps.length;
-        this.steps.push({ num: num++, title: title, view: view });
+        this.steps.push({ num: num++, title: title, view: view, header: header || title });
     },
     ready: function (num) {
         var ready = this.model.get("ready") || new Array(this.model.get("total") + 1);
@@ -213,6 +213,7 @@ EzBob.Wizard = Backbone.View.extend({
             allowed = this.model.get('allowed');
         this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
         this.$el.find('.pages > div').hide().eq(current).show();
+        this.$el.find('.wizard-header').text(this.steps[current].header);
     }
 });
 

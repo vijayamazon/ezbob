@@ -6,29 +6,21 @@
 
 @helper accountInfo(){
     <div class="row-fluid">
-        <div class="row-fluid ">
-           <div class="span7" style="padding-top: 2px;">
-                <div class="wizard-top-notification">
-                    <h2>Please enter your Volusion credentials</h2>
+        <div class="wizard-top-notification">
+            <h2>Please enter your Volusion credentials</h2>
+        </div>
+        <form id="ekmAccount">                              
+            <div class="simple-well bank-account-instructions clearfix form-horizontal">
+                <div class="bank-account">
+                    @EzForm.InputText("volusion_login", "Volusion Login", "", "input-large")
+                    @EzForm.Password("volusion_password", "Volusion Password", "", "input-large")
+                    <div class="control-group clearfix" style="padding-right: 68px;">
+                        <a href="#" class="button orange  connect-volusion  disabled pull-right">Continue</a>
+                        <a href="#" class="back button orange pull-right">Back</a>
+                    </div>
                 </div>
-               <form id="ekmAccount">                              
-                   <div class="simple-well bank-account-instructions clearfix form-horizontal">
-                       <div class="bank-account">
-                           @EzForm.InputText("volusion_login", "Volusion Login", "", "input-large")
-                           @EzForm.Password("volusion_password", "Volusion Password", "", "input-large")
-                          <div class="control-group clearfix" style="padding-right: 68px;">
-                              <a href="#" class="button orange  connect-volusion  disabled pull-right">Continue</a>
-                              <a href="#" class="back button orange pull-right">Back</a>
-                          </div>
-                       </div>
-                   </div>
-               </form>
-              @{Html.RenderPartial("_SecureDisclaimer");}
-        </div>
-            <div class="span1">&nbsp;</div>
-            <div class="span4">
-                @{Html.RenderPartial("SideBars/VolusionShopNotification");}
             </div>
-        </div>
+        </form>
+        @{Html.RenderPartial("_SecureDisclaimer");}
     </div>
 }

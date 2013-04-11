@@ -3,15 +3,18 @@
 @{ ViewBag.Title = "EZBOB sign up. easy, fast and free │ EZBOB"; }
 
 @helper Wizard(){
-    <div class="row-fluid">
+    <h1 class="wizard-header"></h1>
+    <section id="content">
         @{Html.RenderPartial("_Steps");}
-    </div>
-    <div class="row-fluid notifications">
-    </div>
-    <div class="row-fluid">
-        <div class='pages'>
+        <div class="row-fluid notifications">
         </div>
-    </div>
+        <div class='pages'>
+        </div>        
+    </section>
+    <aside  id="sidebar">
+        @{Html.RenderPartial("SideBars/_SecurityStatement");}
+    </aside>
+    <div class="clear"/>
 }
 <script type="text/template" id="wizard-template">
 @Wizard()

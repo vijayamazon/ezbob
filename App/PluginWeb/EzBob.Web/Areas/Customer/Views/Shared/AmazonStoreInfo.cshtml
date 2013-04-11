@@ -1,90 +1,76 @@
-﻿@using EzBob.Web.Models.Strings
-@model dynamic
+﻿@model dynamic
 
 @helper AmazonInfo()
     {
-    <div class="row-fluid">
-       
-
-        <div class="row-fluid">
-            <div class="span7 amazon-instructions" style="padding-top: 1px;">
-            
-            <div class="instructions-header">
-                <h2>
-                    <span class="exclamation">!</span>
-                    <p>Please follow the instructions below to add your Amazon shop. We recommend <a href="#" class="yellow-link print">printing</a> the instructions below.</p>
-                </h2>
-            </div>
-
-                <div class="simple-well" style="padding-top: 10px;">
-                    
-                    <div class="screenshots-container clearfix">
-                        <h4>Click to view tutorial</h4>
-                        <div class="tutorial-arrow"></div>
-                        <a class="screenshots" rel="group" href="#"><img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" /></a>
-                    </div>
-
-                    <ol class='store-connect-manual'>
-                        <li>
-                            <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link" target="_blank">Click here</a> to be redirected to Amazon Services and login with your seller ID
-                        </li>
-                    
-                        <hr class="dotted" />
-                    
-                        <li>
-                            Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option: <q>"I want to use an <b>application</b>..."</q>
-                            <br/>and enter the following in Amazon Services:
-                            <dl>
-                                <dt>Application name</dt>
-                                <dd>EZBOB</dd>
-
-                                <dt>Developer number</dt>
-                                <dd>0145-5534-7663</dd>
-                            </dl>
-                        </li>
-                    
-                        <hr class="dotted" />
-
-                        <li>
-                            Read and accept Amazon Services terms and conditions.
-                        </li>
-                    
-                        <hr class="dotted" />
-
-                        <li>
-                            Copy and Paste from Amazon Services:
-                            @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm form-horizontal", @style = "padding-top:20px;" }))
-                            {
-                                <div class="control-group">
-                                    <label for="amazonMerchantId" class="control-label">Merchant ID</label>
-                                    <div class="controls">
-                                        <input id="amazonMerchantId" name="amazonMerchantId" type="text" value="" class="input-medium" maxlength="15" />
-                                    </div>
-                                </div>
-                                
-                                <div class="control-group">
-                                    <label for="amazonMarketplaceId" class="control-label">Marketplace ID</label>
-                                    <div class="controls">
-                                        <input id="amazonMarketplaceId" name="amazonMarketplaceId" type="text" value="" class="input-medium" maxlength="15" />
-                                    </div>
-                                </div>
-                            }
-                        </li>
-                    </ol>
-                </div>
-                <div class="control-group clearfix">
-                    <a href="#Connect/amazon" class="connect-amazon button orange pull-right">Continue</a>
-                    <a href="#" class="back button orange pull-right">Back</a>
-                </div>
-                @{Html.RenderPartial("_SecureDisclaimer");}
-            </div>
-            <div class="span1">
-                &nbsp;
-            </div>
-            <div class="span4">
-                @{Html.RenderPartial("SideBars/AmazonStoreNtification");}
-            </div>
+    <div class="amazon-instructions" style="padding-top: 1px;">            
+        <div class="instructions-header">
+            <h2>
+                <span class="exclamation">!</span>
+                <p>Please follow the instructions below to add your Amazon shop. We recommend <a href="#" class="yellow-link print">printing</a> the instructions below.</p>
+            </h2>
         </div>
+
+        <div class="simple-well" style="padding-top: 10px;">
+                    
+            <div class="screenshots-container clearfix">
+                <h4>Click to view tutorial</h4>
+                <div class="tutorial-arrow"></div>
+                <a class="screenshots" rel="group" href="#"><img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" /></a>
+            </div>
+
+            <ol class='store-connect-manual'>
+                <li>
+                    <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link" target="_blank">Click here</a> to be redirected to Amazon Services and login with your seller ID
+                </li>
+                    
+                <hr class="dotted" />
+                    
+                <li>
+                    Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option: <q>"I want to use an <b>application</b>..."</q>
+                    <br/>and enter the following in Amazon Services:
+                    <dl>
+                        <dt>Application name</dt>
+                        <dd>EZBOB</dd>
+
+                        <dt>Developer number</dt>
+                        <dd>0145-5534-7663</dd>
+                    </dl>
+                </li>
+                    
+                <hr class="dotted" />
+
+                <li>
+                    Read and accept Amazon Services terms and conditions.
+                </li>
+                    
+                <hr class="dotted" />
+
+                <li>
+                    Copy and Paste from Amazon Services:
+                    @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm form-horizontal", @style = "padding-top:20px;" }))
+                    {
+                        <div class="control-group">
+                            <label for="amazonMerchantId" class="control-label">Merchant ID</label>
+                            <div class="controls">
+                                <input id="amazonMerchantId" name="amazonMerchantId" type="text" value="" class="input-medium" maxlength="15" />
+                            </div>
+                        </div>
+                                
+                        <div class="control-group">
+                            <label for="amazonMarketplaceId" class="control-label">Marketplace ID</label>
+                            <div class="controls">
+                                <input id="amazonMarketplaceId" name="amazonMarketplaceId" type="text" value="" class="input-medium" maxlength="15" />
+                            </div>
+                        </div>
+                    }
+                </li>
+            </ol>
+        </div>
+        <div class="control-group clearfix">
+            <a href="#Connect/amazon" class="connect-amazon button orange pull-right">Continue</a>
+            <a href="#" class="back button orange pull-right">Back</a>
+        </div>
+        @{Html.RenderPartial("_SecureDisclaimer");}
     </div>
 }
 
