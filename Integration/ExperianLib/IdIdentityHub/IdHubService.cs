@@ -88,6 +88,7 @@ namespace ExperianLib.IdIdentityHub
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
             }
 
             return result;
@@ -166,6 +167,7 @@ namespace ExperianLib.IdIdentityHub
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
             }
 
             return result;
@@ -337,6 +339,7 @@ namespace ExperianLib.IdIdentityHub
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
             }
 
             return result;
@@ -426,6 +429,7 @@ namespace ExperianLib.IdIdentityHub
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
             }
 
             return result;
