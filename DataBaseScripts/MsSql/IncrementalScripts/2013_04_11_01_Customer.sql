@@ -1,0 +1,1 @@
+alter table [dbo].[Customer] add PendingStatus nvarchar(50) null

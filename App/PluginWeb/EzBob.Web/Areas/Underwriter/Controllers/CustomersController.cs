@@ -10,7 +10,6 @@ using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
 using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Transform;
 using PluginWebApp.Code.jqGrid;
 using Scorto.PluginWeb.Core.jqGrid;
 using Scorto.Web;
@@ -37,75 +36,87 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRejected;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridAll;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRegisteredCustomers;
+        private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridPending;
+        private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
 
         public ViewResult Index()
         {
             var grids = new LoansGrids
-                            {
-
-                                WaitingForDecision = new CustomerGridModel
-                                {
-                                    Action = "Waiting",
-                                    ColModel = _gridWaiting.RenderColModel(),
-                                    ColNames = _gridWaiting.RenderColNames()
-                                },
-                                Approved = new CustomerGridModel
-                                {
-                                    Action = "Approved",
-                                    ColModel = _gridApproved.RenderColModel(),
-                                    ColNames = _gridApproved.RenderColNames()
-                                },
-
-                                Late = new CustomerGridModel
-                                {
-                                    Action = "Late",
-                                    ColModel = _gridLate.RenderColModel(),
-                                    ColNames = _gridLate.RenderColNames()
-                                },
-                     
-                                Rejected = new CustomerGridModel
-                                {
-                                    Action = "Rejected",
-                                    ColModel = _gridRejected.RenderColModel(),
-                                    ColNames = _gridRejected.RenderColNames()
-                                },
-                                All = new CustomerGridModel
-                                {
-                                    Action = "All",
-                                    ColModel = _gridAll.RenderColModel(),
-                                    ColNames = _gridAll.RenderColNames()
-                                },
-                                RegisteredCustomers = new CustomerGridModel
-                                {
-                                    Action = "RegisteredCustomers",
-                                    ColModel = _gridRegisteredCustomers.RenderColModel(),
-                                    ColNames = _gridRegisteredCustomers.RenderColNames()
-                                },
-                                Config = _config,
-                                MaxLoan = _limit.GetMaxLimit()
-                            };
+                {
+                    WaitingForDecision = new CustomerGridModel
+                        {
+                            Action = "Waiting",
+                            ColModel = _gridWaiting.RenderColModel(),
+                            ColNames = _gridWaiting.RenderColNames()
+                        },
+                    Approved = new CustomerGridModel
+                        {
+                            Action = "Approved",
+                            ColModel = _gridApproved.RenderColModel(),
+                            ColNames = _gridApproved.RenderColNames()
+                        },
+                    Late = new CustomerGridModel
+                        {
+                            Action = "Late",
+                            ColModel = _gridLate.RenderColModel(),
+                            ColNames = _gridLate.RenderColNames()
+                        },
+                    Rejected = new CustomerGridModel
+                        {
+                            Action = "Rejected",
+                            ColModel = _gridRejected.RenderColModel(),
+                            ColNames = _gridRejected.RenderColNames()
+                        },
+                    All = new CustomerGridModel
+                        {
+                            Action = "All",
+                            ColModel = _gridAll.RenderColModel(),
+                            ColNames = _gridAll.RenderColNames()
+                        },
+                    RegisteredCustomers = new CustomerGridModel
+                        {
+                            Action = "RegisteredCustomers",
+                            ColModel = _gridRegisteredCustomers.RenderColModel(),
+                            ColNames = _gridRegisteredCustomers.RenderColNames()
+                        },
+                    Pending = new CustomerGridModel
+                        {
+                            Action = "Pending",
+                            ColModel = _gridPending.RenderColModel(),
+                            ColNames = _gridPending.RenderColNames()
+                        },
+                    Loans = new CustomerGridModel
+                        {
+                            Action = "Loans",
+                            ColModel = _gridLoans.RenderColModel(),
+                            ColNames = _gridLoans.RenderColNames()
+                        },
+                    Config = _config,
+                    MaxLoan = _limit.GetMaxLimit()
+                };
 
             if (_context.User.Roles.Any(r => r.Name == "manager"))
             {
                 grids.Escalated = new CustomerGridModel
-                                      {
-                                          Action = "Escalated",
-                                          ColModel = _gridEscalated.RenderColModel(),
-                                          ColNames = _gridEscalated.RenderColNames()
-                                      };
+                    {
+                        Action = "Escalated",
+                        ColModel = _gridEscalated.RenderColModel(),
+                        ColNames = _gridEscalated.RenderColNames()
+                    };
             }
 
             return View(grids);
-         }
+        }
 
         public CustomersController(
-                                    ISession session, 
-                                    CustomerRepository customers, 
-                                    IAppCreator appCreator, 
-                                    IEzBobConfiguration config,
-                                    IDecisionHistoryRepository historyRepository,
-                                    IZohoFacade crm,
-                                    IWorkplaceContext context, LoanLimit limit)
+            ISession session,
+            CustomerRepository customers,
+            IAppCreator appCreator,
+            IEzBobConfiguration config,
+            IDecisionHistoryRepository historyRepository,
+            IZohoFacade crm,
+            IWorkplaceContext context, LoanLimit limit, GridModel<EZBob.DatabaseLib.Model.Database.Customer> pending,
+            GridModel<EZBob.DatabaseLib.Model.Database.Customer> loans)
         {
             _session = session;
             _customers = customers;
@@ -115,6 +126,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _crm = crm;
             _context = context;
             _limit = limit;
+            _gridPending = pending;
+            _gridLoans = loans;
 
             _gridWaiting = CreateColumnsWaitingForDesicion();
 
@@ -122,20 +135,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             _gridApproved = CreateColumnsApproved();
 
-            _gridApproved.GetColumnByIndex("RejectedReason").Hidden = true;
+            _gridRejected = CreateColumnsRejected();
 
-            _gridRejected = CreateColumnsApproved();
-
-            _gridAll = CreateColumnsApproved();
+            _gridAll = CreateColumnsAll();
 
             _gridLate = CreateColumnsLate();
-            _gridLate.GetColumnByIndex("RejectedReason").Hidden = true;
+
+            _gridLoans = CreateColumnsLoans();
+
+            _gridPending = CreateColumnsPending();
 
             _gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
             _gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
         }
 
-        //---------------------------------------------------------------------------------
         [ValidateJsonAntiForgeryToken]
         [Ajax]
         [HttpGet]
@@ -143,9 +156,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public UnderwriterGridResult Waiting(GridSettings settings)
         {
             var result = new UnderwriterGridResult(_session, null, _gridWaiting, settings)
-                             {
-                                 CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.WaitingForDecision))
-                             };
+                {
+                    CustomizeFilter =
+                        crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.WaitingForDecision))
+                };
             return result;
         }
 
@@ -156,11 +170,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public UnderwriterGridResult Escalated(GridSettings settings)
         {
             var result = new UnderwriterGridResult(_session, null, _gridEscalated, settings)
-                             {
-                                 CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Escalated))
-                             };
-            
-
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Escalated))
+                };
             return result;
         }
 
@@ -171,9 +183,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public UnderwriterGridResult Approved(GridSettings settings)
         {
             var result = new UnderwriterGridResult(_session, null, _gridApproved, settings)
-                             {
-                                 CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Approved))
-                             };
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Approved))
+                };
             return result;
         }
 
@@ -184,9 +196,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public UnderwriterGridResult Rejected(GridSettings settings)
         {
             var result = new UnderwriterGridResult(_session, null, _gridRejected, settings)
-                             {
-                                 CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Rejected))
-                             };
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Rejected))
+                };
             return result;
         }
 
@@ -196,25 +208,25 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public UnderwriterGridResult All(GridSettings settings)
         {
-            var result = new UnderwriterGridResult(_session, null, _gridRejected, settings)
-            {
-                CustomizeFilter = crit => crit.Add( Restrictions.IsNotNull("CreditResult") )
-            };
-            //var result = new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null, _gridAll, settings);
+            var result = new UnderwriterGridResult(_session, null, _gridAll, settings)
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.IsNotNull("CreditResult"))
+                };
             return result;
         }
-        
+
         [ValidateJsonAntiForgeryToken]
         [Ajax]
         [HttpGet]
         [Transactional]
         public GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer> RegisteredCustomers(GridSettings settings)
         {
-            var result = new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null, _gridRegisteredCustomers, settings)
-            {
-                CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
-            };
-            //var result = new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null, _gridAll, settings);
+            var result = new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
+                                                                                           _gridRegisteredCustomers,
+                                                                                           settings)
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
+                };
             return result;
         }
 
@@ -225,14 +237,55 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public UnderwriterGridResult Late(GridSettings settings)
         {
             var result = new UnderwriterGridResult(_session, null, _gridLate, settings)
+                {
+                    CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Late))
+                };
+            return result;
+        }
+
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [HttpGet]
+        [Transactional]
+        public UnderwriterGridResult Pending(GridSettings settings)
+        {
+            var result = new UnderwriterGridResult(_session, null, _gridPending, settings)
             {
-                CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Late))
+                CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.ApprovedPending))
             };
             return result;
         }
 
-        //---------------------------------------------------------------------------------
-        static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRegisteredCustomers()
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [HttpGet]
+        [Transactional]
+        public UnderwriterGridResult Loans(GridSettings settings)
+        {
+            var result = new UnderwriterGridResult(_session, null, _gridLoans, settings)
+            {
+                CustomizeFilter = crit => crit.Add(Restrictions.IsNotEmpty("Loans"))
+            };
+            return result;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsAll()
+        {
+            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateIdColumn(gridModel);
+            GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
+            GridHelpers.CreateStatusColumn(gridModel);
+            GridHelpers.CreateSystemCalculatedSum(gridModel);
+            GridHelpers.CreateManualyApprovedSum(gridModel);
+            GridHelpers.CreateOutstandingBalance(gridModel);
+            return gridModel;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRegisteredCustomers()
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateIdColumn(gridModel);
@@ -243,78 +296,96 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateRegisteredDateColumn(gridModel);
             GridHelpers.CreateEbayStatus(gridModel);
             GridHelpers.CreateAmazonStatus(gridModel);
+            GridHelpers.CreateEkmStatus(gridModel);
             GridHelpers.CreatePayPalStatus(gridModel);
             GridHelpers.CreateWizardStep(gridModel);
-            
             return gridModel;
         }
 
-        //---------------------------------------------------------------------------------
-        static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsWaitingForDesicion()
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsWaitingForDesicion()
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
-
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
-            GridHelpers.CreateRefNumColumn(gridModel);
-            GridHelpers.CreateNameColumn(gridModel);            
-            GridHelpers.CreateLoanAmountColumn(gridModel);
-            GridHelpers.CreateDateApplyedColumn(gridModel);
-            GridHelpers.CreateCartColumn(gridModel);
-            GridHelpers.CreateEmailColumn(gridModel);
-            GridHelpers.CreateStatusColumn(gridModel);
-
-            return gridModel;
-        }
-
-        //---------------------------------------------------------------------------------
-        static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsEscalated()
-        {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
-
-            GridHelpers.CreateIdColumn(gridModel);
-            GridHelpers.CreateRefNumColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
-            GridHelpers.CreateLoanAmountColumn(gridModel);
-            GridHelpers.CreateDateApplyedColumn(gridModel);
-            GridHelpers.CreateCartColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateLastStatusColumn(gridModel);
+            GridHelpers.CreateSystemCalculatedSum(gridModel);
+            GridHelpers.CreateOutstandingBalance(gridModel);
+            return gridModel;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsEscalated()
+        {
+            var gridModel = CreateColumnsWaitingForDesicion();
             GridHelpers.CreateDateEscalatedColumn(gridModel);
             GridHelpers.CreateUnderwriterNameColumn(gridModel);
             GridHelpers.CreateEscalationReasonColumn(gridModel);
-            GridHelpers.CreateStatusColumn(gridModel);
-
             return gridModel;
         }
 
-        //-----------------------------------------------------------------------------
-        static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsApproved()
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsApproved()
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
-
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
-            GridHelpers.CreateRefNumColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
-            GridHelpers.CreateLoanAmountColumn(gridModel);
-            GridHelpers.CreateDateApplyedColumn(gridModel);
-            GridHelpers.CreateCartColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
             GridHelpers.CreateDateApprovedColumn(gridModel);
-            GridHelpers.CreateUnderwriterNameColumn(gridModel);
-            GridHelpers.CreateManagerNameColumn(gridModel);
-            GridHelpers.CreateStatusColumn(gridModel);
-            GridHelpers.CreateRejectedReasonColumn(gridModel);
-
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateSystemCalculatedSum(gridModel);
+            GridHelpers.CreateManualyApprovedSum(gridModel);
+            GridHelpers.CreateAmountTaken(gridModel);
+            GridHelpers.CreateOfferExpiryDate(gridModel);
+            GridHelpers.CreateNumApprovals(gridModel);
+            GridHelpers.CreateNumRejections(gridModel);
             return gridModel;
         }
 
-        static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLate()
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRejected()
+        {
+            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateIdColumn(gridModel);
+            GridHelpers.CreateNameColumn(gridModel);
+            GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateDateRejectedColumn(gridModel);
+            GridHelpers.CreateRejectedReasonColumn(gridModel);
+            GridHelpers.CreateNumRejections(gridModel);
+            GridHelpers.CreateNumApprovals(gridModel);
+            GridHelpers.CreateOutstandingBalance(gridModel);
+            return gridModel;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLate()
         {
             var gridModel = CreateColumnsApproved();
             GridHelpers.CreateDelinquency(gridModel);
+            return gridModel;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsPending()
+        {
+            var gridModel = CreateColumnsWaitingForDesicion();
+            GridHelpers.CreatePending(gridModel);
+            return gridModel;
+        }
+
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLoans()
+        {
+            var gridModel = CreateColumnsWaitingForDesicion();
 
             return gridModel;
         }
-        //-----------------------------------------------------------
+
         [Transactional]
         [HttpPost]
         [Ajax]
@@ -323,20 +394,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = workplaceContext.User;
-            var customer = _customers.Get(id);
+            var customer = _customers.GetChecked(id);
 
             customer.CreditResult = status;
-
             customer.UnderwriterName = user.Name;
 
-            var request = customer.LastCashRequest;
-            if (request != null)
-            {
-                request.IdUnderwriter = user.Id;
-                request.UnderwriterDecisionDate = DateTime.UtcNow;
-                request.UnderwriterDecision = status;
-                request.UnderwriterComment = reason;
-            }
+            var request = customer.LastCashRequest ?? new CashRequest();
+            request.IdUnderwriter = user.Id;
+            request.UnderwriterDecisionDate = DateTime.UtcNow;
+            request.UnderwriterDecision = status;
+            request.UnderwriterComment = reason;
 
             switch (status)
             {
@@ -346,7 +413,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     customer.ApprovedReason = reason;
                     var sum = request.ApprovedSum();
                     customer.CreditSum = sum;
-                    if (sum <= 0)throw new Exception("Credit sum cannot be zero or less");
+                    if (sum <= 0) throw new Exception("Credit sum cannot be zero or less");
                     request.ManagerApprovedSum = (double?) sum;
                     customer.OfferStart = request.OfferStart;
                     customer.OfferValidUntil = request.OfferValidUntil;
@@ -357,8 +424,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         _appCreator.ApprovedUser(user, customer, sum);
                     }
                     break;
-
                 case CreditResultStatus.Rejected:
+                    customer.DateRejected = DateTime.UtcNow;
                     customer.RejectedReason = reason;
                     customer.Status = Status.Rejected;
                     _historyRepository.LogAction(DecisionActions.Reject, reason, user, customer);
@@ -371,7 +438,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         _appCreator.RejectUser(user, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
                     }
                     break;
-
                 case CreditResultStatus.Escalated:
                     customer.CreditResult = CreditResultStatus.Escalated;
                     customer.DateEscalated = DateTime.UtcNow;
@@ -382,5 +448,4 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             }
         }
     }
-
 }

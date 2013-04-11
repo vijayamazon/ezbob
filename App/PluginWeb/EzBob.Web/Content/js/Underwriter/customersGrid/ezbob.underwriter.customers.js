@@ -9,7 +9,8 @@ EzBob.Underwriter.CustomersView = Backbone.View.extend({
         this.$el.find('a[data-toggle="tab"]').on('shown', _.bind(this.tabShown, this));
         _.each(this.grids, function (g) {
             EzBob.Underwriter.customerGrid(g);
-        });        
+        });
+        this.$el.find("[tooltip]").tooltip();
     },
     tabShown: function (e) {
         document.location.href = e.target.getAttribute('href');

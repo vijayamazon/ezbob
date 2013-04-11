@@ -59,15 +59,6 @@ $(function () {
         po.has("input[name='UserName']").find(".arrow").css("left", "84%");
     });
 });
-$(window).mousemove(function () {
-    var $th = $('.ui-jqgrid-htable:visible');
-    var $td = $('.ui-jqgrid-bdiv:visible');
-    if ($th.length == 0 || $td.length == 0) {
-        return;
-    }
-    var tdLeft =198.58 - $td.offset().left;
-    $th.css("margin-left", 0- tdLeft);
-});
 //-----------  jQuery extended function  -----------  
 (function ($) {
     $.fn.extend({
@@ -661,7 +652,7 @@ var dateDiff = null;
     var r = new XMLHttpRequest(),
             start = (new Date).getTime();
 
-    r.open('HEAD', document.location, false);
+    r.open('HEAD', window.gRootPath, false);
     r.onreadystatechange = function () {
         if (r.readyState != 4) {
             return null;

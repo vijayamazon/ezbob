@@ -38,6 +38,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             
             Map(x => x.DateEscalated).CustomType<UtcDateTimeType>();
             Map(x => x.DateApproved).CustomType<UtcDateTimeType>();
+            Map(x => x.DateRejected).CustomType<UtcDateTimeType>();
             Map(x => x.UnderwriterName);
             Map(x => x.ManagerName);
 
@@ -46,6 +47,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.ApprovedReason).Length(200);
 
             Map(x => x.Details);
+            Map(x => x.PendingStatus).CustomType<PendingStatusType>();
           
             Map(x => x.OfferValidUntil, "ValidFor").CustomType<UtcDateTimeType>();
             Map(x => x.OfferStart, "ApplyForLoan").CustomType<UtcDateTimeType>();
@@ -175,6 +177,12 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Inverse()
                 .Cascade.All();
 
+            HasMany(m => m.DecisionHistory)
+                .AsSet()
+                .KeyColumn("CustomerId")
+                .Inverse()
+                .Cascade.All();
+
             Map(x => x.Fraud);
             Map(x => x.Eliminated);
             Map(x=> x.Comment,"Comments").CustomType("StringClob").LazyLoad();
@@ -198,6 +206,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
             Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
+            Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
             Map(x => x.WizardStep).CustomType(typeof(WizardStepType));
 
 		}
