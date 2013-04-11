@@ -1,9 +1,8 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.EKMAccountButtonView extends EzBob.StoreButtonWithListView
+class EzBob.EKMAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
-        @listView = new EzBob.StoreListView({ model: this.model })
         super({name: 'EKM', logoText: ''})
     update: ->
         @model.fetch()

@@ -40,26 +40,32 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 view: @EbayStoreView
                 button: @EbayButtonView
                 active: 0
+                isShop: 1
             "Amazon":
                 view: @AmazonStoreInfoView
                 button: @AmazonButtonView
                 active: 0
+                isShop: 1
             "EKM":
                 view: @EKMAccountInfoView
                 button: @ekmButtonView
                 active: 0
+                isShop: 1
             "PayPoint":
                 view: @PayPointAccountInfoView
                 button: @PayPointButtonView
                 active: 0
+                isShop: 1
             "Volusion":
                 view: @volusionAccountInfoView
                 button: @volusionButtonView
                 active: 0
+                isShop: 1
             "paypal": 
                 view: @PayPalInfoView
                 button : @PayPalButtonView
                 active: 1
+                isShop: 0
 
          for j in EzBob.Config.ActiveMarketPlaces
              if @stores[j]

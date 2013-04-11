@@ -39,11 +39,19 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     render: ->
         that = this
-        buttonList = @storeList.find(".buttons-list")
+        shopsList = @storeList.find(".shops-list")
+        accountsList = @storeList.find(".accounts-list")
         row = null
         _.each @stores, (store) ->
             return unless store.active
-            store.button.render().$el.appendTo buttonList
+            return unless store.isShop
+            store.button.render().$el.appendTo shopsList
+            store.view.render().$el.hide().appendTo that.$el
+
+        _.each @stores, (store) ->
+            return unless store.active
+            return if store.isShop
+            store.button.render().$el.appendTo accountsList
             store.view.render().$el.hide().appendTo that.$el
 
         @storeList.appendTo @$el

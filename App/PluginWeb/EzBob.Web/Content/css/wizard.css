@@ -216,7 +216,7 @@ ul.list_none
 }
 #wizard .notifications > div { margin-right: 18px;}
 
-.buttons-list > div {
+.shops-list > div, .accounts-list > div {
     margin-left: 0!important;
 }
 

@@ -16,9 +16,6 @@
     }
 
     EKMAccountButtonView.prototype.initialize = function() {
-      this.listView = new EzBob.StoreListView({
-        model: this.model
-      });
       return EKMAccountButtonView.__super__.initialize.call(this, {
         name: 'EKM',
         logoText: ''
@@ -31,7 +28,7 @@
 
     return EKMAccountButtonView;
 
-  })(EzBob.StoreButtonWithListView);
+  })(EzBob.StoreButtonView);
 
   EzBob.EKMAccountInfoView = (function(_super) {
     __extends(EKMAccountInfoView, _super);

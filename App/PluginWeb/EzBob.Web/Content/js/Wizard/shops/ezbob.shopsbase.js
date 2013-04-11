@@ -1,59 +1,88 @@
 (function() {
-  var root, that;
+  var root, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
   root.EzBob = root.EzBob || {};
 
-  EzBob.StoreInfoBaseView = Backbone.View.extend({
-    initialize: function() {}
-  }, that = this, _.each(this.stores, function(store) {
-    store.button.on("selected", that.connect, that);
-    store.view.on("completed", _.bind(that.completed, that, store.button.name));
-    store.view.on("back", that.back, that);
-    return store.button.on("ready", that.ready, that);
-  }), this.storeList = $($("#store-info").html()), EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this), this.isReady = false, {
-    completed: function(name) {
+  EzBob.StoreInfoBaseView = (function(_super) {
+    __extends(StoreInfoBaseView, _super);
+
+    function StoreInfoBaseView() {
+      _ref = StoreInfoBaseView.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    StoreInfoBaseView.prototype.initialize = function() {
+      var that;
+
+      that = this;
+      _.each(this.stores, function(store) {
+        store.button.on("selected", that.connect, that);
+        store.view.on("completed", _.bind(that.completed, that, store.button.name));
+        store.view.on("back", that.back, that);
+        return store.button.on("ready", that.ready, that);
+      });
+      this.storeList = $($("#store-info").html());
+      EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
+      return this.isReady = false;
+    };
+
+    StoreInfoBaseView.prototype.completed = function(name) {
       this.stores[name].button.update();
       this.$el.find(">div").hide();
       this.storeList.show();
       return this.trigger("completed");
-    },
-    back: function() {
+    };
+
+    StoreInfoBaseView.prototype.back = function() {
       this.$el.find(">div").hide();
       this.storeList.show();
       $(document).attr("title", this.oldTitle);
       return false;
-    },
-    next: function() {
+    };
+
+    StoreInfoBaseView.prototype.next = function() {
       this.trigger("next");
       EzBob.App.trigger("clear");
       return false;
-    },
-    ready: function(name) {
+    };
+
+    StoreInfoBaseView.prototype.ready = function(name) {
       this.trigger("ready", name);
       if (!this.isReady) {
         this.isReady = true;
         return this.$el.find(".next").show();
       }
-    },
-    render: function() {
-      var buttonList, i, row;
+    };
+
+    StoreInfoBaseView.prototype.render = function() {
+      var accountsList, row, shopsList, that;
 
       that = this;
-      buttonList = this.storeList.find(".buttons-list");
+      shopsList = this.storeList.find(".shops-list");
+      accountsList = this.storeList.find(".accounts-list");
       row = null;
-      i = 0;
       _.each(this.stores, function(store) {
         if (!store.active) {
           return;
         }
-        if ((i % 2) === 0) {
-          row = $("<div class='row-fluid'/>");
-          row.appendTo(buttonList);
+        if (!store.isShop) {
+          return;
         }
-        i++;
-        store.button.render().$el.appendTo(row);
+        store.button.render().$el.appendTo(shopsList);
+        return store.view.render().$el.hide().appendTo(that.$el);
+      });
+      _.each(this.stores, function(store) {
+        if (!store.active) {
+          return;
+        }
+        if (store.isShop) {
+          return;
+        }
+        store.button.render().$el.appendTo(accountsList);
         return store.view.render().$el.hide().appendTo(that.$el);
       });
       this.storeList.appendTo(this.$el);
@@ -61,17 +90,20 @@
         that.ready();
       }
       return this;
-    },
-    events: {
+    };
+
+    StoreInfoBaseView.prototype.events = {
       "click a.connect-store": "close",
       "click a.next": "next",
       "click a.back-step": "previousClick"
-    },
-    previousClick: function() {
+    };
+
+    StoreInfoBaseView.prototype.previousClick = function() {
       this.trigger("previous");
       return false;
-    },
-    connect: function(storeName) {
+    };
+
+    StoreInfoBaseView.prototype.connect = function(storeName) {
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       this.stores[storeName].view.$el.show();
@@ -79,8 +111,9 @@
       this.setDocumentTitle(storeName);
       this.setFocus(storeName);
       return false;
-    },
-    setFocus: function(storeName) {
+    };
+
+    StoreInfoBaseView.prototype.setFocus = function(storeName) {
       switch (storeName) {
         case "ekm":
           return this.$el.find("#ekm_login").focus();
@@ -91,8 +124,9 @@
         case "bank-account":
           return this.$el.find("#AccountNumber").focus();
       }
-    },
-    setDocumentTitle: function(storeName) {
+    };
+
+    StoreInfoBaseView.prototype.setDocumentTitle = function(storeName) {
       switch (storeName) {
         case "amazon":
           return $(document).attr("title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB");
@@ -103,8 +137,14 @@
         case "paypal":
           return $(document).attr("title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB");
       }
-    },
-    close: function() {}
-  });
+    };
+
+    StoreInfoBaseView.prototype.close = function() {
+      return this;
+    };
+
+    return StoreInfoBaseView;
+
+  })(Backbone.View);
 
 }).call(this);
