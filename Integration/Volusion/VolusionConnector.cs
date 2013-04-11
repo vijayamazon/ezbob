@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RestSharp;
 
 namespace Integration.Volusion
 {
@@ -8,7 +9,8 @@ namespace Integration.Volusion
 	public class VolusionConnector {
 		#region method Validate
 
-		public bool Validate(string userName, string password, out string errMsg) {
+		public bool Validate(string shopName, string url, string userName, string password, out string errMsg) {
+			// RestClient
 			throw new NotImplementedException();
 		} // Validate
 

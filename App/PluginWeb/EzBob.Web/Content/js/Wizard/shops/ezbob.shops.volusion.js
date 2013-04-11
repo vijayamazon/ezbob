@@ -53,6 +53,8 @@
     VolusionAccountInfoView.prototype.ui = {
       login: '#volusion_login',
       password: '#volusion_password',
+      shopname: '#volusion_shopname',
+      url: '#volusion_url',
       connect: 'a.connect-volusion',
       form: 'form'
     };
@@ -76,7 +78,9 @@
       }
       acc = new EzBob.VolusionAccountModel({
         login: this.ui.login.val(),
-        password: this.ui.password.val()
+        password: this.ui.password.val(),
+        displayName: this.ui.shopname.val(),
+        url: this.ui.url.val()
       });
       xhr = acc.save();
       if (!xhr) {

@@ -23,6 +23,8 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
     ui:
         login       : '#volusion_login'
         password    : '#volusion_password'
+        shopname    : '#volusion_shopname'
+        url         : '#volusion_url'
         connect     : 'a.connect-volusion'
         form        : 'form'
 
@@ -34,7 +36,12 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         return false if not @validator.form()            
         return false if @$el.find('a.connect-volusion').hasClass('disabled')            
 
-        acc = new EzBob.VolusionAccountModel({login: @ui.login.val(), password: @ui.password.val()})
+        acc = new EzBob.VolusionAccountModel({
+            login: @ui.login.val(),
+            password: @ui.password.val(),
+            displayName: @ui.shopname.val(),
+            url: @ui.url.val()
+        })
 
         xhr = acc.save()
 

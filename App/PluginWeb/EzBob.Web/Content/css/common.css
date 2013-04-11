@@ -101,8 +101,9 @@ ul.storelist li span {
 
 #ekmAccount input[type="text"], #ekmAccount input[type="password"],
 #payPointAccount input[type="text"], #payPointAccount input[type="password"], #payPointAccount input[type="password"] { width: 245px; }
+
 #volusionAccount input[type="text"], #volusionAccount input[type="password"]
-{ width: 195px; }
+{ width: 400px; }
 
 .field-validation-error { display: block; }
 

@@ -59,7 +59,11 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
+<<<<<<< HEAD
       var accountsList, row, shopsList, that;
+=======
+      var buttonList, row, that;
+>>>>>>> Volusion login form
 
       that = this;
       shopsList = this.storeList.find(".shops-list");
@@ -69,6 +73,7 @@
         if (!store.active) {
           return;
         }
+<<<<<<< HEAD
         if (!store.isShop) {
           return;
         }
@@ -84,6 +89,9 @@
           return;
         }
         store.button.render().$el.appendTo(accountsList);
+=======
+        store.button.render().$el.appendTo(buttonList);
+>>>>>>> Volusion login form
         return store.view.render().$el.hide().appendTo(that.$el);
       });
       this.storeList.appendTo(this.$el);
@@ -115,11 +123,21 @@
     };
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
+<<<<<<< HEAD
+=======
+      var sText;
+
+      console.log("setFocus", storeName);
+>>>>>>> Volusion login form
       switch (storeName) {
-        case "ekm":
+        case "EKM":
           return this.$el.find("#ekm_login").focus();
-        case "volusion":
-          return this.$el.find("#volusion_login").focus();
+        case "Volusion":
+          sText = $("#header_description").text().trim();
+          if ("" === this.$el.find("#volusion_login").val()) {
+            this.$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")));
+          }
+          return this.$el.find("#volusion_shopname").focus();
         case "payPoint":
           return this.$el.find("#payPoint_login").focus();
         case "bank-account":

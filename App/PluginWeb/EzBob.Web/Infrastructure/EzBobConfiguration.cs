@@ -51,6 +51,10 @@ namespace EzBob.Web.Infrastructure
         string ReneweBayTokenStrategyName { get; }
         string PasswordPolicyType { get; }
         string CAISNoUploadStrategyName { get; }
+        string VolusionShopName { get; }
+        string VolusionShopUrl { get; }
+        string VolusionShopLogin { get; }
+        string VolusionShopPassword { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -117,6 +121,11 @@ namespace EzBob.Web.Infrastructure
         {
             get { return GetValueWithDefault<string>("CaptchaMode", "off"); }
         }
+
+        public string VolusionShopName     { get { return this.GetValueWithDefault<string>("VolusionShopName",     ""); } }
+        public string VolusionShopUrl      { get { return this.GetValueWithDefault<string>("VolusionShopUrl",      ""); } }
+        public string VolusionShopLogin    { get { return this.GetValueWithDefault<string>("VolusionShopLogin",    ""); } }
+        public string VolusionShopPassword { get { return this.GetValueWithDefault<string>("VolusionShopPassword", ""); } }
 
         public bool WizardTopNaviagtionEnabled
         {

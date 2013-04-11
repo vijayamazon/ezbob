@@ -1,19 +1,25 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using StructureMap
+@model dynamic
 
 <script id="VolusionAccoutInfoTemplate" type="text/template">
     @accountInfo()
 </script>
 
 @helper accountInfo(){
+    var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
+
     <div class="row-fluid">
         <div class="wizard-top-notification">
             <h2>Please enter your Volusion credentials</h2>
         </div>
-        <form id="ekmAccount">                              
+        <form id="volusionAccount">                              
             <div class="simple-well bank-account-instructions clearfix form-horizontal">
                 <div class="bank-account">
-                    @EzForm.InputText("volusion_login", "Volusion Login", "", "input-large")
-                    @EzForm.Password("volusion_password", "Volusion Password", "", "input-large")
+                    @EzForm.InputText("volusion_shopname", "Volusion Shop Name", oCfg.VolusionShopName, "")
+                    @EzForm.InputText("volusion_url", "Volusion Shop URL", oCfg.VolusionShopUrl, "")
+                    @EzForm.InputText("volusion_login", "Volusion Login", oCfg.VolusionShopLogin, "")
+                    @EzForm.Password("volusion_password", "Volusion Password", oCfg.VolusionShopPassword, "")
                     <div class="control-group clearfix" style="padding-right: 68px;">
                         <a href="#" class="button orange  connect-volusion  disabled pull-right">Continue</a>
                         <a href="#" class="back button orange pull-right">Back</a>
