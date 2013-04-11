@@ -4,7 +4,7 @@
 @model dynamic
 @{
     var captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
-    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    var securityQuestions = ViewData["Questions"] as List<SecurityQuestion>;
 }
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix form-horizontal"}))
