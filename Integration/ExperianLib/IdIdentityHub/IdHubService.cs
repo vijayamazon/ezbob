@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Authentication;
 using System.Text.RegularExpressions;
+using System.Xml;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using ExperianLib.Web_References.IDHubService;
 using EzBob.Configuration;
@@ -24,14 +26,14 @@ namespace ExperianLib.IdIdentityHub
         }
 
         //-----------------------------------------------------------------------------------
-        public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, int customerId, bool checkInCacheOnly = false)
+        public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
         {
             var result = new AuthenticationResults();
 
             var key = String.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
             Log.DebugFormat("Checking key '{0}' in cache...", key);
             var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, null);
-            if (cachedValue != null)
+            if (cachedValue != null && string.IsNullOrEmpty(xmlForDebug))
             {
                 Log.DebugFormat("Will use cache value for key '{0}'", key);
                 result.Parse(cachedValue);
@@ -71,14 +73,23 @@ namespace ExperianLib.IdIdentityHub
 
             try
             {
-                var service = InitService();
-                if (service == null)
+                ProcessConfigResponseType r;
+                if (string.IsNullOrEmpty(xmlForDebug))
                 {
-                    Log.Error("Auth service problems, please check");
-                    result.Error = "Auth problems, please see log.";
-                    return result;
+                    try
+                    {
+                        r = MakeRequest(execRequest);
+                    }
+                    catch (AuthenticationException exception)
+                    {
+                        result.Error = exception.Message;
+                        return result;
+                    }
                 }
-                var r = service.ExecuteRequestOperation(execRequest);
+                else
+                {
+                    r = GetRequestFromXml(xmlForDebug);
+                }
                 var logItem = Utils.WriteLog(execRequest, r, "AML A check", customerId);
                 _bankCacheRepository.Set(key, r, logItem);
 
@@ -96,7 +107,7 @@ namespace ExperianLib.IdIdentityHub
         //-----------------------------------------------------------------------------------
         public AuthenticationResults AuthenticateForcedWithCustomAddress(string foreName, string middleName, string surname, string gender, DateTime birth,
                                                                    string houseNumber, string houseName, string street, string district,
-                                                                   string town, string county, string postCode, int customerId)
+                                                                   string town, string county, string postCode, int customerId, string xmlForDebug = "")
         {
             var result = new AuthenticationResults();
 
@@ -149,14 +160,23 @@ namespace ExperianLib.IdIdentityHub
 
             try
             {
-                var service = InitService();
-                if (service == null)
+                ProcessConfigResponseType r;
+                if (string.IsNullOrEmpty(xmlForDebug))
                 {
-                    Log.Error("Auth service problems, please check");
-                    result.Error = "Auth problems, please see log.";
-                    return result;
+                    try
+                    {
+                        r = MakeRequest(execRequest);
+                    }
+                    catch (AuthenticationException exception)
+                    {
+                        result.Error = exception.Message;
+                        return result;
+                    }
                 }
-                var r = service.ExecuteRequestOperation(execRequest);
+                else
+                {
+                    r = GetRequestFromXml(xmlForDebug);
+                }
                 var logItem = Utils.WriteLog(execRequest, r, "AML A check", customerId);
                 _bankCacheRepository.Set(key, r, logItem);
 
@@ -264,14 +284,14 @@ namespace ExperianLib.IdIdentityHub
         }
 
         //-----------------------------------------------------------------------------------
-        public AccountVerificationResults AccountVerification(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, string branchCode, string accountNumber, int customerId, bool checkInCacheOnly = false)
+        public AccountVerificationResults AccountVerification(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, string branchCode, string accountNumber, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
         {
             var result = new AccountVerificationResults();
 
             var key = String.Format("{0}_{1}", branchCode, accountNumber);
             Log.DebugFormat("Checking key '{0}' in cache...", key);
             var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, null);
-            if (cachedValue != null)
+            if (cachedValue != null && string.IsNullOrEmpty(xmlForDebug))
             {
                 Log.DebugFormat("Will use cache value for key '{0}'", key);
                 result.Parse(cachedValue);
@@ -320,14 +340,23 @@ namespace ExperianLib.IdIdentityHub
 
             try
             {
-                var service = InitService();
-                if (service == null)
+                ProcessConfigResponseType r;
+                if (string.IsNullOrEmpty(xmlForDebug))
                 {
-                    Log.Error("Auth service problems, please check");
-                    result.Error = "Auth problems, please see log.";
-                    return result;
+                    try
+                    {
+                        r = MakeRequest(execRequestBwa);
+                    }
+                    catch (AuthenticationException exception)
+                    {
+                        result.Error = exception.Message;
+                        return result;
+                    }
                 }
-                var r = service.ExecuteRequestOperation(execRequestBwa);
+                else
+                {
+                    r = GetRequestFromXml(xmlForDebug);
+                }
                 var logItem = Utils.WriteLog(execRequestBwa, r, "BWA check", customerId);
                 _bankCacheRepository.Set(key, r, logItem);
 
@@ -348,7 +377,7 @@ namespace ExperianLib.IdIdentityHub
                                                               string gender, DateTime birth,
                                                               string houseNumber, string houseName, string street, string district,
                                                               string town, string county, string postCode,
-                                                              string branchCode, string accountNumber, int customerId)
+                                                              string branchCode, string accountNumber, int customerId, string xmlForDebug = "")
         {
             var result = new AccountVerificationResults();
 
@@ -409,14 +438,24 @@ namespace ExperianLib.IdIdentityHub
 
             try
             {
-                var service = InitService();
-                if (service == null)
+                ProcessConfigResponseType r;
+                if (string.IsNullOrEmpty(xmlForDebug))
                 {
-                    Log.Error("Auth service problems, please check");
-                    result.Error = "Auth problems, please see log.";
-                    return result;
+                    try
+                    {
+                        r = MakeRequest(execRequestBwa);
+                    }
+                    catch (AuthenticationException exception)
+                    {
+                        result.Error = exception.Message;
+                        return result;
+                    }
                 }
-                var r = service.ExecuteRequestOperation(execRequestBwa);
+                else
+                {
+                    r = GetRequestFromXml(xmlForDebug);
+                }
+
                 var logItem = Utils.WriteLog(execRequestBwa, r, "BWA check", customerId);
                 _bankCacheRepository.Set(key, r, logItem);
 
@@ -431,6 +470,23 @@ namespace ExperianLib.IdIdentityHub
             return result;
         }
 
+        private ProcessConfigResponseType MakeRequest( ExecuteRequestType execRequest)
+        {
+            var service = InitService();
+            if (service == null)
+            {
+                Log.Error("Auth service problems, please check");
+                throw new AuthenticationException("Auth problems, please see log.");
+            }
+            return service.ExecuteRequestOperation(execRequest);
+        }
+
+        private static ProcessConfigResponseType GetRequestFromXml(string xml)
+        {
+            var xmlDoc = XmlReader.Create(new System.IO.StringReader(xml));
+            var serialize = new System.Xml.Serialization.XmlSerializer(typeof(ProcessConfigResponseType));
+            return serialize.Deserialize(xmlDoc) as ProcessConfigResponseType;
+        }
         //-----------------------------------------------------------------------------------
         private EndpointService InitService()
         {
