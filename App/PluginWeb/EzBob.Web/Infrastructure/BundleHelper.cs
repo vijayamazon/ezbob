@@ -104,6 +104,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/popover.css")
                 .Add("~/Content/css/shops.css")
                 .Add("~/Content/css/coin-slider-styles.css")
+                .Add("~/Content/css/app.css")
                 
                 .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
