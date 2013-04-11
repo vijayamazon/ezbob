@@ -38,6 +38,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             
             Map(x => x.DateEscalated).CustomType<UtcDateTimeType>();
             Map(x => x.DateApproved).CustomType<UtcDateTimeType>();
+            Map(x => x.DateRejected).CustomType<UtcDateTimeType>();
             Map(x => x.UnderwriterName);
             Map(x => x.ManagerName);
 
@@ -46,6 +47,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.ApprovedReason).Length(200);
 
             Map(x => x.Details);
+            Map(x => x.PendingStatus).CustomType<PendingStatusType>();
           
             Map(x => x.OfferValidUntil, "ValidFor").CustomType<UtcDateTimeType>();
             Map(x => x.OfferStart, "ApplyForLoan").CustomType<UtcDateTimeType>();
@@ -170,6 +172,12 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Cascade.All();
 
             HasMany(m => m.BankAccounts)
+                .AsSet()
+                .KeyColumn("CustomerId")
+                .Inverse()
+                .Cascade.All();
+
+            HasMany(m => m.DecisionHistory)
                 .AsSet()
                 .KeyColumn("CustomerId")
                 .Inverse()

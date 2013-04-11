@@ -73,15 +73,11 @@ EzBob.Underwriter.customerGrid = (settings) ->
 
     $div = $("<div class='show-test-customers'></div>")
     checkbox.appendTo $div
-    div.appendTo settings.$el
+    $div.appendTo settings.$el
     settings.$el.on "dblclick", "tr", (ev) ->
         href = $(ev.currentTarget).find("a").first().attr("href")
         window.location.href = href if href
         false
-
-    $(window).bind("resize", ->
-        settings.$el.setGridWidth $(window).width() * 0.8
-    ).trigger "resize"
 
 # --- forrmaters ---
 $.fn.fmatter.profileWithTypeLink = (cellval, opts) ->
@@ -126,3 +122,10 @@ $.fn.fmatter.dateNative = (cellval, opts, row) ->
         date = new Date(parseInt(q.substring(0, 4)), parseInt(q.substring(5, 7)) - 1, parseInt(q.substring(8, 10)), parseInt(q.substring(11, 13)), parseInt(q.substring(14, 16)))
         return date.format("dd.MM.yyyy")
     date.format "DD.MM.YYYY"
+
+$.fn.fmatter.CheckDateWithNow = (cellval, opts, row) ->
+    date = moment(cellval)
+    isPast = moment(new Date) > date
+    el = $.fn.fmatter.dateNative(cellval, opts, row)
+    el = "<span class='blue'>#{el}</span>" if not isPast
+    el

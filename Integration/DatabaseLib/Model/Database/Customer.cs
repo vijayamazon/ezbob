@@ -10,7 +10,20 @@ using NHibernate.Type;
 using Scorto.NHibernate.Types;
 
 namespace EZBob.DatabaseLib.Model.Database {
-    
+
+    public enum PendingStatus
+    {
+        AML,
+        Bank,
+        Bank_AML,
+        Manual
+    }
+
+    public class PendingStatusType : EnumStringType<PendingStatus>
+    {
+
+    }
+
     public enum SystemDecision
     {
         Approve,
@@ -218,12 +231,20 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual DateTime? GreetingMailSentDate { get; set; }
 
+
+        public virtual Iesi.Collections.Generic.ISet<DecisionHistory> DecisionHistory
+        {
+            get { return _decisionHistory; }
+            set { _decisionHistory = value; }
+        }
+
         /// <summary>
         /// Êîëè÷åñòî ïîïûòîê ïîëó÷èòü êýø. Ïî ñóòè êîëè÷åñòî íàæàòèé íà êíîïêó Request Cash.
         /// </summary>
         public virtual int ApplyCount { get; set; }
         public virtual DateTime? DateEscalated { get; set; }
         public virtual DateTime? DateApproved { get; set; }
+        public virtual DateTime? DateRejected { get; set; }
         public virtual string UnderwriterName { get; set; }
         public virtual string ManagerName { get; set; }
         
@@ -236,8 +257,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual string Comment { get; set; }
         public virtual string Details { get; set; }
-        
 
+        public virtual PendingStatus PendingStatus { get; set; }
         
         /// <summary>
         /// Offer start date
@@ -273,6 +294,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         private CardInfo _currentCard;
         private CollectionStatus _collectionStatus;
         private string _payPointTransactionId;
+        private Iesi.Collections.Generic.ISet<DecisionHistory> _decisionHistory = new HashedSet<DecisionHistory>();
 
 
         public virtual Iesi.Collections.Generic.ISet<ScoringResult> ScoringResults

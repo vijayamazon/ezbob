@@ -78,7 +78,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Cart Icon",
+                    Caption = "Cart",
                     Name = "Medal",
                     Index = "Medal",
                     Resizable = false,
@@ -98,7 +98,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Date Applyed",
+                    Caption = "Apply Date",
                     Name = "OfferStart",
                     Index = "OfferStart",
                     Resizable = false,
@@ -108,7 +108,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Sortable = true,
                     Search = true,
-                    Width = 115,
+                    Width = 90,
                     DataType = TypeCode.DateTime,
                     Data = x => x.OfferStart,
                     DateColumn = true,
@@ -116,13 +116,13 @@ namespace EzBob.Web.Areas.Underwriter
                 });
         }
 
-        public static void CreateLoanAmountColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateSystemCalculatedSum(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Loan amount",
-                    Name = "CreditSum",
-                    Index = "CreditSum",
+                    Caption = "Sys. Calc. Approved £",
+                    Name = "Amount",
+                    Index = "SystemCalculatedSum",
                     Search = true,
                     Resizable = false,
                     Align = Align.Center,
@@ -130,9 +130,102 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Width = 100,
-                    Formatter = "tooltipText",
                     DataType = TypeCode.Decimal,
-                    Data = x => x.CreditSum ?? 0
+                    Data = x => x.LastCashRequest.SystemCalculatedSum ?? 0
+                });
+        }
+        public static void CreateManualyApprovedSum(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Manual Approved £",
+                    Name = "ManualAmount",
+                    Index = "ManualSum",
+                    Search = true,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 100,
+                    DataType = TypeCode.Decimal,
+                    Data = x => x.LastCashRequest.ManagerApprovedSum ?? 0
+                });
+        }
+        public static void CreateAmountTaken(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Amount Taken",
+                    Name = "AmountTaken",
+                    Index = "AmountTaken",
+                    Search = false,
+                    Sortable = false,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 100,
+                    DataType = TypeCode.Decimal,
+                    Data = x => x.Loans.Sum(y=>y.LoanAmount)
+                });
+        }
+        public static void CreateNumApprovals(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "# approvals",
+                    Name = "NumApprovals",
+                    Index = "NumApprovals",
+                    Search = false,
+                    Sortable = false,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 100,
+                    DataType = TypeCode.String,
+                    Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Approve)
+                });
+        }
+        public static void CreateNumRejections(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "# rejections",
+                    Name = "Numrejections",
+                    Index = "Numrejections",
+                    Search = false,
+                    Sortable = false,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 100,
+                    DataType = TypeCode.String,
+                    Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Reject)
+                });
+        }
+        public static void CreateOfferExpiryDate(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Offer Expiry Date",
+                    Name = "OfferValidUntil",
+                    Index = "OfferValidUntil",
+                    Search = true,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 100,
+                    Formatter = "CheckDateWithNow",
+                    DataType = TypeCode.DateTime,
+                    Data = x => x.OfferValidUntil
                 });
         }
 
@@ -143,7 +236,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Caption = "#",
                 Name = "Id",
                 Index = "Id",
-                Width = 60,
+                Width = 45,
                 Key = true,
                 Resizable = false,
                 Align = Align.Center,
@@ -265,6 +358,24 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.DateEscalated
                 });
         }
+        public static void CreateDateRejectedColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Reject Date",
+                    Name = "DateRejected",
+                    Index = "DateRejected",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 115,
+                    DataType = TypeCode.DateTime,
+                    Formatter = "dateNative",
+                    Data = x => x.DateRejected
+                });
+        }
 
         public static void CreateRejectedReasonColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
@@ -304,7 +415,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Date approved",
+                    Caption = "Date current Approved",
                     Name = "DateApproved",
                     Index = "DateApproved",
                     Resizable = false,
@@ -361,7 +472,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "Registration Date",
+                Caption = "Reg. Date",
                 Name = "RegisteredDate",
                 Index = "GreetingMailSentDate",
                 Resizable = false,
@@ -370,7 +481,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Width = 130,
+                Width = 75,
                 DataType = TypeCode.DateTime,
                 Data = x => x.GreetingMailSentDate,
                 Formatter = "dateNative"
@@ -496,7 +607,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "MP",
+                Caption = "MPs",
                 Name = "MP",
                 Index = "Mp",
                 Resizable = false,
@@ -527,7 +638,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Fixed = false,
                 Search = false,
                 Sortable = false,
-                Width = 115,
+                Width = 70,
                 DataType = TypeCode.String,
                 Data = x => CalculateStatus(x)
             });
@@ -537,7 +648,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "Outstanding Balance",
+                Caption = "O/S Balance",
                 Name = "OutstandingBalance",
                 Index = "OutstandingBalance",
                 Resizable = false,
@@ -547,11 +658,32 @@ namespace EzBob.Web.Areas.Underwriter
                 Fixed = false,
                 Search = false,
                 Sortable = false,
-                Width = 115,
+                Width = 75,
                 DataType = TypeCode.String,
                 Data = x => x.Loans.Sum(y=>y.Balance)
             });
         }
+
+        public static void CreatePending(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Pending Status",
+                Name = "PendingStatus",
+                Index = "PendingStatus",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 85,
+                DataType = TypeCode.String,
+                Data = x => x.PendingStatus.ToString()
+            });
+        }
+        
     /*
      * Helpers
      */
@@ -578,9 +710,16 @@ namespace EzBob.Web.Areas.Underwriter
 
         public static string CalculateStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            var cr = customer.LastCashRequest;
-
-            return cr.UnderwriterDecision != null ? cr.UnderwriterDecision.ToString() : cr.SystemDecision.ToString();
+            var decisionHistory = customer.DecisionHistory.LastOrDefault();
+            if (decisionHistory == null)
+            {
+                return "N/A";
+            }
+            return decisionHistory.Action.ToString();
+        }
+        public static DecisionHistory GetLastHistory(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            return customer.DecisionHistory.LastOrDefault();
         }
     }
 }
