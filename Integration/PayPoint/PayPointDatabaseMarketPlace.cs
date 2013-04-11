@@ -6,7 +6,7 @@ using EzBob.CommonLib;
 
 namespace PayPoint
 {
-    public class PayPointDatabaseMarketPlace : DatabaseMarketplaceBase<PayPointDatabaseMarketPlace, PayPointDatabaseFunctionType>
+    public class PayPointDatabaseMarketPlace : DatabaseMarketplaceBase<PayPointDatabaseFunctionType>
     {
         public PayPointDatabaseMarketPlace()
             : base(new PayPointServiceInfo())

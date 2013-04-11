@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
@@ -15,5 +16,10 @@ namespace EzBob.PayPalDbLib
 		{
 			return PayPalDatabaseFunctionStorage.Instance.GetFunctionById( id );
 		}
+
+        public IEnumerable<IDatabaseFunction> GetAll()
+        {
+            return PayPalDatabaseFunctionStorage.Instance.AllFunctions();
+        }
 	}
 }

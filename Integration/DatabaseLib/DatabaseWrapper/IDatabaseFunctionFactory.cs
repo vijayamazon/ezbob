@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper
@@ -8,6 +9,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		IDatabaseFunction Create(T enumItem);
 
 		IDatabaseFunction GetById( Guid id );
-	}
-	
+	    IEnumerable<IDatabaseFunction> GetAll();
+	}	
 }

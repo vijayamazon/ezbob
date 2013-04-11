@@ -3,7 +3,7 @@ using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 
 namespace Integration.Volusion {
-	public class VolusionDatabaseMarketPlace : DatabaseMarketplaceBase<VolusionDatabaseMarketPlace, VolusionDatabaseFunctionType> {
+	public class VolusionDatabaseMarketPlace : DatabaseMarketplaceBase<VolusionDatabaseFunctionType> {
         public VolusionDatabaseMarketPlace() : base(new VolusionServiceInfo()) {}
 
         public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {

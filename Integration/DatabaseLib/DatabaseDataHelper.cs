@@ -117,28 +117,7 @@ namespace EZBob.DatabaseLib
             return client;
         }
 
-        public void InitDatabaseMarketPlace<TEnum>(DatabaseMarketplaceBase<TEnum> databaseMarketPlace)
-        {
-            // Add Market Place if not Exists
-            if (!_MarketPlaceRepository.Exists(databaseMarketPlace.InternalId))
-            {
-                var marketPlace = new MP_MarketplaceType
-                                      {
-                                          InternalId = databaseMarketPlace.InternalId,
-                                          Description = databaseMarketPlace.Description,
-                                          Name = databaseMarketPlace.DisplayName,
-                                      };
-                _MarketPlaceRepository.Save(marketPlace);
-            }
-
-            // Add Functions if not exists any
-            var list = databaseMarketPlace.DatabaseFunctionList;
-
-            if (list != null)
-            {
-                list.ToList().ForEach(f => AddFunctionIfNotExists(f, databaseMarketPlace));
-            }
-        }
+        
 
 
         public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -193,43 +172,6 @@ namespace EZBob.DatabaseLib
             return _AnalyisisFunctionRepository.Get(databaseFunction.InternalId);
         }
 
-        private void AddFunctionIfNotExists(IDatabaseFunction func, IMarketplaceType databaseMarketplace)
-        {
-            MP_ValueType mpValueType = GetValueType(func.FunctionValueType);
-
-            if (!_AnalyisisFunctionRepository.Exists(func.InternalId))
-            {
-                var f = new MP_AnalyisisFunction
-                {
-                    InternalId = func.InternalId,
-                    Marketplace = GetMarketPlace(databaseMarketplace),
-                    Name = func.Name,
-                    ValueType = mpValueType,
-                    Description = func.Description
-                };
-
-                _AnalyisisFunctionRepository.Save(f);
-            }
-            else
-            {
-                var f = _AnalyisisFunctionRepository.Get(func.InternalId);
-
-                if (!string.Equals(f.Name, func.Name) || f.ValueType != mpValueType || !string.Equals(f.Description, func.Description))
-                {
-                    f.Name = func.Name;
-                    f.ValueType = mpValueType;
-                    f.Description = func.Description;
-
-                    _AnalyisisFunctionRepository.Update(f);
-                }
-            }
-        }
-
-        private MP_ValueType GetValueType(IDatabaseValueType databaseValueType)
-        {
-            return _ValueTypeRepository.Get(databaseValueType.InternalId);
-        }
-
         public void InitFunctionTimePeriod()
         {
             foreach (var timePeriod in TimePeriodBase.AllTimePeriods)
@@ -240,26 +182,6 @@ namespace EZBob.DatabaseLib
                 period.Description = timePeriod.Description;
 
                 _AnalysisFunctionTimePeriodRepository.SaveOrUpdate(period);
-            }
-        }
-
-        public void InitValueTypes()
-        {
-            foreach (DatabaseValueTypeEnum enumItem in Enum.GetValues(typeof(DatabaseValueTypeEnum)))
-            {
-                var valueType = DatabaseValueTypeFactory.Create(enumItem);
-
-                if (!_ValueTypeRepository.Exists(valueType.InternalId))
-                {
-                    var period = new MP_ValueType
-                    {
-                        InternalId = valueType.InternalId,
-                        Name = valueType.Name,
-                        Description = valueType.Description
-                    };
-
-                    _ValueTypeRepository.Save(period);
-                }
             }
         }
 
@@ -520,7 +442,7 @@ namespace EZBob.DatabaseLib
             int customerMarketPlaceId;
             var now = DateTime.UtcNow;
 
-            var customerMarketPlace = GetExistsCustomerMarketPlace(displayname, marketplaceType, customer.Id);
+            var customerMarketPlace = GetExistsCustomerMarketPlace(displayname, marketplaceType, customer);
             
             if (customerMarketPlace != null)
             {
@@ -548,9 +470,9 @@ namespace EZBob.DatabaseLib
             return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
         }
 
-        public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, int customerId)
+        public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
         {
-            return _CustomerMarketplaceRepository.Get(customerId, marketplaceType.InternalId, marketPlaceName);
+            return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);
         }
 
         public MP_MarketplaceType GetMarketPlace(int marketPlaceId)
@@ -566,7 +488,7 @@ namespace EZBob.DatabaseLib
 
         public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(string marketPlaceName, IMarketplaceType databaseMarketplace, Customer databaseCustomer)
         {
-            MP_CustomerMarketPlace mpCustomerMarketPlace = GetExistsCustomerMarketPlace(marketPlaceName, databaseMarketplace, databaseCustomer.Id);
+            MP_CustomerMarketPlace mpCustomerMarketPlace = GetExistsCustomerMarketPlace(marketPlaceName, databaseMarketplace, databaseCustomer);
             return CreateDatabaseCustomerMarketPlace(databaseCustomer, databaseMarketplace, mpCustomerMarketPlace, mpCustomerMarketPlace.Id);
         }
 
