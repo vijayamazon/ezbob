@@ -42,15 +42,6 @@
       this.EKMAccountInfoView = new EzBob.EKMAccountInfoView({
         model: this.ekmAccounts
       });
-<<<<<<< HEAD
-      this.PayPointAccounts = new EzBob.PayPointAccounts();
-      this.PayPointAccounts.fetch();
-      this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
-        model: this.PayPointAccounts
-      });
-      this.PayPointAccountInfoView = new EzBob.PayPointAccountInfoView({
-        model: this.PayPointAccounts
-=======
       this.volusionAccounts = new EzBob.VolusionAccounts();
       this.volusionAccounts.fetch();
       this.volusionButtonView = new EzBob.VolusionAccountButtonView({
@@ -58,8 +49,20 @@
       });
       this.volusionAccountInfoView = new EzBob.VolusionAccountInfoView({
         model: this.volusionAccounts
->>>>>>> Volusion Connector - first pre-alfa
       });
+      this.PayPointAccounts = new EzBob.PayPointAccounts();
+      this.PayPointAccounts.fetch();
+      this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
+        model: this.PayPointAccounts
+      });
+      this.PayPointAccountInfoView = new EzBob.PayPointAccountInfoView({
+        model: this.PayPointAccounts
+      });
+      this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
+      this.PayPalButtonView = new EzBob.PayPalButtonView({
+        model: this.payPalAccounts
+      });
+      this.PayPalInfoView = new EzBob.PayPalInfoView();
       this.stores = {
         "eBay": {
           view: this.EbayStoreView,
@@ -76,16 +79,20 @@
           button: this.ekmButtonView,
           active: 0
         },
-<<<<<<< HEAD
         "PayPoint": {
           view: this.PayPointAccountInfoView,
           button: this.PayPointButtonView,
-=======
+          active: 0
+        },
         "Volusion": {
           view: this.volusionAccountInfoView,
           button: this.volusionButtonView,
->>>>>>> Volusion Connector - first pre-alfa
           active: 0
+        },
+        "paypal": {
+          view: this.PayPalInfoView,
+          button: this.PayPalButtonView,
+          active: 1
         }
       };
       _ref1 = EzBob.Config.ActiveMarketPlaces;

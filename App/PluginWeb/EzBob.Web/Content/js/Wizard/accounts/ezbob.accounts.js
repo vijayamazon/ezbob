@@ -14,37 +14,21 @@ EzBob.AccountsView = EzBob.StoreInfoBaseView.extend({
 
         this.ebayStores.on('fetch reset change', this.accountChanged, this);
 
-        this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
-
-        this.payPalAccounts.on('fetch reset change', this.accountChanged, this);
-        this.PayPalButtonView = new EzBob.PayPalButtonView({ model: this.payPalAccounts });
-        this.PayPalInfoView = new EzBob.PayPalInfoView();
-
-        this.PayPalButtonView.disabled = !EzBob.Config.PayPalEnabled;
-
         this.model.on('change:bankAccountAdded', this.accountChanged, this);
 
         this.BankAccountButtonView = new EzBob.BankAccountButtonView({ model: this.model });
         this.BankAccountInfoView = new EzBob.BankAccountInfoView({ model: this.model });
 
         this.stores = {
-            "paypal": { "view": this.PayPalInfoView, "button": this.PayPalButtonView, active: 1 },
             "bank-account": { "view": this.BankAccountInfoView, "button": this.BankAccountButtonView, active: 1 }
         };
 
         this.name = "accounts";
 
-        this.PayPalInfoView.on('ready', this.PPready, this);
-        this.PayPalInfoView.on('next', this.PPnext, this);
+
         EzBob.StoreInfoBaseView.prototype.initialize.apply(this);
     },
-    PPready: function () {
-        //this.PayPalButtonView.trigger('ready', 'paypal');
-        //this.trigger('ready', 'paypal');
-    },
-    PPnext: function () {
-        //this.PayPalButtonView.trigger('next', 'paypal');
-    },
+    
     render: function () {
         this.constructor.__super__.render.call(this);
         this.isRendered = true;

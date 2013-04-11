@@ -30,6 +30,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
+        @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
+        #@payPalAccounts.on('fetch reset change', @accountChanged, this)
+        @PayPalButtonView = new EzBob.PayPalButtonView model: @payPalAccounts 
+        @PayPalInfoView = new EzBob.PayPalInfoView()
+
         @stores =
             "eBay":
                 view: @EbayStoreView
@@ -51,6 +56,10 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 view: @volusionAccountInfoView
                 button: @volusionButtonView
                 active: 0
+            "paypal": 
+                view: @PayPalInfoView
+                button : @PayPalButtonView
+                active: 1
 
          for j in EzBob.Config.ActiveMarketPlaces
              if @stores[j]
