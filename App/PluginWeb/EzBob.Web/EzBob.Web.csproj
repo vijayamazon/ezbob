@@ -965,6 +965,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.js">
       <DependentUpon>ezbob.shopbuttonlist.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
+      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
       <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
     </Content>
@@ -1116,7 +1119,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfoBase.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.personinfo.js" />
     <Content Include="Content\js\Wizard\ezbob.storebase.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ebay.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.signupstep.js" />
@@ -1473,6 +1475,7 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />
