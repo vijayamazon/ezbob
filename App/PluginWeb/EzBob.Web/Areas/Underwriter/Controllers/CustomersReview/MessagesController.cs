@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Aspose.Words;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Signals.RenderAgreements;
@@ -104,6 +105,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var customer = _customersRepository.Get(id);
             _crm.MoreAMLInformation(customer);
             _appCreator.MoreAMLInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+            customer.CreditResult = CreditResultStatus.ApprovedPending;
+            customer.PendingStatus = PendingStatus.AML;
         }
 
         [Transactional]
@@ -115,6 +118,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _crm.MoreAMLInformation(customer);
             _crm.MoreBWAInformation(customer);
             _appCreator.MoreAMLandBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+            customer.CreditResult = CreditResultStatus.ApprovedPending;
+            customer.PendingStatus = PendingStatus.Bank_AML;
         }
 
         [Transactional]
@@ -125,6 +130,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var customer = _customersRepository.Get(id);
             _crm.MoreBWAInformation(customer);
             _appCreator.MoreBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+            customer.CreditResult = CreditResultStatus.ApprovedPending;
+            customer.PendingStatus = PendingStatus.Bank;
         }
     }
 }

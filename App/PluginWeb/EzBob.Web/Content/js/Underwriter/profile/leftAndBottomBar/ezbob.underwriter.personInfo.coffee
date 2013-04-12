@@ -62,8 +62,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             xhr2.done ->
                 BlockUi "Off"
 
-
-
     disablingChanged: ->
         disabled = @$el.find("select[name=\"disabling\"] option:selected").val()
         id = @model.get("Id")

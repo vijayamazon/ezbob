@@ -25,7 +25,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: profileInfo
             model: @personalInfoModel
         )
-        @personalInfoModel.on "change", @makeDecisionFunctionEnabled, this
+        @personalInfoModel.on "change", @changeDecisionButtonsState, this
         @marketPlaces = new EzBob.Underwriter.MarketPlaces()
         @marketPlaceView = new EzBob.Underwriter.MarketPlacesView(
             el: marketplaces
@@ -83,6 +83,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: messages
             model: @messagesModel
         )
+        @Message.on "creditResultChanged", @changedSystemDecision, @
         @alertDocsView = new EzBob.Underwriter.AlertDocsView(el: @$el.find("#alert-docs"))
         @ApicCheckLogs = new EzBob.Underwriter.ApiChecksLogs()
         @ApiChecksLogView = new EzBob.Underwriter.ApiChecksLogView(
@@ -100,6 +101,8 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         "click #RejectBtn": "RejectBtnClick"
         "click #ApproveBtn": "ApproveBtnClick"
         "click #EscalateBtn": "EscalateBtnClick"
+        "click #SuspendBtn": "SuspendBtnClick"
+        "click #ReturnBtn": "ReturnBtnClick"
 
     checkCustomerAvailability: (model) ->
         data = model.toJSON()
@@ -156,12 +159,26 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         functionPopupView.on "changedSystemDecision", @changedSystemDecision, this
         false
 
+    SuspendBtnClick: (e) ->
+        return false  if $(e.currentTarget).hasClass("disabled")
+        functionPopupView = new EzBob.Underwriter.Suspended(model: @loanInfoModel)
+        functionPopupView.render()
+        functionPopupView.on "changedSystemDecision", @changedSystemDecision, this
+        false
+        
+    ReturnBtnClick: (e) ->
+        return false  if $(e.currentTarget).hasClass("disabled")
+        functionPopupView = new EzBob.Underwriter.Returned(model: @loanInfoModel)
+        functionPopupView.render()
+        functionPopupView.on "changedSystemDecision", @changedSystemDecision, this
+        false
+
     changedSystemDecision: ->
         @summaryInfoModel.fetch()
         @personalInfoModel.fetch()
         @loanInfoModel.fetch() 
         @loanHistory.fetch()
-        @makeDecisionFunctionEnabled()
+        @changeDecisionButtonsState()
 
     show: (id) ->
         @hide()
@@ -175,7 +192,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             silent: true
 
         @personalInfoModel.fetch().done ->
-            that.makeDecisionFunctionEnabled that.personalInfoModel.get("Editable")
+            that.changeDecisionButtonsState that.personalInfoModel.get("Editable")
 
         @loanInfoModel.set
             Id: id
@@ -258,16 +275,38 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
     hide: ->
         @$el.hide()
 
-    makeDecisionFunctionEnabled: ->
+    changeDecisionButtonsState: (isHideAll)->
         disabled = !!@personalInfoModel.get("Disabled")
-        creditResualt = @personalInfoModel.get("CreditResult")
+        creditResult = @personalInfoModel.get("CreditResult")
+       
+        @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass "disabled", disabled
+        @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide() if isHideAll
 
-        isShowRejectAndApproveBtn = !disabled and (creditResualt is "WaitingForDecision" or creditResualt is "Escalated")
-        isShowEscalateBtn = !disabled and creditResualt is "WaitingForDecision"
-        
-        @$el.find("#controlButtoons,  #controlButtoons, #controlButtoons").toggleClass "disabled", disabled
-        @$el.find("#RejectBtn,  #ApproveBtn").toggleClass "disabled", !isShowRejectAndApproveBtn
-        @$el.find("#EscalateBtn").toggleClass "disabled", !isShowEscalateBtn
-    
+        switch creditResult
+            when  "WaitingForDecision"
+                @$el.find("#ReturnBtn").hide()
+                @$el.find("#RejectBtn").show()
+                @$el.find("#ApproveBtn").show()
+                @$el.find("#SuspendBtn").show()
+                @$el.find("#EscalateBtn").show()
+            when "Rejected", "Approved", "Late"
+                @$el.find("#ReturnBtn").hide()
+                @$el.find("#RejectBtn").hide()
+                @$el.find("#ApproveBtn").hide()
+                @$el.find("#SuspendBtn").hide()
+                @$el.find("#EscalateBtn").hide()
+            when "Escalated"
+                @$el.find("#ReturnBtn").hide()
+                @$el.find("#RejectBtn").show()
+                @$el.find("#ApproveBtn").show()
+                @$el.find("#SuspendBtn").show()
+                @$el.find("#EscalateBtn").hide()
+            when "ApprovedPending"
+                @$el.find("#ReturnBtn").show()
+                @$el.find("#RejectBtn").hide()
+                @$el.find("#ApproveBtn").hide()
+                @$el.find("#SuspendBtn").hide()
+                @$el.find("#EscalateBtn").hide()
+
     updateAlerts: ->
         @alertsModel.fetch()

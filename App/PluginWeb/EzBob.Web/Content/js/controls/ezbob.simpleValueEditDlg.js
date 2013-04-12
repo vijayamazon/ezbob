@@ -113,7 +113,7 @@ EzBob.Dialogs.DateTimeEdit = EzBob.Dialogs.SimpleValueEdit.extend({
 EzBob.Dialogs.DateEdit = EzBob.Dialogs.SimpleValueEdit.extend({
     onDialogOpened: function(event, ui){
         var d = $(event.target);
-        d.find("[name='simpleValueEdit']").datepicker({ autoclose: true, format: 'dd/mm/yyyy' }).datepicker('show');
+        d.find("[name='simpleValueEdit']").datepicker({ autoclose: true, format: 'dd/mm/yyyy' }).datepicker('show').mask("99/99/9999");
         d.validator = d.validate({
             rules: {
                 simpleValueEdit: {

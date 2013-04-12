@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
     public enum DecisionActions
     {
-        Approve, Reject, Escalate
+        Approve, Reject, Escalate, Pending, Waiting
     }
 
     public class CreditResultDecisionActionsType : EnumStringType<DecisionActions>

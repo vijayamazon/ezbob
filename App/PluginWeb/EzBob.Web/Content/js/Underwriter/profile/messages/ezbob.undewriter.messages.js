@@ -33,7 +33,8 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                 {
                     id: that.customerId
                 }).done(function () {
-                    EzBob.ShowMessage("Message has been sent to user email address","Application incomplete - More information needed" , null, "OK");
+                    EzBob.ShowMessage("Message has been sent to user email address", "Application incomplete - More information needed", null, "OK");
+                    that.trigger("creditResultChanged");
                 })
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
@@ -54,6 +55,7 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                     id: that.customerId
                 }).done(function () {
                     EzBob.ShowMessage("Message has been sent to user email address", "Application incomplete - More information needed", null, "OK");
+                    that.trigger("creditResultChanged");
                 })
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
@@ -74,6 +76,7 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                     id: that.customerId
                 }).done(function () {
                     EzBob.ShowMessage("Message has been sent to user email address", "Application incomplete - More information needed", null, "OK");
+                    that.trigger("creditResultChanged");
                 })
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
