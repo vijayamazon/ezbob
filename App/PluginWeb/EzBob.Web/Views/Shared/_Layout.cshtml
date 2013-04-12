@@ -3,7 +3,8 @@
 @using StructureMap
 @{
     var controller = (string) ViewContext.RouteData.Values["controller"];
-    var isShowGetSatisfaction = controller == "Wizard";
+    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+    var showGetSatisfaction = controller == "Wizard" && config.GetSatisfactionEnabled;
 }
 <!DOCTYPE html>
 <html>
@@ -152,7 +153,7 @@
         @{ Html.RenderPartial("_ClickTale"); }
         @{ Html.RenderPartial("_AddRoll"); }
         @{
-            if (isShowGetSatisfaction && ObjectFactory.GetInstance<IEzBobConfiguration>().GetSatisfactionEnabled)
+            if (showGetSatisfaction)
             {
                 Html.RenderPartial("_GetSatisfaction");
             }
