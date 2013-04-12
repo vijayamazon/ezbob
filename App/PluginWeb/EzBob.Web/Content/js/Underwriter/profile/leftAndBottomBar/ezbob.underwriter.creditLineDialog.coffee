@@ -17,8 +17,10 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         form: "form"
 
     onChangeStartingDate:->
-        endDate = moment.utc(@cloneModel.get("StartingFromDate"), "DD/MM/YYYY").add('days', 1)
-        @cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'))
+        startingDate =  moment.utc(@cloneModel.get("StartingFromDate"), "DD/MM/YYYY")
+        if  startingDate isnt null
+            endDate = startingDate.add('days', 1)
+            @cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'))
 
     onChangeLoanType:->
         loanTypeId =+ @$el.find("#loan-type option:selected").val()
@@ -88,7 +90,6 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
                 repaymentPeriod:
                     required:true
                     autonumericMin: 1
-                    autonumericMax: 100
                 
                 interestRate:
                     required:true
@@ -102,6 +103,17 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
                 offerValidUntil:
                     required:true
                     dateCheck: true
-                    
+             messages:
+                interestRate:
+                    autonumericMin: "Interest Rate is below limit."
+                    autonumericMax: "Interest Rate is above limit."
+                repaymentPeriod:
+                    autonumericMin: "Repayment Period is below limit."
+
+                startingFromDate:
+                    dateCheck:"Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
+                offerValidUntil:
+                    dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
+
             errorPlacement: EzBob.Validation.errorPlacement,
             unhighlight: EzBob.Validation.unhighlight
