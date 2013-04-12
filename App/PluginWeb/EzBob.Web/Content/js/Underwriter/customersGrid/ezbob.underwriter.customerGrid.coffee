@@ -83,7 +83,7 @@ EzBob.Underwriter.customerGrid = (settings) ->
 $.fn.fmatter.profileWithTypeLink = (cellval, opts) ->
     href = "#profile/#{cellval.id or cellval}/#{opts.gid.replace('-table', '')}"
     text = cellval.text or cellval
-    "<a class='profileLink' href='#{href}'>#{text}</a>"
+    $.fn.fmatter.withScrollbar "<a class='profileLink' href='#{href}'>#{text}</a>"
 
 $.fn.fmatter.showMedalIcon = (cellval) ->
     text = cellval.text or cellval
@@ -99,7 +99,7 @@ $.fn.fmatter.showMPsIcon = (cellval, opt) ->
 $.fn.fmatter.profileLink = (cellval, opts) ->
     href = "#profile/#{(cellval.id or cellval)}"
     text = cellval.text or cellval
-    link = "<a class='profileLink' href='#{href}'>#{text}</a>"
+    "<a class='profileLink' href='#{href}'>#{text}</a>"
 
 $.fn.fmatter.datetimeNative = (cellval, opts, row) ->
     return "" unless cellval
@@ -129,3 +129,7 @@ $.fn.fmatter.CheckDateWithNow = (cellval, opts, row) ->
     el = $.fn.fmatter.dateNative(cellval, opts, row)
     el = "<span class='blue'>#{el}</span>" if not isPast
     el
+
+$.fn.fmatter.withScrollbar = (cellval) ->
+    text = cellval.text or cellval
+    "<div style='overflow: auto; width: auto'>#{text}</div>"

@@ -113,6 +113,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Caption = "E-Mail",
                     Name = "Name",
                     Index = "Name",
+                    Formatter = "withScrollbar",
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,

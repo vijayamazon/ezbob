@@ -130,21 +130,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _gridLoans = loans;
 
             _gridWaiting = CreateColumnsWaitingForDesicion();
-
             _gridEscalated = CreateColumnsEscalated();
-
             _gridApproved = CreateColumnsApproved();
-
             _gridRejected = CreateColumnsRejected();
-
             _gridAll = CreateColumnsAll();
-
             _gridLate = CreateColumnsLate();
-
             _gridLoans = CreateColumnsLoans();
-
             _gridPending = CreateColumnsPending();
-
             _gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
             _gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
         }
@@ -458,6 +450,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     customer.EscalationReason = reason;
                     _historyRepository.LogAction(DecisionActions.Escalate, reason, user, customer);
                     _appCreator.Escalated(customer);
+                    break;
+                case CreditResultStatus.ApprovedPending:
+                    customer.CreditResult = CreditResultStatus.ApprovedPending;
+                    customer.PendingStatus = PendingStatus.Manual;
+                    _historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
+                    break;
+                case CreditResultStatus.WaitingForDecision:
+                    customer.CreditResult = CreditResultStatus.WaitingForDecision;
+                    _historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
                     break;
             }
         }
