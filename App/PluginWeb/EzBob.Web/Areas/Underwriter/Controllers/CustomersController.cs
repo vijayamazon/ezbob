@@ -273,7 +273,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateCartColumn(gridModel, true);
-            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateMpListColumn(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateRegisteredDateColumn(gridModel);
@@ -281,7 +281,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateStatusColumn(gridModel);
             GridHelpers.CreateSystemCalculatedSum(gridModel);
             GridHelpers.CreateManualyApprovedSum(gridModel);
-            GridHelpers.CreateOutstandingBalance(gridModel);
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             return gridModel;
         }
 
@@ -292,13 +292,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateRefNumWithoutLinkColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateUserStatusColumn(gridModel);
-            GridHelpers.CreateMPStatusColumn(gridModel);
+            GridHelpers.CreateMpStatusColumn(gridModel);
             GridHelpers.CreateRegisteredDateColumn(gridModel);
-            GridHelpers.CreateEbayStatus(gridModel);
-            GridHelpers.CreateAmazonStatus(gridModel);
-            GridHelpers.CreateEkmStatus(gridModel);
-            GridHelpers.CreatePayPalStatus(gridModel);
-            GridHelpers.CreateWizardStep(gridModel);
+            GridHelpers.CreateEbayStatusColumn(gridModel);
+            GridHelpers.CreateAmazonStatusColumn(gridModel);
+            GridHelpers.CreateEkmStatusColumn(gridModel);
+            GridHelpers.CreatePayPalStatusColumn(gridModel);
+            GridHelpers.CreateWizardStepColumn(gridModel);
             return gridModel;
         }
 
@@ -306,7 +306,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateCartColumn(gridModel, true);
-            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateMpListColumn(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
@@ -314,7 +314,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateRegisteredDateColumn(gridModel);
             GridHelpers.CreateLastStatusColumn(gridModel);
             GridHelpers.CreateSystemCalculatedSum(gridModel);
-            GridHelpers.CreateOutstandingBalance(gridModel);
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             return gridModel;
         }
 
@@ -331,7 +331,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateCartColumn(gridModel, true);
-            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateMpListColumn(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
@@ -351,7 +351,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
             GridHelpers.CreateCartColumn(gridModel, true);
-            GridHelpers.CreateMpList(gridModel);
+            GridHelpers.CreateMpListColumn(gridModel);
             GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
@@ -361,28 +361,42 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateRejectedReasonColumn(gridModel);
             GridHelpers.CreateNumRejections(gridModel);
             GridHelpers.CreateNumApprovals(gridModel);
-            GridHelpers.CreateOutstandingBalance(gridModel);
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             return gridModel;
         }
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLate()
         {
             var gridModel = CreateColumnsApproved();
-            GridHelpers.CreateDelinquency(gridModel);
+            GridHelpers.CreateDelinquencyColumn(gridModel);
             return gridModel;
         }
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsPending()
         {
             var gridModel = CreateColumnsWaitingForDesicion();
-            GridHelpers.CreatePending(gridModel);
+            GridHelpers.CreatePendingStatusColumn(gridModel);
             return gridModel;
         }
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLoans()
         {
-            var gridModel = CreateColumnsWaitingForDesicion();
-
+            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+            GridHelpers.CreateCartColumn(gridModel, true);
+            GridHelpers.CreateMpListColumn(gridModel);
+            GridHelpers.CreateIdColumn(gridModel);
+            GridHelpers.CreateNameColumn(gridModel);
+            GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateRegisteredDateColumn(gridModel);
+            GridHelpers.CreateDateApplyedColumn(gridModel);
+            GridHelpers.CreateFirstLoanColumn(gridModel);
+            GridHelpers.CreateLastLoanDateColumn(gridModel);
+            GridHelpers.CreateLastLoanAmountColumn(gridModel);
+            GridHelpers.CreateTotalPrincipalTakenColumn(gridModel);
+            GridHelpers.CreateTotalPrincipalRepaidColumn(gridModel);
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.CreateNextRepaymentDateColumn(gridModel);
+            GridHelpers.CreateStatusColumn(gridModel);
             return gridModel;
         }
 

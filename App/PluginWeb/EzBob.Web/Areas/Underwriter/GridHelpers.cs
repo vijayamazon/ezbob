@@ -9,6 +9,56 @@ namespace EzBob.Web.Areas.Underwriter
 {
     public static class GridHelpers
     {
+        /*
+     * Helpers
+     */
+
+        public static int GetDelinquency(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            var result = 0;
+
+            var loans = customer.Loans.Where(l => l.Status == LoanStatus.Late).ToList();
+            if (!loans.Any()) return 0;
+
+            var scheduleDate = DateTime.UtcNow;
+
+            foreach (
+                var loanScheduleItem in
+                    loans.SelectMany(
+                        loan =>
+                        loan.Schedule.Where(
+                            loanScheduleItem =>
+                            loanScheduleItem.Date < scheduleDate && loanScheduleItem.Status == LoanScheduleStatus.Late))
+                )
+            {
+                scheduleDate = loanScheduleItem.Date;
+            }
+
+            var currentDate = DateTime.UtcNow.ToUniversalTime();
+            if (scheduleDate <= currentDate)
+                result = (currentDate - scheduleDate).Days;
+
+            return result;
+        }
+
+        public static string CalculateStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            var decisionHistory = customer.DecisionHistory.LastOrDefault();
+            if (decisionHistory == null)
+            {
+                return "N/A";
+            }
+            return decisionHistory.Action.ToString();
+        }
+
+        public static DecisionHistory GetLastHistory(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            return customer.DecisionHistory.LastOrDefault();
+        }
+
+        /*
+         * Columns
+         */
         public static void CreateStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -19,10 +69,10 @@ namespace EzBob.Web.Areas.Underwriter
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
-                    Hidden = true,
+                    Hidden = false,
                     Fixed = false,
                     DataType = TypeCode.String,
-                    Data = x => x.CreditResult
+                    Data = x => x.CreditResult.ToString()
                 });
         }
 
@@ -74,7 +124,8 @@ namespace EzBob.Web.Areas.Underwriter
                 });
         }
 
-        public static void CreateCartColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel, bool showIcon = false)
+        public static void CreateCartColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel,
+                                            bool showIcon = false)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
@@ -134,6 +185,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.LastCashRequest.SystemCalculatedSum ?? 0
                 });
         }
+
         public static void CreateManualyApprovedSum(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -152,6 +204,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.LastCashRequest.ManagerApprovedSum ?? 0
                 });
         }
+
         public static void CreateAmountTaken(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -168,9 +221,10 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Width = 100,
                     DataType = TypeCode.Decimal,
-                    Data = x => x.Loans.Sum(y=>y.LoanAmount)
+                    Data = x => x.Loans.Sum(y => y.LoanAmount)
                 });
         }
+
         public static void CreateNumApprovals(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -190,6 +244,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Approve)
                 });
         }
+
         public static void CreateNumRejections(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -209,6 +264,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Reject)
                 });
         }
+
         public static void CreateOfferExpiryDate(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -232,22 +288,22 @@ namespace EzBob.Web.Areas.Underwriter
         public static void CreateIdColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "#",
-                Name = "Id",
-                Index = "Id",
-                Width = 45,
-                Key = true,
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Frozen = true,
-                Fixed = true,
-                DataType = TypeCode.Int32,
-                Formatter = "profileLink",
-                Data = x => x.Id
-            });
+                {
+                    Caption = "#",
+                    Name = "Id",
+                    Index = "Id",
+                    Width = 45,
+                    Key = true,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Frozen = true,
+                    Fixed = true,
+                    DataType = TypeCode.Int32,
+                    Formatter = "profileLink",
+                    Data = x => x.Id
+                });
         }
 
         public static void CreateRefNumColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
@@ -265,26 +321,26 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = true,
                     Formatter = "profileLink",
                     DataType = TypeCode.String,
-                    Data = x => new { text = x.RefNumber, id = x.Id }
+                    Data = x => new {text = x.RefNumber, id = x.Id}
                 });
         }
 
         public static void CreateRefNumWithoutLinkColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "#",
-                Name = "RefNumber",
-                Index = "RefNumber",
-                Width = 60,
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = true,
-                DataType = TypeCode.String,
-                Data = x =>  x.RefNumber
-            });
+                {
+                    Caption = "#",
+                    Name = "RefNumber",
+                    Index = "RefNumber",
+                    Width = 60,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = true,
+                    DataType = TypeCode.String,
+                    Data = x => x.RefNumber
+                });
         }
 
         public static void CreateNameColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
@@ -302,7 +358,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Formatter = "profileLink",
                     DataType = TypeCode.String,
-                    Data = x => new{text= (x.PersonalInfo != null) ? x.PersonalInfo.Fullname : " - ", id= x.Id}
+                    Data = x => new {text = (x.PersonalInfo != null) ? x.PersonalInfo.Fullname : " - ", id = x.Id}
                 });
         }
 
@@ -358,6 +414,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.DateEscalated
                 });
         }
+
         public static void CreateDateRejectedColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -430,13 +487,268 @@ namespace EzBob.Web.Areas.Underwriter
                 });
         }
 
-        public static void CreateMPStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateMpStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "MP Status",
+                    Name = "MPStatus",
+                    Index = "MPStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = true,
+                    Width = 85,
+                    DataType = TypeCode.String,
+                    Data = x => x.MPStatus
+                });
+        }
+
+        public static void CreateUserStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "User Status",
+                    Name = "IsSuccessfullyRegistered",
+                    Index = "IsSuccessfullyRegistered",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Width = 95,
+                    DataType = TypeCode.Boolean,
+                    Data = x => !x.IsSuccessfullyRegistered ? "registered" : "credit calculation"
+                });
+        }
+
+        public static void CreateRegisteredDateColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Reg. Date",
+                    Name = "RegisteredDate",
+                    Index = "GreetingMailSentDate",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Width = 75,
+                    DataType = TypeCode.DateTime,
+                    Data = x => x.GreetingMailSentDate,
+                    Formatter = "dateNative"
+                });
+        }
+
+        public static void CreateEbayStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "eBay status",
+                    Name = "EbayStatus",
+                    Index = "EbayStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Width = 95,
+                    DataType = TypeCode.String,
+                    Data = x => x.EbayStatus
+                });
+        }
+
+        public static void CreateAmazonStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Amazon status",
+                    Name = "AmazonStatus",
+                    Index = "AmazonStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 115,
+                    Search = false,
+                    DataType = TypeCode.String,
+                    Data = x => x.AmazonStatus
+                });
+        }
+
+        public static void CreateEkmStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Ekm status",
+                    Name = "EkmStatus",
+                    Index = "EkmStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 115,
+                    Search = false,
+                    DataType = TypeCode.String,
+                    Data = x => x.EkmStatus
+                });
+        }
+
+        public static void CreatePayPalStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "PayPal Status",
+                    Name = "PayPalStatus",
+                    Index = "PayPalStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Width = 110,
+                    DataType = TypeCode.String,
+                    Data = x => x.PayPalStatus
+                });
+        }
+
+        public static void CreateWizardStepColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Wizard Step",
+                    Name = "WizardStep",
+                    Index = "WizardStep",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Width = 100,
+                    DataType = TypeCode.String,
+                    Data = x => x.WizardStep == WizardStepType.AllStep ? (object) "Passed" : x.WizardStep
+                });
+        }
+
+        public static void CreateDelinquencyColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Delinquency",
+                    Name = "Delinquency",
+                    Index = "Id",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = false,
+                    Width = 100,
+                    DataType = TypeCode.Int16,
+                    Data = x => GetDelinquency(x)
+                });
+        }
+
+        public static void CreateMpListColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "MPs",
+                    Name = "MP",
+                    Index = "Mp",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = false,
+                    Width = 115,
+                    DataType = TypeCode.String,
+                    Formatter = "showMPsIcon",
+                    Data = x => x.CustomerMarketPlaces.Select(y => y.Marketplace.Name).ToList()
+                });
+        }
+
+        public static void CreateLastStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Last Status",
+                    Name = "LastStatus",
+                    Index = "LastStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = false,
+                    Width = 70,
+                    DataType = TypeCode.String,
+                    Data = x => CalculateStatus(x)
+                });
+        }
+
+        public static void CreateOutstandingBalanceColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "O/S Balance",
+                    Name = "OutstandingBalance",
+                    Index = "OutstandingBalance",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = false,
+                    Width = 75,
+                    DataType = TypeCode.String,
+                    Data = x => x.Loans.Sum(y => y.Balance)
+                });
+        }
+
+        public static void CreatePendingStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Pending Status",
+                    Name = "PendingStatus",
+                    Index = "PendingStatus",
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Search = false,
+                    Sortable = false,
+                    Width = 85,
+                    DataType = TypeCode.String,
+                    Data = x => x.PendingStatus.ToString()
+                });
+        }
+
+        public static void CreateFirstLoanColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "MP Status",
-                Name = "MPStatus",
-                Index = "MPStatus",
+                Caption = "First Loan Date",
+                Name = "FirstLoanDate",
+                Index = "Loans.Date",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
@@ -444,282 +756,112 @@ namespace EzBob.Web.Areas.Underwriter
                 Fixed = false,
                 Search = false,
                 Sortable = true,
-                Width = 85,
+                Width = 100,
                 DataType = TypeCode.String,
-                Data = x => x.MPStatus
-            });
-        }
-
-        public static void CreateUserStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "User Status",
-                Name = "IsSuccessfullyRegistered",
-                Index = "IsSuccessfullyRegistered",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Width = 95,
-                DataType = TypeCode.Boolean,
-                Data = x => !x.IsSuccessfullyRegistered ? "registered" : "credit calculation"
-            });
-        }
-        public static void CreateRegisteredDateColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Reg. Date",
-                Name = "RegisteredDate",
-                Index = "GreetingMailSentDate",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Width = 75,
-                DataType = TypeCode.DateTime,
-                Data = x => x.GreetingMailSentDate,
+                Data = x => x.Loans.First().Date,
                 Formatter = "dateNative"
             });
         }
 
-        public static void CreateEbayStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateLastLoanDateColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "eBay status",
-                Name = "EbayStatus",
-                Index = "EbayStatus",
+                Caption = "Last Loan Date",
+                Name = "LastLoanDate",
+                Index = "Loans.Date",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Width = 95,
-                DataType = TypeCode.String,
-                Data = x => x.EbayStatus
-            });
-        }
-        
-        public static void CreateAmazonStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Amazon status",
-                Name = "AmazonStatus",
-                Index = "AmazonStatus",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Width = 115,
-                Search = false,
-                DataType = TypeCode.String,
-                Data = x => x.AmazonStatus
-            });
-        }
-
-        public static void CreateEkmStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Ekm status",
-                Name = "EkmStatus",
-                Index = "EkmStatus",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Width = 115,
-                Search = false,
-                DataType = TypeCode.String,
-                Data = x => x.EkmStatus
-            });
-        }
-
-        public static void CreatePayPalStatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "PayPal Status",
-                Name = "PayPalStatus",
-                Index = "PayPalStatus",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Width = 110,
-                DataType = TypeCode.String,
-                Data = x => x.PayPalStatus
-            });
-        }
-
-        public static void CreateWizardStep(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Wizard Step",
-                Name = "WizardStep",
-                Index = "WizardStep",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
+                Sortable = true,
                 Width = 100,
                 DataType = TypeCode.String,
-                Data = x => x.WizardStep == WizardStepType.AllStep ? (object) "Passed" : x.WizardStep
+                Data = x => x.Loans.Last().Date,
+                Formatter = "dateNative"
             });
         }
 
-        public static void CreateDelinquency(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateLastLoanAmountColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "Delinquency",
-                Name = "Delinquency",
-                Index = "Id",
+                Caption = "Last Loan Amount",
+                Name = "LastLoanAmount",
+                Index = "Loans.Amount",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
+                Sortable = true,
                 Width = 100,
-                DataType = TypeCode.Int16,
-                Data = x => GetDelinquency(x)
+                DataType = TypeCode.String,
+                Data = x => x.Loans.Last().LoanAmount
             });
         }
 
-        public static void CreateMpList(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateTotalPrincipalTakenColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "MPs",
-                Name = "MP",
-                Index = "Mp",
+                Caption = "Total Principal Taken",
+                Name = "TotalPrincipalTaken",
+                Index = "TotalPrincipalTaken",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
-                Width = 115,
+                Sortable = true,
+                Width = 100,
                 DataType = TypeCode.String,
-                Formatter = "showMPsIcon",
-                Data = x => x.CustomerMarketPlaces.Select(y=>y.Marketplace.Name).ToList()
+                Data = x => x.Loans.Sum(y=>y.LoanAmount)
             });
         }
 
-        public static void CreateLastStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateTotalPrincipalRepaidColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "Last Status",
-                Name = "LastStatus",
-                Index = "LastStatus",
+                Caption = "Total Principal Repaid",
+                Name = "TotalPrincipalRepaid",
+                Index = "TotalPrincipalRepaid",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
-                Width = 70,
+                Sortable = true,
+                Width = 100,
                 DataType = TypeCode.String,
-                Data = x => CalculateStatus(x)
+                Data = x => "?"
             });
         }
 
-        public static void CreateOutstandingBalance(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        public static void CreateNextRepaymentDateColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "O/S Balance",
-                Name = "OutstandingBalance",
-                Index = "OutstandingBalance",
+                Caption = "Next repayment date",
+                Name = "LastLoanAmount",
+                Index = "Loans.Amount",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
-                Width = 75,
+                Sortable = true,
+                Width = 100,
                 DataType = TypeCode.String,
-                Data = x => x.Loans.Sum(y=>y.Balance)
+                Data = x => "?"
             });
-        }
-
-        public static void CreatePending(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Pending Status",
-                Name = "PendingStatus",
-                Index = "PendingStatus",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Sortable = false,
-                Width = 85,
-                DataType = TypeCode.String,
-                Data = x => x.PendingStatus.ToString()
-            });
-        }
-        
-    /*
-     * Helpers
-     */
-        public static int GetDelinquency(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            var result = 0;
-
-            var loans = customer.Loans.Where(l => l.Status == LoanStatus.Late).ToList();
-            if (!loans.Any()) return 0;
-
-            var scheduleDate = DateTime.UtcNow;
-
-            foreach (var loanScheduleItem in loans.SelectMany(loan => loan.Schedule.Where(loanScheduleItem => loanScheduleItem.Date < scheduleDate && loanScheduleItem.Status == LoanScheduleStatus.Late)))
-            {
-                scheduleDate = loanScheduleItem.Date;
-            }
-
-            var currentDate = DateTime.UtcNow.ToUniversalTime();
-            if (scheduleDate <= currentDate)
-                result = (currentDate - scheduleDate).Days;
-
-            return result;
-        }
-
-        public static string CalculateStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            var decisionHistory = customer.DecisionHistory.LastOrDefault();
-            if (decisionHistory == null)
-            {
-                return "N/A";
-            }
-            return decisionHistory.Action.ToString();
-        }
-        public static DecisionHistory GetLastHistory(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            return customer.DecisionHistory.LastOrDefault();
         }
     }
 }
