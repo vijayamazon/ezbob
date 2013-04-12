@@ -8,7 +8,10 @@
 }
 
 @section afterHead{
-    @{Html.RenderPartial("_LivePerson");}
+    @if (config.GetSatisfactionEnabled)
+    {
+        Html.RenderPartial("_LivePerson");
+    }
 }
 
 <div class="row-fluid wizard-wrapper">

@@ -886,7 +886,6 @@
     <Content Include="Content\js\lib\jquery.numeric.js" />
     <Content Include="Content\js\lib\jquery.placeholder.js" />
     <Content Include="Content\js\lib\jsuri-1.1.1.js" />
-    <Content Include="Content\js\lib\livechat.js" />
     <Content Include="Content\js\lib\moment.js" />
     <Content Include="Content\js\lib\notifications.js" />
     <Content Include="Content\js\Profile\ezbob.profile.Agreements.js">

@@ -252,7 +252,6 @@ namespace EzBob.Web.Infrastructure
         public static MvcHtmlString RenderWizardJs()
         {
             return Bundle.JavaScript()
-                         .Add("~/Content/js/lib/livechat.js")
                          .Add("~/Content/js/controls/ezbob.notifications.js")
                          .Add("~/Content/js/ezbob.customerModel.js")
                          .Add("~/Content/js/Wizard/ezbob.wizard.js")
@@ -299,7 +298,6 @@ namespace EzBob.Web.Infrastructure
         public static MvcHtmlString RenderProfileJs()
         {
             return Bundle.JavaScript()
-                         .Add("~/Content/js/lib/livechat.js")
                          .Add("~/Content/js/controls/ezbob.address.js")
                          .Add("~/Content/js/controls/ezbob.notifications.js")
                          .Add("~/Content/js/controls/ezbob.livechat.livechatrouter.js")
