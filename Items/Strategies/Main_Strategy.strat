@@ -29824,7 +29824,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <OwnerName>Comparison27559193</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>ExperianConsumerError = NULL</InitialValue>
+      <InitialValue>ExperianConsumerError = ""</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -41837,15 +41837,15 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianConsumerError</SourceVariableName>
-      <TargetVariableOwnerName>Comparison27559193</TargetVariableOwnerName>
-      <TargetVariableName>Comparison27559193ExperianConsumerError</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>UseCustomIdHubAddress</SourceVariableName>
       <TargetVariableOwnerName>Comparison437699</TargetVariableOwnerName>
       <TargetVariableName>Comparison26121432UseCustomIdHubAddress</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianConsumerError</SourceVariableName>
+      <TargetVariableOwnerName>Comparison27559193</TargetVariableOwnerName>
+      <TargetVariableName>Comparison27559193ExperianConsumerError</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
