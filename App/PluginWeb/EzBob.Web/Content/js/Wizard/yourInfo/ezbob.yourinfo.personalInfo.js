@@ -35,7 +35,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         var prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: "PrevPersonAddresses", max: 3 });
         prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
-
+        
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
 
@@ -43,6 +43,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.turnOver = this.$el.find(".turnOver");
         this.turnOver.remove();
+        
+        this.companyTurnover = this.$el.find(".companyTurnover");
+        this.companyTurnover.remove();
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
@@ -62,16 +65,18 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     typeChanged: function (e) {
         this.type = e.target.value;
-        var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
-        this.$el.find('.btn-next').text(buttonName);
 
         if (this.type == "Entrepreneur") {
             this.turnOver.appendTo($(".typeOfBussiness").parent());
             this.turnOver.find(".cashInput").cashEdit();
             this.$el.find('.cashControlls img').setPopover();
+            this.companyTurnover.remove();
         } else {
             this.turnOver.remove();
+            this.companyTurnover.appendTo($(".typeOfBussiness").parent());
         }
+        
+       
 
     },
     consentToSearchChanged: function (e) {

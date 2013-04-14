@@ -3,112 +3,195 @@
 @helper PersonalInfo()
 {
     <div class="row-fluid">
-            <h1>&nbsp;Personal Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div>
-                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                {
-
-                    <div class="control-group">
-                        <label class="control-label">First Name</label>
-                        <div class="controls">
-                            <input type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
-                        </div>
+        <h2 style="padding-left: 0">Personal information</h2>
+        A bit about you, the director or partner completing the application.
+        <br />
+        <div>
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" }))
+            {
+                <div class="control-group">
+                    <label>Title <span class="required">*</span></label> @* TODO: ALEC - do we need this "title"? *@
+                    <select style="height:30px; width:345px" name="title" id="title" tabindex="1">
+                        <option value="-">-</option>
+                        <option value="M">Mr</option>
+                        <option value="F">Mrs</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label>First Name <span class="required">*</span></label>
+                    <div style="margin-left: 0px;" class="controls">
+                        <input style="height:20px;" type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" class="form_field" size="50" />
                     </div>
+                </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Middle Initial</label>
-                        <div class="controls">
-                            <input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" />
-                        </div>
+                <div class="control-group">
+                    <label>Middle Name (Optional)</label>
+                    <div style="margin-left: 0px;" class="controls">
+                        <input style="height:20px" type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" size="50" />
                     </div>
+                </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Surname</label>
-                        <div class="controls">
-                            <input type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" />
-                        </div>
+                <div class="control-group">
+                    <label>Last Name <span class="required">*</span></label>
+                    <div style="margin-left: 0px;" class="controls">
+                        <input style="height:20px" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
                     </div>
-                    <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
+                </div>
+                <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
-                    @EzForm.DateInput("DateOfBirth", "Date of Birth")
+                <div style="margin-left: 0px;" class="control-group">
+                    <label style="text-align: left" class="control-label" for="Gender">Gender</label>
+                    <div class="controls" style="margin-left: 0px">
+                        <select style="height:30px; width:345px" id="Gender" name="Gender">
+                            <option value="-">-</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="Gender">Gender</label>
+                @EzForm.DateInput("DateOfBirth", "Date of Birth")
+
+                <div class="control-group">
+                    <label class="control-label" for="MartialStatus">Martial Status <span class="required">*</span></label>
+                    <div class="controls">
+                        <select style="height:30px; width:345px" id="MartialStatus" name="MartialStatus">
+                            <option>-</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widow/er">Widow/er</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <br/>
+                <h2 style="padding-left:0" >Your Current Residential Address</h2>
+                @EzForm.AddressInput("PersonalAddress", "Potcode")
+
+                @* TODO: ALEC - do we need this "address"? *@
+                @*
+                <div class="control-group">
+                    <label>Addess <span class="required">*</span></label>
+                    <div style="margin-left: 0px;" class="controls">
+                        <input style="height:20px;" type="text" name="Addess" />
+                    </div>
+                </div>
+                *@
+                
+                <div class="control-group">
+                    <label class="control-label" for="TimeAtAddress">Length of time at address <span class="required">*</span></label>
+                    <div class="controls">
+                        <select style="height:30px; width:345px" id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select">
+                            <option selected="selected" value="">-</option>
+                            <option value="1">1 year</option>
+                            <option value="2">2 years</option>
+                            <option value="3">More than 3 years</option>
+                        </select>
+                    </div>
+                </div>
+                
+                @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
+                
+                <div class="control-group">
+                    <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
+                    <div class="controls">
+                        <select style="height:30px; width:345px" id="ResidentialStatus" name="ResidentialStatus" class="select">
+                            <option>-</option>
+                            <option value="Home owner">Home owner</option>
+                            <option value="Renting">Renting</option>
+                            <option value="Living with parents">Living with parents</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <br/>
+                <h2 style="padding-left:0" >Your Contact Details</h2>
+                <div class="control-group">
+                    <label class="control-label">Home Phone Number <span class="required">*</span></label>
+                    <div class="controls">
+                        <input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" size="50"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Mobile Number</label>
+                    <div class="controls">
+                        <input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" size="50" />
+                    </div>
+                </div>
+                   
+                <br/>
+                <h2 style="padding-left:0" >Your Company Information</h2> 
+
+                <div>
+                    <div class="control-group typeOfBussiness">
+                        <label class="control-label">Your Type of Business <span class="required">*</span></label>
                         <div class="controls">
-                            <select id="Gender" name="Gender" class="">
-                                <option value="-">-</option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
+                            <select style="height:30px; width:345px" name="TypeOfBusiness">
+                                <option value="">-</option>
+                                <option value="Entrepreneur">Sole Trader (not Inc.)</option>
+                                <option value="SoleTrader">Sole Trader (Inc.)</option>
+                                <option value="PShip3P">Partnership (Up to 3)</option>
+                                <option value="PShip">Partnership (More than 3)</option>
+                                <option value="Limited">Limited Company</option>
+                                <option value="LLP">LLP</option>
                             </select>
                         </div>
                     </div>
-
-                    @EzForm.Select("MartialStatus", "Martial Status", new[] { "Single", "Married", "Divorced", "Widow/er", "Other" }, "select")
-
-                    @EzForm.AddressInput("PersonalAddress", "Address")
-                    @EzForm.SelectAdvanced("TimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "", "TimeAtAddress select", 0)
-                    @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
-                    @EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")
-
-                    <hr />
-
-                    <div class="control-group">
-                        <label class="control-label">Daytime Phone #</label>
-                        <div class="controls">
-                            <input type="text" class="phonenumber" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Mobile Phone #</label>
-                        <div class="controls">
-                            <input type="text" class="phonenumber" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
-                        </div>
-                    </div>
                     
-                    <hr />
-
-                    <div>
-                        <div class="control-group typeOfBussiness">
-                            <label class="control-label">Type of Business</label>
-                            <div class="controls">
-                                <select name="TypeOfBusiness">
-                                    <option value="">-</option>
-                                    <option value="Entrepreneur">Sole Trader (not Inc.)</option>
-                                    <option value="SoleTrader">Sole Trader (Inc.)</option>
-                                    <option value="PShip3P">Partnership (Up to 3)</option>
-                                    <option value="PShip">Partnership (More than 3)</option>
-                                    <option value="Limited">Limited Company</option>
-                                    <option value="LLP">LLP</option>
-                                </select>
+                    @* TODO: ALEC - do we need this? *@
+                    <fieldset class="PersonalturnOver turnOver">
+                        <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
+                        @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
+                        @EzForm.InputTextWithHelp(Html, "WebSiteTurnOver", "Online <b>Estimated</b> Sales", "", "Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
+                    </fieldset>
+                    
+                    <div class="companyTurnover">
+                        <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
+                        <div class="control-group">
+                            <label>Your Total Online Sales (£) <span class="required">*</span></label>
+                            <div style="margin-left: 0px;" class="controls">
+                                <input style="height:20px" type="text" name="TotalOnlineSales" class="form_field" size="50" />
                             </div>
                         </div>
-
-                        <fieldset class="PersonalturnOver turnOver">
-                            <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
-                            @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                            @EzForm.InputTextWithHelp(Html, "WebSiteTurnOver", "Online <b>Estimated</b> Sales", "", "Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                        </fieldset>
-                    </div>
-
-                    <hr />
-
-                    <div class="control-group">
-                        <div class="controls">
-                            <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                                <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
-                                I have read and accept the <a>terms and conditions</a> of the credit bureau search
-                            </label>
+                        <div class="control-group">
+                            <label>Your Total Online & Offline Sales (£) <span class="required">*</span></label>
+                            <div style="margin-left: 0px;" class="controls">
+                                <input style="height:20px" type="text" name="TotalOnlineAndOfflineSales" class="form_field" size="50" />
+                            </div>
                         </div>
+                
+                        @* ALEC - what about registration and name that exists in the old wizard? *@
+                        <br/>
+                        <h2 style="padding-left:0" >Additional Directors (Optional)</h2> 
+                        <div class="directorArea"></div>
+                        <div>EZBOB assumes that you are a director in the company. Add directors and qualify for more cash</div>
+                        <br/>
+                       <input type="button" id="addDirector" value="Add Additional Directors" class="button green"/> 
+                        @*<a href="#" type="button" id="addDirector" class="button green">Add Additional Directors</a>*@
+                        <br/>
                     </div>
-                }
-            </div>
+                </div>
+                   
+                
+                    
+                <div class="control-group">
+                    <div class="controls">
+                        <label for="ConsentToSearch" class="editor-label-with-checkbox">
+                            <input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
+                            I have read and accept the <a>terms and conditions</a> of the credit bureau search
+                        </label>
+                    </div>
+                </div>
+            }
+        </div>
 
-            <div class="">
-                <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
-                <a href="#" class="btn-back button orange back pull-right">Back</a>
-            </div>
+        <div class="">
+            <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
+            <a href="#" class="btn-back button orange back pull-right">Back</a>
+        </div>
     </div>
 }
 @helper Director()
@@ -120,7 +203,7 @@
 
         <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
 
-        <a href="#" id="addDirector"><b>Add directors</b> and qualify for more cash.</a>
+        <a href="#" id="addDirector_old_button"><b>Add directors</b> and qualify for more cash.</a>
     </fieldset>
 }
 

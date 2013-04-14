@@ -1,12 +1,13 @@
 ﻿@using System.Web.Mvc
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css="",  string placeHolder = ""){
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
+{
       <div class="control-group">
           <label class="control-label" for="@id">@caption</label>
           <div class="controls">
               <select id="@id" name="@id" class="@css" data-placeholder="@placeHolder" >
                   <option>-</option>
-                  @foreach(var v in values)
+                  @foreach (var v in values)
                   {
                       <option value="@v">@v</option>
                   }
@@ -15,17 +16,19 @@
       </div>
 }
 
-@helper SelectInline(string id, string caption, IEnumerable<string> values, string css){
+@helper SelectInline(string id, string caption, IEnumerable<string> values, string css)
+{
     <label class="control-label" for="@id">@caption</label>
     <select id="@id" class="@css">
-        @foreach(var v in values)
+        @foreach (var v in values)
         {
             <option>@v</option>
         }
     </select>
 }
 
-@helper CheckBox(string id, string caption){
+@helper CheckBox(string id, string caption)
+{
     <div class="control-group">      
         <div class="controls">
             <label for="@id" class="editor-label-with-checkbox checkbox"><input id="@id" name="@id" type="checkbox" value="true"/>@caption</label>
@@ -36,7 +39,7 @@
 @helper InputText(string id, string caption, string value, string cls = "", bool isDisabled = false, int size = 0)
 {
     
-    var identificator=new HtmlString(id);
+    var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     <div class="control-group">
         <label for="@identificator" class="control-label">@caption</label>
@@ -63,7 +66,7 @@
 @helper Password(string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
     
-    var identificator=new HtmlString(id);
+    var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     <div class="control-group">
         <label for="@identificator" class="control-label">@caption</label>
@@ -83,7 +86,7 @@
     </div>
 }
 
-@helper InputTextCash (string id, string caption, string value, string cls = "")
+@helper InputTextCash(string id, string caption, string value, string cls = "")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@caption (£)</label>
@@ -100,7 +103,7 @@
         <div class="controls cashControlls ">           
             <div>
                 <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
-                <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png",page.ViewContext.HttpContext)" rel="popover" data-content="@help" alt="" />
+                <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="@help" alt="" />
             </div>
         </div>
     </div>
@@ -136,7 +139,7 @@
     </div>
 }
 
-@helper TextArea(string id, string caption, string value, string css="span9")
+@helper TextArea(string id, string caption, string value, string css = "span9")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@caption</label>
@@ -146,7 +149,7 @@
     </div>
 }
 
-@helper TextAreaSmall(string id, string caption, string value, string css="")
+@helper TextAreaSmall(string id, string caption, string value, string css = "")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@caption</label>
@@ -156,7 +159,7 @@
     </div>
 }
 
-@helper TextAreaReadOnly(string id, string caption, string value, string css="")
+@helper TextAreaReadOnly(string id, string caption, string value, string css = "")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@caption</label>
@@ -167,14 +170,15 @@
 }
 
 @helper DatePicker(string id, string date, string css = "span2")
-    {
+{
             <div class="input-append date dp-inline" id="@id" data-date="@date" data-date-format="dd-mm-yyyy">
                 <input class="@css datepicker" size="16" type="text" value="@date" name="@id">
                 <span class="add-on"><i class="icon-th"></i></span>
             </div>
 }
 
-@helper DatePickerInline(string id, string caption, string date, string css=""){
+@helper DatePickerInline(string id, string caption, string date, string css = "")
+{
     <div class="control-group">
         <label for="@id" class="control-label">@caption</label>
         <div class="controls">
@@ -186,17 +190,19 @@
 @helper Cell(params string[] arguments)
 {
     <tr>
-        @foreach(var s in arguments)
+        @foreach (var s in arguments)
         {
             <td>@s</td>    
         }
     </tr>
 }
-@helper AddressInput(string name, string title, string css = ""){
+
+@helper AddressInput(string name, string title, string css = "")
+{
     var identificator = new HtmlString(name);
 
     <div class="control-group">
-        <label for="@identificator" class="control-label">@title</label>
+        <label for="@identificator" class="control-label">@title <span class="required">*</span></label>
         <div class="controls">
             <div id="@identificator" class="address-field @css"></div>
         </div>
@@ -210,10 +216,16 @@
     var identificator = new HtmlString(name);
 
     <div class="control-group" >
-
-        <label for="day" class="control-label">@title</label>
+        @if (required)
+        {
+            <label for="day" class="control-label">@title <span class="required">*</span></label>
+        }
+        else
+        {
+            <label for="day" class="control-label">@title</label>
+        }
         <div class="controls ezDateTime">
-            <select name="day" style="width: 60px;" >
+            <select name="day" style="width: 113px;height:30px" >
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 31; i++)
                    {
@@ -225,7 +237,7 @@
                    } }
             </select>
 
-            <select name="month" style="width: 70px;" >
+            <select name="month" style="width: 113px;height:30px" >
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 12; i++)
                    {
@@ -233,12 +245,12 @@
                                {
                                    @:selected="selected"
                                }
-                           value="@i"> @month[i-1]</option>
+                           value="@i"> @month[i - 1]</option>
                    } 
                  }
             </select>
 
-            <select name="year" style="width: 80px; ">
+            <select name="year" style="width: 113px;height:30px">
                 <option value="-">-</option>
                 @{
                     var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
@@ -286,7 +298,7 @@
     </div>
 }
 
-@helper Captcha( string captchaType, string cls = "")
+@helper Captcha(string captchaType, string cls = "")
 {     
     <div class="control-group">
         <div class="controls">
@@ -301,7 +313,7 @@
     </div>
 }
 
-@helper Button(string id, string labelText, string buttonText, string cls = "", string css="")
+@helper Button(string id, string labelText, string buttonText, string cls = "", string css = "")
 {
     <div class="control-group">
         <label for="@id" class="control-label">@labelText</label>
@@ -311,14 +323,14 @@
     </div>
 }
 @helper RawHeaderCell(params string[] arguments)
-    {
+{
     <tr>
         <th colspan="@arguments.Length">@arguments[0]</th>
     </tr>
 }
 
 @helper RawCell(params string[] arguments)
-    {
+{
     <tr>
         @foreach (var s in arguments)
         {
@@ -328,7 +340,7 @@
 }
 
 @helper RawCellBold(params string[] arguments)
-    {
+{
     <tr>
         @foreach (var s in arguments)
         {
