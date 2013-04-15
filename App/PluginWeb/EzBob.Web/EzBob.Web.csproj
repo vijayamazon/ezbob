@@ -218,6 +218,7 @@
     <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
+    <Compile Include="Areas\Customer\Controllers\VolusionMPUniqChecker.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
@@ -1248,7 +1249,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
-      <Name>CommonLib %28Integration\CommonLib%29</Name>
+      <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>

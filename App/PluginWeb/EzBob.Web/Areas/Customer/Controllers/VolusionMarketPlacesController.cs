@@ -49,7 +49,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			ICustomerRepository customers,
 			IRepository<MP_MarketplaceType> mpTypes,
 			IRepository<MP_CustomerMarketPlace> marketplaces,
-			IMPUniqChecker mpChecker,
+			VolusionMPUniqChecker mpChecker,
 			IAppCreator appCreator
 		) {
 			_context = context;
@@ -78,19 +78,14 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Accounts(VolusionAccountModel model) {
-			string errorMsg;
-
-			if (!_validator.Validate(model.displayName, model.url, model.login, model.password, out errorMsg)) {
-				var errorObject = new { error = errorMsg };
-				return this.JsonNet(errorObject);
-			} // if
-
 			try {
+				_validator.Validate(_log, _context.Customer, model.displayName, model.url, model.login, model.password);
+
 				var customer = _context.Customer;
 				var username = model.login;
 				var volusion = new VolusionDatabaseMarketPlace();
 
-				_mpChecker.Check(volusion.InternalId, customer, username);
+				_mpChecker.Check(volusion.InternalId, customer, username, model.url);
 
 				var oVsi = new VolusionServiceInfo();
 

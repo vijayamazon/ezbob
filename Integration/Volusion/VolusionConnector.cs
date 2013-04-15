@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using RestSharp;
+using EZBob.DatabaseLib.Model.Database;
+using log4net;
+using Integration.ChannelGrabberAPI;
 
 namespace Integration.Volusion
 {
@@ -9,16 +11,25 @@ namespace Integration.Volusion
 	public class VolusionConnector {
 		#region method Validate
 
-		public bool Validate(string shopName, string url, string userName, string password, out string errMsg) {
-			// RestClient
-			throw new NotImplementedException();
+		public void Validate(
+			ILog log,
+			Customer customer,
+			string shopName,
+			string url,
+			string userName,
+			string password
+		) {
+			var oApi = new VolusionProle(log, customer);
+			oApi.Validate(url, userName, password);
 		} // Validate
 
 		#endregion method Validate
 
 		#region method GetOrders
 
-		public static List<VolusionOrder> GetOrders(string userName, string password) {
+		public static List<VolusionOrder> GetOrders(ILog log, Customer customer, string url, string userName, string password) {
+			var oApi = new VolusionProle(log, customer);
+			// return oApi.GetOrders(url, userName);
 			throw new NotImplementedException();
 		} // GetOrders
 

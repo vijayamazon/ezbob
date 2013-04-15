@@ -26,11 +26,6 @@
 
 .simpleCaptcha a { display: block; }
 
-#recaptcha_area {
-    margin: 5px;
-    margin-left: -40px;
-}
-
 .captcha legend, #questionArea legend {
     margin-bottom: 0;
     border: none;
