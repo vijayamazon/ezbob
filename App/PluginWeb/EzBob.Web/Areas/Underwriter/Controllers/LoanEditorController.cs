@@ -75,7 +75,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var amount = cr.ApprovedSum();
             var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
             var model = _builder.BuildModel(loan);
-            cr.LoanTemplate = null;
             return this.JsonNet(model);
         }
 
