@@ -1506,14 +1506,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransactions.companyColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'company\' in table \'Transactions\' is DBNull.", e);
-                    }
+                    return this[this.tableTransactions.companyColumn].ToString();
                 }
                 set
                 {
@@ -1586,14 +1579,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.trans_idColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'trans_id\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.trans_idColumn].ToString();
                 }
                 set
                 {
@@ -1607,14 +1593,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.midColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'mid\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.midColumn].ToString();
                 }
                 set
                 {
@@ -1628,14 +1607,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.dateColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'date\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.dateColumn].ToString();
                 }
                 set
                 {
@@ -1649,14 +1621,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.merchant_noColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'merchant_no\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.merchant_noColumn].ToString();
                 }
                 set
                 {
@@ -1670,14 +1635,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.MessageTypeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'MessageType\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.MessageTypeColumn].ToString();
                 }
                 set
                 {
@@ -1691,14 +1649,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.ExpiryDateColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ExpiryDate\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.ExpiryDateColumn].ToString();
                 }
                 set
                 {
@@ -1712,14 +1663,9 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((decimal)(this[this.tableTransaction.amountColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'amount\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    decimal result;
+                    decimal.TryParse(this[this.tableTransaction.amountColumn].ToString(), out result);
+                    return result;
                 }
                 set
                 {
@@ -1733,14 +1679,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.currencyColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'currency\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.currencyColumn].ToString();
                 }
                 set
                 {
@@ -1754,14 +1693,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.countryColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'country\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.countryColumn].ToString();
                 }
                 set
                 {
@@ -1775,14 +1707,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.nameColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'name\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.nameColumn].ToString();
                 }
                 set
                 {
@@ -1796,14 +1721,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.auth_codeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'auth_code\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.auth_codeColumn].ToString();
                 }
                 set
                 {
@@ -1817,14 +1735,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.statusColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'status\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.statusColumn].ToString();
                 }
                 set
                 {
@@ -1838,14 +1749,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.ipColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ip\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.ipColumn].ToString();
                 }
                 set
                 {
@@ -1859,14 +1763,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.optionsColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'options\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.optionsColumn].ToString();
                 }
                 set
                 {
@@ -1880,14 +1777,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.authorisedColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'authorised\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.authorisedColumn].ToString();
                 }
                 set
                 {
@@ -1901,14 +1791,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.deferredColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'deferred\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.deferredColumn].ToString();
                 }
                 set
                 {
@@ -1922,14 +1805,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.cidColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'cid\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.cidColumn].ToString();
                 }
                 set
                 {
@@ -1943,14 +1819,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.company_noColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'company_no\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.company_noColumn].ToString();
                 }
                 set
                 {
@@ -1964,14 +1833,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.tidColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'tid\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.tidColumn].ToString();
                 }
                 set
                 {
@@ -1985,14 +1847,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.card_typeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'card_type\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.card_typeColumn].ToString();
                 }
                 set
                 {
@@ -2006,14 +1861,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.acquirerColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'acquirer\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.acquirerColumn].ToString();
                 }
                 set
                 {
@@ -2027,14 +1875,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.messageColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'message\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.messageColumn].ToString();
                 }
                 set
                 {
@@ -2048,14 +1889,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.lastfiveColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'lastfive\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.lastfiveColumn].ToString();
                 }
                 set
                 {
@@ -2069,14 +1903,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.cv2avsColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'cv2avs\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.cv2avsColumn].ToString();
                 }
                 set
                 {
@@ -2090,14 +1917,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.FraudScoreColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'FraudScore\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.FraudScoreColumn].ToString();
                 }
                 set
                 {
@@ -2111,14 +1931,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.fraud_codeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'fraud_code\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.fraud_codeColumn].ToString();
                 }
                 set
                 {
@@ -2132,14 +1945,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.emvValueColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'emvValue\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.emvValueColumn].ToString();
                 }
                 set
                 {
@@ -2153,14 +1959,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction.start_dateColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'start_date\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction.start_dateColumn].ToString();
                 }
                 set
                 {
@@ -2174,14 +1973,7 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((string)(this[this.tableTransaction._classColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'class\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    return this[this.tableTransaction._classColumn].ToString();
                 }
                 set
                 {
@@ -2195,14 +1987,9 @@ namespace PayPoint
             {
                 get
                 {
-                    try
-                    {
-                        return ((int)(this[this.tableTransaction.Transactions_IdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e)
-                    {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Transactions_Id\' in table \'Transaction\' is DBNull.", e);
-                    }
+                    int result = 0;
+                    int.TryParse(this[this.tableTransaction.Transactions_IdColumn].ToString(), out result);
+                    return result;
                 }
                 set
                 {

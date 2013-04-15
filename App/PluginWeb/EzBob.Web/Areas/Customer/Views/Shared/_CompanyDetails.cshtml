@@ -90,11 +90,11 @@
                             <option value="3">More than 3 years</option>
                         </select>
                     </div>
-                </div>
+                </div>@*
                 
                 @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
                 
-                <div class="control-group">
+                *@<div class="control-group">
                     <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
                     <div class="controls">
                         <select style="height:30px; width:345px" id="ResidentialStatus" name="ResidentialStatus" class="select">
@@ -149,6 +149,26 @@
                     </fieldset>
                     
                     <div class="companyTurnover">
+                        <h2 style="padding-left:0" >Company</h2> 
+                        <div class="control-group">
+                            <label>Registration # <span class="required">*</span></label>
+                            <div style="margin-left: 0px;" class="controls">
+                                <input style="height:20px" type="text" name="Registration" class="form_field" size="50" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label>Name <span class="required">*</span></label>
+                            <div style="margin-left: 0px;" class="controls">
+                                <input style="height:20px" type="text" name="Name" class="form_field" size="50" />
+                            </div>
+                        </div>
+                        @*@EzForm.AddressInput("PrevPersonAddresses", "Address")*@
+                        <div class="control-group">
+                            <label>Business Phone <span class="required">*</span></label>
+                            <div style="margin-left: 0px;" class="controls">
+                                <input style="height:20px" type="text" name="BusinessPhone" class="form_field" size="50" />
+                            </div>
+                        </div>
                         <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
                         <div class="control-group">
                             <label>Your Total Online Sales (£) <span class="required">*</span></label>

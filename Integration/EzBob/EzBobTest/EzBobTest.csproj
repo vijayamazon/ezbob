@@ -128,6 +128,10 @@
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Volusion\Volusion.csproj">
       <Project>{48FEC03D-C021-4C8C-89E3-9F6DEE55A55D}</Project>
       <Name>Volusion</Name>

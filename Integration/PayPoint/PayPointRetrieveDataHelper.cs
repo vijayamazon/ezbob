@@ -1,20 +1,19 @@
-﻿using EzBob.CommonLib;
-using EzBob.CommonLib.Security;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.Model.Database;
-using PaymentServices.Web_References.PayPoint;
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using EzBob.CommonLib;
+    using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
+    using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Common;
+    using EZBob.DatabaseLib.DatabaseWrapper;
+    using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+    using EZBob.DatabaseLib.DatabaseWrapper.Order;
+    using EZBob.DatabaseLib.Model.Database;
+    using PaymentServices.Web_References.PayPoint;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public static class StringToStreamExtension
     {
         public static Stream ToStream(this string str)
@@ -39,11 +38,11 @@ namespace PayPoint
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            PayPointSecurityInfo securityInfo = (PayPointSecurityInfo)this.RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
+            var securityInfo = (PayPointSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
         }
-
+        
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             var secVpnService = new SECVPNService();
@@ -56,18 +55,49 @@ namespace PayPoint
                 payPointDataSet.ReadXml(xmlStream);
             }
 
-            var Iwant = new List<PayPointOrderItem>();
-            foreach (var x in payPointDataSet.Transaction)
+            var payPointOrders = new List<PayPointOrderItem>();
+            foreach (PayPointDataSet.TransactionRow x in payPointDataSet.Transaction)
             {
-                int h = 9;
-                int hh = h + 9; // qqq - debug this line and init object properly
-                Iwant.Add(new PayPointOrderItem()
-                {
-                });
+                var order = new PayPointOrderItem
+                    {
+                        acquirer = x.acquirer,
+                        amount = x.amount,
+                        auth_code = x.auth_code,
+                        authorised = x.authorised,
+                        card_type = x.card_type,
+                        cid = x.cid,
+                        classType = x._class,
+                        company_no = x.company_no,
+                        country = x.country,
+                        currency = x.currency,
+                        cv2avs = x.cv2avs,
+                        deferred = x.deferred,
+                        emvValue = x.emvValue,
+                        fraud_code = x.fraud_code,
+                        FraudScore = x.FraudScore,
+                        ip = x.ip,
+                        lastfive = x.lastfive,
+                        merchant_no = x.merchant_no,
+                        message = x.message,
+                        MessageType = x.MessageType,
+                        mid = x.mid,
+                        name = x.name,
+                        options = x.options,
+                        status = x.status,
+                        tid = x.tid,
+                        trans_id = x.trans_id
+                    };
+
+                DateTime result;
+                order.date = !DateTime.TryParse(x.date, out result) ? (DateTime?)null : result;
+                order.ExpiryDate = !DateTime.TryParse(x.ExpiryDate, out result) ? (DateTime?)null : result;
+                order.start_date = !DateTime.TryParse(x.start_date, out result) ? (DateTime?)null : result;
+                payPointOrders.Add(order);
+                
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-            PayPointOrdersList allOrders = new PayPointOrdersList(DateTime.UtcNow, Iwant);
+            var allOrders = new PayPointOrdersList(DateTime.UtcNow, payPointOrders);
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
                                     () => Helper.StorePayPointOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));

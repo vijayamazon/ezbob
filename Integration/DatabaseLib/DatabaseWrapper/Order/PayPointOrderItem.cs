@@ -22,10 +22,10 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
         public string country {get; set;}
         public string currency {get; set;}
         public string cv2avs {get; set;}
-        public DateTime date {get; set;}
+        public DateTime? date {get; set;}
         public string deferred {get; set;}
         public string emvValue {get; set;}
-        public DateTime ExpiryDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
         public string fraud_code {get; set;}
         public string FraudScore {get; set;}
         public string ip {get; set;}
@@ -35,7 +35,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
         public string MessageType {get; set;}
         public string mid {get; set;}
         public string name {get; set;}
-        public DateTime start_date { get; set; }
+        public DateTime? start_date { get; set; }
         public string options {get; set;}
         public string status {get; set;}
         public string tid {get; set;}
@@ -43,7 +43,10 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
         
 		public override DateTime RecordTime
 		{
-			get { return date; }
+			get
+			{
+			    return date.HasValue ? date.Value : DateTime.Now;
+			}
 		}
 	}
 }

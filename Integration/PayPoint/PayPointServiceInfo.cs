@@ -17,7 +17,7 @@ namespace PayPoint
 
         public string Description
         {
-            get { return "PayPoint description"; }
+            get { return "PayPoint"; }
         }
 
     }

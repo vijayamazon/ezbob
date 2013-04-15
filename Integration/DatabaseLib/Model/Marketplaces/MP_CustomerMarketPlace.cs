@@ -20,6 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
             EkmOrders = new HashedSet<MP_EkmOrder>();
             VolusionOrders = new HashedSet<MP_VolusionOrder>();
+            PayPointOrders = new HashedSet<MP_PayPointOrder>();
 		}
         public virtual int Id { get; set; }
         public virtual MP_MarketplaceType Marketplace { get; set; }

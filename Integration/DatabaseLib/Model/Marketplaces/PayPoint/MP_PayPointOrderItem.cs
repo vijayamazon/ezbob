@@ -22,10 +22,10 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual string country { get; set; }
         public virtual string currency { get; set; }
         public virtual string cv2avs { get; set; }
-        public virtual DateTime date { get; set; }
+        public virtual DateTime? date { get; set; }
         public virtual string deferred { get; set; }
         public virtual string emvValue { get; set; }
-        public virtual DateTime ExpiryDate { get; set; }
+        public virtual DateTime? ExpiryDate { get; set; }
         public virtual string fraud_code { get; set; }
         public virtual string FraudScore { get; set; }
         public virtual string ip { get; set; }
@@ -35,7 +35,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual string MessageType { get; set; }
         public virtual string mid { get; set; }
         public virtual string name { get; set; }
-        public virtual DateTime start_date { get; set; }
+        public virtual DateTime? start_date { get; set; }
         public virtual string options { get; set; }
         public virtual string status { get; set; }
         public virtual string tid { get; set; }
