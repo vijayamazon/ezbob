@@ -51,7 +51,7 @@
     };
 
     PayPointAccountInfoView.prototype.ui = {
-      login: '#payPoint_login',
+      mid: '#payPoint_mid',
       vpnPassword: '#payPoint_vpnPassword',
       remotePassword: '#payPoint_remotePassword',
       connect: 'a.connect-payPoint',
@@ -61,7 +61,7 @@
     PayPointAccountInfoView.prototype.inputChanged = function() {
       var enabled;
 
-      enabled = this.ui.login.val() && this.ui.vpnPassword.val() && this.ui.remotePassword.val();
+      enabled = this.ui.mid.val() && this.ui.vpnPassword.val() && this.ui.remotePassword.val();
       return this.ui.connect.toggleClass('disabled', !enabled);
     };
 
@@ -76,7 +76,7 @@
         return false;
       }
       acc = new EzBob.PayPointAccountModel({
-        login: this.ui.login.val(),
+        mid: this.ui.mid.val(),
         vpnPassword: this.ui.vpnPassword.val(),
         remotePassword: this.ui.remotePassword.val()
       });
@@ -100,7 +100,7 @@
         }
         _this.model.add(acc);
         EzBob.App.trigger('info', "PayPoint Account added successfully");
-        _this.ui.login.val("");
+        _this.ui.mid.val("");
         _this.ui.vpnPassword.val("");
         _this.ui.remotePassword.val("");
         _this.inputChanged();

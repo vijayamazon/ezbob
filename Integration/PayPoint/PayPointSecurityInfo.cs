@@ -4,6 +4,11 @@ namespace PayPoint
 {
     public class PayPointSecurityInfo : IMarketPlaceSecurityInfo
     {
+        // Constructor with empty parameters is required for serialization
+        public PayPointSecurityInfo()
+        {
+        }
+
         public PayPointSecurityInfo(int marketplaceId, string remotePassword, string vpnPassword, string mid)
         {
             MarketplaceId = marketplaceId;

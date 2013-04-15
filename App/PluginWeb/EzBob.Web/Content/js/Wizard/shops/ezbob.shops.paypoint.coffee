@@ -19,21 +19,21 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
     }
 
     ui:
-        login       : '#payPoint_login'
+        mid       : '#payPoint_mid'
         vpnPassword    : '#payPoint_vpnPassword'
         remotePassword    : '#payPoint_remotePassword'
         connect     : 'a.connect-payPoint'
         form        : 'form'
 
     inputChanged: ->
-        enabled = @ui.login.val() and @ui.vpnPassword.val() and @ui.remotePassword.val()
+        enabled = @ui.mid.val() and @ui.vpnPassword.val() and @ui.remotePassword.val()
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->
         return false if not @validator.form()            
         return false if @$el.find('a.connect-payPoint').hasClass('disabled')
 
-        acc = new EzBob.PayPointAccountModel({login: @ui.login.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})
+        acc = new EzBob.PayPointAccountModel({mid: @ui.mid.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})
 
         xhr = acc.save()
 
@@ -57,7 +57,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
 
             @model.add(acc)
             EzBob.App.trigger('info', "PayPoint Account added successfully");
-            @ui.login.val("") 
+            @ui.mid.val("") 
             @ui.vpnPassword.val("")
             @ui.remotePassword.val("")
             @inputChanged()

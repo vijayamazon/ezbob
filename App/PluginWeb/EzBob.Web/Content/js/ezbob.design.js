@@ -922,7 +922,7 @@ EzBob.validatePayPointShopForm = function (el) {
 
     return e.validate({
         rules: {
-            payPoint_login: { required: true, minlength: 2, maxlength: 30 },
+            payPoint_mid: { required: true, minlength: 2, maxlength: 30 },
             payPoint_vpnPassword: { required: true, minlength: 2, maxlength: 30 },
             payPoint_remotePassword: { required: true, minlength: 2, maxlength: 30 }
         },

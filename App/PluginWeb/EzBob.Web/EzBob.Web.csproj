@@ -975,11 +975,11 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
-      <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
       <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
+      <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
       <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
