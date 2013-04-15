@@ -30,7 +30,7 @@ namespace PaymentServices.Calculators
         /// <param name="term"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer")
+        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false)
         {
             var paymentTime = term ?? DateTime.UtcNow;
 
@@ -45,7 +45,8 @@ namespace PaymentServices.Calculators
                 PaypointId = transId,
                 IP = ip,
                 LoanRepayment = oldLoan.Principal - loan.Principal,
-                Interest = loan.InterestPaid - oldLoan.InterestPaid
+                Interest = loan.InterestPaid - oldLoan.InterestPaid,
+                InterestOnly = interestOnly
             };
             
             loan.AddTransaction(transactionItem);

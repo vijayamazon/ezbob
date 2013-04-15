@@ -369,7 +369,7 @@ namespace PaymentServices.Calculators
             RecordFeesPayment(amount);
 
             //Платим Interest
-            amount = Math.Min(money, Math.Round(interestToPay, 2));
+            amount = payment.InterestOnly ? money : Math.Min(money, Math.Round(interestToPay, 2));
             _paidInterest += amount;
             money = money - amount;
             payment.Interest = amount;
@@ -392,7 +392,6 @@ namespace PaymentServices.Calculators
             RecordPrincipalPayment(amount);
 
             UpdateInstallmentsState();
-
         }
 
         private decimal PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money)
