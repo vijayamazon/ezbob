@@ -99,7 +99,7 @@ $.fn.fmatter.showMPsIcon = (cellval, opt) ->
 $.fn.fmatter.profileLink = (cellval, opts) ->
     href = "#profile/#{(cellval.id or cellval)}"
     text = cellval.text or cellval
-    "<a class='profileLink' href='#{href}'>#{text}</a>"
+    $.fn.fmatter.withScrollbar "<a class='profileLink' href='#{href}'>#{text}</a>"
 
 $.fn.fmatter.datetimeNative = (cellval, opts, row) ->
     return "" unless cellval

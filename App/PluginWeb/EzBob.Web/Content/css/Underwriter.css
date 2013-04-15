@@ -366,6 +366,7 @@ table tr.editing td { background-color: beige !important; }
     padding: 10px 0;
     border-radius: 5px;
     width: 152px;
+    clear: both;
 }
 
 ul.left-underwriter-menu li.active {
@@ -381,7 +382,14 @@ ul.left-underwriter-menu > li > a:hover {
     text-decoration: underline;
     color: #0088CC !important;
 }
-.customer-grids { margin-left: 134px; }
+.customer-grids { 
+    margin-left: 154px;
+    position: absolute;
+    bottom: 0;
+    top: 41px;
+    right: 5px;
+    left: 0;
+}
 
 .with-border {
     border: 1px solid #aaa;
@@ -472,4 +480,14 @@ i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }
 }
 span.active {
     color: #0088CC;
+}
+
+.left-underwriter-div {
+    position: absolute;
+    top: 41px;
+    bottom: 0;
+    background-color: white;
+    z-index: 11;
+    width: 152px;
+    left: 0;
 }
