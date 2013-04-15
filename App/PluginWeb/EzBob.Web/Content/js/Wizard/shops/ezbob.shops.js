@@ -20,22 +20,25 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var j, _i, _len, _ref1;
+      var j, _i, _len, _ref1,
+        _this = this;
 
       this.ebayStores = this.model.get("ebayStores");
-      this.amazonMarketplaces = this.model.get("amazonMarketplaces");
       this.EbayButtonView = new EzBob.EbayButtonView({
         model: this.ebayStores
       });
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
+      this.ebayStores.on("reset change", this.marketplacesChanged, this);
+      this.amazonMarketplaces = this.model.get("amazonMarketplaces");
       this.AmazonButtonView = new EzBob.AmazonButtonView({
         model: this.amazonMarketplaces
       });
       this.AmazonStoreInfoView = new EzBob.AmazonStoreInfoView();
       this.amazonMarketplaces.on("reset change", this.marketplacesChanged, this);
-      this.ebayStores.on("reset change", this.marketplacesChanged, this);
       this.ekmAccounts = new EzBob.EKMAccounts();
-      this.ekmAccounts.fetch();
+      this.ekmAccounts.fetch().done(function() {
+        return _this.render();
+      });
       this.ekmButtonView = new EzBob.EKMAccountButtonView({
         model: this.ekmAccounts
       });
@@ -43,7 +46,9 @@
         model: this.ekmAccounts
       });
       this.volusionAccounts = new EzBob.VolusionAccounts();
-      this.volusionAccounts.fetch();
+      this.volusionAccounts.fetch().done(function() {
+        return _this.render();
+      });
       this.volusionButtonView = new EzBob.VolusionAccountButtonView({
         model: this.volusionAccounts
       });
@@ -51,7 +56,9 @@
         model: this.volusionAccounts
       });
       this.PayPointAccounts = new EzBob.PayPointAccounts();
-      this.PayPointAccounts.fetch();
+      this.PayPointAccounts.fetch().done(function() {
+        return _this.render();
+      });
       this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
         model: this.PayPointAccounts
       });

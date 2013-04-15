@@ -21,7 +21,8 @@
       });
       return VolusionAccountButtonView.__super__.initialize.call(this, {
         name: 'Volusion',
-        logoText: ''
+        logoText: '',
+        shops: this.model
       });
     };
 
@@ -31,7 +32,7 @@
 
     return VolusionAccountButtonView;
 
-  })(EzBob.StoreButtonWithListView);
+  })(EzBob.StoreButtonView);
 
   EzBob.VolusionAccountInfoView = (function(_super) {
     __extends(VolusionAccountInfoView, _super);

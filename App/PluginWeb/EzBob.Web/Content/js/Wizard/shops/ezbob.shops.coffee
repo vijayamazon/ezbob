@@ -7,14 +7,15 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
 
     initialize: ->
         @ebayStores = @model.get("ebayStores")
-        @amazonMarketplaces = @model.get("amazonMarketplaces")
         @EbayButtonView = new EzBob.EbayButtonView(model: @ebayStores)
         @EbayStoreView = new EzBob.EbayStoreInfoView()
+        @ebayStores.on "reset change", @marketplacesChanged, this
+
+        @amazonMarketplaces = @model.get("amazonMarketplaces")
         @AmazonButtonView = new EzBob.AmazonButtonView(model: @amazonMarketplaces)
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
         @amazonMarketplaces.on "reset change", @marketplacesChanged, this
-        @ebayStores.on "reset change", @marketplacesChanged, this
-
+        
         @ekmAccounts = new EzBob.EKMAccounts()
         @ekmAccounts.fetch().done => @render()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)

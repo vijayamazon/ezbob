@@ -126,11 +126,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public string mid { get; set; }
         public string vpnPassword { get; set; }
         public string remotePassword { get; set; }
+        public string displayName { get { return mid; } }
 
 
         public static PayPointAccountModel ToModel(MP_CustomerMarketPlace account)
         {
-            PayPointSecurityInfo i = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
+            var i = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
              
             return new PayPointAccountModel()
                        {

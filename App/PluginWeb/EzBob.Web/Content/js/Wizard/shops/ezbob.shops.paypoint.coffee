@@ -1,10 +1,9 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.PayPointAccountButtonView extends EzBob.StoreButtonWithListView
+class EzBob.PayPointAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
-        @listView = new EzBob.StoreListView({ model: this.model })
-        super({name: 'PayPoint', logoText: ''})
+        super({name: 'PayPoint', logoText: '', shops: @model})
     update: ->
         @model.fetch()
 
@@ -34,7 +33,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         return false if @$el.find('a.connect-payPoint').hasClass('disabled')
 
         acc = new EzBob.PayPointAccountModel({mid: @ui.mid.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})
-
+        
         xhr = acc.save()
 
         if not xhr

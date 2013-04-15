@@ -16,12 +16,10 @@
     }
 
     PayPointAccountButtonView.prototype.initialize = function() {
-      this.listView = new EzBob.StoreListView({
-        model: this.model
-      });
       return PayPointAccountButtonView.__super__.initialize.call(this, {
         name: 'PayPoint',
-        logoText: ''
+        logoText: '',
+        shops: this.model
       });
     };
 
@@ -31,7 +29,7 @@
 
     return PayPointAccountButtonView;
 
-  })(EzBob.StoreButtonWithListView);
+  })(EzBob.StoreButtonView);
 
   EzBob.PayPointAccountInfoView = (function(_super) {
     __extends(PayPointAccountInfoView, _super);
