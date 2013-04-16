@@ -1,11 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Fraud
 {
-    class FraudEmailDomain
+    public class FraudEmailDomain
     {
+        public virtual int Id { get; set; }
+        public virtual string EmailDomain { get; set; }
+        public virtual FraudUser FraudUser { get; set; }
+    }
+
+    public sealed class FraudEmailDomainMap : ClassMap<FraudEmailDomain>
+    {
+        public FraudEmailDomainMap()
+        {
+            Id(x => x.Id);
+            Map(x => x.EmailDomain).Length(250);
+            References(x => x.FraudUser, "FraudUserId");
+        }
     }
 }

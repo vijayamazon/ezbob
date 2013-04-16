@@ -20,11 +20,11 @@ namespace EZBob.DatabaseLib.Model.Fraud
         {
             Id(x => x.Id);
             Map(x => x.Postcode);
-            Map(x => x.Line1);
-            Map(x => x.Line2);
-            Map(x => x.Line3);
-            Map(x => x.Town);
-            Map(x => x.County);
+            Map(x => x.Line1).Length(200);
+            Map(x => x.Line2).Length(200);
+            Map(x => x.Line3).Length(200);
+            Map(x => x.Town).Length(200);
+            Map(x => x.County).Length(200);
             References(x => x.FraudUser, "FraudUserId");
         }
     }
