@@ -23,6 +23,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly CustomerRepository _customersRepository;
         private readonly IWorkplaceContext _workplaceContext;
         private readonly EzbobMailNodeAttachRelationRepository _ezbobMailNodeAttachRelationRepository;
+        private readonly IDecisionHistoryRepository _historyRepository;
         private readonly ExportResultRepository _exportResultRepository;
         private readonly IZohoFacade _crm;
         private readonly AskvilleRepository _askvilleRepository;
@@ -31,13 +32,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                                   IAppCreator appCreator,  
                                   EzbobMailNodeAttachRelationRepository ezbobMailNodeAttachRelationRepository, 
                                   ExportResultRepository exportResultRepository,
-                                  IZohoFacade crm, AskvilleRepository askvilleRepository)
+                                  IZohoFacade crm, AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository)
         {
             _appCreator = appCreator;
             _ezbobMailNodeAttachRelationRepository = ezbobMailNodeAttachRelationRepository;
             _exportResultRepository = exportResultRepository;
             _crm = crm;
             _askvilleRepository = askvilleRepository;
+            _historyRepository = historyRepository;
             _customersRepository = customers;
             _workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
         }
@@ -107,6 +109,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _appCreator.MoreAMLInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.AML;
+            LogPending(customer, PendingStatus.AML);
         }
 
         [Transactional]
@@ -120,6 +123,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _appCreator.MoreAMLandBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank_AML;
+            LogPending(customer, PendingStatus.Bank_AML);
         }
 
         [Transactional]
@@ -132,6 +136,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _appCreator.MoreBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank;
+            LogPending(customer, PendingStatus.Bank);
+        }
+
+        private void LogPending(EZBob.DatabaseLib.Model.Database.Customer customer, PendingStatus status)
+        {
+            var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
+            var user = workplaceContext.User;
+            _historyRepository.LogAction(DecisionActions.Pending, status.ToString(), user, customer);
         }
     }
 }

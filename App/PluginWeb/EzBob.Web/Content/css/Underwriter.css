@@ -431,6 +431,7 @@ ul.left-underwriter-menu > li > a:hover {
     white-space: pre-wrap;
 } 
 i.gold,
+i.diamond,
 i.silver,
 i.platinum,
 i.amazon,
@@ -445,6 +446,8 @@ i.paypal {
 }
 
 i.gold { background-image: url(../img/basket-gold-32.png); }
+
+i.diamond { background-image: url(../img/basket-diamond-32.png); }
 
 i.silver { background-image: url(../img/basket-silver-32.png); }
 

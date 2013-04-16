@@ -692,7 +692,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Last Status",
+                    Caption = "Current Status",
                     Name = "LastStatus",
                     Index = "LastStatus",
                     Resizable = false,

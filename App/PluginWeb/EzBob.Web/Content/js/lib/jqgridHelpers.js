@@ -8,9 +8,7 @@ var jqgridHelpers = {
             showButtonPanel: true
         };
         var $el = $(el), $parent = $el.parent();
-        $el.datepicker(options).addClass('datepickerCol').change(function () {
-            $("#list")[0].triggerToolbar();
-        });
+        
         return;
     },
 

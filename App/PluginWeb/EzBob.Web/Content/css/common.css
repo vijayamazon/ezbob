@@ -135,7 +135,3 @@ input.error, select.error, textarea.error { border: 2px solid #B94A48; }
     line-height: 30px;
     margin: 0 !important;
 }
-
-div.ui-dialog {
-    top: 45px !important;
-}
