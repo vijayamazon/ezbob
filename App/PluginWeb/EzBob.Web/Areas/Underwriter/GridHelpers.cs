@@ -140,7 +140,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Search = false,
-                    Width = 30,
+                    Width = 50,
                     DataType = TypeCode.String,
                     Formatter = showIcon ? "showMedalIcon" : "",
                     Data = x => x.Medal.HasValue ? x.Medal.ToString() : "-"
@@ -404,7 +404,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Date escalated",
+                    Caption = "Escalation Date",
                     Name = "DateEscalated",
                     Index = "DateEscalated",
                     Resizable = false,
@@ -702,7 +702,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Search = false,
                     Sortable = false,
-                    Width = 65,
+                    Width = 90,
                     DataType = TypeCode.String,
                     Data = x => CalculateStatus(x)
                 });
