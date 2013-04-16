@@ -27,6 +27,8 @@
     </div>
   }
   </script>
+
+
 <script id="personal-info-template" type="text/template">   
     <fieldset>
         <legend>Personal Information</legend>
@@ -58,35 +60,12 @@
                 <input type="text" value="<%-EzBob.formatDate(CustomerPersonalInfo.DateOfBirth)%>"  readonly="readonly"/>
             </div>
         </div>
-            
-        <div  class="control-group addressShow" display:"none">
-            <label class="control-label">Address:</label>
             <div class="controls">
-                <%
-                var adress = PersonalAddress.toJSON()[PersonalAddress.length-1];
-                var tempAddress = "";
-                var numRows = 0;
-                if(adress){ 
-                delete(adress['AddressId']);
-                delete(adress['AddressType']);
-                delete(adress['Id']);
-                delete(adress['FormattedAddress']);
-                _.each(adress, function(v,i){ 
-                if(v != null){
-                tempAddress += i + ": " +v + " " + "\n";
-                numRows++;
-                }           
-                });
-                }
-                %>
-                <textarea rows="<%-numRows%>"  wrap="off" style="overflow-y: hidden;resize:none;width: 95%;" type="text" readonly="readonly"><%-tempAddress%></textarea>
+                    <div class="addressEdit" display:"none">
+                        @EzForm.AddressInput("PersonalAddress", "Address")
+                    </div>
             </div>
-        </div>
-            
-        <div class="addressEdit" display:"none">
-            @EzForm.AddressInput("PersonalAddress", "Address")
-        </div>
-
+    
         <div class="control-group">
             <label class="control-label">Time at Address:</label>
             <div class="controls">
@@ -129,15 +108,17 @@
             </div>
         </div>   
        
-       <div class="control-group">
-        <label for="WebSiteTurnOver" class="control-label">Online Estimated Sales</label>
-        <div class="controls cashControlls">
-            <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput" />
-        </div>
-       </div>   
+        <div class="control-group">
+            <label for="WebSiteTurnOver" class="control-label">Online Estimated Sales</label>
+            <div class="controls cashControlls">
+                <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput" />
+            </div>
+        </div>   
 
     </fieldset>
+
 </script>
+
 <script id="limited-info-template" type="text/template">
     <fieldset>
         <legend>Business Information </legend>
@@ -155,86 +136,27 @@
                 <input type="text" value="<%-LimitedInfo.LimitedCompanyName%>" readonly="readonly" />
             </div>
         </div>
-        <div  class="control-group addressShow" display:"none">
-            <label class="control-label">
-                Address:</label>
-
-            <div class="controls">
-                <%
-                    var adress=LimitedAddress[LimitedAddress.length-1]; 
-                    var tempAddress = "";
-                    var numRows = 0;
-                    if(adress){ 
-                        delete(adress['AddressId']);
-                        delete(adress['AddressType']);
-                        delete(adress['Id']);
-                        delete(adress['FormattedAddress']);
-                        _.each(adress, function(v,i){ 
-                            if(v != null){
-                                tempAddress += i + ": " +v + " " + "\n";
-                                numRows++;
-                            }           
-                        });
-                    }
-                %>
-            <textarea rows="<%-numRows%>"  wrap="off" style="overflow: hidden;resize:none;width: 95%;" type="text" readonly="readonly"><%-tempAddress%></textarea>
-            </div>    
-        </div>
-            
-             <div class="addressEdit" display:"none">
+        <div class="controls">
+                <div class="addressEdit" display:"none">
                     @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-             </div>
-
-            <div class="control-group">
-                <label class="control-label">
-                    Business Phone #</label>
-                <div class="controls">
-                    <input class ="personEditInput phonenumber" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
                 </div>
+        </div>    
+        
+
+        <div class="control-group">
+            <label class="control-label">
+                Business Phone #</label>
+            <div class="controls">
+                <input class ="personEditInput phonenumber" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
-            <div class="control-group">
-                <% if(LimitedInfo.Directors.length){%>
-                <div class="accordion page-content-frame" id="accordion-faq-signup">
-                    <%_.each(LimitedInfo.Directors, function(director){%>
-                    <div class="accordion-group">
-                        <div class="accordion-heading faq-accordion-head">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-director.Id%>">
-                                <b class="play"></b>Director</a>
-                        </div>
-                        <div id="colapse<%-director.Id%>" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <p>
-                                    Name:<b><%-director.Name%> <%-director.Middle%> <%-director.Surname%></b></p>
-                                <p>
-                                    Date Of Birth:<b><%-director.DateOfBirth%></b></p>
-                                <p>
-                                    Address:</p>
-                                    <%
-                                        var adress=director.DirectorAddress[0]; 
-                                        var tempAddress = "";
-                                        var numRows = 0;
-                                        if(adress){ 
-                                            delete(adress['AddressId']);
-                                            delete(adress['AddressType']);
-                                            delete(adress['Id']);
-                                            delete(adress['FormattedAddress']);
-                                            _.each(adress, function(v,i){ 
-                                                if(v != null){
-                                                    tempAddress += i + ": " +v + " " + "\n";
-                                                    numRows++;
-                                                }           
-                                            });
-                                        }
-                                    %>
-                                <textarea rows="<%-numRows%>"  wrap="off" style="overflow-y: hidden;resize:none;width: 95%;" type="text" readonly="readonly"><%-tempAddress%></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <%});%> <%}%>
-                </div></div>
-        </fieldset>
+        </div>
+        <div class="control-group director-conteiner">
+            
+        </div>
+    </fieldset>
         
 </script>
+
 <script id="nonlimited-info-template" type="text/template">
     <fieldset>
         <legend>Business Information </legend>
@@ -245,34 +167,11 @@
                 <input type="text" value="<%-NonLimitedInfo.NonLimitedCompanyName%>" readonly="readonly" />
             </div>
         </div>
-        <div class="control-group addressShow">
-            <label class="control-label">Address:</label>
-            <div class="controls">
-                <%
-                    var adress=NonLimitedAddress[NonLimitedAddress.length-1]; 
-                    var tempAddress = "";
-                    var numRows = 0;
-                    if(adress){ 
-                        delete(adress['AddressId']);
-                        delete(adress['AddressType']);
-                        delete(adress['Id']);
-                        delete(adress['FormattedAddress']);
-                        _.each(adress, function(v,i){ 
-                            if(v != null){
-                                tempAddress += i + ": " +v + " " + "\n";
-                                numRows++;
-                            }                           
-                        });
-                    }
-                %>
-                <textarea rows="<%-numRows%>"  wrap="off" style="overflow-y: hidden;resize:none;width: 95%;" type="text" readonly="readonly"><%-tempAddress%></textarea>
-            </div>    
-        </div>
-            
-        <div class="addressEdit" display:"none">
-            @EzForm.AddressInput("NonLimitedAddress", "Address")
-        </div>
-
+        <div class="controls">
+               <div class="addressEdit">
+                    @EzForm.AddressInput("NonLimitedAddress", "Address")
+               </div>
+        </div>    
         <div class="control-group">
             <label class="control-label">
                 Time at Address:</label>
@@ -294,52 +193,36 @@
                 <input class ="personEditInput phonenumber" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
-        <div class="control-group">
-            <% if(LimitedInfo.Directors.length){%>
-            <div class="accordion page-content-frame" id="accordion-faq-signup">
-                <%_.each(LimitedInfo.Directors, function(director){%>
-                <div class="accordion-group">
-                    <div class="accordion-heading faq-accordion-head">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-director.Id%>">
-                            <b class="play"></b>Director</a>
-                    </div>
-                    <div id="colapse<%-director.Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <p>
-                                Name:<b><%-director.Name%> <%-director.Middle%> <%-director.Surname%></b></p>
-                            <p>
-                                Date Of Birth:<b><%-director.DateOfBirth%></b></p>
-                            <%var address=director.DirectorAddress[0]; 
-                            var addr = address ? (address.Line1 ||"") + " " + (address.Line2 || "") + " " + (address.Line3 || "") : "";%>
-                            <p>Address:</p>
-                            <%
-                                var adress=director.DirectorAddress[0]; 
-                                var tempAddress = "";
-                                var numRows = 0;
-                                if(adress){ 
-                                    delete(adress['AddressId']);
-                                    delete(adress['AddressType']);
-                                    delete(adress['Id']);
-                                    delete(adress['FormattedAddress']);
-                                    _.each(adress, function(v,i){ 
-                                        if(v != null){
-                                            tempAddress += i + ": " +v + " " + "\n";
-                                            numRows++;
-                                        }                                   
-                                    });
-                                }
-                            %>
-                            <textarea rows="<%-numRows%>"  wrap="off" style="overflow-y: hidden;resize:none;width: 95%;" type="text" readonly="readonly"><%-tempAddress%></textarea>
-                        </div>
-                    </div>
-                </div>
-                <%});%> <%}%>
-            </div>
+        <div class="control-group director-conteiner">
+            
         </div>
     </fieldset>
         
 </script> 
 
+<script id="director-info-template" type="text/template">
+                <div class="accordion-group">
+                    <div class="accordion-heading faq-accordion-head">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-Id%>">
+                            <b class="play"></b>Director</a>
+                    </div>
+                    <div id="colapse<%-Id%>" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <p>Name:<b><%-Name%> <%-Middle%> <%-Surname%></b></p>
+                            <p> Date Of Birth:<b><%-DateOfBirth%></b></p>
+                            <div class="addressEdit" >
+                                @EzForm.AddressInput("DirectorAddress", "Address")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</script> 
+
+<script id="directors-info" type="text/template">
+        <div class="accordion page-content-frame" id="accordion-faq-signup">
+            
+        </div>
+</script>
 
 <script id="address-popup-template" type="text/template">
     @{Html.RenderPartial("_AddressPopupTemplate");}

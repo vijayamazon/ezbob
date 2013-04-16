@@ -142,6 +142,62 @@ namespace EZBob.DatabaseLib.Model.Database {
                     .ChildKeyColumn("addressId")
                     .ChildWhere("addressType=" + Convert.ToInt32(AddressType.PrevPersonAddresses))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.LimitedCompanyAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedCompanyAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.LimitedDirectorHomeAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+
+                m.HasManyToMany(x => x.NonLimitedCompanyAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedCompanyAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+
+                m.HasManyToMany(x => x.LimitedDirectorHomeAddress)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddress))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddress)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddress))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
             });
 
             Component(x => x.BankAccount, m =>

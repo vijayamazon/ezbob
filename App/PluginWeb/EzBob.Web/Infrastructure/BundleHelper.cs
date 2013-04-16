@@ -332,7 +332,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Profile/ezbob.profile.paymentAccounts.js")
                          .Add("~/Content/js/Profile/ezbob.profile.Stores.js")
                          .Add("~/Content/js/Profile/ezbob.profile.AccountSummary.js")
-                         .Add("~/Content/js/Profile/ezbob.profile.yourInfo.js")
+                         .Add("~/Content/js/Profile/ezbob.profile.yourInfo.coffee")
                          .Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")

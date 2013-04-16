@@ -228,7 +228,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult Edit(string dayTimePhone, string mobilePhone, string businessPhone, decimal? overallTurnOver, decimal? webSiteTurnOver,   List<CustomerAddress> personalAddress, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress)
+        public JsonNetResult Edit(string dayTimePhone, string mobilePhone, string businessPhone, decimal? overallTurnOver, decimal? webSiteTurnOver, List<CustomerAddress> personalAddress, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<CustomerAddress> directorAddress)
         {
             var customer = _context.Customer;
 
@@ -238,40 +238,35 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.PersonalInfo.MobilePhone = mobilePhone;
             customer.PersonalInfo.OverallTurnOver = overallTurnOver;
             customer.PersonalInfo.WebSiteTurnOver = webSiteTurnOver;
-            if (personalAddress != null)
-            {
-                foreach (var val in personalAddress)
-                {
-                    val.AddressType = AddressType.PrevPersonAddresses;
-                }
-                personalAddress.Last().AddressType = AddressType.PersonalAddress;
-                customer.AddressInfo.PersonalAddress = new HashedSet<CustomerAddress>(personalAddress);
-            }
 
+            var addressInfo = customer.AddressInfo;
+            MakeAddress(personalAddress, addressInfo.PrevPersonAddresses, AddressType.PrevPersonAddresses, addressInfo.PersonalAddress, AddressType.PersonalAddress);
+            
             if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
             {
                 customer.LimitedInfo.LimitedBusinessPhone = businessPhone;
-                if (limitedCompanyAddress != null)
+
+                MakeAddress(limitedCompanyAddress, addressInfo.LimitedCompanyAddressPrev, AddressType.LimitedCompanyAddressPrev, addressInfo.LimitedCompanyAddress, AddressType.LimitedCompanyAddress);
+
+                if (customer.LimitedInfo.Directors.Any())
                 {
-                    foreach (var val in limitedCompanyAddress)
-                    {
-                        val.AddressType = AddressType.LimitedCompanyAddress;
-                    }
-                    customer.AddressInfo.LimitedCompanyAddress = new HashedSet<CustomerAddress>(limitedCompanyAddress);
+                    MakeAddress(directorAddress, addressInfo.LimitedDirectorHomeAddressPrev, AddressType.LimitedDirectorHomeAddressPrev, addressInfo.LimitedDirectorHomeAddress, AddressType.LimitedDirectorHomeAddress);
                 }
             }
+
             else if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited)
             {
                 customer.NonLimitedInfo.NonLimitedBusinessPhone = businessPhone;
-                if (nonLimitedCompanyAddress != null)
+
+                MakeAddress(nonLimitedCompanyAddress, addressInfo.NonLimitedCompanyAddressPrev, AddressType.NonLimitedCompanyAddressPrev, addressInfo.NonLimitedCompanyAddress, AddressType.NonLimitedCompanyAddress);
+
+                if (customer.NonLimitedInfo.Directors.Any())
                 {
-                    foreach (var val in nonLimitedCompanyAddress)
-                    {
-                        val.AddressType = AddressType.NonLimitedCompanyAddress;
-                    }
-                    customer.AddressInfo.NonLimitedCompanyAddress = new HashedSet<CustomerAddress>(nonLimitedCompanyAddress);
+                    MakeAddress(directorAddress, addressInfo.NonLimitedDirectorHomeAddressPrev, AddressType.NonLimitedDirectorHomeAddressPrev, addressInfo.NonLimitedDirectorHomeAddress, AddressType.NonLimitedDirectorHomeAddress);
                 }
+
             }
+
             var newPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
 
             SaveEditHistory(oldPersonalInfo, newPersonalInfo);
@@ -287,6 +282,21 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
 
             return this.JsonNet(new { });
+        }
+
+        private void MakeAddress(List<CustomerAddress> newAddress, Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress, AddressType prevAddressType,  Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress, AddressType currentAddressType)
+        {
+            if (newAddress == null || newAddress.Count <= 1) return;
+            var lastAddress = newAddress.Last();
+
+            foreach (var item in newAddress.Where(a => a.Id != lastAddress.Id))
+            {
+                item.AddressType = prevAddressType;
+                prevAddress.Add(item);
+            }
+            lastAddress.AddressType = currentAddressType;
+            currentAddress.Clear();
+            currentAddress.Add(lastAddress);
         }
 
         [NonAction]

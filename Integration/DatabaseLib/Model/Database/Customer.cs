@@ -552,6 +552,48 @@ namespace EZBob.DatabaseLib.Model.Database {
             get { return _prevPersonAddresses; }
             set { _prevPersonAddresses = value; }
         }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _limitedCompanyAddressPrev = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> LimitedCompanyAddressPrev
+        {
+            get { return _limitedCompanyAddressPrev; }
+            set { _limitedCompanyAddressPrev = value; }
+        }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _limitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> LimitedDirectorHomeAddressPrev
+        {
+            get { return _limitedDirectorHomeAddressPrev; }
+            set { _limitedDirectorHomeAddressPrev = value; }
+        }
+        
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _nonLimitedCompanyAddressPrev = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> NonLimitedCompanyAddressPrev
+        {
+            get { return _nonLimitedCompanyAddressPrev; }
+            set { _nonLimitedCompanyAddressPrev = value; }
+        }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _nonLimitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> NonLimitedDirectorHomeAddressPrev
+        {
+            get { return _nonLimitedDirectorHomeAddressPrev; }
+            set { _nonLimitedDirectorHomeAddressPrev = value; }
+        }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _limitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> LimitedDirectorHomeAddress
+        {
+            get { return _limitedDirectorHomeAddress; }
+            set { _limitedDirectorHomeAddress = value; }
+        }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _nonLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> NonLimitedDirectorHomeAddress
+        {
+            get { return _nonLimitedDirectorHomeAddress; }
+            set { _nonLimitedDirectorHomeAddress = value; }
+        }
     }
 
     public class ScoringResult
