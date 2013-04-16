@@ -39,7 +39,7 @@
     var identificator=new HtmlString(id);
     var val = new HtmlString(value);
     <div class="control-group">
-        <label for="@identificator" class="control-label">@caption</label>
+        <label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
         <div class="controls">
             <input 
                 id="@identificator" 

@@ -1,29 +1,275 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Areas.Underwriter.Models.Fraud
+@using EzBob.Web.Infrastructure
 @{
     ViewBag.Title = "Fraud";
     Layout = "../Shared/_Layout.cshtml";
 }
+
+<div id="main" style="margin-top: 10px;"></div>
 
 @section Js{
     @BundleHelper.RenderUnderwriterFraudJs()
     <script type="text/javascript">
         $(".menu").find("li.active").removeClass("active");
         $("#liFraud").addClass("active");
-        var view = new EzBob.Underwriter.FraudView();
+        var model = new EzBob.Underwriter.FraudModels();
+        var view = new EzBob.Underwriter.FraudView({ model: model, el: "#main" });
+        model.fetch();
     </script>
 }
 
-<script type="text/template">
+<script type="text/template" id="fraud-template">
     @Fraud()
 </script>
 
-@helper Fraud(){
-    <table class="table table-striped table-bordered">
+<script type="text/template" id="fraud-add-edit-template">
+    @FraudAddEdit()
+</script>
+
+@helper Fraud()
+{
+    <div class="left">
+        <button class="add btn btn-success btn-small"><i class="icon-plus"></i>Add new fraud user</button>
+    </div>
+
+    <table class="table table-striped table-bordered blue-header">
         <thead>
-            @EzForm.RawHeaderCell("")
+            @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
         </thead>
         <tbody>
-            
+            @EzForm.RawCellBold("Name", "Addresses", "Phones", "Emails", "Email Domains", "Bank Accounts", "Companies", "Shops")
+            @EzForm.RawCell("", "", "", "", "", "", "", "")
         </tbody>
     </table>
 }
+
+@helper FraudAddEdit()
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Add new fraud user</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" action="/" method="post">
+            <h5>Fraud name</h5>
+            @EzForm.InputText("firstName", "First Name", "")
+            @EzForm.InputText("lastName", "Last Name", "")
+            <hr/>
+
+            <h5>Fraud Addresses</h5>
+            <div class="addresses"></div>
+            <button class="btn-mini btn btn-success add" data-type="addresses"><i class="icon-plus"></i></button>
+            <hr/>
+
+            <h5>Fraud Phones</h5>
+            <div class="phones"></div>
+            <button class="btn-mini btn btn-success add" data-type="phones"><i class="icon-plus"></i></button>
+            <hr/>
+
+            <h5>Fraud Emails</h5>
+            <div class="emails"></div>
+            <button class="btn-mini btn btn-success add" data-type="emails"><i class="icon-plus"></i></button>
+            <hr/>
+
+            <h5>Fraud Email Domains</h5>
+            <div class="emailDomains"></div>
+            <button class="btn-mini btn btn-success add" data-type="emailDomains"><i class="icon-plus"></i></button>
+            <hr/>
+
+            <h5>Fraud Bank Accounts</h5>
+            <div class="bankAccounts"></div>
+            <button class="btn-mini btn btn-success add" data-type="bankAccounts"><i class="icon-plus"></i></button>
+            <hr/>
+            
+            <h5>Fraud Companies</h5>
+            <div class="companies"></div>
+            <button class="btn-mini btn btn-success add" data-type="companies"><i class="icon-plus"></i></button>
+            <hr/>
+
+            <h5>Fraud Shops</h5>
+            <div class="shops"></div>
+            <button class="btn-mini btn btn-success add" data-type="shops"><i class="icon-plus"></i></button>
+            <hr/>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary save">Save</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+}
+
+@helper AddValuesModal(string caption, IEnumerable<InputValuesModel> values)
+{
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>@caption</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            @foreach (var val in values)
+            {
+                @EzForm.InputText(val.Id, val.Caption, val.Value)
+            }
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary ok">Add</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+}
+
+@helper SimpleValues(string caption, string type)
+{
+    <text>
+        <%_.each(models, function(val, i){%>
+        <div class="control-group">
+            <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
+            <div class="controls">
+                <%if(_.keys(val).length>1){%>
+                <textarea  disabled="disabled" style="resize: none" name="@caption<%-i%>"><%-$.param(val).replace(/&/g,'\n')%></textarea>
+                <%}else{%>
+                <input type="text"  disabled="disabled" name="@caption<%-i%>" value="<%-$.param(val)%>">
+                <%}%>
+                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
+            </div>
+        </div>
+        <%});%>
+    </text>
+}
+<script type="text/template" id="add-addresses-template">
+    @AddValuesModal("Add Fraud Addresses", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Postcode",
+                    Id = "Postcode",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "Address Line1",
+                    Id = "Line1",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "Address Line2",
+                    Id = "Line2",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "Address Line3",
+                    Id = "Line3",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "Town",
+                    Id = "Town",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "County",
+                    Id = "County",
+                    Value = ""
+                }
+        })
+</script>
+
+<script type="text/template" id="addresses-template">
+    @SimpleValues("Address", "addresses")
+</script>
+
+<script type="text/template" id="phones-template">
+    @SimpleValues("Phones", "phones")
+</script>
+
+<script type="text/template" id="add-phones-template">
+    @AddValuesModal("Add Fraud Phone", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Phone",
+                    Id = "Phone",
+                    Value = ""
+                }
+        })
+</script>
+
+<script type="text/template" id="emails-template">
+    @SimpleValues("Email", "emails")
+</script>
+
+<script type="text/template" id="add-emails-template">
+    @AddValuesModal("Add Fraud Email", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Email",
+                    Id = "Email",
+                    Value = ""
+                },
+        })
+</script>
+
+<script type="text/template" id="emailDomains-template">
+    @SimpleValues("Email Domain", "emailDomains")
+</script>
+
+<script type="text/template" id="add-emailDomains-template">
+    @AddValuesModal("Add Fraud Email Domain", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Email",
+                    Id = "Email",
+                    Value = ""
+                },
+        })
+</script>
+
+<script type="text/template" id="bankAccounts-template">
+    @SimpleValues("Bank Account", "bankAccounts")
+</script>
+
+<script type="text/template" id="add-bankAccounts-template">
+    @AddValuesModal("Add Fraud Bank Accounts", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Bank Account",
+                    Id = "BankAccount",
+                    Value = ""
+                },
+            new InputValuesModel
+                {
+                    Caption = "Sort Code",
+                    Id = "SortCode",
+                    Value = ""
+                },
+        })
+</script>
+
+<script type="text/template" id="companies-template">
+    @SimpleValues("Company", "companies")
+</script>
+
+<script type="text/template" id="add-companies-template">
+    @AddValuesModal("Add Fraud Company", new List<InputValuesModel>
+        {
+            new InputValuesModel
+                {
+                    Caption = "Company Name",
+                    Id = "CompanyName",
+                    Value = ""
+                },
+             new InputValuesModel
+                {
+                    Caption = "Registration Number",
+                    Id = "RegistrationNumber",
+                    Value = ""
+                },
+        })
+</script>

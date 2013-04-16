@@ -491,3 +491,7 @@ span.active {
     width: 152px;
     left: 0;
 }
+
+[class^="icon-"], [class*=" icon-"] {
+    margin-top: -1px;
+}

@@ -233,6 +233,7 @@
     <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Fraud\FraudModel.cs" />
     <Compile Include="Areas\Underwriter\Models\IdHubCustomAddressModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />
     <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
