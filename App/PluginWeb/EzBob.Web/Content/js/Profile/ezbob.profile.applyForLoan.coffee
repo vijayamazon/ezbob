@@ -87,7 +87,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       BlockUi "off", @$el.find('#block-agreement')
 
   renderSchedule: (schedule) ->
-    @lastPaymentDate = moment(schedule.schedule[schedule.schedule.length - 1].Date)
+    @lastPaymentDate = moment(schedule.Schedule[schedule.Schedule.length - 1].Date)
     scheduleView = new EzBob.LoanScheduleView(
       el: @$el.find(".loan-schedule")
       schedule: schedule
@@ -95,7 +95,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       isShowExportBlock:false
     )
     scheduleView.render()
-    @createAgreementView schedule.agreement
+    @createAgreementView schedule.Agreement
 
   neededCashChanged: ->
     value = @model.get("neededCash")
