@@ -80,6 +80,8 @@ CREATE TABLE [dbo].[Customer](
 	[WizardStep] [int] NULL,
 	[LastStartedMainStrategyId] [int] NULL,
 	[LastStartedMainStrategyEndTime] [datetime] NULL,
+	[PendingStatus] [nvarchar](50) NULL,
+	[DateRejected] [datetime] NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

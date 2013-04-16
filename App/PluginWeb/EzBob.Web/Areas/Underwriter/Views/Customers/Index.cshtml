@@ -1,4 +1,5 @@
-﻿@model EzBob.Web.Areas.Underwriter.Models.LoansGrids
+﻿@using EzBob.Web.Infrastructure
+@model EzBob.Web.Areas.Underwriter.Models.LoansGrids
 @{
     ViewBag.Title = "Underwriter";
 }
@@ -58,7 +59,7 @@
                     { el: '#waiting', url: '@Url.Action(@Model.WaitingForDecision.Action, new {Area = "Underwriter"})', model: @Model.WaitingForDecision.ColModel, names: @Model.WaitingForDecision.ColNames }
                     @if (Model.Escalated != null)
                     {
-                    <text>
+                        <text>
                     ,
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
@@ -125,4 +126,5 @@
             }
         });
     </script>
+    @BundleHelper.RenderUnderwriterCustomersJs()
 }

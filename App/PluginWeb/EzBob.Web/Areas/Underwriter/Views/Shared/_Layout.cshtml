@@ -32,7 +32,6 @@
             window.gRootPath = '@Url.Content("~/")';
         </script>
         @BundleHelper.RenderJs()
-        @BundleHelper.RenderUnderwriterJs()
         <script id="login-template" type="text/template">
             @{ Html.RenderPartial("_LoginSimple"); }
         </script>
@@ -84,7 +83,9 @@
                     <li id="liCAIS">
                         <a href="@Url.Action("Index", "CAIS")">CAIS</a>
                     </li>
-
+                    <li id="liFraud">
+                        <a href="@Url.Action("Index", "Fraud")">Fraud</a>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
                     <li>

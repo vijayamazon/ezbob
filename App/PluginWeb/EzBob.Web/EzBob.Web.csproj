@@ -223,6 +223,7 @@
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanOptionsController.cs" />
     <Compile Include="Areas\Customer\Models\CashRequestModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EmailVerificationController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\FraudController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Helper.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanAmountPerDay.cs" />
@@ -827,6 +828,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Content\js\lib\log.coffee" />
+    <Content Include="Areas\Underwriter\Views\Fraud\Index.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
@@ -1329,6 +1331,7 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.coffee" />
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
+    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />

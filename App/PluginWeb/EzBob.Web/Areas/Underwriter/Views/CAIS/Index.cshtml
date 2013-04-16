@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@model dynamic
 
 @{
     ViewBag.Title = "CAIS";
@@ -14,9 +15,9 @@
 </script>
 
 @section Js{
+    @BundleHelper.RenderUnderwriterCAISJs()
     <script type="text/javascript">
-        $("#liReports").removeClass("active");
-        $("#liApplications").removeClass("active");
+        $(".menu").find("li.active").removeClass("active");
         $("#liCAIS").addClass("active");
         var view = new EzBob.Underwriter.CAIS.CaisManageView({ el: ".content" });
     </script>

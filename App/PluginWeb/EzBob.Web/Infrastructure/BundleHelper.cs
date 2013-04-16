@@ -160,7 +160,7 @@ namespace EzBob.Web.Infrastructure
             return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
         }
 
-        public static MvcHtmlString RenderUnderwriterJs()
+        public static MvcHtmlString RenderUnderwriterCustomersJs()
         {
             return Bundle.JavaScript()
                 //3rd party libs
@@ -229,9 +229,22 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")
                          .Add("~/Content/js/Underwriter/editLoan/editFee.coffee")
                          .Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
-                         .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
                          .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
                          .MvcRender("~/Content/js/min/underwriter_#.js");
+        }
+
+        public static MvcHtmlString RenderUnderwriterFraudJs()
+        {
+            return Bundle.JavaScript()
+                         .Add("~/Content/js/Underwriter/fraud/ezbob.underwriter.fraud.coffee")
+                         .MvcRender("~/Content/js/min/cais_#.js");
+        }
+
+        public static MvcHtmlString RenderUnderwriterCAISJs()
+        {
+            return Bundle.JavaScript()
+                         .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
+                         .MvcRender("~/Content/js/min/cais_#.js");
         }
 
         public static MvcHtmlString RenderStoreInfoJs()

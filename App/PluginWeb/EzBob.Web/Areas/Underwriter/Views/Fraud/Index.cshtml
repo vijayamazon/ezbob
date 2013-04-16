@@ -1,0 +1,29 @@
+﻿@using EzBob.Web.Infrastructure
+@{
+    ViewBag.Title = "Fraud";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+@section Js{
+    @BundleHelper.RenderUnderwriterFraudJs()
+    <script type="text/javascript">
+        $(".menu").find("li.active").removeClass("active");
+        $("#liFraud").addClass("active");
+        var view = new EzBob.Underwriter.FraudView();
+    </script>
+}
+
+<script type="text/template">
+    @Fraud()
+</script>
+
+@helper Fraud(){
+    <table class="table table-striped table-bordered">
+        <thead>
+            @EzForm.RawHeaderCell("")
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+}

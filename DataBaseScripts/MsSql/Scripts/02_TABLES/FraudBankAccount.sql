@@ -1,0 +1,18 @@
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FraudBankAccount]') AND type in (N'U'))
+DROP TABLE [dbo].[FraudBankAccount]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FraudBankAccount](
+	[Id] [int] NOT NULL,
+	[BankAccount] [nvarchar](50) NULL,
+	[SortCode] [nvarchar](50) NULL,
+	[FraudUserId] [int] NOT NULL,
+ CONSTRAINT [PK_FraudBankAccount] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO

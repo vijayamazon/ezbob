@@ -181,6 +181,66 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_CustomerId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_CustomerId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ExperianAccountType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ExperianAccountType.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ServiceLogId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ServiceLogId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudAddress_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudAddress_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudBankAccount_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudBankAccount_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudCompany_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudCompany_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmail_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmail_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmailDomain_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmailDomain_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudPhone_FraudPhone</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudPhone_FraudPhone.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudShop_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudShop_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoanOptions_Loan</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanOptions_Loan.sql</oFileName>
