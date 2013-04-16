@@ -834,6 +834,9 @@
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js">
       <DependentUpon>makeEarlyPaymentModel.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Profile\PayEarly\MakeEarlyPaymentView.js">
+      <DependentUpon>makeEarlyPaymentView.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.js">
       <DependentUpon>editLoanView.coffee</DependentUpon>
     </Content>

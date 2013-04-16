@@ -3,8 +3,6 @@ using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Models;
-using EzBob.Web.Areas.Underwriter.Controllers;
-using EzBob.Web.Models;
 using PaymentServices.Calculators;
 
 namespace EzBob.Web.Code

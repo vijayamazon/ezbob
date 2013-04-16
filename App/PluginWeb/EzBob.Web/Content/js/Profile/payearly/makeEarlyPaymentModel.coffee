@@ -7,10 +7,15 @@ class EzBob.Profile.MakeEarlyPaymentModel extends Backbone.Model
   defaults:
     amount: 0
     paymentType: "loan" #{loan, total, rollover, totalLate}
-    loanPaymentType: "full" #{full, next, other, late}
+    loanPaymentType: "full" #{full, next, other, late, nextInterest}
     rolloverPaymentType: "minimum" #{minimum, other}
     defaultCard: true
     url: "#"
+    isPayTotal: true
+    isPayRollover: false
+    isPayLoan: false
+    isPayTotalLate: false
+    isNextInterest: false
 
   initialize: ->
     @get("customer").on "fetch", @recalculate, this
@@ -82,6 +87,8 @@ class EzBob.Profile.MakeEarlyPaymentModel extends Backbone.Model
         amount = loan.get("NextEarlyPayment")
       when "late"
         amount = loan.get("AmountDue")
+      when "nextInterest"
+        amount = loan.get("NextInterestPayment")
       when "other"
         amount = loan.get("TotalEarlyPayment")
       else
@@ -90,9 +97,22 @@ class EzBob.Profile.MakeEarlyPaymentModel extends Backbone.Model
   changed: ->
     loan = @get("loan")
     return  unless loan
+    
     url = window.gRootPath + "Customer/Paypoint/Pay?amount=" + @get("amount")
     url += "&type=" + @get("paymentType")
-    url += "&paymentType=" + if @get("paymentType") != "rollover" then @get("loanPaymentType") else @get("rolloverPaymentType")
+    url += "&paymentType=" + getPaymentType()
     url += "&loanId=" + loan.id
     url += "&rolloverId=" + ( if @get("currentRollover") is not null then @get("currentRollover").Id else -1)
     @set url: url
+    
+    paymentType = @get 'paymentType'
+
+    @set
+        'isPayTotal':        paymentType == 'total'
+        'isPayRollover':     paymentType == 'rollover'
+        'isPayLoan':         paymentType == 'loan'
+        'isPayTotalLate':    paymentType == 'totalLate'
+        'isNextInterest':    paymentType == 'nextInterest'
+
+  getPaymentType: ->
+    if @get("paymentType") != "rollover" then @get("loanPaymentType") else @get("rolloverPaymentType")

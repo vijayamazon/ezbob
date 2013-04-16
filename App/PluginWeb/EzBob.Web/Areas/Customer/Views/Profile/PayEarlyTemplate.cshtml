@@ -9,11 +9,6 @@
 
 <script id="payEaryly-template" type="text/template">
     <%
-        var isPayTotal              = paymentType == 'total';
-        var isPayRollover           = paymentType == 'rollover';
-        var isPayLoan               = paymentType == 'loan';
-        var isPayTotalLate          = paymentType == 'totalLate';
-
         var loanPaymentTypeDisabled = !isPayLoan && liveLoans.length > 1 ? 'disabled="disabled"' : '';
         var loanPaymentTypeHidden   = !isPayLoan && liveLoans.length > 1 ? 'style="display: none;"' : '';
 
@@ -93,11 +88,19 @@
                     </div>
 
                     <% if(loan.get('Status') != "Late"){%>
-                    <div class="control-group less-space">
-                        <label class="radio <%-loansClass%> w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> >
-                            <input type="radio" <%-loanPaymentTypeDisabled%> name="loanPaymentType" value="next"  <%-loanPaymentType=='next' && isPayLoan ? 'checked="checked"' : ''%>  />Next Installment: &nbsp;&nbsp;<b><%-EzBob.formatPounds(loan.get('NextEarlyPayment'))%></b>
-                         </label>
-                    </div>
+                        <div class="control-group less-space">
+                            <label class="radio <%-loansClass%> w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> >
+                                <input type="radio" <%-loanPaymentTypeDisabled%> name="loanPaymentType" value="next"  <%-loanPaymentType=='next' && isPayLoan ? 'checked="checked"' : ''%>  />Next Installment: &nbsp;&nbsp;<b><%-EzBob.formatPounds(loan.get('NextEarlyPayment'))%></b>
+                             </label>
+                        </div>
+                    
+                        <% if(loan.get('NextInterestPayment')){%>
+                            <div class="control-group less-space">
+                                <label class="radio <%-loansClass%> w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> >
+                                    <input type="radio" <%-loanPaymentTypeDisabled%> name="loanPaymentType" value="nextInterest"  <%-loanPaymentType=='nextInterest' && isPayLoan ? 'checked="checked"' : ''%>  />Next Interest: &nbsp;&nbsp;<b><%-EzBob.formatPounds(loan.get('NextInterestPayment'))%></b>
+                                 </label>
+                            </div>
+                        <%}%>
                     <%}%>
 
                     <div class="control-group less-space" style="margin-bottom: 20px;">
@@ -128,6 +131,8 @@
                             <input type="radio" name="rolloverPaymentType" value="minimum" <%-rolloverPaymentType=='minimum' ? 'checked="checked"' : ''%> />Minimum payment: </b><%-EzBob.formatPounds(currentRollover && currentRollover.RolloverPayValue)%> </b>
                         </label>
                     </div>
+                    
+                    @* Another amount *@
                     <div class="control-group less-space" <%=rolloverIsHided%> <%=rolloverVisible%>>
                         <label class="radio inline-block-margin input-medium lot-of-loans other-amount-label w100p" <%-rolloverDisabled%> <%=rolloverIsHided%> >
                             <input <%-rolloverDisabled%> type="radio" name="rolloverPaymentType" value="other"  <%-rolloverPaymentType=='other' ? 'checked="checked"' : ''%>/>
@@ -135,6 +140,7 @@
                         <input type="text" <%=rolloverAnotherAmountDisabled%> class="money w70 bold" <%=rolloverIsHided%> name="rolloverAmount" value="<%-EzBob.formatPounds(amount)%>" />
                         </label>
                     </div>
+
                     @* ************* *@
 
                 </div>
