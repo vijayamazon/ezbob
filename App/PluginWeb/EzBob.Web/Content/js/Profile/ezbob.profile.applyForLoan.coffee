@@ -92,6 +92,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       el: @$el.find(".loan-schedule")
       schedule: schedule
       isShowGift: true
+      isShowExportBlock:false
     )
     scheduleView.render()
     @createAgreementView schedule.agreement

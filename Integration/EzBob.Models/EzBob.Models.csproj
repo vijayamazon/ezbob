@@ -93,6 +93,7 @@
     <Compile Include="LoanChargesModel.cs" />
     <Compile Include="LoanDetails.cs" />
     <Compile Include="LoanModel.cs" />
+    <Compile Include="LoanOffer.cs" />
     <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="LoanTransactionModel.cs" />
     <Compile Include="MarketPlaceModel.cs" />

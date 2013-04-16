@@ -14,11 +14,13 @@ using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
+using EzBob.Web.Code.ReportGenerator;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
 using PaymentServices.PayPoint;
 using Scorto.Web;
 using log4net;
+
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
@@ -278,6 +280,22 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                             };
 
             return this.JsonNet(model);
+        }
+
+        [HttpGet]
+        public ActionResult ExportDetails(int id, int loanid, bool isExcel)
+        {
+            var customer = _customerRepository.Get(id);
+            var loan = customer.Loans.SingleOrDefault(l => l.Id == loanid);
+
+            if (loan == null)
+            {
+                return this.JsonNet(new { error = "loan does not exists" });
+            }
+            var loansDetailsBuilder = new LoansDetailsBuilder();
+            var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
+
+            return new LoanScheduleReportResult(details, isExcel);
         }
     }
 }

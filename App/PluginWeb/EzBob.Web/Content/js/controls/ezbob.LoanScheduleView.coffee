@@ -6,17 +6,33 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
 
     serializeData: ->
         return {
-            schedule: @options.schedule.schedule
-            apr: @options.schedule.apr
-            setupFee: @options.schedule.setupFee
-            realInterestCost: @options.schedule.realInterestCost
-            total: @options.schedule.total
-            totalInterest : @options.schedule.totalInterest
-            totalPrincipal : @options.schedule.totalPrincipal
+            schedule: @options.schedule.Schedule
+            apr: @options.schedule.Apr
+            setupFee: @options.schedule.SetupFee
+            realInterestCost: @options.schedule.RealInterestCost
+            total: @options.schedule.Total
+            totalInterest : @options.schedule.TotalInterest
+            totalPrincipal : @options.schedule.TotalPrincipal
             isShowGift : @options.isShowGift
+            isShowExportBlock:@options.isShowExportBlock
         }
 
+
 class EzBob.LoanScheduleViewDlg extends EzBob.LoanScheduleView
+
+    events:
+        "click .pdf-link": "exportToPdf",
+        "click .excel-link": "exportToExcel"
+
+    exportToPdf: (e) ->
+        console.log (@options)
+        $el = $(e.currentTarget);
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=false&isShowDetails=false");
+    
+    exportToExcel: (e) ->
+        $el = $(e.currentTarget); 
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=true&isShowDetails=false");
+    
     jqoptions: ->
         modal: true
         width: 600

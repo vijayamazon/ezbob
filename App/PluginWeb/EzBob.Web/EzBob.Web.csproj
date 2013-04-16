@@ -246,12 +246,16 @@
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
     <Compile Include="Code\LoanLimit.cs" />
+    <Compile Include="Code\ReportGenerator\LoanHistoryExelReportGenerator.cs" />
+    <Compile Include="Code\ReportGenerator\LoanHistoryExelReportResult.cs" />
+    <Compile Include="Code\ReportGenerator\LoanOfferReportGenerator.cs" />
+    <Compile Include="Code\ReportGenerator\LoanOfferReportResult.cs" />
+    <Compile Include="Code\ReportGenerator\LoanScheduleReportGenerator.cs" />
+    <Compile Include="Code\ReportGenerator\LoanScheduleReportResult.cs" />
     <Compile Include="Controllers\AgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\DailyReportData.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\ExpectationReportData.cs" />
     <Compile Include="Code\DailyReportBuilder.cs" />
-    <Compile Include="Code\LoanHistoryExelReportGenerator.cs" />
-    <Compile Include="Code\LoanHistoryExelReportResult.cs" />
     <Compile Include="Code\MedalExcelReportGenerator.cs" />
     <Compile Include="Code\MedalExcelReportResult.cs" />
     <Compile Include="Code\MpUniq\FakeMPUniqChecker.cs" />
@@ -421,6 +425,7 @@
     <Content Include="Content\img\ebay-small.png" />
     <Content Include="Content\img\ebay.png" />
     <Content Include="Content\img\ecommerce bytes.png" />
+    <Content Include="Content\img\excel.png" />
     <Content Include="Content\img\free-gift-icon.png" />
     <Content Include="Content\img\huffingtonpost.jpeg" />
     <Content Include="Content\img\logo-amazon-small.png" />

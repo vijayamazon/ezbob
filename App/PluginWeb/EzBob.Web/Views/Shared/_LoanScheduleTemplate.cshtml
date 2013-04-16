@@ -10,6 +10,10 @@
             </div>
         <%}%>
     </div>
+     <%if(isShowExportBlock){%>
+        <a href="#" class="pull-right print print-link excel-link">Export to Excel</a>
+        <a style="margin-right: 20px;" class="pull-right download pdf-link">Export to Pdf</a>
+    <%}%>
 </script>
 
 @helper talbe(){
@@ -69,15 +73,21 @@
         </div>
         <span class="ric">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %>, &nbsp;&nbsp;&nbsp; APR = <%- apr %>%</span>
         <%if(isShowGift){%>
-            <div  class="free-gift-block free-gift">
-                <p>Did you know: You can always pay any amount at any time, <br/>
-                   above the specified amount, and save on interest costs.<br/>
-                   There are no pre-payment penalties or charges.
-                </p>
-            </div>
+        <div  class="free-gift-block free-gift">
+            <p>Did you know: You can always pay any amount at any time, <br/>
+                above the specified amount, and save on interest costs.<br/>
+                There are no pre-payment penalties or charges.
+            </p>
+        </div>
         <%}%>
         <i class="separator-image1"></i>
         <i class="separator-image2"></i>
-        
     </div>
+}
+@helper ExportBlock ()
+{
+    <div class="export-block">
+        <a href="#" class="pull-right print print-link">Print</a>
+        <a style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
+  </div>
 }

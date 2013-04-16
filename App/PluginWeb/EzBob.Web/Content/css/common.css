@@ -135,3 +135,7 @@ input.error, select.error, textarea.error { border: 2px solid #B94A48; }
     line-height: 30px;
     margin: 0 !important;
 }
+
+a.excel-link {
+   background-image: url(../img/excel.png);
+} 

@@ -131,7 +131,9 @@ EzBob.Underwriter.Returned = EzBob.Underwriter.FunctionsDialogView.extend(
 EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     events: ->
         _.extend {}, EzBob.Underwriter.FunctionsDialogView::events,
-            "click .change-offer-details": "changeLoanDetails"
+            "click .change-offer-details": "changeLoanDetails",
+            "click .pdf-link": "exportToPdf",
+            "click .excel-link": "exportToExcel"
 
     getType: ->
         "Approved"
@@ -160,6 +162,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 el: that.$el.find(".loan-schedule")
                 schedule: data
                 isShowGift: false
+                isShowExportBlock:false
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()
@@ -185,4 +188,13 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
             EzBob.App.jqmodal.show view
             view.on "item:saved", that.onSaved, that
         false
+    
+    exportToPdf: (e) ->
+        $el = $(e.currentTarget);
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=false&isShowDetails=true");
+    
+    exportToExcel: (e) ->
+        $el = $(e.currentTarget);
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=true&isShowDetails=true");
+    
 )

@@ -47,6 +47,10 @@ namespace EzBob.Web.Code
             return "£ "+numeric.ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
         }
 
+        public static string FormatPoundsWidhDash(decimal numeric)
+        {
+            return  numeric == 0 ? "" : "£ " + numeric.ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
+        }
         public static string ConvertingNumberToWords(int number)
         {
             var unit = number % 10;

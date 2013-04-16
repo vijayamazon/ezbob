@@ -55,6 +55,8 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
         "click .make-payment": "makePayment"
         "click #btn-options": "showDialogOptions"
         "change .filter-errors": "renderContent"
+        "click .pdf-link": "exportToPdf"
+        "click .excel-link": "exportToExcel"
 
     rollover: (e) ->
         return false  unless @checkForActiveLoan()
@@ -139,3 +141,13 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             EzBob.ShowMessage "Loan is  paid off", "Info"
             return false
         true
+
+    exportToPdf: (e) ->
+        customerId = @model.id
+        $el = $(e.currentTarget);
+        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=false");
+    
+    exportToExcel: (e) ->
+        customerId = @model.id
+        $el = $(e.currentTarget);
+        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=true");

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
+using EzBob.Models;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
@@ -60,28 +61,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var schedule = loan.Schedule;
             var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee);
-            var total = schedule.Sum(s => s.AmountDue) + loan.SetupFee;
-            var totalPrincipal = schedule.Sum(s => s.LoanRepayment);
-            var totalInterest = schedule.Sum(s => s.Interest) + loan.Charges.Sum(x => x.Amount) + loan.SetupFee;
-            var realInterestCost = totalInterest/amount;
-            var timestamp = DateTime.UtcNow.Ticks;
 
             var b = new AgreementsModelBuilder(_customerModelBuilder);
             var agreement = b.Build(_customer, amount, loan);
+            var loanOffer = LoanOffer.InitFromLoan(loan, apr, agreement);
 
-            return this.JsonNet(new
-                                    {
-                                        schedule = loan.Schedule.Select(s => LoanScheduleItemModel.FromLoanScheduleItem(s)).ToArray(),
-                                        apr, 
-                                        loan.SetupFee, 
-                                        total, 
-                                        totalPrincipal, 
-                                        realInterestCost, 
-                                        totalInterest, 
-                                        amount, 
-                                        timestamp, 
-                                        agreement
-                                    });
+            return this.JsonNet(loanOffer);
         }
     }
 }
