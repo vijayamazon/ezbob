@@ -35,6 +35,11 @@ EzBob.Underwriter.customerGrid = (settings) ->
         height: "auto"
         rowNum: 100
         shrinkToFit: true
+        loadError: (xhr,status,error)->
+            BlockUi "off"
+            EzBob.ShowMessage error, status
+        loadComplete: ->
+            BlockUi "off"
         gridComplete: ->
             ( settings.$el.find "[data-toggle='tooltip']" ).tooltip()
             BlockUi "off"
