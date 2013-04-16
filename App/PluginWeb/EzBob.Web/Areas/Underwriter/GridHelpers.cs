@@ -702,7 +702,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Search = false,
                     Sortable = false,
-                    Width = 65,
+                    Width = 90,
                     DataType = TypeCode.String,
                     Data = x => CalculateStatus(x)
                 });
