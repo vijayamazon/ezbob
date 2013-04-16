@@ -70,7 +70,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 
         public override decimal NextInterestPayment(Loan loan)
         {
-            var installment = loan.Schedule.FirstOrDefault(i => i.Status == LoanScheduleStatus.StillToPay);
+            var installment = loan.Schedule.FirstOrDefault(i => i.Status == LoanScheduleStatus.StillToPay && i.LoanRepayment == 0);
             if (installment == null)
             {
                 return 0;
