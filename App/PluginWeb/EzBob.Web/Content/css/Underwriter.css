@@ -491,3 +491,8 @@ span.active {
     width: 152px;
     left: 0;
 }
+
+/*disable default jqGrid loading popup*/
+.loading.ui-state-default.ui-state-active {
+    visibility: hidden;
+}

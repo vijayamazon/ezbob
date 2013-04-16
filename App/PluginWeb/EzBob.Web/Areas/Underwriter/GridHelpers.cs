@@ -63,7 +63,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Status",
+                    Caption = " Customer Status",
                     Name = "CreditResult",
                     Index = "CreditResult",
                     Resizable = false,
@@ -71,7 +71,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Width = 100,
+                    Width = 120,
                     DataType = TypeCode.String,
                     Data = x => x.CreditResult.ToString()
                 });
@@ -193,7 +193,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Manual Approved",
+                    Caption = "Approved Manually",
                     Name = "ManualAmount",
                     Index = "ManualSum",
                     Search = false,
@@ -543,7 +543,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
+                    Search = true,
+                    Sortable = true,
                     Width = 73,
                     DataType = TypeCode.DateTime,
                     Data = x => x.GreetingMailSentDate,
@@ -853,7 +854,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
-                Caption = "Next repayment date",
+                Caption = "Next Repayment Date",
                 Name = "LastLoanAmount",
                 Index = "Loans.Amount",
                 Resizable = false,

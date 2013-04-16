@@ -35,8 +35,11 @@ EzBob.Underwriter.customerGrid = (settings) ->
         height: "auto"
         rowNum: 100
         shrinkToFit: true
-        loadComplete: ->
+        gridComplete: ->
             ( settings.$el.find "[data-toggle='tooltip']" ).tooltip()
+            BlockUi "off"
+        loadBeforeSend: ->
+            BlockUi "on"
 
     $grid = $(list).jqGrid(options)
     $grid.jqGrid "filterToolbar",
