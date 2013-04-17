@@ -8,7 +8,6 @@ namespace Integration.ChannelGrabberAPI {
 		public VolusionProle(ILog log, Customer customer) : base(log, customer) {}
 
 		public override ShopTypes ShopType { get { return ShopTypes.Volusion; } }
-
 	} // class VolusionProle
 
 	#endregion class VolusionProle

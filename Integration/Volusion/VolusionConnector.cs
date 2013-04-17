@@ -14,13 +14,19 @@ namespace Integration.Volusion
 		public void Validate(
 			ILog log,
 			Customer customer,
-			string shopName,
-			string url,
-			string userName,
-			string password
+			string sShopName,
+			string sUrl,
+			string sUserName,
+			string sPassword
 		) {
 			var oApi = new VolusionProle(log, customer);
-			oApi.Validate(url, userName, password);
+
+			oApi.Validate(new VolusionAccountData {
+				name     = sShopName,
+				endpoint = sUrl,
+				username = sUserName,
+				password = sPassword
+			});
 		} // Validate
 
 		#endregion method Validate

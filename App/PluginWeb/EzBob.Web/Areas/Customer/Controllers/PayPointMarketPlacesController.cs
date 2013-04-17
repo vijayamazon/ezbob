@@ -49,7 +49,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customer = context.Customer;
             _mpChecker = mpChecker;
             _appCreator = appCreator;
-            payPointMarketTypeId = 5; // qqq - SELECT Id FROM MP_MarketPlaceType WHERE Name = 'PayPoint'
+
+            var oPsi = new PayPointServiceInfo();
+            payPointMarketTypeId = _mpTypes
+                .GetAll()
+                .First(a => a.InternalId == oPsi.InternalId)
+                .Id;
         }
 
         [Transactional]
