@@ -32,6 +32,8 @@ namespace EzBob.Models
         public decimal Repayments { get; set; }
         public decimal Principal { get; set; }
         public decimal AmountDue { get; set; }
+        public decimal NextInterestPayment { get; set; }
+
         public List<LoanAgreementModel> Agreements { get; set; }
 
         public List<LoanScheduleItemModel> Schedule { get; set; }
@@ -61,6 +63,7 @@ namespace EzBob.Models
                     TotalBalance = loan.Schedule.Sum(s => s.AmountDue),
                     Principal = loan.Principal,
                     NextRepayment = loan.NextRepayment,
+                    NextInterestPayment = loan.NextInterestPayment,
                     Repayments = loan.Repayments,
                     Fees = loan.Schedule.Sum(i => i.Fees),
                     APR = loan.APR,

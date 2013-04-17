@@ -38,6 +38,11 @@ namespace EZBob.DatabaseLib.Model.Loans
             installment.LoanRepayment = 0;
             installment.AmountDue = 0;
         }
+
+        public virtual decimal NextInterestPayment(Loan loan)
+        {
+            return 0;
+        }
     }
 
     public class StandardLoanType : LoanType
@@ -61,6 +66,16 @@ namespace EZBob.DatabaseLib.Model.Loans
         public override void BalanceReachedExpected(LoanScheduleItem installment)
         {
             //base.BalanceReachedExpected(installment);
+        }
+
+        public override decimal NextInterestPayment(Loan loan)
+        {
+            var installment = loan.Schedule.FirstOrDefault(i => i.Status == LoanScheduleStatus.StillToPay && i.LoanRepayment == 0);
+            if (installment == null)
+            {
+                return 0;
+            }
+            return installment.Interest;
         }
     }
 

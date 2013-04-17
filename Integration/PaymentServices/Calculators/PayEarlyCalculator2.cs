@@ -356,7 +356,7 @@ namespace PaymentServices.Calculators
             payment.Rollover = 0;
 
             var money = payment.Amount;
-            var interestToPay = _totalInterestToPay - _paidInterest;
+            var interestToPay = Math.Max(0, _totalInterestToPay - _paidInterest);
             var feestToPay = _totalFeesToPay - _paidFees;
             _lastPaymentDate = payment.PostDate;
 
@@ -369,7 +369,7 @@ namespace PaymentServices.Calculators
             RecordFeesPayment(amount);
 
             //Платим Interest
-            amount = Math.Min(money, Math.Round(interestToPay, 2));
+            amount = payment.InterestOnly ? money : Math.Min(money, Math.Round(interestToPay, 2));
             _paidInterest += amount;
             money = money - amount;
             payment.Interest = amount;
@@ -392,7 +392,6 @@ namespace PaymentServices.Calculators
             RecordPrincipalPayment(amount);
 
             UpdateInstallmentsState();
-
         }
 
         private decimal PayRollover(PaymentRollover rollover, PaypointTransaction payment, decimal money)
@@ -513,7 +512,7 @@ namespace PaymentServices.Calculators
             var interestToPay = _totalInterestToPay - _paidInterest - _processed.Sum(x => x.Interest);
             var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees);
 
-            installment.Interest = Math.Round(interestToPay, 2);
+            installment.Interest = Math.Max(0, Math.Round(interestToPay, 2));
             installment.Fees = Math.Round(feesToPay, 2);
 
             installment.Status = LoanScheduleStatus.StillToPay;

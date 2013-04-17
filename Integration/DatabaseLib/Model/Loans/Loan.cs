@@ -329,6 +329,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             set { _loanType = value; }
         }
 
+        public virtual decimal NextInterestPayment
+        {
+            get { return _loanType.NextInterestPayment(this); }
+        }
+
         public virtual Loan Clone()
         {
             var newItem = new Loan()

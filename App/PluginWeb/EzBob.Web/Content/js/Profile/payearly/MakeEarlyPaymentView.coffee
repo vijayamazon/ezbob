@@ -82,7 +82,7 @@ class EzBob.Profile.MakeEarlyPayment extends Backbone.Marionette.ItemView
       data =
         amount: parseFloat( @model.get("amount") )
         type: @model.get("paymentType")
-        paymentType: (if @model.get("paymentType") != "rollover" then @model.get("loanPaymentType") else @model.get("rolloverPaymentType") )
+        paymentType: @model.getPaymentType()
         loanId: @model.get("loan").id
         cardId: cardId
         rolloverId: @model.get("currentRollover") && @model.get("currentRollover").Id

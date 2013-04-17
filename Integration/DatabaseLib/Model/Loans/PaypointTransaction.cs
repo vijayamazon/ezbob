@@ -43,6 +43,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         /// Сумма, которая ушла на выплату тела кредита
         /// </summary>
         public virtual decimal LoanRepayment { get; set; }
+
+        public virtual bool InterestOnly { get; set; }
     }
 
     public interface IPaypointTransactionRepository : IRepository<PaypointTransaction>
@@ -77,6 +79,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.Rollover);
             Map(x => x.Balance);
             Map(x => x.LoanRepayment);
+            Map(x => x.InterestOnly);
         }
     }
 }

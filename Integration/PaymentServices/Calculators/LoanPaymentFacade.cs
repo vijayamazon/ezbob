@@ -30,7 +30,7 @@ namespace PaymentServices.Calculators
         /// <param name="term"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer")
+        public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false)
         {
             var paymentTime = term ?? DateTime.UtcNow;
 
@@ -45,7 +45,8 @@ namespace PaymentServices.Calculators
                 PaypointId = transId,
                 IP = ip,
                 LoanRepayment = oldLoan.Principal - loan.Principal,
-                Interest = loan.InterestPaid - oldLoan.InterestPaid
+                Interest = loan.InterestPaid - oldLoan.InterestPaid,
+                InterestOnly = interestOnly
             };
             
             loan.AddTransaction(transactionItem);
@@ -129,11 +130,11 @@ namespace PaymentServices.Calculators
             }
         }
 
-        public PayFastResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer")
+        public PayFastResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null)
         {
             decimal oldInterest;
             decimal newInterest;
-            bool rolloverWasPaid;
+            bool rolloverWasPaid = false;
 
             if (type == "total")
             {
@@ -158,6 +159,13 @@ namespace PaymentServices.Calculators
                      select r).Any();
                 oldInterest = customer.Loans.Sum(l => l.Interest);
                 PayAllLateLoansForCustomer(customer, amount, transId, date);
+                newInterest = customer.Loans.Sum(l => l.Interest);
+            }
+            else if (paymentType == "nextInterest")
+            {
+                oldInterest = customer.Loans.Sum(l => l.Interest);
+                var loan = customer.GetLoan(loanId);
+                PayLoan(loan, transId, amount, ip, date, description, true);
                 newInterest = customer.Loans.Sum(l => l.Interest);
             }
             else
