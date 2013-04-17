@@ -32,3 +32,5 @@ Tools/DownloadScript/run.log
 Tools/IncrementalUpdate/run.log
 Tools/IncrementalUpdate/run.log.*
 Tools/DownloadScript/run.log.*
+App/service/agent/ChannelGrabberAPI.dll
+App/service/agent/Volusion.dll
