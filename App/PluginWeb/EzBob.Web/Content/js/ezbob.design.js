@@ -254,11 +254,11 @@ function Redirect(url) {
 
 function CheckForActivity() {
 
-    if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 1000 * 20);
-
     var minute = EzBob.Config.SessionTimeout;
 
     if (minute <= 0) return;
+    
+    if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 1000 * 60 * EzBob.Config.SessionTimeout / 2);
 
     var underwriterParam = document.location.href.indexOf("Underwriter") > -1 ? "?isUnderwriterPage=true" : "";
 
@@ -272,11 +272,10 @@ function CheckForActivity() {
 
     set();
 
-    $("body").bind('keyup', reset);
-    $("body").bind('mousemove', reset);
+    $("body").on('keyup mousemove', reset);
 
     function heartBeat() {
-        //ping server every 20 seconds, to keep session alive
+        //ping server to keep session alive
         $.get(window.gRootPath + "HeartBeat");
     }
 
