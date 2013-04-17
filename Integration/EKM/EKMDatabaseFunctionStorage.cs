@@ -5,45 +5,56 @@ using System;
 
 namespace EKM
 {
-	public enum EkmDatabaseFunctionType
-	{
-        //Stas test
-        NumOfOrders,
-       // TotalItemsOrdered,
-        TotalSumOfOrders,//revenue
-        //AverageItemsPerOrder,
-        AverageSumOfOrder,
-	}
-
-    internal class EKMDatabaseFunctionStorage : DatabaseFunctionStorage<EkmDatabaseFunctionType>
+    public enum EkmDatabaseFunctionType
     {
-        private static EKMDatabaseFunctionStorage _Instance;
+        NumOfOrders,
+        NumOfCancelledOrders,
+        NumOfOtherOrders,
 
-        private EKMDatabaseFunctionStorage()
-            : base(new EKMDatabaseFunctionTypeConverter())
+        TotalSumOfOrders,
+        TotalSumOfCancelledOrders,
+        TotalSumOfOtherOrders,
+
+        AverageSumOfOrder,
+        AverageSumOfCancelledOrder,
+        AverageSumOfOtherOrder,
+
+    }
+
+    internal class EkmDatabaseFunctionStorage : DatabaseFunctionStorage<EkmDatabaseFunctionType>
+    {
+        private static EkmDatabaseFunctionStorage _Instance;
+
+        private EkmDatabaseFunctionStorage()
+            : base(new EkmDatabaseFunctionTypeConverter())
         {
-            //Stas test
-            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfOrders, DatabaseValueTypeEnum.Integer, "{fa09ce65-d6a9-4656-b00c-5e635d2083c2}");
-            //CreateFunctionAndAddToCollection(EKMDatabaseFunctionType.TotalItemsOrdered, DatabaseValueTypeEnum.Integer, "{e216ef11-ddc2-4721-91fe-6237928c79b2}");
-            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{8687dabc-c092-4296-92ff-42612a59157a}");
-            //CreateFunctionAndAddToCollection(EKMDatabaseFunctionType.AverageItemsPerOrder, DatabaseValueTypeEnum.Integer, "{b16493fa-da57-40ec-9939-2d86ff93f774}");
-            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfOrder, DatabaseValueTypeEnum.Double, "{86a7e774-b48b-44c1-8db1-f3212e5063f2}");
-            
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfOrders, DatabaseValueTypeEnum.Integer, "{FA09CE65-D6A9-4656-B00C-5E635D2083C2}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{8687DABC-C092-4296-92FF-42612A59157A}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfOrder, DatabaseValueTypeEnum.Double, "{86A7E774-B48B-44C1-8DB1-F3212E5063F2}");
+
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfCancelledOrders, DatabaseValueTypeEnum.Integer, "{DFAE1DC2-F8C6-4C71-A357-0C8A5FE3B23D}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfCancelledOrders, DatabaseValueTypeEnum.Double, "{7AB97148-DB4C-43A2-98E2-88995431F523}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfCancelledOrder, DatabaseValueTypeEnum.Double, "{D8E14F67-DCE1-4831-962D-5CB3BC49B1CF}");
+
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfOtherOrders, DatabaseValueTypeEnum.Integer, "{9F52623C-B16B-4316-9244-9C5EDD0F2347}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOtherOrders, DatabaseValueTypeEnum.Double, "{A4F01792-2F97-469E-BE00-08E7E6BAE232}");
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfOtherOrder, DatabaseValueTypeEnum.Double, "{19CF2A6E-5975-48AE-A4C4-A25DDF127C2E}");
+
         }
 
-        public static EKMDatabaseFunctionStorage Instance
+        public static EkmDatabaseFunctionStorage Instance
         {
             get
             {
-                return _Instance ?? (_Instance = new EKMDatabaseFunctionStorage());
+                return _Instance ?? (_Instance = new EkmDatabaseFunctionStorage());
             }
         }
     }
 
-	internal class EKMDatabaseFunctionTypeConverter : IDatabaseEnumTypeConverter<EkmDatabaseFunctionType>
-	{
-		public ConvertedTypeInfo Convert(EkmDatabaseFunctionType type)
-		{
+    internal class EkmDatabaseFunctionTypeConverter : IDatabaseEnumTypeConverter<EkmDatabaseFunctionType>
+    {
+        public ConvertedTypeInfo Convert(EkmDatabaseFunctionType type)
+        {
             //Stas test
             string displayName = string.Empty;
             string description = string.Empty;
@@ -56,20 +67,36 @@ namespace EKM
                     displayName = "Num of Orders";
                     break;
 
-                //case EKMDatabaseFunctionType.AverageItemsPerOrder:
-                //    displayName = "Average Items per Order";
-                //    break;
-
                 case EkmDatabaseFunctionType.AverageSumOfOrder:
                     displayName = "Average Sum of Order";
                     break;
 
-                //case EKMDatabaseFunctionType.TotalItemsOrdered:
-                //    displayName = "Total Items Ordered";
-                //    break;
-
                 case EkmDatabaseFunctionType.TotalSumOfOrders:
                     displayName = "Total Sum of Orders";
+                    break;
+
+                case EkmDatabaseFunctionType.NumOfCancelledOrders:
+                    displayName = "Num of Cancelled Orders";
+                    break;
+
+                case EkmDatabaseFunctionType.AverageSumOfCancelledOrder:
+                    displayName = "Average Sum of Cancelled Order";
+                    break;
+
+                case EkmDatabaseFunctionType.TotalSumOfCancelledOrders:
+                    displayName = "Total Sum of Cancelled Orders";
+                    break;
+
+                case EkmDatabaseFunctionType.NumOfOtherOrders:
+                    displayName = "Num of Other Orders";
+                    break;
+
+                case EkmDatabaseFunctionType.AverageSumOfOtherOrder:
+                    displayName = "Average Sum of Other Order";
+                    break;
+
+                case EkmDatabaseFunctionType.TotalSumOfOtherOrders:
+                    displayName = "Total Sum of Other Orders";
                     break;
 
                 default:
@@ -77,6 +104,6 @@ namespace EKM
             }
 
             return new ConvertedTypeInfo(name, displayName, description);
-		}
-	}
+        }
+    }
 }

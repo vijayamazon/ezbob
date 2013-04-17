@@ -9,17 +9,17 @@ namespace EKM
     {
         public IDatabaseFunction Create(EkmDatabaseFunctionType type)
         {
-            return EKMDatabaseFunctionStorage.Instance.GetFunction(type);
+            return EkmDatabaseFunctionStorage.Instance.GetFunction(type);
         }
 
         public IDatabaseFunction GetById(Guid id)
         {
-            return EKMDatabaseFunctionStorage.Instance.GetFunctionById(id);
+            return EkmDatabaseFunctionStorage.Instance.GetFunctionById(id);
         }
 
         public IEnumerable<IDatabaseFunction> GetAll()
         {
-            return EKMDatabaseFunctionStorage.Instance.AllFunctions();
+            return EkmDatabaseFunctionStorage.Instance.AllFunctions();
         }
     }
 }
