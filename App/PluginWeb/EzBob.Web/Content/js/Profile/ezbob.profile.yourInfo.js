@@ -232,7 +232,7 @@
       this.nonlimitedAddress.show(address);
       directors = this.model.get("NonLimitedInfo").Directors;
       if (directors !== null && directors.length !== 0) {
-        directorView = new EzBob.Profile.NonLimitedDirectorInfoView({
+        directorView = new EzBob.Profile.DirectorCompositeView({
           collection: new EzBob.Directors(directors)
         });
         this.director.show(directorView);

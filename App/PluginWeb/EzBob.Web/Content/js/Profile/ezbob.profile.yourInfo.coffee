@@ -150,7 +150,7 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
         directors = @model.get("NonLimitedInfo").Directors;
         
         if directors isnt null and directors.length isnt 0
-            directorView = new EzBob.Profile.NonLimitedDirectorInfoView ({collection: new EzBob.Directors(directors)}) 
+            directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
             @director.show (directorView)
         @
 
