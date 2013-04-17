@@ -40,7 +40,10 @@
                     <td><%-EzBob.formatPounds(line.Interest)%></td>
                     
                     <td style="text-align: center">
-                        <%var fee = setupFee > 0 && i == 0 ? setupFee : 0;%>
+                        <%
+                            var fee = setupFee > 0 && i == 0 ? setupFee : 0;
+                            if (line.Fees) fee += line.Fees;
+                        %>
                         <%-fee !=0 ? EzBob.formatPounds(fee):'-'%><%-setupFee && i == 0 ? '*' : ''%>
                     </td>
                     

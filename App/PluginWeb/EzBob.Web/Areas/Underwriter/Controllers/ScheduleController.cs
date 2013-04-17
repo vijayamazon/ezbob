@@ -32,37 +32,39 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Ajax]
         public JsonNetResult Calculate(long id)
         {
-            var cr = _cashRequests.Get(id);
-
-            var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), DateTime.UtcNow);
-
-            var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
-
-            var loanOffer = LoanOffer.InitFromLoan(loan, apr, null);
+            var loanOffer = GetLoanOffer(id);
             return this.JsonNet(loanOffer);
-
         }
 
+        [Transactional]
         public ActionResult Export(long id, bool isExcel, bool isShowDetails)
+        {
+            var loanOffer = GetLoanOffer(id);
+            return new LoanOfferReportResult(loanOffer, isExcel, isShowDetails);
+        }
+
+        private LoanOffer GetLoanOffer(long id)
         {
             var cr = _cashRequests.Get(id);
 
-            var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), DateTime.UtcNow);
+            var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.Value);
 
+            var calc = new PayEarlyCalculator2(loan, loan.Date);
+            calc.GetState();
+ 
             var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
 
             var loanOffer = LoanOffer.InitFromLoan(loan, apr, null);
 
             loanOffer.Details = new LoanOfferDetails
-                {
-                    InterestRate = cr.InterestRate,
-                    RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
-                    OfferedCreditLine = 15,
-                    LoanType = _loanTypes.GetAll().First().Name
-                };
+            {
+                InterestRate = cr.InterestRate,
+                RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
+                OfferedCreditLine = 15,
+                LoanType = _loanTypes.GetAll().First().Name
+            };
 
-            return new LoanOfferReportResult(loanOffer, isExcel, isShowDetails);
-
+            return loanOffer;
         }
     }
 }
