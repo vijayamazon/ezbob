@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Web.Mvc;
+using log4net;
 
 namespace EzBob.Web.Infrastructure
 {
     public class DecimalModelBinder : DefaultModelBinder
     {
+
+        private static readonly ILog log = LogManager.GetLogger("EzBob.Web.Infrastructure.DecimalModelBinder");
+
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
@@ -19,7 +23,15 @@ namespace EzBob.Web.Infrastructure
                 string.IsNullOrEmpty(valueProviderResult.AttemptedValue))
                 return 0m;
 
-            return Convert.ToDecimal(valueProviderResult.AttemptedValue, CultureInfo.InvariantCulture);
+            decimal val = 0;
+
+            if ( !Decimal.TryParse(valueProviderResult.AttemptedValue, NumberStyles.Number, CultureInfo.InvariantCulture, out val))
+            {
+                var msg = string.Format("Cannot convert value '{0}' to decimal. ModelName is {1}", valueProviderResult.AttemptedValue, bindingContext.ModelName);
+                log.Error(msg);
+            }
+
+            return val;
         }
     }
 }
