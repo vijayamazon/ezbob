@@ -100,7 +100,7 @@ class EzBob.Profile.MakeEarlyPaymentModel extends Backbone.Model
     
     url = window.gRootPath + "Customer/Paypoint/Pay?amount=" + @get("amount")
     url += "&type=" + @get("paymentType")
-    url += "&paymentType=" + getPaymentType()
+    url += "&paymentType=" + @getPaymentType()
     url += "&loanId=" + loan.id
     url += "&rolloverId=" + ( if @get("currentRollover") is not null then @get("currentRollover").Id else -1)
     @set url: url

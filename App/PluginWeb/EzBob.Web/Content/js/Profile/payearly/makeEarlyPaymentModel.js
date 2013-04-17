@@ -151,7 +151,7 @@
       }
       url = window.gRootPath + "Customer/Paypoint/Pay?amount=" + this.get("amount");
       url += "&type=" + this.get("paymentType");
-      url += "&paymentType=" + getPaymentType();
+      url += "&paymentType=" + this.getPaymentType();
       url += "&loanId=" + loan.id;
       url += "&rolloverId=" + (this.get("currentRollover") === !null ? this.get("currentRollover").Id : -1);
       this.set({
