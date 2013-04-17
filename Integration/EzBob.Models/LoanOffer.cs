@@ -11,6 +11,7 @@ namespace EzBob.Models
         public int RepaymentPeriod { get; set; }
         public decimal InterestRate { get; set; }
         public string LoanType { get; set; }
+        public bool IsModified { get; set; }
     }
 
     public class LoanOffer

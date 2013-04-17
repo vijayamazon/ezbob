@@ -60,8 +60,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             {
                 InterestRate = cr.InterestRate,
                 RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
-                OfferedCreditLine = 15,
-                LoanType = _loanTypes.GetAll().First().Name
+                OfferedCreditLine = loanOffer.TotalPrincipal,
+                LoanType = _loanTypes.GetAll().First().Name,
+                IsModified = !string.IsNullOrEmpty(cr.LoanTemplate)
             };
 
             return loanOffer;

@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Models;
 
 
@@ -23,7 +22,7 @@ namespace EzBob.Web.Code.ReportGenerator
             var fileFormat = _isExcel ? "xls" : "pdf";
             var generator = new LoanOfferReportGenerator();
             var content = generator.GenerateReport(_loanOffer, _isExcel, _isShowDetails);
-            var f = new FileContentResult(content, "application/"+fileFormat) { FileDownloadName = "LoanShedule."+fileFormat };
+            var f = new FileContentResult(content, "application/"+fileFormat) { FileDownloadName = "LoanOffer."+fileFormat };
             f.ExecuteResult(context);
         }
     }
