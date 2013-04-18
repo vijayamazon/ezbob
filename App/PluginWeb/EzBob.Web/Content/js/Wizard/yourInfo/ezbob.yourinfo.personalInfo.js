@@ -15,9 +15,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'change input[name="ConsentToSearch"]': 'consentToSearchChanged',
-            'click label[for="ConsentToSearch"] a' : 'showConsent'
+            'click label[for="ConsentToSearch"] a': 'showConsent'
         });
-        
+
         this.constructor.__super__.initialize.call(this);
     },
     PersonalTimeAtAddressChanged: function () {
@@ -35,7 +35,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         var prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: "PrevPersonAddresses", max: 3 });
         prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
-        
+
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
 
@@ -43,18 +43,15 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.turnOver = this.$el.find(".turnOver");
         this.turnOver.remove();
-        
-        this.companyTurnover = this.$el.find(".companyTurnover");
-        this.companyTurnover.remove();
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
-                                                    id:this.model.get('Id'),
-                                                    firstName: this.$el.find("input[name='FirstName']").val(),
-                                                    middleInitial: this.$el.find("input[name='MiddleInitial']").val(),
-                                                    surname: this.$el.find("input[name='Surname']").val()
-                                                  });
-        
+            id: this.model.get('Id'),
+            firstName: this.$el.find("input[name='FirstName']").val(),
+            middleInitial: this.$el.find("input[name='MiddleInitial']").val(),
+            surname: this.$el.find("input[name='Surname']").val()
+        });
+
         var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
         EzBob.App.modal.show(consentAgreement);
         return false;
@@ -65,18 +62,16 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     typeChanged: function (e) {
         this.type = e.target.value;
+        var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
+        this.$el.find('.btn-next').text(buttonName);
 
         if (this.type == "Entrepreneur") {
             this.turnOver.appendTo($(".typeOfBussiness").parent());
             this.turnOver.find(".cashInput").cashEdit();
             this.$el.find('.cashControlls img').setPopover();
-            this.companyTurnover.remove();
         } else {
             this.turnOver.remove();
-            this.companyTurnover.appendTo($(".typeOfBussiness").parent());
         }
-        
-       
 
     },
     consentToSearchChanged: function (e) {
@@ -98,7 +93,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         if ($el.hasClass("disabled")) {
             return false;
         }
-        
+
         scrollTop();
         if (!this.validator.form() || !this.PrevAddressValidator || !this.AddressValidator) {
             if (!this.PrevAddressValidator)

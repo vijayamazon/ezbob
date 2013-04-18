@@ -10,15 +10,6 @@
             @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" }))
             {
                 <div class="control-group">
-                    <label>Title <span class="required">*</span></label> @* TODO: ALEC - do we need this "title"? *@
-                    <select style="height:30px; width:345px" name="title" id="title" tabindex="1">
-                        <option value="-">-</option>
-                        <option value="M">Mr</option>
-                        <option value="F">Mrs</option>
-                    </select>
-                </div>
-                
-                <div class="control-group">
                     <label>First Name <span class="required">*</span></label>
                     <div style="margin-left: 0px;" class="controls">
                         <input style="height:20px;" type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" class="form_field" size="50" />
@@ -50,7 +41,7 @@
                         </select>
                     </div>
                 </div>
-
+                
                 @EzForm.DateInput("DateOfBirth", "Date of Birth")
 
                 <div class="control-group">
@@ -69,17 +60,9 @@
                 <br/>
                 <h2 style="padding-left:0" >Your Current Residential Address</h2>
                 @EzForm.AddressInput("PersonalAddress", "Potcode")
-
-                @* TODO: ALEC - do we need this "address"? *@
-                @*
-                <div class="control-group">
-                    <label>Addess <span class="required">*</span></label>
-                    <div style="margin-left: 0px;" class="controls">
-                        <input style="height:20px;" type="text" name="Addess" />
-                    </div>
-                </div>
-                *@
                 
+                @*
+                @EzForm.SelectAdvanced("TimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "", "TimeAtAddress select", 0)*@
                 <div class="control-group">
                     <label class="control-label" for="TimeAtAddress">Length of time at address <span class="required">*</span></label>
                     <div class="controls">
@@ -90,11 +73,13 @@
                             <option value="3">More than 3 years</option>
                         </select>
                     </div>
-                </div>@*
+                </div>
                 
                 @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
                 
-                *@<div class="control-group">
+                
+                @*@EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")*@
+                <div class="control-group">
                     <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
                     <div class="controls">
                         <select style="height:30px; width:345px" id="ResidentialStatus" name="ResidentialStatus" class="select">
@@ -105,6 +90,7 @@
                         </select>
                     </div>
                 </div>
+                
                 
                 <br/>
                 <h2 style="padding-left:0" >Your Contact Details</h2>
@@ -124,7 +110,26 @@
                    
                 <br/>
                 <h2 style="padding-left:0" >Your Company Information</h2> 
-
+                @* this should replace the turnover here and in next page
+                <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
+                <div class="control-group">
+                    <label for="OverallTurnOver">Your Total Online Sales (£) <span class="required">*</span></label>
+                    <div class="controls cashControlls ">           
+                        <div style="margin-left: 0px;" class="controls">
+                            <input style="height:20px" id="OverallTurnOver" name="OverallTurnOver" type="text" value="" class="cashInput form_field" size="50" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
+                            <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount." alt="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                <label for="WebSiteTurnOver">Your Total Online & Offline Sales (£) <span class="required">*</span></label>
+                    <div class="controls cashControlls ">           
+                        <div style="margin-left: 0px;" class="controls">
+                            <input style="height:20px" id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" value="" class="cashInput form_field" size="50" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
+                            <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount." alt="" />
+                        </div>
+                    </div>
+                </div>*@
                 <div>
                     <div class="control-group typeOfBussiness">
                         <label class="control-label">Your Type of Business <span class="required">*</span></label>
@@ -140,67 +145,20 @@
                             </select>
                         </div>
                     </div>
-                    
-                    @* TODO: ALEC - do we need this? *@
+
                     <fieldset class="PersonalturnOver turnOver">
                         <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
                         @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
                         @EzForm.InputTextWithHelp(Html, "WebSiteTurnOver", "Online <b>Estimated</b> Sales", "", "Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
                     </fieldset>
-                    
-                    <div class="companyTurnover">
-                        <h2 style="padding-left:0" >Company</h2> 
-                        <div class="control-group">
-                            <label>Registration # <span class="required">*</span></label>
-                            <div style="margin-left: 0px;" class="controls">
-                                <input style="height:20px" type="text" name="Registration" class="form_field" size="50" />
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Name <span class="required">*</span></label>
-                            <div style="margin-left: 0px;" class="controls">
-                                <input style="height:20px" type="text" name="Name" class="form_field" size="50" />
-                            </div>
-                        </div>
-                        @*@EzForm.AddressInput("PrevPersonAddresses", "Address")*@
-                        <div class="control-group">
-                            <label>Business Phone <span class="required">*</span></label>
-                            <div style="margin-left: 0px;" class="controls">
-                                <input style="height:20px" type="text" name="BusinessPhone" class="form_field" size="50" />
-                            </div>
-                        </div>
-                        <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
-                        <div class="control-group">
-                            <label>Your Total Online Sales (£) <span class="required">*</span></label>
-                            <div style="margin-left: 0px;" class="controls">
-                                <input style="height:20px" type="text" name="TotalOnlineSales" class="form_field" size="50" />
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label>Your Total Online & Offline Sales (£) <span class="required">*</span></label>
-                            <div style="margin-left: 0px;" class="controls">
-                                <input style="height:20px" type="text" name="TotalOnlineAndOfflineSales" class="form_field" size="50" />
-                            </div>
-                        </div>
-                
-                        @* ALEC - what about registration and name that exists in the old wizard? *@
-                        <br/>
-                        <h2 style="padding-left:0" >Additional Directors (Optional)</h2> 
-                        <div class="directorArea"></div>
-                        <div>EZBOB assumes that you are a director in the company. Add directors and qualify for more cash</div>
-                        <br/>
-                       <input type="button" id="addDirector" value="Add Additional Directors" class="button green"/> 
-                        @*<a href="#" type="button" id="addDirector" class="button green">Add Additional Directors</a>*@
-                        <br/>
-                    </div>
                 </div>
-                   
-                
-                    
+
+                <hr />
+
                 <div class="control-group">
                     <div class="controls">
                         <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                            <input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
+                            <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
                             I have read and accept the <a>terms and conditions</a> of the credit bureau search
                         </label>
                     </div>
@@ -223,7 +181,7 @@
 
         <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
 
-        <a href="#" id="addDirector_old_button"><b>Add directors</b> and qualify for more cash.</a>
+        <a href="#" id="addDirector"><b>Add directors</b> and qualify for more cash.</a>
     </fieldset>
 }
 
