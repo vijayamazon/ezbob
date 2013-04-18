@@ -839,6 +839,127 @@
                     </div>
                 </div>
             </div>
+            
+            @* *** PayPoint   *** *@
+            <%if(marketplaceType == "PayPoint"){%>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#paypointtab1" data-toggle="tab">Orders</a>
+                    </li>
+                    <li><a href="#paypointtab2" data-toggle="tab">Account details</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="paypointtab1">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>1M</th>
+                                    <th>3M</th>
+                                    <th>6M</th>
+                                    <th>12M</th>
+                                    <th>15M</th>
+                                    <th>18M</th>
+                                    <th>24M</th>
+                                    <th>24M+</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total sum of authorised orders</td>
+                                    <td><%-ai.SumOfAuthorisedOrders1M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders1M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders3M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders3M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders6M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders6M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders12M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders12M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders15M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders15M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders18M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders18M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrders24M!=undefined ? GBPValues(ai.SumOfAuthorisedOrders24M, true): "-"%></td>
+                                    <td><%-ai.SumOfAuthorisedOrdersLifetime!=undefined ? GBPValues(ai.SumOfAuthorisedOrdersLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Number of orders</td>
+                                    <td><%-ai.NumOfOrders1M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders3M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders6M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders12M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders15M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders18M  || "-"%></td>
+                                    <td><%-ai.NumOfOrders24M  || "-"%></td>
+                                    <td><%-ai.NumOfOrdersLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Order average</td>
+                                    <td><%-ai.OrdersAverage1M!=undefined ? GBPValues(ai.OrdersAverage1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage3M!=undefined ? GBPValues(ai.OrdersAverage3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage6M!=undefined ? GBPValues(ai.OrdersAverage6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage12M!=undefined ? GBPValues(ai.OrdersAverage12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage15M!=undefined ? GBPValues(ai.OrdersAverage15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage18M!=undefined ? GBPValues(ai.OrdersAverage18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverage24M!=undefined ? GBPValues(ai.OrdersAverage24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.OrdersAverageLifetime!=undefined ? GBPValues(ai.OrdersAverageLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Number of unauthorised orders</td>
+                                    <td><%-ai.NumOfFailures1M!=undefined ? GBPValues(ai.NumOfFailures1M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures3M!=undefined ? GBPValues(ai.NumOfFailures3M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures6M!=undefined ? GBPValues(ai.NumOfFailures6M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures12M!=undefined ? GBPValues(ai.NumOfFailures12M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures15M!=undefined ? GBPValues(ai.NumOfFailures15M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures18M!=undefined ? GBPValues(ai.NumOfFailures18M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailures24M!=undefined ? GBPValues(ai.NumOfFailures24M, true): "-"%></td>
+                                    <td><%-ai.NumOfFailuresLifetime!=undefined ? GBPValues(ai.NumOfFailuresLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Cancellation rate</td>
+                                    <td><%-ai.CancellationRate1M  || "-"%></td>
+                                    <td><%-ai.CancellationRate3M  || "-"%></td>
+                                    <td><%-ai.CancellationRate6M  || "-"%></td>
+                                    <td><%-ai.CancellationRate12M  || "-"%></td>
+                                    <td><%-ai.CancellationRate15M  || "-"%></td>
+                                    <td><%-ai.CancellationRate18M  || "-"%></td>
+                                    <td><%-ai.CancellationRate24M  || "-"%></td>
+                                    <td><%-ai.CancellationRateLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Cancellation value</td>
+                                    <td><%-ai.CancellationValue1M!=undefined ? GBPValues(ai.CancellationValue1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue3M!=undefined ? GBPValues(ai.CancellationValue3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue6M!=undefined ? GBPValues(ai.CancellationValue6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue12M!=undefined ? GBPValues(ai.CancellationValue12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue15M!=undefined ? GBPValues(ai.CancellationValue15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue18M!=undefined ? GBPValues(ai.CancellationValue18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValue24M!=undefined ? GBPValues(ai.CancellationValue24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CancellationValueLifetime!=undefined ? GBPValues(ai.CancellationValueLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="paypointtab2">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+
+                                <tr>
+                                    <th>Parameter name</th>
+                                    <th colspan="2">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Some info</td>
+                                    <td colspan="2">info1
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>some other info</td>
+                                    <td colspan="2">info2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
             <%}%>
         </fieldset>
     </div>  

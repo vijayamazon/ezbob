@@ -31,7 +31,6 @@
         public PayPointRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPointDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
-
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -127,9 +126,14 @@
         private IEnumerable<IWriteDataInfo<PayPointDatabaseFunctionType>> CreateOrdersAggregationInfo(PayPointOrdersList orders, ICurrencyConvertor currencyConverter)
         {
             var aggregateFunctionArray = new[]
-					{
-						PayPointDatabaseFunctionType.NumOfOrders, 
-					};
+                {
+                    PayPointDatabaseFunctionType.NumOfOrders,
+                    PayPointDatabaseFunctionType.SumOfAuthorisedOrders,
+                    PayPointDatabaseFunctionType.OrdersAverage,
+                    PayPointDatabaseFunctionType.NumOfFailures,
+                    PayPointDatabaseFunctionType.CancellationRate,
+                    PayPointDatabaseFunctionType.CancellationValue
+                };
 
             var updated = orders.SubmittedDate;
 
