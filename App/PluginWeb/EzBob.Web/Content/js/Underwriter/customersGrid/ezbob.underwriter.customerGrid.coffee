@@ -36,15 +36,15 @@ EzBob.Underwriter.customerGrid = (settings) ->
         rowNum: 100
         shrinkToFit: true
         loadError: (xhr,status,error)->
-            BlockUi "off"
-            EzBob.ShowMessage error, status
+            BlockUi "off", $(list)
+            console.log status
         loadComplete: ->
-            BlockUi "off"
+            BlockUi "off", $(list)
         gridComplete: ->
             ( settings.$el.find "[data-toggle='tooltip']" ).tooltip()
-            BlockUi "off"
+            BlockUi "off", $(list)
         loadBeforeSend: ->
-            BlockUi "on"
+            BlockUi "on", $(list)
 
     $grid = $(list).jqGrid(options)
     $grid.jqGrid "filterToolbar",
