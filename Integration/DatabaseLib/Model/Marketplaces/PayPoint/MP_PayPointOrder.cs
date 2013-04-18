@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ApplicationMng.Repository;
-using Iesi.Collections.Generic;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EZBob.DatabaseLib.Model.Database
+﻿namespace EZBob.DatabaseLib.Model.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using ApplicationMng.Repository;
+    using Iesi.Collections.Generic;
+    using NHibernate;
+    using NHibernate.Linq;
+
 	public class MP_PayPointOrder
 	{
 		public MP_PayPointOrder()
@@ -43,7 +42,5 @@ namespace EZBob.DatabaseLib.Model.Database
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
                 .ToList();
         }
-
-	    
     }
 }

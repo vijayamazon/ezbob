@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.CommonLib.TimePeriodLogic;
-
 namespace PayPoint
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.DatabaseWrapper.Order;
+    using EzBob.CommonLib.TimePeriodLogic;
+
     internal class PayPointOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType>
     {
         public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<PayPointOrderItem> data, ICurrencyConvertor currencyConverter)

@@ -1,15 +1,11 @@
-using System;
-using EZBob.DatabaseLib.Common;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib.Model.Database
 {
+    using System;
+
 	public class MP_PayPointOrderItem
 	{
 		public virtual int Id { get; set; }
- 
 		public virtual MP_PayPointOrder Order { get; set; }
-
 
         public virtual string acquirer { get; set; }
         public virtual decimal amount { get; set; }
@@ -40,6 +36,5 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual string status { get; set; }
         public virtual string tid { get; set; }
         public virtual string trans_id { get; set; }
-		
 	}
 }

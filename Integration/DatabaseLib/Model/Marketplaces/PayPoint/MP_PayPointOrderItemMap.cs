@@ -1,8 +1,8 @@
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
 namespace EZBob.DatabaseLib.Model.Database
 {
+    using FluentNHibernate.Mapping;
+    using NHibernate.Type;
+
 	public class MP_PayPointOrderItemMap : ClassMap<MP_PayPointOrderItem>
 	{
 		public MP_PayPointOrderItemMap()

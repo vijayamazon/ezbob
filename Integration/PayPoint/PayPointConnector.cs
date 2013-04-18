@@ -1,8 +1,5 @@
 ﻿namespace PayPoint
 {
-    using System;
-    using System.Text;
-    using System.Collections.Generic;
     using PaymentServices.Web_References.PayPoint;
 
     public class PayPointConnector
@@ -30,16 +27,9 @@
             var secVpnService = new SECVPNService();
             string res = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Batch", "1", "GBP", string.Empty, false, false);
             
-            bool b = (!string.IsNullOrEmpty(res) && !res.Contains("Remote Password Invalid"));
-            if (!b)
-            {
-                errMsg = string.Format("Failure: {0}", res);
-            }
-            else
-            {
-                errMsg = "";
-            }
-            return b;
+            bool isValid = (!string.IsNullOrEmpty(res) && !res.Contains("Remote Password Invalid"));
+            errMsg = !isValid ? string.Format("Failure: {0}", string.IsNullOrEmpty(res) ? "Received empty response" : res) : string.Empty;
+            return isValid;
         }
     }
 }

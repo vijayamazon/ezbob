@@ -1,8 +1,8 @@
-﻿using System;
-using EzBob.CommonLib;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using System;
+    using EzBob.CommonLib;
+
     public class PayPointServiceInfo : IMarketplaceServiceInfo
     {
         public string DisplayName
@@ -19,6 +19,5 @@ namespace PayPoint
         {
             get { return "PayPoint"; }
         }
-
     }
 }

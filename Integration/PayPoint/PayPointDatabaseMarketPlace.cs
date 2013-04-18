@@ -1,11 +1,9 @@
-﻿using System;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Common;
+    using EZBob.DatabaseLib.DatabaseWrapper;
+
     public class PayPointDatabaseMarketPlace : DatabaseMarketplaceBase<PayPointDatabaseFunctionType>
     {
         public PayPointDatabaseMarketPlace()

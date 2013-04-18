@@ -1,7 +1,7 @@
-﻿using EZBob.DatabaseLib.Common;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using EZBob.DatabaseLib.Common;
+
     public class PayPointSecurityInfo : IMarketPlaceSecurityInfo
     {
         // Constructor with empty parameters is required for serialization

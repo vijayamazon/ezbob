@@ -1,10 +1,10 @@
-﻿using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using System;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using EZBob.DatabaseLib.Common;
+    using EzBob.CommonLib;
+    using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+    using System;
+
     public enum PayPointDatabaseFunctionType
 	{
         NumOfOrders,

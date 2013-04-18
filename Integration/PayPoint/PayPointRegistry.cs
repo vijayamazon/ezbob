@@ -1,10 +1,9 @@
-﻿using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib;
-using StructureMap.Configuration.DSL;
-
-namespace PayPoint
+﻿namespace PayPoint
 {
+    using EZBob.DatabaseLib.Common;
+    using EZBob.DatabaseLib.DatabaseWrapper;
+    using StructureMap.Configuration.DSL;
+
     public class PluginRegistry : Registry
     {
         public PluginRegistry()

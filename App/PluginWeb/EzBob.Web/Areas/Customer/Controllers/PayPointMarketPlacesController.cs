@@ -1,24 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-using PayPoint;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Models.Strings;
-using log4net;
-using EzBob.CommonLib.Security;
-using EzBob.Web.ApplicationCreator;
-using EZBob.DatabaseLib;
-using EzBob.CommonLib;
-using EzBob.CommonLib.Security;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using ApplicationMng.Repository;
+    using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Repository;
+    using Infrastructure;
+    using Scorto.Web;
+    using PayPoint;
+    using Code.MpUniq;
+    using Web.Models.Strings;
+    using log4net;
+    using ApplicationCreator;
+    using EZBob.DatabaseLib;
+    using CommonLib;
+
     public class PayPointMarketPlacesController: Controller
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
@@ -26,11 +23,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ICustomerRepository _customers;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
-        private EZBob.DatabaseLib.Model.Database.Customer _customer;
+        private Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
-        private int payPointMarketTypeId;
+        private readonly int payPointMarketTypeId;
 
         public PayPointMarketPlacesController(
             IEzbobWorkplaceContext context,
@@ -60,7 +57,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [Transactional]
         public JsonNetResult Accounts()
         {
-            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == payPointMarketTypeId).Select(a => PayPointAccountModel.ToModel(a)).ToList();
+            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == payPointMarketTypeId).Select(PayPointAccountModel.ToModel).ToList();
             return this.JsonNet(payPoints);
         }
 
@@ -79,40 +76,24 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 var customer = _context.Customer;
                 var username = model.mid;
-                var payPoint1 = new PayPointDatabaseMarketPlace();
+                var payPointDatabaseMarketPlace = new PayPointDatabaseMarketPlace();
 
-                _mpChecker.Check(payPoint1.InternalId, customer, username);
+                _mpChecker.Check(payPointDatabaseMarketPlace.InternalId, customer, username);
 
                 var payPointSecurityInfo = new PayPointSecurityInfo(model.id, model.remotePassword, model.vpnPassword, model.mid);
 
-                var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPoint1, payPointSecurityInfo, customer);
+                var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
 
-
-                /* all of this code happens in SaveOrUpdateCustomerMarketplace (qqq - i should make sure)
-                var mp = new MP_CustomerMarketPlace
-                             {
-                                 Marketplace = _mpTypes.Get(payPointMarketTypeId),
-                                 DisplayName = model.mid,
-                                 SecurityData = Encryptor.EncryptBytes(model.vpnPassword), // qqq what does it mean?
-                                 // probably should add column to MP_CustomerMarketPlace to hold the second password...
-                                 Customer = _customer,
-                                 Created = DateTime.UtcNow,
-                                 UpdatingStart = DateTime.UtcNow,
-                                 Updated = DateTime.UtcNow,
-                                 UpdatingEnd = DateTime.UtcNow
-                             };
-
-                _customer.CustomerMarketPlaces.Add(mp);*/
                 _appCreator.EbayAdded(customer, payPoint.Id); // qqq - should be different strategy
-                //return this.JsonNet(PayPointAccountModel.ToModel(payPoint.Marketplace));
+                return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
 
-                return this.JsonNet(new { msg = "Congratulations. Your PayPoint was added successfully." });
+                //return this.JsonNet(new { msg = "Congratulations. Your PayPoint was added successfully." });
             }
-            catch (MarketPlaceAddedByThisCustomerException e)
+            catch (MarketPlaceAddedByThisCustomerException)
             {
                 return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
             }
-            catch (MarketPlaceIsAlreadyAddedException e)
+            catch (MarketPlaceIsAlreadyAddedException)
             {
                 return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
             }
@@ -121,7 +102,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 _log.Error(e);
                 return this.JsonNet(new { error = e.Message });
             }
-           
         }
     }
 
@@ -133,17 +113,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public string remotePassword { get; set; }
         public string displayName { get { return mid; } }
 
-
         public static PayPointAccountModel ToModel(MP_CustomerMarketPlace account)
         {
-            var i = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
+            var payPointSecurityInfo = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
              
-            return new PayPointAccountModel()
+            return new PayPointAccountModel
                        {
-                           id = i.MarketplaceId,
-                           mid = i.Mid,
-                           vpnPassword = i.VpnPassword,
-                           remotePassword = i.RemotePassword
+                           id = payPointSecurityInfo.MarketplaceId,
+                           mid = payPointSecurityInfo.Mid,
+                           vpnPassword = payPointSecurityInfo.VpnPassword,
+                           remotePassword = payPointSecurityInfo.RemotePassword
                        };
         }
     }
