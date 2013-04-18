@@ -40,9 +40,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
 
         this.$el.find("#TimeAtAddress").trigger("change");
-
-        this.turnOver = this.$el.find(".turnOver");
-        this.turnOver.remove();
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
@@ -64,15 +61,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
-
-        if (this.type == "Entrepreneur") {
-            this.turnOver.appendTo($(".typeOfBussiness").parent());
-            this.turnOver.find(".cashInput").cashEdit();
-            this.$el.find('.cashControlls img').setPopover();
-        } else {
-            this.turnOver.remove();
-        }
-
     },
     consentToSearchChanged: function (e) {
         this.agree = $(e.target).is(':checked');

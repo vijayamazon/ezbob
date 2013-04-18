@@ -77,7 +77,6 @@
                 
                 @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
                 
-                
                 @*@EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")*@
                 <div class="control-group">
                     <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
@@ -90,7 +89,6 @@
                         </select>
                     </div>
                 </div>
-                
                 
                 <br/>
                 <h2 style="padding-left:0" >Your Contact Details</h2>
@@ -107,29 +105,25 @@
                         <input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" size="50" />
                     </div>
                 </div>
-                   
+                
                 <br/>
-                <h2 style="padding-left:0" >Your Company Information</h2> 
-                @* this should replace the turnover here and in next page
                 <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
                 <div class="control-group">
                     <label for="OverallTurnOver">Your Total Online Sales (£) <span class="required">*</span></label>
-                    <div class="controls cashControlls ">           
-                        <div style="margin-left: 0px;" class="controls">
-                            <input style="height:20px" id="OverallTurnOver" name="OverallTurnOver" type="text" value="" class="cashInput form_field" size="50" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
-                            <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount." alt="" />
-                        </div>
+                    <div class="controls cashControlls">           
+                        <input style="height:20px" id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" size="50" />
                     </div>
                 </div>
                 <div class="control-group">
-                <label for="WebSiteTurnOver">Your Total Online & Offline Sales (£) <span class="required">*</span></label>
-                    <div class="controls cashControlls ">           
-                        <div style="margin-left: 0px;" class="controls">
-                            <input style="height:20px" id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" value="" class="cashInput form_field" size="50" data-content="We require 3 years of residence addresses as part of your credit profile analysis." rel="popover" />
-                            <img class="help-btn" style="float: right;margin-right: 10px;" width="25" height="25" src="@UrlHelper.GenerateContentUrl("~/Content/img/question.png", page.ViewContext.HttpContext)" rel="popover" data-content="Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount." alt="" />
-                        </div>
+                    <label for="WebSiteTurnOver">Your Total Online & Offline Sales (£) <span class="required">*</span></label>
+                    <div class="controls cashControlls">           
+                        <input style="height:20px" id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" size="50" />
                     </div>
-                </div>*@
+                </div>
+                   
+                <br/>
+                <h2 style="padding-left:0" >Your Company Information</h2> 
+                
                 <div>
                     <div class="control-group typeOfBussiness">
                         <label class="control-label">Your Type of Business <span class="required">*</span></label>
@@ -145,12 +139,6 @@
                             </select>
                         </div>
                     </div>
-
-                    <fieldset class="PersonalturnOver turnOver">
-                        <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
-                        @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                        @EzForm.InputTextWithHelp(Html, "WebSiteTurnOver", "Online <b>Estimated</b> Sales", "", "Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                    </fieldset>
                 </div>
 
                 <hr />
@@ -158,7 +146,7 @@
                 <div class="control-group">
                     <div class="controls">
                         <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                            <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
+                            <input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true" />
                             I have read and accept the <a>terms and conditions</a> of the credit bureau search
                         </label>
                     </div>
@@ -202,12 +190,6 @@
                     @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "", "phonenumber")
                     <input type="hidden" name="LimitedRefNum" class="RefNum" />
                 </fieldset>
-                    
-                <fieldset>
-                    <legend>Turnover Past 12 Months</legend>
-                    @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                    @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                </fieldset>
 
                 <div class="directors">
                 </div>
@@ -238,14 +220,8 @@
                     @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
                     @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
                     @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "", "phonenumber")
-
                 </fieldset>
 
-                <fieldset>
-                    <legend>Turnover</legend>
-                    @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                    @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                </fieldset>
                 <div class="directors">
                 </div>  
             }
