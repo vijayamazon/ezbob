@@ -70,8 +70,8 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Validate
 
-		public virtual void Validate(string url, string userName, string password) {
-			this.Info("Validate {0} customer started with parameters [ {1} , {2} , {3} ]", ShopTypeName, url, userName, password);
+		public virtual void Validate(IAccountData oAccData) {
+			this.Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, oAccData);
 
 			Dictionary<string, ChannelGrabberCustomer> oCustomers = this.LoadCustomers();
 
@@ -86,18 +86,34 @@ namespace Integration.ChannelGrabberAPI {
 				oCustomer = CreateCustomer(m_oCustomer.Name, ri.ThreeLetterISORegionName);
 			} // if
 
-			if ((oCustomer == null) || !oCustomer.IsValid)
+			if ((oCustomer == null) || !oCustomer.IsValid())
 				throw new ChannelGrabberApiException("Failed to load customer details.");
 
-			Debug("Customer details loaded, validating shop details...");
+			Debug("Customer details loaded successfully.");
 
-			// TODO: validate shop
+			ValidateShop(oCustomer, oAccData);
 
 			this.Info("Validate {0} customer complete.", ShopTypeName);
-			throw new NotImplementedException();
 		} // Validate
 
 		#endregion method Validate
+
+		private void ValidateShop(ChannelGrabberCustomer oCustomer, IAccountData oAccData) {
+			Debug("Validating shop details...");
+
+			XmlDocument doc = this.ExecuteRequest(string.Format(
+				"{0}/{1}/{2}", CustomersRq, oCustomer.Id, ShopTypeName.ToLower()
+				), oAccData
+			);
+
+			oAccData.VerifyRegistrationInProgress(doc);
+
+			oAccData.Validate(this.ExecutePostRequest(string.Format(
+				"{0}/{1}/{2}/{3}/validityReport", CustomersRq, oCustomer.Id, ShopTypeName.ToLower(), oAccData.Id()
+			)));
+
+			Debug("Validating shop details complete.");
+		} // ValidateShop
 
 		#region method CreateCustomer
 
@@ -108,7 +124,7 @@ namespace Integration.ChannelGrabberAPI {
 
 			oCustomer.FromXml(ExecuteRequest(CustomersRq, oCustomer));
 
-			if (!oCustomer.IsValid) {
+			if (!oCustomer.IsValid()) {
 				Error("Failed to create customer: invalid data. {0}", oCustomer);
 				throw new ChannelGrabberApiException("Failed to create customer: invalid data returned.");
 			} // if
@@ -138,7 +154,7 @@ namespace Integration.ChannelGrabberAPI {
 			foreach (XmlNode oNode in oNodeList) {
 				var oCustomer = new ChannelGrabberCustomer(oNode);
 
-				if (oCustomer.IsValid) {
+				if (oCustomer.IsValid()) {
 					oCustomers[oCustomer.Name] = oCustomer;
 					Debug("Customer loaded: {0}", oCustomer);
 				} // if
@@ -151,6 +167,10 @@ namespace Integration.ChannelGrabberAPI {
 		#endregion method LoadCustomers
 
 		#region method ExecuteRequest
+
+		private XmlDocument ExecutePostRequest(string sResource) {
+			return this.ExecuteRequest(this.CreatePostRequest(sResource));
+		} // ExecutePostRequest
 
 		private XmlDocument ExecuteRequest(string sResource = "", IJsonable oData = null) {
 			sResource = (sResource ?? string.Empty).Trim();
@@ -201,6 +221,12 @@ namespace Integration.ChannelGrabberAPI {
 		#endregion method ExecuteRequest
 
 		#region method CreateRequest
+
+		private RestRequest CreatePostRequest(string sResource) {
+			var oRequest = new RestRequest(sResource, Method.POST);
+			oRequest.AddHeader("Accept", "application/xml");
+			return oRequest;
+		} // CreatePostRequest
 
 		private RestRequest CreateRequest(string sResource = "", IJsonable oData = null) {
 			Method nMethod = oData == null ? Method.GET : Method.POST;
