@@ -11,11 +11,11 @@ namespace Integration.ChannelGrabberAPI {
 		#region constructors
 
 		public ChannelGrabberCustomer(XmlNode oNode) : this() {
-			this.FromXml(oNode);
+			FromXml(oNode);
 		} // constructor
 
 		public ChannelGrabberCustomer(string sName = "", string sCountry = "") {
-			this.Init();
+			Init();
 
 			Name = (sName ?? "").Trim();
 			Country = (sCountry ?? "").Trim();
@@ -27,7 +27,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region property Id
 
-		public int Id { get { return m_oIntData[IdNode]; } } // Id
+		public int Id { get { return m_oIntData[API.IdNode]; } } // Id
 
 		#endregion property Id
 
@@ -74,21 +74,21 @@ namespace Integration.ChannelGrabberAPI {
 		#region method FromXml
 
 		public void FromXml(XmlDocument oDoc) {
-			this.Init();
+			Init();
 
 			if (oDoc != null)
 				FromXml(oDoc.DocumentElement);
 		} // FromXml
 
 		public void FromXml(XmlNode oNode) {
-			this.Init();
+			Init();
 
 			if (null == oNode)
 				return;
 
-			this.Xml2Data(m_oIntData, oNode, XmlConvert.ToInt32);
+			Xml2Data(m_oIntData, oNode, XmlConvert.ToInt32);
 
-			this.Xml2Data(m_oStrData, oNode, s => s.Trim());
+			Xml2Data(m_oStrData, oNode, s => s.Trim());
 		} // FromXml
 
 		#endregion method FromXml
@@ -109,7 +109,6 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region private const
 
-		private const string IdNode = "id";
 		private const string NameNode = "name";
 		private const string CountryNode = "country";
 
@@ -130,7 +129,7 @@ namespace Integration.ChannelGrabberAPI {
 			m_oIntData = new Dictionary<string, int>();
 			m_oStrData = new Dictionary<string, string>();
 
-			m_oIntData[IdNode] = 0;
+			m_oIntData[API.IdNode] = 0;
 			m_oStrData[NameNode] = "";
 			m_oStrData[CountryNode] = "";
 		} // Init

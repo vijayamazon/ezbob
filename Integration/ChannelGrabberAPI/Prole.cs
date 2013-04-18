@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Threading;
 using System.Xml;
 using EZBob.DatabaseLib.Model.Database;
 using RestSharp;
@@ -35,45 +36,26 @@ namespace Integration.ChannelGrabberAPI {
 	#region class Prole
 
 	public abstract class Prole : ConfigurationRoot {
-		#region constructor
+		#region public
 
-		protected Prole(ILog log, Customer customer) {
-			m_oLog = log;
+		#region property ShopType
 
-			Debug("Creating a ChannelGrabber API prole class...");
+		public abstract ShopTypes ShopType { get; }
 
-			if (customer == null)
-				throw new ChannelGrabberApiException("Customer information not specified.");
+		#endregion property ShopType
 
-			m_oCustomer = customer;
+		#region property ShopTypeName
 
-			ConfigurationRoot o = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
+		public string ShopTypeName { get { return ShopType.ToString(); } }
 
-			string sUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
-
-			if (sUrl == string.Empty)
-				throw new ChannelGrabberApiException("ChannelGrabber Service URL not specified.");
-
-			Debug("Validating ChannelGrabber Service URL {0}", sUrl);
-
-			m_oRestClient = new RestClient(sUrl);
-
-			XmlNodeList lst = ExecuteRequest().SelectNodes(ServiceValidateXpath);
-
-			if ((null == lst) || (2 > lst.Count))
-				throw new ChannelGrabberApiException("Failed to parse ChannelGrabber Service output.");
-
-			Debug("Creating a ChannelGrabber API prole class succeeded.");
-		} // constructor
-
-		#endregion constructor
+		#endregion property ShopTypeName
 
 		#region method Validate
 
-		public virtual void Validate(IAccountData oAccData) {
-			this.Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, oAccData);
+		public virtual void Validate(IAccountData oAccountData) {
+			Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, oAccountData);
 
-			Dictionary<string, ChannelGrabberCustomer> oCustomers = this.LoadCustomers();
+			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
 
 			ChannelGrabberCustomer oCustomer = null;
 
@@ -91,173 +73,92 @@ namespace Integration.ChannelGrabberAPI {
 
 			Debug("Customer details loaded successfully.");
 
-			ValidateShop(oCustomer, oAccData);
+			ValidateShop(oCustomer, oAccountData);
 
-			this.Info("Validate {0} customer complete.", ShopTypeName);
+			Info("Validate {0} customer complete.", ShopTypeName);
 		} // Validate
 
 		#endregion method Validate
 
-		private void ValidateShop(ChannelGrabberCustomer oCustomer, IAccountData oAccData) {
-			Debug("Validating shop details...");
+		#region method GetOrders
 
-			XmlDocument doc = this.ExecuteRequest(string.Format(
-				"{0}/{1}/{2}", CustomersRq, oCustomer.Id, ShopTypeName.ToLower()
-				), oAccData
+		public List<ChannelGrabberOrder> GetOrders(IAccountData oAccountData) {
+			Info(
+				"GetOrders for {0} customer {1} ({2}) started with parameters [ {3} ]",
+				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id, oAccountData
 			);
 
-			oAccData.VerifyRegistrationInProgress(doc);
+			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
 
-			oAccData.Validate(this.ExecutePostRequest(string.Format(
-				"{0}/{1}/{2}/{3}/validityReport", CustomersRq, oCustomer.Id, ShopTypeName.ToLower(), oAccData.Id()
-			)));
+			ChannelGrabberCustomer oCustomer =
+				oCustomers.ContainsKey(m_oCustomer.Name)
+					? oCustomers[m_oCustomer.Name]
+					: null;
 
-			Debug("Validating shop details complete.");
-		} // ValidateShop
+			if ((oCustomer == null) || !oCustomer.IsValid())
+				throw new ChannelGrabberApiException("Failed to load customer details.");
 
-		#region method CreateCustomer
+			Debug("Verifying account id...");
 
-		private ChannelGrabberCustomer CreateCustomer(string sCustomerName, string sCountry) {
-			Debug("Creating Channel Grabber customer {0} from {1}...", sCustomerName, sCountry);
+			oAccountData.VerifyAccountID(
+				ExecuteRequest(BuildRegisterShopRq(oCustomer))
+			);
 
-			var oCustomer = new ChannelGrabberCustomer(sCustomerName, sCountry);
+			int nRqID = SendGenerateOrdersRq(oCustomer, oAccountData);
 
-			oCustomer.FromXml(ExecuteRequest(CustomersRq, oCustomer));
+			while (!AreOrdersGenerated(oCustomer, oAccountData, nRqID)) {
+				Debug("Not ready, sleeping...");
+				Thread.Sleep(SleepTime);
+			} // while
 
-			if (!oCustomer.IsValid()) {
-				Error("Failed to create customer: invalid data. {0}", oCustomer);
-				throw new ChannelGrabberApiException("Failed to create customer: invalid data returned.");
-			} // if
+			List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, oAccountData);
 
-			Debug("Customer details: {0}", oCustomer);
-			Debug("Creating Channel Grabber customer {0} from {1} complete.", sCustomerName, sCountry);
+			Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
+				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
+				lst.Count, lst.Count == 1 ? "" : "s"
+			);
 
-			return oCustomer;
-		} // CreateCustomer
+			return lst;
+		} // GetOrders
 
-		#endregion method CreateCustomer
+		#endregion method GetOrders
 
-		#region method LoadCustomers
+		#endregion public
 
-		private Dictionary<string, ChannelGrabberCustomer> LoadCustomers() {
-			var oCustomers = new Dictionary<string, ChannelGrabberCustomer>();
+		#region protected
 
-			Info("Loading list of customers started...");
+		#region constructor
 
-			XmlNodeList oNodeList = ExecuteRequest(CustomersRq).SelectNodes(CustomerXpath);
+		protected Prole(ILog log, Customer oCustomer) {
+			m_oLog = log;
 
-			if (oNodeList == null) {
-				this.Info("No customers found");
-				return oCustomers;
-			} // if
+			Debug("Creating a ChannelGrabber API prole class...");
 
-			foreach (XmlNode oNode in oNodeList) {
-				var oCustomer = new ChannelGrabberCustomer(oNode);
+			if (oCustomer == null)
+				throw new ChannelGrabberApiException("Customer information not specified.");
 
-				if (oCustomer.IsValid()) {
-					oCustomers[oCustomer.Name] = oCustomer;
-					Debug("Customer loaded: {0}", oCustomer);
-				} // if
-			} // foreach
+			m_oCustomer = oCustomer;
 
-			Info("Loading list of customers complete, {0} customer{1} loaded.", oCustomers.Count, oCustomers.Count == 1 ? "" : "s");
-			return oCustomers;
-		} // LoadCustomers
+			ConfigurationRoot o = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
 
-		#endregion method LoadCustomers
+			string sServiceUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
 
-		#region method ExecuteRequest
+			if (sServiceUrl == string.Empty)
+				throw new ChannelGrabberApiException("ChannelGrabber Service URL not specified.");
 
-		private XmlDocument ExecutePostRequest(string sResource) {
-			return this.ExecuteRequest(this.CreatePostRequest(sResource));
-		} // ExecutePostRequest
+			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
 
-		private XmlDocument ExecuteRequest(string sResource = "", IJsonable oData = null) {
-			sResource = (sResource ?? string.Empty).Trim();
+			m_oRestClient = new RestClient(sServiceUrl);
 
-			if (sResource == string.Empty)
-				return this.ExecuteRequest(this.CreateRequest(sResource));
+			XmlNodeList lst = ExecuteRequest().SelectNodes(ServiceValidateXpath);
 
-			return this.ExecuteRequest(this.CreateRequest(sResource, oData));
-		} // ExecuteRequest
+			if ((null == lst) || (2 > lst.Count))
+				throw new ChannelGrabberApiException("Failed to parse ChannelGrabber Service output.");
 
-		private XmlDocument ExecuteRequest(RestRequest oRequest) {
-			Debug("Requesting {0} {1}/{2}", oRequest.Method, m_oRestClient.BaseUrl, oRequest.Resource);
+			Debug("Creating a ChannelGrabber API prole class succeeded.");
+		} // constructor
 
-			IRestResponse oResponse = m_oRestClient.Execute(oRequest);
-
-			Debug("Response status: {0}\nResponse output: {1}", oResponse.StatusCode, oResponse.Content);
-
-			if (oResponse.StatusCode != HttpStatusCode.OK) {
-				var sErrorMsg = string.Format(
-					"Request fail: failed to execute request.\nStatus: {0}\nError msg: {1}",
-					oResponse.StatusCode,
-					oResponse.ErrorMessage
-				);
-
-				this.Error(sErrorMsg);
-				throw new ChannelGrabberApiException(sErrorMsg);
-			} // if
-
-			var doc = new XmlDocument();
-
-			try {
-				doc.LoadXml(oResponse.Content);
-			}
-			catch (Exception e) {
-				var sErrorMsg = string.Format(
-					"Request fail: failed to parse response: {0}", e.Message
-				);
-
-				this.Error(sErrorMsg);
-				throw new ChannelGrabberApiException(sErrorMsg);
-			} // try
-
-			Debug("Response output parsed successfully.\nRequest succeeded.");
-
-			return doc;
-		} // ExecuteRequest
-
-		#endregion method ExecuteRequest
-
-		#region method CreateRequest
-
-		private RestRequest CreatePostRequest(string sResource) {
-			var oRequest = new RestRequest(sResource, Method.POST);
-			oRequest.AddHeader("Accept", "application/xml");
-			return oRequest;
-		} // CreatePostRequest
-
-		private RestRequest CreateRequest(string sResource = "", IJsonable oData = null) {
-			Method nMethod = oData == null ? Method.GET : Method.POST;
-
-			var oRequest = new RestRequest(sResource, nMethod);
-			oRequest.AddHeader("Accept", "application/xml");
-
-			if (null != oData) {
-				oRequest.AddHeader("Content-Type", "application/json");
-				oRequest.AddHeader("x-li-format", "json");
-
-				oRequest.RequestFormat = DataFormat.Json;
-				oRequest.AddBody(oData.ToJson());
-			} // if
-
-			return oRequest;
-		} // CreateRequest
-
-		#endregion method CreateRequest
-
-		#region property ShopType
-
-		public abstract ShopTypes ShopType { get; }
-
-		#endregion property ShopType
-
-		#region property ShopTypeName
-
-		public string ShopTypeName { get { return this.ShopType.ToString(); } }
-
-		#endregion property ShopTypeName
+		#endregion constructor
 
 		#region method Say
 
@@ -304,7 +205,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Info
 
-		protected void Info(string sMsg) { this.Say(LogMsgTypes.Info, sMsg); } // Info
+		protected void Info(string sMsg) { Say(LogMsgTypes.Info, sMsg); } // Info
 
 		protected void Info(string sFormat, params object[] args) { Info(string.Format(sFormat, args)); } // Info
 
@@ -312,7 +213,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Error
 
-		protected void Error(string sMsg) { this.Say(LogMsgTypes.Error, sMsg); } // Error
+		protected void Error(string sMsg) { Say(LogMsgTypes.Error, sMsg); } // Error
 
 		protected void Error(string sFormat, params object[] args) { Error(string.Format(sFormat, args)); } // Error
 
@@ -320,7 +221,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Warn
 
-		protected void Warn(string sMsg) { this.Say(LogMsgTypes.Warn, sMsg); } // Warn
+		protected void Warn(string sMsg) { Say(LogMsgTypes.Warn, sMsg); } // Warn
 
 		protected void Warn(string sFormat, params object[] args) { Warn(string.Format(sFormat, args)); } // Warn
 
@@ -328,7 +229,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Fatal
 
-		protected void Fatal(string sMsg) { this.Say(LogMsgTypes.Fatal, sMsg); } // Msg
+		protected void Fatal(string sMsg) { Say(LogMsgTypes.Fatal, sMsg); } // Msg
 
 		protected void Fatal(string sFormat, params object[] args) { Fatal(string.Format(sFormat, args)); } // Fatal
 
@@ -336,30 +237,304 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Debug
 
-		protected void Debug(string sMsg) { this.Say(LogMsgTypes.Debug, sMsg); } // Debug
+		protected void Debug(string sMsg) { Say(LogMsgTypes.Debug, sMsg); } // Debug
 
 		protected void Debug(string sFormat, params object[] args) { Debug(string.Format(sFormat, args)); } // Debug
 
 		#endregion Debug
 
-		#region private properties
+		#endregion protected
+
+		#region private
+
+		#region method LoadCustomers
+
+		private Dictionary<string, ChannelGrabberCustomer> LoadCustomers() {
+			var oCustomers = new Dictionary<string, ChannelGrabberCustomer>();
+
+			Info("Loading list of customers started...");
+
+			XmlNodeList oNodeList = ExecuteRequest(CustomersRq).SelectNodes(CustomerXpath);
+
+			if (oNodeList == null) {
+				Info("No customers found");
+				return oCustomers;
+			} // if
+
+			foreach (XmlNode oNode in oNodeList) {
+				var oCustomer = new ChannelGrabberCustomer(oNode);
+
+				if (oCustomer.IsValid()) {
+					oCustomers[oCustomer.Name] = oCustomer;
+					Debug("Customer loaded: {0}", oCustomer);
+				} // if
+			} // foreach
+
+			Info("Loading list of customers complete, {0} customer{1} loaded.", oCustomers.Count, oCustomers.Count == 1 ? "" : "s");
+			return oCustomers;
+		} // LoadCustomers
+
+		#endregion method LoadCustomers
+
+		#region Validate related only
+
+		#region method ValidateShop
+
+		private void ValidateShop(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+			Debug("Validating shop details...");
+
+			string sRequest = BuildRegisterShopRq(oCustomer);
+
+			oAccountData.VerifyNotExist(ExecuteRequest(sRequest));
+
+			oAccountData.VerifyRegistrationInProgress(
+				ExecuteRequest(sRequest, oAccountData)
+			);
+
+			Debug("Shop registration request sent.");
+
+			oAccountData.Validate(ExecutePostRequest(BuildValidityRq(oCustomer, oAccountData)));
+
+			Debug("Validating shop details complete.");
+		} // ValidateShop
+
+		#endregion method ValidateShop
+
+		#region method CreateCustomer
+
+		private ChannelGrabberCustomer CreateCustomer(string sCustomerName, string sCountry) {
+			Debug("Creating Channel Grabber customer {0} from {1}...", sCustomerName, sCountry);
+
+			var oCustomer = new ChannelGrabberCustomer(sCustomerName, sCountry);
+
+			oCustomer.FromXml(ExecuteRequest(CustomersRq, oCustomer));
+
+			if (!oCustomer.IsValid()) {
+				Error("Failed to create customer: invalid data. {0}", oCustomer);
+				throw new ChannelGrabberApiException("Failed to create customer: invalid data returned.");
+			} // if
+
+			Debug("Customer details: {0}", oCustomer);
+			Debug("Creating Channel Grabber customer {0} from {1} complete.", sCustomerName, sCountry);
+
+			return oCustomer;
+		} // CreateCustomer
+
+		#endregion method CreateCustomer
+
+		#endregion Validate related only
+
+		#region GetOrders related only
+
+		#region SendGenerateOrdersRq
+
+		private int SendGenerateOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+			Debug("Sending generate orders request...");
+			XmlDocument doc = ExecutePostRequest(BuildGenerateOrdersRq(oCustomer, oAccountData));
+			return API.GetInt(doc, API.IdNode);
+		} // SendGenerateOrdersRq
+
+		#endregion SendGenerateOrdersRq
+
+		#region AreOrdersGenerated
+
+		private bool AreOrdersGenerated(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
+			Debug("Tesing whether orders are ready...");
+			return API.IsComplete(
+				ExecuteRequest(BuildOrdersGeneratedRq(oCustomer, oAccountData, nRqID))
+			);
+		} // AreOrdersGenerated
+
+		#endregion AreOrdersGenerated
+
+		#region LoadOrders
+
+		private List<ChannelGrabberOrder> LoadOrders(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+			Debug("Loading list of orders...");
+
+			var lst = new List<ChannelGrabberOrder>();
+
+			XmlDocument doc = ExecuteRequest(BuildOrdersRq(oCustomer));
+
+			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
+				var o = new ChannelGrabberOrder(oNode);
+				lst.Add(o);
+			} // foreach
+
+			Debug("Loading list of orders complete, {0} order{1} loaded.", lst.Count, lst.Count == 1 ? "" : "s");
+			return lst;
+		} // LoadOrders
+
+		#endregion LoadOrders
+
+		#endregion GetOrders related only
+
+		#region infrastructure
+
+		#region method ExecuteRequest
+
+		private XmlDocument ExecutePostRequest(string sResource) {
+			return ExecuteRequest(CreatePostRequest(sResource));
+		} // ExecutePostRequest
+
+		private XmlDocument ExecuteRequest(string sResource = "", IJsonable oData = null) {
+			sResource = (sResource ?? string.Empty).Trim();
+
+			if (sResource == string.Empty)
+				return ExecuteRequest(CreateRequest(sResource));
+
+			return ExecuteRequest(CreateRequest(sResource, oData));
+		} // ExecuteRequest
+
+		private XmlDocument ExecuteRequest(RestRequest oRequest) {
+			Debug("Requesting {0} {1}/{2}", oRequest.Method, m_oRestClient.BaseUrl, oRequest.Resource);
+
+			IRestResponse oResponse = m_oRestClient.Execute(oRequest);
+
+			Debug("Response status: {0}\nResponse output: {1}", oResponse.StatusCode, oResponse.Content);
+
+			if (oResponse.StatusCode != HttpStatusCode.OK) {
+				var sErrorMsg = string.Format(
+					"Request fail: failed to execute request.\nStatus: {0}\nError msg: {1}",
+					oResponse.StatusCode,
+					oResponse.ErrorMessage
+				);
+
+				Error(sErrorMsg);
+				throw new ChannelGrabberApiException(sErrorMsg);
+			} // if
+
+			var doc = new XmlDocument();
+
+			try {
+				doc.LoadXml(oResponse.Content);
+			}
+			catch (Exception e) {
+				var sErrorMsg = string.Format(
+					"Request fail: failed to parse response: {0}", e.Message
+				);
+
+				Error(sErrorMsg);
+				throw new ChannelGrabberApiException(sErrorMsg);
+			} // try
+
+			if (null == doc.DocumentElement) {
+				var sErrorMsg = string.Format("Request fail: failed to parse response: no root node.");
+				Error(sErrorMsg);
+				throw new ChannelGrabberApiException(sErrorMsg);
+			} // if
+
+			Debug("Response output parsed successfully.\nRequest succeeded.");
+
+			return doc;
+		} // ExecuteRequest
+
+		#endregion method ExecuteRequest
+
+		#region method CreateRequest
+
+		private RestRequest CreatePostRequest(string sResource) {
+			var oRequest = new RestRequest(sResource, Method.POST);
+			oRequest.AddHeader("Accept", "application/xml");
+			return oRequest;
+		} // CreatePostRequest
+
+		private RestRequest CreateRequest(string sResource = "", IJsonable oData = null) {
+			Method nMethod = oData == null ? Method.GET : Method.POST;
+
+			var oRequest = new RestRequest(sResource, nMethod);
+			oRequest.AddHeader("Accept", "application/xml");
+
+			if (null != oData) {
+				oRequest.AddHeader("Content-Type", "application/json");
+				oRequest.AddHeader("x-li-format", "json");
+
+				oRequest.RequestFormat = DataFormat.Json;
+				oRequest.AddBody(oData.ToJson());
+			} // if
+
+			return oRequest;
+		} // CreateRequest
+
+		#endregion method CreateRequest
+
+		#region method BuildRegisterShopRq
+
+		private string BuildRegisterShopRq(ChannelGrabberCustomer oCustomer) {
+			return string.Format(
+				RegisterShopRq, oCustomer.Id, ShopTypeName.ToLower()
+			);
+		} // BuildRegisterShopRq
+
+		#endregion method BuildRegisterShopRq
+
+		#region method BuildValidityRq
+
+		private string BuildValidityRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+			return string.Format(
+				ValidityReportRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
+			);
+		} // BuildValidityRq
+
+		#endregion method BuildRegisterShopRq
+
+		#region method BuildGenerateOrdersRq
+
+		private string BuildGenerateOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+			return string.Format(
+				GenerateOrdersRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
+			);
+		} // BuildGenerateOrdersRq
+
+		#endregion method BuildGenerateOrdersRq
+
+		#region method BuildOrdersGeneratedRq
+
+		private string BuildOrdersGeneratedRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
+			return string.Format(
+				OrdersGeneratedRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id(), nRqID
+			);
+		} // BuildOrdersGeneratedRq
+
+		#endregion method BuildOrdersGeneratedRq
+
+		#region method BuildOrdersRq
+
+		private string BuildOrdersRq(ChannelGrabberCustomer oCustomer) {
+			return string.Format(OrdersRq, oCustomer.Id);
+		} // BuildOrdersRq
+
+		#endregion method BuildOrdersRq
+
+		#region private fields
 
 		private ILog m_oLog;
 		private Customer m_oCustomer;
 		private RestClient m_oRestClient;
 
-		#endregion private properties
+		#endregion private fields
 
 		#region private const
 
 		private const string DefaultRegion = "en-GB";
 
 		private const string CustomersRq = "customers";
+		private const string RegisterShopRq = CustomersRq + "/{0}/{1}";
+		private const string ValidityReportRq = CustomersRq + "/{0}/{1}/{2}/validityReport";
+		private const string GenerateOrdersRq = CustomersRq + "/{0}/{1}/{2}/orderReport";
+		private const string OrdersGeneratedRq = CustomersRq + "/{0}/{1}/{2}/orderReport/{3}";
+		private const string OrdersRq = CustomersRq + "/{0}/orders";
 
 		private const string CustomerXpath = "/resource/resource";
 		private const string ServiceValidateXpath = "/resource/link[@rel]";
 
+		private const int SleepTime = 1000;
+
 		#endregion private const
+
+		#endregion infrastructure
+
+		#endregion private
 	} // class Prole
 
 	#endregion class Prole

@@ -65,7 +65,6 @@
     <Compile Include="VolusionDatabaseFunctionFactory.cs" />
     <Compile Include="VolusionDatabaseFunctionStorage.cs" />
     <Compile Include="VolusionDatabaseMarketPlace.cs" />
-    <Compile Include="VolusionOrder.cs" />
     <Compile Include="VolusionOrdersAgregator.cs" />
     <Compile Include="VolusionRegistry.cs" />
     <Compile Include="VolusionRetriveDataHelper.cs" />
