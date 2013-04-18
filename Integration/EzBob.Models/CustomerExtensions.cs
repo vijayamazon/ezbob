@@ -1,45 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using EKM;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonLib;
-using EzBob.PayPal;
-using EzBob.eBayLib;
-using Integration.Volusion;
-using NHibernate;
-using NHibernate.Linq;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
+    using PayPoint;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using EKM;
+    using EZBob.DatabaseLib.Model.Database;
+    using AmazonLib;
+    using PayPal;
+    using eBayLib;
+    using Integration.Volusion;
+
     public static class CustomerExtensions
     {
-        public static IEnumerable<SimpleMarketPlaceModel> GetEbayMarketPlaces(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<SimpleMarketPlaceModel> GetEbayMarketPlaces(this Customer customer)
         {
             var marketplaces = GetEbayCustomerMarketPlaces(customer).Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return marketplaces;
         }
 
-        public static IEnumerable<MP_CustomerMarketPlace> GetEbayCustomerMarketPlaces(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<MP_CustomerMarketPlace> GetEbayCustomerMarketPlaces(this Customer customer)
         {
             var ebay = new eBayDatabaseMarketPlace();
             return customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ebay.InternalId);
         }
 
-        public static IEnumerable<MP_CustomerMarketPlace> GetPayPalCustomerMarketPlaces(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<MP_CustomerMarketPlace> GetPayPalCustomerMarketPlaces(this Customer customer)
         {
             var paypal = new PayPalDatabaseMarketPlace();
             return customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == paypal.InternalId);
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetPayPalAccountsSimple(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<SimpleMarketPlaceModel> GetPayPalAccountsSimple(this Customer customer)
         {
-            return GetPayPalCustomerMarketPlaces(customer).ToList().Select(m => new SimpleMarketPlaceModel() { displayName = m.DisplayName });
+            return GetPayPalCustomerMarketPlaces(customer).ToList().Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
         }
 
-        public static IEnumerable<PayPalModel> GetPayPalAccounts(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<PayPalModel> GetPayPalAccounts(this Customer customer)
         {
             var marketpalces = GetPayPalCustomerMarketPlaces(customer).ToList();
             var res = new List<PayPalModel>();
@@ -88,36 +86,37 @@ namespace EzBob.Web.Areas.Customer.Models
             return res;
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetAmazonMarketPlaces(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<SimpleMarketPlaceModel> GetAmazonMarketPlaces(this Customer customer)
         {
             var marketplaces = GetAmazonMP(customer);
 
-            var simpleMarketPlaceModels = marketplaces.Select((m) => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this EZBob.DatabaseLib.Model.Database.Customer customer) {
+        public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this Customer customer) {
 	        var oEsi = new EkmServiceInfo();
             var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
             var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetVolusionShops(this EZBob.DatabaseLib.Model.Database.Customer customer) {
+        public static IEnumerable<SimpleMarketPlaceModel> GetVolusionShops(this Customer customer) {
 	        var oVsi = new VolusionServiceInfo();
             var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oVsi.InternalId);
             var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         } // GetVolusionShops
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this Customer customer)
         {
-            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.Id == 5); // qqq - should take this number from DB
-            var simpleMarketPlaceModels = marketplaces.Select((m) => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+            var payPointServiceInfo = new PayPointServiceInfo();
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == payPointServiceInfo.InternalId);
+            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         }
 
-        public static List<MP_CustomerMarketPlace> GetAmazonMP(this EZBob.DatabaseLib.Model.Database.Customer customer)
+        public static List<MP_CustomerMarketPlace> GetAmazonMP(this Customer customer)
         {
             var amazon = new AmazonDatabaseMarketPlace();
 

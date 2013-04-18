@@ -9,7 +9,6 @@
     using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
     using EZBob.DatabaseLib.DatabaseWrapper.Order;
     using EZBob.DatabaseLib.Model.Database;
-    using PaymentServices.Web_References.PayPoint;
     using System;
     using System.Collections.Generic;
     using System.IO;

@@ -47,11 +47,8 @@
             _mpChecker = mpChecker;
             _appCreator = appCreator;
 
-            var oPsi = new PayPointServiceInfo();
-            payPointMarketTypeId = _mpTypes
-                .GetAll()
-                .First(a => a.InternalId == oPsi.InternalId)
-                .Id;
+            var payPointServiceInfo = new PayPointServiceInfo();
+            payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
         }
 
         [Transactional]
@@ -86,8 +83,6 @@
 
                 _appCreator.EbayAdded(customer, payPoint.Id); // qqq - should be different strategy
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
-
-                //return this.JsonNet(new { msg = "Congratulations. Your PayPoint was added successfully." });
             }
             catch (MarketPlaceAddedByThisCustomerException)
             {
@@ -116,14 +111,14 @@
         public static PayPointAccountModel ToModel(MP_CustomerMarketPlace account)
         {
             var payPointSecurityInfo = SerializeDataHelper.DeserializeType<PayPointSecurityInfo>(account.SecurityData);
-             
+
             return new PayPointAccountModel
-                       {
-                           id = payPointSecurityInfo.MarketplaceId,
-                           mid = payPointSecurityInfo.Mid,
-                           vpnPassword = payPointSecurityInfo.VpnPassword,
-                           remotePassword = payPointSecurityInfo.RemotePassword
-                       };
+                {
+                    id = payPointSecurityInfo.MarketplaceId,
+                    mid = payPointSecurityInfo.Mid,
+                    vpnPassword = payPointSecurityInfo.VpnPassword,
+                    remotePassword = payPointSecurityInfo.RemotePassword
+                };
         }
     }
 }

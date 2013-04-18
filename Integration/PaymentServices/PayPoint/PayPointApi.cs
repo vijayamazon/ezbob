@@ -1,16 +1,16 @@
-﻿using System;
-using System.Globalization;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Configuration;
-using PaymentServices.Calculators;
-using PaymentServices.Web_References.PayPoint;
-using StructureMap;
-using log4net;
-
-namespace PaymentServices.PayPoint
+﻿namespace PaymentServices.PayPoint
 {
+    using global::PayPoint;
+    using System;
+    using System.Globalization;
+    using EZBob.DatabaseLib.Model;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Loans;
+    using EzBob.Configuration;
+    using Calculators;
+    using StructureMap;
+    using log4net;
+
     public class PayPointApi
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));

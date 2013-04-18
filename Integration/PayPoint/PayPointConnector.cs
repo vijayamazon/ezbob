@@ -1,7 +1,5 @@
 ﻿namespace PayPoint
 {
-    using PaymentServices.Web_References.PayPoint;
-
     public class PayPointConnector
     {
         /// <summary>
