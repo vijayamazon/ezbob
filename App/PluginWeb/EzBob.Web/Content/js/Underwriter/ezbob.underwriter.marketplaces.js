@@ -107,9 +107,6 @@
         return;
       }
       shop = this.model.at(id);
-      if (shop.get('Name') === 'EKM') {
-        return;
-      }
       if (shop.get('Name') === 'Volusion') {
         return;
       }
