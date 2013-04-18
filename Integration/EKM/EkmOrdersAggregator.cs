@@ -37,7 +37,10 @@ namespace EKM
         public EkmOrdersAggregator(ReceivedDataListTimeDependentInfo<EkmOrderItem> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
-            LogOtherStatuses(orders);
+            if (orders.TimePeriodType == TimePeriodEnum.Lifetime)
+            {
+                LogOtherStatuses(orders);
+            }
         }
 
         private int GetOrdersCount(IEnumerable<EkmOrderItem> orders)
@@ -104,16 +107,16 @@ namespace EKM
 
         private void LogOtherStatuses(IEnumerable<EkmOrderItem> orders)
         {
-            IEnumerable<string> otherStatuses = orders.
+            var otherStatuses = orders.
                 Where(o => !_ekmCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower()) &&
                            !_ekmCompleteStatusList.Contains(o.OrderStatus.Trim().ToLower())).
                 OrderBy(o => o.OrderStatus).
-                Select(o => o.OrderStatus.Trim()).
-                Distinct();
+                GroupBy(x => x.OrderStatus.Trim()).
+                Select(g => new { g.Key, Count = g.Count() });
 
             foreach (var otherStatus in otherStatuses)
             {
-                Log.InfoFormat("Ekm other status detected: |{0}|", otherStatus);
+                Log.InfoFormat("Ekm other status detected: '{0}' appeared {1} times", otherStatus.Key, otherStatus.Count);
             }
         }
 
@@ -137,16 +140,16 @@ namespace EKM
                     return GetAverageSumOfCancelledOrder(orders);
 
                 case EkmDatabaseFunctionType.TotalSumOfCancelledOrders:
-                    return GetAverageSumOfCancelledOrder(orders);
+                    return GetTotalSumOfCancelledOrders(orders);
 
                 case EkmDatabaseFunctionType.NumOfOtherOrders:
-                    return GetAverageSumOfOtherOrder(orders);
+                    return GetOtherOrdersCount(orders);
 
                 case EkmDatabaseFunctionType.AverageSumOfOtherOrder:
                     return GetAverageSumOfOtherOrder(orders);
 
                 case EkmDatabaseFunctionType.TotalSumOfOtherOrders:
-                    return GetAverageSumOfOtherOrder(orders);
+                    return GetTotalSumOfOtherOrders(orders);
 
                 default:
                     throw new NotImplementedException();
