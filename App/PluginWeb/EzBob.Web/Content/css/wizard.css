@@ -7,8 +7,6 @@
     padding-right: 10px !important;
 }
 
-#signupEmail, #signupPass1, #signupPass2, #SecurityAnswer { width: 400px; }
-
 #securityQuestion {
 	width: 414px;
 	padding: 0;

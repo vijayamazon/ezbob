@@ -878,7 +878,7 @@
                     <% _.each(marketplaces, function(m,i){ %>
                     <tr data-id="<%-i%>">
                         <td>
-                            <div class="shop-<%- m.Name %>"></div>
+                            <div class="source_labels_on <%- m.Name.toLowerCase() %>"></div>
                         </td>
                         <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                         <td class="centered"><%- m.age %></td>

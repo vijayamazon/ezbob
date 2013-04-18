@@ -2,9 +2,9 @@
 
 <script id="store-button-template" type="text/template">
     <div class="source">
-        <div class="<%= shops.length ? 'source_header_on' : 'source_header'%> cf">
+        <div class="<%= shops.length ? 'sources_header_on' : 'source_header'%> cf">
             <div class="alignleft">
-                <div class="source_labels <%- shopClass %>"><%- name %></div> 
+                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div> 
             </div> 
             <div class="alignright"><a href="#" class="button green">Link more shops</a></div>
         </div>

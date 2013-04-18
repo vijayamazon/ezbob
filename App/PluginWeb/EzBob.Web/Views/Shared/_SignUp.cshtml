@@ -3,47 +3,49 @@
 @using StructureMap
 @model dynamic
 @{
-	string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
-	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
+    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
 {
-	<div class="inner">
-		<h2>Funding over £2.5m loans and counting!</h2>
-		<p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
+    <div class="inner">
+        <h2>Funding over £2.5m loans and counting!</h2>
+        <p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
 
-		<h3>Create an account</h3>
-		<p>Complete the details below to begin</p>
+        <h3>Create an account</h3>
+        <p>Complete the details below to begin</p>
+        <label>Email Address <span class="required">*</span></label>
+        <input type="text" name="Email" id="signupEmail" value="" tabindex="1" class="form_field" size="50" />
 
-		<label>Email Address <span class="required">*</span></label>
-		<input type="text" name="Email" id="signupEmail" value="" tabindex="1" class="form_field" />
+        <div id="strength-password-view">
+            <label class="inform">Password <span class="required">*</span></label>
+            <input type="password" name="signupPass1" id="signupPass1" value="" tabindex="2" class="form_field" size="50" />
+            <p id="message" class="help-block"></p>
+        </div>
 
-		<div id="strength-password-view">
-			<label class="inform">Password <span class="required">*</span></label>
-			<input type="password" name="signupPass1" id="signupPass1" value="" tabindex="2" class="form_field" />
-			<p id="message" class="help-block"></p>
-		</div>
+        <label class="inform">Confirm Password <span class="required">*</span></label>
+        <input type="password" name="signupPass2" id="signupPass2" value="" tabindex="3" class="form_field" size="50" />
+        <label class="inform">Select a Secret Question <span class="required">*</span></label>
+        <!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
+        <span class="inform">
+            <select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+                @if (securityQuestions != null)
+                {
+                    foreach (SecurityQuestion item in securityQuestions)
+                    {
+                    <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select></span>
 
-		<label class="inform">Confirm Password <span class="required">*</span></label>
-		<input type="password" name="signupPass2" id="signupPass2" value="" tabindex="3" class="form_field" />
+        <label class="inform">Secret Answer <span class="required">*</span></label>
+        <input type="text" name="SecurityAnswer" id="SecurityAnswer" value="" tabindex="5" class="form_field" size="50" />
 
-		<label class="inform">Select a Secret Question <span class="required">*</span></label>
-		<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
-		<span class="inform"><select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
-			@if (securityQuestions != null) {
-				foreach (SecurityQuestion item in securityQuestions) {
-					<option value="@item.Id">@item.Name</option>
-				}
-			}
-		</select></span>
+        @EzForm.Captcha(captchamode)
 
-		<label class="inform">Secret Answer <span class="required">*</span></label>
-		<input type="text" name="SecurityAnswer" id="SecurityAnswer" value="" tabindex="5" class="form_field" />
-
-		@EzForm.Captcha(captchamode)
-
-		<br><br>
-		<input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
-	</div>
+        <br>
+        <br>
+        <input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
+    </div>
 }

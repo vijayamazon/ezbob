@@ -35,7 +35,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/popover.css")
                 .Add("~/Content/css/video-js.css")
                 .Add("~/Content/css/shops.css")
-                
+                .Add("~/Content/css/app.css")
                 
                 .MvcRender("~/Content/css/min/combined_#.css");
         }

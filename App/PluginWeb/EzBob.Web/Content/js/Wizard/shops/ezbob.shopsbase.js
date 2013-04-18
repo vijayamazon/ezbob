@@ -123,12 +123,8 @@
     };
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
-<<<<<<< HEAD
-=======
       var sText;
-
       console.log("setFocus", storeName);
->>>>>>> Volusion login form
       switch (storeName) {
         case "EKM":
           return this.$el.find("#ekm_login").focus();
