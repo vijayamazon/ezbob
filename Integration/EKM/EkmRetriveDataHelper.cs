@@ -1,5 +1,4 @@
-﻿using EKM.API;
-using EzBob.CommonLib;
+﻿using EzBob.CommonLib;
 using EzBob.CommonLib.Security;
 using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
 using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
@@ -25,25 +24,21 @@ namespace EKM
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            EkmSecurityInfo securityInfo = (EkmSecurityInfo)this.RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
+            var securityInfo = (EkmSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
             //store orders
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-
-            //calculate agregated data
-            //TODO
-
         }
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             //retreive data from ekm api
-           var ordersList = EkmConnector.GetOrders(securityInfo.Name, securityInfo.Password);
+            var ordersList = EkmConnector.GetOrders(securityInfo.Name, securityInfo.Password);
 
-            var Iwant = new List<EkmOrderItem>();
-            foreach (EKM.API.Order order in ordersList)
+            var ekmOrderItem = new List<EkmOrderItem>();
+            foreach (var order in ordersList)
             {
-                Iwant.Add(new EkmOrderItem()
+                ekmOrderItem.Add(new EkmOrderItem
                 {
                     EkmOrderId = order.OrderID,
                     OrderNumber = order.OrderNumber,
@@ -61,7 +56,7 @@ namespace EKM
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-            EkmOrdersList allOrders = new EkmOrdersList(DateTime.UtcNow, Iwant);
+            var allOrders = new EkmOrdersList(DateTime.UtcNow, ekmOrderItem);
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
                                     () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));
@@ -70,7 +65,7 @@ namespace EKM
             //store agregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.AggregateData,
-                                    () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
+                                    () => { return CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter); });
             // Save
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
@@ -79,13 +74,12 @@ namespace EKM
 
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
         {
-          
 
         }
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            EkmSecurityInfo ekmSecurityInfo = new EkmSecurityInfo();
+            var ekmSecurityInfo = new EkmSecurityInfo();
             IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
             ekmSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
             ekmSecurityInfo.Name = customerMarketPlace.DisplayName;
@@ -95,16 +89,20 @@ namespace EKM
 
         private IEnumerable<IWriteDataInfo<EkmDatabaseFunctionType>> CreateOrdersAggregationInfo(EkmOrdersList orders, ICurrencyConvertor currencyConverter)
         {
-
             var aggregateFunctionArray = new[]
-					{
-						EkmDatabaseFunctionType.AverageSumOfOrder, 
-						EkmDatabaseFunctionType.NumOfOrders, 						
-						EkmDatabaseFunctionType.TotalSumOfOrders, 
-					};
+                {
+                    EkmDatabaseFunctionType.AverageSumOfOrder,
+                    EkmDatabaseFunctionType.NumOfOrders,
+                    EkmDatabaseFunctionType.TotalSumOfOrders,
+                    EkmDatabaseFunctionType.AverageSumOfCancelledOrder,
+                    EkmDatabaseFunctionType.NumOfCancelledOrders,
+                    EkmDatabaseFunctionType.TotalSumOfCancelledOrders,
+                    EkmDatabaseFunctionType.AverageSumOfOtherOrder,
+                    EkmDatabaseFunctionType.NumOfOtherOrders,
+                    EkmDatabaseFunctionType.TotalSumOfOtherOrders
+                };
 
             var updated = orders.SubmittedDate;
-
             var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
             TimePeriodChainWithData<EkmOrderItem> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<EkmOrderItem>(), orders, nodesCreationFactory);
 
@@ -114,11 +112,8 @@ namespace EKM
             }
 
             var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-
             var factory = new EkmOrdersAggregatorFactory();
-
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-
         }
 
     }
