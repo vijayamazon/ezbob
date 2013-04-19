@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[FraudShop](
 	[Id] [int] NOT NULL,
-	[Type] [nvarchar](50) NULL,
+	[Type] [int] NOT NULL,
 	[Name] [nvarchar](200) NULL,
 	[FraudUserId] [int] NOT NULL,
  CONSTRAINT [PK_FraudShop] PRIMARY KEY CLUSTERED 

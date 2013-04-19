@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudAddressMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.HiLo("100");
             Map(x => x.Postcode);
             Map(x => x.Line1).Length(200);
             Map(x => x.Line2).Length(200);

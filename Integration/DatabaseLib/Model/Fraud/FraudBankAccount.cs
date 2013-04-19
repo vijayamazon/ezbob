@@ -14,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudBankAccountMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.HiLo("100");
             Map(x => x.BankAccount).Length(50);
             Map(x => x.SortCode).Length(50);
             References(x => x.FraudUser, "FraudUserId");

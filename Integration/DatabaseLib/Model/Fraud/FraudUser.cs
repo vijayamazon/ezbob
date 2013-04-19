@@ -40,7 +40,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
             set { _emails = value; }
         }
 
-        public virtual ISet<FraudEmailDomain> Domains
+        public virtual ISet<FraudEmailDomain> EmailDomains
         {
             get { return _domains; }
             set { _domains = value; }
@@ -63,7 +63,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudUserMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.HiLo("100").Column("Id");
             Map(x => x.FirstName).Length(100);
             Map(x => x.LastName).Length(100);
             HasMany(m => m.BankAccounts)
@@ -90,7 +90,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
                 .OrderBy("Id")
                 .Inverse()
                 .Cascade.All();
-            HasMany(m => m.Domains)
+            HasMany(m => m.EmailDomains)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")

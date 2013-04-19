@@ -15,9 +15,9 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudShopMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.HiLo("100");
             Map(x => x.Name).Length(200);
-            References(x => x.Type, "MarketPlaceId");
+            References(x => x.Type, "`Type`");
             References(x => x.FraudUser, "FraudUserId");
         }
     }

@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
     {
         public FraudEmailDomainMap()
         {
-            Id(x => x.Id);
+            Id(x => x.Id).GeneratedBy.HiLo("100");
             Map(x => x.EmailDomain).Length(250);
             References(x => x.FraudUser, "FraudUserId");
         }

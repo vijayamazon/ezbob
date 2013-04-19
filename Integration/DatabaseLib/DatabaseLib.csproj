@@ -129,6 +129,7 @@
     <Compile Include="Model\Fraud\FraudAddress.cs" />
     <Compile Include="Model\Fraud\FraudBankAccount.cs" />
     <Compile Include="Model\Fraud\FraudCompany.cs" />
+    <Compile Include="Model\Fraud\FraudDetection.cs" />
     <Compile Include="Model\Fraud\FraudEmail.cs" />
     <Compile Include="Model\Fraud\FraudEmailDomain.cs" />
     <Compile Include="Model\Fraud\FraudPhone.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Repository\AmazonOrderItemDetailRepository.cs" />
     <Compile Include="Repository\EbayAmazonCategoryRepository.cs" />
     <Compile Include="Repository\EBayOrderItemInfoRepository.cs" />
+    <Compile Include="Repository\FraudDetectionRepository.cs" />
     <Compile Include="Repository\FraudUserRepository.cs" />
     <Compile Include="Repository\IMP_WhiteListRepository.cs" />
     <Compile Include="Repository\LoanOptionsRepository.cs" />

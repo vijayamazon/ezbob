@@ -655,6 +655,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_FraudDetection_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_Customer1</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer1.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudDetection</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\FraudDetection.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_FraudEmail_FraudUser</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_FraudEmail_FraudUser.sql</oFileName>
