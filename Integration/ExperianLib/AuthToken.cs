@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using EzBob.Configuration;
 using EzBobIntegration.Web_References.ExpAuth;
+using log4net;
 
 namespace ExperianLib
 {
@@ -13,6 +14,7 @@ namespace ExperianLib
         private readonly string _certificateToUse;
         private string _url;
         private string _autLevels;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AuthToken));
 
         public AuthToken(string certificateToUse, string authLevels, string url = null)
         {
@@ -41,6 +43,7 @@ namespace ExperianLib
             {
                 return new WaspToken(response);
             }
+            Log.Error("GetAuthToken response: " + response);
             return null;
         }
 
@@ -62,6 +65,7 @@ namespace ExperianLib
                 _certificateCache.Add(thumb, cert[0]);
                 return cert[0];
             }
+            Log.Error("GetCertificate: cannot find certificate by thumb: " + thumb);
             return null;
         }
     }
