@@ -16,6 +16,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual DateTime? DateOfBirth { get; set; }
 
         private ISet<CustomerAddress> _addresses = new HashedSet<CustomerAddress>();
+
         public virtual ISet<CustomerAddress> DirectorAddress
         {
             get { return _addresses; }
@@ -24,6 +25,38 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public virtual Customer Customer { get; set; }
         public virtual Gender Gender { get; set; }
+        public virtual DirectorAddressInfo DirectorAddressInfo { get; set; }
+    }
+
+    public class DirectorAddressInfo
+    {
+        private ISet<CustomerAddress> _nonLimitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddressPrev
+        {
+            get { return _nonLimitedDirectorHomeAddressPrev; }
+            set { _nonLimitedDirectorHomeAddressPrev = value; }
+        }
+
+        private ISet<CustomerAddress> _limitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
+        public virtual ISet<CustomerAddress> LimitedDirectorHomeAddress
+        {
+            get { return _limitedDirectorHomeAddress; }
+            set { _limitedDirectorHomeAddress = value; }
+        }
+
+        private ISet<CustomerAddress> _nonLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
+        public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddress
+        {
+            get { return _nonLimitedDirectorHomeAddress; }
+            set { _nonLimitedDirectorHomeAddress = value; }
+        }
+
+        private ISet<CustomerAddress> _limitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        public ISet<CustomerAddress> LimitedDirectorHomeAddressPrev
+        {
+            get { return _limitedDirectorHomeAddressPrev; }
+            set { _limitedDirectorHomeAddressPrev = value; }
+        }
     }
 }
 
@@ -48,7 +81,45 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                                 .Table("DirectorAddressRelation")
                                 .ParentKeyColumn("DirectorId")
                                 .ChildKeyColumn("addressId");
+
+            Component(x => x.DirectorAddressInfo, m =>
+            {
+                m.HasManyToMany(x => x.LimitedDirectorHomeAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("DirectorAddressRelation")
+                    .ParentKeyColumn("DirectorId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddressPrev)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("DirectorAddressRelation")
+                    .ParentKeyColumn("DirectorId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddressPrev))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.LimitedDirectorHomeAddress)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("DirectorAddressRelation")
+                    .ParentKeyColumn("DirectorId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddress))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddress)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("DirectorAddressRelation")
+                    .ParentKeyColumn("DirectorId")
+                    .ChildKeyColumn("addressId")
+                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddress))
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+            });
         }
     }
-
 }

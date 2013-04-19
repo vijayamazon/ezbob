@@ -250,7 +250,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (customer.LimitedInfo.Directors.Any())
                 {
-                    MakeAddress(directorAddress, addressInfo.LimitedDirectorHomeAddressPrev, AddressType.LimitedDirectorHomeAddressPrev, addressInfo.LimitedDirectorHomeAddress, AddressType.LimitedDirectorHomeAddress);
+                    foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
+                    {
+                        MakeAddress(directorAddress, addrInfo.LimitedDirectorHomeAddressPrev, AddressType.LimitedDirectorHomeAddressPrev, addrInfo.LimitedDirectorHomeAddress, AddressType.LimitedDirectorHomeAddress);
+                    }
                 }
             }
 
@@ -262,9 +265,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (customer.NonLimitedInfo.Directors.Any())
                 {
-                    MakeAddress(directorAddress, addressInfo.NonLimitedDirectorHomeAddressPrev, AddressType.NonLimitedDirectorHomeAddressPrev, addressInfo.NonLimitedDirectorHomeAddress, AddressType.NonLimitedDirectorHomeAddress);
+                    foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
+                    {
+                        MakeAddress(directorAddress, addrInfo.NonLimitedDirectorHomeAddressPrev, AddressType.NonLimitedDirectorHomeAddressPrev, addrInfo.NonLimitedDirectorHomeAddress, AddressType.NonLimitedDirectorHomeAddress);
+                    }
                 }
-
             }
 
             var newPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
@@ -286,10 +291,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         private void MakeAddress(List<CustomerAddress> newAddress, Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress, AddressType prevAddressType,  Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress, AddressType currentAddressType)
         {
-            if (newAddress == null || newAddress.Count <= 1) return;
-            var lastAddress = newAddress.Last();
-
-            foreach (var item in newAddress.Where(a => a.Id != lastAddress.Id))
+            var addAddress = newAddress.Where(i => i.AddressId == 0).ToList();
+            if (!addAddress.Any()) return;
+            var lastAddress = addAddress.Last();
+            foreach (var item in addAddress.Where(a => a.Id != lastAddress.Id))
             {
                 item.AddressType = prevAddressType;
                 prevAddress.Add(item);
