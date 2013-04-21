@@ -32,16 +32,16 @@ namespace PayPoint
             return orders.Count();
         }
 
-        private decimal GetAuthorisedOrdersSum(IEnumerable<PayPointOrderItem> orders)
+        private double GetAuthorisedOrdersSum(IEnumerable<PayPointOrderItem> orders)
         {
-            return GetAuthorisedOrders(orders).Sum(payPointOrderItem => payPointOrderItem.amount);
+            return (double)GetAuthorisedOrders(orders).Sum(payPointOrderItem => payPointOrderItem.amount);
         }
 
-        private decimal GetOrdersAverage(IEnumerable<PayPointOrderItem> orders)
+        private double GetOrdersAverage(IEnumerable<PayPointOrderItem> orders)
         {
             var authorisedOrders = GetAuthorisedOrders(orders);
             decimal sum = authorisedOrders.Sum(payPointOrderItem => payPointOrderItem.amount);
-            return sum / authorisedOrders.Count();
+            return (double)(sum / authorisedOrders.Count());
         }
 
         private int GetNumOfFailures(IEnumerable<PayPointOrderItem> orders)
@@ -49,17 +49,17 @@ namespace PayPoint
             return orders.Count(a => a.status != "Authorised");
         }
 
-        private decimal GetCancellationRate(IEnumerable<PayPointOrderItem> orders)
+        private double GetCancellationRate(IEnumerable<PayPointOrderItem> orders)
         {
             var authorisedOrders = GetAuthorisedOrders(orders);
-            return authorisedOrders.Count()*100/GetOrdersCount(orders);
+            return (authorisedOrders.Count() * 100 / GetOrdersCount(orders));
         }
 
-        private decimal GetCancellationValue(IEnumerable<PayPointOrderItem> orders)
+        private double GetCancellationValue(IEnumerable<PayPointOrderItem> orders)
         {
             decimal sumOfUnAuthorisedOrders = orders.Where(a => a.status != "Authorised").Sum(o => o.amount);
             decimal sunOfAllOrders = orders.Sum(o => o.amount);
-            return sumOfUnAuthorisedOrders * 100 / sunOfAllOrders;
+            return (double)(sumOfUnAuthorisedOrders * 100 / sunOfAllOrders);
         }
         
         protected override object InternalCalculateAggregatorValue(PayPointDatabaseFunctionType functionType, IEnumerable<PayPointOrderItem> orders)
