@@ -147,7 +147,7 @@
 
             var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
 
-            var factory = new PayPointOrdersAgregatorFactory();
+            var factory = new PayPointOrdersAggregatorFactory();
 
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
         }

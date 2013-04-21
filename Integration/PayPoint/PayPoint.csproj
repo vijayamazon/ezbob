@@ -53,7 +53,7 @@
     <Compile Include="PayPointDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PayPointOrdersAgregator.cs" />
+    <Compile Include="PayPointOrdersAggregator.cs" />
     <Compile Include="PayPointRegistry.cs" />
     <Compile Include="PayPointRetrieveDataHelper.cs" />
     <Compile Include="PayPointSecurityInfo.cs" />

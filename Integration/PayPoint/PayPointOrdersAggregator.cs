@@ -7,17 +7,17 @@ namespace PayPoint
     using EZBob.DatabaseLib.DatabaseWrapper.Order;
     using EzBob.CommonLib.TimePeriodLogic;
 
-    internal class PayPointOrdersAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType>
+    internal class PayPointOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType>
     {
         public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<PayPointOrderItem> data, ICurrencyConvertor currencyConverter)
         {
-            return new PayPointOrdersAgregator(data, currencyConverter);
+            return new PayPointOrdersAggregator(data, currencyConverter);
         }
     }
 
-    internal class PayPointOrdersAgregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType>
+    internal class PayPointOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<PayPointOrderItem>, PayPointOrderItem, PayPointDatabaseFunctionType>
     {
-        public PayPointOrdersAgregator(ReceivedDataListTimeDependentInfo<PayPointOrderItem> orders, ICurrencyConvertor currencyConvertor)
+        public PayPointOrdersAggregator(ReceivedDataListTimeDependentInfo<PayPointOrderItem> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
         }
