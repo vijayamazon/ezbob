@@ -101,7 +101,7 @@ ul.storelist li span {
 
 #ekmAccount input[type="text"], #ekmAccount input[type="password"] { width: 195px; }
 
-.field-validation-error { display: block; }
+.field-validation-error { display: block; font-weigth: bold;}
 
 [name='addressInput'] { margin-top: 10px; }
 
