@@ -21,8 +21,19 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
             @model.fetch()
 
     serializeData: ->
-        paymentAccounts: @model.toJSON()
-        customerId: @model.customerId
+        bankAccounts = @model.get("BankAccounts") || []
+        current = @model.get("CurrentBankAccount")
+        if current
+            current.isDefault = true
+            bankAccounts.push(current)
+        
+        bankAccounts = _.sortBy(bankAccounts, "BankAccount")
+
+        return {
+            bankAccounts: bankAccounts
+            paymentAccounts: @model.toJSON()
+            customerId: @model.customerId
+        }
 
 
     events:

@@ -11,18 +11,15 @@
         </tr>
     </thead>
     <tbody>
-        <%var current = paymentAccounts.CurrentBankAccount || {}; %>
-        @BankAccountLine("current", false)
-                
-        <% _.each(paymentAccounts.BankAccounts, function(ba, i){%>
-            @BankAccountLine("ba", true)
-        <%}) %>       
+        <% _.each(bankAccounts, function(ba, i){%>
+            @BankAccountLine("ba")
+        <%})%>
     </tbody>
 </table>
     
 <button class="btn addNewDebitCard">Add New</button>
 
-@helper BankAccountLine(string current, bool setDefault){
+@helper BankAccountLine(string current){
     <tr data-card-id="<%-(@current).Id%>" >
         <td>
             <%if(!(@current).StatusInformation){%>
@@ -39,9 +36,9 @@
         <td><%-(@current).Type%></td>
         <td>
             <button class="btn btn-mini checkeBankAccount">Check</button>
-            @if(setDefault){
+            <% if(!(@current).isDefault){%>
                 <button class="btn btn-mini setDefault">Set Default</button>
-            }
+            <%}%>
         </td>
     </tr>
 }
