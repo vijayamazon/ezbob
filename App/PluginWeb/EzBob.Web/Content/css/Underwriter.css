@@ -132,6 +132,10 @@ table.rright tbody td:not(:first-child) { text-align: right; }
 .profile-person-info .table-bordered,
 .profile-loan-info .table-bordered { behavior: none; /* conflict with overflow: auto. Must be none!*/ }
 
+.profile-person-info td {
+    word-wrap: break-word;
+}
+
 
 
 .shop-eBay, .shop-Amazon, .shop-EKM {
