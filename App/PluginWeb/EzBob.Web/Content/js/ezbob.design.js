@@ -772,7 +772,7 @@ EzBob.validateCompanyDetailForm = function (el) {
 
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },
-            NonLimitedTimeInBusiness: { required: true, digits: true },
+            NonLimitedTimeInBusiness: { required: true },
             NonLimitedOverallTurnOver: { required: true, number: true, minlength: 2 },
             NonLimitedWebSiteTurnOver: { required: true, number: true, minlength: 2 },
             NonLimitedTimeAtAddress: { required: true, digits: true },
