@@ -122,7 +122,7 @@
                 </div>
                    
                 <br/>
-                <h2 style="padding-left:0" >Your Company Information</h2> 
+                <h2 style="padding-left:0">Your Company Information</h2> 
                 
                 <div>
                     <div class="control-group typeOfBussiness">
@@ -162,39 +162,52 @@
 }
 @helper Director()
 {
-    <fieldset>
-        <legend>Additional Directors (Optional)</legend>
+    <div>
+        <h2 style="padding-left:0">Additional Directors (Optional)</h2>
 
         <div class="directorArea"></div>
 
         <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
-
-        <a href="#" id="addDirector"><b>Add directors</b> and qualify for more cash.</a>
-    </fieldset>
+        
+        <input id="addDirector" class="btn green" type="button" value="Add directors" />
+    </div>
 }
-
 
 @helper LimitedInfo()
 {
     <div class="row-fluid">
-        <h1>&nbsp;Business Info:</h1>
-        <h2>Safe &amp; Secure!</h2>
+        <h2 style="padding-left:0">Company Info</h2> 
         <div style="margin-bottom: 10px;">
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" }))
             {
-                <fieldset>
-                    <legend>Company</legend>
-                    @EzForm.InputText("LimitedCompanyNumber", "Registration #", "")
-                    @EzForm.InputText("LimitedCompanyName", "Name", "")
-                    @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-                    @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "", "phonenumber")
-                    <input type="hidden" name="LimitedRefNum" class="RefNum" />
-                </fieldset>
+                <div class="control-group">
+                    <label for="LimitedCompanyNumber" class="control-label">Registration # <span class="required">*</span></label>
+                    <div class="controls">
+                        <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" size="50" class="form_field" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="LimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+                    <div class="controls">
+                        <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" size="50" class="form_field" />
+                    </div>
+                </div>
+                
+                @EzForm.AddressInput("LimitedCompanyAddress", "Address")
+                
+                <div class="control-group">
+                    <label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+                    <div class="controls">
+                        <input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+                    </div>
+                </div>
+                    
+                <input type="hidden" name="LimitedRefNum" class="RefNum" />
 
                 <div class="directors">
                 </div>
             }
-
 
         </div>
         <div class="">
@@ -207,23 +220,61 @@
 @helper Nonlimitedinfo()
 {
     <div class="row-fluid">
-        <h1>&nbsp;Business Info:</h1>
-        <h2>Safe &amp; Secure!</h2>
+        <h2 style="padding-left:0">Company Info</h2>
         <div style="margin-bottom: 10px;">
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForml" }))
             {
-                <fieldset>
-                    <legend>Company</legend>
-                    <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-                    @EzForm.InputText("NonLimitedCompanyName", "Name", "")
-                    @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
-                    @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
-                    @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "101", "More than 10 years" } })
-                    @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "", "phonenumber")
-                </fieldset>
+                <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+                
+                <div class="control-group">
+                    <label for="NonLimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+                    <div class="controls">
+                        <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" size="50" class="form_field" />
+                    </div>
+                </div>
+                
+                @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+
+                <div class="control-group">
+                    <label class="control-label" for="NonLimitedTimeAtAddress">Resided at Address <span class="required">*</span></label>
+                    <div class="controls">
+                        <select style="height:30px; width:345px" id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select">
+                            <option selected="selected" value="">-</option>
+                            <option value="1">1 year</option>
+                            <option value="2">2 years</option>
+                            <option value="3">More than 3 years</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="NonLimitedTimeInBusiness">Time in Business <span class="required">*</span></label>
+                    <div class="controls">
+                        <select style="height:30px; width:345px" id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select">
+                            <option selected="selected" value="">-</option>
+                            <option value="1">1 year</option>
+                            <option value="2">2 years</option>
+                            <option value="3">3 years</option>
+                            <option value="4">4 years</option>
+                            <option value="5">5 years</option>
+                            <option value="6">6 years</option>
+                            <option value="7">7 years</option>
+                            <option value="8">8 years</option>
+                            <option value="9">9 years</option>
+                            <option value="101">More than 10 years</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="NonLimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+                    <div class="controls">
+                        <input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+                    </div>
+                </div>
 
                 <div class="directors">
-                </div>  
+                </div>
             }
 
         </div>
@@ -233,10 +284,6 @@
         </div>
     </div>
 }
-
-
-
-
 
 <script id="personinfo-template" type="text/template">
     @PersonalInfo()
@@ -264,32 +311,48 @@
 
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
-        <fieldset class="Directors form-horizontal">
-            <legend style="font-size: 14px; font-weight: normal">Director #<%=i+1%> <span style="font-size: 10px;">(<a style="color:#aaa" number="<%=i+1%>" href="#" class="removeDirector">remove</a>)</span></legend>
-
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Name", "Name", "<%- director.Name %>")
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Middle", "Middle Initial", "<%- director.Middle %>")
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Surname", "Surname", "<%- director.Surname %>")
-
+        <div class="Directors">    
+            <h1 style="padding-left:0;">Director #<%=i+1%><input style="margin-left: 15px" class="btn green removeDirector" type="button" value="Remove" number="<%=i+1%>" /></h1>
             
             <div class="control-group">
-                <label class="control-label" for="">Gender</label>
+                <label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
                 <div class="controls">
-                    <select name="<%-preffix%>[<%=i%>].Gender">
-                        <option value="">-</option>
+                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="<%-preffix%>[<%=i%>].Middle" class="control-label">Middle Initial</label>
+                <div class="controls">
+                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+                </div>
+            </div>
+    
+            <div class="control-group">
+                <label for="<%-preffix%>[<%=i%>].Surname" class="control-label">Surname <span class="required">*</span></label>
+                <div class="controls">
+                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
+                </div>
+            </div>
+    
+            <div style="margin-left: 0px;" class="control-group">
+                <label style="text-align: left" class="control-label" for="Gender">Gender</label>
+                <div class="controls" style="margin-left: 0px">
+                    <select style="height:30px; width:345px" id="Gender" name="<%-preffix%>[<%=i%>].Gender">
+                        <option value="-">-</option>
                         <option <%if(director.Gender == 'M'){%>selected="selected"<%}%> value="M">Male</option>
                         <option <%if(director.Gender == 'F'){%>selected="selected"<%}%> value="F">Female</option>
                     </select>
                 </div>
             </div>
 
-            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)
+            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)    
+
             @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
-        </fieldset>
+        </div>
     <%
     })
     %>
-
 </script>
 
 <script id="director-hidden-template" type="text/template">
