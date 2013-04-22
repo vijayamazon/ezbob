@@ -142,6 +142,14 @@ namespace EZBob.DatabaseLib.Model.Database {
                     .ChildKeyColumn("addressId")
                     .ChildWhere("addressType=" + Convert.ToInt32(AddressType.PrevPersonAddresses))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasManyToMany(x => x.AllAddresses)
+                    .AsSet()
+                    .Cascade.All()
+                    .Table("CustomerAddressRelation")
+                    .ParentKeyColumn("customerId")
+                    .ChildKeyColumn("addressId")
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
             });
 
             Component(x => x.BankAccount, m =>

@@ -552,6 +552,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             get { return _prevPersonAddresses; }
             set { _prevPersonAddresses = value; }
         }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _allAddresses = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> AllAddresses
+        {
+            get { return _allAddresses; }
+            set { _allAddresses = value; }
+        }
     }
 
     public class ScoringResult

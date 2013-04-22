@@ -36,10 +36,13 @@ class EzBob.Underwriter.simpleValueAddView extends Backbone.Marionette.ItemView
         form: "form"
 
     onRender: ->
-        @ui.form.find("input, textarea").addClass('required')
+        #addresses can contains null. Skip required for it.
+        if @type != "Addresses"
+            @ui.form.find("input, textarea").addClass('required')
         @validator = @ui.form.validate
             errorPlacement: EzBob.Validation.errorPlacement
             unhighlight: EzBob.Validation.unhighlight
+        @
 
     okClicked: ->
         return unless @validator.form()
@@ -71,16 +74,6 @@ class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
         "click .save":"saveButtonClicked"
         "click .add":"addClicked"
         "click .remove": "removeClicked"
-        "click .internal":"internalClicked"
-        "click .external":"externalClicked"
-
-    internalClicked: ->
-        cid = prompt "Customer Id"
-        $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {CustomerId: cid, type: "internal" }
-
-    externalClicked: ->
-        cid = prompt "Customer Id"
-        $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {CustomerId: cid, type: "external" }
 
     removeClicked: (e)->
         $el = ($ e.currentTarget)
@@ -125,6 +118,18 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
 
     events:
         "click .add":"addButtonClicked"
+        "click .internal":"internalClicked"
+        "click .external":"externalClicked"
+
+    internalClicked: ->
+        cid = prompt "Customer Id"
+        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "internal" }
+        xhr.complete (data)-> console.clear(); alert data.responseText
+
+    externalClicked: ->
+        cid = prompt "Customer Id"
+        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "external" }
+        xhr.complete (data)-> console.clear(); alert data.responseText
 
     serializeData: ->
         data: @model.toJSON()
