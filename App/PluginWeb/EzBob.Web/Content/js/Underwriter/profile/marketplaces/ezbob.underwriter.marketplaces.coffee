@@ -93,7 +93,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 if response and response.error != undefined
                     EzBob.ShowMessage response.error, "Error occured"
                 else
-                    EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck was starting. ", null, "OK"
+                    EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
                 @trigger "rechecked",
                     umi: umi
                     el: $el
