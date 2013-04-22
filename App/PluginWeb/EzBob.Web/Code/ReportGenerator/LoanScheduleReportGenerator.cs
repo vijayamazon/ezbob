@@ -16,12 +16,12 @@ namespace EzBob.Web.Code.ReportGenerator
             _workbook = new Workbook();
         }
 
-        public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell)
+        public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell, string header)
         {
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Payment Schedule";
-           
-            int row = 1;
+            HeaderReportGenerator.CreateHeader(worksheet, header);
+            int row = 3;
             CreateXlsHeader(worksheet, row);
             
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/payment-to-customer.png");

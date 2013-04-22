@@ -15,21 +15,28 @@ namespace EzBob.Web.Code.ReportGenerator
             _workbook = new Workbook();
         }
 
-        public byte[] GenerateReport(LoanOffer loanOffer, bool isExcel, bool isShowDetails)
+        public byte[] GenerateReport(LoanOffer loanOffer, bool isExcel, bool isShowDetails, string header)
         {
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Loan Offer";
+            
+            HeaderReportGenerator.CreateHeader(worksheet, header);
 
-            int row = 1;
+            int row=3;
             CreateXlsHeader(worksheet, row);
-
+            var i = 0;
             foreach (var item in loanOffer.Schedule)
             {
                 row++;
+                i++;
                 worksheet.Cells[row, 0].PutValue(item.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
                 worksheet.Cells[row, 1].PutValue(FormattingUtils.FormatPounds(item.LoanRepayment));
                 worksheet.Cells[row, 2].PutValue(FormattingUtils.FormatPounds(item.Interest));
-                worksheet.Cells[row, 3].PutValue("-");
+                var fee =loanOffer.SetupFee > 0 && i == 0 ? loanOffer.SetupFee : 0;
+                if (item.Fees>0) fee += item.Fees;
+                var res = fee != 0 ? FormattingUtils.FormatPounds(fee) : "-";
+                var res1 = loanOffer.SetupFee>0 && i == 0 ? "*" : string.Empty;
+                worksheet.Cells[row, 3].PutValue(res+res1);
                 worksheet.Cells.Merge(row, 4, 1, 3);
                 worksheet.Cells[row, 4].PutValue(FormattingUtils.FormatPounds(item.AmountDue));
                 SetCellStyle(worksheet, row, false);
@@ -74,6 +81,8 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, 1].Style.Font.IsBold = true;
         }
 
+       
+
         private  int CreateTotalBlock(LoanOffer loanOffer, int row, Worksheet worksheet)
         {
             row += 2;
@@ -93,6 +102,7 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row + 1, 6].PutValue(FormattingUtils.FormatPounds(loanOffer.Total));
 
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/image-money64.png");
+            
             worksheet.Pictures.Add(row, 0, filePath, 100, 50);
 
             filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/plus.png");

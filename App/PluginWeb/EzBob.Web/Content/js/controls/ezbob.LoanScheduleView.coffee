@@ -25,13 +25,12 @@ class EzBob.LoanScheduleViewDlg extends EzBob.LoanScheduleView
         "click .excel-link": "exportToExcel"
 
     exportToPdf: (e) ->
-        console.log (@options)
         $el = $(e.currentTarget);
-        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=false&isShowDetails=false");
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=false&isShowDetails=false&customerId="+@options.customerId);
     
     exportToExcel: (e) ->
         $el = $(e.currentTarget); 
-        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=true&isShowDetails=false");
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" +@options.offerId+"&isExcel=true&isShowDetails=false&customerId="+@options.customerId);
     
     jqoptions: ->
         modal: true

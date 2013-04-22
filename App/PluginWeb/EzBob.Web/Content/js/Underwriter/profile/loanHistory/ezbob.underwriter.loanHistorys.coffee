@@ -82,6 +82,6 @@ class EzBob.Underwriter.LoanHistoryView extends Backbone.Marionette.View
         xhr = $.getJSON  "#{window.gRootPath}Underwriter/Schedule/Calculate/#{offerId}"
 
         xhr.done (data) =>
-            view = new EzBob.LoanScheduleViewDlg schedule: data, isShowGift: false, isShowExportBlock:true, offerId:offerId
+            view = new EzBob.LoanScheduleViewDlg schedule: data, isShowGift: false, isShowExportBlock:true, offerId:offerId, customerId:@model.customerId
             EzBob.App.jqmodal.show view
         false

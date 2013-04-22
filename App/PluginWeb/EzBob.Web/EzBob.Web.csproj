@@ -246,6 +246,7 @@
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
     <Compile Include="Code\LoanLimit.cs" />
+    <Compile Include="Code\ReportGenerator\HeaderReportGenerator.cs" />
     <Compile Include="Code\ReportGenerator\LoanHistoryExelReportGenerator.cs" />
     <Compile Include="Code\ReportGenerator\LoanHistoryExelReportResult.cs" />
     <Compile Include="Code\ReportGenerator\LoanOfferReportGenerator.cs" />
@@ -860,6 +861,18 @@
       <DependentUpon>loanModel.coffee</DependentUpon>
     </Content>
     <Content Include="Content\css\postcode.css" />
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js">
+      <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.min.js">
+      <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">
+      <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.min.js">
+      <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>

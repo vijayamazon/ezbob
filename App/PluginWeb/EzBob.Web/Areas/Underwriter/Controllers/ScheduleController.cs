@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
 using EzBob.Web.Code;
@@ -17,14 +18,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly ICashRequestRepository _cashRequests;
         private readonly APRCalculator _aprCalc;
         private readonly ILoanTypeRepository _loanTypes;
+        private readonly ICustomerRepository _customerRepository;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
-        public ScheduleController(LoanBuilder loanBuilder, ICashRequestRepository cashRequests, ILoanTypeRepository loanType)
+        public ScheduleController(LoanBuilder loanBuilder, ICashRequestRepository cashRequests, ILoanTypeRepository loanType, ICustomerRepository customerRepository)
         {
             _loanBuilder = loanBuilder;
             _cashRequests = cashRequests;
             _loanTypes = loanType;
             _aprCalc = new APRCalculator();
+            _customerRepository = customerRepository;
         }
 
         [HttpGet]
@@ -37,32 +40,33 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         }
 
         [Transactional]
-        public ActionResult Export(long id, bool isExcel, bool isShowDetails)
+        public ActionResult Export(long id, bool isExcel, bool isShowDetails, int customerId)
         {
             var loanOffer = GetLoanOffer(id);
-            return new LoanOfferReportResult(loanOffer, isExcel, isShowDetails);
+            var customer = _customerRepository.Get(customerId);
+            return new LoanOfferReportResult(loanOffer, isExcel, isShowDetails, customer);
         }
 
         private LoanOffer GetLoanOffer(long id)
         {
             var cr = _cashRequests.Get(id);
-
             var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.Value);
-
+            
             var calc = new PayEarlyCalculator2(loan, loan.Date);
             calc.GetState();
  
             var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
 
             var loanOffer = LoanOffer.InitFromLoan(loan, apr, null);
-
+            
             loanOffer.Details = new LoanOfferDetails
             {
                 InterestRate = cr.InterestRate,
                 RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
                 OfferedCreditLine = loanOffer.TotalPrincipal,
                 LoanType = _loanTypes.GetAll().First().Name,
-                IsModified = !string.IsNullOrEmpty(cr.LoanTemplate)
+                IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
+                Date = loan.Date
             };
 
             return loanOffer;

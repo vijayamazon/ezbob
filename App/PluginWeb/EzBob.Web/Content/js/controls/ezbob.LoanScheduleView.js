@@ -19,14 +19,15 @@
 
     LoanScheduleView.prototype.serializeData = function() {
       return {
-        schedule: this.options.schedule.schedule,
-        apr: this.options.schedule.apr,
-        setupFee: this.options.schedule.setupFee,
-        realInterestCost: this.options.schedule.realInterestCost,
-        total: this.options.schedule.total,
-        totalInterest: this.options.schedule.totalInterest,
-        totalPrincipal: this.options.schedule.totalPrincipal,
-        isShowGift: this.options.isShowGift
+        schedule: this.options.schedule.Schedule,
+        apr: this.options.schedule.Apr,
+        setupFee: this.options.schedule.SetupFee,
+        realInterestCost: this.options.schedule.RealInterestCost,
+        total: this.options.schedule.Total,
+        totalInterest: this.options.schedule.TotalInterest,
+        totalPrincipal: this.options.schedule.TotalPrincipal,
+        isShowGift: this.options.isShowGift,
+        isShowExportBlock: this.options.isShowExportBlock
       };
     };
 
@@ -41,6 +42,23 @@
     function LoanScheduleViewDlg() {
       return LoanScheduleViewDlg.__super__.constructor.apply(this, arguments);
     }
+
+    LoanScheduleViewDlg.prototype.events = {
+      "click .pdf-link": "exportToPdf",
+      "click .excel-link": "exportToExcel"
+    };
+
+    LoanScheduleViewDlg.prototype.exportToPdf = function(e) {
+      var $el;
+      $el = $(e.currentTarget);
+      return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.options.offerId + "&isExcel=false&isShowDetails=false&customerId=" + this.options.customerId);
+    };
+
+    LoanScheduleViewDlg.prototype.exportToExcel = function(e) {
+      var $el;
+      $el = $(e.currentTarget);
+      return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.options.offerId + "&isExcel=true&isShowDetails=false&customerId=" + this.options.customerId);
+    };
 
     LoanScheduleViewDlg.prototype.jqoptions = function() {
       return {

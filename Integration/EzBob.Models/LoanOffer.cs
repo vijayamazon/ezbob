@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.Areas.Customer.Models;
 
@@ -12,6 +13,7 @@ namespace EzBob.Models
         public decimal InterestRate { get; set; }
         public string LoanType { get; set; }
         public bool IsModified { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class LoanOffer

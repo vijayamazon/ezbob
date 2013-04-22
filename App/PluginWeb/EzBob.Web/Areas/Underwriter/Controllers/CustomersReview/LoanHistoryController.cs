@@ -295,7 +295,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var loansDetailsBuilder = new LoansDetailsBuilder();
             var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
 
-            return new LoanScheduleReportResult(details, isExcel);
+            return new LoanScheduleReportResult(details, isExcel, customer);
         }
     }
 }

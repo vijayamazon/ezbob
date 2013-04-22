@@ -191,10 +191,10 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     
     exportToPdf: (e) ->
         $el = $(e.currentTarget);
-        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=false&isShowDetails=true");
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=false&isShowDetails=true&customerId="+@model.get("CustomerId"));
     
     exportToExcel: (e) ->
         $el = $(e.currentTarget);
-        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=true&isShowDetails=true");
+        $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId")+"&isExcel=true&isShowDetails=true&customerId="+@model.get("CustomerId"));
     
 )
