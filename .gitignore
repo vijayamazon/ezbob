@@ -38,3 +38,6 @@ App/service/agent/ChannelGrabberAPI.dll
 App/clients/Maven/log/Maven.log
 App/clients/Master/log/master.log
 App/clients/Maven/DefaultWorkspace.sbProj
+App/clients/Administrator/log/Admin.log
+App/clients/Auditor/log/AuditorApplication.log
+
