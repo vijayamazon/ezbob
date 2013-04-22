@@ -12,13 +12,22 @@ AS
 BEGIN
 
 IF @PasswordValidator != 'I am sure I want to delete!'
+BEGIN
 	RAISERROR('Cant delete customer without password validation', 16, 1)
-	
+	RETURN -1
+END
+
 IF EXISTS (SELECT 1 FROM DecisionHistory WHERE CustomerId = @CustomerID AND Action = 'Approve')
+BEGIN
 	RAISERROR('Cant delete customer with approved loans', 16, 1)
+	RETURN -2
+END
 	
 IF EXISTS (SELECT 1 FROM Loan WHERE Loan.CustomerId = @CustomerID)
+BEGIN
 	RAISERROR('Cant delete customer with a loan', 16, 1)
+	RETURN -3
+END
 
 BEGIN TRANSACTION DeleteCustomer
 
@@ -97,12 +106,6 @@ BEGIN TRANSACTION DeleteCustomer
 		(SELECT Id FROM MP_EbayOrderItem WHERE OrderId IN
 			(SELECT Id FROM MP_EbayOrder WHERE CustomerMarketPlaceId IN 
 				(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID)))
-
-	-- MP_EBayOrderItemDetail.ItemId is NVARCHAR(128) - how should it be crossed with MP_EbayOrderItem???
-	--DELETE FROM MP_EBayOrderItemDetail WHERE ItemId IN 
-	--	(SELECT Id FROM MP_EbayOrderItem WHERE OrderId IN
-	--		(SELECT Id FROM MP_EbayOrder WHERE CustomerMarketPlaceId IN 
-	--			(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID)))
 
 	DELETE FROM MP_EbayTransaction WHERE OrderItemId IN
 		(SELECT Id FROM MP_EbayOrderItem WHERE OrderId IN
