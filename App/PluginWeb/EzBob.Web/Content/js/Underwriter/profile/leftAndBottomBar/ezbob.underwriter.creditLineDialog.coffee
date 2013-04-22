@@ -35,7 +35,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         return unless @ui.form.valid()
         postData = @getPostData()
         action = "#{window.gRootPath}Underwriter/ApplicationInfo/ChangeCreditLine"
-        post = $.post action, postData 
+        post = $.post action, postData
         post.done => @model.fetch()
         @close()
     
@@ -61,7 +61,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             converter:EzBob.BidingConverters.percentsFormat
         RepaymentPerion:
             selector: "input[name='repaymentPeriod']"
-            
+            converter:EzBob.BidingConverters.notNull            
         StartingFromDate:
             selector:"input[name='startingFromDate']"
         OfferValidateUntil:

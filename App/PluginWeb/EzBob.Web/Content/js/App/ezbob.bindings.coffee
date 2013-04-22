@@ -16,6 +16,11 @@ EzBob.BidingConverters.percents = (direction, value) ->
     else
         return value / 100
 
+EzBob.BidingConverters.notNull = (direction, value) ->
+    if value is "" or value is null
+        value = 0
+    return value
+
 EzBob.BidingConverters.dateTime = (direction, value) ->
     if direction == 'ModelToView'
         moment.utc(value).format('DD/MM/YYYY')
