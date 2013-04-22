@@ -1,5 +1,5 @@
 ﻿<div class="addAddressContainer">
-    <input type="text" class="addAddressInput" placeholder="Enter postcode"/>
+    <input style="width: 190px;height: 20px;" type="text" class="addAddressInput" placeholder="Enter postcode"/>
     <input class="btn addAddress green" style="margin-bottom: 11px;" type="button" value="Postcode Lookup" disabled="disabled" />
 </div>
 <%var i = 0; _.each(addresses, function(address) {%>
@@ -14,7 +14,7 @@ shortAddress.clean("");
 %>
 <div>
     <!-- Address information -->
-    <textarea id="<%-addresses.addressInput%>"  style="resize: none" rows='<%-shortAddress.length%>' readonly="readonly" name="addressInput" type="text"><%-shortAddress.join("\n")%></textArea>
+    <textarea style="height: auto; width: 295px" id="<%-addresses.addressInput%>"  style="resize: none" rows='<%-shortAddress.length%>' readonly="readonly" name="addressInput" type="text"><%-shortAddress.join("\n")%></textarea>
     <a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>">clear</a>
     <input type="hidden" name="<%-name%>[<%=i%>].Credits_display_text" value="<%=address.Credits_display_text%>" />
     <input type="hidden" name="<%=name%>[<%=i%>].Accountadminpage" value="<%=address.Accountadminpage%>" />

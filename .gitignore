@@ -35,3 +35,6 @@ Tools/DownloadScript/run.log.*
 App/service/agent/ChannelGrabberAPI.dll
 App/service/agent/Volusion.dll
 App/service/agent/ChannelGrabberAPI.dll
+App/clients/Maven/log/Maven.log
+App/clients/Master/log/master.log
+App/clients/Maven/DefaultWorkspace.sbProj
