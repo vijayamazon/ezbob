@@ -124,5 +124,13 @@
                 $('a[href="' + window.location.hash + '"]').tab('show');
             }
         });
+        
+        @if (Model.Escalated != null)
+        {
+            <text>  var escalatedFlag = 1;  </text>
+        } else 
+        {
+            <text>  var escalatedFlag = 0;  </text>
+        }
     </script>
 }

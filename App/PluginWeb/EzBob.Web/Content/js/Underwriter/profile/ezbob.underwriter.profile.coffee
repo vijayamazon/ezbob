@@ -288,7 +288,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                 @$el.find("#RejectBtn").show()
                 @$el.find("#ApproveBtn").show()
                 @$el.find("#SuspendBtn").show()
-                @$el.find("#EscalateBtn").show()
+                @$el.find("#EscalateBtn").show() if !escalatedFlag
             when "Rejected", "Approved", "Late"
                 @$el.find("#ReturnBtn").hide()
                 @$el.find("#RejectBtn").hide()
