@@ -151,6 +151,13 @@ EzBob.Validation.validateAndNotify = function (validator) {
     return true;
 };
 
+EzBob.Validation.checkForm = function (validator) {
+    if (!validator.checkForm()) {
+        return false;
+    }
+    return true;
+};
+
 $.validator.methods.yearLimit = function (value, element, yearCount) {
     var val = moment(value, "DD/MM/YYYY").toDate();
     var now = new Date();

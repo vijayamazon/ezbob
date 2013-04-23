@@ -722,6 +722,36 @@ EzBob.validateSignUpForm = function (el) {
     });
 };
 
+EzBob.checkSignUpForm = function (el) {
+    var e = el || $(".signup");
+
+    var passPolicy = { required: true, minlength: 6, maxlength: 20 };
+    var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
+    if (EzBob.Config.PasswordPolicyType != 'simple') {
+        passPolicy.regex =
+        "^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$";
+        passPolicy.minlength = 7;
+        passPolicyText = "Password has to have 2 types of characters out of 4 (letters,caps,digits,special chars)";
+    }
+    var passPolicy2 = $.extend({}, passPolicy);
+    passPolicy2.equalTo = '#signupPass1';
+
+    return e.validate({
+        rules: {
+            signupPass1: $.extend({}, passPolicy),
+            signupPass2: passPolicy2,
+            EMail: { required: true, email: true },
+            SecurityAnswer: { required: true, maxlength: 199 }
+        },
+        messages: {
+            "EMail": { email: EzBob.dbStrings.NotValidEmailAddress, remote: "Email address already exists", required: EzBob.dbStrings.NotValidEmailAddress },
+            "signupPass1": { required: passPolicyText, regex: passPolicyText },
+            "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
+            "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" }
+        }
+    });
+};
+
 EzBob.validateChangePassword = function (el) {
     var e = el || $("#change-password");
     return e.validate({

@@ -15,12 +15,25 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.model.on('change:loggedIn', this.render, this);
     },
     events: {
-        'click :submit': 'submit'
+        'click :submit': 'submit',
+        'keydown input[name="EMail"]': 'inputChanged',
+        'paste input[name="EMail"]': 'inputChanged',
+        'input input[name="EMail"]': 'inputChanged',
+        'keydown input[name="signupPass1"]': 'inputChanged',
+        'paste input[name="signupPass1"]': 'inputChanged',
+        'input input[name="signupPass1"]': 'inputChanged',
+        'keydown input[name="signupPass2"]': 'inputChanged',
+        'paste input[name="signupPass2"]': 'inputChanged',
+        'input input[name="signupPass2"]': 'inputChanged',
+        'keydown input[name="SecurityAnswer"]': 'inputChanged',
+        'paste input[name="SecurityAnswer"]': 'inputChanged',
+        'input input[name="SecurityAnswer"]': 'inputChanged'
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('.signup');
         this.validator = EzBob.validateSignUpForm(this.form);
+        this.formChecker = EzBob.checkSignUpForm(this.form);
 
         if (this.model.get('loggedIn')) {
             this.setReadOnly();
@@ -32,6 +45,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('li[rel]').setPopover("left");
         
         return this;
+    },
+    inputChanged: function (e) {
+        if (EzBob.Validation.checkForm(this.formChecker)) {
+            $("#signupSubmitButton.disabled").removeClass('disabled');
+        } else {
+            $("#signupSubmitButton").addClass('disabled');
+        }
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {
