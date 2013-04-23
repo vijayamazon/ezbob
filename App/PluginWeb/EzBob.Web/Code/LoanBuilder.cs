@@ -28,6 +28,10 @@ namespace EzBob.Web.Code
                 loan.CashRequest = cr;
 
                 AdjustDates(now, loan);
+                AdjustBalances(amount, loan);
+
+                var c = new PayEarlyCalculator2(loan, now);
+                c.GetState();
 
                 return loan;
             }
@@ -46,6 +50,19 @@ namespace EzBob.Web.Code
             calculator.Calculate(amount, loan, loan.Date);
 
             return loan;
+        }
+
+        private void AdjustBalances(decimal amount, Loan loan)
+        {
+            if (!_builder.IsAmountChangingAllowed(loan.CashRequest)) return;
+
+            var balances = loan.LoanType.GetBalances(amount, loan.Schedule.Count).ToArray();
+            for (int i = 0; i < loan.Schedule.Count; i++)
+            {
+                loan.Schedule[i].Balance = balances[i];
+            }
+
+            loan.LoanAmount = amount;
         }
 
         private static void AdjustDates(DateTime now, Loan loan)

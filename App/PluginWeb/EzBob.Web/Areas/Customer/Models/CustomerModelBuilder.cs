@@ -19,6 +19,7 @@ namespace EzBob.Web.Areas.Customer.Models
         private readonly IUsersRepository _users;
         private readonly LoanPaymentFacade _facade;
         private readonly PaymentRolloverRepository _paymentRolloverRepository;
+        private ChangeLoanDetailsModelBuilder _changeLoanDetailsModelBuilder;
 
         public CustomerModelBuilder(ISecurityQuestionRepository questions, ICustomerRepository customerRepository, IUsersRepository users, PaymentRolloverRepository paymentRolloverRepository)
         {
@@ -27,6 +28,7 @@ namespace EzBob.Web.Areas.Customer.Models
             _users = users;
             _paymentRolloverRepository = paymentRolloverRepository;
             _facade = new LoanPaymentFacade();
+            _changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
         }
 
         public CustomerModel BuildWizardModel(EZBob.DatabaseLib.Model.Database.Customer cus)
@@ -163,10 +165,7 @@ namespace EzBob.Web.Areas.Customer.Models
             customerdModel.HasRollovers = customerdModel.ActiveRollovers.Any();
 
             var cr = cus.LastCashRequest;
-            if (cr != null)
-            {
-                customerdModel.IsLoanDetailsFixed = !string.IsNullOrEmpty(cr.LoanTemplate);
-            }
+            customerdModel.IsLoanDetailsFixed = !_changeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
             return customerdModel;
         }
