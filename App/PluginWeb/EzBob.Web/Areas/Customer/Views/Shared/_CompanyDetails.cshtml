@@ -30,16 +30,11 @@
                     </div>
                 </div>
                 <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
-
-                <div style="margin-left: 0px;" class="control-group">
-                    <label style="text-align: left" class="control-label" for="Gender">Gender</label>
-                    <div class="controls" style="margin-left: 0px">
-                        <select style="height:30px; width:345px" id="Gender" name="Gender">
-                            <option value="-">-</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
-                        </select>
-                    </div>
+                
+                <div>
+                    <label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
+                    <input type="radio" name="Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
+                    <input type="radio" name="Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
                 </div>
                 
                 @EzForm.DateInput("DateOfBirth", "Date of Birth")
@@ -61,8 +56,6 @@
                 <h2 style="padding-left:0" >Your Current Residential Address</h2>
                 @EzForm.AddressInput("PersonalAddress", "Potcode")
                 
-                @*
-                @EzForm.SelectAdvanced("TimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "", "TimeAtAddress select", 0)*@
                 <div class="control-group">
                     <label class="control-label" for="TimeAtAddress">Length of time at address <span class="required">*</span></label>
                     <div class="controls">
@@ -76,8 +69,7 @@
                 </div>
                 
                 @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
-                
-                @*@EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")*@
+
                 <div class="control-group">
                     <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
                     <div class="controls">
@@ -312,7 +304,7 @@
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
         <div class="Directors">    
-            <h1 style="padding-left:0;">Director #<%=i+1%><input style="margin-left: 15px" class="btn green removeDirector" type="button" value="Remove" number="<%=i+1%>" /></h1>
+            <h1 style="padding-left:0;">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
             
             <div class="control-group">
                 <label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
@@ -333,17 +325,12 @@
                 <div class="controls">
                     <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
                 </div>
-            </div>
+            </div>    
     
-            <div style="margin-left: 0px;" class="control-group">
-                <label style="text-align: left" class="control-label" for="Gender">Gender</label>
-                <div class="controls" style="margin-left: 0px">
-                    <select style="height:30px; width:345px" id="Gender" name="<%-preffix%>[<%=i%>].Gender">
-                        <option value="-">-</option>
-                        <option <%if(director.Gender == 'M'){%>selected="selected"<%}%> value="M">Male</option>
-                        <option <%if(director.Gender == 'F'){%>selected="selected"<%}%> value="F">Female</option>
-                    </select>
-                </div>
+            <div>
+                <label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
+                <input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
+                <input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
             </div>
 
             @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)    

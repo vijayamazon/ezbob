@@ -765,7 +765,7 @@ EzBob.validateCompanyDetailForm = function (el) {
             MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
             TypeOfBusiness: { required: true },
             ResidentialStatus: { regex: "^[a-zA-Z ]+$" },
-            Gender: { regex: "^M|F$" },
+            Gender: { regex: "^M|F$", required: true },
             MartialStatus: { regex: "^Single|Married|Divorced|Widow/er|Other$" },
             OverallTurnOver: { required: true, number: true, min:1 },
             WebSiteTurnOver: { required: true, number: true, min: 1 },
