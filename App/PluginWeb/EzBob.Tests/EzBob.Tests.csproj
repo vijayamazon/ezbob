@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="AmazonRateInfoFixture.cs" />
     <Compile Include="AnalysisFunctionTimePeriodRepositoryFixture.cs" />
+    <Compile Include="CustomLoanCanBeAltered.cs" />
     <Compile Include="EncryptorFxiture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\FlexibleInerestRateFixture.cs" />

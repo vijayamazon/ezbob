@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EZBob.DatabaseLib.Model;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using StructureMap;
@@ -297,6 +298,24 @@ namespace EzBob.Models
                 loan.Charges.Add(item);
                 item.Loan = loan;
             }
+        }
+
+        public bool IsAmountChangingAllowed(CashRequest cr)
+        {
+            if (string.IsNullOrEmpty(cr.LoanTemplate)) return true;
+            
+            var model = EditLoanDetailsModel.Parse(cr.LoanTemplate);
+            
+            //compare number of installments/other actions
+            if (model.Items.Count(i => i.Type == "Installment") != cr.RepaymentPeriod) return false;
+            if (model.Items.Count != cr.RepaymentPeriod) return false;
+
+            //compare template balances with actual
+            var expectedBalances = cr.LoanType.GetBalances((decimal)cr.ManagerApprovedSum, cr.RepaymentPeriod);
+            var actualBalances = model.Items.Where(i => i.Type == "Installment").Select(i => i.Balance);
+            if (expectedBalances.Except(actualBalances).Any()) return false;
+
+            return true;
         }
     }
 }

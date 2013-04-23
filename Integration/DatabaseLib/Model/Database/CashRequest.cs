@@ -74,7 +74,6 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual bool HasLoans { get; set; }
 
         public virtual string LoanTemplate { get; set; }
-
     }
 
     public interface ICashRequestRepository : IRepository<CashRequest>

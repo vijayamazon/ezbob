@@ -88,6 +88,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             model = RecalculateModel(model, cr, model.Date);
 
             cr.LoanTemplate = model.ToJSON();
+
             return this.JsonNet(model);
         }
 
