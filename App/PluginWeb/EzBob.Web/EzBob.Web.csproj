@@ -433,6 +433,7 @@
     <Content Include="Content\css\images\play-icon-hover.png" />
     <Content Include="Content\css\images\play-icon-sprite.png" />
     <Content Include="Content\css\images\play-icon.png" />
+    <Content Include="Content\css\images\plus.png" />
     <Content Include="Content\css\images\points.png" />
     <Content Include="Content\css\images\pound.png" />
     <Content Include="Content\css\images\progress_tip.png" />

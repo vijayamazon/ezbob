@@ -3,7 +3,7 @@
 {
     <div>
         <h2>Enter your shops</h2>
-        <p>Please link the shops you sell in. You can link always add more later. Remember, the more you link the more the funds you can get.</p>
+        @*<p>Please link the shops you sell in. You can link always more later. Remember, the more you link the more the funds you can get.</p>*@
 
         <div class="shops-list row-fluid">
         </div>
@@ -14,8 +14,8 @@
         <div class="accounts-list row-fluid">
         </div>
 
-        <div style="padding-bottom: 50px" class="cont-button">
-            <a class="next button orange pull-right" style="display: none;">Continue</a>
+        <div style="padding-bottom: 50px;margin-top: 10px;" class="cont-button">
+            <a class="next button orange pull-right disabled" >Continue</a>
             <a href="#" class="back-step button orange pull-right">Back</a>
         </div>
     </div>
@@ -29,21 +29,8 @@
     @StoreInfo()
 </script>
 
-<script id="amazon-store-list" type="text/template">
-    <ul>
-        <% _.each(stores, function(s){
-        %>
-            <li>
-                <%= s.marketplaceId %>, <%= s.merchantId %>
-            </li>
-        <%
-            });
-        %>
-    </ul>
-</script>
-
 <script id="ebay-store-list" type="text/template">
-    <ul class="storelist">
+    @*<ul class="storelist">
         <% _.each(stores, function(s){
         %>
             <li>
@@ -52,5 +39,5 @@
         <%
             });
         %>
-    </ul>
+    </ul>*@
 </script>

@@ -13,7 +13,10 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 
         var storeInfoStepModel = new EzBob.StoreInfoStepModel({
             ebayMarketPlaces: options.ebayMarketPlaces,
-            amazonMarketPlaces: options.amazonMarketPlaces
+            amazonMarketPlaces: options.amazonMarketPlaces,
+            ekmMarketPlaces: options.ekmMarketPlaces,
+            volusionMarketPlaces: options.volusionMarketPlaces,
+            paypointMarketPlaces: options.paypointMarketPlaces
         });
 
         var yourInformationStepModel = new EzBob.YourInformationStepModel();

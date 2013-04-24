@@ -1,14 +1,37 @@
 ﻿@model dynamic
-
 <script id="store-button-template" type="text/template">
     <div class="source">
         <div class="<%= shops.length ? 'source_header_on' : 'source_header'%> cf">
             <div class="alignleft">
-                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div> 
-            </div> 
-            <div class="alignright"><a href="#" class="button green">Link more shops</a></div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width:170px;">
+                                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
+                            </td>
+                            <td style="vertical-align:middle;">
+                                <% if(shops.length) {%>
+                               <div style="width:300px;" title="<%- shopNames %>">
+                                    <span class="label label-warning"><%= shops.length%></span> shops(s) linked
+                                </div>
+                                <%} else {%>
+                                <div style="width:300px;">
+                                    <span class="label label-warning"><%= shops.length%></span> shops(s) linked
+                                </div>
+                                <%}%>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div class="alignright"><a href="#" class="button green">
+                <div class="plus"></div>
+            </a></div>
         </div>
-        <div class="source_description">
+
+        @*        <div class="source_description">
             <% if(shops.length) {%>
                 <table class="source_table" width="100%">
                     <thead>
@@ -29,6 +52,6 @@
             <%} else{%>
                 <span class="label label-warning">0</span> shops(s) linked
             <%}%>
-        </div>
+        </div>*@
     </div>
 </script>

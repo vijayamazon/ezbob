@@ -11,9 +11,10 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         @name = options.name
         @logoText = options.logoText
         @shops = options.shops
+        @shopNames = ""
 
         if @shops
-            @shops.on("change reset", @render, this)
+            @shops.on("change reset", @updateShopNames, this)
 
         @shopClass = options.name.toLowerCase().replace(' ', '')
 
@@ -22,6 +23,17 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         logoText: @logoText
         shopClass: @shopClass
         shops: if @shops then @shops.toJSON() else []
+        shopNames: @shopNames
+
+    updateShopNames: ->
+        if @shops
+            s = ""
+            _.each @shops.models, (sh, idx) ->
+                if s != ""
+                    s += ", "
+                s += sh.attributes.displayName
+            @shopNames = s
+        @render
 
     clicked: ->
         if @disabled
