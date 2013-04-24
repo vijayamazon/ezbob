@@ -33,7 +33,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
                     s += ", "
                 s += sh.attributes.displayName
             @shopNames = s
-        @render
+        @render()
 
     clicked: ->
         if @disabled
