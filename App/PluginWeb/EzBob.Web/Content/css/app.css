@@ -276,6 +276,7 @@ ul.documents {
     border-width: 0 1px 1px 1px;
     border-color: #ccc;
     border-style: solid;
+    margin-top: -20px;
 }
 
     .source_description h3 {
@@ -355,7 +356,7 @@ ul.documents {
 
     .source_labels.paypoint {
         background-position: -967px 0;
-        width: 39px;
+        width: 167px;
     }
 
     .source_labels.volusion {
@@ -405,7 +406,7 @@ ul.documents {
 
     .source_labels_on.paypoint {
         background-position: -967px -40px;
-        width: 39px;
+        width: 167px;
     }
 
     .source_labels_on.volusion {
@@ -426,6 +427,10 @@ ul.documents {
     .source_table th, .source_table td {
         padding: 5px;
         border-bottom: 1px #ccc dotted;
+    }
+
+    .source_table td.statustd {
+        width: 20%;
     }
 
 .estimate_container {
