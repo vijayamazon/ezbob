@@ -1,394 +1,404 @@
 ﻿@using EzBob.Web.Models.Strings
 @model dynamic
-@helper PersonalInfo()
-{
-    <div class="row-fluid">
-        <h2 style="padding-left: 0">Personal information</h2>
-        A bit about you, the director or partner completing the application.
-        <br />
-        <div>
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" }))
-            {
-                <div class="control-group">
-                    <label>First Name <span class="required">*</span></label>
-                    <div style="margin-left: 0px;" class="controls">
-                        <input style="height:20px;" type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" class="form_field" size="50" />
-                    </div>
-                </div>
+@helper PersonalInfo() {
+	<div class="row-fluid">
+		<h2 class="form_start">Personal information</h2>
+		<div>
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="attardi-input"><span>First Name</span>
+							<input class="form_field" type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
 
-                <div class="control-group">
-                    <label>Middle Name</label>
-                    <div style="margin-left: 0px;" class="controls">
-                        <input style="height:20px" type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" size="50" />
-                    </div>
-                </div>
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="attardi-input"><span>Middle Name</span>
+							<input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
+						</label>
+					</div>
+				</div>
 
-                <div class="control-group">
-                    <label>Last Name <span class="required">*</span></label>
-                    <div style="margin-left: 0px;" class="controls">
-                        <input style="height:20px" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
-                    </div>
-                </div>
-                <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
-                
-                <div>
-                    <label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
-                    <input type="radio" name="Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
-                    <input type="radio" name="Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
-                </div>
-                
-                @EzForm.DateInput("DateOfBirth", "Date of Birth")
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="attardi-input"><span>Last Name</span>
+							<input style="height:20px" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
+				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
+				
+				<div class="form_field_container GenderCtrl">
+					Gender
+					<span class="required">*</span>
+					<input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
+					<input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
+				</div>
+				
+				@EzForm.DateInput("DateOfBirth", "Date of Birth")
 
-                <div class="control-group">
-                    <label class="control-label" for="MartialStatus">Martial Status <span class="required">*</span></label>
-                    <div class="controls">
-                        <select style="height:30px; width:345px" id="MartialStatus" name="MartialStatus">
-                            <option>-</option>
-                            <option value="Single">Single</option>
-                            <option value="Married">Married</option>
-                            <option value="Divorced">Divorced</option>
-                            <option value="Widow/er">Widow/er</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                <br/>
-                <h2 style="padding-left:0" >Your Current Residential Address</h2>
-                @EzForm.AddressInput("PersonalAddress", "Potcode")
-                
-                <div class="control-group">
-                    <label class="control-label" for="TimeAtAddress">Length of time at address <span class="required">*</span></label>
-                    <div class="controls">
-                        <select style="height:30px; width:345px" id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select">
-                            <option selected="selected" value="">-</option>
-                            <option value="1">1 year</option>
-                            <option value="2">2 years</option>
-                            <option value="3">More than 3 years</option>
-                        </select>
-                    </div>
-                </div>
-                
-                @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input"><span>Martial Status</span>
+							<select class="form_field" id="MartialStatus" name="MartialStatus">
+								<option></option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Divorced">Divorced</option>
+								<option value="Widow/er">Widow/er</option>
+								<option value="Other">Other</option>
+							</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
 
-                <div class="control-group">
-                    <label class="control-label" for="ResidentialStatus">Residential Status <span class="required">*</span></label>
-                    <div class="controls">
-                        <select style="height:30px; width:345px" id="ResidentialStatus" name="ResidentialStatus" class="select">
-                            <option>-</option>
-                            <option value="Home owner">Home owner</option>
-                            <option value="Renting">Renting</option>
-                            <option value="Living with parents">Living with parents</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <br/>
-                <h2 style="padding-left:0" >Your Contact Details</h2>
-                <div class="control-group">
-                    <label class="control-label">Home Phone Number <span class="required">*</span></label>
-                    <div class="controls">
-                        <input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" size="50"/>
-                    </div>
-                </div>
+				<h2 class="form_section">Your Current Residential Address</h2>
 
-                <div class="control-group">
-                    <label class="control-label">Mobile Number</label>
-                    <div class="controls">
-                        <input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" size="50" />
-                    </div>
-                </div>
-                
-                <br/>
-                <h2 style="padding-left:0" >Your Past 12 Months Turnover</h2> 
-                <div class="control-group">
-                    <label for="OverallTurnOver">Your Total Online Sales (£) <span class="required">*</span></label>
-                    <div class="controls cashControlls">           
-                        <input style="height:20px" id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" size="50" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="WebSiteTurnOver">Your Total Online & Offline Sales (£) <span class="required">*</span></label>
-                    <div class="controls cashControlls">           
-                        <input style="height:20px" id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" size="50" />
-                    </div>
-                </div>
-                   
-                <br/>
-                <h2 style="padding-left:0">Your Company Information</h2> 
-                
-                <div>
-                    <div class="control-group typeOfBussiness">
-                        <label class="control-label">Your Type of Business <span class="required">*</span></label>
-                        <div class="controls">
-                            <select style="height:30px; width:345px" name="TypeOfBusiness">
-                                <option value="">-</option>
-                                <option value="Entrepreneur">Sole Trader (not Inc.)</option>
-                                <option value="SoleTrader">Sole Trader (Inc.)</option>
-                                <option value="PShip3P">Partnership (Up to 3)</option>
-                                <option value="PShip">Partnership (More than 3)</option>
-                                <option value="Limited">Limited Company</option>
-                                <option value="LLP">LLP</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+				@EzForm.AddressInput("PersonalAddress", "Potcode")
+				
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input"><span>Length of time at address</span>
+							<select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
+								<option selected="selected" value=""></option>
+								<option value="1">1 year</option>
+								<option value="2">2 years</option>
+								<option value="3">More than 3 years</option>
+							</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
 
-                <hr />
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span>Residential Status</span>
+								<select id="ResidentialStatus" name="ResidentialStatus" class="select form_field">
+									<option></option>
+									<option value="Home owner">Home owner</option>
+									<option value="Renting">Renting</option>
+									<option value="Living with parents">Living with parents</option>
+								</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
 
-                <div class="control-group">
-                    <div class="controls">
-                        <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                            <input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
-                            I have read and accept the <a>terms and conditions</a> of the credit bureau search
-                        </label>
-                    </div>
-                </div>
-            }
-        </div>
+				<h2 class="form_section">Your Contact Details</h2>
 
-        <div class="">
-            <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
-            <a href="#" class="btn-back button orange back pull-right">Back</a>
-        </div>
-    </div>
+				<div class="control-group form_field_container">
+					<label class="control-label attardi-input"><span>Home Phone Number</span>
+						<div class="controls">
+							<input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" size="50"/>
+						</div>
+					</label>
+					<span class="required">*</span>
+				</div>
+
+				<div class="control-group form_field_container">
+					<label class="control-label attardi-input"><span>Mobile Number</span>
+					<div class="controls">
+						<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
+					</div></label>
+				</div>
+
+				<h2 class="form_section">Your Company Information</h2> 
+
+				<div class="control-group typeOfBussiness form_field_container">
+					<div class="controls">
+						<label class="attardi-input">
+							<span>Your Type of Business</span>
+							<select class="form_field" name="TypeOfBusiness">
+								<option value=""></option>
+								<option value="Entrepreneur">Sole Trader (not Inc.)</option>
+								<option value="SoleTrader">Sole Trader (Inc.)</option>
+								<option value="PShip3P">Partnership (Up to 3)</option>
+								<option value="PShip">Partnership (More than 3)</option>
+								<option value="Limited">Limited Company</option>
+								<option value="LLP">LLP</option>
+							</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
+
+				<div class="control-group form_field_container">
+					<label class="attardi-input"><span>Your Total Online Sales (£)</span>
+						<div class="controls cashControlls">
+							<input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
+						</div>
+					</label>
+					<span class="required">*</span>
+				</div>
+
+				<div class="control-group form_field_container">
+					<label class="attardi-input"><span>Your Total Online & Offline Sales (£)</span>
+						<div class="controls cashControlls">
+							<input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
+						</div>
+					</label>
+					<span class="required">*</span>
+				</div>
+
+				<hr />
+
+				<div class="control-group">
+					<div class="controls">
+						<label for="ConsentToSearch" class="editor-label-with-checkbox">
+							<input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
+							I have read and accept the <a>terms and conditions</a> of the credit bureau search
+						</label>
+					</div>
+				</div>
+   }
+		</div>
+
+		<div class="">
+			<a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
+			<a href="#" class="btn-back button orange back pull-right">Back</a>
+		</div>
+	</div>
 }
-@helper Director()
-{
-    <div>
-        <h2 style="padding-left:0">Additional Directors (Optional)</h2>
+@helper Director() {
+	<div>
+		<h2 style="padding-left:0">Additional Directors (Optional)</h2>
 
-        <div class="directorArea"></div>
+		<div class="directorArea"></div>
 
-        <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
-        
-        <input id="addDirector" class="btn green" type="button" value="Add directors" />
-    </div>
-}
-
-@helper LimitedInfo()
-{
-    <div class="row-fluid">
-        <h2 style="padding-left:0">Company Info</h2> 
-        <div style="margin-bottom: 10px;">
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" }))
-            {
-                <div class="control-group">
-                    <label for="LimitedCompanyNumber" class="control-label">Registration # <span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" size="50" class="form_field" />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="LimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" size="50" class="form_field" />
-                    </div>
-                </div>
-                
-                @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-                
-                <div class="control-group">
-                    <label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
-                    </div>
-                </div>
-                    
-                <input type="hidden" name="LimitedRefNum" class="RefNum" />
-
-                <div class="directors">
-                </div>
-            }
-
-        </div>
-        <div class="">
-            <a href="#" class="next btn-continue button orange pull-right">Complete</a>
-            <a href="#" class="back btn-back button orange pull-right">Back</a>
-        </div>
-    </div>
+		<span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
+		
+		<input id="addDirector" class="btn green" type="button" value="Add directors" />
+	</div>
 }
 
-@helper Nonlimitedinfo()
-{
-    <div class="row-fluid">
-        <h2 style="padding-left:0">Company Info</h2>
-        <div style="margin-bottom: 10px;">
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForml" }))
-            {
-                <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-                
-                <div class="control-group">
-                    <label for="NonLimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" size="50" class="form_field" />
-                    </div>
-                </div>
-                
-                @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+@helper LimitedInfo() {
+	<div class="row-fluid">
+		<h2 style="padding-left:0">Company Info</h2> 
+		<div style="margin-bottom: 10px;">
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+				<div class="control-group">
+					<label for="LimitedCompanyNumber" class="control-label">Registration # <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label for="LimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
+				
+				<div class="control-group">
+					<label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+					</div>
+				</div>
+					
+				<input type="hidden" name="LimitedRefNum" class="RefNum" />
 
-                <div class="control-group">
-                    <label class="control-label" for="NonLimitedTimeAtAddress">Resided at Address <span class="required">*</span></label>
-                    <div class="controls">
-                        <select style="height:30px; width:345px" id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select">
-                            <option selected="selected" value="">-</option>
-                            <option value="1">1 year</option>
-                            <option value="2">2 years</option>
-                            <option value="3">More than 3 years</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="NonLimitedTimeInBusiness">Time in Business <span class="required">*</span></label>
-                    <div class="controls">
-                        <select style="height:30px; width:345px" id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select">
-                            <option selected="selected" value="">-</option>
-                            <option value="1">1 year</option>
-                            <option value="2">2 years</option>
-                            <option value="3">3 years</option>
-                            <option value="4">4 years</option>
-                            <option value="5">5 years</option>
-                            <option value="6">6 years</option>
-                            <option value="7">7 years</option>
-                            <option value="8">8 years</option>
-                            <option value="9">9 years</option>
-                            <option value="101">More than 10 years</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="NonLimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
-                    <div class="controls">
-                        <input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
-                    </div>
-                </div>
+				<div class="directors">
+				</div>
+   }
 
-                <div class="directors">
-                </div>
-            }
+		</div>
+		<div class="">
+			<a href="#" class="next btn-continue button orange pull-right">Complete</a>
+			<a href="#" class="back btn-back button orange pull-right">Back</a>
+		</div>
+	</div>
+}
 
-        </div>
-        <div class="">
-            <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
-            <a href="#" class="back btn-back button orange pull-right">Back</a>
-        </div>
-    </div>
+@helper Nonlimitedinfo() {
+	<div class="row-fluid">
+		<h2 style="padding-left:0">Company Info</h2>
+		<div style="margin-bottom: 10px;">
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForml" })) {
+				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+				
+				<div class="control-group">
+					<label for="NonLimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+					<div class="controls">
+						<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+
+				<div class="control-group">
+					<label class="control-label" for="NonLimitedTimeAtAddress">Resided at Address <span class="required">*</span></label>
+					<div class="controls">
+						<select style="height:30px; width:345px" id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select">
+							<option selected="selected" value="">-</option>
+							<option value="1">1 year</option>
+							<option value="2">2 years</option>
+							<option value="3">More than 3 years</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="NonLimitedTimeInBusiness">Time in Business <span class="required">*</span></label>
+					<div class="controls">
+						<select style="height:30px; width:345px" id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select">
+							<option selected="selected" value="">-</option>
+							<option value="1">1 year</option>
+							<option value="2">2 years</option>
+							<option value="3">3 years</option>
+							<option value="4">4 years</option>
+							<option value="5">5 years</option>
+							<option value="6">6 years</option>
+							<option value="7">7 years</option>
+							<option value="8">8 years</option>
+							<option value="9">9 years</option>
+							<option value="101">More than 10 years</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label for="NonLimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+					<div class="controls">
+						<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+					</div>
+				</div>
+
+				<div class="directors">
+				</div>
+   }
+
+		</div>
+		<div class="">
+			<a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
+			<a href="#" class="back btn-back button orange pull-right">Back</a>
+		</div>
+	</div>
 }
 
 <script id="personinfo-template" type="text/template">
-    @PersonalInfo()
+	@PersonalInfo()
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-    @LimitedInfo()
+	@LimitedInfo()
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
-      @Nonlimitedinfo()
+	  @Nonlimitedinfo()
 </script>
 
 <script id="address-popup-template" type="text/template">
-        @{Html.RenderPartial("_AddressPopupTemplate");}
+		@{Html.RenderPartial("_AddressPopupTemplate");}
 </script>
 
 <script id="address-template" type="text/template">
-       @{Html.RenderPartial("_AddressTemplate");}
+	   @{Html.RenderPartial("_AddressTemplate");}
 </script>
 
 <script id="director-edit-template" type="text/template">
-    @Director()
+	@Director()
 </script>
 
 <script id="oneDirector" type="text/template">
-    <%_.each(directors, function(director, i){%>
-        <div class="Directors">    
-            <h1 style="padding-left:0;">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
-            
-            <div class="control-group">
-                <label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
-                <div class="controls">
-                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
-                </div>
-            </div>
+	<%_.each(directors, function(director, i){%>
+		<div class="Directors">	
+			<h1 style="padding-left:0;">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
+			
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
+				</div>
+			</div>
 
-            <div class="control-group">
-                <label for="<%-preffix%>[<%=i%>].Middle" class="control-label">Middle Initial</label>
-                <div class="controls">
-                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
-                </div>
-            </div>
-    
-            <div class="control-group">
-                <label for="<%-preffix%>[<%=i%>].Surname" class="control-label">Surname <span class="required">*</span></label>
-                <div class="controls">
-                    <input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
-                </div>
-            </div>    
-    
-            <div>
-                <label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
-                <input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
-                <input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
-            </div>
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Middle" class="control-label">Middle Initial</label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+				</div>
+			</div>
+	
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Surname" class="control-label">Surname <span class="required">*</span></label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
+				</div>
+			</div>	
+	
+			<div>
+				<label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
+				<input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
+				<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
+			</div>
 
-            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)    
+			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)	
 
-            @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
-        </div>
-    <%
-    })
-    %>
+			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
+		</div>
+	<%
+	})
+	%>
 </script>
 
 <script id="director-hidden-template" type="text/template">
-    <%_.each(directors, function(director, i){%>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Name" value="<%- director.Name %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Middle" value="<%- director.Middle %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Surname" value="<%- director.Surname %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirth" value="<%- director.DateOfBirth %>"/>
-    <%});%>
+	<%_.each(directors, function(director, i){%>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Name" value="<%- director.Name %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Middle" value="<%- director.Middle %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Surname" value="<%- director.Surname %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirth" value="<%- director.DateOfBirth %>"/>
+	<%});%>
 </script>
 
 <script id="lastWizardThankYouPage" type="text/template">
-    <div>
-        <section id="full_width">
-            <div style="margin: 50px auto; width: 600px;">
-                <div style="padding: 20px; margin: 0 0 20px 0; background: #fff; border: 1px #ccc solid;">
-                    <h2>Thank you</h2>
-                    <p>We have the infomation we need and are processing your application. You will be notified by email as soon as it's ready</p>
-                    <p>If you haven't already we would suggest that you read through <a href="#">Our Loans Explained</a> and understand what repayment method best suits your business needs.</p>
-                    <p><strong>Remember you can pay any amount at any time during the loan period and there are not penalties for early repayments.</strong></p>
-                </div>
-                <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Back to account</a>
-            </div>
-        </section>
-        <div class="clear"></div>
-        <br />
-        <br />
-        <br />
-    </div>
+	<div>
+		<section id="full_width">
+			<div style="margin: 50px auto; width: 600px;">
+				<div style="padding: 20px; margin: 0 0 20px 0; background: #fff; border: 1px #ccc solid;">
+					<h2>Thank you</h2>
+					<p>We have the infomation we need and are processing your application. You will be notified by email as soon as it's ready</p>
+					<p>If you haven't already we would suggest that you read through <a href="#">Our Loans Explained</a> and understand what repayment method best suits your business needs.</p>
+					<p><strong>Remember you can pay any amount at any time during the loan period and there are not penalties for early repayments.</strong></p>
+				</div>
+				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Back to account</a>
+			</div>
+		</section>
+		<div class="clear"></div>
+		<br />
+		<br />
+		<br />
+	</div>
 </script>
 
 
 @{
-    Html.RenderPartial("_TargetingTemplate");
+	Html.RenderPartial("_TargetingTemplate");
 }
 
 <script id="consent-agreement-temlate" type="text/template">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Consent</h3>
-    </div>
-    <div id="consent-conent" class="modal-body consent-dialog">
-        @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
-        
-        <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%> </p>
-        <p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="pull-right print print-link">Print</a>
-        <a style="margin-right: 20px;"class="pull-right download pdf-link">Download</a>
-    </div>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Consent</h3>
+	</div>
+	<div id="consent-conent" class="modal-body consent-dialog">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+		
+		<p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%> </p>
+		<p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="pull-right print print-link">Print</a>
+		<a style="margin-right: 20px;"class="pull-right download pdf-link">Download</a>
+	</div>
 </script>

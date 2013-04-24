@@ -28,7 +28,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 		setTimeout(function () {
 			var def = input.attr('title');
-			if (!input.val() || (input.val() == def)) {
+
+			var bIsEmpty = input.val() && (input.val() == input.attr('empty_value'));
+			
+			if (bIsEmpty || !input.val() || (input.val() == def)) {
 				input.prev('span').css('visibility', '');
 				if (def) {
 					var dummy = $('<label></label>').text(def).css('visibility', 'hidden').appendTo('body');
@@ -49,25 +52,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		}
 	};
 
-	$(document).on('cut keydown paste change', '.attardi-input input, .attardi-input textarea', toggleLabel);
+	$(document).on('cut keydown paste change', '.attardi-input input, .attardi-input textarea, .attardi-input select', toggleLabel);
 
-	$(document).on('focusin focus', '.attardi-input input, .attardi-input textarea', function () {
+	$(document).on('focusin focus', '.attardi-input input, .attardi-input textarea, .attardi-input select', function () {
 		$(this).prev('span').addClass('active');
 	});
 
-	$(document).on('focusout blur', '.attardi-input input, .attardi-input textarea', function () {
+	$(document).on('focusout blur', '.attardi-input input, .attardi-input textarea, .attardi-input select', function () {
 		$(this).prev('span').removeClass('active');
 	});
 
 	// set things up as soon as the DOM is ready
 	$(function () {
-		$('.attardi-input input, .attardi-input textarea').each(function () { toggleLabel.call(this); });
+		$('.attardi-input input, .attardi-input textarea, .attardi-input select').each(function () { toggleLabel.call(this); });
 	});
 
 	// do it again to detect Chrome autofill
 	$(window).load(function () {
 		setTimeout(function () {
-			$('.attardi-input input, .attardi-input textarea').each(function () { toggleLabel.call(this); });
+			$('.attardi-input input, .attardi-input textarea, .attardi-input select').each(function () { toggleLabel.call(this); });
 		}, 0);
 	});
 })(jQuery);

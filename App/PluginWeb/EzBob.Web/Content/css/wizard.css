@@ -7,12 +7,6 @@
     padding-right: 10px !important;
 }
 
-#securityQuestion {
-	width: 414px;
-	padding: 0;
-	height: 30px;
-}
-
 span.inform {
 	display: inline-block;
 	-webkit-box-shadow: 0 0 10px #ccc;
@@ -226,3 +220,24 @@ ul.list_none
 }
 
 #AccountNumber { width: 215px;}
+
+.GenderCtrl .required {
+	margin-right: 17px;
+}
+
+.GenderCtrl input {
+	margin: -5px 0 0 15px;
+}
+
+.GenderCtrl label {
+	display: inline;
+	font-weight: normal;
+	margin-left: 5px;
+	text-decoration: underline;
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+h2.form_section, h2.form_start { padding-left: 0!important; }
+h2.form_section { margin-top: 1em; }

@@ -45,3 +45,5 @@ App/clients/Administrator/log/*.log
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopbutton.js
 Tools/LogViewer/preferences.xml
 Tools/LogViewer/*.log
+App/clients/*/log/*.log*
+App/clients/Maven/nodelist.xml

@@ -32,41 +32,52 @@
 		</div>
 
 		<div id="strength-password-view" class="form_field_container">
-			@Html.Password("signupPass1", "", new { @tabindex = 2, @class = "form_field", placeholder = "Password" })
+			<label class ="attardi-input">
+				<span>Password</span>
+				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
+			</label>
 			<span class="required">*</span>
 			<p id="message" class="help-block"></p>
 		</div>
 
 		<div class="form_field_container">
-			@Html.Password("signupPass2", "", new { @tabindex = 3, @class = "form_field", placeholder = "Confirm password" })
+			<label class ="attardi-input">
+				<span>Confirm password</span>
+				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
+			</label>
 			<span class="required">*</span>
     <img id="Password2Image"/>
 		</div>
 		
 		<div class="form_field_container">
 			<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
-			<span class="inform"><select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
-				<optgroup label="Secret question">
+			<span class="inform"><label class="attardi-input">
+				<span>Secret question</span>
+				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+					<option></option>
 					@if (securityQuestions != null) {
 						foreach (SecurityQuestion item in securityQuestions) {
 							<option value="@item.Id">@item.Name</option>
 						} // foreach
 					} // if
-				</optgroup>
-			</select></span>
+				</select>
+			</label></span>
 			<span class="required">*</span>
 		</div>
 
 		<div class="form_field_container">
-			@Html.TextBox("SecurityAnswer", "", new { @tabindex = 5, @class = "form_field", placeholder = "Secret answer" })
+			<label class="attardi-input">
+				<span>Secret answer</span>
+				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
+			</label>
 			<span class="required">*</span>
     <img id="SecretAnswerImage"/>
 		</div>
 
+		<div class="form_field_container">
 		@EzForm.Captcha(captchamode)
+		</div>
 
-		<br>
-		<br>
 		<input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
 	</div>
 }

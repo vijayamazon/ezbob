@@ -1,5 +1,6 @@
 ﻿.attardi-input {
 	display: inline-block;
+	margin: 0 !important;
 }
 
 .attardi-input span {

@@ -4,9 +4,9 @@
 	<div class="inner">
 		<h1>Login</h1>
 		<section id="content">
-			<h2>Funding over £2.5m loans and counting!</h2>
-			<h3>Already have an account?</h3>
-			<p>Great! Sign in below</p>
+			<h2>Welcome back!</h2>
+			<!-- h3>Already have an account?</h3>
+			<p>Great! Sign in below</p -->
 			@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
 			<div class="form_field_container">
@@ -39,7 +39,7 @@
 					Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
 				</label>
 			</div>
-			<input type="submit" value="Conitnue &raquo;" class="button grey" id="loginSubmit" />
+			<input type="submit" value="Conitnue &raquo;" class="button orange" id="loginSubmit" />
 			<p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
 		</section>
 		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Login.cshtml");}
