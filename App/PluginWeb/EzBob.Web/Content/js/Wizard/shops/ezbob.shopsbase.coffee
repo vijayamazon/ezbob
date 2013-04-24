@@ -18,7 +18,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     completed: (name) ->
         @stores[name].button.update()
-        @$el.empty()
         @render()
         @trigger "completed"
 
