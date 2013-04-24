@@ -15,7 +15,7 @@ body{background:#1F2022; font-family: Arial, Helvetica, sans-serif; font-size:14
 #wrapper, footer{background:#eee url(images/body_bg.jpg);}
 
 /*-- Padding for inner sections --*/
-.inner{width:960px; padding:10px; margin:0 auto;min-height: 500px; }
+.inner{width:960px; padding:10px; margin:0 auto;/*min-height: 500px;*/ }
 .inner_nopadding{width:980px; padding:0; margin:0 auto; }
 /*-- login bar --*/
 #pre_header{
