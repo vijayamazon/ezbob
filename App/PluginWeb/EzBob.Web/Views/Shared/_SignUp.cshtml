@@ -1,58 +1,72 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure
 @using Scorto.NHibernate.Model
 @using StructureMap
 @model dynamic
 @{
-    string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
-    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+	string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
+	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
-{
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
+	<div class="inner">
     <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
     <img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
     <img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
 
-    <h2>Funding over £2.5m loans and counting!</h2>
-    <p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
+		<h2>Funding over £2.5m loans and counting!</h2>
+		<p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
 
-    <h3>Create an account</h3>
-    <p>Complete the details below to begin</p>
-    <label>Email Address <span class="required">*</span></label>
-    <input type="text" name="EMail" id="signupEmail" value="" tabindex="1" class="form_field" size="50" />
+		<h3>Create an account</h3>
+		<p>Complete the details below to begin</p>
     <img id="EmailImage"/>
 
 
-    <div id="strength-password-view">
-        <label class="inform">Password <span class="required">*</span></label>
-        <input type="password" name="signupPass1" id="signupPass1" value="" tabindex="2" class="form_field" size="50" />
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Email address</span>
+				<input type="email" name="signupEmail" id="signupEmail" tabindex="1" class="form_field"/>
         <img id="Password1Image"/>
-        <p id="message" class="help-block"></p>
-    </div>
+			</label>
+			<span class="required">*</span>
+		</div>
 
-    <label class="inform">Confirm Password <span class="required">*</span></label>
-    <input type="password" name="signupPass2" id="signupPass2" value="" tabindex="3" class="form_field" size="50" />
+		<div id="strength-password-view" class="form_field_container">
+			@Html.Password("signupPass1", "", new { @tabindex = 2, @class = "form_field", placeholder = "Password" })
+			<span class="required">*</span>
+			<p id="message" class="help-block"></p>
+		</div>
+
+		<div class="form_field_container">
+			@Html.Password("signupPass2", "", new { @tabindex = 3, @class = "form_field", placeholder = "Confirm password" })
+			<span class="required">*</span>
     <img id="Password2Image"/>
-    <label class="inform">Select a Secret Question <span class="required">*</span></label>
-    <!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
-    <span class="inform">
-        <select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
-            @if (securityQuestions != null)
-            {
-                foreach (SecurityQuestion item in securityQuestions)
-                {
-                <option value="@item.Id">@item.Name</option>
-                }
-            }
-        </select></span>
+		</div>
+		
+		<div class="form_field_container">
+			<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
+			<span class="inform"><select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+				<optgroup label="Secret question">
+					@if (securityQuestions != null) {
+						foreach (SecurityQuestion item in securityQuestions) {
+							<option value="@item.Id">@item.Name</option>
+						} // foreach
+					} // if
+				</optgroup>
+			</select></span>
+			<span class="required">*</span>
+		</div>
 
-    <label class="inform">Secret Answer <span class="required">*</span></label>
-    <input type="text" name="SecurityAnswer" id="SecurityAnswer" value="" tabindex="5" class="form_field" size="50" />
+		<div class="form_field_container">
+			@Html.TextBox("SecurityAnswer", "", new { @tabindex = 5, @class = "form_field", placeholder = "Secret answer" })
+			<span class="required">*</span>
     <img id="SecretAnswerImage"/>
+		</div>
 
-    @EzForm.Captcha(captchamode)
+		@EzForm.Captcha(captchamode)
 
-    <br />
-    <br />
-    <input type="submit" id="signupSubmitButton" value="Continue &raquo;" class="alignright button green disabled" />
+		<br>
+		<br>
+		<input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
+	</div>
 }

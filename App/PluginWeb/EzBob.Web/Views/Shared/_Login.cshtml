@@ -1,32 +1,50 @@
 ﻿@model EzBob.Web.Models.LogOnModel
-@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
-{
-    <div class="inner">
-        <h1>Login</h1>
-        <section id="content">
-            <h2>Funding over £2.5m loans and counting!</h2>
-            <h3>Already have an account?</h3>
-            <p>Great! Sign in below</p>
-            <label>Email Address <span class="required">*</span></label>
-            @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
-            @Html.TextBoxFor(m => m.UserName, new { @class = "form_field", placeholder = "enter your email", size = "50", autofocus = "autofocus" })
-            @Html.ValidationMessageFor(m => m.UserName)
-            <br />
-            <label>Password <span class="required">*</span></label>
-            @Html.PasswordFor(m => m.Password, new { @class = "form_field", size = "50", autocomplete = "off" })
-            @Html.ValidationMessageFor(m => m.Password)
-            <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
-            <label class="checkbox" for="RememberMe" style="font-weight: normal">
-                Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
-            </label>
-            <br />
-            <br />
-            <input type="submit" value="Conitnue &raquo;" class="button grey" id="loginSubmit"/>
-            <p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
-        </section>
-        @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Login.cshtml");}
-    </div>
-    <div id="DontHaveAccount">
-    </div>
+
+@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" })) {
+	<div class="inner">
+		<h1>Login</h1>
+		<section id="content">
+			<h2>Funding over £2.5m loans and counting!</h2>
+			<h3>Already have an account?</h3>
+			<p>Great! Sign in below</p>
+			@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
+
+			<div class="form_field_container">
+				<label class="attardi-input">
+					<span>Email address</span>
+					<input type="email" autofocus="autofocus" class="form_field" data-val="true"
+						data-val-required="The email address field is required."
+						id="UserName" name="UserName"/>
+				</label>
+				<span class="required">*</span>
+			</div>
+
+			@Html.ValidationMessageFor(m => m.UserName)
+
+			<div class="form_field_container">
+				<label class="attardi-input">
+					<span>Password</span>
+					<input type="password" autocomplete="off" class="form_field" data-val="true"
+						data-val-required="The password field is required."
+						id="Password" name="Password"/>
+				</label>
+				<span class="required">*</span>
+			</div>
+
+			@Html.ValidationMessageFor(m => m.Password)
+			<input name="RememberMe" type="hidden" value="@Model.RememberMe" />
+
+			<div class="form_field_container">
+				<label class="checkbox" for="RememberMe" style="font-weight: normal">
+					Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
+				</label>
+			</div>
+			<input type="submit" value="Conitnue &raquo;" class="button grey" id="loginSubmit" />
+			<p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
+		</section>
+		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Login.cshtml");}
+	</div>
+	<div id="DontHaveAccount">
+	</div>
     
 }

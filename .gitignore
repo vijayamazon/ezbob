@@ -42,5 +42,6 @@ App/clients/Maven/log/*.log
 Tools/LogViewer/logentries.db
 Tools/LogViewer/logentries.db.bak
 App/clients/Administrator/log/*.log
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopbutton.js
 Tools/LogViewer/preferences.xml
 Tools/LogViewer/*.log

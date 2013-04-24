@@ -454,6 +454,7 @@
     <Content Include="Content\css\shops.css" />
     <Content Include="Content\css\sidebar.css" />
     <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\attardi.labels.css" />
     <Content Include="Content\css\video.css" />
     <Content Include="Content\css\wizard-header.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
@@ -774,6 +775,7 @@
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
     <Content Include="Content\js\lib\handlebars.js" />
     <Content Include="Content\js\lib\html5shiv.js" />
+    <Content Include="Content\js\lib\attardi.labels.js" />
     <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.barRenderer.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.BezierCurveRenderer.js" />

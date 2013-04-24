@@ -36,6 +36,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/video-js.css")
                 .Add("~/Content/css/shops.css")
                 .Add("~/Content/css/app.css")
+                .Add("~/Content/css/attardi.labels.css")
                 
                 .MvcRender("~/Content/css/min/combined_#.css");
         }
@@ -62,6 +63,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/shops.css")
                 .Add("~/Content/css/choosen/chosen.css")
                 .Add("~/Content/css/app.css")
+                .Add("~/Content/css/attardi.labels.css")
                 .MvcRender("~/Content/css/min/customer_#.css");
         }
         public static MvcHtmlString RenderPrintCss()
@@ -105,6 +107,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/shops.css")
                 .Add("~/Content/css/coin-slider-styles.css")
                 .Add("~/Content/css/app.css")
+                .Add("~/Content/css/attardi.labels.css")
                 
                 .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
@@ -154,6 +157,7 @@ namespace EzBob.Web.Infrastructure
                             .Add("~/Content/js/controls/ezbob.video.js")
                             .Add("~/Content/js/ezbob.csrf.js")
                             .Add("~/Content/js/login/ezbob.restorePassword.coffee")
+                            .Add("~/Content/js/lib/attardi.labels.js")
                             .AddString(GetDbStrings())
                             
                             .MvcRender("~/Content/js/min/jslib_#.js");
@@ -178,6 +182,7 @@ namespace EzBob.Web.Infrastructure
                             .Add("~/Content/js/lib/jqgridHelpers.js")
                             .Add("~/Content/js/lib/jquery.form.js")
                             .Add("~/Content/js/lib/splitter.js")
+                            .Add("~/Content/js/lib/attardi.labels.js")
                             
                             .Add("~/Content/js/lib/jqplot/jquery.jqplot.js")
                             .Add("~/Content/js/lib/jqplot/plugins/jqplot.dateAxisRenderer.js")
