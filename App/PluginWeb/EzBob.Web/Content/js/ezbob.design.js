@@ -797,7 +797,7 @@ EzBob.validateCompanyDetailForm = function (el) {
             ResidentialStatus: { regex: "^[a-zA-Z ]+$" },
             Gender: { regex: "^M|F$", required: true },
             MartialStatus: { regex: "^Single|Married|Divorced|Widow/er|Other$" },
-            OverallTurnOver: { required: true, number: true, min:1 },
+            OverallTurnOver: { required: true, number: true, min: 1 },
             WebSiteTurnOver: { required: true, number: true, min: 1 },
             TimeAtAddress: { required: true },
 
@@ -833,6 +833,58 @@ EzBob.validateCompanyDetailForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight
+    });
+};
+
+EzBob.checkCompanyDetailForm = function (el) {
+    var e = el || $(".CompanyDetailForm");
+    return e.validate({
+        ignore: "",
+        rules: {
+            //personal info
+            FirstName: EzBob.Validation.NameValidationObject,
+            Surname: { required: true },
+            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
+            DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            TypeOfBusiness: { required: true },
+            ResidentialStatus: { regex: "^[a-zA-Z ]+$" },
+            Gender: { regex: "^M|F$", required: true },
+            MartialStatus: { regex: "^Single|Married|Divorced|Widow/er|Other$" },
+            OverallTurnOver: { required: true, number: true, min: 1 },
+            WebSiteTurnOver: { required: true, number: true, min: 1 },
+            TimeAtAddress: { required: true },
+
+            //limited company info
+            LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
+            LimitedCompanyName: { required: true, minlength: 2 },
+            LimitedOverallTurnOver: { required: true, number: true },
+            LimitedWebSiteTurnOver: { required: true, number: true },
+            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
+
+            //Non limited company info
+            NonLimitedCompanyName: { required: true, minlength: 2 },
+            NonLimitedTimeInBusiness: { required: true, digits: true },
+            NonLimitedOverallTurnOver: { required: true, number: true, minlength: 2 },
+            NonLimitedWebSiteTurnOver: { required: true, number: true, minlength: 2 },
+            NonLimitedTimeAtAddress: { required: true, digits: true },
+            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" }
+        },
+        messages: {
+            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
+            day: { digits: "Incorect day" },
+            month: { digits: "Incorect month" },
+            year: { digits: "Incorect year" },
+            ResidentialStatus: { regex: "This field is required" },
+            TimeAtAddress: { regex: "This field is required" },
+            Gender: { regex: "Gender field is required" },
+            MartialStatus: { regex: "Martial status field is required" },
+            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            MobilePhone: { regex: "Please enter a valid UK number" },
+            DayTimePhone: { regex: "Please enter a valid UK number" },
+            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
+        }
     });
 };
 

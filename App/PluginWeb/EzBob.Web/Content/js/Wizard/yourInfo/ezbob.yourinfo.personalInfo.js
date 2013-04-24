@@ -15,10 +15,22 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'change input[name="ConsentToSearch"]': 'consentToSearchChanged',
-            'click label[for="ConsentToSearch"] a': 'showConsent'
+            'click label[for="ConsentToSearch"] a': 'showConsent',
+            'change input[name="FirstName"]': 'firstNameChanged',
+            'change input[name="MiddleInitial"]': 'middleNameChanged',
+            'change input[name="Surname"]': 'surnameChanged'
         });
 
         this.constructor.__super__.initialize.call(this);
+    },
+    firstNameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    middleNameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    surnameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
     },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
@@ -40,6 +52,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
 
         this.$el.find("#TimeAtAddress").trigger("change");
+        
+        this.formChecker = EzBob.checkCompanyDetailForm(this.form);
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({

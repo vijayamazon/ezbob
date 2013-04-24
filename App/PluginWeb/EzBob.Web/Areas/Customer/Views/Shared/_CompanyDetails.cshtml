@@ -5,11 +5,14 @@
 		<h2 class="form_start">Personal information</h2>
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
-				<div class="control-group form_field_container">
+                <div class="control-group form_field_container">
 					<div class="controls">
-						<label class="attardi-input"><span>First Name</span>
-							<input class="form_field" type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
-						</label>
+					    <label class="attardi-input"><span>First Name</span>
+                            <!-- should eliminate all margins !!!!! -->
+                            <!-- Wrong validation is performed!!!!! -->
+                            <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
+						    <img id="FirstNameImage"/>
+					    </label>
 						<span class="required">*</span>
 					</div>
 				</div>
@@ -17,7 +20,8 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>Middle Name</span>
-							<input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
+						    <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
+                            <img id="MiddleNameImage"/>
 						</label>
 					</div>
 				</div>
@@ -25,7 +29,8 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>Last Name</span>
-							<input style="height:20px" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
+						    <input style="height:20px" id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
+                            <img id="SurnameImage"/>
 						</label>
 						<span class="required">*</span>
 					</div>
@@ -63,14 +68,14 @@
 				
 				<div class="control-group form_field_container">
 					<div class="controls">
-						<label class="control-label attardi-input"><span>Length of time at address</span>
-							<select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">More than 3 years</option>
-							</select>
-						</label>
+					    <label class="control-label attardi-input"><span>Length of time at address</span>
+					        <select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
+					            <option selected="selected" value=""></option>
+					            <option value="1">1 year</option>
+					            <option value="2">2 years</option>
+					            <option value="3">More than 3 years</option>
+					        </select>
+					    </label>
 						<span class="required">*</span>
 					</div>
 				</div>
