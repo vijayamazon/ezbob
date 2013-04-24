@@ -153,6 +153,7 @@
     <Compile Include="XSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="Web References\Consumer\Consumer Data UAT v1.2c.wsdl" />
     <None Include="Web References\Consumer\NunitCrap.Web_References.Consumer.OutputRoot.datasource" />
     <None Include="Web References\Consumer\Reference.map">

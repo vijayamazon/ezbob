@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
+using System.Web.Services.Protocols;
 using System.Xml;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using ExperianLib.Web_References.IDHubService;
 using EzBob.Configuration;
-using Scorto.Configuration;
 using StructureMap;
 using log4net;
 using AddressType = ExperianLib.Web_References.IDHubService.AddressType;
@@ -15,9 +16,9 @@ namespace ExperianLib.IdIdentityHub
 {
     public class IdHubService
     {
-        readonly ExperianIntegrationParams _config;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(IdHubService));
-        private ExperianBankCacheRepository _bankCacheRepository;
+        private readonly ExperianIntegrationParams _config;
+        private static readonly ILog Log = LogManager.GetLogger(typeof (IdHubService));
+        private readonly ExperianBankCacheRepository _bankCacheRepository;
 
         public IdHubService()
         {
@@ -26,7 +27,10 @@ namespace ExperianLib.IdIdentityHub
         }
 
         //-----------------------------------------------------------------------------------
-        public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
+        public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender,
+                                                  DateTime birth, string addressLine1, string addressLine2,
+                                                  string addressLine3, string town, string county, string postCode,
+                                                  int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
         {
             var result = new AuthenticationResults();
 
@@ -46,29 +50,34 @@ namespace ExperianLib.IdIdentityHub
             var address = FillAddress(addressLine1, addressLine2, addressLine3, town, county, postCode);
             //AML A
             var execRequest = new ExecuteRequestType
-            {
-                EIHHeader = new EIHHeaderType
                 {
-                    ClientUser = "User1",
-                    ReferenceId = "1234"
-                },
-                ResponseType = ResponseType.Detail,
-                ProcessConfigReference = new ProcessConfigReferenceType { ItemElementName = ItemChoiceType.ProcessConfigName, Item = "AML A" },
-                Consent = ConsentType.Yes,
-                PersonalData = new PersonalDataType
-                {
-                    Name = new NameType
-                    {
-                        Forename = foreName,
-                        MiddleName = middleName,
-                        Surname = surname
-                    },
-                    BirthDate = birth,
-                    BirthDateSpecified = true,
-                    GenderSpecified = true
-                },
-                Addresses = new[]{address}
-            };
+                    EIHHeader = new EIHHeaderType
+                        {
+                            ClientUser = "User1",
+                            ReferenceId = "1234"
+                        },
+                    ResponseType = ResponseType.Detail,
+                    ProcessConfigReference =
+                        new ProcessConfigReferenceType
+                            {
+                                ItemElementName = ItemChoiceType.ProcessConfigName,
+                                Item = "AML A"
+                            },
+                    Consent = ConsentType.Yes,
+                    PersonalData = new PersonalDataType
+                        {
+                            Name = new NameType
+                                {
+                                    Forename = foreName,
+                                    MiddleName = middleName,
+                                    Surname = surname
+                                },
+                            BirthDate = birth,
+                            BirthDateSpecified = true,
+                            GenderSpecified = true
+                        },
+                    Addresses = new[] {address}
+                };
             execRequest.PersonalData.Gender = gender == "M" ? GenderType.Male : GenderType.Female;
 
             try
@@ -95,20 +104,30 @@ namespace ExperianLib.IdIdentityHub
 
                 result.Parse(r);
             }
+            catch (SoapException exception)
+            {
+                Log.Error(exception);
+                result.Error = exception.Detail.InnerText;
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Detail.InnerText),
+                               "AML A check", customerId);
+            }
             catch (Exception exception)
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
-                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message),
+                               "AML A check", customerId);
             }
-
             return result;
         }
 
         //-----------------------------------------------------------------------------------
-        public AuthenticationResults AuthenticateForcedWithCustomAddress(string foreName, string middleName, string surname, string gender, DateTime birth,
-                                                                   string houseNumber, string houseName, string street, string district,
-                                                                   string town, string county, string postCode, int customerId, string xmlForDebug = "")
+        public AuthenticationResults AuthenticateForcedWithCustomAddress(string foreName, string middleName,
+                                                                         string surname, string gender, DateTime birth,
+                                                                         string houseNumber, string houseName,
+                                                                         string street, string district,
+                                                                         string town, string county, string postCode,
+                                                                         int customerId, string xmlForDebug = "")
         {
             var result = new AuthenticationResults();
 
@@ -116,47 +135,52 @@ namespace ExperianLib.IdIdentityHub
 
             Log.DebugFormat("Request AML A service for key '{0}'", key);
             var address = new AddressType
-            {
-                AddressStatus = AddressStatusType.Current,
-                TypeOfAddress = TypeOfAddressType.UK,
-                AddressDetail = new AddressDetailType
                 {
-                    PostCode = postCode,
-                    HouseNumber = houseNumber,
-                    HouseName = houseName,
-                    Address1 = street,
-                    Address2 = district,
-                    Address3 = town,
-                    Address4 = county,
-                    Country = "GB"
-                }
-            };
+                    AddressStatus = AddressStatusType.Current,
+                    TypeOfAddress = TypeOfAddressType.UK,
+                    AddressDetail = new AddressDetailType
+                        {
+                            PostCode = postCode,
+                            HouseNumber = houseNumber,
+                            HouseName = houseName,
+                            Address1 = street,
+                            Address2 = district,
+                            Address3 = town,
+                            Address4 = county,
+                            Country = "GB"
+                        }
+                };
 
             //AML A
             var execRequest = new ExecuteRequestType
-            {
-                EIHHeader = new EIHHeaderType
                 {
-                    ClientUser = "User1",
-                    ReferenceId = "1234"
-                },
-                ResponseType = ResponseType.Detail,
-                ProcessConfigReference = new ProcessConfigReferenceType { ItemElementName = ItemChoiceType.ProcessConfigName, Item = "AML A" },
-                Consent = ConsentType.Yes,
-                PersonalData = new PersonalDataType
-                {
-                    Name = new NameType
-                    {
-                        Forename = foreName,
-                        MiddleName = middleName,
-                        Surname = surname
-                    },
-                    BirthDate = birth,
-                    BirthDateSpecified = true,
-                    GenderSpecified = true
-                },
-                Addresses = new[] { address }
-            };
+                    EIHHeader = new EIHHeaderType
+                        {
+                            ClientUser = "User1",
+                            ReferenceId = "1234"
+                        },
+                    ResponseType = ResponseType.Detail,
+                    ProcessConfigReference =
+                        new ProcessConfigReferenceType
+                            {
+                                ItemElementName = ItemChoiceType.ProcessConfigName,
+                                Item = "AML A"
+                            },
+                    Consent = ConsentType.Yes,
+                    PersonalData = new PersonalDataType
+                        {
+                            Name = new NameType
+                                {
+                                    Forename = foreName,
+                                    MiddleName = middleName,
+                                    Surname = surname
+                                },
+                            BirthDate = birth,
+                            BirthDateSpecified = true,
+                            GenderSpecified = true
+                        },
+                    Addresses = new[] {address}
+                };
             execRequest.PersonalData.Gender = gender == "M" ? GenderType.Male : GenderType.Female;
 
             try
@@ -183,18 +207,27 @@ namespace ExperianLib.IdIdentityHub
 
                 result.Parse(r);
             }
+            catch (SoapException exception)
+            {
+                Log.Error(exception);
+                result.Error = exception.Detail.InnerText;
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Detail.InnerText),
+                               "AML A check", customerId);
+            }
             catch (Exception exception)
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
-                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message), "AML A check", customerId);
+                Utils.WriteLog(execRequest.ToString(), string.Format("Excecption: {0}", exception.Message),
+                               "AML A check", customerId);
             }
 
             return result;
         }
 
         //-----------------------------------------------------------------------------------
-        public AddressType FillAddress(string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode)
+        public AddressType FillAddress(string addressLine1, string addressLine2, string addressLine3, string town,
+                                       string county, string postCode)
         {
             var flatOrAppartmentNumber = string.Empty;
             var houseName = string.Empty;
@@ -202,7 +235,8 @@ namespace ExperianLib.IdIdentityHub
             var address1 = string.Empty;
             var address2 = string.Empty;
             var poBox = string.Empty;
-            if (!string.IsNullOrEmpty(addressLine1) && string.IsNullOrEmpty(addressLine2) && string.IsNullOrEmpty(addressLine3))
+            if (!string.IsNullOrEmpty(addressLine1) && string.IsNullOrEmpty(addressLine2) &&
+                string.IsNullOrEmpty(addressLine3))
             {
                 houseNumber = Regex.Match(addressLine1, "\\d*").Value;
                 if (!string.IsNullOrEmpty(houseNumber))
@@ -218,7 +252,8 @@ namespace ExperianLib.IdIdentityHub
                     houseName = addressLine1;
                 }
             }
-            else if (!string.IsNullOrEmpty(addressLine1) && !string.IsNullOrEmpty(addressLine2) && string.IsNullOrEmpty(addressLine3))
+            else if (!string.IsNullOrEmpty(addressLine1) && !string.IsNullOrEmpty(addressLine2) &&
+                     string.IsNullOrEmpty(addressLine3))
             {
                 houseNumber = Regex.Match(addressLine1, "\\d*").Value;
                 if (!string.IsNullOrEmpty(houseNumber))
@@ -239,7 +274,8 @@ namespace ExperianLib.IdIdentityHub
                     address1 = addressLine2;
                 }
             }
-            else if ((!string.IsNullOrEmpty(addressLine1) && !string.IsNullOrEmpty(addressLine2) && !string.IsNullOrEmpty(addressLine3)))
+            else if ((!string.IsNullOrEmpty(addressLine1) && !string.IsNullOrEmpty(addressLine2) &&
+                      !string.IsNullOrEmpty(addressLine3)))
             {
                 if (addressLine1.ToUpper().StartsWith("APARTMENT") || addressLine1.ToUpper().StartsWith("FLAT"))
                 {
@@ -264,29 +300,34 @@ namespace ExperianLib.IdIdentityHub
                     address2 = addressLine3;
                 }
             }
-            
+
             return new AddressType
-            {
-                AddressStatus = AddressStatusType.Current,
-                TypeOfAddress = TypeOfAddressType.UK,
-                AddressDetail = new AddressDetailType
                 {
-                    FlatOrApartmentNumber = flatOrAppartmentNumber,
-                    HouseNumber = houseNumber,
-                    HouseName = houseName,
-                    Address1 = address1,
-                    Address2 = address2,
-                    Address3 = town,
-                    Address4 = county,
-                    Country = "GB",
-                    PostCode = postCode,
-                    POBox = poBox
-                }
-            };
+                    AddressStatus = AddressStatusType.Current,
+                    TypeOfAddress = TypeOfAddressType.UK,
+                    AddressDetail = new AddressDetailType
+                        {
+                            FlatOrApartmentNumber = flatOrAppartmentNumber,
+                            HouseNumber = houseNumber,
+                            HouseName = houseName,
+                            Address1 = address1,
+                            Address2 = address2,
+                            Address3 = town,
+                            Address4 = county,
+                            Country = "GB",
+                            PostCode = postCode,
+                            POBox = poBox
+                        }
+                };
         }
 
         //-----------------------------------------------------------------------------------
-        public AccountVerificationResults AccountVerification(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, string branchCode, string accountNumber, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
+        public AccountVerificationResults AccountVerification(string foreName, string middleName, string surname,
+                                                              string gender, DateTime birth, string addressLine1,
+                                                              string addressLine2, string addressLine3, string town,
+                                                              string county, string postCode, string branchCode,
+                                                              string accountNumber, int customerId,
+                                                              bool checkInCacheOnly = false, string xmlForDebug = "")
         {
             var result = new AccountVerificationResults();
 
@@ -305,39 +346,54 @@ namespace ExperianLib.IdIdentityHub
             var address = FillAddress(addressLine1, addressLine2, addressLine3, town, county, postCode);
             //BWA
             var execRequestBwa = new ExecuteRequestType
-            {
-                EIHHeader = new EIHHeaderType
                 {
-                    ClientUser = "User1",
-                    ReferenceId = "1234"
-                },
-                ResponseType = ResponseType.Detail,
-                ProcessConfigReference = new ProcessConfigReferenceType { ItemElementName = ItemChoiceType.ProcessConfigName, Item = "BWA" },
-                Consent = ConsentType.Yes,
-                PersonalData = new PersonalDataType
-                {
-                    Name = new NameType
-                    {
-                        Forename = foreName,
-                        Surname = surname,
-                        MiddleName = middleName
-                    },
-                    BirthDate = birth,
-                    BirthDateSpecified = true,
-                    GenderSpecified = true
-                },
-                Addresses = new[]{address},
-                BankInformation = new BankInformationType
-                {
-                    CheckContext = CheckContextType.DirectCredit,
-                    CheckContextSpecified = true,
-                    AccountReference = new[]
-                    {
-                        new AccountReferenceType{TypeOfReference = TypeOfReferenceType.BankBranchCode, Reference = branchCode, ReferenceIndex = "1"},
-                        new AccountReferenceType{TypeOfReference = TypeOfReferenceType.AccountNumber, Reference = accountNumber, ReferenceIndex = "2"}
-                    }
-                }
-            };
+                    EIHHeader = new EIHHeaderType
+                        {
+                            ClientUser = "User1",
+                            ReferenceId = "1234"
+                        },
+                    ResponseType = ResponseType.Detail,
+                    ProcessConfigReference =
+                        new ProcessConfigReferenceType
+                            {
+                                ItemElementName = ItemChoiceType.ProcessConfigName,
+                                Item = "BWA"
+                            },
+                    Consent = ConsentType.Yes,
+                    PersonalData = new PersonalDataType
+                        {
+                            Name = new NameType
+                                {
+                                    Forename = foreName,
+                                    Surname = surname,
+                                    MiddleName = middleName
+                                },
+                            BirthDate = birth,
+                            BirthDateSpecified = true,
+                            GenderSpecified = true
+                        },
+                    Addresses = new[] {address},
+                    BankInformation = new BankInformationType
+                        {
+                            CheckContext = CheckContextType.DirectCredit,
+                            CheckContextSpecified = true,
+                            AccountReference = new[]
+                                {
+                                    new AccountReferenceType
+                                        {
+                                            TypeOfReference = TypeOfReferenceType.BankBranchCode,
+                                            Reference = branchCode,
+                                            ReferenceIndex = "1"
+                                        },
+                                    new AccountReferenceType
+                                        {
+                                            TypeOfReference = TypeOfReferenceType.AccountNumber,
+                                            Reference = accountNumber,
+                                            ReferenceIndex = "2"
+                                        }
+                                }
+                        }
+                };
             execRequestBwa.PersonalData.Gender = gender == "M" ? GenderType.Male : GenderType.Female;
 
             try
@@ -364,79 +420,108 @@ namespace ExperianLib.IdIdentityHub
 
                 result.Parse(r);
             }
+            catch (SoapException exception)
+            {
+                Log.Error(exception);
+                result.Error = exception.Detail.InnerText;
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Detail.InnerText),
+                               "AML A check", customerId);
+            }
             catch (Exception exception)
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
-                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message),
+                               "BWA check", customerId);
             }
 
             return result;
-
         }
 
         //-----------------------------------------------------------------------------------
-        public AccountVerificationResults AccountVerificationForcedWithCustomAddress(string foreName, string middleName, string surname,
-                                                              string gender, DateTime birth,
-                                                              string houseNumber, string houseName, string street, string district,
-                                                              string town, string county, string postCode,
-                                                              string branchCode, string accountNumber, int customerId, string xmlForDebug = "")
+        public AccountVerificationResults AccountVerificationForcedWithCustomAddress(string foreName, string middleName,
+                                                                                     string surname,
+                                                                                     string gender, DateTime birth,
+                                                                                     string houseNumber,
+                                                                                     string houseName, string street,
+                                                                                     string district,
+                                                                                     string town, string county,
+                                                                                     string postCode,
+                                                                                     string branchCode,
+                                                                                     string accountNumber,
+                                                                                     int customerId,
+                                                                                     string xmlForDebug = "")
         {
             var result = new AccountVerificationResults();
 
             var key = String.Format("{0}_{1}", branchCode, accountNumber);
 
             var address = new AddressType
-            {
-                AddressStatus = AddressStatusType.Current,
-                TypeOfAddress = TypeOfAddressType.UK,
-                AddressDetail = new AddressDetailType
                 {
-                    PostCode = postCode,
-                    HouseNumber = houseNumber,
-                    HouseName = houseName,
-                    Address1 = street,
-                    Address2 = district,
-                    Address3 = town,
-                    Address4 = county,
-                    Country = "GB"
-                }
-            };
+                    AddressStatus = AddressStatusType.Current,
+                    TypeOfAddress = TypeOfAddressType.UK,
+                    AddressDetail = new AddressDetailType
+                        {
+                            PostCode = postCode,
+                            HouseNumber = houseNumber,
+                            HouseName = houseName,
+                            Address1 = street,
+                            Address2 = district,
+                            Address3 = town,
+                            Address4 = county,
+                            Country = "GB"
+                        }
+                };
             //BWA
             var execRequestBwa = new ExecuteRequestType
-            {
-                EIHHeader = new EIHHeaderType
                 {
-                    ClientUser = "User1",
-                    ReferenceId = "1234"
-                },
-                ResponseType = ResponseType.Detail,
-                ProcessConfigReference = new ProcessConfigReferenceType { ItemElementName = ItemChoiceType.ProcessConfigName, Item = "BWA" },
-                Consent = ConsentType.Yes,
-                PersonalData = new PersonalDataType
-                {
-                    Name = new NameType
-                    {
-                        Forename = foreName,
-                        Surname = surname,
-                        MiddleName = middleName
-                    },
-                    BirthDate = birth,
-                    BirthDateSpecified = true,
-                    GenderSpecified = true
-                },
-                Addresses = new[] { address },
-                BankInformation = new BankInformationType
-                {
-                    CheckContext = CheckContextType.DirectCredit,
-                    CheckContextSpecified = true,
-                    AccountReference = new[]
-                    {
-                        new AccountReferenceType{TypeOfReference = TypeOfReferenceType.BankBranchCode, Reference = branchCode, ReferenceIndex = "1"},
-                        new AccountReferenceType{TypeOfReference = TypeOfReferenceType.AccountNumber, Reference = accountNumber, ReferenceIndex = "2"}
-                    }
-                }
-            };
+                    EIHHeader = new EIHHeaderType
+                        {
+                            ClientUser = "User1",
+                            ReferenceId = "1234"
+                        },
+                    ResponseType = ResponseType.Detail,
+                    ProcessConfigReference =
+                        new ProcessConfigReferenceType
+                            {
+                                ItemElementName = ItemChoiceType.ProcessConfigName,
+                                Item = "BWA"
+                            },
+                    Consent = ConsentType.Yes,
+                    PersonalData = new PersonalDataType
+                        {
+                            Name = new NameType
+                                {
+                                    Forename = foreName,
+                                    Surname = surname,
+                                    MiddleName = middleName
+                                },
+                            BirthDate = birth,
+                            BirthDateSpecified = true,
+                            GenderSpecified = true
+                        },
+                    Addresses = new[] {address},
+                    BankInformation = new BankInformationType
+                        {
+                            CheckContext = CheckContextType.DirectCredit,
+                            CheckContextSpecified = true,
+                            AccountReference = new[]
+                                {
+                                    new AccountReferenceType
+                                        {
+                                            TypeOfReference = TypeOfReferenceType.BankBranchCode,
+                                            Reference = branchCode,
+                                            ReferenceIndex = "1"
+                                        },
+                                    new AccountReferenceType
+                                        {
+                                            TypeOfReference = TypeOfReferenceType.AccountNumber,
+                                            Reference = accountNumber,
+                                            ReferenceIndex = "2"
+                                        }
+                                }
+                        }
+                };
             execRequestBwa.PersonalData.Gender = gender == "M" ? GenderType.Male : GenderType.Female;
 
             try
@@ -464,17 +549,25 @@ namespace ExperianLib.IdIdentityHub
 
                 result.Parse(r);
             }
+            catch (SoapException exception)
+            {
+                Log.Error(exception);
+                result.Error = exception.Detail.InnerText;
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Detail.InnerText),
+                               "AML A check", customerId);
+            }
             catch (Exception exception)
             {
                 Log.Error(exception);
                 result.Error = exception.Message;
-                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message), "BWA check", customerId);
+                Utils.WriteLog(execRequestBwa.ToString(), string.Format("Excecption: {0}", exception.Message),
+                               "BWA check", customerId);
             }
 
             return result;
         }
 
-        private ProcessConfigResponseType MakeRequest( ExecuteRequestType execRequest)
+        private ProcessConfigResponseType MakeRequest(ExecuteRequestType execRequest)
         {
             var service = InitService();
             if (service == null)
@@ -488,15 +581,18 @@ namespace ExperianLib.IdIdentityHub
         private static ProcessConfigResponseType GetRequestFromXml(string xml)
         {
             var xmlDoc = XmlReader.Create(new System.IO.StringReader(xml));
-            var serialize = new System.Xml.Serialization.XmlSerializer(typeof(ProcessConfigResponseType));
+            var serialize = new System.Xml.Serialization.XmlSerializer(typeof (ProcessConfigResponseType));
             return serialize.Deserialize(xmlDoc) as ProcessConfigResponseType;
         }
+
         //-----------------------------------------------------------------------------------
         private EndpointService InitService()
         {
             Log.InfoFormat("Getting auth token...");
-            Log.InfoFormat("Will use certificate: {0} and URL: {1}", _config.UIdCertificateThumb, _config.AuthTokenServiceIdHub);
-            var service = new AuthToken(_config.UIdCertificateThumb, "CertificateAuthentication", _config.AuthTokenServiceIdHub);
+            Log.InfoFormat("Will use certificate: {0} and URL: {1}", _config.UIdCertificateThumb,
+                           _config.AuthTokenServiceIdHub);
+            var service = new AuthToken(_config.UIdCertificateThumb, "CertificateAuthentication",
+                                        _config.AuthTokenServiceIdHub);
             var token = service.GetAuthToken();
             if (token == null)
             {
