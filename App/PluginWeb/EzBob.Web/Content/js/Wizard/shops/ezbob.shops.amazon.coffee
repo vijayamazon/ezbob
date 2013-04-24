@@ -83,6 +83,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
                 return
             EzBob.App.trigger "info", result.msg
             @trigger "completed"
+            @trigger 'back'
             marketplaceId.val ""
             merchantId.val ""
         ).error ->
