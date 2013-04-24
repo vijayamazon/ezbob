@@ -9,6 +9,10 @@
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
 {
+    <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
+    <img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
+    <img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
+
     <h2>Funding over £2.5m loans and counting!</h2>
     <p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
 
@@ -16,15 +20,19 @@
     <p>Complete the details below to begin</p>
     <label>Email Address <span class="required">*</span></label>
     <input type="text" name="EMail" id="signupEmail" value="" tabindex="1" class="form_field" size="50" />
+    <img id="EmailImage"/>
+
 
     <div id="strength-password-view">
         <label class="inform">Password <span class="required">*</span></label>
         <input type="password" name="signupPass1" id="signupPass1" value="" tabindex="2" class="form_field" size="50" />
+        <img id="Password1Image"/>
         <p id="message" class="help-block"></p>
     </div>
 
     <label class="inform">Confirm Password <span class="required">*</span></label>
     <input type="password" name="signupPass2" id="signupPass2" value="" tabindex="3" class="form_field" size="50" />
+    <img id="Password2Image"/>
     <label class="inform">Select a Secret Question <span class="required">*</span></label>
     <!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
     <span class="inform">
@@ -40,6 +48,7 @@
 
     <label class="inform">Secret Answer <span class="required">*</span></label>
     <input type="text" name="SecurityAnswer" id="SecurityAnswer" value="" tabindex="5" class="form_field" size="50" />
+    <img id="SecretAnswerImage"/>
 
     @EzForm.Captcha(captchamode)
 

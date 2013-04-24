@@ -206,6 +206,13 @@ ul.list_none
     width: 207px;
 }
 
+.HiddenImage {
+    display: none;
+    width: 20px;
+    height: 20px;
+    vertical-align:middle;
+}
+
 #SortCode2, #SortCode3 {
     width: 54px;
 }

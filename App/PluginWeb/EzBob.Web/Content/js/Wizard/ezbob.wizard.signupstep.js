@@ -19,15 +19,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         'keydown input[name="EMail"]': 'inputChanged',
         'paste input[name="EMail"]': 'inputChanged',
         'input input[name="EMail"]': 'inputChanged',
+        'change input[name="EMail"]': 'emailChanged',
         'keydown input[name="signupPass1"]': 'inputChanged',
         'paste input[name="signupPass1"]': 'inputChanged',
         'input input[name="signupPass1"]': 'inputChanged',
+        'change input[name="signupPass1"]': 'password1Changed',
         'keydown input[name="signupPass2"]': 'inputChanged',
         'paste input[name="signupPass2"]': 'inputChanged',
         'input input[name="signupPass2"]': 'inputChanged',
+        'change input[name="signupPass2"]': 'password2Changed',
         'keydown input[name="SecurityAnswer"]': 'inputChanged',
         'paste input[name="SecurityAnswer"]': 'inputChanged',
-        'input input[name="SecurityAnswer"]': 'inputChanged'
+        'input input[name="SecurityAnswer"]': 'inputChanged',
+        'change input[name="SecurityAnswer"]': 'secretAnswerChanged'
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
@@ -46,12 +50,26 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         return this;
     },
-    inputChanged: function (e) {
+    inputChanged: function () {
+        
         if (EzBob.Validation.checkForm(this.formChecker)) {
             $("#signupSubmitButton.disabled").removeClass('disabled');
         } else {
             $("#signupSubmitButton").addClass('disabled');
         }
+    },
+    emailChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "EmailImage", "#signupEmail", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    password1Changed: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
+        EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    password2Changed: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    secretAnswerChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {
