@@ -240,7 +240,8 @@ ul.documents {
 
 .source {
     margin: 0;
-    width: 95%;
+    width: 85%;
+    margin-bottom: 20px;
 }
 
 .source_header, .source_header_on {
@@ -309,6 +310,7 @@ ul.documents {
     display: block;
     float: left;
     text-indent: -9999px;
+    margin-top: 5px;
 }
 
     .source_labels.ebay {
@@ -342,7 +344,7 @@ ul.documents {
     }
 
     .source_labels.ekm {
-        background-position: -557px 0;
+        background-position: -558px 0;
         width: 150px;
     }
 
@@ -352,7 +354,7 @@ ul.documents {
     }
 
     .source_labels.paypoint {
-        background-position: -966px 0;
+        background-position: -967px 0;
         width: 39px;
     }
 
@@ -392,7 +394,7 @@ ul.documents {
     }
 
     .source_labels_on.ekm {
-        background-position: -557px -40px;
+        background-position: -558px -40px;
         width: 150px;
     }
 
@@ -402,7 +404,7 @@ ul.documents {
     }
 
     .source_labels_on.paypoint {
-        background-position: -966px -40px;
+        background-position: -967px -40px;
         width: 39px;
     }
 
@@ -463,10 +465,10 @@ ul.application_steps {
     ul.application_steps li {
         float: left;
         background: #f1f1f1 url(images/arrow.png) 15px 13px no-repeat;
-        padding: 10px 10px 10px 50px;
+        padding: 10px 0px 10px 40px;
         font-weight: bold;
         font-size: 16px;
-        width: 158px;
+        width: 150px;
         margin: 0 5px 0 0;
         position: relative;
     }

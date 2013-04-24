@@ -28,11 +28,12 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
     updateShopNames: ->
         if @shops
             s = ""
-            _.each @shops.models, (sh, idx) ->
+            for shop, index in @shops.models
                 if s != ""
                     s += ", "
-                s += sh.attributes.displayName
+                s += shop.get('displayName')
             @shopNames = s
+            $('#div'+@shopClass).tooltip({title:@shopNames},{placement: "bottom"})
         @render()
 
     clicked: ->

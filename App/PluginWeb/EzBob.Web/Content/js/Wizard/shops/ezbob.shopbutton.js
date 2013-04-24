@@ -43,19 +43,26 @@
     };
 
     StoreButtonView.prototype.updateShopNames = function() {
-      var s;
+      var index, s, shop, _i, _len, _ref1;
 
       if (this.shops) {
         s = "";
-        _.each(this.shops.models, function(sh, idx) {
+        _ref1 = this.shops.models;
+        for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+          shop = _ref1[index];
           if (s !== "") {
             s += ", ";
           }
-          return s += sh.attributes.displayName;
-        });
+          s += shop.get('displayName');
+        }
         this.shopNames = s;
+        $('#div' + this.shopClass).tooltip({
+          title: this.shopNames
+        }, {
+          placement: "bottom"
+        });
       }
-      return this.render;
+      return this.render();
     };
 
     StoreButtonView.prototype.clicked = function() {

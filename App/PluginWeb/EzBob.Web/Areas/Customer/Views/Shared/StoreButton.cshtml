@@ -11,7 +11,7 @@
                             </td>
                             <td style="vertical-align:middle;">
                                 <% if(shops.length) {%>
-                               <div style="width:300px;" title="<%- shopNames %>">
+                               <div id="div<%- shopClass %>" style="width:300px;" title="<%- shopNames %>">
                                     <span class="label label-warning"><%= shops.length%></span> shops(s) linked
                                 </div>
                                 <%} else {%>
@@ -26,7 +26,7 @@
 
 
             </div>
-            <div class="alignright"><a href="#" class="button green">
+            <div class="alignright"><a href="#" class="btn green" style="border: none; margin-top: 8px;">
                 <div class="plus"></div>
             </a></div>
         </div>
