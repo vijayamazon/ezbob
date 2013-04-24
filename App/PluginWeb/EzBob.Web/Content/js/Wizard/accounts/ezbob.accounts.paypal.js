@@ -1,5 +1,4 @@
-﻿///<reference path="~/Content/js/Wizard/ezbob.storebutton.js" />
-///<reference path="~/Content/js/lib/underscore.js" />
+﻿///<reference path="~/Content/js/lib/underscore.js" />
 ///<reference path="~/Content/js/lib/backbone.js" />
 
 var EzBob = EzBob || {};
@@ -17,7 +16,6 @@ EzBob.PayPalAccounts = Backbone.Collection.extend({
 
 EzBob.PayPalButtonView = EzBob.StoreButtonWithListView.extend({
     initialize: function () {
-        this.listView = new EzBob.StoreListView({ model: this.model });
         this.constructor.__super__.initialize.apply(this, [{ name: "paypal", logoText: "Add account to get more cash"}]);  
     },
     update: function () {

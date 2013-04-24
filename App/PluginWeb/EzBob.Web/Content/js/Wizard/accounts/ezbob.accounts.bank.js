@@ -1,5 +1,4 @@
 ﻿///<reference path="~/Content/js/lib/backbone.js" />
-///<reference path="~/Content/js/Wizard/ezbob.storebutton.js" />
 ///<reference path="~/Content/js/lib/underscore.js" />
 /// <reference path="../lib/jquery.maskedinput-1.2.2.js" />
 
@@ -26,7 +25,6 @@ EzBob.BankAccountButtonView = EzBob.StoreButtonWithListView.extend({
         if (accountNumber) {
             this.bankAccounts.add({ displayName: 'XXXX'+accountNumber.substring(4)});
         }
-        this.listView = new EzBob.StoreListView({ model: this.bankAccounts, name: "bank-account" });
         this.constructor.__super__.initialize.apply(this, [{ name: "bank-account", logoText:"Add account for cash transfer"}]);
     },
     update: function () {

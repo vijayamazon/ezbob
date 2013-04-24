@@ -985,9 +985,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
       <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.js">
-      <DependentUpon>ezbob.shopslistview.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
       <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
     </Content>
@@ -1472,7 +1469,6 @@
     <None Include="Content\js\Underwriter\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />

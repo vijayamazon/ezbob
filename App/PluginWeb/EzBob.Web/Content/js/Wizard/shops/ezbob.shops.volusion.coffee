@@ -3,7 +3,6 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.VolusionAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
-        @listView = new EzBob.StoreListView({ model: this.model })
         super({name: 'Volusion', logoText: '', shops: @model})
     update: ->
         @model.fetch()

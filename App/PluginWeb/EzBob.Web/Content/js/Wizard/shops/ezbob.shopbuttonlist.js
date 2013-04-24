@@ -12,24 +12,12 @@
     }
 
     StoreButtonWithListView.prototype.initialize = function(options) {
-      this.listView.model.on("change reset", this.listChanged, this);
       return StoreButtonWithListView.__super__.initialize.call(this, options);
-    };
-
-    StoreButtonWithListView.prototype.listChanged = function() {
-      if (this.listView.model.length > 0) {
-        return this.trigger("ready", this.name);
-      }
     };
 
     StoreButtonWithListView.prototype.render = function() {
       StoreButtonWithListView.__super__.render.call(this);
-      this.$el.append(this.listView.render().$el);
       return this;
-    };
-
-    StoreButtonWithListView.prototype.update = function() {
-      return this.listView.update();
     };
 
     return StoreButtonWithListView;

@@ -1,6 +1,5 @@
 ﻿///<reference path="~/Content/js/lib/backbone.js" />
 ///<reference path="~/Content/js/lib/underscore.js" />
-///<reference path="~/Content/js/Wizard/ezbob.storebutton.js" />
 var EzBob = EzBob || {};
 
 EzBob.EbayStoreModel = Backbone.Model.extend({
@@ -54,7 +53,6 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
 
 EzBob.EbayButtonView = EzBob.StoreButtonWithListView.extend({
     initialize: function () {
-        this.listView = new EzBob.StoreListView({ model: this.model });
         this.constructor.__super__.initialize.apply(this, [{ name: "eBay", logoText: "" }]);
     },
     update: function () {

@@ -16,9 +16,6 @@
     }
 
     VolusionAccountButtonView.prototype.initialize = function() {
-      this.listView = new EzBob.StoreListView({
-        model: this.model
-      });
       return VolusionAccountButtonView.__super__.initialize.call(this, {
         name: 'Volusion',
         logoText: '',
