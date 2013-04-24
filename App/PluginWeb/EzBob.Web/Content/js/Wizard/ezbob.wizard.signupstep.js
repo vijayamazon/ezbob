@@ -16,10 +16,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     events: {
         'click :submit': 'submit',
-        'keydown input[name="EMail"]': 'inputChanged',
-        'paste input[name="EMail"]': 'inputChanged',
-        'input input[name="EMail"]': 'inputChanged',
-        'change input[name="EMail"]': 'emailChanged',
+        'keydown input[name="signupEmail"]': 'inputChanged',
+        'paste input[name="signupEmail"]': 'inputChanged',
+        'input input[name="signupEmail"]': 'inputChanged',
+        'change input[name="signupEmail"]': 'emailChanged',
         'keydown input[name="signupPass1"]': 'inputChanged',
         'paste input[name="signupPass1"]': 'inputChanged',
         'input input[name="signupPass1"]': 'inputChanged',
@@ -51,7 +51,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         return this;
     },
     inputChanged: function () {
-        
         if (EzBob.Validation.checkForm(this.formChecker)) {
             $("#signupSubmitButton.disabled").removeClass('disabled');
         } else {

@@ -10,25 +10,23 @@
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
 	<div class="inner">
-    <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
-    <img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
-    <img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
+		<img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
+		<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
+		<img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
 
 		<h2>Funding over £2.5m loans and counting!</h2>
 		<p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
 
 		<h3>Create an account</h3>
 		<p>Complete the details below to begin</p>
-    <img id="EmailImage"/>
-
 
 		<div class="form_field_container">
 			<label class="attardi-input">
 				<span>Email address</span>
 				<input type="email" name="signupEmail" id="signupEmail" tabindex="1" class="form_field"/>
-        <img id="Password1Image"/>
 			</label>
 			<span class="required">*</span>
+			<img id="EmailImage"/>
 		</div>
 
 		<div id="strength-password-view" class="form_field_container">
@@ -37,6 +35,7 @@
 				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
 			</label>
 			<span class="required">*</span>
+			<img id="Password1Image"/>
 			<p id="message" class="help-block"></p>
 		</div>
 
@@ -46,7 +45,7 @@
 				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
 			</label>
 			<span class="required">*</span>
-    <img id="Password2Image"/>
+			<img id="Password2Image"/>
 		</div>
 		
 		<div class="form_field_container">
@@ -71,7 +70,7 @@
 				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
 			</label>
 			<span class="required">*</span>
-    <img id="SecretAnswerImage"/>
+			<img id="SecretAnswerImage"/>
 		</div>
 
 		<div class="form_field_container">
