@@ -37,7 +37,7 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value, string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, int size = 0)
+@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false)
 {
 	
     var identificator = new HtmlString(id);
@@ -52,10 +52,6 @@
                 id="@identificator" 
                 class="@cls" 
                 value="@val"
-                @if (size > 0)
-                {
-                    @:size = "@size"
-                }
                 @if (isDisabled)
                 { 
                     @:disabled="disabled"
@@ -69,26 +65,31 @@
     </div>
 }
 
-@helper Password(string id, string caption, string value, string cls = "", bool isDisabled = false)
+@helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true)
 {
 	
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
-    <div class="control-group">
-        <label for="@identificator" class="control-label">@caption</label>
-        <div class="controls">
+    
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>@caption</span>
             <input 
-				id="@identificator" 
-				name="@identificator" 
-				type="password" 
-				value="@val" 
-				class="@cls" 
-				@if (isDisabled)
-    {
-					@:disabled="disabled"
-				}  
-			/>
-        </div>
+                type="password" 
+                name="@identificator" 
+                id="@identificator" 
+                class="@cls" 
+                value="@val"
+                @if (isDisabled)
+                { 
+                    @:disabled="disabled"
+                } 
+             />
+        </label>
+        @if (isRequired)
+        {
+            <span class="required">*</span>
+        }
     </div>
 }
 
