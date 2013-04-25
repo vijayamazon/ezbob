@@ -241,3 +241,17 @@ ul.list_none
 
 h2.form_section, h2.form_start { padding-left: 0!important; }
 h2.form_section { margin-top: 1em; }
+
+div.form_buttons_container { position: relative; height: 30px; }
+
+div.form_buttons_container input.continue,
+div.form_buttons_container a.continue
+{ position: absolute; top: 0; left: 293px; }
+
+div.form_buttons_container input.back,
+div.form_buttons_container a.back
+{ position: absolute; top: 0; left: 190px; }
+
+div.form_read_and_accept input { margin-top: -5px; }
+
+div.form_read_and_accept label { display: inline; }

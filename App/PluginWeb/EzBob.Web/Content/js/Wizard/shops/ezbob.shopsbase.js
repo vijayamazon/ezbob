@@ -129,10 +129,6 @@
         case "EKM":
           return this.$el.find("#ekm_login").focus();
         case "Volusion":
-          sText = $("#header_description").text().trim();
-          if ("" === this.$el.find("#volusion_login").val()) {
-            this.$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")));
-          }
           return this.$el.find("#volusion_shopname").focus();
         case "payPoint":
           return this.$el.find("#payPoint_login").focus();
