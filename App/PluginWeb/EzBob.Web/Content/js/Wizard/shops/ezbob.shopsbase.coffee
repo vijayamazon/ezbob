@@ -28,6 +28,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         false
 
     next: ->
+        return if @$el.find(".next").hasClass("disabled")
         @trigger "next"
         EzBob.App.trigger "clear"
         false
@@ -44,6 +45,9 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         accountsList = @storeList.find(".accounts-list")
 
         sortedShops = _.sortBy(@stores, (s) -> s.button.model.length).reverse()
+
+        hasFilledShops = sortedShops[0].button.model.length > 0
+        @$el.find(".next").toggleClass("disabled", !hasFilledShops)
 
         for shop in sortedShops when shop.active and shop.isShop is 1
             shop.button.render().$el.appendTo shopsList
