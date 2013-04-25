@@ -109,6 +109,7 @@ namespace EzBob.Web.Infrastructure
                          .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
 
+
         public static MvcHtmlString RenderJs()
         {
             return Bundle.JavaScript()
@@ -126,6 +127,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/underscore.js")
                          .Add("~/Content/js/lib/backbone.js")
                          .Add("~/Content/js/lib/Backbone.ModelBinder.js")
+                         .Add("~/Content/js/lib/handlebars.js")
                          .Add("~/Content/js/App/ezbob.bindings.coffee")
                          .Add("~/Content/js/lib/backbone.marionette.js")
                          .Add("~/Content/js/lib/moment.js")
@@ -154,8 +156,9 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/controls/ezbob.video.js")
                          .Add("~/Content/js/ezbob.csrf.js")
                          .Add("~/Content/js/login/ezbob.restorePassword.coffee")
-                            .Add("~/Content/js/lib/attardi.labels.js")
+                         .Add("~/Content/js/lib/attardi.labels.js")
                          .AddString(GetDbStrings())
+                         .ForceRelease()
                          .MvcRender("~/Content/js/min/jslib_#.js");
         }
 
@@ -239,58 +242,62 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
                          .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
                          .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+
+
+                         
+
                          .MvcRender("~/Content/js/min/underwriter_#.js");
         }
 
         public static MvcHtmlString RenderStoreInfoJs()
         {
             return Bundle.JavaScript()
-                         .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
-                         .Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
-                         .MvcRender("~/Content/js/min/storeinfo_#.js");
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
+                        .Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
+                        .MvcRender("~/Content/js/min/storeinfo_#.js");
         }
 
         public static MvcHtmlString RenderWizardJs()
         {
             return Bundle.JavaScript()
-                         .Add("~/Content/js/controls/ezbob.notifications.js")
-                         .Add("~/Content/js/ezbob.customerModel.js")
-                         .Add("~/Content/js/Wizard/ezbob.wizard.js")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
-                         .Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
-                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
-                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.bank.js")
-                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
-                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
-                         .Add("~/Content/js/Wizard/ezbob.wizard.signupstep.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfoBase.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.limitedInformation.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.notLimitedInformation.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfo.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.steps.personinfo.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
-                         .Add("~/Content/js/controls/ezbob.address.js")
-                         .Add("~/Content/js/Wizard/ezbob.signupwizard.js")
-                         .Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.coffee")
-                         .MvcRender("~/Content/js/min/wizard_#.js");
+                        .Add("~/Content/js/controls/ezbob.notifications.js")
+                        .Add("~/Content/js/ezbob.customerModel.js")
+                        .Add("~/Content/js/Wizard/ezbob.wizard.js")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
+                        .Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
+                        .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
+                        .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
+                        .Add("~/Content/js/Wizard/accounts/ezbob.accounts.bank.js")
+                        .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
+                        .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
+                        .Add("~/Content/js/Wizard/ezbob.wizard.signupstep.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfoBase.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.limitedInformation.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.notLimitedInformation.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfo.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.steps.personinfo.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+                        .Add("~/Content/js/controls/ezbob.address.js")
+                        .Add("~/Content/js/Wizard/ezbob.signupwizard.js")
+                        .Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.coffee")
+                        .MvcRender("~/Content/js/min/wizard_#.js");
         }
 
         public static MvcHtmlString RenderAccountsJs()
@@ -298,7 +305,7 @@ namespace EzBob.Web.Infrastructure
             return Bundle.JavaScript()
                          .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
                          .MvcRender("~/Content/js/min/account_#.js");
@@ -319,13 +326,13 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Wizard/ezbob.wizard.js")
                          .Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shopbuttonlist.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
                          .Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                          .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
@@ -349,7 +356,6 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
                          .Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
-                         .Add("~/Content/js/lib/handlebars.js")
                          .MvcRender("~/Content/js/min/profile_#.js");
         }
     }
