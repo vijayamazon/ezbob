@@ -17,6 +17,7 @@
 
     StoreButtonWithListView.prototype.render = function() {
       StoreButtonWithListView.__super__.render.call(this);
+      $('.tooltipdiv').tooltip();
       return this;
     };
 

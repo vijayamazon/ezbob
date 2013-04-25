@@ -12,6 +12,7 @@ class EzBob.StoreButtonWithListView extends EzBob.StoreButtonView
 
     render: ->        
         super()
+        $('.tooltipdiv').tooltip();
         #@$el.append @listView.render().$el
         this
 
