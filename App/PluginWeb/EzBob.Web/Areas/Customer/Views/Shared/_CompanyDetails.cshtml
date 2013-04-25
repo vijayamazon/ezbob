@@ -11,9 +11,9 @@
                             <!-- should eliminate all margins !!!!! -->
                             <!-- Wrong validation is performed!!!!! -->
                             <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
-						    <img id="FirstNameImage"/>
 					    </label>
 						<span class="required">*</span>
+						<img id="FirstNameImage"/>
 					</div>
 				</div>
 
@@ -30,9 +30,9 @@
 					<div class="controls">
 						<label class="attardi-input"><span>Last Name</span>
 						    <input style="height:20px" id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
-                            <img id="SurnameImage"/>
 						</label>
 						<span class="required">*</span>
+                        <img id="SurnameImage"/>
 					</div>
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
@@ -121,7 +121,7 @@
 					<div class="controls">
 						<label class="attardi-input">
 							<span>Your Type of Business</span>
-							<select class="form_field" name="TypeOfBusiness">
+							<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
 								<option value=""></option>
 								<option value="Entrepreneur">Sole Trader (not Inc.)</option>
 								<option value="SoleTrader">Sole Trader (Inc.)</option>
@@ -132,6 +132,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
+                        <img id="TypeOfBusinessImage"/>
 					</div>
 				</div>
 

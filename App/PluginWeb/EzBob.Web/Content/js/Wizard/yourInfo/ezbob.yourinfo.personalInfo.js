@@ -21,6 +21,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change input[name="Surname"]': 'surnameChanged',
             'change input[name="OverallTurnOver"]': 'overallTurnOverChanged',
             'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged'
+            
         });
 
         this.constructor.__super__.initialize.call(this);
@@ -83,6 +84,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
+        EzBob.Validation.displayIndication(this.formChecker, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
     consentToSearchChanged: function (e) {
         this.agree = $(e.target).is(':checked');

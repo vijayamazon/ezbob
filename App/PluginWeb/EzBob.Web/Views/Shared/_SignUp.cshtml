@@ -53,7 +53,7 @@
 			<span class="inform"><label class="attardi-input">
 				<span>Secret question</span>
 				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
-					<option></option>
+					<option value=""></option>
 					@if (securityQuestions != null) {
 						foreach (SecurityQuestion item in securityQuestions) {
 							<option value="@item.Id">@item.Name</option>
@@ -62,6 +62,7 @@
 				</select>
 			</label></span>
 			<span class="required">*</span>
+			<img id="SecurityQuestionImage"/>
 		</div>
 
 		<div class="form_field_container">

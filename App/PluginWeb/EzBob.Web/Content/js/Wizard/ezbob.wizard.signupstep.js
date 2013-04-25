@@ -28,6 +28,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         'paste input[name="signupPass2"]': 'inputChanged',
         'input input[name="signupPass2"]': 'inputChanged',
         'change input[name="signupPass2"]': 'password2Changed',
+        'change select[name="securityQuestion"]': "securityQuestionChanged",
         'keydown input[name="SecurityAnswer"]': 'inputChanged',
         'paste input[name="SecurityAnswer"]': 'inputChanged',
         'input input[name="SecurityAnswer"]': 'inputChanged',
@@ -62,10 +63,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     password1Changed: function () {
         EzBob.Validation.displayIndication(this.formChecker, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
-        EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+        if ($("#signupPass2").val() != "") {
+            EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+        }
     },
     password2Changed: function () {
         EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    securityQuestionChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
     },
     secretAnswerChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
