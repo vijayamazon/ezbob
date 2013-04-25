@@ -233,10 +233,6 @@ ul.list_none
 	display: inline;
 	font-weight: normal;
 	margin-left: 5px;
-	text-decoration: underline;
-	color: blue;
-	text-decoration: underline;
-	cursor: pointer;
 }
 
 h2.form_section, h2.form_start { padding-left: 0!important; }
