@@ -18,7 +18,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'click label[for="ConsentToSearch"] a': 'showConsent',
             'change input[name="FirstName"]': 'firstNameChanged',
             'change input[name="MiddleInitial"]': 'middleNameChanged',
-            'change input[name="Surname"]': 'surnameChanged'
+            'change input[name="Surname"]': 'surnameChanged',
+            'change input[name="OverallTurnOver"]': 'overallTurnOverChanged',
+            'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged'
         });
 
         this.constructor.__super__.initialize.call(this);
@@ -31,6 +33,12 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     surnameChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    overallTurnOverChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "OverallTurnOverImage", "#OverallTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    webSiteTurnOverImageChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "WebSiteTurnOverImage", "#WebSiteTurnOver", "#RotateImage", "#OkImage", "#FailImage");
     },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
