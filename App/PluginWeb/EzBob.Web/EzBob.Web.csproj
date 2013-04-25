@@ -963,12 +963,6 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
-      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.js">
-      <DependentUpon>ezbob.shopbuttonlist.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
       <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
     </Content>

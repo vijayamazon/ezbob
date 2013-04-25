@@ -11,29 +11,27 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         @name = options.name
         @logoText = options.logoText
         @shops = options.shops
-        @shopNames = ""
 
         if @shops
-            @shops.on("change reset", @updateShopNames, this)
+            @shops.on("change reset", @render, this)
 
         @shopClass = options.name.toLowerCase().replace(' ', '')
 
     serializeData: ->
-        name: @name
-        logoText: @logoText
-        shopClass: @shopClass
-        shops: if @shops then @shops.toJSON() else []
-        shopNames: @shopNames
+        data = 
+            name: @name
+            logoText: @logoText
+            shopClass: @shopClass
+            shops: []
+            shopNames: ""
 
-    updateShopNames: ->
         if @shops
-            s = ""
-            _.each @shops.models, (sh, idx) ->
-                if s != ""
-                    s += ", "
-                s += sh.attributes.displayName
-            @shopNames = s
-        @render()
+            data.shops = @shops.toJSON()
+            data.shopNames = @shops.pluck("displayName").join(", ")
+        return data
+
+    onRender: ->
+        @$el.find('.tooltipdiv').tooltip()
 
     clicked: ->
         if @disabled
