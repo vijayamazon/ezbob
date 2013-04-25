@@ -310,6 +310,13 @@ a.plus_container {
 	padding: 0;
 }
 
+div.shop-connected {
+    background: url(images/green_dot.png);
+    width: 9px;
+    height: 9px;
+    vertical-align: middle;
+}
+
 .source_labels, .source_labels_on {
     margin: 0 20px 0 0;
     background: url(images/source_sprite.png) no-repeat 0 0;
@@ -323,12 +330,12 @@ a.plus_container {
 
     .source_labels.ebay {
         background-position: 0 0;
-        width: 86px;
+        width: 81px;
     }
 
     .source_labels.amazon {
         background-position: -86px 0;
-        width: 109px;
+        width: 110px;
     }
 
     .source_labels.play {
@@ -358,7 +365,7 @@ a.plus_container {
 
     .source_labels.paypal {
         background-position: -751px 0;
-        width: 117px;
+        width: 111px;
     }
 
     .source_labels.paypoint {
@@ -368,17 +375,17 @@ a.plus_container {
 
     .source_labels.volusion {
         background-position: -867px 0;
-        width: 99px;
+        width: 98px;
     }
 
     .source_labels_on.ebay {
         background-position: 0 -40px;
-        width: 86px;
+        width: 81px;
     }
 
     .source_labels_on.amazon {
         background-position: -86px -40px;
-        width: 109px;
+        width: 110px;
     }
 
     .source_labels_on.play {
@@ -408,7 +415,7 @@ a.plus_container {
 
     .source_labels_on.paypal {
         background-position: -751px -40px;
-        width: 117px;
+        width: 111px;
     }
 
     .source_labels_on.paypoint {
@@ -418,7 +425,7 @@ a.plus_container {
 
     .source_labels_on.volusion {
         background-position: -867px -40px;
-        width: 99px;
+        width: 98px;
     }
 
 .source_table {
@@ -437,7 +444,7 @@ a.plus_container {
     }
 
     .source_table td.statustd {
-        width: 20%;
+        width: 10px;
     }
 
 .estimate_container {

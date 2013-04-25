@@ -106,6 +106,12 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 $(document).attr "title", "Wizard 3 Bank: Bank Account Details | EZBOB"
             when "paypal"
                 $(document).attr "title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB"
+            when "ekm"
+                $(document).attr "title", "Wizard 3 EKM: Link Your EKM Account | EZBOB"
+            when "paypoint"
+                $(document).attr "title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB"
+            when "volusion"
+                $(document).attr "title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB"
             else
 
     close: ->

@@ -424,16 +424,19 @@
     <Content Include="Content\css\images\companies\yahoo.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
+    <Content Include="Content\css\images\fail.png" />
     <Content Include="Content\css\images\favicon114x114.png" />
     <Content Include="Content\css\images\favicon57x57.png" />
     <Content Include="Content\css\images\favicon72x72.png" />
     <Content Include="Content\css\images\footer_bg.png" />
     <Content Include="Content\css\images\gauge.png" />
+    <Content Include="Content\css\images\green_dot.png" />
     <Content Include="Content\css\images\help_ebay.jpg" />
     <Content Include="Content\css\images\live_help.jpg" />
     <Content Include="Content\css\images\lock_64.png" />
     <Content Include="Content\css\images\nav_bg.png" />
     <Content Include="Content\css\images\nav_bg_on.png" />
+    <Content Include="Content\css\images\ok.png" />
     <Content Include="Content\css\images\pdf.png" />
     <Content Include="Content\css\images\play-icon-hover.png" />
     <Content Include="Content\css\images\play-icon-sprite.png" />
@@ -442,6 +445,7 @@
     <Content Include="Content\css\images\points.png" />
     <Content Include="Content\css\images\pound.png" />
     <Content Include="Content\css\images\progress_tip.png" />
+    <Content Include="Content\css\images\rotate.gif" />
     <Content Include="Content\css\images\secure.png" />
     <Content Include="Content\css\images\source_small_sprite.png" />
     <Content Include="Content\css\images\source_sprite.png" />

@@ -39,7 +39,7 @@
 					Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
 				</label>
 			</div>
-			<input type="submit" value="Conitnue &raquo;" class="button orange" id="loginSubmit" />
+            <input type="submit" value="Login" class="button orange" id="loginSubmit" />
 			<p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
 		</section>
 		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Login.cshtml");}

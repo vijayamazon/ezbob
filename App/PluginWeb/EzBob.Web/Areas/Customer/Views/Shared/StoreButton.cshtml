@@ -7,15 +7,17 @@
                     <tbody>
                         <tr>
                             <td style="width: 187px;">
-                                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
+								<a href="#" class="addShopButton" style="border: none;">
+                                	<div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
+								</a>
                             </td>
                             <td style="vertical-align: middle;"><% if(shops.length) {%>
                                    <div class="tooltipdiv" data-toggle="tooltip" data-placement="bottom" style="width: 120px;" data-original-title="<%- shopNames %>">
-                                       <a class="accordion-toggle label green" data-toggle="collapse" href="#description<%- shopClass %>"><%= shops.length%></a> shops(s) linked
+                                       <a class="accordion-toggle label green" data-toggle="collapse" href="#description<%- shopClass %>"><%= shops.length%></a> shop(s) linked
                                    </div>
                                 <%} else {%>
                                     <div style="width: 120px;">
-                                        <span class="label orange"><%= shops.length%></span> shops(s) linked
+                                        no accounts linked
                                     </div>
                                 <%}%>
                             </td>
@@ -26,7 +28,7 @@
 
             </div>
             <div class="alignright">
-                <a href="#" class="btn green plus_container button" style="border: none; margin-top: 8px;">
+                <a href="#" class="btn green plus_container button addShopButton" style="border: none; margin-top: 8px;">
                     <div class="plus"></div>
                 </a>
             </div>
@@ -35,17 +37,11 @@
             <div class="accordion-inner">
                 <div class="source_description">
                     <table class="source_table" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Store</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <% _.each(shops, function(shop, index) { %>
                                 <tr>
                                     <td><%- shop.displayName %></td>
-                                    <td class="statustd"><span class="label label-success">Connected</span></td>
+                                    <td class="statustd"><div class="shop-connected"></div></td>
                                 </tr>
                             <% }); %>
                         </tbody>
@@ -54,7 +50,4 @@
             </div>
         </div>
     </div>
-    @*<script type="text/javascript">
-        $('.tooltipdiv').tooltip();
-    </script>*@
 </script>

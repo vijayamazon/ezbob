@@ -3,7 +3,7 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
     events:
-        "click .button": "clicked"
+        "click .addShopButton": "clicked"
 
     template: "#store-button-template"
 
