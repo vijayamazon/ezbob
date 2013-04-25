@@ -1,10 +1,9 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.EKMAccountButtonView extends EzBob.StoreButtonWithListView
+class EzBob.EKMAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
-        @listView = new EzBob.StoreListView({ model: this.model })
-        super({name: 'ekm', logoText: ''})
+        super({name: 'EKM', logoText: '', shops: @model})
     update: ->
         @model.fetch()
 
@@ -53,7 +52,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr.done (res) =>
             if (res.error)
-                EzBob.App.trigger 'error', 'ekm account saving error'
+                EzBob.App.trigger 'error', res.error
                 return false
 
             @model.add(acc)
@@ -77,8 +76,8 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
 
 class EzBob.EKMAccountModel extends Backbone.Model
-    urlRoot: "#{window.gRootPath}Customer/EKMAccounts/Accounts"
+    urlRoot: "#{window.gRootPath}Customer/EkmMarketPlaces/Accounts"
 
 class EzBob.EKMAccounts extends Backbone.Collection
     model: EzBob.EKMAccountModel
-    url: "#{window.gRootPath}Customer/EKMAccounts/Accounts"
+    url: "#{window.gRootPath}Customer/EkmMarketPlaces/Accounts"

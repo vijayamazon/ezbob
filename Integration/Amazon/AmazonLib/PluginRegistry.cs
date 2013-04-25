@@ -12,7 +12,7 @@ namespace EzBob.AmazonLib
 		public PluginRegistry()
 		{
 		    var amazon = new AmazonServiceInfo();
-            For<IDatabaseMarketplace>().Use<AmazonDatabaseMarketPlace>().Named(amazon.DisplayName);
+            For<IMarketplaceType>().Use<AmazonDatabaseMarketPlace>().Named(amazon.DisplayName);
             For<DatabaseMarketplaceBase<AmazonDatabaseFunctionType>>().Use<AmazonDatabaseMarketPlace>();
             For<IMarketplaceRetrieveDataHelper>().Use<AmazonRetriveDataHelper>().Named(amazon.DisplayName);
 		}

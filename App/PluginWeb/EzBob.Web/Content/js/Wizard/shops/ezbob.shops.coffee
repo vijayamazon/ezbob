@@ -7,30 +7,70 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
 
     initialize: ->
         @ebayStores = @model.get("ebayStores")
-        @amazonMarketplaces = @model.get("amazonMarketplaces")
         @EbayButtonView = new EzBob.EbayButtonView(model: @ebayStores)
         @EbayStoreView = new EzBob.EbayStoreInfoView()
+        @ebayStores.on "reset change", @marketplacesChanged, this
+
+        @amazonMarketplaces = @model.get("amazonMarketplaces")
         @AmazonButtonView = new EzBob.AmazonButtonView(model: @amazonMarketplaces)
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
         @amazonMarketplaces.on "reset change", @marketplacesChanged, this
-        @ebayStores.on "reset change", @marketplacesChanged, this
-
+        
         @ekmAccounts = new EzBob.EKMAccounts()
-        @ekmAccounts.fetch()
+        @ekmAccounts.fetch().done => @render()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
+        
+        @volusionAccounts = new EzBob.VolusionAccounts()
+        @volusionAccounts.fetch().done => @render()
+        @volusionButtonView = new EzBob.VolusionAccountButtonView(model: @volusionAccounts)
+        @volusionAccountInfoView = new EzBob.VolusionAccountInfoView(model: @volusionAccounts)
 
+        @PayPointAccounts = new EzBob.PayPointAccounts()
+        @PayPointAccounts.fetch().done => @render()
+        @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
+        @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
+
+        @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
+        #@payPalAccounts.on('fetch reset change', @accountChanged, this)
+        @PayPalButtonView = new EzBob.PayPalButtonView model: @payPalAccounts 
+        @PayPalInfoView = new EzBob.PayPalInfoView()
 
         @stores =
-            ebay:
+            "eBay":
                 view: @EbayStoreView
                 button: @EbayButtonView
-            amazon:
+                active: 0
+                isShop: 1
+            "Amazon":
                 view: @AmazonStoreInfoView
                 button: @AmazonButtonView
-            ekm:
+                active: 0
+                isShop: 1
+            "EKM":
                 view: @EKMAccountInfoView
                 button: @ekmButtonView
+                active: 0
+                isShop: 1
+            "PayPoint":
+                view: @PayPointAccountInfoView
+                button: @PayPointButtonView
+                active: 0
+                isShop: 1
+            "Volusion":
+                view: @volusionAccountInfoView
+                button: @volusionButtonView
+                active: 0
+                isShop: 1
+            "paypal": 
+                view: @PayPalInfoView
+                button : @PayPalButtonView
+                active: 1
+                isShop: 0
+
+         for j in EzBob.Config.ActiveMarketPlaces
+             if @stores[j]
+                 @stores[j].active = 1
 
         @name = "shops"
         super()

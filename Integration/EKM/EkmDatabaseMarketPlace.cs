@@ -1,12 +1,10 @@
-﻿using System;
-using EZBob.DatabaseLib;
+﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib;
 
 namespace EKM
 {
-	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseMarketPlace, EKMDatabaseFunctionType>
+	public class EkmDatabaseMarketPlace : DatabaseMarketplaceBase<EkmDatabaseFunctionType>
     {
         public EkmDatabaseMarketPlace()
             : base(new EkmServiceInfo())
@@ -18,7 +16,7 @@ namespace EKM
             return new EkmRetriveDataHelper( helper, this );
         }
 
-        public override IDatabaseFunctionFactory<EKMDatabaseFunctionType> FunctionFactory
+        public override IDatabaseFunctionFactory<EkmDatabaseFunctionType> FunctionFactory
         {
             get { return new EKMDatabaseFunctionFactory(); }
         }

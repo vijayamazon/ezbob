@@ -114,18 +114,6 @@
     <Compile Include="PayPoint\PayPointApi.cs" />
     <Compile Include="Tests\PayPointTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web References\PayPoint\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\PayPoint\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\PayPoint\SECCardService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
@@ -137,8 +125,12 @@
       <Name>EzBob.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
       <Name>EzBob.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

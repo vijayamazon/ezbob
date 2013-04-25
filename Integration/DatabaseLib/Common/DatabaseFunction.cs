@@ -26,7 +26,7 @@ namespace EZBob.DatabaseLib.Common
 
 		public string Description { get; set; }
 
-		public IDatabaseMarketplace DatabaseMarketplace { get; private set; }
+		public IMarketplaceType DatabaseMarketplace { get; private set; }
 
 		public IDatabaseValueType FunctionValueType { get; private set; }
 

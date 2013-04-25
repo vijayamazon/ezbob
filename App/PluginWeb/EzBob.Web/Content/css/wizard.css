@@ -6,16 +6,12 @@
     padding-bottom: 0px !important;
     padding-right: 10px !important;
 }
-#signupEmail, #signupPass1, #signupPass2, #SecurityAnswer {
-    width: 200px;
-}
-#securityQuestion{
-    width: 208px;
-}
 
-
-#wizard {
-    padding: 0 61px;    
+span.inform {
+	display: inline-block;
+	-webkit-box-shadow: 0 0 10px #ccc;
+	   -moz-box-shadow: 0 0 10px #ccc;
+	        box-shadow: 0 0 10px #ccc;
 }
 
 form.signup input[type="text"], form.signup input[type="password"], form.signup select{
@@ -204,6 +200,13 @@ ul.list_none
     width: 207px;
 }
 
+.HiddenImage {
+    display: none;
+    width: 20px;
+    height: 20px;
+    vertical-align:middle;
+}
+
 #SortCode2, #SortCode3 {
     width: 54px;
 }
@@ -212,8 +215,29 @@ ul.list_none
 }
 #wizard .notifications > div { margin-right: 18px;}
 
-.buttons-list > div {
+.shops-list > div, .accounts-list > div {
     margin-left: 0!important;
 }
 
 #AccountNumber { width: 215px;}
+
+.GenderCtrl .required {
+	margin-right: 17px;
+}
+
+.GenderCtrl input {
+	margin: -5px 0 0 15px;
+}
+
+.GenderCtrl label {
+	display: inline;
+	font-weight: normal;
+	margin-left: 5px;
+	text-decoration: underline;
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+h2.form_section, h2.form_start { padding-left: 0!important; }
+h2.form_section { margin-top: 1em; }

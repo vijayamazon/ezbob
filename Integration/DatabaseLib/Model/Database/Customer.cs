@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ApplicationMng.Model;
+using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
 using Iesi.Collections.Generic;
@@ -133,7 +134,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         AllStep = 4
     }
 
-    public class Customer 
+    public class Customer
 	{
         
         public Customer() 
@@ -352,6 +353,14 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// Количество неудачноых проверок банковского счета
         /// </summary>
         public virtual int BankAccountValidationInvalidAttempts { get; set; }
+
+        public virtual bool HasLateLoans
+        {
+            get
+            {
+                return Loans.Any(l => l.Status == LoanStatus.Late);
+            }
+        }
 
         public virtual void ValidateOfferDate(DateTime? offerDate = null)
         {

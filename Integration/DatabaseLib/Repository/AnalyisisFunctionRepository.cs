@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ApplicationMng.Repository;
 using NHibernate;
 using NHibernate.Linq;
+using NHibernate.SqlCommand;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
@@ -38,5 +40,12 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			return false;
 		}
+
+	    public IList<MP_AnalyisisFunction> GetAllFunctionsAndInit()
+	    {
+	        return _session.CreateCriteria<MP_AnalyisisFunction>()
+                    .CreateAlias("ValueType", "vt", JoinType.InnerJoin)
+	                .List<MP_AnalyisisFunction>();
+	    }
 	}
 }

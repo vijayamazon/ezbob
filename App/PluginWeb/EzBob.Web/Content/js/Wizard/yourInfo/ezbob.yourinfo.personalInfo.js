@@ -15,10 +15,31 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'change input[name="ConsentToSearch"]': 'consentToSearchChanged',
-            'click label[for="ConsentToSearch"] a' : 'showConsent'
+            'click label[for="ConsentToSearch"] a': 'showConsent',
+            'change input[name="FirstName"]': 'firstNameChanged',
+            'change input[name="MiddleInitial"]': 'middleNameChanged',
+            'change input[name="Surname"]': 'surnameChanged',
+            'change input[name="OverallTurnOver"]': 'overallTurnOverChanged',
+            'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged'
+            
         });
-        
+
         this.constructor.__super__.initialize.call(this);
+    },
+    firstNameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    middleNameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    surnameChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    overallTurnOverChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "OverallTurnOverImage", "#OverallTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    webSiteTurnOverImageChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "WebSiteTurnOverImage", "#WebSiteTurnOver", "#RotateImage", "#OkImage", "#FailImage");
     },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
@@ -40,18 +61,17 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
 
         this.$el.find("#TimeAtAddress").trigger("change");
-
-        this.turnOver = this.$el.find(".turnOver");
-        this.turnOver.remove();
+        
+        this.formChecker = EzBob.checkCompanyDetailForm(this.form);
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
-                                                    id:this.model.get('Id'),
-                                                    firstName: this.$el.find("input[name='FirstName']").val(),
-                                                    middleInitial: this.$el.find("input[name='MiddleInitial']").val(),
-                                                    surname: this.$el.find("input[name='Surname']").val()
-                                                  });
-        
+            id: this.model.get('Id'),
+            firstName: this.$el.find("input[name='FirstName']").val(),
+            middleInitial: this.$el.find("input[name='MiddleInitial']").val(),
+            surname: this.$el.find("input[name='Surname']").val()
+        });
+
         var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
         EzBob.App.modal.show(consentAgreement);
         return false;
@@ -64,15 +84,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
-
-        if (this.type == "Entrepreneur") {
-            this.turnOver.appendTo($(".typeOfBussiness").parent());
-            this.turnOver.find(".cashInput").cashEdit();
-            this.$el.find('.cashControlls img').setPopover();
-        } else {
-            this.turnOver.remove();
-        }
-
+        EzBob.Validation.displayIndication(this.formChecker, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
     consentToSearchChanged: function (e) {
         this.agree = $(e.target).is(':checked');
@@ -93,7 +105,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         if ($el.hasClass("disabled")) {
             return false;
         }
-        
+
         scrollTop();
         if (!this.validator.form() || !this.PrevAddressValidator || !this.AddressValidator) {
             if (!this.PrevAddressValidator)

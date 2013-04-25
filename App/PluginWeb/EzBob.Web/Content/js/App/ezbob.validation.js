@@ -151,6 +151,38 @@ EzBob.Validation.validateAndNotify = function (validator) {
     return true;
 };
 
+EzBob.Validation.checkForm = function (validator) {
+    if (!validator.checkForm()) {
+        return false;
+    }
+    return true;
+};
+
+EzBob.Validation.element = function (validator, elem) {
+    if (!validator.element(elem)) {
+        return false;
+    }
+    return true;
+};
+
+EzBob.Validation.displayIndication = function (validator, ctrlImgId, validatedElement, rotateImgId, okImgId, failImgId) {
+    var controlImgId = "#" + ctrlImgId;
+    
+    if (EzBob.Validation.element(validator, $(validatedElement))) {
+        $(controlImgId).replaceWith($(rotateImgId).clone().show().attr({ id: ctrlImgId }));
+
+        window.setTimeout(
+            function () {
+                $(controlImgId).replaceWith($(okImgId).clone().show().attr({ id: ctrlImgId }));
+            },
+            1000);
+    } else {
+        $(controlImgId).replaceWith($(failImgId).clone().show().attr({ id: ctrlImgId }));
+    }
+};
+
+
+
 $.validator.methods.yearLimit = function (value, element, yearCount) {
     var val = moment(value, "DD/MM/YYYY").toDate();
     var now = new Date();

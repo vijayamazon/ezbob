@@ -1,40 +1,25 @@
-﻿@using EzBob.Web.Models.Strings
-@model dynamic
-
+﻿@model dynamic
 @helper StoreInfo()
-    {
-    <div class="row-fluid">
-        <div class="span7">
-            <div class="wizard-top-notification stores-top-notification">
-                <h1>&nbsp;Shop Info</h1>
-                <h2>
-                    Add your shops to get cash
-                </h2>
-            </div>
-            <div class="simple-well">
-                <div class="row-fluid">
-                    <img class="help-btn" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="Click a marketplace logo  to link your shop to EZBOB." data-original-title="Stores" alt=""/>
-                </div>
-                <div class="store-add-page">
-                    <h2>Select your marketplace:</h2>
-                </div>
-                    <div class="buttons-list row-fluid">
-                    </div>
-                </div>
-            <div style="padding-bottom: 50px" class="cont-button">
-                <a class="next button orange pull-right" style="display: none; " >Continue</a>
-                <a href="#" class="back-step button orange pull-right">Back</a>
-            </div>
-            @{Html.RenderPartial("_SecureDisclaimer");}
+{
+    <div>
+        <h2>Enter your shops</h2>
+        @*<p>Please link the shops you sell in. You can link always more later. Remember, the more you link the more the funds you can get.</p>*@
+
+        <div class="shops-list row-fluid">
         </div>
-        <div class="span1">&nbsp;</div>
-        <div class="span4 sidebar-container">
-            @{Html.RenderPartial("SideBars/StoreInfoNotification");}
+
+        <h2>Enter your payment processors</h2>
+        <p>Don’t have stores in the above marketplaces or want to be approved for more? Do you process your payments through PayPal?  </p>
+        
+        <div class="accounts-list row-fluid">
+        </div>
+
+        <div style="padding-bottom: 50px;margin-top: 10px;" class="cont-button">
+            <a class="next button orange pull-right disabled" >Continue</a>
+            <a href="#" class="back-step button orange pull-right">Back</a>
         </div>
     </div>
 }
-
-
 
 <script id="payment-accounts-securitystatement" type="text/template">
     @{Html.RenderPartial("SideBars/PaymentAccountsNotification");}
@@ -42,30 +27,4 @@
 
 <script id="store-info" type="text/template">
     @StoreInfo()
-</script>
-
-<script id="amazon-store-list" type="text/template">
-    <ul>
-        <% _.each(stores, function(s){
-        %>
-            <li>
-                <%= s.marketplaceId %>, <%= s.merchantId %>
-            </li>
-        <%
-            });
-        %>
-    </ul>
-</script>
-
-<script id="ebay-store-list" type="text/template">
-    <ul class="storelist">
-        <% _.each(stores, function(s){
-        %>
-            <li>
-                <span><%= s.displayName %></span>
-            </li>
-        <%
-            });
-        %>
-    </ul>
 </script>

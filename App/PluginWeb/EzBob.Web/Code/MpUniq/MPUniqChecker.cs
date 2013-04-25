@@ -5,7 +5,7 @@ using EZBob.DatabaseLib.Repository;
 
 namespace EzBob.Web.Code.MpUniq
 {
-    public class MPUniqChecker : IMPUniqChecker
+    public class MPUniqChecker : AMPUniqChecker
     {
         private readonly ICustomerMarketPlaceRepository _customerMarketPlaceRepository;
         private readonly IMP_WhiteListRepository _whiteList;
@@ -16,7 +16,7 @@ namespace EzBob.Web.Code.MpUniq
             _customerMarketPlaceRepository = customerMarketPlaceRepository;
         }
 
-        public void Check(Guid marketplaceType, Customer customer, string token)
+        public override void Check(Guid marketplaceType, Customer customer, string token)
         {
             if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, token))
             {

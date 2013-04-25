@@ -229,9 +229,17 @@ namespace EzBob.Web.Areas.Underwriter
         private static string SellerInfoStoreUrl(MP_CustomerMarketPlace mp, bool isAmazon, MP_EbayUserData ebayUserData)
         {
             string sellerInfoStoreUrl;
-            if (mp.Marketplace.Name == "EKM")
-            {
+
+	        var oEsi = new EKM.EkmServiceInfo();
+	        var oVsi = new Integration.Volusion.VolusionServiceInfo();
+
+            if (mp.Marketplace.InternalId == oEsi.InternalId)
                 sellerInfoStoreUrl = "https://www.google.com/search?q=ekm+" + mp.DisplayName;
+			else if (mp.Marketplace.InternalId == oVsi.InternalId)
+                sellerInfoStoreUrl = "https://www.google.com/search?q=volusion+" + mp.DisplayName;
+            else if (mp.Marketplace.Name == "PayPoint")
+            {
+                sellerInfoStoreUrl = "https://www.google.com/search?q=payPoint+" + mp.DisplayName;
             }
             else if (!isAmazon)
             {

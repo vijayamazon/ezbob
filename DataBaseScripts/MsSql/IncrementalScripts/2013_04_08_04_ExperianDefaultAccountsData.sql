@@ -3,8 +3,7 @@ BEGIN
 	PRINT 'ExperianDefaultAccountsData exists'
 	DROP TABLE ExperianDefaultAccountsData
 END
-ELSE
-BEGIN
+
 CREATE TABLE dbo.ExperianDefaultAccountsData
 (
 	Id INT IDENTITY, -- Internal Default Account Id
@@ -18,7 +17,6 @@ CREATE TABLE dbo.ExperianDefaultAccountsData
 	CONSTRAINT FK_ExperianDefaultAccountsData_CustomerId FOREIGN KEY (CustomerId) REFERENCES dbo.Customer (Id),
 	CONSTRAINT FK_ExperianDefaultAccountsData_ExperianAccountType FOREIGN KEY (AccountType) REFERENCES dbo.ExperianAccountTypes (Id)
 )
-END
 GO
 
 SET ANSI_NULLS ON

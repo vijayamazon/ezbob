@@ -45,11 +45,13 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         id = e.currentTarget.getAttribute("data-id")
         return unless id
         shop = @model.at(id)
-        return if shop.get('Name') is 'EKM'
+
+        return if shop.get('Name') is 'Volusion'
 
         @detailView = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: @model, currentId: id, customerId: @model.customerId
         @detailView.on "reCheck", @reCheckmarketplaces, @
         @detailView.on("recheck-token", @renewToken)
+	@detailView.customerId = @model.customerId
         @detailView.render()
 
     showMPError: -> false

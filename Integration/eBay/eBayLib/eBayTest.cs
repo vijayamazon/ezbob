@@ -1,7 +1,6 @@
 using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper;
+using EZBob.DatabaseLib.Model.Database;
 using EzBob.eBayServiceLib;
-using NHibernate;
 using StructureMap;
 
 namespace EzBob.eBayLib
@@ -19,14 +18,14 @@ namespace EzBob.eBayLib
 			}
 		}
 
-		public static IDatabaseCustomer GetCustomerInfo( int customerId )
+		public static Customer GetCustomerInfo( int customerId )
 		{
 			return EBayRetriveDataHelper.GetCustomerInfo( customerId );			
 		}
 
 		public static void TestStoreCustomerSecurityData( int customerId, string token, string marketplaceName = null )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+			var databaseCustomer = GetCustomerInfo( customerId );
 
 			var data = new eBaySecurityInfo
 			{
@@ -49,59 +48,59 @@ namespace EzBob.eBayLib
 
 		public static void TestUpdateAllUserInfo( int customerId )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+			var databaseCustomer = GetCustomerInfo( customerId );
 
 			UpdateUserInfo( databaseCustomer );
 		}
 
 		public static void TestUpdateAllAccountInfo( int customerId )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+            var databaseCustomer = GetCustomerInfo(customerId);
 
 			UpdateAccountInfo( databaseCustomer );
 		}
 
 		public static void TestUpdateFeedbackInfo( int customerId )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+            var databaseCustomer = GetCustomerInfo(customerId);
 
 			UpdateFeedbackInfo( databaseCustomer );
 		}
 		public static void TestUpdateInventoryInfo( int customerId )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+            var databaseCustomer = GetCustomerInfo(customerId);
 
 			UpdateInventoryInfo( databaseCustomer );
 		}
 
-		private static void UpdateUserInfo( IDatabaseCustomer databaseCustomer )
+		private static void UpdateUserInfo( Customer databaseCustomer )
 		{
             //EBayRetriveDataHelper.UpdateUserInfo(databaseCustomer);
 		}
 
-		private static void UpdateAccountInfo( IDatabaseCustomer databaseCustomer )
+        private static void UpdateAccountInfo(Customer databaseCustomer)
 		{
             //EBayRetriveDataHelper.UpdateAccountInfo(databaseCustomer);
 		}
-		
-		private static void UpdateFeedbackInfo(IDatabaseCustomer databaseCustomer)
+
+        private static void UpdateFeedbackInfo(Customer databaseCustomer)
 		{
             //EBayRetriveDataHelper.UpdateFeedbackInfo(databaseCustomer);
 		}
 
-		private static void UpdateInventoryInfo( IDatabaseCustomer databaseCustomer )
+        private static void UpdateInventoryInfo(Customer databaseCustomer)
 		{
             //EBayRetriveDataHelper.UpdateInventoryInfo(databaseCustomer);
 		}
 
 		public static void TestUpdateOrdersInfo( int customerId )
 		{
-			IDatabaseCustomer databaseCustomer = GetCustomerInfo( customerId );
+			var databaseCustomer = GetCustomerInfo( customerId );
 
 			UpdateOrdersInfo( databaseCustomer );
 		}
 
-		private static void UpdateOrdersInfo(IDatabaseCustomer databaseCustomer)
+        private static void UpdateOrdersInfo(Customer databaseCustomer)
 		{
 			//EBayRetriveDataHelper.UpdateOrdersInfo( databaseCustomer );
 		}

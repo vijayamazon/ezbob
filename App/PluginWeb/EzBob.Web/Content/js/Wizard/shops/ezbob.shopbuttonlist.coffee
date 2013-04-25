@@ -4,16 +4,16 @@
 #
 class EzBob.StoreButtonWithListView extends EzBob.StoreButtonView
     initialize: (options) ->
-        @listView.model.on "change reset", @listChanged, this
+        #@listView.model.on "change reset", @listChanged, this
         super(options)
 
-    listChanged: ->
-        @trigger("ready", @name)  if @listView.model.length > 0
+    #listChanged: -> 
+        #@trigger("ready", @name)  if @listView.model.length > 0
 
     render: ->        
         super()
-        @$el.append @listView.render().$el
+        #@$el.append @listView.render().$el
         this
 
-    update: ->
-        @listView.update()
+    #update: ->
+        #@listView.update()

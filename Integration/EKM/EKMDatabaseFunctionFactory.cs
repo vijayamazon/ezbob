@@ -1,19 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 
 namespace EKM
 {
-    public class EKMDatabaseFunctionFactory : IDatabaseFunctionFactory<EKMDatabaseFunctionType>
+    public class EKMDatabaseFunctionFactory : IDatabaseFunctionFactory<EkmDatabaseFunctionType>
     {
-        public IDatabaseFunction Create(EKMDatabaseFunctionType type)
+        public IDatabaseFunction Create(EkmDatabaseFunctionType type)
         {
-            return EKMDatabaseFunctionStorage.Instance.GetFunction(type);
+            return EkmDatabaseFunctionStorage.Instance.GetFunction(type);
         }
 
         public IDatabaseFunction GetById(Guid id)
         {
-            return EKMDatabaseFunctionStorage.Instance.GetFunctionById(id);
+            return EkmDatabaseFunctionStorage.Instance.GetFunctionById(id);
+        }
+
+        public IEnumerable<IDatabaseFunction> GetAll()
+        {
+            return EkmDatabaseFunctionStorage.Instance.AllFunctions();
         }
     }
 }

@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 using EzBob.CommonLib;
-using StructureMap;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
-	public abstract class DatabaseMarketplaceBaseBase : IDatabaseMarketplace
+	public abstract class DatabaseMarketplaceBaseBase : IMarketplaceType
 	{		
 		private readonly IMarketplaceServiceInfo _MarketplaceSeriveInfo;
 
@@ -33,27 +31,20 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 			get { return _MarketplaceSeriveInfo.Description; }
 		}
 
-		public abstract IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper);
+	    public abstract IEnumerable<IDatabaseFunction> DatabaseFunctionList { get; }
+
+	    public abstract IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper);
 		public abstract IDatabaseFunction GetDatabaseFunctionById(Guid id);
 	}
 
 	public abstract class DatabaseMarketplaceBase<TEnum> : DatabaseMarketplaceBaseBase		
 	{		
-		/*protected static void InitDatabaseMarketplace<T>()
-			where T : DatabaseMarketplaceBase<TEnum>, new()
-		{
-			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-			var mp = new T();
-			helper.InitDatabaseMarketPlace(mp);
-		}*/
-
 		protected DatabaseMarketplaceBase( IMarketplaceServiceInfo marketplaceSeriveInfo ) 
 			: base(marketplaceSeriveInfo)
 		{
 		}
 
-		// for internal use only!!! 
-		protected internal IEnumerable<IDatabaseFunction> DatabaseFunctionList
+	    public override IEnumerable<IDatabaseFunction> DatabaseFunctionList
 		{
 			get
 			{
@@ -69,26 +60,4 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		}
 	
 	}
-
-	public abstract class DatabaseMarketplaceBase<T, TEnum> : DatabaseMarketplaceBase<TEnum>
-		where T : DatabaseMarketplaceBase<TEnum>, new()
-	{	
-		static DatabaseMarketplaceBase()
-		{			
-			InitDatabaseMarketplace(new T());
-		}
-
-		private static void InitDatabaseMarketplace(DatabaseMarketplaceBase<TEnum> mp)
-		{
-			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();			
-			helper.InitDatabaseMarketPlace(mp);
-		}
-
-		protected DatabaseMarketplaceBase(IMarketplaceServiceInfo marketplaceSeriveInfo) 
-			: base(marketplaceSeriveInfo)
-		{
-		}
-	}
-
-	
 }

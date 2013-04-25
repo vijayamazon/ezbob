@@ -44,5 +44,9 @@ namespace EZBob.DatabaseLib.Common
 			return _Funcs.Values.FirstOrDefault( fv => fv.InternalId.Equals( id ) );
 		}
 
+        public IEnumerable<IDatabaseFunction> AllFunctions()
+        {
+            return _Funcs.Values;
+        }
 	}
 }

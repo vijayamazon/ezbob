@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using EKM;
+using Integration.Volusion;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
@@ -39,13 +40,14 @@ namespace EzBobTest
 		[SetUp]
 		public void Init()
 		{
-			EnvironmentConfigurationLoader.AppPathDummy = @"p:\Projects\EzBob\App\clients\Maven\maven.exe";
+			EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
 			NHibernateManager.FluentAssemblies.Add( typeof( ApplicationMng.Model.Application ).Assembly );
 			NHibernateManager.FluentAssemblies.Add( typeof( Customer ).Assembly );
 			NHibernateManager.FluentAssemblies.Add( typeof( eBayDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add( typeof( AmazonDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add( typeof( PayPalDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add(typeof (EkmDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof (VolusionDatabaseMarketPlace).Assembly);
 			Scanner.Register();
 			ObjectFactory.Configure( x =>
 			{
@@ -92,7 +94,7 @@ namespace EzBobTest
 		[Test]
 		public void UpdateCustomerMarketplace()
 		{
-			var umi = 1047;
+			var umi = 119;
 			UpdateCustomerMarketplace(umi);
 
 			/*var umis = new[] { 2408, 268, 2222 };
@@ -245,7 +247,7 @@ namespace EzBobTest
 
 		}
 
-		private IDatabaseCustomer GetCustomerInfo( int customerId )
+		private Customer GetCustomerInfo( int customerId )
 		{
 			return _Helper.GetCustomerInfo( customerId );
 		}

@@ -181,6 +181,24 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_CustomerId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_CustomerId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ExperianAccountType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ExperianAccountType.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ServiceLogId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ServiceLogId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoanOptions_Loan</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanOptions_Loan.sql</oFileName>
@@ -307,6 +325,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_CustomerMarketplaceUpdatingCounter_MP_CustomerMarketplaceUpdatingActionLog</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketplaceUpdatingCounter_MP_CustomerMarketplaceUpdatingActionLog.sql</oFileName>
@@ -343,6 +367,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_EbayExternalTransaction_MP_EbayOrderItem</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EbayExternalTransaction_MP_EbayOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_EbayFeedbackItem_MP_AnalysisFunctionTimePeriod</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_EbayFeedbackItem_MP_AnalysisFunctionTimePeriod.sql</oFileName>
@@ -370,6 +400,12 @@
     <oName>FK_MP_OrderItem_MP_Order</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_OrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -445,6 +481,18 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_EkmOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EkmOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_PersonalInfoItem_MP_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_PersonalInfoItem_MP_CustomerMarketPlace.sql</oFileName>
@@ -478,6 +526,18 @@
     <oName>FK_MP_TeraPeakOrderItem_MP_TeraPeakOrder</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_TeraPeakOrderItem_MP_TeraPeakOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportScheduler_ReportID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportScheduler_ReportID.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportUsers_UserID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportUsers_UserID.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -1183,6 +1243,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>DeleteCustomer</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\DeleteCustomer.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>DeleteDataSource</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\DeleteDataSource.sql</oFileName>
@@ -1216,6 +1282,18 @@
     <oName>Dump_Application_Variables</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\Dump_Application_Variables.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>EKMGetNewShops</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\EKMGetNewShops.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>EkmUpdateLastHandledId</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\EkmUpdateLastHandledId.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1393,6 +1471,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetEkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetEkmConnectorConfigs.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetElementId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetElementId.sql</oFileName>
@@ -1435,6 +1519,24 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetExperianData</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetExperianData.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetExperianDataAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetExperianDataAgentConfigs.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetExperianDefaultAccountId</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetExperianDefaultAccountId.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetExposurePerMedalReport</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetExposurePerMedalReport.sql</oFileName>
@@ -1447,9 +1549,21 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetFirstStepCustomers</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetFirstStepCustomers.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetHistoryByApplicationId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetHistoryByApplicationId.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetLastStepCustomers</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetLastStepCustomers.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1465,6 +1579,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetMaxServiceLogId</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetMaxServiceLogId.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetMedalStatisticReport</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\GetMedalStatisticReport.sql</oFileName>
@@ -1477,9 +1597,21 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetMonitoredSites</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetMonitoredSites.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetNdx</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetNdx.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetNewCustomers</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetNewCustomers.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1492,6 +1624,12 @@
     <oName>GetNodeFilesForRestoreAndSave</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetNodeFilesForRestoreAndSave.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetPacnetAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetPacnetAgentConfigs.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1555,6 +1693,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetSecondStepCustomers</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetSecondStepCustomers.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetSignalParameters</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetSignalParameters.sql</oFileName>
@@ -1570,6 +1714,12 @@
     <oName>GetStoredParametersByAppId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetStoredParametersByAppId.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetSupportAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetSupportAgentConfigs.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1615,6 +1765,24 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>InsertExperianAccount</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertExperianAccount.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>InsertPacNetBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertPacNetBalance.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>InsertSiteAnalytics</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertSiteAnalytics.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>InsertStrategyCustomerUpdateTime</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\InsertStrategyCustomerUpdateTime.sql</oFileName>
@@ -1654,6 +1822,12 @@
     <oName>Log_TraceLogInsert</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\Log_TraceLogInsert.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MC_AddCampaignClickStat</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\MC_AddCampaignClickStat.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1831,15 +2005,99 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptAddReportUser</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptAddReportUser.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptAddUserReportMap</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptAddUserReportMap.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptAdsReport</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptAdsReport.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptBugs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptBugs.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptChangePassword</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptChangePassword.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptCustAllData</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptCustAllData.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptCustAnualSales</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptCustAnualSales.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptCustomerReport</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptCustomerReport.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptDailyStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptDailyStats.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptDidntTakeLoan</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptDidntTakeLoan.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptGetCampaignClickStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptGetCampaignClickStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptGetUserName</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptGetUserName.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptGetUserReports</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptGetUserReports.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoansOverall</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoansOverall.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptNewClients</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptNewClients.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptNewClientsEKM</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptNewClientsEKM.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -1864,6 +2122,36 @@
     <oName>RptOpenPayments</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptOpenPayments.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptOverallStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptOverallStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptPaymentReport</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptPaymentReport.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptScheduler_GetHeaderAndFields</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptScheduler_GetHeaderAndFields.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptScheduler_GetReportList</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptScheduler_GetReportList.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptSourceRef</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptSourceRef.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2293,6 +2581,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>UpdateExperianFirstIdToHandle</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\UpdateExperianFirstIdToHandle.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>UpdateExportSigningId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\UpdateExportSigningId.sql</oFileName>
@@ -2308,6 +2602,12 @@
     <oName>UpdateIsTimeoutReported</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\UpdateIsTimeoutReported.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>UpdateLastFoundCustomerId</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\UpdateLastFoundCustomerId.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

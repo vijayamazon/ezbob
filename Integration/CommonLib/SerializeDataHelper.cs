@@ -6,11 +6,11 @@ namespace EzBob.CommonLib
 {
 	public static class SerializeDataHelper
 	{
-		public static byte[] Serialize<T>( T info )
+		public static byte[] Serialize( object info )
 		{
 			byte[] data;
 
-			var modelSerializer = SerializerCache.GetSerializer( typeof( T ) );
+			var modelSerializer = SerializerCache.GetSerializer( info.GetType() );
 			using ( var mem = new MemoryStream() )
 			{
 				modelSerializer.Serialize( mem, info );

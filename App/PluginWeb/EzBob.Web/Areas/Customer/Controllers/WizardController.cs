@@ -12,6 +12,8 @@ using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Infrastructure.csrf;
 using Scorto.Web;
 using log4net;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -25,9 +27,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ILoanTypeRepository _loanTypes;
         private static readonly ILog _log = LogManager.GetLogger(typeof(WizardController));
         private readonly MembershipProvider _membershipProvider;
+		private readonly ISession _session;
 
         //-------------------------------------------------------------------
-        public WizardController(IAppCreator creator, IEzbobWorkplaceContext context, ISecurityQuestionRepository questions, CustomerModelBuilder customerModelBuilder, IEzBobConfiguration config, ILoanTypeRepository loanTypes, MembershipProvider membershipProvider)
+        public WizardController(
+			IAppCreator creator,
+			IEzbobWorkplaceContext context,
+			ISecurityQuestionRepository questions,
+			CustomerModelBuilder customerModelBuilder,
+			IEzBobConfiguration config,
+			ILoanTypeRepository loanTypes,
+			MembershipProvider membershipProvider,
+			ISession session
+		)
         {
             _context = context;
             _creator = creator;
@@ -36,6 +48,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _config = config;
             _loanTypes = loanTypes;
             _membershipProvider = membershipProvider;
+			_session = session;
         }
 
         //-------------------------------------------------------------------
@@ -48,6 +61,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
             ViewData["TargetsEnabled"] = _config.TargetsEnabled;
             ViewData["Config"] = _config;
+
+			ViewData["ActiveMarketPlaces"] = _session
+				.Query<MP_MarketplaceType>()
+				.Where(x => x.Active)
+				.Select(x => x.Name)
+				.ToArray();
 
             var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
 

@@ -14,7 +14,7 @@ namespace EzBob.eBayLib
 		public PluginRegistry()
 		{
 		    var ebay = new eBayServiceInfo();
-            For<IDatabaseMarketplace>().Use<eBayDatabaseMarketPlace>().Named(ebay.DisplayName);
+            For<IMarketplaceType>().Use<eBayDatabaseMarketPlace>().Named(ebay.DisplayName);
             For<DatabaseMarketplaceBase<eBayDatabaseFunctionType>>().Use<eBayDatabaseMarketPlace>();
             For<IEbayMarketplaceTypeConnection>().Use(new EbayMarketplaceTypeConnection());
 			For<IEbayMarketplaceSettings>().Use( new EbayMarketPlaceTypeSettings() );

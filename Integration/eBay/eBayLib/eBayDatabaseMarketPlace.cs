@@ -7,7 +7,7 @@ using StructureMap;
 
 namespace EzBob.eBayLib
 {
-	public class eBayDatabaseMarketPlace : DatabaseMarketplaceBase<eBayDatabaseMarketPlace, eBayDatabaseFunctionType>
+	public class eBayDatabaseMarketPlace : DatabaseMarketplaceBase<eBayDatabaseFunctionType>
 	{
 		/*static eBayDatabaseMarketPlace()
 		{

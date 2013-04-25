@@ -13,9 +13,9 @@ namespace EzBob.RequestsQueueCore
 	internal class EzBobIntegrationWorkflows : EzBobIntegrationWorkflowsBase
 	{
 		private static IEzBobIntegrationWorkflows _Instance;
-		private static IEnumerable<IDatabaseMarketplace> _RegisteredMarketplaces;
+		private static IEnumerable<IMarketplaceType> _RegisteredMarketplaces;
 
-		private static IEnumerable<IDatabaseMarketplace> RegisteredMarketplaces
+		private static IEnumerable<IMarketplaceType> RegisteredMarketplaces
 		{
 			get { return _RegisteredMarketplaces ?? ( _RegisteredMarketplaces = GetRegisteredMarketplaces() ); }
 		}
@@ -27,14 +27,14 @@ namespace EzBob.RequestsQueueCore
 
 		public override int UpdateCustomerData( int customerId )
 		{
-			IEnumerable<IDatabaseMarketplace> mpList = RegisteredMarketplaces;
+			IEnumerable<IMarketplaceType> mpList = RegisteredMarketplaces;
 
 			var helper = Helper;
 			var customer = helper.GetCustomerInfo( customerId );
 
 			var listMpId = new List<IDatabaseCustomerMarketPlace>();
 
-			foreach (IDatabaseMarketplace mp in mpList)
+			foreach (IMarketplaceType mp in mpList)
 			{
 				var list = helper.GetCustomerMarketPlaceList( customer, mp );
 
@@ -79,7 +79,7 @@ namespace EzBob.RequestsQueueCore
 
 		public override int UpdateCustomerMarketPlaceData( int customerMarketPlaceId )
 		{
-			IDatabaseMarketplace mp = GetRegisteredMarketPlace( customerMarketPlaceId );
+			IMarketplaceType mp = GetRegisteredMarketPlace( customerMarketPlaceId );
 			IRequestData requestinfo = RequestInfoFactory.CreateSingleRequest( mp, () =>
 				{
 					var databaseDataHelper = Helper;
@@ -89,7 +89,7 @@ namespace EzBob.RequestsQueueCore
 			return CreateRequest( requestinfo );
 		}
 
-		private IRequestData UpdateCustomerMarketPlaceData( IDatabaseMarketplace mp, int customerMarketPlaceId )
+		private IRequestData UpdateCustomerMarketPlaceData( IMarketplaceType mp, int customerMarketPlaceId )
 		{
 			return RequestInfoFactory.CreateSingleRequest( mp, () =>
 			{
@@ -107,7 +107,7 @@ namespace EzBob.RequestsQueueCore
 
 		private IMarketplaceRetrieveDataHelper GetMarketplaceRetrieveDataHelper( int customerMarketPlaceId )
 		{
-			IDatabaseMarketplace mp = GetRegisteredMarketPlace( customerMarketPlaceId );
+			IMarketplaceType mp = GetRegisteredMarketPlace( customerMarketPlaceId );
 			DatabaseDataHelper databaseDataHelper = Helper;
 			return mp.GetRetrieveDataHelper( databaseDataHelper );			
 		}
@@ -130,21 +130,21 @@ namespace EzBob.RequestsQueueCore
 			return cmp;
 		}
 
-		private IDatabaseMarketplace GetRegisteredMarketPlace( MP_MarketplaceType mp )
+		private IMarketplaceType GetRegisteredMarketPlace( MP_MarketplaceType mp )
 		{
-			return ObjectFactory.GetNamedInstance<IDatabaseMarketplace>( mp.Name );
+			return ObjectFactory.GetNamedInstance<IMarketplaceType>( mp.Name );
 		}
 
-		private IDatabaseMarketplace GetRegisteredMarketPlace( int customerMarketPlaceId )
+		private IMarketplaceType GetRegisteredMarketPlace( int customerMarketPlaceId )
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace( customerMarketPlaceId );
 
 			return GetRegisteredMarketPlace( customerMarketPlace.Marketplace );
 		}
 
-		private static IEnumerable<IDatabaseMarketplace> GetRegisteredMarketplaces()
+		private static IEnumerable<IMarketplaceType> GetRegisteredMarketplaces()
 		{
-			return ObjectFactory.GetAllInstances<IDatabaseMarketplace>();
+			return ObjectFactory.GetAllInstances<IMarketplaceType>();
 		}
 
 		private DatabaseDataHelper Helper

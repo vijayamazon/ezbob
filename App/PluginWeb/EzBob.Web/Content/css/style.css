@@ -15,7 +15,7 @@ body{background:#1F2022; font-family: Arial, Helvetica, sans-serif; font-size:14
 #wrapper, footer{background:#eee url(images/body_bg.jpg);}
 
 /*-- Padding for inner sections --*/
-.inner{width:960px; padding:10px; margin:0 auto; }
+.inner{width:960px; padding:10px; margin:0 auto;/*min-height: 500px;*/ }
 .inner_nopadding{width:980px; padding:0; margin:0 auto; }
 /*-- login bar --*/
 #pre_header{
@@ -203,11 +203,40 @@ ul.star li{background:url(images/star.png) no-repeat 0 0; padding:0 0 0 30px;}
 .contact_form:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
 .contact_form:focus{border:1px #666 solid;}
 
-.form_field{font-family:Arial, Helvetica, sans-serif; margin:0 0 20px 0; padding:5px; font-size:14px; border:1px #ccc solid; -moz-box-shadow: 0 0 10px #ccc; -webkit-box-shadow: 0 0 10px #ccc; box-shadow: 0 0 10px #ccc;}
-.form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
-.form_field:focus{border:1px #666 solid;}
+body .form_field {
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0 0 20px 0;
+	padding: 5px;
+	font-size: 14px;
+	border: 1px #ccc solid;
+	-moz-box-shadow: 0 0 10px #ccc;
+	-webkit-box-shadow: 0 0 10px #ccc;
+	box-shadow: 0 0 10px #ccc;
+}
+body .form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
+body .form_field:focus{border:1px #666 solid;}
+
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
-label span.required{color:#c00;}
+
+span.required {
+	color: #c00;
+	vertical-align: top;
+	display: inline-block;
+	margin-top: -0.6em;
+}
+
+input.form_field, textarea.form_field { width: 400px; }
+
+textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none; }
+
+select.form_field { width: 410px; height: 30px; padding: 0; }
+
+select.form_field_date { width: 103px; height: 30px; padding: 0; }
+
+div.form_field_container { margin-bottom: 1.1em; }
+
+input.form_field_address { width: 245px; }
+input.form_field_address_lookup { width: 150px; }
 
 /*----table for payment schedule-----*/
 table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;
@@ -235,7 +264,7 @@ table.table td span.label{color:#666;}
 table.table tbody tr:hover{background:#f1f1f1;}
 
 /*-- General Content Classes --*/
-h1,h2,h3,h4,h5,h6{font-size:28px; margin:0 0 20px 0; line-height:28px; font-family:'Sanchez', arial;}
+h1,h2,h3,h4,h5,h6{font-size:28px; margin:0 0 20px 0; line-height:28px; font-family: 'Segoe UI', arial;} /* Sanchez */
 h1{font-size:24px; margin:10px 0 20px 0; color:#999; padding:0 0 10px 0; border-bottom:1px #eee solid;}
 h1.home_page{font-size:34px; line-height:50px; color:#666; border:none!important; padding:0; margin:0 0 10px 0;}
 h1.centered{text-align:center;}

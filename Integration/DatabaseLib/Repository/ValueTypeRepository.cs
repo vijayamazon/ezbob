@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using ApplicationMng.Repository;
 using NHibernate;
 
@@ -13,15 +14,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 		public MP_ValueType Get( Guid internalMarketPlaceId )
 		{
-			foreach ( var marketPlace in GetAll() )
-			{
-				if ( marketPlace.InternalId.Equals( internalMarketPlaceId ) )
-				{
-					return marketPlace;
-				}
-			}
-
-			return null;
+		    return GetAll().SingleOrDefault(x => x.InternalId == internalMarketPlaceId);
 		}
 
 		public bool Exists( Guid internalId )

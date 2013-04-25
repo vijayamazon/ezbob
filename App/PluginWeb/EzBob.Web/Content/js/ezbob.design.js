@@ -701,16 +701,50 @@ EzBob.validateSignUpForm = function (el) {
             signupPass1: $.extend({}, passPolicy),
             signupPass2: passPolicy2,
             EMail: { required: true, email: true },
+            securityQuestion: { required: true },
             SecurityAnswer: { required: true, maxlength: 199 }
         },
         messages: {
             "EMail": { email: EzBob.dbStrings.NotValidEmailAddress, remote: "Email address already exists", required: EzBob.dbStrings.NotValidEmailAddress },
             "signupPass1": { required: passPolicyText, regex: passPolicyText },
             "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
+            "securityQuestion": { required: "This field is required" },
             "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight
+    });
+};
+
+EzBob.checkSignUpForm = function (el) {
+    var e = el || $(".signup");
+
+    var passPolicy = { required: true, minlength: 6, maxlength: 20 };
+    var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
+    if (EzBob.Config.PasswordPolicyType != 'simple') {
+        passPolicy.regex =
+        "^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$";
+        passPolicy.minlength = 7;
+        passPolicyText = "Password has to have 2 types of characters out of 4 (letters,caps,digits,special chars)";
+    }
+    var passPolicy2 = $.extend({}, passPolicy);
+    passPolicy2.equalTo = '#signupPass1';
+
+    return e.validate({
+        rules: {
+            signupPass1: $.extend({}, passPolicy),
+            signupPass2: passPolicy2,
+            EMail: { required: true, email: true },
+            securityQuestion: { required: true },
+            SecurityAnswer: { required: true, maxlength: 199 }
+        },
+        messages: {
+            "EMail": { email: EzBob.dbStrings.NotValidEmailAddress, remote: "Email address already exists", required: EzBob.dbStrings.NotValidEmailAddress },
+            "signupPass1": { required: passPolicyText, regex: passPolicyText },
+            "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
+            "securityQuestion": { required: "This field is required" },
+            "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" }
+        }
     });
 };
 
@@ -757,9 +791,9 @@ EzBob.validateCompanyDetailForm = function (el) {
             MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
             TypeOfBusiness: { required: true },
             ResidentialStatus: { regex: "^[a-zA-Z ]+$" },
-            Gender: { regex: "^M|F$" },
+            Gender: { regex: "^M|F$", required: true },
             MartialStatus: { regex: "^Single|Married|Divorced|Widow/er|Other$" },
-            OverallTurnOver: { required: true, number: true, min:1 },
+            OverallTurnOver: { required: true, number: true, min: 1 },
             WebSiteTurnOver: { required: true, number: true, min: 1 },
             TimeAtAddress: { required: true },
 
@@ -795,6 +829,58 @@ EzBob.validateCompanyDetailForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight
+    });
+};
+
+EzBob.checkCompanyDetailForm = function (el) {
+    var e = el || $(".CompanyDetailForm");
+    return e.validate({
+        ignore: "",
+        rules: {
+            //personal info
+            FirstName: EzBob.Validation.NameValidationObject,
+            Surname: { required: true },
+            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
+            DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            TypeOfBusiness: { required: true },
+            ResidentialStatus: { regex: "^[a-zA-Z ]+$" },
+            Gender: { regex: "^M|F$", required: true },
+            MartialStatus: { regex: "^Single|Married|Divorced|Widow/er|Other$" },
+            OverallTurnOver: { required: true, number: true, min: 1 },
+            WebSiteTurnOver: { required: true, number: true, min: 1 },
+            TimeAtAddress: { required: true },
+
+            //limited company info
+            LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
+            LimitedCompanyName: { required: true, minlength: 2 },
+            LimitedOverallTurnOver: { required: true, number: true },
+            LimitedWebSiteTurnOver: { required: true, number: true },
+            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
+
+            //Non limited company info
+            NonLimitedCompanyName: { required: true, minlength: 2 },
+            NonLimitedTimeInBusiness: { required: true, digits: true },
+            NonLimitedOverallTurnOver: { required: true, number: true, minlength: 2 },
+            NonLimitedWebSiteTurnOver: { required: true, number: true, minlength: 2 },
+            NonLimitedTimeAtAddress: { required: true, digits: true },
+            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" }
+        },
+        messages: {
+            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
+            day: { digits: "Incorect day" },
+            month: { digits: "Incorect month" },
+            year: { digits: "Incorect year" },
+            ResidentialStatus: { regex: "This field is required" },
+            TimeAtAddress: { regex: "This field is required" },
+            Gender: { regex: "Gender field is required" },
+            MartialStatus: { regex: "Martial status field is required" },
+            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            MobilePhone: { regex: "Please enter a valid UK number" },
+            DayTimePhone: { regex: "Please enter a valid UK number" },
+            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
+        }
     });
 };
 
@@ -896,13 +982,42 @@ EzBob.validatemanualPaymentForm = function (el) {
     });
 };
 
-EzBob.validateEkmShopForm = function(el) {
+EzBob.validateEkmShopForm = function (el) {
     var e = el || $('form');
 
     return e.validate({
         rules: {
             ekm_login: { required: true, minlength: 2, maxlength: 30 },
             ekm_password: { required: true, minlength: 2, maxlength: 30 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+}
+
+EzBob.validatePayPointShopForm = function (el) {
+    var e = el || $('form');
+
+    return e.validate({
+        rules: {
+            payPoint_mid: { required: true, minlength: 2, maxlength: 30 },
+            payPoint_vpnPassword: { required: true, minlength: 2, maxlength: 30 },
+            payPoint_remotePassword: { required: true, minlength: 2, maxlength: 30 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+}
+
+EzBob.validateVolusionShopForm = function(el) {
+    var e = el || $('form');
+
+    return e.validate({
+        rules: {
+            volusion_shopname: { required: true, minlength: 2, maxlength: 300 },
+            volusion_url: { required: true, minlength: 10, maxlength: 300 },
+            volusion_login: { required: true, minlength: 2, maxlength: 30 },
+            volusion_password: { required: true, minlength: 2, maxlength: 300 }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight

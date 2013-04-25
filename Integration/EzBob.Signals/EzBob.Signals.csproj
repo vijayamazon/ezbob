@@ -102,7 +102,7 @@
     </ProjectReference>
     <ProjectReference Include="..\ZohoCRM\ZohoCRM.csproj">
       <Project>{A3D7CD63-C1D8-41D0-93A7-776C0E6A20D8}</Project>
-      <Name>ZohoCRM %28Integration\ZohoCRM\ZohoCRM%29</Name>
+      <Name>ZohoCRM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

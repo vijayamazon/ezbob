@@ -1,3 +1,5 @@
+using EZBob.DatabaseLib.Model.Database;
+
 namespace EZBob.DatabaseLib.DatabaseWrapper
 {
 	public interface IDatabaseCustomerMarketPlace
@@ -6,7 +8,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 		string DisplayName { get; }
 		byte[] SecurityData { get; }
 
-		IDatabaseCustomer Customer {get; }
-		IDatabaseMarketplace Marketplace { get; }
+		Customer Customer {get; }
+		IMarketplaceType Marketplace { get; }
 	}
 }

@@ -3,8 +3,8 @@
     resize: none;
     height: 80px;
 }
-
-.underwriter-body {
+.underwriter-body 
+{
     padding: 10px;
     background-color: #fefefe;
     background-color: #F9F9F9;
@@ -138,7 +138,7 @@ table.rright tbody td:not(:first-child) { text-align: right; }
 
 
 
-.shop-eBay, .shop-Amazon, .shop-EKM {
+.shop-eBay, .shop-Amazon, .shop-EKM, .shop-Volusion, .shop-PayPoint {
     background-image: url(../img/store-logos.png);
     width: 119px;
     height: 35px;
@@ -153,6 +153,13 @@ table.rright tbody td:not(:first-child) { text-align: right; }
 }
 
 .shop-EKM { background-position: 0 -70px; }
+
+.shop-PayPoint {
+    background-position: 0 -105px;
+    margin-left: 20px;
+}
+
+.shop-Volusion { background-position: 0 -70px; } /* TODO: fix the offset */
 
 .marketplace-table tr { vertical-align: middle; }
 

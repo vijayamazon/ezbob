@@ -1,0 +1,26 @@
+﻿@using EzBob.Web.Models.Strings
+@model dynamic
+
+@{
+    Layout = "_SideBarLayout.cshtml";
+}
+
+<h1><img alt="" src="@Url.Content("~/Content/img/sidebar/ico-tips.png")"><span style="margin-left:-3px;">Quick Tips</span></h1>
+<ul class="gtarr">
+    <li
+        rel="popover" 
+        data-content="In order to link your PayPoint account fast and easy we advise you to have your user ID and passwords (vpn and remote) ready."
+        data-original-title="">
+        Please have your login and passwords ready.
+    </li>
+</ul>
+
+
+@section Video
+{
+    <div style="position:relative">
+        <span>Featuring - Add your PayPoint account</span>
+        <img src="@Url.Content("~/Content/Video/poster.jpg")" alt="" style="width: 320px; height:140px" class="poster-picture"/>
+    </div>
+}
+

@@ -11,7 +11,7 @@ namespace EzBob.PayPal
 		public PluginRegistry()
 		{
 		    var paypal = new PayPalServiceInfo();
-            For<IDatabaseMarketplace>().Use<PayPalDatabaseMarketPlace>().Named(paypal.DisplayName);
+            For<IMarketplaceType>().Use<PayPalDatabaseMarketPlace>().Named(paypal.DisplayName);
 			For<DatabaseMarketplaceBase<PayPalDatabaseFunctionType>>().Use<PayPalDatabaseMarketPlace>();
             For<IMarketplaceRetrieveDataHelper>().Use<PayPalRetriveDataHelper>().Named(paypal.DisplayName);
 		}

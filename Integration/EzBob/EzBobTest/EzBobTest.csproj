@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ErrorRetryingFixture.cs" />
+    <Compile Include="TestVolusionProle.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
     <Compile Include="SplitDateRangesFixture.cs" />
@@ -91,6 +92,10 @@
     <ProjectReference Include="..\..\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
+      <Project>{189D7477-DEE3-4F7B-B703-D24C92352C0C}</Project>
+      <Name>ChannelGrabberAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
@@ -127,6 +132,14 @@
     <ProjectReference Include="..\..\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Volusion\Volusion.csproj">
+      <Project>{48FEC03D-C021-4C8C-89E3-9F6DEE55A55D}</Project>
+      <Name>Volusion</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.csproj">
       <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>

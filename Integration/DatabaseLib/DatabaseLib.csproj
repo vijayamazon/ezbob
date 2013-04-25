@@ -86,7 +86,6 @@
     <Compile Include="DatabaseWrapper\AccountInfo\IDatabaseEbayAccountInfo.cs" />
     <Compile Include="DatabaseWrapper\AccountInfo\PayPalPersonalData.cs" />
     <Compile Include="DatabaseWrapper\DatabaseCustomerMarketPlace.cs" />
-    <Compile Include="DatabaseWrapper\DatabaseCustomer.cs" />
     <Compile Include="DatabaseWrapper\DatabaseMarketPlaceBase.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackDataByPeriod.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackData.cs" />
@@ -102,13 +101,17 @@
     <Compile Include="DatabaseWrapper\FunctionValues\IDatabaseAnalysisFunctionValues.cs" />
     <Compile Include="DatabaseWrapper\FunctionValues\WriteDataInfo.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseCustomerMarketPlace.cs" />
-    <Compile Include="DatabaseWrapper\IDatabaseCustomer.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
+    <Compile Include="DatabaseWrapper\Order\PayPointOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\VolusionOrdersList.cs" />
+    <Compile Include="DatabaseWrapper\Order\PayPointOrdersList.cs" />
+    <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
     <Compile Include="DatabaseWrapper\Products\AmazonProductsList.cs" />
     <Compile Include="IDataAggregatorFactory.cs" />
     <Compile Include="IUpdateActionResultInfo.cs" />
+    <Compile Include="MarketPlacesBootstrap.cs" />
     <Compile Include="Model\ConfigurationVariable.cs" />
     <Compile Include="Model\ConfigurationVariablesRepository.cs" />
     <Compile Include="Model\Database\Bug.cs" />
@@ -133,13 +136,25 @@
     <Compile Include="Model\Loans\LoanType.cs" />
     <Compile Include="Model\Loans\PaymentRallover.cs" />
     <Compile Include="Model\DatabaseElapsedTimeInfo.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrder.cs" />
+    <Compile Include="Model\Marketplaces\EKM\MP_EkmOrderItem.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounter.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingCounterMap.cs" />
     <Compile Include="Model\Database\DailyReportRow.cs" />
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrder.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderMap.cs" />
     <Compile Include="Model\PayPointCard.cs" />
+    <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrder.cs" />
+    <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderMap.cs" />
     <Compile Include="Model\Plain\MarketPlaceModel.cs" />
     <Compile Include="Model\Database\OfferExpiredException.cs" />
     <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />
@@ -207,7 +222,7 @@
     <Compile Include="DatabaseWrapper\ValueType\DatabaseValueType.cs" />
     <Compile Include="DatabaseWrapper\ValueType\DatabaseValueTypeFactory.cs" />
     <Compile Include="DatabaseWrapper\ValueType\IDatabaseValueType.cs" />
-    <Compile Include="DatabaseWrapper\IDatabaseMarketPlace.cs" />
+    <Compile Include="DatabaseWrapper\IMarketplaceType.cs" />
     <Compile Include="Common\AmountInfo.cs" />
     <Compile Include="Exceptions\InvalidCustomerMarketPlaceException.cs" />
     <Compile Include="IAnalysisDataParameterInfo.cs" />
@@ -394,6 +409,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

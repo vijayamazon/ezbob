@@ -18,10 +18,10 @@ namespace EzBob.RequestsQueueCore
 			get { return _Instance ?? ( _Instance = new EzBobIntegrationWorkflowsMock() ); }
 		}
 
-		private readonly IDatabaseMarketplace[] _ListMp;
-		private readonly IDatabaseMarketplace _Mp1;
-		private readonly IDatabaseMarketplace _Mp2;
-		private readonly IDatabaseMarketplace _Mp3;
+		private readonly IMarketplaceType[] _ListMp;
+		private readonly IMarketplaceType _Mp1;
+		private readonly IMarketplaceType _Mp2;
+		private readonly IMarketplaceType _Mp3;
 
 		public EzBobIntegrationWorkflowsMock()
 		{

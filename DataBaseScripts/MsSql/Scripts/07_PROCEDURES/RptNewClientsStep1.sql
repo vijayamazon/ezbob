@@ -5,13 +5,11 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*-------------------------------*/
-Create PROCEDURE RptNewClientsStep1
+CREATE PROCEDURE RptNewClientsStep1
 	@DateStart    DATETIME,
 	@DateEnd      DATETIME
 AS
 BEGIN
-
 
 if OBJECT_ID('tempdb..#tmp1') is not NULL 
 BEGIN
@@ -36,7 +34,6 @@ FROM
 	MP_CustomerMarketPlace
 GROUP BY  
 	CustomerId
-
 
 SELECT 
 	IdCustomer CustomerId,
@@ -87,7 +84,6 @@ WHERE
 	GreetingMailSentDate <  @DateEnd  AND 
 	IsTest = 0
 
-	
 SELECT Name,DateRegister, Shops, Payment,Personal, Complete FROM #tmp1 WHERE Name NOT like '%ezbob%' AND Name NOT LIKE '%q.q%' AND Name NOT LIKE '%liatvanir%' AND Shops IS NULL AND Status = 'Registered'
 
 END

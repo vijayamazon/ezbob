@@ -1,57 +1,83 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure
 @using Scorto.NHibernate.Model
 @using StructureMap
 @model dynamic
 @{
-    var captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
-    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+	string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
+	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix form-horizontal"}))
-{
-    <div class="simple-well">
-        <div class="control-group">
-            <label class="control-label">Email Address</label>
-            <div class="controls">
-                <input id="signupEmail" name="EMail" type="text" placeholder="" class="input-medium" tabindex="1" value="<%-userName||''%>"/>
-            </div>
-        </div>
-        <div id="strength-password-view" class="control-group">
-            <label class="control-label">Password</label>
-            <div class="controls">
-                <input id="signupPass1" name="signupPass1" type="password" placeholder="" class="input-medium"  tabindex="2" autocomplete="off"/>
-                <p id="message" class="help-block"></p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Confirm Password</label>
-            <div class="controls">
-                <input id="signupPass2" name="signupPass2" type="password" placeholder="" class="input-medium"  tabindex="3" autocomplete="off"/>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Select Secret Question</label>
-            <div class="controls">
-                <select name="securityQuestion" id="securityQuestion" class="chzn-select input-medium" tabindex="4">
-                    @if (securityQuestions != null)
-                    {
-                        foreach (SecurityQuestion item in securityQuestions)
-                        {
-                            <option value="@item.Id">@item.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">Answer</label>
-            <div class="controls">
-                <input type="text" name="SecurityAnswer" id="SecurityAnswer" placeholder="" class="input-medium"  tabindex="5" value="<%-AccountSettings ? AccountSettings.SecurityQuestionModel.Answer : ''%>"/>
-            </div>
-        </div>
-        @EzForm.Captcha(captchamode)
-    </div>
-    <div class="control-group" id="submitArea">
-        <input id="btn" type="submit" value="Continue" class="button orange pull-right"  tabindex="6"/>
-    </div>
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
+	<div class="inner">
+		<img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
+		<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
+		<img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
+
+		<h2>Funding over £2.5m loans and counting!</h2>
+		<p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
+
+		<h3>Create an account</h3>
+		<p>Complete the details below to begin</p>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Email address</span>
+				<input type="email" name="Email" id="Email" tabindex="1" class="form_field"/>
+			</label>
+			<span class="required">*</span>
+			<img id="EmailImage"/>
+		</div>
+
+		<div id="strength-password-view" class="form_field_container">
+			<label class ="attardi-input">
+				<span>Password</span>
+				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
+			</label>
+			<span class="required">*</span>
+			<img id="Password1Image"/>
+			<p id="message" class="help-block"></p>
+		</div>
+
+		<div class="form_field_container">
+			<label class ="attardi-input">
+				<span>Confirm password</span>
+				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
+			</label>
+			<span class="required">*</span>
+			<img id="Password2Image"/>
+		</div>
+		
+		<div class="form_field_container">
+			<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
+			<span class="inform"><label class="attardi-input">
+				<span>Secret question</span>
+				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+					<option value=""></option>
+					@if (securityQuestions != null) {
+						foreach (SecurityQuestion item in securityQuestions) {
+							<option value="@item.Id">@item.Name</option>
+						} // foreach
+					} // if
+				</select>
+			</label></span>
+			<span class="required">*</span>
+			<img id="SecurityQuestionImage"/>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Secret answer</span>
+				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
+			</label>
+			<span class="required">*</span>
+			<img id="SecretAnswerImage"/>
+		</div>
+
+		<div class="form_field_container">
+		@EzForm.Captcha(captchamode)
+		</div>
+
+		<input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
+	</div>
 }

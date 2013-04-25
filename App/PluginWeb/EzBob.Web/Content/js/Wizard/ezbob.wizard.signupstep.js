@@ -15,12 +15,30 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.model.on('change:loggedIn', this.render, this);
     },
     events: {
-        'click :submit': 'submit'
+        'click :submit': 'submit',
+        'keydown input[name="Email"]': 'inputChanged',
+        'paste input[name="Email"]': 'inputChanged',
+        'input input[name="Email"]': 'inputChanged',
+        'change input[name="Email"]': 'emailChanged',
+        'keydown input[name="signupPass1"]': 'inputChanged',
+        'paste input[name="signupPass1"]': 'inputChanged',
+        'input input[name="signupPass1"]': 'inputChanged',
+        'change input[name="signupPass1"]': 'password1Changed',
+        'keydown input[name="signupPass2"]': 'inputChanged',
+        'paste input[name="signupPass2"]': 'inputChanged',
+        'input input[name="signupPass2"]': 'inputChanged',
+        'change input[name="signupPass2"]': 'password2Changed',
+        'change select[name="securityQuestion"]': "securityQuestionChanged",
+        'keydown input[name="SecurityAnswer"]': 'inputChanged',
+        'paste input[name="SecurityAnswer"]': 'inputChanged',
+        'input input[name="SecurityAnswer"]': 'inputChanged',
+        'change input[name="SecurityAnswer"]': 'secretAnswerChanged'
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('.signup');
         this.validator = EzBob.validateSignUpForm(this.form);
+        this.formChecker = EzBob.checkSignUpForm(this.form);
 
         if (this.model.get('loggedIn')) {
             this.setReadOnly();
@@ -32,6 +50,31 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('li[rel]').setPopover("left");
         
         return this;
+    },
+    inputChanged: function () {
+        if (EzBob.Validation.checkForm(this.formChecker)) {
+            $("#signupSubmitButton.disabled").removeClass('disabled');
+        } else {
+            $("#signupSubmitButton").addClass('disabled');
+        }
+    },
+    emailChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    password1Changed: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
+        if ($("#signupPass2").val() != "") {
+            EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+        }
+    },
+    password2Changed: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    securityQuestionChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    secretAnswerChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {

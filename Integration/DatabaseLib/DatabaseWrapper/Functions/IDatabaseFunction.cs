@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Functions
 		string Name { get; }
 		string DisplayName { get; }
 		string Description { get; set; }
-		IDatabaseMarketplace DatabaseMarketplace { get; }
+		IMarketplaceType DatabaseMarketplace { get; }
 		IDatabaseValueType FunctionValueType { get; }
 		Guid InternalId { get; }
 	}

@@ -5,7 +5,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-/*-------------------------------*/
 Create PROCEDURE RptNewClients
 	@DateStart    DATETIME,
 	@DateEnd      DATETIME
@@ -85,7 +84,6 @@ WHERE
 	GreetingMailSentDate <  @DateEnd  AND 
 	IsTest = 0
 
-	
 SELECT Name,DateRegister, Shops, Payment,Personal, Complete FROM #tmp1 WHERE Name NOT like '%ezbob%' AND Name NOT LIKE '%q.q%' AND Name NOT LIKE '%liatvanir%' AND Shops IS NOT NULL AND Status = 'Registered'
 
 END

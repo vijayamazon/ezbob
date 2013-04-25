@@ -1049,7 +1049,7 @@ namespace EzBob.eBayLib
 				return null;
 			}
 
-			IDatabaseMarketplace marketplace = databaseCustomerMarketPlace.Marketplace;
+			IMarketplaceType marketplace = databaseCustomerMarketPlace.Marketplace;
 
 			var eBayItemInfoData = new eBayFindOrderItemInfoData( itemID );
 
@@ -1080,7 +1080,7 @@ namespace EzBob.eBayLib
 			return eBayOrderItemInfo;
 		}
 
-		private MP_EbayAmazonCategory FindCategory( IDatabaseMarketplace marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo )
+		private MP_EbayAmazonCategory FindCategory( IMarketplaceType marketplace, eBayCategoryInfo data, ElapsedTimeInfo elapsedTimeInfo )
 		{
 			if ( data == null )
 			{

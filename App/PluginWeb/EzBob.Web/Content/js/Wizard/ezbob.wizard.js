@@ -12,7 +12,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
         "": "SignUp",
         "SignUp": "SignUp",
         "ShopInfo": "ShopInfo",
-        "PaymentAccounts": "PaymentAccounts",
+        //"PaymentAccounts": "PaymentAccounts",
         "YourDetails": "YourDetails"
     },
     defaultRoute: function () {
@@ -32,20 +32,20 @@ EzBob.WizardRouter = Backbone.Router.extend({
             this.trigger("ShopInfo");
         }
     },
-    PaymentAccounts: function () {
-        if (!this.topNavigationEnabled) {
-            if (this.maxStepNum >= 2) {
-                this.trigger("PaymentAccounts");
-            } else {
-                this.navTo(this.maxStepNum);
-            }
-        } else {
-            this.trigger("PaymentAccounts");
-        }
-    },
+    //PaymentAccounts: function () {
+    //    if (!this.topNavigationEnabled) {
+    //        if (this.maxStepNum >= 2) {
+    //            this.trigger("PaymentAccounts");
+    //        } else {
+    //            this.navTo(this.maxStepNum);
+    //        }
+    //    } else {
+    //        this.trigger("PaymentAccounts");
+    //    }
+    //},
     YourDetails: function () {
         if (!this.topNavigationEnabled) {
-            if (this.maxStepNum >= 3) {
+            if (this.maxStepNum >= 2) {
                 this.trigger("YourDetails");
             } else {
                 this.navTo(this.maxStepNum);
@@ -69,13 +69,13 @@ EzBob.WizardRouter = Backbone.Router.extend({
                 EzBob.App.GA.trackPage('/Customer/Wizard/Shops');
                 this.navigate("ShopInfo", { trigger: true });
                 break;
+            //case 2:
+            //    $(document).attr("title", "Wizard 3: Link Your Payment Accounts | EZBOB");
+            //    EzBob.App.GA.trackPage('/Customer/Wizard/PaymentAccounts');
+            //    this.navigate("PaymentAccounts", { trigger: true });
+            //    break;
             case 2:
-                $(document).attr("title", "Wizard 3: Link Your Payment Accounts | EZBOB");
-                EzBob.App.GA.trackPage('/Customer/Wizard/PaymentAccounts');
-                this.navigate("PaymentAccounts", { trigger: true });
-                break;
-            case 3:
-                $(document).attr("title", "Wizard 4 Business: Fill Business Details | EZBOB ");
+                $(document).attr("title", "Wizard 3 Business: Fill Business Details | EZBOB ");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
                 this.navigate("YourDetails", { trigger: true });
                 break;
@@ -105,7 +105,7 @@ EzBob.Wizard = Backbone.View.extend({
         this.router = new EzBob.WizardRouter({ topNavigationEnabled: this.topNavigationEnabled, maxStepNum: this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0 });
         this.router.on("SignUp", this.SignUpRoute, this);
         this.router.on("ShopInfo", this.ShopInfoRoute, this);
-        this.router.on("PaymentAccounts", this.PaymentAccountsRoute, this);
+        //this.router.on("PaymentAccounts", this.PaymentAccountsRoute, this);
         this.router.on("YourDetails", this.YourDetailsRoute, this);
         Backbone.history.start();
     },
@@ -115,11 +115,11 @@ EzBob.Wizard = Backbone.View.extend({
     ShopInfoRoute: function () {
         this.model.changePage(1);
     },
-    PaymentAccountsRoute: function () {
-        this.model.changePage(2);
-    },
+    //PaymentAccountsRoute: function () {
+    //    this.model.changePage(2);
+    //},
     YourDetailsRoute: function () {
-        this.model.changePage(3);
+        this.model.changePage(2);
     },
     render: function () {
         var template = this.template({ steps: this.steps });
@@ -149,9 +149,9 @@ EzBob.Wizard = Backbone.View.extend({
         this.router.navTo(newCurrent);
         return false;
     },
-    addStep: function (title, view) {
+    addStep: function (title, view, header) {
         var num = this.steps.length;
-        this.steps.push({ num: num++, title: title, view: view });
+        this.steps.push({ num: num++, title: title, view: view, header: header || title });
     },
     ready: function (num) {
         var ready = this.model.get("ready") || new Array(this.model.get("total") + 1);
@@ -165,7 +165,7 @@ EzBob.Wizard = Backbone.View.extend({
         if (!this.steps[num].ready) {
             this.steps[num].ready = true;
         }
-        this.$el.find('.wizard-steps > ul li').eq(num).addClass('completed');
+        this.$el.find('.wizard-steps > ul li').eq(num).addClass('completed complete');
         this.router.maxStepNum = this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0;
     },
 
@@ -211,8 +211,10 @@ EzBob.Wizard = Backbone.View.extend({
     stepChanged: function () {
         var current = this.model.get('current'),
             allowed = this.model.get('allowed');
-        this.$el.find('.wizard-steps > ul li').removeClass('active').eq(current).addClass('active');
+
+        this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
         this.$el.find('.pages > div').hide().eq(current).show();
+        if (this.steps[current])  this.$el.find('.wizard-header').text(this.steps[current].header);
     }
 });
 

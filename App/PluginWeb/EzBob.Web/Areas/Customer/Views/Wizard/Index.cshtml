@@ -29,11 +29,14 @@
     @{Html.RenderPartial("_Wizard");}
     @{Html.RenderPartial("BankAccountInstructions");}
     @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/VolusionAccoutInfoTemplate");}
     @BundleHelper.RenderWizardJs()
     <script type="text/javascript">
         $(function () {
 
-            EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+        	EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+        	EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
             SetCaptchaMode();
             EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
             EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)
@@ -43,7 +46,7 @@
                                           else
                                           {
                                               <text>false</text>
-                                          };
+                                         };
             EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
             EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
         

@@ -16,7 +16,7 @@ namespace EzBob.RequestsQueueCore
 		private readonly ConcurrentDictionary<IRequestHandle, IRequestTask> _Requests = new ConcurrentDictionary<IRequestHandle, IRequestTask>();
 		private readonly TaskExecutor _TaskExecutor;
 
-		public ExternalRequestsManager( IDatabaseMarketplace marketplace )
+		public ExternalRequestsManager( IMarketplaceType marketplace )
 		{
 			_TaskExecutor = new TaskExecutor( marketplace );
 		}

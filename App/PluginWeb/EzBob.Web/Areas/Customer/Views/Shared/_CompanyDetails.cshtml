@@ -1,325 +1,412 @@
 ﻿@using EzBob.Web.Models.Strings
 @model dynamic
-           
-@helper PersonalInfo()
-{
-    <div class="row-fluid">
-        <div class="span7">
-            <h1>&nbsp;Personal Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px;">
-                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                {
+@helper PersonalInfo() {
+	<div class="row-fluid">
+		<h2 class="form_start">Personal information</h2>
+		<div>
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+                <div class="control-group form_field_container">
+					<div class="controls">
+					    <label class="attardi-input"><span>First Name</span>
+                            <!-- should eliminate all margins !!!!! -->
+                            <!-- Wrong validation is performed!!!!! -->
+                            <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
+					    </label>
+						<span class="required">*</span>
+						<img id="FirstNameImage"/>
+					</div>
+				</div>
 
-                    <div class="control-group">
-                        <label class="control-label">First Name</label>
-                        <div class="controls">
-                            <input type="text" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>"/>
-                        </div>
-                    </div>
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="attardi-input"><span>Middle Name</span>
+						    <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
+                            <img id="MiddleNameImage"/>
+						</label>
+					</div>
+				</div>
 
-                    <div class="control-group">
-                        <label class="control-label">Middle Initial</label>
-                        <div class="controls">
-                            <input type="text" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>"/>
-                        </div>
-                    </div>
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="attardi-input"><span>Last Name</span>
+						    <input style="height:20px" id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
+						</label>
+						<span class="required">*</span>
+                        <img id="SurnameImage"/>
+					</div>
+				</div>
+				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
+				
+				<div class="form_field_container GenderCtrl">
+					Gender
+					<span class="required">*</span>
+					<input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
+					<input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
+				</div>
+				
+				@EzForm.DateInput("DateOfBirth", "Date of Birth")
 
-                    <div class="control-group">
-                        <label class="control-label">Surname</label>
-                        <div class="controls">
-                            <input type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>"/>
-                        </div>
-                    </div>
-                    <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input"><span>Martial Status</span>
+							<select class="form_field" id="MartialStatus" name="MartialStatus">
+								<option></option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Divorced">Divorced</option>
+								<option value="Widow/er">Widow/er</option>
+								<option value="Other">Other</option>
+							</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
 
-                    @EzForm.DateInput("DateOfBirth", "Date of Birth")
+				<h2 class="form_section">Your Current Residential Address</h2>
 
-                  <div class="control-group">
-                      <label class="control-label" for="Gender">Gender</label>
-                      <div class="controls">
-                          <select id="Gender" name="Gender" class="" >
-                              <option value="-">-</option>
-                              <option value="M">Male</option>
-                              <option value="F">Female</option>
-                          </select>
-                      </div>
-                  </div>
+				@EzForm.AddressInput("PersonalAddress", "Potcode")
+				
+				<div class="control-group form_field_container">
+					<div class="controls">
+					    <label class="control-label attardi-input"><span>Length of time at address</span>
+					        <select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
+					            <option selected="selected" value=""></option>
+					            <option value="1">1 year</option>
+					            <option value="2">2 years</option>
+					            <option value="3">More than 3 years</option>
+					        </select>
+					    </label>
+						<span class="required">*</span>
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
 
-                    @EzForm.Select("MartialStatus", "Martial Status", new[] { "Single", "Married", "Divorced", "Widow/er", "Other" }, "select")
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span>Residential Status</span>
+								<select id="ResidentialStatus" name="ResidentialStatus" class="select form_field">
+									<option></option>
+									<option value="Home owner">Home owner</option>
+									<option value="Renting">Renting</option>
+									<option value="Living with parents">Living with parents</option>
+								</select>
+						</label>
+						<span class="required">*</span>
+					</div>
+				</div>
 
-                    @EzForm.AddressInput("PersonalAddress", "Address")
-                    @EzForm.SelectAdvanced("TimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "", "TimeAtAddress select", 0)
-                    @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
-                    @EzForm.Select("ResidentialStatus", "Residential Status", new[] { "Home owner", "Renting", "Living with parents" }, "select")
+				<h2 class="form_section">Your Contact Details</h2>
 
-                    <hr/>
+				<div class="control-group form_field_container">
+					<label class="control-label attardi-input"><span>Home Phone Number</span>
+						<div class="controls">
+							<input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" size="50"/>
+						</div>
+					</label>
+					<span class="required">*</span>
+				</div>
 
-                    <div class="control-group">
-                        <label class="control-label">Daytime Phone #</label>
-                        <div class="controls">
-                            <input type="text" class="phonenumber" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>"/>
-                        </div>
-                    </div>
+				<div class="control-group form_field_container">
+					<label class="control-label attardi-input"><span>Mobile Number</span>
+					<div class="controls">
+						<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
+					</div></label>
+				</div>
 
-                    <div class="control-group">
-                        <label class="control-label">Mobile Phone #</label>
-                        <div class="controls">
-                            <input type="text" class="phonenumber" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>"/>
-                        </div>
-                    </div>
-                    
-                    <hr/>
+				<h2 class="form_section">Your Company Information</h2> 
 
-                    <div>
-                        <div class="control-group typeOfBussiness">
-                            <label class="control-label">Type of Business</label>
-                            <div class="controls">
-                                <select name="TypeOfBusiness">
-                                    <option value="">-</option>
-                                    <option value="Entrepreneur">Sole Trader (not Inc.)</option>
-                                    <option value="SoleTrader">Sole Trader (Inc.)</option>
-                                    <option value="PShip3P">Partnership (Up to 3)</option>
-                                    <option value="PShip">Partnership (More than 3)</option>
-                                    <option value="Limited">Limited Company</option>
-                                    <option value="LLP">LLP</option>                                    
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <fieldset class="PersonalturnOver turnOver">
-                            <legend><b>Estimated</b> Turnover Past 12 Months (£)</legend>
-                            @EzForm.InputTextWithHelp(Html, "OverallTurnOver", "Total <b>Estimated</b> Sales", "", "Please enter estimation for your total sales including online and offline. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                            @EzForm.InputTextWithHelp(Html, "WebSiteTurnOver", "Online <b>Estimated</b> Sales", "", "Please enter estimation for your total online sales. You don't have to open your books or talk to your accountant, just provide an approximate amount.", "")
-                        </fieldset>
-                    </div>
+				<div class="control-group typeOfBussiness form_field_container">
+					<div class="controls">
+						<label class="attardi-input">
+							<span>Your Type of Business</span>
+							<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
+								<option value=""></option>
+								<option value="Entrepreneur">Sole Trader (not Inc.)</option>
+								<option value="SoleTrader">Sole Trader (Inc.)</option>
+								<option value="PShip3P">Partnership (Up to 3)</option>
+								<option value="PShip">Partnership (More than 3)</option>
+								<option value="Limited">Limited Company</option>
+								<option value="LLP">LLP</option>
+							</select>
+						</label>
+						<span class="required">*</span>
+                        <img id="TypeOfBusinessImage"/>
+					</div>
+				</div>
 
-                    <hr/>
+				<div class="control-group form_field_container">
+					<label class="attardi-input"><span>Your Total Online Sales (£)</span>
+						<div class="controls cashControlls">
+						    <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
+                            <img id="OverallTurnOverImage"/>
+						</div>
+					</label>
+					<span class="required">*</span>
+				</div>
 
-                    <div class="control-group">      
-                        <div class="controls">
-                            <label for="ConsentToSearch" class="editor-label-with-checkbox">
-                                <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="true"/>
-                                 I have read and accept the <a>terms and conditions</a> of the credit bureau search
-                            </label>
-                        </div>
-                    </div>
-                }    
-            </div>
+                <div class="control-group form_field_container">
+	                <label class="attardi-input"><span>Your Total Online & Offline Sales (£)</span>
+		                <div class="controls cashControlls">
+			                <input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
+			                <img id="WebSiteTurnOverImage"/>
+		                </div>
+	                </label>
+	                <span class="required">*</span>
+                </div>
 
-            <div class="">
-                <a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
-                <a href="#" class="btn-back button orange back pull-right">Back</a>
-            </div>
-         </div>
-         <div class="span1">&nbsp;</div>
-         @{Html.RenderPartial("SideBars/DetailsNotification");}
-    </div>
+				<hr />
+
+				<div class="control-group">
+					<div class="controls">
+						<label for="ConsentToSearch" class="editor-label-with-checkbox">
+							<input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
+							I have read and accept the <a>terms and conditions</a> of the credit bureau search
+						</label>
+					</div>
+				</div>
+   }
+		</div>
+
+		<div class="">
+			<a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
+			<a href="#" class="btn-back button orange back pull-right">Back</a>
+		</div>
+	</div>
 }
-@helper Director()
-{
-    <fieldset>
-        <legend>Additional Directors (Optional)</legend>
-            
-        <div class="directorArea"></div>
-        
-        <span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
+@helper Director() {
+	<div>
+		<h2 style="padding-left:0">Additional Directors (Optional)</h2>
 
-        <a href="#" id="addDirector"><b>Add directors</b> and qualify for more cash.</a>
-    </fieldset>
-}
+		<div class="directorArea"></div>
 
-
-@helper LimitedInfo()
-    {
-    <div class="row-fluid">
-        <div class="span7">
-            <h1>&nbsp;Business Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
-                @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                {
-                    <fieldset>
-                        <legend>Company</legend>
-                        @EzForm.InputText("LimitedCompanyNumber", "Registration #", "")
-                        @EzForm.InputText("LimitedCompanyName", "Name", "")
-                        @EzForm.AddressInput("LimitedCompanyAddress", "Address")
-                        @EzForm.InputText("LimitedBusinessPhone", "Business Phone", "","phonenumber")
-                        <input type="hidden" name="LimitedRefNum" class="RefNum" />
-                    </fieldset>
-                    
-                    <fieldset>
-                        <legend>Turnover Past 12 Months</legend>
-                        @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                        @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                    </fieldset>
-
-                    <div class="directors">
-                    </div>
-                }
-                
-
-            </div>
-            <div class="">
-                <a href="#" class="next btn-continue button orange pull-right">Complete</a>
-                <a href="#" class="back btn-back button orange pull-right">Back</a>
-            </div>
-            </div>
-            <div class="span1">&nbsp;</div>
-            @{Html.RenderPartial("SideBars/DetailsNotification");}
-    </div>
-}
-
-@helper Nonlimitedinfo()
-    {
-    <div class="row-fluid">
-        <div class="span7" style="padding-top: 10px;">
-            <h1>&nbsp;Business Info:</h1>
-            <h2>Safe &amp; Secure!</h2>
-            <div class="simple-well" style="padding: 10px; margin-bottom: 10px;">
-                    @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm form-horizontal" }))
-                    {
-                        <fieldset>
-                            <legend>Company</legend>
-                            <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-                            @EzForm.InputText("NonLimitedCompanyName", "Name", "")        
-                            @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
-                            @EzForm.SelectAdvanced("NonLimitedTimeAtAddress", "Resided at Address", new Dictionary<string, string> { { "1", "1 year" }, { "2", "2 years" }, { "3", "More than 3 years" } }, "TimeAtAddress")
-                            @EzForm.SelectAdvanced("NonLimitedTimeInBusiness", "Time in Business", new Dictionary<string, string> { { "", "-" }, { "1", "1 year" }, { "2", "2 years" }, { "3", "3 years" }, { "4", "4 years" }, { "5", "5 years" }, { "6", "6 years" }, { "7", "7 years" }, { "8", "8 years" }, { "9", "9 years" }, { "10", "10 years" }, { "10+", "More than 10 years" } })
-                            @EzForm.InputText("NonLimitedBusinessPhone", "Business Phone", "","phonenumber")
-
-                        </fieldset>
-
-                        <fieldset>
-                            <legend>Turnover</legend>
-                            @EzForm.InputTextCash("OverallTurnOver", "Your Total Sales", "")
-                            @EzForm.InputTextCash("WebSiteTurnOver", "Online Total Sales", "")
-                        </fieldset>
-                        <div class="directors">
-                        </div>  
-                    }
-                    
-            </div>
-            <div class="">
-                <a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
-                <a href="#" class="back btn-back button orange pull-right">Back</a>
-            </div>
-            </div>
-        <div class="span1">&nbsp;</div>
-        @{Html.RenderPartial("SideBars/DetailsNotification");}
-    </div>
+		<span class="wizard-director-text">EZBOB assumes that you are a director in the Company.</span>
+		
+		<input id="addDirector" class="btn green" type="button" value="Add directors" />
+	</div>
 }
 
-@helper LastWizardPage()
-    {
-    <div class="row-fluid">
-    <div class="span7">                          
-        <div class="thankyou-loan">
-            We are processing your data in the Credit Bureau and will notify you about you validation in 24 hours. <br /> You can edit you personal and business information in your dashboard.
-        </div>
-        <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Go to My Profile</a>
-    </div>
-    <div class="span1">&nbsp;</div>
-    @{Html.RenderPartial("SideBars/DetailsNotification");}
-</div>
+@helper LimitedInfo() {
+	<div class="row-fluid">
+		<h2 style="padding-left:0">Company Info</h2> 
+		<div style="margin-bottom: 10px;">
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+				<div class="control-group">
+					<label for="LimitedCompanyNumber" class="control-label">Registration # <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label for="LimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
+				
+				<div class="control-group">
+					<label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+					<div class="controls">
+						<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+					</div>
+				</div>
+					
+				<input type="hidden" name="LimitedRefNum" class="RefNum" />
+
+				<div class="directors">
+				</div>
+   }
+
+		</div>
+		<div class="">
+			<a href="#" class="next btn-continue button orange pull-right">Complete</a>
+			<a href="#" class="back btn-back button orange pull-right">Back</a>
+		</div>
+	</div>
 }
 
+@helper Nonlimitedinfo() {
+	<div class="row-fluid">
+		<h2 style="padding-left:0">Company Info</h2>
+		<div style="margin-bottom: 10px;">
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForml" })) {
+				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+				
+				<div class="control-group">
+					<label for="NonLimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
+					<div class="controls">
+						<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" size="50" class="form_field" />
+					</div>
+				</div>
+				
+				@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
 
+				<div class="control-group">
+					<label class="control-label" for="NonLimitedTimeAtAddress">Resided at Address <span class="required">*</span></label>
+					<div class="controls">
+						<select style="height:30px; width:345px" id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select">
+							<option selected="selected" value="">-</option>
+							<option value="1">1 year</option>
+							<option value="2">2 years</option>
+							<option value="3">More than 3 years</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="NonLimitedTimeInBusiness">Time in Business <span class="required">*</span></label>
+					<div class="controls">
+						<select style="height:30px; width:345px" id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select">
+							<option selected="selected" value="">-</option>
+							<option value="1">1 year</option>
+							<option value="2">2 years</option>
+							<option value="3">3 years</option>
+							<option value="4">4 years</option>
+							<option value="5">5 years</option>
+							<option value="6">6 years</option>
+							<option value="7">7 years</option>
+							<option value="8">8 years</option>
+							<option value="9">9 years</option>
+							<option value="101">More than 10 years</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label for="NonLimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+					<div class="controls">
+						<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+					</div>
+				</div>
+
+				<div class="directors">
+				</div>
+   }
+
+		</div>
+		<div class="">
+			<a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
+			<a href="#" class="back btn-back button orange pull-right">Back</a>
+		</div>
+	</div>
+}
 
 <script id="personinfo-template" type="text/template">
-    @PersonalInfo()
+	@PersonalInfo()
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-    @LimitedInfo()
+	@LimitedInfo()
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
-      @Nonlimitedinfo()
+	  @Nonlimitedinfo()
 </script>
 
 <script id="address-popup-template" type="text/template">
-        @{Html.RenderPartial("_AddressPopupTemplate");}
+		@{Html.RenderPartial("_AddressPopupTemplate");}
 </script>
 
 <script id="address-template" type="text/template">
-       @{Html.RenderPartial("_AddressTemplate");}
+	   @{Html.RenderPartial("_AddressTemplate");}
 </script>
 
 <script id="director-edit-template" type="text/template">
-    @Director()
+	@Director()
 </script>
 
 <script id="oneDirector" type="text/template">
-    <%_.each(directors, function(director, i){%>
-        <fieldset class="Directors form-horizontal">
-            <legend style="font-size: 14px; font-weight: normal">Director #<%=i+1%> <span style="font-size: 10px;">(<a style="color:#aaa" number="<%=i+1%>" href="#" class="removeDirector">remove</a>)</span></legend>
+	<%_.each(directors, function(director, i){%>
+		<div class="Directors">	
+			<h1 style="padding-left:0;">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
+			
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
+				</div>
+			</div>
 
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Name", "Name", "<%- director.Name %>")
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Middle", "Middle Initial", "<%- director.Middle %>")
-            @EzForm.InputText("<%-preffix%>[<%=i%>].Surname", "Surname", "<%- director.Surname %>")
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Middle" class="control-label">Middle Initial</label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+				</div>
+			</div>
+	
+			<div class="control-group">
+				<label for="<%-preffix%>[<%=i%>].Surname" class="control-label">Surname <span class="required">*</span></label>
+				<div class="controls">
+					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
+				</div>
+			</div>	
+	
+			<div>
+				<label style="display:inline-block;margin-bottom: 10px" class="control-label">Gender <span class="required">*</span></label>
+				<input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" style="margin-bottom: 6.5px;margin-left: 25px"><label style="display:inline-block;margin-left: 5px">Male</label>
+				<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" style="margin-bottom: 6.5px;margin-left: 15px"><label style="display:inline-block;margin-left: 5px">Female</label>
+			</div>
 
-            
-            <div class="control-group">
-                <label class="control-label" for="">Gender</label>
-                <div class="controls">
-                    <select name="<%-preffix%>[<%=i%>].Gender">
-                        <option value="">-</option>
-                        <option <%if(director.Gender == 'M'){%>selected="selected"<%}%> value="M">Male</option>
-                        <option <%if(director.Gender == 'F'){%>selected="selected"<%}%> value="F">Female</option>
-                    </select>
-                </div>
-            </div>
+			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)	
 
-            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)
-            @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
-        </fieldset>
-    <%
-    })
-    %>
-
+			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
+		</div>
+	<%
+	})
+	%>
 </script>
 
 <script id="director-hidden-template" type="text/template">
-    <%_.each(directors, function(director, i){%>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Name" value="<%- director.Name %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Middle" value="<%- director.Middle %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].Surname" value="<%- director.Surname %>"/>
-        <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirth" value="<%- director.DateOfBirth %>"/>
-    <%});%>
+	<%_.each(directors, function(director, i){%>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Name" value="<%- director.Name %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Middle" value="<%- director.Middle %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].Surname" value="<%- director.Surname %>"/>
+		<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirth" value="<%- director.DateOfBirth %>"/>
+	<%});%>
 </script>
 
 <script id="lastWizardThankYouPage" type="text/template">
-<div class="row-fluid">
-    <div class="span7">                          
-        <div class="thankyou-loan">
-            We are processing your application and will notify you in the next business day.
-        </div>
-        <a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Go to My Account</a>
-    </div>
-    <div class="span1">&nbsp;</div>
-    @{Html.RenderPartial("SideBars/DetailsNotification");}
-</div>
+	<div>
+		<section id="full_width">
+			<div style="margin: 50px auto; width: 600px;">
+				<div style="padding: 20px; margin: 0 0 20px 0; background: #fff; border: 1px #ccc solid;">
+					<h2>Thank you</h2>
+					<p>We have the infomation we need and are processing your application. You will be notified by email as soon as it's ready</p>
+					<p>If you haven't already we would suggest that you read through <a href="#">Our Loans Explained</a> and understand what repayment method best suits your business needs.</p>
+					<p><strong>Remember you can pay any amount at any time during the loan period and there are not penalties for early repayments.</strong></p>
+				</div>
+				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Back to account</a>
+			</div>
+		</section>
+		<div class="clear"></div>
+		<br />
+		<br />
+		<br />
+	</div>
 </script>
 
 
 @{
-    Html.RenderPartial("_TargetingTemplate");
+	Html.RenderPartial("_TargetingTemplate");
 }
 
 <script id="consent-agreement-temlate" type="text/template">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Consent</h3>
-    </div>
-    <div id="consent-conent" class="modal-body consent-dialog">
-        @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
-        
-        <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%> </p>
-        <p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="pull-right print print-link">Print</a>
-        <a style="margin-right: 20px;"class="pull-right download pdf-link">Download</a>
-    </div>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Consent</h3>
+	</div>
+	<div id="consent-conent" class="modal-body consent-dialog">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+		
+		<p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%> </p>
+		<p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="pull-right print print-link">Print</a>
+		<a style="margin-right: 20px;"class="pull-right download pdf-link">Download</a>
+	</div>
 </script>

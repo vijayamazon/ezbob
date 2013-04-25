@@ -1,5 +1,4 @@
 ﻿@model dynamic
-           
 <script id="marketplace-values-template" type="text/template">
     @MarketplaceDetails()
 </script>
@@ -71,7 +70,7 @@
         
         <fieldset>
             <legend>Details</legend>
-            @* *** EBay *** *@   
+            @* *** EBay *** *@
             <%if(marketplaceType == "eBay"){%>  
             <div class="tabbable">
                 <ul class="nav nav-tabs">
@@ -81,7 +80,7 @@
                     <li><a href="#ebayTab1" data-toggle="tab">Trader info</a></li>
                     <li><a href="#ebayTab2" data-toggle="tab">Account details</a></li>
                     <li><a href="#ebayTab6" data-toggle="tab">Categories info</a></li>
-                </ul>                                                      
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane" id="ebayTab1">
                         <table class="table table-bordered table-striped  blue-header centered">
@@ -92,7 +91,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
+
                                 <tr>
                                     <td>FeedbackPrivate</td>
                                     <td><%-m.EBay.FeedbackPrivate%></td>
@@ -152,43 +151,43 @@
                                 <tr>
                                     <td>Account ID</td>
                                     <td><%-m.EBay.AccountId%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Account State</td>
                                     <td><%-m.EBay.AccountState%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Amount Past Due</td>
                                     <td><%-m.EBay.AmountPastDueAmount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Bank Account Info</td>
                                     <td><%-m.EBay.BankAccountInfo%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Bank Modify Date</td>
                                     <td><%-m.EBay.BankModifyDate%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Credit Card Expiration</td>
                                     <td><%-m.EBay.CreditCardExpiration%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Credit Card Info</td>
                                     <td><%-m.EBay.CreditCardInfo || "-"%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Credit Card Modify Date</td>
                                     <td><%-m.EBay.CreditCardModifyDate%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Current Balance</td>
                                     <td><%-m.EBay.CurrentBalance%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Past Due</td>
                                     <td><%-m.EBay.PastDue%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Payment Method</td>
                                     <td><%-m.EBay.PaymentMethod%></td>
@@ -196,23 +195,23 @@
                                 <tr>
                                     <td>Currency</td>
                                     <td><%-m.EBay.Currency%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Additional Account Code</td>
                                     <td><%-m.EBay.AdditionalAccountAccountCode%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Additiona Account Balance</td>
                                     <td><%-m.EBay.AdditionalAccountBalance%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Additional Account Currency</td>
                                     <td><%-m.EBay.AdditionalAccountCurrency%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>eBayGoodStanding</td>
                                     <td><%-m.EBay.EBayGoodStanding%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>EIASToken</td>
                                     <td><%-m.EBay.EIASToken || "-"%></td>
@@ -223,11 +222,11 @@
                                 </tr>
                                 <tr>
                                     <td>StoreURL</td>
-                                    <td><a target="_blank"  href="<%-m.SellerInfoStoreURL%>"><%- m.SellerInfoStoreURL %></a></td>
+                                    <td><a target="_blank" href="<%-m.SellerInfoStoreURL%>"><%- m.SellerInfoStoreURL %></a></td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>                            
+                    </div>
                     <div class="tab-pane" id="ebayTab3">
                         <table class="table table-bordered table-striped  blue-header centered">
                             <thead>
@@ -240,7 +239,7 @@
                                 <tr>
                                     <td>Total Items in Inventory</td>
                                     <td><%-m.AnalysisDataInfo.TotalItemsinInventoryLifetime || "-"%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Total Value of Inventory</td>
                                     <td><%-GBPValues( m.AnalysisDataInfo.TotalValueofInventoryLifetime  || 0, true )%></td>
@@ -301,44 +300,44 @@
                                 <tr>
                                     <td>Negative Feedback Count</td>
                                     <td><%-m.EBay.NegativeFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Neutral Feedback Count</td>
                                     <td><%-m.EBay.NeutralFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Positive Feedback Count</td>
                                     <td><%-m.EBay.PositiveFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Unique Negative Feedback Count</td>
                                     <td><%-m.EBay.UniqueNegativeFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Unique Neutral Feedback Count</td>
                                     <td><%-m.EBay.UniqueNeutralFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Unique Buyer Count</td>
                                     <td><%-m.EBay.UniqueBuyerCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Unique Positive Feedback Count</td>
                                     <td><%-m.EBay.UniquePositiveFeedbackCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Transaction Percent</td>
 
                                     <td><%-m.EBay.TransactionPercent!= "-" ? (m.EBay.TransactionPercent.replace(',','.')*1 ).toFixed(1) : m.EBay.TransactionPercent%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Repeat Buyer Count</td>
                                     <td><%-m.EBay.RepeatBuyerCount%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Repeat Buyer Percent</td>
                                     <td><%-m.EBay.RepeatBuyerPercent%></td>
-                                </tr> 
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -467,7 +466,7 @@
                     <li><a href="#tab3" data-toggle="tab">Inventory</a></li>
                     <li><a href="#tab4" data-toggle="tab">Categories</a></li>
                     <li><a href="#tab6" data-toggle="tab">Account details</a></li>
-                </ul>                                                      
+                </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                         <table class="table table-bordered table-striped  blue-header centered">
@@ -620,29 +619,29 @@
                                 <tr>
                                     <td>Total Items in Inventory</td>
                                     <td><%-m.AnalysisDataInfo.TotalItemsinInventoryLifetime || "-"%></td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td>Total Value of Inventory</td>
                                     <td><%-GBPValues( m.AnalysisDataInfo.TotalValueofInventoryLifetime  || 0, true )%></td>
-                                </tr> 
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="tab4">
-                         <table class="table table-bordered table-striped  blue-header centered">
-                             <tbody>
-                                 <%if(m.Categories.length == 0){%>
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <tbody>
+                                <%if(m.Categories.length == 0){%>
                                 <tr>
                                     <td><i>No data in database</i></td>
                                 </tr>
-                                 <%}%>
+                                <%}%>
 
                                  <%_.each(m.Categories, function(val, i){%>
                                  <tr>
                                      <td><%-val%></td>
                                  </tr>
-                                 <%});%>
-                             </tbody>
+                                <%});%>
+                            </tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="tab5">
@@ -662,7 +661,7 @@
                     <div class="tab-pane" id="tab6">
                         <table class="table table-bordered table-striped  blue-header centered">
                             <thead>
-                                
+
                                 <tr>
                                     <th>Parameter name</th>
                                     <th colspan="2">Value</th>
@@ -679,8 +678,258 @@
                                     <td>Askville status</td>
                                     <td class="askvilleStatus"><%-m.AskvilleStatus%></td>
                                     <td style="width: 100px;">
-                                        <button class="btn" id="recheck-askville" data-guid="<%-m.AskvilleGuid%>" data-marketplaceId ="<%-m.Id%>"><i class="icon-refresh"></i>Recheck</button>
+                                        <button class="btn" id="recheck-askville" data-guid="<%-m.AskvilleGuid%>" data-marketplaceid="<%-m.Id%>"><i class="icon-refresh"></i>Recheck</button>
                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+             @* *** EKM   *** *@
+            <%if(marketplaceType == "EKM"){%>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#ekmtab1" data-toggle="tab">Orders</a>
+                    </li>
+                    <li><a href="#ekmtab2" data-toggle="tab">Account details</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="ekmtab1">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>1M</th>
+                                    <th>3M</th>
+                                    <th>6M</th>
+                                    <th>12M</th>
+                                    <th>15M</th>
+                                    <th>18M</th>
+                                    <th>24M</th>
+                                    <th>24M+</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total sum of orders</td>
+                                    <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders12M!=undefined ? GBPValues(ai.TotalSumofOrders12M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders15M!=undefined ? GBPValues(ai.TotalSumofOrders15M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Number of orders</td>
+                                    <td><%-ai.NumofOrders1M  || "-"%></td>
+                                    <td><%-ai.NumofOrders3M  || "-"%></td>
+                                    <td><%-ai.NumofOrders6M  || "-"%></td>
+                                    <td><%-ai.NumofOrders12M  || "-"%></td>
+                                    <td><%-ai.NumofOrders15M  || "-"%></td>
+                                    <td><%-ai.NumofOrders18M  || "-"%></td>
+                                    <td><%-ai.NumofOrders24M  || "-"%></td>
+                                    <td><%-ai.NumofOrdersLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Average sum of order</td>
+                                    <td><%-ai.AverageSumofOrder1M!=undefined ? GBPValues(ai.AverageSumofOrder1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder3M!=undefined ? GBPValues(ai.AverageSumofOrder3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder6M!=undefined ? GBPValues(ai.AverageSumofOrder6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder12M!=undefined ? GBPValues(ai.AverageSumofOrder12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder15M!=undefined ? GBPValues(ai.AverageSumofOrder15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder18M!=undefined ? GBPValues(ai.AverageSumofOrder18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrder24M!=undefined ? GBPValues(ai.AverageSumofOrder24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOrderLifetime!=undefined ? GBPValues(ai.AverageSumofOrderLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Total sum of cancelled orders</td>
+                                    <td><%-ai.TotalSumofCancelledOrders1M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders1M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders3M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders3M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders6M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders6M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders12M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders12M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders15M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders15M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders18M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders18M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrders24M!=undefined ? GBPValues(ai.TotalSumofCancelledOrders24M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofCancelledOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofCancelledOrdersLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Cancelled orders count</td>
+                                    <td><%-ai.NumofCancelledOrders1M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders3M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders6M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders12M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders15M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders18M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrders24M  || "-"%></td>
+                                    <td><%-ai.NumofCancelledOrdersLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Average sum of cancelled order</td>
+                                    <td><%-ai.AverageSumofCancelledOrder1M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder3M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder6M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder12M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder15M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder18M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrder24M!=undefined ? GBPValues(ai.AverageSumofCancelledOrder24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofCancelledOrderLifetime!=undefined ? GBPValues(ai.AverageSumofCancelledOrderLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Total sum of other orders</td>
+                                    <td><%-ai.TotalSumofOtherOrders1M!=undefined ? GBPValues(ai.TotalSumofOtherOrders1M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders3M!=undefined ? GBPValues(ai.TotalSumofOtherOrders3M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders6M!=undefined ? GBPValues(ai.TotalSumofOtherOrders6M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders12M!=undefined ? GBPValues(ai.TotalSumofOtherOrders12M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders15M!=undefined ? GBPValues(ai.TotalSumofOtherOrders15M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders18M!=undefined ? GBPValues(ai.TotalSumofOtherOrders18M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrders24M!=undefined ? GBPValues(ai.TotalSumofOtherOrders24M, true): "-"%></td>
+                                    <td><%-ai.TotalSumofOtherOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOtherOrdersLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Other orders count</td>
+                                    <td><%-ai.NumofOtherOrders1M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders3M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders6M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders12M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders15M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders18M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrders24M  || "-"%></td>
+                                    <td><%-ai.NumofOtherOrdersLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Average sum of other order</td>
+                                    <td><%-ai.AverageSumofOtherOrder1M!=undefined ? GBPValues(ai.AverageSumofOtherOrder1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder3M!=undefined ? GBPValues(ai.AverageSumofOtherOrder3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder6M!=undefined ? GBPValues(ai.AverageSumofOtherOrder6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder12M!=undefined ? GBPValues(ai.AverageSumofOtherOrder12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder15M!=undefined ? GBPValues(ai.AverageSumofOtherOrder15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder18M!=undefined ? GBPValues(ai.AverageSumofOtherOrder18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrder24M!=undefined ? GBPValues(ai.AverageSumofOtherOrder24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.AverageSumofOtherOrderLifetime!=undefined ? GBPValues(ai.AverageSumofOtherOrderLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="ekmtab2">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+
+                                <tr>
+                                    <th>Parameter name</th>
+                                    <th colspan="2">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Some info</td>
+                                    <td colspan="2">info1
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>some other info</td>
+                                    <td colspan="2">info2</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+            @* *** PayPoint   *** *@
+            <%if(marketplaceType == "PayPoint"){%>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#paypointtab1" data-toggle="tab">Orders</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="paypointtab1">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>1M</th>
+                                    <th>3M</th>
+                                    <th>6M</th>
+                                    <th>12M</th>
+                                    <th>15M</th>
+                                    <th>18M</th>
+                                    <th>24M</th>
+                                    <th>24M+</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sum of authorised orders</td>
+                                    <td><%-ai.SumofOrders1M!=undefined ? GBPValues(ai.SumofOrders1M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders3M!=undefined ? GBPValues(ai.SumofOrders3M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders6M!=undefined ? GBPValues(ai.SumofOrders6M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders12M!=undefined ? GBPValues(ai.SumofOrders12M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders15M!=undefined ? GBPValues(ai.SumofOrders15M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders18M!=undefined ? GBPValues(ai.SumofOrders18M, true): "-"%></td>
+                                    <td><%-ai.SumofOrders24M!=undefined ? GBPValues(ai.SumofOrders24M, true): "-"%></td>
+                                    <td><%-ai.SumofOrdersLifetime!=undefined ? GBPValues(ai.SumofOrdersLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Number of orders</td>
+                                    <td><%-ai.NumofOrders1M  || "-"%></td>
+                                    <td><%-ai.NumofOrders3M  || "-"%></td>
+                                    <td><%-ai.NumofOrders6M  || "-"%></td>
+                                    <td><%-ai.NumofOrders12M  || "-"%></td>
+                                    <td><%-ai.NumofOrders15M  || "-"%></td>
+                                    <td><%-ai.NumofOrders18M  || "-"%></td>
+                                    <td><%-ai.NumofOrders24M  || "-"%></td>
+                                    <td><%-ai.NumofOrdersLifetime  || "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Orders Average</td>
+                                    <td><%-ai.AverageOrder1M!=undefined ? ai.AverageOrder1M : "-"%></td>
+                                    <td><%-ai.AverageOrder3M!=undefined ? ai.AverageOrder3M : "-"%></td>
+                                    <td><%-ai.AverageOrder6M!=undefined ? ai.AverageOrder6M : "-"%></td>
+                                    <td><%-ai.AverageOrder12M!=undefined ? ai.AverageOrder12M : "-"%></td>
+                                    <td><%-ai.AverageOrder15M!=undefined ? ai.AverageOrder15M : "-"%></td>
+                                    <td><%-ai.AverageOrder18M!=undefined ? ai.AverageOrder18M : "-"%></td>
+                                    <td><%-ai.AverageOrder24M!=undefined ? ai.AverageOrder24M : "-"%></td>
+                                    <td><%-ai.AverageOrderLifetime!=undefined ? ai.AverageOrderLifetime : "-"%></td>
+                                </tr>                                
+                                <tr>
+                                    <td>Num Of Failures</td>
+                                    <td><%-ai.NumofFailures1M!=undefined ? ai.NumofFailures1M : "-"%></td>
+                                    <td><%-ai.NumofFailures3M!=undefined ? ai.NumofFailures3M : "-"%></td>
+                                    <td><%-ai.NumofFailures6M!=undefined ? ai.NumofFailures6M : "-"%></td>
+                                    <td><%-ai.NumofFailures12M!=undefined ? ai.NumofFailures12M : "-"%></td>
+                                    <td><%-ai.NumofFailures15M!=undefined ? ai.NumofFailures15M : "-"%></td>
+                                    <td><%-ai.NumofFailures18M!=undefined ? ai.NumofFailures18M : "-"%></td>
+                                    <td><%-ai.NumofFailures24M!=undefined ? ai.NumofFailures24M : "-"%></td>
+                                    <td><%-ai.NumofFailuresLifetime!=undefined ? ai.NumofFailuresLifetime : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Cancellation Rate</td>
+                                    <td><%-ai.CancellationRate1M!=undefined ? ai.CancellationRate1M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate3M!=undefined ? ai.CancellationRate3M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate6M!=undefined ? ai.CancellationRate6M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate12M!=undefined ? ai.CancellationRate12M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate15M!=undefined ? ai.CancellationRate15M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate18M!=undefined ? ai.CancellationRate18M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRate24M!=undefined ? ai.CancellationRate24M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationRateLifetime!=undefined ? ai.CancellationRateLifetime + "%" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Cancellation Value</td>
+                                    <td><%-ai.CancellationValue1M!=undefined ? ai.CancellationValue1M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue3M!=undefined ? ai.CancellationValue3M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue6M!=undefined ? ai.CancellationValue6M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue12M!=undefined ? ai.CancellationValue12M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue15M!=undefined ? ai.CancellationValue15M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue18M!=undefined ? ai.CancellationValue18M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValue24M!=undefined ? ai.CancellationValue24M + "%" : "-"%></td>
+                                    <td><%-ai.CancellationValueLifetime!=undefined ? ai.CancellationValueLifetime + "%" : "-"%></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -693,69 +942,73 @@
 }
 
 @helper MarketPlaces()
-    {
+{
     <div style="overflow: auto">
-            <table class="table table-bordered table-striped marketplace-table blue-header centered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Shop Name</th>
-                        <th>Seniority</th>
-                        <th>Annual Sales</th>
-                        <th>Rating</th>
-                        <th>Inventory</th>
-                        <th>Elimination</th>
-                        <th>Updated</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(summary){%>
+        <table class="table table-bordered table-striped marketplace-table blue-header centered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Shop Name</th>
+                    <th>Seniority</th>
+                    <th>Annual Sales</th>
+                    <th>Rating</th>
+                    <th>Inventory</th>
+                    <th>Elimination</th>
+                    <th>Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(summary){%>
                         <tr class="bold" style="font-size: 18px;">
                             <td>Total</td>
                             <td></td>
                             <td></td>
-                            <td class="centered"> <%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
-                            <td class="centered"> <%= EzBob.formatPercents(summary.rating, 1) %> </td>
-                            <td class="centered"> <%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
+                            <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
+                            <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
+                            <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
                             <td></td>
                             <td></td>
                             <td></td>
                         </tr>
-                    <%}%>
+                <%}%>
                     <% _.each(marketplaces, function(m,i){ %>
                     <tr data-id="<%-i%>">
-                        <td><div class="shop-<%- m.Name %>"></div></td>
+                        <td>
+                            <div class="source_labels_on <%- m.Name.toLowerCase() %>"></div>
+                        </td>
                         <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                         <td class="centered"><%- m.age %></td>
                         <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
                         <td class="centered"><%- m.RaitingPercent%> %</td>
                         <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
                         <td><%- m.EluminatingStatus %></td>
-                        <td>
-                            <%- m.UpdatingStatus %>
+                        <td><%- m.UpdatingStatus %>
                             <% if(m.UpdateError){%>
-                            <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button><br />
+                            <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+                            <br />
                             <%}%>
                         </td>
-                        <td  class="centered">
+                        <td class="centered">
                             <div style="width: 100px;">
-                                <% if(m.Name != "EKM"){%>
-                                <a href="#" class="btn btn-mini reCheck-amazon" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a> <br />
+
+                                <a href="#" class="btn btn-mini reCheck-amazon" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
                                 <% if(m.UpdateError && m.Name == 'eBay'){ %>
-                                <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button> <br />
+                                <br/>
+                                <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
+                                <br />
                                 <%}%>
-                                <%}%>
-                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug" ><i class="icon-tag"></i></a>
+                                
+                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
                             </div>
                         </td>
                     </tr>
-                    <% }); %>
-                </tbody>
-            </table>        
+                <% }); %>
+            </tbody>
+        </table>
     </div>
 
-    <div id="marketplace-details">  </div>
+    <div id="marketplace-details"></div>
 }
 <script id="marketplace-template" type="text/template">
     @MarketPlaces()

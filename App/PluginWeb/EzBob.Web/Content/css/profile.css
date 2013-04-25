@@ -254,7 +254,7 @@ body .agreement-text {
     padding-bottom: 3px;
 }
 
-.store-icon-Amazon, .store-icon-Ebay, .store-icon-EKM {
+.store-icon-Amazon, .store-icon-Ebay, .store-icon-EKM, .store-icon-Volusion, .store-icon-PayPoint {
     background-image: url(../img/store-logos.png);
     width: 119px;
     height: 35px;
@@ -273,6 +273,13 @@ body .agreement-text {
 .store-icon-EKM {
     background-position: 0 -70px;
 }
+
+.store-icon-PayPoint {
+    background-position: 0 -105px;
+    margin-left: 20px;
+}
+
+.store-icon-Volusion { background-position: 0 -70px; } /* TODO: fix the offset */
 
 .cart-logo {
     float: left;

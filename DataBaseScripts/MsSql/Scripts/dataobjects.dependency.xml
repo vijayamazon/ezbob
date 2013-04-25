@@ -499,6 +499,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -523,6 +529,18 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>ExperianAccountStatuses</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianAccountStatuses.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianAccountTypes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianAccountTypes.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_ExperianConsentAgreement_Customer</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_ExperianConsentAgreement_Customer.sql</oFileName>
@@ -532,6 +550,36 @@
     <oName>ExperianConsentAgreement</oName>
     <oRank>3</oRank>
     <oFileName>02_TABLES\ExperianConsentAgreement.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianDataAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianDataAgentConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_CustomerId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_CustomerId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ExperianAccountType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ExperianAccountType.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ExperianDefaultAccountsData_ServiceLogId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_ServiceLogId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ExperianDefaultAccountsData</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\ExperianDefaultAccountsData.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -700,6 +748,12 @@
     <oName>MenuItem_Status_Rel</oName>
     <oRank>2</oRank>
     <oFileName>02_TABLES\MenuItem_Status_Rel.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MonitoredSites</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MonitoredSites.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -907,8 +961,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_CustomerMarketplaceUpdatingActionLog</oName>
-    <oRank>1</oRank>
+    <oRank>5</oRank>
     <oFileName>02_TABLES\MP_CustomerMarketplaceUpdatingActionLog.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -920,7 +980,7 @@
   </DependencyData>
   <DependencyData>
     <oName>MP_CustomerMarketplaceUpdatingCounter</oName>
-    <oRank>2</oRank>
+    <oRank>6</oRank>
     <oFileName>02_TABLES\MP_CustomerMarketplaceUpdatingCounter.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -979,8 +1039,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_EbayExternalTransaction_MP_EbayOrderItem</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EbayExternalTransaction_MP_EbayOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_EbayExternalTransaction</oName>
-    <oRank>1</oRank>
+    <oRank>6</oRank>
     <oFileName>02_TABLES\MP_EbayExternalTransaction.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -1037,6 +1103,12 @@
     <oRank>5</oRank>
     <oFileName>02_TABLES\MP_EbayOrderItem.sql</oFileName>
     <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EBayOrderItemDetail_MP_EbayAmazonCategory.sql</oFileName>
+    <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
     <oName>FK_MP_EBayOrderItemInfo_MP_EbayCategory_FreeAddedCategory</oName>
@@ -1153,6 +1225,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_EkmOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_EkmOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_EkmOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_EkmOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_EkmOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_EkmOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_EkmOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_ExperianBankCache</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_ExperianBankCache.sql</oFileName>
@@ -1255,6 +1351,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>PacNetBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\PacNetBalance.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>PacnetPaypointServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PacnetPaypointServiceLog.sql</oFileName>
@@ -1282,6 +1384,36 @@
     <oName>PostcodeServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PostcodeServiceLog.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportScheduler</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ReportScheduler.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportScheduler_ReportID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportScheduler_ReportID.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportUsers_UserID</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportUsers_UserID.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportsUsersMap</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\ReportsUsersMap.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportUsers</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ReportUsers.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1630,6 +1762,12 @@
     <oName>StrategyTasks</oName>
     <oRank>2</oRank>
     <oFileName>02_TABLES\StrategyTasks.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SupportAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SupportAgentConfigs.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

@@ -214,8 +214,11 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
-    <Compile Include="Areas\Customer\Controllers\EKMAccounts.cs" />
+    <Compile Include="Areas\Customer\Controllers\VolusionMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
+    <Compile Include="Areas\Customer\Controllers\VolusionMPUniqChecker.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
@@ -245,7 +248,6 @@
     <Compile Include="Code\Email\IEmailConfirmation.cs" />
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
-    <Compile Include="Code\LoanLimit.cs" />
     <Compile Include="Code\ReportGenerator\HeaderReportGenerator.cs" />
     <Compile Include="Code\ReportGenerator\LoanHistoryExelReportGenerator.cs" />
     <Compile Include="Code\ReportGenerator\LoanHistoryExelReportResult.cs" />
@@ -253,6 +255,10 @@
     <Compile Include="Code\ReportGenerator\LoanOfferReportResult.cs" />
     <Compile Include="Code\ReportGenerator\LoanScheduleReportGenerator.cs" />
     <Compile Include="Code\ReportGenerator\LoanScheduleReportResult.cs" />
+    <Compile Include="Code\LoanDelayViolationException.cs" />
+    <Compile Include="Code\LoanLimit.cs" />
+    <Compile Include="Code\PostCode\IPostCodeFacade.cs" />
+    <Compile Include="Code\PostCode\SimplyPostCodeFacade.cs" />
     <Compile Include="Controllers\AgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\DailyReportData.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\ExpectationReportData.cs" />
@@ -290,8 +296,8 @@
     <Compile Include="Areas\Customer\Models\PayPointFacade.cs" />
     <Compile Include="Areas\Customer\Models\PersonalInfoEditHistory.cs" />
     <Compile Include="Areas\Customer\Models\Person.cs" />
-    <Compile Include="Areas\Customer\Models\PostcodeFullAddressModel.cs" />
-    <Compile Include="Areas\Customer\Models\PostcodeSearchListModel.cs" />
+    <Compile Include="Code\PostCode\PostcodeFullAddressModel.cs" />
+    <Compile Include="Code\PostCode\PostcodeSearchListModel.cs" />
     <Compile Include="Areas\Customer\Models\CustomerModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertDocsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertsController.cs" />
@@ -395,15 +401,56 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\alertify.css" />
+    <Content Include="Content\css\app.css" />
     <Content Include="Content\css\bootstrap-modal.css" />
     <Content Include="Content\css\captcha.css" />
     <Content Include="Content\css\choosen\chosen-sprite.png" />
     <Content Include="Content\css\choosen\chosen.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
+    <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\apply_now.png" />
+    <Content Include="Content\css\images\arrow.png" />
+    <Content Include="Content\css\images\bank_details.png" />
+    <Content Include="Content\css\images\body_bg.jpg" />
+    <Content Include="Content\css\images\cb\controls.png" />
+    <Content Include="Content\css\images\cb\controls_old.png" />
+    <Content Include="Content\css\images\cb\loading.gif" />
+    <Content Include="Content\css\images\companies\bloomberg.png" />
+    <Content Include="Content\css\images\companies\ccta.png" />
+    <Content Include="Content\css\images\companies\internet_retailing.png" />
+    <Content Include="Content\css\images\companies\tamebay.png" />
+    <Content Include="Content\css\images\companies\techcrunch.png" />
+    <Content Include="Content\css\images\companies\yahoo.png" />
+    <Content Include="Content\css\images\current_arrow.png" />
+    <Content Include="Content\css\images\ezbob_logo.png" />
+    <Content Include="Content\css\images\favicon114x114.png" />
+    <Content Include="Content\css\images\favicon57x57.png" />
+    <Content Include="Content\css\images\favicon72x72.png" />
+    <Content Include="Content\css\images\footer_bg.png" />
+    <Content Include="Content\css\images\gauge.png" />
+    <Content Include="Content\css\images\help_ebay.jpg" />
+    <Content Include="Content\css\images\live_help.jpg" />
+    <Content Include="Content\css\images\lock_64.png" />
+    <Content Include="Content\css\images\nav_bg.png" />
+    <Content Include="Content\css\images\nav_bg_on.png" />
+    <Content Include="Content\css\images\pdf.png" />
     <Content Include="Content\css\images\play-icon-hover.png" />
     <Content Include="Content\css\images\play-icon-sprite.png" />
     <Content Include="Content\css\images\play-icon.png" />
+    <Content Include="Content\css\images\plus.png" />
+    <Content Include="Content\css\images\points.png" />
+    <Content Include="Content\css\images\pound.png" />
+    <Content Include="Content\css\images\progress_tip.png" />
+    <Content Include="Content\css\images\secure.png" />
+    <Content Include="Content\css\images\source_small_sprite.png" />
+    <Content Include="Content\css\images\source_sprite.png" />
+    <Content Include="Content\css\images\sprites\contact_sprite.png" />
+    <Content Include="Content\css\images\sprites\secure_sprite.png" />
+    <Content Include="Content\css\images\sprites\social_sprite.png" />
+    <Content Include="Content\css\images\sprites\social_sprite_round.png" />
+    <Content Include="Content\css\images\star.png" />
+    <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\jquery.jqplot.css" />
     <Content Include="Content\css\loanDetails.css">
       <DependentUpon>loanDetails.less</DependentUpon>
@@ -412,6 +459,7 @@
     <Content Include="Content\css\shops.css" />
     <Content Include="Content\css\sidebar.css" />
     <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\attardi.labels.css" />
     <Content Include="Content\css\video.css" />
     <Content Include="Content\css\wizard-header.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
@@ -742,6 +790,7 @@
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
     <Content Include="Content\js\lib\handlebars.js" />
     <Content Include="Content\js\lib\html5shiv.js" />
+    <Content Include="Content\js\lib\attardi.labels.js" />
     <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.barRenderer.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.BezierCurveRenderer.js" />
@@ -836,6 +885,17 @@
     <Content Include="Content\js\lib\log.coffee" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\VolusionShopNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointShopNotification.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_Login.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
+    <None Include="Content\js\login\ezbob.restorePassword.coffee" />
+    <Content Include="Content\js\login\ezbob.restorePassword.js">
+      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
     </Content>
@@ -876,17 +936,20 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
-      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
+      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.js">
-      <DependentUpon>ezbob.shopbuttonlist.coffee</DependentUpon>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
+      <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.js">
-      <DependentUpon>ezbob.shopslistview.coffee</DependentUpon>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
+      <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
+      <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
       <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
@@ -1018,8 +1081,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.limitedInformation.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfoBase.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.personinfo.js" />
-    <Content Include="Content\js\Wizard\ezbob.storebase.js" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ebay.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.signupstep.js" />
@@ -1146,7 +1207,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
-      <Name>CommonLib %28Integration\CommonLib%29</Name>
+      <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
@@ -1211,6 +1272,14 @@
     <ProjectReference Include="..\..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Volusion\Volusion.csproj">
+      <Project>{48fec03d-c021-4c8c-89e3-9f6dee55a55d}</Project>
+      <Name>Volusion</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
@@ -1361,11 +1430,14 @@
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shopslistview.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

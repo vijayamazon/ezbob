@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using PaymentServices.PayPoint;
-using PaymentServices.Web_References.PayPoint;
 
 namespace PaymentServices.Tests
 {
