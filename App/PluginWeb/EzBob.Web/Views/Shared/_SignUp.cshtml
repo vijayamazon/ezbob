@@ -26,7 +26,7 @@
 				<input type="email" name="Email" id="Email" tabindex="1" class="form_field"/>
 			</label>
 			<span class="required">*</span>
-			<img id="EmailImage"/>
+			<img id="EmailImage" class="HiddenImage"/>
 		</div>
 
 		<div id="strength-password-view" class="form_field_container">
@@ -35,7 +35,7 @@
 				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
 			</label>
 			<span class="required">*</span>
-			<img id="Password1Image"/>
+			<img id="Password1Image" class="HiddenImage"/>
 			<p id="message" class="help-block"></p>
 		</div>
 
@@ -45,7 +45,7 @@
 				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
 			</label>
 			<span class="required">*</span>
-			<img id="Password2Image"/>
+			<img id="Password2Image" class="HiddenImage"/>
 		</div>
 		
 		<div class="form_field_container">
@@ -71,13 +71,13 @@
 				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
 			</label>
 			<span class="required">*</span>
-			<img id="SecretAnswerImage"/>
+			<img id="SecretAnswerImage" class="HiddenImage"/>
 		</div>
 
 		<div class="form_field_container">
 		@EzForm.Captcha(captchamode)
 		</div>
 
-		<input type="submit" id="btn" value="Conitnue &raquo;" class="button green">
+		<div class="form_buttons_container"><input type="submit" id="btn" value="Conitnue" class="button orange continue"></div>
 	</div>
 }

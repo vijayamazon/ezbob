@@ -5,13 +5,13 @@
 		<h2 class="form_start">Personal information</h2>
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
-                <div class="control-group form_field_container">
+				<div class="control-group form_field_container">
 					<div class="controls">
-					    <label class="attardi-input"><span>First Name</span>
-                            <!-- should eliminate all margins !!!!! -->
-                            <!-- Wrong validation is performed!!!!! -->
-                            <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
-					    </label>
+						<label class="attardi-input"><span>First Name</span>
+							<!-- should eliminate all margins !!!!! -->
+							<!-- Wrong validation is performed!!!!! -->
+							<input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
+						</label>
 						<span class="required">*</span>
 						<img id="FirstNameImage"/>
 					</div>
@@ -20,19 +20,19 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>Middle Name</span>
-						    <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
-                            <img id="MiddleNameImage"/>
+							<input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
 						</label>
+						<img id="MiddleNameImage"/>
 					</div>
 				</div>
 
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>Last Name</span>
-						    <input style="height:20px" id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" size="50" />
+							<input id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" />
 						</label>
 						<span class="required">*</span>
-                        <img id="SurnameImage"/>
+						<img id="SurnameImage"/>
 					</div>
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
@@ -62,24 +62,25 @@
 					</div>
 				</div>
 
-				<h2 class="form_section">Your Current Residential Address</h2>
+				<h2 class="form_section">Residential Address</h2>
 
 				@EzForm.AddressInput("PersonalAddress", "Potcode")
-				
+
 				<div class="control-group form_field_container">
 					<div class="controls">
-					    <label class="control-label attardi-input"><span>Length of time at address</span>
-					        <select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
-					            <option selected="selected" value=""></option>
-					            <option value="1">1 year</option>
-					            <option value="2">2 years</option>
-					            <option value="3">More than 3 years</option>
-					        </select>
-					    </label>
+						<label class="control-label attardi-input">
+							<span>Length of time at address</span>
+							<select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
+								<option selected="selected" value=""></option>
+								<option value="1">1 year</option>
+								<option value="2">2 years</option>
+								<option value="3">More than 3 years</option>
+							</select>
+						</label>
 						<span class="required">*</span>
 					</div>
 				</div>
-				
+
 				@EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
 
 				<div class="control-group form_field_container">
@@ -97,30 +98,33 @@
 					</div>
 				</div>
 
-				<h2 class="form_section">Your Contact Details</h2>
+				<h2 class="form_section">Contact Details</h2>
 
 				<div class="control-group form_field_container">
-					<label class="control-label attardi-input"><span>Home Phone Number</span>
-						<div class="controls">
-							<input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" size="50"/>
-						</div>
-					</label>
-					<span class="required">*</span>
-				</div>
-
-				<div class="control-group form_field_container">
-					<label class="control-label attardi-input"><span>Mobile Number</span>
 					<div class="controls">
-						<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
-					</div></label>
+						<label class="control-label attardi-input">
+							<span>Phone Number</span>
+							<input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
+						</label>
+						<span class="required">*</span>
+					</div>
 				</div>
 
-				<h2 class="form_section">Your Company Information</h2> 
+				<div class="control-group form_field_container">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span>Mobile Number</span>
+							<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
+						</label>
+					</div>
+				</div>
+
+				<h2 class="form_section">Company Information</h2> 
 
 				<div class="control-group typeOfBussiness form_field_container">
 					<div class="controls">
 						<label class="attardi-input">
-							<span>Your Type of Business</span>
+							<span>Type of Business</span>
 							<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
 								<option value=""></option>
 								<option value="Entrepreneur">Sole Trader (not Inc.)</option>
@@ -137,41 +141,40 @@
 				</div>
 
 				<div class="control-group form_field_container">
-					<label class="attardi-input"><span>Your Total Online Sales (£)</span>
-						<div class="controls cashControlls">
-						    <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
-                            <img id="OverallTurnOverImage"/>
-						</div>
-					</label>
-					<span class="required">*</span>
+					<div class="controls cashControlls">
+						<label class="attardi-input">
+							<span>Total Online Sales (£)</span>
+							<input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
+						</label>
+						<span class="required">*</span>
+						<img id="OverallTurnOverImage" />
+					</div>
 				</div>
 
-                <div class="control-group form_field_container">
-	                <label class="attardi-input"><span>Your Total Online & Offline Sales (£)</span>
-		                <div class="controls cashControlls">
-			                <input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
-			                <img id="WebSiteTurnOverImage"/>
-		                </div>
-	                </label>
-	                <span class="required">*</span>
-                </div>
-
-				<hr />
-
-				<div class="control-group">
-					<div class="controls">
-						<label for="ConsentToSearch" class="editor-label-with-checkbox">
-							<input style="margin-bottom: 6px" id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
-							I have read and accept the <a>terms and conditions</a> of the credit bureau search
+				<div class="control-group form_field_container">
+					<div class="controls cashControlls">
+						<label class="attardi-input">
+							<span>Total Online & Offline Sales (£)</span>
+							<input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
 						</label>
+						<span class="required">*</span>
+						<img id="WebSiteTurnOverImage" />
+					</div>
+				</div>
+
+				<div class="control-group form_read_and_accept">
+					<hr />
+					<div class="controls">
+						<input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
+						<label for="ConsentToSearch" class="editor-label-with-checkbox"> I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
 					</div>
 				</div>
    }
 		</div>
 
-		<div class="">
-			<a href="#" class="btn-continue button orange btn-next pull-right disabled">Complete</a>
-			<a href="#" class="btn-back button orange back pull-right">Back</a>
+		<div class="form_buttons_container">
+			<a href="#" class="btn-back button gray back">Back</a>
+			<a href="#" class="btn-continue button orange btn-next disabled continue">Complete</a>
 		</div>
 	</div>
 }
@@ -195,14 +198,14 @@
 				<div class="control-group">
 					<label for="LimitedCompanyNumber" class="control-label">Registration # <span class="required">*</span></label>
 					<div class="controls">
-						<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" size="50" class="form_field" />
+						<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
 					</div>
 				</div>
 				
 				<div class="control-group">
 					<label for="LimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
 					<div class="controls">
-						<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" size="50" class="form_field" />
+						<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
 					</div>
 				</div>
 				
@@ -211,7 +214,7 @@
 				<div class="control-group">
 					<label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
 					<div class="controls">
-						<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+						<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
 					</div>
 				</div>
 					
@@ -219,7 +222,7 @@
 
 				<div class="directors">
 				</div>
-   }
+			}
 
 		</div>
 		<div class="">
@@ -239,7 +242,7 @@
 				<div class="control-group">
 					<label for="NonLimitedCompanyName" class="control-label">Name <span class="required">*</span></label>
 					<div class="controls">
-						<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" size="50" class="form_field" />
+						<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
 					</div>
 				</div>
 				
@@ -279,15 +282,15 @@
 				<div class="control-group">
 					<label for="NonLimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
 					<div class="controls">
-						<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" size="50" class="form_field phonenumber" />
+						<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
 					</div>
 				</div>
 
 				<div class="directors">
 				</div>
-   }
-
+			}
 		</div>
+
 		<div class="">
 			<a href="#" class="continue btn-continue next button orange pull-right">Complete</a>
 			<a href="#" class="back btn-back button orange pull-right">Back</a>
@@ -327,21 +330,21 @@
 			<div class="control-group">
 				<label for="<%-preffix%>[<%=i%>].Name" class="control-label">Name <span class="required">*</span></label>
 				<div class="controls">
-					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
+					<input class="form_field" style="height:20px;" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label for="<%-preffix%>[<%=i%>].Middle" class="control-label">Middle Initial</label>
 				<div class="controls">
-					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+					<input class="form_field" style="height:20px;" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
 				</div>
 			</div>
 	
 			<div class="control-group">
 				<label for="<%-preffix%>[<%=i%>].Surname" class="control-label">Surname <span class="required">*</span></label>
 				<div class="controls">
-					<input class="form_field" size="50" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
+					<input class="form_field" style="height:20px;" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
 				</div>
 			</div>	
 	
