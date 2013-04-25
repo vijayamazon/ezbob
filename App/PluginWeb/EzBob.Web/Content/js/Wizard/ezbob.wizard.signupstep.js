@@ -16,10 +16,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     events: {
         'click :submit': 'submit',
-        'keydown input[name="signupEmail"]': 'inputChanged',
-        'paste input[name="signupEmail"]': 'inputChanged',
-        'input input[name="signupEmail"]': 'inputChanged',
-        'change input[name="signupEmail"]': 'emailChanged',
+        'keydown input[name="Email"]': 'inputChanged',
+        'paste input[name="Email"]': 'inputChanged',
+        'input input[name="Email"]': 'inputChanged',
+        'change input[name="Email"]': 'emailChanged',
         'keydown input[name="signupPass1"]': 'inputChanged',
         'paste input[name="signupPass1"]': 'inputChanged',
         'input input[name="signupPass1"]': 'inputChanged',
@@ -59,7 +59,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         }
     },
     emailChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "EmailImage", "#signupEmail", "#RotateImage", "#OkImage", "#FailImage");
+        EzBob.Validation.displayIndication(this.formChecker, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
     },
     password1Changed: function () {
         EzBob.Validation.displayIndication(this.formChecker, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");

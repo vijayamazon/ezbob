@@ -10,14 +10,14 @@
             <h2>Please enter your PayPoint credentials</h2>
         </div>
         <form id="ekmAccount">                              
-            <div class="simple-well bank-account-instructions clearfix form-horizontal">
+            <div class="bank-account-instructions clearfix form-horizontal">
                 <div class="bank-account">
-                    @EzForm.InputText("payPoint_mid", "PayPoint Mid", "", "input-large")
-                    @EzForm.Password("payPoint_vpnPassword", "PayPoint VpnPassword", "", "input-large")
-                    @EzForm.Password("payPoint_remotePassword", "PayPoint RemotePassword", "", "input-large")
+                    @EzForm.InputText("payPoint_mid", "PayPoint Mid", cls: "form_field", isRequired:true)
+                    @EzForm.Password("payPoint_vpnPassword", "PayPoint VpnPassword", cls: "form_field")
+                    @EzForm.Password("payPoint_remotePassword", "PayPoint RemotePassword", cls: "form_field")
                     <div class="control-group clearfix" style="padding-right: 68px;">
                         <a href="#" class="button orange  connect-payPoint  disabled pull-right">Continue</a>
-                        <a href="#" class="back button orange pull-right">Back</a>
+                        <a href="#" class="back button grey pull-right">Back</a>
                     </div>
                 </div>
             </div>
