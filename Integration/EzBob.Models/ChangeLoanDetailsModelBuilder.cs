@@ -302,7 +302,7 @@ namespace EzBob.Models
 
         public bool IsAmountChangingAllowed(CashRequest cr)
         {
-            if (string.IsNullOrEmpty(cr.LoanTemplate)) return true;
+            if (cr == null || string.IsNullOrEmpty(cr.LoanTemplate)) return true;
             
             var model = EditLoanDetailsModel.Parse(cr.LoanTemplate);
             
