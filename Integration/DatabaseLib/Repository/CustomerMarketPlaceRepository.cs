@@ -40,6 +40,11 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             return GetAll().Any(cm => cm.Customer.Id == customer.Id && cm.Marketplace.Id == marketplaceType.Id);
         }
 
+        public IEnumerable<MP_CustomerMarketPlace> GetAll(Customer customer)
+        {
+            return GetAll().Where(cm => cm.Customer.Id == customer.Id ).ToList();
+        }
+
         public IEnumerable<MP_CustomerMarketPlace> Get(Customer customer, MP_MarketplaceType marketplaceType)
         {
             return GetAll().Where(cm => cm.Customer.Id == customer.Id && cm.Marketplace.Id == marketplaceType.Id).ToList();

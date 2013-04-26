@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
+using NHibernate;
+using NHibernate.Linq;
 using StructureMap;
 
 namespace EzBob.Web.Code
@@ -10,16 +15,20 @@ namespace EzBob.Web.Code
     public class FraudDetectionChecker
     {
         private readonly List<FraudUser> _fu;
-        private readonly FraudDetectionRepository _fraudDetectioRepository;
+        private readonly ISession _session;
 
         public FraudDetectionChecker()
         {
             _fu = (ObjectFactory.GetInstance<FraudUserRepository>()).GetAll().ToList();
-            _fraudDetectioRepository = ObjectFactory.GetInstance<FraudDetectionRepository>();
+            _session = ObjectFactory.GetInstance<ISession>();
         }
 
-        public string ExternalSystemDecision(Customer customer)
+        public string ExternalSystemDecision(int customerId)
         {
+            var customer = _session.Get<Customer>(customerId);
+            if (!customer.IsSuccessfullyRegistered)
+                throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
+
             var fraudDetections = new List<FraudDetection>();
 
             //First name + Last name check
@@ -30,8 +39,8 @@ namespace EzBob.Web.Code
                     x.LastName.ToLower() == customer.PersonalInfo.Surname.ToLower())
                    .Select(
                        x =>
-                       CreateDetection("FirstName + LastName", customer, null, "", x,
-                                       string.Format("{0} + {1}", x.FirstName, x.LastName))));
+                       CreateDetection("Customer FirstName, LastName", customer, null, "Fraud FirstName, LastName", x,
+                                       string.Format("{0}, {1}", x.FirstName, x.LastName))));
 
             //addresses check
             var address = customer.AddressInfo.AllAddresses;
@@ -42,9 +51,10 @@ namespace EzBob.Web.Code
                                          d.Line1 == add.Line1 && d.Line2 == add.Line2 && d.Line3 == add.Line3 &&
                                          d.Postcode == add.Postcode && d.County == add.County
                                      select
-                                         CreateDetection("Line1 + Line2 + Line3 + Postcode + County", customer, null, "",
+                                         CreateDetection("Customer " + add.AddressType.ToString(), customer, null,
+                                                         "Fraud address",
                                                          f,
-                                                         string.Format("{0} + {1} + {2} + {3} + {4}",
+                                                         string.Format("{0}, {1}, {2}, {3}, {4}",
                                                                        d.Line1, d.Line2, d.Line3, d.Postcode, d.County)));
 
             //bank accounts check
@@ -55,8 +65,9 @@ namespace EzBob.Web.Code
                                      where
                                          d.SortCode == sortCode && d.BankAccount == accountNumber
                                      select
-                                         CreateDetection("SortCode + AccountNumber", customer, null, "", f,
-                                                         string.Format("{0} + {1}", sortCode, accountNumber)));
+                                         CreateDetection("Customer SortCode, AccountNumber", customer, null,
+                                                         "Fraud SortCode, AccountNumber", f,
+                                                         string.Format("{0}, {1}", sortCode, accountNumber)));
 
             //companys check
             var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
@@ -73,8 +84,9 @@ namespace EzBob.Web.Code
                                          where
                                              c.CompanyName == companyName && c.RegistrationNumber == companyRegNum
                                          select
-                                             CreateDetection("CompanyName + RegistrationNumber", customer, null, "", f,
-                                                             string.Format("{0} + {1}", companyName, companyRegNum)));
+                                             CreateDetection("Customer CompanyName, RegistrationNumber", customer, null,
+                                                             "Fraud CompanyName, RegistrationNumber", f,
+                                                             string.Format("{0}, {1}", companyName, companyRegNum)));
             }
 
             //emails check
@@ -84,7 +96,7 @@ namespace EzBob.Web.Code
                                      where
                                          d.Email == email
                                      select
-                                         CreateDetection("Email", customer, null, "", f, email));
+                                         CreateDetection("Customer Email", customer, null, "Fraud Email", f, email));
 
             //email domains check
             var customerEmailDomain =
@@ -93,7 +105,9 @@ namespace EzBob.Web.Code
                                      from d in f.EmailDomains
                                      where
                                          d.EmailDomain == customerEmailDomain
-                                     select CreateDetection("Email domain", customer, null, "", f, d.EmailDomain));
+                                     select
+                                         CreateDetection("Customer Email", customer, null, "Fraud Email Domain", f,
+                                                         d.EmailDomain));
 
             //phones check
             var phone = string.Empty;
@@ -121,8 +135,9 @@ namespace EzBob.Web.Code
                                                         phoneType = "DaytimePhone";
                                                     if (@t.d.PhoneNumber == customer.PersonalInfo.MobilePhone)
                                                         phoneType = "MobilePhone";
-                                                    return CreateDetection(phoneType, customer,
-                                                                           null, "", @t.f, @t.d.PhoneNumber);
+                                                    return CreateDetection("Customer " + phoneType, customer,
+                                                                           null, "Fraud PhoneNumber", @t.f,
+                                                                           @t.d.PhoneNumber);
                                                 }
                                          ));
             //shops check
@@ -132,30 +147,231 @@ namespace EzBob.Web.Code
                                      where
                                          d.Name == s.DisplayName && d.Type == s.Marketplace
                                      select
-                                         CreateDetection("ShopDisplayName + ShopMarketplaceType", customer, null, "", f,
-                                                         string.Format("{0} + {1}", d.Name, d.Type.Name
+                                         CreateDetection("Customer ShopDisplayName, ShopMarketplaceType", customer, null,
+                                                         "Fraud ShopDisplayName, ShopMarketplaceType", f,
+                                                         string.Format("{0}, {1}", d.Name, d.Type.Name
                                                              )));
 
-            
+
             var resultString =
                 string.Join("\n", fraudDetections.Select(x =>
-                    x.CompareField + ",  " +
-                    x.CurrentCustomer.Id + ",  " +
-                    x.CurrentField + ",  " +
-                    x.ExternalUser.Id + ",  " +
-                    x.Id + ",  " +
-                    x.InternalCustomer + ",  " +
-                    x.Value));
+                                                         x.CompareField + ",  " +
+                                                         x.CurrentCustomer.Id + ",  " +
+                                                         x.CurrentField + ",  " +
+                                                         x.ExternalUser.Id + ",  " +
+                                                         x.Id + ",  " +
+                                                         x.InternalCustomer + ",  " +
+                                                         x.Value));
+
+
+            for (var i = 0; i < fraudDetections.Count; i++)
+            {
+                _session.Save(fraudDetections[i]);
+                if (i%20 != 0) continue;
+                _session.Flush();
+                _session.Clear();
+            }
+
             return resultString;
         }
 
-        public string InternalSystemDecision(Customer customer)
+        public string InternalSystemDecision(int customerId)
         {
-            return "";
+            var customer = _session.Get<Customer>(customerId);
+            if (!customer.IsSuccessfullyRegistered)
+                throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
+
+            var fraudDetections = new List<FraudDetection>();
+
+            const int PAGE_SIZE = 50;
+            var customerCount = _session.QueryOver<Customer>().RowCount();
+            var iterationCount = customerCount/PAGE_SIZE;
+
+            for (var i = 0; i <= iterationCount; i++)
+            {
+                var customerPortion = _session.QueryOver<Customer>().Skip(i*PAGE_SIZE).Take(PAGE_SIZE).List<Customer>();
+
+                //Name
+                var firstName = customer.PersonalInfo.FirstName;
+                var lastName = customer.PersonalInfo.Surname;
+                var middleName = customer.PersonalInfo.MiddleInitial;
+
+                // First + Middle + Last
+                fraudDetections.AddRange(
+                    from c in customerPortion
+                    where c.IsSuccessfullyRegistered
+                    where
+                        c.PersonalInfo.FirstName == firstName && c.PersonalInfo.Surname == lastName &&
+                        c.PersonalInfo.MiddleInitial == middleName
+                    select
+                        CreateDetection("Customer First Name, Last Name, Middle Name", customer, c,
+                                        "Customer First Name, Last Name, Middle Name",
+                                        null, string.Format("{0}, {1}, {2}", firstName, lastName, middleName)));
+                // First + Last
+                fraudDetections.AddRange(
+                    from c in customerPortion
+                    where c.IsSuccessfullyRegistered
+                    where
+                        c.PersonalInfo.FirstName == firstName && c.PersonalInfo.Surname == lastName &&
+                        c.PersonalInfo.MiddleInitial == middleName
+                    select
+                        CreateDetection("Customer First Name, Last Name", customer, c,
+                                        "Customer First Name, Last Name",
+                                        null, string.Format("{0}, {1}", firstName, lastName)));
+
+                //Last name + date of birth
+                fraudDetections.AddRange(
+                    from c in customerPortion
+                    where c.IsSuccessfullyRegistered
+                    where
+                        c.PersonalInfo.Surname == lastName &&
+                        c.PersonalInfo.DateOfBirth == customer.PersonalInfo.DateOfBirth
+                    select
+                        CreateDetection("Customer Last Name, Date Of Birth", customer, c,
+                                        "Customer Last Name, Date Of Birth",
+                                        null,
+                                        string.Format("{0}, {1}", c.PersonalInfo.Surname, c.PersonalInfo.DateOfBirth)));
+
+                //Phone (any of them, mobile, land line) - eBay, PayPal, Application Mobile, Application Daytime, Application Limited Business Phone, Application Non-Limited Business Phone
+
+
+                //Name of company
+                var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
+                var companyName = typeOfBussiness == TypeOfBusinessReduced.NonLimited
+                                      ? customer.NonLimitedInfo.NonLimitedCompanyName
+                                      : customer.LimitedInfo.LimitedCompanyName;
+                fraudDetections.AddRange(
+                    from c in customerPortion
+                    where c.IsSuccessfullyRegistered
+                    where
+                        ((c.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
+                              ? c.LimitedInfo.LimitedCompanyName
+                              : c.NonLimitedInfo.NonLimitedCompanyName) ?? "").ToLower() == companyName.ToLower()
+                    select
+                        CreateDetection("Customer CompanyName", customer, c,
+                                        "Customer CompanyName",
+                                        null,
+                                        string.Format("{0}", companyName)));
+
+                //Bank Account (sort + Bank Account)
+                fraudDetections.AddRange(
+                    from c in customerPortion
+                    where c.IsSuccessfullyRegistered
+                    where c.BankAccount != null
+                    where
+                        c.BankAccount.SortCode == customer.BankAccount.SortCode &&
+                        c.BankAccount.AccountNumber == customer.BankAccount.AccountNumber
+                    select
+                        CreateDetection("Customer SortCode, AccountNumber", customer, c,
+                                        "Customer SortCode, AccountNumber",
+                                        null,
+                                        string.Format("{0}, {1}", c.BankAccount.SortCode, c.BankAccount.AccountNumber)));
+
+                //Last name + post code
+
+
+                //Date of birth too young ( < 21 years)
+                if ((DateTime.UtcNow - customer.PersonalInfo.DateOfBirth).Value.Days/365.25 < 21)
+                {
+                    fraudDetections.Add(CreateDetection("Customer.DateOfBirth < 21", customer, null, "", null,
+                                                        FormattingUtils.FormatDateTimeToString(
+                                                            customer.PersonalInfo.DateOfBirth)));
+                }
+            }
+
+            //Direcor
+            var directorCount = _session.QueryOver<Director>().RowCount();
+            iterationCount = directorCount/PAGE_SIZE;
+            for (var i = 0; i <= iterationCount; i++)
+            {
+                var directorPortion = _session.QueryOver<Director>().Skip(i*PAGE_SIZE).Take(PAGE_SIZE).List<Director>();
+                // First + Last
+                fraudDetections.AddRange(
+                    from d in directorPortion
+                    where d.Customer != null
+                    where d.Customer.Id != customer.Id
+                    where customer.PersonalInfo.FirstName == d.Name && customer.PersonalInfo.Surname == d.Surname
+                    select
+                        CreateDetection("Customer First Name, Last Name", customer, d.Customer,
+                                        "Director First Name, Last Name", null,
+                                        string.Format("{0}, {1}", d.Name, d.Surname)));
+                // First + Middle + Last
+                fraudDetections.AddRange(
+                    from d in directorPortion
+                    where d.Customer != null
+                    where d.Customer.Id != customer.Id
+                    where
+                        customer.PersonalInfo.FirstName == d.Name && customer.PersonalInfo.Surname == d.Surname &&
+                        customer.PersonalInfo.MiddleInitial == d.Middle
+                    select
+                        CreateDetection("Customer First Name, Last Name, Middle Name", customer, d.Customer,
+                                        "Director First Name, Last Name, Middle Name", null,
+                                        string.Format("{0}, {1}, {2}", d.Name, d.Surname, d.Middle)));
+            }
+
+
+            //Address (any of home, business, directors, previous addresses)
+            var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
+            var postcodes = customerAddresses.Select(a => a.Postcode).ToArray();
+
+            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode));
+
+            var addressCount = addresses.Count();
+            iterationCount = addressCount/PAGE_SIZE;
+            for (var i = 0; i <= iterationCount; i++)
+            {
+                var addressPortion = addresses.Skip(i*PAGE_SIZE).Take(PAGE_SIZE).ToList();
+                fraudDetections.AddRange(
+                    from a in addressPortion
+                    from ca in customerAddresses
+                    where ca.Id != a.Id
+                    where a.Line1 == ca.Line1 && a.Line2 == ca.Line2 && a.Line3 == ca.Line3 &&
+                          a.Postcode == ca.Postcode && a.County == ca.County
+                    select
+                        CreateDetection(ca.AddressType.ToString(), customer, null,
+                                        a.AddressType.ToString(),
+                                        null,
+                                        string.Format("{0}, {1}, {2}, {3}, {4}",
+                                                      ca.Line1, ca.Line2, ca.Line3, ca.Postcode, ca.County)));
+            }
+
+            //Shop ID
+            var customerMps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().GetAll(customer);
+            var mpCount = _session.QueryOver<MP_CustomerMarketPlace>().RowCount();
+            iterationCount = mpCount/PAGE_SIZE;
+            for (var i = 0; i <= iterationCount; i++)
+            {
+                var mpPortion =
+                    _session.QueryOver<MP_CustomerMarketPlace>()
+                            .Skip(i*PAGE_SIZE)
+                            .Take(PAGE_SIZE)
+                            .List<MP_CustomerMarketPlace>();
+
+                fraudDetections.AddRange(
+                    from m in mpPortion
+                    from cm in customerMps
+                    where m.Customer.Id != customer.Id
+                    where m.DisplayName == cm.DisplayName
+                    select
+                        CreateDetection("Customer Marketplace Name", customer, m.Customer, "Customer Marketplace Name",
+                                        null, string.Format("{0}: {1}", m.Marketplace.Name, m.DisplayName)));
+
+                fraudDetections = fraudDetections.Distinct().ToList();
+            }
+
+            var resultString =
+                string.Join("\n", fraudDetections.Select(x =>
+                                                         x.CompareField + ",  " +
+                                                         x.CurrentCustomer.Id + ",  " +
+                                                         x.CurrentField + ",  " +
+                                                         (x.InternalCustomer != null ? x.InternalCustomer.Id : 0) +
+                                                         ",  " +
+                                                         x.Value));
+            return resultString;
         }
 
-        private FraudDetection CreateDetection(string compareField, Customer currentCustomer,
-                                               Customer internalCustomer, string currentField, FraudUser externalUser,
+        private FraudDetection CreateDetection(string currentField, Customer currentCustomer,
+                                               Customer internalCustomer, string compareField, FraudUser externalUser,
                                                string value)
         {
             return new FraudDetection

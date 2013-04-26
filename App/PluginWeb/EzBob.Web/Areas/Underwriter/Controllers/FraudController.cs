@@ -5,7 +5,6 @@ using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Web.Areas.Underwriter.Models.Fraud;
 using EzBob.Web.Code;
-using NHibernate;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
@@ -14,23 +13,18 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
     {
         private readonly FraudUserRepository _fraudUserRepository;
         private readonly MarketPlaceRepository _mpType;
-        private readonly CustomerRepository _customerRepository;
 
-        public FraudController(FraudUserRepository fraudUserRepository, MarketPlaceRepository mpType, CustomerRepository customerRepository)
+        public FraudController(FraudUserRepository fraudUserRepository, MarketPlaceRepository mpType)
         {
             _fraudUserRepository = fraudUserRepository;
             _mpType = mpType;
-            _customerRepository = customerRepository;
         }
 
+        [Ajax]
         public string RunCheck(int id, string type)
         {
             var a = new FraudDetectionChecker();
-            if (type == "internal")
-            {
-                return a.InternalSystemDecision(_customerRepository.Get(id));
-            }
-            return a.ExternalSystemDecision(_customerRepository.Get(id));
+            return type == "internal" ? a.InternalSystemDecision(id) : a.ExternalSystemDecision(id);
         }
 
         [HttpGet]

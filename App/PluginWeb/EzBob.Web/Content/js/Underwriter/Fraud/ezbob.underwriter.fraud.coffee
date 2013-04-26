@@ -3,7 +3,7 @@ root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter or {}
 
 class EzBob.Underwriter.FraudModel extends Backbone.Model
-    defaults:
+    defaults: ->
         FirstName: ""
         LastName: ""
         Addresses: []
@@ -114,7 +114,7 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
     template: "#fraud-template"
 
     initialize: ->
-        @model.on "change reset load save post put", @render, @
+        @model.on "change reset", @render, @
 
     events:
         "click .add":"addButtonClicked"
@@ -124,18 +124,27 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
     internalClicked: ->
         cid = prompt "Customer Id"
         xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "internal" }
-        xhr.complete (data)-> console.clear(); alert data.responseText
+        xhr.complete (data)=>  @showData data.responseText
+            
 
     externalClicked: ->
         cid = prompt "Customer Id"
         xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "external" }
-        xhr.complete (data)-> console.clear(); alert data.responseText
+        xhr.complete (data)=>  @showData data.responseText
+
+    showData: (data)->
+        dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>#{data}</textarea>" )
+        dialog.dialog
+            width: '75%'
+            height: 600
 
     serializeData: ->
         data: @model.toJSON()
 
     addButtonClicked: ->
         model = new EzBob.Underwriter.FraudModel()
+        console.clear()
+        log model.toJSON()
         view = new EzBob.Underwriter.AddEditFraudView({model: model})
         view.modalOptions = 
             show: true
