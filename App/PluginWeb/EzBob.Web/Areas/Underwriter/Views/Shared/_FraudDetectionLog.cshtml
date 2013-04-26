@@ -1,0 +1,26 @@
+﻿<script id="fraudDetectionLog" type="text/template">
+    @FraudDetectionLog()
+</script>
+
+@helper FraudDetectionLog(){
+    <table class="table table-bordered table-striped blue-header centered table-fixed">
+        <thead>
+            <tr>
+                <th>CurrentField</th>
+                <th>CompareField</th>
+                <th style="width: 130px;">Value</th>
+                <th>Concurrence</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(vals, function(val){%>
+            <tr>
+                <td class="break-word"><%-val.CurrentField%></td>
+                <td class="break-word"><%-val.CompareField || ''%></td>
+                <td class="break-word"><%-val.Value || ''%></td>
+                <td class="break-word"><%=val.Concurrence || ''%></td>
+            </tr>
+            <%})%>
+        </tbody>
+    </table>
+}

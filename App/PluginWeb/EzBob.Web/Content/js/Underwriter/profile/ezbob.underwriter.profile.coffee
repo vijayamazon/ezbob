@@ -18,6 +18,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         medalCalculations = @$el.find("#medal-calculator")
         messages = @$el.find("#messages")
         apiChecks = @$el.find("#apiChecks")
+        fraudDetection = @$el.find("#fraudDetection")
         alertPassed = @$el.find("#alerts-passed")
         controlButtons = @$el.find "#controlButtoons"
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
@@ -89,6 +90,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @ApiChecksLogView = new EzBob.Underwriter.ApiChecksLogView(
             el: apiChecks
             model: @ApicCheckLogs
+        )
+        @FraudDetectionLogs = new EzBob.Underwriter.FraudDetectionLogs()
+        @FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView(
+            el: fraudDetection
+            model: @FraudDetectionLogs
         )
         @showed = true
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
@@ -266,7 +272,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @ApicCheckLogs.customerId = id
         @ApiChecksLogView.idCustomer = id
         @ApicCheckLogs.fetch()
-
+        @FraudDetectionLogs.customerId = id
+        @FraudDetectionLogView.idCustomer = id
+        @FraudDetectionLogs.fetch()
         @controlButtons.model = new Backbone.Model(
             customerId: id
         )

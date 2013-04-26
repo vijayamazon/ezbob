@@ -223,7 +223,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
                          .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
                          .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
-
+                         .Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
                 //----
                          .Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")
                          .Add("~/Content/js/Underwriter/editLoan/installmentEditor.coffee")

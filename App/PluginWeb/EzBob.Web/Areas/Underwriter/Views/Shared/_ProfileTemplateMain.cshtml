@@ -30,6 +30,7 @@
                     <li><a href="#customer-info" data-toggle="tab">Customer info</a></li>
                     <li><a href="#messages-tab" data-toggle="tab">Messages</a></li>
                     <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
+                    <li><a href="#fraudDetection" data-toggle="tab">Fraud detection</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="profile-summary"></div>
@@ -48,8 +49,7 @@
                         <div id="alert-docs"></div>
                     </div>
                     <div class="tab-pane" id="apiChecks"></div>
-                    
-
+                    <div class="tab-pane" id="fraudDetection"></div>
                 </div>
             </div>
             <div id="controlButtoons" class="well" style="margin-top:10px;">
@@ -84,6 +84,7 @@
 @{Html.RenderPartial("Alerts");}
 @{Html.RenderPartial("_MedalCalculationTemplate");}
 @{Html.RenderPartial("_ApiChecksLog");}
+@{Html.RenderPartial("_FraudDetectionLog");}
 @{Html.RenderPartial("_DocsTemplate");}
 @{Html.RenderPartial("LoanEditor/_loan_editor");}
 @{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
