@@ -102,7 +102,7 @@ $.fn.fmatter.showMPsIcon = (cellval, opt) ->
     retVal = ""
     _.each mps, (val) ->
         retVal += $.fn.fmatter.showMedalIcon(val)
-    "<div style='overflow: auto; width: auto'>#{retVal}</div>"
+    "<div style='overflow: auto; width: 102%'>#{retVal + ' '}</div>"
 
 $.fn.fmatter.profileLink = (cellval, opts) ->
     href = "#profile/#{(cellval.id or cellval)}"

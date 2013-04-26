@@ -203,7 +203,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Width = 100,
+                    Width = 105,
                     DataType = TypeCode.Decimal,
                     Data = x => x.LastCashRequest.ManagerApprovedSum ?? 0
                 });
@@ -370,7 +370,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Escalation reason",
+                    Caption = "Escalation Reason",
                     Name = "EscalationReason",
                     Index = "EscalationReason",
                     Resizable = false,
@@ -387,7 +387,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Underwriter name",
+                    Caption = "Underwriter Name",
                     Name = "UnderwriterName",
                     Index = "UnderwriterName",
                     Resizable = false,
@@ -556,7 +556,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "eBay status",
+                    Caption = "eBay Status",
                     Name = "EbayStatus",
                     Index = "EbayStatus",
                     Resizable = false,
@@ -575,7 +575,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Amazon status",
+                    Caption = "Amazon Status",
                     Name = "AmazonStatus",
                     Index = "AmazonStatus",
                     Resizable = false,
@@ -594,7 +594,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Ekm status",
+                    Caption = "Ekm Status",
                     Name = "EkmStatus",
                     Index = "EkmStatus",
                     Resizable = false,
