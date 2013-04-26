@@ -9,24 +9,32 @@ class EzBob.Installment extends Backbone.Model
     initialize: ->
         @on "change:Balance", @balanceChanged, this
         @on "change:Principal", @principalChanged, this
+        @on "change:Total", @totalChanged, this
         @on "change:Date", @dateChanged, this
 
     balanceChanged: ->
         @safeRecalculate ->
             return if @get('Balance') is @previous('Balance')
-            principal = Math.round((@get('BalanceBeforeRepayment') - @get('Balance')) * 100)
-            principal = principal / 100
+            principal = @round((@get('BalanceBeforeRepayment') - @get('Balance')))
             @set('Principal', principal)
             @recalculate()
+
+    totalChanged: ->
+        @safeRecalculate ->
+            diff = @get("Total") - @previous("Total")
+            return if diff is 0
+            @set('Balance', (@get("Balance") - diff))
+            @set('Principal', (@get("Principal") + diff))
 
     principalChanged: ->
         @safeRecalculate ->
             diff = @get("Principal") - @previous("Principal")
             return if diff is 0
-            @set('Balance', @get("Balance") - diff)
+            @set('Balance', (@get("Balance") - diff))
             @recalculate()
 
     safeRecalculate: (func, params...) ->
+        console.log @toJSON()
         return if @skipRecalculations
         @skipRecalculations = true
         func.call(this, params)
@@ -37,6 +45,9 @@ class EzBob.Installment extends Backbone.Model
 
     dateChanged: ->
         #console.log(@get("Date"))
+    round: (number) ->
+            number = Math.round(number * 100)
+            number = number / 100
 
 
 class EzBob.Installments extends Backbone.Collection

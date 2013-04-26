@@ -38,6 +38,7 @@ class EzBob.InstallmentEditor extends Backbone.Marionette.ItemView
     template: "#loan_editor_edit_installment_template"
 
     initialize: ->
+        console.log @model.toJSON()
         @oldValues = @model.toJSON()
         @modelBinder = new Backbone.ModelBinder()
 
@@ -61,6 +62,9 @@ class EzBob.InstallmentEditor extends Backbone.Marionette.ItemView
         InterestRate:
             selector: "input[name='interestRate']"
             converter: EzBob.BidingConverters.percents
+        Total:
+            selector: "input[name='totalRepayment']"
+            converter: EzBob.BidingConverters.floatNumbers
     ui:
         form: "form"
         shift: ".shift-installments :checkbox"
