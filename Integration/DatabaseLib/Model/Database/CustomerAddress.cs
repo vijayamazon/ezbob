@@ -19,6 +19,8 @@ namespace ApplicationMng.Model
     [Serializable]
     public class CustomerAddress
     {
+        public virtual Customer Customer { get; set; }
+        public virtual Director Director { get; set; }
         public virtual int AddressId { get; set; }
         public virtual AddressType AddressType { get; set; }
         public virtual string Id { get; set; }
@@ -77,6 +79,8 @@ namespace ApplicationMng.Model.Mappings
             Map(x => x.Pobox).Column("Pobox").Length(200);
             Map(x => x.Mailsortcode).Column("Mailsortcode").Length(200);
             Map(x => x.Udprn).Column("Udprn").Length(200);
+            References(x => x.Director, "DirectorId");
+            References(x => x.Customer, "CustomerId");
         }
     }
 }

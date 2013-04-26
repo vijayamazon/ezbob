@@ -309,31 +309,27 @@ namespace EzBob.Web.Code
                                         string.Format("{0}, {1}, {2}", d.Name, d.Surname, d.Middle)));
             }
 
-
             //Address (any of home, business, directors, previous addresses)
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
-            var postcodes = customerAddresses.Select(a => a.Postcode).ToArray();
-
+            var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
             var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode));
 
-            var addressCount = addresses.Count();
-            iterationCount = addressCount/PAGE_SIZE;
-            for (var i = 0; i <= iterationCount; i++)
-            {
-                var addressPortion = addresses.Skip(i*PAGE_SIZE).Take(PAGE_SIZE).ToList();
-                fraudDetections.AddRange(
-                    from a in addressPortion
-                    from ca in customerAddresses
-                    where ca.Id != a.Id
-                    where a.Line1 == ca.Line1 && a.Line2 == ca.Line2 && a.Line3 == ca.Line3 &&
-                          a.Postcode == ca.Postcode && a.County == ca.County
-                    select
-                        CreateDetection(ca.AddressType.ToString(), customer, null,
-                                        a.AddressType.ToString(),
-                                        null,
-                                        string.Format("{0}, {1}, {2}, {3}, {4}",
-                                                      ca.Line1, ca.Line2, ca.Line3, ca.Postcode, ca.County)));
-            }
+            fraudDetections.AddRange(
+                from allAddresses in addresses
+                from customerAddress in customerAddresses
+                where customerAddress.Id != allAddresses.Id
+                where
+                    allAddresses.Line1 == customerAddress.Line1 && allAddresses.Line2 == customerAddress.Line2 &&
+                    allAddresses.Line3 == customerAddress.Line3 &&
+                    allAddresses.Postcode == customerAddress.Postcode && allAddresses.County == customerAddress.County
+                select
+                    CreateDetection(customerAddress.AddressType.ToString(), customer,
+                                    allAddresses.Customer ?? allAddresses.Director.Customer,
+                                    allAddresses.AddressType.ToString(),
+                                    null,
+                                    string.Format("{0}, {1}, {2}, {3}, {4}",
+                                                  customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
+                                                  customerAddress.Postcode, customerAddress.County)));
 
             //Shop ID
             var customerMps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().GetAll(customer);

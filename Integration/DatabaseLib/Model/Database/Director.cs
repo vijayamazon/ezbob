@@ -42,12 +42,10 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.DateOfBirth);
             Map(x => x.Gender).CustomType<GenderType>();
             References(x => x.Customer, "CustomerId");
-            HasManyToMany(x => x.DirectorAddress)
+            HasMany(x => x.DirectorAddress)
                                 .AsSet()
                                 .Cascade.All()
-                                .Table("DirectorAddressRelation")
-                                .ParentKeyColumn("DirectorId")
-                                .ChildKeyColumn("addressId");
+                                .KeyColumn("DirectorId");
         }
     }
 

@@ -106,49 +106,44 @@ namespace EZBob.DatabaseLib.Model.Database {
 
             Component(x => x.AddressInfo, m =>
             {
-                m.HasManyToMany(x => x.PersonalAddress)
+                m.HasMany(x => x.PersonalAddress)
                     .AsSet()
+                    .KeyColumn("customerId")
+                    .Where("addressType=" + Convert.ToInt32(AddressType.PersonalAddress))
                     .Cascade.All()
-                    .Table("CustomerAddressRelation")
-                    .ParentKeyColumn("customerId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.PersonalAddress))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-                m.HasManyToMany(x => x.LimitedCompanyAddress)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("CustomerAddressRelation")
-                    .ParentKeyColumn("customerId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedCompanyAddress))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-                m.HasManyToMany(x => x.NonLimitedCompanyAddress)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("CustomerAddressRelation")
-                    .ParentKeyColumn("customerId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedCompanyAddress))
+                    .Inverse()
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
 
-                m.HasManyToMany(x => x.PrevPersonAddresses)
+                m.HasMany(x => x.LimitedCompanyAddress)
                     .AsSet()
+                    .KeyColumn("customerId")
+                    .Where("addressType=" + Convert.ToInt32(AddressType.LimitedCompanyAddress))
                     .Cascade.All()
-                    .Table("CustomerAddressRelation")
-                    .ParentKeyColumn("customerId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.PrevPersonAddresses))
+                    .Inverse()
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasManyToMany(x => x.AllAddresses)
+                m.HasMany(x => x.NonLimitedCompanyAddress)
                     .AsSet()
+                    .KeyColumn("customerId")
+                    .Where("addressType=" + Convert.ToInt32(AddressType.NonLimitedCompanyAddress))
                     .Cascade.All()
-                    .Table("CustomerAddressRelation")
-                    .ParentKeyColumn("customerId")
-                    .ChildKeyColumn("addressId")
+                    .Inverse()
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasMany(x => x.PrevPersonAddresses)
+                    .AsSet()
+                    .KeyColumn("customerId")
+                    .Where("addressType=" + Convert.ToInt32(AddressType.PrevPersonAddresses))
+                    .Cascade.All()
+                    .Inverse()
+                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                m.HasMany(x => x.AllAddresses)
+                    .AsSet()
+                    .KeyColumn("customerId")
+                    .Cascade.All()
+                    .Inverse()
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
             });
 
