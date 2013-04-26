@@ -51,7 +51,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         @detailView = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: @model, currentId: id, customerId: @model.customerId
         @detailView.on "reCheck", @reCheckmarketplaces, @
         @detailView.on("recheck-token", @renewToken)
-	@detailView.customerId = @model.customerId
+        @detailView.customerId = @model.customerId
         @detailView.render()
 
     showMPError: -> false

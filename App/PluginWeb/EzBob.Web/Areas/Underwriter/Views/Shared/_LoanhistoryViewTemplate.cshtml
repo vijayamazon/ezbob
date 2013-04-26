@@ -164,9 +164,9 @@
             @EzForm.Select("paymentMethod", "Payment method", new List<string>{ "Cheque", "Cash", "Bank transfer", "Other" })
             @EzForm.InputText("totalSumPaid", "Total sum paid","")
             @EzForm.DateInput("paymentDate", "Date", false, new[]{ DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
-            @EzForm.InputText("fees", "Fees","", "", true)
-            @EzForm.InputText("interest", "Interest","", "", true)
-            @EzForm.InputText("principal", "Principal","", "", true)
+            @EzForm.InputText("fees", "Fees","", "text","", true)
+            @EzForm.InputText("interest", "Interest","", "text", "", true)
+            @EzForm.InputText("principal", "Principal","", "text", "", true)
             @EzForm.CheckBox("sendemail", "Send confirmation email")
             @EzForm.TextAreaSmall("description", "Description", "")
         </form>
