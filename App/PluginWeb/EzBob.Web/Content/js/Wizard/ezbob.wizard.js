@@ -65,7 +65,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
                 this.navigate("SignUp", { trigger: true });
                 break;
             case 1:
-                $(document).attr("title", "Wizard 2: Link Your Shop | EZBOB");
+                $(document).attr("title", "Wizard 2: Link Your Accounts | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/Shops');
                 this.navigate("ShopInfo", { trigger: true });
                 break;

@@ -37,7 +37,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 
         this.storeView = new EzBob.StoreInfoStepView({ model: storeInfoStepModel });
 
-        this.addStep("Link your sources", this.storeView);
+        this.addStep("Link Accounts", this.storeView);
         this.addStep("Enter your info", this.personInfoView);
 
         this.constructor.__super__.initialize.apply(this, [{ model: model, steps: this.steps}]);
