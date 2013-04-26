@@ -188,7 +188,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null);
             }
 
-            return customer.PayPointCards.Select(c => PayPointCardModel.FromCard(c)).ToArray();
+            return customer.PayPointCards.Select(PayPointCardModel.FromCard).OrderByDescending(x=>x.IsDefault).ToArray();
         }
     }
 }

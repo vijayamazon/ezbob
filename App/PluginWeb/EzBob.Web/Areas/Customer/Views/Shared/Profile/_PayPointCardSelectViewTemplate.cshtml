@@ -16,7 +16,7 @@
 
 				<select class="span3">
 					<% _.each(cards, function(c, i){%>
-						<option value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> (<%-EzBob.formatDate(c.DateAdded)%>)</option>
+						<option <%if(c.IsDefault){ print('selected="selected"') }%> value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> (<%-EzBob.formatDate(c.DateAdded)%>)</option>
 					<%});%>
 				</select>
 			</div>
