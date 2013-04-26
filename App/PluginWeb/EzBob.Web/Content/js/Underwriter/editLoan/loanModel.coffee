@@ -34,7 +34,6 @@ class EzBob.Installment extends Backbone.Model
             @recalculate()
 
     safeRecalculate: (func, params...) ->
-        console.log @toJSON()
         return if @skipRecalculations
         @skipRecalculations = true
         func.call(this, params)
