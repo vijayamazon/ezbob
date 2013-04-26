@@ -8,8 +8,6 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>First Name</span>
-							<!-- should eliminate all margins !!!!! -->
-							<!-- Wrong validation is performed!!!!! -->
 							<input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
 						</label>
 						<span class="required">*</span>
@@ -59,6 +57,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
+                        <img id="MartialStatusImage"/>
 					</div>
 				</div>
 
@@ -78,6 +77,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
+                        <img id="TimeAtAddressImage"/>
 					</div>
 				</div>
 
@@ -95,6 +95,7 @@
 								</select>
 						</label>
 						<span class="required">*</span>
+                        <img id="ResidentialStatusImage"/>
 					</div>
 				</div>
 
@@ -104,9 +105,10 @@
 					<div class="controls">
 						<label class="control-label attardi-input">
 							<span>Phone Number</span>
-							<input type="text" class="phonenumber form_field" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
+							<input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
 						</label>
 						<span class="required">*</span>
+                        <img id="DayTimePhoneImage"/>
 					</div>
 				</div>
 

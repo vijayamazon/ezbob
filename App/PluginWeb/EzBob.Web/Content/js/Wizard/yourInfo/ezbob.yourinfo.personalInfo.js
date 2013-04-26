@@ -20,7 +20,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change input[name="MiddleInitial"]': 'middleNameChanged',
             'change input[name="Surname"]': 'surnameChanged',
             'change input[name="OverallTurnOver"]': 'overallTurnOverChanged',
-            'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged'
+            'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged',
+            'change select[name="MartialStatus"]': "martialStatusChanged",
+            'change select[name="TimeAtAddress"]': "timeAtAddressChanged",
+            'change select[name="ResidentialStatus"]': "residentialStatusChanged",
+            'change input[name="DayTimePhone"]': 'dayTimePhoneChanged'
             
         });
 
@@ -28,6 +32,18 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     firstNameChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    dayTimePhoneChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "DayTimePhoneImage", "#DayTimePhone", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    martialStatusChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "MartialStatusImage", "#MartialStatus", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    timeAtAddressChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "TimeAtAddressImage", "#TimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    residentialStatusChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "ResidentialStatusImage", "#ResidentialStatus", "#RotateImage", "#OkImage", "#FailImage");
     },
     middleNameChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
@@ -59,8 +75,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
-
-        this.$el.find("#TimeAtAddress").trigger("change");
         
         this.formChecker = EzBob.checkCompanyDetailForm(this.form);
     },
