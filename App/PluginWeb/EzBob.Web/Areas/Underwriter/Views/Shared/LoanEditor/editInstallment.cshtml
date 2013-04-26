@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
 
 <script id="loan_editor_edit_installment_template" type="text/template">
     <form id="installment-edit-form" class="form-horizontal">
@@ -23,26 +24,11 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <label class="control-label">Principal:</label>
-            <div class="controls">
-                <input type="text" id="installment-edit-repaymentAmount" name="loanRepayment" data-content="Principal, that customer stiil needs to pay." class="span2">
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">Total:</label>
-            <div class="controls">
-                <input type="text" id="installment-edit-totalAmount" name="totalRepayment" data-content="Total amount to pay." class="span2">
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">Balance:</label>
-            <div class="controls">
-                <input type="text" id="installment-edit-balance" name="balance" data-content="The Balance of loan, that is expected to be after succesfull payment." class="span2">
-            </div>
-        </div>
+        @EzHtml.InputText().Label("Principal:").Id("installment-edit-repaymentAmount").Name("loanRepayment").Class("span2").DataContent("Principal, that customer stiil needs to pay.").Render()
+        
+        @EzHtml.InputText().Label("Total:").Id("installment-edit-totalAmount").Name("totalRepayment").Class("span2").DataContent("Total amount to pay.").Render()
+        
+        @EzHtml.InputText().Label("Balance:").Id("installment-edit-balance").Name("balance").Class("span2").DataContent("The Balance of loan, that is expected to be after succesfull payment.").Render()
 
         <div class="control-group">
             <label class="control-label">Interest Rate:</label>
