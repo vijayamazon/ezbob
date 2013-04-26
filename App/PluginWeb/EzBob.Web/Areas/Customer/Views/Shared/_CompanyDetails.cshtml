@@ -104,7 +104,7 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="control-label attardi-input">
-							<span>Phone Number</span>
+							<span>Best Contact Number</span>
 							<input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
 						</label>
 						<span class="required">*</span>
@@ -115,7 +115,7 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="control-label attardi-input">
-							<span>Mobile Number</span>
+							<span>Additional Contact Number</span>
 							<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
 						</label>
 						<span class="required">*</span>
@@ -195,7 +195,7 @@
 
 @helper LimitedInfo() {
 	<div class="row-fluid">
-		<h2 style="padding-left:0">Company Info</h2> 
+		<h2 style="padding-left:0">Company Information</h2> 
 		<div style="margin-bottom: 10px;">
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
 				<div class="control-group">
@@ -215,7 +215,7 @@
 				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
 				
 				<div class="control-group">
-					<label for="LimitedBusinessPhone" class="control-label">Business Phone <span class="required">*</span></label>
+					<label for="LimitedBusinessPhone" class="control-label">Business Contact Number <span class="required">*</span></label>
 					<div class="controls">
 						<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
 					</div>
@@ -385,7 +385,7 @@
 					<p>If you haven't already we would suggest that you read through <a href="#">Our Loans Explained</a> and understand what repayment method best suits your business needs.</p>
 					<p><strong>Remember you can pay any amount at any time during the loan period and there are not penalties for early repayments.</strong></p>
 				</div>
-				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Back to account</a>
+				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })' class="btn-continue button orange pull-right">Go to Account</a>
 			</div>
 		</section>
 		<div class="clear"></div>
