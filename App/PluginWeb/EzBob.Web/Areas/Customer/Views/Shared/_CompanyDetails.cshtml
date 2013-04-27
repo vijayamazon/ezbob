@@ -35,12 +35,13 @@
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 				
-				<div class="form_field_container GenderCtrl">
-					Gender
-					<span class="required">*</span>
-					<input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
-					<input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
-				</div>
+			    <div class="form_field_container GenderCtrl">
+			        Gender
+			        <span class="required">*</span>
+			        <input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
+			        <input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
+			        <img id="GenderImage" />
+			    </div>
 				
 				@EzForm.DateInput("DateOfBirth", "Date of Birth")
 

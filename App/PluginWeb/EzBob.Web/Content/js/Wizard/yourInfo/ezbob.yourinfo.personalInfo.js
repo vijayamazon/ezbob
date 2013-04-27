@@ -24,7 +24,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change select[name="MartialStatus"]': "martialStatusChanged",
             'change select[name="TimeAtAddress"]': "timeAtAddressChanged",
             'change select[name="ResidentialStatus"]': "residentialStatusChanged",
-            'change input[name="DayTimePhone"]': 'dayTimePhoneChanged'
+            'change input[name="DayTimePhone"]': 'dayTimePhoneChanged',
+            'change input[name="Gender"]': 'genderChanged'
             
         });
 
@@ -32,6 +33,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     firstNameChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    },
+    genderChanged: function () {
+        EzBob.Validation.displayIndication(this.formChecker, "GenderImage", "#GenderCtrl_M", "#RotateImageRight", "#OkImageRight", "#FailImageRight");
     },
     dayTimePhoneChanged: function () {
         EzBob.Validation.displayIndication(this.formChecker, "DayTimePhoneImage", "#DayTimePhone", "#RotateImage", "#OkImage", "#FailImage");
