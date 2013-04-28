@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoStepModel = (function(_super) {
-
     __extends(StoreInfoStepModel, _super);
 
     function StoreInfoStepModel() {
-      return StoreInfoStepModel.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoStepModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoStepModel.prototype.initialize = function(options) {
@@ -23,11 +23,14 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var amazons, ebays, ekms, shop, stores, _i, _j, _k, _len, _len1, _len2;
+      var amazons, ebays, ekms, payPoints, shop, stores, volusions, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m;
+
       stores = [];
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
+      volusions = this.get("volusionShops");
+      payPoints = this.get("payPointAccounts");
       for (_i = 0, _len = ebays.length; _i < _len; _i++) {
         shop = ebays[_i];
         stores.push({
@@ -49,6 +52,20 @@
           type: "EKM"
         });
       }
+      for (_l = 0, _len3 = volusions.length; _l < _len3; _l++) {
+        shop = volusions[_l];
+        stores.push({
+          displayName: shop.displayName,
+          type: "Volusion"
+        });
+      }
+      for (_m = 0, _len4 = payPoints.length; _m < _len4; _m++) {
+        shop = payPoints[_m];
+        stores.push({
+          displayName: shop.displayName,
+          type: "PayPoint"
+        });
+      }
       return stores;
     };
 
@@ -57,11 +74,11 @@
   })(EzBob.WizardStepModel);
 
   EzBob.StoreInfoStepView = (function(_super) {
-
     __extends(StoreInfoStepView, _super);
 
     function StoreInfoStepView() {
-      return StoreInfoStepView.__super__.constructor.apply(this, arguments);
+      _ref1 = StoreInfoStepView.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     StoreInfoStepView.prototype.initialize = function() {
@@ -83,6 +100,7 @@
     };
 
     StoreInfoStepView.prototype.next = function() {
+      this.ready();
       return this.trigger("next");
     };
 

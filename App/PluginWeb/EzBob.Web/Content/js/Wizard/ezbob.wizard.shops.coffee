@@ -48,6 +48,7 @@ class EzBob.StoreInfoStepView extends Backbone.View
     @trigger "ready"
 
   next: ->
+    @ready()
     @trigger "next"
 
   previous: ->
