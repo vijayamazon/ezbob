@@ -318,12 +318,10 @@ div.shop-connected {
 }
 
 .source_labels, .source_labels_on {
-    margin: 0 20px 0 0;
     background: url(images/source_sprite.png) no-repeat 0 0;
     height: 40px;
     width: 100px;
     display: block;
-    float: left;
     text-indent: -9999px;
     margin-top: 5px;
 }
