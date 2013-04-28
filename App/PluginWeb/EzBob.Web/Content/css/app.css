@@ -479,7 +479,7 @@ ul.application_steps {
 
     ul.application_steps li {
         float: left;
-        background: #f1f1f1 url(images/arrow.png) 15px 13px no-repeat;
+        background: url(images/arrow.png) 15px 13px no-repeat;
         padding: 10px 0px 10px 40px;
         font-weight: bold;
         font-size: 16px;
@@ -489,12 +489,12 @@ ul.application_steps {
     }
 
         ul.application_steps li.current {
-            background: #cee7ff url(images/current_arrow.png) no-repeat 15px 15px;
+            background: url(images/current_arrow.png) no-repeat 15px 15px;
             color: #577fa5;
         }
 
         ul.application_steps li.complete {
-            background: #e8fcc6 url(images/tick.png) no-repeat 12px 18px;
+            background: url(images/tick.png) no-repeat 12px 18px;
             color: #497307;
         }
 
