@@ -1,2 +1,15 @@
-﻿.progress_tip{ display: none;}
-li.active  > .progress_tip { display: block;}
+﻿.progress_tip {
+    display: none;
+}
+
+li.active > .progress_tip {
+    display: block;
+}
+
+.ez_progress_bar {
+    display: none;
+}
+
+.ez_progress_bar.active {
+    display: block;
+}

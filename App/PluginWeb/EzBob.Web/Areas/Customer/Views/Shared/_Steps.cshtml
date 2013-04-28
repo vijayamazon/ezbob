@@ -1,15 +1,19 @@
 ﻿@model dynamic
-
 <div class="wizard-steps">
-<ul class="application_steps">
-    <% _.each(steps, function(step, i){%>
+    <ul class="application_steps">
+        <% _.each(steps, function(step, i){%>
         <li class="<%= (i == steps.length-1) ?  'current' : ''%> " data-step-num="<%= step.num %>">
-            <span class="step_label">
-                Step <%= step.num + 1 %>:
+            <span class="step_label">Step <%= step.num + 1 %>:
             </span>
             <%= step.title %>
-            <div class="progress_tip"><%= parseInt((100/steps.length)*step.num) %>%completed</div>
         </li>
+        <%})%>
+    </ul>
+    <% _.each(steps, function(step, i){%>
+    <div class="ez_progress_bar <%= (i == steps.length-1) ?  'current' : ''%>">
+        <div class="ez_bar bar_step<%= step.num %>">
+            <div class="bar_content"><%= parseInt((100/steps.length)*step.num) %>% completed</div>
+        </div>
+    </div>
     <%})%>
-</ul>
 </div>

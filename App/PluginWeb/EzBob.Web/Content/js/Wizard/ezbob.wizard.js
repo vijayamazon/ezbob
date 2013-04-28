@@ -69,11 +69,11 @@ EzBob.WizardRouter = Backbone.Router.extend({
                 EzBob.App.GA.trackPage('/Customer/Wizard/Shops');
                 this.navigate("ShopInfo", { trigger: true });
                 break;
-            //case 2:
-            //    $(document).attr("title", "Wizard 3: Link Your Payment Accounts | EZBOB");
-            //    EzBob.App.GA.trackPage('/Customer/Wizard/PaymentAccounts');
-            //    this.navigate("PaymentAccounts", { trigger: true });
-            //    break;
+                //case 2:
+                //    $(document).attr("title", "Wizard 3: Link Your Payment Accounts | EZBOB");
+                //    EzBob.App.GA.trackPage('/Customer/Wizard/PaymentAccounts');
+                //    this.navigate("PaymentAccounts", { trigger: true });
+                //    break;
             case 2:
                 $(document).attr("title", "Wizard 3 Business: Fill Business Details | EZBOB ");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
@@ -201,7 +201,7 @@ EzBob.Wizard = Backbone.View.extend({
             var view = s.view.render();
 
             view.$el.hide().appendTo(ul);
-            view.$el.find(".chzn-select").chosen({disable_search_threshold: 10});
+            view.$el.find(".chzn-select").chosen({ disable_search_threshold: 10 });
             if (view.$el.find('#captcha').length > 0) {
                 view.captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 6 });
                 view.captcha.render();
@@ -213,8 +213,9 @@ EzBob.Wizard = Backbone.View.extend({
             allowed = this.model.get('allowed');
 
         this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
+        this.$el.find('.wizard-steps .ez_progress_bar').removeClass('active current').eq(current).addClass('active current');
         this.$el.find('.pages > div').hide().eq(current).show();
-        if (this.steps[current])  this.$el.find('.wizard-header').text(this.steps[current].header);
+        if (this.steps[current]) this.$el.find('.wizard-header').text(this.steps[current].header);
     }
 });
 
