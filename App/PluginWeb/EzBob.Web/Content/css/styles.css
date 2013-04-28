@@ -1463,13 +1463,6 @@ input.disable {
     font-weight: bold;
 }
 
-.wizard-director-text {
-    color: #585858;
-    font-size: 12px;
-    margin-left: 10px;
-    margin-top: 20px;
-}
-
 form.simple-login #UserName, form.simple-login #Password {
     width: 220px;
 }
