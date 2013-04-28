@@ -157,6 +157,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/ezbob.csrf.js")
                          .Add("~/Content/js/login/ezbob.restorePassword.coffee")
                          .Add("~/Content/js/lib/attardi.labels.js")
+                         .Add("~/Content/js/lib/jquery.colorbox-min.js")
                          .AddString(GetDbStrings())
                          .ForceRelease()
                          .MvcRender("~/Content/js/min/jslib_#.js");

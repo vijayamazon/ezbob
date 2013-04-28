@@ -890,3 +890,32 @@ input[type="color"],
     width: 600px;
     padding: 0 5px;
 }
+
+.help_window {
+    background: #fff;
+    padding: 10px;
+}
+
+.help_ekm {
+    background: url(images/help/help_ekm.jpg) no-repeat center center;
+    width: 759px;
+    height: 543px;
+}
+
+.help_ebay {
+    background: url(images/help/help_ebay.jpg) no-repeat center center;
+    width: 759px;
+    height: 543px;
+}
+
+.help_paypal {
+    background: url(images/help/help_paypal.jpg) no-repeat center center;
+    width: 759px;
+    height: 543px;
+}
+
+.help_security {
+    background: url(images/help/help_security.jpg) no-repeat center center;
+    width: 759px;
+    height: 77px;
+}

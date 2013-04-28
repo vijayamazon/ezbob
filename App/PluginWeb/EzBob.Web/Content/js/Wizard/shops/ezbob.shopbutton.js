@@ -16,7 +16,7 @@
     }
 
     StoreButtonView.prototype.events = {
-      "click .button": "clicked"
+      "click .addAccount": "addAccount"
     };
 
     StoreButtonView.prototype.template = "#store-button-template";
@@ -25,41 +25,40 @@
       this.name = options.name;
       this.logoText = options.logoText;
       this.shops = options.shops;
-      this.shopNames = "";
       if (this.shops) {
-        this.shops.on("change reset", this.updateShopNames, this);
+        this.shops.on("change reset", this.render, this);
       }
       return this.shopClass = options.name.toLowerCase().replace(' ', '');
     };
 
     StoreButtonView.prototype.serializeData = function() {
-      return {
+      var data;
+
+      data = {
         name: this.name,
         logoText: this.logoText,
         shopClass: this.shopClass,
-        shops: this.shops ? this.shops.toJSON() : [],
-        shopNames: this.shopNames
+        shops: [],
+        shopNames: ""
       };
-    };
-
-    StoreButtonView.prototype.updateShopNames = function() {
-      var s;
-
       if (this.shops) {
-        s = "";
-        _.each(this.shops.models, function(sh, idx) {
-          if (s !== "") {
-            s += ", ";
-          }
-          return s += sh.attributes.displayName;
-        });
-        this.shopNames = s;
+        data.shops = this.shops.toJSON();
+        data.shopNames = this.shops.pluck("displayName").join(", ");
       }
-      return this.render;
+      return data;
     };
 
-    StoreButtonView.prototype.clicked = function() {
+    StoreButtonView.prototype.onRender = function() {
+      this.$el.find('.tooltipdiv').tooltip();
+      return this.$el.find('.source_help').colorbox({
+        inline: true
+      });
+    };
+
+    StoreButtonView.prototype.addAccount = function() {
+      console.log('continue');
       if (this.disabled) {
+        console.log('continue dis');
         if (this.disabledText) {
           EzBob.ShowMessage(this.disabledText);
         }
@@ -71,6 +70,7 @@
       if (this.name === "bank-account" && this.model.get("bankAccountAdded")) {
         return;
       }
+      console.log('continue sel');
       this.trigger("selected", this.name);
       return false;
     };

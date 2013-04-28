@@ -3,7 +3,7 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
     events:
-        "click .addShopButton": "clicked"
+        "click .addAccount": "addAccount"
 
     template: "#store-button-template"
 
@@ -32,13 +32,17 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
     onRender: ->
         @$el.find('.tooltipdiv').tooltip()
+        @$el.find('.source_help').colorbox({ inline:true });
 
-    clicked: ->
+    addAccount: ->
+        console.log('continue')
         if @disabled
+            console.log('continue dis')
             EzBob.ShowMessage @disabledText  if @disabledText
             return false
         return false if not @isAddingAllowed()
         return  if @name is "bank-account" and @model.get("bankAccountAdded")
+        console.log('continue sel')
         @trigger "selected", @name
         false
 
