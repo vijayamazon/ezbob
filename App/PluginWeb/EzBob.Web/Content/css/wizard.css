@@ -252,8 +252,10 @@ div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
 
-div.add-director-container { position: relative; margin-bottom: 3.5em; }
+div.add-director-container { position: relative; width: 414px; }
 
-div.add-director-container #addDirector { position: absolute; left: 300px; top: 2em; }
+div.add-director-container #addDirector { position: relative; left: 300px; margin-bottom: 1em; }
 
 div.canDisabledAddress { display: none; }
+
+div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
