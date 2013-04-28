@@ -22,10 +22,11 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly)
         @.$el.find('.addAddressInput').attr('modifed', !isReadOnly)
         if isReadOnly
-            @.$el.find('.submit-personal, .cancel, .addAddressInput, .addAddress, .removeAddress').hide()
+            @.$el.find('.submit-personal, .cancel, .addAddressInput, .addAddress, .removeAddress, .attardi-input, .required').hide()
+            @.$el.find('textarea').removeClass('form_field').css('margin-top', 0)
             @.$el.find('.edit-personal').show()
          else 
-            @.$el.find('.submit-personal, .cancel, .addAddressInput, .addAddress, .removeAddress').show()
+            @.$el.find('.submit-personal, .cancel, .removeAddress').show()
             @.$el.find('.edit-personal').hide()
 
     editPersonalViewShow: ->

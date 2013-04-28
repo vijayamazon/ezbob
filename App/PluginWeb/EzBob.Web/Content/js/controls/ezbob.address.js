@@ -59,6 +59,7 @@ EzBob.Popup = Backbone.View.extend({
 
 		if (oDummyResults.length > 0) {
 			addressModel = $.parseJSON($('.by_id', oDummyResults.first()).html());
+			addressModel.Line3 = 'Found by postcode ' + this.$el.find(".postCode").val();
 		} else {
 			addressModel = new EzBob.AddressModel({ id: id });
 			addressModel.fetch();

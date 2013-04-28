@@ -34,15 +34,15 @@
 					</div>
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
-				
-			    <div class="form_field_container GenderCtrl">
-			        Gender
-			        <span class="required">*</span>
-			        <input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
-			        <input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
-			        <img id="GenderImage" />
-			    </div>
-				
+
+				<div class="form_field_container GenderCtrl">
+					Gender
+					<span class="required">*</span>
+					<input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
+					<input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
+					<img id="GenderImage" />
+				</div>
+
 				@EzForm.DateInput("DateOfBirth", "Date of Birth")
 
 				<div class="control-group form_field_container">
@@ -58,13 +58,13 @@
 							</select>
 						</label>
 						<span class="required">*</span>
-                        <img id="MartialStatusImage"/>
+						<img id="MartialStatusImage"/>
 					</div>
 				</div>
 
 				<h2 class="form_section">Residential Address</h2>
 
-				@EzForm.AddressInput("PersonalAddress", "Potcode")
+				@EzForm.AddressInput("PersonalAddress", "Residential Address")
 
 				<div class="control-group form_field_container">
 					<div class="controls">
@@ -78,7 +78,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
-                        <img id="TimeAtAddressImage"/>
+						<img id="TimeAtAddressImage"/>
 					</div>
 				</div>
 
@@ -96,7 +96,7 @@
 								</select>
 						</label>
 						<span class="required">*</span>
-                        <img id="ResidentialStatusImage"/>
+						<img id="ResidentialStatusImage"/>
 					</div>
 				</div>
 
@@ -109,7 +109,7 @@
 							<input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
 						</label>
 						<span class="required">*</span>
-                        <img id="DayTimePhoneImage"/>
+						<img id="DayTimePhoneImage"/>
 					</div>
 				</div>
 
@@ -173,7 +173,7 @@
 						<label for="ConsentToSearch" class="editor-label-with-checkbox"> I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
 					</div>
 				</div>
-   }
+		}
 		</div>
 
 		<div class="form_buttons_container">
@@ -207,8 +207,7 @@
 							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
 						</label>
 						<span class="required">*</span>
-                        <img id="LimitedCompanyNumberImage"/>
-
+						<img id="LimitedCompanyNumberImage"/>
 					</div>
 				</div>
 
@@ -219,8 +218,7 @@
 							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
 						</label>
 						<span class="required">*</span>
-                        <img id="LimitedCompanyNameImage"/>
-
+						<img id="LimitedCompanyNameImage"/>
 					</div>
 				</div>
 
@@ -232,8 +230,8 @@
 							<span>Business Phone</span>
 							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
 						</label>
-                        <img id="LimitedBusinessPhoneImage"/>
 						<span class="required">*</span>
+						<img id="LimitedBusinessPhoneImage"/>
 					</div>
 				</div>
 
@@ -265,8 +263,7 @@
 							<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
 						</label>
 						<span class="required">*</span>
-                        <img id="NonLimitedCompanyNameImage"/>
-
+						<img id="NonLimitedCompanyNameImage"/>
 					</div>
 				</div>
 
@@ -284,8 +281,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
-                        <img id="NonLimitedTimeAtAddressImage"/>
-
+						<img id="NonLimitedTimeAtAddressImage"/>
 					</div>
 				</div>
 
@@ -308,8 +304,7 @@
 							</select>
 						</label>
 						<span class="required">*</span>
-                        <img id="NonLimitedTimeInBusinessImage"/>
-
+						<img id="NonLimitedTimeInBusinessImage"/>
 					</div>
 				</div>
 
@@ -320,8 +315,7 @@
 							<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
 						</label>
 						<span class="required">*</span>
-                        <img id="NonLimitedBusinessPhoneImage"/>
-
+						<img id="NonLimitedBusinessPhoneImage"/>
 					</div>
 				</div>
 
@@ -439,7 +433,6 @@
 		<br />
 	</div>
 </script>
-
 
 @{
 	Html.RenderPartial("_TargetingTemplate");

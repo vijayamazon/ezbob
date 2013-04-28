@@ -35,6 +35,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         this.PersonalView.on('next', this.next, this);
         this.PersonalView.on('back', this.back, this);
         this.PersonalView.$el.appendTo(this.$el);
+	    this.PersonalView.$el.find('.addressCaption').hide();
         return this;
     },
     showStep: function (name) {

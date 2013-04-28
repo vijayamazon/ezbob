@@ -220,11 +220,11 @@
         oById = new HtmlString(oCfg.DummyAddressSearchResult);
     } // if
 
-    <div class="control-group form_field_container">
+    <div class="control-group form_field_container @css">
+        <label class="control-label addressCaption">@title</label>
         <div class="controls">
             <label class="control-label">
-                <!-- span>@title</span -->
-                <div id="@identificator" class="address-field @css"></div>
+                <div id="@identificator" class="address-field"></div>
             </label>
         </div>
     </div>

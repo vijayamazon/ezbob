@@ -882,7 +882,8 @@ html body .right {
 }
 
 .company-info input[type="text"], input[type="password"],
-.personal-info input[type="text"], input[type="password"], .changePassword input[type="text"]  {
+.personal-info input[type="text"], input[type="password"], .changePassword input[type="text"],
+.personal-info textarea {
     width: 95%;
 }
 .changePassword select {

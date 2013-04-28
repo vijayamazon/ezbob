@@ -4,9 +4,6 @@
 	<input class="btn addAddress green form_field_address_lookup" type="button" value="Postcode Lookup" disabled="disabled" />
 	<span class="required">*</span>
 </div>
-<%
-// addresses = [ { Line1: '', Line2: 'River Plate House', Line3: '7-11 Finsbury Circus', Town: 'London', Country: 'UK', Postcode: 'EC2M 7EB' } ];
-%>
 <%var i = 0; _.each(addresses, function(address) {%>
 <%
 var shortAddress = [address.Line1,

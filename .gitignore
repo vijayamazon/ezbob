@@ -48,3 +48,4 @@ Tools/LogViewer/preferences.xml
 Tools/LogViewer/*.log
 App/clients/*/log/*.log*
 App/clients/Maven/nodelist.xml
+App/PluginWeb/EzBob.Web/Content/js/Profile/ezbob.profile.yourInfo.js
