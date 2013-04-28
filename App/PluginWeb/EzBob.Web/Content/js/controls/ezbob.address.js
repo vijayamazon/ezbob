@@ -52,8 +52,18 @@ EzBob.Popup = Backbone.View.extend({
             this.textArea.css("border", "1px solid red");
             return;
         }
-        var addressModel = new EzBob.AddressModel({ id: id });
-        addressModel.fetch();
+
+		var addressModel = null;
+
+		var oDummyResults = $('.dummy_address_search_result');
+
+		if (oDummyResults.length > 0) {
+			addressModel = $.parseJSON($('.by_id', oDummyResults.first()).html());
+		} else {
+			addressModel = new EzBob.AddressModel({ id: id });
+			addressModel.fetch();
+		} // if dummy
+
         this.model.add(addressModel);
 
         this.$el.dialog("close");
@@ -71,6 +81,34 @@ EzBob.Popup = Backbone.View.extend({
         this.textArea.html("");
         this.$el.find('.postCodeBtn').attr("disabled", "disabled");
 
+		var oDoAlways = function () {
+			that.textArea.trigger("liszt:updated");
+			that.$el.find('.postCodeBtn').removeAttr("disabled");
+
+			//fix for chosen select and JQuery dialog 
+			$('.ui-dialog-content').css("overflow", "visible");
+			$('.ui-dialog ').css("overflow", "visible");
+		};
+
+		var oOnSuccess = function (oRecords) {
+			$.each(oRecords, function (i, val) {
+				that.textArea.append($('<li></li>').attr("data", val.Id).html(val.L));
+			});
+
+			that.textArea.beautifullList();
+
+			that.textArea.removeAttr("disabled");
+		};
+
+		var oDummyResults = $('.dummy_address_search_result');
+
+		if (oDummyResults.length > 0) {
+			var oRecords = $.parseJSON( $('.by_postcode', oDummyResults.first()).html() );
+			oOnSuccess(oRecords);
+			oDoAlways();
+			return;
+		} // if dummy
+
         var request = $.getJSON(this.rootPath+"Postcode/GetAddressFromPostCode", { postCode: postCode });
 
         request.done(function (data) {
@@ -78,13 +116,8 @@ EzBob.Popup = Backbone.View.extend({
                 that.textArea.append($('<li></li>').val(0).html("Not found"));
                 return;
             }
-            $.each(data.Records, function (i, val) {
-                that.textArea.append($('<li></li>').attr("data", val.Id).html(val.L));
-            });
 
-            that.textArea.beautifullList();
-
-            that.textArea.removeAttr("disabled");
+            oOnSuccess(data.Records);
         });
 
         request.fail(function () {
@@ -94,14 +127,7 @@ EzBob.Popup = Backbone.View.extend({
             that.$el.find('.postCodeBtnOk').attr("disabled", "disabled");
         });
 
-        request.always(function () {
-            that.textArea.trigger("liszt:updated");
-            that.$el.find('.postCodeBtn').removeAttr("disabled");
-
-            //fix for chosen select and JQuery dialog 
-            $('.ui-dialog-content').css("overflow", "visible");
-            $('.ui-dialog ').css("overflow", "visible");
-        });
+        request.always(oDoAlways);
     }
 });
 //-----------------------------------------------------------------------------

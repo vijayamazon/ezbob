@@ -55,6 +55,8 @@ namespace EzBob.Web.Infrastructure
         string VolusionShopUrl { get; }
         string VolusionShopLogin { get; }
         string VolusionShopPassword { get; }
+		string DummyPostcodeSearchResult { get; }
+		string DummyAddressSearchResult { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -126,6 +128,9 @@ namespace EzBob.Web.Infrastructure
         public string VolusionShopUrl      { get { return this.GetValueWithDefault<string>("VolusionShopUrl",      ""); } }
         public string VolusionShopLogin    { get { return this.GetValueWithDefault<string>("VolusionShopLogin",    ""); } }
         public string VolusionShopPassword { get { return this.GetValueWithDefault<string>("VolusionShopPassword", ""); } }
+
+        public string DummyPostcodeSearchResult { get { return this.GetValueWithDefault<string>("DummyPostcodeSearchResult", ""); } }
+        public string DummyAddressSearchResult { get { return this.GetValueWithDefault<string>("DummyAddressSearchResult", ""); } }
 
         public bool WizardTopNaviagtionEnabled
         {

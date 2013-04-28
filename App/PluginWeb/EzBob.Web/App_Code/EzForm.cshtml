@@ -1,4 +1,6 @@
 ﻿@using System.Web.Mvc
+@using EzBob.Web.Infrastructure
+@using StructureMap
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
@@ -206,7 +208,17 @@
 
 @helper AddressInput(string name, string title, string css = "")
 {
+    var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
+
     var identificator = new HtmlString(name);
+
+    HtmlString oByPostcode = null;
+    HtmlString oById = null;
+
+    if ((oCfg.DummyPostcodeSearchResult != string.Empty) && (oCfg.DummyAddressSearchResult != string.Empty)) {
+        oByPostcode = new HtmlString(oCfg.DummyPostcodeSearchResult);
+        oById = new HtmlString(oCfg.DummyAddressSearchResult);
+    } // if
 
     <div class="control-group form_field_container">
         <div class="controls">
@@ -216,6 +228,13 @@
             </label>
         </div>
     </div>
+
+    if (oByPostcode != null) { // !!! intentional inline style in the following line
+        <div style="display: none;" class="dummy_address_search_result">
+            <div class="by_postcode">@oByPostcode</div>
+            <div class="by_id">@oById</div>
+        </div>
+    }
 }
 
 @helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null)

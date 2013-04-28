@@ -251,3 +251,7 @@ div.form_buttons_container a.back
 div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
+
+div.add-director-container { position: relative; margin-bottom: 3.5em; }
+
+div.add-director-container #addDirector { position: absolute; left: 300px; top: 2em; }
