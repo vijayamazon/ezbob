@@ -41,19 +41,15 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     render: ->
         that = this
-        shopsList = @storeList.find(".shops-list")
         accountsList = @storeList.find(".accounts-list")
 
-        sortedShops = _.sortBy(@stores, (s) -> s.button.model.length).reverse()
+        sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
+        sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.model.length)
 
-        hasFilledShops = sortedShops[0].button.model.length > 0
+        hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0
         @$el.find(".next").toggleClass("disabled", !hasFilledShops)
 
-        for shop in sortedShops when shop.active and shop.isShop is 1
-            shop.button.render().$el.appendTo shopsList
-            shop.view.render().$el.hide().appendTo that.$el
-
-        for shop in sortedShops when shop.active and shop.isShop is 0
+        for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
             shop.view.render().$el.hide().appendTo that.$el
 

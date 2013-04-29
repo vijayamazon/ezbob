@@ -75,37 +75,37 @@
           view: this.EbayStoreView,
           button: this.EbayButtonView,
           active: 0,
-          isShop: 1
+          priority: 0
         },
         "Amazon": {
           view: this.AmazonStoreInfoView,
           button: this.AmazonButtonView,
           active: 0,
-          isShop: 1
-        },
-        "EKM": {
-          view: this.EKMAccountInfoView,
-          button: this.ekmButtonView,
-          active: 0,
-          isShop: 1
-        },
-        "PayPoint": {
-          view: this.PayPointAccountInfoView,
-          button: this.PayPointButtonView,
-          active: 0,
-          isShop: 1
-        },
-        "Volusion": {
-          view: this.volusionAccountInfoView,
-          button: this.volusionButtonView,
-          active: 0,
-          isShop: 1
+          priority: 1
         },
         "paypal": {
           view: this.PayPalInfoView,
           button: this.PayPalButtonView,
           active: 1,
-          isShop: 0
+          priority: 2
+        },
+        "EKM": {
+          view: this.EKMAccountInfoView,
+          button: this.ekmButtonView,
+          active: 0,
+          priority: 3
+        },
+        "Volusion": {
+          view: this.volusionAccountInfoView,
+          button: this.volusionButtonView,
+          active: 0,
+          priority: 4
+        },
+        "PayPoint": {
+          view: this.PayPointAccountInfoView,
+          button: this.PayPointButtonView,
+          active: 0,
+          priority: 5
         }
       };
       _ref1 = EzBob.Config.ActiveMarketPlaces;

@@ -19,20 +19,19 @@
       var that;
 
       that = this;
+      this.storeList = $($("#store-info").html());
+      this.isReady = false;
       _.each(this.stores, function(store) {
         store.button.on("selected", that.connect, that);
         store.view.on("completed", _.bind(that.completed, that, store.button.name));
         store.view.on("back", that.back, that);
         return store.button.on("ready", that.ready, that);
       });
-      this.storeList = $($("#store-info").html());
-      EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
-      return this.isReady = false;
+      return EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
     };
 
     StoreInfoBaseView.prototype.completed = function(name) {
       this.stores[name].button.update();
-      this.$el.empty();
       this.render();
       return this.trigger("completed");
     };
@@ -45,6 +44,9 @@
     };
 
     StoreInfoBaseView.prototype.next = function() {
+      if (this.$el.find(".next").hasClass("disabled")) {
+        return;
+      }
       this.trigger("next");
       EzBob.App.trigger("clear");
       return false;
@@ -59,41 +61,26 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-<<<<<<< HEAD
-      var accountsList, row, shopsList, that;
-=======
-      var buttonList, row, that;
->>>>>>> Volusion login form
+      var accountsList, hasFilledShops, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
 
       that = this;
-      shopsList = this.storeList.find(".shops-list");
       accountsList = this.storeList.find(".accounts-list");
-      row = null;
-      _.each(this.stores, function(store) {
-        if (!store.active) {
-          return;
-        }
-<<<<<<< HEAD
-        if (!store.isShop) {
-          return;
-        }
-        store.button.render().$el.appendTo(shopsList);
-        store.view.render().$el.hide().appendTo(that.$el);
-        return console.log(store.button.model);
+      sortedShopsByPriority = _.sortBy(this.stores, function(s) {
+        return s.priority;
       });
-      _.each(this.stores, function(store) {
-        if (!store.active) {
-          return;
-        }
-        if (store.isShop) {
-          return;
-        }
-        store.button.render().$el.appendTo(accountsList);
-=======
-        store.button.render().$el.appendTo(buttonList);
->>>>>>> Volusion login form
-        return store.view.render().$el.hide().appendTo(that.$el);
+      sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, function(s) {
+        return -s.button.model.length;
       });
+      hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
+      this.$el.find(".next").toggleClass("disabled", !hasFilledShops);
+      for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
+        shop = sortedShopsByNumOfShops[_i];
+        if (!shop.active) {
+          continue;
+        }
+        shop.button.render().$el.appendTo(accountsList);
+        shop.view.render().$el.hide().appendTo(that.$el);
+      }
       this.storeList.appendTo(this.$el);
       if (this.stores["bank-account"] != null ? this.stores["bank-account"].button.model.get("bankAccountAdded") : void 0) {
         that.ready();
@@ -124,11 +111,16 @@
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
       var sText;
+
       console.log("setFocus", storeName);
       switch (storeName) {
         case "EKM":
           return this.$el.find("#ekm_login").focus();
         case "Volusion":
+          sText = $("#header_description").text().trim();
+          if ("" === this.$el.find("#volusion_login").val()) {
+            this.$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")));
+          }
           return this.$el.find("#volusion_shopname").focus();
         case "payPoint":
           return this.$el.find("#payPoint_login").focus();
@@ -147,6 +139,12 @@
           return $(document).attr("title", "Wizard 3 Bank: Bank Account Details | EZBOB");
         case "paypal":
           return $(document).attr("title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB");
+        case "ekm":
+          return $(document).attr("title", "Wizard 3 EKM: Link Your EKM Account | EZBOB");
+        case "paypoint":
+          return $(document).attr("title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB");
+        case "volusion":
+          return $(document).attr("title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB");
       }
     };
 
