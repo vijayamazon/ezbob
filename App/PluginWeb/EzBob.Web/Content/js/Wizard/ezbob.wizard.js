@@ -149,9 +149,9 @@ EzBob.Wizard = Backbone.View.extend({
         this.router.navTo(newCurrent);
         return false;
     },
-    addStep: function (title, view, header) {
-        var num = this.steps.length;
-        this.steps.push({ num: num++, title: title, view: view, header: header || title });
+    addStep: function (title, view) {
+    	var num = this.steps.length;
+    	this.steps.push({ num: num++, title: title, view: view });
     },
     ready: function (num) {
         var ready = this.model.get("ready") || new Array(this.model.get("total") + 1);

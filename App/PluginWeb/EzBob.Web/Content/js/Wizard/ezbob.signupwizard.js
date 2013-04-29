@@ -25,7 +25,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 
         this.signUpStepView = new EzBob.QuickSignUpStepView({ model: this.customer });
         this.signUpStepView.on('ready', this.signed, this);
-        this.addStep("Create an Account", this.signUpStepView, "Sign Up");
+        this.addStep("Create an Account", this.signUpStepView);
 
         this.personInfoView = new EzBob.YourInformationStepView({model: this.customer});
         this.personInfoView.on('ready', this.evaluate, this);
