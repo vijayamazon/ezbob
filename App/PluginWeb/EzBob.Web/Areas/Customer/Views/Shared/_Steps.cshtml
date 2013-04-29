@@ -13,9 +13,9 @@
     <div class="ez_progress_bar <%= (i == steps.length-1) ?  'current' : ''%>">
         <div class="ez_bar bar_step<%= step.num %>">
             <%if(step.num==2){%>
-                <div class="bar_content">70% completed</div>
+                <div class="bar_content">70% Completed</div> <!-- align text right-->
             <%}else{%>
-                <div class="bar_content"><%= parseInt((100/steps.length)*step.num) %>% completed</div>
+                <div class="bar_content"><%= parseInt((100/steps.length)*step.num) %>% Completed</div>
             <%}%>
         </div>
     </div>

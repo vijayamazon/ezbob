@@ -8,81 +8,78 @@
 	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
-	<div class="inner">
-		<img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
-		<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
-	    <img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
-        
-        <!-- This should be improved: duplicated images and style hack -->
-	    <img id="RotateImageRight" src="../../Content/css/images/rotate.gif" class="HiddenImage alignright" style="margin-right: 240px;" />
-		<img id="OkImageRight" src="../../Content/css/images/ok.png"  class="HiddenImage alignright" style="margin-right: 240px;" />
-		<img id="FailImageRight" src="../../Content/css/images/fail.png" class="HiddenImage alignright" style="margin-right: 240px;" />
+@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
+{
+	<img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
+	<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
+	<img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
 
-		<h2 style="padding-left:0">Funding over £2.5m loans and counting!</h2>
-		<p><span style="font-size: large;"><strong>You are less than 10 minutes away from an EZBOB loan.</strong></span></p>
+	<!-- This should be improved: duplicated images and style hack -->
+	<img id="RotateImageRight" src="../../Content/css/images/rotate.gif" class="HiddenImage alignright" style="margin-right: 240px;" />
+	<img id="OkImageRight" src="../../Content/css/images/ok.png"  class="HiddenImage alignright" style="margin-right: 240px;" />
+	<img id="FailImageRight" src="../../Content/css/images/fail.png" class="HiddenImage alignright" style="margin-right: 240px;" />
 
-		<h3>Create an Account</h3>
-		<p>Complete the details below to begin</p>
+	<h2 class="form_section">Create an Account</h2>
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Email Address</span>
-				<input type="email" name="Email" id="Email" tabindex="1" class="form_field"/>
-			</label>
-			<span class="required">*</span>
-			<img id="EmailImage" class="HiddenImage"/>
-		</div>
-
-		<div id="strength-password-view" class="form_field_container">
-			<label class ="attardi-input">
-				<span>Password</span>
-				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
-			</label>
-			<span class="required">*</span>
-			<img id="Password1Image" class="HiddenImage"/>
-			<p id="message" class="help-block"></p>
-		</div>
-
-		<div class="form_field_container">
-			<label class ="attardi-input">
-				<span>Confirm Password</span>
-				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
-			</label>
-			<span class="required">*</span>
-			<img id="Password2Image" class="HiddenImage"/>
-		</div>
-		
-		<div class="form_field_container">
-			<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
-			<span class="inform"><label class="attardi-input">
-				<span>Secret Question</span>
-				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
-					<option value=""></option>
-					@if (securityQuestions != null) {
-						foreach (SecurityQuestion item in securityQuestions) {
-							<option value="@item.Id">@item.Name</option>
-						} // foreach
-					} // if
-				</select>
-			</label></span>
-			<span class="required">*</span>
-			<img id="SecurityQuestionImage"/>
-		</div>
-
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Secret Answer</span>
-				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
-			</label>
-			<span class="required">*</span>
-			<img id="SecretAnswerImage" class="HiddenImage"/>
-		</div>
-
-		<div class="form_field_container">
-		@EzForm.Captcha(captchamode)
-		</div>
-
-		<div class="form_buttons_container"><input type="submit" id="btn" value="Conitnue" class="button orange continue"></div>
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span>Email Address</span>
+			<input type="email" name="Email" id="Email" tabindex="1" class="form_field"/>
+		</label>
+		<span class="required">*</span>
+		<img id="EmailImage" class="HiddenImage"/>
 	</div>
+
+	<div id="strength-password-view" class="form_field_container">
+		<label class ="attardi-input">
+			<span>Password</span>
+			<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1"/>
+		</label>
+		<span class="required">*</span>
+		<img id="Password1Image" class="HiddenImage"/>
+		<p id="message" class="help-block"></p>
+	</div>
+
+	<div class="form_field_container">
+		<label class ="attardi-input">
+			<span>Confirm Password</span>
+			<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2"/>
+		</label>
+		<span class="required">*</span>
+		<img id="Password2Image" class="HiddenImage"/>
+	</div>
+
+	<div class="form_field_container">
+		<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
+		<span class="inform"><label class="attardi-input">
+			                     <span>Secret Question</span>
+			                     <select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+				                     <option value=""></option>
+				                     @if (securityQuestions != null)
+				                     {
+					                     foreach (SecurityQuestion item in securityQuestions)
+					                     {
+						                     <option value="@item.Id">@item.Name</option>
+					                     } // foreach
+				                     } // if
+			                     </select>
+		                     </label></span>
+		<span class="required">*</span>
+		<img id="SecurityQuestionImage"/>
+	</div>
+
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span>Secret Answer</span>
+			<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
+		</label>
+		<span class="required">*</span>
+		<img id="SecretAnswerImage" class="HiddenImage"/>
+	</div>
+
+	<div class="form_field_container">
+		@EzForm.Captcha(captchamode)
+	</div>
+
+	<div class="form_buttons_container"><input type="submit" id="btn" value="Conitnue" class="button orange continue"></div>
 }

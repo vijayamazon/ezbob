@@ -25,7 +25,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 
         this.signUpStepView = new EzBob.QuickSignUpStepView({ model: this.customer });
         this.signUpStepView.on('ready', this.signed, this);
-        this.addStep("Create an account", this.signUpStepView, "Sign Up");
+        this.addStep("Create an Account", this.signUpStepView, "Sign Up");
 
         this.personInfoView = new EzBob.YourInformationStepView({model: this.customer});
         this.personInfoView.on('ready', this.evaluate, this);
@@ -39,7 +39,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
         this.storeView.on('ready', this.signed, this);
         
         this.addStep("Link Accounts", this.storeView);
-        this.addStep("Enter information", this.personInfoView);
+        this.addStep("Enter Information", this.personInfoView);
 
         this.constructor.__super__.initialize.apply(this, [{ model: model, steps: this.steps}]);
     },
