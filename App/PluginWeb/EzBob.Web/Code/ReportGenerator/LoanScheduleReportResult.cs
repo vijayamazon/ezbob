@@ -21,7 +21,13 @@ namespace EzBob.Web.Code.ReportGenerator
         public override void ExecuteResult(ControllerContext context)
         {
             var fileFormat = _isExcell ? "xls" : "pdf";
-            var header = string.Format("Payment Schedule ({0}, {1}, {2})", _customer.PersonalInfo.Fullname, _customer.Id, DateTime.Now.ToString("dd/MM/yyyy"));
+            var header = string.Format("Payment Schedule ({0}, {1}, {2})",
+                            (_customer.PersonalInfo.FirstName +
+                            ((_customer.PersonalInfo.MiddleInitial == null) ? " " : (" " + _customer.PersonalInfo.MiddleInitial) + " ") +
+                            _customer.PersonalInfo.Surname),
+                            _customer.Id, 
+                            DateTime.Now.ToString("dd/MM/yyyy"));
+
             var generator = new LoanScheduleReportGenerator();
             var content = generator.GenerateReport(_loanDetails, _isExcell, header);
             var fileName = header + "." + fileFormat;

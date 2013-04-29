@@ -21,7 +21,10 @@ namespace EzBob.Web.Code.ReportGenerator
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Payment Schedule";
             HeaderReportGenerator.CreateHeader(worksheet, header);
-            int row = 3;
+            int row = 4;
+            worksheet.Cells.SetColumnWidth(0, 4);
+            worksheet.Cells.SetColumnWidth(1, 20);
+
             CreateXlsHeader(worksheet, row);
             
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/payment-to-customer.png");
