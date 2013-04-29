@@ -879,9 +879,6 @@ input[type="color"],
 }
 
 .bar_content {
-    position: absolute;
-    top: 0;
-    width: 600px;
     padding: 0 5px;
 }
 
