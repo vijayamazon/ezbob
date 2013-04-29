@@ -7,16 +7,16 @@
                     <tbody>
                         <tr>
                             <td style="width: 187px;">
-								<a href="#" class="addShopButton" style="border: none;">
-                                	<div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
-								</a>
+                                <a href="#" class="addAccount" style="border: none;">
+                                    <div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
+                                </a>
                             </td>
                             <td style="vertical-align: middle;"><% if(shops.length) {%>
                                    <div class="tooltipdiv" data-toggle="tooltip" data-placement="bottom" style="width: 120px;" data-original-title="<%- shopNames %>">
                                        <a class="accordion-toggle label green" data-toggle="collapse" href="#description<%- shopClass %>"><%= shops.length%></a> Shop(s) Linked
                                    </div>
                                 <%} else {%>
-                                    <div style="width: 120px;">
+                                    <div style="width: 130px;">
                                         No Accounts Linked
                                     </div>
                                 <%}%>
@@ -27,12 +27,26 @@
 
 
             </div>
-            <div class="alignright" style="margin-top: 7px;">    
+            <div class="alignright" @*style="margin-top: 7px;"*@>
                 <div class="tooltipdiv" data-toggle="tooltip" data-placement="top" data-original-title="Click to add an account">
-		            <input class="btn green plus_container button addShopButton" type="button" value="Add Account" />
+                    @*<input class="btn green button addAccount" type="button" value="Add Account" />*@
+                    <a href="#<%- shopClass %>_help" class="source_help btn green button">Add Account</a>
                 </div>
             </div>
         </div>
+
+        <div class="hide">
+            <div id="<%- shopClass %>_help" class="help_window">
+                <h2>Link <%- shopClass.charAt(0).toUpperCase() + shopClass.slice(1)%> Account</h2>
+                <p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
+                <div class="help_<%- shopClass %>"></div><br>
+                <div class="alignright" style="padding: 0 10px 0 0;"><input class="btn orange button addAccount" type="button" value="Continue" /></div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
+        </div>
+
         <div id="description<%- shopClass %>" class="accordion-body collapse">
             <div class="accordion-inner">
                 <div class="source_description">
@@ -41,7 +55,9 @@
                             <% _.each(shops, function(shop, index) { %>
                                 <tr>
                                     <td><%- shop.displayName %></td>
-                                    <td class="statustd"><div class="shop-connected"></div></td>
+                                    <td class="statustd">
+                                        <div class="shop-connected"></div>
+                                    </td>
                                 </tr>
                             <% }); %>
                         </tbody>
