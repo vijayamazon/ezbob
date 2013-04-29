@@ -24,7 +24,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public string RunCheck(int id, string type)
         {
             var a = new FraudDetectionChecker();
-            return type == "internal" ? a.InternalSystemDecision(id) : a.ExternalSystemDecision(id);
+            return type == "internal" ? a.InternalSystemDecision(id, true) : a.ExternalSystemDecision(id, true);
         }
 
         [HttpGet]

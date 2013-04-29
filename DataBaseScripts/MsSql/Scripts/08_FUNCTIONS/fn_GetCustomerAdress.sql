@@ -1,10 +1,11 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fn_GetCustomerAdress]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
-DROP FUNCTION [dbo].[fn_GetCustomerAdress]
-GO
+﻿
+/****** Object:  UserDefinedFunction [dbo].[fn_GetCustomerAdress]    Script Date: 4/29/2013 1:19:52 PM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE FUNCTION [dbo].[fn_GetCustomerAdress] (@CustId int)
 /*
 Функция возвращает адреса кастомера
@@ -44,23 +45,17 @@ DECLARE
 
 select 
 @line1=ca.Line1, @Line2=ca.Line2, @Line3 =ca.Line3,@Line4 =ca.Town , @Line5 =ca.County, @Line6 =ca.Postcode
-from CustomerAddressRelation car
-left join CustomerAddress ca on ca.addressId = car.addressId and ca.addressType= '1'
-where car.id  IN (select car1.id 
-                from CustomerAddressRelation car1 
-                where  car1.CustomerId = @CustId)--932)
-                AND ca.Line1 is NOT NULL
+from CustomerAddress ca
+where ca.addressType= '1'
+AND ca.CustomerId = @CustId AND ca.Line1 is NOT NULL
 
 select 
 @Line1Prev =ca.Line1, @Line2Prev =ca.Line2, 
 @Line3Prev =ca.Line3, @Line4Prev =ca.Town, 
 @Line5Prev =ca.County, @Line6Prev =ca.Postcode
-from CustomerAddressRelation car
-left join CustomerAddress ca on ca.addressId = car.addressId and ca.addressType = '2'
-where car.id  IN (select car1.id 
-                from CustomerAddressRelation car1 
-                where  car1.CustomerId = @CustId)--932)
-                AND ca.Line1 is NOT NULL
+from CustomerAddress ca
+WHERE ca.addressType = '2'
+AND ca.CustomerId = @CustId AND ca.Line1 is NOT NULL
 
 
 INSERT into @CustAdress
@@ -95,4 +90,5 @@ VALUES
 )        
 RETURN
 end
+
 GO
