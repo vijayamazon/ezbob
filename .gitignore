@@ -49,3 +49,5 @@ Tools/LogViewer/*.log
 App/clients/*/log/*.log*
 App/clients/Maven/nodelist.xml
 App/PluginWeb/EzBob.Web/Content/js/Profile/ezbob.profile.yourInfo.js
+App/clients/Auditor/Auditor.exe.config
+App/clients/Auditor/Auditor.mdb

@@ -10,9 +10,13 @@ using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
 using System;
 using System.Collections.Generic;
+using Integration.ChannelGrabberAPI;
+using log4net;
 
 namespace Integration.Volusion {
 	public class VolusionRetriveDataHelper : MarketplaceRetrieveDataHelperBase<VolusionDatabaseFunctionType> {
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(VolusionRetriveDataHelper));
+
 		public VolusionRetriveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<VolusionDatabaseFunctionType> marketplace
@@ -23,7 +27,7 @@ namespace Integration.Volusion {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			var securityInfo = (VolusionSecurityInfo)this.RetrieveCustomerSecurityInfo(
+			var securityInfo = (VolusionSecurityInfo)RetrieveCustomerSecurityInfo(
 				databaseCustomerMarketPlace.Id
 			);
 
@@ -42,7 +46,14 @@ namespace Integration.Volusion {
 			ActionAccessType actionAccessType,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			// TODO: implement this.
+			List<ChannelGrabberOrder> orders = VolusionConnector.GetOrders(
+				ms_oLog,
+				databaseCustomerMarketPlace.Customer,
+				securityInfo.Url,
+				securityInfo.Login
+			);
+
+			throw new NotImplementedException();
 
 			/*
 			//retreive data from Volusion api
@@ -106,12 +117,9 @@ namespace Integration.Volusion {
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
 			int customerMarketPlaceId
 		) {
-			var VolusionSecurityInfo = new VolusionSecurityInfo();
-			IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-			VolusionSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
-			VolusionSecurityInfo.Name = customerMarketPlace.DisplayName;
-			VolusionSecurityInfo.MarketplaceId = customerMarketPlace.Id;
-			return VolusionSecurityInfo;
+			return SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(
+				GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData
+			);
 		} // RetrieveSecurityInfo
 
 		private IEnumerable<IWriteDataInfo<VolusionDatabaseFunctionType>> CreateOrdersAggregationInfo(
@@ -120,7 +128,7 @@ namespace Integration.Volusion {
 		) {
 			var aggregateFunctionArray = new[] {
 				VolusionDatabaseFunctionType.AverageSumOfOrder, 
-				VolusionDatabaseFunctionType.NumOfOrders, 						
+				VolusionDatabaseFunctionType.NumOfOrders,
 				VolusionDatabaseFunctionType.TotalSumOfOrders, 
 			};
 

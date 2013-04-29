@@ -92,6 +92,11 @@ namespace EzBobTest
 	    }
 
 		[Test]
+		public void UpdateVolusionMarketplace() {
+			UpdateCustomerMarketplace(112);
+		}
+
+		[Test]
 		public void UpdateCustomerMarketplace()
 		{
 			var umi = 119;

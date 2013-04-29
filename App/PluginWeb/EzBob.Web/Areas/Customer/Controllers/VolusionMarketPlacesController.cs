@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using ApplicationMng.Repository;
+using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.CommonLib;
 using EzBob.Web.Infrastructure;
 using Scorto.Web;
 using Integration.Volusion;
@@ -23,14 +26,28 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		public string url { get; set; }
 
 		public static VolusionAccountModel ToModel(MP_CustomerMarketPlace account) {
+			VolusionSecurityInfo oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
+
 			return new VolusionAccountModel {
 				id = account.Id,
 				login = account.DisplayName,
-				password = Encryptor.Decrypt(account.SecurityData),
+				password = oSecInfo.Password,
 				displayName = account.DisplayName,
 				url = ""
 			};
-		} // constructor
+		} // ToModel
+
+		public static VolusionAccountModel ToModel(IDatabaseCustomerMarketPlace account) {
+			VolusionSecurityInfo oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
+
+			return new VolusionAccountModel {
+				id = account.Id,
+				login = account.DisplayName,
+				password = oSecInfo.Password,
+				displayName = account.DisplayName,
+				url = ""
+			};
+		} // ToModel
 	} // class VolusionAccountModel
 
 	public class VolusionMarketPlacesController : Controller {
@@ -43,9 +60,11 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly VolusionConnector _validator = new VolusionConnector();
+		private readonly DatabaseDataHelper _helper;
 
 		public VolusionMarketPlacesController(
 			IEzbobWorkplaceContext context,
+			DatabaseDataHelper helper, 
 			ICustomerRepository customers,
 			IRepository<MP_MarketplaceType> mpTypes,
 			IRepository<MP_CustomerMarketPlace> marketplaces,
@@ -53,6 +72,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			IAppCreator appCreator
 		) {
 			_context = context;
+			_helper = helper;
 			_customers = customers;
 			_mpTypes = mpTypes;
 			_marketplaces = marketplaces;
@@ -94,19 +114,18 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					.First(a => a.InternalId == oVsi.InternalId)
 					.Id;
 
-				var mp = new MP_CustomerMarketPlace {
-					Marketplace = _mpTypes.Get(marketPlaceId),
+				var oSecInfo = new VolusionSecurityInfo {
+					Url = model.url,
+					Login = model.login,
+					Password = model.password,
 					DisplayName = model.displayName,
-					SecurityData = Encryptor.EncryptBytes(model.password),
-					Customer = _customer,
-					Created = DateTime.UtcNow,
-					UpdatingStart = DateTime.UtcNow,
-					Updated = DateTime.UtcNow,
-					UpdatingEnd = DateTime.UtcNow
+					MarketplaceId = marketPlaceId
 				};
 
-				_customer.CustomerMarketPlaces.Add(mp);
-				_appCreator.EbayAdded(customer, mp.Id);
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
+
+				_appCreator.EbayAdded(customer, mp.Id); // TODO: implement and use VolusionAdded
+
 				return this.JsonNet(VolusionAccountModel.ToModel(mp));
 			}
 			catch (MarketPlaceAddedByThisCustomerException e) {
