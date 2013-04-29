@@ -1,27 +1,21 @@
 ﻿@model dynamic
+
 <div class="wizard-steps">
     <ul class="application_steps">
         <% _.each(steps, function(step, i){%>
-        <li class="<%= (i == steps.length-1) ?  'current' : ''%> " data-step-num="<%= step.num %>">
-            <span class="step_label">Step <%= step.num + 1 %>:
-            </span>
-            <%= step.title %>
-        </li>
+            <% 
+                var css = "";
+                if(i == current) css += "active current ";
+                if(i < current) css += "completed complete ";
+            %>
+            <li class="<%= css %> " data-step-num="<%= step.num %>">
+                <span class="step_label">Step <%= step.num + 1 %>:
+                </span>
+                <%= step.title %>
+            </li>
         <%})%>
     </ul>
-    <% _.each(steps, function(step, i){%>
-    <div class="ez_progress_bar <%= (i == steps.length-1) ?  'current' : ''%>">
-        <div class="ez_bar bar_step<%= step.num %>">
-            <%if(step.num==0){%>
-                <div class="bar_content_for_0">0% Completed</div>
-            <%}else if(step.num==1){%>
-                <div class="bar_content alignright">33% Completed</div>
-            <%}else if(step.num==2){%>
-                <div class="bar_content alignright">70% Completed</div>
-            <%}else{%>
-                <div class="bar_content alignright">100% Completed</div>
-            <%}%>
-        </div>
+    <div>
+        <%= progress %> % Completed
     </div>
-    <%})%>
 </div>

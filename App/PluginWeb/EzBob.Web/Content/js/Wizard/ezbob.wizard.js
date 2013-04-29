@@ -62,11 +62,13 @@ EzBob.WizardRouter = Backbone.Router.extend({
             case 0:
                 $(document).attr("title", "Wizard 1: Sign up | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/SignUp');
+                EzBob.App.trigger("wizard:progress", 10);
                 this.navigate("SignUp", { trigger: true });
                 break;
             case 1:
                 $(document).attr("title", "Wizard 2: Link Your Accounts | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/Shops');
+                EzBob.App.trigger("wizard:progress", 30);
                 this.navigate("ShopInfo", { trigger: true });
                 break;
                 //case 2:
@@ -77,6 +79,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
             case 2:
                 $(document).attr("title", "Wizard 3 Business: Fill Business Details | EZBOB ");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
+                EzBob.App.trigger("wizard:progress", 60);
                 this.navigate("YourDetails", { trigger: true });
                 break;
             default:
@@ -87,8 +90,10 @@ EzBob.WizardRouter = Backbone.Router.extend({
 
 EzBob.Wizard = Backbone.View.extend({
     initialize: function (options) {
+        this.progress = 0;
         this.topNavigationEnabled = EzBob.Config.WizardTopNaviagtionEnabled;
         this.template = _.template($('#wizard-template').html());
+        this.progressTemplate = _.template($('#progress-indicator').html());
         this.model = options.model;
         this.steps = options.steps;
         this.stepModels = this.model.get('stepModels');
@@ -101,6 +106,8 @@ EzBob.Wizard = Backbone.View.extend({
             s.view.on('previous', that.previous, that);
             s.view.on('linkClick', that.linkClick, that);
         });
+        
+        EzBob.App.on('wizard:progress', that.progressChanged, that);
 
         this.router = new EzBob.WizardRouter({ topNavigationEnabled: this.topNavigationEnabled, maxStepNum: this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0 });
         this.router.on("SignUp", this.SignUpRoute, this);
@@ -122,8 +129,9 @@ EzBob.Wizard = Backbone.View.extend({
         this.model.changePage(2);
     },
     render: function () {
-        var template = this.template({ steps: this.steps });
+        var template = this.template();
         this.$el.html(template);
+        
         this.renderSteps();
         this.stepChanged();
 
@@ -165,8 +173,10 @@ EzBob.Wizard = Backbone.View.extend({
         if (!this.steps[num].ready) {
             this.steps[num].ready = true;
         }
-        this.$el.find('.wizard-steps > ul li').eq(num).addClass('completed complete');
+
         this.router.maxStepNum = this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0;
+        
+        this.stepChanged();
     },
 
     next: function () {
@@ -212,10 +222,20 @@ EzBob.Wizard = Backbone.View.extend({
         var current = this.model.get('current'),
             allowed = this.model.get('allowed');
 
-        this.$el.find('.wizard-steps > ul li').removeClass('active current').eq(current).addClass('active current');
-        this.$el.find('.wizard-steps .ez_progress_bar').removeClass('active current').eq(current).addClass('active current');
+        var data = {
+            steps: this.steps,
+            current: current,
+            progress: this.progress
+        };
+        
+        this.$el.find(".wizard-progress").html(this.progressTemplate(data));
+
         this.$el.find('.pages > div').hide().eq(current).show();
         if (this.steps[current]) this.$el.find('.wizard-header').text(this.steps[current].header);
+    },
+    progressChanged: function(progress) {
+        this.progress = progress;
+        this.stepChanged();
     }
 });
 
