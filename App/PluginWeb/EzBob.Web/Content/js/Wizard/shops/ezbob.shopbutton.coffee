@@ -15,7 +15,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         if @shops
             @shops.on("change reset", @render, this)
 
-        @shopClass = options.name.toLowerCase().replace(' ', '')
+        @shopClass = options.name.replace(' ', '')
 
     serializeData: ->
         data = 

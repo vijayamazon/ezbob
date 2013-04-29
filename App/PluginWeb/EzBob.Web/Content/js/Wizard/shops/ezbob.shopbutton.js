@@ -28,7 +28,7 @@
       if (this.shops) {
         this.shops.on("change reset", this.render, this);
       }
-      return this.shopClass = options.name.toLowerCase().replace(' ', '');
+      return this.shopClass = options.name.replace(' ', '');
     };
 
     StoreButtonView.prototype.serializeData = function() {

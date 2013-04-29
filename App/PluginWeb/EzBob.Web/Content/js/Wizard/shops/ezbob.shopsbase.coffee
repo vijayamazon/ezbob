@@ -76,6 +76,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         false
 
     setFocus: (storeName) ->
+        $.colorbox.close()
         console.log("setFocus", storeName)
 
         switch storeName
@@ -86,7 +87,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 if "" == @$el.find("#volusion_login").val()
                     @$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")))
                 @$el.find("#volusion_shopname").focus()
-            when "payPoint"
+            when "PayPoint"
                 @$el.find("#payPoint_login").focus()
             when "bank-account"
                 @$el.find("#AccountNumber").focus()
@@ -94,19 +95,19 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     setDocumentTitle: (storeName) ->
         switch storeName
-            when "amazon"
+            when "Amazon"
                 $(document).attr "title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB"
-            when "ebay"
+            when "eBay"
                 $(document).attr "title", "Wizard 2 Ebay: Link Your Ebay Shop | EZBOB"
             when "bank-account"
                 $(document).attr "title", "Wizard 3 Bank: Bank Account Details | EZBOB"
             when "paypal"
                 $(document).attr "title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB"
-            when "ekm"
+            when "EKM"
                 $(document).attr "title", "Wizard 3 EKM: Link Your EKM Account | EZBOB"
-            when "paypoint"
+            when "PayPoint"
                 $(document).attr "title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB"
-            when "volusion"
+            when "Volusion"
                 $(document).attr "title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB"
             else
 

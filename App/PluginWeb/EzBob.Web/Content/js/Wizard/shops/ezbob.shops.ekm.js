@@ -18,7 +18,8 @@
     EKMAccountButtonView.prototype.initialize = function() {
       return EKMAccountButtonView.__super__.initialize.call(this, {
         name: 'EKM',
-        logoText: ''
+        logoText: '',
+        shops: this.model
       });
     };
 

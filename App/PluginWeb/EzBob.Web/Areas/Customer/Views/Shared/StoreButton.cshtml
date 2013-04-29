@@ -40,7 +40,7 @@
                 <h2>Link <%- shopClass.charAt(0).toUpperCase() + shopClass.slice(1)%> Account</h2>
                 <p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
                 <div class="help_<%- shopClass %>"></div><br>
-                <div class="alignright" style="padding: 0 10px 0 0;"><input class="btn orange button addAccount" type="button" value="Continue" /></div>
+                <div class="alignright" style="padding: 0 10px 0 0;"><input class="btn orange button addAccount" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")' type="button" value="Continue" /></div>
                 <div class="clear"></div>
                 <hr>
                 <div class="help_security"></div>

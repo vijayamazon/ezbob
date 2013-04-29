@@ -71,13 +71,13 @@
       });
       this.PayPalInfoView = new EzBob.PayPalInfoView();
       this.stores = {
-        "eBay": {
+        "ebay": {
           view: this.EbayStoreView,
           button: this.EbayButtonView,
           active: 0,
           priority: 0
         },
-        "Amazon": {
+        "amazon": {
           view: this.AmazonStoreInfoView,
           button: this.AmazonButtonView,
           active: 0,
@@ -89,19 +89,19 @@
           active: 1,
           priority: 2
         },
-        "EKM": {
+        "ekm": {
           view: this.EKMAccountInfoView,
           button: this.ekmButtonView,
           active: 0,
           priority: 3
         },
-        "Volusion": {
+        "volusion": {
           view: this.volusionAccountInfoView,
           button: this.volusionButtonView,
           active: 0,
           priority: 4
         },
-        "PayPoint": {
+        "paypoint": {
           view: this.PayPointAccountInfoView,
           button: this.PayPointButtonView,
           active: 0,

@@ -327,12 +327,12 @@ div.shop-connected {
     margin-top: 5px;
 }
 
-    .source_labels.ebay {
+    .source_labels.eBay {
         background-position: 0 0;
         width: 81px;
     }
 
-    .source_labels.amazon {
+    .source_labels.Amazon {
         background-position: -86px 0;
         width: 110px;
     }
@@ -357,7 +357,7 @@ div.shop-connected {
         width: 55px;
     }
 
-    .source_labels.ekm {
+    .source_labels.EKM {
         background-position: -558px 0;
         width: 150px;
     }
@@ -367,22 +367,22 @@ div.shop-connected {
         width: 111px;
     }
 
-    .source_labels.paypoint {
+    .source_labels.PayPoint {
         background-position: -967px 0;
         width: 167px;
     }
 
-    .source_labels.volusion {
+    .source_labels.Volusion {
         background-position: -867px 0;
         width: 98px;
     }
 
-    .source_labels_on.ebay {
+    .source_labels_on.eBay {
         background-position: 0 -40px;
         width: 81px;
     }
 
-    .source_labels_on.amazon {
+    .source_labels_on.Amazon {
         background-position: -86px -40px;
         width: 110px;
     }
@@ -407,7 +407,7 @@ div.shop-connected {
         width: 55px;
     }
 
-    .source_labels_on.ekm {
+    .source_labels_on.EKM {
         background-position: -558px -40px;
         width: 150px;
     }
@@ -417,12 +417,12 @@ div.shop-connected {
         width: 111px;
     }
 
-    .source_labels_on.paypoint {
+    .source_labels_on.PayPoint {
         background-position: -967px -40px;
         width: 167px;
     }
 
-    .source_labels_on.volusion {
+    .source_labels_on.Volusion {
         background-position: -867px -40px;
         width: 98px;
     }

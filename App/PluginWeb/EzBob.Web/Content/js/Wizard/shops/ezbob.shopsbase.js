@@ -112,6 +112,7 @@
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
       var sText;
 
+      $.colorbox.close();
       console.log("setFocus", storeName);
       switch (storeName) {
         case "EKM":
@@ -122,7 +123,7 @@
             this.$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")));
           }
           return this.$el.find("#volusion_shopname").focus();
-        case "payPoint":
+        case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
         case "bank-account":
           return this.$el.find("#AccountNumber").focus();
@@ -131,19 +132,19 @@
 
     StoreInfoBaseView.prototype.setDocumentTitle = function(storeName) {
       switch (storeName) {
-        case "amazon":
+        case "Amazon":
           return $(document).attr("title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB");
-        case "ebay":
+        case "eBay":
           return $(document).attr("title", "Wizard 2 Ebay: Link Your Ebay Shop | EZBOB");
         case "bank-account":
           return $(document).attr("title", "Wizard 3 Bank: Bank Account Details | EZBOB");
         case "paypal":
           return $(document).attr("title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB");
-        case "ekm":
+        case "EKM":
           return $(document).attr("title", "Wizard 3 EKM: Link Your EKM Account | EZBOB");
-        case "paypoint":
+        case "PayPoint":
           return $(document).attr("title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB");
-        case "volusion":
+        case "Volusion":
           return $(document).attr("title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB");
       }
     };
