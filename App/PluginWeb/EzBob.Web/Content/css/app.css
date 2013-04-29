@@ -84,7 +84,7 @@ footer {
     margin: 20px 0 5px 0;
 }
 
-.grid1_nb .estimate_container {
+.grid1_nb .marketing_container {
     margin: 0;
 }
 
@@ -446,12 +446,12 @@ div.shop-connected {
             width: 10px;
         }
 
-.estimate_container {
-    margin: 0 0 20px 0;
-    text-align: center;
-}
+	.marketing_container {
+		margin: 0 0 20px 0;
+		text-align: center;
+	}
 
-    .estimate_container .loan_estimate {
+    .marketing_container .marketing_message {
         padding: 5px;
         border: 1px #a2c966 solid;
         background: #efffd7;
@@ -460,23 +460,15 @@ div.shop-connected {
         color: #71a61f;
     }
 
-    .estimate_container .ezbob_points {
-        padding: 5px;
-        border: 1px #065268 solid;
-        font-size: 16px;
-        background: #d9e8ed;
-        color: #065268;
-    }
-
-    .estimate_container .large {
+    .marketing_container .large {
         font-size: 50px;
     }
 
-ul.application_steps {
-    margin: 0 0 10px 0;
-    overflow: hidden;
-    list-style: none;
-}
+	ul.application_steps {
+		margin: 0 0 10px 0;
+		overflow: hidden;
+		list-style: none;
+	}
 
     ul.application_steps li {
         float: left;
