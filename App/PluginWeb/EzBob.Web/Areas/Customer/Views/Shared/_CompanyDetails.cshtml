@@ -396,7 +396,7 @@
 				<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].GenderCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
 			</div>
 
-			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", false)	
+			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth")	
 
 			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
 		</div>
