@@ -12,10 +12,14 @@
     <% _.each(steps, function(step, i){%>
     <div class="ez_progress_bar <%= (i == steps.length-1) ?  'current' : ''%>">
         <div class="ez_bar bar_step<%= step.num %>">
-            <%if(step.num==2){%>
-                <div class="bar_content alignright">70% Completed</div> <!-- align text right-->
+            <%if(step.num==0){%>
+                <div class="bar_content_for_0">0% Completed</div>
+            <%}else if(step.num==1){%>
+                <div class="bar_content alignright">33% Completed</div>
+            <%}else if(step.num==2){%>
+                <div class="bar_content alignright">70% Completed</div>
             <%}else{%>
-                <div class="bar_content alignright"><%= parseInt((100/steps.length)*step.num) %>% Completed</div>
+                <div class="bar_content alignright">100% Completed</div>
             <%}%>
         </div>
     </div>

@@ -107,7 +107,6 @@ label {
 }
 
 .CompanyDetailForm {
-    padding-top: 15px;
 }
 
 .yellow-link, a.yellow-link, a.yellow-link:visited, a.yellow-link:active,  a.yellow-link:hover {
@@ -235,8 +234,13 @@ ul.list_none
 	margin-left: 5px;
 }
 
-h2.form_section, h2.form_start { padding-left: 0!important; }
-h2.form_section { margin-top: 1em; }
+h2.form_start {
+	padding-left: 0!important;
+}
+
+h2.form_section {
+	 margin-top: 1em; padding-left: 0!important;
+}
 
 div.form_buttons_container { position: relative; height: 30px; }
 

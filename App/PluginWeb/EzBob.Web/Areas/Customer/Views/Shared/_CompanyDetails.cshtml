@@ -2,7 +2,7 @@
 @model dynamic
 @helper PersonalInfo() {
 	<div class="row-fluid">
-		<h2 class="form_start">Personal information</h2>
+		<h2 class="form_start">Personal Information</h2>
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
 				<div class="control-group form_field_container">
@@ -198,7 +198,7 @@
 
 @helper LimitedInfo() {
 	<div class="row-fluid">
-		<h2 class="form_section">Company Information</h2> 
+		<h2 class="form_start">Company Information</h2> 
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
 				<div class="control-group">
@@ -251,7 +251,7 @@
 
 @helper Nonlimitedinfo() {
 	<div class="row-fluid">
-		<h2 class="form_start">Company Info</h2>
+		<h2 class="form_start">Company Information</h2>
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForml" })) {
 				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />

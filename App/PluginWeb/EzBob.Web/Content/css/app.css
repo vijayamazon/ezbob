@@ -837,7 +837,7 @@ input[type="color"],
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    margin: 0 0 20px 0;
+    margin-bottom: 1em;
 }
 
 .ez_bar {
@@ -879,6 +879,13 @@ input[type="color"],
 }
 
 .bar_content {
+    padding: 0 5px;
+}
+
+.bar_content_for_0 {
+    position: absolute;
+    top: 0;
+    width: 600px;
     padding: 0 5px;
 }
 
