@@ -967,6 +967,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
       <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
+      <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
       <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
     </Content>
