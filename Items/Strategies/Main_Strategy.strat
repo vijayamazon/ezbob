@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>Main_Strategy</Name>
-  <Description />
+  <Description>Performs all Experian checks, provides system decision. May take several hours. 24 hours limit. Trigger -  wizard finished. Underwriter triggers: 1. Credit check 2. New Credit Line. Dashboard triggers: Request cash</Description>
   <Workspace Name="Main_Strategy">
     <NodeElement Name="12 times (12 hours)" NodeId="Comparison65328258" />
     <NodeElement Name="18 times = (3 hours)" NodeId="Comparison50679487" />
@@ -16,39 +16,39 @@
     <NodeElement Name="Amazon Alerts Passed" NodeId="ConditionalAssignment2030132" />
     <NodeElement Name="Amazon Elimination Variables" NodeId="CreditProduct8059170" />
     <NodeElement Name="Amazon Select" NodeId="Select45785693" />
+    <NodeElement Name="AML" NodeId="ScriptNode15548922" />
+    <NodeElement Name="AML" NodeId="ScriptNode25270568" />
     <NodeElement Name="AML" NodeId="ConditionalAssignment10489022" />
-    <NodeElement Name="AML &amp; BWA" NodeId="Comparison26121432" />
     <NodeElement Name="AML &amp; BWA" NodeId="Comparison14055177" />
+    <NodeElement Name="AML &amp; BWA" NodeId="Comparison26121432" />
     <NodeElement Name="AML Alerts" NodeId="ScriptNode39606272" />
     <NodeElement Name="AML Only" NodeId="Comparison437699" />
     <NodeElement Name="AML Prev" NodeId="ScriptNode63142667" />
     <NodeElement Name="Amount is null check" NodeId="ConditionalAssignment57612135" />
     <NodeElement Name="AmzonCounter" NodeId="Comparison20944062" />
     <NodeElement Name="Approve" NodeId="MultiAssignmentB66326724" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB52547616" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB18596172" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB33910007" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB51964767" />
     <NodeElement Name="Assignment" NodeId="AssignmentB39624552" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB51964767" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB33910007" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB18596172" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB52547616" />
     <NodeElement Name="Bank Account is Business" NodeId="Comparison56939344" />
     <NodeElement Name="Bureau Score R" NodeId="Comparison61864166" />
     <NodeElement Name="Bureau Score W" NodeId="Comparison10268880" />
-    <NodeElement Name="BWA" NodeId="ScriptNode5436632" />
-    <NodeElement Name="AML" NodeId="ScriptNode25270568" />
     <NodeElement Name="BWA" NodeId="ScriptNode32928275" />
-    <NodeElement Name="AML" NodeId="ScriptNode15548922" />
+    <NodeElement Name="BWA" NodeId="ScriptNode5436632" />
     <NodeElement Name="BWA Alerts" NodeId="ScriptNode27212590" />
     <NodeElement Name="BWA Prev" NodeId="ScriptNode28699853" />
     <NodeElement Name="BWABusinessCheckFlag" NodeId="DataSourceNodeScalar28748943" />
-    <NodeElement Name="Comparison" NodeId="Comparison34055499" />
-    <NodeElement Name="Comparison" NodeId="Comparison43741994" />
-    <NodeElement Name="Comparison" NodeId="Comparison26359507" />
     <NodeElement Name="Comparison" NodeId="Comparison64333366" />
-    <NodeElement Name="Conditional" NodeId="ConditionalAssignment45490280" />
-    <NodeElement Name="Conditional" NodeId="ConditionalAssignment65927667" />
+    <NodeElement Name="Comparison" NodeId="Comparison26359507" />
+    <NodeElement Name="Comparison" NodeId="Comparison43741994" />
+    <NodeElement Name="Comparison" NodeId="Comparison34055499" />
     <NodeElement Name="Conditional" NodeId="ConditionalAssignment35393524" />
-    <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment17277859" />
+    <NodeElement Name="Conditional" NodeId="ConditionalAssignment65927667" />
+    <NodeElement Name="Conditional" NodeId="ConditionalAssignment45490280" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment18896952" />
+    <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment17277859" />
     <NodeElement Name="Consumer" NodeId="Comparison53881646" />
     <NodeElement Name="Consumer Alerts" NodeId="ScriptNode51986291" />
     <NodeElement Name="Consumer Error" NodeId="ScriptNode37196205" />
@@ -62,15 +62,15 @@
     <NodeElement Name="Credit card exposure W" NodeId="Comparison24481429" />
     <NodeElement Name="Credit Card Status R" NodeId="Comparison11887525" />
     <NodeElement Name="Credit Card Status W" NodeId="Comparison60622023" />
-    <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison64156767" />
     <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison4221766" />
-    <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison46902148" />
+    <NodeElement Name="Credit Limit Utilisation R" NodeId="Comparison64156767" />
     <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison59045447" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65999348" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65313131" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB17590785" />
-    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB35228179" />
+    <NodeElement Name="CreditCardOverLimit R" NodeId="Comparison46902148" />
     <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB67077397" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB35228179" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB17590785" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65313131" />
+    <NodeElement Name="CurrentRowId = 0" NodeId="AssignmentB65999348" />
     <NodeElement Name="CustomerEliminated" NodeId="AssignmentB680073" />
     <NodeElement Name="CustomerNonEliminated" NodeId="AssignmentB16960185" />
     <NodeElement Name="CustomerScoringResult_Insert" NodeId="DataSourceNodeScalar51289140" />
@@ -84,11 +84,11 @@
     <NodeElement Name="eBay Warnings" NodeId="ConditionalAssignment3670804" />
     <NodeElement Name="eBayCounter" NodeId="Comparison28073419" />
     <NodeElement Name="Elimination Not Passed" NodeId="AssignmentB56596130" />
-    <NodeElement Name="Elimination Passed" NodeId="AssignmentB26825449" />
     <NodeElement Name="Elimination Passed" NodeId="AssignmentB25114417" />
+    <NodeElement Name="Elimination Passed" NodeId="AssignmentB26825449" />
     <NodeElement Name="Empty Sales Totals" NodeId="ConditionalAssignment14570343" />
-    <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison63218898" />
     <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison2387659" />
+    <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison63218898" />
     <NodeElement Name="Enquiries Number 3M R" NodeId="Comparison22919578" />
     <NodeElement Name="Enquiries Number 3M W" NodeId="Comparison21901376" />
     <NodeElement Name="Enquiries Number 6M R" NodeId="Comparison30215163" />
@@ -100,14 +100,14 @@
     <NodeElement Name="Experian Initial Score" NodeId="MultiAssignmentB31606341" />
     <NodeElement Name="ExperianBusiness" NodeId="CreditProduct1226350" />
     <NodeElement Name="ExperianPolicyRulesConsumer" NodeId="CreditProduct34857263" />
-    <NodeElement Name="ezbob_scoring_model" NodeId="NestedStrategy23238696" />
+    <NodeElement Name="ezbob_scoring_model" NodeId="NestedStrategy15351038" />
     <NodeElement Name="Get data" NodeId="GetRowDataNode13424586" />
-    <NodeElement Name="Get data from row" NodeId="GetRowDataNode53514187" />
-    <NodeElement Name="Get data from row" NodeId="GetRowDataNode26386209" />
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode60663320" />
+    <NodeElement Name="Get data from row" NodeId="GetRowDataNode26386209" />
+    <NodeElement Name="Get data from row" NodeId="GetRowDataNode53514187" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode37336053" />
-    <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar55330634" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
+    <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar55330634" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar16854755" />
     <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar2488896" />
     <NodeElement Name="Get_Other_Directors_Address" NodeId="DataSourceBehavioral20197855" />
@@ -123,102 +123,102 @@
     <NodeElement Name="is 2 Errors" NodeId="Comparison29253371" />
     <NodeElement Name="is AML Error" NodeId="Comparison61741779" />
     <NodeElement Name="Is Approved" NodeId="Comparison1806776" />
-    <NodeElement Name="is BWA Error" NodeId="Comparison51358920" />
-    <NodeElement Name="is BWA Error" NodeId="Comparison3821339" />
     <NodeElement Name="is BWA Error" NodeId="Comparison30760515" />
+    <NodeElement Name="is BWA Error" NodeId="Comparison3821339" />
+    <NodeElement Name="is BWA Error" NodeId="Comparison51358920" />
     <NodeElement Name="is Error" NodeId="Comparison29275518" />
     <NodeElement Name="Is rejected" NodeId="Comparison17338192" />
     <NodeElement Name="IsAMLStartedFromWeb" NodeId="Comparison45780660" />
     <NodeElement Name="IsCustomerMPUpdated" NodeId="Comparison66184812" />
-    <NodeElement Name="Limited Alerts" NodeId="ConditionalAssignment24989057" />
     <NodeElement Name="Limited Alerts" NodeId="ScriptNode16276544" />
+    <NodeElement Name="Limited Alerts" NodeId="ConditionalAssignment24989057" />
     <NodeElement Name="Limited business" NodeId="ScriptNode7845620" />
     <NodeElement Name="Limited Company" NodeId="Comparison22234547" />
     <NodeElement Name="Limited Low Risk" NodeId="Comparison31904988" />
-    <NodeElement Name="Limited Medium Risk" NodeId="Comparison29344809" />
     <NodeElement Name="Limited Medium Risk" NodeId="Comparison31845254" />
-    <NodeElement Name="Mail Node" NodeId="MailNode30425207" />
-    <NodeElement Name="Mail Node" NodeId="MailNode61074547" />
-    <NodeElement Name="Mail Node" NodeId="MailNode34221815" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38679314" />
-    <NodeElement Name="Mail Node" NodeId="MailNode3521800" />
+    <NodeElement Name="Limited Medium Risk" NodeId="Comparison29344809" />
     <NodeElement Name="Mail Node" NodeId="MailNode7642424" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct64925487" />
+    <NodeElement Name="Mail Node" NodeId="MailNode3521800" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38679314" />
+    <NodeElement Name="Mail Node" NodeId="MailNode34221815" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61074547" />
+    <NodeElement Name="Mail Node" NodeId="MailNode30425207" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct37031506" />
-    <NodeElement Name="Manual" NodeId="MailNode2693411" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct64925487" />
     <NodeElement Name="Manual" NodeId="MultiAssignmentB13176872" />
+    <NodeElement Name="Manual" NodeId="MailNode2693411" />
     <NodeElement Name="Minimum repayment R" NodeId="Comparison7078897" />
     <NodeElement Name="Minimum repayment W" NodeId="Comparison31262001" />
-    <NodeElement Name="MP Alerts" NodeId="ScriptNode31892610" />
-    <NodeElement Name="MP Alerts" NodeId="ScriptNode6647602" />
     <NodeElement Name="MP Alerts" NodeId="ScriptNode61442565" />
+    <NodeElement Name="MP Alerts" NodeId="ScriptNode6647602" />
+    <NodeElement Name="MP Alerts" NodeId="ScriptNode31892610" />
     <NodeElement Name="MP_Get_Orders" NodeId="DataSourceNodeScalar27141505" />
     <NodeElement Name="MP_GetAmountOfNotEliminatedMPs" NodeId="DataSourceNodeScalar47123429" />
     <NodeElement Name="MP_GetMPNumber" NodeId="DataSourceNodeScalar20480353" />
     <NodeElement Name="MP_GetScoreCardData" NodeId="DataSourceNodeScalar24312641" />
     <NodeElement Name="MP_IsCustomerMarketPlacesUpdated" NodeId="DataSourceNodeScalar36868397" />
-    <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar29579681" />
     <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar10118767" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar10213674" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar20128515" />
-    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar32004531" />
+    <NodeElement Name="MP_UpdateEliminationWarning" NodeId="DataSourceNodeScalar29579681" />
     <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar53497695" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60001781" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64681005" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38972142" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12433334" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28189346" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21355384" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12193174" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1786593" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64978768" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB46589783" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8634708" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50848458" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28168778" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57391878" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56076321" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB62674112" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB44610037" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1768962" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43281866" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57986812" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21510403" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8981466" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38038751" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB35693119" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28132937" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB13964701" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22931619" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB61643912" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB63457740" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31284468" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB36526857" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60693691" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB54363918" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60306634" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28570570" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB4207559" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB6289252" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB10714073" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43665743" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB23190036" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB26789609" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28803687" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21003110" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB49986958" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB24529445" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28788730" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22748702" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56906283" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar32004531" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar20128515" />
+    <NodeElement Name="MP_UpdateMPEliminationStatus" NodeId="DataSourceNodeScalar10213674" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31186707" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56906283" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22748702" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28788730" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB24529445" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB49986958" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21003110" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28803687" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB26789609" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB23190036" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43665743" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB10714073" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB6289252" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB4207559" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28570570" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60306634" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB54363918" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60693691" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB36526857" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB31284468" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB63457740" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB61643912" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB22931619" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB13964701" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28132937" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB35693119" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38038751" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8981466" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21510403" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57986812" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB43281866" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1768962" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB44610037" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB62674112" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB56076321" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57391878" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28168778" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50848458" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB8634708" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB46589783" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64978768" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB1786593" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12193174" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB21355384" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB28189346" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB12433334" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB38972142" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB64681005" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB60001781" />
     <NodeElement Name="No DOB" NodeId="Comparison53767959" />
     <NodeElement Name="No Error" NodeId="Comparison27559193" />
     <NodeElement Name="Non limited Alerts" NodeId="ScriptNode65232460" />
     <NodeElement Name="Non limited Business" NodeId="ScriptNode66781859" />
     <NodeElement Name="Non-limited " NodeId="Comparison41806244" />
-    <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison26779025" />
     <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison48521438" />
+    <NodeElement Name="NonLimitedRefNum is NULL" NodeId="Comparison26779025" />
     <NodeElement Name="Not Passed" NodeId="AssignmentB28507060" />
     <NodeElement Name="Not Performed" NodeId="ConditionalAssignment5791838" />
     <NodeElement Name="Number Of Credit Cards R" NodeId="Comparison26293412" />
@@ -229,65 +229,65 @@
     <NodeElement Name="OverIndebtedness" NodeId="MultiAssignmentB42605986" />
     <NodeElement Name="Over-indebtedness Alert" NodeId="ScriptNode64395379" />
     <NodeElement Name="Over-Indebtedness R" NodeId="ConditionalAssignment65096334" />
-    <NodeElement Name="Passed" NodeId="ConditionalAssignment15176678" />
-    <NodeElement Name="Passed" NodeId="AssignmentB31639646" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB66564778" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB62092003" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB24169717" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB28561426" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB37857788" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB45635198" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB66395971" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB7030785" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB16803633" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB49662088" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB9805685" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB14965585" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB44050452" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB22777043" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB64273592" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB38632660" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB25782746" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB9100489" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB33179059" />
-    <NodeElement Name="Passed" NodeId="MultiAssignmentB61893686" />
     <NodeElement Name="Passed" NodeId="ConditionalAssignment20840602" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB61893686" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB33179059" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB9100489" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB25782746" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB38632660" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB64273592" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB22777043" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB44050452" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB14965585" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB9805685" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB49662088" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB16803633" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB7030785" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB66395971" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB45635198" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB37857788" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB28561426" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB24169717" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB62092003" />
+    <NodeElement Name="Passed" NodeId="MultiAssignmentB66564778" />
+    <NodeElement Name="Passed" NodeId="AssignmentB31639646" />
+    <NodeElement Name="Passed" NodeId="ConditionalAssignment15176678" />
     <NodeElement Name="Personal Loan Status R " NodeId="Comparison15830649" />
     <NodeElement Name="Personal Loan Status W" NodeId="Comparison37287068" />
     <NodeElement Name="Personal loans R" NodeId="Comparison20035339" />
     <NodeElement Name="Personal loans W" NodeId="Comparison41778047" />
     <NodeElement Name="Prev adress" NodeId="Comparison47459948" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode11519133" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode2225260" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode53255599" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode17826361" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode40306186" />
-    <NodeElement Name="Re-approval" NodeId="Comparison7876644" />
-    <NodeElement Name="Re-approval" NodeId="Comparison13079191" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode17826361" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode53255599" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode2225260" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode11519133" />
     <NodeElement Name="Re-approval" NodeId="Comparison22785027" />
+    <NodeElement Name="Re-approval" NodeId="Comparison13079191" />
+    <NodeElement Name="Re-approval" NodeId="Comparison7876644" />
     <NodeElement Name="ReApproved" NodeId="MailNode5325067" />
     <NodeElement Name="Referred" NodeId="Comparison39862831" />
-    <NodeElement Name="Reject" NodeId="MailNode62386338" />
-    <NodeElement Name="Reject" NodeId="MailNode24415962" />
-    <NodeElement Name="Reject" NodeId="MultiAssignmentB54404718" />
     <NodeElement Name="Reject" NodeId="MultiAssignmentB8084077" />
-    <NodeElement Name="Rejected" NodeId="Comparison3438497" />
-    <NodeElement Name="Rejected" NodeId="AssignmentB17124613" />
-    <NodeElement Name="Rejected" NodeId="Comparison37862992" />
+    <NodeElement Name="Reject" NodeId="MultiAssignmentB54404718" />
+    <NodeElement Name="Reject" NodeId="MailNode24415962" />
+    <NodeElement Name="Reject" NodeId="MailNode62386338" />
     <NodeElement Name="Rejected" NodeId="ConditionalAssignment3951668" />
+    <NodeElement Name="Rejected" NodeId="Comparison37862992" />
+    <NodeElement Name="Rejected" NodeId="AssignmentB17124613" />
+    <NodeElement Name="Rejected" NodeId="Comparison3438497" />
     <NodeElement Name="rejection exception" NodeId="Comparison66725580" />
     <NodeElement Name="Scotland and N Ireland" NodeId="ConditionalAssignment13082596" />
     <NodeElement Name="Start Node" NodeId="StartNode20530434" />
     <NodeElement Name="Stop Node" NodeId="StopNode50556185" />
-    <NodeElement Name="StopNode" NodeId="StopNode53017596" />
-    <NodeElement Name="StopNode" NodeId="StopNode40458108" />
     <NodeElement Name="StopNode" NodeId="StopNode5692201" />
-    <NodeElement Name="Subject" NodeId="MultiAssignmentB49341743" />
-    <NodeElement Name="Subject" NodeId="MultiAssignmentB33104529" />
+    <NodeElement Name="StopNode" NodeId="StopNode40458108" />
+    <NodeElement Name="StopNode" NodeId="StopNode53017596" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB15301361" />
-    <NodeElement Name="Suspend" NodeId="SuspendNode32700027" />
-    <NodeElement Name="Suspend" NodeId="SuspendNode443785" />
+    <NodeElement Name="Subject" NodeId="MultiAssignmentB33104529" />
+    <NodeElement Name="Subject" NodeId="MultiAssignmentB49341743" />
     <NodeElement Name="Suspend" NodeId="SuspendNode38974653" />
+    <NodeElement Name="Suspend" NodeId="SuspendNode443785" />
+    <NodeElement Name="Suspend" NodeId="SuspendNode32700027" />
     <NodeElement Name="Thin File R" NodeId="Comparison53318662" />
     <NodeElement Name="Time To Suspend " NodeId="CreditProduct18329995" />
     <NodeElement Name="TotalSumOfStores" NodeId="MultiAssignmentB17780513" />
@@ -298,15 +298,15 @@
     <NodeElement Name="Update_Main_Strat_Finish_Date" NodeId="DataSourceNodeScalar56085180" />
     <NodeElement Name="UpdateCashRequests" NodeId="DataSourceNodeScalar60720175" />
     <NodeElement Name="UpdateCashRequestsReApproval" NodeId="DataSourceNodeScalar4655559" />
-    <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64432673" />
     <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64293435" />
+    <NodeElement Name="UpdateExperianBusiness" NodeId="DataSourceNodeScalar64432673" />
     <NodeElement Name="UpdateExperianBWA_AML" NodeId="DataSourceNodeScalar35577239" />
-    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar5204239" />
-    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar57450688" />
     <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar28993732" />
+    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar57450688" />
+    <NodeElement Name="UpdateExperianConsumer" NodeId="DataSourceNodeScalar5204239" />
     <NodeElement Name="UpdateScoringResult" NodeId="DataSourceNodeScalar16522434" />
-    <NodeElement Name="Warning" NodeId="AssignmentB56236929" />
     <NodeElement Name="Warning" NodeId="ConditionalAssignment14932284" />
+    <NodeElement Name="Warning" NodeId="AssignmentB56236929" />
     <NodeElement Name="Withdrawals M R" NodeId="Comparison18563872" />
     <NodeElement Name="Withdrawals M W" NodeId="Comparison36701957" />
   </Workspace>
@@ -7941,23 +7941,6 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>ezbob_scoring_model</DisplayName>
-      <InitialValue>ezbob_scoring_modelQlXZU6jeMFf+Yx0ZLDj5bQ==</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>NestedStrategy23238696</Name>
-      <PointF>
-        <X>6102.726</X>
-        <Y>1576</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeWorkflow</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
       <DefaultPinName />
       <Description />
       <DisplayName>TotalSumOfStores</DisplayName>
@@ -10168,6 +10151,8 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       &lt;ConstraintString /&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString /&gt;
       &lt;Direction&gt;Input&lt;/Direction&gt;
       &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
@@ -10219,6 +10204,23 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>ezbob_scoring_model</DisplayName>
+      <InitialValue>ezbob_scoring_modelRio/gZLENIWcxTLXqGxPYQ==</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>NestedStrategy15351038</Name>
+      <PointF>
+        <X>6102.726</X>
+        <Y>1576</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeWorkflow</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -27189,294 +27191,6 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>ScoreResult</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>ScorePoints</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>LoanOffer</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>Medal</Name>
-      <TypeName>WorkflowObjects.VariableConstrained</TypeName>
-      <InitialValue>Silver;System.String;Medal</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>AnnualTurnover</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>ExperianScore</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>MarketplaceSeniority</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>PositiveFeedbackCount</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>MaritalStatus</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>Married</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>Gender</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>NumberOfStores</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EZBOBSeniority</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EZBOBNumberOfLoans</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EZBOBPrevLatePayments</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EZBOBPrevEarlyPayments</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>userId</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>Subject</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EMailTo</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EMailCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>EZBOBFirstRepaymentDate</Name>
-      <TypeName>System.DateTime</TypeName>
-      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>AC_Parameters</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>AC_Descriptors</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>Result_Weights</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <Name>Result_MAXPossiblePoints</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
       <OwnerName>CreditProduct64925487</OwnerName>
       <Name>CP_AddressTo</Name>
       <TypeName>System.String</TypeName>
@@ -29907,6 +29621,294 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableDescriptor>
       <OwnerName>DataSourceNodeScalar48989741</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>ScoreResult</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>ScorePoints</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>LoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>Medal</Name>
+      <TypeName>WorkflowObjects.VariableConstrained</TypeName>
+      <InitialValue>Silver;System.String;Medal</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>AnnualTurnover</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>ExperianScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>MarketplaceSeniority</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>PositiveFeedbackCount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>MaritalStatus</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>Married</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>Gender</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>NumberOfStores</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EZBOBSeniority</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EZBOBNumberOfLoans</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EZBOBPrevLatePayments</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EZBOBPrevEarlyPayments</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>userId</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EMailTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EMailCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>EZBOBFirstRepaymentDate</Name>
+      <TypeName>System.DateTime</TypeName>
+      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>AC_Parameters</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>AC_Descriptors</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>Result_Weights</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
+      <Name>Result_MAXPossiblePoints</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -33032,9 +33034,9 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>NestedStrategy23238696</SourceNodeName>
+      <SourceNodeName>AssignmentB33910007</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment18896952</TargetNodeName>
+      <TargetNodeName>NestedStrategy15351038</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -34369,9 +34371,9 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>AssignmentB33910007</SourceNodeName>
+      <SourceNodeName>NestedStrategy15351038</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>NestedStrategy23238696</TargetNodeName>
+      <TargetNodeName>ConditionalAssignment18896952</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -37644,61 +37646,61 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>userId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EMailTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EMailCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_Gender</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>Gender</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>ExperianScore</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ModelScoreResult</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>ScoreResult</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ModelScorePoints</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>ScorePoints</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ModelLoanOffer</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>LoanOffer</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ModelMedal</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>Medal</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -38460,43 +38462,43 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_EarlyPayments</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EZBOBPrevEarlyPayments</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_LatePayments</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EZBOBPrevLatePayments</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_EZBOBSeniority</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EZBOBSeniority</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_OnTimeLoans</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EZBOBNumberOfLoans</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_MPsNumber</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>NumberOfStores</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_MaxFeedback</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>PositiveFeedbackCount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_FirstRepaymentDate</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>EZBOBFirstRepaymentDate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -38508,31 +38510,31 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_MartialStatus</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>MaritalStatus</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_AC_Parameters</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>AC_Parameters</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_AC_Descriptors</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>AC_Descriptors</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_Result_Weights</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>Result_Weights</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Model_Result_MAXPossiblePoints</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>Result_MAXPossiblePoints</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -39516,7 +39518,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>AnnualTurnover</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -40308,7 +40310,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy23238696</TargetVariableOwnerName>
+      <TargetVariableOwnerName>NestedStrategy15351038</TargetVariableOwnerName>
       <TargetVariableName>MarketplaceSeniority</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -41846,6 +41848,30 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SourceVariableName>ExperianConsumerError</SourceVariableName>
       <TargetVariableOwnerName>Comparison27559193</TargetVariableOwnerName>
       <TargetVariableName>Comparison27559193ExperianConsumerError</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar48989741</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>userId</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar48989741</TargetVariableOwnerName>
+      <TargetVariableName>CustomerId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar48989741</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBWAResult</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar48989741</TargetVariableOwnerName>
+      <TargetVariableName>BWAResult</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -43898,14 +43924,6 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>NestedStrategy23238696</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
       <OwnerName>MultiAssignmentB17780513</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -44291,6 +44309,14 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>ScriptNode15548922</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>NestedStrategy15351038</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

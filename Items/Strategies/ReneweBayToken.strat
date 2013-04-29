@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>ReneweBayToken</Name>
-  <Description />
+  <Description>Email to customer – Request from the customer to renew the token given to us. Trigger - Underwriter-&gt;Marketplacestoken' button on the most right column-&gt;'Renew </Description>
   <Workspace Name="ReneweBayToken">
-    <NodeElement Name="Mail Node" NodeId="MailNode39087901" />
     <NodeElement Name="Mail Node" NodeId="MailNode43682438" />
+    <NodeElement Name="Mail Node" NodeId="MailNode39087901" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct5246632" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment45631679" />
     <NodeElement Name="Start Node" NodeId="StartNode34649765" />

@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>CAIS_NO_Upload</Name>
-  <Description />
+  <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="BusinessCounter &gt; 0" NodeId="Comparison41337601" />
-    <NodeElement Name="ConsumerCounter &gt;0" NodeId="Comparison58319463" />
+    <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
     <NodeElement Name="Consumer" NodeId="Comparison29504734" />
     <NodeElement Name="Consumer Counter" NodeId="ConditionalAssignment44657822" />
+    <NodeElement Name="ConsumerCounter &gt;0" NodeId="Comparison58319463" />
     <NodeElement Name="Customer" NodeId="ScriptNode34708966" />
     <NodeElement Name="Delinquency" NodeId="ConditionalAssignment56530712" />
     <NodeElement Name="File Path, Name and Type" NodeId="MultiAssignmentB23018869" />
@@ -21,8 +21,8 @@
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode4733890" />
     <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral61244824" />
     <NodeElement Name="Get_CAIS_Folders_Paths" NodeId="DataSourceNodeScalar37560342" />
-    <NodeElement Name="InsertCaisReportsHistory" NodeId="DataSourceNodeScalar21305375" />
     <NodeElement Name="InsertCaisReportsHistory" NodeId="DataSourceNodeScalar17957270" />
+    <NodeElement Name="InsertCaisReportsHistory" NodeId="DataSourceNodeScalar21305375" />
     <NodeElement Name="Mail Node" NodeId="MailNode14931696" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct27789888" />
     <NodeElement Name="Male/Temale to Mr/Ms" NodeId="ConditionalAssignment29424649" />

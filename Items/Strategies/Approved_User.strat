@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Approved_User</Name>
-  <Description />
+  <Description>Email to customer – loan approved notification. Trigger - Underwriter approve button</Description>
   <Workspace Name="Approved_User">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment14651901" />
-    <NodeElement Name="StandardLoanType" NodeId="Comparison39197281" />
     <NodeElement Name="Mail Node" NodeId="MailNode1115135" />
     <NodeElement Name="Mail Node" NodeId="MailNode26504490" />
     <NodeElement Name="Mail Node" NodeId="MailNode26817774" />
@@ -12,6 +11,7 @@
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct26390432" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct18286613" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment24457787" />
+    <NodeElement Name="StandardLoanType" NodeId="Comparison39197281" />
     <NodeElement Name="StandardLoanType" NodeId="Comparison18074072" />
     <NodeElement Name="Start Node" NodeId="StartNode3532547" />
     <NodeElement Name="Stop Node" NodeId="StopNode31792927" />

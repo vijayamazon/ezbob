@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>Get_PayPoint</Name>
-  <Description>Get money from customers</Description>
+  <Description>Get monet from customers. Executing all of PayPoint transactions (getting clients' money) Trigger - Scheduled twice a day at 08:00 and 20:00 UTC</Description>
   <Workspace Name="Get_PayPoint">
     <NodeElement Name="Address+Delinq" NodeId="MultiAssignmentB52349424" />
     <NodeElement Name="Amount reduction deactivated" NodeId="Comparison59043505" />
@@ -17,58 +17,58 @@
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment29402138" />
     <NodeElement Name="Error subject" NodeId="MultiAssignmentB62967777" />
     <NodeElement Name="Get data " NodeId="GetRowDataNode63474072" />
-    <NodeElement Name="Get Payment Amount" NodeId="ScriptNode8190892" />
     <NodeElement Name="Get Payment Amount" NodeId="ScriptNode37612860" />
+    <NodeElement Name="Get Payment Amount" NodeId="ScriptNode8190892" />
     <NodeElement Name="Get PayPoint Payment" NodeId="ScriptNode57352691" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar4581796" />
     <NodeElement Name="Get_Schedule_Interest" NodeId="DataSourceNodeScalar64550954" />
     <NodeElement Name="GetCustomersForPayPoint" NodeId="DataSourceBehavioral42889836" />
     <NodeElement Name="GetPersonalDataForCollection" NodeId="DataSourceNodeScalar40621687" />
     <NodeElement Name="Initial AmountDue" NodeId="AssignmentB51503150" />
-    <NodeElement Name="Is first late period" NodeId="Comparison35968927" />
-    <NodeElement Name="Is first late period" NodeId="Comparison7576359" />
-    <NodeElement Name="Is first late period" NodeId="Comparison61113790" />
     <NodeElement Name="Is first late period" NodeId="Comparison13557507" />
+    <NodeElement Name="Is first late period" NodeId="Comparison61113790" />
+    <NodeElement Name="Is first late period" NodeId="Comparison7576359" />
+    <NodeElement Name="Is first late period" NodeId="Comparison35968927" />
     <NodeElement Name="Is first late period &amp; Full Papayment" NodeId="Comparison38320646" />
-    <NodeElement Name="Is Late?" NodeId="Comparison58473705" />
     <NodeElement Name="Is Late?" NodeId="Comparison62080932" />
+    <NodeElement Name="Is Late?" NodeId="Comparison58473705" />
     <NodeElement Name="Is second late period &amp; Full Papayment" NodeId="Comparison65026297" />
     <NodeElement Name="Is Second late period &amp; NO Partial Papayment" NodeId="Comparison24851438" />
     <NodeElement Name="Is Second late period &amp; Partial Papayment" NodeId="Comparison3518485" />
-    <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison8873464" />
     <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison61362333" />
-    <NodeElement Name="Mail Node" NodeId="MailNode51960593" />
-    <NodeElement Name="Mail Node" NodeId="MailNode29562961" />
-    <NodeElement Name="Mail Node" NodeId="MailNode61667623" />
-    <NodeElement Name="Mail Node" NodeId="MailNode11090052" />
-    <NodeElement Name="Mail Node" NodeId="MailNode11790008" />
-    <NodeElement Name="Mail Node" NodeId="MailNode41019402" />
-    <NodeElement Name="Mail Node" NodeId="MailNode43406392" />
-    <NodeElement Name="Mail Node" NodeId="MailNode49608012" />
-    <NodeElement Name="Mail Node" NodeId="MailNode27594809" />
-    <NodeElement Name="Mail Node" NodeId="MailNode43928661" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14793173" />
+    <NodeElement Name="is StopSendingEmails diactivated" NodeId="Comparison8873464" />
     <NodeElement Name="Mail Node" NodeId="MailNode48150975" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14793173" />
+    <NodeElement Name="Mail Node" NodeId="MailNode43928661" />
+    <NodeElement Name="Mail Node" NodeId="MailNode27594809" />
+    <NodeElement Name="Mail Node" NodeId="MailNode49608012" />
+    <NodeElement Name="Mail Node" NodeId="MailNode43406392" />
+    <NodeElement Name="Mail Node" NodeId="MailNode41019402" />
+    <NodeElement Name="Mail Node" NodeId="MailNode11790008" />
+    <NodeElement Name="Mail Node" NodeId="MailNode11090052" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61667623" />
+    <NodeElement Name="Mail Node" NodeId="MailNode29562961" />
+    <NodeElement Name="Mail Node" NodeId="MailNode51960593" />
     <NodeElement Name="mail settings" NodeId="MultiAssignmentB19971501" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct26734618" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct66471668" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct19519970" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct4100215" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct434129" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct17083557" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct18312477" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct48024466" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB51416507" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50518786" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB7353023" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB2817790" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB29476029" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct18312477" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct17083557" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct434129" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct4100215" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct19519970" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct66471668" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct26734618" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB55416040" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB29476029" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB2817790" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB7353023" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB50518786" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB51416507" />
     <NodeElement Name="not enough money" NodeId="Comparison30445668" />
     <NodeElement Name="Part Payment" NodeId="ConditionalAssignment17305987" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode60057706" />
-    <NodeElement Name="Reject Email" NodeId="MailNode59479928" />
     <NodeElement Name="Reject Email" NodeId="MailNode13737660" />
+    <NodeElement Name="Reject Email" NodeId="MailNode59479928" />
     <NodeElement Name="Start Node" NodeId="StartNode29083691" />
     <NodeElement Name="Stop Node" NodeId="StopNode60426628" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode10295489" />
@@ -2379,6 +2379,8 @@ Communication problem. Trying again later may well work
       &lt;ConstraintString /&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString /&gt;
       &lt;Direction&gt;Input&lt;/Direction&gt;
       &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;

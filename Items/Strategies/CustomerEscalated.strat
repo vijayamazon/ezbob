@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>CustomerEscalated</Name>
-  <Description />
+  <Description>Email to us. Trigger - Escalate button in the underwriter</Description>
   <Workspace Name="CustomerEscalated">
     <NodeElement Name="Mail Node" NodeId="MailNode993757" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct55773684" />

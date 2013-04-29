@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>PayPointNameValidationFailed</Name>
-  <Description />
+  <Description>Email to us – personal info is different in ezbob\paypal. Trigger - Customer fills debit card in dashboard with information different than what we had before</Description>
   <Workspace Name="PayPointNameValidationFailed">
     <NodeElement Name="Mail Node" NodeId="MailNode22236344" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct51042991" />

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>Update_Transaction_Status</Name>
-  <Description>update transations status to paid</Description>
+  <Description>updates PacNet transations status to paid. Trigger - Scheduled every 5 minutes </Description>
   <Workspace Name="Update_Transaction_Status">
     <NodeElement Name="Counter=0" NodeId="AssignmentB20069106" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode63474072" />

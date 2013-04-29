@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>ezbob_scoring_model</Name>
-  <Description />
+  <Description>Calculating all scoring values. Trigger - Triggered in main strategy (Which may be triggered via underwriter in several methods)</Description>
   <Workspace Name="ezbob_scoring_model">
     <NodeElement Name="Annual Turnover" NodeId="DiscreteValue3494550" />
     <NodeElement Name="Annual turnover new weight" NodeId="Assignment18293840" />
@@ -16,11 +16,11 @@
     <NodeElement Name="ezbob model" NodeId="ModelExecution31153498" />
     <NodeElement Name="EZBOB Seniority" NodeId="ConditionalAssignment60588421" />
     <NodeElement Name="Gender" NodeId="ConditionalAssignment2639534" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="ConditionalAssignment6635397" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
     <NodeElement Name="has first repayment date been reached?" NodeId="Comparison51227795" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="ConditionalAssignment6635397" />
     <NodeElement Name="init new weights" NodeId="MultiAssignmentB59164922" />
     <NodeElement Name="Marital Status" NodeId="ConditionalAssignment38927140" />
     <NodeElement Name="Marketplace Seniority" NodeId="ConditionalAssignment20687433" />
@@ -34,11 +34,11 @@
     <NodeElement Name="Prev Late Payments" NodeId="DiscreteValue43878027" />
     <NodeElement Name="Recalculate weights" NodeId="MultiAssignment19990073" />
     <NodeElement Name="Script" NodeId="ScriptNode5045995" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB32468313" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
-    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
     <NodeElement Name="set new weight" NodeId="Assignment3345069" />
+    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB32468313" />
     <NodeElement Name="Start Node" NodeId="StartNode2792905" />
     <NodeElement Name="Stop Node" NodeId="StopNode25136147" />
     <NodeElement Name="update initial weights" NodeId="MultiAssignmentB18688628" />

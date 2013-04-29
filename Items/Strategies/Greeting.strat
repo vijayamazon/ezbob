@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Greeting</Name>
-  <Description />
+  <Description>Email - Greeting. Trigger - After first wizard step</Description>
   <Workspace Name="Greeting">
     <NodeElement Name="Assignment" NodeId="Assignment18100201" />
     <NodeElement Name="Counter+1" NodeId="Assignment28327138" />
     <NodeElement Name="Counter&lt;5" NodeId="Comparison46362927" />
     <NodeElement Name="GetAppError" NodeId="DataSourceNodeScalar46896187" />
     <NodeElement Name="GreetingEmail" NodeId="DataSourceNodeScalar5645742" />
-    <NodeElement Name="Mail Node" NodeId="MailNode19005214" />
-    <NodeElement Name="Mail Node" NodeId="MailNode27228238" />
     <NodeElement Name="Mail Node" NodeId="MailNode62084314" />
+    <NodeElement Name="Mail Node" NodeId="MailNode27228238" />
+    <NodeElement Name="Mail Node" NodeId="MailNode19005214" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct48906009" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment63122796" />
     <NodeElement Name="Start Node" NodeId="StartNode58187988" />

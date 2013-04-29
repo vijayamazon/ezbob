@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Rejected_User</Name>
-  <Description />
+  <Description>Email to customer – loan rejected notification. Trigger - Underwriter reject button</Description>
   <Workspace Name="Rejected_User">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment58771704" />
-    <NodeElement Name="Mail Node" NodeId="MailNode30222992" />
     <NodeElement Name="Mail Node" NodeId="MailNode65655818" />
+    <NodeElement Name="Mail Node" NodeId="MailNode30222992" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct55773684" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment24457787" />
     <NodeElement Name="Start Node" NodeId="StartNode3532547" />

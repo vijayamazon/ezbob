@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>Set_Late_Loan_Status</Name>
-  <Description />
+  <Description>Checks if there are delinquent customers. Tags the customer in database as 'late' (LoanSchedule.Status, Customer.CreditResult). Trigger - Once a day at night</Description>
   <Workspace Name="Set_Late_Loan_Status">
-    <NodeElement Name="Assignment" NodeId="AssignmentB31129877" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
-    <NodeElement Name="Comparison" NodeId="Comparison66996147" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB31129877" />
     <NodeElement Name="Comparison" NodeId="Comparison24633528" />
+    <NodeElement Name="Comparison" NodeId="Comparison66996147" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar41934404" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
     <NodeElement Name="GetAllLateLoanSchedules" NodeId="DataSourceBehavioral44149718" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral59883787" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral22711690" />
@@ -25,15 +25,15 @@
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Lete" NodeId="AssignmentB33513147" />
     <NodeElement Name="LoanStatus = Late" NodeId="AssignmentB31830735" />
-    <NodeElement Name="Mail Node" NodeId="MailNode6121736" />
-    <NodeElement Name="Mail Node" NodeId="MailNode40639663" />
     <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40639663" />
+    <NodeElement Name="Mail Node" NodeId="MailNode6121736" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
     <NodeElement Name="Script" NodeId="ScriptNode46765253" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />

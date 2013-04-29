@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>More_AML_Information</Name>
-  <Description />
+  <Description>Trigger - Underwriter messages tab – 'AML and BWA' button clicked</Description>
   <Workspace Name="More_AML_Information">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment30301652" />
-    <NodeElement Name="Mail Node" NodeId="MailNode61967756" />
     <NodeElement Name="Mail Node" NodeId="MailNode36147551" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61967756" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct51042991" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment28420017" />
     <NodeElement Name="Start Node" NodeId="StartNode13239568" />

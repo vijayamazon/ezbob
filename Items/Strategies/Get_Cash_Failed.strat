@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Get_Cash_Failed</Name>
-  <Description />
+  <Description>Email to customer – failed to create a debit card. Trigger - After 4 attempts, the client is filling his debit card with wrong details (adding debit card via dashboard)</Description>
   <Workspace Name="Get_Cash_Failed">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment27662549" />
-    <NodeElement Name="Mail Node" NodeId="MailNode42652778" />
     <NodeElement Name="Mail Node" NodeId="MailNode50824398" />
+    <NodeElement Name="Mail Node" NodeId="MailNode42652778" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct16128356" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment5236587" />
     <NodeElement Name="Start Node" NodeId="StartNode9644177" />

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>ConfirmationEmailStrategy</Name>
-  <Description />
+  <Description>Email to customer to verify his mail. Trigger - Email to customer to verify his mail</Description>
   <Workspace Name="ConfirmationEmailStrategy">
-    <NodeElement Name="Email" NodeId="MailNode10635509" />
     <NodeElement Name="Email" NodeId="MailNode54087697" />
+    <NodeElement Name="Email" NodeId="MailNode10635509" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct64292394" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment28055495" />
     <NodeElement Name="Старт" NodeId="StartNode45854749" />
