@@ -30,9 +30,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 			return new VolusionAccountModel {
 				id = account.Id,
-				login = account.DisplayName,
+				login = oSecInfo.Login,
 				password = oSecInfo.Password,
-				displayName = account.DisplayName,
+				displayName = oSecInfo.DisplayName,
 				url = ""
 			};
 		} // ToModel
@@ -42,9 +42,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 			return new VolusionAccountModel {
 				id = account.Id,
-				login = account.DisplayName,
+				login = oSecInfo.Login,
 				password = oSecInfo.Password,
-				displayName = account.DisplayName,
+				displayName = oSecInfo.DisplayName,
 				url = ""
 			};
 		} // ToModel

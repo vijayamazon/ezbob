@@ -25,28 +25,35 @@ namespace Integration.Volusion {
 		public VolusionOrdersAgregator(
 			ReceivedDataListTimeDependentInfo<VolusionOrderItem> orders, ICurrencyConvertor currencyConvertor
 		): base(orders, currencyConvertor)
-		{}
-
-		private int GetOrdersCount(IEnumerable<VolusionOrderItem> orders) {
-			return orders.Count();
-		} // GetOrdersCount
+		{} // constructor
 
 		private int GetShipedOrdersCount(IEnumerable<VolusionOrderItem> orders) {
-			//TODO check status field
-			return orders.Count();//o => o.OrderStatus == VolusionOrdersList2ItemStatusType.Shipped);
+			// TODO: update this once Channel Grabber implement order status.
+			// Currently returns all the orders.
+			return orders.Count();
 		} // GetShippedOrdersCount
 
 		private double GetAverageSumOfOrder(IEnumerable<VolusionOrderItem> orders) {
-			var sum = GetTotalSumOfOrders(orders);
-			var count = GetShipedOrdersCount(orders);
+			double sum   = GetTotalSumOfOrders(orders);
+			int    count = GetShipedOrdersCount(orders);
 
 			return count == 0 ? 0 : sum / count;
 		} // GetAverageSumOfOrders
-	   
+
 		private double GetTotalSumOfOrders(IEnumerable<VolusionOrderItem> orders) {
-			// TODO: check status field
-			// return orders.Where(o => o.OrderStatus == VolusionOrdersList2ItemStatusType.Shipped).Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
-			return orders.Sum(o => (double)o.TotalCost);
+			// TODO: update this once Channel Grabber implement order status.
+			// Currently returns all the orders.
+
+			return orders
+				.Where(o => o.TotalCost.HasValue)
+				.Sum(
+					o =>
+					CurrencyConverter.ConvertToBaseCurrency(
+						o.CurrencyCode,
+						(double)o.TotalCost,
+						o.PurchaseDate
+					).Value
+				);
 		} // GetTotalSumOfOrders
 
 		protected override object InternalCalculateAggregatorValue(

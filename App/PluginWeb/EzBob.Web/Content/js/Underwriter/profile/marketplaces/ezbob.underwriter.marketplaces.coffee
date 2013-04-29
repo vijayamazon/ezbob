@@ -46,8 +46,6 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return unless id
         shop = @model.at(id)
 
-        return if shop.get('Name') is 'Volusion'
-
         @detailView = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: @model, currentId: id, customerId: @model.customerId
         @detailView.on "reCheck", @reCheckmarketplaces, @
         @detailView.on("recheck-token", @renewToken)

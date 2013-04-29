@@ -46,67 +46,49 @@ namespace Integration.Volusion {
 			ActionAccessType actionAccessType,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			List<ChannelGrabberOrder> orders = VolusionConnector.GetOrders(
+			List<ChannelGrabberOrder> oRawOrders = VolusionConnector.GetOrders(
 				ms_oLog,
 				databaseCustomerMarketPlace.Customer,
 				securityInfo.Url,
 				securityInfo.Login
 			);
 
-			throw new NotImplementedException();
+			var oVolusionOrders = new List<VolusionOrderItem>();
 
-			/*
-			//retreive data from Volusion api
-			var ordersList = VolusionConnector.GetOrders(securityInfo.Name, securityInfo.Password);
-
-			var Iwant = new List<VolusionOrderItem>();
-			foreach (Volusion.API.Order order in ordersList) {
-				Iwant.Add(new VolusionOrderItem {
-					VolusionOrderId = order.OrderID,
-					OrderNumber = order.OrderNumber,
-					CustomerID = order.CustomerID,
-					CompanyName = order.CompanyName,
-					FirstName = order.FirstName,
-					LastName = order.LastName,
-					EmailAddress = order.EmailAddress,
-					TotalCost = order.TotalCost,
-					OrderDate = DateTime.Parse(order.OrderDate),
-					OrderStatus = order.OrderStatus,
-					OrderDateIso = DateTime.Parse(order.OrderDateISO),
-					OrderStatusColour = order.OrderStatusColour,
+			foreach (var oRaw in oRawOrders) {
+				oVolusionOrders.Add(new VolusionOrderItem {
+					CurrencyCode  = oRaw.CurrencyCode,
+					OrderStatus   = oRaw.OrderStatus,
+					NativeOrderId = oRaw.NativeOrderId,
+					PaymentDate   = oRaw.PaymentDate,
+					PurchaseDate  = oRaw.PurchaseDate,
+					TotalCost     = oRaw.TotalCost
 				});
 			} // foreach
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
-			VolusionOrdersList allOrders = new VolusionOrdersList(DateTime.UtcNow, Iwant);
+			var allOrders = new VolusionOrdersList(DateTime.UtcNow, oVolusionOrders);
+
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreVolusionOrdersData(
-					databaseCustomerMarketPlace,
-					allOrders,
-					historyRecord
-				)
+				() => Helper.StoreVolusionOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord)
 			);
 
 			// store agregated
-			var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
-				elapsedTimeInfo,
-				ElapsedDataMemberType.AggregateData,
-				() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
-			);
+			IEnumerable<IWriteDataInfo<VolusionDatabaseFunctionType>> aggregatedData =
+				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+					elapsedTimeInfo,
+					ElapsedDataMemberType.AggregateData,
+					() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
+				);
 
 			// Save
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreAggregatedData,
-				() => Helper.StoreToDatabaseAggregatedData(
-					databaseCustomerMarketPlace,
-					aggregatedData,
-					historyRecord
-				)
+				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);
-			*/
 		} // UpdateClientOrdersInfo
 
 		protected override void AddAnalysisValues(
@@ -127,14 +109,15 @@ namespace Integration.Volusion {
 			ICurrencyConvertor currencyConverter
 		) {
 			var aggregateFunctionArray = new[] {
-				VolusionDatabaseFunctionType.AverageSumOfOrder, 
-				VolusionDatabaseFunctionType.NumOfOrders,
-				VolusionDatabaseFunctionType.TotalSumOfOrders, 
+				VolusionDatabaseFunctionType.AverageSumOfOrder,
+				VolusionDatabaseFunctionType.NumOfOrders, 
+				VolusionDatabaseFunctionType.TotalSumOfOrders
 			};
 
 			var updated = orders.SubmittedDate;
 
 			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
+
 			TimePeriodChainWithData<VolusionOrderItem> timeChain =
 				TimePeriodChainContructor.CreateDataChain(
 					new TimePeriodNodeWithDataFactory<VolusionOrderItem>(),
@@ -145,10 +128,7 @@ namespace Integration.Volusion {
 			if (timeChain.HasNoData)
 				return null;
 
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(
-				timeChain,
-				updated
-			);
+			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
 
 			var factory = new VolusionOrdersAggregatorFactory();
 

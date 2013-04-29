@@ -1,0 +1,215 @@
+(function() {
+  var root, _ref, _ref1, _ref2,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+
+  root.EzBob = root.EzBob || {};
+
+  EzBob.Underwriter = EzBob.Underwriter || {};
+
+  EzBob.Underwriter.MarketPlaceModel = (function(_super) {
+    __extends(MarketPlaceModel, _super);
+
+    function MarketPlaceModel() {
+      _ref = MarketPlaceModel.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    MarketPlaceModel.prototype.initialize = function() {
+      this.on('change reset', this.recalculate, this);
+      return this.recalculate();
+    };
+
+    MarketPlaceModel.prototype.recalculate = function() {
+      var accountAge, age, ai, anualSales, inventory;
+
+      ai = this.get('AnalysisDataInfo');
+      accountAge = this.get('AccountAge');
+      age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
+      anualSales = (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1;
+      inventory = !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
+      return this.set({
+        age: age,
+        anualSales: anualSales,
+        inventory: inventory
+      }, {
+        silent: true
+      });
+    };
+
+    return MarketPlaceModel;
+
+  })(Backbone.Model);
+
+  EzBob.Underwriter.MarketPlaces = (function(_super) {
+    __extends(MarketPlaces, _super);
+
+    function MarketPlaces() {
+      _ref1 = MarketPlaces.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    MarketPlaces.prototype.model = EzBob.Underwriter.MarketPlaceModel;
+
+    MarketPlaces.prototype.url = function() {
+      return "" + window.gRootPath + "Underwriter/MarketPlaces/Index/" + this.customerId;
+    };
+
+    return MarketPlaces;
+
+  })(Backbone.Collection);
+
+  EzBob.Underwriter.MarketPlacesView = (function(_super) {
+    __extends(MarketPlacesView, _super);
+
+    function MarketPlacesView() {
+      _ref2 = MarketPlacesView.__super__.constructor.apply(this, arguments);
+      return _ref2;
+    }
+
+    MarketPlacesView.prototype.template = "#marketplace-template";
+
+    MarketPlacesView.prototype.initialize = function() {
+      this.model.on("reset change", this.render, this);
+      return this.rendered = false;
+    };
+
+    MarketPlacesView.prototype.onRender = function() {
+      this.$el.find('.mp-error-description').tooltip({
+        placement: "bottom"
+      });
+      this.$el.find('a[data-bug-type]').tooltip({
+        title: 'Report bug'
+      });
+      if (this.detailView !== void 0) {
+        return this.detailView.render();
+      }
+    };
+
+    MarketPlacesView.prototype.events = {
+      "click .reCheck-amazon": "reCheckmarketplaces",
+      "click .reCheck-ebay": "reCheckmarketplaces",
+      "click tbody tr": "rowClick",
+      "click .mp-error-description": "showMPError",
+      "click .renew-token": "renewTokenClicked"
+    };
+
+    MarketPlacesView.prototype.rowClick = function(e) {
+      var id, shop;
+
+      if (e.target.getAttribute('href')) {
+        return;
+      }
+      if (e.target.tagName === 'I') {
+        return;
+      }
+      id = e.currentTarget.getAttribute("data-id");
+      if (!id) {
+        return;
+      }
+      shop = this.model.at(id);
+      this.detailView = new EzBob.Underwriter.MarketPlaceDetailsView({
+        el: this.$el.find('#marketplace-details'),
+        model: this.model,
+        currentId: id,
+        customerId: this.model.customerId
+      });
+      this.detailView.on("reCheck", this.reCheckmarketplaces, this);
+      this.detailView.on("recheck-token", this.renewToken);
+      this.detailView.customerId = this.model.customerId;
+      return this.detailView.render();
+    };
+
+    MarketPlacesView.prototype.showMPError = function() {
+      return false;
+    };
+
+    MarketPlacesView.prototype.serializeData = function() {
+      var data, m, total, _i, _len, _ref3;
+
+      data = {
+        customerId: this.model.customerId,
+        marketplaces: this.model.toJSON(),
+        summary: {
+          anualSales: 0,
+          inventory: 0,
+          positive: 0,
+          negative: 0,
+          neutral: 0
+        }
+      };
+      _ref3 = data.marketplaces;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        m = _ref3[_i];
+        data.summary.anualSales += m.anualSales;
+        data.summary.inventory += m.inventory;
+        data.summary.positive += m.PositiveFeedbacks;
+        data.summary.negative += m.NegativeFeedbacks;
+        data.summary.neutral += m.NeutralFeedbacks;
+      }
+      total = data.summary.positive + data.summary.negative + data.summary.neutral;
+      data.summary.rating = total > 0 ? data.summary.positive / total : 0;
+      return data;
+    };
+
+    MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
+      var $el, customerId, mpType, okFn, umi,
+        _this = this;
+
+      $el = $(e.currentTarget);
+      umi = $el.attr("umi");
+      mpType = $el.attr("marketplaceType");
+      customerId = this.model.customerId;
+      okFn = function() {
+        var xhr;
+
+        xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
+          customerId: customerId,
+          umi: umi,
+          marketplaceType: mpType
+        });
+        xhr.done(function(response) {
+          if (response && response.error !== void 0) {
+            EzBob.ShowMessage(response.error, "Error occured");
+          } else {
+            EzBob.ShowMessage("Wait a few minutes", "The marketplace recheck is running. ", null, "OK");
+          }
+          return _this.trigger("rechecked", {
+            umi: umi,
+            el: $el
+          });
+        });
+        return xhr.fail(function(data) {
+          return console.error(data.responseText);
+        });
+      };
+      EzBob.ShowMessage("", "Are you sure?", okFn, "Yes", null, "No");
+      return false;
+    };
+
+    MarketPlacesView.prototype.renewTokenClicked = function(e) {
+      var umi;
+
+      umi = $(e.currentTarget).data("umi");
+      this.renewToken(umi);
+      return false;
+    };
+
+    MarketPlacesView.prototype.renewToken = function(umi) {
+      var xhr;
+
+      xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/RenewEbayToken", {
+        umi: umi
+      });
+      return xhr.done(function() {
+        return EzBob.ShowMessage("Renew started successfully", "Successfully");
+      });
+    };
+
+    return MarketPlacesView;
+
+  })(Backbone.Marionette.ItemView);
+
+}).call(this);

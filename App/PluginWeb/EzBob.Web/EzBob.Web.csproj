@@ -943,6 +943,9 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.min.js">
       <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
+      <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>
