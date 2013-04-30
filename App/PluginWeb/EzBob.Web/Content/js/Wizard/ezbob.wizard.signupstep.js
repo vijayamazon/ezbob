@@ -38,7 +38,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('.signup');
         this.validator = EzBob.validateSignUpForm(this.form);
-        this.formChecker = EzBob.checkSignUpForm(this.form);
 
         if (this.model.get('loggedIn')) {
             this.setReadOnly();
@@ -52,29 +51,29 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         return this;
     },
     inputChanged: function () {
-        if (EzBob.Validation.checkForm(this.formChecker)) {
+    	if (EzBob.Validation.checkForm(this.validator)) {
             $("#signupSubmitButton.disabled").removeClass('disabled');
         } else {
             $("#signupSubmitButton").addClass('disabled');
         }
     },
     emailChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
     },
     password1Changed: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
         if ($("#signupPass2").val() != "") {
-            EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+        	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
         }
     },
     password2Changed: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
     },
     securityQuestionChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
     },
     secretAnswerChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {
