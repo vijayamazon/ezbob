@@ -13,7 +13,7 @@
             <%_.each(stores, function(store, i){%>
                 <%var last = stores.length - 1 == i;%>
                 <tr class="<%= last ? 'last' : '' %>" >
-                    <td class="first" ><div class="source_labels_on <%=store.type.toLowerCase()%>"></div></td>
+                    <td class="first" ><div class="source_labels_on <%=store.type%>"></div></td>
                     <td><%=store.displayName%></td>
                     <td class="last Live" >LIVE</td>
                 </tr>

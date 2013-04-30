@@ -108,7 +108,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             that = this;
         
         EzBob.App.trigger("wizard:progress", 100);
-
+        this.$el.find('.wizard-steps > ul li').addClass('completed complete');
         switch (typeOfBussiness.toLowerCase()) {
             case "entrepreneur":
                 break;
