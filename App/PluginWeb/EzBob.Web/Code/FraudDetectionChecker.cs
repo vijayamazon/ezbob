@@ -73,16 +73,18 @@ namespace EzBob.Web.Code
             var fraudDetections = new List<FraudDetection>();
 
             const int pageSize = 50;
-            var customerCount = _session.QueryOver<Customer>().RowCount();
+            var customers = _session.QueryOver<Customer>().Where(x => !x.IsTest);
+            var customerCount = customers.RowCount();
             var iterationCount = customerCount/pageSize;
 
             for (var i = 0; i <= iterationCount; i++)
             {
-                var customerPortion = _session.QueryOver<Customer>().Skip(i*pageSize).Take(pageSize).List<Customer>();
+                var customerPortion = customers.Skip(i*pageSize).Take(pageSize).List<Customer>();
                 InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections);
                 InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections, true);
                 InternalLastNameDobCheck(fraudDetections, customerPortion, customer);
                 InternalPhoneCheck(fraudDetections, customerPortion, customer);
+                InternalPhoneFromMpCheck(fraudDetections, customer);
                 InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
                 InternalBankAccountCheck(fraudDetections, customerPortion, customer);
                 InternalDobLess21(customer, fraudDetections);
@@ -99,8 +101,8 @@ namespace EzBob.Web.Code
             }
 
             InternalAddressCheck(customer, fraudDetections);
-            InternalLastNamePostcodeChech(fraudDetections, customer);
-            InternalShopCheck(customer, fraudDetections);            
+            InternalLastNamePostcodeCheck(fraudDetections, customer);
+            InternalShopCheck(customer, fraudDetections);
 
             var resultString =
                 string.Join("\n", fraudDetections.Select(x =>
@@ -139,6 +141,7 @@ namespace EzBob.Web.Code
                                                          string.Format("{0}, {1}", d.Name, d.Type.Name
                                                              )));
         }
+
 
         private void ExternalPhoneCheck(Customer customer, List<FraudDetection> fraudDetections)
         {
@@ -180,7 +183,7 @@ namespace EzBob.Web.Code
         {
             //email domains check
             var customerEmailDomain =
-                customer.Name.Substring(customer.Name.IndexOf("@", StringComparison.Ordinal)+1);
+                customer.Name.Substring(customer.Name.IndexOf("@", StringComparison.Ordinal) + 1);
             fraudDetections.AddRange(from f in _fu
                                      from d in f.EmailDomains
                                      where
@@ -275,42 +278,145 @@ namespace EzBob.Web.Code
 
         #region internal helpers
 
-        private void InternalPhoneCheck(List<FraudDetection> fraudDetections, IList<Customer> customerPortion, Customer customer)
+        private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections, Customer customer)
         {
-            //Phone (any of them, mobile, land line) - eBay, PayPal, Application Mobile, Application Daytime, Application Limited Business Phone, Application Non-Limited Business Phone
+            //check from customer marketplaces info
+            var customerPhones = new Dictionary<string, string>();
+            var customerMps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().GetAll(customer);
+            foreach (var mp in customerMps)
+            {
+                switch (mp.Marketplace.Name)
+                {
+                    case "eBay":
+                        var ebaUserData = mp.EbayUserData.FirstOrDefault();
+                        if (ebaUserData != null)
+                        {
+                            if (ebaUserData.RegistrationAddress != null)
+                                customerPhones.Add("Ebay phone", ebaUserData.RegistrationAddress.Phone);
+                            if (ebaUserData.RegistrationAddress != null)
+                                customerPhones.Add("Ebay phone 2", ebaUserData.RegistrationAddress.Phone2);
+                        }
+                        break;
+                    case "Pay Pal":
+                        customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone);
+                        break;
+                }
+            }
+            var phonesArray = customerPhones.Values.ToArray();
+
+            var customerMpDetections =
+                from mp in _session.Query<MP_CustomerMarketPlace>().Fetch(mp => mp.PersonalInfo)
+                where mp.Customer != customer
+                where mp.EbayUserData.All(e => e != null) || mp.PersonalInfo != null
+                where phonesArray.Contains(mp.PersonalInfo.Phone) ||
+                      mp.EbayUserData.Any(
+                          x =>
+                          phonesArray.Contains(x.RegistrationAddress.Phone) ||
+                          phonesArray.Contains(x.RegistrationAddress.Phone2))
+                select mp;
+
+            foreach (var mpDetection in customerMpDetections)
+            {
+                foreach (var customerPhone in customerPhones)
+                {
+                    var phone = customerPhone.Value;
+                    if (mpDetection.PersonalInfo.Phone == phone)
+                    {
+                        fraudDetections.Add(CreateDetection("Paypal Phone", customer, mpDetection.Customer,
+                                                            customerPhone.Key, null, phone));
+                    }
+
+                    if (mpDetection.EbayUserData.Any() &&
+                        mpDetection.EbayUserData.First().RegistrationAddress.Phone == phone)
+                    {
+                        fraudDetections.Add(CreateDetection("Ebay Phone", customer, mpDetection.Customer,
+                                                            customerPhone.Key, null, phone));
+                    }
+                    if (mpDetection.EbayUserData.Any() &&
+                        mpDetection.EbayUserData.First().RegistrationAddress.Phone2 == phone)
+                    {
+                        fraudDetections.Add(CreateDetection("Ebay Phone2", customer, mpDetection.Customer,
+                                                            customerPhone.Key, null, phone));
+                    }
+                }
+            }
         }
 
-        private void InternalLastNamePostcodeChech(List<FraudDetection> fraudDetections, Customer customer)
+        private void InternalPhoneCheck(ICollection<FraudDetection> fraudDetections,
+                                        IEnumerable<Customer> customerPortion,
+                                        Customer customer)
+        {
+            var customerPhones = GetCustomerPhones(customer);
+
+            //check from customer info
+            foreach (var cd in customerPortion)
+            {
+                foreach (var customerPhone in customerPhones)
+                {
+                    if (cd.PersonalInfo == null) continue;
+
+                    var phone = customerPhone.Value;
+                    if (cd.PersonalInfo.DaytimePhone == phone)
+                    {
+                        fraudDetections.Add(CreateDetection("Customer DaytimePhone", customer, cd, customerPhone.Key,
+                                                            null, phone));
+                    }
+                    if (cd.PersonalInfo.MobilePhone == phone)
+                    {
+                        fraudDetections.Add(CreateDetection("Customer MobilePhone", customer, cd, customerPhone.Key,
+                                                            null, phone));
+                    }
+                    switch (cd.PersonalInfo.TypeOfBusiness.Reduce())
+                    {
+                        case TypeOfBusinessReduced.Limited:
+                            if (cd.LimitedInfo.LimitedBusinessPhone == phone)
+                            {
+                                fraudDetections.Add(CreateDetection("Customer LimitedBusinessPhone", customer, cd,
+                                                                    customerPhone.Key, null, phone));
+                            }
+                            break;
+                        case TypeOfBusinessReduced.NonLimited:
+                            if (cd.NonLimitedInfo.NonLimitedBusinessPhone == phone)
+                            {
+                                fraudDetections.Add(CreateDetection("Customer NonLimitedBusinessPhone", customer, cd,
+                                                                    customerPhone.Key, null, phone));
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void InternalLastNamePostcodeCheck(List<FraudDetection> fraudDetections, Customer customer)
         {
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
             var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
 
             fraudDetections.AddRange(
-            from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode))
-            where ca.Customer != customer
-            where ca.Customer.IsSuccessfullyRegistered
-            where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
-            select CreateDetection("Customer Last Name, Postcode", customer, ca.Customer, "Customer Last Name, Posstcode",
-                                        null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname))); 
-            
-            
+                from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode))
+                where ca.Customer != customer
+                where ca.Customer.IsSuccessfullyRegistered
+                where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
+                select
+                    CreateDetection("Customer Last Name, Postcode", customer, ca.Customer,
+                                    "Customer Last Name, Posstcode",
+                                    null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname)));
         }
 
         private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections)
         {
             //Shop ID
             const int pageSize = 500;
-            var customerMps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().GetAll(customer);
-            var mpCount = _session.QueryOver<MP_CustomerMarketPlace>().RowCount();
+            var customerMps = _session.QueryOver<MP_CustomerMarketPlace>().Where(x => x.Customer == customer).List<MP_CustomerMarketPlace>();
+            var mps = from cmp in _session.QueryOver<MP_CustomerMarketPlace>()
+                      where cmp.Customer.IsTest == false
+                      select cmp;
+            var mpCount = mps.RowCount();
             var iterationCount = mpCount/pageSize;
 
             for (var i = 0; i <= iterationCount; i++)
             {
-                var mpPortion =
-                    _session.QueryOver<MP_CustomerMarketPlace>()
-                            .Skip(i*pageSize)
-                            .Take(pageSize)
-                            .List<MP_CustomerMarketPlace>();
+                var mpPortion = mps.Skip(i*pageSize).Take(pageSize).List<MP_CustomerMarketPlace>();
 
                 fraudDetections.AddRange(
                     from m in mpPortion
@@ -334,12 +440,15 @@ namespace EzBob.Web.Code
                 from ca in customerAddresses
                 from a in addresses
                 where a.Customer != ca.Customer
-                where ca.Line1 == a.Line1 && ca.Line2 == a.Line2 && ca.Line3 == a.Line3 && ca.Town == a.Town && ca.County == a.County
-                select CreateDetection("Customer " + ca.AddressType.ToString(), customer, a.Customer ?? a.Director.Customer,
-                                                         "Customer " + a.AddressType.ToString(),
-                                                         null,
-                                                         string.Format("{0}, {1}, {2}, {3}, {4}",
-                                                                       a.Line1, a.Line2, a.Line3, a.Postcode, a.County))
+                where
+                    ca.Line1 == a.Line1 && ca.Line2 == a.Line2 && ca.Line3 == a.Line3 && ca.Town == a.Town &&
+                    ca.County == a.County
+                select
+                    CreateDetection("Customer " + ca.AddressType.ToString(), customer, a.Customer ?? a.Director.Customer,
+                                    "Customer " + a.AddressType.ToString(),
+                                    null,
+                                    string.Format("{0}, {1}, {2}, {3}, {4}",
+                                                  a.Line1, a.Line2, a.Line3, a.Postcode, a.County))
                 );
         }
 
@@ -472,7 +581,33 @@ namespace EzBob.Web.Code
                     Value = value
                 };
         }
+
+        private static Dictionary<string, string> GetCustomerPhones(Customer customer)
+        {
+            var retVal = new Dictionary<string, string>();
+            if (customer.PersonalInfo == null)
+            {
+                return retVal;
+            }
+            var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
+            if (typeOfBussiness != TypeOfBusinessReduced.Personal)
+            {
+                if (typeOfBussiness == TypeOfBusinessReduced.Limited)
+                {
+                    retVal.Add("LimitedBusinessPhone", customer.LimitedInfo.LimitedBusinessPhone);
+                }
+                retVal.Add("NonLimitedBusinessPhone", customer.NonLimitedInfo.NonLimitedBusinessPhone);
+            }
+            if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
+                retVal.Add("DaytimePhone", customer.PersonalInfo.DaytimePhone);
+
+            if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.MobilePhone))
+                retVal.Add("MobilePhone", customer.PersonalInfo.MobilePhone);
+
+            return retVal;
+        }
     }
+
 
     internal class FraudDetectionModel
     {
