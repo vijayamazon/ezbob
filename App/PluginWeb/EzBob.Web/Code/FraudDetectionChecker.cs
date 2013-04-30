@@ -396,6 +396,7 @@ namespace EzBob.Web.Code
 
             fraudDetections.AddRange(
                 from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode))
+                where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
                 where ca.Customer != customer
                 where ca.Customer.IsSuccessfullyRegistered
                 where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
@@ -418,7 +419,7 @@ namespace EzBob.Web.Code
 
             for (var i = 0; i <= iterationCount; i++)
             {
-                var mpPortion = mps.Skip(i*pageSize).Take(pageSize).ToList<MP_CustomerMarketPlace>();
+                var mpPortion = mps.Skip(i*pageSize).Take(pageSize).ToList();
 
                 fraudDetections.AddRange(
                     from m in mpPortion
@@ -435,7 +436,7 @@ namespace EzBob.Web.Code
             //Address (any of home, business, directors, previous addresses)
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
             var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
-            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode));
+            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode)).Where(x=>x.Customer.IsTest == false || x.Director.Customer.IsTest);
 
             fraudDetections.AddRange(
                 from ca in customerAddresses

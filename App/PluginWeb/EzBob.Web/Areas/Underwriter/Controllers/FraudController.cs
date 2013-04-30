@@ -51,12 +51,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName
                 };
+            // ReSharper disable ReturnValueOfPureMethodIsNotUsed
             user.Addresses.Select(x =>{x.FraudUser = fraudUser;return x; }).ToList();
             user.Phones.Select(x => { x.FraudUser = fraudUser; return x; }).ToList();
             user.Emails.Select(x => { x.FraudUser = fraudUser; return x; }).ToList();
             user.Companies.Select(x => { x.FraudUser = fraudUser; return x; }).ToList();
             user.BankAccounts.Select(x => { x.FraudUser = fraudUser; return x; }).ToList();
             user.EmailDomains.Select(x => { x.FraudUser = fraudUser; return x; }).ToList();
+            // ReSharper restore ReturnValueOfPureMethodIsNotUsed
 
             fraudUser.Addresses.AddAll(user.Addresses);
             fraudUser.Phones.AddAll(user.Phones);
