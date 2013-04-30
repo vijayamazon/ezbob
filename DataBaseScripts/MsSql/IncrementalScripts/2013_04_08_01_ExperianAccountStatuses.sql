@@ -1,7 +1,6 @@
 IF OBJECT_ID ('dbo.ExperianAccountStatuses') IS NOT NULL
 BEGIN
-	PRINT 'ExperianAccountStatuses exists'
-	DROP TABLE ExperianAccountStatuses
+    RETURN
 END
 
 CREATE TABLE dbo.ExperianAccountStatuses
