@@ -1,7 +1,6 @@
 IF OBJECT_ID ('dbo.SupportAgentConfigs') IS NOT NULL
 BEGIN
-	PRINT 'SupportAgentConfigs exists'	
-	DROP TABLE SupportAgentConfigs
+    RETURN
 END
 
 CREATE TABLE dbo.SupportAgentConfigs

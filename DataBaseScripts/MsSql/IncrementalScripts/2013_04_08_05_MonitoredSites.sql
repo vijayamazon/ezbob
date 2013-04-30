@@ -1,7 +1,6 @@
 IF OBJECT_ID ('dbo.MonitoredSites') IS NOT NULL
 BEGIN
-	PRINT 'MonitoredSites exists'
-	DROP TABLE MonitoredSites
+    RETURN
 END
 
 CREATE TABLE dbo.MonitoredSites
