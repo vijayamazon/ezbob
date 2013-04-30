@@ -41,7 +41,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
     showStep: function (name) {
         this.PersonalView.$el.hide();
         if (name === "entrepreneur") {
-            EzBob.App.trigger("wizard:progress", 60);
+            EzBob.App.trigger("wizard:progress", 70);
             this.infoView.$el.hide();
             this.PersonalView.$el.show();
             return;
@@ -72,7 +72,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         if (!infoType) return false;
 
         EzBob.CT.recordEvent('ct:personalinfo.show', name);
-        EzBob.App.trigger("wizard:progress", 80);
+        EzBob.App.trigger("wizard:progress", 90);
 
         this.PersonalView.$el.hide();
         
@@ -88,7 +88,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         this.trigger('previous');
     },
     backToPersonal: function () {
-        EzBob.App.trigger("wizard:progress", 60);
+        EzBob.App.trigger("wizard:progress", 70);
         scrollTop();
         EzBob.CT.recordEvent('ct:personalinfo.show', 'personal');
         this.infoView.$el.hide();

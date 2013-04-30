@@ -62,7 +62,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
             case 0:
                 $(document).attr("title", "Wizard 1: Sign up | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/SignUp');
-                EzBob.App.trigger("wizard:progress", 10);
+                EzBob.App.trigger("wizard:progress", 0);
                 this.navigate("SignUp", { trigger: true });
                 break;
             case 1:
@@ -79,7 +79,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
             case 2:
                 $(document).attr("title", "Wizard 3 Business: Fill Business Details | EZBOB ");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
-                EzBob.App.trigger("wizard:progress", 60);
+                EzBob.App.trigger("wizard:progress", 70);
                 this.navigate("YourDetails", { trigger: true });
                 break;
             default:

@@ -866,27 +866,25 @@ input[type="color"],
     text-shadow: 0 1px 1px #fff;
 }
 
-.bar_step1 {
-    width: 33%;
+.bar_step30 {
+    width: 30%;
 }
 
-.bar_step2 {
-    width: 66%;
+.bar_step70 {
+    width: 70%;
 }
 
-.bar_step3 {
+.bar_step90 {
+    width: 90%;
+}
+
+.bar_step100 {
     width: 100%;
 }
 
 .bar_content {
     padding: 0 5px;
-}
-
-.bar_content_for_0 {
-    position: absolute;
-    top: 0;
-    width: 600px;
-    padding: 0 5px;
+    min-width: 90px;
 }
 
 .help_window {
@@ -894,13 +892,13 @@ input[type="color"],
     padding: 10px;
 }
 
-.help_ekm {
+.help_EKM {
     background: url(images/help/help_ekm.jpg) no-repeat center center;
     width: 759px;
     height: 543px;
 }
 
-.help_ebay {
+.help_eBay {
     background: url(images/help/help_ebay.jpg) no-repeat center center;
     width: 759px;
     height: 543px;
