@@ -11,6 +11,10 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.agree = false;
 
+        this.day = false;
+        this.month = false;
+	    this.year = false;
+
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
@@ -25,15 +29,34 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change select[name="TimeAtAddress"]': "timeAtAddressChanged",
             'change select[name="ResidentialStatus"]': "residentialStatusChanged",
             'change input[name="DayTimePhone"]': 'dayTimePhoneChanged',
-            'change input[name="Gender"]': 'genderChanged'
-            
+            'change input[name="Gender"]': 'genderChanged',
+            'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
+            'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
+            'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged"
         });
 
         this.constructor.__super__.initialize.call(this);
+	},
+    dateOfBirthChanged: function () {
+	    if (this.year && this.month && this.day) {
+		    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth", "#RotateImage", "#OkImage", "#FailImage");
+	    }
     },
-    firstNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    dateOfBirthYearChanged: function () {
+    	this.year = true;
+    	this.dateOfBirthChanged();
     },
+    dateOfBirthMonthChanged: function () {
+    	this.month = true;
+    	this.dateOfBirthChanged();
+    },
+    dateOfBirthDayChanged: function () {
+    	this.day = true;
+    	this.dateOfBirthChanged();
+    },
+	firstNameChanged: function () {
+		EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+	},
     genderChanged: function () {
     	EzBob.Validation.displayIndication(this.validator, "GenderImage", "#GenderCtrl_M", "#RotateImageRight", "#OkImageRight", "#FailImageRight");
     },

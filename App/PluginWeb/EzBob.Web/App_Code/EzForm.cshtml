@@ -237,11 +237,15 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null)
+@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool includeImage = false)
 {
     var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
     var validationClass = required ? "requiredDate" : "";
     var identificator = new HtmlString(name);
+	var dayIdentificator = identificator + "Day";
+	var monthIdentificator = identificator + "Month";
+	var yearIdentificator = identificator + "Year";
+	var imageIdentificator = identificator + "Image";
 
     <div class="control-group form_field_container">
         <div class="controls ezDateTime">
@@ -253,7 +257,7 @@
 
             <label class="attardi-input">
                 <span>Day</span>
-                <select name="day" class="form_field_date" empty_value="-">
+                <select id='@dayIdentificator' name="day" class="form_field_date" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 31; i++)
                        {
@@ -268,7 +272,7 @@
 
             <label class="attardi-input">
                 <span>Month</span>
-                <select name="month" class="form_field_date" empty_value="-">
+                <select id='@monthIdentificator' name="month" class="form_field_date" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 12; i++)
                        {
@@ -284,7 +288,7 @@
 
             <label class="attardi-input">
                 <span>Year</span>
-                <select name="year" class="form_field_date" empty_value="-">
+                <select id='@yearIdentificator' name="year" class="form_field_date" empty_value="-">
                     <option value="-"></option>
                     @{
                         var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
@@ -300,7 +304,11 @@
                     }
                 </select>
             </label>
-
+			
+			@if (includeImage)
+			{
+				<img id="@imageIdentificator" />
+			}
             <input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
         </div>
 
