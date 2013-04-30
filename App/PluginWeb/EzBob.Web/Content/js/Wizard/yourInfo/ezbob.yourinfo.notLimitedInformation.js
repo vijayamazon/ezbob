@@ -46,6 +46,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         directorsView.render().$el.appendTo(this.$el.find('.directors'));
 
         this.$el.find(".cashInput").cashEdit();
+        this.$el.find(".addressCaption").hide();
 
         return this;
     },

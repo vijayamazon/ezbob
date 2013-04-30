@@ -33,6 +33,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         directorsView.render().$el.appendTo(this.$el.find('.directors'));
 
         this.$el.find(".cashInput").cashEdit();
+        this.$el.find(".addressCaption").hide();
     },
     next: function () {
         if (!this.validator.form() || !this.companyAddressValidator) {
