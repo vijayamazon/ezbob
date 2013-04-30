@@ -140,11 +140,10 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/controls/ezbob.modal.js")
                          .Add("~/Content/js/controls/ezbob.jqmodal.coffee")
                          .Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
+                         .Add("~/Content/js/login/ezbob.login.js")
                          .Add("~/Content/js/App/ezbob.GA.coffee")
                          .Add("~/Content/js/App/ezbob.app.js")
                          .Add("~/Content/js/App/ezbob.clicktale.js")
-                         .Add("~/Content/js/login/ezbob.login.js")
-                         .Add("~/Content/js/login/ezbob.login.view.coffee")
                          .Add("~/Content/js/contactUs/ezbo.contactUs.js")
                          .Add("~/Content/js/ezbob.design.js")
                          .Add("~/Content/js/App/ezbob.validation.js")
@@ -160,7 +159,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/attardi.labels.js")
                          .Add("~/Content/js/lib/jquery.colorbox-min.js")
                          .AddString(GetDbStrings())
-                         .ForceRelease()
+                         //.ForceRelease()
                          .MvcRender("~/Content/js/min/jslib_#.js");
         }
 
@@ -358,6 +357,13 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
                          .Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
+                         .MvcRender("~/Content/js/min/profile_#.js");
+        }
+
+        public static MvcHtmlString RenderLoginJs()
+        {
+            return  Bundle.JavaScript()
+                         .Add("~/Content/js/login/ezbob.login.view.coffee")
                          .MvcRender("~/Content/js/min/profile_#.js");
         }
     }

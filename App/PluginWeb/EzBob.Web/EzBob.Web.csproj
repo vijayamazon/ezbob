@@ -894,9 +894,6 @@
     </Content>
     <Content Include="Content\js\lib\log.coffee" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
-    <Content Include="Content\js\login\ezbob.login.view.js">
-      <DependentUpon>ezbob.login.view.coffee</DependentUpon>
-    </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />

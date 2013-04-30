@@ -21,9 +21,6 @@ $(function () {
     $('.datepicker').datepicker();
     $('#signup-form').validate();
 
-    var login = new EzBob.LoginView({ el: $('.login-small-container') });
-    login.render();
-
     var contactUs = new EzBob.ContactUsView();
     contactUs.template = $(".contactUs").html();
     contactUs.render();
