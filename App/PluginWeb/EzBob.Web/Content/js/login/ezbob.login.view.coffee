@@ -4,9 +4,9 @@ root.EzBob = root.EzBob or {}
 class EzBob.CustomerLoginView extends Backbone.View
   initialize: ->
     @template = _.template($("#customerlogin-template").html())
-    @loginModel = new EzBob.CustomerLoginModel()
+    @model = new EzBob.CustomerLoginModel()
     @on "ready", @ready, this
-    #@model.on "change:loggedIn", @render, this
+    @model.on "change:loggedIn", @render, this
 
   events:
     "click :submit": "submit"
@@ -45,7 +45,9 @@ class EzBob.CustomerLoginView extends Backbone.View
     EzBob.Validation.displayIndication @validator, "PasswordImage", "#Password", "#RotateImage", "#OkImage", "#FailImage"
 
   submit: ->
-    return false  if @$el.find(":submit").hasClass("disabled")
+    console.log('submit')
+    return false if @$el.find(":submit").hasClass("disabled")
+    return false if not @validator.form()
     @blockBtn true
     that = this
     #if @model.get("signedIn") or (@model.get("loggedIn"))
@@ -53,27 +55,33 @@ class EzBob.CustomerLoginView extends Backbone.View
     #  @trigger "next"
     #  that.blockBtn false
     #  return false
-    unless EzBob.Validation.validateAndNotify(that.validator)
-      that.blockBtn false
-      return false
-    $.post that.form.attr("action"), that.form.serialize(), ((result) ->
-      if result.success
-        that.$el.find("input[type='password'], input[type='text']").tooltip "hide"
-    #    EzBob.App.trigger "signedIn"
-        EzBob.App.trigger "clear"
-        
-        #EzBob.App.trigger('info', "You have successfully registered. The message was sent to your email.");
-    #    that.model.set "signedIn", true
-        that.trigger "ready"
-        that.trigger "next"
-        $.get(window.gRootPath + "Start/TopButton").done (dat) ->
-          $("#pre_header").html dat
+    console.log('submit1')
+    unless EzBob.Validation.validateAndNotify(that.validator) 
+        that.blockBtn false
+        return false
 
-      else
-        EzBob.App.trigger "error", result.errorMessage  if result.errorMessage
-        that.captcha.reload()
-      that.blockBtn false
+    console.log('submit2')
+    $.post that.form.attr("action"), that.form.serialize(), ((result) ->
+        if result.success
+            console.log('submit suc')
+            that.$el.find("input[type='password'], input[type='text']").tooltip "hide"
+            EzBob.App.trigger "loggedIn"
+            EzBob.App.trigger "clear"
+        
+            #EzBob.App.trigger('info', "You have successfully registered. The message was sent to your email.");
+            that.model.set "loggedIn", true
+            that.trigger "ready"
+            that.trigger "next"
+            $.get(window.gRootPath + "Start/TopButton").done (dat) ->
+            $("#pre_header").html dat
+        else
+            console.log('submit fail')          
+            EzBob.App.trigger "error", result.errorMessage  if result.errorMessage
+            that.captcha.reload()
+            that.blockBtn false
     ), "json"
+    console.log('submit4')
+    that.blockBtn false
     false
 
   ready: ->
@@ -82,10 +90,6 @@ class EzBob.CustomerLoginView extends Backbone.View
   setReadOnly: ->
     @readOnly = true
     @$el.find(":input").not(":submit").attr("disabled", "disabled").attr("readonly", "readonly").css "disabled"
-    #@$el.find("#captcha").hide()
-    #@$el.find(".captcha").hide()
-    #@$el.find(":submit").val "Continue"
-    #@$el.find("[name='securityQuestion']").trigger "liszt:updated"
 
   blockBtn: (isBlock) ->
     BlockUi (if isBlock then "on" else "off")
@@ -94,6 +98,7 @@ class EzBob.CustomerLoginView extends Backbone.View
 
 class EzBob.CustomerLoginModel extends Backbone.Model
     defaults:
+        loggedIn: false
         completed: false
 
 

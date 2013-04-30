@@ -17,8 +17,9 @@
 
     CustomerLoginView.prototype.initialize = function() {
       this.template = _.template($("#customerlogin-template").html());
-      this.loginModel = new EzBob.CustomerLoginModel();
-      return this.on("ready", this.ready, this);
+      this.model = new EzBob.CustomerLoginModel();
+      this.on("ready", this.ready, this);
+      return this.model.on("change:loggedIn", this.render, this);
     };
 
     CustomerLoginView.prototype.events = {
@@ -61,32 +62,43 @@
     CustomerLoginView.prototype.submit = function() {
       var that;
 
+      console.log('submit');
       if (this.$el.find(":submit").hasClass("disabled")) {
+        return false;
+      }
+      if (!this.validator.form()) {
         return false;
       }
       this.blockBtn(true);
       that = this;
+      console.log('submit1');
       if (!EzBob.Validation.validateAndNotify(that.validator)) {
         that.blockBtn(false);
         return false;
       }
+      console.log('submit2');
       $.post(that.form.attr("action"), that.form.serialize(), (function(result) {
         if (result.success) {
+          console.log('submit suc');
           that.$el.find("input[type='password'], input[type='text']").tooltip("hide");
+          EzBob.App.trigger("loggedIn");
           EzBob.App.trigger("clear");
+          that.model.set("loggedIn", true);
           that.trigger("ready");
           that.trigger("next");
-          $.get(window.gRootPath + "Start/TopButton").done(function(dat) {
-            return $("#pre_header").html(dat);
-          });
+          $.get(window.gRootPath + "Start/TopButton").done(function(dat) {});
+          return $("#pre_header").html(dat);
         } else {
+          console.log('submit fail');
           if (result.errorMessage) {
             EzBob.App.trigger("error", result.errorMessage);
           }
           that.captcha.reload();
+          return that.blockBtn(false);
         }
-        return that.blockBtn(false);
       }), "json");
+      console.log('submit4');
+      that.blockBtn(false);
       return false;
     };
 
@@ -117,6 +129,7 @@
     }
 
     CustomerLoginModel.prototype.defaults = {
+      loggedIn: false,
       completed: false
     };
 

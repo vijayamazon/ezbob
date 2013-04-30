@@ -480,6 +480,7 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 .simple-login .control-label{
     width: 110px;
 }
+.login-btn{ position: absolute;top: 0;left: 310px;}
 
 .CompanyDetailForm.form-horizontal .control-label{
     width: 160px;
