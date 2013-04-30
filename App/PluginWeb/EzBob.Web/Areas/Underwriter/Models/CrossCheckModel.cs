@@ -74,7 +74,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             var ebay = customer.GetEbayCustomerMarketPlaces().FirstOrDefault();
             if (ebay != null)
             {
-                var eBayUserData = ebay.EbayUserData.FirstOrDefault();
+                var eBayUserData = ebay.EbayUserData.LastOrDefault();
                 if (eBayUserData != null)
                 {
                     EBay = Mapper.Map<MP_EbayUserData, PersonalInfo>(eBayUserData);

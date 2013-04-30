@@ -306,6 +306,7 @@ namespace EzBob.Web.Code
 
             var customerMpDetections =
                 from mp in _session.Query<MP_CustomerMarketPlace>().Fetch(mp => mp.PersonalInfo)
+                where mp.Customer.IsTest == false
                 where mp.Customer != customer
                 where mp.EbayUserData.All(e => e != null) || mp.PersonalInfo != null
                 where phonesArray.Contains(mp.PersonalInfo.Phone) ||
@@ -326,14 +327,15 @@ namespace EzBob.Web.Code
                                                             customerPhone.Key, null, phone));
                     }
 
-                    if (mpDetection.EbayUserData.Any() &&
-                        mpDetection.EbayUserData.First().RegistrationAddress.Phone == phone)
+                    var ebayUserData = mpDetection.EbayUserData;
+                    if (ebayUserData.Any() &&
+                        ebayUserData.Last().RegistrationAddress.Phone == phone)
                     {
                         fraudDetections.Add(CreateDetection("Ebay Phone", customer, mpDetection.Customer,
                                                             customerPhone.Key, null, phone));
                     }
-                    if (mpDetection.EbayUserData.Any() &&
-                        mpDetection.EbayUserData.First().RegistrationAddress.Phone2 == phone)
+                    if (ebayUserData.Any() &&
+                        ebayUserData.Last().RegistrationAddress.Phone2 == phone)
                     {
                         fraudDetections.Add(CreateDetection("Ebay Phone2", customer, mpDetection.Customer,
                                                             customerPhone.Key, null, phone));
@@ -408,20 +410,19 @@ namespace EzBob.Web.Code
             //Shop ID
             const int pageSize = 500;
             var customerMps = _session.QueryOver<MP_CustomerMarketPlace>().Where(x => x.Customer == customer).List<MP_CustomerMarketPlace>();
-            var mps = from cmp in _session.QueryOver<MP_CustomerMarketPlace>()
+            var mps = from cmp in _session.Query<MP_CustomerMarketPlace>()
                       where cmp.Customer.IsTest == false
                       select cmp;
-            var mpCount = mps.RowCount();
+            var mpCount = mps.Count();
             var iterationCount = mpCount/pageSize;
 
             for (var i = 0; i <= iterationCount; i++)
             {
-                var mpPortion = mps.Skip(i*pageSize).Take(pageSize).List<MP_CustomerMarketPlace>();
+                var mpPortion = mps.Skip(i*pageSize).Take(pageSize).ToList<MP_CustomerMarketPlace>();
 
                 fraudDetections.AddRange(
                     from m in mpPortion
                     from cm in customerMps
-                    where m.Customer.Id != customer.Id
                     where m.DisplayName == cm.DisplayName
                     select
                         CreateDetection("Customer Marketplace Name", customer, m.Customer, "Customer Marketplace Name",
