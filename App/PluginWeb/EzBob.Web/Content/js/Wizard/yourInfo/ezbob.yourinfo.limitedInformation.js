@@ -14,13 +14,13 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
     },
     limitedCompanyNameChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "LimitedCompanyNameImage", "#LimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNameImage", "#LimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
     },
     limitedCompanyNumberChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "LimitedCompanyNumberImage", "#LimitedCompanyNumber", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNumberImage", "#LimitedCompanyNumber", "#RotateImage", "#OkImage", "#FailImage");
     },
     limitedBusinessPhoneChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
     },
     render: function () {
         this.constructor.__super__.render.call(this);
@@ -33,8 +33,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         directorsView.render().$el.appendTo(this.$el.find('.directors'));
 
         this.$el.find(".cashInput").cashEdit();
-
-        this.formChecker = EzBob.checkCompanyDetailForm(this.form);
     },
     next: function () {
         if (!this.validator.form() || !this.companyAddressValidator) {

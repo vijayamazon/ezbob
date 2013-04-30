@@ -14,16 +14,16 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
     },
     nonLimitedCompanyNameChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "NonLimitedCompanyNameImage", "#NonLimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedCompanyNameImage", "#NonLimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
     },
     nonLimitedBusinessPhoneChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "NonLimitedBusinessPhoneImage", "#NonLimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedBusinessPhoneImage", "#NonLimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
     },
     nonLimitedTimeAtAddressChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "NonLimitedTimeAtAddressImage", "#NonLimitedTimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeAtAddressImage", "#NonLimitedTimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
     },
     nonLimitedTimeInBusinessChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "NonLimitedTimeInBusinessImage", "#NonLimitedTimeInBusiness", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeInBusinessImage", "#NonLimitedTimeInBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
     next: function () {
         if (!this.validator.form() || !this.companyAddressValidator) {
@@ -46,8 +46,6 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         directorsView.render().$el.appendTo(this.$el.find('.directors'));
 
         this.$el.find(".cashInput").cashEdit();
-
-        this.formChecker = EzBob.checkCompanyDetailForm(this.form);
 
         return this;
     },

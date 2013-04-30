@@ -800,58 +800,6 @@ EzBob.validateCompanyDetailForm = function (el) {
     });
 };
 
-EzBob.checkCompanyDetailForm = function (el) {
-    var e = el || $(".CompanyDetailForm");
-    return e.validate({
-        ignore: "",
-        rules: {
-            //personal info
-            FirstName: EzBob.Validation.NameValidationObject,
-            Surname: { required: true },
-            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
-            DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            TypeOfBusiness: { required: true },
-            ResidentialStatus: { required: true },
-            Gender: { regex: "^M|F$", required: true },
-            MartialStatus: { required: true },
-            OverallTurnOver: { required: true, number: true, min: 1 },
-            WebSiteTurnOver: { required: true, number: true, min: 1 },
-            TimeAtAddress: { required: true },
-
-            //limited company info
-            LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
-            LimitedCompanyName: { required: true, minlength: 2 },
-            LimitedOverallTurnOver: { required: true, number: true },
-            LimitedWebSiteTurnOver: { required: true, number: true },
-            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
-
-            //Non limited company info
-            NonLimitedCompanyName: { required: true, minlength: 2 },
-            NonLimitedTimeInBusiness: { required: true, digits: true },
-            NonLimitedOverallTurnOver: { required: true, number: true, minlength: 2 },
-            NonLimitedWebSiteTurnOver: { required: true, number: true, minlength: 2 },
-            NonLimitedTimeAtAddress: { required: true, digits: true },
-            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" }
-        },
-        messages: {
-            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
-            day: { digits: "Incorect day" },
-            month: { digits: "Incorect month" },
-            year: { digits: "Incorect year" },
-            ResidentialStatus: { required: "This field is required" },
-            TimeAtAddress: { regex: "This field is required" },
-            Gender: { regex: "Gender field is required" },
-            MartialStatus: { required: "Martial status field is required" },
-            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-            MobilePhone: { regex: "Please enter a valid UK number" },
-            DayTimePhone: { regex: "Please enter a valid UK number" },
-            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
-        }
-    });
-};
-
 EzBob.validateSortCode = function (el) {
     var e = el || $(".bankAccount");
     return e.validate({

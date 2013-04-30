@@ -32,34 +32,34 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.constructor.__super__.initialize.call(this);
     },
     firstNameChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
     },
     genderChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "GenderImage", "#GenderCtrl_M", "#RotateImageRight", "#OkImageRight", "#FailImageRight");
+    	EzBob.Validation.displayIndication(this.validator, "GenderImage", "#GenderCtrl_M", "#RotateImageRight", "#OkImageRight", "#FailImageRight");
     },
     dayTimePhoneChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "DayTimePhoneImage", "#DayTimePhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "DayTimePhoneImage", "#DayTimePhone", "#RotateImage", "#OkImage", "#FailImage");
     },
     martialStatusChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "MartialStatusImage", "#MartialStatus", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "MartialStatusImage", "#MartialStatus", "#RotateImage", "#OkImage", "#FailImage");
     },
     timeAtAddressChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "TimeAtAddressImage", "#TimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "TimeAtAddressImage", "#TimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
     },
     residentialStatusChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "ResidentialStatusImage", "#ResidentialStatus", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "ResidentialStatusImage", "#ResidentialStatus", "#RotateImage", "#OkImage", "#FailImage");
     },
     middleNameChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
     },
     surnameChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
     },
     overallTurnOverChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "OverallTurnOverImage", "#OverallTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "OverallTurnOverImage", "#OverallTurnOver", "#RotateImage", "#OkImage", "#FailImage");
     },
     webSiteTurnOverImageChanged: function () {
-        EzBob.Validation.displayIndication(this.formChecker, "WebSiteTurnOverImage", "#WebSiteTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "WebSiteTurnOverImage", "#WebSiteTurnOver", "#RotateImage", "#OkImage", "#FailImage");
     },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
@@ -79,8 +79,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
-        
-        this.formChecker = EzBob.checkCompanyDetailForm(this.form);
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
@@ -102,7 +100,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
-        EzBob.Validation.displayIndication(this.formChecker, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
+        EzBob.Validation.displayIndication(this.validator, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
     consentToSearchChanged: function (e) {
         this.agree = $(e.target).is(':checked');

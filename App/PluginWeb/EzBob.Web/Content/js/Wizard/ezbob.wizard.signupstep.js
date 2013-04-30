@@ -70,6 +70,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
     },
     securityQuestionChanged: function () {
+	    this.inputChanged();
     	EzBob.Validation.displayIndication(this.validator, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
     },
     secretAnswerChanged: function () {
