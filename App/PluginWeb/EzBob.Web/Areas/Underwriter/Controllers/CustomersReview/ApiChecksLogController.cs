@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Mvc;
 using System.Linq;
 using ApplicationMng.Repository;
@@ -86,7 +87,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 ErrorMessage = val.ErrorMessage,
                 Status = val.Status
             }));
-            models = new List<ApiChecksLogModel>(models.OrderByDescending(x=>x.DateTime));
+
+            models = new List<ApiChecksLogModel>(models.OrderByDescending(x => DateTime.ParseExact(x.DateTime, "dd/MM/yyyy HH:mm", new CultureInfo("en-US"))));
+
             return this.JsonNet(models);
         }
 
