@@ -1,6 +1,5 @@
 ﻿using System;
 using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NHibernate;
 
