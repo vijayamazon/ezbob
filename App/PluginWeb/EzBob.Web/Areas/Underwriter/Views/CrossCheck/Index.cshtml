@@ -62,9 +62,9 @@
             </tr>            
             <tr>
                 <td><b>Date Of Birth</b><b class="marking pull-right  @Model.CrossCheckStatus.DateOfBirth"></b></td>
-                <td>@GetDate(Model.Application.DateOfBirth)</td>
-                <td>@GetDate(Model.EBay.DateOfBirth)</td>
-                <td>@GetDate(Model.PayPal.DateOfBirth)</td>
+                <td>@GetDate(Model.Application.DateOfBirth) @( Model.Application.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.Application.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
+                <td>@GetDate(Model.EBay.DateOfBirth) @( Model.EBay.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.EBay.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
+                <td>@GetDate(Model.PayPal.DateOfBirth) @( Model.PayPal.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.PayPal.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
             </tr>            
             <tr>
                 <td><b>Mobile Phone</b></td>
@@ -310,8 +310,8 @@
                     <td>@d.Gender</td>
                 </tr>            
                 <tr>
-                    <td><b>DateOfBirth</b></td>
-                    <td>@GetDate(d.DateOfBirth)</td>
+                    <td><b>Date Of Birth</b></td>
+                    <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (d.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
                 </tr>            
                 <tr>
                     <td><b>Organisation</b></td>
