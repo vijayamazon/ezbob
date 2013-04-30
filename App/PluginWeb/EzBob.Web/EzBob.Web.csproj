@@ -247,7 +247,6 @@
     <Compile Include="Code\Email\EmailConfirmationRequestInvalidStateException.cs" />
     <Compile Include="Code\Email\EmailConfirmationRequestNotFoundException.cs" />
     <Compile Include="Code\Email\IEmailConfirmation.cs" />
-    <Compile Include="Code\FraudDetectionChecker.cs" />
     <Compile Include="Code\LoanBuilder.cs" />
     <Compile Include="Code\LoanCreator.cs" />
     <Compile Include="Code\LoanLimit.cs" />
@@ -1112,6 +1111,10 @@
     <Content Include="Views\Shared\_Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FraudChecker\FraudChecker.csproj">
+      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>
@@ -1126,7 +1129,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
-      <Name>CommonLib %28Integration\CommonLib%29</Name>
+      <Name>CommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>

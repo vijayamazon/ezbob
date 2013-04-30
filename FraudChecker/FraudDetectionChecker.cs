@@ -6,11 +6,12 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
+using EzBob.Web.Code;
 using NHibernate;
 using NHibernate.Linq;
 using StructureMap;
 
-namespace EzBob.Web.Code
+namespace FraudChecker
 {
     public class FraudDetectionChecker
     {

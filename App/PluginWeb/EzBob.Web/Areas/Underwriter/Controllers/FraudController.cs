@@ -3,8 +3,8 @@ using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Areas.Underwriter.Models.Fraud;
-using EzBob.Web.Code;
+using EzBob.Web.Areas.Underwriter.Models.Fraud; 
+using FraudChecker;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
