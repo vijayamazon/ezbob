@@ -892,22 +892,38 @@ input[type="color"],
     padding: 10px;
 }
 
-.help_EKM {
-    background: url(images/help/help_ekm.jpg) no-repeat center center;
+.help_image {
     width: 759px;
     height: 543px;
+}
+.help_EKM {
+    background: url(images/help/help_ekm.jpg) no-repeat center center;
 }
 
 .help_eBay {
     background: url(images/help/help_ebay.jpg) no-repeat center center;
-    width: 759px;
-    height: 543px;
 }
 
 .help_paypal {
     background: url(images/help/help_paypal.jpg) no-repeat center center;
-    width: 759px;
-    height: 543px;
+}
+
+.help_Amazon {
+    background: url(images/cb/loading.gif) no-repeat center center;
+    background-color: black;
+    /*TODO provide real image*/
+}
+
+.help_PayPoint {
+    background: url(images/cb/loading.gif) no-repeat center center;
+    background-color: black;
+    /*TODO provide real image*/
+}
+
+.help_Volusion {
+    background: url(images/cb/loading.gif) no-repeat center center;
+    background-color: black;
+    /*TODO provide real image*/
 }
 
 .help_security {
