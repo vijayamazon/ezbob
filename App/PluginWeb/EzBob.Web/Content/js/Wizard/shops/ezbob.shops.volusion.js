@@ -82,7 +82,7 @@
       });
       xhr = acc.save();
       if (!xhr) {
-        EzBob.App.trigger('error', 'Volusion account saving error');
+        EzBob.App.trigger('error', 'Volusion Account Saving Error');
         return false;
       }
       BlockUi('on');
@@ -91,7 +91,7 @@
       });
       xhr.fail(function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
-        return EzBob.App.trigger('error', 'Volusion account saving error');
+        return EzBob.App.trigger('error', 'Volusion Account Saving Error');
       });
       xhr.done(function(res) {
         if (res.error) {
@@ -99,7 +99,7 @@
           return false;
         }
         _this.model.add(acc);
-        EzBob.App.trigger('info', "Volusion Account added successfully");
+        EzBob.App.trigger('info', "Volusion Account Added Successfully");
         _this.ui.login.val("");
         _this.ui.password.val("");
         _this.inputChanged();

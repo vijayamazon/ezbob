@@ -45,7 +45,7 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         xhr = acc.save()
 
         if not xhr
-            EzBob.App.trigger 'error', 'Volusion account saving error'
+            EzBob.App.trigger 'error', 'Volusion Account Saving Error'
             return false
 
         BlockUi('on')
@@ -55,7 +55,7 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
             console.log textStatus
-            EzBob.App.trigger 'error', 'Volusion account saving error'
+            EzBob.App.trigger 'error', 'Volusion Account Saving Error'
 
         xhr.done (res) =>
             if (res.error)
@@ -63,7 +63,7 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
                 return false
 
             @model.add(acc)
-            EzBob.App.trigger('info', "Volusion Account added successfully");
+            EzBob.App.trigger('info', "Volusion Account Added Successfully");
             @ui.login.val("") 
             @ui.password.val("")
             @inputChanged()

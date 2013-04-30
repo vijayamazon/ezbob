@@ -40,7 +40,7 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
                         that.trigger('back');
                     })
                     .error(function() {
-                        EzBob.App.trigger('error', 'Ebay account failed to add');
+                        EzBob.App.trigger('error', 'Ebay Account Failed to Add');
                     });
             };
         };

@@ -38,7 +38,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         xhr = acc.save()
 
         if not xhr
-            EzBob.App.trigger 'error', 'ekm account saving error'
+            EzBob.App.trigger 'error', 'EKM Account Saving Error'
             return false
 
         BlockUi('on')
@@ -48,7 +48,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
             console.log textStatus
-            EzBob.App.trigger 'error', 'ekm account saving error'
+            EzBob.App.trigger 'error', 'EKM Account Saving Error'
 
         xhr.done (res) =>
             if (res.error)
@@ -56,7 +56,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
                 return false
 
             @model.add(acc)
-            EzBob.App.trigger('info', "EKM Account added successfully");
+            EzBob.App.trigger('info', "EKM Account Added Successfully");
             @ui.login.val("") 
             @ui.password.val("")
             @inputChanged()

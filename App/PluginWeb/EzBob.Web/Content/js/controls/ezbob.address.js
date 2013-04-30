@@ -18,7 +18,7 @@ EzBob.Popup = Backbone.View.extend({
 
         this.$el.dialog({
             autoOpen: true,
-            title: "Select your address",
+            title: "Select Address",
             modal: true,
             resizable: false,
             width: 390

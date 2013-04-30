@@ -159,7 +159,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/attardi.labels.js")
                          .Add("~/Content/js/lib/jquery.colorbox-min.js")
                          .AddString(GetDbStrings())
-                         .ForceRelease()
+                         //.ForceRelease()
                          .MvcRender("~/Content/js/min/jslib_#.js");
         }
 

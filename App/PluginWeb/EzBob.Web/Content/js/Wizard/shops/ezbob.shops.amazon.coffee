@@ -62,7 +62,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
 
     connect: (e) ->
         unless @validator.form()
-            EzBob.App.trigger "error", "The fields Merchant ID or Marketplace ID are not filled"
+            EzBob.App.trigger "error", "The Fields Merchant ID or Marketplace ID are not Filled"
             return false
 
         marketplaceId = @$el.find("#amazonMarketplaceId")
@@ -87,7 +87,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
             marketplaceId.val ""
             merchantId.val ""
         ).error ->
-            EzBob.App.trigger "error", "Amazon account adding failed"
+            EzBob.App.trigger "error", "Amazon Account Adding Failed"
 
         false
 

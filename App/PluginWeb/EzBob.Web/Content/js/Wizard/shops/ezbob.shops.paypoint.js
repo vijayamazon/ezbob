@@ -80,7 +80,7 @@
       });
       xhr = acc.save();
       if (!xhr) {
-        EzBob.App.trigger('error', 'PayPoint account saving error');
+        EzBob.App.trigger('error', 'PayPoint Account Saving Error');
         return false;
       }
       BlockUi('on');
@@ -89,7 +89,7 @@
       });
       xhr.fail(function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
-        return EzBob.App.trigger('error', 'PayPoint account saving error');
+        return EzBob.App.trigger('error', 'PayPoint Account Saving Error');
       });
       xhr.done(function(res) {
         if (res.error) {
@@ -97,7 +97,7 @@
           return false;
         }
         _this.model.add(acc);
-        EzBob.App.trigger('info', "PayPoint Account added successfully");
+        EzBob.App.trigger('info', "PayPoint Account Added Successfully");
         _this.ui.mid.val("");
         _this.ui.vpnPassword.val("");
         _this.ui.remotePassword.val("");

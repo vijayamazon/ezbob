@@ -1,5 +1,7 @@
 (function() {
-  var root;
+  var root, _ref, _ref1, _ref2,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
@@ -20,8 +22,8 @@
       "click a.connect-amazon": "connect",
       "click a.back": "back",
       "click .screenshots": "runTutorial",
-      "keyup input[type=\"text\"]": "inputChanged",
-      "change input[type=\"text\"]": "inputChanged",
+      "keyup input[type='text']": "inputChanged",
+      "change input[type='text']": "inputChanged",
       "click a.print": "print"
     },
     inputChanged: function() {
@@ -70,15 +72,15 @@
       return false;
     },
     connect: function(e) {
-      var marketplaceId, merchantId, that;
+      var marketplaceId, merchantId,
+        _this = this;
 
       if (!this.validator.form()) {
-        EzBob.App.trigger("error", "The fields Merchant ID or Marketplace ID are not filled");
+        EzBob.App.trigger("error", "The Fields Merchant ID or Marketplace ID are not Filled");
         return false;
       }
       marketplaceId = this.$el.find("#amazonMarketplaceId");
       merchantId = this.$el.find("#amazonMerchantId");
-      that = this;
       if (this.$el.find("a.connect-amazon").hasClass("disabled")) {
         return false;
       }
@@ -87,18 +89,19 @@
         marketplaceId: marketplaceId.val(),
         merchantId: merchantId.val()
       }).success(function(result) {
-        that.blockBtn(false);
+        _this.blockBtn(false);
         if (result.error) {
           EzBob.App.trigger("error", result.error);
-          that.trigger("back");
+          _this.trigger("back");
           return;
         }
         EzBob.App.trigger("info", result.msg);
-        that.trigger("completed");
+        _this.trigger("completed");
+        _this.trigger('back');
         marketplaceId.val("");
         return merchantId.val("");
       }).error(function() {
-        return EzBob.App.trigger("error", "Amazon account adding failed");
+        return EzBob.App.trigger("error", "Amazon Account Adding Failed");
       });
       return false;
     },
@@ -111,5 +114,61 @@
       return this.$el.find("connect-amazon").toggleClass("disabled", isBlock);
     }
   });
+
+  EzBob.AmazonStoreModel = (function(_super) {
+    __extends(AmazonStoreModel, _super);
+
+    function AmazonStoreModel() {
+      _ref = AmazonStoreModel.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    AmazonStoreModel.prototype.defaults = {
+      marketplaceId: null
+    };
+
+    return AmazonStoreModel;
+
+  })(Backbone.Model);
+
+  EzBob.AmazonStoreModels = (function(_super) {
+    __extends(AmazonStoreModels, _super);
+
+    function AmazonStoreModels() {
+      _ref1 = AmazonStoreModels.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    AmazonStoreModels.prototype.model = EzBob.AmazonStoreModel;
+
+    AmazonStoreModels.prototype.url = "" + window.gRootPath + "Customer/AmazonMarketPlaces";
+
+    return AmazonStoreModels;
+
+  })(Backbone.Collection);
+
+  EzBob.AmazonButtonView = (function(_super) {
+    __extends(AmazonButtonView, _super);
+
+    function AmazonButtonView() {
+      _ref2 = AmazonButtonView.__super__.constructor.apply(this, arguments);
+      return _ref2;
+    }
+
+    AmazonButtonView.prototype.initialize = function() {
+      return AmazonButtonView.__super__.initialize.call(this, {
+        name: "Amazon",
+        logoText: "",
+        shops: this.model
+      });
+    };
+
+    AmazonButtonView.prototype.update = function() {
+      return this.model.fetch();
+    };
+
+    return AmazonButtonView;
+
+  })(EzBob.StoreButtonView);
 
 }).call(this);

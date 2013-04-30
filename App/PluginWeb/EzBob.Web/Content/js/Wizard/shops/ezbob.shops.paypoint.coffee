@@ -37,7 +37,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         xhr = acc.save()
 
         if not xhr
-            EzBob.App.trigger 'error', 'PayPoint account saving error'
+            EzBob.App.trigger 'error', 'PayPoint Account Saving Error'
             return false
 
         BlockUi('on')
@@ -47,7 +47,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
             console.log textStatus
-            EzBob.App.trigger 'error', 'PayPoint account saving error'
+            EzBob.App.trigger 'error', 'PayPoint Account Saving Error'
 
         xhr.done (res) =>
             if (res.error)
@@ -55,7 +55,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
                 return false
 
             @model.add(acc)
-            EzBob.App.trigger('info', "PayPoint Account added successfully");
+            EzBob.App.trigger('info', "PayPoint Account Added Successfully");
             @ui.mid.val("") 
             @ui.vpnPassword.val("")
             @ui.remotePassword.val("")
