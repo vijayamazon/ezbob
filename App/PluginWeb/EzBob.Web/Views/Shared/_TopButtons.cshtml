@@ -10,12 +10,18 @@
             @if (isAuth)
             {
                 @User.Identity.Name
-                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log off</a>
+                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log Off</a>
             }
             else
             {
-                <text>Already have an account?</text>
-                <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">LOGIN</a>
+                <div class="login_btn">
+                    <text>Already have an account?</text>
+                    <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">LOGIN</a>
+                </div>
+                <div class="signup_btn hide">
+                    <text>Don't have an account?</text>
+                    <a href='@Url.Action("Index", "Wizard", new {Area = "Customer"}, "https")#SignUp' class="button green medium_btn">Sign Up</a>
+                </div>
             }
         </div>
     </div>
