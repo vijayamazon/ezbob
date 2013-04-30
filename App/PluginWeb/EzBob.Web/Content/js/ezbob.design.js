@@ -682,6 +682,24 @@ $.validator.setDefaults({
     ignore: ""
 });
 
+EzBob.validateLoginForm = function (el) {
+    var e = el || $(".simple-login");
+
+    return e.validate({
+        rules: {
+            UserName: { required: true, email: true },
+            Password: { required: true }
+           
+        },
+        messages: {
+            "UserName": { email: EzBob.dbStrings.NotValidEmailAddress, required: EzBob.dbStrings.NotValidEmailAddress },
+            "Password": { required: EzBob.dbStrings.PasswordPolicyCheck },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+};
+
 EzBob.validateSignUpForm = function (el) {
     var e = el || $(".signup");
 

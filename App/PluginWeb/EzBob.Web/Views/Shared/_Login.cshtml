@@ -11,26 +11,23 @@
             <div class="form_field_container">
                 <label class="attardi-input">
                     <span>Email address</span>
-                    <input type="email" autofocus="autofocus" class="form_field" data-val="true"
-                        data-val-required="The email address field is required."
-                        id="UserName" name="UserName" />
+                    <input type="email" autofocus="autofocus" class="form_field" id="UserName" name="UserName" />
                 </label>
                 <span class="required">*</span>
             </div>
 
-            @Html.ValidationMessageFor(m => m.UserName)
+            @*@Html.ValidationMessageFor(m => m.UserName)*@
 
             <div class="form_field_container">
                 <label class="attardi-input">
                     <span>Password</span>
-                    <input type="password" autocomplete="off" class="form_field" data-val="true"
-                        data-val-required="The password field is required."
-                        id="Password" name="Password" />
+                    <input type="password" autocomplete="off" class="form_field" id="Password" name="Password" />
                 </label>
                 <span class="required">*</span>
             </div>
 
-            @Html.ValidationMessageFor(m => m.Password)
+            @*@Html.ValidationMessageFor(m => m.Password)*@
+
             <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
 
             <div class="form_field_container">

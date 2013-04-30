@@ -18,7 +18,10 @@
     StoreInfoStepModel.prototype.initialize = function(options) {
       return this.set({
         ebayStores: new EzBob.EbayStoreModels(options.ebayMarketPlaces),
-        amazonMarketplaces: new EzBob.AmazonStoreModels(options.amazonMarketPlaces)
+        amazonMarketplaces: new EzBob.AmazonStoreModels(options.amazonMarketPlaces),
+        ekmShops: new EzBob.EKMAccounts(options.ekmShops),
+        volusionShops: new EzBob.VolusionAccounts(options.volusionShops),
+        payPointAccounts: new EzBob.PayPointAccounts(options.payPointAccounts)
       });
     };
 

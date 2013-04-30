@@ -12,12 +12,14 @@
     </div>
     <div class="row-fluid">
         <div class="span10">
-            @{Html.RenderPartial("_Login", Model);}
+            @{Html.RenderPartial("_LoginTemplate", Model);}
         </div>
     </div>
 </div>
 @section Js{
     <script type="text/javascript">
+        var loginPage = new EzBob.LoginView();
+        loginPage.render();
         $(function () {
             EzBob.validateSignUpForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
