@@ -42,8 +42,8 @@ namespace EzBob.Web.Code.ReportGenerator
                 var res = fee != 0 ? FormattingUtils.FormatPounds(fee) : "-";
                 var res1 = loanOffer.SetupFee>0 && i == 0 ? "*" : string.Empty;
                 worksheet.Cells[row, column + 3].PutValue(res + res1);
-                worksheet.Cells.Merge(row, 4, 1, 3);
-                worksheet.Cells[row, 4].PutValue(FormattingUtils.FormatPounds(item.AmountDue));
+                worksheet.Cells.Merge(row, column + 4, 1, 3);
+                worksheet.Cells[row, column + 4].PutValue(FormattingUtils.FormatPounds(item.AmountDue));
                 SetCellStyle(worksheet, row, column, false);
             }
 
@@ -52,7 +52,7 @@ namespace EzBob.Web.Code.ReportGenerator
             if (loanOffer.Details.IsModified)
             {
                 row++;
-                worksheet.Cells.Merge(row, 0, 1, 7);
+                worksheet.Cells.Merge(row, column, 1, 7);
                 worksheet.Cells[row, column ].PutValue("Offer was manually modified");
                 worksheet.Cells[row, column ].Style.Font.IsBold = true;
             }

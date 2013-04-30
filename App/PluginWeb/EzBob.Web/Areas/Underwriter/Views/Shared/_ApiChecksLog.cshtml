@@ -16,7 +16,7 @@
         <tbody>
             <%_.each(vals, function(val){%>
             <tr>
-                <td><%-val.DateTime%></td>
+                <td><%-EzBob.formatDateTime(val.DateTime)%></td>
                 <td class="break-word"><%-val.ApiType%></td>
                 <td class="break-word"><%-val.Marketplace || ''%></td>
                 <td><%-val.Status%></td>

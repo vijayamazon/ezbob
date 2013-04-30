@@ -1,8 +1,10 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
+﻿using System;
+
+namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class ApiChecksLogModel
     {
-        public string DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
         public string ApiType { get; set; }
         public string Status { get; set; }
         public string ErrorMessage { get; set; }

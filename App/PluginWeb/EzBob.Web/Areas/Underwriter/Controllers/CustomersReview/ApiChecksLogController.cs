@@ -58,7 +58,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             models.AddRange(postCode.Select(val => new ApiChecksLogModel
                 {
                     ApiType = "Postcode",
-                    DateTime = FormattingUtils.FormatDateTimeToString(val.InsertDate, "-"),
+                    DateTime = val.InsertDate,
                     ErrorMessage = val.ErrorMessage,
                     Status = val.Status
                 }));
@@ -66,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             models.AddRange(customerMarketPlaceHistory.Select(val => new ApiChecksLogModel
             {
                 ApiType = val.marketplaceType,
-                DateTime = FormattingUtils.FormatDateTimeToString(val.history.UpdatingStart, "-"),
+                DateTime = val.history.UpdatingStart,
                 ErrorMessage = val.history.Error,
                 Status = val.history.Error == null ? "Successful" : "Failed",
                 Marketplace = val.displayName
@@ -75,7 +75,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             models.AddRange(eseriasLog.Select(val => new ApiChecksLogModel
             {
                 ApiType = val.ServiceType,
-                DateTime = FormattingUtils.FormatDateTimeToString(val.InsertDate),
+                DateTime = val.InsertDate,
                 ErrorMessage = "",
                 Status = "Successful"
             }));
@@ -83,12 +83,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             models.AddRange(pacnetLog.Select(val => new ApiChecksLogModel
             {
                 ApiType = val.RequestType,
-                DateTime = FormattingUtils.FormatDateTimeToString(val.InsertDate, "-"),
+                DateTime = val.InsertDate,
                 ErrorMessage = val.ErrorMessage,
                 Status = val.Status
             }));
 
-            models = new List<ApiChecksLogModel>(models.OrderByDescending(x => DateTime.ParseExact(x.DateTime, "dd/MM/yyyy HH:mm", new CultureInfo("en-US"))));
+            models = new List<ApiChecksLogModel>(models.OrderByDescending(x => x.DateTime));
 
             return this.JsonNet(models);
         }
