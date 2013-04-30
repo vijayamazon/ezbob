@@ -144,6 +144,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/App/ezbob.app.js")
                          .Add("~/Content/js/App/ezbob.clicktale.js")
                          .Add("~/Content/js/login/ezbob.login.js")
+                         .Add("~/Content/js/login/ezbob.login.view.coffee")
                          .Add("~/Content/js/contactUs/ezbo.contactUs.js")
                          .Add("~/Content/js/ezbob.design.js")
                          .Add("~/Content/js/App/ezbob.validation.js")

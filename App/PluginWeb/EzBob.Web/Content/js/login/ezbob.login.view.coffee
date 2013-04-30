@@ -1,10 +1,10 @@
 root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.LoginView extends Backbone.View
+class EzBob.CustomerLoginView extends Backbone.View
   initialize: ->
-    @template = _.template($("#login-template").html())
-    @loginModel = new EzBob.LoginModel()
+    @template = _.template($("#customerlogin-template").html())
+    @loginModel = new EzBob.CustomerLoginModel()
     @on "ready", @ready, this
     #@model.on "change:loggedIn", @render, this
 
@@ -17,10 +17,11 @@ class EzBob.LoginView extends Backbone.View
     "keydown input[name='Password']": "inputChanged"
     "paste input[name='Password']": "inputChanged"
     "input input[name='Password']": "inputChanged"
-    "change input[name='Password']": "password1Changed"
+    "change input[name='Password']": "passwordChanged"
 
   render: ->
-    @$el.html @template(@model.toJSON())
+    @$el.html @template()
+    #@$el.html @template(@loginModel.toJSON())
     @form = @$el.find(".simple-login")
     @validator = EzBob.validateLoginForm(@form)
     #if @model.get("loggedIn")
@@ -38,10 +39,10 @@ class EzBob.LoginView extends Backbone.View
       $("#loginSubmit").addClass "disabled"
 
   emailChanged: ->
-    EzBob.Validation.displayIndication @validator, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage"
+    EzBob.Validation.displayIndication @validator, "EmailImage", "#UserName", "#RotateImage", "#OkImage", "#FailImage"
 
   passwordChanged: ->
-    EzBob.Validation.displayIndication @validator, "Password1Image", "#Password", "#RotateImage", "#OkImage", "#FailImage"
+    EzBob.Validation.displayIndication @validator, "PasswordImage", "#Password", "#RotateImage", "#OkImage", "#FailImage"
 
   submit: ->
     return false  if @$el.find(":submit").hasClass("disabled")
@@ -91,7 +92,7 @@ class EzBob.LoginView extends Backbone.View
     @$el.find(":submit").toggleClass "disabled", isBlock
 
 
-class EzBob.LoginModel extends Backbone.Model
+class EzBob.CustomerLoginModel extends Backbone.Model
     defaults:
         completed: false
 

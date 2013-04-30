@@ -7,21 +7,21 @@
 
   root.EzBob = root.EzBob || {};
 
-  EzBob.LoginView = (function(_super) {
-    __extends(LoginView, _super);
+  EzBob.CustomerLoginView = (function(_super) {
+    __extends(CustomerLoginView, _super);
 
-    function LoginView() {
-      _ref = LoginView.__super__.constructor.apply(this, arguments);
+    function CustomerLoginView() {
+      _ref = CustomerLoginView.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
-    LoginView.prototype.initialize = function() {
-      this.template = _.template($("#login-template").html());
-      this.loginModel = new EzBob.LoginModel();
+    CustomerLoginView.prototype.initialize = function() {
+      this.template = _.template($("#customerlogin-template").html());
+      this.loginModel = new EzBob.CustomerLoginModel();
       return this.on("ready", this.ready, this);
     };
 
-    LoginView.prototype.events = {
+    CustomerLoginView.prototype.events = {
       "click :submit": "submit",
       "keydown input[name='UserName']": "inputChanged",
       "paste input[name='UserName']": "inputChanged",
@@ -30,11 +30,11 @@
       "keydown input[name='Password']": "inputChanged",
       "paste input[name='Password']": "inputChanged",
       "input input[name='Password']": "inputChanged",
-      "change input[name='Password']": "password1Changed"
+      "change input[name='Password']": "passwordChanged"
     };
 
-    LoginView.prototype.render = function() {
-      this.$el.html(this.template(this.model.toJSON()));
+    CustomerLoginView.prototype.render = function() {
+      this.$el.html(this.template());
       this.form = this.$el.find(".simple-login");
       this.validator = EzBob.validateLoginForm(this.form);
       this.$el.find("img[rel]").setPopover("left");
@@ -42,7 +42,7 @@
       return this;
     };
 
-    LoginView.prototype.inputChanged = function() {
+    CustomerLoginView.prototype.inputChanged = function() {
       if (EzBob.Validation.checkForm(this.validator)) {
         return $("#loginSubmit.disabled").removeClass("disabled");
       } else {
@@ -50,15 +50,15 @@
       }
     };
 
-    LoginView.prototype.emailChanged = function() {
-      return EzBob.Validation.displayIndication(this.validator, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
+    CustomerLoginView.prototype.emailChanged = function() {
+      return EzBob.Validation.displayIndication(this.validator, "EmailImage", "#UserName", "#RotateImage", "#OkImage", "#FailImage");
     };
 
-    LoginView.prototype.passwordChanged = function() {
-      return EzBob.Validation.displayIndication(this.validator, "Password1Image", "#Password", "#RotateImage", "#OkImage", "#FailImage");
+    CustomerLoginView.prototype.passwordChanged = function() {
+      return EzBob.Validation.displayIndication(this.validator, "PasswordImage", "#Password", "#RotateImage", "#OkImage", "#FailImage");
     };
 
-    LoginView.prototype.submit = function() {
+    CustomerLoginView.prototype.submit = function() {
       var that;
 
       if (this.$el.find(":submit").hasClass("disabled")) {
@@ -90,37 +90,37 @@
       return false;
     };
 
-    LoginView.prototype.ready = function() {
+    CustomerLoginView.prototype.ready = function() {
       return this.setReadOnly();
     };
 
-    LoginView.prototype.setReadOnly = function() {
+    CustomerLoginView.prototype.setReadOnly = function() {
       this.readOnly = true;
       return this.$el.find(":input").not(":submit").attr("disabled", "disabled").attr("readonly", "readonly").css("disabled");
     };
 
-    LoginView.prototype.blockBtn = function(isBlock) {
+    CustomerLoginView.prototype.blockBtn = function(isBlock) {
       BlockUi((isBlock ? "on" : "off"));
       return this.$el.find(":submit").toggleClass("disabled", isBlock);
     };
 
-    return LoginView;
+    return CustomerLoginView;
 
   })(Backbone.View);
 
-  EzBob.LoginModel = (function(_super) {
-    __extends(LoginModel, _super);
+  EzBob.CustomerLoginModel = (function(_super) {
+    __extends(CustomerLoginModel, _super);
 
-    function LoginModel() {
-      _ref1 = LoginModel.__super__.constructor.apply(this, arguments);
+    function CustomerLoginModel() {
+      _ref1 = CustomerLoginModel.__super__.constructor.apply(this, arguments);
       return _ref1;
     }
 
-    LoginModel.prototype.defaults = {
+    CustomerLoginModel.prototype.defaults = {
       completed: false
     };
 
-    return LoginModel;
+    return CustomerLoginModel;
 
   })(Backbone.Model);
 
