@@ -46,16 +46,19 @@ class EzBob.CustomerLoginView extends Backbone.View
         return false
 
     xhr = $.post @form.attr("action"), @form.serialize()
+    
     xhr.done (result, status) =>
+        
         if status is "success"
-            document.location.href = "#{window.gRootPath}Customer/Profile"
+            if result.success
+                document.location.href = "#{window.gRootPath}Customer/Profile"
+            else
+                EzBob.App.trigger "error", result.errorMessage
+                @blockBtn false
         else
-            EzBob.App.trigger "error", result.errorMessage  if result.errorMessage
+            EzBob.App.trigger "error", result.errorMessage if result.errorMessage
             @blockBtn false
     false
-
-  ready: ->
-    @setReadOnly()
 
   blockBtn: (isBlock) ->
     BlockUi (if isBlock then "on" else "off")

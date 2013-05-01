@@ -1,5 +1,5 @@
 ﻿@model EzBob.Web.Models.LogOnModel
-@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
+@using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
 {
     <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
 	<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
@@ -19,7 +19,7 @@
 
             <div class="form_field_container">
                 <label class="attardi-input">
-                    <span>Email address</span>
+                    <span>Email Address</span>
                     <input type="email" autofocus="autofocus" class="form_field" id="UserName" name="UserName" />
                 </label>
                 <span class="required">*</span>

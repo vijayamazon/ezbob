@@ -44,10 +44,10 @@ namespace EzBob.Web.Controllers
 
         //------------------------------------------------------------------------
         public AccountController(
-                                    MembershipProvider membershipProvider, 
+                                    MembershipProvider membershipProvider,
                                     IUsersRepository users,
-                                    CustomerRepository customers, 
-                                    IAppCreator appCreator, 
+                                    CustomerRepository customers,
+                                    IAppCreator appCreator,
                                     IEzBobConfiguration config,
                                     ISessionManager sessionManager,
                                     IEzbobWorkplaceContext context,
@@ -69,7 +69,7 @@ namespace EzBob.Web.Controllers
         [IsSuccessfullyRegisteredFilter]
         public ActionResult LogOn(string returnUrl)
         {
-            return View( new LogOnModel{ ReturnUrl = returnUrl } );
+            return View(new LogOnModel { ReturnUrl = returnUrl });
         }
         //------------------------------------------------------------------------
         public ActionResult AdminLogOn(string returnUrl)
@@ -84,15 +84,16 @@ namespace EzBob.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = _users.GetUserByLogin(model.UserName);
-                
-                if(user == null)
+
+                if (user == null)
                 {
                     ModelState.AddModelError("", "User not found or incorrect password.");
-                    
-                }else
+
+                }
+                else
                 {
 
-                    var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id ==32 || r.Id ==33  );
+                    var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
                     if (!isUnderwriter)
                     {
                         var customer = _customers.Get(user.Id);
@@ -109,11 +110,11 @@ namespace EzBob.Web.Controllers
                         user.LoginFailedCount = 0;
                         return SetCookieAndRedirect(model);
                     }
-                    if (user.LoginFailedCount >=3)
+                    if (user.LoginFailedCount >= 3)
                     {
                         _log.InfoFormat("More than 3 unsuccessful login attempts have been made. Resetting user password");
                         //RestorePassword(user.EMail, user.SecurityAnswer);
-                        
+
                         var password = _membershipProvider.ResetPassword(user.EMail, "");
                         _appCreator.ThreeInvalidAttempts(user, user.Name, password);
                         user.IsPasswordRestored = true;
@@ -127,6 +128,68 @@ namespace EzBob.Web.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+        //------------------------------------------------------------------------
+        [HttpPost]
+        public JsonNetResult CustomerLogOn(LogOnModel model)
+        {
+            string errorMessage = null;
+            if (ModelState.IsValid)
+            {
+                var user = _users.GetUserByLogin(model.UserName);
+
+                if (user == null)
+                {
+                    errorMessage = @"User not found or incorrect password.";
+                }
+                else
+                {
+                    var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
+                    if (!isUnderwriter)
+                    {
+                        var customer = _customers.Get(user.Id);
+                        if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
+                        {
+                            errorMessage = @"This account is closed, please contact EZBOB customer care customercare@ezbob.com";
+                            return this.JsonNet(new { success = false, errorMessage });
+                        }
+                    }
+
+                    if (_membershipProvider.ValidateUser(model.UserName, model.Password))
+                    {
+                        user.LoginFailedCount = 0;
+                        SetCookie(model);
+                        return this.JsonNet(new { success = true, model });
+                    }
+
+                    if (user.LoginFailedCount >= 3)
+                    {
+                        _log.InfoFormat(
+                            "More than 3 unsuccessful login attempts have been made. Resetting user password");
+                        //RestorePassword(user.EMail, user.SecurityAnswer);
+
+                        var password = _membershipProvider.ResetPassword(user.EMail, "");
+                        _appCreator.ThreeInvalidAttempts(user, user.Name, password);
+                        user.IsPasswordRestored = true;
+                        user.LoginFailedCount = 0;
+
+                        errorMessage =
+                            @"Three unsuccessful login attempts have been made. EZBOB has issued you with a temporary password. Please check your e-mail.";
+                    }
+                    else
+                    {
+                        errorMessage = @"User not found or incorrect password.";
+                    }
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return this.JsonNet(new { success = false, errorMessage });
+        }
+        //------------------------------------------------------------------------
+        private void SetCookie(LogOnModel model)
+        {
+            FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
         }
         //------------------------------------------------------------------------
         private ActionResult SetCookieAndRedirect(LogOnModel model)
@@ -181,7 +244,7 @@ namespace EzBob.Web.Controllers
                 {
                     return this.JsonNet(new { success = false, errorMessage = DbStrings.EmailAddressAlreadyExists });
                 }
-                return this.JsonNet(new {success = false, errorMessage = e.Message});
+                return this.JsonNet(new { success = false, errorMessage = e.Message });
             }
         }
 
@@ -229,7 +292,7 @@ namespace EzBob.Web.Controllers
                 };
 
                 var sourceref = Request.Cookies["sourceref"];
-                if(sourceref != null)
+                if (sourceref != null)
                 {
                     var cookie = new HttpCookie("sourceref", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
                     Response.Cookies.Add(cookie);
@@ -239,17 +302,17 @@ namespace EzBob.Web.Controllers
                 var link = _confirmation.GenerateLink(customer);
 
                 _zoho.RegisterLead(customer);
-                
+
                 if (Request.Cookies["istest"] != null)
                 {
                     customer.IsTest = true;
                 }
 
-                _customers.Save(customer);               
+                _customers.Save(customer);
 
                 _appCreator.AfterSignup(user, link);
             }
-            if(status == MembershipCreateStatus.DuplicateEmail)
+            if (status == MembershipCreateStatus.DuplicateEmail)
             {
                 throw new Exception("This email is already registered");
             }
@@ -274,13 +337,13 @@ namespace EzBob.Web.Controllers
             var user = _users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
             return user == null ?
                 this.JsonNet(new { error = "User : '" + email + "' was not found" }) :
-                this.JsonNet(new { question = user.SecurityQuestion !=null ? user.SecurityQuestion.Name : "" });
+                this.JsonNet(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" });
         }
 
         //------------------------------------------------------------------------        
         [Transactional]
         [CaptchaValidationFilter]
-        public JsonNetResult RestorePassword(string email="", string answer="")
+        public JsonNetResult RestorePassword(string email = "", string answer = "")
         {
             if (!ModelState.IsValid)
             {
@@ -289,7 +352,7 @@ namespace EzBob.Web.Controllers
 
             if (_users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null || string.IsNullOrEmpty(email))
             {
-                throw new UserNotFoundException(string.Format("User {0} not found",email));
+                throw new UserNotFoundException(string.Format("User {0} not found", email));
             }
 
             if (string.IsNullOrEmpty(answer))
