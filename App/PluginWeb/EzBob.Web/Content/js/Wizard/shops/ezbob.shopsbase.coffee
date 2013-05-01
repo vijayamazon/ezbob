@@ -77,7 +77,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     setFocus: (storeName) ->
         $.colorbox.close()
-        console.log("setFocus", storeName)
 
         switch storeName
             when "EKM"
