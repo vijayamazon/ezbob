@@ -756,6 +756,22 @@ EzBob.validateChangePassword = function (el) {
     });
 };
 
+EzBob.validateRestorePasswordForm = function (el) {
+    var e = el || $(".restorePasswordArea");
+    return e.validate({
+        rules: {
+            email: { required: true, email: true },
+            Answer: { required: true, maxlength: 199 },
+        },
+        messages: {
+            "email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
+            "Answer": { maxlength: "Maximum answer length is 199 characters" }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+};
+
 EzBob.validateDirectorForm = function (el) {
     var e = el;
     return e.validate({

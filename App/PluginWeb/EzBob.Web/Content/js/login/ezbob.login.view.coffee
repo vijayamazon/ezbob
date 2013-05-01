@@ -25,7 +25,7 @@ class EzBob.CustomerLoginView extends Backbone.View
     oFieldStatusIcons = this.$el.find('IMG.field_status')
     oFieldStatusIcons.filter('.required').field_status({ required: true })
     oFieldStatusIcons.not('.required').field_status({ required: false })
-    this
+    @
 
   inputChanged: ->
     if EzBob.Validation.checkForm(@validator)
