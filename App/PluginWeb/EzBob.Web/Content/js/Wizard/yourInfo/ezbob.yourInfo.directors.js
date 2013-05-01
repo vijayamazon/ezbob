@@ -10,8 +10,41 @@ EzBob.DirectorMainView = Backbone.View.extend({
     },
     events: {
         "click #addDirector": "addDirector",
-        "click .removeDirector": "removeDirector"
+        "click .removeDirector": "removeDirector",
+        "change .director_name_part": "directorNamePartChanged",
+        "change .director_gender": "directorGenderChanged"
     },
+	directorNamePartChanged: function(jqEvent) {
+		var oTarget = $(jqEvent.target);
+		var oIcon = oTarget.closest('div').find('img.field_status').first();
+
+		var sStatusName = '';
+		if (oIcon.hasClass('required'))
+			sStatusName = oTarget.val() ? 'ok' : 'fail';
+		else
+			sStatusName = oTarget.val() ? 'ok' : 'empty';
+
+		oIcon.field_status('set', sStatusName);
+	},
+	directorGenderChanged: function(jqEvent) {
+		var oTarget = $(jqEvent.target);
+		var oParent = oTarget.closest('div');
+
+		var nCheckedCount = 0;
+
+		oParent.find('.director_gender').each(function(idx, oChk) {
+			if ($(oChk).attr('checked')) {
+				nCheckedCount++;
+				return false;
+			} // if
+
+			return true;
+		});
+
+		sStatusName = nCheckedCount ? 'ok' : 'fail';
+
+		oParent.find('img.field_status').field_status('set', sStatusName);
+	},
     render: function () {
         this.$el.html(this.template());
         this.directorArea = this.$el.find('.directorArea');
