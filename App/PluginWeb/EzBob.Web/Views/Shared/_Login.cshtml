@@ -1,6 +1,15 @@
 ﻿@model EzBob.Web.Models.LogOnModel
-@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
+@using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
 {
+    <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
+	<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
+	<img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
+
+	<!-- This should be improved: duplicated images and style hack -->
+	<img id="RotateImageRight" src="../../Content/css/images/rotate.gif" class="HiddenImage alignright" style="margin-right: 240px;" />
+	<img id="OkImageRight" src="../../Content/css/images/ok.png"  class="HiddenImage alignright" style="margin-right: 240px;" />
+    <img id="FailImageRight" src="../../Content/css/images/fail.png" class="HiddenImage alignright" style="margin-right: 240px;" />
+    
     <div class="inner">
         <h1>Login</h1>
         <section id="content">
@@ -10,27 +19,26 @@
 
             <div class="form_field_container">
                 <label class="attardi-input">
-                    <span>Email address</span>
-                    <input type="email" autofocus="autofocus" class="form_field" data-val="true"
-                        data-val-required="The email address field is required."
-                        id="UserName" name="UserName" />
+                    <span>Email Address</span>
+                    <input type="email" autofocus="autofocus" class="form_field" id="UserName" name="UserName" />
                 </label>
                 <span class="required">*</span>
+                <img id="EmailImage" class="HiddenImage"/>
             </div>
 
-            @Html.ValidationMessageFor(m => m.UserName)
+            @*@Html.ValidationMessageFor(m => m.UserName)*@
 
             <div class="form_field_container">
                 <label class="attardi-input">
                     <span>Password</span>
-                    <input type="password" autocomplete="off" class="form_field" data-val="true"
-                        data-val-required="The password field is required."
-                        id="Password" name="Password" />
+                    <input type="password" autocomplete="off" class="form_field" id="Password" name="Password" />
                 </label>
                 <span class="required">*</span>
+                <img id="PasswordImage" class="HiddenImage"/>
             </div>
 
-            @Html.ValidationMessageFor(m => m.Password)
+            @*@Html.ValidationMessageFor(m => m.Password)*@
+
             <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
 
             <div class="form_field_container">
@@ -39,7 +47,7 @@
                 </label>
             </div>
             <div class="form_buttons_container">
-                <input type="submit" value="Login" class="button orange continue disabled" id="loginSubmit" />
+                <input type="submit" value="Login" class="button orange login-btn disabled" id="loginSubmit" />
             </div>
             <p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
         </section>

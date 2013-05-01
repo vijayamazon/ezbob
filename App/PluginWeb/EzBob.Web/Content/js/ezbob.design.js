@@ -21,9 +21,6 @@ $(function () {
     $('.datepicker').datepicker();
     $('#signup-form').validate();
 
-    var login = new EzBob.LoginView({ el: $('.login-small-container') });
-    login.render();
-
     var contactUs = new EzBob.ContactUsView();
     contactUs.template = $(".contactUs").html();
     contactUs.render();
@@ -681,6 +678,30 @@ $.validator.setDefaults({
     onChangeFocus: true,
     ignore: ""
 });
+
+EzBob.validateLoginForm = function (el) {
+    var e = el || $(".simple-login");
+    var passPolicy = { required: true, minlength: 6, maxlength: 20 };
+    var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
+    if (EzBob.Config.PasswordPolicyType != 'simple') {
+        passPolicy.regex =
+        "^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$";
+        passPolicy.minlength = 7;
+        passPolicyText = "Password has to have 2 types of characters out of 4 (letters,caps,digits,special chars)";
+    }
+    return e.validate({
+        rules: {
+            UserName: { required: true, email: true },
+            Password:  $.extend({}, passPolicy) 
+        },
+        messages: {
+            "UserName": { email: EzBob.dbStrings.NotValidEmailAddress, required: EzBob.dbStrings.NotValidEmailAddress },
+            "Password": { required: passPolicyText, regex: passPolicyText },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlight
+    });
+};
 
 EzBob.validateSignUpForm = function (el) {
     var e = el || $(".signup");

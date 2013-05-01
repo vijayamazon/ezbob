@@ -1,23 +1,30 @@
-﻿@model EzBob.Web.Models.LogOnModel
+﻿@using EzBob.Web.Infrastructure
+@model EzBob.Web.Models.LogOnModel
 @{
     ViewBag.Title = "Login to EZBOB | Business loans UK | Money in your account in less than 30 minutes";
 }
+<section id="content">
+    <div class="row-fluid">
+        <div class="notifications"></div>
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- @Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.") -->
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="loginTemplate">
+            </div>
+        </div>
+    </div>
+</section>
 
-<div class="row-fluid">
-    <div class="notifications"></div>
-    <div class="row-fluid">
-        <div class="span12">
-            <!-- @Html.ValidationSummary(true, "Login was unsuccessful. Please correct the errors and try again.") -->
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span10">
-            @{Html.RenderPartial("_Login", Model);}
-        </div>
-    </div>
-</div>
 @section Js{
+    @BundleHelper.RenderLoginJs();
+    @{Html.RenderPartial("_LoginTemplate", Model);}
     <script type="text/javascript">
+        var loginPage = new EzBob.CustomerLoginView({ el: $('.loginTemplate') });
+        loginPage.render();
+
         $(function () {
             EzBob.validateSignUpForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
