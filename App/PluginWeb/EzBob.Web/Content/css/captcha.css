@@ -33,18 +33,3 @@
     padding: 0 10px;
 }
 
-.restorePasswordArea .captcha-head {
-    margin-left: 5px;
-}
-
-.restorePasswordArea .captcha {
-    margin-left: -5px;
-}
-
-.restorePasswordArea #recaptcha_area{
-    margin: 5px;
-}
-
-.restorePasswordArea .simpleCaptcha {
-    margin-left: -47px;
-}
