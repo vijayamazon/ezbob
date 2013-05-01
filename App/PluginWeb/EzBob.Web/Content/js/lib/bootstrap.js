@@ -1,4 +1,4 @@
-/* ===================================================
+﻿/* ===================================================
  * bootstrap-transition.js v2.2.1
  * http://twitter.github.com/bootstrap/javascript.html#transitions
  * ===================================================
@@ -558,13 +558,31 @@
   * ==================== */
 
   $(document).on('click.collapse.data-api', '[data-toggle=collapse]', function (e) {
-    var $this = $(this), href
+  	var $this = $(this), href
       , target = $this.attr('data-target')
         || e.preventDefault()
         || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
       , option = $(target).data('collapse') ? 'toggle' : $this.data()
-    $this[$(target).hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
-    $(target).collapse(option)
+  	$this[$(target).hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
+  	$(target).collapse(option)
+  })
+	
+  $(document).on('click.collapse.data-api', '[data-toggle=collapsewithlinkedarrow]', function (e) {
+  	var $this = $(this), href
+      , target = (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
+      , option = $(target).data('collapse') ? 'toggle' : $this.data()
+  	$this[$(target).hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
+  	console.log('a')
+  	console.log($(target))
+  	$(target).collapse(option)
+  	console.log('b')
+  	console.log($(target))
+  	var arrow = $this.attr('data-target')
+  	if ($(target).hasClass('in')) {
+  		$(arrow)[0].innerText = '▲'
+  	} else {
+  		$(arrow)[0].innerText = '▼'
+  	}
   })
 
 }(window.jQuery);/* ============================================================
