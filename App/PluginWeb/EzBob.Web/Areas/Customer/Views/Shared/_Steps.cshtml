@@ -6,8 +6,9 @@
         var css = "";
         if(i == current) css += "active current ";
         if(i < current) css += "completed complete ";
+        if(progress == 100) css = "completed complete ";
         %>
-        <li class="<%= css %> " data-step-num="<%= step.num %>">
+        <li class="<%- css %> " data-step-num="<%= step.num %>">
             <span class="step_label">Step <%= step.num + 1 %>:
             </span>
             <%= step.title %>
