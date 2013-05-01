@@ -24,53 +24,70 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 (function ($) {
 	function toggleLabel() {
-		var input = $(this);
+		return $(this).each(function() {
+			var input = $(this);
 
-		setTimeout(function () {
-			var def = input.attr('title');
+			setTimeout(function () {
+				var def = input.attr('title');
 
-			var bIsEmpty = input.val() && (input.val() == input.attr('empty_value'));
-			
-			if (bIsEmpty || !input.val() || (input.val() == def)) {
-				input.prev('span').css('visibility', '');
-				if (def) {
-					var dummy = $('<label></label>').text(def).css('visibility', 'hidden').appendTo('body');
-					input.prev('span').css('margin-left', dummy.width() + 3 + 'px');
-					dummy.remove();
+				var bIsEmpty = input.val() && (input.val() == input.attr('empty_value'));
+				
+				if (bIsEmpty || !input.val() || (input.val() == def)) {
+					input.prev('span').css('visibility', '');
+					if (def) {
+						var dummy = $('<label></label>').text(def).css('visibility', 'hidden').appendTo('body');
+						input.prev('span').css('margin-left', dummy.width() + 3 + 'px');
+						dummy.remove();
+					}
+				} else {
+					input.prev('span').css('visibility', 'hidden');
 				}
-			} else {
-				input.prev('span').css('visibility', 'hidden');
-			}
-		}, 0);
-	};
+			}, 0);
+		});
+	}; // toggleLabel
 
-	function resetField() {
-		var def = $(this).attr('title');
-		if (!$(this).val() || ($(this).val() == def)) {
-			$(this).val(def);
-			$(this).prev('span').css('visibility', '');
-		}
-	};
+	var sSupportedControls = '.attardi-input input, .attardi-input textarea, .attardi-input select';
 
-	$(document).on('cut keydown paste change', '.attardi-input input, .attardi-input textarea, .attardi-input select', toggleLabel);
+	$(document).on('cut keydown paste change', sSupportedControls, toggleLabel);
 
-	$(document).on('focusin focus', '.attardi-input input, .attardi-input textarea, .attardi-input select', function () {
+	$(document).on('focusin focus', sSupportedControls, function () {
 		$(this).prev('span').addClass('active');
 	});
 
-	$(document).on('focusout blur', '.attardi-input input, .attardi-input textarea, .attardi-input select', function () {
+	$(document).on('focusout blur', sSupportedControls, function () {
 		$(this).prev('span').removeClass('active');
 	});
 
 	// set things up as soon as the DOM is ready
 	$(function () {
-		$('.attardi-input input, .attardi-input textarea, .attardi-input select').each(function () { toggleLabel.call(this); });
+		$(sSupportedControls).each(function () { toggleLabel.call(this); });
 	});
 
 	// do it again to detect Chrome autofill
 	$(window).load(function () {
 		setTimeout(function () {
-			$('.attardi-input input, .attardi-input textarea, .attardi-input select').each(function () { toggleLabel.call(this); });
+			$(sSupportedControls).each(function () { toggleLabel.call(this); });
 		}, 0);
 	});
+
+	var oMethods = {
+		toggle: toggleLabel,
+
+		supported_controls: function () { return sSupportedControls; }, // supported_controls
+
+		toggle_all: function() {
+			return $(this).each(function() {
+				$(this).find(sSupportedControls).each(function() {
+					toggleLabel.apply(this);
+				});
+			});
+		} // toggle_all
+	}; // oMethods
+
+	$.fn.attardi_labels = function(method) {
+		if (oMethods[method])
+			return oMethods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		else
+			$.error('Method is not implemented: ' + method);
+	}; // main plugin function
 })(jQuery);

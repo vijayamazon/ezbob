@@ -245,7 +245,7 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false)
+@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "")
 {
     var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
     var validationClass = required ? "requiredDate" : "";
@@ -266,7 +266,7 @@
 
             <label class="attardi-input">
                 <span>Day</span>
-                <select id='@dayIdentificator' name="day" class="form_field_date" empty_value="-">
+                <select id='@dayIdentificator' name="day" class="form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 31; i++)
                        {
@@ -281,7 +281,7 @@
 
             <label class="attardi-input">
                 <span>Month</span>
-                <select id='@monthIdentificator' name="month" class="form_field_date" empty_value="-">
+                <select id='@monthIdentificator' name="month" class="form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 12; i++)
                        {
@@ -297,7 +297,7 @@
 
             <label class="attardi-input">
                 <span>Year</span>
-                <select id='@yearIdentificator' name="year" class="form_field_date" empty_value="-">
+                <select id='@yearIdentificator' name="year" class="form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{
                         var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
@@ -316,13 +316,12 @@
 			
 			@if (statusIcon) {
 				var sReq = required ? "required" : "";
-				var sId = new HtmlString(name + "Image");
+				var sId = identificator + "Image";
 				<img id="@sId" class="field_status @sReq"/>
 			}
 
 			<input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
         </div>
-
     </div>
 }
 
@@ -356,9 +355,6 @@
 {	 
     <div class="control-group">
         <div class="captcha">
-            <!-- div> 
-                <p class="captcha-head">Please enter the following characters in the field below <span class="required">*</span></p>
-            </div -->
             <div id="captcha">
             </div>
         </div>

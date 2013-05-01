@@ -16,7 +16,7 @@
 }
 .simpleCaptcha { /* padding: 0 54px 15px; */ }
 
-.simpleCaptcha img {
+.simpleCaptcha img#CaptchaImage {
     border: 1px dashed #ccc;
     border-radius: 8px;
     -moz-border-radius: 8px;

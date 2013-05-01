@@ -32,7 +32,11 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         'keydown input[name="SecurityAnswer"]': 'inputChanged',
         'paste input[name="SecurityAnswer"]': 'inputChanged',
         'input input[name="SecurityAnswer"]': 'inputChanged',
-        'change input[name="SecurityAnswer"]': 'secretAnswerChanged'
+        'change input[name="SecurityAnswer"]': 'secretAnswerChanged',
+        'change #CaptchaInputText': 'captchaInputChanged',
+        'input #CaptchaInputText': 'inputChanged',
+        'paste #CaptchaInputText': 'inputChanged',
+        'keydown #CaptchaInputText': 'inputChanged'
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
@@ -75,6 +79,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     secretAnswerChanged: function () {
     	EzBob.Validation.displayIndication(this.validator, "SecretAnswerImage", "#SecurityAnswer");
+    },
+    captchaInputChanged: function () {
+    	EzBob.Validation.displayIndication(this.validator, "CaptchaInputTextImage", "#CaptchaInputText");
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {

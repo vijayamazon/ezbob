@@ -14,13 +14,13 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
     },
     limitedCompanyNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNameImage", "#LimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNameImage", "#LimitedCompanyName");
     },
     limitedCompanyNumberChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNumberImage", "#LimitedCompanyNumber", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNumberImage", "#LimitedCompanyNumber");
     },
     limitedBusinessPhoneChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone");
     },
     render: function () {
         this.constructor.__super__.render.call(this);
@@ -34,6 +34,10 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.$el.find(".cashInput").cashEdit();
         this.$el.find(".addressCaption").hide();
+
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
     },
     next: function () {
         if (!this.validator.form() || !this.companyAddressValidator) {

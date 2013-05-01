@@ -723,14 +723,16 @@ EzBob.validateSignUpForm = function (el) {
             signupPass2: passPolicy2,
             Email: { required: true, email: true },
             securityQuestion: { required: true },
-            SecurityAnswer: { required: true, maxlength: 199 }
+            SecurityAnswer: { required: true, maxlength: 199 },
+            CaptchaInputText: { required: true, minlength: 6, maxlength: 6 }
         },
         messages: {
             "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
             "signupPass1": { required: passPolicyText, regex: passPolicyText },
             "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
             "securityQuestion": { required: "This field is required" },
-            "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" }
+            "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" },
+            "CaptchaInputText": { required: "This field is required" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight

@@ -40,7 +40,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 	},
     dateOfBirthChanged: function () {
 	    if (this.year && this.month && this.day) {
-		    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth", "#RotateImage", "#OkImage", "#FailImage");
+		    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth");
 	    }
     },
     dateOfBirthYearChanged: function () {

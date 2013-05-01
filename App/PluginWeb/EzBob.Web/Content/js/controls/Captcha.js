@@ -44,13 +44,13 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 							.addClass('form_field')
 						) // append to label
 					) // append to div
+					.append('<span>&nbsp;</span>')
 					.append(
-						$('<span />').text(' ')
-					)
-					.append(
-						$('<span />').text('*').addClass('required')
+						$('<img />').addClass('field_status').attr('id', 'CaptchaInputTextImage')
 					)
 				); // replaceWith
+
+				that.$el.find('img.field_status').field_status({ required: true });
 
 				//fix conflict with Backbone history and refresh button
 				that.$el.find('.simpleCaptcha a').on("click", function () {
