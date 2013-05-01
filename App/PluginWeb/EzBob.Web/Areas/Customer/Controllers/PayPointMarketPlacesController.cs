@@ -79,9 +79,11 @@
 
                 var payPointSecurityInfo = new PayPointSecurityInfo(model.id, model.remotePassword, model.vpnPassword, model.mid);
 
+				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+					customer.WizardStep = WizardStepType.Marketplace;
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
 
-                _appCreator.EbayAdded(customer, payPoint.Id); // qqq - should be different strategy
+                _appCreator.EbayAdded(customer, payPoint.Id);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException)

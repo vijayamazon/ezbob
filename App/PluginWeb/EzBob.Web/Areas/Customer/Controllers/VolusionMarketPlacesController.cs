@@ -122,6 +122,8 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					MarketplaceId = marketPlaceId
 				};
 
+				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+					customer.WizardStep = WizardStepType.Marketplace;
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
 
 				_appCreator.EbayAdded(customer, mp.Id); // TODO: implement and use VolusionAdded

@@ -89,9 +89,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                  UpdatingEnd = DateTime.UtcNow
                              };
 
-                _customer.CustomerMarketPlaces.Add(mp);
+				_customer.CustomerMarketPlaces.Add(mp); 
+				
+				if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
+					_customer.WizardStep = WizardStepType.Marketplace;
+
                 _session.Flush();
                 _appCreator.EbayAdded(customer, mp.Id);
+				
                 return this.JsonNet(EkmAccountModel.ToModel(mp));
             }
             catch (MarketPlaceAddedByThisCustomerException e)
