@@ -1,19 +1,19 @@
 ﻿namespace EKM
 {
-    using EKM.API;
+    using API;
     using System;
     using System.Text;
     using System.Collections.Generic;
     using System.ServiceModel;
-    using System.ServiceModel.Description;
-    using System.ServiceModel.Channels;
+    using log4net;
 
-    /// <summary>
+	/// <summary>
     /// Here we use EKM API classes
     /// The API service reference was generated from http://partnerapi.ekmpowershop1.com/v1.1/partnerapi.asmx
     /// </summary>
     public class EkmConnector
-    {
+	{
+		private static readonly ILog _Log = LogManager.GetLogger(typeof(EkmConnector));
         private static string PartnerKey = "4kNLfm+jv37k0sWb8ojpxGSQ7yx169xz/nS3mmKGiCwUn7fJIl5UxAZthlm44iiEJynebcGHOG/9fJV2/cM4BQ==";
         private static string PartnerEndpointName = "PartnerAPISoap";
         private static string PartnerContractName = "API.PartnerAPISoap";
@@ -43,9 +43,9 @@
                 if (counter != 1)
                 {
                     sb.Append(LineBreak);
-                }
-                sb.Append("Login to Shop Failed. UserName:").Append(userName);
-                errMsg = sb.ToString();
+				}
+				_Log.Info(sb.ToString());
+                errMsg = "Invalid Credentials";
                 return false;
             }
 
