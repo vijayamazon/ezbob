@@ -1,43 +1,14 @@
 ﻿@model EzBob.Web.Models.LogOnModel
 @using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
 {
-    <img id="RotateImage" src="../../Content/css/images/rotate.gif" class="HiddenImage" />
-	<img id="OkImage" src="../../Content/css/images/ok.png"  class="HiddenImage" />
-	<img id="FailImage" src="../../Content/css/images/fail.png" class="HiddenImage" />
-
-	<!-- This should be improved: duplicated images and style hack -->
-	<img id="RotateImageRight" src="../../Content/css/images/rotate.gif" class="HiddenImage alignright" style="margin-right: 240px;" />
-	<img id="OkImageRight" src="../../Content/css/images/ok.png"  class="HiddenImage alignright" style="margin-right: 240px;" />
-    <img id="FailImageRight" src="../../Content/css/images/fail.png" class="HiddenImage alignright" style="margin-right: 240px;" />
-    
     <div class="inner">
         <h1>Login</h1>
         <section id="content">
             <h2>Welcome Back!</h2>
-            <!-- h3>Already have an account?</h3><p>Great! Sign in below</p -->
             @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
-
-            <div class="form_field_container">
-                <label class="attardi-input">
-                    <span>Email Address</span>
-                    <input type="email" autofocus="autofocus" class="form_field" id="UserName" name="UserName" />
-                </label>
-                <span class="required">*</span>
-                <img id="EmailImage" class="HiddenImage"/>
-            </div>
-
-            @*@Html.ValidationMessageFor(m => m.UserName)*@
-
-            <div class="form_field_container">
-                <label class="attardi-input">
-                    <span>Password</span>
-                    <input type="password" autocomplete="off" class="form_field" id="Password" name="Password" />
-                </label>
-                <span class="required">*</span>
-                <img id="PasswordImage" class="HiddenImage"/>
-            </div>
-
-            @*@Html.ValidationMessageFor(m => m.Password)*@
+            
+            @EzForm.InputText("UserName", "Email Address", cls:"form_field", isRequired: true, statusIcon: true)
+            @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true)
 
             <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
 
@@ -55,5 +26,4 @@
     </div>
     <div id="DontHaveAccount">
     </div>
-    
 }

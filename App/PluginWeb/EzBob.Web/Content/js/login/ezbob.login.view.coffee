@@ -22,6 +22,9 @@ class EzBob.CustomerLoginView extends Backbone.View
     @validator = EzBob.validateLoginForm(@form)
     @$el.find("img[rel]").setPopover "left"
     @$el.find("li[rel]").setPopover "left"
+    oFieldStatusIcons = this.$el.find('IMG.field_status')
+    oFieldStatusIcons.filter('.required').field_status({ required: true })
+    oFieldStatusIcons.not('.required').field_status({ required: false })
     this
 
   inputChanged: ->
@@ -31,10 +34,10 @@ class EzBob.CustomerLoginView extends Backbone.View
       $("#loginSubmit").addClass "disabled"
 
   emailChanged: ->
-    EzBob.Validation.displayIndication @validator, "EmailImage", "#UserName", "#RotateImage", "#OkImage", "#FailImage"
+    @$el.find('#UserNameImage').field_status('set', if EzBob.Validation.element(@validator,@$el.find('#UserName')) then 'ok' else 'fail')
 
   passwordChanged: ->
-    EzBob.Validation.displayIndication @validator, "PasswordImage", "#Password", "#RotateImage", "#OkImage", "#FailImage"
+    @$el.find('#PasswordImage').field_status('set', if EzBob.Validation.element(@validator,@$el.find('#Password')) then 'ok' else 'fail')
 
   submit: ->
     return false if @$el.find(":submit").hasClass("disabled")
