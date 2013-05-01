@@ -26,6 +26,9 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         form        : 'form'
 
     inputChanged: ->
+        @$el.find('#ekm_loginImage').field_status('set', if @ui.login.val() then 'ok' else 'fail')
+        @$el.find('#ekm_passwordImage').field_status('set', if @ui.password.val() then 'ok' else 'fail')
+
         enabled = @ui.login.val() and @ui.password.val()
         @ui.connect.toggleClass('disabled', !enabled)
 

@@ -10,8 +10,7 @@
 						<label class="attardi-input"><span>First Name</span>
 							<input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
 						</label>
-						<span class="required">*</span>
-						<img id="FirstNameImage"/>
+						<img id="FirstNameImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -20,7 +19,7 @@
 						<label class="attardi-input"><span>Middle Name</span>
 							<input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
 						</label>
-						<img id="MiddleNameImage"/>
+						<img id="MiddleNameImage" class="field_status"/>
 					</div>
 				</div>
 
@@ -29,21 +28,19 @@
 						<label class="attardi-input"><span>Last Name</span>
 							<input id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="SurnameImage"/>
+						<img id="SurnameImage" class="field_status required"/>
 					</div>
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
 				<div class="form_field_container GenderCtrl">
 					Gender
-					<span class="required">*</span>
 					<input type="radio" name="Gender" value="M" id="GenderCtrl_M"><label for="GenderCtrl_M">Male</label>
 					<input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
-					<img id="GenderImage" />
+					<img id="GenderImage" class="field_status required"/>
 				</div>
 
-				@EzForm.DateInput("DateOfBirth", "Date of Birth", true, null, true)
+				@EzForm.DateInput("DateOfBirth", "Date of Birth", required: true, statusIcon: true)
 
 				<div class="control-group form_field_container">
 					<div class="controls">
@@ -57,8 +54,7 @@
 								<option value="Other">Other</option>
 							</select>
 						</label>
-						<span class="required">*</span>
-						<img id="MartialStatusImage"/>
+						<img id="MartialStatusImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -77,8 +73,7 @@
 								<option value="3">More than 3 years</option>
 							</select>
 						</label>
-						<span class="required">*</span>
-						<img id="TimeAtAddressImage"/>
+						<img id="TimeAtAddressImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -95,8 +90,7 @@
 									<option value="Living with parents">Living with parents</option>
 								</select>
 						</label>
-						<span class="required">*</span>
-						<img id="ResidentialStatusImage"/>
+						<img id="ResidentialStatusImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -108,8 +102,7 @@
 							<span>Best Contact Number</span>
 							<input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
 						</label>
-						<span class="required">*</span>
-						<img id="DayTimePhoneImage"/>
+						<img id="DayTimePhoneImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -117,9 +110,9 @@
 					<div class="controls">
 						<label class="control-label attardi-input">
 							<span>Additional Contact Number</span>
-							<input type="text" class="phonenumber form_field" name="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
+							<input type="text" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
 						</label>
-						<span class="required">*</span>
+						<img id="MobilePhoneImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -139,8 +132,7 @@
 								<option value="LLP">LLP</option>
 							</select>
 						</label>
-						<span class="required">*</span>
-						<img id="TypeOfBusinessImage"/>
+						<img id="TypeOfBusinessImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -150,8 +142,7 @@
 							<span>Total Online Sales (£)</span>
 							<input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="OverallTurnOverImage" />
+						<img id="OverallTurnOverImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -161,8 +152,7 @@
 							<span>Total Online & Offline Sales (£)</span>
 							<input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="WebSiteTurnOverImage" />
+						<img id="WebSiteTurnOverImage" class="field_status required" />
 					</div>
 				</div>
 
@@ -206,8 +196,7 @@
 						<label class="control-label attardi-input"><span>Registration #</span>
 							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="LimitedCompanyNumberImage"/>
+						<img id="LimitedCompanyNumberImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -217,8 +206,7 @@
 							<span>Name</span>
 							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="LimitedCompanyNameImage"/>
+						<img id="LimitedCompanyNameImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -230,8 +218,7 @@
 							<span>Business Phone</span>
 							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
 						</label>
-						<span class="required">*</span>
-						<img id="LimitedBusinessPhoneImage"/>
+						<img id="LimitedBusinessPhoneImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -262,8 +249,7 @@
 							<span>Name</span>
 							<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
 						</label>
-						<span class="required">*</span>
-						<img id="NonLimitedCompanyNameImage"/>
+						<img id="NonLimitedCompanyNameImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -280,8 +266,7 @@
 								<option value="3">More than 3 years</option>
 							</select>
 						</label>
-						<span class="required">*</span>
-						<img id="NonLimitedTimeAtAddressImage"/>
+						<img id="NonLimitedTimeAtAddressImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -303,8 +288,7 @@
 								<option value="101">More than 10 years</option>
 							</select>
 						</label>
-						<span class="required">*</span>
-						<img id="NonLimitedTimeInBusinessImage"/>
+						<img id="NonLimitedTimeInBusinessImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -314,8 +298,7 @@
 							<span>Business Phone</span>
 							<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
 						</label>
-						<span class="required">*</span>
-						<img id="NonLimitedBusinessPhoneImage"/>
+						<img id="NonLimitedBusinessPhoneImage" class="field_status required"/>
 					</div>
 				</div>
 
@@ -366,7 +349,7 @@
 						<span>Name</span>
 						<input class="form_field" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
 					</label>
-					<span class="required">*</span>
+					<img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
 				</div>
 			</div>
 
@@ -376,6 +359,7 @@
 						<span>Middle Initial</span>
 						<input class="form_field" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
 					</label>
+					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
 				</div>
 			</div>
 
@@ -385,15 +369,15 @@
 						<span>Surname</span>
 						<input class="form_field" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
 					</label>
-					<span class="required">*</span>
+					<img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
 				</div>
 			</div>
 
 			<div class="form_field_container GenderCtrl">
 				Gender
-				<span class="required">*</span>
 				<input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].GenderCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
 				<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].GenderCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
+				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required"/>
 			</div>
 
 			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth")	

@@ -14,16 +14,16 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         });
     },
     nonLimitedCompanyNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "NonLimitedCompanyNameImage", "#NonLimitedCompanyName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedCompanyNameImage", "#NonLimitedCompanyName");
     },
     nonLimitedBusinessPhoneChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "NonLimitedBusinessPhoneImage", "#NonLimitedBusinessPhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedBusinessPhoneImage", "#NonLimitedBusinessPhone");
     },
     nonLimitedTimeAtAddressChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeAtAddressImage", "#NonLimitedTimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeAtAddressImage", "#NonLimitedTimeAtAddress");
     },
     nonLimitedTimeInBusinessChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeInBusinessImage", "#NonLimitedTimeInBusiness", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeInBusinessImage", "#NonLimitedTimeInBusiness");
     },
     next: function () {
         if (!this.validator.form() || !this.companyAddressValidator) {
@@ -47,6 +47,10 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.$el.find(".cashInput").cashEdit();
         this.$el.find(".addressCaption").hide();
+
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
 
         return this;
     },

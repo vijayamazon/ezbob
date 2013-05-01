@@ -220,13 +220,11 @@ ul.list_none
 
 #AccountNumber { width: 215px;}
 
-.GenderCtrl .required {
-	margin-right: 17px;
-}
-
 .GenderCtrl input {
 	margin: -5px 0 0 15px;
 }
+
+img#GenderImage { margin-left: 210px; }
 
 .GenderCtrl label {
 	display: inline;

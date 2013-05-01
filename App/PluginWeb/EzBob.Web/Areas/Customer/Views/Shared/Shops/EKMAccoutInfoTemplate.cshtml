@@ -12,8 +12,8 @@
         <form id="ekmAccount">                              
             <div class="bank-account-instructions clearfix form-horizontal">
                 <div class="bank-account">
-                    @EzForm.InputText("ekm_login", "EKM Login", cls:"form_field", isRequired:true)
-                    @EzForm.Password("ekm_password", "EKM Password", cls: "form_field")
+                    @EzForm.InputText("ekm_login", "EKM Login", cls:"form_field", isRequired: true, statusIcon: true)
+                    @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true)
                     <div class="control-group clearfix" style="padding-right: 68px;">
                         <a href="#" class="button orange  connect-ekm  disabled pull-right">Continue</a>
                         <a href="#" class="back button grey pull-right">Back</a>

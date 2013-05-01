@@ -58,23 +58,23 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         }
     },
     emailChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "EmailImage", "#Email", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "EmailImage", "#Email");
     },
     password1Changed: function () {
-    	EzBob.Validation.displayIndication(this.validator, "Password1Image", "#signupPass1", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "Password1Image", "#signupPass1");
         if ($("#signupPass2").val() != "") {
-        	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+        	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2");
         }
     },
     password2Changed: function () {
-    	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2");
     },
     securityQuestionChanged: function () {
 	    this.inputChanged();
-    	EzBob.Validation.displayIndication(this.validator, "SecurityQuestionImage", "#securityQuestion", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SecurityQuestionImage", "#securityQuestion");
     },
     secretAnswerChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "SecretAnswerImage", "#SecurityAnswer", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SecretAnswerImage", "#SecurityAnswer");
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {

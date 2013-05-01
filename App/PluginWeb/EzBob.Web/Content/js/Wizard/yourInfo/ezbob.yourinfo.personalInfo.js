@@ -29,6 +29,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change select[name="TimeAtAddress"]': "timeAtAddressChanged",
             'change select[name="ResidentialStatus"]': "residentialStatusChanged",
             'change input[name="DayTimePhone"]': 'dayTimePhoneChanged',
+            'change input[name="MobilePhone"]': 'mobilePhoneChanged',
             'change input[name="Gender"]': 'genderChanged',
             'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
             'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
@@ -55,34 +56,37 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     	this.dateOfBirthChanged();
     },
 	firstNameChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName");
 	},
     genderChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "GenderImage", "#GenderCtrl_M", "#RotateImageRight", "#OkImageRight", "#FailImageRight");
+    	EzBob.Validation.displayIndication(this.validator, "GenderImage", "#GenderCtrl_M");
     },
     dayTimePhoneChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "DayTimePhoneImage", "#DayTimePhone", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "DayTimePhoneImage", "#DayTimePhone");
+    },
+    mobilePhoneChanged: function () {
+    	EzBob.Validation.displayIndication(this.validator, "MobilePhoneImage", "#MobilePhone");
     },
     martialStatusChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "MartialStatusImage", "#MartialStatus", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "MartialStatusImage", "#MartialStatus");
     },
     timeAtAddressChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "TimeAtAddressImage", "#TimeAtAddress", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "TimeAtAddressImage", "#TimeAtAddress");
     },
     residentialStatusChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "ResidentialStatusImage", "#ResidentialStatus", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "ResidentialStatusImage", "#ResidentialStatus");
     },
     middleNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "MiddleNameImage", "#MiddleInitial", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "MiddleNameImage", "#MiddleInitial");
     },
     surnameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "SurnameImage", "#Surname", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "SurnameImage", "#Surname");
     },
     overallTurnOverChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "OverallTurnOverImage", "#OverallTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "OverallTurnOverImage", "#OverallTurnOver");
     },
     webSiteTurnOverImageChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "WebSiteTurnOverImage", "#WebSiteTurnOver", "#RotateImage", "#OkImage", "#FailImage");
+    	EzBob.Validation.displayIndication(this.validator, "WebSiteTurnOverImage", "#WebSiteTurnOver");
     },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();

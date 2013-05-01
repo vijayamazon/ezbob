@@ -26,7 +26,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             @.$el.find('textarea').removeClass('form_field').css('margin-top', 0)
             @.$el.find('.edit-personal').show()
          else 
-            @.$el.find('.submit-personal, .cancel, .removeAddress').show()
+            @.$el.find('.submit-personal, .cancel, .removeAddress, .required').show()
             @.$el.find('.edit-personal').hide()
 
     editPersonalViewShow: ->

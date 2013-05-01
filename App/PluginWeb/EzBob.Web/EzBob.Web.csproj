@@ -835,6 +835,7 @@
     <Content Include="Content\js\lib\jquery-ui-1.8.24.custom.js" />
     <Content Include="Content\js\lib\jquery.blockUI.js" />
     <Content Include="Content\js\lib\jquery.colorbox-min.js" />
+    <Content Include="Content\js\lib\jquery.field_status.js" />
     <Content Include="Content\js\lib\jquery.form.js" />
     <Content Include="Content\js\lib\jquery.jscrollpane.js" />
     <Content Include="Content\js\lib\jquery.mousewheel.js" />
@@ -912,9 +913,6 @@
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
-      <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\ezbob.profile.yourInfo.min.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js">

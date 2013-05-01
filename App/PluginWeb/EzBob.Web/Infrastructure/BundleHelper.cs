@@ -157,6 +157,8 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/ezbob.csrf.js")
                          .Add("~/Content/js/login/ezbob.restorePassword.coffee")
                          .Add("~/Content/js/lib/attardi.labels.js")
+                         .Add("~/Content/js/lib/jquery.field_status.js")
+
                          .Add("~/Content/js/lib/jquery.colorbox-min.js")
                          .AddString(GetDbStrings())
                          //.ForceRelease()
@@ -182,7 +184,8 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/jqgridHelpers.js")
                          .Add("~/Content/js/lib/jquery.form.js")
                          .Add("~/Content/js/lib/splitter.js")
-                            .Add("~/Content/js/lib/attardi.labels.js")
+                         .Add("~/Content/js/lib/attardi.labels.js")
+                         .Add("~/Content/js/lib/jquery.field_status.js")
                          .Add("~/Content/js/lib/jqplot/jquery.jqplot.js")
                          .Add("~/Content/js/lib/jqplot/plugins/jqplot.dateAxisRenderer.js")
                          .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")

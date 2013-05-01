@@ -28,7 +28,12 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         form        : 'form'
 
     inputChanged: ->
-        enabled = @ui.login.val() and @ui.password.val()
+        @$el.find('#volusion_loginImage').field_status('set', if @ui.login.val() then 'ok' else 'fail')
+        @$el.find('#volusion_passwordImage').field_status('set', if @ui.password.val() then 'ok' else 'fail')
+        @$el.find('#volusion_shopnameImage').field_status('set', if @ui.shopname.val() then 'ok' else 'fail')
+        @$el.find('#volusion_urlImage').field_status('set', if @ui.url.val() then 'ok' else 'fail')
+
+        enabled = @ui.login.val() and @ui.password.val() and @ui.shopname.val() and @ui.url.val()
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->

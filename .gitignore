@@ -51,3 +51,8 @@ App/clients/Maven/nodelist.xml
 App/PluginWeb/EzBob.Web/Content/js/Profile/ezbob.profile.yourInfo.js
 App/clients/Auditor/Auditor.exe.config
 App/clients/Auditor/Auditor.mdb
+App/PluginWeb/EzBob.Web/Content/js/Profile/ezbob.profile.yourInfo.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.amazon.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.ekm.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.paypoint.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.volusion.js

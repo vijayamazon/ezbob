@@ -39,9 +39,8 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false)
+@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false)
 {
-	
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     
@@ -60,16 +59,20 @@
                 } 
              />
         </label>
-        @if (isRequired)
+        @if (statusIcon) {
+            var sId = identificator + "Image";
+            var sReq = isRequired ? "required" : "";
+            <img id="@sId" class="field_status @sReq"/>
+        }
+        else if (isRequired)
         {
             <span class="required">*</span>
         }
     </div>
 }
 
-@helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true)
+@helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true, bool statusIcon = false)
 {
-	
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     
@@ -88,7 +91,12 @@
                 } 
              />
         </label>
-        @if (isRequired)
+        @if (statusIcon) {
+            var sId = identificator + "Image";
+            var sReq = isRequired ? "required" : "";
+            <img id="@sId" class="field_status @sReq"/>
+        }
+        else if (isRequired)
         {
             <span class="required">*</span>
         }
@@ -237,7 +245,7 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool includeImage = false)
+@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false)
 {
     var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
     var validationClass = required ? "requiredDate" : "";
@@ -245,14 +253,15 @@
 	var dayIdentificator = identificator + "Day";
 	var monthIdentificator = identificator + "Month";
 	var yearIdentificator = identificator + "Year";
-	var imageIdentificator = identificator + "Image";
 
     <div class="control-group form_field_container">
         <div class="controls ezDateTime">
             <span>@title</span>
-            @if (required)
-            {
-                <span class="required">*</span>
+            @if (required && !statusIcon) {
+	            <span class="required">*</span>
+            }
+            else {
+	            <span>&nbsp;</span>
             }
 
             <label class="attardi-input">
@@ -305,11 +314,13 @@
                 </select>
             </label>
 			
-			@if (includeImage)
-			{
-				<img id="@imageIdentificator" />
+			@if (statusIcon) {
+				var sReq = required ? "required" : "";
+				var sId = new HtmlString(name + "Image");
+				<img id="@sId" class="field_status @sReq"/>
 			}
-            <input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
+
+			<input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
         </div>
 
     </div>

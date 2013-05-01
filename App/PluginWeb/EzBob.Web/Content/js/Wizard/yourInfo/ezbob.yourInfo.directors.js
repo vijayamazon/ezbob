@@ -23,6 +23,10 @@ EzBob.DirectorMainView = Backbone.View.extend({
         this.directorArea.html(this.directorTemplate({ preffix: this.preffix, directors: this.model.toJSON() }));
         this.directorArea.find('.ezDateTime').splittedDateTime();
 
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
+
         $.each(this.model.models, function (i, val) {
             var addressElem = that.preffix + 'Address' + i,
                 name = that.preffix + "[" + i + "]." + that.name,

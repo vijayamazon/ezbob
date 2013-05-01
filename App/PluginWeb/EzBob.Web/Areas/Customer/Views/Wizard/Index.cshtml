@@ -65,6 +65,10 @@
             var strengthPasswordModel= new EzBob.StrengthPassword ();
             var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
             strengthPasswordView.render();
+
+            var oFieldStatusIcons = $('IMG.field_status');
+            oFieldStatusIcons.filter('.required').field_status({ required: true });
+            oFieldStatusIcons.not('.required').field_status({ required: false });
         })
     </script>
 }

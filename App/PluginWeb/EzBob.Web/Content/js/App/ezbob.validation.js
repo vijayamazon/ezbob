@@ -152,33 +152,19 @@ EzBob.Validation.validateAndNotify = function (validator) {
 };
 
 EzBob.Validation.checkForm = function (validator) {
-    if (!validator.checkForm()) {
-        return false;
-    }
-    return true;
+	return validator.checkForm();
 };
 
 EzBob.Validation.element = function (validator, elem) {
-    if (!validator.element(elem)) {
-        return false;
-    }
-    return true;
+	return validator.element(elem);
 };
 
-EzBob.Validation.displayIndication = function (validator, ctrlImgId, validatedElement, rotateImgId, okImgId, failImgId) {
-    var controlImgId = "#" + ctrlImgId;
-    
-    if (EzBob.Validation.element(validator, $(validatedElement))) {
-        $(controlImgId).replaceWith($(rotateImgId).clone().show().attr({ id: ctrlImgId }));
+EzBob.Validation.displayIndication = function (validator, ctrlImgId, validatedElement) {
+	var controlImgId = "#" + ctrlImgId;
 
-        window.setTimeout(
-            function () {
-                $(controlImgId).replaceWith($(okImgId).clone().show().attr({ id: ctrlImgId }));
-            },
-            1000);
-    } else {
-        $(controlImgId).replaceWith($(failImgId).clone().show().attr({ id: ctrlImgId }));
-    }
+	var sStatus = validator.element($(validatedElement)) ? 'ok' : 'fail';
+
+	$(controlImgId).field_status('set', sStatus);
 };
 
 

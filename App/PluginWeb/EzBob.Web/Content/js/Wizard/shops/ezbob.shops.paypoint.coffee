@@ -25,6 +25,10 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         form        : 'form'
 
     inputChanged: ->
+        @$el.find('#payPoint_midImage').field_status('set', if @ui.mid.val() then 'ok' else 'fail')
+        @$el.find('#payPoint_vpnPasswordImage').field_status('set', if @ui.vpnPassword.val() then 'ok' else 'fail')
+        @$el.find('#payPoint_remotePasswordImage').field_status('set', if @ui.remotePassword.val() then 'ok' else 'fail')
+
         enabled = @ui.mid.val() and @ui.vpnPassword.val() and @ui.remotePassword.val()
         @ui.connect.toggleClass('disabled', !enabled)
 

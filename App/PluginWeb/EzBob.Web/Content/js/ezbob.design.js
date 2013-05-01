@@ -721,12 +721,12 @@ EzBob.validateSignUpForm = function (el) {
         rules: {
             signupPass1: $.extend({}, passPolicy),
             signupPass2: passPolicy2,
-            EMail: { required: true, email: true },
+            Email: { required: true, email: true },
             securityQuestion: { required: true },
             SecurityAnswer: { required: true, maxlength: 199 }
         },
         messages: {
-            "EMail": { email: EzBob.dbStrings.NotValidEmailAddress, remote: "Email address already exists", required: EzBob.dbStrings.NotValidEmailAddress },
+            "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
             "signupPass1": { required: passPolicyText, regex: passPolicyText },
             "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
             "securityQuestion": { required: "This field is required" },

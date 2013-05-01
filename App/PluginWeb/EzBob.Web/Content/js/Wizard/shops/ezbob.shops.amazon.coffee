@@ -23,7 +23,15 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
     inputChanged: ->
         marketplaceId = @$el.find("#amazonMarketplaceId").val()
         merchantId = @$el.find("#amazonMerchantId").val()
-        if marketplaceId.length < 10 or marketplaceId.length > 15 or merchantId.length < 10 or merchantId.length > 15 or not @validator.form()
+
+        bIsMarketPlaceOk = marketplaceId.length >= 10 and marketplaceId.length <= 15
+        bIsMerchantIdOk = merchantId.length >= 10 and merchantId.length <= 15
+
+        @$el.find('#amazonMarketplaceIdImage').field_status('set', if bIsMarketPlaceOk then 'ok' else 'fail')
+
+        @$el.find('#amazonMerchantIdImage').field_status('set', if bIsMerchantIdOk then 'ok' else 'fail')
+
+        if not bIsMerchantIdOk or not bIsMarketPlaceOk or not @validator.form()
             @$el.find("a.connect-amazon").addClass "disabled"
             return
         @$el.find("a.connect-amazon").removeClass "disabled"
