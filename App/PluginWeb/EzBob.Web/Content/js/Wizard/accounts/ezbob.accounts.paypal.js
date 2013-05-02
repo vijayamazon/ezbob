@@ -35,9 +35,10 @@ EzBob.PayPalInfoView = Backbone.View.extend({
         this.template = _.template($('#paypal-instructions').html());
         
         window.PayPalAdded = function (result) {
-            EzBob.App.trigger('info', 'Congratulations. Your PayPal account was added successfully.');
+            EzBob.App.trigger('info', 'Congratulations. PayPal account was added successfully.');
             that.trigger('completed');
             that.trigger('ready');
+            that.trigger('back');
         };
 
         window.PayPalAddingError = function (msg) {
