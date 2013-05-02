@@ -17,7 +17,7 @@
     From
 </div>
 <div class="reportDiv">
-    @Html.DropDownListFor(x => @Model.DateFilter.TimeFilterString, ReportModelBase.FilterTypes, new {id = "timeFilter", style = "width: 140px"})
+    @Html.DropDownListFor(x => @Model.DateFilter.TimeFilterString, ReportModelBase.FilterTypes, new {id = "timeFilter", @class = "selectheight"})
 </div>
 <div class="reportDiv">
     Range

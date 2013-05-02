@@ -101,6 +101,8 @@
 
 .reportDatePicker { width: 70px !important; }
 
+select.selectheight { height: 30px; }
+
 .reportDiv {
     float: right;
     padding-left: 10px;

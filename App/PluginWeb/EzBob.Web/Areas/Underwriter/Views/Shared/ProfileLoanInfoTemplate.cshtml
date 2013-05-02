@@ -68,7 +68,7 @@
 </div>
 
 <script id="simple-value-editor-cb-template" type="text/template">
-    <select name='simpleValueEdit'>
+    <select name='simpleValueEdit' class="selectheight">
         <%_.each(options, function(o){%>
                 <option value="<%=o.value%>"><%=o.text%></option>              
         <%});%>        
@@ -236,7 +236,7 @@
 </script>
 
 <script id="collection-status-items-template" type="text/template">
-    <select id="collection-status-items">
+    <select id="collection-status-items" class="selectheight">
         <option value="0">Enabled</option>
         <option value="1">Disabled</option>
         <option value="2">Fraud</option>

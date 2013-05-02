@@ -57,7 +57,7 @@
        
             <div class="span2" style="margin-top: 3px;">
                 <label for="cais-flags" >Manual CAIS Flag
-                    <select style ="width: 320px;" id="cais-flags" name="cais-flags">
+                    <select style="width: 320px;" id="cais-flags" name="cais-flags" class="selectheight">
                         <%var i = 0; _.each(ManualCaisFlags, function(caisFlag){%>
                         <option data-id="<%-i%>" value="<%-caisFlag.FlagSetting%>"><%-caisFlag.Description == "Calculated value" ? "" : caisFlag.FlagSetting+'-'%><%-caisFlag.Description%></option>
                         <%i++;}) %>
