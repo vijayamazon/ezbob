@@ -1087,7 +1087,7 @@
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.crosscheck.js" />
     <Content Include="Content\js\Underwriter\profile\medalCalculator\ezbob.underwriter.medalCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\messages\ezbob.undewriter.messages.js" />
-    <Content Include="Content\js\Wizard\accounts\ezbob.accounts.bank.js" />
+    <Content Include="Content\js\Profile\ezbob.accounts.bank.js" />
     <Content Include="Content\js\controls\ezbob.address.js" />
     <Content Include="Content\js\Wizard\accounts\ezbob.accounts.js" />
     <Content Include="Content\js\Wizard\accounts\ezbob.accounts.paypal.js" />

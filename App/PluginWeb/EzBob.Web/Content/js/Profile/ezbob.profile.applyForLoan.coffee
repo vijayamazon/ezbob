@@ -61,6 +61,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .agreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
+    "click #getChashContinueBtn": "addBankAccount"
 
   ui:
     submit: ".submit"
@@ -73,6 +74,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     read = (readAgreement is true and readPreAgreement is true)
     @model.set "agree", read
     @$el.find(".submit").toggleClass "disabled", not read
+    @$el.find("#getChashContinueBtn").toggleClass "disabled", not read
 
   loanAmountChanged: (e) ->
     amount = @ui.loanAmount.autoNumericGet()
@@ -143,6 +145,22 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   refreshTimer: ->
     @$el.find(".offerValidFor").text @customer.offerValidFormatted()
+
+  addBankAccount: ->
+    console.log "addbank"
+    creditSum = @model.get("neededCash")
+    max = @model.get("maxCash")
+    min = @model.get("minCash")
+    @model.set "neededCash", creditSum
+    view = new EzBob.BankAccountInfoView( model: @customer )
+    view.render()
+    console.log "addbankview",view, @$el
+    @$el.find('.add-bank').html view.template
+    @$el.find('.choose-ammount').hide()
+    @$el.find('.dashboard-steps > ul li').removeClass('active')
+    @$el.find('.dashboard-steps > ul li[data-step-num="1"]').addClass('active')
+    #EzBob.App.modal.show view
+    false
 
   submit: ->
     creditSum = @model.get("neededCash")

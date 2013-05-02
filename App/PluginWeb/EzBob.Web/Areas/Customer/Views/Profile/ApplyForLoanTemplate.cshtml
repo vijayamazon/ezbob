@@ -9,7 +9,7 @@
                 <%
                     var steps = [
                         { num: 0, title: "Choose<br/>Amount", css: "active" },
-                        { num: 1, title: "Enter<br/>Debit Card" },
+                        { num: 1, title: "Enter Bank &<br/>Debit Card" },
                         { num: 2, title: "Get<br/>Cash" }
                     ];
                 %>
@@ -17,7 +17,7 @@
             </div>
                 
             <div class="row-fluid">
-                <div class="span11">
+                <div class="span11 choose-ammount">
                     <h2 style="margin-top: 8px;">Choose Loan Amount</h2>
             
                     <div class="guarantee-img"></div>
@@ -47,9 +47,9 @@
                             </div>
                         </div>
                         
-                        </div>
+                    </div>
                     
-                        <div id="block-loan-schedule">
+                    <div id="block-loan-schedule">
                         <div class="loan-schedule">
                         </div>
                     </div>
@@ -58,9 +58,12 @@
                   
                         </div>
                     </div>
-                    <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="GetCash/GetTransactionId?loan_amount=<%-neededCash%>">Continue</a>
+                    <input type="button" class="button orange pull-right <%if (!agree) {%>disabled<%}%>" id="getChashContinueBtn" value="Continue" />
+                    @*<a class="button orange pull-right <%if (!agree) {%>disabled<%}%>" href="#addBank" id="getChashContinueBtn">Continue</a>*@
+                    <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="GetCash/GetTransactionId?loan_amount=<%-neededCash%>">Continue old</a>
                     <a href="#" class="btn-back button grey pull-right">Back</a>
                 </div>
+                    <div class="add-bank span11"></div>
                 </div>
             </div>
         <div class="span4">
@@ -74,8 +77,8 @@
 </script>
 
 @{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
-@{ Html.RenderPartial("_GetCashConfirmationModalTemplate"); }
-
+@{Html.RenderPartial("_GetCashConfirmationModalTemplate");}
+@{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
 
 @helper ThankYouLoan()
     {

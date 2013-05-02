@@ -14,7 +14,7 @@
 				  Use credit card ending:
 				</label>
 
-				<select class="span3">
+				<select class="span3 selectheight">
 					<% _.each(cards, function(c, i){%>
 						<option <%if(c.IsDefault){ print('selected="selected"') }%> value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> (<%-EzBob.formatDate(c.DateAdded)%>)</option>
 					<%});%>

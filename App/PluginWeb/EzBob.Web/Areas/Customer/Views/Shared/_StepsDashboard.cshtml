@@ -1,12 +1,12 @@
 ﻿@model dynamic
 
-<div class="wizard-steps">
-    <ul class="application_steps">
+<div class="dashboard-steps">
+    <ul>
         <% _.each(steps, function(step, i){
         %>
         <li data-step-num="<%= step.num %>" class="<%=step.css%>" >
             <div class="arrow-left"></div>
-            <div class="wizard-step-no wizard-step-no<%=step.num+1%>"><%= step.num + 1 %></div>
+            <div class="dashboard-step-no dashboard-step-no<%=step.num+1%>"><%= step.num + 1 %></div>
             <div class="step-text"><span><%= step.title %></span></div>
             <div class="completition"></div>
             <div class="<%= (i == steps.length-1) ?  'arrow-last' : 'arrow-right'%>"></div>

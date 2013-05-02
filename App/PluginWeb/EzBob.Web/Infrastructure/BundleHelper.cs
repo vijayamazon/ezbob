@@ -287,7 +287,6 @@ namespace EzBob.Web.Infrastructure
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-                        .Add("~/Content/js/Wizard/accounts/ezbob.accounts.bank.js")
                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
                         .Add("~/Content/js/Wizard/ezbob.wizard.signupstep.js")
@@ -340,7 +339,6 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                          .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.bank.js")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
                          .Add("~/Content/js/Wizard/ezbob.signupwizard.js")
                          .Add("~/Content/js/Profile/ezbob.profile.PayPointCardSelectView.coffee")
@@ -360,6 +358,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
                          .Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
+                         .Add("~/Content/js/Profile/ezbob.accounts.bank.js")
                          .MvcRender("~/Content/js/min/profile_#.js");
         }
 
