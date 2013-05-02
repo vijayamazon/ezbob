@@ -263,10 +263,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsAll()
         {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
             GridHelpers.CreateMpListColumn(gridModel);
-            GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateRegisteredDateColumn(gridModel);
             GridHelpers.CreateDateApplyedColumn(gridModel);
@@ -296,10 +296,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsWaitingForDesicion()
         {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
             GridHelpers.CreateMpListColumn(gridModel);
-            GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateDateApplyedColumn(gridModel);
@@ -321,10 +321,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsApproved()
         {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
             GridHelpers.CreateMpListColumn(gridModel);
-            GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateDateApplyedColumn(gridModel);
@@ -341,10 +341,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRejected()
         {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
             GridHelpers.CreateMpListColumn(gridModel);
-            GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateDateApplyedColumn(gridModel);
@@ -373,10 +373,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLoans()
         {
-            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
             GridHelpers.CreateMpListColumn(gridModel);
-            GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateRegisteredDateColumn(gridModel);
