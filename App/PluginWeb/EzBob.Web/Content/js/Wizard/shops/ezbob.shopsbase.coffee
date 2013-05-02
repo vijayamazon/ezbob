@@ -13,8 +13,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             store.view.on "back", that.back, that
             store.button.on "ready", that.ready, that
 
+        EzBob.App.on "ct:storebase.shop.connected", @render, this
         EzBob.App.on "ct:storebase." + @name + ".connect", @connect, this
-        
+
+    something: =>
+        console.log "something base"
 
     completed: (name) ->
         @stores[name].button.update()
@@ -43,6 +46,10 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         that = this
         accountsList = @storeList.find(".accounts-list")
 
+        console.log 'render'
+
+        console.log accountsList
+
         sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
         sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.model.length)
 
@@ -55,9 +62,14 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
         @$el.find(".next").toggleClass("disabled", !hasFilledShops or (hasEbay and not hasPaypal))
 
+        console.log 'begin'
+
         for shop in sortedShopsByNumOfShops when shop.active 
+            console.log shop.button.model.length, shop.priority, shop
             shop.button.render().$el.appendTo accountsList
             shop.view.render().$el.hide().appendTo that.$el
+
+        console.log 'end'
 
         @storeList.appendTo @$el
         #that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded") if @stores["bank-account"]?

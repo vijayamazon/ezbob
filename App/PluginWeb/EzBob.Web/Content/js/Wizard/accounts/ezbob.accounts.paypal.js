@@ -19,7 +19,7 @@ EzBob.PayPalButtonView = EzBob.StoreButtonView.extend({
         this.constructor.__super__.initialize.apply(this, [{ name: "paypal", logoText: "Add account to get more cash", shops: this.model }]);  
     },
     update: function () {
-        this.model.fetch();
+        this.model.fetch().done(function () { EzBob.App.trigger("ct:storebase.shop.connected"); });
     },
     disabledText: "The PayPal service is temporary offline. Contact us for support."
 });
