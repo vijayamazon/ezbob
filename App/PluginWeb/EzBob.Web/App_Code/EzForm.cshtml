@@ -39,7 +39,7 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false)
+@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0)
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
@@ -57,6 +57,9 @@
                 { 
                     @:disabled="disabled"
                 } 
+                @if (tabIndex > 0) {
+                    @:tabindex="@tabIndex"
+                }
              />
         </label>
         @if (statusIcon) {

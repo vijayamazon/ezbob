@@ -895,9 +895,11 @@
     </Content>
     <Content Include="Content\js\lib\log.coffee" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
+    <Content Include="Content\js\login\ezbob.restorePassword.js">
+      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
+    </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
-    <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\VolusionShopNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
@@ -906,9 +908,6 @@
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
-    <Content Include="Content\js\login\ezbob.restorePassword.js">
-      <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Profile\ezbob.profile.PayPointCardSelectView.js">
       <DependentUpon>ezbob.profile.PayPointCardSelectView.coffee</DependentUpon>
     </Content>

@@ -16,11 +16,10 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 
 		this.CaptchaMode = EzBob.Config.CaptchaMode;
 	},
-	render: function () {
+	render: function (callback) {
 		var that = this;
 		$.ajax({ url: this.captchaUrl, cache: false })
-			.done(function (response) {
-				console.log('captcha response', response);
+			.done(function(response) {
 				that.$el.html("<div class='simpleCaptcha'>" + response + "</div>");
 				that.$el.find("br").remove();
 				that.$el.find('a').html('Refresh');
@@ -29,41 +28,45 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 				that.$el.find('input#CaptchaInputText').replaceWith(
 					$('<div />').append(
 						$('<label />')
-						.addClass('attardi-input')
-						.append(
-							$('<span />').text('Please enter above characters here')
-						)
-						.append(
-							$('<input />')
-							.attr({
-								tabindex: that.tabindex,
-								id: "CaptchaInputText",
-								name: "CaptchaInputText",
-								type: "text"
-							}) // attr
-							.addClass('form_field')
-						) // append to label
+							.addClass('attardi-input')
+							.append(
+								$('<span />').text('Please enter above characters here')
+							)
+							.append(
+								$('<input />')
+									.attr({
+										tabindex: that.tabindex,
+										id: "CaptchaInputText",
+										name: "CaptchaInputText",
+										type: "text"
+									}) // attr
+									.addClass('form_field')
+							) // append to label
 					) // append to div
-					.append('<span>&nbsp;</span>')
-					.append(
-						$('<img />').addClass('field_status').attr('id', 'CaptchaInputTextImage')
-					)
+						.append('<span>&nbsp;</span>')
+						.append(
+							$('<img />').addClass('field_status').attr('id', 'CaptchaInputTextImage')
+						)
 				); // replaceWith
 
 				that.$el.find('img.field_status').field_status({ required: true });
 
 				//fix conflict with Backbone history and refresh button
-				that.$el.find('.simpleCaptcha a').on("click", function () {
+				that.$el.find('.simpleCaptcha a').on("click", function() {
 					return false;
 				});
 			})
-			.fail(function () {
+			.fail(function() {
 				EzBob.App.trigger('error', "Captcha connection failed. Please try again later.");
+			})
+			.always(function() {
+				if (callback)
+					callback.apply();
 			});
 		return false;
 	},
-	reload: function () {
-		this.render();
+	reload: function (callback) {
+		this.render(callback);
 	}
 });
 

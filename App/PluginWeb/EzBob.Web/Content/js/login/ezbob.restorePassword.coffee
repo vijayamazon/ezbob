@@ -7,6 +7,9 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
   initialize: ->
     @mail = undefined
 
+  focus:
+    null
+
   ui:
     "questionArea": "#questionArea"
     "questionField": "#questionField"
@@ -17,13 +20,15 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     "passwordRestoredArea":".passwordRestoredArea"
     "restorePasswordArea":".restorePasswordArea"
     "answer": "#Answer"
+    "captcha": "#CaptchaInputText"
 
   onRender: ->
-    @captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 3 });
+    @captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 11 });
     @captcha.render();
     @ui.email.data "changed", true
     @validator = EzBob.validateRestorePasswordForm(@ui.form)
     @initStatusIcons()
+    @ui.email.focus()
     @
 
   events:
@@ -41,88 +46,97 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     "input #Answer": "inputAnswerChanged"
     "change #Answer": "answerChanged"
 
-  restoreClicked: (e)->
+  restoreClicked: (e) ->
     false if @ui.restoreBtn.hasClass("disabled")
     $el = $(e.currentTarget)
     false if $el.hasClass("disabled")
     $el.addClass "disabled"
 
+    @focus = null
+
     $.post("RestorePassword", @ui.form.serializeArray())
         .done (data) =>
-            console.log 'done',data
             if not EzBob.isNullOrEmpty(data.errorMessage) or not EzBob.isNullOrEmpty(data.error)
                 EzBob.App.trigger "error", data.errorMessage or data.error
                 @ui.questionArea.hide()
-                false
-            console.log 'done2'
+                @focus = @focusCaptcha
+                return false
+
             @ui.passwordRestoredArea.show()
             @ui.restorePasswordArea.hide()
             scrollTop()
 
-        .fail (data) ->
+        .fail (data) =>
             EzBob.App.trigger "error", data.responceText
             @initStatusIcons()
-            console.log 'fail', data
+            @focus = @focusCaptcha
 
-        .complete =>
+        .always (data) =>
             $el.removeClass "disabled"
             @ui.email.data "changed", false
             @emailKeyuped()
-            @captcha.reload()
-            console.log 'complete', data
+            @captcha.reload @focus
+
+  focusEmail: => $('#email').focus()
+
+  focusAnswer: => $('#Answer').focus()
+
+  focusCaptcha: => $('#CaptchaInputText').focus()
 
   emailChanged: ->
     @$el.find('#emailImage').field_status('set', if EzBob.Validation.element(@validator,@ui.email) then 'ok' else 'fail')
-  
+
   answerChanged: ->
     @$el.find('#AnswerImage').field_status('set', if EzBob.Validation.element(@validator,@ui.answer) then 'ok' else 'fail')
-  
+
   inputEmailChanged: ->
     enabled = EzBob.Validation.element(@validator,@ui.email)
     @ui.getQuestionBtn.toggleClass('disabled', !enabled)
-  
+
   inputAnswerChanged: ->
     enabled = EzBob.Validation.element(@validator,@ui.answer)
     @ui.restoreBtn.toggleClass('disabled', !enabled) 
-    
+
   emailKeyuped: ->
     false if @ui.email.data("changed")
     @ui.email.data "changed", true
     @ui.questionArea.hide()
     @ui.getQuestionBtn.show()
     @captcha.$el.closest('.control-group').insertAfter(@ui.email.closest('.control-group'))
-    #@captcha.reload()
 
   getQuestionBtnClicked: ->
     false if @ui.getQuestionBtn.hasClass("disabled")
     @mail = @ui.email.val()
     EzBob.App.trigger 'clear'
     @ui.questionArea.hide()
-    @ui.answer.val("")
-    
+
+    @focus = null
+
     $.post("QuestionForEmail", @ui.form.serialize())
         .done (response)=>
             if not EzBob.isNullOrEmpty(response.errorMessage) or not EzBob.isNullOrEmpty(response.error)
                 EzBob.App.trigger 'error', response.errorMessage or response.error
                 @ui.questionArea.hide()
+                @focus = @focusCaptcha
                 return true
 
             if EzBob.isNullOrEmpty(response.question)
-                    EzBob.App.trigger "warning", "To recover your password security question fields must be completely filled in the account settings"
-                    @ui.questionArea.hide()
-                    return true
+                EzBob.App.trigger "warning", "To recover your password security question fields must be completely filled in the account settings"
+                @ui.questionArea.hide()
+                @focus = @focusEmail
+                return true
 
             @ui.questionField.text response.question
             @ui.questionArea.show()
             @initStatusIcons('email')
             @ui.getQuestionBtn.hide()
             @captcha.$el.closest('.control-group').insertAfter(@ui.answer.closest('.control-group'))
-            #@captcha.reload()
             @ui.email.data "changed", false
+            @focus = @focusAnswer
 
-        .complete =>
-            @captcha.reload()
-  
+        .always =>
+            @captcha.reload @focus
+
   initStatusIcons: (e) ->
     oFieldStatusIcons = this.$el.find('IMG.field_status')
     oFieldStatusIcons.filter('.required').field_status({ required: true })
