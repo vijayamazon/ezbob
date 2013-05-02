@@ -47,7 +47,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.model.length)
 
         hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0
-        @$el.find(".next").toggleClass("disabled", !hasFilledShops)
+
+        hasEbay = @stores.eBay.button.model.length > 0
+        hasPaypal = @stores.paypal.button.model.length > 0
+
+        @$el.find(".next").toggleClass("disabled", !hasFilledShops or (hasEbay and not hasPaypal))
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
