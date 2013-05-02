@@ -51,9 +51,9 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
     }
 });
 
-EzBob.EbayButtonView = EzBob.StoreButtonWithListView.extend({
+EzBob.EbayButtonView = EzBob.StoreButtonView.extend({
     initialize: function () {
-        this.constructor.__super__.initialize.apply(this, [{ name: "eBay", logoText: "" }]);
+        this.constructor.__super__.initialize.apply(this, [{ name: "eBay", logoText: "", shops: this.model }]);
     },
     update: function () {
         this.model.fetch();

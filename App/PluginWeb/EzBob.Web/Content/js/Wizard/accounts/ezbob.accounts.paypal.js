@@ -14,18 +14,15 @@ EzBob.PayPalAccounts = Backbone.Collection.extend({
     url: window.gRootPath + 'Customer/PaymentAccounts/PayPalList'
 });
 
-EzBob.PayPalButtonView = EzBob.StoreButtonWithListView.extend({
+EzBob.PayPalButtonView = EzBob.StoreButtonView.extend({
     initialize: function () {
-        this.constructor.__super__.initialize.apply(this, [{ name: "paypal", logoText: "Add account to get more cash"}]);  
+        this.constructor.__super__.initialize.apply(this, [{ name: "paypal", logoText: "Add account to get more cash", shops: this.model }]);  
     },
     update: function () {
         this.model.fetch();
     },
     disabledText: "The PayPal service is temporary offline. Contact us for support."
 });
-
-
-
 
 EzBob.PayPalInfoView = Backbone.View.extend({
     events: {

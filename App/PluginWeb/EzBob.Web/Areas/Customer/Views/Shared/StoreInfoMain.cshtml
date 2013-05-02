@@ -1,24 +1,26 @@
 ﻿@model dynamic
-@helper StoreInfo()
-{
-    <div>
-        <div class="shops-list row-fluid">
-        </div>
-        <div class="accounts-list row-fluid">
-        </div>
-		
-	    <div>A minimum of £10,000 annual income is required to get a loan offer</div>
-	    <div>Link more accounts to be approved for a loan</div>
-	    <div style="padding-bottom: 50px;margin-top: 10px;" class="cont-button source">
-            <a class="next button orange pull-right disabled" >Continue</a>
-        </div>
-    </div>
+@helper StoreInfo() {
+	<div>
+		<div id="eBayPaypalRule" class="hide">Paypal must be added in order to continue.</div>
+
+		<div class="shops-list row-fluid">
+		</div>
+		<div class="accounts-list row-fluid">
+		</div>
+
+
+		<div>A minimum of £10,000 annual income is required to get a loan offer</div>
+		<div>Link more accounts to be approved for a loan</div>
+		<div style="padding-bottom: 50px; margin-top: 10px;" class="cont-button source">
+			<a class="next button orange pull-right disabled">Continue</a>
+		</div>
+	</div>
 }
 
 <script id="payment-accounts-securitystatement" type="text/template">
-    @{Html.RenderPartial("SideBars/PaymentAccountsNotification");}
+	@{Html.RenderPartial("SideBars/PaymentAccountsNotification");}
 </script>
 
 <script id="store-info" type="text/template">
-    @StoreInfo()
+	@StoreInfo()
 </script>

@@ -32,9 +32,10 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
         @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
+        @payPalAccounts.fetch().done => @render()
         #@payPalAccounts.on('fetch reset change', @accountChanged, this)
-        @PayPalButtonView = new EzBob.PayPalButtonView model: @payPalAccounts 
-        @PayPalInfoView = new EzBob.PayPalInfoView()
+        @PayPalButtonView = new EzBob.PayPalButtonView(model: @payPalAccounts)
+        @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)
 
         @stores =
             "eBay":
