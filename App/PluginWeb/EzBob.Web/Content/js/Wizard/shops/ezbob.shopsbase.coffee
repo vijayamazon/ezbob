@@ -54,7 +54,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             shop.view.render().$el.hide().appendTo that.$el
 
         @storeList.appendTo @$el
-        that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded")    if @stores["bank-account"]?
+        #that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded") if @stores["bank-account"]?
         this
 
     events:
@@ -88,8 +88,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 @$el.find("#volusion_shopname").focus()
             when "PayPoint"
                 @$el.find("#payPoint_login").focus()
-            when "bank-account"
-                @$el.find("#AccountNumber").focus()
+            #when "bank-account"
+            #    @$el.find("#AccountNumber").focus()
             else
 
     setDocumentTitle: (storeName) ->
@@ -98,16 +98,16 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 $(document).attr "title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB"
             when "eBay"
                 $(document).attr "title", "Wizard 2 Ebay: Link Your Ebay Shop | EZBOB"
-            when "bank-account"
-                $(document).attr "title", "Wizard 3 Bank: Bank Account Details | EZBOB"
+            #when "bank-account"
+            #    $(document).attr "title", "Wizard 3 Bank: Bank Account Details | EZBOB"
             when "paypal"
-                $(document).attr "title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB"
+                $(document).attr "title", "Wizard 2 PayPal: Link Your PayPal Account | EZBOB"
             when "EKM"
-                $(document).attr "title", "Wizard 3 EKM: Link Your EKM Account | EZBOB"
+                $(document).attr "title", "Wizard 2 EKM: Link Your EKM Account | EZBOB"
             when "PayPoint"
-                $(document).attr "title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB"
+                $(document).attr "title", "Wizard 2 PayPoint: Link Your PayPoint Account | EZBOB"
             when "Volusion"
-                $(document).attr "title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB"
+                $(document).attr "title", "Wizard 2 Volusion: Link Your Volusion Account | EZBOB"
             else
 
     close: ->
