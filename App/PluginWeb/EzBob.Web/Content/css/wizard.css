@@ -216,6 +216,7 @@ ul.list_none
 
 .shops-list > div, .accounts-list > div {
     margin-left: 0!important;
+	margin-top: 20px;
 }
 
 #AccountNumber { width: 215px;}
