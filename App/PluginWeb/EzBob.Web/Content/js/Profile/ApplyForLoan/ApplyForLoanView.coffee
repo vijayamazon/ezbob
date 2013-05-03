@@ -2,29 +2,6 @@
 root.EzBob = root.EzBob or {}
 EzBob.Profile = EzBob.Profile or {}
 
-class EzBob.Profile.ApplyForLoanModel extends Backbone.Model
-  defaults:
-    neededCash: 100
-    maxCash: 15000
-    minCash: EzBob.Config.MinLoan
-    agree: false
-    agreement: false
-    CreditSum: 0
-    OfferValid: 0
-    OfferValidMintes: 0
-
-  validate: (attrs) ->
-    unless typeof attrs.neededCash is "undefined"
-      val = attrs.neededCash
-      attrs.neededCash = @get("minCash")  if isNaN(val)
-      attrs.neededCash = @get("maxCash")  if val > @get("maxCash")
-      attrs.neededCash = @get("minCash")  if val < @get("minCash")
-    false
-
-  initialize: ->
-    @set
-      neededCash: @get("maxCash")
-      minCash: (if @get("maxCash") > EzBob.Config.MinLoan then EzBob.Config.MinLoan else EzBob.Config.XMinLoan)
 
 class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   template: "#apply-forloan-template"
@@ -38,11 +15,6 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       return
 
     @fixed = @customer.get('IsLoanDetailsFixed')
-
-    @model = new EzBob.Profile.ApplyForLoanModel(
-      maxCash: @customer.get("CreditSum")
-      OfferStart: @customer.get("OfferStart")
-    )
 
     @recalculateThrottled = _.debounce @recalculateSchedule, 250
     @timerId = setInterval _.bind(@refreshTimer, this), 1000
@@ -61,7 +33,6 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .agreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
-    "click #getChashContinueBtn": "addBankAccount"
 
   ui:
     submit: ".submit"
@@ -101,7 +72,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   neededCashChanged: ->
     value = @model.get("neededCash")
-    @ui.submit.attr "href", "GetCash/GetTransactionId?loan_amount=" + value
+    @ui.submit.attr "href", @model.get("url")
     @recalculateThrottled value
     @ui.loanAmount.autoNumericSet value
     @$el.find("#loan-slider").slider "value", value
@@ -146,62 +117,16 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   refreshTimer: ->
     @$el.find(".offerValidFor").text @customer.offerValidFormatted()
 
-  addBankAccount: ->
-    console.log "addbank"
-    creditSum = @model.get("neededCash")
-    max = @model.get("maxCash")
-    min = @model.get("minCash")
-    @model.set "neededCash", creditSum
-    view = new EzBob.BankAccountInfoView( model: @customer )
-    view.render()
-    console.log "addbankview",view, @$el
-    @$el.find('.add-bank').html view.template
-    @$el.find('.choose-ammount').hide()
-    @$el.find('.dashboard-steps > ul li').removeClass('active')
-    @$el.find('.dashboard-steps > ul li[data-step-num="1"]').addClass('active')
-    #EzBob.App.modal.show view
-    false
-
-  submit: ->
+  submit: (e) ->
+    e.preventDefault()
     creditSum = @model.get("neededCash")
     max = @model.get("maxCash")
     min = @model.get("minCash")
     @model.set "neededCash", creditSum
     return false  if creditSum > max or creditSum < min
     return false  if not $(".preAgreementTermsRead").is(":checked") or not $(".agreementTermsRead").is(":checked")
-
-    view = new EzBob.Profile.PayPointCardSelectView( model: @customer, date: @lastPaymentDate )
-    if view.cards.length > 0
-      view.on 'select', (cardId) =>
-        BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: creditSum}
-        xhr.done (data) =>
-          document.location.href = data.url;
-      
-      view.on 'existing', => @_submit()
-
-      EzBob.App.modal.show view
-      return false
-    else
-      BlockUi "off"
-  
-  #        var model = new Backbone.Model({
-  #            amount: creditSum,
-  #            card_no: this.customer.get('BankAccountNumber').substring(4, 8),
-  #            name: this.customer.get('CustomerPersonalInfo').FirstName,
-  #            surname: this.customer.get('CustomerPersonalInfo').Surname,
-  #            total: this.total
-  #        });
-  #        
-  #        var view = new EzBob.GetCashConfirmation({ model: model });
-  #        view.on('modal:save', this._submit, this);
-  #        EzBob.App.modal.show(view);
-  #
-  #        return false;
-  #        
-  _submit: ->
-    BlockUi "on"
-    document.location.href = @ui.submit.attr("href")
+    @trigger ("submit")
+    return false
 
   getCurrentViewId: ->
     current = @$el.find("li.active a").attr("page-name")
@@ -229,37 +154,3 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     clearInterval @timerId
     @model.off()
     super()
-
-EzBob.Profile.ThankyouLoan = Backbone.View.extend(
-  initialize: ->
-    @template = _.template($("#thankyouloan-template").html())
-
-  events:
-    "click a": "close"
-
-  render: ->
-    @$el.html @template()
-
-  close: ->
-    @trigger "close"
-    false
-)
-
-EzBob.GetCashConfirmation = Backbone.Marionette.ItemView.extend(
-  template: "#apply-forloan-confirmation-template"
-  events:
-    "click a.cancel": "btnClose"
-    "click a.save": "btnSave"
-
-  btnClose: ->
-    @close()
-    false
-
-  btnSave: ->
-    @trigger "modal:save"
-    @onOk()
-    @close()
-    false
-
-  onOk: ->
-)

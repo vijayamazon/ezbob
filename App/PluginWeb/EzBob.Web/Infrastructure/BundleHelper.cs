@@ -161,7 +161,7 @@ namespace EzBob.Web.Infrastructure
 
                          .Add("~/Content/js/lib/jquery.colorbox-min.js")
                          .AddString(GetDbStrings())
-                         //.ForceRelease()
+                         .ForceRelease()
                          .MvcRender("~/Content/js/min/jslib_#.js");
         }
 
@@ -341,8 +341,13 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
                          .Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
                          .Add("~/Content/js/Wizard/ezbob.signupwizard.js")
-                         .Add("~/Content/js/Profile/ezbob.profile.PayPointCardSelectView.coffee")
-                         .Add("~/Content/js/Profile/ezbob.profile.applyForLoan.coffee")
+
+                         .Add("~/Content/js/Profile/ApplyForLoan/ezbob.profile.PayPointCardSelectView.coffee")
+                         .Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanModel.coffee")
+                         .Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanView.coffee")
+                         .Add("~/Content/js/Profile/ApplyForLoan/ezbob.accounts.bank.js")
+                         .Add("~/Content/js/Profile/ApplyForLoan/ApplyForLoanTopView.coffee")
+
                          .Add("~/Content/js/Profile/ezbob.profile.profileView.js")
                          .Add("~/Content/js/Profile/PayEarly/makeEarlyPaymentModel.coffee")
                          .Add("~/Content/js/Profile/PayEarly/makeEarlyPaymentView.coffee")
@@ -358,7 +363,6 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
                          .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
                          .Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
-                         .Add("~/Content/js/Profile/ezbob.accounts.bank.js")
                          .MvcRender("~/Content/js/min/profile_#.js");
         }
 

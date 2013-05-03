@@ -73,7 +73,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         $(document).attr("title", "Get Cash: Select Loan Amount | EZBOB");
         EzBob.App.GA.trackPage('/Customer/Profile/GetCash');
 
-        var applyForLoanView = new EzBob.Profile.ApplyForLoanView({ customer: this.customer });
+        var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
 
         applyForLoanView.on('back', this.applyForLoanBack, this);
         applyForLoanView.on('submit', this.applyForLoanSubmit, this);

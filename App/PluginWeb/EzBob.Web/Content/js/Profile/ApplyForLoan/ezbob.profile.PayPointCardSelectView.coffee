@@ -11,6 +11,7 @@ class EzBob.Profile.PayPointCardSelectView extends Backbone.Marionette.ItemView
     events:
         'change input[name="cardOptions"]' : 'optionsChanged'
         'click .btn-continue' : 'continue'
+        'click .cancel' : 'cancel'
 
     ui: cont: '.btn-continue'
 
@@ -42,5 +43,10 @@ class EzBob.Profile.PayPointCardSelectView extends Backbone.Marionette.ItemView
             @trigger 'select', @$el.find('option:selected').val()
         else
             @trigger 'existing'
+        @close()
+        return false
+
+    cancel: ->
+        @trigger("cancel")
         @close()
         return false
