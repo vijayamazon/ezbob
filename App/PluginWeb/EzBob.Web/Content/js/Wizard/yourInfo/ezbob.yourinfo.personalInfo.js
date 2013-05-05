@@ -106,6 +106,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
+        this.$el.find("#WebSiteTurnOver").moneyFormat();
+        this.$el.find("#OverallTurnOver").moneyFormat();
     },
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({

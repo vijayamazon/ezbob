@@ -1,0 +1,54 @@
+﻿@model dynamic
+@helper ApplyForLoanTopTemplate()
+{
+    <div class="row-fluid profile-screen">
+        <div class="span8" style="padding-top: 16px;">
+            <div class="narrow-wizard-header">
+                <%
+                    var steps = [
+                        { num: 0, title: "Choose<br/>Amount", css: "active" },
+                        { num: 1, title: "Enter Bank &<br/>Debit Card" },
+                        { num: 2, title: "Get<br/>Cash" }
+                    ];
+                %>
+                @{Html.RenderPartial("_StepsDashboard");}
+            </div>
+
+            <div class="row-fluid">
+                <div class="apply-for-loan-div span11">
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            @{Html.RenderPartial("SideBars/GetCashNotification");}
+        </div>
+    </div>
+}
+
+<script id="apply-forloan-top-template" type="text/template">
+    @ApplyForLoanTopTemplate()
+</script>
+
+
+@{Html.RenderPartial("_GetCashConfirmationModalTemplate");}
+@{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
+@{Html.RenderPartial("ApplyForLoanTemplate"); }
+
+@helper ThankYouLoan()
+{
+    <h1>Apply for a loan</h1>
+    <h2>It’s so easy. Unbelievable!</h2>
+    <div class="thankyou-loan">
+        EZBOB will get back to you by mail in 24 hours.<br />
+        You can edit your personal and business<br />
+        information in your dashboard.<br />
+    </div>
+    <a href="#" class="btn-continue button orange offer">Go to My Account</a>
+}
+
+<script id="thankyouloan-template" type="text/template">
+    @ThankYouLoan()
+</script>
+
+
+

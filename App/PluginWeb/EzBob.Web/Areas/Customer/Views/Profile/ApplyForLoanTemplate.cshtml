@@ -1,99 +1,58 @@
-﻿@using EzBob.Web.Models.Strings
-@model dynamic
+﻿@model dynamic
 @helper ApplyForLoanTemplate()
 {
-    <div class="row-fluid profile-screen">
-        <div class="span8" style="padding-top: 16px;">
-            <div class="narrow-wizard-header">
-                <%
-                    var steps = [
-                        { num: 0, title: "Choose<br/>Amount", css: "active" },
-                        { num: 1, title: "Enter Bank &<br/>Debit Card" },
-                        { num: 2, title: "Get<br/>Cash" }
-                    ];
-                %>
-                @{Html.RenderPartial("_StepsDashboard");}
-            </div>
+    
+    <h2 style="margin-top: 8px;">Choose Loan Amount</h2>
 
-            <div class="row-fluid">
-                <div class="span11 choose-ammount">
-                    <h2 style="margin-top: 8px;">Choose Loan Amount</h2>
+    <div class="guarantee-img"></div>
 
-                    <div class="guarantee-img"></div>
+    <h3 class="apply-header-approved">You are eligible for <b><%-EzBob.formatPounds(CreditSum)%></b></h3>
+    <h3 class="apply-header-approved">Valid for <b class="offerValidFor"><%-OfferValid%></b> hrs.</h3>
 
-                    <h3 class="apply-header-approved">You are eligible for <b><%-EzBob.formatPounds(CreditSum)%></b></h3>
-                    <h3 class="apply-header-approved">Valid for <b class="offerValidFor"><%-OfferValid%></b> hrs.</h3>
+    <div class="cash-question">
+        <h3>How much cash do you need?</h3>
 
-                    <div class="cash-question">
-                        <h3>How much cash do you need?</h3>
+        <div class="row-fluid">
 
-                        <div class="row-fluid">
-
-                            <div class="slider-wrapper clearfix span8">
-                                <div id="loan-slider"></div>
-                                <div class="slider-text">
-                                    <div class="pull-right slider-upto">
-                                        <text class="hm_blue">up to </text>
-                                        <%-EzBob.formatPounds(maxCash)%></div>
-                                    <div class="pull-left ">
-                                        <text class=""><%-EzBob.formatPounds(minCash)%></text>
-                                    </div>
-                                    <div class="slider-ticks"></div>
-                                </div>
-                            </div>
-
-                            <div class="span4">
-                                <div style="width: 135px;" class="pull-right">
-                                    <input type="text" name="loanAmount" class="input-small get-cash-amount white" placeholder="" value="<%-neededCash%>" />
-                                    <img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
-                                </div>
-                            </div>
-                        </div>
-
+            <div class="slider-wrapper clearfix span8">
+                <div id="loan-slider"></div>
+                <div class="slider-text">
+                    <div class="pull-right slider-upto">
+                        <text class="hm_blue">up to </text>
+                        <%-EzBob.formatPounds(maxCash)%>
                     </div>
-
-                    <div id="block-loan-schedule">
-                        <div class="loan-schedule">
-                        </div>
+                    <div class="pull-left ">
+                        <text class=""><%-EzBob.formatPounds(minCash)%></text>
                     </div>
-                    <div id="block-agreement">
-                        <div class="agreement">
-                        </div>
-                    </div>
-                    <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
-                    <a href="#" class="btn-back button grey pull-right">Back</a>
+                    <div class="slider-ticks"></div>
                 </div>
-                <div class="add-bank span11"></div>
             </div>
-        </div>
-        <div class="span4">
-            @{Html.RenderPartial("SideBars/GetCashNotification");}
+
+            <div class="span4">
+                <div style="width: 135px;" class="pull-right">
+                    <input type="text" name="loanAmount" class="input-small get-cash-amount white" placeholder="" value="<%-neededCash%>" />
+                    <img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
+                </div>
+            </div>
+
+            <div id="block-loan-schedule">
+                <div class="loan-schedule">
+                </div>
+            </div>
+            <div id="block-agreement">
+                <div class="agreement">
+                </div>
+            </div>
+            <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
+            <a href="#" class="btn-back button grey pull-right">Back</a>
         </div>
     </div>
 }
+
+@{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
 
 <script id="apply-forloan-template" type="text/template">
     @ApplyForLoanTemplate()
-</script>
-
-@{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
-@{Html.RenderPartial("_GetCashConfirmationModalTemplate");}
-@{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
-
-@helper ThankYouLoan()
-{
-    <h1>Apply for a loan</h1>
-    <h2>It’s so easy. Unbelievable!</h2>
-    <div class="thankyou-loan">
-        EZBOB will get back to you by mail in 24 hours.<br />
-        You can edit your personal and business<br />
-        information in your dashboard.<br />
-    </div>
-    <a href="#" class="btn-continue button orange offer">Go to My Account</a>
-}
-
-<script id="thankyouloan-template" type="text/template">
-    @ThankYouLoan()
 </script>
 
 <script id="consumers-agreement-template" type="text/template">

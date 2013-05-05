@@ -8,9 +8,12 @@ class EzBob.Profile.ApplyForLoanTopViewModel extends Backbone.Model
 
 # a top view that manages process of choosing loan amount
 # adding a bank account and displaying confirmation screen
-class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
+class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
+
     initialize: (options)->
-        @region = new Backbone.Marionette.Region el: @el
+        @template = _.template($("#apply-forloan-top-template").html())
+
+        #@region = new Backbone.Marionette.Region el: @$el.find('.apply-for-loan-div')
         @customer = options.customer
         @applyForLoanViewModel = new EzBob.Profile.ApplyForLoanModel(
           maxCash: @customer.get("CreditSum")
@@ -24,8 +27,13 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
         @model.on "change", @render, this
 
     render: ->
+        @$el.html @template()
         view = @states[@model.get("state")]()
-        @region.show(view)
+        console.log("view",view, @model.get("state"), @sates, )
+        region = new Backbone.Marionette.Region el: @$el.find('.apply-for-loan-div')
+        region.show view
+        #@createApplyForLoanView()
+        false 
 
     createApplyForLoanView: =>
         view = new EzBob.Profile.ApplyForLoanView(model: @applyForLoanViewModel, customer: @customer)
@@ -66,5 +74,6 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
 
     _submit: ->
         BlockUi "on"
+        @applyForLoanViewModel.buildUrl()
         document.location.href = @applyForLoanViewModel.get('url')
 

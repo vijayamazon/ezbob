@@ -800,22 +800,18 @@ EzBob.validateCompanyDetailForm = function (el) {
             ResidentialStatus: { required: true },
             Gender: { regex: "^M|F$", required: true },
             MartialStatus: { required: true },
-            OverallTurnOver: { required: true, number: true, min: 1 },
-            WebSiteTurnOver: { required: true, number: true, min: 1 },
+            OverallTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
+            WebSiteTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
             TimeAtAddress: { required: true },
 
             //limited company info
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
             LimitedCompanyName: { required: true, minlength: 2 },
-            LimitedOverallTurnOver: { required: true, number: true },
-            LimitedWebSiteTurnOver: { required: true, number: true },
             LimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
 
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },
             NonLimitedTimeInBusiness: { required: true },
-            NonLimitedOverallTurnOver: { required: true, number: true, minlength: 2 },
-            NonLimitedWebSiteTurnOver: { required: true, number: true, minlength: 2 },
             NonLimitedTimeAtAddress: { required: true, digits: true },
             NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" }
         },
