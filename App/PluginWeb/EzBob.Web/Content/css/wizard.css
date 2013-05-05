@@ -262,3 +262,5 @@ div.add-director-container #addDirector { position: relative; left: 300px; margi
 div.canDisabledAddress { display: none; }
 
 div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
+
+div.full_width { width: 581px; }
