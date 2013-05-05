@@ -1222,6 +1222,10 @@
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
+      <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
+      <Name>ChannelGrabberAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

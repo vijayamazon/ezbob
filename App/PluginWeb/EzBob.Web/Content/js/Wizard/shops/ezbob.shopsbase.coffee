@@ -90,10 +90,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             when "EKM"
                 @$el.find("#ekm_login").focus()
             when "Volusion"
-                sText = $("#header_description").text().trim()
-                if "" == @$el.find("#volusion_login").val()
-                    @$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")))
-                @$el.find("#volusion_shopname").focus()
+                @$el.find("#volusion_url").focus()
             when "PayPoint"
                 @$el.find("#payPoint_login").focus()
             #when "bank-account"

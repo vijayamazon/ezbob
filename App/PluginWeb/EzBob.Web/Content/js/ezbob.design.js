@@ -969,7 +969,6 @@ EzBob.validateVolusionShopForm = function(el) {
 
     return e.validate({
         rules: {
-            volusion_shopname: { required: true, minlength: 2, maxlength: 300 },
             volusion_url: { required: true, minlength: 10, maxlength: 300 },
             volusion_login: { required: true, minlength: 2, maxlength: 30 },
             volusion_password: { required: true, minlength: 2, maxlength: 300 }

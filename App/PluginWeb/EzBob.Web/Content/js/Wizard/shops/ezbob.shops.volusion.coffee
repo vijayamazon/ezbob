@@ -14,36 +14,61 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
     
     events: {
         'click a.connect-volusion': 'connect',
-        "click a.back": "back",
-        'change input': 'inputChanged'
-        'keyup input': 'inputChanged'
+        'click a.back': 'back',
+
+        'cut     #volusion_login': 'loginChanged',
+        'change  #volusion_login': 'loginChanged',
+        'keydown #volusion_login': 'loginChanged',
+        'paste   #volusion_login': 'loginChanged',
+
+        'cut     #volusion_url': 'urlChanged',
+        'change  #volusion_url': 'urlChanged',
+        'keydown #volusion_url': 'urlChanged',
+        'paste   #volusion_url': 'urlChanged',
+
+        'cut     #volusion_password': 'passwordChanged',
+        'change  #volusion_password': 'passwordChanged',
+        'keydown #volusion_password': 'passwordChanged',
+        'paste   #volusion_password': 'passwordChanged'
     }
 
     ui:
         login       : '#volusion_login'
         password    : '#volusion_password'
-        shopname    : '#volusion_shopname'
         url         : '#volusion_url'
         connect     : 'a.connect-volusion'
         form        : 'form'
 
-    inputChanged: ->
-        @$el.find('#volusion_loginImage').field_status('set', if @ui.login.val() then 'ok' else 'fail')
-        @$el.find('#volusion_passwordImage').field_status('set', if @ui.password.val() then 'ok' else 'fail')
-        @$el.find('#volusion_shopnameImage').field_status('set', if @ui.shopname.val() then 'ok' else 'fail')
-        @$el.find('#volusion_urlImage').field_status('set', if @ui.url.val() then 'ok' else 'fail')
+    loginChanged: =>
+        @$el.find('#volusion_loginImage').field_status({ required: true, initial_status: if @ui.login.val() then 'ok' else 'fail' })
+        @inputChanged()
 
-        enabled = @ui.login.val() and @ui.password.val() and @ui.shopname.val() and @ui.url.val()
+    passwordChanged: =>
+        @$el.find('#volusion_passwordImage').field_status({ required: true, initial_status: if @ui.password.val() then 'ok' else 'fail' })
+        @inputChanged()
+
+    urlChanged: =>
+        @$el.find('#volusion_urlImage').field_status({ required: true, initial_status: if @ui.url.val() then 'ok' else 'fail' })
+        @inputChanged()
+
+    inputChanged: =>
+        enabled = @ui.login.val() and @ui.password.val() and @ui.url.val()
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->
-        return false if not @validator.form()            
-        return false if @$el.find('a.connect-volusion').hasClass('disabled')            
+        return false if not @validator.form()
+        return false if @$el.find('a.connect-volusion').hasClass('disabled')
+
+        aryDisplayName = /^http[s]?:\/\/([^\/\?]+)/.exec(@ui.url.val())
+
+        sDisplayName = if aryDisplayName and aryDisplayName.length and aryDisplayName.length == 2 then aryDisplayName[1] else @ui.url.val()
+
+        sDisplayName = sDisplayName or @ui.url.val()
 
         acc = new EzBob.VolusionAccountModel({
             login: @ui.login.val(),
             password: @ui.password.val(),
-            displayName: @ui.shopname.val(),
+            displayName: sDisplayName,
             url: @ui.url.val()
         })
 

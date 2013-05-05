@@ -9,6 +9,7 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib;
 using EzBob.Web.Infrastructure;
+using Integration.ChannelGrabberAPI;
 using Scorto.Web;
 using Integration.Volusion;
 using EzBob.Web.Code.MpUniq;
@@ -100,7 +101,17 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		public JsonNetResult Accounts(VolusionAccountModel model) {
 			try {
 				_validator.Validate(_log, _context.Customer, model.displayName, model.url, model.login, model.password);
+			}
+			catch (ChannelGrabberApiException cge) {
+				_log.Error("Failed to validate Volusion account, continuing with registration.");
+				_log.Error(cge);
+			}
+			catch (Exception e) {
+				_log.Error(e);
+				return this.JsonNet(new { error = e.Message });
+			} // try
 
+			try {
 				var customer = _context.Customer;
 				var username = model.login;
 				var volusion = new VolusionDatabaseMarketPlace();

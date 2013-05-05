@@ -1,32 +1,43 @@
 ﻿@using EzBob.Web.Infrastructure
 @using StructureMap
 @model dynamic
-
 <script id="VolusionAccoutInfoTemplate" type="text/template">
-    @accountInfo()
+	@accountInfo()
 </script>
 
-@helper accountInfo(){
-    var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
+@helper accountInfo() {
+	var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
 
-    <div class="row-fluid">
-        <div class="wizard-top-notification">
-            <h2 class="form_start">Please Enter Volusion Credentials</h2>
-        </div>
-        <form id="volusionAccount">                              
-            <div class="bank-account-instructions clearfix form-horizontal">
-                <div class="bank-account">
-                    @EzForm.InputText("volusion_shopname", "Volusion Shop Name", oCfg.VolusionShopName,cls: "form_field", isRequired: true, statusIcon: true)
-                    @EzForm.InputText("volusion_url", "Volusion Shop URL", oCfg.VolusionShopUrl, cls: "form_field", isRequired: true, statusIcon: true)
-                    @EzForm.InputText("volusion_login", "Volusion Login", oCfg.VolusionShopLogin, cls: "form_field", isRequired: true, statusIcon: true)
-                    @EzForm.Password("volusion_password", "Volusion Password", oCfg.VolusionShopPassword, cls: "form_field", isRequired: true, statusIcon: true)
-                    <div class="control-group clearfix" style="padding-right: 68px;">
-                        <a href="#" class="button orange connect-volusion disabled pull-right">Link Account</a>
-                        <a href="#" class="back button grey pull-right">Back</a>
-                    </div>
-                </div>
-            </div>
-        </form>
-        @*@{Html.RenderPartial("_SecureDisclaimer");}*@
-    </div>
+	<div class="row-fluid">
+		<div class="wizard-top-notification">
+			<h2 class="form_start">Please Enter Volusion Credentials</h2>
+		</div>
+		<form id="volusionAccount">
+			<div class="bank-account-instructions clearfix form-horizontal">
+				<div class="bank-account">
+					@EzForm.InputText("volusion_url", "Volusion Shop URL", oCfg.VolusionShopUrl, cls: "form_field", isRequired: true, statusIcon: true)
+					@EzForm.InputText("volusion_login", "Volusion Login", oCfg.VolusionShopLogin, cls: "form_field", isRequired: true, statusIcon: true)
+					@EzForm.InputText("volusion_password", "Volusion Password", oCfg.VolusionShopPassword, cls: "form_field", isRequired: true, statusIcon: true)
+					You need to enter the Encrypted Password for your Admin Area.
+					You can find your encrypted password in the Volusion API section of your store.
+					Volusion support direct number: 0800.520.0312.
+					<div>
+						To retrieve your Encrypted Password:
+						<ol>
+							<li>Login to your shop admin area.</li>
+							<li>Go to <strong>Inventory</strong> &raquo; <strong>Import/Export</strong> &raquo; <strong>Volusion API</strong> &raquo; <strong>Get Help</strong>.</li>
+							<li>Scroll the page down and follow the link <strong>Volusion API Integration Help</strong>.</li>
+							<li>Open the <strong>URL with Query String and General Information for Importing and Exporting</strong> section.</li>
+							<li>Your Encrypted Password is the part of the address between <strong>EncryptedPassword=</strong> and <strong>&amp;</strong>.</li>
+						</ol>
+					</div>
+					<div class="control-group clearfix" style="padding-right: 68px;">
+						<a href="#" class="button orange connect-volusion disabled pull-right">Link Account</a>
+						<a href="#" class="back button grey pull-right">Back</a>
+					</div>
+				</div>
+			</div>
+		</form>
+		@*@{Html.RenderPartial("_SecureDisclaimer");}*@
+	</div>
 }

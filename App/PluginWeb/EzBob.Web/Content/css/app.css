@@ -239,6 +239,11 @@ ul.documents {
     margin-top: 7px;
 }
 
+.source_help, .source_no_help {
+    margin-top: 7px;
+    border: none;
+}
+
 .source {
     margin: 0;
     width: 581px;
