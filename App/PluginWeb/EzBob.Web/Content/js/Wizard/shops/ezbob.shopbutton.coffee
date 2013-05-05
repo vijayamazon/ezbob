@@ -29,7 +29,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
     onRender: ->
         @$el.find('.tooltipdiv').tooltip()
-        @$el.find('.source_help').colorbox({ inline:true });
+        @$el.find('.source_help').colorbox({ inline:true, transition: 'none' });
 
     isAddingAllowed: -> return true
 
