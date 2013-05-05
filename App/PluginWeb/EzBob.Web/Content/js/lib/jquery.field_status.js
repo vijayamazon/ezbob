@@ -29,7 +29,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		width: 16, // pixels (px)
 		height: 16, // pixels (px)
 
-		wait_delay: 1000, // milliseconds
+		wait_delay: 500, // milliseconds
+		always_with_delay: true,
 
 		empty_status_name: 'empty',
 		wait_status_name: 'wait',
@@ -51,15 +52,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	var MY_NAME = 'field_status';
 
-	var TwoStepTransition = function(oImg, sStatusName, oSettings) {
-		var oTmpImg = ReplaceImage(oImg, oSettings.wait_status_name, oSettings);
-
-		window.setTimeout(function () {
-			ReplaceImage(oTmpImg, sStatusName, oSettings); 
-		}, oSettings.wait_delay);
-	}; // TwoStepTransition
-
-	var ReplaceImage = function(oImg, sStatus, oSettings) {
+	function OneStepTransition(oImg, sStatus, oSettings) {
 		var oOldImg = $(oImg);
 
 		var oNewImg = oSettings.status_list[sStatus].img
@@ -79,7 +72,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		oOldImg.replaceWith(oNewImg);
 
 		return oNewImg;
-	}; // ReplaceImage
+	}; // OneStepTransition
+
+	function TwoStepTransition(oImg, sStatusName, oSettings) {
+		var oTmpImg = OneStepTransition(oImg, oSettings.wait_status_name, oSettings);
+
+		window.setTimeout(function () {
+			OneStepTransition(oTmpImg, sStatusName, oSettings); 
+		}, oSettings.wait_delay);
+	}; // TwoStepTransition
+
+	function DoTransition(bWithDelay, oImg, sStatusName, oSettings) {
+		if (oSettings.always_with_delay || bWithDelay)
+			TwoStepTransition(oImg, sStatusName, oSettings);
+		else
+			OneStepTransition(oImg, sStatusName, oSettings);
+	}; // DoTransition
 
 	var oMethods = {
 		init: function(options) {
@@ -109,32 +117,31 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				$(this).data(MY_NAME, oSettings);
 
 				if (oSettings.initial_status) {
-					ReplaceImage(this, oSettings.initial_status, oSettings);
+					OneStepTransition(this, oSettings.initial_status, oSettings);
 					return;
 				} // if
 
 				if (oSettings.required)
-					ReplaceImage(this, oSettings.required_status_name, oSettings);
+					OneStepTransition(this, oSettings.required_status_name, oSettings);
 				else
-					ReplaceImage(this, oSettings.empty_status_name, oSettings);
+					OneStepTransition(this, oSettings.empty_status_name, oSettings);
 			}); // each
 		}, // init
 
 		clear: function(bWithDelay) {
-			var oImg = this;
-			var oSettings = $(oImg).data(MY_NAME);
+			return this.each(function() {
+				var oImg = this;
+				var oSettings = $(oImg).data(MY_NAME);
 
-			if (!oSettings)
+				if (!oSettings)
+					return true;
+
+				var sStatusName = oSettings.required ? oSettings.required_status_name : oSettings.empty_status_name;
+
+				DoTransition(bWithDelay, oImg, sStatusName, oSettings);
+
 				return true;
-
-			var sStatusName = oSettings.required ? oSettings.required_status_name : oSettings.empty_status_name;
-
-			if (bWithDelay)
-				TwoStepTransition(oImg, sStatusName, oSettings);
-			else
-				ReplaceImage(oImg, sStatusName, oSettings);
-
-			return true;
+			});
 		}, // clear
 
 		set: function(sStatusName, bWithDelay) {
@@ -153,10 +160,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				if (!oSettings.status_list[sStatusName])
 					return true;
 
-				if (bWithDelay)
-					TwoStepTransition(oImg, sStatusName, oSettings);
-				else
-					ReplaceImage(oImg, sStatusName, oSettings);
+				DoTransition(bWithDelay, oImg, sStatusName, oSettings);
 
 				return true;
 			});
