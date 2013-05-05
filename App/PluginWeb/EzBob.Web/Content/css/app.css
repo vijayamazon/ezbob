@@ -327,17 +327,72 @@ div.shop-connected {
 }
 
     .source_labels.eBay {
-        background-position: 0 0;
+        background-position: 0 -1.5px;
+        width: 81px;
+    }
+
+    .source_labels_on.eBay {
+        background-position: 0 -41.5px;
         width: 81px;
     }
 
     .source_labels.Amazon {
-        background-position: -86px 0;
+        background-position: -85.9px -1px;
         width: 110px;
+    }
+
+    .source_labels_on.Amazon {
+        background-position: -85.9px -41px;
+        width: 110px;
+    }
+
+    .source_labels.EKM {
+        background-position: -558px -2px;
+        width: 150px;
+    }
+
+    .source_labels_on.EKM {
+        background-position: -558px -42px;
+        width: 150px;
+    }
+
+    .source_labels.Volusion {
+        background-position: -868.9px -3px;
+        width: 98px;
+    }
+
+    .source_labels_on.Volusion {
+        background-position: -868.9px -43px;
+        width: 98px;
+    }
+
+    .source_labels.paypal {
+        background-position: -751px -2px;
+        width: 111px;
+    }
+
+    .source_labels_on.paypal {
+        background-position: -751px -42px;
+        width: 111px;
+    }
+
+    .source_labels.PayPoint {
+        background-position: -967px -1px;
+        width: 167px;
+    }
+
+    .source_labels_on.PayPoint {
+        background-position: -967px -41px;
+        width: 167px;
     }
 
     .source_labels.play {
         background-position: -195px 0;
+        width: 119px;
+    }
+
+    .source_labels_on.play {
+        background-position: -195px -40px;
         width: 119px;
     }
 
@@ -346,8 +401,18 @@ div.shop-connected {
         width: 103px;
     }
 
+    .source_labels_on.shopify {
+        background-position: -314px -40px;
+        width: 103px;
+    }
+
     .source_labels.google_shopping {
         background-position: -417px 0;
+        width: 85px;
+    }
+
+    .source_labels_on.google_shopping {
+        background-position: -417px -40px;
         width: 85px;
     }
 
@@ -356,74 +421,9 @@ div.shop-connected {
         width: 55px;
     }
 
-    .source_labels.EKM {
-        background-position: -558px 0;
-        width: 150px;
-    }
-
-    .source_labels.paypal {
-        background-position: -751px 0;
-        width: 111px;
-    }
-
-    .source_labels.PayPoint {
-        background-position: -967px 0;
-        width: 167px;
-    }
-
-    .source_labels.Volusion {
-        background-position: -867px 0;
-        width: 98px;
-    }
-
-    .source_labels_on.eBay {
-        background-position: 0 -40px;
-        width: 81px;
-    }
-
-    .source_labels_on.Amazon {
-        background-position: -86px -40px;
-        width: 110px;
-    }
-
-    .source_labels_on.play {
-        background-position: -195px -40px;
-        width: 119px;
-    }
-
-    .source_labels_on.shopify {
-        background-position: -314px -40px;
-        width: 103px;
-    }
-
-    .source_labels_on.google_shopping {
-        background-position: -417px -40px;
-        width: 85px;
-    }
-
     .source_labels_on.etsy {
         background-position: -502px -40px;
         width: 55px;
-    }
-
-    .source_labels_on.EKM {
-        background-position: -558px -40px;
-        width: 150px;
-    }
-
-    .source_labels_on.paypal {
-        background-position: -751px -40px;
-        width: 111px;
-    }
-
-    .source_labels_on.PayPoint {
-        background-position: -967px -40px;
-        width: 167px;
-    }
-
-    .source_labels_on.Volusion {
-        background-position: -867px -40px;
-        width: 98px;
     }
 
 .source_table {
