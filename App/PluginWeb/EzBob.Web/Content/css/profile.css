@@ -982,3 +982,5 @@ table.payment-schedule-table td{font-size: 16px;}
     -webkit-text-shadow: none;
     text-shadow: none;
 }
+
+select.selectheight { height: 30px; }

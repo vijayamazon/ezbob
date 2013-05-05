@@ -12,7 +12,6 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
     initialize: (options)->
         @region = new Backbone.Marionette.Region el: @el
         @customer = options.customer
-
         @applyForLoanViewModel = new EzBob.Profile.ApplyForLoanModel(
           maxCash: @customer.get("CreditSum")
           OfferStart: @customer.get("OfferStart")
@@ -41,12 +40,11 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
         return view
 
     amountSelected: ->
-        console.log "amount #{@applyForLoanViewModel.get('neededCash')} selected url is #{@applyForLoanViewModel.get('url')}"
-
+        #console.log "amount #{@applyForLoanViewModel.get('neededCash')} selected url is #{@applyForLoanViewModel.get('url')}"
         if not @customer.get("bankAccountAdded")
             @model.set "state", "bank"
             return
-
+        
         @submit()
 
     submit: ->
@@ -54,17 +52,16 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.View
         if view.cards.length > 0
             view.on 'select', (cardId) =>
                 BlockUi "on"
-                xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: creditSum}
+                xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: view.model.get("CreditSum")}
                 xhr.done (data) =>
                     document.location.href = data.url;
       
             view.on 'existing', => @_submit()
-
             view.on 'cancel', => @model.set("state", "apply")
-
             EzBob.App.modal.show view
             return false
-
+        else
+            @_submit()
         return false
 
     _submit: ->
