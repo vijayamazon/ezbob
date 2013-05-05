@@ -30,10 +30,9 @@ EzBob.PayPalInfoView = Backbone.View.extend({
     },
     initialize: function () {
         var that = this;
-        
+
         EzBob.CT.bindShopToCT(this, 'paypal');
-        this.template = _.template($('#paypal-instructions').html());
-        
+
         window.PayPalAdded = function (result) {
             EzBob.App.trigger('info', 'Congratulations. PayPal account was added successfully.');
             that.trigger('completed');
@@ -49,10 +48,6 @@ EzBob.PayPalInfoView = Backbone.View.extend({
     },
     signedIn: function () {
         this.bindToButton();
-    },
-    render: function () {
-        this.$el.html(this.template());
-        return this;
     },
     back: function () {
         this.trigger('back');

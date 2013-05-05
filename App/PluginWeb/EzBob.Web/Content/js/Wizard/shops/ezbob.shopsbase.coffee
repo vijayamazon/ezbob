@@ -40,6 +40,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             @$el.find(".next").show()
 
     render: ->
+        $.colorbox.close()
+
         that = this
         accountsList = @storeList.find(".accounts-list")
 

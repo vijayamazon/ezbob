@@ -44,10 +44,6 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
                     });
             };
         };
-    },
-    render: function () {
-        this.$el.html($('#ebay-store-info').html());
-        return this;
     }
 });
 
