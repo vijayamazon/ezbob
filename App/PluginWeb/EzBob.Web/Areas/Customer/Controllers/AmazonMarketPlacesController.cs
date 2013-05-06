@@ -148,8 +148,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
 
-                //only UK for now...
-                marketplaceId = "A1F83G8C2ARO7P";
                 if (string.IsNullOrEmpty(marketplaceId) || string.IsNullOrEmpty(merchantId))
                 {
                     return Json(new{});
@@ -180,7 +178,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     customer.WizardStep = WizardStepType.Marketplace;
                 _customerRepository.SaveOrUpdate(customer);
 
-                return Json(new { msg = "Congratulations. Your shop was added successfully." });
+                return Json(new { msg = "Congratulations. Amazon account was linked successfully." });
             }
             catch (MarketPlaceAddedByThisCustomerException)
             {

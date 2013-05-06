@@ -11,26 +11,25 @@ class EzBob.VolusionAccountButtonView extends EzBob.StoreButtonView
 
 class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
     template: '#VolusionAccoutInfoTemplate'
-    
-    events: {
-        'click a.connect-volusion': 'connect',
-        'click a.back': 'back',
 
-        'cut     #volusion_login': 'loginChanged',
-        'change  #volusion_login': 'loginChanged',
-        'keydown #volusion_login': 'loginChanged',
-        'paste   #volusion_login': 'loginChanged',
+    events:
+        'click a.connect-volusion': 'connect'
+        'click a.back': 'back'
 
-        'cut     #volusion_url': 'urlChanged',
-        'change  #volusion_url': 'urlChanged',
-        'keydown #volusion_url': 'urlChanged',
-        'paste   #volusion_url': 'urlChanged',
+        'cut    #volusion_login': 'loginChanged'
+        'change #volusion_login': 'loginChanged'
+        'keyup  #volusion_login': 'loginChanged'
+        'paste  #volusion_login': 'loginChanged'
 
-        'cut     #volusion_password': 'passwordChanged',
-        'change  #volusion_password': 'passwordChanged',
-        'keydown #volusion_password': 'passwordChanged',
-        'paste   #volusion_password': 'passwordChanged'
-    }
+        'cut    #volusion_url': 'urlChanged'
+        'change #volusion_url': 'urlChanged'
+        'keyup  #volusion_url': 'urlChanged'
+        'paste  #volusion_url': 'urlChanged'
+
+        'cut    #volusion_password': 'passwordChanged'
+        'change #volusion_password': 'passwordChanged'
+        'keyup  #volusion_password': 'passwordChanged'
+        'paste  #volusion_password': 'passwordChanged'
 
     ui:
         login       : '#volusion_login'

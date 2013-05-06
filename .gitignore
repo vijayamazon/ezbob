@@ -65,3 +65,6 @@ App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.ebay.js
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopbutton.js
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopsbase.js
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.volusion.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.amazon.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shops.volusion.js
+App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopsbase.js

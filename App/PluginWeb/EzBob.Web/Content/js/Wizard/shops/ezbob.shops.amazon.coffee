@@ -1,7 +1,7 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-EzBob.AmazonStoreInfoView = Backbone.View.extend(
+class EzBob.AmazonStoreInfoView extends Backbone.View
     initialize: ->
         EzBob.CT.bindShopToCT this, "amazon"
 
@@ -16,24 +16,41 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
         "click a.connect-amazon": "connect"
         "click a.back": "back"
         "click .screenshots": "runTutorial"
-        "keyup input[type='text']": "inputChanged"
-        "change input[type='text']": "inputChanged"
         "click a.print": "print"
 
-    inputChanged: ->
+        'cut    #amazonMarketplaceId': 'marketplaceIdChanged'
+        'change #amazonMarketplaceId': 'marketplaceIdChanged'
+        'keyup  #amazonMarketplaceId': 'marketplaceIdChanged'
+        'paste  #amazonMarketplaceId': 'marketplaceIdChanged'
+
+        'cut    #amazonMerchantId': 'merchantIdChanged'
+        'change #amazonMerchantId': 'merchantIdChanged'
+        'keyup  #amazonMerchantId': 'merchantIdChanged'
+        'paste  #amazonMerchantId': 'merchantIdChanged'
+
+    marketplaceIdChanged: ->
+        @inputChanged 'marketplace'
+
+    merchantIdChanged: ->
+        @inputChanged 'merchant'
+
+    inputChanged: (sIcon) ->
         marketplaceId = @$el.find("#amazonMarketplaceId").val()
         merchantId = @$el.find("#amazonMerchantId").val()
 
         bIsMarketPlaceOk = marketplaceId.length >= 10 and marketplaceId.length <= 15
         bIsMerchantIdOk = merchantId.length >= 10 and merchantId.length <= 15
 
-        @$el.find('#amazonMarketplaceIdImage').field_status('set', if bIsMarketPlaceOk then 'ok' else 'fail')
+        if 'marketplace' == sIcon
+            @$el.find('#amazonMarketplaceIdImage').field_status({ required: true, initial_status: if bIsMarketPlaceOk then 'ok' else 'fail' })
 
-        @$el.find('#amazonMerchantIdImage').field_status('set', if bIsMerchantIdOk then 'ok' else 'fail')
+        if 'merchant' == sIcon
+            @$el.find('#amazonMerchantIdImage').field_status({ required: true, initial_status: if bIsMerchantIdOk then 'ok' else 'fail' })
 
         if not bIsMerchantIdOk or not bIsMarketPlaceOk or not @validator.form()
             @$el.find("a.connect-amazon").addClass "disabled"
             return
+
         @$el.find("a.connect-amazon").removeClass "disabled"
 
     runTutorial: ->
@@ -89,6 +106,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
                 EzBob.App.trigger "error", result.error
                 @trigger "back"
                 return
+
             EzBob.App.trigger "info", result.msg
             @trigger "completed"
             @trigger 'back'
@@ -106,22 +124,18 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend(
     blockBtn: (isBlock) ->
         BlockUi (if isBlock then "on" else "off")
         @$el.find("connect-amazon").toggleClass "disabled", isBlock
-)
-
 
 class EzBob.AmazonStoreModel extends Backbone.Model
     defaults:
         marketplaceId: null
 
-
 class EzBob.AmazonStoreModels extends Backbone.Collection
     model: EzBob.AmazonStoreModel
     url: "#{window.gRootPath}Customer/AmazonMarketPlaces"
-
 
 class EzBob.AmazonButtonView extends EzBob.StoreButtonView
     initialize: ->
         super({name: "Amazon", logoText: "", shops: @model})
 
     update: ->
-        @model.fetch()
+        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
