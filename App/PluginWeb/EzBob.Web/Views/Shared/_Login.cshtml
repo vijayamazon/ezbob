@@ -1,29 +1,29 @@
 ﻿@model EzBob.Web.Models.LogOnModel
-@using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" }))
-{
-    <div class="inner">
-        <h1>Login</h1>
-        <section id="content">
-            <h2>Welcome Back!</h2>
-            @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
-            
-            @EzForm.InputText("UserName", "Email Address", cls:"form_field", isRequired: true, statusIcon: true)
-            @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true)
+@using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login form-horizontal" })) {
+	<section id="content">
+		<h1>Login</h1>
+		<h2>Welcome Back!</h2>
+		@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
-            <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
+		@EzForm.InputText("UserName", "Email Address", cls: "form_field", isRequired: true, statusIcon: true)
+		@EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true)
 
-            <div class="form_field_container">
-                <label class="checkbox" for="RememberMe" style="font-weight: normal">
-                    Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
-                </label>
-            </div>
-            <div class="form_buttons_container">
-                <input type="submit" value="Login" class="button orange login-btn disabled" id="loginSubmit" />
-            </div>
-            <p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
-        </section>
-        @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Login.cshtml");}
-    </div>
-    <div id="DontHaveAccount">
-    </div>
+		<input name="RememberMe" type="hidden" value="@Model.RememberMe" />
+
+		<div class="form_field_container">
+			<label class="checkbox" for="RememberMe" style="font-weight: normal">
+				Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
+			</label>
+		</div>
+		<div class="form_buttons_container">
+			<input type="submit" value="Login" class="button orange login-btn disabled" id="loginSubmit" />
+		</div>
+		<p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
+	</section>
+	<aside id="sidebar">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityStatement.cshtml");}
+	</aside>
+	<div class="clear" />
+	<div id="DontHaveAccount">
+	</div>
 }
