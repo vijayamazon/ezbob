@@ -7,7 +7,7 @@
     <div class="control-group">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
-            <select id="@id" name="@id" class="@css" data-placeholder="@placeHolder" >
+            <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder" >
                 <option>-</option>
                 @foreach (var v in values)
                 {
@@ -71,6 +71,29 @@
         {
             <span class="required">*</span>
         }
+    </div>
+}
+
+@helper InputTextUnderwriter(string id, string caption, string value, string cls = "", bool isDisabled = false)
+{
+    
+    var identificator=new HtmlString(id);
+    var val = new HtmlString(value);
+    <div class="control-group">
+        <label for="@identificator" class="control-label">@caption</label>
+        <div class="controls">
+            <input 
+                id="@identificator" 
+                name="@identificator" 
+                type="text" 
+                value="@val" 
+                class="@cls" 
+                @if (isDisabled)
+                {
+                    @:disabled="disabled"
+                }  
+            />
+        </div>
     </div>
 }
 
@@ -269,7 +292,7 @@
 
             <label class="attardi-input">
                 <span>Day</span>
-                <select id='@dayIdentificator' name="day" class="form_field_date @css" empty_value="-">
+                <select id='@dayIdentificator' name="day" class="selectheight form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 31; i++)
                        {
@@ -284,7 +307,7 @@
 
             <label class="attardi-input">
                 <span>Month</span>
-                <select id='@monthIdentificator' name="month" class="form_field_date @css" empty_value="-">
+                <select id='@monthIdentificator' name="month" class="selectheight form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{ for (var i = 1; i <= 12; i++)
                        {
@@ -300,7 +323,7 @@
 
             <label class="attardi-input">
                 <span>Year</span>
-                <select id='@yearIdentificator' name="year" class="form_field_date @css" empty_value="-">
+                <select id='@yearIdentificator' name="year" class="selectheight form_field_date @css" empty_value="-">
                     <option value="-"></option>
                     @{
                         var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
@@ -325,6 +348,63 @@
 
 			<input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
         </div>
+    </div>
+}
+
+@helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null)
+{
+    var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
+    var validationClass = required ? "requiredDate" : "";
+    var identificator = new HtmlString(name);
+
+    <div class="control-group" >
+
+        <label for="day" class="control-label">@title</label>
+        <div class="controls ezDateTime">
+            <select name="day" style="width: 60px;" class="selectheight" >
+                <option value="-">-</option>
+                @{ for (var i = 1; i <= 31; i++)
+                   {
+                       <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
+                               {
+                                   @:selected="selected"
+                               }
+                        value="@i">@i</option>
+                   } }
+            </select>
+
+            <select name="month" style="width: 70px;" class="selectheight" >
+                <option value="-">-</option>
+                @{ for (var i = 1; i <= 12; i++)
+                   {
+                       <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
+                               {
+                                   @:selected="selected"
+                               }
+                           value="@i"> @month[i-1]</option>
+                   } 
+                 }
+            </select>
+
+            <select name="year" style="width: 80px; " class="selectheight">
+                <option value="-">-</option>
+                @{
+                    var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
+                    var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
+                    for (var i = minYear; i <= maxYear; i++)
+                    {
+                        <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
+                                {
+                                    @:selected="selected"
+                                }
+                            value="@i">@i</option>
+                    }
+                }
+            </select>
+            
+            <input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
+        </div>
+        
     </div>
 }
 

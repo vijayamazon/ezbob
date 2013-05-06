@@ -162,11 +162,11 @@
         
         <form id="payment-form" class="form-horizontal" action="/" method="POST">
             @EzForm.Select("paymentMethod", "Payment method", new List<string>{ "Cheque", "Cash", "Bank transfer", "Other" })
-            @EzForm.InputText("totalSumPaid", "Total sum paid","")
-            @EzForm.DateInput("paymentDate", "Date", false, new[]{ DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
-            @EzForm.InputText("fees", "Fees","", "text","", true)
-            @EzForm.InputText("interest", "Interest","", "text", "", true)
-            @EzForm.InputText("principal", "Principal","", "text", "", true)
+            @EzForm.InputTextUnderwriter("totalSumPaid", "Total sum paid","")
+            @EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[]{ DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
+            @EzForm.InputTextUnderwriter("fees", "Fees","", "text", isDisabled: true)
+            @EzForm.InputTextUnderwriter("interest", "Interest","", "text", isDisabled: true)
+            @EzForm.InputTextUnderwriter("principal", "Principal","", "text", isDisabled: true)
             @EzForm.CheckBox("sendemail", "Send confirmation email")
             @EzForm.TextAreaSmall("description", "Description", "")
         </form>
