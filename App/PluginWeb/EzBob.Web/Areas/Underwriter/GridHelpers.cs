@@ -7,6 +7,8 @@ using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter
 {
+    using System.Globalization;
+
     public static class GridHelpers
     {
         /*
@@ -684,7 +686,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Width = 115,
                     DataType = TypeCode.String,
                     Formatter = "showMPsIcon",
-                    Data = x => x.CustomerMarketPlaces.Select(y => y.Marketplace.Name).ToList()
+                    //Data = x => x.CustomerMarketPlaces.Select(y => y.Marketplace.Name).ToList()
+                    Data = x => x.CustomerMarketPlaces.GroupBy(m => m.Marketplace.Name).Select(g => g.Count().ToString(CultureInfo.InvariantCulture) + " " + g.Key).ToList()
                 });
         }
 

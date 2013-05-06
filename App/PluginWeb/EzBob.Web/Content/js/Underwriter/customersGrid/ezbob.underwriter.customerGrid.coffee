@@ -97,11 +97,15 @@ $.fn.fmatter.showMedalIcon = (cellval) ->
     text = cellval.text or cellval
     "<i data-toggle='tooltip' title='#{text}' class='#{text.toLowerCase().replace(/\s/g, '')}'></i>"
 
+$.fn.fmatter.showMPIcon = (cellval) ->
+    text = cellval.text or cellval
+    "<i data-toggle='tooltip' title='#{text}' class='#{text.split(" ")[1].toLowerCase()}'></i>"
+
 $.fn.fmatter.showMPsIcon = (cellval, opt) ->
     mps = cellval.text or cellval
     retVal = ""
     _.each mps, (val) ->
-        retVal += $.fn.fmatter.showMedalIcon(val)
+        retVal += $.fn.fmatter.showMPIcon(val)
     "<div style='overflow: auto; width: 102%'>#{retVal + ' '}</div>"
 
 $.fn.fmatter.profileLink = (cellval, opts) ->

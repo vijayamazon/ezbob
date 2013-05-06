@@ -494,6 +494,7 @@
     <Content Include="Content\img\mp-icons-32\icon-ebay-32.png" />
     <Content Include="Content\img\mp-icons-32\icon-ekm-32.png" />
     <Content Include="Content\img\mp-icons-32\icon-paypal-32.png" />
+    <Content Include="Content\img\mp-icons-32\shopping-bag-icon-16x16.png" />
     <Content Include="Content\img\ok16.png" />
     <Content Include="Content\img\pdf-logo.jpg" />
     <Content Include="Content\img\printer.png" />
