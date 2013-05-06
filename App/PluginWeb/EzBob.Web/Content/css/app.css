@@ -936,3 +936,13 @@ input[type="color"],
     width: 759px;
     height: 77px;
 }
+
+.accounts-list > div {
+    margin-left: 0!important;
+	margin-top: 20px;
+}
+
+.eBayPaypalRule { font-weight: bold; color: red; margin-top: 0.6em; }
+
+.cont-button .eBayPaypalRule { float: left; }
+

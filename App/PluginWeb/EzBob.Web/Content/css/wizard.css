@@ -214,11 +214,6 @@ ul.list_none
 }
 #wizard .notifications > div { margin-right: 18px;}
 
-.shops-list > div, .accounts-list > div {
-    margin-left: 0!important;
-	margin-top: 20px;
-}
-
 #AccountNumber { width: 215px;}
 
 .GenderCtrl input {
@@ -265,6 +260,6 @@ div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 
 div.full_width { width: 581px; }
 
-.eBayPaypalRule { font-weight: bold; color: red; margin-top: 0.6em; }
-
-.cont-button .eBayPaypalRule { float: left; }
+.wizard-wrapper .stores-view .back-step {
+    display: none !important;
+}

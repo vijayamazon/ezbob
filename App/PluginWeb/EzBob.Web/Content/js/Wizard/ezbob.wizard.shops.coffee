@@ -15,9 +15,10 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     ekms = @get("ekmShops")
     volusions = @get("volusionShops")
     payPoints = @get("payPointAccounts")
+    paypals = @get("paypalAccounts")
 
     for shop in ebays
-        stores.push {displayName: shop.displayName, type: "Ebay"}
+        stores.push {displayName: shop.displayName, type: "eBay"}
 
     for shop in amazons
         stores.push {displayName: shop.displayName, type: "Amazon"}
@@ -30,6 +31,9 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     for shop in payPoints
         stores.push {displayName: shop.displayName, type: "PayPoint"}
+
+    for shop in paypals
+        stores.push {displayName: shop.displayName, type: "paypal"}
 
     return stores
 

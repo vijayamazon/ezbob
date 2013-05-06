@@ -65,7 +65,7 @@
                                 <input type="radio" name="paymentType" value="loan" <%-isPayLoan ? 'checked="checked"' : ''%> />
                                 Pay
                             </label>
-                            <select class="w220" <%=loanPaymentTypeDisabled%> name="loanSelect">
+                            <select class="w220 selectheight" <%=loanPaymentTypeDisabled%> name="loanSelect">
                                 <% _.each(liveLoans, function(l){%>
                                     <option value="<%-l.get('Id')%>" <%-l.get('Id') == loan.get('Id') ? 'selected="selected"' : ''%> >Loan Ref. # <%-l.get('RefNumber')%></option>
                                 <%});%>
@@ -118,7 +118,7 @@
                             <input type="radio" name="paymentType" value="rollover" <%-paymentType =='rollover' ? 'checked="checked"' : ''%> />
                             Rollover
                         </label>
-                        <select class="rolloverLoan" <%=rolloverDisabled%> name="rolloverSelect">
+                        <select class="rolloverLoan selectheight" <%=rolloverDisabled%> name="rolloverSelect">
                             <% _.each(liveLoans, function(l){%>
                                 <%if (_.any(rollovers.toJSON(), function(r){ return r.LoanId == l.get('Id'); }) ){%>
                                     <option value="<%-l.get('Id')%>" >Loan Ref. # <%-l.get('RefNumber')%></option>
