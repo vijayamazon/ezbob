@@ -106,7 +106,6 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
                 that.blockBtn(false);
                 if (result.error) {
                     EzBob.App.trigger('error', result.error);
-                    //that.trigger('back');
                     return;
                 }
                 that.model.set('bankAccount', accNum);

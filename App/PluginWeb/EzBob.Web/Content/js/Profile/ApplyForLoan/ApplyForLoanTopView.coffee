@@ -29,7 +29,7 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
     render: ->
         @$el.html @template()
         view = @states[@model.get("state")]()
-        console.log("view",view, @model.get("state"), @sates, )
+        $('.narrow-wizard-header').after($('.notifications'))
         region = new Backbone.Marionette.Region el: @$el.find('.apply-for-loan-div')
         region.show view
         #@createApplyForLoanView()
