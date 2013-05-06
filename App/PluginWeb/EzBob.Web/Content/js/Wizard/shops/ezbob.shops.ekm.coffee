@@ -70,6 +70,11 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
+
+        oFieldStatusIcons = $ 'IMG.field_status'
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+
         @validator = EzBob.validateEkmShopForm @ui.form
         return @
 

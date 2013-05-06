@@ -53,7 +53,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         hasEbay = @stores.eBay.button.model.length > 0
         hasPaypal = @stores.paypal.button.model.length > 0
 
-        @$el.find("#eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
+        @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
 
         @$el.find(".next").toggleClass("disabled", !hasFilledShops or (hasEbay and not hasPaypal))
 
@@ -100,19 +100,19 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     setDocumentTitle: (storeName) ->
         switch storeName
             when "Amazon"
-                $(document).attr "title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB"
+                $(document).attr "title", "Wizard 2 Amazon: Link Amazon Account | EZBOB"
             when "eBay"
-                $(document).attr "title", "Wizard 2 Ebay: Link Your Ebay Shop | EZBOB"
+                $(document).attr "title", "Wizard 2 Ebay: Link Ebay Account | EZBOB"
             #when "bank-account"
-            #    $(document).attr "title", "Wizard 3 Bank: Bank Account Details | EZBOB"
+            #    $(document).attr "title", "Wizard 2 Bank: Bank Account Details | EZBOB"
             when "paypal"
-                $(document).attr "title", "Wizard 2 PayPal: Link Your PayPal Account | EZBOB"
+                $(document).attr "title", "Wizard 2 PayPal: Link PayPal Account | EZBOB"
             when "EKM"
-                $(document).attr "title", "Wizard 2 EKM: Link Your EKM Account | EZBOB"
+                $(document).attr "title", "Wizard 2 EKM: Link EKM Account | EZBOB"
             when "PayPoint"
-                $(document).attr "title", "Wizard 2 PayPoint: Link Your PayPoint Account | EZBOB"
+                $(document).attr "title", "Wizard 2 PayPoint: Link PayPoint Account | EZBOB"
             when "Volusion"
-                $(document).attr "title", "Wizard 2 Volusion: Link Your Volusion Account | EZBOB"
+                $(document).attr "title", "Wizard 2 Volusion: Link Volusion Account | EZBOB"
             else
 
     close: ->

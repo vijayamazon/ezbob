@@ -264,3 +264,7 @@ div.canDisabledAddress { display: none; }
 div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 
 div.full_width { width: 581px; }
+
+.eBayPaypalRule { font-weight: bold; color: red; margin-top: 0.6em; }
+
+.cont-button .eBayPaypalRule { float: left; }

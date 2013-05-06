@@ -20,16 +20,19 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         'change #volusion_login': 'loginChanged'
         'keyup  #volusion_login': 'loginChanged'
         'paste  #volusion_login': 'loginChanged'
+        'blur   #volusion_login': 'loginChanged'
 
         'cut    #volusion_url': 'urlChanged'
         'change #volusion_url': 'urlChanged'
         'keyup  #volusion_url': 'urlChanged'
         'paste  #volusion_url': 'urlChanged'
+        'blur   #volusion_url': 'urlChanged'
 
         'cut    #volusion_password': 'passwordChanged'
         'change #volusion_password': 'passwordChanged'
         'keyup  #volusion_password': 'passwordChanged'
         'paste  #volusion_password': 'passwordChanged'
+        'blur   #volusion_password': 'passwordChanged'
 
     ui:
         login       : '#volusion_login'
@@ -103,6 +106,11 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
+
+        oFieldStatusIcons = $ 'IMG.field_status'
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+
         @validator = EzBob.validateVolusionShopForm @ui.form
         return @
 
