@@ -121,6 +121,7 @@ EzBob.Wizard = Backbone.View.extend({
     },
     ShopInfoRoute: function () {
         this.model.changePage(1);
+        this.steps[1].view.StoreInfoView.back();
     },
     //PaymentAccountsRoute: function () {
     //    this.model.changePage(2);
