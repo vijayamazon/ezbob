@@ -16,17 +16,19 @@
     }
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var that;
+      var name, store, _ref1;
 
-      that = this;
       this.storeList = $($("#store-info").html());
       this.isReady = false;
-      _.each(this.stores, function(store) {
-        store.button.on("selected", that.connect, that);
-        store.view.on("completed", _.bind(that.completed, that, store.button.name));
-        store.view.on("back", that.back, that);
-        return store.button.on("ready", that.ready, that);
-      });
+      _ref1 = this.stores;
+      for (name in _ref1) {
+        store = _ref1[name];
+        store.button.on("selected", this.connect, this);
+        store.view.on("completed", _.bind(this.completed, this, store.button.name));
+        store.view.on("back", this.back, this);
+        store.button.on("ready", this.ready, this);
+      }
+      EzBob.App.on("ct:storebase.shop.connected", this.render, this);
       return EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
     };
 
@@ -61,8 +63,9 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasFilledShops, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
+      var accountsList, hasEbay, hasFilledShops, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
 
+      $.colorbox.close();
       that = this;
       accountsList = this.storeList.find(".accounts-list");
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
@@ -72,7 +75,10 @@
         return -s.button.model.length;
       });
       hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
-      this.$el.find(".next").toggleClass("disabled", !hasFilledShops);
+      hasEbay = this.stores.eBay.button.model.length > 0;
+      hasPaypal = this.stores.paypal.button.model.length > 0;
+      this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
+      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || (hasEbay && !hasPaypal));
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
         if (!shop.active) {
@@ -82,9 +88,6 @@
         shop.view.render().$el.hide().appendTo(that.$el);
       }
       this.storeList.appendTo(this.$el);
-      if (this.stores["bank-account"] != null ? this.stores["bank-account"].button.model.get("bankAccountAdded") : void 0) {
-        that.ready();
-      }
       return this;
     };
 
@@ -100,52 +103,37 @@
     };
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
+      var storeView;
+
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
-      this.stores[storeName].view.$el.show();
+      storeView = this.stores[storeName].view;
+      storeView.render();
+      storeView.$el.show();
       this.oldTitle = $(document).attr("title");
-      this.setDocumentTitle(storeName);
+      this.setDocumentTitle(storeView);
       this.setFocus(storeName);
       return false;
     };
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
-      var sText;
-
       $.colorbox.close();
-      console.log("setFocus", storeName);
       switch (storeName) {
         case "EKM":
           return this.$el.find("#ekm_login").focus();
         case "Volusion":
-          sText = $("#header_description").text().trim();
-          if ("" === this.$el.find("#volusion_login").val()) {
-            this.$el.find("#volusion_login").val(sText.substr(0, sText.indexOf(" ")));
-          }
-          return this.$el.find("#volusion_shopname").focus();
+          return this.$el.find("#volusion_url").focus();
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
-        case "bank-account":
-          return this.$el.find("#AccountNumber").focus();
       }
     };
 
-    StoreInfoBaseView.prototype.setDocumentTitle = function(storeName) {
-      switch (storeName) {
-        case "Amazon":
-          return $(document).attr("title", "Wizard 2 Amazon: Link Your Amazon Shop | EZBOB");
-        case "eBay":
-          return $(document).attr("title", "Wizard 2 Ebay: Link Your Ebay Shop | EZBOB");
-        case "bank-account":
-          return $(document).attr("title", "Wizard 3 Bank: Bank Account Details | EZBOB");
-        case "paypal":
-          return $(document).attr("title", "Wizard 3 PayPal: Link Your PayPal Account | EZBOB");
-        case "EKM":
-          return $(document).attr("title", "Wizard 3 EKM: Link Your EKM Account | EZBOB");
-        case "PayPoint":
-          return $(document).attr("title", "Wizard 3 PayPoint: Link Your PayPoint Account | EZBOB");
-        case "Volusion":
-          return $(document).attr("title", "Wizard 3 Volusion: Link Your Volusion Account | EZBOB");
+    StoreInfoBaseView.prototype.setDocumentTitle = function(view) {
+      var title;
+
+      title = view.getDocumentTitle();
+      if (title) {
+        return $(document).attr("title", "Step 2: " + title + " | EZBOB");
       }
     };
 

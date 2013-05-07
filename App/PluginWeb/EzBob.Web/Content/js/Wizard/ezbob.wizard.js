@@ -60,13 +60,13 @@ EzBob.WizardRouter = Backbone.Router.extend({
         }
         switch (i) {
             case 0:
-                $(document).attr("title", "Wizard 1: Sign up | EZBOB");
+                $(document).attr("title", "Step 1: Sign Up | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/SignUp');
                 EzBob.App.trigger("wizard:progress", 0);
                 this.navigate("SignUp", { trigger: true });
                 break;
             case 1:
-                $(document).attr("title", "Wizard 2: Link Your Accounts | EZBOB");
+                $(document).attr("title", "Step 2: Link Your Accounts | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/Shops');
                 EzBob.App.trigger("wizard:progress", 30);
                 this.navigate("ShopInfo", { trigger: true });
@@ -77,7 +77,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
                 //    this.navigate("PaymentAccounts", { trigger: true });
                 //    break;
             case 2:
-                $(document).attr("title", "Wizard 3 Business: Fill Business Details | EZBOB ");
+                $(document).attr("title", "Step 3: Fill Personal Details | EZBOB ");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
                 EzBob.App.trigger("wizard:progress", 70);
                 this.navigate("YourDetails", { trigger: true });
