@@ -258,8 +258,6 @@ div.canDisabledAddress { display: none; }
 
 div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 
-div.full_width { width: 581px; }
-
 .wizard-wrapper .stores-view .back-step {
     display: none !important;
 }

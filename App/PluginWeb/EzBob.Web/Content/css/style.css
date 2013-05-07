@@ -92,7 +92,7 @@ ul.sub_footer_nav li a{float:left; display:block; padding:10px 10px 10px 0; colo
 box-shadow: 0 0 10px #ccc;
 }
 /*-- 2 column layout with side bar --*/
-#full_width{}
+
 #content{float:left; width:670px; line-height:1.8em;}
 #sidebar{float:right; width:250px;}
 /*-- Call to action --*/

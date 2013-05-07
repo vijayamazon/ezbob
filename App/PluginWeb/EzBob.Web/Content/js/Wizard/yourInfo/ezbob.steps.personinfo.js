@@ -99,8 +99,12 @@ EzBob.YourInformationStepView = Backbone.View.extend({
     },
     saveData: function () {
         var form = this.$el.find('form.CompanyDetailForm'),
-            data = form.serializeArray(),
-            action = form.attr('action'),
+            data = form.serializeArray();
+        
+        _.find(data, function (d) { return d.name == "OverallTurnOver"; }).value = this.$el.find("#OverallTurnOver").autoNumericGet();
+        _.find(data, function (d) { return d.name == "WebSiteTurnOver"; }).value = this.$el.find("#WebSiteTurnOver").autoNumericGet();
+        
+        var action = form.attr('action'),
             dataForCompany = SerializeArrayToEasyObject(data),
             typeOfBussiness = dataForCompany.TypeOfBusiness,
             companyName = null,
