@@ -89,6 +89,42 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			OneStepTransition(oImg, sStatusName, oSettings);
 	}; // DoTransition
 
+	// Delay modes:
+	// 0: without delay unless always_with_delay is set.
+	// 1: with delay.
+	// 2: without delay. Ignore always_with_delay if it is set.
+	function DelayMode(nDelayMode) {
+		if ((nDelayMode === null) || (typeof nDelayMode === "undefined"))
+			return 0;
+
+		if (nDelayMode === parseInt(nDelayMode)) {
+			switch (nDelayMode) {
+			case 0:
+			case 1:
+				return nDelayMode;
+				break;
+
+			default:
+				return 2;
+				break;
+			} // switch
+		} // if
+		
+		switch (nDelayMode) {
+		case '0':
+			return 0;
+			break;
+
+		case '1':
+			return 1;
+			break;
+
+		default:
+			return 2;
+			break;
+		} // switch
+	}; // DelayMode
+
 	var oMethods = {
 		init: function(options) {
 			return this.each(function() {
@@ -128,7 +164,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			}); // each
 		}, // init
 
-		clear: function(bWithDelay) {
+		clear: function(nDelayMode) {
 			return this.each(function() {
 				var oImg = this;
 				var oSettings = $(oImg).data(MY_NAME);
@@ -138,17 +174,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 				var sStatusName = oSettings.required ? oSettings.required_status_name : oSettings.empty_status_name;
 
-				DoTransition(bWithDelay, oImg, sStatusName, oSettings);
+				nDelayMode = DelayMode(nDelayMode);
+				if (2 == nDelayMode)
+					OneStepTransition(oImg, sStatusName, oSettings);
+				else
+					DoTransition(nDelayMode, oImg, sStatusName, oSettings);
 
 				return true;
-			});
+			}); // each
 		}, // clear
 
-		set: function(sStatusName, bWithDelay) {
-			return this.each(function() {
-				if (!sStatusName)
-					return true;
+		set: function(sStatusName, nDelayMode) {
+			if (!sStatusName)
+				return this;
 
+			return this.each(function() {
 				sStatusName = (new String(sStatusName)).valueOf().toLowerCase();
 
 				var oImg = this;
@@ -160,10 +200,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				if (!oSettings.status_list[sStatusName])
 					return true;
 
-				DoTransition(bWithDelay, oImg, sStatusName, oSettings);
+				nDelayMode = DelayMode(nDelayMode);
+				if (2 == nDelayMode)
+					OneStepTransition(oImg, sStatusName, oSettings);
+				else
+					DoTransition(nDelayMode, oImg, sStatusName, oSettings);
 
 				return true;
-			});
+			}); // each
 		} // set_status
 	}; // methods
 

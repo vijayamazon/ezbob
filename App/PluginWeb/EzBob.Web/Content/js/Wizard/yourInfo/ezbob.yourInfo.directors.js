@@ -31,7 +31,13 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		oTarget = $(oTarget);
 		var oIcon = oTarget.closest('div').find('img.field_status').first();
 
+		if (oTarget.val() == '') {
+			oIcon.field_status('clear', 'immediately');
+			return;
+		} // if
+
 		var sStatusName = '';
+
 		if (oIcon.hasClass('required'))
 			sStatusName = oTarget.val() ? 'ok' : 'fail';
 		else
@@ -54,17 +60,27 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			return true;
 		});
 
-		sStatusName = nCheckedCount ? 'ok' : 'fail';
-
-		oParent.find('img.field_status').field_status('set', sStatusName);
+		if (0 == nCheckedCount)
+			oParent.find('img.field_status').field_status('clear', 'right now');
+		else
+			oParent.find('img.field_status').field_status('set', 'ok');
 	}, // directorGenderChanged
 	directorDateChanged: function(oTarget) {
 		oTarget = $(oTarget);
+
+		var sID = oTarget.attr('id');
+
+		var sDirectorID = sID.substr(0, sID.indexOf(']'));
+		var nDirectorIDLen = sDirectorID.length;
 
 		var nGoodValueCount = 0;
 
 		this.$el.find('.director_date').each(function() {
 			var o = $(this);
+
+			if (o.attr('id').substr(0, nDirectorIDLen) != sDirectorID)
+				return true;
+
 			var sEmptyValue = o.attr('empty_value');
 			var sValue = o.val();
 
@@ -74,9 +90,17 @@ EzBob.DirectorMainView = Backbone.View.extend({
 				nGoodValueCount++;
 		}); // each
 
-		var sStatusName = (nGoodValueCount == 3) ? 'ok' : 'fail';
+		var sStatusName = '';
 
-		oTarget.closest('div').find('img.field_status').field_status('set', sStatusName);
+		if (nGoodValueCount == 3)
+			sStatusName = 'ok';
+		else if (nGoodValueCount > 0)
+			sStatusName = 'fail';
+
+		if ('' == sStatusName)
+			oTarget.closest('div').find('img.field_status').field_status('clear', 'immediately');
+		else
+			oTarget.closest('div').find('img.field_status').field_status('set', sStatusName);
 	}, // directorDateChanged
 	render: function () {
 		this.$el.html(this.template());
@@ -104,6 +128,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		});
 
 		this.$el.attardi_labels('toggle_all');
+
 		this.$el.find('.director_name_part').each(function () { that.directorNamePartChanged(this); });
 		this.$el.find('.director_gender').first().each(function () { that.directorGenderChanged(this); });
 		this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });
@@ -111,9 +136,12 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.$el.find('.director_date, img.field_status').each(function() {
 			var oDateUIComponent = $(this);
 
-			var oMeta = oDateUIComponent.closest('.Directors').find('h1[preffix]').first();
-
 			var sID = oDateUIComponent.attr('id');
+
+			if (!sID)
+				return;
+
+			var oMeta = oDateUIComponent.closest('.Directors').find('h1[preffix]').first();
 
 			sID = sID.replace('<%-preffix%>', oMeta.attr('preffix'));
 			sID = sID.replace('<%=i%>', oMeta.attr('seqno'));

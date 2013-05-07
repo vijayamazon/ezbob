@@ -220,7 +220,8 @@ ul.list_none
 	margin: -5px 0 0 15px;
 }
 
-img#GenderImage { margin-left: 210px; }
+img#GenderImage,
+img.gender_image { margin-left: 210px; }
 
 .GenderCtrl label {
 	display: inline;
@@ -228,10 +229,12 @@ img#GenderImage { margin-left: 210px; }
 	margin-left: 5px;
 }
 
+h1.form_start,
 h2.form_start {
 	padding-left: 0!important;
 }
 
+h1.form_section,
 h2.form_section {
 	 margin-top: 1em; padding-left: 0!important;
 }
