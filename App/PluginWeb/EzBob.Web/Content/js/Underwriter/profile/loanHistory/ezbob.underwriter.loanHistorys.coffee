@@ -61,7 +61,6 @@ class EzBob.Underwriter.LoanHistoryView extends Backbone.Marionette.View
         @table = @$el.find("#loanhistory-table")
         viewModel = @model.toJSON()
         @table.html @template(viewModel)
-        @table.find('td[loan_status=Live] .edit-loan').each -> $(this).show()
         @renderOffers()
         this
 
