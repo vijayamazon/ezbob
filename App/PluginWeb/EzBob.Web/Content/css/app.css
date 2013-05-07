@@ -332,22 +332,22 @@ div.shop-connected {
 }
 
     .source_labels.eBay {
-        background-position: 0 -1.5px;
+        background-position: 0 -1px;
         width: 81px;
     }
 
     .source_labels_on.eBay {
-        background-position: 0 -41.5px;
+        background-position: 0 -41px;
         width: 81px;
     }
 
     .source_labels.Amazon {
-        background-position: -85.9px -1px;
+        background-position: -85px -1px;
         width: 110px;
     }
 
     .source_labels_on.Amazon {
-        background-position: -85.9px -41px;
+        background-position: -85px -41px;
         width: 110px;
     }
 
@@ -362,12 +362,12 @@ div.shop-connected {
     }
 
     .source_labels.Volusion {
-        background-position: -868.9px -3px;
+        background-position: -868px -3px;
         width: 98px;
     }
 
     .source_labels_on.Volusion {
-        background-position: -868.9px -43px;
+        background-position: -868px -43px;
         width: 98px;
     }
 
