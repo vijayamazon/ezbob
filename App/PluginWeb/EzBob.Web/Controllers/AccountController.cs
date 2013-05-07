@@ -100,7 +100,7 @@ namespace EzBob.Web.Controllers
                         if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
                         {
                             ModelState.AddModelError("",
-                                                     "This account is closed, please contact EZBOB customer care customercare@ezbob.com");
+                                                     "This account is closed, please contact EZBOB customer care<br/>customercare@ezbob.com");
                             return View(model);
                         }
                     }
@@ -150,7 +150,7 @@ namespace EzBob.Web.Controllers
                         var customer = _customers.Get(user.Id);
                         if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
                         {
-                            errorMessage = @"This account is closed, please contact EZBOB customer care customercare@ezbob.com";
+							errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
                             return this.JsonNet(new { success = false, errorMessage });
                         }
                     }

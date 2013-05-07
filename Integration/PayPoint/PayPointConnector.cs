@@ -26,7 +26,7 @@
             string res = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Batch", "1", "GBP", string.Empty, false, false);
             
             bool isValid = (!string.IsNullOrEmpty(res) && !res.Contains("Remote Password Invalid"));
-            errMsg = !isValid ? string.Format("Failure: {0}", string.IsNullOrEmpty(res) ? "Received empty response" : res) : string.Empty;
+			errMsg = !isValid ? string.Format("Failure: {0}", string.IsNullOrEmpty(res) ? "Invalid Credentials" : res) : string.Empty;
             return isValid;
         }
     }
