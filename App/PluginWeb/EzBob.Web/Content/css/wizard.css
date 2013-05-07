@@ -261,3 +261,7 @@ div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 .wizard-wrapper .stores-view .back-step {
     display: none !important;
 }
+
+.field_status {
+	vertical-align: middle;
+}
