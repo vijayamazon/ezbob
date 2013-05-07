@@ -6,8 +6,8 @@
         @EzForm.DatePickerInline("loantransactions-from", "From", @DateTime.Now.Subtract(TimeSpan.FromDays(31)).ToShortDateString(), "input-small")
         @EzForm.DatePickerInline("loantransactions-to", "to", @DateTime.Now.ToShortDateString(), "input-small")
 
-        @EzForm.SelectInline("loantransactions-number", "Loan", new[] {"Loan name/number"}, "input-medium")
-        @EzForm.SelectInline("loantransactions-types", "Type", new[] {"All transactions"}, "input-medium")
+        @EzForm.SelectInline("loantransactions-number", "Loan", new[] {"Loan name/number"}, "input-medium selectheight")
+        @EzForm.SelectInline("loantransactions-types", "Type", new[] {"All transactions"}, "input-medium selectheight")
     </div>
 
     <p>

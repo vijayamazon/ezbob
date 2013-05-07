@@ -161,7 +161,7 @@
     <div class="modal-body">
         
         <form id="payment-form" class="form-horizontal" action="/" method="POST">
-            @EzForm.Select("paymentMethod", "Payment method", new List<string>{ "Cheque", "Cash", "Bank transfer", "Other" })
+            @EzForm.Select("paymentMethod", "Payment method", new List<string>{ "Cheque", "Cash", "Bank transfer", "Other" }, "selectheight")
             @EzForm.InputTextUnderwriter("totalSumPaid", "Total sum paid","")
             @EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[]{ DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
             @EzForm.InputTextUnderwriter("fees", "Fees","", "text", isDisabled: true)

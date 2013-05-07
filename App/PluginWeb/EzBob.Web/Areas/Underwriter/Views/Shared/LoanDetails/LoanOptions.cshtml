@@ -1,5 +1,4 @@
 ﻿@model dynamic
-
 <script id="loan-options-template" type="text/template">
     <div class="loan-options">
         @LoanOptions()
@@ -12,20 +11,20 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>Loan Options</h3>
     </div>
-    <input id="Id" type="hidden" name="Id"/>
-    <input id="LoanId" type="hidden" name="LoanId"/>
+    <input id="Id" type="hidden" name="Id" />
+    <input id="LoanId" type="hidden" name="LoanId" />
     <div class="modal-body">
         <div class="row" style="margin-left: 1px">
             <div class="span4">
-                <div class="control-group">      
+                <div class="control-group">
                     <div class="controls">
                         <label for="AutoPayment" class="checkbox">
-                            <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true"/>Activate automatic money charging
+                            <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true" />Activate automatic money charging
                         </label>
                     </div>
-                    <div class="controls">    
+                    <div class="controls">
                         <label for="ReductionFee" class="checkbox">
-                            <input id="ReductionFee" name="ReductionFee" type="checkbox" value="true"/>Activate repayment reduction (75%,50%,25%)
+                            <input id="ReductionFee" name="ReductionFee" type="checkbox" value="true" />Activate repayment reduction (75%,50%,25%)
                         </label>
                     </div>
                     <div class="controls">
@@ -36,13 +35,14 @@
                     <div class="controls">
                         <label for="StopSendingEmails" class="checkbox">
                             <input id="StopSendingEmails" name="StopSendingEmails" type="checkbox" value="true" />Stop sending emails after 14 days delay
-                        </label>        
+                        </label>
                     </div>
-            
-    
+
+
                     <div class="controls calculated-status">
-                        <label for="CalculatedStatus" >CAIS calculated status
-                            <input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>"/>
+                        <label for="CalculatedStatus">
+                            CAIS calculated status
+                            <input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>" />
                         </label>
                     </div>
 
@@ -51,26 +51,28 @@
                             {"Calculated value", "Calculated value"}, {"0", "0"}, {"1", "1"}, {"2", "2"},
                             {"3", "3"}, {"4", "4"}, {"5", "5"}, {"6", "6"},
                             {"8", "8"}, {"D", "D"}, {"U", "U"}
-                        })
+                        }, css: "selectheight")
                 </div>
             </div>
-       
+
             <div class="span2" style="margin-top: 3px;">
-                <label for="cais-flags" >Manual CAIS Flag
+                <label for="cais-flags">
+                    Manual CAIS Flag
                     <select style="width: 320px;" id="cais-flags" name="cais-flags" class="selectheight">
                         <%var i = 0; _.each(ManualCaisFlags, function(caisFlag){%>
                         <option data-id="<%-i%>" value="<%-caisFlag.FlagSetting%>"><%-caisFlag.Description == "Calculated value" ? "" : caisFlag.FlagSetting+'-'%><%-caisFlag.Description%></option>
                         <%i++;}) %>
                     </select>
                 </label>
-                <label for="cais-comment" >Description
+                <label for="cais-comment">
+                    Description
                     <div class="cais-comment" id="cais-comment" name="cais-comment"></div>
                 </label>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btnOk">OK</button>    
+        <button class="btn btn-primary btnOk">OK</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
 }
