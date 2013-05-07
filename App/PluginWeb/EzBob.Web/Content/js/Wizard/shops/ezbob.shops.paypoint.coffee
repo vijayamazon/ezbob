@@ -15,22 +15,30 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         "click a.back": "back",
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+        'change #payPoint_mid': 'payPointMidChanged'
+        'change #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
+        'change #payPoint_remotePassword': 'payPointRemotePasswordChanged'
     }
 
     ui:
-        mid       : '#payPoint_mid'
-        vpnPassword    : '#payPoint_vpnPassword'
-        remotePassword    : '#payPoint_remotePassword'
-        connect     : 'a.connect-payPoint'
-        form        : 'form'
+        mid: '#payPoint_mid'
+        vpnPassword: '#payPoint_vpnPassword'
+        remotePassword: '#payPoint_remotePassword'
+        connect: 'a.connect-payPoint'
+        form: 'form'
 
     inputChanged: ->
-        @$el.find('#payPoint_midImage').field_status('set', if @ui.mid.val() then 'ok' else 'fail')
-        @$el.find('#payPoint_vpnPasswordImage').field_status('set', if @ui.vpnPassword.val() then 'ok' else 'fail')
-        @$el.find('#payPoint_remotePasswordImage').field_status('set', if @ui.remotePassword.val() then 'ok' else 'fail')
-
-        enabled = @ui.mid.val() and @ui.vpnPassword.val() and @ui.remotePassword.val()
+        enabled =  EzBob.Validation.checkForm(@validator) 
         @ui.connect.toggleClass('disabled', !enabled)
+
+    payPointMidChanged: ->
+        @$el.find('#payPoint_midImage').field_status('set', if EzBob.Validation.element(@validator, @ui.mid) then 'ok' else 'fail')
+
+    payPointVpnPasswordChanged: ->
+        @$el.find('#payPoint_vpnPasswordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.vpnPassword) then 'ok' else 'fail')
+
+    payPointRemotePasswordChanged: ->
+        @$el.find('#payPoint_remotePasswordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.remotePassword) then 'ok' else 'fail')
 
     connect: ->
         return false if not @validator.form()            
