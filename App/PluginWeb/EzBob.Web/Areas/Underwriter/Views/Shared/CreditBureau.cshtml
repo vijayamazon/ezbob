@@ -981,6 +981,12 @@
 }
 
 @helper BureauSummaryForCustomer(){
+    <text>
+        <%
+        experianInfo.Summary = experianInfo.Summary || {};
+        experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
+        %>
+    </text>
         <div class="row-fluid">
             <div class="span6">
                 <table class="table table-striped blue-header rright">

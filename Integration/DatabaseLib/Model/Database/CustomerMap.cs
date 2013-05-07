@@ -186,7 +186,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Inverse()
                 .Cascade.All();
 
-            Map(x => x.Fraud);
+            Map(x => x.Fraud).CustomType<FraudStatus>();
             Map(x => x.Eliminated);
             Map(x=> x.Comment,"Comments").CustomType("StringClob").LazyLoad();
             Map(x => x.SetupFee);

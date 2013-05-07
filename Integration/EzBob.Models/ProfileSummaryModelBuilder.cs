@@ -147,8 +147,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 {
                     Aml = customer.AMLResult,
                     Bwa = customer.BWAResult,
-                    Fraud = String.Format("{0}", customer.Fraud ? "Yes" : "No"),
                     Lighter = new Lighter(ObtainAmlState(customer))
+                };
+
+            summary.FraudCheck = new FraudCheck
+                {
+                    Status = customer.Fraud.ToString(),
+                    
                 };
 
             summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
@@ -252,7 +257,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         private LightsState ObtainAmlState(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            if (customer.Fraud || customer.AMLResult == "Rejected" || customer.BWAResult == "Rejected")
+            if (customer.AMLResult == "Rejected" || customer.BWAResult == "Rejected")
                 return LightsState.Reject;
             if (customer.AMLResult == "Warning" || customer.BWAResult == "Warning")
                 return LightsState.Warning;

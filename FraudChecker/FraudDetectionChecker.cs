@@ -41,16 +41,6 @@ namespace FraudChecker
             ExternalPhoneCheck(customer, fraudDetections);
             ExternalShopCheck(fraudDetections, customer);
 
-            var resultString =
-                string.Join("\n", fraudDetections.Select(x =>
-                                                         x.CompareField + ",  " +
-                                                         x.CurrentCustomer.Id + ",  " +
-                                                         x.CurrentField + ",  " +
-                                                         x.ExternalUser.Id + ",  " +
-                                                         x.Id + ",  " +
-                                                         x.InternalCustomer + ",  " +
-                                                         x.Value));
-
             if (!isShowOnly)
             {
                 for (var i = 0; i < fraudDetections.Count; i++)
@@ -61,9 +51,10 @@ namespace FraudChecker
                     _session.Clear();
                 }
             }
-
-            return resultString;
+            return PrepareResultForOutput(fraudDetections);
         }
+
+        
 
         public string InternalSystemDecision(int customerId, bool isShowOnly = false)
         {
@@ -105,14 +96,6 @@ namespace FraudChecker
             InternalLastNamePostcodeCheck(fraudDetections, customer);
             InternalShopCheck(customer, fraudDetections);
 
-            var resultString =
-                string.Join("\n", fraudDetections.Select(x =>
-                                                         x.CompareField + ",  " +
-                                                         x.CurrentCustomer.Id + ",  " +
-                                                         x.CurrentField + ",  " +
-                                                         (x.InternalCustomer != null ? x.InternalCustomer.Id : 0) +
-                                                         ",  " +
-                                                         x.Value));
             if (!isShowOnly)
             {
                 for (var i = 0; i < fraudDetections.Count; i++)
@@ -123,7 +106,7 @@ namespace FraudChecker
                     _session.Clear();
                 }
             }
-            return resultString;
+            return PrepareResultForOutput(fraudDetections);
         }
 
         #region external helpers
@@ -608,6 +591,18 @@ namespace FraudChecker
                 retVal.Add("MobilePhone", customer.PersonalInfo.MobilePhone);
 
             return retVal;
+        }
+
+        private static string PrepareResultForOutput(IEnumerable<FraudDetection> fraudDetections)
+        {
+            return string.Join("\n", fraudDetections.Select(x =>
+                                                            x.CompareField + ",  " +
+                                                            x.CurrentCustomer.Id + ",  " +
+                                                            x.CurrentField + ",  " +
+                                                            x.ExternalUser.Id + ",  " +
+                                                            x.Id + ",  " +
+                                                            x.InternalCustomer + ",  " +
+                                                            x.Value));
         }
     }
 

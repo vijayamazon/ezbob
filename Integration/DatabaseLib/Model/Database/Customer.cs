@@ -77,6 +77,16 @@ namespace EZBob.DatabaseLib.Model.Database {
         
     }
 
+    public enum FraudStatus
+    {
+        Ok = 0,
+        Fishy = 1,
+        FraudSuspect = 2,
+        UnderInvestigation = 3,
+        FraudDone = 4,
+        IdentityOrDetailsTheft =5
+    }
+
     public enum Gender
     {
         M, F
@@ -165,7 +175,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual CreditResultStatus? CreditResult { get; set; }
         public virtual SystemDecision? SystemDecision { get; set; }
 
-        public virtual bool Fraud { get; set; }
+        public virtual FraudStatus Fraud { get; set; }
         public virtual bool Eliminated { get; set; }
 
         public virtual bool IsSuccessfullyRegistered { get; set; }
