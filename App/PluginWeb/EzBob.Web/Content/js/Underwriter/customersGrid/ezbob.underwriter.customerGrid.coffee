@@ -99,8 +99,8 @@ $.fn.fmatter.showMedalIcon = (cellval) ->
 
 $.fn.fmatter.showMPIcon = (cellval) ->
     text = cellval.text or cellval
-    className = text.replace(/\s\s/g,'').toLowerCase()
-    "<i data-toggle='tooltip' title='#{text}' class='#{text.split(" ")[1].toLowerCase()}'></i>"
+    className = text.replace(/\s|\d/g,'').toLowerCase()
+    "<i data-toggle='tooltip' title='#{text}' class='#{className}'></i>"
 
 $.fn.fmatter.showMPsIcon = (cellval, opt) ->
     mps = cellval.text or cellval

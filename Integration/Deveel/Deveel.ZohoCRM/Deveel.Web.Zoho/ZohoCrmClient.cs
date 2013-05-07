@@ -8,11 +8,12 @@ using System.Text;
 using System.Xml.Linq;
 
 using RestSharp;
+using log4net;
 
 namespace Deveel.Web.Zoho {
 	public sealed partial class ZohoCrmClient {
 		private readonly string authToken;
-
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ZohoCrmClient));
 		private const string BaseUrl = "https://crm.zoho.com/crm/private/xml/";
 
 		public ZohoCrmClient(string authToken) {
@@ -110,10 +111,22 @@ namespace Deveel.Web.Zoho {
 			if (response.StatusCode != HttpStatusCode.OK)
 				throw response.ErrorException;
 
+		    LogRequestResponse(response, request);
 			return response.Content;
 		}
 
-		private ZohoResponse GetResponse(string module, string method, IEnumerable<KeyValuePair<string, string>> parameters) {
+	    private static void LogRequestResponse(IRestResponse response, IRestRequest request)
+	    {
+	        Log.DebugFormat("\nRequest:" +
+                            "\nUri: {2}" +
+                            "\nParameters:\n{0}" +
+                            "\nResponse:\n{1}", 
+                            string.Join(";\n", request.Parameters), 
+                            response.Content,
+                            response.ResponseUri);
+	    }
+
+	    private ZohoResponse GetResponse(string module, string method, IEnumerable<KeyValuePair<string, string>> parameters) {
 			var content = GetData(module, method, parameters);
 			return new ZohoResponse(module, method, content);
 		}
@@ -121,7 +134,9 @@ namespace Deveel.Web.Zoho {
 		private ZohoEntityCollection<T> GetEntities<T>(string module, string method, IEnumerable<KeyValuePair<string, string>> parameters) where T : ZohoEntity {
 			var response = GetResponse(module, method, parameters);
 			response.ThrowIfError();
-			return response.LoadCollectionFromResul<T>();
+		    var collection = response.LoadCollectionFromResul<T>();
+            if (!collection.Any()) throw new Exception(string.Format("Code: {1}. Message: {0}.", response.Message, response.Code));
+			return collection;
 		}
 
 		private ZohoInsertResponse PostData(string module, string method, IDictionary<string, string> parameters, string xmlData)
@@ -163,8 +178,9 @@ namespace Deveel.Web.Zoho {
 
 	        if (!String.IsNullOrEmpty(xmlData))
 	            request.AddParameter("xmlData", xmlData);
-
 	        var response = client.Execute(request);
+	        
+            LogRequestResponse(response, request);
 	        if (response.StatusCode != HttpStatusCode.OK)
 	            throw response.ErrorException;
 	        return response;
@@ -231,12 +247,11 @@ namespace Deveel.Web.Zoho {
 
 		public T GetRecordById<T>(string id) where T :ZohoEntity {
 			var collection = GetEntities<T>(ModuleName(typeof (T)), "getRecordById", new Dictionary<string, string> {{"id", id}});
-			if (collection.Count == 0)
-				return null;
+			
 			if (collection.Count > 1)
 				throw new AmbiguousMatchException("More than one entity was found for the given id");
 
-			return collection.SingleOrDefault();
+			return collection.Single();
 		}
 
 		public ZohoEntityCollection<T> GetRecords<T>(ListOptions options) where T : ZohoEntity {
