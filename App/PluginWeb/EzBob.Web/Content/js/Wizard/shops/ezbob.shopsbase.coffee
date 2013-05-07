@@ -77,6 +77,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
         @$el.find(">div").hide()
         storeView = @stores[storeName].view
+        storeView.render()
         storeView.$el.show()
         @oldTitle = $(document).attr("title")
         @setDocumentTitle storeView

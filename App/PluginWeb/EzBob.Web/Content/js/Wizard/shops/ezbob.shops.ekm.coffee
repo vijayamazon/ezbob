@@ -17,6 +17,8 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         "click a.back": "back",
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+        'change #ekm_login': 'ekmLoginChanged'
+        'change #ekm_password': 'ekmPasswordChanged'
     }
 
     ui:
@@ -25,27 +27,26 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         connect     : 'a.connect-ekm'
         form        : 'form'
 
-    inputChanged: ->
-        @$el.find('#ekm_loginImage').field_status('set', if @ui.login.val() then 'ok' else 'fail')
-        @$el.find('#ekm_passwordImage').field_status('set', if @ui.password.val() then 'ok' else 'fail')
+    ekmLoginChanged: ->
+        @$el.find('#ekm_loginImage').field_status('set', if EzBob.Validation.element(@validator, @ui.login) then 'ok' else 'fail')
 
-        enabled = @ui.login.val() and @ui.password.val()
+    ekmPasswordChanged: ->
+        @$el.find('#ekm_passwordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.password) then 'ok' else 'fail')
+
+    inputChanged: ->
+        enabled = EzBob.Validation.element(@validator, @ui.password) and EzBob.Validation.element(@validator, @ui.login)
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->
         return false if not @validator.form()            
         return false if @$el.find('a.connect-ekm').hasClass('disabled')            
-
         acc = new EzBob.EKMAccountModel({login: @ui.login.val(), password: @ui.password.val()})
-
         xhr = acc.save()
-
         if not xhr
             EzBob.App.trigger 'error', 'EKM Account Saving Error'
             return false
 
         BlockUi('on')
-
         xhr.always =>
             BlockUi('off')
 
@@ -70,7 +71,6 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
-
         oFieldStatusIcons = $ 'IMG.field_status'
         oFieldStatusIcons.filter('.required').field_status({ required: true })
         oFieldStatusIcons.not('.required').field_status({ required: false })
