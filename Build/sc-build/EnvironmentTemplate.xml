@@ -704,6 +704,9 @@
                 <level value="ERROR" />
                 <appender-ref ref="MailAppenderWithSSLForAskville" />
             </logger>
+            <logger additivity="false" name="Deveel.Web.Zoho">
+                <level value="ALL" />
+            </logger>
         </log4net>
     </configuration>
     <!-- NHibernateConfig for MSSQL -->
