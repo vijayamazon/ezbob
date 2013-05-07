@@ -866,7 +866,8 @@ EzBob.validateAmazonForm = function (el) {
             amazonMerchantId: { remote: "Account does not exist" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 

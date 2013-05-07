@@ -36,6 +36,7 @@ EzBob.Validation.errorPlacement = function (error, element) {
         element.addClass('error');
     }
 };
+
 //-----------------------------------------------------------------
 EzBob.Validation.unhighlight = function (element) {
     var $e = $(element);
@@ -53,6 +54,25 @@ EzBob.Validation.unhighlight = function (element) {
     $e.tooltip('disable');
     $e.closest("div").find(".cashInput").removeClass("error");
 };
+
+
+EzBob.Validation.unhighlightFS = function (element) {
+    EzBob.Validation.unhighlight(element);
+    var $el = $(element),
+        val = $el.val(),
+        img = $el.closest('div').find('.field_status');
+    
+    if (img.hasClass("required") && !val) {
+        img.field_status('set', 'required');
+    } else {
+        img.field_status('set', 'ok');
+    }
+};
+
+EzBob.Validation.highlightFS = function (element) {
+    $(element).closest('div').find('.field_status').field_status('set', 'fail');
+};
+
 //Extends validator method 
 $.validator.addMethod(
         "regex",

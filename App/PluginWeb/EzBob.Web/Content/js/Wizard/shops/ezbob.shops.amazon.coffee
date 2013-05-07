@@ -25,34 +25,20 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         'click .screenshots': 'runTutorial'
         'click a.print': 'print'
 
-        'cut    #amazonMarketplaceId': 'marketplaceIdChanged'
-        'change #amazonMarketplaceId': 'marketplaceIdChanged'
-        'paste  #amazonMarketplaceId': 'marketplaceIdChanged'
-        'keyup  #amazonMarketplaceId': 'marketplaceIdChanged'
 
-        'cut    #amazonMerchantId': 'merchantIdChanged'
-        'change #amazonMerchantId': 'merchantIdChanged'
-        'paste  #amazonMerchantId': 'merchantIdChanged'
-        'keyup  #amazonMerchantId': 'merchantIdChanged'
 
         'change input': 'inputChanged'
 
     enableControls: ->
         @$el.find('#amazonMarketplaceId, #amazonMerchantId').removeAttr('disabled')
-
-    marketplaceIdChanged: ->
         if @marketplaceId.val().length == 0
             @$el.find('#amazonMarketplaceIdImage').field_status('clear', 'right away')
             return
 
-        @$el.find('#amazonMarketplaceIdImage').field_status('set', if EzBob.Validation.element(@validator, @marketplaceId) then 'ok' else 'fail')
-
-    merchantIdChanged: ->
         if @merchantId.val().length == 0
             @$el.find('#amazonMerchantIdImage').field_status('clear', 'right away')
             return
 
-        @$el.find('#amazonMerchantIdImage').field_status('set', if EzBob.Validation.element(@validator, @merchantId) then 'ok' else 'fail')
 
     inputChanged: ->
         enabled =  EzBob.Validation.checkForm(@validator) 
