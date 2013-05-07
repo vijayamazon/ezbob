@@ -13,6 +13,7 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         this
 
     events:
+        "click a.go-to-amazon": 'enableControls'
         "click a.connect-amazon": "connect"
         "click a.back": "back"
         "click .screenshots": "runTutorial"
@@ -27,6 +28,9 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         'change #amazonMerchantId': 'merchantIdChanged'
         'keyup  #amazonMerchantId': 'merchantIdChanged'
         'paste  #amazonMerchantId': 'merchantIdChanged'
+
+    enableControls: ->
+        @$el.find('#amazonMarketplaceId, #amazonMerchantId').removeAttr('disabled')
 
     marketplaceIdChanged: ->
         @inputChanged 'marketplace'
