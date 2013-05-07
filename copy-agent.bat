@@ -6,5 +6,6 @@ robocopy Integration\EzBob.Signals\bin\Debug\ c:\ezbobSrv\ /e
 robocopy Integration\EKM\bin\Debug\ c:\ezbobSrv\ /e
 robocopy Integration\Volusion\bin\Debug\ c:\ezbobSrv\ /e
 robocopy Integration\PayPoint\bin\Debug\ c:\ezbobSrv\ /e
+robocopy App\service\Servicestarter\bin\Debug\ c:\ezbobSrv\ /e
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
 net start ScortoService
