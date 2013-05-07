@@ -58,16 +58,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		var oNewImg = oSettings.status_list[sStatus].img
 			.clone()
 			.attr({
-				class: oOldImg.attr('class'),
-				width: oSettings.width,
+				'class': oOldImg.attr('class'),
 				height: oSettings.height,
-				id: oOldImg.attr('id')
+				id: oOldImg.attr('id'),
+				width: oSettings.width
 			})
 			.addClass(oSettings.class_name)
-			.css('width', oSettings.width + 'px')
 			.css('height', oSettings.height + 'px')
-			.show()
+			.css('width', oSettings.width + 'px')
 			.data(MY_NAME, oOldImg.data(MY_NAME));
+
+		if (oOldImg.css('display'))
+			oNewImg.css('display', oOldImg.css('display'));
+
+		if (oOldImg.css('visibility'))
+			oNewImg.css('visibility', oOldImg.css('visibility'));
 
 		oOldImg.replaceWith(oNewImg);
 

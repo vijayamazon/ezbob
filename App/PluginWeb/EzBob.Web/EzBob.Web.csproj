@@ -899,6 +899,9 @@
     <Content Include="Content\js\login\ezbob.restorePassword.js">
       <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
+      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
+    </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
