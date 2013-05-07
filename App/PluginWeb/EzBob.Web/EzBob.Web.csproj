@@ -951,9 +951,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
-      <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
       <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
     </Content>
@@ -965,9 +962,6 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
       <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
-      <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
       <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>

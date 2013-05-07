@@ -118,6 +118,9 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         @trigger 'back'
         false
 
+    getDocumentTitle: ->
+        "Link Volusion Account"
+
 
 class EzBob.VolusionAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/VolusionMarketPlaces/Accounts"

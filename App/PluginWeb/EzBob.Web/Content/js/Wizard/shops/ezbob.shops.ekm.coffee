@@ -82,6 +82,9 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         @trigger 'back'
         false
 
+    getDocumentTitle: ->
+        "Link EKM Account"
+
 
 class EzBob.EKMAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/EkmMarketPlaces/Accounts"

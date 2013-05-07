@@ -52,5 +52,8 @@ EzBob.PayPalInfoView = Backbone.View.extend({
     back: function () {
         this.trigger('back');
         return false;
+    },
+    getDocumentTitle: function() {
+        return "Link PayPal Account";
     }
 });

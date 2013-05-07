@@ -3,15 +3,14 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.StoreInfoBaseView extends Backbone.View
     initialize: ->
-        that = this
         @storeList = $($("#store-info").html())
         @isReady = false
 
-        _.each @stores, (store) ->
-            store.button.on "selected", that.connect, that
-            store.view.on "completed", _.bind(that.completed, that, store.button.name)
-            store.view.on "back", that.back, that
-            store.button.on "ready", that.ready, that
+        for name, store of @stores
+            store.button.on "selected", @connect, this
+            store.view.on "completed", _.bind(@completed, this, store.button.name)
+            store.view.on "back", @back, this
+            store.button.on "ready", @ready, this
 
         EzBob.App.on "ct:storebase.shop.connected", @render, this
         EzBob.App.on "ct:storebase." + @name + ".connect", @connect, this
@@ -77,9 +76,10 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     connect: (storeName) ->
         EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
         @$el.find(">div").hide()
-        @stores[storeName].view.$el.show()
+        storeView = @stores[storeName].view
+        storeView.$el.show()
         @oldTitle = $(document).attr("title")
-        @setDocumentTitle storeName
+        @setDocumentTitle storeView
         @setFocus storeName
         false
 
@@ -97,23 +97,10 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             #    @$el.find("#AccountNumber").focus()
             else
 
-    setDocumentTitle: (storeName) ->
-        switch storeName
-            when "Amazon"
-                $(document).attr "title", "Wizard 2 Amazon: Link Amazon Account | EZBOB"
-            when "eBay"
-                $(document).attr "title", "Wizard 2 Ebay: Link Ebay Account | EZBOB"
-            #when "bank-account"
-            #    $(document).attr "title", "Wizard 2 Bank: Bank Account Details | EZBOB"
-            when "paypal"
-                $(document).attr "title", "Wizard 2 PayPal: Link PayPal Account | EZBOB"
-            when "EKM"
-                $(document).attr "title", "Wizard 2 EKM: Link EKM Account | EZBOB"
-            when "PayPoint"
-                $(document).attr "title", "Wizard 2 PayPoint: Link PayPoint Account | EZBOB"
-            when "Volusion"
-                $(document).attr "title", "Wizard 2 Volusion: Link Volusion Account | EZBOB"
-            else
+    setDocumentTitle: (view) ->
+        title = view.getDocumentTitle()
+        if title
+            $(document).attr "title", "Wizard 2 #{title} | EZBOB"
 
     close: ->
         this

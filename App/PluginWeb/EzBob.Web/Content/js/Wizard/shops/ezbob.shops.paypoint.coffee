@@ -83,6 +83,9 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         @trigger 'back'
         false
 
+    getDocumentTitle: ->
+        "Link PayPoint Account"
+
 
 class EzBob.PayPointAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/PayPointMarketPlaces/Accounts"

@@ -44,6 +44,9 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
                     });
             };
         };
+    },
+    getDocumentTitle: function() {
+        return "Ebay: Link Ebay Account";
     }
 });
 

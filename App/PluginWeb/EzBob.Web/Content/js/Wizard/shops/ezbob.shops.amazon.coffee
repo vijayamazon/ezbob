@@ -125,6 +125,9 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         BlockUi (if isBlock then "on" else "off")
         @$el.find("connect-amazon").toggleClass "disabled", isBlock
 
+    getDocumentTitle: ->
+        "Link Amazon Account"
+
 class EzBob.AmazonStoreModel extends Backbone.Model
     defaults:
         marketplaceId: null
