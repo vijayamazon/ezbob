@@ -11,13 +11,23 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
     template: '#PayPointAccoutInfoTemplate'
  
     events: {
-        'click a.connect-payPoint': 'connect',
-        "click a.back": "back",
+        'click a.connect-payPoint': 'connect'
+        "click a.back": "back"
+
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+
         'change #payPoint_mid': 'payPointMidChanged'
+        'cut #payPoint_mid': 'payPointMidChanged'
+        'paste #payPoint_mid': 'payPointMidChanged'
+
         'change #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
+        'cut #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
+        'paste #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
+
         'change #payPoint_remotePassword': 'payPointRemotePasswordChanged'
+        'cut #payPoint_remotePassword': 'payPointRemotePasswordChanged'
+        'paste #payPoint_remotePassword': 'payPointRemotePasswordChanged'
     }
 
     ui:

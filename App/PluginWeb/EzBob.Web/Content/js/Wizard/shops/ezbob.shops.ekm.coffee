@@ -13,12 +13,19 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
     template: '#EKMAccoutInfoTemplate'
     
     events: {
-        'click a.connect-ekm': 'connect',
-        "click a.back": "back",
+        'click a.connect-ekm': 'connect'
+        "click a.back": "back"
+
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+
         'change #ekm_login': 'ekmLoginChanged'
+        'cut #ekm_login': 'ekmLoginChanged'
+        'paste #ekm_login': 'ekmLoginChanged'
+
         'change #ekm_password': 'ekmPasswordChanged'
+        'cut #ekm_password': 'ekmPasswordChanged'
+        'paste #ekm_password': 'ekmPasswordChanged'
     }
 
     ui:
@@ -34,7 +41,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find('#ekm_passwordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.password) then 'ok' else 'fail')
 
     inputChanged: ->
-        enabled = EzBob.Validation.element(@validator, @ui.password) and EzBob.Validation.element(@validator, @ui.login)
+        enabled =  EzBob.Validation.checkForm(@validator)
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->

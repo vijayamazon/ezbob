@@ -18,21 +18,18 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
 
         'cut    #volusion_login': 'loginChanged'
         'change #volusion_login': 'loginChanged'
-        'keyup  #volusion_login': 'loginChanged'
         'paste  #volusion_login': 'loginChanged'
-        'blur   #volusion_login': 'loginChanged'
 
         'cut    #volusion_url': 'urlChanged'
         'change #volusion_url': 'urlChanged'
-        'keyup  #volusion_url': 'urlChanged'
         'paste  #volusion_url': 'urlChanged'
-        'blur   #volusion_url': 'urlChanged'
 
         'cut    #volusion_password': 'passwordChanged'
         'change #volusion_password': 'passwordChanged'
-        'keyup  #volusion_password': 'passwordChanged'
         'paste  #volusion_password': 'passwordChanged'
-        'blur   #volusion_password': 'passwordChanged'
+        
+        'change input': 'inputChanged'
+        'keyup input': 'inputChanged'
 
     ui:
         login       : '#volusion_login'
@@ -42,19 +39,16 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         form        : 'form'
 
     loginChanged: =>
-        @$el.find('#volusion_loginImage').field_status({ required: true, initial_status: if @ui.login.val() then 'ok' else 'fail' })
-        @inputChanged()
+        @$el.find('#volusion_loginImage').field_status('set', if EzBob.Validation.element(@validator, @ui.login) then 'ok' else 'fail')
 
     passwordChanged: =>
-        @$el.find('#volusion_passwordImage').field_status({ required: true, initial_status: if @ui.password.val() then 'ok' else 'fail' })
-        @inputChanged()
+        @$el.find('#volusion_passwordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.password) then 'ok' else 'fail')
 
     urlChanged: =>
-        @$el.find('#volusion_urlImage').field_status({ required: true, initial_status: if @ui.url.val() then 'ok' else 'fail' })
-        @inputChanged()
+        @$el.find('#volusion_urlImage').field_status('set', if EzBob.Validation.element(@validator, @ui.url) then 'ok' else 'fail')
 
     inputChanged: =>
-        enabled = @ui.login.val() and @ui.password.val() and @ui.url.val()
+        enabled =  EzBob.Validation.checkForm(@validator) 
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->

@@ -15,7 +15,7 @@ $(function () {
     });
 
     $.ui.dialog.prototype.options.zIndex = 1040;
-    
+
     $("[autofocus = autofocus]").focus();
     $('input[placeholder], textarea[placeholder]').placeholder();
     $('.datepicker').datepicker();
@@ -171,7 +171,7 @@ $(function () {
         this.each(function () {
             var el = $(this);
             el.on('keyup change', function (event) {
-                el.val(el.val().replace(/\s/,"" ));
+                el.val(el.val().replace(/\s/, ""));
             });
         });
         return this;
@@ -244,7 +244,7 @@ $(function () {
 function ValueOrDefault(value, defaultValue) {
     return EzBob.isNullOrEmpty(value) ? defaultValue : value;
 }
-    
+
 function Redirect(url) {
     document.location.replace(url);
 }
@@ -254,7 +254,7 @@ function CheckForActivity() {
     var minute = EzBob.Config.SessionTimeout;
 
     if (minute <= 0) return;
-    
+
     if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 1000 * 60 * EzBob.Config.SessionTimeout / 2);
 
     var underwriterParam = document.location.href.indexOf("Underwriter") > -1 ? "?isUnderwriterPage=true" : "";
@@ -300,16 +300,16 @@ SetDefaultDate = function (el, date, isNow) { //el is hidden split input
     }
     if (date === undefined) return;
     if (date.indexOf('-') != -1) date = EzBob.formatDateWithoutTime(date);
-    var element = typeof el === "object" ?el : $(document.getElementById(el)),
+    var element = typeof el === "object" ? el : $(document.getElementById(el)),
         day = element.parent('.ezDateTime').find('select[name="day"]'),
         month = element.parent('.ezDateTime').find('select[name="month"]'),
         year = element.parent('.ezDateTime').find('select[name="year"]'),
         dateArray = date.split("/");
 
     element.val(date);
-    day.val(dateArray[0]*1);
-    month.val(dateArray[1]*1);
-    year.val(dateArray[2]*1);
+    day.val(dateArray[0] * 1);
+    month.val(dateArray[1] * 1);
+    year.val(dateArray[2] * 1);
 
     day.trigger("change");
 };
@@ -405,7 +405,7 @@ Array.prototype.clean = function (deleteValue) {
     return this;
 };
 
-String.prototype.isNullOrEmpty = function() {
+String.prototype.isNullOrEmpty = function () {
     return EzBob.isNullOrEmpty(this);
 };
 
@@ -457,12 +457,12 @@ EzBob.UpdateBugsIcon = function (element, state) {
             iconClass = "";
     }
     element.removeClass().addClass(iconClass);
-    element.closest("a").attr("data-original-title", "{0} bug".f(state) ).tooltip('fixTitle');
+    element.closest("a").attr("data-original-title", "{0} bug".f(state)).tooltip('fixTitle');
 };
 
-EzBob.GlobalUpdateBugsIcon = function(customerId) {
-    var req = $.get( window.gRootPath + "Underwriter/Bugs/GetAllForCustomer", { customerId: customerId });
-    req.done(function(data) {
+EzBob.GlobalUpdateBugsIcon = function (customerId) {
+    var req = $.get(window.gRootPath + "Underwriter/Bugs/GetAllForCustomer", { customerId: customerId });
+    req.done(function (data) {
         _.each(data, function (val) {
             var element = val.MarketPlaceId ?
                 $('a[data-bug-mp={0}]'.f(val.MarketPlaceId)) :
@@ -471,7 +471,7 @@ EzBob.GlobalUpdateBugsIcon = function(customerId) {
                     $('a[data-credit-bureau-director-id={0}]'.f(val.DirectorId)) :
                     $('a[data-bug-type={0}]'.f(val.Type))
                 );
-            EzBob.UpdateBugsIcon(element,val.State);
+            EzBob.UpdateBugsIcon(element, val.State);
         });
     });
 };
@@ -692,7 +692,7 @@ EzBob.validateLoginForm = function (el) {
     return e.validate({
         rules: {
             UserName: { required: true, email: true },
-            Password:  $.extend({}, passPolicy) 
+            Password: $.extend({}, passPolicy)
         },
         messages: {
             "UserName": { email: EzBob.dbStrings.NotValidEmailAddress, required: EzBob.dbStrings.NotValidEmailAddress },
@@ -850,17 +850,17 @@ EzBob.validateSortCode = function (el) {
             AccountNumber: { required: true, minlength: 8, maxlength: 8, digits: true }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-       // unhighlight: EzBob.Validation.unhighlight
+        //unhighlight: EzBob.Validation.unhighlight
     });
 };
 
 EzBob.validateAmazonForm = function (el) {
-    var e = el || $(".form-inline");
+    var e = el || $(".AmazonForm");
 
     return e.validate({
         rules: {
             amazonMerchantId: { remote: { url: window.gRootPath + "AmazonMarketPlaces/IsAmazonUserCorrect", async: false }, required: true },
-            amazonMarketplaceId: { required: true }
+            amazonMarketplaceId: { required: true, rangelength: [10, 15] }
         },
         messages: {
             amazonMerchantId: { remote: "Account does not exist" }
@@ -877,8 +877,8 @@ EzBob.validateYourInfoEditForm = function (el) {
             DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
             BusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            OverallTurnOver: { required: true, digits: true, min:1 },
-            WebSiteTurnOver: { required: true, digits: true, min:1 }
+            OverallTurnOver: { required: true, digits: true, min: 1 },
+            WebSiteTurnOver: { required: true, digits: true, min: 1 }
         },
         messages: {
             DayTimePhone: { regex: "Please enter a valid UK number" },
@@ -898,19 +898,19 @@ EzBob.validateRollover = function (el) {
             ScheduleId: { required: true },
             PaymentDueDate: { required: true, requiredDate: true },
             Payment: { required: true, number: true },
-            MounthCount: { required: true, number: true, min:1 }
+            MounthCount: { required: true, number: true, min: 1 }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight
     });
 };
 
-EzBob.validateChangeEmailForm = function(el) {
+EzBob.validateChangeEmailForm = function (el) {
     var e = el || $('form');
 
     return e.validate({
         rules: {
-            'edit-email' : { required: true, email: true }
+            'edit-email': { required: true, email: true }
         }
     });
 };
@@ -960,14 +960,16 @@ EzBob.validatePayPointShopForm = function (el) {
     });
 }
 
-EzBob.validateVolusionShopForm = function(el) {
+EzBob.validateVolusionShopForm = function (el) {
     var e = el || $('form');
-
     return e.validate({
         rules: {
-            volusion_url: { required: true, minlength: 10, maxlength: 300 },
+            volusion_url: { required: true, url: true, maxlength: 300 },
             volusion_login: { required: true, minlength: 2, maxlength: 30 },
             volusion_password: { required: true, minlength: 2, maxlength: 300 }
+        },
+        messages: {
+            volusion_url: { url: "Please enter a valid URL" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight

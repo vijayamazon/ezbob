@@ -10,7 +10,7 @@
             </h2>
         </div>
 
-        <div class="simple-well" style="padding-top: 10px;">
+        <div style="padding-top: 10px;">
                     
             <div class="screenshots-container clearfix">
                 <h4>Click to view tutorial</h4>
@@ -47,9 +47,11 @@
 
                 <li>
                     Copy and Paste from Amazon Services:
-                    @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm form-horizontal", @style = "padding-top:20px;" }))
+                    @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm", @style = "padding-top:20px;" }))
                     {
-                        <div class="control-group">
+                        @EzForm.InputText("amazonMerchantId", "Merchant ID", cls:"form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls:"form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                        @*<div class="control-group">
                             <label for="amazonMerchantId" class="control-label">Merchant ID</label>
                             <div class="controls">
                                 <input id="amazonMerchantId" name="amazonMerchantId" type="text" value="" class="input-medium" maxlength="15" disabled="disabled" />
@@ -63,16 +65,16 @@
                                 <input id="amazonMarketplaceId" name="amazonMarketplaceId" type="text" value="" class="input-medium" maxlength="15"  disabled="disabled" />
                                 <img id="amazonMarketplaceIdImage" class="field_status required"/>
                             </div>
-                        </div>
+                        </div>*@
                     }
                 </li>
             </ol>
         </div>
         <div class="control-group clearfix">
-            <a href="#Connect/amazon" class="connect-amazon button orange pull-right">Continue</a>
+            <a href="#Connect/amazon" class="connect-amazon button orange pull-right disabled">Continue</a>
             <a href="#" class="back button grey pull-right">Back</a>
         </div>
-        @{Html.RenderPartial("_SecureDisclaimer");}
+        @*@{Html.RenderPartial("_SecureDisclaimer");}*@
     </div>
 }
 

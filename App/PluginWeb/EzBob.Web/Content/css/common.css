@@ -23,7 +23,7 @@ h3.popover-title { margin: 0 !important; }
 hr.dotted {
     border: 0;
     border-bottom: 2px dotted #ccc;
-    margin: 18px 30px;
+    margin: 0;
 }
 
 input[type='radio'], input[type='checkbox'] { box-shadow: none; }
@@ -105,7 +105,7 @@ ul.storelist li span {
 #volusionAccount input[type="text"], #volusionAccount input[type="password"]
 { width: 400px; }
 
-.field-validation-error { display: block; font-weigth: bold;}
+.field-validation-error { display: block; font-weight: bold;}
 
 [name='addressInput'] { margin-top: 10px; }
 

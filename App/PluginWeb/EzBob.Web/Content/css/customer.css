@@ -115,8 +115,6 @@
     padding-top: 20px;
 }
 
-#amazonMerchantId, #amazonMarketplaceId { width: 150px;}
-
 .controls.error input.error, .controls.error select, .controls.error textarea, .controls select.error, .controls textArea.error {
   color: #b94a48;
   border: 2px solid #b94a48;

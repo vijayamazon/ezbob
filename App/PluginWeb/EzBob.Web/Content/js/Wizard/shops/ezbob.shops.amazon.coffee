@@ -9,11 +9,17 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         @$el.html $("#amazon-store-info").html()
         @form = @$el.find(".AmazonForm")
         @validator = EzBob.validateAmazonForm(@form)
-        @inputChanged()
+        @marketplaceId = @$el.find("#amazonMarketplaceId")
+        @merchantId = @$el.find("#amazonMerchantId")
+
+        oFieldStatusIcons = $ "IMG.field_status"
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+
         this
 
     events:
-        "click a.go-to-amazon": 'enableControls'
+        "click a.go-to-amazon": "enableControls"
         "click a.connect-amazon": "connect"
         "click a.back": "back"
         "click .screenshots": "runTutorial"
@@ -21,41 +27,27 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
 
         'cut    #amazonMarketplaceId': 'marketplaceIdChanged'
         'change #amazonMarketplaceId': 'marketplaceIdChanged'
-        'keyup  #amazonMarketplaceId': 'marketplaceIdChanged'
         'paste  #amazonMarketplaceId': 'marketplaceIdChanged'
 
         'cut    #amazonMerchantId': 'merchantIdChanged'
         'change #amazonMerchantId': 'merchantIdChanged'
-        'keyup  #amazonMerchantId': 'merchantIdChanged'
         'paste  #amazonMerchantId': 'merchantIdChanged'
+
+        'change input': 'inputChanged'
 
     enableControls: ->
         @$el.find('#amazonMarketplaceId, #amazonMerchantId').removeAttr('disabled')
 
     marketplaceIdChanged: ->
-        @inputChanged 'marketplace'
+        @$el.find('#amazonMarketplaceIdImage').field_status('set', if EzBob.Validation.element(@validator, @marketplaceId) then 'ok' else 'fail')
 
     merchantIdChanged: ->
-        @inputChanged 'merchant'
+        @$el.find('#amazonMerchantIdImage').field_status('set', if EzBob.Validation.element(@validator, @merchantId) then 'ok' else 'fail')
 
     inputChanged: (sIcon) ->
-        marketplaceId = @$el.find("#amazonMarketplaceId").val()
-        merchantId = @$el.find("#amazonMerchantId").val()
-
-        bIsMarketPlaceOk = marketplaceId.length >= 10 and marketplaceId.length <= 15
-        bIsMerchantIdOk = merchantId.length >= 10 and merchantId.length <= 15
-
-        if 'marketplace' == sIcon
-            @$el.find('#amazonMarketplaceIdImage').field_status({ required: true, initial_status: if bIsMarketPlaceOk then 'ok' else 'fail' })
-
-        if 'merchant' == sIcon
-            @$el.find('#amazonMerchantIdImage').field_status({ required: true, initial_status: if bIsMerchantIdOk then 'ok' else 'fail' })
-
-        if not bIsMerchantIdOk or not bIsMarketPlaceOk or not @validator.form()
-            @$el.find("a.connect-amazon").addClass "disabled"
-            return
-
-        @$el.find("a.connect-amazon").removeClass "disabled"
+        enabled =  EzBob.Validation.checkForm(@validator) 
+        #enabled = EzBob.Validation.element(@validator, @marketplaceId) and @merchantId.val().length > 10 and @merchantId.val().length < 15
+        @$el.find("a.connect-amazon").toggleClass('disabled', !enabled)
 
     runTutorial: ->
         div = $("<div/>")
@@ -91,7 +83,7 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
 
     connect: (e) ->
         unless @validator.form()
-            EzBob.App.trigger "error", "The Fields Merchant ID or Marketplace ID are not Filled"
+            EzBob.App.trigger "error", "Please enter a valid Merchant ID"
             return false
 
         marketplaceId = @$el.find("#amazonMarketplaceId")

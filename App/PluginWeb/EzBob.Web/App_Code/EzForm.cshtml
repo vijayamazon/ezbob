@@ -39,12 +39,12 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0)
+@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0, int maxLength = 0)
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     
-    <div class="form_field_container">
+    <div class="form_field_container control-group controls">
         <label class="attardi-input">
             <span>@caption</span>
             <input 
@@ -59,6 +59,10 @@
                 } 
                 @if (tabIndex > 0) {
                     @:tabindex="@tabIndex"
+                }
+                @if (maxLength > 0)
+                {
+                    @:maxlength="@maxLength"
                 }
              />
         </label>
