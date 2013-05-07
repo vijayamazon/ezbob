@@ -95,6 +95,19 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.$el.find('.director_name_part').each(function () { that.directorNamePartChanged(this); });
 		this.$el.find('.director_gender').first().each(function () { that.directorGenderChanged(this); });
 		this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });
+
+		this.$el.find('.director_date').each(function() {
+			var oDateCombo = $(this);
+
+			var oMeta = oDateCombo.closest('.Directors').find('h1[preffix]').first();
+
+			var sID = oDateCombo.attr('id');
+
+			sID = sID.replace('<%-preffix%>', oMeta.attr('preffix'));
+			sID = sID.replace('<%=i%>', oMeta.attr('seqno'));
+
+			oDateCombo.attr('id', sID);
+		});
 	},
 	addDirector: function () {
 		this.model.add(new EzBob.DirectorsModel({ Address: new EzBob.AddressModels() }));

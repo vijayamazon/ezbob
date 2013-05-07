@@ -40,7 +40,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
         var nonLimitedAddressView = new EzBob.AddressView({ model: this.model.get('NonLimitedCompanyAddress'), name: "NonLimitedCompanyAddress", max: 1 });
         nonLimitedAddressView.render().$el.appendTo(this.$el.find('#NonLimitedCompanyAddress'));
-        this.model.get('NonLimitedCompanyAddress').on("change", this.NotLimitedCompanyAddressChanged, this);
+        this.model.get('NonLimitedCompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
 
         var directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", hidden: this.$el.find('.directorsData') });
         directorsView.render().$el.appendTo(this.$el.find('.directors'));
@@ -54,8 +54,8 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
         return this;
     },
-    NotLimitedCompanyAddressChanged: function (el, e) {
-        this.companyAddressValidator = el.collection.length > 0;
+    NonLimitedCompanyAddressChanged: function (evt, oModel) {
+        this.companyAddressValidator = oModel.collection.length > 0;
         this.clearAddressError("#NonLimitedCompanyAddress");
     }
 });

@@ -341,7 +341,7 @@
 <script id="oneDirector" type="text/template">
 	<%_.each(directors, function(director, i){%>
 		<div class="Directors">	
-			<h1 style="padding-left:0;">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
+			<h1 preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
 
 			<div class="control-group">
 				<div class="controls">
