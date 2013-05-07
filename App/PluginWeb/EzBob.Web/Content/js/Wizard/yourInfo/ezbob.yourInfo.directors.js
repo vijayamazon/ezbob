@@ -11,9 +11,21 @@ EzBob.DirectorMainView = Backbone.View.extend({
 	events: {
 		"click #addDirector": "addDirector",
 		"click .removeDirector": "removeDirector",
+
 		"change .director_name_part": function (jqEvent) { this.directorNamePartChanged(jqEvent.target); },
+		"keyup  .director_name_part": function (jqEvent) { this.directorNamePartChanged(jqEvent.target); },
+		"cut    .director_name_part": function (jqEvent) { this.directorNamePartChanged(jqEvent.target); },
+		"paste  .director_name_part": function (jqEvent) { this.directorNamePartChanged(jqEvent.target); },
+
 		"change .director_gender": function (jqEvent) { this.directorGenderChanged(jqEvent.target); },
-		"change .director_date": function (jqEvent) { this.directorDateChanged(jqEvent.target); }
+		"keyup  .director_gender": function (jqEvent) { this.directorGenderChanged(jqEvent.target); },
+		"cut    .director_gender": function (jqEvent) { this.directorGenderChanged(jqEvent.target); },
+		"paste  .director_gender": function (jqEvent) { this.directorGenderChanged(jqEvent.target); },
+
+		"change .director_date": function (jqEvent) { this.directorDateChanged(jqEvent.target); },
+		"keyup  .director_date": function (jqEvent) { this.directorDateChanged(jqEvent.target); },
+		"cut    .director_date": function (jqEvent) { this.directorDateChanged(jqEvent.target); },
+		"paste  .director_date": function (jqEvent) { this.directorDateChanged(jqEvent.target); }
 	},
 	directorNamePartChanged: function (oTarget) {
 		oTarget = $(oTarget);
@@ -96,17 +108,17 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.$el.find('.director_gender').first().each(function () { that.directorGenderChanged(this); });
 		this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });
 
-		this.$el.find('.director_date').each(function() {
-			var oDateCombo = $(this);
+		this.$el.find('.director_date, img.field_status').each(function() {
+			var oDateUIComponent = $(this);
 
-			var oMeta = oDateCombo.closest('.Directors').find('h1[preffix]').first();
+			var oMeta = oDateUIComponent.closest('.Directors').find('h1[preffix]').first();
 
-			var sID = oDateCombo.attr('id');
+			var sID = oDateUIComponent.attr('id');
 
 			sID = sID.replace('<%-preffix%>', oMeta.attr('preffix'));
 			sID = sID.replace('<%=i%>', oMeta.attr('seqno'));
 
-			oDateCombo.attr('id', sID);
+			oDateUIComponent.attr('id', sID);
 		});
 	},
 	addDirector: function () {
