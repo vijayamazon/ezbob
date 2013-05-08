@@ -42,6 +42,7 @@
 
 <body>
     @RenderSection("afterHead", false)
+    @{Html.RenderPartial("_LivePerson");}
     @Html.AntiForgeryTokenNoUserCheck()
 
     <div id="wrapper">
@@ -165,5 +166,8 @@
             Html.RenderPartial("_GetSatisfaction");
         }
     }
+    
+
+    
 </body>
 </html>

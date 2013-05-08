@@ -1,17 +1,13 @@
 ﻿@using System.Globalization
 @using EzBob.Web.Infrastructure
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var config = ViewData["Config"] as IEzBobConfiguration;
 }
 
 @section afterHead{
-    @if (config.GetSatisfactionEnabled)
-    {
-        Html.RenderPartial("_LivePerson");
-    }
+        @{Html.RenderPartial("_LivePerson");}
 }
 
 <div class="row-fluid wizard-wrapper">
@@ -35,8 +31,8 @@
     <script type="text/javascript">
         $(function () {
 
-        	EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
-        	EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
+            EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+            EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
             SetCaptchaMode();
             EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
             EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)
@@ -46,7 +42,7 @@
                                           else
                                           {
                                               <text>false</text>
-                                         };
+                                          };
             EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
             EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
         
@@ -69,6 +65,7 @@
             var oFieldStatusIcons = $('IMG.field_status');
             oFieldStatusIcons.filter('.required').field_status({ required: true });
             oFieldStatusIcons.not('.required').field_status({ required: false });
+            
         })
     </script>
 }
