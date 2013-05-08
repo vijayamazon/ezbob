@@ -34,6 +34,8 @@
                     <img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
                 </div>
             </div>
+        </div>
+     </div>
 
             <div id="block-loan-schedule">
                 <div class="loan-schedule">
@@ -45,8 +47,6 @@
             </div>
             <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
             <a href="#" class="btn-back button grey pull-right">Back</a>
-        </div>
-    </div>
 }
 
 @{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
