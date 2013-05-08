@@ -58,13 +58,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
 
             var loanOffer = LoanOffer.InitFromLoan(loan, apr, null);
-            
+
             loanOffer.Details = new LoanOfferDetails
             {
                 InterestRate = cr.InterestRate,
                 RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
                 OfferedCreditLine = loanOffer.TotalPrincipal,
-                LoanType = _loanTypes.GetAll().First().Name,
+                LoanType = cr.LoanType.Name,
                 IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
                 Date = loan.Date
             };

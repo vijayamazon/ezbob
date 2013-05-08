@@ -19,15 +19,15 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Loan Offer";
-            
-            HeaderReportGenerator.CreateHeader(worksheet, header);
 
-            int row=4;
+            int row = 4;
             int column = 1;
-            worksheet.Cells.SetColumnWidth(0, 1);
-            worksheet.Cells.SetColumnWidth(1, 20);
-            worksheet.Cells.SetColumnWidth(2, 15);
 
+            HeaderReportGenerator.CreateHeader(worksheet, header, column -1);
+
+            worksheet.Cells.SetColumnWidth(0, 1);
+            worksheet.Cells.SetColumnWidth(1, 16);
+            worksheet.Cells.SetColumnWidth(2, 15); 
             CreateXlsHeader(worksheet, row, column);
             var i = 0;
             foreach (var item in loanOffer.Schedule)
@@ -60,7 +60,6 @@ namespace EzBob.Web.Code.ReportGenerator
             {
                 CreateDetails(loanOffer.Details, row, column, worksheet);
             }
-
 
             return ConvertFormat(_workbook, isExcel ? FileFormatType.Excel2003 : FileFormatType.Pdf);
         }
@@ -147,7 +146,6 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, column + 4].PutValue("Total");
 
             SetHeaderBackgroundColor(worksheet, row, column);
-            worksheet.AutoFitColumns();
             worksheet.AutoFitRows();
         }
 
@@ -186,7 +184,6 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells.SetRowHeight(row, 60);
             }
             worksheet.AutoFitRows();
-            worksheet.AutoFitColumns();
         }
     }
 }
