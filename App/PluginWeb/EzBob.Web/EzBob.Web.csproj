@@ -469,7 +469,6 @@
     <Content Include="Content\css\sidebar.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\attardi.labels.css" />
-    <Content Include="Content\css\video.css" />
     <Content Include="Content\css\wizard-header.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
@@ -512,8 +511,6 @@
     <Content Include="Content\css\notifications.css" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\Underwriter.css" />
-    <Content Include="Content\css\video-js.css" />
-    <Content Include="Content\css\video-js.png" />
     <Content Include="Content\img\1-how-it-works-steps.jpg" />
     <Content Include="Content\img\2-Require.jpg" />
     <Content Include="Content\img\accounts-paypal.png" />
@@ -730,7 +727,6 @@
     <Content Include="Content\img\sidebar\side-b.png" />
     <Content Include="Content\img\sidebar\side-m.png" />
     <Content Include="Content\img\sidebar\side-top.png" />
-    <Content Include="Content\img\sidebar\video-ph.png" />
     <Content Include="Content\img\signup-button.png" />
     <Content Include="Content\img\sign_wide.jpg" />
     <Content Include="Content\img\silver-1.png" />
@@ -790,7 +786,6 @@
       <DependentUpon>ezbob.LoanScheduleView.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.simpleValueEditDlg.js" />
-    <Content Include="Content\js\controls\ezbob.video.js" />
     <Content Include="Content\js\ezbob.csrf.js" />
     <Content Include="Content\js\ezbob.customerModel.js" />
     <Content Include="Content\js\lib\alertify.js" />
@@ -902,9 +897,7 @@
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\VolusionShopNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointShopNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Login.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
@@ -994,26 +987,6 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\creditBureau\ezbob.underwriter.idHubCustomAddress.js" />
     <Content Include="Content\PIE_uncompressed.htc" />
-    <Content Include="Content\Video\GetCash.mp4" />
-    <Content Include="Content\Video\GetCash.ogv" />
-    <Content Include="Content\Video\GetCash.webm" />
-    <Content Include="Content\Video\Intro.mp4" />
-    <Content Include="Content\Video\Intro.ogv" />
-    <Content Include="Content\Video\Intro.webm" />
-    <Content Include="Content\Video\PayPal-tutorial.mp4" />
-    <Content Include="Content\Video\PayPal-tutorial.ogv" />
-    <Content Include="Content\Video\PayPal-tutorial.webm" />
-    <Content Include="Content\Video\eBay-tutorial.mp4" />
-    <Content Include="Content\Video\eBay-tutorial.ogv" />
-    <Content Include="Content\Video\eBay-tutorial.webm" />
-    <Content Include="Content\Video\Bank-account.mp4" />
-    <Content Include="Content\Video\Bank-account.ogv" />
-    <Content Include="Content\Video\Bank-account.webm" />
-    <Content Include="Content\Video\Amazon.mp4" />
-    <Content Include="Content\Video\Amazon.ogv" />
-    <Content Include="Content\Video\Amazon.webm" />
-    <Content Include="Content\Video\video-js.swf" />
-    <Content Include="Content\js\lib\video.js" />
     <Content Include="Content\js\login\ezbob.login.js" />
     <Content Include="Content\js\ezbob.strengthPassword.js" />
     <Content Include="Views\Shared\_FBSDK.cshtml" />
@@ -1040,13 +1013,11 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanOptions.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\PaymentRollover.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\LatePaymentNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\RenewEbayToken.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CaisReportsHistory.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\EKMShopNtification.cshtml" />
     <Content Include="Areas\Underwriter\Views\Helper\PermissionClasses.cshtml" />
     <Content Include="Areas\Underwriter\Views\Helper\RolesClasses.cshtml" />
     <None Include="Content\js\controls\ezbob.BoundItemView.coffee" />
@@ -1102,9 +1073,6 @@
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customers.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaceDetails.js" />
     <Content Include="Content\PIE.htc" />
-    <Content Include="Content\Video\EZBOB-Movie.mp4" />
-    <Content Include="Content\Video\EZBOB_Movie.webm" />
-    <Content Include="Content\Video\poster.jpg" />
     <Content Include="Global.asax" />
     <Content Include="Content\js\lib\bootstrap-datepicker.js" />
     <Content Include="Content\js\lib\bootstrap.js" />
@@ -1347,7 +1315,6 @@
     <Content Include="Areas\Customer\Views\Paypoint\Error.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\PacnetStatus.cshtml" />
     <Content Include="Areas\Customer\Views\PacnetStatus\Index.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\StoreInfoNotification.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Alerts.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\PayPointResult.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_AddressPopupTemplate.cshtml" />
@@ -1382,30 +1349,17 @@
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SecureDisclaimer.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_SideBarLayout.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\AmazonStoreNtification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\EbayStoreNtification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\BankAccountNtification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\PaymentAccountsNotification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPalNotification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\DetailsNotification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\GetCashNotification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\PayEarlyNotification.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_Steps.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\CashConfirmationNotification.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DayFilterReportControl.cshtml" />
     <Content Include="Areas\Customer\Views\Pacnet\PacnetError.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\PayPointNotification.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\FakeVideo.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_GetCashConfirmationModalTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_payEarlyConfirmationModalTemplate.cshtml" />
     <Content Include="Content\css\min\web.config" />
     <Content Include="Areas\Customer\Views\Shared\_TargetingTemplate.cshtml" />
     <None Include="Content\files\consent_letter.pdf" />
-    <Content Include="Content\Video\EZBOB_Movie.ogv" />
     <Content Include="Content\js\controls\ezbob.modal.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanTopView.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.coffee" />

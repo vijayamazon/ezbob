@@ -37,7 +37,6 @@ EzBob.AccountsView = EzBob.StoreInfoBaseView.extend({
         this.$el.find('.wizard-top-notification.stores-top-notification h2').text("So we can send you cash!");
         this.$el.find(".help-btn").attr("data-content", "Click on the bank account box  so we can transfer funds to you, and click on the PayPal account to be qualified for a loan increase. Currently PayPal is not available for transferring funds, but will be in the near future.");
         this.$el.find(".help-btn").attr("data-original-title", "Payment account");
-        this.$el.find(".sidebar-container").html($('#payment-accounts-securitystatement').html());
         
         this.$el.find('img[rel]').setPopover();
         this.$el.find('li[rel]').setPopover("left");
