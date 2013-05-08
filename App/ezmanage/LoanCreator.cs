@@ -46,6 +46,10 @@ namespace ezmanage
         {
         }
 
+        public override void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period)
+        {
+        }
+
         public override void ValidateOffer(Customer cus)
         {
         }
