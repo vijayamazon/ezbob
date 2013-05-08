@@ -13,25 +13,58 @@
         EzBob.GA = EzBob.GA || function () { };
     </script>
     <style>
-        .error{
-	        color: red;
+        .error {
+            color: red;
         }
-        .error h3{
-	        font-size: 14px;
-	        margin-bottom: 0px;
-	        color: red;
-        }
+
+            .error h3 {
+                font-size: 14px;
+                margin-bottom: 0px;
+                color: red;
+            }
+
         .paypont-form .control-label {
             font-weight: normal;
         }
+
         body header + .inner, .main-page {
             margin: 0 auto !important;
         }
+
         select {
             height: 30px !important;
         }
     </style>
 }
+
+@helper DashboardHeader()
+{
+    <div class="dashboard-steps narrow-dashboard-header">
+        <ul>
+            <li data-step-num="0" class="completed">
+                <div class="arrow-left"></div>
+                <div class="dashboard-step-no dashboard-step-no1">1</div>
+                <div class="step-text"><span>Choose<br/>Amount</span></div>
+                <div class="completition"></div>
+                <div class="arrow-right arrow-last"></div>
+            </li>
+            <li data-step-num="1" class="active">
+                <div class="arrow-left"></div>
+                <div class="dashboard-step-no dashboard-step-no2">2</div>
+                <div class="step-text"><span>Enter Bank &<br/>Debit Card</span></div>
+                <div class="completition"></div>
+                <div class="arrow-right arrow-last"></div>
+            </li>
+            <li data-step-num="2" class="">
+                <div class="arrow-left"></div>
+                <div class="dashboard-step-no dashboard-step-no3">3</div>
+                <div class="step-text"><span>Get<br/>Cash</span></div>
+                <div class="completition"></div>
+                <div class="arrow-right arrow-last"></div>
+            </li>
+        </ul>
+    </div>
+} 
 
 @helper Hiddens()
 {
@@ -102,8 +135,8 @@
             <div>
                 <div class="row-fluid">
                     <div class="span2"></div>
-                    <div class="span10" style="padding-top: 16px;">
-                        
+                    <div class="span8" style="padding-top: 16px;">
+                        @DashboardHeader()
                         <div class="PayPointHeader">
                             <h2>Enter your debit card details</h2>
                             <h3>For automatic loan repayment</h3>
@@ -193,7 +226,8 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span11">
+                <div class="span2"></div>
+                <div class="span8">
                     <hr>
                     ${paypal:=<table id="paypal_table">
                                   <tbody>
@@ -275,7 +309,7 @@
 
         var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
 
-        $(function() {
+        $(function () {
             $('form').attr('action', document.location.href);
             var amount = $('.amount').val();
             var isPayEarly = amount != 5;
@@ -308,12 +342,12 @@
             if (isPayEarly) {
                 $('#amount-group').show();
                 $('.PayPointHeader h3').hide();
-                $(".wizard-steps").hide();
+                //$(".dashboard-steps").hide();
             }
 
             $('li[rel]').popover({ placement: 'left' });
 
-            $('input[name="back"]').click(function() {
+            $('input[name="back"]').click(function () {
                 history.go(-1);
             });
 
@@ -321,7 +355,7 @@
             contactUs.template = $(".contactUs").html();
             contactUs.render();
 
-            $('input[type="submit"]').click(function(e) {
+            $('input[type="submit"]').click(function (e) {
                 if (!validator.form()) {
                     return false;
                 }
@@ -340,7 +374,7 @@
             });
 
             $.validator.addMethod(
-                "validateLastDateOfPayment", function(value, element, date) {
+                "validateLastDateOfPayment", function (value, element, date) {
                     date = $.browser.msie ? date._d : date;
                     var expirydate = moment(value, "MM/YY");
                     var res = expirydate > date;
@@ -352,9 +386,9 @@
     <script type="text/javascript">
         adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
         adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
-        (function() {
+        (function () {
             var oldonload = window.onload;
-            window.onload = function() {
+            window.onload = function () {
                 __adroll_loaded = true;
                 var scr = document.createElement("script");
                 var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
@@ -364,7 +398,7 @@
                 ((document.getElementsByTagName('head') || [null])[0] ||
                     document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
                 if (oldonload) {
-                    oldonload()
+                    oldonload();
                 }
             };
         }());
