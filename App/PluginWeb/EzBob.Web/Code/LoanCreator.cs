@@ -121,6 +121,11 @@ namespace EzBob.Web.Code
         {
             var name = GetCustomerNameForPacNet(cus);
 
+            if (!cus.HasBankAccount)
+            {
+                throw new Exception("bank account should be added in order to send money");
+            }
+
             var ret = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
                                                cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
             _pacnetService.CloseFile(cus.Id, "ezbob");
