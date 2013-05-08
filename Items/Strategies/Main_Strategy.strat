@@ -109,7 +109,7 @@
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar55330634" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar16854755" />
-    <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar48501249" />
+    <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar60341288" />
     <NodeElement Name="Get_Other_Directors_Address" NodeId="DataSourceBehavioral20197855" />
     <NodeElement Name="GetAmazonData" NodeId="DataSourceBehavioral56474739" />
     <NodeElement Name="GeteBayData" NodeId="DataSourceBehavioral60622501" />
@@ -152,7 +152,7 @@
     <NodeElement Name="MP Alerts" NodeId="ScriptNode61442565" />
     <NodeElement Name="MP Alerts" NodeId="ScriptNode6647602" />
     <NodeElement Name="MP Alerts" NodeId="ScriptNode31892610" />
-    <NodeElement Name="MP_Get_Orders" NodeId="DataSourceNodeScalar27141505" />
+    <NodeElement Name="MP_Get_Orders" NodeId="DataSourceNodeScalar57657770" />
     <NodeElement Name="MP_GetAmountOfNotEliminatedMPs" NodeId="DataSourceNodeScalar47123429" />
     <NodeElement Name="MP_GetMPNumber" NodeId="DataSourceNodeScalar20480353" />
     <NodeElement Name="MP_GetScoreCardData" NodeId="DataSourceNodeScalar49239340" />
@@ -7455,10 +7455,10 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <AssemblyString />
       <DefaultPinName>Next</DefaultPinName>
       <Description />
-      <DisplayName>MP_Get_Orders</DisplayName>
+      <DisplayName>Get_EKM_Shops_Number</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;MP_Get_OrderszwzDtwLSzweknpyr3htT9Q==&lt;/DataSourceName&gt;
+  &lt;DataSourceName&gt;Get_EKM_Shops_NumbereAAY+L21HMBVwCbQ5YahbQ==&lt;/DataSourceName&gt;
   &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
   &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
   &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
@@ -7467,231 +7467,7 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       &lt;Id&gt;0&lt;/Id&gt;
       &lt;ParentId&gt;0&lt;/ParentId&gt;
       &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;NumOfOrders1M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;NumOfOrders3M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;NumOfOrders1Y&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalItemsOrdered1M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalItemsOrdered3M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalItemsOrdered1Y&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalSumOfOrders1M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalSumOfOrders3M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;TotalSumOfOrders1Y&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CancelledOrdersCounts1M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CancelledOrdersCount3M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CancelledOrdersCount1Y&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;OrdersCancellationRate1M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;OrdersCancellationRate3M&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;OrdersCancellationRate1Y&lt;/Name&gt;
+      &lt;Name&gt;Volusion_PayPoint_Num&lt;/Name&gt;
       &lt;Description /&gt;
       &lt;TypeString&gt;Number&lt;/TypeString&gt;
       &lt;ConstraintString /&gt;
@@ -7713,8 +7489,6 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       &lt;ConstraintString /&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
-      &lt;DataTypeString /&gt;
-      &lt;DatasourceTypeString /&gt;
       &lt;Direction&gt;Input&lt;/Direction&gt;
       &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
@@ -7725,10 +7499,10 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
 &lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar27141505</Name>
+      <Name>DataSourceNodeScalar60341288</Name>
       <PointF>
-        <X>1736.97571</X>
-        <Y>636</Y>
+        <X>5951.176</X>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
@@ -9817,63 +9591,6 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>Get_EKM_Shops_Number</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;Get_EKM_Shops_Number1ldrOHQVywhCFlioo7D9OA==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;EKM_Volusion_PayPoint_Num&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CustomerId&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;Direction&gt;Input&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar48501249</Name>
-      <PointF>
-        <X>5951.176</X>
-        <Y>1836</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
       <DefaultPinName />
       <Description />
       <DisplayName>ConsumerCheckPrev</DisplayName>
@@ -10216,6 +9933,287 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <PointF>
         <X>6338.37549</X>
         <Y>1576</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>MP_Get_Orders</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;MP_Get_OrderslRMm3hTGw5bxaSOfh0xPNQ==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;NumOfOrders1M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;NumOfOrders3M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;NumOfOrders1Y&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalItemsOrdered1M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalItemsOrdered3M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalItemsOrdered1Y&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalSumOfOrders1M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalSumOfOrders3M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;TotalSumOfOrders1Y&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CancelledOrdersCounts1M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CancelledOrdersCount3M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CancelledOrdersCount1Y&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;OrdersCancellationRate1M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Double&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Float&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;OrdersCancellationRate3M&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Double&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Float&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;OrdersCancellationRate1Y&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Double&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Float&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomerId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar57657770</Name>
+      <PointF>
+        <X>1736.97571</X>
+        <Y>636</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
@@ -26817,8 +26815,8 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>NumOfOrders1M</Name>
+      <OwnerName>DataSourceNodeScalar60341288</OwnerName>
+      <Name>Volusion_PayPoint_Num</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -26829,175 +26827,7 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>NumOfOrders3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>NumOfOrders1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalItemsOrdered1M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalItemsOrdered3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalItemsOrdered1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalSumOfOrders1M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalSumOfOrders3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>TotalSumOfOrders1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>CancelledOrdersCounts1M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>CancelledOrdersCount3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>CancelledOrdersCount1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>OrdersCancellationRate1M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>OrdersCancellationRate3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
-      <Name>OrdersCancellationRate1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
+      <OwnerName>DataSourceNodeScalar60341288</OwnerName>
       <Name>CustomerId</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -27009,7 +26839,7 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
+      <OwnerName>DataSourceNodeScalar60341288</OwnerName>
       <Name>DataSourceName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -27021,7 +26851,7 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
+      <OwnerName>DataSourceNodeScalar60341288</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -29317,54 +29147,6 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar48501249</OwnerName>
-      <Name>EKM_Volusion_PayPoint_Num</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar48501249</OwnerName>
-      <Name>CustomerId</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar48501249</OwnerName>
-      <Name>DataSourceName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description>Variable for setting name of Data Source that will be used in current node</Description>
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar48501249</OwnerName>
-      <Name>ScortoInternalErrorMessage</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
       <OwnerName>Comparison47459948</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -29906,6 +29688,222 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>DataSourceNodeScalar49239340</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>NumOfOrders1M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>NumOfOrders3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>NumOfOrders1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalItemsOrdered1M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalItemsOrdered3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalItemsOrdered1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalSumOfOrders1M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalSumOfOrders3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>TotalSumOfOrders1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>CancelledOrdersCounts1M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>CancelledOrdersCount3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>CancelledOrdersCount1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>OrdersCancellationRate1M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>OrdersCancellationRate3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>OrdersCancellationRate1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>CustomerId</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -34542,19 +34540,19 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar27141505</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB16960185</TargetNodeName>
+      <SourceNodeName>Comparison34055499</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar57657770</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-16744448</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar27141505</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar57657770</SourceNodeName>
       <SourceNodeOutletName>Exception</SourceNodeOutletName>
       <TargetNodeName>MailNode38679314</TargetNodeName>
       <SuperNodeName />
@@ -35090,14 +35088,14 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison34055499</SourceNodeName>
-      <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar27141505</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar57657770</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB16960185</TargetNodeName>
       <SuperNodeName />
-      <Caption>Yes</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16744448</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -35369,16 +35367,21 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar48501249</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment57612135</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar60341288</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode61074547</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Exception</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-23296</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>6040</X>
+          <Y>1420</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar15935071</SourceNodeName>
@@ -35791,26 +35794,21 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar48501249</SourceNodeName>
-      <SourceNodeOutletName>Exception</SourceNodeOutletName>
-      <TargetNodeName>MailNode61074547</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar60341288</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment57612135</TargetNodeName>
       <SuperNodeName />
-      <Caption>Exception</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-23296</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>6040</X>
-          <Y>1420</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar15935071</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar48501249</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar60341288</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -39408,109 +39406,109 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>userId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>OrdersNumber1MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>NumOfOrders1M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>OrdersNumber3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>NumOfOrders3M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>OrdersNumber1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>NumOfOrders1Y</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ItemsOrdered1MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalItemsOrdered1M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ItemsOrdered3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalItemsOrdered3M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ItemsOrdered1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalItemsOrdered1Y</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders1MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalSumOfOrders1M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalSumOfOrders3M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>TotalSumOfOrders1Y</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancelledOrders1MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>CancelledOrdersCounts1M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancelledOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>CancelledOrdersCount3M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancelledOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>CancelledOrdersCount1Y</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancellationRate1MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>OrdersCancellationRate1M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancellationRate3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>OrdersCancellationRate3M</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CancellationRate1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar27141505</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar57657770</TargetVariableOwnerName>
       <TargetVariableName>OrdersCancellationRate1Y</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -41730,19 +41728,19 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>userId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar48501249</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar60341288</TargetVariableOwnerName>
       <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar48501249</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar60341288</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar48501249</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar60341288</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -41868,8 +41866,8 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_EKMStoresNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar48501249</TargetVariableOwnerName>
-      <TargetVariableName>EKM_Volusion_PayPoint_Num</TargetVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar60341288</TargetVariableOwnerName>
+      <TargetVariableName>Volusion_PayPoint_Num</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -43890,7 +43888,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceNodeScalar27141505</OwnerName>
+      <OwnerName>DataSourceNodeScalar60341288</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -44242,14 +44240,6 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceNodeScalar48501249</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
       <OwnerName>ScriptNode30915801</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -44315,6 +44305,14 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar49239340</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar57657770</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
