@@ -90,7 +90,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             var cashRequest = new CashRequest
             {
                 CreationDate = DateTime.UtcNow,
-                IdCustomer = _context.Customer.Id,
+                Customer = _context.Customer,
                 InterestRate = 0.06m,
                 RepaymentPeriod = _loanTypes.GetDefault().RepaymentPeriod,
                 LoanType = _loanTypes.GetDefault(),

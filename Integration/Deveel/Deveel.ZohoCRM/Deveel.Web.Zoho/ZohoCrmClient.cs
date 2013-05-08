@@ -135,7 +135,7 @@ namespace Deveel.Web.Zoho {
 			var response = GetResponse(module, method, parameters);
 			response.ThrowIfError();
 		    var collection = response.LoadCollectionFromResul<T>();
-            if (!collection.Any()) throw new Exception(string.Format("Code: {1}. Message: {0}.", response.Message, response.Code));
+		    if (!collection.Any()) Log.ErrorFormat("Code: {1}. Message: {0}.", response.Message, response.Code);
 			return collection;
 		}
 
@@ -245,13 +245,30 @@ namespace Deveel.Web.Zoho {
             return new ZohoConvertLeadResponse("Leads", "convertLead", r.Content);
         }
 
+        public string GetRecordIdByUserEmail(string email)
+        {
+            var contact = Search<ZohoContact>("Email", ConditionOperator.Is, email).FirstOrDefault();
+            return contact == null ? null : contact.Id;
+        }
+
+        public string GetRecordIdByOfferName(string name)
+        {
+            var contact = Search<ZohoPotential>("Potential Name", ConditionOperator.Is, name).FirstOrDefault();
+            return contact == null ? null : contact.Id;
+        }
+        public string GetRecordIdByLoanName(string name)
+        {
+            var contact = Search<ZohoSalesOrder>("Subject", ConditionOperator.Is, name).FirstOrDefault();
+            return contact == null ? null : contact.Id;
+        }
+
 		public T GetRecordById<T>(string id) where T :ZohoEntity {
 			var collection = GetEntities<T>(ModuleName(typeof (T)), "getRecordById", new Dictionary<string, string> {{"id", id}});
 			
 			if (collection.Count > 1)
 				throw new AmbiguousMatchException("More than one entity was found for the given id");
 
-			return collection.Single();
+			return collection.SingleOrDefault();
 		}
 
 		public ZohoEntityCollection<T> GetRecords<T>(ListOptions options) where T : ZohoEntity {

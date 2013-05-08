@@ -300,7 +300,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var cashRequest = new CashRequest()
             {
                 CreationDate = DateTime.UtcNow,
-                IdCustomer = customer.Id,
+                Customer = customer,
                 InterestRate = 0.06m,
                 LoanType = loanType,
                 RepaymentPeriod = loanType.RepaymentPeriod,

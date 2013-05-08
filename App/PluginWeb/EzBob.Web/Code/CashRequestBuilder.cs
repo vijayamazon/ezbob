@@ -26,7 +26,7 @@ namespace EzBob.Web.Code
             var cashRequest = new CashRequest()
             {
                 CreationDate = DateTime.UtcNow,
-                IdCustomer = _context.Customer.Id,
+                Customer = _context.Customer,
                 APR = (decimal)apr,
                 InterestRate = _calculator.Interest
             };

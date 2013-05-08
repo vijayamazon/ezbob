@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib.Model.Database
         private LoanType _loanType;
 
         public virtual long Id { get; set; }
-        public virtual int IdCustomer { get; set; }
+        public virtual Customer Customer { get; set; }
         public virtual int? IdUnderwriter { get; set; }
         public virtual int? IdManager { get; set; }
         public virtual DateTime? CreationDate { get; set; }

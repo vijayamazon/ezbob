@@ -10,7 +10,7 @@ namespace EZBob.DatabaseLib.Model.Database
             LazyLoad();
             Id(x => x.Id);
             Map(x => x.HasLoans);
-            Map(x => x.IdCustomer);
+            References(x => x.Customer, "IdCustomer");
             Map(x => x.IdUnderwriter);
             Map(x => x.IdManager);
             Map(x => x.CreationDate);

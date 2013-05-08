@@ -53,8 +53,7 @@ namespace ZohoCRM
                 lead.SetValue("Reg. Customers Status", "New Customer");
                 var response = _crm.InsertRecord(lead);
                 response.ThrowIfError();
-                string id = response.RecordDetails.First().Id;
-                customer.ZohoId = id;
+                customer.ZohoId = response.RecordDetails.First().Id;
             }
             catch (Exception e)
             {
@@ -68,11 +67,9 @@ namespace ZohoCRM
             {
                 log.DebugFormat("Converting lead {0}", customer.Name);
                 var cr = _crm.ConvertLead(customer.ZohoId);
-
-                cr.ThrowIfError();
-
                 customer.ZohoId = cr.Id;
 
+                CheckZohoId(customer);
                 UpdateCustomer(customer);
             }
             catch (Exception e)
@@ -98,7 +95,9 @@ namespace ZohoCRM
             try
             {
                 if (string.IsNullOrEmpty(customer.ZohoId)) return;
-                var p = new ZohoPotential(string.Format("{0} {1} ({2})", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname, customer.CashRequests.Count));
+                var p = new ZohoPotential(string.Format("{0} {1} ({2})", 
+                    customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname, 
+                    cashRequest.Customer.CashRequests.ToList().IndexOf(cashRequest)+1));
                 p.SetValue("CONTACTID", customer.ZohoId);
                 p.SetValue("Stage", "Processing application");
                 UpdateOffer(p, cashRequest);
@@ -117,7 +116,10 @@ namespace ZohoCRM
             try
             {
                 if (string.IsNullOrEmpty(customer.ZohoId)) return;
-                var p = new ZohoSalesOrder(string.Format("{0} {1} ({2})", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname, customer.Loans.Count));
+                var p = new ZohoSalesOrder(string.Format("{0} {1} ({2})", 
+                    customer.PersonalInfo.FirstName, 
+                    customer.PersonalInfo.Surname, 
+                    loan.Customer.Loans.ToList().IndexOf(loan) + 1));
                 p.SetValue("CONTACTID", customer.ZohoId);
 
                 UpdateLoanFields(p, loan);
@@ -152,6 +154,7 @@ namespace ZohoCRM
             try
             {
                 log.DebugFormat("CRM: update offer on get cash for customer #{0}", customer.Id);
+                CheckZohoId(cashRequest);
                 UpdateEntity<ZohoPotential>(p =>
                     {
                         UpdateOffer(p, cashRequest);
@@ -168,11 +171,12 @@ namespace ZohoCRM
         {
             try
             {
+                CheckZohoId(cashRequest);
                 UpdateEntity<ZohoPotential>(p =>
-                                                {
-                                                    UpdateOffer(p, cashRequest);
-                                                    p.SetValue("Stage", "Rejection");
-                                                }, cashRequest.ZohoId);
+                    {
+                        UpdateOffer(p, cashRequest);
+                        p.SetValue("Stage", "Rejection");
+                    }, cashRequest.ZohoId);
             }
             catch (Exception e)
             {
@@ -184,6 +188,7 @@ namespace ZohoCRM
         {
             try
             {
+                CheckZohoId(cashRequest);
                 UpdateEntity<ZohoPotential>(p =>
                                                 {
                                                     UpdateOffer(p, cashRequest);
@@ -196,10 +201,23 @@ namespace ZohoCRM
             }
         }
 
+        private void CheckZohoId(CashRequest cashRequest)
+        {
+            if (_crm.GetRecordById<ZohoPotential>(cashRequest.ZohoId) == null)
+            {
+                var name = string.Format("{0} {1} ({2})", 
+                    cashRequest.Customer.PersonalInfo.FirstName, 
+                    cashRequest.Customer.PersonalInfo.Surname, 
+                    cashRequest.Customer.CashRequests.ToList().IndexOf(cashRequest)+1);
+                cashRequest.ZohoId = _crm.GetRecordIdByOfferName(name);
+            }
+        }
+
         public void UpdateCashRequest(CashRequest cr)
         {
             try
             {
+                CheckZohoId(cr);
                 UpdateEntity<ZohoPotential>(p => UpdateOffer(p, cr), cr.ZohoId);
             }
             catch (Exception e)
@@ -217,7 +235,16 @@ namespace ZohoCRM
             }
             else
             {
+                CheckZohoId(customer);
                 UpdateCustomer(customer);
+            }
+        }
+
+        private void CheckZohoId(Customer customer)
+        {
+            if (customer.ZohoId == null || _crm.GetRecordById<ZohoContact>(customer.ZohoId) == null)
+            {
+                customer.ZohoId = _crm.GetRecordIdByUserEmail(customer.Name);
             }
         }
 
@@ -231,6 +258,7 @@ namespace ZohoCRM
                 }
                 else
                 {
+                    CheckZohoId(offer);
                     UpdateEntity<ZohoPotential>(p =>
                     {
                         UpdateOffer(p, offer);
@@ -290,18 +318,16 @@ namespace ZohoCRM
             if (string.IsNullOrEmpty(id)) return;
 
             var c = _crm.GetRecordById<T>(id);
-
             if (c == null)
             {
-                throw new Exception("Entity wasn't found for the given id");
+                log.Error("Entity wasn't found for the given id");
+                return;
             }
             action(c);
-
             var r = _crm.UpdateRecord(c);
-
             if (!r)
             {
-                throw new Exception("Updating failed");
+                log.Error("Updating failed");
             }
         }
 
@@ -392,6 +418,7 @@ namespace ZohoCRM
                     }
                     else
                     {
+                        CheckZohoId(loan);
                         UpdateEntity<ZohoSalesOrder>(p => UpdateLoanFields(p, loan), loan.ZohoId);
                         UpdateLoanAgreements(loan);
                     }
@@ -400,6 +427,18 @@ namespace ZohoCRM
             catch (Exception e)
             {
                 log.Error(e);
+            }
+        }
+
+        private void CheckZohoId(Loan loan)
+        {
+            if (_crm.GetRecordById<ZohoSalesOrder>(loan.ZohoId) == null)
+            {
+                var name = string.Format("{0} {1} ({2})", 
+                    loan.Customer.PersonalInfo.FirstName, 
+                    loan.Customer.PersonalInfo.Surname,
+                    loan.Customer.Loans.ToList().IndexOf(loan)+1);
+                loan.ZohoId = _crm.GetRecordIdByLoanName(name);
             }
         }
 
