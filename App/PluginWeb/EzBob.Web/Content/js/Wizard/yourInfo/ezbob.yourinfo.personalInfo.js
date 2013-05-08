@@ -33,11 +33,19 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change input[name="Gender"]': 'genderChanged',
             'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
             'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
-            'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged"
+            'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged",
+            'focus #OverallTurnOver': "overallTurnOverFocus",
+            'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
         });
 
         this.constructor.__super__.initialize.call(this);
-	},
+    },
+    overallTurnOverFocus: function () {
+        $("#OverallTurnOver").change();
+    },
+    webSiteTurnOverFocus: function () {
+        $("#WebSiteTurnOver").change();
+    },
     dateOfBirthChanged: function () {
 	    if (this.year && this.month && this.day) {
 		    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth");

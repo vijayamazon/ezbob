@@ -10,25 +10,11 @@ class EzBob.PayPointAccountButtonView extends EzBob.StoreButtonView
 class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
     template: '#PayPointAccoutInfoTemplate'
  
-    events: {
+    events: 
         'click a.connect-payPoint': 'connect'
         "click a.back": "back"
-
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
-
-        'change #payPoint_mid': 'payPointMidChanged'
-        'cut #payPoint_mid': 'payPointMidChanged'
-        'paste #payPoint_mid': 'payPointMidChanged'
-
-        'change #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
-        'cut #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
-        'paste #payPoint_vpnPassword': 'payPointVpnPasswordChanged'
-
-        'change #payPoint_remotePassword': 'payPointRemotePasswordChanged'
-        'cut #payPoint_remotePassword': 'payPointRemotePasswordChanged'
-        'paste #payPoint_remotePassword': 'payPointRemotePasswordChanged'
-    }
 
     ui:
         mid: '#payPoint_mid'
@@ -41,29 +27,17 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         enabled =  EzBob.Validation.checkForm(@validator) 
         @ui.connect.toggleClass('disabled', !enabled)
 
-    payPointMidChanged: ->
-        @$el.find('#payPoint_midImage').field_status('set', if EzBob.Validation.element(@validator, @ui.mid) then 'ok' else 'fail')
-
-    payPointVpnPasswordChanged: ->
-        @$el.find('#payPoint_vpnPasswordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.vpnPassword) then 'ok' else 'fail')
-
-    payPointRemotePasswordChanged: ->
-        @$el.find('#payPoint_remotePasswordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.remotePassword) then 'ok' else 'fail')
-
     connect: ->
         return false if not @validator.form()            
         return false if @$el.find('a.connect-payPoint').hasClass('disabled')
 
         acc = new EzBob.PayPointAccountModel({mid: @ui.mid.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})
-        
         xhr = acc.save()
-
         if not xhr
             EzBob.App.trigger 'error', 'PayPoint Account Saving Error'
             return false
 
         BlockUi('on')
-
         xhr.always =>
             BlockUi('off')
 

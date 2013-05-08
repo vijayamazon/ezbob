@@ -1,4 +1,4 @@
-﻿var EzBob = EzBob || {};EzBob.Validation = EzBob.Validation || {};
+﻿var EzBob = EzBob || {}; EzBob.Validation = EzBob.Validation || {};
 
 //-----------------------------------------------------------------
 
@@ -14,14 +14,14 @@ EzBob.Validation.errorPlacement = function (error, element) {
             //fix for empty date validation
             if ((element.parent('.controls').find("select[value=-]")).length > 0) {
                 element = element.parent('.controls').find("select[value=-]");
-            }else {
+            } else {
                 //fix for incorrect date validation
                 if ((element.parent('.controls').find("select[name='day']")).length > 0) {
                     element = element.parent('.controls').find("select[name='day'],select[name='month'],select[name='year']");
                 }
             }
             //fix for number
-            if (element.closest("div").find(".cashInput").length>0) {
+            if (element.closest("div").find(".cashInput").length > 0) {
                 element = element.closest("div").find(".cashInput");
             }
         }
@@ -44,7 +44,7 @@ EzBob.Validation.unhighlight = function (element) {
     if ($e.attr("type") == "hidden") {
         $e = $("#" + $e.attr("name"));
     }
-    
+
     //fix for chosen
     $e = $("#" + $e.attr('id') + "_chzn").length == 0 ? $e : $("#" + $e.attr('id') + "_chzn > a");
     $e.parent('.control-group').removeClass('error');
@@ -61,7 +61,7 @@ EzBob.Validation.unhighlightFS = function (element) {
     var $el = $(element),
         val = $el.val(),
         img = $el.closest('div').find('.field_status');
-    
+
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required');
     } else {
@@ -144,7 +144,7 @@ $.validator.addMethod(
     }, "Please insert date in format DD/MM/YYYY, for example 21/06/2012"
 );
 
-$.validator.methods.number = function(value, element) {
+$.validator.methods.number = function (value, element) {
     return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
 };
 
@@ -172,22 +172,20 @@ EzBob.Validation.validateAndNotify = function (validator) {
 };
 
 EzBob.Validation.checkForm = function (validator) {
-	return validator.checkForm();
+    return validator.checkForm();
 };
 
 EzBob.Validation.element = function (validator, elem) {
-	return validator.element(elem);
+    return validator.element(elem);
 };
 
 EzBob.Validation.displayIndication = function (validator, ctrlImgId, validatedElement) {
-	var controlImgId = "#" + ctrlImgId;
+    var controlImgId = "#" + ctrlImgId;
 
-	var sStatus = validator.element($(validatedElement)) ? 'ok' : 'fail';
+    var sStatus = validator.element($(validatedElement)) ? 'ok' : 'fail';
 
-	$(controlImgId).field_status('set', sStatus);
+    $(controlImgId).field_status('set', sStatus);
 };
-
-
 
 $.validator.methods.yearLimit = function (value, element, yearCount) {
     var val = moment(value, "DD/MM/YYYY").toDate();

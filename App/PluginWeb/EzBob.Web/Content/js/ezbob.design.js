@@ -699,7 +699,8 @@ EzBob.validateLoginForm = function (el) {
             "Password": { required: passPolicyText, regex: passPolicyText },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 
@@ -735,7 +736,8 @@ EzBob.validateSignUpForm = function (el) {
             "CaptchaInputText": { required: "This field is required" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 
@@ -752,7 +754,8 @@ EzBob.validateChangePassword = function (el) {
             "new_password2": { minlength: EzBob.dbStrings.PasswordPolicyCheck, equalTo: EzBob.dbStrings.PasswordDoesNotMatch }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 
@@ -768,7 +771,8 @@ EzBob.validateRestorePasswordForm = function (el) {
             "Answer": { maxlength: "Maximum answer length is 199 characters" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 
@@ -832,6 +836,7 @@ EzBob.validateCompanyDetailForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlight
+        
     });
 };
 
@@ -943,7 +948,8 @@ EzBob.validateEkmShopForm = function (el) {
             ekm_password: { required: true, minlength: 2, maxlength: 30 }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 }
 
@@ -957,7 +963,8 @@ EzBob.validatePayPointShopForm = function (el) {
             payPoint_remotePassword: { required: true, minlength: 2, maxlength: 30 }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 }
 
@@ -973,6 +980,7 @@ EzBob.validateVolusionShopForm = function (el) {
             volusion_url: { url: "Please enter a valid URL" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 }

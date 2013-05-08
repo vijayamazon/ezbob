@@ -16,27 +16,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     events: {
         'click :submit': 'submit',
-        'keydown input[name="Email"]': 'inputChanged',
-        'paste input[name="Email"]': 'inputChanged',
-        'input input[name="Email"]': 'inputChanged',
-        'change input[name="Email"]': 'emailChanged',
-        'keydown input[name="signupPass1"]': 'inputChanged',
-        'paste input[name="signupPass1"]': 'inputChanged',
-        'input input[name="signupPass1"]': 'inputChanged',
-        'change input[name="signupPass1"]': 'password1Changed',
-        'keydown input[name="signupPass2"]': 'inputChanged',
-        'paste input[name="signupPass2"]': 'inputChanged',
-        'input input[name="signupPass2"]': 'inputChanged',
-        'change input[name="signupPass2"]': 'password2Changed',
-        'change select[name="securityQuestion"]': "securityQuestionChanged",
-        'keydown input[name="SecurityAnswer"]': 'inputChanged',
-        'paste input[name="SecurityAnswer"]': 'inputChanged',
-        'input input[name="SecurityAnswer"]': 'inputChanged',
-        'change input[name="SecurityAnswer"]': 'secretAnswerChanged',
-        'change #CaptchaInputText': 'captchaInputChanged',
-        'input #CaptchaInputText': 'inputChanged',
-        'paste #CaptchaInputText': 'inputChanged',
-        'keydown #CaptchaInputText': 'inputChanged'
+        'change input': 'inputChanged',
+        'keyup input': 'inputChanged',
+        'change select': 'inputChanged',
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
@@ -55,33 +37,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         return this;
     },
     inputChanged: function () {
-    	if (EzBob.Validation.checkForm(this.validator)) {
-            $("#signupSubmitButton.disabled").removeClass('disabled');
-        } else {
-            $("#signupSubmitButton").addClass('disabled');
-        }
-    },
-    emailChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "EmailImage", "#Email");
-    },
-    password1Changed: function () {
-    	EzBob.Validation.displayIndication(this.validator, "Password1Image", "#signupPass1");
-        if ($("#signupPass2").val() != "") {
-        	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2");
-        }
-    },
-    password2Changed: function () {
-    	EzBob.Validation.displayIndication(this.validator, "Password2Image", "#signupPass2");
-    },
-    securityQuestionChanged: function () {
-	    this.inputChanged();
-    	EzBob.Validation.displayIndication(this.validator, "SecurityQuestionImage", "#securityQuestion");
-    },
-    secretAnswerChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "SecretAnswerImage", "#SecurityAnswer");
-    },
-    captchaInputChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "CaptchaInputTextImage", "#CaptchaInputText");
+        var enabled = EzBob.Validation.checkForm(this.validator);
+        $("#signupSubmitButton").toggleClass('disabled', !enabled);
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {
@@ -89,9 +46,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         }
 
         this.blockBtn(true);
-
         var that = this;
-
         if (this.model.get('signedIn') || (this.model.get('loggedIn'))) {
             this.trigger('ready');
             this.trigger('next');

@@ -15,19 +15,6 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
     events:
         'click a.connect-volusion': 'connect'
         'click a.back': 'back'
-
-        'cut    #volusion_login': 'loginChanged'
-        'change #volusion_login': 'loginChanged'
-        'paste  #volusion_login': 'loginChanged'
-
-        'cut    #volusion_url': 'urlChanged'
-        'change #volusion_url': 'urlChanged'
-        'paste  #volusion_url': 'urlChanged'
-
-        'cut    #volusion_password': 'passwordChanged'
-        'change #volusion_password': 'passwordChanged'
-        'paste  #volusion_password': 'passwordChanged'
-        
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
 
@@ -38,15 +25,6 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         connect     : 'a.connect-volusion'
         form        : 'form'
 
-    loginChanged: =>
-        @$el.find('#volusion_loginImage').field_status('set', if EzBob.Validation.element(@validator, @ui.login) then 'ok' else 'fail')
-
-    passwordChanged: =>
-        @$el.find('#volusion_passwordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.password) then 'ok' else 'fail')
-
-    urlChanged: =>
-        @$el.find('#volusion_urlImage').field_status('set', if EzBob.Validation.element(@validator, @ui.url) then 'ok' else 'fail')
-
     inputChanged: =>
         enabled =  EzBob.Validation.checkForm(@validator) 
         @ui.connect.toggleClass('disabled', !enabled)
@@ -56,11 +34,9 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         return false if @$el.find('a.connect-volusion').hasClass('disabled')
 
         aryDisplayName = /^http[s]?:\/\/([^\/\?]+)/.exec(@ui.url.val())
-
         sDisplayName = if aryDisplayName and aryDisplayName.length and aryDisplayName.length == 2 then aryDisplayName[1] else @ui.url.val()
-
         sDisplayName = sDisplayName or @ui.url.val()
-
+        
         acc = new EzBob.VolusionAccountModel({
             login: @ui.login.val(),
             password: @ui.password.val(),
@@ -69,13 +45,11 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
         })
 
         xhr = acc.save()
-
         if not xhr
             EzBob.App.trigger 'error', 'Volusion Account Saving Error'
             return false
 
         BlockUi('on')
-
         xhr.always =>
             BlockUi('off')
 

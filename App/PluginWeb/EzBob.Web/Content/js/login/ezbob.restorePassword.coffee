@@ -35,16 +35,10 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     "click #getQuestion": "getQuestionBtnClicked"
     "keyup #email": "emailKeyuped"
     "click #restore": "restoreClicked"
-
-    "keydown #email": "inputEmailChanged"
-    "paste #email": "inputEmailChanged"
-    "input #email": "inputEmailChanged"
-    "change #email": "emailChanged"
-
-    "keydown #Answer": "inputAnswerChanged"
-    "paste #Answer": "inputAnswerChanged"
-    "input #Answer": "inputAnswerChanged"
-    "change #Answer": "answerChanged"
+    "keyup #email": "inputEmailChanged"
+    "change #email": "inputEmailChanged"
+    "keyup #Answer": "inputAnswerChanged"
+    "change #Answer": "inputAnswerChanged"
 
   restoreClicked: (e) ->
     false if @ui.restoreBtn.hasClass("disabled")
@@ -82,12 +76,6 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
   focusAnswer: => $('#Answer').focus()
 
   focusCaptcha: => $('#CaptchaInputText').focus()
-
-  emailChanged: ->
-    @$el.find('#emailImage').field_status('set', if EzBob.Validation.element(@validator,@ui.email) then 'ok' else 'fail')
-
-  answerChanged: ->
-    @$el.find('#AnswerImage').field_status('set', if EzBob.Validation.element(@validator,@ui.answer) then 'ok' else 'fail')
 
   inputEmailChanged: ->
     enabled = EzBob.Validation.element(@validator,@ui.email)

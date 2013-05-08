@@ -7,14 +7,8 @@ class EzBob.CustomerLoginView extends Backbone.View
 
   events:
     "click :submit": "submit"
-    "keydown input[name='UserName']": "inputChanged"
-    "paste input[name='UserName']": "inputChanged"
-    "input input[name='UserName']": "inputChanged"
-    "change input[name='UserName']": "emailChanged"
-    "keydown input[name='Password']": "inputChanged"
-    "paste input[name='Password']": "inputChanged"
-    "input input[name='Password']": "inputChanged"
-    "change input[name='Password']": "passwordChanged"
+    "keyup input": "inputChanged"
+    "change input": "inputChanged"
 
   render: ->
     @$el.html @template()
@@ -28,16 +22,8 @@ class EzBob.CustomerLoginView extends Backbone.View
     @
 
   inputChanged: ->
-    if EzBob.Validation.checkForm(@validator)
-      $("#loginSubmit.disabled").removeClass "disabled"
-    else
-      $("#loginSubmit").addClass "disabled"
-
-  emailChanged: ->
-    @$el.find('#UserNameImage').field_status('set', if EzBob.Validation.element(@validator,@$el.find('#UserName')) then 'ok' else 'fail')
-
-  passwordChanged: ->
-    @$el.find('#PasswordImage').field_status('set', if EzBob.Validation.element(@validator,@$el.find('#Password')) then 'ok' else 'fail')
+        enabled =  EzBob.Validation.checkForm(@validator) 
+        $("#loginSubmit").toggleClass('disabled', !enabled)
 
   submit: ->
     return false if @$el.find(":submit").hasClass("disabled")

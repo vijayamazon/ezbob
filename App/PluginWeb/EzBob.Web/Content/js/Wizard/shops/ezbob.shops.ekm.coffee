@@ -12,33 +12,17 @@ class EzBob.EKMAccountButtonView extends EzBob.StoreButtonView
 class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
     template: '#EKMAccoutInfoTemplate'
     
-    events: {
+    events: 
         'click a.connect-ekm': 'connect'
         "click a.back": "back"
-
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
-
-        'change #ekm_login': 'ekmLoginChanged'
-        'cut #ekm_login': 'ekmLoginChanged'
-        'paste #ekm_login': 'ekmLoginChanged'
-
-        'change #ekm_password': 'ekmPasswordChanged'
-        'cut #ekm_password': 'ekmPasswordChanged'
-        'paste #ekm_password': 'ekmPasswordChanged'
-    }
 
     ui:
         login       : '#ekm_login'
         password    : '#ekm_password'
         connect     : 'a.connect-ekm'
         form        : 'form'
-
-    ekmLoginChanged: ->
-        @$el.find('#ekm_loginImage').field_status('set', if EzBob.Validation.element(@validator, @ui.login) then 'ok' else 'fail')
-
-    ekmPasswordChanged: ->
-        @$el.find('#ekm_passwordImage').field_status('set', if EzBob.Validation.element(@validator, @ui.password) then 'ok' else 'fail')
 
     inputChanged: ->
         enabled =  EzBob.Validation.checkForm(@validator)
