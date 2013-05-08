@@ -48,7 +48,6 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
         return view
 
     amountSelected: ->
-        #console.log "amount #{@applyForLoanViewModel.get('neededCash')} selected url is #{@applyForLoanViewModel.get('url')}"
         if not @customer.get("bankAccountAdded")
             @model.set "state", "bank"
             return
@@ -60,7 +59,7 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
         if view.cards.length > 0
             view.on 'select', (cardId) =>
                 BlockUi "on"
-                xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: view.model.get("CreditSum")}
+                xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: @applyForLoanViewModel.get("neededCash")}
                 xhr.done (data) =>
                     document.location.href = data.url;
       
