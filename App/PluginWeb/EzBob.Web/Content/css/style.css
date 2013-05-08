@@ -176,7 +176,7 @@ ul.contact_icons li.telephone{ background-position: 0 0;}
 ul.contact_icons li.email{background-position: 0 -24px;}
 ul.contact_icons li.chat{ background-position: 0 -48px;}
 /*-- SSL security icons --*/
-ul.secure_icons{list-style:none; margin:0 0 20px 0; padding:0; overflow:hidden;}
+ul.secure_icons{list-style:none; margin:0 0 20px 0; padding:0; overflow:hidden; width: 100%;}
 ul.secure_icons li{margin:0 10px 10px 0; float:left;}
 ul.secure_icons li a{height:42px; display:block; text-indent: -9999px;}
 ul.secure_icons li.truste_seal a{width:116px; height: 42px; background:url(images/secure.png) no-repeat 0 0; }
