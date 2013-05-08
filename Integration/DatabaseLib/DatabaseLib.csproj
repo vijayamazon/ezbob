@@ -72,7 +72,7 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
-    <Compile Include="AvailableFunds.cs" />
+    <Compile Include="PacNetBalance.cs" />
     <Compile Include="Common\DatabaseFunction.cs" />
     <Compile Include="Common\DatabaseFunctionStorage.cs" />
     <Compile Include="Common\IMarketplaceRetrieveDataHelper.cs" />

@@ -30,7 +30,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly IZohoFacade _crm;
         private readonly ILoanTypeRepository _loanTypes;
         private readonly LoanLimit _limit;
-        private readonly IAvailableFundsRepository _funds;
+        private readonly IPacNetBalanceRepository _funds;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
 
@@ -39,7 +39,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public ApplicationInfoController(ICustomerRepository customerRepository, ICashRequestsRepository cashRequestsRepository,
                                          IAppCreator creator, IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config,
                                          IZohoFacade crm, ILoanTypeRepository loanTypes, LoanLimit limit,
-                                            IAvailableFundsRepository funds)
+                                            IPacNetBalanceRepository funds)
         {
             _customerRepository = customerRepository;
             _cashRequestsRepository = cashRequestsRepository;

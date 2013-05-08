@@ -8,46 +8,46 @@ using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib
 {
-    public class AvailableFunds
+    public class PacNetBalance
     {
         public int Id { get; set; }
-        public decimal Value { get; set; }
+        public decimal CurrentBalance { get; set; }
         public DateTime Date { get; set; }
     }
 
-    public class AvailableFundsMap : ClassMap<AvailableFunds>
+    public class PacNetBalanceMap : ClassMap<PacNetBalance>
     {
-        public AvailableFundsMap()
+        public PacNetBalanceMap()
         {
             Not.LazyLoad();
-            Table("AvailableFunds");
+            Table("PacNetBalance");
             Id(x => x.Id);
-            Map(x => x.Value);
+            Map(x => x.CurrentBalance, "CurrentBalance");
             Map(x => x.Date);
         }
     }
 
-    public interface IAvailableFundsRepository : IRepository<AvailableFunds>
+    public interface IPacNetBalanceRepository : IRepository<PacNetBalance>
     {
         decimal GetFunds();
     }
 
-    public class AvailableFundsRepository : NHibernateRepositoryBase<AvailableFunds>, IAvailableFundsRepository
+    public class PacNetBalanceRepository : NHibernateRepositoryBase<PacNetBalance>, IPacNetBalanceRepository
     {
-        public AvailableFundsRepository(ISession session) : base(session)
+        public PacNetBalanceRepository(ISession session) : base(session)
         {
         }
 
         public decimal GetFunds()
         {
-            var funds = _session.Query<AvailableFunds>().OrderByDescending(x => x.Date).FirstOrDefault();
+            var funds = _session.Query<PacNetBalance>().OrderByDescending(x => x.Date).FirstOrDefault();
             if (funds == null) return 0;
             
             var loans = _session.Query<Loan>().Where(l => l.Date > funds.Date);
-            if (!loans.Any()) return funds.Value;
+            if (!loans.Any()) return funds.CurrentBalance;
 
             var taken = loans.Sum(l => l.LoanAmount - l.SetupFee);
-            return funds.Value - taken;
+            return funds.CurrentBalance - taken;
         }
 
     }

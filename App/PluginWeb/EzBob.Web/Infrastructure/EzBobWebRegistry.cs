@@ -131,7 +131,7 @@ namespace EzBob.Web.Infrastructure
             For<ICashRequestRepository>().Use<CashRequestRepository>();
             For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
             For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
-            For<IAvailableFundsRepository>().Use<AvailableFundsRepository>();
+            For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
             For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
         }
     }
