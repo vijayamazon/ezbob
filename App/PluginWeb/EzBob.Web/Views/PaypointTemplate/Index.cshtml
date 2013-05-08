@@ -6,7 +6,7 @@
 @model dynamic
 
 @section head{
-    <base href="https://app.ezbob.com/" />
+    @*<base href="https://app.ezbob.com/" />*@
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
@@ -26,6 +26,9 @@
         }
         body header + .inner, .main-page {
             margin: 0 auto !important;
+        }
+        select {
+            height: 30px !important;
         }
     </style>
 }
