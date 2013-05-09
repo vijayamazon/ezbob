@@ -11,7 +11,7 @@
         SumOfAuthorisedOrders, // Orders with Status=Authorised
         OrdersAverage, // SumOfAuthorisedOrders / number of orders with Status=Authorised
         NumOfFailures, // Orders with Status!=Authorised
-        CancellationRate, // (number of orders with Status=Authorised) * 100 / NumOfOrders
+        CancellationRate, // (number of orders with Status!=Authorised) / NumOfOrders
         CancellationValue // (Sum of orders with Status!=Authorised) / (Sum of all orders)
 	}
 
