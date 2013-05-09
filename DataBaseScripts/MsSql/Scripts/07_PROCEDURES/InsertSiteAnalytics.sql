@@ -14,10 +14,3 @@ BEGIN
 	DECLARE @CodeId INT = (SELECT Id FROM SiteAnalyticsCodes WHERE Name=@CodeName)
 	INSERT INTO SiteAnalytics ([Date],SiteAnalyticsCode,SiteAnalyticsValue) VALUES(@Date, @CodeId, @Value)
 END
-
-IF  EXISTS (SELECT * FROM sysobjects WHERE id = OBJECT_ID('MC_AddCampaignClickStat') AND OBJECTPROPERTY(id,N'IsProcedure') = 1) 
-BEGIN
-	PRINT 'MC_AddCampaignClickStat exists, droping'
-	DROP PROCEDURE MC_AddCampaignClickStat 
-END
-GO
