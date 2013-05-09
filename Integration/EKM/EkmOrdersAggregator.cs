@@ -105,6 +105,14 @@ namespace EKM
             return count == 0 ? 0 : sum / count;
         }
 
+        private double GetOrdersCancellationRate(IEnumerable<EkmOrderItem> orders)
+        {
+            var canceled = GetCancelledOrdersCount(orders);
+            var other = GetOrdersCount(orders);
+
+            return other == 0 ? 0 : canceled / (double)other;
+        }
+
         private void LogOtherStatuses(IEnumerable<EkmOrderItem> orders)
         {
             var otherStatuses = orders.
@@ -150,6 +158,9 @@ namespace EKM
 
                 case EkmDatabaseFunctionType.TotalSumOfOtherOrders:
                     return GetTotalSumOfOtherOrders(orders);
+                
+                case EkmDatabaseFunctionType.CancellationRate:
+                    return GetOrdersCancellationRate(orders);
 
                 default:
                     throw new NotImplementedException();

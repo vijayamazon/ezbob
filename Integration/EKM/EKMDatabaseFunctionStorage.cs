@@ -19,6 +19,7 @@ namespace EKM
         AverageSumOfCancelledOrder,
         AverageSumOfOtherOrder,
 
+        CancellationRate, 
     }
 
     internal class EkmDatabaseFunctionStorage : DatabaseFunctionStorage<EkmDatabaseFunctionType>
@@ -40,6 +41,7 @@ namespace EKM
             CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOtherOrders, DatabaseValueTypeEnum.Double, "{A4F01792-2F97-469E-BE00-08E7E6BAE232}");
             CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfOtherOrder, DatabaseValueTypeEnum.Double, "{19CF2A6E-5975-48AE-A4C4-A25DDF127C2E}");
 
+            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.CancellationRate, DatabaseValueTypeEnum.Double, "{C286A0ED-D143-4B27-9598-B9148DF0A49E}");
         }
 
         public static EkmDatabaseFunctionStorage Instance
@@ -97,6 +99,10 @@ namespace EKM
 
                 case EkmDatabaseFunctionType.TotalSumOfOtherOrders:
                     displayName = "Total Sum of Other Orders";
+                    break;
+
+                case EkmDatabaseFunctionType.CancellationRate:
+                    displayName = "Cancellation Rate";
                     break;
 
                 default:

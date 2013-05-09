@@ -551,6 +551,10 @@ EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRoun
 EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '0', vMax: '999999999999999' };
 EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 
+EzBob.formatIntWithCommas = function(val) {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 EzBob.formatPoundsWidhDash = function (val) {
     if (!val && val == 0) {
         return '-';
@@ -737,7 +741,14 @@ EzBob.validateSignUpForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
+       // highlight: EzBob.Validation.highlightFS,
+        onkeyup: false,
+        onclick: false,
+        onfocusin: function(element) {
+            $(element).bind("change", function() {
+                $(element).closest('div').find('.field_status').field_status('set', 'fail');
+            });
+        }
     });
 };
 

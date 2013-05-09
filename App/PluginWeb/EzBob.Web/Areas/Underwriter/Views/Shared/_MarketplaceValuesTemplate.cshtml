@@ -694,7 +694,7 @@
                     <li class="active">
                         <a href="#ekmtab1" data-toggle="tab">Orders</a>
                     </li>
-                    <li><a href="#ekmtab2" data-toggle="tab">Account details</a></li>
+                    @*<li><a href="#ekmtab2" data-toggle="tab">Account details</a></li>*@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="ekmtab1">
@@ -812,10 +812,21 @@
                                     <td><%-ai.AverageSumofOtherOrder24M!=undefined ? GBPValues(ai.AverageSumofOtherOrder24M, true) + "x" : "-"%></td>
                                     <td><%-ai.AverageSumofOtherOrderLifetime!=undefined ? GBPValues(ai.AverageSumofOtherOrderLifetime, true) + "x" : "-"%></td>
                                 </tr>
+                                <tr>
+                                    <td>Orders cancellation rate</td>
+                                    <td><%-ai.OrdersCancellationRate1M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate1M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate3M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate3M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate6M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate6M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate12M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate12M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate15M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate15M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate18M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate18M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRate24M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate24M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                    <td><%-ai.OrdersCancellationRateLifetime!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRateLifetime*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane" id="ekmtab2">
+                    @*<div class="tab-pane" id="ekmtab2">
                         <table class="table table-bordered table-striped  blue-header centered">
                             <thead>
 
@@ -836,7 +847,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div>*@
                 </div>
             </div>
             <%}%>
