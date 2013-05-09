@@ -32,7 +32,7 @@ BEGIN
 
 	INSERT INTO SupportAgentConfigs VALUES ('ToAddressSummary', 'tech@ezbob.com')
 	INSERT INTO SupportAgentConfigs VALUES ('ToAddressSiteMonitor', 'yulys@ezbob.com')
-	INSERT INTO SupportAgentConfigs VALUES ('ToAddressIsLive', 'yulys@ezbob.com;yulysaar@gmail.com')
+	INSERT INTO SupportAgentConfigs VALUES ('ToAddressIsLive', 'yulys@ezbob.com')
 	INSERT INTO SupportAgentConfigs VALUES ('ToAddressMailError', 'yulys@ezbob.com')
 	INSERT INTO SupportAgentConfigs VALUES ('ToAddressNoMailError', 'yulys@ezbob.com')
 
