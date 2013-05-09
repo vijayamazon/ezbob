@@ -57,8 +57,7 @@ namespace EKM
     {
         public ConvertedTypeInfo Convert(EkmDatabaseFunctionType type)
         {
-            //Stas test
-            string displayName = string.Empty;
+            string displayName;
             string description = string.Empty;
 
             string name = type.ToString();
