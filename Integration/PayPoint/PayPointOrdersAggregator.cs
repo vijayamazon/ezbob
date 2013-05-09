@@ -51,15 +51,14 @@ namespace PayPoint
 
         private double GetCancellationRate(IEnumerable<PayPointOrderItem> orders)
         {
-            var authorisedOrders = GetAuthorisedOrders(orders);
-            return (authorisedOrders.Count() * 100 / GetOrdersCount(orders));
+			return (double)GetNumOfFailures(orders) / (double)GetOrdersCount(orders);
         }
 
         private double GetCancellationValue(IEnumerable<PayPointOrderItem> orders)
         {
             decimal sumOfUnAuthorisedOrders = orders.Where(a => a.status != "Authorised").Sum(o => o.amount);
-            decimal sunOfAllOrders = orders.Sum(o => o.amount);
-            return (double)(sumOfUnAuthorisedOrders * 100 / sunOfAllOrders);
+            decimal sumOfAllOrders = orders.Sum(o => o.amount);
+            return (double)(sumOfUnAuthorisedOrders / sumOfAllOrders);
         }
         
         protected override object InternalCalculateAggregatorValue(PayPointDatabaseFunctionType functionType, IEnumerable<PayPointOrderItem> orders)

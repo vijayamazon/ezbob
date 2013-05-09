@@ -66,7 +66,8 @@
             string errorMsg;
             if (!PayPointConnector.Validate(model.mid, model.vpnPassword, model.remotePassword, out errorMsg))
             {
-                var errorObject = new { error = errorMsg };
+				var errorObject = new { error = errorMsg };
+				_log.ErrorFormat("PayPoint validation failed: {0}", errorObject);
                 return this.JsonNet(errorObject);
             }
             try
@@ -86,12 +87,14 @@
                 _appCreator.EbayAdded(customer, payPoint.Id);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
-            catch (MarketPlaceAddedByThisCustomerException)
-            {
+            catch (MarketPlaceAddedByThisCustomerException e)
+			{
+				_log.Error(e);
                 return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
             }
-            catch (MarketPlaceIsAlreadyAddedException)
-            {
+            catch (MarketPlaceIsAlreadyAddedException e)
+			{
+				_log.Error(e);
                 return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
             }
             catch (Exception e)
