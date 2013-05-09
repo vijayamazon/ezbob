@@ -66,20 +66,12 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			oParent.find('img.field_status').field_status('set', 'ok');
 	}, // directorGenderChanged
 	directorDateChanged: function(oTarget) {
-		oTarget = $(oTarget);
-
-		var sID = oTarget.attr('id');
-
-		var sDirectorID = sID.substr(0, sID.indexOf(']'));
-		var nDirectorIDLen = sDirectorID.length;
+		var oDiv = $(oTarget).closest('div');
 
 		var nGoodValueCount = 0;
 
-		this.$el.find('.director_date').each(function() {
+		oDiv.find('.director_date').each(function() {
 			var o = $(this);
-
-			if (o.attr('id').substr(0, nDirectorIDLen) != sDirectorID)
-				return true;
 
 			var sEmptyValue = o.attr('empty_value');
 			var sValue = o.val();
@@ -98,9 +90,9 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			sStatusName = 'fail';
 
 		if ('' == sStatusName)
-			oTarget.closest('div').find('img.field_status').field_status('clear', 'immediately');
+			oDiv.find('img.field_status').field_status('clear', 'immediately');
 		else
-			oTarget.closest('div').find('img.field_status').field_status('set', sStatusName);
+			oDiv.find('img.field_status').field_status('set', sStatusName);
 	}, // directorDateChanged
 	render: function () {
 		this.$el.html(this.template());
