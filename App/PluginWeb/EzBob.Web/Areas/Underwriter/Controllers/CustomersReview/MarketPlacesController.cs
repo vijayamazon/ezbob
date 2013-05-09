@@ -69,6 +69,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                     _appCreator.AmazonAdded(customer, umi);
                     break;
                 case "eBay": 
+                case "EKM": 
+                case "Volusion": 
+                case "PayPoint": 
                     _appCreator.EbayAdded(customer, umi);
                     break;
                 case "Pay Pal": 
