@@ -70,9 +70,7 @@ EzBob.Validation.unhighlightFS = function (element) {
 };
 
 EzBob.Validation.highlightFS = function (element) {
-    $(element).bind("change", function () {
-        $(element).closest('div').find('.field_status').field_status('set', 'fail');
-    });
+    $(element).closest('div').find('.field_status').field_status('set', 'fail');
 };
 
 //Extends validator method 
