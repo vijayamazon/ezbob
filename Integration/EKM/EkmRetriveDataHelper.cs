@@ -99,7 +99,8 @@ namespace EKM
                     EkmDatabaseFunctionType.TotalSumOfCancelledOrders,
                     EkmDatabaseFunctionType.AverageSumOfOtherOrder,
                     EkmDatabaseFunctionType.NumOfOtherOrders,
-                    EkmDatabaseFunctionType.TotalSumOfOtherOrders
+                    EkmDatabaseFunctionType.TotalSumOfOtherOrders,
+                    EkmDatabaseFunctionType.CancellationRate, 
                 };
 
             var updated = orders.SubmittedDate;
