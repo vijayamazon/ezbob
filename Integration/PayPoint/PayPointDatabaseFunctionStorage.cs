@@ -55,7 +55,7 @@
                     displayName = "Num of Orders";
                     break;
                 case PayPointDatabaseFunctionType.SumOfAuthorisedOrders:
-                    displayName = "Sum of Orders";
+                    displayName = "Total Sum of Orders";
                     break;
                 case PayPointDatabaseFunctionType.OrdersAverage:
                     displayName = "Average Order";
