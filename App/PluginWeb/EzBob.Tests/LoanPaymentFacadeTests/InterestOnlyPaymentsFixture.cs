@@ -1,4 +1,5 @@
 ﻿using System;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using NUnit.Framework;
 
@@ -79,7 +80,24 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(_loan.Schedule[1].Interest, Is.EqualTo(0));
             Assert.That(_loan.Schedule[1].AmountDue, Is.EqualTo(0));
             Assert.That(_loan.Schedule[1].LoanRepayment, Is.EqualTo(0));
+        }
 
+        [Test]
+        public void interest_only_payment_does_not_affect_saving()
+        {
+            const int amount = 5000;
+            const decimal interest = 5000.0m * 0.06m;
+
+            CreateHalfWayLoan(Parse("2012-09-23 23:29:35.000"), amount);
+
+            var customer = new Customer();
+            customer.Loans.Add(_loan);
+            _loan.Customer = customer;
+
+            var res = _facade.MakePayment("", interest, "1.1.1.1", "", _loan.Id, customer, _loan.Date, "dfa", "nextInterest");
+
+            Assert.That(res.Saved, Is.EqualTo(0));
+            Assert.That(res.SavedPounds, Is.EqualTo(0));
         }
 
 

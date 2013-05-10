@@ -163,10 +163,10 @@ namespace PaymentServices.Calculators
             }
             else if (paymentType == "nextInterest")
             {
-                oldInterest = customer.Loans.Sum(l => l.Interest);
+                oldInterest = 0;
                 var loan = customer.GetLoan(loanId);
                 PayLoan(loan, transId, amount, ip, date, description, true);
-                newInterest = customer.Loans.Sum(l => l.Interest);
+                newInterest = 0;
             }
             else
             {
