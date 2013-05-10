@@ -266,7 +266,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
             GridHelpers.CreateCartColumn(gridModel, true);
-            GridHelpers.CreateMpListColumn(gridModel);
+			GridHelpers.CreateMpListColumn(gridModel);
+			GridHelpers.CreateNameColumn(gridModel);
             GridHelpers.CreateEmailColumn(gridModel);
             GridHelpers.CreateRegisteredDateColumn(gridModel);
             GridHelpers.CreateDateApplyedColumn(gridModel);
