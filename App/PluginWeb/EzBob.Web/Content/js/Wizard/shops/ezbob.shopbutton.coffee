@@ -10,7 +10,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         @shops = options.shops
 
         if @shops
-            @shops.on("change reset", @render, this)
+            @shops.on("change reset sync", @render, this)
 
         @shopClass = options.name.replace(' ', '')
 

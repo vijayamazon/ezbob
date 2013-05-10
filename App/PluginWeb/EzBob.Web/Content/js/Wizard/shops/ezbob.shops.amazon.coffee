@@ -24,9 +24,6 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         'click a.back': 'back'
         'click .screenshots': 'runTutorial'
         'click a.print': 'print'
-
-
-
         'change input': 'inputChanged'
 
     enableControls: ->
@@ -126,11 +123,14 @@ class EzBob.AmazonStoreModel extends Backbone.Model
 
 class EzBob.AmazonStoreModels extends Backbone.Collection
     model: EzBob.AmazonStoreModel
-    url: '#{window.gRootPath}Customer/AmazonMarketPlaces'
+    url: "#{window.gRootPath}Customer/AmazonMarketPlaces"
 
 class EzBob.AmazonButtonView extends EzBob.StoreButtonView
     initialize: ->
         super({name: 'Amazon', logoText: '', shops: @model})
 
     update: ->
-        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
+        xhr = @model.fetch()
+        xhr.done => 
+            EzBob.App.trigger 'ct:storebase.shop.connected'
+            @model.trigger("sync")

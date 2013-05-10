@@ -938,14 +938,8 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
-      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.js">
       <DependentUpon>ezbob.shops.ekm.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
-      <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
       <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
