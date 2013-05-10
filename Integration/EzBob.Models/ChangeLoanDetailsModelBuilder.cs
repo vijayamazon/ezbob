@@ -311,7 +311,7 @@ namespace EzBob.Models
             if (model.Items.Count != cr.RepaymentPeriod) return false;
 
             //compare template balances with actual
-            var expectedBalances = cr.LoanType.GetBalances((decimal)cr.ManagerApprovedSum, cr.RepaymentPeriod);
+            var expectedBalances = cr.LoanType.GetBalances(cr.ApprovedSum(), cr.RepaymentPeriod);
             var actualBalances = model.Items.Where(i => i.Type == "Installment").Select(i => i.Balance);
             if (expectedBalances.Except(actualBalances).Any()) return false;
 
