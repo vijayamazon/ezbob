@@ -1,5 +1,6 @@
 ﻿using System;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Loans;
 using NUnit.Framework;
 
 namespace EzBob.Tests.LoanCreatorTests
@@ -29,11 +30,13 @@ namespace EzBob.Tests.LoanCreatorTests
             var cr = new CashRequest()
                          {
                              InterestRate = 0.06M,
-                             RepaymentPeriod = 3
+                             RepaymentPeriod = 3,
+                             LoanType = new StandardLoanType()
                          };
 
 
             _customer.CashRequests.Add(cr);
+            _customer.BankAccount = new BankAccount(){AccountNumber = "111111", SortCode = "222222"};
 
             var loan = _lc.CreateLoan(_customer, 10000, null, new DateTime(2013, 10, 21));
 
@@ -47,7 +50,8 @@ namespace EzBob.Tests.LoanCreatorTests
             var cr = new CashRequest()
                          {
                              InterestRate = 0.06M,
-                             RepaymentPeriod = 6
+                             RepaymentPeriod = 6,
+                             LoanType = new StandardLoanType()
                          };
 
 
@@ -56,14 +60,14 @@ namespace EzBob.Tests.LoanCreatorTests
             cr.LoanTemplate = model.ToJSON();
 
             _customer.CashRequests.Add(cr);
-
+            _customer.BankAccount = new BankAccount(){AccountNumber = "111111", SortCode = "1111111"};
             _customer.CreditSum = 3000;
 
             var loan2 = _lc.CreateLoan(_customer, 10, null, new DateTime(2013, 10, 21));
 
             Assert.That(loan2.Schedule.Count, Is.EqualTo(6));
-            Assert.That(loan.LoanAmount, Is.EqualTo(3000));
-            Assert.That(loan2.Schedule[0].LoanRepayment, Is.EqualTo(500));
+            Assert.That(loan2.LoanAmount, Is.EqualTo(10));
+            Assert.That(loan2.Schedule[0].LoanRepayment, Is.EqualTo(5));
         }
 
         [Test]
@@ -72,7 +76,8 @@ namespace EzBob.Tests.LoanCreatorTests
             var cr = new CashRequest()
                          {
                              InterestRate = 0.06M,
-                             RepaymentPeriod = 6
+                             RepaymentPeriod = 6,
+                             LoanType = new StandardLoanType()
                          };
 
 
