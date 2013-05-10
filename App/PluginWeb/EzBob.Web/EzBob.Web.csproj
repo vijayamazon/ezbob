@@ -1105,6 +1105,7 @@
     <Content Include="Views\Shared\_OnlineSellers.cshtml" />
     <Content Include="Views\Shared\_GetSatisfaction.cshtml" />
     <Content Include="Views\Shared\_LivePerson.cshtml" />
+    <Content Include="Views\Shared\security_template.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
