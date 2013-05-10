@@ -6,7 +6,7 @@
 @model dynamic
 
 @section head{
-    @*<base href="https://app.ezbob.com/" />*@
+    <base href="https://app.ezbob.com/" />
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
@@ -36,35 +36,6 @@
         }
     </style>
 }
-
-@helper DashboardHeader()
-{
-    <div class="dashboard-steps narrow-dashboard-header">
-        <ul>
-            <li data-step-num="0" class="completed">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no1">1</div>
-                <div class="step-text"><span>Choose<br/>Amount</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-            <li data-step-num="1" class="active">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no2">2</div>
-                <div class="step-text"><span>Enter Bank &<br/>Debit Card</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-            <li data-step-num="2" class="">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no3">3</div>
-                <div class="step-text"><span>Get<br/>Cash</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-        </ul>
-    </div>
-} 
 
 @helper Hiddens()
 {
@@ -128,7 +99,6 @@
           <input type="hidden" name="error_list"></text>
 }
 
-
 <div style="padding: 0 30px;">
     <div class="row-fluid">
         <div class="pages">
@@ -136,7 +106,6 @@
                 <div class="row-fluid">
                     <div class="span2"></div>
                     <div class="span8" style="padding-top: 16px;">
-                        @DashboardHeader()
                         <div class="PayPointHeader">
                             <h2>Enter your debit card details</h2>
                             <h3>For automatic loan repayment</h3>
@@ -280,9 +249,6 @@
         </div>
     </div>
 </div>
-
-@{Html.RenderPartial("~/Areas/Customer/Views/Profile/_payEarlyConfirmationModalTemplate.cshtml");}
-@{ Html.RenderPartial("~/Areas/Customer/Views/Profile/_GetCashConfirmationModalTemplate.cshtml"); }
 
 @section Js{
     <script type="text/javascript">
