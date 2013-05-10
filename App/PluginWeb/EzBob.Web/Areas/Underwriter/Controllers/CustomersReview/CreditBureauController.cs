@@ -174,16 +174,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             var dirModelList = new List<CreditBureauModel>();
             foreach (var director in directors)
             {
-                var directorMainAddress = director.DirectorAddress.First();
-                var dirLoc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation
+                var directorMainAddress = director.DirectorAddress.FirstOrDefault();
+                var dirLoc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
+                if (directorMainAddress != null)
                 {
-                    LocationLine1 = directorMainAddress.Line1,
-                    LocationLine2 = directorMainAddress.Line2,
-                    LocationLine3 = directorMainAddress.Line3,
-                    LocationLine4 = directorMainAddress.Town,
-                    LocationLine5 = directorMainAddress.County,
-                    LocationLine6 = directorMainAddress.Postcode,
-                };
+                    dirLoc.LocationLine1 = directorMainAddress.Line1;
+                    dirLoc.LocationLine2 = directorMainAddress.Line2;
+                    dirLoc.LocationLine3 = directorMainAddress.Line3;
+                    dirLoc.LocationLine4 = directorMainAddress.Town;
+                    dirLoc.LocationLine5 = directorMainAddress.County;
+                    dirLoc.LocationLine6 = directorMainAddress.Postcode;
+                }
 
                 var result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
                                                  director.Gender.ToString(),
@@ -733,6 +734,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
         protected void appendBAVInfo(BankAccountVerificationInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
         {
             var srv = new IdHubService();
+
+            var bankAccount = customer.BankAccount;
             var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
                                                  customer.PersonalInfo.Surname,
                                                  customer.PersonalInfo.Gender.ToString(),
@@ -741,7 +744,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                                                      : DateTime.Now,
                                                  customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
                                                  customerAddress.Town, customerAddress.County, customerAddress.Postcode,
-                                                 customer.BankAccount.SortCode, customer.BankAccount.AccountNumber,
+                                                 bankAccount!=null ? bankAccount.SortCode : "",
+                                                 bankAccount != null ? bankAccount.AccountNumber : "", 
                                                  customer.Id, true);
             if (null == result)
                 return;

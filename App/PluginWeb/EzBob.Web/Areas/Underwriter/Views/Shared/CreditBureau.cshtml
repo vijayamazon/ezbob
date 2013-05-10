@@ -430,35 +430,30 @@
 
 @helper DisplayLimitedData()
 {
-    <div class="row-fluid">
-        <div class="span9 accordion page-content-frame" id="accordion-limited">
-            <fieldset><legend>Business</legend>
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" href="#collapseLimited">
-                        <b class="play"></b>Company Bureau Check for <%-experianInfo.CompanyName%></a>
+    <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" href="#collapseLimited">
+                    <b class="play"></b>Company Bureau Check for <%-experianInfo.CompanyName%></a>
+            </div>
+    <div id="collapseLimited" class="accordion-body collapse">
+        <div class="accordion-inner">
+            <div class="row-fluid">
+                <div class="span6">
+                    <table class="table table-condensed table-striped">
+                        <tbody>
+                            @RawCell("Borrower Type", "<%- experianInfo.BorrowerType %>")
+                            @RawCell("Bureau Score", "<%- experianInfo.LimitedInfo.BureauScore %>")
+                            @RawCell("Risk Level", "<%- experianInfo.LimitedInfo.RiskLevel %>")
+                            @RawCell("Existing Business Loans", "<%- experianInfo.LimitedInfo.ExistingBusinessLoans %>")
+                        </tbody>
+                    </table>        
                 </div>
-                <div id="collapseLimited" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <table class="table table-condensed table-striped">
-                                    <tbody>
-                                        @RawCell("Borrower Type", "<%- experianInfo.BorrowerType %>")
-                                        @RawCell("Bureau Score", "<%- experianInfo.LimitedInfo.BureauScore %>")
-                                        @RawCell("Risk Level", "<%- experianInfo.LimitedInfo.RiskLevel %>")
-                                        @RawCell("Existing Business Loans", "<%- experianInfo.LimitedInfo.ExistingBusinessLoans %>")
-                                    </tbody>
-                                </table>        
-                            </div>
-                        </div>
-                        <% if(experianInfo.ModelType == "Limited") { %>
-                        @RunCheckButton()
-                        <% } %>
-                    </div>
-                </div>
-            </fieldset>
+            </div>
+            <% if(experianInfo.ModelType == "Limited") { %>
+            @RunCheckButton()
+            <% } %>
         </div>
     </div>
+    
 }
 
 @helper DisplayNonLimitedData()
@@ -775,6 +770,10 @@
 }
 
 <script id="experian-info-template" type="text/template">
+    <%
+    experianInfo.Summary = experianInfo.Summary || {};
+    experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
+    %>
     <% if (experianInfo.IsExpirianError) { %>
          @DisplayExperianError()   
     <% } else { %>
@@ -804,6 +803,7 @@
          <% } %>
 <% }%>
 @ExperianConsent()
+
 
 </script>
 
