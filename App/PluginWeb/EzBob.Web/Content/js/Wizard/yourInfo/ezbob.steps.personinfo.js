@@ -101,9 +101,6 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         var form = this.$el.find('form.CompanyDetailForm'),
             data = form.serializeArray();
         
-        _.find(data, function (d) { return d.name == "OverallTurnOver"; }).value = this.$el.find("#OverallTurnOver").autoNumericGet();
-        _.find(data, function (d) { return d.name == "WebSiteTurnOver"; }).value = this.$el.find("#WebSiteTurnOver").autoNumericGet();
-        
         var action = form.attr('action'),
             dataForCompany = SerializeArrayToEasyObject(data),
             typeOfBussiness = dataForCompany.TypeOfBusiness,
@@ -181,6 +178,8 @@ EzBob.YourInformationStepView = Backbone.View.extend({
     saveDataRequest: function (action, data) {
         BlockUi("on");
         var that = this;
+        _.find(data, function (d) { return d.name == "OverallTurnOver"; }).value = this.$el.find("#OverallTurnOver").autoNumericGet();
+        _.find(data, function (d) { return d.name == "WebSiteTurnOver"; }).value = this.$el.find("#WebSiteTurnOver").autoNumericGet();
         var request = $.post(action, data);
         request.success(function (res) {
             if (res.error) {
