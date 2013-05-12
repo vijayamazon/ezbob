@@ -44,14 +44,14 @@ CREATE TABLE dbo.MP_YodleeOrderItem
     ,annualPercentYield FLOAT 
     ,annualPercentYieldSpecified BIT 
     ,routingNumber NVARCHAR(300)
-    ,maturit DATETIME
+    ,maturityDate DATETIME
     ,asOfDate DATETIME
     --,bankTransactionsId INT -- class
-    ,bankStatementsId INT -- class
+    --,bankStatementsId INT -- class
     ,accountNicknameAtSrcSite NVARCHAR(300)
     ,isPaperlessStmtOn INT 
     ,isPaperlessStmtOnSpecified BIT 
-    ,siteAccountStatusId INT --class
+    --,siteAccountStatusId INT --class
     ,siteAccountStatusSpecified BIT  
     ,created INT 
     ,createdSpecified BIT  
@@ -64,7 +64,7 @@ CREATE TABLE dbo.MP_YodleeOrderItem
     ,taxesPaidYtd FLOAT
     ,budgetBalance FLOAT
     ,straightBalance FLOAT
-    ,accountClassificationId INT --class 
+    --,accountClassificationId INT --class 
     ,accountClassificationSpecified BIT 
     ,CONSTRAINT PK_MP_YodleeOrderItem PRIMARY KEY (Id)
    	,CONSTRAINT FK_MP_YodleeOrderItem_MP_YodleeOrder FOREIGN KEY (OrderId) REFERENCES dbo.MP_YodleeOrder (Id)
