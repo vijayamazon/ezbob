@@ -73,6 +73,7 @@
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="DatabaseWrapper\Order\VolusionOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PlayOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\PlayOrdersList.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YodleeLib</RootNamespace>
+    <AssemblyName>YodleeLib</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Yodlee.NET">
+      <HintPath>..\Lib\3rdparty\Yodlee\Yodlee.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="connector\YodleeConnector.cs" />
+    <Compile Include="connector\YodleeDatabaseFunctionFactory.cs" />
+    <Compile Include="connector\YodleeDatabaseFunctionStorage.cs" />
+    <Compile Include="connector\YodleeDatabaseMarketPlace.cs" />
+    <Compile Include="connector\YodleeOrdersAggregator.cs" />
+    <Compile Include="connector\YodleeRegistry.cs" />
+    <Compile Include="connector\YodleeRetriveDataHelper.cs" />
+    <Compile Include="connector\YodleeSecurityInfo.cs" />
+    <Compile Include="connector\YodleeServiceInfo.cs" />
+    <Compile Include="datatypes\AccountType.cs" />
+    <Compile Include="AddItem.cs" />
+    <Compile Include="ApplicationSuper.cs" />
+    <Compile Include="CobrandContextSingleton.cs" />
+    <Compile Include="datatypes\ContainerTypes.cs" />
+    <Compile Include="datatypes\Currency.cs" />
+    <Compile Include="DisplayBankData.cs" />
+    <Compile Include="DisplayItemInfo.cs" />
+    <Compile Include="FormFieldsVisitor.cs" />
+    <Compile Include="util\FormUtil.cs" />
+    <Compile Include="util\IOUtils.cs" />
+    <Compile Include="LoginUser.cs" />
+    <Compile Include="OAuthBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringTokenizer.cs" />
+    <Compile Include="YodleeMain.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
