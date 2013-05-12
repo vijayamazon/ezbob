@@ -123,6 +123,8 @@
           return this.$el.find("#ekm_login").focus();
         case "Volusion":
           return this.$el.find("#volusion_url").focus();
+        case "Play":
+          return this.$el.find("#play_name").focus();
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
       }

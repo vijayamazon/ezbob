@@ -257,6 +257,7 @@ namespace EzBob.Web.Infrastructure
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                         .MvcRender("~/Content/js/min/storeinfo_#.js");
@@ -276,6 +277,7 @@ namespace EzBob.Web.Infrastructure
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
@@ -328,6 +330,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                          .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")

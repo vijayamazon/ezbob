@@ -20,6 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
             EkmOrders = new HashedSet<MP_EkmOrder>();
             VolusionOrders = new HashedSet<MP_VolusionOrder>();
+            PlayOrders = new HashedSet<MP_PlayOrder>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
 		}
         public virtual int Id { get; set; }
@@ -51,6 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
         public virtual ISet<MP_VolusionOrder> VolusionOrders { get; set; }
+        public virtual ISet<MP_PlayOrder> PlayOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
     }
 }

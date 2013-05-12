@@ -791,6 +791,39 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(customerMarketPlace);
         } // StoreVolusionOrdersData
 
+        public void StorePlayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PlayOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+            LogData("Play Orders Data", customerMarketPlace, ordersData);
+
+            if (ordersData == null)
+                return;
+            
+            DateTime submittedDate = DateTime.UtcNow;;
+            var mpOrder = new MP_PlayOrder {
+                CustomerMarketPlace = customerMarketPlace,
+                Created = submittedDate,
+                HistoryRecord = historyRecord
+            };
+
+            ordersData.ForEach(dataItem => {
+				var mpOrderItem = new MP_PlayOrderItem {
+					Order = mpOrder,
+					NativeOrderId = dataItem.NativeOrderId,
+					TotalCost = dataItem.TotalCost,
+					CurrencyCode = dataItem.CurrencyCode,
+					PaymentDate = dataItem.PaymentDate,
+					PurchaseDate = dataItem.PurchaseDate,
+					OrderStatus = dataItem.OrderStatus,
+				};
+
+				mpOrder.OrderItems.Add(mpOrderItem);
+            });
+
+            customerMarketPlace.PlayOrders.Add(mpOrder);
+            _CustomerMarketplaceRepository.Update(customerMarketPlace);
+        } // StorePlayOrdersData
+
         private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
         {
             if (categories == null)

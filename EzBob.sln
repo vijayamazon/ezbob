@@ -108,6 +108,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChannelGrabber", "ChannelGr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStarter", "App\service\ServiceStarter\ServiceStarter.csproj", "{FD338C4B-A19F-42A7-A765-4738E949B45A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Play", "Integration\Play\Play.csproj", "{DFD164C8-A73C-48CD-8664-B8E63478003A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -565,6 +567,16 @@ Global
 		{FD338C4B-A19F-42A7-A765-4738E949B45A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FD338C4B-A19F-42A7-A765-4738E949B45A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FD338C4B-A19F-42A7-A765-4738E949B45A}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DFD164C8-A73C-48CD-8664-B8E63478003A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -617,6 +629,7 @@ Global
 		{A3D7CD63-C1D8-41D0-93A7-776C0E6A20D8} = {0130AD71-E550-4D93-B57C-038908991C90}
 		{189D7477-DEE3-4F7B-B703-D24C92352C0C} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
 		{48FEC03D-C021-4C8C-89E3-9F6DEE55A55D} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
+		{DFD164C8-A73C-48CD-8664-B8E63478003A} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

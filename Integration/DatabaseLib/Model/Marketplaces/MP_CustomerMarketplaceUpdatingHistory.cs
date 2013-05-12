@@ -32,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public virtual MP_EkmOrder EkmOrder { get; set; }
         public virtual MP_VolusionOrder VolusionOrder { get; set; }
+        public virtual MP_PlayOrder PlayOrder { get; set; }
         public virtual MP_PayPointOrder PayPointOrder { get; set; }
 		public virtual string Error { get; set; }
 	}

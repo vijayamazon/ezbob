@@ -38,7 +38,17 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @PayPalButtonView = new EzBob.PayPalButtonView(model: @payPalAccounts)
         @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)
 
+        @playAccounts = new EzBob.PlayAccounts()
+        @playAccounts.fetch().done => @render()
+        @playButtonView = new EzBob.PlayAccountButtonView(model: @playAccounts)
+        @playAccountInfoView = new EzBob.PlayAccountInfoView(model: @playAccounts)
+
         @stores =
+            "Play":
+                view: @playAccountInfoView
+                button: @playButtonView
+                active: 0
+                priority: 6
             "Volusion":
                 view: @volusionAccountInfoView
                 button: @volusionButtonView

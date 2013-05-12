@@ -14,6 +14,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     amazons = @get("amazonMarketplaces").toJSON()
     ekms = @get("ekmShops")
     volusions = @get("volusionShops")
+    plays = @get("playShops")
     payPoints = @get("payPointAccounts")
     paypals = @get("paypalAccounts")
 
@@ -28,6 +29,9 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     for shop in volusions
         stores.push {displayName: shop.displayName, type: "Volusion"}
+
+    for shop in plays
+        stores.push {displayName: shop.displayName, type: "Play"}
 
     for shop in payPoints
         stores.push {displayName: shop.displayName, type: "PayPoint"}

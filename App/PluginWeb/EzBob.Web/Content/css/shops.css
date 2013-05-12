@@ -46,14 +46,11 @@
 .Volusion-logo       { background-position: 0px -1470px; }
 .Volusion-logo:hover { background-position: 0px -1617px; }
 
-.PayPoint-logo {
-    background-position: 0px -1920px;
-}
+.PayPoint-logo:hover { background-position: 0px -1764px; }
+.PayPoint-logo       { background-position: 0px -1920px; }
 
-.PayPoint-logo:hover {
-    background-position: 0px -1764px;
-}
-
+.Play-logo           { background-position: 0px -2067px; }
+.Play-logo:hover     { background-position: 0px -2214px; }
 
 .instructions-header h2.one-line {
     vertical-align: middle;

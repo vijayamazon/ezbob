@@ -63,6 +63,7 @@ namespace EzBob.Web.Areas.Customer.Models
             customerdModel.ekmShops = customer.GetEkmShops();
             customerdModel.payPointAccounts = customer.GetPayPointAccounts();
             customerdModel.volusionShops = customer.GetVolusionShops();
+            customerdModel.playShops = customer.GetPlayShops();
             customerdModel.paypalAccounts = customer.GetPayPalAccountsSimple();
 
             customerdModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";

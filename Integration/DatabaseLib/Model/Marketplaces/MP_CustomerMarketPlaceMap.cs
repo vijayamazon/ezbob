@@ -77,6 +77,10 @@ namespace EZBob.DatabaseLib.Model.Database
 			HasMany(x => x.VolusionOrders).
 				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();
+
+			HasMany(x => x.PlayOrders).
+				KeyColumn("CustomerMarketPlaceId")
+				.Cascade.All();
 		}
 	}
 }

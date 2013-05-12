@@ -29,12 +29,14 @@
       });
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
       this.ebayStores.on("reset change", this.marketplacesChanged, this);
+      this.ebayStores.on("sync", this.render, this);
       this.amazonMarketplaces = this.model.get("amazonMarketplaces");
       this.AmazonButtonView = new EzBob.AmazonButtonView({
         model: this.amazonMarketplaces
       });
       this.AmazonStoreInfoView = new EzBob.AmazonStoreInfoView();
       this.amazonMarketplaces.on("reset change", this.marketplacesChanged, this);
+      this.amazonMarketplaces.on("sync", this.render, this);
       this.ekmAccounts = new EzBob.EKMAccounts();
       this.ekmAccounts.fetch().done(function() {
         return _this.render();
@@ -66,18 +68,51 @@
         model: this.PayPointAccounts
       });
       this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
+      this.payPalAccounts.fetch().done(function() {
+        return _this.render();
+      });
       this.PayPalButtonView = new EzBob.PayPalButtonView({
         model: this.payPalAccounts
       });
-      this.PayPalInfoView = new EzBob.PayPalInfoView();
+      this.PayPalInfoView = new EzBob.PayPalInfoView({
+        model: this.payPalAccounts
+      });
+      this.playAccounts = new EzBob.PlayAccounts();
+      this.playAccounts.fetch().done(function() {
+        return _this.render();
+      });
+      this.playButtonView = new EzBob.PlayAccountButtonView({
+        model: this.playAccounts
+      });
+      this.playAccountInfoView = new EzBob.PlayAccountInfoView({
+        model: this.playAccounts
+      });
       this.stores = {
-        "ebay": {
+        "Play": {
+          view: this.playAccountInfoView,
+          button: this.playButtonView,
+          active: 0,
+          priority: 6
+        },
+        "Volusion": {
+          view: this.volusionAccountInfoView,
+          button: this.volusionButtonView,
+          active: 0,
+          priority: 4
+        },
+        "PayPoint": {
+          view: this.PayPointAccountInfoView,
+          button: this.PayPointButtonView,
+          active: 0,
+          priority: 5
+        },
+        "eBay": {
           view: this.EbayStoreView,
           button: this.EbayButtonView,
           active: 0,
           priority: 0
         },
-        "amazon": {
+        "Amazon": {
           view: this.AmazonStoreInfoView,
           button: this.AmazonButtonView,
           active: 0,
@@ -89,23 +124,11 @@
           active: 1,
           priority: 2
         },
-        "ekm": {
+        "EKM": {
           view: this.EKMAccountInfoView,
           button: this.ekmButtonView,
           active: 0,
           priority: 3
-        },
-        "volusion": {
-          view: this.volusionAccountInfoView,
-          button: this.volusionButtonView,
-          active: 0,
-          priority: 4
-        },
-        "paypoint": {
-          view: this.PayPointAccountInfoView,
-          button: this.PayPointButtonView,
-          active: 0,
-          priority: 5
         }
       };
       _ref1 = EzBob.Config.ActiveMarketPlaces;

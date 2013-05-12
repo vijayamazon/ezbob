@@ -55,6 +55,9 @@ namespace EzBob.Web.Infrastructure
         string VolusionShopUrl { get; }
         string VolusionShopLogin { get; }
         string VolusionShopPassword { get; }
+        string PlayShopName { get; }
+        string PlayShopLogin { get; }
+        string PlayShopPassword { get; }
 		string DummyPostcodeSearchResult { get; }
 		string DummyAddressSearchResult { get; }
     }
@@ -128,6 +131,10 @@ namespace EzBob.Web.Infrastructure
         public string VolusionShopUrl      { get { return this.GetValueWithDefault<string>("VolusionShopUrl",      ""); } }
         public string VolusionShopLogin    { get { return this.GetValueWithDefault<string>("VolusionShopLogin",    ""); } }
         public string VolusionShopPassword { get { return this.GetValueWithDefault<string>("VolusionShopPassword", ""); } }
+
+        public string PlayShopName     { get { return this.GetValueWithDefault<string>("PlayShopName",     ""); } }
+        public string PlayShopLogin    { get { return this.GetValueWithDefault<string>("PlayShopLogin",    ""); } }
+        public string PlayShopPassword { get { return this.GetValueWithDefault<string>("PlayShopPassword", ""); } }
 
         public string DummyPostcodeSearchResult { get { return this.GetValueWithDefault<string>("DummyPostcodeSearchResult", ""); } }
         public string DummyAddressSearchResult { get { return this.GetValueWithDefault<string>("DummyAddressSearchResult", ""); } }

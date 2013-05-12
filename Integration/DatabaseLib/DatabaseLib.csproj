@@ -72,6 +72,13 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="DatabaseWrapper\Order\VolusionOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\PlayOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\PlayOrdersList.cs" />
+    <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
+    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderMap.cs" />
     <Compile Include="PacNetBalance.cs" />
     <Compile Include="Common\DatabaseFunction.cs" />
     <Compile Include="Common\DatabaseFunctionStorage.cs" />

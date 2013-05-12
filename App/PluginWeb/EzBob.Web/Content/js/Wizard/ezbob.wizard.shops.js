@@ -23,19 +23,21 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var amazons, ebays, ekms, payPoints, shop, stores, volusions, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m;
+      var amazons, ebays, ekms, payPoints, paypals, plays, shop, stores, volusions, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
       volusions = this.get("volusionShops");
+      plays = this.get("playShops");
       payPoints = this.get("payPointAccounts");
+      paypals = this.get("paypalAccounts");
       for (_i = 0, _len = ebays.length; _i < _len; _i++) {
         shop = ebays[_i];
         stores.push({
           displayName: shop.displayName,
-          type: "Ebay"
+          type: "eBay"
         });
       }
       for (_j = 0, _len1 = amazons.length; _j < _len1; _j++) {
@@ -59,11 +61,25 @@
           type: "Volusion"
         });
       }
-      for (_m = 0, _len4 = payPoints.length; _m < _len4; _m++) {
-        shop = payPoints[_m];
+      for (_m = 0, _len4 = plays.length; _m < _len4; _m++) {
+        shop = plays[_m];
+        stores.push({
+          displayName: shop.displayName,
+          type: "Play"
+        });
+      }
+      for (_n = 0, _len5 = payPoints.length; _n < _len5; _n++) {
+        shop = payPoints[_n];
         stores.push({
           displayName: shop.displayName,
           type: "PayPoint"
+        });
+      }
+      for (_o = 0, _len6 = paypals.length; _o < _len6; _o++) {
+        shop = paypals[_o];
+        stores.push({
+          displayName: shop.displayName,
+          type: "paypal"
         });
       }
       return stores;

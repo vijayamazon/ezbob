@@ -11,6 +11,7 @@
     using PayPal;
     using eBayLib;
     using Integration.Volusion;
+    using Integration.Play;
 
     public static class CustomerExtensions
     {
@@ -107,6 +108,13 @@
             var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         } // GetVolusionShops
+
+        public static IEnumerable<SimpleMarketPlaceModel> GetPlayShops(this Customer customer) {
+	        var oVsi = new PlayServiceInfo();
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oVsi.InternalId);
+            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+            return simpleMarketPlaceModels;
+        } // GetPlayShops
 
         public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this Customer customer)
         {

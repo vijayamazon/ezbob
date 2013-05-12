@@ -5,6 +5,7 @@ using System.Threading;
 using System.Xml;
 using EKM;
 using Integration.Volusion;
+using Integration.Play;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
@@ -48,6 +49,7 @@ namespace EzBobTest
 			NHibernateManager.FluentAssemblies.Add( typeof( PayPalDatabaseMarketPlace ).Assembly );
 			NHibernateManager.FluentAssemblies.Add(typeof (EkmDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof (VolusionDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof (PlayDatabaseMarketPlace).Assembly);
 			Scanner.Register();
 			ObjectFactory.Configure( x =>
 			{
@@ -94,6 +96,11 @@ namespace EzBobTest
 		[Test]
 		public void UpdateVolusionMarketplace() {
 			UpdateCustomerMarketplace(2143);
+		}
+
+		[Test]
+		public void UpdatePlayMarketplace() {
+			UpdateCustomerMarketplace(2143); // TODO: put real market place id here
 		}
 
 		[Test]

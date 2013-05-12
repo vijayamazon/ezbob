@@ -232,11 +232,14 @@ namespace EzBob.Web.Areas.Underwriter
 
 	        var oEsi = new EKM.EkmServiceInfo();
 	        var oVsi = new Integration.Volusion.VolusionServiceInfo();
+	        var oPsi = new Integration.Play.PlayServiceInfo();
 
             if (mp.Marketplace.InternalId == oEsi.InternalId)
                 sellerInfoStoreUrl = "https://www.google.com/search?q=ekm+" + mp.DisplayName;
 			else if (mp.Marketplace.InternalId == oVsi.InternalId)
                 sellerInfoStoreUrl = "https://www.google.com/search?q=volusion+" + mp.DisplayName;
+			else if (mp.Marketplace.InternalId == oPsi.InternalId)
+                sellerInfoStoreUrl = "https://www.google.com/search?q=play+" + mp.DisplayName;
             else if (mp.Marketplace.Name == "PayPoint")
             {
                 sellerInfoStoreUrl = "https://www.google.com/search?q=payPoint+" + mp.DisplayName;

@@ -64,6 +64,8 @@
     <Compile Include="ChannelGrabberApiException.cs" />
     <Compile Include="ChannelGrabberCustomer.cs" />
     <Compile Include="ChannelGrabberOrder.cs" />
+    <Compile Include="PlayAccountData.cs" />
+    <Compile Include="PlayProle.cs" />
     <Compile Include="IJsonable.cs" />
     <Compile Include="Jsonable.cs" />
     <Compile Include="Prole.cs" />

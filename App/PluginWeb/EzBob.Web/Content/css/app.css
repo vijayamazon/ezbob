@@ -431,6 +431,16 @@ div.shop-connected {
         width: 55px;
     }
 
+    .source_labels.Play {
+        background-position: -1084px -3px;
+        width: 98px;
+    }
+
+    .source_labels_on.Play {
+        background-position: -1084px -43px;
+        width: 98px;
+    }
+
 .source_table {
     width: 100%;
 }
@@ -926,6 +936,12 @@ input[type="color"],
 }
 
 .help_Volusion {
+    background: url(images/cb/loading.gif) no-repeat center center;
+    background-color: black;
+    /*TODO provide real image*/
+}
+
+.help_Play {
     background: url(images/cb/loading.gif) no-repeat center center;
     background-color: black;
     /*TODO provide real image*/

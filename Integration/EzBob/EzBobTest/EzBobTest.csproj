@@ -73,6 +73,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestPlayProle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ErrorRetryingFixture.cs" />
     <Compile Include="TestVolusionProle.cs" />
@@ -136,6 +137,10 @@
     <ProjectReference Include="..\..\PayPoint\PayPoint.csproj">
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
       <Name>PayPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Play\Play.csproj">
+      <Project>{dfd164c8-a73c-48cd-8664-b8e63478003a}</Project>
+      <Name>Play</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Volusion\Volusion.csproj">
       <Project>{48FEC03D-C021-4C8C-89E3-9F6DEE55A55D}</Project>
