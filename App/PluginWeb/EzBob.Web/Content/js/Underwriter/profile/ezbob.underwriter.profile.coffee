@@ -144,6 +144,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
     ApproveBtnClick: (e) ->
         return false  if $(e.currentTarget).hasClass("disabled")
+        if @loanInfoModel.get('OfferedCreditLine') <= 0
+            EzBob.ShowMessage 'Wrong Offered credit line value (' + @loanInfoModel.get('OfferedCreditLine') + '), please enter the valid value (above zero)', 'Error'
+            return
         if @loanInfoModel.get("OfferExpired")
             EzBob.ShowMessage "Loan offer has expired. Set new validity date.", "Error"
             return false
