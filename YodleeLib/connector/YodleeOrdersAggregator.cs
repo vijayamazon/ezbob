@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.CommonLib.TimePeriodLogic;
-using log4net;
-
 namespace YodleeLib.connector
 {
+	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using log4net;
+
     internal class YodleeOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType>
     {
         public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<YodleeOrderItem> data, ICurrencyConvertor currencyConverter)

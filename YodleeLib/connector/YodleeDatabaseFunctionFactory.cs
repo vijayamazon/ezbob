@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.Functions;
-
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.Functions;
+
     public class YodleeDatabaseFunctionFactory : IDatabaseFunctionFactory<YodleeDatabaseFunctionType>
     {
         public IDatabaseFunction Create(YodleeDatabaseFunctionType type)

@@ -7,86 +7,86 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual int Id { get; set; }
         public virtual int OrderItemId { get; set; }
 
-        public long? isSeidFromDataSource { get; set; }
-        public bool isSeidFromDataSourceSpecified { get; set; }
-        public long? isSeidMod { get; set; }
-        public bool isSeidModSpecified { get; set; }
-        public string srcElementId { get; set; }
-        public long? transactionTypeId { get; set; }
-        public bool transactionTypeIdSpecified { get; set; }
-        public string transactionType { get; set; }
-        public string localizedTransactionType { get; set; }
-        public long? transactionStatusId { get; set; }
-        public bool transactionStatusIdSpecified { get; set; }
-        public string transactionStatus { get; set; }
-        public string localizedTransactionStatus { get; set; }
-        public long? transactionBaseTypeId { get; set; }
-        public bool transactionBaseTypeIdSpecified { get; set; }
-        public string transactionBaseType { get; set; }
-        public string localizedTransactionBaseType { get; set; }
-        public long? categoryId { get; set; }
-        public bool categoryIdSpecified { get; set; }
-        public long? bankTransactionId { get; set; }
-        public bool bankTransactionIdSpecified { get; set; }
-        public long? bankAccountId { get; set; }
-        public bool bankAccountIdSpecified { get; set; }
-        public long? bankStatementId { get; set; }
-        public bool bankStatementIdSpecified { get; set; }
-        public long? isDeleted { get; set; }
-        public bool isDeletedSpecified { get; set; }
-        public long? lastUpdated { get; set; }
-        public bool lastUpdatedSpecified { get; set; }
-        public long? hasDetails { get; set; }
-        public bool hasDetailsSpecified { get; set; }
-        public string transactionId { get; set; }
-        public string transactionCategoryId { get; set; }
-        public string siteCategoryType { get; set; }
-        public string siteCategory { get; set; }
-        public string classUpdationSource { get; set; }
-        public string lastCategorised { get; set; }
-        public DateTime? transactionDate { get; set; }
-        public long? isReimbursable { get; set; }
-        public bool isReimbursableSpecified { get; set; }
-        public string mcCode { get; set; }
-        public long? prevLastCategorised { get; set; }
-        public bool prevLastCategorisedSpecified { get; set; }
-        public string naicsCode { get; set; }
-        public double? runningBalance { get; set; }
-        public string userDescription { get; set; }
-        public long? customCategoryId { get; set; }
-        public bool customCategoryIdSpecified { get; set; }
-        public string memo { get; set; }
-        public long? parentId { get; set; }
-        public bool parentIdSpecified { get; set; }
-        public long? isOlbUserDesc { get; set; }
-        public bool isOlbUserDescSpecified { get; set; }
-        public string categorisationSourceId { get; set; }
-        public string plainTextDescription { get; set; }
-        public string splitType { get; set; }
-        public long? categoryLevelId { get; set; }
-        public bool categoryLevelIdSpecified { get; set; }
-        public double? calcRunningBalance { get; set; }
-        public string category { get; set; }
-        public string link { get; set; }
-        public DateTime? postDate { get; set; }
-        public long? prevTransactionCategoryId { get; set; }
-        public bool prevTransactionCategoryIdSpecified { get; set; }
-        public long? isBusinessExpense { get; set; }
-        public bool isBusinessExpenseSpecified { get; set; }
-        public long? descriptionViewPref { get; set; }
-        public bool descriptionViewPrefSpecified { get; set; }
-        public long? prevCategorisationSourceId { get; set; }
-        public bool prevCategorisationSourceIdSpecified { get; set; }
-        public double? transactionAmount { get; set; }
-        public long? transactionPostingOrder { get; set; }
-        public bool transactionPostingOrderSpecified { get; set; }
-        public string checkNumber { get; set; }
-        public string description { get; set; }
-        public long? isTaxDeductible { get; set; }
-        public bool isTaxDeductibleSpecified { get; set; }
-        public long? isMedicalExpense { get; set; }
-        public bool isMedicalExpenseSpecified { get; set; }
-        public string categorizationKeyword { get; set; }
-        public string sourceTransactionType { get; set; }
+        public virtual long? isSeidFromDataSource { get; set; }
+        public virtual bool isSeidFromDataSourceSpecified { get; set; }
+        public virtual long? isSeidMod { get; set; }
+        public virtual bool isSeidModSpecified { get; set; }
+        public virtual string srcElementId { get; set; }
+        public virtual long? transactionTypeId { get; set; }
+        public virtual bool transactionTypeIdSpecified { get; set; }
+        public virtual string transactionType { get; set; }
+        public virtual string localizedTransactionType { get; set; }
+        public virtual long? transactionStatusId { get; set; }
+        public virtual bool transactionStatusIdSpecified { get; set; }
+        public virtual string transactionStatus { get; set; }
+        public virtual string localizedTransactionStatus { get; set; }
+        public virtual long? transactionBaseTypeId { get; set; }
+        public virtual bool transactionBaseTypeIdSpecified { get; set; }
+        public virtual string transactionBaseType { get; set; }
+        public virtual string localizedTransactionBaseType { get; set; }
+        public virtual long? categoryId { get; set; }
+        public virtual bool categoryIdSpecified { get; set; }
+        public virtual long? bankTransactionId { get; set; }
+        public virtual bool bankTransactionIdSpecified { get; set; }
+        public virtual long? bankAccountId { get; set; }
+        public virtual bool bankAccountIdSpecified { get; set; }
+        public virtual long? bankStatementId { get; set; }
+        public virtual bool bankStatementIdSpecified { get; set; }
+        public virtual long? isDeleted { get; set; }
+        public virtual bool isDeletedSpecified { get; set; }
+        public virtual long? lastUpdated { get; set; }
+        public virtual bool lastUpdatedSpecified { get; set; }
+        public virtual long? hasDetails { get; set; }
+        public virtual bool hasDetailsSpecified { get; set; }
+        public virtual string transactionId { get; set; }
+        public virtual string transactionCategoryId { get; set; }
+        public virtual string siteCategoryType { get; set; }
+        public virtual string siteCategory { get; set; }
+        public virtual string classUpdationSource { get; set; }
+        public virtual string lastCategorised { get; set; }
+        public virtual DateTime? transactionDate { get; set; }
+        public virtual long? isReimbursable { get; set; }
+        public virtual bool isReimbursableSpecified { get; set; }
+        public virtual string mcCode { get; set; }
+        public virtual long? prevLastCategorised { get; set; }
+        public virtual bool prevLastCategorisedSpecified { get; set; }
+        public virtual string naicsCode { get; set; }
+        public virtual double? runningBalance { get; set; }
+        public virtual string userDescription { get; set; }
+        public virtual long? customCategoryId { get; set; }
+        public virtual bool customCategoryIdSpecified { get; set; }
+        public virtual string memo { get; set; }
+        public virtual long? parentId { get; set; }
+        public virtual bool parentIdSpecified { get; set; }
+        public virtual long? isOlbUserDesc { get; set; }
+        public virtual bool isOlbUserDescSpecified { get; set; }
+        public virtual string categorisationSourceId { get; set; }
+        public virtual string plainTextDescription { get; set; }
+        public virtual string splitType { get; set; }
+        public virtual long? categoryLevelId { get; set; }
+        public virtual bool categoryLevelIdSpecified { get; set; }
+        public virtual double? calcRunningBalance { get; set; }
+        public virtual string category { get; set; }
+        public virtual string link { get; set; }
+        public virtual DateTime? postDate { get; set; }
+        public virtual long? prevTransactionCategoryId { get; set; }
+        public virtual bool prevTransactionCategoryIdSpecified { get; set; }
+        public virtual long? isBusinessExpense { get; set; }
+        public virtual bool isBusinessExpenseSpecified { get; set; }
+        public virtual long? descriptionViewPref { get; set; }
+        public virtual bool descriptionViewPrefSpecified { get; set; }
+        public virtual long? prevCategorisationSourceId { get; set; }
+        public virtual bool prevCategorisationSourceIdSpecified { get; set; }
+        public virtual double? transactionAmount { get; set; }
+        public virtual long? transactionPostingOrder { get; set; }
+        public virtual bool transactionPostingOrderSpecified { get; set; }
+        public virtual string checkNumber { get; set; }
+        public virtual string description { get; set; }
+        public virtual long? isTaxDeductible { get; set; }
+        public virtual bool isTaxDeductibleSpecified { get; set; }
+        public virtual long? isMedicalExpense { get; set; }
+        public virtual bool isMedicalExpenseSpecified { get; set; }
+        public virtual string categorizationKeyword { get; set; }
+        public virtual string sourceTransactionType { get; set; }
     }
 }

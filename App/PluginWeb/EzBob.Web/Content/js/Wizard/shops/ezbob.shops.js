@@ -67,6 +67,16 @@
       this.PayPointAccountInfoView = new EzBob.PayPointAccountInfoView({
         model: this.PayPointAccounts
       });
+      this.YodleeAccounts = new EzBob.YodleeAccounts();
+      this.YodleeAccounts.fetch().done(function() {
+        return _this.render();
+      });
+      this.YodleeButtonView = new EzBob.YodleeAccountButtonView({
+        model: this.YodleeAccounts
+      });
+      this.YodleeAccountInfoView = new EzBob.YodleeAccountInfoView({
+        model: this.YodleeAccounts
+      });
       this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
       this.payPalAccounts.fetch().done(function() {
         return _this.render();
@@ -77,6 +87,7 @@
       this.PayPalInfoView = new EzBob.PayPalInfoView({
         model: this.payPalAccounts
       });
+
       this.playAccounts = new EzBob.PlayAccounts();
       this.playAccounts.fetch().done(function() {
         return _this.render();
@@ -87,25 +98,8 @@
       this.playAccountInfoView = new EzBob.PlayAccountInfoView({
         model: this.playAccounts
       });
+
       this.stores = {
-        "Play": {
-          view: this.playAccountInfoView,
-          button: this.playButtonView,
-          active: 0,
-          priority: 6
-        },
-        "Volusion": {
-          view: this.volusionAccountInfoView,
-          button: this.volusionButtonView,
-          active: 0,
-          priority: 4
-        },
-        "PayPoint": {
-          view: this.PayPointAccountInfoView,
-          button: this.PayPointButtonView,
-          active: 0,
-          priority: 5
-        },
         "eBay": {
           view: this.EbayStoreView,
           button: this.EbayButtonView,
@@ -129,6 +123,30 @@
           button: this.ekmButtonView,
           active: 0,
           priority: 3
+        },
+        "Volusion": {
+          view: this.volusionAccountInfoView,
+          button: this.volusionButtonView,
+          active: 0,
+          priority: 4
+        },
+        "PayPoint": {
+          view: this.PayPointAccountInfoView,
+          button: this.PayPointButtonView,
+          active: 0,
+          priority: 5
+        },
+        "Yodlee": {
+          view: this.YodleeAccountInfoView,
+          button: this.YodleeButtonView,
+          active: 0,
+          priority: 6
+        },
+		"Play": {
+          view: this.playAccountInfoView,
+          button: this.playButtonView,
+          active: 0,
+          priority: 7
         }
       };
       _ref1 = EzBob.Config.ActiveMarketPlaces;

@@ -72,3 +72,5 @@ App/PluginWeb/EzBob.Web/Content/js/Underwriter/profile/loanHistory/ezbob.underwr
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopsbase.js
 App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopsbase.js
 App/PluginWeb/EzBob.Web/Content/js/Underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.js
+App/service/agent/Play.dll
+App/service/agent/Volusion.dll

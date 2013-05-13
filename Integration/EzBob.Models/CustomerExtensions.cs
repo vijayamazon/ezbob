@@ -9,6 +9,7 @@
     using EZBob.DatabaseLib.Model.Database;
     using AmazonLib;
     using PayPal;
+    using YodleeLib.connector;
     using eBayLib;
     using Integration.Volusion;
     using Integration.Play;
@@ -123,6 +124,14 @@
             var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
             return simpleMarketPlaceModels;
         }
+
+		public static IEnumerable<SimpleMarketPlaceModel> GetYodleeAccounts(this Customer customer)
+		{
+			var yodleeServiceInfo = new YodleeServiceInfo();
+			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId);
+			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+			return simpleMarketPlaceModels;
+		}
 
         public static List<MP_CustomerMarketPlace> GetAmazonMP(this Customer customer)
         {

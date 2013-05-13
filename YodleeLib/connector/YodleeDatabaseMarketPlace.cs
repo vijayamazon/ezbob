@@ -1,9 +1,9 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+
 	public class YodleeDatabaseMarketPlace : DatabaseMarketplaceBase<YodleeDatabaseFunctionType>
     {
         public YodleeDatabaseMarketPlace()

@@ -59,9 +59,10 @@ namespace EzBob.Web.Areas.Customer.Models
             }
 
             customerdModel.ebayMarketPlaces = customer.GetEbayMarketPlaces();
-            customerdModel.amazonMarketPlaces = customer.GetAmazonMarketPlaces();
-            customerdModel.ekmShops = customer.GetEkmShops();
-            customerdModel.payPointAccounts = customer.GetPayPointAccounts();
+			customerdModel.amazonMarketPlaces = customer.GetAmazonMarketPlaces();
+			customerdModel.ekmShops = customer.GetEkmShops();
+			customerdModel.payPointAccounts = customer.GetPayPointAccounts();
+			customerdModel.yodleeAccounts = customer.GetYodleeAccounts();
             customerdModel.volusionShops = customer.GetVolusionShops();
             customerdModel.playShops = customer.GetPlayShops();
             customerdModel.paypalAccounts = customer.GetPayPalAccountsSimple();

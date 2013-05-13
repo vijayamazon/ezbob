@@ -23,7 +23,7 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var amazons, ebays, ekms, payPoints, paypals, plays, shop, stores, volusions, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _m, _n, _o;
+      var amazons, ebays, ekms, payPoints, paypals, plays, shop, stores, volusions, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
@@ -32,6 +32,7 @@
       volusions = this.get("volusionShops");
       plays = this.get("playShops");
       payPoints = this.get("payPointAccounts");
+      yodlees = this.get("yodleeAccounts");
       paypals = this.get("paypalAccounts");
       for (_i = 0, _len = ebays.length; _i < _len; _i++) {
         shop = ebays[_i];
@@ -80,6 +81,13 @@
         stores.push({
           displayName: shop.displayName,
           type: "paypal"
+        });
+      }
+      for (_p = 0, _len7 = yodlees.length; _p < _len7; _p++) {
+        shop = yodlees[_p];
+        stores.push({
+          displayName: shop.displayName,
+          type: "Yodlee"
         });
       }
       return stores;

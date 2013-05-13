@@ -1,18 +1,17 @@
-﻿using EzBob.CommonLib;
-using EzBob.CommonLib.Security;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.Model.Database;
-using System;
-using System.Collections.Generic;
-
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using EzBob.CommonLib;
+	using EzBob.CommonLib.Security;
+	using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
+	using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.Model.Database;
+	using System.Collections.Generic;
+
     public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
     {
         public YodleeRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)

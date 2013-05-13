@@ -1,10 +1,10 @@
-﻿using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using System;
-
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using EZBob.DatabaseLib.Common;
+	using EzBob.CommonLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+	using System;
+
     public enum YodleeDatabaseFunctionType
     {
         TotlaIncome,

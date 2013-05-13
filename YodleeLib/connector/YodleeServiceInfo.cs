@@ -1,8 +1,8 @@
-﻿using System;
-using EzBob.CommonLib;
-
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using System;
+	using EzBob.CommonLib;
+
     public class YodleeServiceInfo : IMarketplaceServiceInfo
     {
         public string DisplayName

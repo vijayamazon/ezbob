@@ -1,6 +1,7 @@
-﻿using EZBob.DatabaseLib.Common;
-namespace YodleeLib.connector
+﻿namespace YodleeLib.connector
 {
+	using EZBob.DatabaseLib.Common;
+
     public class YodleeSecurityInfo : IMarketPlaceSecurityInfo
     {
         public int MarketplaceId { get; set; }

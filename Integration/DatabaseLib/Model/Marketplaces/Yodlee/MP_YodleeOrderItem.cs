@@ -1,8 +1,8 @@
-using System;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System;
+	using Iesi.Collections.Generic;
+
     public class MP_YodleeOrderItem
     {
         public MP_YodleeOrderItem()
@@ -14,68 +14,68 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public virtual MP_YodleeOrder Order { get; set; }
 
-        public virtual Iesi.Collections.Generic.ISet<MP_YodleeOrderItemBankTransaction> OrderItemBankTransactions { get; set; }
+        public virtual ISet<MP_YodleeOrderItemBankTransaction> OrderItemBankTransactions { get; set; }
 
-        public long? isSeidFromDataSource { get; set; }
-        public bool isSeidFromDataSourceSpecified { get; set; }
-        public long? isSeidMod { get; set; }
-        public bool isSeidModSpecified { get; set; }
-        public long? acctTypeId { get; set; }
-        public bool acctTypeIdSpecified { get; set; }
-        public string acctType { get; set; }
-        public string localizedAcctType { get; set; }
-        public string srcElementId { get; set; }
-        public long? individualInformationId { get; set; }
-        public bool individualInformationIdSpecified { get; set; }
-        public long? bankAccountId { get; set; }
-        public bool bankAccountIdSpecified { get; set; }
-        public string customName { get; set; }
-        public string customDescription { get; set; }
-        public long? isDeleted { get; set; }
-        public bool isDeletedSpecified { get; set; }
-        public long? lastUpdated { get; set; }
-        public bool lastUpdatedSpecified { get; set; }
-        public long? hasDetails { get; set; }
-        public bool hasDetailsSpecified { get; set; }
-        public double? interestRate { get; set; }
-        public bool interestRateSpecified { get; set; }
-        public string accountNumber { get; set; }
-        public string link { get; set; }
-        public string accountHolder { get; set; }
-        public DateTime? tranListToDate { get; set; }
-        public DateTime? tranListFromDate { get; set; }
-        public double? availableBalance { get; set; }
-        public double? currentBalance { get; set; }
-        public double? interestEarnedYtd { get; set; }
-        public double? prevYrInterest { get; set; }
-        public double? overdraftProtection { get; set; }
-        public string term { get; set; }
-        public string accountName { get; set; }
-        public double? annualPercentYield { get; set; }
-        public bool annualPercentYieldSpecified { get; set; }
-        public string routingNumber { get; set; }
-        public DateTime? maturityDate { get; set; }
-        public DateTime? asOfDate { get; set; }
-        //public object[] bankStatements { get; set; }
-        //public IndividualInformation individualInformation { get; set; }
-        public string accountNicknameAtSrcSite { get; set; }
-        public long? isPaperlessStmtOn { get; set; }
-        public bool isPaperlessStmtOnSpecified { get; set; }
-        //public SiteAccountStatus? siteAccountStatus { get; set; }
-        public bool siteAccountStatusSpecified { get; set; }
-        public long? created { get; set; }
-        public bool createdSpecified { get; set; }
-        public string nomineeName { get; set; }
-        public string secondaryAccountHolderName { get; set; }
-        public DateTime? accountOpenDate { get; set; }
-        public DateTime? accountCloseDate { get; set; }
-        public double? maturityAmount { get; set; }
-        public double? taxesWithheldYtd { get; set; }
-        public double? taxesPaidYtd { get; set; }
-        public double? budgetBalance { get; set; }
-        public double? straightBalance { get; set; }
-        //public AccountClassification? accountClassification { get; set; }
-        public bool accountClassificationSpecified { get; set; }
+        public virtual long? isSeidFromDataSource { get; set; }
+        public virtual bool isSeidFromDataSourceSpecified { get; set; }
+        public virtual long? isSeidMod { get; set; }
+        public virtual bool isSeidModSpecified { get; set; }
+        public virtual long? acctTypeId { get; set; }
+        public virtual bool acctTypeIdSpecified { get; set; }
+        public virtual string acctType { get; set; }
+        public virtual string localizedAcctType { get; set; }
+        public virtual string srcElementId { get; set; }
+        public virtual long? individualInformationId { get; set; }
+        public virtual bool individualInformationIdSpecified { get; set; }
+        public virtual long? bankAccountId { get; set; }
+        public virtual bool bankAccountIdSpecified { get; set; }
+        public virtual string customName { get; set; }
+        public virtual string customDescription { get; set; }
+        public virtual long? isDeleted { get; set; }
+        public virtual bool isDeletedSpecified { get; set; }
+        public virtual long? lastUpdated { get; set; }
+        public virtual bool lastUpdatedSpecified { get; set; }
+        public virtual long? hasDetails { get; set; }
+        public virtual bool hasDetailsSpecified { get; set; }
+        public virtual double? interestRate { get; set; }
+        public virtual bool interestRateSpecified { get; set; }
+        public virtual string accountNumber { get; set; }
+        public virtual string link { get; set; }
+        public virtual string accountHolder { get; set; }
+        public virtual DateTime? tranListToDate { get; set; }
+        public virtual DateTime? tranListFromDate { get; set; }
+        public virtual double? availableBalance { get; set; }
+        public virtual double? currentBalance { get; set; }
+        public virtual double? interestEarnedYtd { get; set; }
+        public virtual double? prevYrInterest { get; set; }
+        public virtual double? overdraftProtection { get; set; }
+        public virtual string term { get; set; }
+		public virtual string accountName { get; set; }
+		public virtual double? annualPercentYield { get; set; }
+		public virtual bool annualPercentYieldSpecified { get; set; }
+		public virtual string routingNumber { get; set; }
+		public virtual DateTime? maturityDate { get; set; }
+		public virtual DateTime? asOfDate { get; set; }
+		//public virtual object[] bankStatements { get; set; }
+		//public virtual IndividualInformation individualInformation { get; set; }
+		public virtual string accountNicknameAtSrcSite { get; set; }
+		public virtual long? isPaperlessStmtOn { get; set; }
+		public virtual bool isPaperlessStmtOnSpecified { get; set; }
+		//public virtual SiteAccountStatus? siteAccountStatus { get; set; }
+		public virtual bool siteAccountStatusSpecified { get; set; }
+		public virtual long? created { get; set; }
+		public virtual bool createdSpecified { get; set; }
+		public virtual string nomineeName { get; set; }
+		public virtual string secondaryAccountHolderName { get; set; }
+		public virtual DateTime? accountOpenDate { get; set; }
+		public virtual DateTime? accountCloseDate { get; set; }
+		public virtual double? maturityAmount { get; set; }
+		public virtual double? taxesWithheldYtd { get; set; }
+        public virtual double? taxesPaidYtd { get; set; }
+		public virtual double? budgetBalance { get; set; }
+		public virtual double? straightBalance { get; set; }
+		//public virtual AccountClassification? accountClassification { get; set; }
+		public virtual bool accountClassificationSpecified { get; set; }
 
 
     }

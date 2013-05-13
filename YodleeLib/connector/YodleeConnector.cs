@@ -21,6 +21,5 @@
             var orders = new Dictionary<BankData, List<BankTransactionData>>();
             return orders;
         }
-       
     }
 }

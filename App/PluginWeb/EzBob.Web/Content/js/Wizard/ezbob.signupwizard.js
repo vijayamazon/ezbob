@@ -15,6 +15,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
             ebayMarketPlaces: options.ebayMarketPlaces,
             amazonMarketPlaces: options.amazonMarketPlaces,
             ekmMarketPlaces: options.ekmMarketPlaces,
+            yodleeAccounts: options.yodleeAccounts,
             volusionMarketPlaces: options.volusionMarketPlaces,
             playMarketPlaces: options.playMarketPlaces,
             paypointMarketPlaces: options.paypointMarketPlaces

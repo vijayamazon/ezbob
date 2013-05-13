@@ -33,6 +33,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
+        @YodleeAccounts = new EzBob.YodleeAccounts()
+        @YodleeAccounts.fetch().done => @render()
+        @YodleeButtonView = new EzBob.YodleeAccountButtonView(model: @YodleeAccounts)
+        @YodleeAccountInfoView = new EzBob.YodleeAccountInfoView(model: @YodleeAccounts)
+
         @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
         @payPalAccounts.fetch().done => @render()
         @PayPalButtonView = new EzBob.PayPalButtonView(model: @payPalAccounts)
@@ -44,21 +49,6 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @playAccountInfoView = new EzBob.PlayAccountInfoView(model: @playAccounts)
 
         @stores =
-            "Play":
-                view: @playAccountInfoView
-                button: @playButtonView
-                active: 0
-                priority: 6
-            "Volusion":
-                view: @volusionAccountInfoView
-                button: @volusionButtonView
-                active: 0
-                priority: 4
-            "PayPoint":
-                view: @PayPointAccountInfoView
-                button: @PayPointButtonView
-                active: 0
-                priority: 5
             "eBay":
                 view: @EbayStoreView
                 button: @EbayButtonView
@@ -79,6 +69,26 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 button: @ekmButtonView
                 active: 0
                 priority: 3
+            "Volusion":
+                view: @volusionAccountInfoView
+                button: @volusionButtonView
+                active: 0
+                priority: 4
+            "PayPoint":
+                view: @PayPointAccountInfoView
+                button: @PayPointButtonView
+                active: 0
+                priority: 5
+            "Play":
+                view: @playAccountInfoView
+                button: @playButtonView
+                active: 0
+                priority: 6
+            "Yodlee":
+                view: @YodleeAccountInfoView
+                button: @YodleeButtonView
+                active: 0
+                priority: 7
 
          for j in EzBob.Config.ActiveMarketPlaces
              if @stores[j]

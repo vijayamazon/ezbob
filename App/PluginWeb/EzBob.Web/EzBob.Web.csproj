@@ -216,6 +216,7 @@
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
     <Compile Include="Areas\Customer\Controllers\PlayMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\PlayMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\YodleeMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\VolusionMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
@@ -905,6 +906,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
       <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
+      <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
+    </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
@@ -915,6 +919,7 @@
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PlayAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\YodleeAccoutInfoTemplate.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1278,6 +1283,10 @@
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
       <Name>ZohoCRM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\YodleeLib\YodleeLib.csproj">
+      <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
+      <Name>YodleeLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Log4NetCustomAppenders\Log4NetCustomAppenders.csproj">
       <Project>{9b99cd18-9414-4842-9792-e33b6605f330}</Project>
       <Name>Log4NetCustomAppenders</Name>
@@ -1418,6 +1427,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

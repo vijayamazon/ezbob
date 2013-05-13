@@ -28,6 +28,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public IEnumerable<SimpleMarketPlaceModel> volusionShops { get; set; }
         public IEnumerable<SimpleMarketPlaceModel> playShops { get; set; }
         public IEnumerable<SimpleMarketPlaceModel> payPointAccounts { get; set; }        
+		public IEnumerable<SimpleMarketPlaceModel> yodleeAccounts { get; set; }        
         public IEnumerable<SimpleMarketPlaceModel> paypalAccounts { get; set; }
 
         public decimal? CreditSum { get; set; }
