@@ -36,6 +36,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public int LoanTypeId { get; set; }
 
         public string Reason { get; set; }
+
+        public bool IsLoanTypeSelectionAllowed { get; set; }
     }
 
     public class LoanTypesModel

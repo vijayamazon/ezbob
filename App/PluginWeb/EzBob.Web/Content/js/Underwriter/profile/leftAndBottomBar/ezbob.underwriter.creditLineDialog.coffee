@@ -13,8 +13,16 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     events: 
         'click .btnOk': 'save'
         'change #loan-type ' : 'onChangeLoanType'
+        'click #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed'
+        'change #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed'
     ui:
         form: "form"
+
+    onChangeLoanTypeSelectionAllowed: ->
+        if @cloneModel.get('IsLoanTypeSelectionAllowed')
+            @$el.find('#loan-type, #repaymentPeriod').attr('disabled', 'disabled')
+        else
+            @$el.find('#loan-type, #repaymentPeriod').removeAttr('disabled')
 
     onChangeStartingDate:->
         startingDate =  moment.utc(@cloneModel.get("StartingFromDate"), "DD/MM/YYYY")
@@ -51,6 +59,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             offerValidUntil:m.OfferValidateUntil
             useSetupFee:m.UseSetupFee
             allowSendingEmail:m.AllowSendingEmail
+            isLoanTypeSelectionAllowed:m.IsLoanTypeSelectionAllowed
         return data
             
     bindings:
@@ -70,6 +79,8 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             selector:"input[name='enableSetupFee']"
         AllowSendingEmail:
             selector: "input[name='allowSendingEmail']"
+        IsLoanTypeSelectionAllowed:
+            selector: "input[name='isLoanTypeSelectionAllowed']"
 
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings

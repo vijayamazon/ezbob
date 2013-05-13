@@ -123,6 +123,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             model.Reason = cr.UnderwriterComment;
 
+            model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
         }
 
         [HttpPost]
@@ -240,7 +241,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             Log.DebugFormat("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
         }
 
-       
+        [HttpPost]
+        [Transactional]
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [Permission(Name = "CreditLineFields")]
+        public void IsLoanTypeSelectionAllowed(long id, bool enbaled)
+        {
+            var cr = _cashRequestsRepository.Get(id);
+            cr.IsLoanTypeSelectionAllowed = enbaled;
+            Log.DebugFormat("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
+        }
 
         [HttpPost]
         [Transactional]
@@ -336,7 +347,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Transactional]
         [Ajax]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail)
+        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail, bool isLoanTypeSelectionAllowed)
         {
             var cr = _cashRequestsRepository.Get(id);
             var loanT = _loanTypes.Get(loanType);
@@ -349,6 +360,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             cr.UseSetupFee = useSetupFee;
             cr.EmailSendingBanned = !allowSendingEmail;
             cr.LoanTemplate = null;
+            cr.IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed;
 
             _crm.UpdateCashRequest(cr);
        

@@ -23,6 +23,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
         'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
+        'click [name="isLoanTypeSelectionAllowed"]'         : 'isLoanTypeSelectionAllowed'
 
     editOfferValidUntilDate: ->
         d = new EzBob.Dialogs.DateEdit(
@@ -151,6 +152,25 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d.render()
         return
 
+    isLoanTypeSelectionAllowed: ->
+        d = new EzBob.Dialogs.CheckBoxEdit
+            model: @model
+            propertyName: "IsLoanTypeSelectionAllowed"
+            title: "Loan type"
+            postValueName: "enbaled"
+            checkboxName: "Allow to select loan type and repayment period"
+            url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed"
+            data: {id: @model.get("CashRequestId")}
+        d.render()
+        d.on( 'done', => @LoanTypeSelectionAllowedChanged() )
+        return
+
+    LoanTypeSelectionAllowedChanged: =>
+        if @model.get('IsLoanTypeSelectionAllowed')
+            @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
+        else
+            @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled')
+
     loanType: ->
         d = new EzBob.Dialogs.ComboEdit
             model: @model
@@ -175,6 +195,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     
     onRender: ->
         @UpdateNewCreditLineState()
+        @LoanTypeSelectionAllowedChanged()
 
     changeCreditResult: ->
         @model.fetch()

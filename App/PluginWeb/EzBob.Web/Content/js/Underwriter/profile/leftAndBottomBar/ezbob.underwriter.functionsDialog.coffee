@@ -147,6 +147,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         @model.on "change", @renderDetails, this
         @$el.find(".button-ok").addClass "disabled"    if not @model.get("OfferedCreditLine") or @model.get("OfferedCreditLine") is 0
         @$el.find(".button-ok").addClass "disabled"    if @model.get("OfferExpired")
+        @$el.find(".change-offer-details").attr 'disabled', 'disabled'    if @model.get("IsLoanTypeSelectionAllowed")
 
     renderDetails: ->
         details = _.template($("#approve-details").html(), @model.toJSON())

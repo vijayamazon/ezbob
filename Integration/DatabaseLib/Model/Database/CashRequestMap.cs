@@ -36,6 +36,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.UnderwriterComment).Length(200);
             References(x => x.LoanType, "LoanTypeId");
             Map(x => x.LoanTemplate).CustomType("StringClob");
+            Map(x => x.IsLoanTypeSelectionAllowed);
         }
     }
 }
