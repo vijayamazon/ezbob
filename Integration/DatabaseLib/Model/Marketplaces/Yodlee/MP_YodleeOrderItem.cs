@@ -1,7 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database
 {
-	using System;
-	using Iesi.Collections.Generic;
+    using System;
+    using Iesi.Collections.Generic;
 
     public class MP_YodleeOrderItem
     {
@@ -45,37 +45,47 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual DateTime? tranListToDate { get; set; }
         public virtual DateTime? tranListFromDate { get; set; }
         public virtual double? availableBalance { get; set; }
+        public virtual string availableBalanceCurrency { get; set; }
         public virtual double? currentBalance { get; set; }
+        public virtual string currentBalanceCurrency { get; set; }
         public virtual double? interestEarnedYtd { get; set; }
+        public virtual string interestEarnedYtdCurrency { get; set; }
         public virtual double? prevYrInterest { get; set; }
+        public virtual string prevYrInterestCurrency { get; set; }
         public virtual double? overdraftProtection { get; set; }
+        public virtual string overdraftProtectionCurrency { get; set; }
         public virtual string term { get; set; }
-		public virtual string accountName { get; set; }
-		public virtual double? annualPercentYield { get; set; }
-		public virtual bool annualPercentYieldSpecified { get; set; }
-		public virtual string routingNumber { get; set; }
-		public virtual DateTime? maturityDate { get; set; }
-		public virtual DateTime? asOfDate { get; set; }
-		//public virtual object[] bankStatements { get; set; }
-		//public virtual IndividualInformation individualInformation { get; set; }
-		public virtual string accountNicknameAtSrcSite { get; set; }
-		public virtual long? isPaperlessStmtOn { get; set; }
-		public virtual bool isPaperlessStmtOnSpecified { get; set; }
-		//public virtual SiteAccountStatus? siteAccountStatus { get; set; }
-		public virtual bool siteAccountStatusSpecified { get; set; }
-		public virtual long? created { get; set; }
-		public virtual bool createdSpecified { get; set; }
-		public virtual string nomineeName { get; set; }
-		public virtual string secondaryAccountHolderName { get; set; }
-		public virtual DateTime? accountOpenDate { get; set; }
-		public virtual DateTime? accountCloseDate { get; set; }
-		public virtual double? maturityAmount { get; set; }
-		public virtual double? taxesWithheldYtd { get; set; }
+        public virtual string accountName { get; set; }
+        public virtual double? annualPercentYield { get; set; }
+        public virtual bool annualPercentYieldSpecified { get; set; }
+        public virtual string routingNumber { get; set; }
+        public virtual DateTime? maturityDate { get; set; }
+        public virtual DateTime? asOfDate { get; set; }
+        //public virtual object[] bankStatements { get; set; }
+        //public virtual IndividualInformation individualInformation { get; set; }
+        public virtual string accountNicknameAtSrcSite { get; set; }
+        public virtual long? isPaperlessStmtOn { get; set; }
+        public virtual bool isPaperlessStmtOnSpecified { get; set; }
+        //public virtual SiteAccountStatus? siteAccountStatus { get; set; }
+        public virtual bool siteAccountStatusSpecified { get; set; }
+        public virtual long? created { get; set; }
+        public virtual bool createdSpecified { get; set; }
+        public virtual string nomineeName { get; set; }
+        public virtual string secondaryAccountHolderName { get; set; }
+        public virtual DateTime? accountOpenDate { get; set; }
+        public virtual DateTime? accountCloseDate { get; set; }
+        public virtual double? maturityAmount { get; set; }
+        public virtual string maturityAmountCurrency { get; set; }
+        public virtual double? taxesWithheldYtd { get; set; }
+        public virtual string taxesWithheldYtdCurrency { get; set; }
         public virtual double? taxesPaidYtd { get; set; }
-		public virtual double? budgetBalance { get; set; }
-		public virtual double? straightBalance { get; set; }
-		//public virtual AccountClassification? accountClassification { get; set; }
-		public virtual bool accountClassificationSpecified { get; set; }
+        public virtual string taxesPaidYtdCurrency { get; set; }
+        public virtual double? budgetBalance { get; set; }
+        public virtual string budgetBalanceCurrency { get; set; }
+        public virtual double? straightBalance { get; set; }
+        public virtual string straightBalanceCurrency { get; set; }
+        //public virtual AccountClassification? accountClassification { get; set; }
+        public virtual bool accountClassificationSpecified { get; set; }
 
 
     }

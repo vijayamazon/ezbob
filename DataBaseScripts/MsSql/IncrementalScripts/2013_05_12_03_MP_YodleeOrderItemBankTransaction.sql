@@ -51,6 +51,7 @@ CREATE TABLE dbo.MP_YodleeOrderItemBankTransaction
   ,prevLastCategorisedSpecified BIT 
   ,naicsCode NVARCHAR(300) 
   ,runningBalance FLOAT 
+  ,runningBalanceCurrency NVARCHAR(3)
   ,userDescription NVARCHAR(300) 
   ,customCategoryId INT
   ,customCategoryIdSpecified BIT 
@@ -65,6 +66,7 @@ CREATE TABLE dbo.MP_YodleeOrderItemBankTransaction
   ,categoryLevelId INT
   ,categoryLevelIdSpecified BIT 
   ,calcRunningBalance FLOAT 
+  ,calcRunningBalanceCurrency NVARCHAR(3)
   ,category NVARCHAR(300) 
   ,link NVARCHAR(300) 
   ,postDate DATETIME 
@@ -77,6 +79,7 @@ CREATE TABLE dbo.MP_YodleeOrderItemBankTransaction
   ,prevCategorisationSourceId INT
   ,prevCategorisationSourceIdSpecified BIT 
   ,transactionAmount FLOAT 
+  ,transactionAmountCurrency NVARCHAR(3)
   ,transactionPostingOrder INT
   ,transactionPostingOrderSpecified BIT 
   ,checkNumber NVARCHAR(300) 

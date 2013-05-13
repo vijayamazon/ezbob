@@ -7,36 +7,44 @@ using StructureMap;
 
 namespace EzBob.Configuration
 {
-	public class EzBobConfigRoot : ConfigurationRoot
-	{
-		public IPayPalConfig PayPalConfig
-		{
-			get { return GetConfiguration<PayPalEnvConfig>( "PayPalConfig" ); }
-		}
+    using YodleeLib.config;
+    using AmazonEnvConnectionConfig = AmazonServiceLib.Config.AmazonEnvConnectionConfig;
 
-		public IEbayMarketplaceTypeConnection eBayConfig
-		{
-			get { return GetConfiguration<EbayEvnConnection>( "EbayConfig" ); }
-		}
+    public class EzBobConfigRoot : ConfigurationRoot
+    {
+        public IPayPalConfig PayPalConfig
+        {
+            get { return GetConfiguration<PayPalEnvConfig>("PayPalConfig"); }
+        }
 
-		public IEbayMarketplaceSettings eBaySettings
-		{
-			get { return GetConfiguration<EbayEvnSettings>( "EbaySettings" ); }
-		}
+        public IEbayMarketplaceTypeConnection eBayConfig
+        {
+            get { return GetConfiguration<EbayEvnConnection>("EbayConfig"); }
+        }
 
-		public IAmazonMarketPlaceTypeConnection AmazonConfig
-		{
-			get { return GetConfiguration<AmazonEnvConnectionConfig>( "AmazonConfig" ); }
-		}
+        public IEbayMarketplaceSettings eBaySettings
+        {
+            get { return GetConfiguration<EbayEvnSettings>("EbaySettings"); }
+        }
 
-		public IPayPalMarketplaceSettings PayPalSettings
-		{
-			get { return GetConfiguration<PayPalEvnSettings>( "PayPalSettings" ); }
-		}
+        public IAmazonMarketPlaceTypeConnection AmazonConfig
+        {
+            get { return GetConfiguration<AmazonEnvConnectionConfig>("AmazonConfig"); }
+        }
 
-		public IAmazonMarketplaceSettings AmazonSetings
-		{
-			get { return GetConfiguration<AmazonEvnSettings>( "AmazonSetings" ); }
-		}
-	}
+        public IPayPalMarketplaceSettings PayPalSettings
+        {
+            get { return GetConfiguration<PayPalEvnSettings>("PayPalSettings"); }
+        }
+
+        public IAmazonMarketplaceSettings AmazonSetings
+        {
+            get { return GetConfiguration<AmazonEvnSettings>("AmazonSetings"); }
+        }
+
+        public IYodleeMarketPlaceConfig YodleeConfig
+        {
+            get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }
+        }
+    }
 }

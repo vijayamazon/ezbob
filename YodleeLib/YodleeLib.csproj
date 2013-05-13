@@ -34,6 +34,14 @@
     <Reference Include="log4net">
       <HintPath>..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Scorto.Configuration, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration.Loader, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -51,6 +59,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config\YodleeEnvConnectionConfig.cs" />
+    <Compile Include="config\IYodleeMarketPlaceConfig.cs" />
     <Compile Include="connector\YodleeConnector.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionFactory.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionStorage.cs" />

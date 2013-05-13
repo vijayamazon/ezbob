@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         public virtual decimal Amount { get; set; }
         public virtual decimal AmountPaid { get; set; }
         public virtual string State { get; set; }
-        public virtual Loan Loan { get; set; }
+        public virtual Database.Loans.Loan Loan { get; set; }
         public virtual ConfigurationVariable ChargesType { get; set; }
         public virtual DateTime Date { get; set; }
         public virtual string Description { get; set; }

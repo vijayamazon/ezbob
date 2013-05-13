@@ -52,6 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual bool prevLastCategorisedSpecified { get; set; }
         public virtual string naicsCode { get; set; }
         public virtual double? runningBalance { get; set; }
+        public virtual string runningBalanceCurrency { get; set; }
         public virtual string userDescription { get; set; }
         public virtual long? customCategoryId { get; set; }
         public virtual bool customCategoryIdSpecified { get; set; }
@@ -66,6 +67,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual long? categoryLevelId { get; set; }
         public virtual bool categoryLevelIdSpecified { get; set; }
         public virtual double? calcRunningBalance { get; set; }
+        public virtual string calcRunningBalanceCurrency { get; set; }
         public virtual string category { get; set; }
         public virtual string link { get; set; }
         public virtual DateTime? postDate { get; set; }
@@ -78,6 +80,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual long? prevCategorisationSourceId { get; set; }
         public virtual bool prevCategorisationSourceIdSpecified { get; set; }
         public virtual double? transactionAmount { get; set; }
+        public virtual string transactionAmountCurrency { get; set; }
         public virtual long? transactionPostingOrder { get; set; }
         public virtual bool transactionPostingOrderSpecified { get; set; }
         public virtual string checkNumber { get; set; }

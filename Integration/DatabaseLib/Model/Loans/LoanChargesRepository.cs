@@ -21,7 +21,7 @@ namespace EZBob.DatabaseLib.Model.Loans
                         Amount = amount,
                         ChargesType = _session.Load<ConfigurationVariable>(loanChargesTypeId),
                         Date = DateTime.UtcNow,
-                        Loan = _session.Load<Loan>(loanId)
+                        Loan = _session.Load<Database.Loans.Loan>(loanId)
                     }
                 );
         }

@@ -336,7 +336,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         public virtual Loan Clone()
         {
-            var newItem = new Loan()
+            var newItem = new Database.Loans.Loan()
                 {
                     APR = this.APR,
                     Balance = this.Balance,
@@ -490,7 +490,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class LoanMap : ClassMap<Loan>
+
+    public class LoanMap : ClassMap<Loans.Loan>
     {
         public LoanMap()
         {

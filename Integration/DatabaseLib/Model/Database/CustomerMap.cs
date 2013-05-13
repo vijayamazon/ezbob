@@ -1,11 +1,11 @@
 using System;
-using ApplicationMng.Model;
+
 using EZBob.DatabaseLib.Model.Email;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database {
-        
+    using ApplicationMng.Model;        
     public class CustomerMap : ClassMap<Customer> 
 	{       
         public CustomerMap() 

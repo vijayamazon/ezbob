@@ -66,6 +66,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Yodlee.NET">
+      <HintPath>..\..\Lib\3rdparty\Yodlee\Yodlee.NET.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisDataInfo.cs" />

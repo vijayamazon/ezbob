@@ -57,6 +57,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.prevLastCategorisedSpecified).Nullable();
             Map(x => x.naicsCode).Length(300);
             Map(x => x.runningBalance).Nullable();
+            Map(x => x.runningBalanceCurrency).Length(3);
             Map(x => x.userDescription).Length(300);
             Map(x => x.customCategoryId).Nullable();
             Map(x => x.customCategoryIdSpecified);
@@ -71,6 +72,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.categoryLevelId).Nullable();
             Map(x => x.categoryLevelIdSpecified);
             Map(x => x.calcRunningBalance).Nullable();
+            Map(x => x.calcRunningBalanceCurrency).Length(3);
             Map(x => x.category).Length(300);
             Map(x => x.link).Length(300);
             Map(x => x.postDate).CustomType<UtcDateTimeType>().Nullable(); ;
@@ -83,6 +85,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.prevCategorisationSourceId).Nullable();
             Map(x => x.prevCategorisationSourceIdSpecified);
             Map(x => x.transactionAmount).Nullable();
+            Map(x => x.transactionAmountCurrency).Length(3);
             Map(x => x.transactionPostingOrder).Nullable();
             Map(x => x.transactionPostingOrderSpecified);
             Map(x => x.checkNumber).Length(300);

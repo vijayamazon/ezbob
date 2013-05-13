@@ -39,7 +39,7 @@ namespace EZBob.DatabaseLib.Model.Loans
             installment.AmountDue = 0;
         }
 
-        public virtual decimal NextInterestPayment(Loan loan)
+        public virtual decimal NextInterestPayment(Database.Loans.Loan loan)
         {
             return 0;
         }
@@ -68,7 +68,7 @@ namespace EZBob.DatabaseLib.Model.Loans
             //base.BalanceReachedExpected(installment);
         }
 
-        public override decimal NextInterestPayment(Loan loan)
+        public override decimal NextInterestPayment(Database.Loans.Loan loan)
         {
             var installment = loan.Schedule.FirstOrDefault(i => i.Status == LoanScheduleStatus.StillToPay && i.LoanRepayment == 0);
             if (installment == null)

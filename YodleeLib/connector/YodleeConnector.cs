@@ -1,11 +1,12 @@
 ﻿namespace YodleeLib.connector
 {
     using System.Collections.Generic;
+    using Scorto.Configuration;
     using log4net;
 
     public class YodleeConnector
-	{
-		private static readonly ILog _Log = LogManager.GetLogger(typeof(YodleeConnector));
+    {
+        private static readonly ILog _Log = LogManager.GetLogger(typeof(YodleeConnector));
 
         public bool Validate(string userName, string password, out string errMsg)
         {

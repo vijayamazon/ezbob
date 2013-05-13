@@ -1,10 +1,10 @@
 using System;
-using ApplicationMng.Model;
 using FluentNHibernate.Mapping;
 using Iesi.Collections.Generic;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+    using ApplicationMng.Model;
     public class Director
     {
         public virtual int Id { get; set; }
@@ -90,7 +90,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                     .Table("DirectorAddressRelation")
                     .ParentKeyColumn("DirectorId")
                     .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddressPrev))
+                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.LimitedDirectorHomeAddressPrev))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
                 m.HasManyToMany(x => x.NonLimitedDirectorHomeAddressPrev)
@@ -99,7 +99,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                     .Table("DirectorAddressRelation")
                     .ParentKeyColumn("DirectorId")
                     .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddressPrev))
+                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.NonLimitedDirectorHomeAddressPrev))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
                 m.HasManyToMany(x => x.LimitedDirectorHomeAddress)
@@ -108,7 +108,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                     .Table("DirectorAddressRelation")
                     .ParentKeyColumn("DirectorId")
                     .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.LimitedDirectorHomeAddress))
+                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.LimitedDirectorHomeAddress))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
                 m.HasManyToMany(x => x.NonLimitedDirectorHomeAddress)
@@ -117,7 +117,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                     .Table("DirectorAddressRelation")
                     .ParentKeyColumn("DirectorId")
                     .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(AddressType.NonLimitedDirectorHomeAddress))
+                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.NonLimitedDirectorHomeAddress))
                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
             });
         }

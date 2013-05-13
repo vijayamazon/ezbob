@@ -35,6 +35,8 @@ using ZohoCRM;
 
 namespace EzBob.Web.Infrastructure
 {
+    using YodleeLib.config;
+
     public class PluginWebRegistry : Registry
     {
         public PluginWebRegistry()
@@ -57,15 +59,16 @@ namespace EzBob.Web.Infrastructure
             For<IMedalStatisticReportRepository>().Use<MedalStatisticReportRepository>();
             For<IDailyReportRepository>().Use<DailyReportRepository>();
             For<IPlayer>().Use<PlayerDummy>();
-            
+
             For<IEzBobConfiguration>().Singleton().Use(ezBobConfiguration);
             For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
             For<IAppCreator>().Use<AppCreator>();
             For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
-			For<IEbayMarketplaceTypeConnection>().Use( localRoot.eBayConfig );
-			For<IEbayMarketplaceSettings>().Use( localRoot.eBaySettings );
-			For<IAmazonMarketPlaceTypeConnection>().Use( localRoot.AmazonConfig );
-			For<IServiceEndPointFactory>().Use( new ServiceEndPointFactory() );
+            For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
+            For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);
+            For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
+            For<IYodleeMarketPlaceConfig>().Use(localRoot.YodleeConfig);
+            For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
             For<IDbStringRepository>().Use<DbStringRepository>();
             For<EzBobConfigRoot>().Use(c => localRoot);
             For<IPayPointFacade>().Use<PayPointFacade>();
@@ -85,7 +88,8 @@ namespace EzBob.Web.Infrastructure
             if (bobconfig.PayPoint.ValidateName)
             {
                 For<ICustomerNameValidator>().Use<CustomerNameValidator>();
-            } else
+            }
+            else
             {
                 For<ICustomerNameValidator>().Use<FakeCustomerNameValidator>();
             }
@@ -93,16 +97,17 @@ namespace EzBob.Web.Infrastructure
             if (ezBobConfiguration.CheckStoreUniqueness)
             {
                 For<IMPUniqChecker>().Use<MPUniqChecker>();
-            } else
+            }
+            else
             {
                 For<IMPUniqChecker>().Use<FakeMPUniqChecker>();
             }
 
             For<IEmailConfirmationRequestRepository>().Use<EmailConfirmationRequestRepository>();
-            For<IEmailConfirmation>().Use <EmailConfirmation>();
+            For<IEmailConfirmation>().Use<EmailConfirmation>();
             For<IDecisionHistoryRepository>().Use<DecisionHistoryRepository>();
             For<IPostcodeAnywhereConfig>().Use(ezBobConfiguration.PostcodeAnywhereConfig);
-            
+
             if (ezBobConfiguration.PostcodeAnywhereConfig.Enabled)
             {
                 For<ISortCodeChecker>().Use<SortCodeChecker>();

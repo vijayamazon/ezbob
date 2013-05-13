@@ -35,10 +35,15 @@ CREATE TABLE dbo.MP_YodleeOrderItem
     ,tranListToDate DATETIME
     ,tranListFromDate DATETIME
     ,availableBalance FLOAT
+    ,availableBalanceCurrency NVARCHAR(3)
     ,currentBalance FLOAT
+    ,currentBalanceCurrency NVARCHAR(3)
     ,interestEarnedYtd FLOAT
+    ,interestEarnedYtdCurrency NVARCHAR(3)
     ,prevYrInterest FLOAT 
+    ,prevYrInterestCurrency NVARCHAR(3)
     ,overdraftProtection FLOAT
+    ,overdraftProtectionCurrency NVARCHAR(3)
     ,term NVARCHAR(300)
     ,accountName NVARCHAR(300)
     ,annualPercentYield FLOAT 
@@ -60,10 +65,15 @@ CREATE TABLE dbo.MP_YodleeOrderItem
     ,accountOpenDate DATETIME
     ,accountCloseDate DATETIME
     ,maturityAmount FLOAT
+    ,maturityAmountCurrency NVARCHAR(3)
     ,taxesWithheldYtd FLOAT
+    ,taxesWithheldYtdCurrency NVARCHAR(3)
     ,taxesPaidYtd FLOAT
+    ,taxesPaidYtdCurrency NVARCHAR(3)
     ,budgetBalance FLOAT
+    ,budgetBalanceCurrency NVARCHAR(3)
     ,straightBalance FLOAT
+    ,straightBalanceCurrency NVARCHAR(3)
     --,accountClassificationId INT --class 
     ,accountClassificationSpecified BIT 
     ,CONSTRAINT PK_MP_YodleeOrderItem PRIMARY KEY (Id)

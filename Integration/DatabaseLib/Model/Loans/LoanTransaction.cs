@@ -49,7 +49,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class LoanTransactionMap : ClassMap<LoanTransaction>
+    public class LoanTransactionMap : ClassMap<Database.Loans.LoanTransaction>
     {
         public LoanTransactionMap()
         {

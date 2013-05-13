@@ -42,8 +42,8 @@ namespace EZBob.DatabaseLib
         {
             var funds = _session.Query<PacNetBalance>().OrderByDescending(x => x.Date).FirstOrDefault();
             if (funds == null) return 0;
-            
-            var loans = _session.Query<Loan>().Where(l => l.Date > funds.Date);
+
+            var loans = _session.Query<Model.Database.Loans.Loan>().Where(l => l.Date > funds.Date);
             if (!loans.Any()) return funds.CurrentBalance;
 
             var taken = loans.Sum(l => l.LoanAmount - l.SetupFee);

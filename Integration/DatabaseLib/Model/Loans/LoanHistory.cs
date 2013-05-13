@@ -14,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         {
         }
 
-        public LoanHistory(Loan loan, DateTime date)
+        public LoanHistory(EZBob.DatabaseLib.Model.Database.Loans.Loan loan, DateTime date)
         {
             Loan = loan;
             Interest = loan.Interest;
@@ -24,7 +24,8 @@ namespace EZBob.DatabaseLib.Model.Loans
             Date = date;
         }
 
-        public LoanHistory(Loan loan, LoanScheduleItem installment, DateTime date) : this(loan, date)
+        public LoanHistory(Database.Loans.Loan loan, LoanScheduleItem installment, DateTime date)
+            : this(loan, date)
         {
             ExpectedAmountDue = installment.AmountDue;
             ExpectedFees = installment.Fees;
@@ -33,7 +34,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         }
 
         public virtual int Id { get; set; }
-        public virtual Loan Loan { get; set; }
+        public virtual Database.Loans.Loan Loan { get; set; }
         public virtual DateTime Date { get; set; }
 
         /// <summary>
@@ -97,9 +98,9 @@ namespace EZBob.DatabaseLib.Model.Loans
 
     public interface ILoanHistoryRepository : IRepository<LoanHistory>
     {
-        IQueryable<LoanHistory> GetByLoan(Loan loan);
-        LoanHistory FindMostRescent(Loan loan, DateTime dateTime);
-        LoanHistoryByDay FetchHistoryByDay(Loan loan, DateTime dateTime);
+        IQueryable<LoanHistory> GetByLoan(Database.Loans.Loan loan);
+        LoanHistory FindMostRescent(Database.Loans.Loan loan, DateTime dateTime);
+        LoanHistoryByDay FetchHistoryByDay(Database.Loans.Loan loan, DateTime dateTime);
     }
 
     public class LoanHistoryRepository : NHibernateRepositoryBase<LoanHistory>, ILoanHistoryRepository
@@ -108,12 +109,12 @@ namespace EZBob.DatabaseLib.Model.Loans
         {
         }
 
-        public IQueryable<LoanHistory> GetByLoan(Loan loan)
+        public IQueryable<LoanHistory> GetByLoan(Database.Loans.Loan loan)
         {
             return GetAll().Where(l => l.Loan.Id == loan.Id);
         }
 
-        public LoanHistory FindMostRescent(Loan loan, DateTime dateTime)
+        public LoanHistory FindMostRescent(Database.Loans.Loan loan, DateTime dateTime)
         {
             var items = GetByLoan(loan);
             var item =  items.Where(i => i.Date < dateTime)
@@ -125,7 +126,7 @@ namespace EZBob.DatabaseLib.Model.Loans
             return item;
         }
 
-        public LoanHistoryByDay FetchHistoryByDay(Loan loan, DateTime dateTime)
+        public LoanHistoryByDay FetchHistoryByDay(Database.Loans.Loan loan, DateTime dateTime)
         {
             var items = GetByLoan(loan);
             var before = items.Where(i => i.Date < dateTime)
@@ -140,10 +141,10 @@ namespace EZBob.DatabaseLib.Model.Loans
                         .OrderBy(i => i.Date)
                         .ToFutureValue();
 
-            var l = _session.QueryOver<Loan>()
+            var l = _session.QueryOver<Database.Loans.Loan>()
                     .Where(x => x.Id == loan.Id)
                     .Fetch(x => x.Customer).Eager
-                    .FutureValue<Loan>();
+                    .FutureValue<Database.Loans.Loan>();
 
             return new LoanHistoryByDay(l, before, expected, after);
         }
@@ -151,12 +152,12 @@ namespace EZBob.DatabaseLib.Model.Loans
 
     public class LoanHistoryByDay
     {
-        private readonly IFutureValue<Loan> _loan;
+        private readonly IFutureValue<Database.Loans.Loan> _loan;
         private readonly IFutureValue<LoanHistory> _before;
         private readonly IFutureValue<LoanHistory> _expected;
         private readonly IFutureValue<LoanHistory> _after;
 
-        public LoanHistoryByDay(IFutureValue<Loan> loan, IFutureValue<LoanHistory> before, IFutureValue<LoanHistory> expected, IFutureValue<LoanHistory> after)
+        public LoanHistoryByDay(IFutureValue<Database.Loans.Loan> loan, IFutureValue<LoanHistory> before, IFutureValue<LoanHistory> expected, IFutureValue<LoanHistory> after)
         {
             _loan = loan;
             _before = before;
@@ -164,7 +165,7 @@ namespace EZBob.DatabaseLib.Model.Loans
             _after = after;
         }
 
-        public Loan Loan
+        public Database.Loans.Loan Loan
         {
             get { return _loan.Value; }
         }

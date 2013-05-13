@@ -22,6 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             VolusionOrders = new HashedSet<MP_VolusionOrder>();
             PlayOrders = new HashedSet<MP_PlayOrder>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
+            YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
         public virtual int Id { get; set; }
         public virtual MP_MarketplaceType Marketplace { get; set; }
@@ -54,5 +55,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual ISet<MP_VolusionOrder> VolusionOrders { get; set; }
         public virtual ISet<MP_PlayOrder> PlayOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
+        public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
     }
 }

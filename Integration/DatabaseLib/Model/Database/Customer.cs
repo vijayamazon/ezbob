@@ -180,14 +180,14 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual bool HasBankAccount { get { return BankAccount != null && !String.IsNullOrEmpty(BankAccount.AccountNumber) && !String.IsNullOrEmpty(BankAccount.SortCode); } }
         public virtual BankAccount BankAccount { get; set; }
 
-        private Iesi.Collections.Generic.ISet<Loan> _loans = new HashedSet<Loan>();
-        public virtual Iesi.Collections.Generic.ISet<Loan> Loans
+        private Iesi.Collections.Generic.ISet<Database.Loans.Loan> _loans = new HashedSet<Database.Loans.Loan>();
+        public virtual Iesi.Collections.Generic.ISet<Database.Loans.Loan> Loans
         {
             get { return _loans; }
             set { _loans = value; }
         }
 
-        public virtual Customer AddLoan (Loan loan)
+        public virtual Customer AddLoan(Database.Loans.Loan loan)
         {
             loan.Position = Loans.Count;
             Loans.Add(loan);
@@ -195,7 +195,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             return this;
         }
 
-        public virtual Loan GetLoan(int loanId)
+        public virtual Database.Loans.Loan GetLoan(int loanId)
         {
             return Loans.Single(l => l.Id == loanId);
         }
@@ -276,7 +276,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// </summary>
         public virtual string CreditCardNo { get; set; }
 
-        public virtual IEnumerable<Loan> ActiveLoans
+        public virtual IEnumerable<Loans.Loan> ActiveLoans
         {
             get
             {

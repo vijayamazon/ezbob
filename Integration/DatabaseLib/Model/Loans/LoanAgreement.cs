@@ -14,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         {
         }
 
-        public LoanAgreement(string name, string template, Loan loan)
+        public LoanAgreement(string name, string template, Database.Loans.Loan loan)
         {
             Name = name;
             Template = template;
@@ -25,7 +25,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual string Template { get; set; }
-        public virtual Loan Loan { get; set; }
+        public virtual Database.Loans.Loan Loan { get; set; }
         public virtual string FilePath { get; set; }
         public virtual string ZohoId { get; set; }
 

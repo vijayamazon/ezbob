@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Model.Loans
     {
         public virtual int Id { get; set; }
         public virtual DateTime Date { get; set; }
-        public virtual Loan Loan { get; set; }
+        public virtual Database.Loans.Loan Loan { get; set; }
         public virtual string Data { get; set; }
         public virtual User User { get; set; }
     }
