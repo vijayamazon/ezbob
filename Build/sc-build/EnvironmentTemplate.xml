@@ -31,6 +31,7 @@
     <property name="EbaySettings" value ="EbaySettingsData"/>
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
+	<property name="YodleeConfig" value ="YodleeDev"/>
     <property name="ZohoCRM" value="ZohoCRM"/>
     <module id="ZohoCRM">
       <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
@@ -182,6 +183,34 @@
         <property name="TrustAll" value="True" />
         <property name="ServiceType" value="Production" />
 
+    </module>
+	<module id="YodleeDev">
+		<property name="cobrandId" value="6910005960" />
+		<property name="applicationId" value="58EEA306454D869DFF721D0D00B82D00" />
+		<property name="username" value="private-ezbob" />
+		<property name="password" value="3dhjzb873ehiw$#*bb" />
+		<property name="soapServer" value="https://sdkint11.yodlee.com/yodsoap/services" />
+		<property name="tncVersion" value="2" />
+		
+		<property name="BridgetApplicationID" value="10003200" />
+		<property name="ApplicationKey" value="a458bdf184d34c0cab7ef7ffbb5f016b" />
+		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
+		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
+		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/apps/editSiteCredentials.pfmlaw.action" />
+    </module>
+    <module id="YodleeProduction">
+		<property name="cobrandId" value="6910005960" />
+		<property name="applicationId" value="58EEA306454D869DFF721D0D00B82D00" />
+		<property name="username" value="private-ezbob" />
+		<property name="password" value="3dhjzb873ehiw$#*bb" />
+		<property name="soapServer" value="https://sdkint11.yodlee.com/yodsoap/services" />
+		<property name="tncVersion" value="2" />
+		
+		<property name="BridgetApplicationID" value="10003200" />
+		<property name="ApplicationKey" value="a458bdf184d34c0cab7ef7ffbb5f016b" />
+		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
+		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/ezbob/addAccounts.pfmlaw.action" />
+		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/ezbob/apps/editSiteCredentials.pfmlaw.action" />
     </module>
     <module id="PacNet">
         <property name="SERVICE_TYPE" value="Testing" />
