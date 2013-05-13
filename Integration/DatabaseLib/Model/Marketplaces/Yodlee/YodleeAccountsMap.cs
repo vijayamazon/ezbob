@@ -15,7 +15,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 
 			Map(x => x.Username, "Username").Length(300);
 			Map(x => x.Password, "Password").Length(300);
-			Map(x => x.Username, "CreationDate").CustomType<UtcDateTimeType>().Nullable();
+			Map(x => x.CreationDate, "CreationDate").CustomType<UtcDateTimeType>().Nullable();
         }
     }
 }
