@@ -112,6 +112,7 @@
     <Compile Include="RepaymentCalculator.cs" />
     <Compile Include="SchedultItemModel.cs" />
     <Compile Include="SecurityQuestionModel.cs" />
+    <Compile Include="StrategyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\YodleeLib\YodleeLib.csproj">
