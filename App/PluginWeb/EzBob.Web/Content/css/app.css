@@ -391,14 +391,14 @@ div.shop-connected {
         width: 167px;
     }
 
-    .source_labels.play {
+    .source_labels.Play {
         background-position: -195px 0;
-        width: 119px;
+        width: 116px;
     }
 
-    .source_labels_on.play {
+    .source_labels_on.Play {
         background-position: -195px -40px;
-        width: 119px;
+        width: 116px;
     }
 
     .source_labels.shopify {
@@ -429,16 +429,6 @@ div.shop-connected {
     .source_labels_on.etsy {
         background-position: -502px -40px;
         width: 55px;
-    }
-
-    .source_labels.Play {
-        background-position: -1084px -3px;
-        width: 98px;
-    }
-
-    .source_labels_on.Play {
-        background-position: -1084px -43px;
-        width: 98px;
     }
 
 .source_table {

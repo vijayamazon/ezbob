@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Table("MP_YodleeOrderItem");
             Id(x => x.Id);
             References(x => x.Order, "OrderId");
-            HasMany(x => x.OrderItemBankTransactions).KeyColumn("OrderId").Cascade.All();
+            HasMany(x => x.OrderItemBankTransactions).KeyColumn("OrderItemId").Cascade.All();
 
             Map(x => x.isSeidFromDataSource, "isSeidFromDataSource").Nullable();
             Map(x => x.isSeidFromDataSourceSpecified, "isSeidFromDataSourceSpecified");
