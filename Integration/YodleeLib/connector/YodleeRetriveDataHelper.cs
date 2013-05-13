@@ -11,13 +11,15 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 	using System.Collections.Generic;
+	using StructureMap;
+	using config;
 
     public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
     {
-        public YodleeRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
+        public YodleeRetriveDataHelper(DatabaseDataHelper helper,
+                                       DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
-
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -32,7 +34,7 @@
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             //retreive data from Yodlee api
-            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password);
+            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId);
             //TODO: implement
             //var YodleeOrderItem = new List<YodleeOrderItem>();
             //foreach (var order in ordersList)
@@ -78,12 +80,14 @@
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            var yodleeSecurityInfo = new YodleeSecurityInfo();
-            IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-            yodleeSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
-            yodleeSecurityInfo.Name = customerMarketPlace.DisplayName;
-            yodleeSecurityInfo.MarketplaceId = customerMarketPlace.Id;
-            return yodleeSecurityInfo;
+            return SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(
+                GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData);
+            //var yodleeSecurityInfo = new YodleeSecurityInfo();
+            //IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
+            //yodleeSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
+            //yodleeSecurityInfo.Name = customerMarketPlace.DisplayName;
+            //yodleeSecurityInfo.MarketplaceId = customerMarketPlace.Id;
+            //return yodleeSecurityInfo;
         }
         
         

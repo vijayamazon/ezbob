@@ -4,6 +4,8 @@ using System.Web.Services.Protocols;
 
 namespace YodleeLib
 {
+    using config;
+
     /// <summary>
     /// Contains methods related to logging in and logging out
     /// a user to the Yodlee platform.
@@ -12,11 +14,11 @@ namespace YodleeLib
     {
         LoginService loginService = null;
         OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService = null;
-
+        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
         public LoginUser()
         {
             loginService = new LoginService();
-            loginService.Url = ConfigurationManager.AppSettings.Get("soapServer") + "/" + loginService.GetType().FullName;
+            loginService.Url =config.soapServer + "/" + loginService.GetType().FullName;
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace YodleeLib
             
             oAuthAccessTokenManagementService = new OAuthAccessTokenManagementServiceService();
             //oAuthAccessTokenManagementService.Url = System.Configuration.ConfigurationSettings.AppSettings.Get("soapServer") + "/" + oAuthAccessTokenManagementService.GetType().FullName + "_11_1";
-            oAuthAccessTokenManagementService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "OAuthAccessTokenManagementService_11_1";
+            oAuthAccessTokenManagementService.Url = config.soapServer + "/" + "OAuthAccessTokenManagementService_11_1";
             OAuthAccessToken authAccessToken = null;
             long? applicationId = 10003200;
 

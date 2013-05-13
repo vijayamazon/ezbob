@@ -11,7 +11,9 @@ using StructureMap.Configuration.DSL;
 
 namespace EzBob.Configuration
 {
-	public class EzBobRegistry : Registry
+    using YodleeLib.config;
+
+    public class EzBobRegistry : Registry
 	{
 		public EzBobRegistry()
 		{
@@ -24,6 +26,7 @@ namespace EzBob.Configuration
 				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use( ezBobConfigRoot.AmazonSetings );
+                For<IYodleeMarketPlaceConfig>().Use(ezBobConfigRoot.YodleeConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

@@ -2,7 +2,9 @@ using Scorto.Configuration;
 
 namespace YodleeLib.config
 {
-	public class YodleeEnvConnectionConfig : ConfigurationRoot, IYodleeMarketPlaceConfig
+    using StructureMap;
+
+    public class YodleeEnvConnectionConfig : ConfigurationRoot, IYodleeMarketPlaceConfig
     {
         public string cobrandId
         {
@@ -21,7 +23,7 @@ namespace YodleeLib.config
 
         public string password
         {
-            get { return GetValue<string>("password"); }
+            get { return GetValue<string>("password").Decrypt(); }
         }
 
         public string soapServer

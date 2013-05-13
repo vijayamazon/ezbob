@@ -5,18 +5,20 @@ using System.Collections.Generic;
 
 namespace YodleeLib
 {
+    using config;
+
     /// <summary>
     /// Displays a user's Bank item data in the Yodlee software platform..
     /// </summary>
     public class DisplayBankData : ApplicationSuper
     {
         DataServiceService dataService;
-
+       // private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
 
         public DisplayBankData()
         {
             dataService = new DataServiceService();
-            dataService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "DataService";
+            dataService.Url = YodleeConfig._Config.soapServer + "/" + "DataService";
         }
 
 

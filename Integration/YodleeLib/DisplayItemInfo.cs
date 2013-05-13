@@ -3,17 +3,20 @@ using System.Text;
 
 namespace YodleeLib
 {
-	/// <summary>
+    using config;
+
+    /// <summary>
 	/// Encapsulates DataService functionality of the Yodlee software platform.
 	/// </summary>
 	public class DisplayItemInfo
 	{
 		DataServiceService dataService;
+        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
 
 		public DisplayItemInfo()
 		{
 			dataService = new DataServiceService();
-            dataService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "DataService";
+            dataService.Url = config.soapServer + "/" + "DataService";
 		}
 
 		/// <summary>

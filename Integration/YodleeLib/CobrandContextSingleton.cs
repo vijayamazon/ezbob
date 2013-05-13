@@ -1,6 +1,8 @@
 using System;
 namespace YodleeLib
 {
+    using config;
+
     public sealed class CobrandContextSingleton
     {
         static CobrandContextSingleton instance = null;
@@ -9,15 +11,15 @@ namespace YodleeLib
         double COBRAND_CONTEXT_TIME_OUT = 3;
         DateTime created = DateTime.Now;
         CobrandLoginService cobrandLoginService;
-
+        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
         CobrandContextSingleton()
         {
             created = created.AddMinutes(-COBRAND_CONTEXT_TIME_OUT);
-            string soapServer = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer");
+            string soapServer = config.soapServer;
             System.Console.WriteLine("Connection to soapServer " + soapServer + "...");
             System.Environment.SetEnvironmentVariable("com.yodlee.soap.services.url", soapServer);
             cobrandLoginService = new CobrandLoginService();
-            cobrandLoginService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + cobrandLoginService.GetType().FullName;
+            cobrandLoginService.Url = config.soapServer + "/" + cobrandLoginService.GetType().FullName;
         }
 
         public static CobrandContextSingleton Instance
@@ -47,14 +49,14 @@ namespace YodleeLib
 
                 // Cobrand Context expired, create new one
                 cobrandLoginService = new CobrandLoginService();
-                cobrandLoginService.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + cobrandLoginService.GetType().FullName;
+                cobrandLoginService.Url = config.soapServer + "/" + cobrandLoginService.GetType().FullName;
                 // Get Cobrand Credentials from AppSettings (requires App.config file)
-                string cobrandIdStr = System.Configuration.ConfigurationManager.AppSettings.Get("cobrandId");
+                string cobrandIdStr = config.cobrandId;
                 long cobrandId = long.Parse(cobrandIdStr);
-                string applicationId = System.Configuration.ConfigurationManager.AppSettings.Get("applicationId");
-                string username = System.Configuration.ConfigurationManager.AppSettings.Get("username");
-                string password = System.Configuration.ConfigurationManager.AppSettings.Get("password");
-                string tncVersionStr = System.Configuration.ConfigurationManager.AppSettings.Get("tncVersion");
+                string applicationId = config.applicationId;
+                string username = config.username;
+                string password = config.password;
+                string tncVersionStr = config.tncVersion;
                 long tncVersion = long.Parse(tncVersionStr);
                 // Note you can remove warnings by adding reference 'System.Configuration' from the .NET tab
                 // and replacing code "ConfigurationSettings.AppSettings.Get" with "ConfigurationManager.AppSettings"

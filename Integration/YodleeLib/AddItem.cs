@@ -6,6 +6,8 @@ using YodleeLib.datatypes;
 
 namespace YodleeLib
 {
+    using config;
+
     /// <summary>
     /// Displays all the Content Services in the Yodlee software platform and allows
     /// a user to add an item to any one of those services.
@@ -15,8 +17,8 @@ namespace YodleeLib
         const String SEPARATOR = "*****************************************************************";
 
         ContentServiceTraversalService cst;
-        ItemManagementService itemManagement;        
-
+        ItemManagementService itemManagement;
+        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
         /// <summary>
         /// Constructs an instance of the AddItem class that
         //  provides the functionality to display all content.
@@ -24,9 +26,9 @@ namespace YodleeLib
         public AddItem()
         {
             cst = new ContentServiceTraversalService();
-            cst.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "ContentServiceTraversalService";
+            cst.Url = config.soapServer + "/" + "ContentServiceTraversalService";
             itemManagement = new ItemManagementService();
-            itemManagement.Url = System.Configuration.ConfigurationManager.AppSettings.Get("soapServer") + "/" + "ItemManagementService";
+            itemManagement.Url = config.soapServer + "/" + "ItemManagementService";
         }
 
         /// <summary>
