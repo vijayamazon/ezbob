@@ -1,4 +1,6 @@
 using System;
+using StructureMap;
+
 namespace YodleeLib
 {
     using config;
@@ -11,9 +13,13 @@ namespace YodleeLib
         double COBRAND_CONTEXT_TIME_OUT = 3;
         DateTime created = DateTime.Now;
         CobrandLoginService cobrandLoginService;
-        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
+
+        private static IYodleeMarketPlaceConfig config;
+        
         CobrandContextSingleton()
         {
+            config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+
             created = created.AddMinutes(-COBRAND_CONTEXT_TIME_OUT);
             string soapServer = config.soapServer;
             System.Console.WriteLine("Connection to soapServer " + soapServer + "...");
