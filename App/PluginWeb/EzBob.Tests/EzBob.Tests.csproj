@@ -88,6 +88,7 @@
     <Compile Include="AmazonRateInfoFixture.cs" />
     <Compile Include="AnalysisFunctionTimePeriodRepositoryFixture.cs" />
     <Compile Include="CustomLoanCanBeAltered.cs" />
+    <Compile Include="DiscountPlanFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
@@ -166,7 +167,6 @@
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
     </ProjectReference>
-
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
