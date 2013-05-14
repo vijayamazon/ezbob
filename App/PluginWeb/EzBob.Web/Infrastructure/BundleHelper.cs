@@ -36,6 +36,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/css/shops.css")
 		                 .Add("~/Content/css/app.css")
 		                 .Add("~/Content/css/attardi.labels.css")
+		                 .Add("~/Content/css/loan-type-selector.css")
                          .MvcRender("~/Content/css/min/combined_#.css");
         }
 
@@ -60,6 +61,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/css/choosen/chosen.css")
 			             .Add("~/Content/css/app.css")
                          .Add("~/Content/css/attardi.labels.css")
+                         .Add("~/Content/css/loan-type-selector.css")
                          .MvcRender("~/Content/css/min/customer_#.css");
         }
 
@@ -101,6 +103,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/css/coin-slider-styles.css")
                          .Add("~/Content/css/app.css")
                          .Add("~/Content/css/attardi.labels.css")
+                         .Add("~/Content/css/loan-type-selector.css")
                          .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
 

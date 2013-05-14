@@ -21,6 +21,7 @@ using EZBob.DatabaseLib.Exceptions;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Model.Loans;
 using EzBob.CommonLib;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 using EzBob.CommonLib.ReceivedDataListLogic;
@@ -69,6 +70,7 @@ namespace EZBob.DatabaseLib
         private readonly ConcurrentDictionary<string, MP_EBayOrderItemDetail> _CacheEBayOrderItemInfo = new ConcurrentDictionary<string, MP_EBayOrderItemDetail>();
         private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
         private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
+	    private readonly ILoanTypeRepository _LoanTypeRepository;
         private ISession _session;
 
         public DatabaseDataHelper(ISession session)
@@ -91,7 +93,10 @@ namespace EZBob.DatabaseLib
             _AmazonOrderItemDetailRepository = new AmazonOrderItemDetailRepository(session);
             _MP_EbayOrderRepository = new MP_EbayOrderRepository(session);
             _MP_EbayTransactionsRepository = new MP_EbayTransactionsRepository(session);
+			_LoanTypeRepository = new LoanTypeRepository(session);
         }
+
+		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
 
         public ICurrencyConvertor CurrencyConverter
         {

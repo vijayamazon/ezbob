@@ -161,6 +161,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// The amount of offer, that is still valid for user. It is reduced on taking each new loan.
         /// </summary>
         public virtual decimal? CreditSum { get; set; }
+        public virtual bool IsLoanTypeSelectionAllowed { get; set; }
 
         public virtual Status? Status { get; set; }
         public virtual CreditResultStatus? CreditResult { get; set; }

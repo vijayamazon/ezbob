@@ -31,6 +31,9 @@ namespace EzBob.Web.Areas.Customer.Models
 		public IEnumerable<SimpleMarketPlaceModel> yodleeAccounts { get; set; }        
         public IEnumerable<SimpleMarketPlaceModel> paypalAccounts { get; set; }
 
+		public int LastApprovedLoanTypeID { get; set; }
+		public int LastApprovedRepaymentPeriod { get; set; }
+
         public decimal? CreditSum { get; set; }
         public string CreditResult { get; set; }
         public DateTime? OfferStart { get; set; }
@@ -94,6 +97,8 @@ namespace EzBob.Web.Areas.Customer.Models
         public decimal TotalLatePayment { get; set; }
 
         public bool IsLoanDetailsFixed { get; set; }
+
+        public bool IsLoanTypeSelectionAllowed { get; set; }
     }
 
     public class LimitedInfoMap

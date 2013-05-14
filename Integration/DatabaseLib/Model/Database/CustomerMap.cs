@@ -27,6 +27,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();
             Map(x => x.CreditResult).CustomType<CreditResultStatusType>();
             Map(x => x.CreditSum);
+            Map(x => x.IsLoanTypeSelectionAllowed);
             Map(x => x.Status).CustomType<StatusType>();
             Map(x => x.SystemDecision).CustomType<SystemDecisionType>();
             Map(x => x.IsSuccessfullyRegistered, "IsSuccessfullyRegistered");

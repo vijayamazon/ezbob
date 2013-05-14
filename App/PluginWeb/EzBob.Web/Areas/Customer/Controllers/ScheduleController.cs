@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
+using EzBob.CommonLib;
 using EzBob.Models;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
@@ -10,6 +12,7 @@ using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
 using PaymentServices.Calculators;
 using Scorto.Web;
+using StructureMap;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -35,7 +38,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [HttpGet]
         [ValidateJsonAntiForgeryToken]
         [Transactional]
-        public JsonNetResult Calculate(int amount)
+        public JsonNetResult Calculate(int amount, int loanType, int repaymentPeriod)
         {
             if (!_customer.CreditSum.HasValue || !_customer.Status.HasValue || _customer.Status.Value != Status.Approved)
             {
@@ -57,7 +60,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var cr = _customer.LastCashRequest;
 
-            var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
+			if (_customer.IsLoanTypeSelectionAllowed) {
+				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+				cr.RepaymentPeriod = repaymentPeriod;
+				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
+			} // if
+
+	        var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 
             var schedule = loan.Schedule;
             var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee);

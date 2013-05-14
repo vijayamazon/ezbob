@@ -420,6 +420,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     var sum = request.ApprovedSum();
                     customer.CreditSum = sum;
                     if (sum <= 0) throw new Exception("Credit sum cannot be zero or less");
+                    customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
                     request.ManagerApprovedSum = (double?) sum;
                     customer.OfferStart = request.OfferStart;
                     customer.OfferValidUntil = request.OfferValidUntil;

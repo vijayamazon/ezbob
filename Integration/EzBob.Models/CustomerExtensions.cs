@@ -1,4 +1,10 @@
-﻿namespace EzBob.Web.Areas.Customer.Models
+﻿using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model.Loans;
+using EzBob.CommonLib;
+using Iesi.Collections.Generic;
+using StructureMap;
+
+namespace EzBob.Web.Areas.Customer.Models
 {
     using PayPoint;
     using System;

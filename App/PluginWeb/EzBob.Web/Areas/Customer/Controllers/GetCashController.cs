@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.CommonLib;
 using EzBob.Configuration;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
@@ -14,6 +16,7 @@ using PaymentServices.Calculators;
 using PaymentServices.PacNet;
 using Scorto.Configuration;
 using Scorto.Web;
+using StructureMap;
 using ZohoCRM;
 using log4net;
 
@@ -59,7 +62,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         }
 
         [NoCache]
-        public RedirectResult GetTransactionId(decimal loan_amount)
+        public RedirectResult GetTransactionId(decimal loan_amount, int loanType, int repaymentPeriod)
         {
             EZBob.DatabaseLib.Model.Database.Customer customer = _context.Customer;
 
@@ -70,7 +73,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 loan_amount = (int) Math.Floor(customer.CreditSum.Value);
             }
             var cr = customer.LastCashRequest;
-            DateTime lastDateOfPayment = DateTime.UtcNow.AddMonths(cr.RepaymentPeriod);
+
+			if (customer.IsLoanTypeSelectionAllowed) {
+				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+				cr.RepaymentPeriod = repaymentPeriod;
+				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
+			} // if
+
+	        DateTime lastDateOfPayment = DateTime.UtcNow.AddMonths(cr.RepaymentPeriod);
 
             decimal fee = !cr.HasLoans && cr.UseSetupFee ? (new SetupFeeCalculator()).Calculate(loan_amount) : 0;
 

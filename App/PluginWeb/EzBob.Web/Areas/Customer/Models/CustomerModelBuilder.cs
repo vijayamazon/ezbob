@@ -67,9 +67,13 @@ namespace EzBob.Web.Areas.Customer.Models
             customerdModel.playShops = customer.GetPlayShops();
             customerdModel.paypalAccounts = customer.GetPayPalAccountsSimple();
 
+			customerdModel.LastApprovedLoanTypeID = customer.LastCashRequest.LoanType.Id;
+			customerdModel.LastApprovedRepaymentPeriod = customer.LastCashRequest.RepaymentPeriod;
+
             customerdModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 
             customerdModel.CreditSum = customer.CreditSum;
+	        customerdModel.IsLoanTypeSelectionAllowed = customer.IsLoanTypeSelectionAllowed;
             customerdModel.CreditResult = customer.CreditResult.ToString();
             customerdModel.OfferStart = customer.OfferStart;
             customerdModel.OfferValidUntil = customer.OfferValidUntil;

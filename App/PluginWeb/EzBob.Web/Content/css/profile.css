@@ -777,6 +777,8 @@ body .other-amount-label {
     position: relative;
 }
 
+.loan-amount-header { position: relative; }
+
 .guarantee-img {
     width: 100px;
     height: 100px;

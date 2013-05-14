@@ -1,144 +1,165 @@
-﻿@model dynamic
-@helper ApplyForLoanTemplate()
-{
-    
-    <h2 style="margin-top: 8px;">Choose Loan Amount</h2>
+﻿@using EZBob.DatabaseLib
+@using EzBob.CommonLib
+@using StructureMap
+@model dynamic
+@helper ApplyForLoanTemplate() {
+	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
-    <div class="guarantee-img"></div>
+	int[] aryLoanPeriods = {6, 10};
 
-    <h3 class="apply-header-approved">You are eligible for <b><%-EzBob.formatPounds(CreditSum)%></b></h3>
-    <h3 class="apply-header-approved">Valid for <b class="offerValidFor"><%-OfferValid%></b> hrs.</h3>
+	<div id="loan-type-selector" class="hide">
+		<h2>Choose the right loan for your business</h2>
+		@foreach (var nPeriod in aryLoanPeriods) {
+			foreach (var lt in oDBHelper.LoanTypeRepository.GetAll()) {
+				<div class="plan" id="loan-type-@lt.Id-@nPeriod">
+					<h3>@lt.Name<span>@nPeriod Months</span></h3>
+					<button class="button green select-loan-type" loan-type="@lt.Id" repayment-period="@nPeriod">Select</button>
+					<ul>
+						<li>Advantage Point 1</li>
+						<li>Advantage Point 2</li>
+						<li>Advantage Point 3</li>
+						<li>Advantage Point 4</li>
+						<li><a href="#">Read More...</a></li>
+					</ul>
+				</div>
+			}
+		}
+	</div>
 
-    <div class="cash-question">
-        <h3>How much cash do you need?</h3>
+	<div class="loan-amount-header">
+		<h2 style="margin-top: 8px;">Choose Loan Amount</h2>
+		<div class="guarantee-img"></div>
+	</div>
 
-        <div class="row-fluid">
+	<h3 class="apply-header-approved">You are eligible for <b><%-EzBob.formatPounds(CreditSum)%></b></h3>
+	<h3 class="apply-header-approved">Valid for <b class="offerValidFor"><%-OfferValid%></b> hrs.</h3>
 
-            <div class="slider-wrapper clearfix span8">
-                <div id="loan-slider"></div>
-                <div class="slider-text">
-                    <div class="pull-right slider-upto">
-                        <text class="hm_blue">up to </text>
-                        <%-EzBob.formatPounds(maxCash)%>
-                    </div>
-                    <div class="pull-left ">
-                        <text class=""><%-EzBob.formatPounds(minCash)%></text>
-                    </div>
-                    <div class="slider-ticks"></div>
-                </div>
-            </div>
+	<div class="cash-question">
+		<h3>How much cash do you need?</h3>
 
-            <div class="span4">
-                <div style="width: 135px;" class="pull-right">
-                    <input type="text" name="loanAmount" class="input-small get-cash-amount white" placeholder="" value="<%-neededCash%>" />
-                    <img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
-                </div>
-            </div>
-        </div>
-     </div>
+		<div class="row-fluid">
 
-            <div id="block-loan-schedule">
-                <div class="loan-schedule">
-                </div>
-            </div>
-            <div id="block-agreement">
-                <div class="agreement">
-                </div>
-            </div>
-            <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
-            <a href="#" class="btn-back button grey pull-right">Back</a>
+			<div class="slider-wrapper clearfix span8">
+				<div id="loan-slider"></div>
+				<div class="slider-text">
+					<div class="pull-right slider-upto">
+						<text class="hm_blue">up to </text>
+						<%-EzBob.formatPounds(maxCash)%>
+					</div>
+					<div class="pull-left ">
+						<text class=""><%-EzBob.formatPounds(minCash)%></text>
+					</div>
+					<div class="slider-ticks"></div>
+				</div>
+			</div>
+
+			<div class="span4">
+				<div style="width: 135px;" class="pull-right">
+					<input type="text" name="loanAmount" class="input-small get-cash-amount white" placeholder="" value="<%-neededCash%>" />
+					<img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="block-loan-schedule">
+		<div class="loan-schedule">
+		</div>
+	</div>
+	<div id="block-agreement">
+		<div class="agreement">
+		</div>
+	</div>
+	<a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
+	<a href="#" class="btn-back button grey pull-right">Back</a>
 }
 
 @{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
 
 <script id="apply-forloan-template" type="text/template">
-    @ApplyForLoanTemplate()
+	@ApplyForLoanTemplate()
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
-    @ConsumerAgreementTemplate()
+	@ConsumerAgreementTemplate()
 </script>
 
-@helper ConsumerAgreementTemplate()
-{
-    <div style="padding-right: 15px;" class="simple-well clearfix">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Agreement</a></li>
-                <li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Agreement</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab3">
-                    <div class="overview loan-agreement" id="Pre-Contract-Agreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
-                    </div>
-                </div>
-                <div class="tab-pane" id="tab4">
-                    <div class="overview loan-agreement" id="CreditActAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/CreditActAgreement.cshtml");}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @PrintDownload()
-    </div>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
-            I have read and agree to the pre-agreement terms
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
-            I have read and agree to the agreement terms
-        </label>
-    </div>
+@helper ConsumerAgreementTemplate() {
+	<div style="padding-right: 15px;" class="simple-well clearfix">
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Agreement</a></li>
+				<li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Agreement</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab3">
+					<div class="overview loan-agreement" id="Pre-Contract-Agreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
+					</div>
+				</div>
+				<div class="tab-pane" id="tab4">
+					<div class="overview loan-agreement" id="CreditActAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/CreditActAgreement.cshtml");}
+					</div>
+				</div>
+			</div>
+		</div>
+		@PrintDownload()
+	</div>
+	<div class="controls">
+		<label class="checkbox">
+			<input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
+			I have read and agree to the pre-agreement terms
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
+			I have read and agree to the agreement terms
+		</label>
+	</div>
 }
 
 <script id="companies-agreement-template" type="text/template">
-    @CompaniesAgreementTemplate()
+	@CompaniesAgreementTemplate()
 </script>
 
-@helper CompaniesAgreementTemplate()
-{
-       
-    <div style="padding-right: 15px;" class="simple-well clearfix">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
-                <li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
-                    <div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/PrivateCompanyLoanAgreement.cshtml");}
+@helper CompaniesAgreementTemplate() {
+	<div style="padding-right: 15px;" class="simple-well clearfix">
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
+				<li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/PrivateCompanyLoanAgreement.cshtml");}
 
-                    </div>
-                </div>
-                <div class="tab-pane" id="tab2">
-                    <div class="overview loan-agreement" id="GuarantyAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/GuarantyAgreement.cshtml");}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @PrintDownload()
-    </div>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
-            I have read and agree to the agreement terms
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
-            I have read and agree to the guaranty terms
-        </label>
-    </div>
+					</div>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<div class="overview loan-agreement" id="GuarantyAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/GuarantyAgreement.cshtml");}
+					</div>
+				</div>
+			</div>
+		</div>
+		@PrintDownload()
+	</div>
+	<div class="controls">
+		<label class="checkbox">
+			<input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
+			I have read and agree to the agreement terms
+		</label>
+		<label class="checkbox">
+			<input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
+			I have read and agree to the guaranty terms
+		</label>
+	</div>
 }
 
-@helper PrintDownload()
-{
-    <div style="padding-top: 25px; padding-right: 25px;">
-        <a href="#" class="pull-right print print-link">Print</a>
-        <a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
-    </div>  
+@helper PrintDownload() {
+	<div style="padding-top: 25px; padding-right: 25px;">
+		<a href="#" class="pull-right print print-link">Print</a>
+		<a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
+	</div>  
 }

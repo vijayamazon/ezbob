@@ -15,6 +15,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       return
 
     @fixed = @customer.get('IsLoanDetailsFixed')
+    @isLoanTypeSelectionAllowed = @customer.get('IsLoanTypeSelectionAllowed')
+
+    @currentLoanTypeID = @customer.get('LastApprovedLoanTypeID')
+    @currentRepaymentPeriod = @customer.get('LastApprovedRepaymentPeriod')
 
     @recalculateThrottled = _.debounce @recalculateSchedule, 250
     @timerId = setInterval _.bind(@refreshTimer, this), 1000
@@ -33,11 +37,33 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .agreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
+    'click .select-loan-type': 'loanTypeChanged'
 
   ui:
     submit: ".submit"
     agreement: ".agreement"
     loanAmount: "input[name='loanAmount']"
+
+  loanTypeChanged: (e) =>
+    oTarget = $(e.target)
+
+    newLoanTypeID = oTarget.attr('loan-type')
+    newRepaymentPeriod = oTarget.attr('repayment-period')
+
+    if newLoanTypeID == @currentLoanTypeID and newRepaymentPeriod == @currentRepaymentPeriod
+      return
+
+    @currentLoanTypeID = newLoanTypeID
+    @currentRepaymentPeriod = newRepaymentPeriod
+
+    @setCurrentlyActiveLoanType()
+
+    @neededCashChanged()
+
+  setCurrentlyActiveLoanType: =>
+    @$('div.currently-active').removeClass('currently-active')
+    sCurrentlyActive = @currentLoanTypeID + '-' + @currentRepaymentPeriod
+    @$('#loan-type-' + sCurrentlyActive).addClass('currently-active')
 
   showSubmit: ->
     readPreAgreement = $(".preAgreementTermsRead").is(":checked")
@@ -50,11 +76,14 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   loanAmountChanged: (e) ->
     amount = @ui.loanAmount.autoNumericGet()
     @model.set "neededCash", parseInt(amount, 10)
+    @model.set "loanType", @currentLoanTypeID
+    @model.set "repaymentPeriod", @currentRepaymentPeriod
 
   recalculateSchedule: (val) ->
     BlockUi "on", @$el.find('#block-loan-schedule')
     BlockUi "on", @$el.find('#block-agreement')
-    $.getJSON("#{window.gRootPath}Customer/Schedule/Calculate?amount=#{parseInt(val)}").done (data) =>
+    sMoreParams = '&loanType=' + @currentLoanTypeID + '&repaymentPeriod=' + @currentRepaymentPeriod
+    $.getJSON("#{window.gRootPath}Customer/Schedule/Calculate?amount=#{parseInt(val)}" + sMoreParams).done (data) =>
       @renderSchedule data
       BlockUi "off", @$el.find('#block-loan-schedule')
       BlockUi "off", @$el.find('#block-agreement')
@@ -78,9 +107,12 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @$el.find("#loan-slider").slider "value", value
 
   onRender: ->
-
     if @fixed
       @$(".cash-question").hide()
+
+    if @isLoanTypeSelectionAllowed
+      @$('#loan-type-selector').show()
+      @setCurrentlyActiveLoanType()
 
     updateSlider = (event, ui) =>
       percent = (ui.value - min) / (max - min) * 100
@@ -92,6 +124,8 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       slider.css "-pie-background", "linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
       return  if ui.value is @model.get("neededCash")
       @model.set "neededCash", ui.value
+      @model.set "loanType", @currentLoanTypeID
+      @model.set "repaymentPeriod", @currentRepaymentPeriod
 
     max = @model.get("maxCash")
     min = @model.get("minCash")
@@ -123,6 +157,8 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     max = @model.get("maxCash")
     min = @model.get("minCash")
     @model.set "neededCash", creditSum
+    @model.set "loanType", @currentLoanTypeID
+    @model.set "repaymentPeriod", @currentRepaymentPeriod
     return false  if creditSum > max or creditSum < min
     return false  if not $(".preAgreementTermsRead").is(":checked") or not $(".agreementTermsRead").is(":checked")
     @trigger ("submit")
@@ -138,8 +174,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   download: ->
     amount = parseInt @model.get("neededCash"), 10
+    loanType = @currentLoanTypeID
+    repaymentPeriod = @currentRepaymentPeriod
     view = @getCurrentViewId()
-    location.href = "#{window.gRootPath}Customer/Agreement/Download?amount=#{amount}&viewName=#{view}"
+    location.href = "#{window.gRootPath}Customer/Agreement/Download?amount=#{amount}&viewName=#{view}&loanType=#{loanType}&repaymentPeriod=#{repaymentPeriod}"
     false
 
   createAgreementView: (agreementdata) ->

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Web.Mvc;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database.Loans;
+using EzBob.CommonLib;
 using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
+using StructureMap;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
@@ -32,9 +35,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _loanBuilder = loanBuilder;
         }
 
-        public FileResult Download(decimal amount, string viewName)
+        public FileResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod)
         {
             var lastCashRequest = _customer.LastCashRequest;
+
+			if (_customer.IsLoanTypeSelectionAllowed) {
+				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+				lastCashRequest.RepaymentPeriod = repaymentPeriod;
+				lastCashRequest.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
+			} // if
 
             var loan = _loanBuilder.CreateLoan(lastCashRequest, amount, DateTime.UtcNow);
             
