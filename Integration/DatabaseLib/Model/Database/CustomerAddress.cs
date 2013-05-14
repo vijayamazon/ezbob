@@ -1,9 +1,10 @@
 ﻿using System;
+using EZBob.DatabaseLib.Model.Database;
 using FluentNHibernate.Mapping;
 
 namespace ApplicationMng.Model
 {
-    public enum AddressType
+    public enum CustomerAddressType
     {
         PersonalAddress = 1,
         PrevPersonAddresses = 2,
@@ -20,8 +21,12 @@ namespace ApplicationMng.Model
     [Serializable]
     public class CustomerAddress
     {
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual Customer Customer { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual Director Director { get; set; }
         public virtual int AddressId { get; set; }
-        public virtual AddressType AddressType { get; set; }       
+        public virtual CustomerAddressType AddressType { get; set; }       
         public virtual string Id { get; set; }
         public virtual string Organisation { get; set; }
         public virtual string Line1 { get; set; }
@@ -81,6 +86,8 @@ namespace ApplicationMng.Model.Mappings
             Map(x => x.Pobox).Column("Pobox").Length(200);
             Map(x => x.Mailsortcode).Column("Mailsortcode").Length(200);
             Map(x => x.Udprn).Column("Udprn").Length(200);
+            References(x => x.Director, "DirectorId");
+            References(x => x.Customer, "CustomerId");
         }
     }
 }

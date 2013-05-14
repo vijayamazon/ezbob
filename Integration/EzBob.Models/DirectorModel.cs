@@ -19,6 +19,7 @@ namespace EzBob.Web.Areas.Customer.Models {
 
 		public string DateOfBirth { get; set; }
 		public CustomerAddress[] DirectorAddress { get; set; }
+        public CustomerAddress[] PrevDirectorAddress { get; set; }
 
 		public Director FromModel() {
 			Director director = null;
@@ -30,7 +31,9 @@ namespace EzBob.Web.Areas.Customer.Models {
 					Surname = Surname.Trim(),
 					Middle = (Middle ?? "").Trim(),
 					DateOfBirth = DateOfBirth.IndexOf("-", StringComparison.Ordinal) == -1 ? DateTime.ParseExact(DateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
-					DirectorAddress = DirectorAddress == null ? null : new HashedSet<CustomerAddress>(DirectorAddress),
+					DirectorAddressInfo = new DirectorAddressInfo{
+                        AllAddresses = DirectorAddress == null ? null : new HashedSet<CustomerAddress>(DirectorAddress)
+                    },
 					Gender = (Gender)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Gender), Gender.ToString())
 				};
 			}
@@ -48,7 +51,12 @@ namespace EzBob.Web.Areas.Customer.Models {
 				Middle = director.Middle,
 				Surname = director.Surname,
 				DateOfBirth = FormattingUtils.FormatDateToString(director.DateOfBirth, "-/-/-"),
-				DirectorAddress = director.DirectorAddress.ToArray(),
+			    DirectorAddress =
+			        director.DirectorAddressInfo.AllAddresses.Where(
+			            x =>
+			            x.AddressType == CustomerAddressType.LimitedDirectorHomeAddress ||
+			            x.AddressType == CustomerAddressType.NonLimitedDirectorHomeAddress).ToArray(),
+                PrevDirectorAddress = director.DirectorAddressInfo.AllAddresses.ToArray(),
 				Gender = director.Gender.ToString()[0]
 			};
 		} // FromDirector

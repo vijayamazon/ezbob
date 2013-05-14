@@ -7,7 +7,6 @@ using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Signals.ZohoCRM;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
@@ -23,7 +22,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 {
     public class CustomerDetailsController : Controller
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(CustomerDetailsController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerDetailsController));
 
         private readonly IEzbobWorkplaceContext _context;
         private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
@@ -91,9 +90,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.CashRequests.Add(cashRequest);
 
             _session.Flush();
-
             _creator.Evaluate(_context.User);
-
             _concentAgreementHelper.Save(customer, DateTime.UtcNow);
 
             try
@@ -102,8 +99,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
             catch (Exception e)
             {
-                _log.Warn("Converting lead failed");
-                _log.Warn(e);
+                Log.Warn("Converting lead failed");
+                Log.Warn(e);
             }
 
             return this.JsonNet(new {});
@@ -126,7 +123,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 foreach (var val in personalAddress)
                 {
-                    val.AddressType = AddressType.PersonalAddress;
+                    val.AddressType = CustomerAddressType.PersonalAddress;
+                    val.Customer = customer;
                 }
                 customer.AddressInfo.PersonalAddress = new HashedSet<CustomerAddress>(personalAddress);
             }
@@ -135,14 +133,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 foreach (var val in prevPersonAddresses)
                 {
-                    val.AddressType = AddressType.PrevPersonAddresses;
+                    val.AddressType = CustomerAddressType.PrevPersonAddresses;
+                    val.Customer = customer;
                 }
                customer.AddressInfo.PrevPersonAddresses = new HashedSet<CustomerAddress>(prevPersonAddresses);
             }
         }
 
         private static void ProcessNonLimited(NonLimitedInfo nonLimitedInfo, List<CustomerAddress> nonLimitedCompanyAddress,
-                                              List<DirectorModel> nonLimitedDirectors, EZBob.DatabaseLib.Model.Database.Customer customer)
+                                              IEnumerable<DirectorModel> nonLimitedDirectors, EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             customer.NonLimitedInfo = nonLimitedInfo;
             if (nonLimitedDirectors != null)
@@ -152,10 +151,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
                         var dir = d.FromModel();
                         if (dir != null)
                         {
-                            if (dir.DirectorAddress != null)
-                                foreach (var address in dir.DirectorAddress)
+                            if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null)
+                                foreach (var address in dir.DirectorAddressInfo.AllAddresses)
                                 {
-                                    address.AddressType = AddressType.NonLimitedDirectorHomeAddress;
+                                    address.AddressType = CustomerAddressType.NonLimitedDirectorHomeAddress;
+                                    address.Director = dir;
                                 }
                             dir.Customer = customer;
                         }
@@ -166,13 +166,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 foreach (var val in nonLimitedCompanyAddress)
                 {
-                    val.AddressType = AddressType.NonLimitedCompanyAddress;
+                    val.AddressType = CustomerAddressType.NonLimitedCompanyAddress;
+                    val.Customer = customer;
                 }
                 customer.AddressInfo.NonLimitedCompanyAddress = new HashedSet<CustomerAddress>(nonLimitedCompanyAddress);
             }
         }
 
-        private static void ProcessLimited(LimitedInfo limitedInfo, List<CustomerAddress> limitedCompanyAddress, List<DirectorModel> limitedDirectors,
+        private static void ProcessLimited(LimitedInfo limitedInfo, ICollection<CustomerAddress> limitedCompanyAddress, IEnumerable<DirectorModel> limitedDirectors,
                                            EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             customer.LimitedInfo = limitedInfo;
@@ -184,10 +185,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
                             var dir = d.FromModel();
                             if (dir != null)
                             {
-                                if (dir.DirectorAddress != null)
-                                    foreach (var address in dir.DirectorAddress)
+                                if (dir.DirectorAddressInfo != null && dir.DirectorAddressInfo.AllAddresses != null)
+                                    foreach (var address in dir.DirectorAddressInfo.AllAddresses)
                                     {
-                                        address.AddressType = AddressType.LimitedDirectorHomeAddress;
+                                        address.AddressType = CustomerAddressType.LimitedDirectorHomeAddress;
+                                        address.Director = dir;
                                     }
                                 dir.Customer = customer;
                             }
@@ -199,7 +201,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 foreach (var val in limitedCompanyAddress)
                 {
-                    val.AddressType = AddressType.LimitedCompanyAddress;
+                    val.AddressType = CustomerAddressType.LimitedCompanyAddress;
+                    val.Customer = customer;
                 }
                 customer.AddressInfo.LimitedCompanyAddress = new HashedSet<CustomerAddress>(limitedCompanyAddress);
             }
@@ -215,12 +218,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             if(string.IsNullOrEmpty(personalInfo.FirstName))
             {
-                throw new ArgumentNullException("personalInfo.FirstName");
+                throw new ArgumentNullException("personalInfo." + "FirstName");
             }
 
             if (string.IsNullOrEmpty(personalInfo.Surname))
             {
-                throw new ArgumentNullException("personalInfo.Surname");
+                throw new ArgumentNullException("personalInfo.S" + "urname");
             }
         }
 
@@ -240,19 +243,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.PersonalInfo.WebSiteTurnOver = webSiteTurnOver;
 
             var addressInfo = customer.AddressInfo;
-            MakeAddress(personalAddress, addressInfo.PrevPersonAddresses, AddressType.PrevPersonAddresses, addressInfo.PersonalAddress, AddressType.PersonalAddress);
+            MakeAddress(personalAddress, addressInfo.PrevPersonAddresses, CustomerAddressType.PrevPersonAddresses, addressInfo.PersonalAddress, CustomerAddressType.PersonalAddress);
             
             if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
             {
                 customer.LimitedInfo.LimitedBusinessPhone = businessPhone;
 
-                MakeAddress(limitedCompanyAddress, addressInfo.LimitedCompanyAddressPrev, AddressType.LimitedCompanyAddressPrev, addressInfo.LimitedCompanyAddress, AddressType.LimitedCompanyAddress);
+                MakeAddress(limitedCompanyAddress, addressInfo.LimitedCompanyAddressPrev, CustomerAddressType.LimitedCompanyAddressPrev, addressInfo.LimitedCompanyAddress, CustomerAddressType.LimitedCompanyAddress);
 
                 if (customer.LimitedInfo.Directors.Any())
                 {
                     foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
                     {
-                        MakeAddress(directorAddress, addrInfo.LimitedDirectorHomeAddressPrev, AddressType.LimitedDirectorHomeAddressPrev, addrInfo.LimitedDirectorHomeAddress, AddressType.LimitedDirectorHomeAddress);
+                        MakeAddress(directorAddress, addrInfo.LimitedDirectorHomeAddressPrev, CustomerAddressType.LimitedDirectorHomeAddressPrev, addrInfo.LimitedDirectorHomeAddress, CustomerAddressType.LimitedDirectorHomeAddress);
                     }
                 }
             }
@@ -261,13 +264,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 customer.NonLimitedInfo.NonLimitedBusinessPhone = businessPhone;
 
-                MakeAddress(nonLimitedCompanyAddress, addressInfo.NonLimitedCompanyAddressPrev, AddressType.NonLimitedCompanyAddressPrev, addressInfo.NonLimitedCompanyAddress, AddressType.NonLimitedCompanyAddress);
+                MakeAddress(nonLimitedCompanyAddress, addressInfo.NonLimitedCompanyAddressPrev, CustomerAddressType.NonLimitedCompanyAddressPrev, addressInfo.NonLimitedCompanyAddress, CustomerAddressType.NonLimitedCompanyAddress);
 
                 if (customer.NonLimitedInfo.Directors.Any())
                 {
                     foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
                     {
-                        MakeAddress(directorAddress, addrInfo.NonLimitedDirectorHomeAddressPrev, AddressType.NonLimitedDirectorHomeAddressPrev, addrInfo.NonLimitedDirectorHomeAddress, AddressType.NonLimitedDirectorHomeAddress);
+                        MakeAddress(directorAddress, addrInfo.NonLimitedDirectorHomeAddressPrev, CustomerAddressType.NonLimitedDirectorHomeAddressPrev, addrInfo.NonLimitedDirectorHomeAddress, CustomerAddressType.NonLimitedDirectorHomeAddress);
                     }
                 }
             }
@@ -282,26 +285,41 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
             catch (Exception e)
             {
-                _log.Warn("CRM: updating customer failed");
-                _log.Warn(e);
+                Log.Warn("CRM: updating customer failed");
+                Log.Warn(e);
             }
 
             return this.JsonNet(new { });
         }
 
-        private void MakeAddress(List<CustomerAddress> newAddress, Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress, AddressType prevAddressType,  Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress, AddressType currentAddressType)
+        private void MakeAddress(IEnumerable<CustomerAddress> newAddress, Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress, CustomerAddressType prevAddressType, Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress, CustomerAddressType currentAddressType)
         {
-            var addAddress = newAddress.Where(i => i.AddressId == 0).ToList();
-            if (!addAddress.Any()) return;
-            var lastAddress = addAddress.Last();
-            foreach (var item in addAddress.Where(a => a.Id != lastAddress.Id))
+            var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
+            var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
+            var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
+
+            if (curAddress == null) return;
+
+            foreach (var address in newAddresses)
+            {
+                address.Director = currentAddress.First().Director;
+                address.Customer = currentAddress.First().Customer;
+            }
+
+            foreach (var address in currentAddress)
+            {
+                address.AddressType = prevAddressType;
+            }
+
+            foreach (var item in addAddress.Where(a => a.Id != curAddress.Id))
             {
                 item.AddressType = prevAddressType;
                 prevAddress.Add(item);
             }
-            lastAddress.AddressType = currentAddressType;
+
+            curAddress.AddressType = currentAddressType;
             currentAddress.Clear();
-            currentAddress.Add(lastAddress);
+            currentAddress.Add(curAddress);
         }
 
         [NonAction]
@@ -379,7 +397,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             AddAddressInfoToHistory(oldPersonalInfo.CompanyAddress, newPersonalInfo.CompanyAddress, customer, "Company Address");
         }
 
-        private void AddAddressInfoToHistory(IList<CustomerAddress> oldAddress,
+        private void AddAddressInfoToHistory(IEnumerable<CustomerAddress> oldAddress,
                                              IList<CustomerAddress> newAddress,
                                              EZBob.DatabaseLib.Model.Database.Customer customer,
                                              string fieldName)

@@ -61,8 +61,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
             Directors = new List<Director>();
             CrossCheckStatus =new CrossCheckStatus();
 
-            var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == AddressType.PersonalAddress);
-            var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == AddressType.PrevPersonAddresses);
+            var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+            var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
             if (current != null)CurrentAddress = current;
             if (prev != null)PrevAddress = prev;
             if (customer.PersonalInfo != null)

@@ -1,28 +1,17 @@
 using System;
+using ApplicationMng.Model;
 using FluentNHibernate.Mapping;
 using Iesi.Collections.Generic;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    using ApplicationMng.Model;
     public class Director
     {
         public virtual int Id { get; set; }
-
         public virtual string Name { get; set; }
         public virtual string Middle { get; set; }
         public virtual string Surname { get; set; }
-
         public virtual DateTime? DateOfBirth { get; set; }
-
-        private ISet<CustomerAddress> _addresses = new HashedSet<CustomerAddress>();
-
-        public virtual ISet<CustomerAddress> DirectorAddress
-        {
-            get { return _addresses; }
-            set { _addresses = value; }
-        }
-
         public virtual Customer Customer { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual DirectorAddressInfo DirectorAddressInfo { get; set; }
@@ -30,39 +19,47 @@ namespace EZBob.DatabaseLib.Model.Database
 
     public class DirectorAddressInfo
     {
+        private ISet<CustomerAddress> _limitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
+        private ISet<CustomerAddress> _limitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        private ISet<CustomerAddress> _nonLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
         private ISet<CustomerAddress> _nonLimitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
+        private ISet<CustomerAddress> _allAddresses = new HashedSet<CustomerAddress>();
+
         public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddressPrev
         {
             get { return _nonLimitedDirectorHomeAddressPrev; }
             set { _nonLimitedDirectorHomeAddressPrev = value; }
         }
 
-        private ISet<CustomerAddress> _limitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
         public virtual ISet<CustomerAddress> LimitedDirectorHomeAddress
         {
             get { return _limitedDirectorHomeAddress; }
             set { _limitedDirectorHomeAddress = value; }
         }
 
-        private ISet<CustomerAddress> _nonLimitedDirectorHomeAddress = new HashedSet<CustomerAddress>();
         public virtual ISet<CustomerAddress> NonLimitedDirectorHomeAddress
         {
             get { return _nonLimitedDirectorHomeAddress; }
             set { _nonLimitedDirectorHomeAddress = value; }
         }
 
-        private ISet<CustomerAddress> _limitedDirectorHomeAddressPrev = new HashedSet<CustomerAddress>();
         public ISet<CustomerAddress> LimitedDirectorHomeAddressPrev
         {
             get { return _limitedDirectorHomeAddressPrev; }
             set { _limitedDirectorHomeAddressPrev = value; }
+        }
+
+        public virtual ISet<CustomerAddress> AllAddresses
+        {
+            get { return _allAddresses; }
+            set { _allAddresses = value; }
         }
     }
 }
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class DirectorModelMap: ClassMap<Director>
+    public class DirectorModelMap : ClassMap<Director>
     {
         public DirectorModelMap()
         {
@@ -75,51 +72,52 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.DateOfBirth);
             Map(x => x.Gender).CustomType<GenderType>();
             References(x => x.Customer, "CustomerId");
-            HasManyToMany(x => x.DirectorAddress)
-                                .AsSet()
-                                .Cascade.All()
-                                .Table("DirectorAddressRelation")
-                                .ParentKeyColumn("DirectorId")
-                                .ChildKeyColumn("addressId");
 
             Component(x => x.DirectorAddressInfo, m =>
-            {
-                m.HasManyToMany(x => x.LimitedDirectorHomeAddressPrev)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("DirectorAddressRelation")
-                    .ParentKeyColumn("DirectorId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.LimitedDirectorHomeAddressPrev))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                {
+                    m.HasMany(x => x.LimitedDirectorHomeAddressPrev)
+                     .AsSet()
+                     .KeyColumn("directorId")
+                     .Where("addressType=" +
+                            Convert.ToInt32(CustomerAddressType.LimitedDirectorHomeAddressPrev))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddressPrev)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("DirectorAddressRelation")
-                    .ParentKeyColumn("DirectorId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.NonLimitedDirectorHomeAddressPrev))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.NonLimitedDirectorHomeAddressPrev)
+                     .AsSet()
+                     .KeyColumn("directorId")
+                     .Where("addressType=" +
+                            Convert.ToInt32(CustomerAddressType.NonLimitedDirectorHomeAddressPrev))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasManyToMany(x => x.LimitedDirectorHomeAddress)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("DirectorAddressRelation")
-                    .ParentKeyColumn("DirectorId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.LimitedDirectorHomeAddress))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.LimitedDirectorHomeAddress)
+                     .AsSet()
+                     .KeyColumn("directorId")
+                     .Where("addressType=" +
+                            Convert.ToInt32(CustomerAddressType.LimitedDirectorHomeAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasManyToMany(x => x.NonLimitedDirectorHomeAddress)
-                    .AsSet()
-                    .Cascade.All()
-                    .Table("DirectorAddressRelation")
-                    .ParentKeyColumn("DirectorId")
-                    .ChildKeyColumn("addressId")
-                    .ChildWhere("addressType=" + Convert.ToInt32(ApplicationMng.Model.AddressType.NonLimitedDirectorHomeAddress))
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-            });
+                    m.HasMany(x => x.NonLimitedDirectorHomeAddress)
+                     .AsSet()
+                     .KeyColumn("directorId")
+                     .Where("addressType=" +
+                            Convert.ToInt32(CustomerAddressType.NonLimitedDirectorHomeAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                    m.HasMany(x => x.AllAddresses)
+                     .AsSet()
+                     .KeyColumn("directorId")
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                });
         }
     }
 }

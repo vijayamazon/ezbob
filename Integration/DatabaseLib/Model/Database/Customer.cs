@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ApplicationMng.Model;
-using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
 using Iesi.Collections.Generic;
@@ -298,7 +297,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         private string _payPointTransactionId;
         private Iesi.Collections.Generic.ISet<DecisionHistory> _decisionHistory = new HashedSet<DecisionHistory>();
 
-
         public virtual Iesi.Collections.Generic.ISet<ScoringResult> ScoringResults
         {
             get { return _scoringResults; }
@@ -348,7 +346,6 @@ namespace EZBob.DatabaseLib.Model.Database {
             get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus()); }
             set { _collectionStatus = value; }
         }
-
 
         /// <summary>
         /// Количество неудачноых проверок банковского счета
@@ -578,6 +575,12 @@ namespace EZBob.DatabaseLib.Model.Database {
             set { _nonLimitedCompanyAddressPrev = value; }
         }
 
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _allAddresses = new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> AllAddresses
+        {
+            get { return _allAddresses; }
+            set { _allAddresses = value; }
+        }
     }
 
     public class ScoringResult

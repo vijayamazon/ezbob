@@ -174,7 +174,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             var dirModelList = new List<CreditBureauModel>();
             foreach (var director in directors)
             {
-                var directorMainAddress = director.DirectorAddress.FirstOrDefault();
+                var directorAddresses = director.DirectorAddressInfo != null ? director.DirectorAddressInfo.AllAddresses : null;
+                var directorMainAddress = directorAddresses!= null ? directorAddresses.First() : null;
                 var dirLoc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
                 if (directorMainAddress != null)
                 {
