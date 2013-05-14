@@ -233,6 +233,9 @@ ul.documents {
     background-color: #333;
 }
 
+.label.green {
+    background-color: rgb(100, 153, 30);
+}
 .add_account_button_alignment {
     margin: auto;
     float: left;

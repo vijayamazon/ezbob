@@ -145,3 +145,7 @@ a.excel-link {
    background-image: url(../img/excel.png);
    outline: none;
 } 
+
+.tooltipdiv .label{
+    vertical-align: top;
+}
