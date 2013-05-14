@@ -4,6 +4,7 @@ using System.Web.Services.Protocols;
 
 namespace YodleeLib
 {
+    using StructureMap;
     using config;
 
     /// <summary>
@@ -12,13 +13,14 @@ namespace YodleeLib
     /// </summary>
     public class LoginUser : ApplicationSuper
     {
-        LoginService loginService = null;
-        OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService = null;
-        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
+        readonly LoginService loginService;
+        OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService;
+        private static IYodleeMarketPlaceConfig _config;
         public LoginUser()
         {
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
             loginService = new LoginService();
-            loginService.Url =config.soapServer + "/" + loginService.GetType().FullName;
+            loginService.Url = _config.soapServer + "/" + loginService.GetType().FullName;
         }
 
         /// <summary>
@@ -29,19 +31,10 @@ namespace YodleeLib
         /// <returns></returns>
         public UserContext loginUser(String loginName, String password)
         {
-            PasswordCredentials passwordCredentials = new PasswordCredentials();
-            passwordCredentials.loginName = loginName;
-            passwordCredentials.password = password;
-            UserInfo1 userInfo1 = null;
-            userInfo1 = loginService.login1(getCobrandContext(), passwordCredentials, null, false);
-            if (userInfo1 == null)
-            {
-                return null;
-            }
-            else
-            {
-                return userInfo1.userContext;
-            }
+            var passwordCredentials = new PasswordCredentials {loginName = loginName, password = password};
+            UserInfo1 userInfo1;
+            userInfo1 = loginService.login1(GetCobrandContext(), passwordCredentials, null, false);
+            return userInfo1 == null ? null : userInfo1.userContext;
         }
 
         /// <summary>
@@ -60,9 +53,9 @@ namespace YodleeLib
         public void getUserInfo(UserContext userContext)
         {
             UserInfo1 userInfo1 = loginService.getUserInfo(userContext);
-            System.Console.WriteLine("\tUser Name: {0}", userInfo1.loginName);
-            System.Console.WriteLine("\tLogin Count: {0}", userInfo1.loginCount);
-            System.Console.WriteLine("\tEmail Address: {0}", userInfo1.emailAddress);
+            Console.WriteLine("\tUser Name: {0}", userInfo1.loginName);
+            Console.WriteLine("\tLogin Count: {0}", userInfo1.loginCount);
+            Console.WriteLine("\tEmail Address: {0}", userInfo1.emailAddress);
         }
 
         /// <summary>
@@ -92,10 +85,10 @@ namespace YodleeLib
         //oauth
         public OAuthAccessToken getAccessTokens(UserContext userContext)
         {
-            
+
             oAuthAccessTokenManagementService = new OAuthAccessTokenManagementServiceService();
             //oAuthAccessTokenManagementService.Url = System.Configuration.ConfigurationSettings.AppSettings.Get("soapServer") + "/" + oAuthAccessTokenManagementService.GetType().FullName + "_11_1";
-            oAuthAccessTokenManagementService.Url = config.soapServer + "/" + "OAuthAccessTokenManagementService_11_1";
+            oAuthAccessTokenManagementService.Url = _config.soapServer + "/" + "OAuthAccessTokenManagementService_11_1";
             OAuthAccessToken authAccessToken = null;
             long? applicationId = 10003200;
 
@@ -125,7 +118,7 @@ namespace YodleeLib
         /// Touches the underlying conversation credentials (session) of the user
         /// on the Yodlee platform, to get a new lease on the inactivity timeout.
         /// </summary>
-        /// <param name="userContext"></param
+        /// <param name="userContext">userContext</param>
         public void extendInactivityTimeout(UserContext userContext)
         {
             loginService.touchConversationCredentials(userContext);

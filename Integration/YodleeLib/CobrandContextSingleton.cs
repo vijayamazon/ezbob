@@ -1,31 +1,29 @@
-using System;
-using StructureMap;
+
 
 namespace YodleeLib
 {
-    using config;
+    using System;
+    using StructureMap;
+    using YodleeLib.config;
 
     public sealed class CobrandContextSingleton
     {
         static CobrandContextSingleton instance = null;
         static readonly object padlock = new object();
-        static CobrandContext cobrandContext = null;       
+        static CobrandContext cobrandContext = null;
         double COBRAND_CONTEXT_TIME_OUT = 3;
         DateTime created = DateTime.Now;
         CobrandLoginService cobrandLoginService;
+        private static IYodleeMarketPlaceConfig _config;
 
-        private static IYodleeMarketPlaceConfig config;
-        
         CobrandContextSingleton()
         {
-            config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
-
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
             created = created.AddMinutes(-COBRAND_CONTEXT_TIME_OUT);
-            string soapServer = config.soapServer;
-            System.Console.WriteLine("Connection to soapServer " + soapServer + "...");
-            System.Environment.SetEnvironmentVariable("com.yodlee.soap.services.url", soapServer);
+            string soapServer = _config.soapServer;
+            Environment.SetEnvironmentVariable("com.yodlee.soap.services.url", soapServer);
             cobrandLoginService = new CobrandLoginService();
-            cobrandLoginService.Url = config.soapServer + "/" + cobrandLoginService.GetType().FullName;
+            cobrandLoginService.Url = soapServer + "/" + cobrandLoginService.GetType().FullName;
         }
 
         public static CobrandContextSingleton Instance
@@ -34,7 +32,7 @@ namespace YodleeLib
             {
                 lock (padlock)
                 {
-                    if (instance==null)
+                    if (instance == null)
                     {
                         instance = new CobrandContextSingleton();
                     }
@@ -46,23 +44,21 @@ namespace YodleeLib
         public CobrandContext getCobrandContext()
         {
             DateTime now = DateTime.Now;
-            DateTime expired = created.AddMinutes(COBRAND_CONTEXT_TIME_OUT );
+            DateTime expired = created.AddMinutes(COBRAND_CONTEXT_TIME_OUT);
 
 
             if (now >= expired)
             {
-               // System.Console.WriteLine("\t(CobrandContext is old, creating new one...)");
-
                 // Cobrand Context expired, create new one
                 cobrandLoginService = new CobrandLoginService();
-                cobrandLoginService.Url = config.soapServer + "/" + cobrandLoginService.GetType().FullName;
+                cobrandLoginService.Url = _config.soapServer + "/" + cobrandLoginService.GetType().FullName;
                 // Get Cobrand Credentials from AppSettings (requires App.config file)
-                string cobrandIdStr = config.cobrandId;
+                string cobrandIdStr = _config.cobrandId;
                 long cobrandId = long.Parse(cobrandIdStr);
-                string applicationId = config.applicationId;
-                string username = config.username;
-                string password = config.password;
-                string tncVersionStr = config.tncVersion;
+                string applicationId = _config.applicationId;
+                string username = _config.username;
+                string password = _config.password;
+                string tncVersionStr = _config.tncVersion;
                 long tncVersion = long.Parse(tncVersionStr);
                 // Note you can remove warnings by adding reference 'System.Configuration' from the .NET tab
                 // and replacing code "ConfigurationSettings.AppSettings.Get" with "ConfigurationManager.AppSettings"
@@ -75,10 +71,10 @@ namespace YodleeLib
                 cobrandPasswordCredentials.password = password;
                 cobrandPasswordCredentials.loginName = username;
 
-               
-                    // authentication of a cobrand in the Yodlee software platform and returns 
-                    // a valid CobrandContext if the authentication is successful. This method takes a generic CobrandCredentials argument as the
-                    // authentication related credentials of the cobrand.
+
+                // authentication of a cobrand in the Yodlee software platform and returns 
+                // a valid CobrandContext if the authentication is successful. This method takes a generic CobrandCredentials argument as the
+                // authentication related credentials of the cobrand.
                 cobrandContext = cobrandLoginService.loginCobrand(
                         cobrandId,
                         true,
@@ -87,13 +83,12 @@ namespace YodleeLib
                         tncVersion,
                         true,
                         cobrandPasswordCredentials);
-               
+
                 created = DateTime.Now;
                 return cobrandContext;
             }
             else
             {
-               // System.Console.WriteLine("\t(using cached CobrandContext...)");
                 return cobrandContext;
             }
         }

@@ -1,6 +1,7 @@
 ﻿namespace YodleeLib.connector
 {
-	using EzBob.CommonLib;
+    using System;
+    using EzBob.CommonLib;
 	using EzBob.CommonLib.Security;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
@@ -16,12 +17,12 @@
 
     public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
     {
-        private readonly IYodleeMarketPlaceConfig _Config;
+       // private readonly IYodleeMarketPlaceConfig _Config;
         public YodleeRetriveDataHelper(DatabaseDataHelper helper,
                                        DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
-            _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();  
+           // _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();  
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -36,33 +37,16 @@
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             //retreive data from Yodlee api
-            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId, _Config);
+            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId);
             //TODO: implement
-            //var YodleeOrderItem = new List<YodleeOrderItem>();
-            //foreach (var order in ordersList)
-            //{
-            //    YodleeOrderItem.Add(new YodleeOrderItem
-            //    {
-            //        YodleeOrderId = order.OrderID,
-            //        OrderNumber = order.OrderNumber,
-            //        CustomerID = order.CustomerID,
-            //        CompanyName = order.CompanyName,
-            //        FirstName = order.FirstName,
-            //        LastName = order.LastName,
-            //        EmailAddress = order.EmailAddress,
-            //        TotalCost = order.TotalCost,
-            //        OrderDate = DateTime.Parse(order.OrderDate),
-            //        OrderStatus = order.OrderStatus,
-            //        OrderDateIso = DateTime.Parse(order.OrderDateISO),
-            //        OrderStatusColour = order.OrderStatusColour,
-            //    });
-            //}
+            var yodleeOrderItem = new YodleeOrderItem();
+            yodleeOrderItem.Data = ordersList;
 
-            //var elapsedTimeInfo = new ElapsedTimeInfo();
-            //var allOrders = new YodleeOrdersList(DateTime.UtcNow, YodleeOrderItem);
-            //ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-            //                        ElapsedDataMemberType.StoreDataToDatabase,
-            //                        () => Helper.StoreYodleeOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));
+            var elapsedTimeInfo = new ElapsedTimeInfo();
+            
+            ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                                    ElapsedDataMemberType.StoreDataToDatabase,
+                                    () => Helper.StoreYodleeOrdersData(databaseCustomerMarketPlace, yodleeOrderItem, historyRecord));
 
 
             ////store agregated

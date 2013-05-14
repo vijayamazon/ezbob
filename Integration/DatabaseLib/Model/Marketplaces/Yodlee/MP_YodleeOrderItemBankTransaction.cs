@@ -5,7 +5,7 @@ namespace EZBob.DatabaseLib.Model.Database
     public class MP_YodleeOrderItemBankTransaction
     {
         public virtual int Id { get; set; }
-        public virtual int OrderItemId { get; set; }
+        public virtual MP_YodleeOrderItem YodleeOrderItem { get; set; }
 
         public virtual long? isSeidFromDataSource { get; set; }
         public virtual bool isSeidFromDataSourceSpecified { get; set; }

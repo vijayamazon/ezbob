@@ -63,8 +63,7 @@ namespace YodleeLib
 		private void Tokenize()
 		{
 			string TempSource = this.StrSource;
-			string Tok = "";
-			this.NumTokens = 0;
+		    this.NumTokens = 0;
 			this.tokens.Clear();
 			this.CurrIndex = 0;
 			
@@ -87,27 +86,13 @@ namespace YodleeLib
 				//Delimiter at beginning of source String.
 				if(TempSource.IndexOf(this.StrDelimiter) == 0)
 				{
-					if(TempSource.Length > this.StrDelimiter.Length)
-					{
-						TempSource = TempSource.Substring(this.StrDelimiter.Length);
-					}
-					else
-					{
-						TempSource = "";
-					}
+					TempSource = TempSource.Length > this.StrDelimiter.Length ? TempSource.Substring(this.StrDelimiter.Length) : "";
 				}
 				else
 				{
-					Tok = TempSource.Substring(0,TempSource.IndexOf(this.StrDelimiter));
+					string Tok = TempSource.Substring(0,TempSource.IndexOf(this.StrDelimiter));
 					this.tokens.Add(Tok);
-					if(TempSource.Length > (this.StrDelimiter.Length + Tok.Length))
-					{
-						TempSource = TempSource.Substring(this.StrDelimiter.Length + Tok.Length);
-					}
-					else
-					{
-						TempSource = "";
-					}
+					TempSource = TempSource.Length > (this.StrDelimiter.Length + Tok.Length) ? TempSource.Substring(this.StrDelimiter.Length + Tok.Length) : "";
 				}
 			}
 			//we may have a string leftover.
@@ -140,18 +125,11 @@ namespace YodleeLib
 		/// <param name="newDel">The new Delimiter String.</param>
 		public void NewDelim(string newDel)
 		{
-			if(newDel.Length == 0)
-			{
-				this.StrDelimiter = " ";
-			}
-			else
-			{
-				this.StrDelimiter = newDel;
-			}
-			this.Tokenize();
+		    this.StrDelimiter = newDel.Length == 0 ? " " : newDel;
+		    this.Tokenize();
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Method to add or change this Instance's Delimiter string.  The source string
 		/// will remain the same (either empty if you used Empty Constructor, or the 
 		/// previous value of source from the call to a parameterized constructor or
@@ -161,15 +139,8 @@ namespace YodleeLib
 		/// expects Unicode encoded chars.</param>
 		public void NewDelim(char[] newDel)
 		{
-			string temp = new String(newDel);
-			if(temp.Length == 0)
-			{
-				this.StrDelimiter = " ";
-			}
-			else
-			{
-				this.StrDelimiter = temp;
-			}
+			var temp = new String(newDel);
+			this.StrDelimiter = temp.Length == 0 ? " " : temp;
 			this.Tokenize();
 		}
 
@@ -188,36 +159,29 @@ namespace YodleeLib
 		/// <returns>true if there are more tokens; false otherwise.</returns>
 		public bool HasMoreTokens()
 		{
-			if(this.CurrIndex <= (this.tokens.Count-1))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+		    return this.CurrIndex <= (this.tokens.Count-1);
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Method to get the next (string)token of this StringTokenizer.
 		/// </summary>
 		/// <returns>A string representing the next token; null if no tokens or no more tokens.</returns>
 		public string NextToken()
-		{
-			String RetString = "";
-			if(this.CurrIndex <= (this.tokens.Count-1))
-			{
-				RetString = (string)tokens[CurrIndex];
-				this.CurrIndex ++;
-				return RetString;
-			}
-			else
-			{
-				return null;
-			}
-		}
+	    {
+	        var RetString = "";
+	        if (this.CurrIndex > (this.tokens.Count - 1))
+	        {
+	            return null;
+	        }
+	        else
+	        {
+	            RetString = (string) tokens[CurrIndex];
+	            this.CurrIndex ++;
+	            return RetString;
+	        }
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the Source string of this Stringtokenizer.
 		/// </summary>
 		/// <returns>A string representing the current Source.</returns>

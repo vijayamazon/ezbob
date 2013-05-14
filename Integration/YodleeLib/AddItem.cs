@@ -6,6 +6,7 @@ using YodleeLib.datatypes;
 
 namespace YodleeLib
 {
+    using StructureMap;
     using config;
 
     /// <summary>
@@ -14,21 +15,20 @@ namespace YodleeLib
     /// </summary>
     public class AddItem : ApplicationSuper
     {
-        const String SEPARATOR = "*****************************************************************";
+        const String Separator = "*****************************************************************";
 
-        ContentServiceTraversalService cst;
-        ItemManagementService itemManagement;
-        private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
+        readonly ContentServiceTraversalService _cst;
+        readonly ItemManagementService _itemManagement;
+        private static IYodleeMarketPlaceConfig _config;
         /// <summary>
         /// Constructs an instance of the AddItem class that
         //  provides the functionality to display all content.
         /// </summary>
         public AddItem()
         {
-            cst = new ContentServiceTraversalService();
-            cst.Url = config.soapServer + "/" + "ContentServiceTraversalService";
-            itemManagement = new ItemManagementService();
-            itemManagement.Url = config.soapServer + "/" + "ItemManagementService";
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+            _cst = new ContentServiceTraversalService {Url = _config.soapServer + "/" + "ContentServiceTraversalService"};
+            _itemManagement = new ItemManagementService {Url = _config.soapServer + "/" + "ItemManagementService"};
         }
 
         /// <summary>
@@ -39,28 +39,28 @@ namespace YodleeLib
 
             object[] fieldInfoArray = fieldInfoList.ToArray();
 
-            System.Console.WriteLine("Adding Item...");
+            Console.WriteLine("Adding Item...");
             long? itemId = 0;
             try
             {                
                 bool itemIdSpecified = true;
                 bool? shareCredentialsWithinSite = false;
                 bool? startRefreshItemOnAddition = false;
-                itemManagement.addItemForContentService1(userContext, csId, true, fieldInfoArray, shareCredentialsWithinSite, startRefreshItemOnAddition, out itemId, out itemIdSpecified);
+                _itemManagement.addItemForContentService1(userContext, csId, true, fieldInfoArray, shareCredentialsWithinSite, startRefreshItemOnAddition, out itemId, out itemIdSpecified);
             }
             catch (SoapException soapEx)
             {
-                System.Console.WriteLine(soapEx.StackTrace);
+                Console.WriteLine(soapEx.StackTrace);
                 throw new Exception("Unable to add item for content service!");
             }
-            System.Console.WriteLine("Successfully created itemId: " + itemId.Value);
+            Console.WriteLine("Successfully created itemId: " + itemId.Value);
             return itemId.Value;
 
         }
 
         public Form getLoginForm(long csId)
         {
-            return itemManagement.getLoginFormForContentService(getCobrandContext(), csId, true);
+            return _itemManagement.getLoginFormForContentService(GetCobrandContext(), csId, true);
         }
 
         /**
@@ -71,7 +71,7 @@ namespace YodleeLib
          */
         public Form getLoginFormForContentService(UserContext userContext, long csId)
         {
-            return itemManagement.getLoginFormForContentService(userContext, csId, true);
+            return _itemManagement.getLoginFormForContentService(userContext, csId, true);
         }
 
 
@@ -93,7 +93,7 @@ namespace YodleeLib
 
         public ArrayList inputLoginForm(long csId)
         {
-            ArrayList fieldInfoList = new ArrayList();
+            var fieldInfoList = new ArrayList();
             Form form = getLoginForm(csId);
             FormUtil.PrintFormStructureAsText(form);
             FormUtil.getUserInputFieldInfoList(form, fieldInfoList);
@@ -107,24 +107,24 @@ namespace YodleeLib
         public void displayAllContentServices()
         {
             ContentServiceInfo[] csi =
-                cst.getAllContentServices(getCobrandContext());
+                _cst.getAllContentServices(GetCobrandContext());
 
             if (csi.Length == 0)
             {
-                System.Console.WriteLine("No content services!");
+                Console.WriteLine("No content services!");
                 return;
             }
 
-            System.Console.WriteLine("Content Services Available:");
-            for (int i = 0; i < csi.Length; i++)
+            Console.WriteLine("Content Services Available:");
+            foreach (ContentServiceInfo contentService in csi)
             {
-                System.Console.WriteLine("\tContent Service: {0}",
-                        csi[i].contentServiceDisplayName);
-                System.Console.WriteLine("\tSite name: {0}",
-                        csi[i].siteDisplayName);
-                System.Console.WriteLine("\tContent Service ID: {0}",
-                        csi[i].contentServiceId);
-                System.Console.WriteLine("");
+                Console.WriteLine("\tContent Service: {0}",
+                                  contentService.contentServiceDisplayName);
+                Console.WriteLine("\tSite name: {0}",
+                                  contentService.siteDisplayName);
+                Console.WriteLine("\tContent Service ID: {0}",
+                                  contentService.contentServiceId);
+                Console.WriteLine("");
             }
         }
 
@@ -133,11 +133,11 @@ namespace YodleeLib
         /// </summary>
         public long chooseItem()
         {
-            System.Console.WriteLine("Choose the Content Service Identifier for the Item you want to add");
-            System.Console.Write("> ");
+            Console.WriteLine("Choose the Content Service Identifier for the Item you want to add");
+            Console.Write("> ");
 
             // Read User Input
-            String readStr = System.Console.ReadLine();
+            String readStr = Console.ReadLine();
 
             // Convert input to a long
             long csId = long.Parse(readStr);
@@ -149,14 +149,14 @@ namespace YodleeLib
 
         public ArrayList inputFieldInfos(long csId)
         {
-            System.Console.WriteLine("You will be prompted for the values to enter for each FieldInfo. \n" +
+            Console.WriteLine("You will be prompted for the values to enter for each FieldInfo. \n" +
                     "Type <RETURN> to proceed to the next FieldInfo. The values you \n" +
                     "enter must correspond to the FieldInfo grouping and validity \n" +
                     "constraints displayed above.");
-            System.Console.WriteLine(SEPARATOR);
+            Console.WriteLine(Separator);
 
-            ArrayList fieldInfoList = new ArrayList();
-            Form form = itemManagement.getLoginFormForContentService(getCobrandContext(), csId, true);
+            var fieldInfoList = new ArrayList();
+            Form form = _itemManagement.getLoginFormForContentService(GetCobrandContext(), csId, true);
             FormUtil.getUserInputFieldInfoList(form, fieldInfoList);
 
             return fieldInfoList;
@@ -164,12 +164,12 @@ namespace YodleeLib
 
         public void printForm(long csId)
         {
-            Form form = itemManagement.getLoginFormForContentService(getCobrandContext(), csId, true);
+            Form form = _itemManagement.getLoginFormForContentService(GetCobrandContext(), csId, true);
             // todo: must handle a contentservicenotfoundexception here
 
-            System.Console.WriteLine("Chosen identifier: {0}", csId);
-            System.Console.WriteLine("The following are the fields you need to enter to add an item\nto this Content Service:");
-            System.Console.WriteLine(SEPARATOR);
+            Console.WriteLine("Chosen identifier: {0}", csId);
+            Console.WriteLine("The following are the fields you need to enter to add an item\nto this Content Service:");
+            Console.WriteLine(Separator);
             FormUtil.PrintFormStructureAsText(form);
         }
         
@@ -180,19 +180,19 @@ namespace YodleeLib
             ArrayList accounts = new ArrayList();
             
             BankData bankData = new BankData();            
-            System.Console.WriteLine("\nEnter account holder name");
+            Console.WriteLine("\nEnter account holder name");
             String acctHolder = IOUtils.readStr();
             bankData.accountHolder = acctHolder;
 
-            System.Console.WriteLine("Enter accountNo.");
+            Console.WriteLine("Enter accountNo.");
             String accNo = IOUtils.readStr();
             bankData.accountNumber = accNo;
 
-            System.Console.WriteLine("Enter balance");
+            Console.WriteLine("Enter balance");
             long bal = IOUtils.readLong();
-            YMoney balance = new YMoney();
+            var balance = new YMoney();
             balance.amount = bal;
-            balance.currencyCode = Currency.USD;
+            balance.currencyCode = Currency.GBP;
             bankData.availableBalance = balance;
             bankData.currentBalance = balance;
 
@@ -205,20 +205,20 @@ namespace YodleeLib
             bankData.lastUpdated = 999000;
             bankData.isSeidMod = 0;
             bankData.acctType = AccountType.CHECKING;
-            YMoney intYtd = new YMoney();
+            var intYtd = new YMoney();
             intYtd.amount = 12.5;
-            intYtd.currencyCode = Currency.USD;
+            intYtd.currencyCode = Currency.GBP;
             bankData.interestEarnedYtd = intYtd;
 
-            YMoney od = new YMoney();
+            var od = new YMoney();
             od.amount = 25;
-            od.currencyCode = Currency.USD;
+            od.currencyCode = Currency.GBP;
             bankData.overdraftProtection = od;
 
-            YDate mat = new YDate();
+            var mat = new YDate();
             mat.date = DateTime.Now;
             bankData.maturityDate = mat;
-            YDate asOf = new YDate();
+            var asOf = new YDate();
             asOf.date = DateTime.Now;
             bankData.asOfDate = asOf;
             bankData.shortNickName = "";

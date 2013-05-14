@@ -16,17 +16,17 @@
 
         }
 
-        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, int itemId, IYodleeMarketPlaceConfig config)
+        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, int itemId)
         {
             //TODO: implement
-            var yodlee = new YodleeMain(config.soapServer);
+            var yodlee = new YodleeMain();
             yodlee.loginUser(userName, password);
             var lu = new LoginUser();
-            var DisplayBankData = new DisplayBankData(config);
-            string ItemSummaryInfo;
+            var displayBankData = new DisplayBankData();
+            string itemSummaryInfo;
             string error;
             Dictionary<BankData, List<BankTransactionData>> orders;
-            DisplayBankData.displayBankDataForItem(yodlee.userContext, itemId, out ItemSummaryInfo, out error, out orders);
+            displayBankData.displayBankDataForItem(yodlee.userContext, itemId, out itemSummaryInfo, out error, out orders);
 
             if (!string.IsNullOrEmpty(error))
             {

@@ -3,35 +3,27 @@ using System.Web.Services.Protocols;
 
 namespace YodleeLib
 {
+    using StructureMap;
     using config;
 
     public class YodleeMain : ApplicationSuper
     {
         public UserContext userContext = null;
-        ContentServiceTraversalService contentServieTravelService = null;
-        ServerVersionManagementService serverVersionManagementService = null;
+        ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
+        ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
+        private static IYodleeMarketPlaceConfig _config;
 
-        public YodleeMain(string soapServer)
+        public YodleeMain()
         {
-            contentServieTravelService = new ContentServiceTraversalService
-                {
-                    Url = soapServer + "/" + contentServieTravelService.GetType().FullName
-                };
-            serverVersionManagementService = new ServerVersionManagementService
-                {
-                    Url = soapServer + "/" + serverVersionManagementService.GetType().FullName
-                };
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+            contentServieTravelService.Url = _config.soapServer + "/" + contentServieTravelService.GetType().FullName;
+            serverVersionManagementService.Url = _config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
         }
 
         public string loginUser(string userName, string password)
         {
-            //System.Console.Write("Login [" + userName + "]: ");
-            userName = "Stas";// System.Console.ReadLine();
-
-            password = "Ab12cD";
-            //System.Console.Write("Password [" + password + "]: ");
-            //password = System.Console.ReadLine();
-
+            //userName = "Stas";
+            //password = "Ab12cD";
             LoginUser loginUser = new LoginUser();
 
             try

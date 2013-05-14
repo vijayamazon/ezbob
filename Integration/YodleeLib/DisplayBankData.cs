@@ -1,10 +1,9 @@
 using System;
-using YodleeLib.datatypes;
-using System.Xml;
 using System.Collections.Generic;
 
 namespace YodleeLib
 {
+    using StructureMap;
     using config;
 
     /// <summary>
@@ -13,15 +12,13 @@ namespace YodleeLib
     public class DisplayBankData : ApplicationSuper
     {
         DataServiceService dataService;
-        private readonly IYodleeMarketPlaceConfig _Config;
-        public DisplayBankData(IYodleeMarketPlaceConfig config)
+        private static IYodleeMarketPlaceConfig _config;
+        public DisplayBankData()
         {
-            _Config = config;
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
             dataService = new DataServiceService();
-            dataService.Url = config.soapServer + "/" + "DataService";
+            dataService.Url = _config.soapServer + "/" + "DataService";
         }
-
-
 
         /// <summary>
         /// Convert UTC to DateTime
@@ -30,36 +27,36 @@ namespace YodleeLib
         public DateTime UtcToDateTime(long utc)
         {
             //calculate UTC format for Now
-            DateTime then = new DateTime(1970, 1, 1);
-            TimeSpan unixnow = DateTime.Now.Subtract(then);
             int seconds = Convert.ToInt32(utc);
-
             //convert it back to current DateTime
-            DateTime dateTime = new DateTime(1970, 1, 1).AddSeconds(seconds);
-
+            var dateTime = new DateTime(1970, 1, 1).AddSeconds(seconds);
             return dateTime;
         }
-
+        
         /// <summary>
         /// Displays the item information and item data information
         /// for the given bank itemSummary.
         /// </summary>
-        /// <param name="itemSummary">an itemSummary whose containerType is 'bank'</param>
-        public void displayBankDataForItem(UserContext userContext, long itemId, out string ItemSummaryInfo, out string error, out Dictionary<BankData, List<BankTransactionData>> BankTransactionDataList)
+        /// <param name="userContext"></param>
+        /// <param name="itemId"></param>
+        /// <param name="itemSummaryInfo"></param>
+        /// <param name="error"></param>
+        /// <param name="bankTransactionDataList"></param>
+        public void displayBankDataForItem(UserContext userContext, long itemId, out string itemSummaryInfo, out string error, out Dictionary<BankData, List<BankTransactionData>> bankTransactionDataList)
         {
-            DataExtent dataExtent = new DataExtent();
-			dataExtent.startLevel = 0;
-			dataExtent.endLevel = int.MaxValue;
+            var dataExtent = new DataExtent
+                {
+                    startLevel = 0,
+                    endLevel = int.MaxValue,
+                    startLevelSpecified = true,
+                    endLevelSpecified = true
+                };
 
-            dataExtent.startLevelSpecified = true;
-            dataExtent.endLevelSpecified = true;
-
-			DataExtent da = new DataExtent();
-			ItemSummary itemSummary = dataService.getItemSummaryForItem1(userContext, itemId, true, dataExtent );
-			//String containerName = itemSummary.contentServiceInfo.containerInfo.containerName;			
+            ItemSummary itemSummary = dataService.getItemSummaryForItem1(userContext, itemId, true, dataExtent);
+            //String containerName = itemSummary.contentServiceInfo.containerInfo.containerName;			
 
             error = "";
-            BankTransactionDataList = new Dictionary<BankData, List<BankTransactionData>>();
+            bankTransactionDataList = new Dictionary<BankData, List<BankTransactionData>>();
 
             String containerType = itemSummary.contentServiceInfo.containerInfo.containerName;
             if (!containerType.Equals("bank"))
@@ -67,8 +64,8 @@ namespace YodleeLib
                 throw new Exception("displayBankDataForItem called with invalid container type" + containerType);
             }
 
-            DisplayItemInfo displayItemInfo = new DisplayItemInfo(_Config);
-            ItemSummaryInfo = displayItemInfo.getItemSummaryInfo(itemSummary);
+            var displayItemInfo = new DisplayItemInfo();
+            itemSummaryInfo = displayItemInfo.getItemSummaryInfo(itemSummary);
 
             // Get ItemData
             ItemData1 itemData = itemSummary.itemData;
@@ -85,10 +82,10 @@ namespace YodleeLib
                 }
                 else
                 {
-                    for (int i = 0; i < accounts.Length; i++)
+                    foreach (object account in accounts)
                     {
-                        BankData bankData = (BankData)accounts[i];
-                        BankTransactionDataList.Add(bankData, new List<BankTransactionData>());
+                        var bankData = (BankData)account;
+                        bankTransactionDataList.Add(bankData, new List<BankTransactionData>());
                         object[] bankTransactions = bankData.bankTransactions;
                         if (bankTransactions == null || bankTransactions.Length == 0)
                         {
@@ -96,62 +93,64 @@ namespace YodleeLib
                         }
                         else
                         {
-                            for (int j = 0; j < bankTransactions.Length; j++)
+                            foreach (object bankTransaction in bankTransactions)
                             {
-                                BankTransactionData transactionData =
-                                    (BankTransactionData)bankTransactions[j];
-                                BankTransactionDataList[bankData].Add(transactionData);
+                                var transactionData =
+                                    (BankTransactionData)bankTransaction;
+                                bankTransactionDataList[bankData].Add(transactionData);
                             }
                         }
-                        error = "";
                     }
                 }
             }
 
             // Get AccountHistory
 
-            object[] acctHistories = itemData.accountHistory;
-            if (acctHistories == null || acctHistories.Length == 0)
+            if (itemData != null)
             {
-                System.Console.WriteLine("\tNo Account History");
-            }
-            else
-            {
-                System.Console.WriteLine("\n\t**Account History**");
-                for (int i = 0; i < acctHistories.Length; i++)
+                object[] acctHistories = itemData.accountHistory;
+                if (acctHistories == null || acctHistories.Length == 0)
                 {
-                    AccountHistory acctHistory = (AccountHistory)acctHistories[i];
-
-                    System.Console.WriteLine("\tAccount ID: {0}", acctHistory.accountId);
-
-                    // Get History
-                    object[] histories = acctHistory.history;
-                    if (histories == null || histories.Length == 0)
+                    Console.WriteLine("\tNo Account History");
+                }
+                else
+                {
+                    Console.WriteLine("\n\t**Account History**");
+                    foreach (object accountHistory in acctHistories)
                     {
-                        System.Console.WriteLine("\t\tNo History");
-                    }
-                    else
-                    {
-                        System.Console.WriteLine("\t\t**History**");
-                        for (int j = 0; j < histories.Length; j++)
+                        var acctHistory = (AccountHistory)accountHistory;
+
+                        Console.WriteLine("\tAccount ID: {0}", acctHistory.accountId);
+
+                        // Get History
+                        object[] histories = acctHistory.history;
+                        if (histories == null || histories.Length == 0)
                         {
-                            BankData bankData = (BankData)histories[j];
-                            System.Console.WriteLine("\t\tBank Account Name: {0}",
-                                bankData.accountName);
-                            System.Console.WriteLine("\t\tBank Account Cust Description: {0}",
-                                bankData.customDescription);
-                            System.Console.WriteLine("\t\tBank Account Identifier: {0}",
-                                bankData.bankAccountId);
-                            System.Console.WriteLine("\t\tBank Account Balance: {0}",
-                                bankData.availableBalance.amount);
-                            System.Console.WriteLine("\t\tBank Current Balance: {0}",
-                                bankData.currentBalance.amount);
-                            System.Console.WriteLine("\t\tBank Current Acct Type: {0}",
-                                bankData.acctType);
-                            System.Console.WriteLine("\t\tBank Current As of Date: {0}",
-                                bankData.asOfDate.date);
-                            System.Console.WriteLine("\t\tLast Updated: {0}\n",
-                                UtcToDateTime(bankData.lastUpdated.HasValue ? bankData.lastUpdated.Value: 0));
+                            Console.WriteLine("\t\tNo History");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\t\t**History**");
+                            foreach (object history in histories)
+                            {
+                                var bankData = (BankData)history;
+                                Console.WriteLine("\t\tBank Account Name: {0}",
+                                                  bankData.accountName);
+                                Console.WriteLine("\t\tBank Account Cust Description: {0}",
+                                                  bankData.customDescription);
+                                Console.WriteLine("\t\tBank Account Identifier: {0}",
+                                                  bankData.bankAccountId);
+                                Console.WriteLine("\t\tBank Account Balance: {0}",
+                                                  bankData.availableBalance.amount);
+                                Console.WriteLine("\t\tBank Current Balance: {0}",
+                                                  bankData.currentBalance.amount);
+                                Console.WriteLine("\t\tBank Current Acct Type: {0}",
+                                                  bankData.acctType);
+                                Console.WriteLine("\t\tBank Current As of Date: {0}",
+                                                  bankData.asOfDate.date);
+                                Console.WriteLine("\t\tLast Updated: {0}\n",
+                                                  UtcToDateTime(bankData.lastUpdated.HasValue ? bankData.lastUpdated.Value : 0));
+                            }
                         }
                     }
                 }

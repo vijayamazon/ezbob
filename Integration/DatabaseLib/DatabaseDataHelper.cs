@@ -726,7 +726,7 @@ namespace EZBob.DatabaseLib
                 return;
             }
 
-            DateTime submittedDate = DateTime.UtcNow; 
+            DateTime submittedDate = DateTime.UtcNow;
             var mpOrder = new MP_EkmOrder
             {
                 CustomerMarketPlace = customerMarketPlace,
@@ -759,194 +759,189 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(customerMarketPlace);
         }
 
-        public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+        public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderItem ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-            LogData("Yodlee Orders Data", customerMarketPlace, ordersData);
+            // LogData("Yodlee Orders Data", customerMarketPlace, ordersData);
 
             if (ordersData == null)
             {
                 return;
             }
 
-            DateTime submittedDate = DateTime.UtcNow; 
+            DateTime submittedDate = DateTime.UtcNow;
             var mpOrder = new MP_YodleeOrder
             {
                 CustomerMarketPlace = customerMarketPlace,
                 Created = submittedDate,
                 HistoryRecord = historyRecord
             };
-            //TODO: implement
-            foreach (var dataItem in ordersData)
+
+            
+            foreach (var item in ordersData.Data.Keys)
             {
                 var mpOrderItem = new MP_YodleeOrderItem();
-                foreach (var item in dataItem.Data.Keys)
+                mpOrderItem.Order = mpOrder;
+                mpOrderItem.isSeidFromDataSource = item.isSeidFromDataSource;
+                mpOrderItem.isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified;
+                mpOrderItem.isSeidMod = item.isSeidMod;
+                mpOrderItem.isSeidModSpecified = item.isSeidModSpecified;
+                mpOrderItem.acctTypeId = item.acctTypeId;
+                mpOrderItem.acctTypeIdSpecified = item.acctTypeIdSpecified;
+                mpOrderItem.acctType = item.acctType;
+                mpOrderItem.localizedAcctType = item.localizedAcctType;
+                mpOrderItem.srcElementId = item.srcElementId;
+                mpOrderItem.individualInformationId = item.individualInformationId;
+                mpOrderItem.individualInformationIdSpecified = item.individualInformationIdSpecified;
+                mpOrderItem.bankAccountId = item.bankAccountId;
+                mpOrderItem.bankAccountIdSpecified = item.bankAccountIdSpecified;
+                mpOrderItem.customName = item.customName;
+                mpOrderItem.customDescription = item.customDescription;
+                mpOrderItem.isDeleted = item.isDeleted;
+                mpOrderItem.isDeletedSpecified = item.isDeletedSpecified;
+                mpOrderItem.lastUpdated = item.lastUpdated;
+                mpOrderItem.lastUpdatedSpecified = item.lastUpdatedSpecified;
+                mpOrderItem.hasDetails = item.hasDetails;
+                mpOrderItem.hasDetailsSpecified = item.hasDetailsSpecified;
+                mpOrderItem.interestRate = item.interestRate;
+                mpOrderItem.interestRateSpecified = item.interestRateSpecified;
+                mpOrderItem.accountNumber = item.accountNumber;
+                mpOrderItem.link = item.link;
+                mpOrderItem.accountHolder = item.accountHolder;
+                mpOrderItem.tranListToDate = (item.tranListToDate != null && item.tranListToDate.dateSpecified) ? item.tranListFromDate.date : null;
+                mpOrderItem.tranListFromDate = (item.tranListFromDate != null && item.tranListFromDate.dateSpecified) ? item.tranListFromDate.date : null;
+                mpOrderItem.availableBalance = (item.availableBalance != null && item.availableBalance.amountSpecified) ? item.availableBalance.amount : null;
+                mpOrderItem.availableBalanceCurrency = (item.availableBalance != null && item.availableBalance.amountSpecified) ? item.availableBalance.currencyCode : null;
+                mpOrderItem.currentBalance = (item.currentBalance != null && item.currentBalance.amountSpecified) ? item.currentBalance.amount : null;
+                mpOrderItem.currentBalanceCurrency = (item.currentBalance != null && item.currentBalance.amountSpecified) ? item.currentBalance.currencyCode : null;
+                mpOrderItem.interestEarnedYtd = (item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified) ? item.interestEarnedYtd.amount : null;
+                mpOrderItem.interestEarnedYtdCurrency = (item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified) ? item.interestEarnedYtd.currencyCode : null;
+                mpOrderItem.prevYrInterest = (item.prevYrInterest != null && item.prevYrInterest.amountSpecified) ? item.prevYrInterest.amount : null;
+                mpOrderItem.prevYrInterestCurrency = (item.prevYrInterest != null && item.prevYrInterest.amountSpecified) ? item.prevYrInterest.currencyCode : null;
+                mpOrderItem.overdraftProtection = (item.overdraftProtection != null && item.overdraftProtection.amountSpecified) ? item.overdraftProtection.amount : null;
+                mpOrderItem.overdraftProtectionCurrency = (item.overdraftProtection != null && item.overdraftProtection.amountSpecified) ? item.overdraftProtection.currencyCode : null;
+                mpOrderItem.term = item.term;
+                mpOrderItem.accountName = item.accountName;
+                mpOrderItem.annualPercentYield = item.annualPercentYield;
+                mpOrderItem.annualPercentYieldSpecified = item.annualPercentYieldSpecified;
+                mpOrderItem.routingNumber = item.routingNumber;
+                mpOrderItem.maturityDate = (item.maturityDate != null && item.maturityDate.dateSpecified) ? item.maturityDate.date : null;
+                mpOrderItem.asOfDate = (item.asOfDate != null && item.asOfDate.dateSpecified) ? item.asOfDate.date : null;
+                //mpOrderItem.bankStatementsId = item.bankStatementsId;
+                mpOrderItem.accountNicknameAtSrcSite = item.accountNicknameAtSrcSite;
+                mpOrderItem.isPaperlessStmtOn = item.isPaperlessStmtOn;
+                mpOrderItem.isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified;
+                //mpOrderItem.siteAccountStatusId = item.siteAccountStatusId;
+                mpOrderItem.siteAccountStatusSpecified = item.siteAccountStatusSpecified;
+                mpOrderItem.created = item.created;
+                mpOrderItem.createdSpecified = item.createdSpecified;
+                mpOrderItem.nomineeName = item.nomineeName;
+                mpOrderItem.secondaryAccountHolderName = item.secondaryAccountHolderName;
+                mpOrderItem.accountOpenDate = (item.accountOpenDate != null && item.accountOpenDate.dateSpecified) ? item.accountOpenDate.date : null;
+                mpOrderItem.accountCloseDate = (item.accountOpenDate != null && item.accountCloseDate.dateSpecified) ? item.accountCloseDate.date : null;
+                mpOrderItem.maturityAmount = (item.maturityAmount != null && item.maturityAmount.amountSpecified) ? item.maturityAmount.amount : null;
+                mpOrderItem.maturityAmountCurrency = (item.maturityAmount != null && item.maturityAmount.amountSpecified) ? item.maturityAmount.currencyCode : null;
+                mpOrderItem.taxesWithheldYtd = (item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified) ? item.taxesWithheldYtd.amount : null;
+                mpOrderItem.taxesWithheldYtdCurrency = (item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified) ? item.taxesWithheldYtd.currencyCode : null;
+                mpOrderItem.taxesPaidYtd = (item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified) ? item.taxesPaidYtd.amount : null;
+                mpOrderItem.taxesPaidYtdCurrency = (item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified) ? item.taxesPaidYtd.currencyCode : null;
+                mpOrderItem.budgetBalance = (item.budgetBalance != null && item.budgetBalance.amountSpecified) ? item.budgetBalance.amount : null;
+                mpOrderItem.budgetBalanceCurrency = (item.budgetBalance != null && item.budgetBalance.amountSpecified) ? item.budgetBalance.currencyCode : null;
+                mpOrderItem.straightBalance = (item.straightBalance != null && item.straightBalance.amountSpecified) ? item.straightBalance.amount : null;
+                mpOrderItem.straightBalanceCurrency = (item.straightBalance != null && item.straightBalance.amountSpecified) ? item.straightBalance.currencyCode : null;
+                //mpOrderItem.accountClassificationId = item.accountClassificationId;
+                mpOrderItem.accountClassificationSpecified = item.accountClassificationSpecified;
+
+                foreach (var bankTransaction in ordersData.Data[item])
                 {
-                    mpOrderItem.Order = mpOrder;
-                    mpOrderItem.isSeidFromDataSource = item.isSeidFromDataSource;
-                    mpOrderItem.isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified;
-                    mpOrderItem.isSeidMod = item.isSeidMod;
-                    mpOrderItem.isSeidModSpecified = item.isSeidModSpecified;
-                    mpOrderItem.acctTypeId = item.acctTypeId;
-                    mpOrderItem.acctTypeIdSpecified = item.acctTypeIdSpecified;
-                    mpOrderItem.acctType = item.acctType;
-                    mpOrderItem.localizedAcctType = item.localizedAcctType;
-                    mpOrderItem.srcElementId = item.srcElementId;
-                    mpOrderItem.individualInformationId = item.individualInformationId;
-                    mpOrderItem.individualInformationIdSpecified = item.individualInformationIdSpecified;
-                    mpOrderItem.bankAccountId = item.bankAccountId;
-                    mpOrderItem.bankAccountIdSpecified = item.bankAccountIdSpecified;
-                    mpOrderItem.customName = item.customName;
-                    mpOrderItem.customDescription = item.customDescription;
-                    mpOrderItem.isDeleted = item.isDeleted;
-                    mpOrderItem.isDeletedSpecified = item.isDeletedSpecified;
-                    mpOrderItem.lastUpdated = item.lastUpdated;
-                    mpOrderItem.lastUpdatedSpecified = item.lastUpdatedSpecified;
-                    mpOrderItem.hasDetails = item.hasDetails;
-                    mpOrderItem.hasDetailsSpecified = item.hasDetailsSpecified;
-                    mpOrderItem.interestRate = item.interestRate;
-                    mpOrderItem.interestRateSpecified = item.interestRateSpecified;
-                    mpOrderItem.accountNumber = item.accountNumber;
-                    mpOrderItem.link = item.link;
-                    mpOrderItem.accountHolder = item.accountHolder;
-                    mpOrderItem.tranListToDate = item.tranListToDate.dateSpecified ? item.tranListFromDate.date : null;
-                    mpOrderItem.tranListFromDate = item.tranListFromDate.dateSpecified ? item.tranListFromDate.date : null;
-                    mpOrderItem.availableBalance = item.availableBalance.amountSpecified ? item.availableBalance.amount : null;
-                    mpOrderItem.availableBalanceCurrency = item.availableBalance.amountSpecified ? item.availableBalance.currencyCode : null;
-                    mpOrderItem.currentBalance = item.currentBalance.amountSpecified ? item.currentBalance.amount : null;
-                    mpOrderItem.currentBalanceCurrency = item.currentBalance.amountSpecified ? item.currentBalance.currencyCode : null;
-                    mpOrderItem.interestEarnedYtd = item.interestEarnedYtd.amountSpecified ? item.interestEarnedYtd.amount : null;
-                    mpOrderItem.interestEarnedYtdCurrency = item.interestEarnedYtd.amountSpecified ? item.interestEarnedYtd.currencyCode : null;
-                    mpOrderItem.prevYrInterest = item.prevYrInterest.amountSpecified ? item.prevYrInterest.amount : null;
-                    mpOrderItem.prevYrInterestCurrency = item.prevYrInterest.amountSpecified ? item.prevYrInterest.currencyCode : null;
-                    mpOrderItem.overdraftProtection = item.overdraftProtection.amountSpecified ? item.overdraftProtection.amount : null;
-                    mpOrderItem.overdraftProtectionCurrency = item.overdraftProtection.amountSpecified ? item.overdraftProtection.currencyCode : null;
-                    mpOrderItem.term = item.term;
-                    mpOrderItem.accountName = item.accountName;
-                    mpOrderItem.annualPercentYield = item.annualPercentYield;
-                    mpOrderItem.annualPercentYieldSpecified = item.annualPercentYieldSpecified;
-                    mpOrderItem.routingNumber = item.routingNumber;
-                    mpOrderItem.maturityDate = item.maturityDate.dateSpecified ? item.maturityDate.date : null;
-                    mpOrderItem.asOfDate = item.asOfDate.dateSpecified ? item.asOfDate.date : null;
-                    //mpOrderItem.bankStatementsId = item.bankStatementsId;
-                    mpOrderItem.accountNicknameAtSrcSite = item.accountNicknameAtSrcSite;
-                    mpOrderItem.isPaperlessStmtOn = item.isPaperlessStmtOn;
-                    mpOrderItem.isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified;
-                    //mpOrderItem.siteAccountStatusId = item.siteAccountStatusId;
-                    mpOrderItem.siteAccountStatusSpecified = item.siteAccountStatusSpecified;
-                    mpOrderItem.created = item.created;
-                    mpOrderItem.createdSpecified = item.createdSpecified;
-                    mpOrderItem.nomineeName = item.nomineeName;
-                    mpOrderItem.secondaryAccountHolderName = item.secondaryAccountHolderName;
-                    mpOrderItem.accountOpenDate = item.accountOpenDate.dateSpecified ? item.accountOpenDate.date : null;
-                    mpOrderItem.accountCloseDate = item.accountCloseDate.dateSpecified ? item.accountCloseDate.date : null;
-                    mpOrderItem.maturityAmount = item.maturityAmount.amountSpecified ? item.maturityAmount.amount : null;
-                    mpOrderItem.maturityAmountCurrency = item.maturityAmount.amountSpecified ? item.maturityAmount.currencyCode : null;
-                    mpOrderItem.taxesWithheldYtd = item.taxesWithheldYtd.amountSpecified ? item.taxesWithheldYtd.amount : null;
-                    mpOrderItem.taxesWithheldYtdCurrency = item.taxesWithheldYtd.amountSpecified ? item.taxesWithheldYtd.currencyCode : null;
-                    mpOrderItem.taxesPaidYtd = item.taxesPaidYtd.amountSpecified ? item.taxesPaidYtd.amount : null;
-                    mpOrderItem.taxesPaidYtdCurrency = item.taxesPaidYtd.amountSpecified ? item.taxesPaidYtd.currencyCode : null;
-                    mpOrderItem.budgetBalance = item.budgetBalance.amountSpecified ? item.budgetBalance.amount : null;
-                    mpOrderItem.budgetBalanceCurrency = item.budgetBalance.amountSpecified ? item.budgetBalance.currencyCode : null;
-                    mpOrderItem.straightBalance = item.straightBalance.amountSpecified ? item.straightBalance.amount : null;
-                    mpOrderItem.straightBalanceCurrency = item.straightBalance.amountSpecified ? item.straightBalance.currencyCode : null;
-                    //mpOrderItem.accountClassificationId = item.accountClassificationId;
-                    mpOrderItem.accountClassificationSpecified = item.accountClassificationSpecified;
-
-                    foreach (var value in dataItem.Data.Values)
-                    {
-                        var orderBankTransaction = new MP_YodleeOrderItemBankTransaction();
-                        foreach (var bankTransaction in value)
-                        {
-                            orderBankTransaction.isSeidFromDataSource = bankTransaction.isSeidFromDataSource;
-                            orderBankTransaction.isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified;
-                            orderBankTransaction.isSeidMod = bankTransaction.isSeidMod;
-                            orderBankTransaction.isSeidModSpecified = bankTransaction.isSeidModSpecified;
-                            orderBankTransaction.srcElementId = bankTransaction.srcElementId;
-                            orderBankTransaction.transactionTypeId = bankTransaction.transactionTypeId;
-                            orderBankTransaction.transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified;
-                            orderBankTransaction.transactionType = bankTransaction.transactionType;
-                            orderBankTransaction.localizedTransactionType = bankTransaction.localizedTransactionType;
-                            orderBankTransaction.transactionStatusId = bankTransaction.transactionStatusId;
-                            orderBankTransaction.transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified;
-                            orderBankTransaction.transactionStatus = bankTransaction.transactionStatus;
-                            orderBankTransaction.localizedTransactionStatus = bankTransaction.localizedTransactionStatus;
-                            orderBankTransaction.transactionBaseTypeId = bankTransaction.transactionBaseTypeId;
-                            orderBankTransaction.transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified;
-                            orderBankTransaction.transactionBaseType = bankTransaction.transactionBaseType;
-                            orderBankTransaction.localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType;
-                            orderBankTransaction.categoryId = bankTransaction.categoryId;
-                            orderBankTransaction.categoryIdSpecified = bankTransaction.categoryIdSpecified;
-                            orderBankTransaction.bankTransactionId = bankTransaction.bankTransactionId;
-                            orderBankTransaction.bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified;
-                            orderBankTransaction.bankAccountId = bankTransaction.bankAccountId;
-                            orderBankTransaction.bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified;
-                            orderBankTransaction.bankStatementId = bankTransaction.bankStatementId;
-                            orderBankTransaction.bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified;
-                            orderBankTransaction.isDeleted = bankTransaction.isDeleted;
-                            orderBankTransaction.isDeletedSpecified = bankTransaction.isDeletedSpecified;
-                            orderBankTransaction.lastUpdated = bankTransaction.lastUpdated;
-                            orderBankTransaction.lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified;
-                            orderBankTransaction.hasDetails = bankTransaction.hasDetails;
-                            orderBankTransaction.hasDetailsSpecified = bankTransaction.hasDetailsSpecified;
-                            orderBankTransaction.transactionId = bankTransaction.transactionId;
-                            orderBankTransaction.transactionCategoryId = bankTransaction.transactionCategoryId;
-                            orderBankTransaction.siteCategoryType = bankTransaction.siteCategoryType;
-                            orderBankTransaction.siteCategory = bankTransaction.siteCategory;
-                            orderBankTransaction.classUpdationSource = bankTransaction.classUpdationSource;
-                            orderBankTransaction.lastCategorised = bankTransaction.lastCategorised;
-                            orderBankTransaction.transactionDate = bankTransaction.transactionDate.dateSpecified ? bankTransaction.transactionDate.date : null;
-                            orderBankTransaction.isReimbursable = bankTransaction.isReimbursable;
-                            orderBankTransaction.isReimbursableSpecified = bankTransaction.isReimbursableSpecified;
-                            orderBankTransaction.mcCode = bankTransaction.mcCode;
-                            orderBankTransaction.prevLastCategorised = bankTransaction.prevLastCategorised;
-                            orderBankTransaction.prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified;
-                            orderBankTransaction.naicsCode = bankTransaction.naicsCode;
-                            orderBankTransaction.runningBalance = bankTransaction.runningBalance.amountSpecified ? bankTransaction.runningBalance.amount : null;
-                            orderBankTransaction.runningBalanceCurrency = bankTransaction.runningBalance.amountSpecified ? bankTransaction.runningBalance.currencyCode : null;
-                            orderBankTransaction.userDescription = bankTransaction.userDescription;
-                            orderBankTransaction.customCategoryId = bankTransaction.customCategoryId;
-                            orderBankTransaction.customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified;
-                            orderBankTransaction.memo = bankTransaction.memo;
-                            orderBankTransaction.parentId = bankTransaction.parentId;
-                            orderBankTransaction.parentIdSpecified = bankTransaction.parentIdSpecified;
-                            orderBankTransaction.isOlbUserDesc = bankTransaction.isOlbUserDesc;
-                            orderBankTransaction.isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified;
-                            orderBankTransaction.categorisationSourceId = bankTransaction.categorisationSourceId;
-                            orderBankTransaction.plainTextDescription = bankTransaction.plainTextDescription;
-                            orderBankTransaction.splitType = bankTransaction.splitType;
-                            orderBankTransaction.categoryLevelId = bankTransaction.categoryLevelId;
-                            orderBankTransaction.categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified;
-                            orderBankTransaction.calcRunningBalance = bankTransaction.calcRunningBalance.amountSpecified ? bankTransaction.calcRunningBalance.amount : null;
-                            orderBankTransaction.calcRunningBalanceCurrency = bankTransaction.calcRunningBalance.amountSpecified ? bankTransaction.calcRunningBalance.currencyCode : null;
-                            orderBankTransaction.category = bankTransaction.category;
-                            orderBankTransaction.link = bankTransaction.link;
-                            orderBankTransaction.postDate = bankTransaction.postDate.dateSpecified ? bankTransaction.postDate.date : null;
-                            orderBankTransaction.prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId;
-                            orderBankTransaction.prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified;
-                            orderBankTransaction.isBusinessExpense = bankTransaction.isBusinessExpense;
-                            orderBankTransaction.isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified;
-                            orderBankTransaction.descriptionViewPref = bankTransaction.descriptionViewPref;
-                            orderBankTransaction.descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified;
-                            orderBankTransaction.prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId;
-                            orderBankTransaction.prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified;
-                            orderBankTransaction.transactionAmount = bankTransaction.transactionAmount.amountSpecified ? bankTransaction.transactionAmount.amount : null;
-                            orderBankTransaction.transactionAmountCurrency = bankTransaction.transactionAmount.amountSpecified ? bankTransaction.transactionAmount.currencyCode : null;
-                            orderBankTransaction.transactionPostingOrder = bankTransaction.transactionPostingOrder;
-                            orderBankTransaction.transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified;
-                            orderBankTransaction.checkNumber = bankTransaction.checkNumber;
-                            orderBankTransaction.description = bankTransaction.description;
-                            orderBankTransaction.isTaxDeductible = bankTransaction.isTaxDeductible;
-                            orderBankTransaction.isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified;
-                            orderBankTransaction.isMedicalExpense = bankTransaction.isMedicalExpense;
-                            orderBankTransaction.isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified;
-                            orderBankTransaction.categorizationKeyword = bankTransaction.categorizationKeyword;
-                            orderBankTransaction.sourceTransactionType = bankTransaction.sourceTransactionType;
-                        }
-                        mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
-                    }
-
+                    var orderBankTransaction = new MP_YodleeOrderItemBankTransaction();
+                    orderBankTransaction.YodleeOrderItem = mpOrderItem;
+                    orderBankTransaction.isSeidFromDataSource = bankTransaction.isSeidFromDataSource;
+                    orderBankTransaction.isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified;
+                    orderBankTransaction.isSeidMod = bankTransaction.isSeidMod;
+                    orderBankTransaction.isSeidModSpecified = bankTransaction.isSeidModSpecified;
+                    orderBankTransaction.srcElementId = bankTransaction.srcElementId;
+                    orderBankTransaction.transactionTypeId = bankTransaction.transactionTypeId;
+                    orderBankTransaction.transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified;
+                    orderBankTransaction.transactionType = bankTransaction.transactionType;
+                    orderBankTransaction.localizedTransactionType = bankTransaction.localizedTransactionType;
+                    orderBankTransaction.transactionStatusId = bankTransaction.transactionStatusId;
+                    orderBankTransaction.transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified;
+                    orderBankTransaction.transactionStatus = bankTransaction.transactionStatus;
+                    orderBankTransaction.localizedTransactionStatus = bankTransaction.localizedTransactionStatus;
+                    orderBankTransaction.transactionBaseTypeId = bankTransaction.transactionBaseTypeId;
+                    orderBankTransaction.transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified;
+                    orderBankTransaction.transactionBaseType = bankTransaction.transactionBaseType;
+                    orderBankTransaction.localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType;
+                    orderBankTransaction.categoryId = bankTransaction.categoryId;
+                    orderBankTransaction.categoryIdSpecified = bankTransaction.categoryIdSpecified;
+                    orderBankTransaction.bankTransactionId = bankTransaction.bankTransactionId;
+                    orderBankTransaction.bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified;
+                    orderBankTransaction.bankAccountId = bankTransaction.bankAccountId;
+                    orderBankTransaction.bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified;
+                    orderBankTransaction.bankStatementId = bankTransaction.bankStatementId;
+                    orderBankTransaction.bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified;
+                    orderBankTransaction.isDeleted = bankTransaction.isDeleted;
+                    orderBankTransaction.isDeletedSpecified = bankTransaction.isDeletedSpecified;
+                    orderBankTransaction.lastUpdated = bankTransaction.lastUpdated;
+                    orderBankTransaction.lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified;
+                    orderBankTransaction.hasDetails = bankTransaction.hasDetails;
+                    orderBankTransaction.hasDetailsSpecified = bankTransaction.hasDetailsSpecified;
+                    orderBankTransaction.transactionId = bankTransaction.transactionId;
+                    orderBankTransaction.transactionCategoryId = bankTransaction.transactionCategoryId;
+                    orderBankTransaction.siteCategoryType = bankTransaction.siteCategoryType;
+                    orderBankTransaction.siteCategory = bankTransaction.siteCategory;
+                    orderBankTransaction.classUpdationSource = bankTransaction.classUpdationSource;
+                    orderBankTransaction.lastCategorised = bankTransaction.lastCategorised;
+                    orderBankTransaction.transactionDate = (bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified) ? bankTransaction.transactionDate.date : null;
+                    orderBankTransaction.isReimbursable = bankTransaction.isReimbursable;
+                    orderBankTransaction.isReimbursableSpecified = bankTransaction.isReimbursableSpecified;
+                    orderBankTransaction.mcCode = bankTransaction.mcCode;
+                    orderBankTransaction.prevLastCategorised = bankTransaction.prevLastCategorised;
+                    orderBankTransaction.prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified;
+                    orderBankTransaction.naicsCode = bankTransaction.naicsCode;
+                    orderBankTransaction.runningBalance = (bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified) ? bankTransaction.runningBalance.amount : null;
+                    orderBankTransaction.runningBalanceCurrency = (bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified) ? bankTransaction.runningBalance.currencyCode : null;
+                    orderBankTransaction.userDescription = bankTransaction.userDescription;
+                    orderBankTransaction.customCategoryId = bankTransaction.customCategoryId;
+                    orderBankTransaction.customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified;
+                    orderBankTransaction.memo = bankTransaction.memo;
+                    orderBankTransaction.parentId = bankTransaction.parentId;
+                    orderBankTransaction.parentIdSpecified = bankTransaction.parentIdSpecified;
+                    orderBankTransaction.isOlbUserDesc = bankTransaction.isOlbUserDesc;
+                    orderBankTransaction.isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified;
+                    orderBankTransaction.categorisationSourceId = bankTransaction.categorisationSourceId;
+                    orderBankTransaction.plainTextDescription = bankTransaction.plainTextDescription;
+                    orderBankTransaction.splitType = bankTransaction.splitType;
+                    orderBankTransaction.categoryLevelId = bankTransaction.categoryLevelId;
+                    orderBankTransaction.categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified;
+                    orderBankTransaction.calcRunningBalance = (bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified) ? bankTransaction.calcRunningBalance.amount : null;
+                    orderBankTransaction.calcRunningBalanceCurrency = (bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified) ? bankTransaction.calcRunningBalance.currencyCode : null;
+                    orderBankTransaction.category = bankTransaction.category;
+                    orderBankTransaction.link = bankTransaction.link;
+                    orderBankTransaction.postDate = (bankTransaction.postDate != null && bankTransaction.postDate.dateSpecified) ? bankTransaction.postDate.date : null;
+                    orderBankTransaction.prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId;
+                    orderBankTransaction.prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified;
+                    orderBankTransaction.isBusinessExpense = bankTransaction.isBusinessExpense;
+                    orderBankTransaction.isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified;
+                    orderBankTransaction.descriptionViewPref = bankTransaction.descriptionViewPref;
+                    orderBankTransaction.descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified;
+                    orderBankTransaction.prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId;
+                    orderBankTransaction.prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified;
+                    orderBankTransaction.transactionAmount = (bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified) ? bankTransaction.transactionAmount.amount : null;
+                    orderBankTransaction.transactionAmountCurrency = (bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified) ? bankTransaction.transactionAmount.currencyCode : null;
+                    orderBankTransaction.transactionPostingOrder = bankTransaction.transactionPostingOrder;
+                    orderBankTransaction.transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified;
+                    orderBankTransaction.checkNumber = bankTransaction.checkNumber;
+                    orderBankTransaction.description = bankTransaction.description;
+                    orderBankTransaction.isTaxDeductible = bankTransaction.isTaxDeductible;
+                    orderBankTransaction.isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified;
+                    orderBankTransaction.isMedicalExpense = bankTransaction.isMedicalExpense;
+                    orderBankTransaction.isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified;
+                    orderBankTransaction.categorizationKeyword = bankTransaction.categorizationKeyword;
+                    orderBankTransaction.sourceTransactionType = bankTransaction.sourceTransactionType;
+                    mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
                 }
                 mpOrder.OrderItems.Add(mpOrderItem);
             }
@@ -964,7 +959,7 @@ namespace EZBob.DatabaseLib
             if (ordersData == null)
                 return;
 
-            DateTime submittedDate = DateTime.UtcNow; 
+            DateTime submittedDate = DateTime.UtcNow;
             var mpOrder = new MP_VolusionOrder
             {
                 CustomerMarketPlace = customerMarketPlace,
@@ -1001,7 +996,7 @@ namespace EZBob.DatabaseLib
             if (ordersData == null)
                 return;
 
-            DateTime submittedDate = DateTime.UtcNow; 
+            DateTime submittedDate = DateTime.UtcNow;
             var mpOrder = new MP_PlayOrder
             {
                 CustomerMarketPlace = customerMarketPlace,

@@ -3,6 +3,7 @@ using System.Text;
 
 namespace YodleeLib
 {
+    using StructureMap;
     using config;
 
     /// <summary>
@@ -10,12 +11,12 @@ namespace YodleeLib
     /// </summary>
     public class DisplayItemInfo
     {
-        DataServiceService dataService;
-
-        public DisplayItemInfo(IYodleeMarketPlaceConfig config)
+        readonly DataServiceService dataService;
+        private static IYodleeMarketPlaceConfig _config;
+        public DisplayItemInfo()
         {
-            dataService = new DataServiceService();
-            dataService.Url = config.soapServer + "/" + "DataService";
+            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+            dataService = new DataServiceService {Url = _config.soapServer + "/" + "DataService"};
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace YodleeLib
         public void displayItemSummariesForItem(UserContext userContext, long itemId)
         {
             ItemSummary itemSummary = dataService.getItemSummaryForItem(userContext, itemId, true);
-            object[] itemSummaries = new object[1];
+            var itemSummaries = new object[1];
             itemSummaries[0] = itemSummary;
             _printItemSummaries(itemSummaries);
         }
@@ -83,22 +84,24 @@ namespace YodleeLib
         {
             if (itemSummaries == null)
             {
-                System.Console.WriteLine("No items were found for the user.");
+                Console.WriteLine("No items were found for the user.");
                 return;
             }
-            else if (itemSummaries.Length == 0)
+            
+            if (itemSummaries.Length == 0)
             {
-                System.Console.WriteLine("No items were found for the user.");
+                Console.WriteLine("No items were found for the user.");
                 return;
             }
-
-            for (int i = 0; i < itemSummaries.Length; i++)
+            /*
+            foreach (object t in itemSummaries)
             {
-                System.Console.WriteLine("Item Summary Information:");
-                ItemSummary itemSummary = (ItemSummary)itemSummaries[i];
-                //	displayItemSummaryInfo(itemSummary);
-                System.Console.WriteLine("");
+                Console.WriteLine("Item Summary Information:");
+                var itemSummary = (ItemSummary)t;
+                //displayItemSummaryInfo(itemSummary);
+                Console.WriteLine("");
             }
+            */
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace YodleeLib
         /// is to be displayed.</param>
         public string getItemSummaryInfo(ItemSummary itemSummary)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat("\tItem identifier: {0}",
                        itemSummary.itemId);
             sb.AppendFormat("\tItem display name: {0}",
@@ -140,28 +143,26 @@ namespace YodleeLib
 
         public void viewItems(UserContext userContext)
         {
-            ItemSummary[] itemSummaries = (ItemSummary[])dataService.getItemSummaries(userContext);
+            var itemSummaries = (ItemSummary[])dataService.getItemSummaries(userContext);
             if (itemSummaries == null || itemSummaries.Length == 0)
             {
-                System.Console.WriteLine("You have no Items Added.");
+                Console.WriteLine("You have no Items Added.");
             }
             else
             {
-                for (int i = 0; i < itemSummaries.Length; i++)
+                foreach (ItemSummary itemSummary in itemSummaries)
                 {
-                    ItemSummary itemSummary = (ItemSummary)itemSummaries[i];
                     String displayName = itemSummary.contentServiceInfo.contentServiceDisplayName;
-                    System.Console.WriteLine("ItemId: " + itemSummary.itemId + " DisplayName: "
-                        + displayName + " errorCode: " + itemSummary.refreshInfo.statusCode +
-                           " refreshInfo time: " /**new Date(itemSummary.refreshInfo.lastUpdatedTime * 1000)*/);
+                    Console.WriteLine("ItemId: " + itemSummary.itemId + " DisplayName: "
+                                      + displayName + " errorCode: " + itemSummary.refreshInfo.statusCode +
+                                      " refreshInfo time: " /**new Date(itemSummary.refreshInfo.lastUpdatedTime * 1000)*/);
                     ItemData1 id = itemSummary.itemData;
                     if (id != null)
                     {
-                        ItemAccountData[] itemAccounts = (ItemAccountData[])id.accounts;
-                        for (int j = 0; j < itemAccounts.Length; j++)
+                        var itemAccounts = (ItemAccountData[])id.accounts;
+                        foreach (var iad in itemAccounts)
                         {
-                            ItemAccountData iad = (ItemAccountData)itemAccounts[j];
-                            System.Console.WriteLine("\tItemAccountId: " + iad.itemAccountInfo.itemAccountId);
+                            Console.WriteLine("\tItemAccountId: " + iad.itemAccountInfo.itemAccountId);
                         }
                     }
                 }

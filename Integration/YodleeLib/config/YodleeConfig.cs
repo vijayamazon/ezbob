@@ -4,6 +4,6 @@
 
     public class YodleeConfig
     {
-        public static IYodleeMarketPlaceConfig _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();  
+        public static IYodleeMarketPlaceConfig _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
     }
 }

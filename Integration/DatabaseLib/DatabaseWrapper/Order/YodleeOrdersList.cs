@@ -26,7 +26,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
         public override DateTime RecordTime
         {
-            get { throw new NotImplementedException(); }
+            get { return DateTime.UtcNow; }
         }
     }
 
