@@ -44,6 +44,9 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\CustomSchedulers\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Signals\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\EKM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Play\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPoint\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Volusion\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
