@@ -18,24 +18,14 @@ namespace EzBob.Web.Code
 
         public Loan CreateLoan(CashRequest cr, decimal amount, DateTime now)
         {
+            return string.IsNullOrEmpty(cr.LoanTemplate) ?
+                            CreateNewLoan(cr, amount, now) : 
+                            CreateLoanFromTemplate(cr, amount, now);
+        }
+
+        private static Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now)
+        {
             Loan loan;
-
-            if (!string.IsNullOrEmpty(cr.LoanTemplate))
-            {
-                var model = EditLoanDetailsModel.Parse(cr.LoanTemplate);
-                loan = _builder.CreateLoan(model);
-                loan.LoanType = cr.LoanType;
-                loan.CashRequest = cr;
-
-                AdjustDates(now, loan);
-                AdjustBalances(amount, loan);
-
-                var c = new PayEarlyCalculator2(loan, now);
-                c.GetState();
-
-                return loan;
-            }
-
             var setupFee = 0M;
 
             if (cr.UseSetupFee)
@@ -46,9 +36,24 @@ namespace EzBob.Web.Code
 
             var calculator = new LoanScheduleCalculator {Interest = cr.InterestRate, Term = cr.RepaymentPeriod};
 
-            loan = new Loan() { LoanAmount = amount, Date = now, LoanType = cr.LoanType, CashRequest = cr, SetupFee = setupFee};
+            loan = new Loan() {LoanAmount = amount, Date = now, LoanType = cr.LoanType, CashRequest = cr, SetupFee = setupFee};
             calculator.Calculate(amount, loan, loan.Date);
+            return loan;
+        }
 
+        private Loan CreateLoanFromTemplate(CashRequest cr, decimal amount, DateTime now)
+        {
+            Loan loan;
+            var model = EditLoanDetailsModel.Parse(cr.LoanTemplate);
+            loan = _builder.CreateLoan(model);
+            loan.LoanType = cr.LoanType;
+            loan.CashRequest = cr;
+
+            AdjustDates(now, loan);
+            AdjustBalances(amount, loan);
+
+            var c = new PayEarlyCalculator2(loan, now);
+            c.GetState();
             return loan;
         }
 

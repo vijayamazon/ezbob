@@ -94,6 +94,7 @@
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixtureBase.cs" />
     <Compile Include="LoanCreatorTests\LoanDelayFixture.cs" />
+    <Compile Include="LoanCreatorTests\LoanWithDiscountFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\FlexibleInerestRateFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\GetStateAtFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\InterestOnlyPaymentsFixture.cs" />

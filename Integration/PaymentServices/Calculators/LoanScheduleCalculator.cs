@@ -56,6 +56,8 @@ namespace PaymentServices.Calculators
             var loanType = loan == null ? new StandardLoanType() : loan.LoanType;
             var balances = loanType.GetBalances(total, Term).ToArray();
 
+            var discounts = GetDiscounts(loan, Term);
+
             var balance = total;
             var repayment = balance;
 
@@ -73,7 +75,10 @@ namespace PaymentServices.Calculators
                     item = schedule[m];
                 }
 
-                var interest = Math.Round(balance * Interest, 2);
+                var currentInterestRate = Interest + Interest*discounts[m];
+
+                var round = Math.Round(balance*currentInterestRate, 2);
+                var interest = round;
 
                 repayment = balance - balances[m];
                 item.BalanceBeforeRepayment = balance;
@@ -84,7 +89,7 @@ namespace PaymentServices.Calculators
                 item.Date = startDate.Value.AddMonths(m + 1);
                 item.Balance = balance;
                 item.Interest = interest;
-                item.InterestRate = Interest;
+                item.InterestRate = currentInterestRate;
                 item.AmountDue = repayment + interest;
                 item.LoanRepayment = repayment;
             }
@@ -101,6 +106,23 @@ namespace PaymentServices.Calculators
             }
 
             return schedule;
+        }
+
+        private decimal[] GetDiscounts(Loan loan, int term)
+        {
+            var discounts = new List<decimal>(term);
+            discounts.AddRange(new decimal[term]);
+            
+            if (loan != null && loan.CashRequest != null && loan.CashRequest.DiscountPlan != null)
+            {
+                for (int i = 0; i < loan.CashRequest.DiscountPlan.Discounts.Length; i++)
+                {
+                    if (i >= term) break;
+                    discounts[i] = loan.CashRequest.DiscountPlan.Discounts[i] / 100.0m;
+                }
+            }
+
+            return discounts.ToArray();
         }
     }
 }
