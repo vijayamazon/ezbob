@@ -10,13 +10,17 @@ namespace YodleeLib
         public UserContext userContext = null;
         ContentServiceTraversalService contentServieTravelService = null;
         ServerVersionManagementService serverVersionManagementService = null;
-       // internal readonly IYodleeMarketPlaceConfig config;// = new YodleeEnvConnectionConfig();
-        public YodleeMain()
+
+        public YodleeMain(string soapServer)
         {
-            contentServieTravelService = new ContentServiceTraversalService();
-            contentServieTravelService.Url = YodleeConfig._Config.soapServer + "/" + contentServieTravelService.GetType().FullName;
-            serverVersionManagementService = new ServerVersionManagementService();
-            serverVersionManagementService.Url = YodleeConfig._Config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
+            contentServieTravelService = new ContentServiceTraversalService
+                {
+                    Url = soapServer + "/" + contentServieTravelService.GetType().FullName
+                };
+            serverVersionManagementService = new ServerVersionManagementService
+                {
+                    Url = soapServer + "/" + serverVersionManagementService.GetType().FullName
+                };
         }
 
         public string loginUser(string userName, string password)

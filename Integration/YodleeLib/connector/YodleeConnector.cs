@@ -1,7 +1,7 @@
 ﻿namespace YodleeLib.connector
 {
     using System.Collections.Generic;
-    using Scorto.Configuration;
+    using config;
     using log4net;
 
     public class YodleeConnector
@@ -16,13 +16,13 @@
 
         }
 
-        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, int itemId)
+        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, int itemId, IYodleeMarketPlaceConfig config)
         {
             //TODO: implement
-            var yodlee = new YodleeMain();
+            var yodlee = new YodleeMain(config.soapServer);
             yodlee.loginUser(userName, password);
             var lu = new LoginUser();
-            var DisplayBankData = new DisplayBankData();
+            var DisplayBankData = new DisplayBankData(config);
             string ItemSummaryInfo;
             string error;
             Dictionary<BankData, List<BankTransactionData>> orders;

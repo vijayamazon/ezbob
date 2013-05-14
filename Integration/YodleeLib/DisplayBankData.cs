@@ -13,12 +13,12 @@ namespace YodleeLib
     public class DisplayBankData : ApplicationSuper
     {
         DataServiceService dataService;
-       // private static readonly IYodleeMarketPlaceConfig config = new YodleeEnvConnectionConfig();
-
-        public DisplayBankData()
+        private readonly IYodleeMarketPlaceConfig _Config;
+        public DisplayBankData(IYodleeMarketPlaceConfig config)
         {
+            _Config = config;
             dataService = new DataServiceService();
-            dataService.Url = YodleeConfig._Config.soapServer + "/" + "DataService";
+            dataService.Url = config.soapServer + "/" + "DataService";
         }
 
 
@@ -67,7 +67,7 @@ namespace YodleeLib
                 throw new Exception("displayBankDataForItem called with invalid container type" + containerType);
             }
 
-            DisplayItemInfo displayItemInfo = new DisplayItemInfo();
+            DisplayItemInfo displayItemInfo = new DisplayItemInfo(_Config);
             ItemSummaryInfo = displayItemInfo.getItemSummaryInfo(itemSummary);
 
             // Get ItemData
@@ -151,7 +151,7 @@ namespace YodleeLib
                             System.Console.WriteLine("\t\tBank Current As of Date: {0}",
                                 bankData.asOfDate.date);
                             System.Console.WriteLine("\t\tLast Updated: {0}\n",
-                                UtcToDateTime(bankData.lastUpdated.Value));
+                                UtcToDateTime(bankData.lastUpdated.HasValue ? bankData.lastUpdated.Value: 0));
                         }
                     }
                 }

@@ -60,6 +60,7 @@
     <Compile Include="config\YodleeConfig.cs" />
     <Compile Include="config\YodleeEnvConnectionConfig.cs" />
     <Compile Include="config\IYodleeMarketPlaceConfig.cs" />
+    <Compile Include="config\YodleeMarketPlaceConfig.cs" />
     <Compile Include="connector\YodleeConnector.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionFactory.cs" />
     <Compile Include="connector\YodleeDatabaseFunctionStorage.cs" />

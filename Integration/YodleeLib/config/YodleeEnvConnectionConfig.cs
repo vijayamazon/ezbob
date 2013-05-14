@@ -2,8 +2,6 @@ using Scorto.Configuration;
 
 namespace YodleeLib.config
 {
-    using StructureMap;
-
     public class YodleeEnvConnectionConfig : ConfigurationRoot, IYodleeMarketPlaceConfig
     {
         public string cobrandId

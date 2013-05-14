@@ -16,10 +16,12 @@
 
     public class YodleeRetriveDataHelper : MarketplaceRetrieveDataHelperBase<YodleeDatabaseFunctionType>
     {
+        private readonly IYodleeMarketPlaceConfig _Config;
         public YodleeRetriveDataHelper(DatabaseDataHelper helper,
                                        DatabaseMarketplaceBase<YodleeDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
+            _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();  
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -34,7 +36,7 @@
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             //retreive data from Yodlee api
-            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId);
+            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId, _Config);
             //TODO: implement
             //var YodleeOrderItem = new List<YodleeOrderItem>();
             //foreach (var order in ordersList)

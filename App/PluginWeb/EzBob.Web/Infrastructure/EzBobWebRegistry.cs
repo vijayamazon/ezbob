@@ -67,7 +67,7 @@ namespace EzBob.Web.Infrastructure
             For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
             For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);
             For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
-            For<IYodleeMarketPlaceConfig>().Use(localRoot.YodleeConfig);
+            For<IYodleeMarketPlaceConfig>().Singleton().Use(localRoot.YodleeConfig);
             For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
             For<IDbStringRepository>().Use<DbStringRepository>();
             For<EzBobConfigRoot>().Use(c => localRoot);
