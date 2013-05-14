@@ -38,6 +38,21 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string Reason { get; set; }
 
         public bool IsLoanTypeSelectionAllowed { get; set; }
+
+        public DiscountPlanModel[] DiscountPlans { get; set; }
+        public string DiscountPlan { get; set; }
+        public int DiscountPlanId { get; set; }
+    }
+
+    public class DiscountPlanModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public static DiscountPlanModel Create(DiscountPlan discountPlan)
+        {
+            return new DiscountPlanModel{Id = discountPlan.Id, Name = discountPlan.Name};
+        }
     }
 
     public class LoanTypesModel

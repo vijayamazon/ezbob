@@ -21,5 +21,8 @@ GO
 ALTER TABLE dbo.DiscountPlan SET (LOCK_ESCALATION = TABLE)
 GO
 
-INSERT INTO dbo.DiscountPlan (Name, ValuesStr, IsDefault) VALUES ('Simple Discount', '+0,+0,+0,-10,-20,-30', 'True')
+INSERT INTO dbo.DiscountPlan (Name, ValuesStr, IsDefault) VALUES ('No Discount', '+0,+0,+0', 'True')
+GO
+
+INSERT INTO dbo.DiscountPlan (Name, ValuesStr, IsDefault) VALUES ('Simple Discount', '+0,+0,+0,-10,-20,-30', 'False')
 GO

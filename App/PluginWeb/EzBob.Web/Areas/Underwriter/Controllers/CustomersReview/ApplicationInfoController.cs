@@ -31,6 +31,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly ILoanTypeRepository _loanTypes;
         private readonly LoanLimit _limit;
         private readonly IPacNetBalanceRepository _funds;
+        private readonly IDiscountPlanRepository _discounts;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
 
@@ -39,7 +40,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public ApplicationInfoController(ICustomerRepository customerRepository, ICashRequestsRepository cashRequestsRepository,
                                          IAppCreator creator, IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config,
                                          IZohoFacade crm, ILoanTypeRepository loanTypes, LoanLimit limit,
-                                            IPacNetBalanceRepository funds)
+                                            IPacNetBalanceRepository funds, IDiscountPlanRepository discounts)
         {
             _customerRepository = customerRepository;
             _cashRequestsRepository = cashRequestsRepository;
@@ -51,6 +52,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _loanTypes = loanTypes;
             _limit = limit;
             _funds = funds;
+            _discounts = discounts;
         }
 
         [Ajax]
@@ -121,6 +123,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
 
+            model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
+            var discountPlan = (cr.DiscountPlan ?? _discounts.GetDefault());
+            model.DiscountPlan = discountPlan.Name;
+            model.DiscountPlanId = discountPlan.Id;
+
             model.Reason = cr.UnderwriterComment;
 
             model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
@@ -157,6 +164,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             cr.RepaymentPeriod = loanT.RepaymentPeriod;
             cr.LoanTemplate = null;
             Log.DebugFormat("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
+        }
+
+        [HttpPost]
+        [Ajax]
+        [Transactional]
+        public JsonNetResult DiscountPlan(long id, int discountPlanId)
+        {
+            var cr = _cashRequestsRepository.Get(id);
+            var discount = _discounts.Get(discountPlanId);
+            cr.DiscountPlan = discount;
+            //cr.LoanTemplate = null;
+            //Log.DebugFormat("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
+            return this.JsonNet(new {});
         }
 
         [HttpPost]

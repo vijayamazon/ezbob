@@ -24,6 +24,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
         'click [name="isLoanTypeSelectionAllowed"]'         : 'isLoanTypeSelectionAllowed'
+        'click [name="discountPlan"]'                       : 'discountPlan'
 
     editOfferValidUntilDate: ->
         d = new EzBob.Dialogs.DateEdit(
@@ -179,6 +180,19 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             comboValues: @model.get('LoanTypes')
             postValueName: "LoanType"
             url: "Underwriter/ApplicationInfo/LoanType"
+            data: {id: @model.get("CashRequestId")}
+        d.render()
+        d.on( "done", => @model.fetch())
+        return
+
+    discountPlan: ->
+        d = new EzBob.Dialogs.ComboEdit
+            model: @model
+            propertyName: "DiscountPlanId"
+            title: "Discount Plan"
+            comboValues: _.map(@model.get('DiscountPlans'), (v) -> {value: v.Id, text: v.Name})
+            postValueName: "DiscountPlanId"
+            url: "Underwriter/ApplicationInfo/DiscountPlan"
             data: {id: @model.get("CashRequestId")}
         d.render()
         d.on( "done", => @model.fetch())

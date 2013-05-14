@@ -40,13 +40,19 @@ namespace EZBob.DatabaseLib.Model.Loans
 
     public interface IDiscountPlanRepository : IRepository<DiscountPlan>
     {
-
+        DiscountPlan GetDefault();
     }
 
-    public class DsicountPlanRepository : NHibernateRepositoryBase<DiscountPlan>, IDiscountPlanRepository
+    public class DiscountPlanRepository : NHibernateRepositoryBase<DiscountPlan>, IDiscountPlanRepository
     {
-        public DsicountPlanRepository(ISession session) : base(session)
+        public DiscountPlanRepository(ISession session)
+            : base(session)
         {
+        }
+
+        public DiscountPlan GetDefault()
+        {
+            return GetAll().Single(p => p.IsDefault);
         }
     }
 
