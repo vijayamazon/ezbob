@@ -98,12 +98,13 @@
         <thead>
             <tr>
                 <th>Action</th>
-                <th>Offer</th>        
+                <th>Offer</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Amount</th>
                 <th>Interest Rate</th>
                 <th>Setup Fee</th>
+                <th>Discount Plan</th>
                 <th>Repayment Period</th>
                 <th>Type</th>
                 <th>Comments</th>
@@ -131,6 +132,7 @@
         <td><%- EzBob.formatPounds(offer.Amount) %></td>
         <td><%- EzBob.formatPercents(offer.InterestRate) %></td>
         <td><%- offer.SetupFee %></td>
+        <td><%- offer.DiscountPlan %></td>
         <td><%- offer.RepaymentPeriod %></td>
         <td><%- offer.LoanType %></td>
         <td><%- offer.Comments %></td>
@@ -142,7 +144,7 @@
         <td><%- offer.UnderwriterDecision %></td>
         <td class="centered"></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
-        <td colspan="6"></td>
+        <td colspan="7"></td>
         
         <td><%- offer.Comments %></td>
     </tr>
