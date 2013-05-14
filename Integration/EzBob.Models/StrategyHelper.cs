@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib.TimePeriodLogic;
 using StructureMap;
@@ -21,7 +18,7 @@ namespace EzBob.Models
         {
             var customer = _customers.Get(customerId);
             double sum = 0;
-            foreach (MP_CustomerMarketPlace mp in customer.CustomerMarketPlaces)
+            foreach (var mp in customer.CustomerMarketPlaces)
             {
                 var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
                 var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
@@ -29,6 +26,23 @@ namespace EzBob.Models
                 {
                     var lastAnualTurnover = av.LastOrDefault(x => x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Year);
                     sum += Convert.ToDouble(lastAnualTurnover!=null ? lastAnualTurnover.Value : 0);
+                }
+            }
+            return sum;
+        }
+
+        public double GetTotalSumOfOrders3M(int customerId)
+        {
+            var customer = _customers.Get(customerId);
+            double sum = 0;
+            foreach (var mp in customer.CustomerMarketPlaces)
+            {
+                var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+                var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+                if (av != null)
+                {
+                    var lastAnualTurnover = av.LastOrDefault(x => x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Month3);
+                    sum += Convert.ToDouble(lastAnualTurnover != null ? lastAnualTurnover.Value : 0);
                 }
             }
             return sum;
