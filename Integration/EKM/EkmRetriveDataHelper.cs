@@ -64,6 +64,7 @@ namespace EKM
                 {
                     log.Error("Failed to create EKMOrderItem", e);
                     log.DebugFormat("Original order is: {0}", order);
+                    throw;
                 }
             }
 
