@@ -58,6 +58,7 @@
     <Compile Include="EKMRegistry.cs" />
     <Compile Include="EkmSecurityInfo.cs" />
     <Compile Include="EkmServiceInfo.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\API\Reference.cs">
       <AutoGen>True</AutoGen>

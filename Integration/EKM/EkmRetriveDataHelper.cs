@@ -10,11 +10,15 @@ using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
 using System;
 using System.Collections.Generic;
+using log4net;
 
 namespace EKM
 {
     public class EkmRetriveDataHelper : MarketplaceRetrieveDataHelperBase<EkmDatabaseFunctionType>
     {
+
+        private static ILog log = LogManager.GetLogger(typeof(EkmRetriveDataHelper));
+
         public EkmRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<EkmDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
@@ -38,21 +42,29 @@ namespace EKM
             var ekmOrderItem = new List<EkmOrderItem>();
             foreach (var order in ordersList)
             {
-                ekmOrderItem.Add(new EkmOrderItem
+                try
                 {
-                    EkmOrderId = order.OrderID,
-                    OrderNumber = order.OrderNumber,
-                    CustomerID = order.CustomerID,
-                    CompanyName = order.CompanyName,
-                    FirstName = order.FirstName,
-                    LastName = order.LastName,
-                    EmailAddress = order.EmailAddress,
-                    TotalCost = order.TotalCost,
-                    OrderDate = DateTime.Parse(order.OrderDate),
-                    OrderStatus = order.OrderStatus,
-                    OrderDateIso = DateTime.Parse(order.OrderDateISO),
-                    OrderStatusColour = order.OrderStatusColour,
-                });
+                    ekmOrderItem.Add(new EkmOrderItem
+                                         {
+                                             EkmOrderId = order.OrderID,
+                                             OrderNumber = order.OrderNumber,
+                                             CustomerID = order.CustomerID,
+                                             CompanyName = order.CompanyName,
+                                             FirstName = order.FirstName,
+                                             LastName = order.LastName,
+                                             EmailAddress = order.EmailAddress,
+                                             TotalCost = order.TotalCost,
+                                             OrderDate = DateTime.Parse(order.OrderDate),
+                                             OrderStatus = order.OrderStatus,
+                                             OrderDateIso = DateTime.Parse(order.OrderDateISO),
+                                             OrderStatusColour = order.OrderStatusColour,
+                                         });
+                }
+                catch (Exception e)
+                {
+                    log.Error("Failed to create EKMOrderItem", e);
+                    log.DebugFormat("Original order is: {0}", order);
+                }
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
