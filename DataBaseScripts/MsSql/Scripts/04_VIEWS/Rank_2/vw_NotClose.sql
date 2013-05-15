@@ -1,12 +1,14 @@
-﻿IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_NotClose]'))
-DROP VIEW [dbo].[vw_NotClose]
-GO
+﻿
+/****** Object:  View [dbo].[vw_NotClose]    Script Date: 4/29/2013 1:18:46 PM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
+
 /*order by Id*/
-CREATE VIEW [dbo].[vw_NotClose]
+create VIEW [dbo].[vw_NotClose]
 AS
 SELECT l.Id AS loanID
 , l.CustomerId
@@ -57,8 +59,8 @@ FROM
  LEFT OUTER JOIN dbo.Loan AS l ON l.Id = LoanAmount.Id 
  LEFT OUTER JOIN MinLoanSchedule as ld ON ld.Id = LoanAmount.Id 
  LEFT OUTER JOIN dbo.Customer AS c ON c.Id = l.CustomerId 
-LEFT OUTER JOIN dbo.CustomerAddressRelation AS car ON car.customerId = c.Id 
-LEFT OUTER JOIN dbo.CustomerAddress AS ca ON ca.addressId = car.addressId
+--LEFT OUTER JOIN dbo.CustomerAddressRelation AS car ON car.customerId = c.Id 
+LEFT OUTER JOIN dbo.CustomerAddress AS ca ON ca.customerId = c.Id
 LEFT OUTER JOIN dbo.LoanOptions AS lo ON lo.LoanId = l.Id
 WHERE c.IsTest <> 1 and 
  (
@@ -66,5 +68,8 @@ WHERE c.IsTest <> 1 and
  ((c.TypeOfBusiness = 'Limited' OR c.TypeOfBusiness = 'PShip' OR c.TypeOfBusiness = 'LLP')and  (ca.addressType = 3)) OR 
   (c.TypeOfBusiness = 'Entrepreneur' and  (ca.addressType = 1))
  )    
---ORDER BY car.customerId
+
+
 GO
+
+
