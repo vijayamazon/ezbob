@@ -315,9 +315,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _crm.UpdateCashRequest(cr);
         }
 
+
         [HttpPost]
         [Transactional]
         [Ajax]
+        [ValidateJsonAntiForgeryToken]
         [Permission(Name = "NewCreditLineButton")]
         public JsonNetResult RunNewCreditLine(int Id)
         {
@@ -326,7 +328,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
             var customer = _customerRepository.Get(Id);
-            var loanType = _loanTypes.GetDefault();
+            var loanType = customer.LastCashRequest.LoanType;
 
             var cashRequest = new CashRequest()
             {
