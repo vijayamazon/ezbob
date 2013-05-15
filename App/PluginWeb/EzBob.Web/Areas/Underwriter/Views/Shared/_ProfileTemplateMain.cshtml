@@ -110,11 +110,6 @@
 </script>
 
 <script id="approve-details" type="text/template">
-    <p class="offer-status"></p>
-    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%><br/>
-    Repayment period: <b><%- RepaymentPerion %></b><br/>
-    Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br/>
-    Loan type: <b><%- LoanType %></b><br><br>
     <div id="loan-schedule"></div>
     <div>
         <button class="btn btn-danger change-offer-details"><i class="icon-pencil"></i> Edit</button>

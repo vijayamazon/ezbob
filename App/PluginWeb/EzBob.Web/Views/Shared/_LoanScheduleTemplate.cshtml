@@ -10,7 +10,13 @@
             </div>
         <%}%>
     </div>
-     <%if(isShowExportBlock){%>
+    <p class="offer-status"></p>
+    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%><br/>
+    Repayment period: <b><%- RepaymentPerion %></b><br/>
+    Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br/>
+    Loan type: <b><%- LoanType %></b><br><br>
+
+    <%if(isShowExportBlock){%>
         <a href="#" class="pull-right print-link excel-link">Export to Excel</a>
 	<a href="#" style="margin-right: 20px;" class="pull-right print-link pdf-link">Export to PDF</a>
     <%}%>

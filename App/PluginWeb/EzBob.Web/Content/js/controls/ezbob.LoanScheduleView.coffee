@@ -15,6 +15,10 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
             totalPrincipal : @options.schedule.TotalPrincipal
             isShowGift : @options.isShowGift
             isShowExportBlock:@options.isShowExportBlock
+            OfferedCreditLine:@options.schedule.Details.OfferedCreditLine
+            RepaymentPerion:@options.schedule.Details.RepaymentPeriod
+            InterestRate:@options.schedule.Details.InterestRate
+            LoanType:@options.schedule.Details.LoanType
         }
 
 
