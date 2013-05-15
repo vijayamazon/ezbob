@@ -44,26 +44,12 @@ namespace EKM
             {
                 try
                 {
-                    ekmOrderItem.Add(new EkmOrderItem
-                                         {
-                                             EkmOrderId = order.OrderID,
-                                             OrderNumber = order.OrderNumber,
-                                             CustomerID = order.CustomerID,
-                                             CompanyName = order.CompanyName,
-                                             FirstName = order.FirstName,
-                                             LastName = order.LastName,
-                                             EmailAddress = order.EmailAddress,
-                                             TotalCost = order.TotalCost,
-                                             OrderDate = DateTime.Parse(order.OrderDate),
-                                             OrderStatus = order.OrderStatus,
-                                             OrderDateIso = DateTime.Parse(order.OrderDateISO),
-                                             OrderStatusColour = order.OrderStatusColour,
-                                         });
+                    ekmOrderItem.Add(order.ToEkmOrderItem());
                 }
                 catch (Exception e)
                 {
                     log.Error("Failed to create EKMOrderItem", e);
-                    log.DebugFormat("Original order is: {0}", order);
+                    log.DebugFormat("Original order is: {0}", order.ToString());
                     throw;
                 }
             }

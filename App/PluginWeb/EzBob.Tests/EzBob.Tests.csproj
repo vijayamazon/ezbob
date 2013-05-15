@@ -71,6 +71,7 @@
     <Reference Include="System.Data.SQLite">
       <HintPath>..\..\..\Lib\3rdparty\SQLite\System.Data.SQLite.DLL</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -89,6 +90,7 @@
     <Compile Include="AnalysisFunctionTimePeriodRepositoryFixture.cs" />
     <Compile Include="CustomLoanCanBeAltered.cs" />
     <Compile Include="DiscountPlanFixture.cs" />
+    <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
@@ -171,6 +173,10 @@
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EKM\EKM.csproj">
+      <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
+      <Name>EKM</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
       <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
