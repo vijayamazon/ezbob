@@ -110,6 +110,7 @@
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar47020346" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar16854755" />
     <NodeElement Name="Get_EKM_Shops_Number" NodeId="DataSourceNodeScalar60341288" />
+    <NodeElement Name="Get_MPs_Error_Num" NodeId="DataSourceNodeScalar51204301" />
     <NodeElement Name="Get_Other_Directors_Address" NodeId="DataSourceBehavioral48157118" />
     <NodeElement Name="GetAmazonData" NodeId="DataSourceBehavioral56474739" />
     <NodeElement Name="GeteBayData" NodeId="DataSourceBehavioral60622501" />
@@ -4880,6 +4881,63 @@ eBayAccountStateScalar != CP_eBay_AccountStatePending&lt;/condition&gt;&lt;posit
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>Get_MPs_Error_Num</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;Get_MPs_Error_Num16evg1Dlx2BUmM0Gbe3/5Q==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;ErrorMPsNum&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomerId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar51204301</Name>
+      <PointF>
+        <X>6143.784</X>
+        <Y>1696</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -16092,6 +16150,18 @@ eBayPayPalAccountTypeScalar  &amp;lt;&amp;gt; CP_eBay_PayPalAccountTypePremier
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>ErrorMPsNum</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>CreditProduct2811519</OwnerName>
       <Name>BureauScore</Name>
       <TypeName>System.String</TypeName>
@@ -23763,6 +23833,54 @@ ExperianMortgageBalance = CPExperianMortgagesBalance
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51204301</OwnerName>
+      <Name>ErrorMPsNum</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51204301</OwnerName>
+      <Name>CustomerId</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51204301</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51204301</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>DataSourceNodeScalar57450688</OwnerName>
       <Name>RETURN_VALUE</Name>
       <TypeName>System.Double</TypeName>
@@ -27589,7 +27707,7 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
       <OwnerName>Comparison13079191</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>LoanOffer_ApprovalNum &gt; 0 OR TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 OR LoanOffer_EKMStoresNum &gt; 0</InitialValue>
+      <InitialValue>(LoanOffer_ApprovalNum &gt; 0 OR TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 OR LoanOffer_EKMStoresNum &gt; 0) OR ErrorMPsNum&gt;0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -27636,6 +27754,18 @@ Inintial_ExperianConsumerScore &lt; 500 OR TotalSumOfOrders3MTotal  &lt; 1500 OR
     <VariableDescriptor>
       <OwnerName>Comparison13079191</OwnerName>
       <Name>Comparison13079191LoanOffer_ApprovalNum</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison13079191</OwnerName>
+      <Name>Comparison13079191ErrorMPsNum</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -35810,7 +35940,7 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar15935071</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar60341288</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar51204301</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -35964,6 +36094,39 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar51204301</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar60341288</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar51204301</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode61074547</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Exception</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-23296</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>6040</X>
+          <Y>1700</Y>
+        </PointF>
+        <PointF>
+          <X>6040</X>
+          <Y>1420</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
@@ -41507,30 +41670,6 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
-      <TargetVariableName>Comparison13079191TotalSumOfOrders1YTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
-      <TargetVariableName>Comparison13079191Inintial_ExperianConsumerScore</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_EKMStoresNum</SourceVariableName>
-      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
-      <TargetVariableName>Comparison13079191LoanOffer_EKMStoresNum</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_ApprovalNum</SourceVariableName>
-      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
-      <TargetVariableName>Comparison13079191LoanOffer_ApprovalNum</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar56085180</TargetVariableOwnerName>
       <TargetVariableName>UserId</TargetVariableName>
@@ -41870,6 +42009,60 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
       <SourceVariableName>LoanOffer_EKMStoresNum</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar60341288</TargetVariableOwnerName>
       <TargetVariableName>Volusion_PayPoint_Num</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51204301</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51204301</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ErrorMPsNum</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51204301</TargetVariableOwnerName>
+      <TargetVariableName>ErrorMPsNum</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerId</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51204301</TargetVariableOwnerName>
+      <TargetVariableName>CustomerId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
+      <TargetVariableName>Comparison13079191TotalSumOfOrders1YTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
+      <TargetVariableName>Comparison13079191Inintial_ExperianConsumerScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_EKMStoresNum</SourceVariableName>
+      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
+      <TargetVariableName>Comparison13079191LoanOffer_EKMStoresNum</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_ApprovalNum</SourceVariableName>
+      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
+      <TargetVariableName>Comparison13079191LoanOffer_ApprovalNum</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ErrorMPsNum</SourceVariableName>
+      <TargetVariableOwnerName>Comparison13079191</TargetVariableOwnerName>
+      <TargetVariableName>Comparison13079191ErrorMPsNum</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -43411,6 +43604,14 @@ TotalSumOfOrders1YTotal &gt; 250000 OR Inintial_ExperianConsumerScore &gt; 900 O
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>Comparison19681404</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar51204301</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
