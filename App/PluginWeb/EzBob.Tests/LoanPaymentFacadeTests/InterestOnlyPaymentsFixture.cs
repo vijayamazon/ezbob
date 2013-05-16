@@ -100,6 +100,30 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Assert.That(res.SavedPounds, Is.EqualTo(0));
         }
 
+        [Test]
+        public void pay_interest_installment_then_total_balance_loan_should_be_closed()
+        {
+            const int amount = 1000;
+            const decimal interest = amount * 0.06m;
+
+            CreateHalfWayLoan(Parse("2012-09-23 23:29:35.000"), amount);
+
+            var customer = new Customer();
+            customer.Loans.Add(_loan);
+            _loan.Customer = customer;
+
+            var res = _facade.MakePayment("", interest, "1.1.1.1", "", _loan.Id, customer, _loan.Date, "dfa", "nextInterest");
+
+            Console.Write(_loan);
+
+            _facade.PayAllLoansForCustomer(customer, amount, "transactionid", _loan.Date);
+
+            Console.Write(_loan);
+
+            Assert.That(_loan.Status, Is.EqualTo(LoanStatus.PaidOff));
+
+        }
+
 
         protected void MakePaymentIO(decimal amount, DateTime date)
         {

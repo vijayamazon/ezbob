@@ -191,7 +191,7 @@ namespace PaymentServices.Calculators
             decimal amount = 0;
             _eventDayEnd.Action = () =>
             {
-                var payment = InterestToPay + FeesToPay + _loan.LoanAmount - _paidPrincipal;
+                var payment = Math.Max(0, InterestToPay )+ FeesToPay + _loan.LoanAmount - _paidPrincipal;
                 var rollovers = _rollovers.Where(r => r.Status != RolloverStatus.Expired).Sum(r => r.Payment - r.PaidPaymentAmount);
                 amount = Math.Round(payment + rollovers + FeesToPay, 2);
             };
