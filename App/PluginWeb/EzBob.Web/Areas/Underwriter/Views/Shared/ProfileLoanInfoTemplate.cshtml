@@ -194,7 +194,11 @@
             <%} else{%>
             @RawCell("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             <%}%>
+            <%if(m.Editable){%>
             @RawCellWithButtonNear("Discount plan:", "<%= m.DiscountPlan %>", "discountPlan")
+            <%} else{%>
+            @RawCell("Discount plan:", "<%= m.DiscountPlan %>")
+            <%}%>
             <%if(m.Editable){%>
             @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
             <%} else{%>
