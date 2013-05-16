@@ -610,6 +610,42 @@ EzBob.formatPercents = function (num, precision) {
     return EzBob.roundNumber(num * 100, p) + "%";
 };
 
+EzBob.formatLoanType = function(loanTypeSelection, loanType) {
+	switch (loanTypeSelection) {
+	case 1:
+	case '1':
+		return 'customer selected';
+		break;
+		
+	default:
+		return loanType;
+		break;
+	} // switch
+}; // formatLoanType
+
+EzBob.formatLoanTypeSelection = function(num) {
+	switch (num) {
+	case 0:
+	case '0':
+		return 'No';
+		break;
+		
+	case 1:
+	case '1':
+		return 'Yes';
+		break;
+		
+	case 2:
+	case '2':
+		return 'Forbidden';
+		break;
+		
+	default:
+		return 'UNKNOWN';
+		break;
+	} // switch
+}; // formatLoanTypeSelection
+
 EzBob.formatDateHuman = function (date) {
     if (!date) return "";
     return moment.utc(date).local().format("MMM D");

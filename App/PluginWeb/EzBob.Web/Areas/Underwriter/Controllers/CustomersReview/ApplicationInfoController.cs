@@ -266,10 +266,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [ValidateJsonAntiForgeryToken]
         [Ajax]
         [Permission(Name = "CreditLineFields")]
-        public void IsLoanTypeSelectionAllowed(long id, bool enbaled)
+        public void IsLoanTypeSelectionAllowed(long id, int loanTypeSelection)
         {
             var cr = _cashRequestsRepository.Get(id);
-            cr.IsLoanTypeSelectionAllowed = enbaled;
+            cr.IsLoanTypeSelectionAllowed = loanTypeSelection;
             Log.DebugFormat("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
         }
 
@@ -369,7 +369,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Transactional]
         [Ajax]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail, bool isLoanTypeSelectionAllowed)
+        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed)
         {
             var cr = _cashRequestsRepository.Get(id);
             var loanT = _loanTypes.Get(loanType);

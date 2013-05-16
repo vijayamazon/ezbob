@@ -147,7 +147,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         @model.on "change", @renderDetails, this
         @$el.find(".button-ok").addClass "disabled"    if not @model.get("OfferedCreditLine") or @model.get("OfferedCreditLine") is 0
         @$el.find(".button-ok").addClass "disabled"    if @model.get("OfferExpired")
-        @$el.find(".change-offer-details").attr 'disabled', 'disabled'    if @model.get("IsLoanTypeSelectionAllowed")
+        @$el.find(".change-offer-details").attr 'disabled', 'disabled' if @model.get("IsLoanTypeSelectionAllowed") in [ 1, '1' ]
 
     renderDetails: ->
         details = _.template($("#approve-details").html(), @model.toJSON())
@@ -174,8 +174,15 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     dlgWidth: 540
     dlgHeight: 750
     onSaved: ->
+        that = this
         @renderSchedule()
-        @model.fetch()
+
+        $.post(
+            window.gRootPath + "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed",
+            { id: @model.get("CashRequestId"), loanTypeSelection: 2 }
+        ).done( ->
+            that.model.fetch()
+        )
 
     changeLoanDetails: ->
         that = this

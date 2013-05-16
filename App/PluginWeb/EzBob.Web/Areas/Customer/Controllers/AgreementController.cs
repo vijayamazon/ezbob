@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.CommonLib;
 using EzBob.Web.Code;
@@ -39,7 +40,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         {
             var lastCashRequest = _customer.LastCashRequest;
 
-			if (_customer.IsLoanTypeSelectionAllowed) {
+			if (_customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				lastCashRequest.RepaymentPeriod = repaymentPeriod;
 				lastCashRequest.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);

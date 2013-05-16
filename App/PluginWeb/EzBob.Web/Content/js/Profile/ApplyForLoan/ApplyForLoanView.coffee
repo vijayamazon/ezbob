@@ -110,7 +110,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     if @fixed
       @$(".cash-question").hide()
 
-    if @isLoanTypeSelectionAllowed
+    if @isLoanTypeSelectionAllowed in [ 1, '1' ]
       @$('#loan-type-selector').show()
       @setCurrentlyActiveLoanType()
 

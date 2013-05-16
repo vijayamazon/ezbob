@@ -34,6 +34,7 @@ class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
         m: @model.toJSON()
 
     onRender: ->
+        console.log 'ezbob.underwriter.summaryinfo.onRender', @model
         @CommentSave = @$el.find("#commentSave")
         @CommentArea = @$el.find("#CommentArea")
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});

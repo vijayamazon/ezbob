@@ -19,7 +19,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         form: "form"
 
     onChangeLoanTypeSelectionAllowed: ->
-        if @cloneModel.get('IsLoanTypeSelectionAllowed')
+        if @cloneModel.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('#loan-type, #repaymentPeriod').attr('disabled', 'disabled')
         else
             @$el.find('#loan-type, #repaymentPeriod').removeAttr('disabled')

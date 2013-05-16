@@ -17,6 +17,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public int RepaymentPeriod { get; set; }
         public decimal ApprovedSum { get; set; }
         public string LoanType { get; set; }
+		public int IsLoanTypeSelectionAllowed { get; set; }
         private static RepaymentCalculator _repaymentCalculator;
 
         public DecisionHistoryModel()
@@ -42,6 +43,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 dm.InterestRate = item.CashRequest.InterestRate;
                 dm.UseSetupFee = item.CashRequest.UseSetupFee;
                 dm.ApprovedSum = item.CashRequest.ApprovedSum();
+	            dm.IsLoanTypeSelectionAllowed = item.CashRequest.IsLoanTypeSelectionAllowed;
             }
             return dm;
         }

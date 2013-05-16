@@ -1,4 +1,5 @@
-﻿using EZBob.DatabaseLib.Model.Loans;
+﻿using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Loans;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
@@ -37,7 +38,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public string Reason { get; set; }
 
-        public bool IsLoanTypeSelectionAllowed { get; set; }
+        public int IsLoanTypeSelectionAllowed { get; set; }
 
         public DiscountPlanModel[] DiscountPlans { get; set; }
         public string DiscountPlan { get; set; }

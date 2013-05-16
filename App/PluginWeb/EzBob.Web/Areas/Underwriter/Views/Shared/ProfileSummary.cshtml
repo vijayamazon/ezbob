@@ -310,6 +310,7 @@
                             <th> Loan Type </th>
                             <th> Use SetupFee </th>
                             <th> Discount Plan </th>
+                            <th> Customer Selection </th>
                             <th> Underwriter </th>
                             <th> Comment </th>
                         </tr>
@@ -320,7 +321,7 @@
                             <% if (d.Action == "Reject") {%>
                                 <td><%- d.Action %></td>
                                 <td><%- EzBob.formatDate(d.Date) %></td>
-                                <td colspan="5"></td>
+                                <td colspan="7"></td>
                                 <td><%- d.UnderwriterName %></td>
                                 <td><%- d.Comment %></td>
                             <%} else {%>
@@ -329,9 +330,10 @@
                                 <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
                                 <td><%- EzBob.formatPercents(d.InterestRate) %></td>
                                 <td><%- d.RepaymentPeriod %></td>
-                                <td><%- d.LoanType %></td>
+                                <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
                                 <td><%- d.UseSetupFee %></td>
                                 <td><%- d.DiscountPlan %></td>
+                                <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
                                 <td><%- d.UnderwriterName %></td>
                                 <td><%- d.Comment %></td>
                             <%}%>

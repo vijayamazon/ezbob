@@ -98,7 +98,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
         public bool IsLoanDetailsFixed { get; set; }
 
-        public bool IsLoanTypeSelectionAllowed { get; set; }
+        public int IsLoanTypeSelectionAllowed { get; set; }
     }
 
     public class LimitedInfoMap

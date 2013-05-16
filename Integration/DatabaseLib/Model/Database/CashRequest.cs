@@ -74,7 +74,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public virtual string LoanTemplate { get; set; }
 
-        public virtual bool IsLoanTypeSelectionAllowed { get; set; }
+        public virtual int IsLoanTypeSelectionAllowed { get; set; }
 
         public virtual DiscountPlan DiscountPlan { get; set; }
     }

@@ -74,7 +74,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
             var cr = customer.LastCashRequest;
 
-			if (customer.IsLoanTypeSelectionAllowed) {
+			if (customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				cr.RepaymentPeriod = repaymentPeriod;
 				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);

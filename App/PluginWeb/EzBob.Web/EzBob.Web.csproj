@@ -913,6 +913,9 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
+      <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
@@ -957,9 +960,6 @@
     </Content>
     <Content Include="Content\css\postcode.css" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js">
-      <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.min.js">
       <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">

@@ -154,12 +154,13 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     isLoanTypeSelectionAllowed: ->
-        d = new EzBob.Dialogs.CheckBoxEdit
+        console.log @model
+        d = new EzBob.Dialogs.ComboEdit
             model: @model
             propertyName: "IsLoanTypeSelectionAllowed"
-            title: "Loan type"
-            postValueName: "enbaled"
-            checkboxName: "Allow to select loan type and repayment period"
+            title: "Customer selection"
+            postValueName: "loanTypeSelection"
+            comboValues: [{ value: 0, text: 'Disabled' }, { value: 1, text: 'Enabled' }]
             url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed"
             data: {id: @model.get("CashRequestId")}
         d.render()
@@ -167,7 +168,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     LoanTypeSelectionAllowedChanged: =>
-        if @model.get('IsLoanTypeSelectionAllowed')
+        if @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
         else
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled')
@@ -210,6 +211,11 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     onRender: ->
         @UpdateNewCreditLineState()
         @LoanTypeSelectionAllowedChanged()
+
+        if @model.get('IsLoanTypeSelectionAllowed') in [ 2, '2' ]
+            @$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled')
+        else
+            @$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled')
 
     changeCreditResult: ->
         @model.fetch()

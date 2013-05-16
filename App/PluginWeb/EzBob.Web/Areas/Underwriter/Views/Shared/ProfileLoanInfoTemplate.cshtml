@@ -189,10 +189,23 @@
             @*
             @RawCellWithButton("Details", "<%- m.Details || '' %>", "editDetails")
             *@
+            <%if(m.Editable){%>
             @RawCellWithButtonNear("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
-            @RawCellWithButtonNear("Loan Type:", "<%= m.LoanType %>", "loanType")
-            @RawCellWithButtonNear("Customer selection:", "<%= m.IsLoanTypeSelectionAllowed ? 'Yes' : 'No' %>", "isLoanTypeSelectionAllowed")
+            <%} else{%>
+            @RawCell("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
+            <%}%>
             @RawCellWithButtonNear("Discount plan:", "<%= m.DiscountPlan %>", "discountPlan")
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
+            <%} else{%>
+            @RawCell("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")
+            <%}%>
+
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Customer selection:", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>", "isLoanTypeSelectionAllowed")
+            <%} else{%>
+            @RawCell("Customer selection:", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
+            <%}%>
 
         </tbody>
     </table>
