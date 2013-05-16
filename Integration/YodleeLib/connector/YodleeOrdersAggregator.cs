@@ -1,11 +1,12 @@
 namespace YodleeLib.connector
 {
-	using System;
-	using System.Collections.Generic;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.DatabaseWrapper.Order;
-	using EzBob.CommonLib.TimePeriodLogic;
-	using log4net;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.DatabaseWrapper.Order;
+    using EzBob.CommonLib.TimePeriodLogic;
+    using log4net;
 
     internal class YodleeOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType>
     {
@@ -18,82 +19,12 @@ namespace YodleeLib.connector
     internal class YodleeOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType>
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeOrdersAggregator));
-       
+
         public YodleeOrdersAggregator(ReceivedDataListTimeDependentInfo<YodleeOrderItem> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
-           
+
         }
-
-        //private int GetOrdersCount(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Count(o => !_YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower()));
-        //}
-
-        //private int GetCancelledOrdersCount(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Count(o => _YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower()));
-        //}
-
-        //private int GetOtherOrdersCount(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Count(o =>
-        //       !_YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower()) &&
-        //       !_YodleeCompleteStatusList.Contains(o.OrderStatus.Trim().ToLower())
-        //     );
-        //}
-
-        //private double GetTotalSumOfOrders(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Where(o => o.TotalCost.HasValue && !_YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower())).
-        //        Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
-        //}
-
-        //private double GetTotalSumOfCancelledOrders(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Where(o => o.TotalCost.HasValue && _YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower())).
-        //        Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
-        //}
-
-        //private double GetTotalSumOfOtherOrders(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    return orders.Where(o => o.TotalCost.HasValue &&
-        //        !_YodleeCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower()) &&
-        //        !_YodleeCompleteStatusList.Contains(o.OrderStatus.Trim().ToLower())).
-        //        Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
-        //}
-
-        //private double GetAverageSumOfOrder(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    double sum = GetTotalSumOfOrders(orders);
-        //    var count = GetOrdersCount(orders);
-
-        //    return count == 0 ? 0 : sum / count;
-        //}
-
-        //private double GetAverageSumOfCancelledOrder(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    double sum = GetTotalSumOfCancelledOrders(orders);
-        //    var count = GetCancelledOrdersCount(orders);
-
-        //    return count == 0 ? 0 : sum / count;
-        //}
-
-        //private double GetAverageSumOfOtherOrder(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    double sum = GetTotalSumOfOtherOrders(orders);
-        //    var count = GetOtherOrdersCount(orders);
-
-        //    return count == 0 ? 0 : sum / count;
-        //}
-
-        //private double GetOrdersCancellationRate(IEnumerable<YodleeOrderItem> orders)
-        //{
-        //    var canceled = GetCancelledOrdersCount(orders);
-        //    var other = GetOrdersCount(orders);
-
-        //    return other == 0 ? 0 : canceled / (double)other;
-        //}
 
         protected override object InternalCalculateAggregatorValue(YodleeDatabaseFunctionType functionType, IEnumerable<YodleeOrderItem> orders)
         {
@@ -105,28 +36,101 @@ namespace YodleeLib.connector
 
                 case YodleeDatabaseFunctionType.TotalExpense:
                     return GetTotalExpense(orders);
-                
+
                 case YodleeDatabaseFunctionType.CurrentBalance:
                     return GetCurrentBalance(orders);
+
+                case YodleeDatabaseFunctionType.AvailableBalance:
+                    return GetAvailableBalance(orders);
 
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private object GetCurrentBalance(IEnumerable<YodleeOrderItem> orders)
+        private double GetAvailableBalance(IEnumerable<YodleeOrderItem> orders)
         {
-            throw new NotImplementedException();
+            var availableBalance = orders.First().Data
+                                         .Where(
+                                             x =>
+                                             x.Key.availableBalance != null && x.Key.availableBalance.amountSpecified)
+                                         .Sum(
+                                             x =>
+                                             CurrencyConverter.ConvertToBaseCurrency(
+                                                 x.Key.availableBalance.currencyCode,
+                                                 x.Key.availableBalance.amount.Value,
+                                                 (x.Key.asOfDate != null &&
+                                                  x.Key.asOfDate.dateSpecified)
+                                                     ? x.Key.asOfDate.date
+                                                     : null).Value);
+            return availableBalance;
         }
 
-        private object GetTotalExpense(IEnumerable<YodleeOrderItem> orders)
+        private double GetCurrentBalance(IEnumerable<YodleeOrderItem> orders)
         {
-            throw new NotImplementedException();
+            var currentBalance = orders.First().Data
+                                       .Where(x => x.Key.currentBalance != null && x.Key.currentBalance.amountSpecified)
+                                       .Sum(
+                                           x =>
+                                           CurrencyConverter.ConvertToBaseCurrency(x.Key.currentBalance.currencyCode,
+                                                                                   x.Key.currentBalance.amount.Value,
+                                                                                   (x.Key.asOfDate != null &&
+                                                                                    x.Key.asOfDate.dateSpecified)
+                                                                                       ? x.Key.asOfDate.date
+                                                                                       : null).Value);
+            return currentBalance;
         }
 
-        private object GetTotlaIncome(IEnumerable<YodleeOrderItem> orders)
+        private double GetTotalExpense(IEnumerable<YodleeOrderItem> orders)
         {
-            throw new NotImplementedException();
+            var totlalExpense =
+                orders.First()
+                      .Data
+                      .SelectMany(x => x.Value)
+                      .Where(
+                          b =>
+                          b.transactionStatusIdSpecified &&
+                          b.transactionBaseTypeIdSpecified &&
+                          b.transactionStatusId == (int)datatypes.TransactionStatus.Posted &&
+                          b.transactionBaseTypeId == (int)datatypes.TransactionBaseType.Debit &&
+                          b.transactionAmount != null &&
+                          b.transactionAmount.amountSpecified)
+                      .Sum(
+                          s =>
+                          CurrencyConverter.ConvertToBaseCurrency(s.transactionAmount.currencyCode,
+                                                                  s.transactionAmount.amount.Value,
+                                                                  (s.transactionDate != null &&
+                                                                   s.transactionDate.dateSpecified)
+                                                                      ? s.transactionDate.date
+                                                                      : null).Value);
+
+            return totlalExpense;
+        }
+
+        private double GetTotlaIncome(IEnumerable<YodleeOrderItem> orders)
+        {
+            var totlalExpense =
+                orders.First()
+                      .Data
+                      .SelectMany(x => x.Value)
+                      .Where(
+                          b =>
+                          b.transactionStatusIdSpecified &&
+                          b.transactionBaseTypeIdSpecified &&
+                          b.transactionStatusId == (int)datatypes.TransactionStatus.Posted &&
+                          b.transactionBaseTypeId == (int)datatypes.TransactionBaseType.Credit &&
+                          b.transactionAmount != null &&
+                          b.transactionAmount.amountSpecified)
+                      .Sum(
+                          s =>
+                          CurrencyConverter.ConvertToBaseCurrency(s.transactionAmount.currencyCode,
+                                                                  s.transactionAmount.amount.Value,
+                                                                  (s.transactionDate != null &&
+                                                                   s.transactionDate.dateSpecified)
+                                                                      ? s.transactionDate.date
+                                                                      : null).Value);
+
+            return totlalExpense;
         }
     }
 }

@@ -1975,6 +1975,16 @@ namespace EZBob.DatabaseLib
             return _session.Query<MP_AmazonFeedback>();
         }
 
+        public IQueryable<MP_YodleeOrderItem> GetYodleeOrderItems()
+        {
+            return _session.Query<MP_YodleeOrderItem>();
+        }
+
+        public IQueryable<MP_YodleeOrderItemBankTransaction> GetYodleeOrderItemBankTransactions()
+        {
+            return _session.Query<MP_YodleeOrderItemBankTransaction>();
+        }
+
     }
 
     public class eBayFindOrderItemInfoData

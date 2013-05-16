@@ -10,6 +10,7 @@
         TotlaIncome,
         TotalExpense,
         CurrentBalance,
+        AvailableBalance
     }
 
     internal class YodleeDatabaseFunctionStorage : DatabaseFunctionStorage<YodleeDatabaseFunctionType>
@@ -19,9 +20,10 @@
         private YodleeDatabaseFunctionStorage()
             : base(new YodleeDatabaseFunctionTypeConverter())
         {
-            CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotlaIncome, DatabaseValueTypeEnum.Integer, "{4E9ED37D-9D0B-4095-8E72-FDADDD65234D}");
+            CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotlaIncome, DatabaseValueTypeEnum.Double, "{4E9ED37D-9D0B-4095-8E72-FDADDD65234D}");
             CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotalExpense, DatabaseValueTypeEnum.Double, "{57545B4E-017F-4A91-B5CD-96479E14FE08}");
             CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.CurrentBalance, DatabaseValueTypeEnum.Double, "{621290B5-EC51-44A7-AD06-373EDC6367D8}");
+            CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.AvailableBalance, DatabaseValueTypeEnum.Double, "{598C5ED7-59A5-4905-BFDF-F35EFAA095BA}");
         }
 
         public static YodleeDatabaseFunctionStorage Instance
@@ -54,6 +56,10 @@
 
                 case YodleeDatabaseFunctionType.CurrentBalance:
                     displayName = "Current Balance";
+                    break;
+
+                case YodleeDatabaseFunctionType.AvailableBalance:
+                    displayName = "Available Balance";
                     break;
 
                 default:

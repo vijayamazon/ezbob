@@ -76,6 +76,9 @@
     <Compile Include="CobrandContextSingleton.cs" />
     <Compile Include="datatypes\ContainerTypes.cs" />
     <Compile Include="datatypes\Currency.cs" />
+    <Compile Include="datatypes\TransactionBaseType.cs" />
+    <Compile Include="datatypes\TransactionCategory.cs" />
+    <Compile Include="datatypes\TransactionStatus.cs" />
     <Compile Include="DisplayBankData.cs" />
     <Compile Include="DisplayItemInfo.cs" />
     <Compile Include="FormFieldsVisitor.cs" />
