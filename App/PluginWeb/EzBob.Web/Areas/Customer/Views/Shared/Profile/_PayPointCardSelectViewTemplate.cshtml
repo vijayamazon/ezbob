@@ -16,8 +16,8 @@
 
 				<select class="span3 selectheight">
 					<% _.each(cards, function(c, i){%>
-						<option <%if(c.IsDefault){ print('selected="selected"') }%> value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> (<%-EzBob.formatDate(c.DateAdded)%>)</option>
-					<%});%>
+						<option <%if(c.IsDefault){ print('selected="selected"') }%> value="<%-c.Id%>"><%-c.CardNo || 'XXXX' %> Exp <%-EzBob.formatDateShortCard(c.ExpireDate)%></option>
+ 					<%});%>
 				</select>
 			</div>
 			<div class="controls controls-inline">

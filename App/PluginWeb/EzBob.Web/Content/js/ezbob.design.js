@@ -620,6 +620,11 @@ EzBob.formatDateHumanFull = function (date) {
     return moment.utc(date).local().format("MMM D YYYY");
 };
 
+EzBob.formatDateShortCard = function (date) {
+    if (!date) return "";
+    return moment.utc(date).local().format("MM/YYYY");
+};
+
 EzBob.formatTimeSpan = function (val) {
     if (!val) return "";
 
