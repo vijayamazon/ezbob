@@ -111,6 +111,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         var prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: "PrevPersonAddresses", max: 3 });
         prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
+        this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter Previous Postcode');
 
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
