@@ -133,6 +133,23 @@ namespace EZBob.DatabaseLib.Model.Database {
         AllStep = 4
     }
 
+
+    public enum BankAccountType
+    {
+        Unknown,
+        Personal,
+        Business
+    }
+
+    public class BankAccountTypeType : CaseInsensitiveEnumStringType<BankAccountType> { }
+
+    public class BankAccount
+    {
+        public string AccountNumber { get; set; }
+        public string SortCode { get; set; }
+        public BankAccountType Type { get; set; }
+    }
+
     public class Customer
 	{
         
@@ -177,8 +194,14 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual AddressInfo AddressInfo { get; set; }
 
+        private BankAccount _bankAccount =new BankAccount();
         public virtual bool HasBankAccount { get { return BankAccount != null && !String.IsNullOrEmpty(BankAccount.AccountNumber) && !String.IsNullOrEmpty(BankAccount.SortCode); } }
-        public virtual BankAccount BankAccount { get; set; }
+        public virtual BankAccount BankAccount
+        {
+            get { return _bankAccount ?? (_bankAccount = new BankAccount()); }
+            set { _bankAccount = value; }
+        }
+
 
         private Iesi.Collections.Generic.ISet<Database.Loans.Loan> _loans = new HashedSet<Database.Loans.Loan>();
         public virtual Iesi.Collections.Generic.ISet<Database.Loans.Loan> Loans
@@ -457,21 +480,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 
 
-    public enum BankAccountType
-    {
-        Unknown,
-        Personal,
-        Business
-    }
-
-    public class BankAccountTypeType : CaseInsensitiveEnumStringType<BankAccountType>{}
-
-    public class BankAccount
-    {
-        public string AccountNumber { get; set; }
-        public string SortCode { get; set; }
-        public BankAccountType Type { get; set; }
-    }
 
     public class LimitedInfo
     {

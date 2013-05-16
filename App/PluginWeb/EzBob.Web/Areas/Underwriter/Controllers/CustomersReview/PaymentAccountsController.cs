@@ -143,7 +143,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
             }
             customer.BankAccounts.Add(card);
-            //customer.SetDefaultCard(card);
+            customer.SetDefaultCard(card);
 
             return this.JsonNet(new {r = card.Id});
         }
