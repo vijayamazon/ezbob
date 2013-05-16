@@ -471,7 +471,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             var displayedMonths = new List<DateTime>();
             var mthStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
 
-            for (int i = -StatusHistoryMonths; i < 0; i++)
+            for (int i = 1 - StatusHistoryMonths; i <= 0; i++)
             {
                 var date = mthStart.AddMonths(i);
                 displayedMonths.Add(date);
@@ -570,10 +570,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             sList.Add(new AccountStatus {Status = "", StatusColor = "white"});
                         }
 
-                        if (caisDetails.SettlementDate != null)
+                        if (caisDetails.LastUpdatedDate != null)
                         {
-                            var histStart = new DateTime(caisDetails.SettlementDate.CCYY, caisDetails.SettlementDate.MM, 1);
-                            accountInfo.SettlementDate = FormattingUtils.FormatDateToString(new DateTime(caisDetails.SettlementDate.CCYY, caisDetails.SettlementDate.MM, caisDetails.SettlementDate.DD));
+							var histStart = new DateTime(caisDetails.LastUpdatedDate.CCYY, caisDetails.LastUpdatedDate.MM, 1);
+							accountInfo.SettlementDate = FormattingUtils.FormatDateToString(new DateTime(caisDetails.LastUpdatedDate.CCYY, caisDetails.LastUpdatedDate.MM, caisDetails.LastUpdatedDate.DD));
 
                             for (int i = 0; i < mthsCount; i++)
                             {
