@@ -7,8 +7,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE RptChangePassword
 	@UserName NVARCHAR(50)
-   ,@Password VARBINARY
-   ,@Salt     VARBINARY 
+   ,@Password VARBINARY(20)
+   ,@Salt     VARBINARY(20) 
 AS 
 BEGIN
 	UPDATE ReportUsers SET Password=@Password, Salt=@Salt WHERE UserName=@UserName
