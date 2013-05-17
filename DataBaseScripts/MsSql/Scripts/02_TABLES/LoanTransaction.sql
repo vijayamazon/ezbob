@@ -24,6 +24,7 @@ CREATE TABLE [dbo].[LoanTransaction](
 	[RefNumber] [nchar](14) NULL,
 	[LoanRepayment] [numeric](18, 4) NULL,
 	[Rollover] [numeric](18, 4) NULL,
+	[InterestOnly] [bit] NULL,
  CONSTRAINT [PK_LoanTransaction] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

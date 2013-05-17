@@ -80,6 +80,9 @@ CREATE TABLE [dbo].[Customer](
 	[WizardStep] [int] NULL,
 	[LastStartedMainStrategyId] [int] NULL,
 	[LastStartedMainStrategyEndTime] [datetime] NULL,
+	[PendingStatus] [nvarchar](50) NULL,
+	[DateRejected] [datetime] NULL,
+	[IsLoanTypeSelectionAllowed] [int] NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -119,5 +122,5 @@ CREATE NONCLUSTERED INDEX [IX_Customer_RefNumber] ON [dbo].[Customer]
 	[RefNumber] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_Disabled]  DEFAULT ((0)) FOR [CollectionStatus]
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_IsLoanType]  DEFAULT ((0)) FOR [IsLoanTypeSelectionAllowed]
 GO

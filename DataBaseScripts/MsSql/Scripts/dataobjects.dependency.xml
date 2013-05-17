@@ -421,12 +421,6 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
-    <oName>CustomerAddressRelation</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\CustomerAddressRelation.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>CustomerScoringResult</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\CustomerScoringResult.sql</oFileName>
@@ -493,15 +487,9 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
-    <oName>DirectorAddressRelation</oName>
+    <oName>DiscountPlan</oName>
     <oRank>1</oRank>
-    <oFileName>02_TABLES\DirectorAddressRelation.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>EkmConnectorConfigs</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oFileName>02_TABLES\DiscountPlan.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1303,6 +1291,54 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_PayPointOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_PayPointOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_PayPointOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_PayPointOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_PayPointOrderItem_MP_PayPointOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_PayPointOrderItem_MP_PayPointOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_PayPointOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_PayPointOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_PlayOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_PlayOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_PlayOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_PlayOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_PlayOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_PlayOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_PlayOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_PlayOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_ServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_ServiceLog.sql</oFileName>
@@ -1345,9 +1381,75 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_VolusionOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_VolusionOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_VolusionOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_VolusionOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_VolusionOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_VolusionOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_VolusionOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_VolusionOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_WhiteList</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_WhiteList.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_YodleeOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_YodleeOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_YodleeOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_YodleeOrderItem_MP_YodleeOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItem_MP_YodleeOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_YodleeOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_YodleeOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_YodleeOrderItemBankTransaction</oName>
+    <oRank>6</oRank>
+    <oFileName>02_TABLES\MP_YodleeOrderItemBankTransaction.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>PacnetAgentConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\PacnetAgentConfigs.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1864,6 +1966,30 @@
     <oName>TaskedStrategyParams</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\TaskedStrategyParams.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_YodleeAccounts_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_YodleeAccounts_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_YodleeAccounts_YodleeBanks</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_YodleeAccounts_YodleeBanks.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>YodleeAccounts</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\YodleeAccounts.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>YodleeBanks</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\YodleeBanks.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
 </DocumentElement>

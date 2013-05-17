@@ -14,3 +14,4 @@ BEGIN
 	DECLARE @CodeId INT = (SELECT Id FROM SiteAnalyticsCodes WHERE Name=@CodeName)
 	INSERT INTO SiteAnalytics ([Date],SiteAnalyticsCode,SiteAnalyticsValue) VALUES(@Date, @CodeId, @Value)
 END
+GO

@@ -23,7 +23,9 @@ CREATE TABLE [dbo].[CustomerAddress](
 	[Smallorg] [varchar](200) NULL,
 	[Pobox] [varchar](200) NULL,
 	[Mailsortcode] [varchar](200) NULL,
-	[Udprn] [varchar](200) NULL
+	[Udprn] [varchar](200) NULL,
+	[CustomerId] [int] NULL,
+	[DirectorId] [int] NULL
 ) ON [PRIMARY]
 GO
 CREATE NONCLUSTERED INDEX [IX_CustomerAddress_ID] ON [dbo].[CustomerAddress] 

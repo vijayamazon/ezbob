@@ -1,11 +1,10 @@
-﻿
-/****** Object:  UserDefinedFunction [dbo].[fn_GetCustomerAdress]    Script Date: 4/29/2013 1:19:52 PM ******/
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fn_GetCustomerAdress]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[fn_GetCustomerAdress]
+GO
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE FUNCTION [dbo].[fn_GetCustomerAdress] (@CustId int)
 /*
 Функция возвращает адреса кастомера
@@ -90,5 +89,4 @@ VALUES
 )        
 RETURN
 end
-
 GO

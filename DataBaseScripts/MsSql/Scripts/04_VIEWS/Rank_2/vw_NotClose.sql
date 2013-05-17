@@ -1,12 +1,10 @@
-﻿
-/****** Object:  View [dbo].[vw_NotClose]    Script Date: 4/29/2013 1:18:46 PM ******/
+﻿IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_NotClose]'))
+DROP VIEW [dbo].[vw_NotClose]
+GO
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
-
 /*order by Id*/
 create VIEW [dbo].[vw_NotClose]
 AS
@@ -67,9 +65,5 @@ WHERE c.IsTest <> 1 and
  ((c.TypeOfBusiness = 'PShip3P' OR c.TypeOfBusiness = 'SoleTrader') AND ca.addressType = 5) OR 
  ((c.TypeOfBusiness = 'Limited' OR c.TypeOfBusiness = 'PShip' OR c.TypeOfBusiness = 'LLP')and  (ca.addressType = 3)) OR 
   (c.TypeOfBusiness = 'Entrepreneur' and  (ca.addressType = 1))
- )    
-
-
+ )
 GO
-
-
