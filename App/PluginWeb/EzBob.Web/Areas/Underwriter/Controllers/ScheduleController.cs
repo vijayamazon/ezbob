@@ -19,7 +19,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly APRCalculator _aprCalc;
         private readonly ILoanTypeRepository _loanTypes;
         private readonly ICustomerRepository _customerRepository;
-        private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
         public ScheduleController(LoanBuilder loanBuilder, ICashRequestRepository cashRequests, ILoanTypeRepository loanType, ICustomerRepository customerRepository)
         {
@@ -57,17 +56,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
  
             var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
 
-            var loanOffer = LoanOffer.InitFromLoan(loan, apr, null);
-
-            loanOffer.Details = new LoanOfferDetails
-            {
-                InterestRate = cr.InterestRate,
-                RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
-                OfferedCreditLine = loanOffer.TotalPrincipal,
-                LoanType = cr.LoanType.Name,
-                IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
-                Date = loan.Date
-            };
+            var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 
             return loanOffer;
         }

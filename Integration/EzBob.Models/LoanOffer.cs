@@ -30,7 +30,9 @@ namespace EzBob.Models
         public AgreementModel Agreement { get; set; }
         public LoanOfferDetails Details { get; set; }
 
-        public static LoanOffer InitFromLoan(Loan loan, double calculateApr,  AgreementModel agreement )
+        private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
+
+        public static LoanOffer InitFromLoan(Loan loan, double calculateApr,  AgreementModel agreement, CashRequest cr)
         {
             var apr = loan.LoanAmount == 0 ? 0 : calculateApr;
             var total = loan.Schedule.Sum(s => s.AmountDue) + loan.SetupFee;
@@ -39,19 +41,30 @@ namespace EzBob.Models
             var realInterestCost = loan.LoanAmount == 0 ? 0 : totalInterest / loan.LoanAmount;
             var timestamp = DateTime.UtcNow.Ticks;
 
-            return new LoanOffer()
-            {
-                Schedule = loan.Schedule.Select(s => LoanScheduleItemModel.FromLoanScheduleItem(s)).ToArray(),
-                Apr=apr,
-                SetupFee = loan.SetupFee,
-                Total = total,
-                RealInterestCost = realInterestCost,
-                LoanAmount = loan.LoanAmount,
-                TimeStamp = timestamp,
-                TotalInterest = totalInterest,
-                TotalPrincipal = totalPrincipal,
-                Agreement = agreement
-            };
+            var offer = new LoanOffer()
+                {
+                    Schedule = loan.Schedule.Select(s => LoanScheduleItemModel.FromLoanScheduleItem(s)).ToArray(),
+                    Apr = apr,
+                    SetupFee = loan.SetupFee,
+                    Total = total,
+                    RealInterestCost = realInterestCost,
+                    LoanAmount = loan.LoanAmount,
+                    TimeStamp = timestamp,
+                    TotalInterest = totalInterest,
+                    TotalPrincipal = totalPrincipal,
+                    Agreement = agreement,
+                    Details = new LoanOfferDetails
+                        {
+                            InterestRate = cr.InterestRate,
+                            RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
+                            OfferedCreditLine = totalPrincipal,
+                            LoanType = cr.LoanType.Name,
+                            IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
+                            Date = loan.Date
+                        }
+                };
+
+            return offer;
         }
     }
   }

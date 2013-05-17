@@ -73,7 +73,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var b = new AgreementsModelBuilder(_customerModelBuilder);
             var agreement = b.Build(_customer, amount, loan);
-            var loanOffer = LoanOffer.InitFromLoan(loan, apr, agreement);
+            var loanOffer = LoanOffer.InitFromLoan(loan, apr, agreement, cr);
 
             return this.JsonNet(loanOffer);
         }
