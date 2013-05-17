@@ -76,18 +76,6 @@
          }
      }
 
-     if ((v_ua.indexOf("msie") != -1) && (ver >= 7)) {
-         var plat = -1;
-         var re = new RegExp("windows nt ([0-9]{1,}[\.0-9]{0,})");
-         if (re.exec(v_ua) !== null) {
-             plat = parseFloat(RegExp.$1);
-         }
-         if ((plat >= 5.1) && (plat != 5.2)) {
-             document.write("<div style='display:none'>");
-             document.write("<img src='https://extended-validation-ssl.verisign.com/dot_clear.gif'/>");
-             document.write("</div>");
-         }
-     }
      if (document.addEventListener) {
          document.addEventListener('mouseup', v_mact, true);
      } else {
