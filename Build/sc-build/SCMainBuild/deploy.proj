@@ -3,7 +3,15 @@
 
 	<Target Name="Deploy">
 		<Message Text="Deleting old deploy folder..." Importance="high"/>
-		<RemoveDir Directories="$(ServerBaseFolder)" />
+		
+		<RemoveDir Directories="$(ServerBaseFolder)/Clients" />
+		<RemoveDir Directories="$(ServerBaseFolder)/Database" />
+		<RemoveDir Directories="$(ServerBaseFolder)/Items" />
+		<RemoveDir Directories="$(ServerBaseFolder)/libs" />
+		<RemoveDir Directories="$(ServerBaseFolder)/service" />
+		<RemoveDir Directories="$(ServerBaseFolder)/tools" />
+		<RemoveDir Directories="$(ServerBaseFolder)/web" />
+
 		<!--Exec Command="rd $(ServerBaseFolder) /s/q"/-->
 		<!-- Exec Command="unlocker.exe $(ServerBaseFolder) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 		<Message Text="Copy files to deploy folder..." Importance="high"/>
