@@ -44,7 +44,7 @@ namespace PaymentServices.Calculators
         /// <param name="loan">Loan object, or null. If loan is present, schedule is added to it</param>
         /// <param name="startDate">Starting day of loan. First payment is mounth later</param>
         /// <returns></returns>
-        public IList<LoanScheduleItem> Calculate(decimal total, Loan loan = null, DateTime? startDate = null)
+        public IList<LoanScheduleItem> Calculate(decimal total, Loan loan = null, DateTime? startDate = null, int interestOnlyTerm = 0)
         {
             var schedule = loan == null ? new List<LoanScheduleItem>(Term) : loan.Schedule;
 
@@ -54,7 +54,7 @@ namespace PaymentServices.Calculators
             }
 
             var loanType = loan == null ? new StandardLoanType() : loan.LoanType;
-            var balances = loanType.GetBalances(total, Term).ToArray();
+            var balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray();
 
             var discounts = GetDiscounts(loan, Term);
 

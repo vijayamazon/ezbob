@@ -19,7 +19,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 
         public virtual bool IsHalwayLoan { get { return false; } }
 
-        public virtual IEnumerable<decimal> GetBalances(decimal total, int term)
+        public virtual IEnumerable<decimal> GetBalances(decimal total, int term, int interstOnlyTerm = 0)
         {
             var balance = total;
             var loanRepayment = Math.Floor(total / term);
@@ -57,9 +57,15 @@ namespace EZBob.DatabaseLib.Model.Loans
 
         public override bool IsHalwayLoan { get { return true; } }
 
-        public override IEnumerable<decimal> GetBalances(decimal total, int term)
+        public override IEnumerable<decimal> GetBalances(decimal total, int term, int interstOnlyTerm = 0)
         {
             var first = (int)Math.Floor(term/2.0);
+
+            if (interstOnlyTerm > 0 && interstOnlyTerm < term)
+            {
+                first = interstOnlyTerm;
+            }
+
             return Enumerable.Repeat(total, first).Concat(base.GetBalances(total, term - first));
         }
 
