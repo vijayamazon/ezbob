@@ -162,7 +162,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string Name { get; set; }
 
         public virtual Iesi.Collections.Generic.ISet<MP_CustomerMarketPlace> CustomerMarketPlaces { get; set; }
-        public virtual string MPStatus { get; set; }
 
         private Iesi.Collections.Generic.ISet<CashRequest> _cashRequests = new HashedSet<CashRequest>();
         public virtual Iesi.Collections.Generic.ISet<CashRequest> CashRequests
@@ -203,14 +202,14 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 
 
-        private Iesi.Collections.Generic.ISet<Database.Loans.Loan> _loans = new HashedSet<Database.Loans.Loan>();
-        public virtual Iesi.Collections.Generic.ISet<Database.Loans.Loan> Loans
+        private Iesi.Collections.Generic.ISet<Loans.Loan> _loans = new HashedSet<Loans.Loan>();
+        public virtual Iesi.Collections.Generic.ISet<Loans.Loan> Loans
         {
             get { return _loans; }
             set { _loans = value; }
         }
 
-        public virtual Customer AddLoan(Database.Loans.Loan loan)
+        public virtual Customer AddLoan(Loans.Loan loan)
         {
             loan.Position = Loans.Count;
             Loans.Add(loan);
@@ -218,24 +217,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             return this;
         }
 
-        public virtual Database.Loans.Loan GetLoan(int loanId)
+        public virtual Loans.Loan GetLoan(int loanId)
         {
             return Loans.Single(l => l.Id == loanId);
         }
 
-        public virtual string PayPointTransactionId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_payPointTransactionId) && PayPointCards.Any())
-                {
-                    _payPointTransactionId = PayPointCards.First().TransactionId;
-                }
-                return _payPointTransactionId;
-            }
-            set { _payPointTransactionId = value; }
-        }
-
+        public virtual string PayPointTransactionId { get; set; }
+        
 
         private Iesi.Collections.Generic.ISet<PayPointCard> _payPointCards = new HashedSet<PayPointCard>();
         public virtual Iesi.Collections.Generic.ISet<PayPointCard> PayPointCards
@@ -271,17 +259,13 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual DateTime? DateRejected { get; set; }
         public virtual string UnderwriterName { get; set; }
         public virtual string ManagerName { get; set; }
-        
         public virtual string EscalationReason { get; set; }
         public virtual string RejectedReason { get; set; }
         public virtual string ApprovedReason { get; set; }
-
         public virtual string BWAResult { get; set; }
         public virtual string AMLResult { get; set; }
-
         public virtual string Comment { get; set; }
         public virtual string Details { get; set; }
-
         public virtual PendingStatus PendingStatus { get; set; }
         
         /// <summary>
@@ -315,9 +299,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal TotalBalance { get { return ActiveLoans.Sum(l => l.Balance); } }
 
         private  Iesi.Collections.Generic.ISet<ScoringResult> _scoringResults = new HashedSet<ScoringResult>();
-        private CardInfo _currentCard;
         private CollectionStatus _collectionStatus;
-        private string _payPointTransactionId;
         private Iesi.Collections.Generic.ISet<DecisionHistory> _decisionHistory = new HashedSet<DecisionHistory>();
 
         public virtual Iesi.Collections.Generic.ISet<ScoringResult> ScoringResults
@@ -347,21 +329,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual bool IsTest { get; set; }
 
-        public virtual CardInfo CurrentCard
-        {
-            get { return _currentCard ?? (_currentCard = BankAccounts.FirstOrDefault()); }
-            set { _currentCard = value; }
-        }
+        public virtual CardInfo CurrentCard { get; set; }
 
         /// <summary>
         /// Идентификатор записи в системе ZohoCRM
         /// </summary>
         public virtual string ZohoId { get; set; }
 
-        public virtual string EbayStatus { get; set; }
-        public virtual string AmazonStatus { get; set; }
-        public virtual string PayPalStatus { get; set; }
-        public virtual string EkmStatus { get; set; }
         public virtual WizardStepType WizardStep { get; set; }
 
         public virtual CollectionStatus CollectionStatus
@@ -476,6 +450,27 @@ namespace EZBob.DatabaseLib.Model.Database {
                 CreditResult = CreditResultStatus.Approved;
             }
         }
+
+        //calculated with formula
+        public virtual string EbayStatus { get; set; }
+        public virtual string AmazonStatus { get; set; }
+        public virtual string PayPalStatus { get; set; }
+        public virtual string EkmStatus { get; set; }
+        public virtual string MPStatus { get; set; }
+        public virtual string MpList { get; set; }
+        public virtual decimal SystemCalculatedSum { get; set; }
+        public virtual decimal ManagerApprovedSum { get; set; }
+        public virtual decimal OutstandingBalance { get; set; }
+        public virtual int NumRejects { get; set; }
+        public virtual int NumApproves { get; set; }
+        public virtual int Delinquency { get; set; }
+        public virtual int AmountTaken { get; set; }
+        public virtual string LastStatus { get; set; }
+        public virtual DateTime? FirstLoanDate { get; set; }
+        public virtual DateTime? LastLoanDate { get; set; }
+        public virtual decimal LastLoanAmount { get; set; }
+        public virtual decimal TotalPrincipalRepaid { get; set; }
+        public virtual DateTime? NextRepaymentDate { get; set; }
 	}
 
 

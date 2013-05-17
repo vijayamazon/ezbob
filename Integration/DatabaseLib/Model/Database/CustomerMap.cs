@@ -7,22 +7,19 @@ using NHibernate.Type;
 namespace EZBob.DatabaseLib.Model.Database {
         
     public class CustomerMap : ClassMap<Customer> 
-	{       
-        public CustomerMap() 
-		{
-			Table("Customer");
+	{
+        public CustomerMap()
+        {
+            Table("Customer");
             DynamicUpdate();
             Cache.ReadWrite().Region("LongTerm").ReadWrite();
-			Id(x => x.Id).GeneratedBy.Assigned().Column("Id");
-			Map( x => x.Name ).Not.Nullable();
-			HasMany(x => x.CustomerMarketPlaces)
+            Id(x => x.Id).GeneratedBy.Assigned().Column("Id");
+            Map(x => x.Name).Not.Nullable();
+            HasMany(x => x.CustomerMarketPlaces)
                 .AsSet()
                 .KeyColumn("CustomerId")
                 .Inverse()
                 .Cascade.All();
-            Map(x => x.MPStatus).Formula(@"CASE WHEN (SELECT COUNT(*) FROM [MP_CustomerMarketPlace] c where c.UpdatingEnd is null and c.CustomerId = Id) > 0 THEN 'not updated' ELSE 'updated' END")
-            .Not.Insert().Not.Update();
-
             References(x => x.LastStartedMainStrategy, "LastStartedMainStrategyId");
             Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();
             Map(x => x.CreditResult).CustomType<CreditResultStatusType>();
@@ -31,12 +28,11 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.Status).CustomType<StatusType>();
             Map(x => x.SystemDecision).CustomType<SystemDecisionType>();
             Map(x => x.IsSuccessfullyRegistered, "IsSuccessfullyRegistered");
-            Map(x => x.PayPointTransactionId, "PayPointTransactionId").Length(250);
             Map(x => x.Medal, "MedalType").CustomType<MedalType>();
             Map(x => x.GreetingMailSentDate, "GreetingMailSentDate");
             Map(x => x.ApplyCount, "ApplyCount");
             HasMany(x => x.ScoringResults).KeyColumn("CustomerId").Cascade.All();
-            
+
             Map(x => x.DateEscalated).CustomType<UtcDateTimeType>();
             Map(x => x.DateApproved).CustomType<UtcDateTimeType>();
             Map(x => x.DateRejected).CustomType<UtcDateTimeType>();
@@ -49,7 +45,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
             Map(x => x.Details);
             Map(x => x.PendingStatus).CustomType<PendingStatusType>();
-          
+
             Map(x => x.OfferValidUntil, "ValidFor").CustomType<UtcDateTimeType>();
             Map(x => x.OfferStart, "ApplyForLoan").CustomType<UtcDateTimeType>();
             Map(x => x.CreditCardNo).Length(50);
@@ -59,116 +55,116 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.AMLResult).Length(100);
 
             Component(x => x.LimitedInfo, m =>
-            {
-                m.Map(x => x.LimitedCompanyNumber).Length(255);
-                m.Map(x => x.LimitedCompanyName).Length(255);
-                m.Map(x => x.LimitedTimeAtAddress);
-                m.Map(x => x.LimitedConsentToSearch);
-                m.Map(x => x.LimitedBusinessPhone).Length(50);
-                m.HasMany(x => x.Directors)
-                    .AsSet()
-                    .KeyColumn("CustomerId")
-                    .Cascade.All()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-                m.Map(x => x.LimitedRefNum).Length(250);
-            });
+                {
+                    m.Map(x => x.LimitedCompanyNumber).Length(255);
+                    m.Map(x => x.LimitedCompanyName).Length(255);
+                    m.Map(x => x.LimitedTimeAtAddress);
+                    m.Map(x => x.LimitedConsentToSearch);
+                    m.Map(x => x.LimitedBusinessPhone).Length(50);
+                    m.HasMany(x => x.Directors)
+                     .AsSet()
+                     .KeyColumn("CustomerId")
+                     .Cascade.All()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.Map(x => x.LimitedRefNum).Length(250);
+                });
             Component(x => x.NonLimitedInfo, m =>
-            {
-                m.Map(x => x.NonLimitedCompanyName).Length(255);
-                m.Map(x => x.NonLimitedTimeInBusiness).Length(255);
-                m.Map(x => x.NonLimitedTimeAtAddress);
-                m.Map(x => x.NonLimitedBusinessPhone).Length(50);
-                m.Map(x => x.NonLimitedConsentToSearch);
-                m.HasMany(x => x.Directors)
-                    .AsSet()
-                    .KeyColumn("CustomerId")
-                    .Cascade.All()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-                m.Map(x => x.NonLimitedRefNum).Length(250);
-            });
+                {
+                    m.Map(x => x.NonLimitedCompanyName).Length(255);
+                    m.Map(x => x.NonLimitedTimeInBusiness).Length(255);
+                    m.Map(x => x.NonLimitedTimeAtAddress);
+                    m.Map(x => x.NonLimitedBusinessPhone).Length(50);
+                    m.Map(x => x.NonLimitedConsentToSearch);
+                    m.HasMany(x => x.Directors)
+                     .AsSet()
+                     .KeyColumn("CustomerId")
+                     .Cascade.All()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.Map(x => x.NonLimitedRefNum).Length(250);
+                });
             Component(x => x.PersonalInfo, m =>
-            {
-                m.Map(x => x.FirstName).Length(255);
-                m.Map(x => x.MiddleInitial).Length(255);
-                m.Map(x => x.Surname).Length(255);
-                m.Map(x => x.Fullname).Length(250);
-                m.Map(x => x.DateOfBirth);
-                m.Map(x => x.TimeAtAddress);                
-                m.Map(x => x.ResidentialStatus).Length(255);
-                m.Map(x => x.MobilePhone);
-                m.Map(x => x.DaytimePhone);
-                m.Map(x => x.Gender).CustomType<GenderType>();
-                m.Map(x => x.MartialStatus).CustomType<MartialStatusType>();
-                m.Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
-                m.Map(x => x.OverallTurnOver);
-                m.Map(x => x.WebSiteTurnOver);
-            });
+                {
+                    m.Map(x => x.FirstName).Length(255);
+                    m.Map(x => x.MiddleInitial).Length(255);
+                    m.Map(x => x.Surname).Length(255);
+                    m.Map(x => x.Fullname).Length(250);
+                    m.Map(x => x.DateOfBirth);
+                    m.Map(x => x.TimeAtAddress);
+                    m.Map(x => x.ResidentialStatus).Length(255);
+                    m.Map(x => x.MobilePhone);
+                    m.Map(x => x.DaytimePhone);
+                    m.Map(x => x.Gender).CustomType<GenderType>();
+                    m.Map(x => x.MartialStatus).CustomType<MartialStatusType>();
+                    m.Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
+                    m.Map(x => x.OverallTurnOver);
+                    m.Map(x => x.WebSiteTurnOver);
+                });
 
             Component(x => x.AddressInfo, m =>
-            {
-                m.HasMany(x => x.PersonalAddress)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PersonalAddress))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                {
+                    m.HasMany(x => x.PersonalAddress)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PersonalAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.PrevPersonAddresses)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PrevPersonAddresses))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.PrevPersonAddresses)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PrevPersonAddresses))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.LimitedCompanyAddress)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddress))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.LimitedCompanyAddress)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.LimitedCompanyAddressPrev)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddressPrev))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.LimitedCompanyAddressPrev)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddressPrev))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.NonLimitedCompanyAddress)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddress))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.NonLimitedCompanyAddress)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.NonLimitedCompanyAddressPrev)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddressPrev))
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                    m.HasMany(x => x.NonLimitedCompanyAddressPrev)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddressPrev))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
-                m.HasMany(x => x.AllAddresses)
-                    .AsSet()
-                    .KeyColumn("customerId")
-                    .Cascade.All()
-                    .Inverse()
-                    .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-            });
+                    m.HasMany(x => x.AllAddresses)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+                });
 
             Component(x => x.BankAccount, m =>
-            {
-                m.Map(x => x.AccountNumber).Length(8);
-                m.Map(x => x.SortCode).Length(8);
-                m.Map(x => x.Type, "BankAccountType").CustomType<BankAccountTypeType>();
-            });            
-            
+                {
+                    m.Map(x => x.AccountNumber).Length(8);
+                    m.Map(x => x.SortCode).Length(8);
+                    m.Map(x => x.Type, "BankAccountType").CustomType<BankAccountTypeType>();
+                });
+
             HasMany(m => m.Loans)
                 .AsSet()
                 .KeyColumn("CustomerId")
@@ -181,7 +177,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .KeyColumn("IdCustomer")
                 .OrderBy("CreationDate")
                 .Cascade.All();
-            
+
             HasMany(m => m.PayPointCards)
                 .AsSet()
                 .KeyColumn("CustomerId")
@@ -203,30 +199,111 @@ namespace EZBob.DatabaseLib.Model.Database {
 
             Map(x => x.Fraud);
             Map(x => x.Eliminated);
-            Map(x=> x.Comment,"Comments").CustomType("StringClob").LazyLoad();
+            Map(x => x.Comment, "Comments").CustomType("StringClob").LazyLoad();
             Map(x => x.SetupFee);
             Map(x => x.ReferenceSource).Length(200);
             Map(x => x.EmailState).CustomType<EmailConfirmationRequestStateType>();
             Map(x => x.IsTest);
-            References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
             Map(x => x.ZohoId);
             Map(x => x.BankAccountValidationInvalidAttempts);
 
             Component(x => x.CollectionStatus, m =>
-            {
-                m.Map(x => x.CollectionDescription);
-                m.Map(x => x.CollectionFee);
-                m.Map(x => x.CollectionDateOfDeclaration).CustomType<UtcDateTimeType>(); 
-                m.Map(x => x.IsAddCollectionFee);
-                m.Map(x => x.CurrentStatus).Column("CollectionStatus").CustomType(typeof(CollectionStatusType));
-            });
+                {
+                    m.Map(x => x.CollectionDescription);
+                    m.Map(x => x.CollectionFee);
+                    m.Map(x => x.CollectionDateOfDeclaration).CustomType<UtcDateTimeType>();
+                    m.Map(x => x.IsAddCollectionFee);
+                    m.Map(x => x.CurrentStatus).Column("CollectionStatus").CustomType(typeof (CollectionStatusType));
+                });
+            Map(x => x.WizardStep).CustomType(typeof (WizardStepType));
 
+            //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
             Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
             Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
-            Map(x => x.WizardStep).CustomType(typeof(WizardStepType));
-
-		}
-    }
+            Map(x => x.MPStatus)
+                .Formula(
+                    @"CASE WHEN (SELECT COUNT(*) FROM [MP_CustomerMarketPlace] c where c.UpdatingEnd is null and c.CustomerId = Id) > 0 THEN 'not updated' ELSE 'updated' END")
+                .Not.Insert().Not.Update();
+            Map(x => x.MpList).Formula(@"dbo.MP_List (Id)").Not.Insert().Not.Update();
+            Map(x => x.SystemCalculatedSum)
+                .Formula(
+                    "(select top(1) cr.SystemCalculatedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by Id desc)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.OutstandingBalance)
+                .Formula("(select sum(l.Balance) from [Loan] l where l.CustomerId = Id)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.ManagerApprovedSum)
+                .Formula(
+                    "(select top(1) cr.ManagerApprovedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by Id desc)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.NumApproves)
+                .Formula(
+                    @"(select count(*) from [DecisionHistory] d where d.[CustomerId] = Id and d.[Action] = 'Approve')")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.NumRejects)
+                .Formula(
+                    @"(select count(*) from [DecisionHistory] d where d.[CustomerId] = Id and d.[Action] = 'Reject')")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.Delinquency)
+                .Formula(
+                    @"(select DATEDIFF(day, ISNULL(MIN(s.[Date]), GETUTCDATE()), GETUTCDATE()) from [Loan] l left join [LoanSchedule] s
+                on l.Id = s.LoanId 
+                where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.AmountTaken)
+                .Formula("(select sum(l.LoanAmount) from [Loan] l where l.CustomerId = Id)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.LastStatus)
+                .Formula(
+                    "(select ISNUll( (select top(1) h.Action from [DecisionHistory] h where h.[CustomerId] = Id  order by id desc ) , 'N/A'))")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.FirstLoanDate)
+                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.LastLoanDate)
+                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id order by Id desc)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.PayPointTransactionId)
+                .Formula(@"(SELECT ISNULL( 	
+                            (SELECT c.[PayPointTransactionId] FROM [Customer] c where c.[Id] = Id),
+                            (SELECT top 1 p.[TransactionId] from [PayPointCard] p where p.[CustomerId] = Id)))")
+                .Not.Insert()
+                .Not.Update();
+            References(x => x.CurrentCard)
+                .Formula(@"(SELECT ISNULL( 	
+                                (SELECT c.[CurrentDebitCard] FROM [Customer] c where c.[Id] = Id),
+                                (SELECT top 1 ci.[Id] from [CardInfo] ci where ci.[CustomerId] = Id)))")
+                .Cascade
+                .All();
+            Map(x => x.LastLoanAmount)
+                .Formula("(select top 1 l.[LoanAmount] from [Loan] l where l.[CustomerId] = Id order by l.[Id] desc)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x=>x.TotalPrincipalRepaid)
+                .Formula(@"(SELECT sum(t.[LoanRepayment]) from [LoanTransaction] t left join [Loan] l
+                        on t.[LoanId] = l.[Id]
+                        where t.[Type] = 'PaypointTransaction'  and l.[CustomerId] = Id and t.[Status] != 'Error')")
+                .Not.Insert()
+                .Not.Update();
+            Map(x=>x.NextRepaymentDate)
+                .Formula(@"(select top 1 s.[Date] from [LoanSchedule] s left join [loan] l
+                        on l.[Id] = s.[LoanId]
+                        where l.[CustomerId] = Id and s.[Status] in ('StillToPay','Late')
+                        order by s.[Date])")
+                .Not.Insert()
+                .Not.Update();
+        }
+	}
 }

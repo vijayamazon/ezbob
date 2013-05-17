@@ -58,7 +58,7 @@ EzBob.Underwriter.customerGrid = (settings) ->
         multipleSearch: true
 
     EzBob.App.vent.on "uw:grids:refresh", ->
-        $(list).trigger "reloadGrid"
+        $("#{list}:visible").trigger "reloadGrid"
 
     EzBob.App.vent.on "uw:grids:performsearch", ->
         $(list)[0].triggerToolbar()
@@ -104,6 +104,7 @@ $.fn.fmatter.showMPIcon = (cellval) ->
 
 $.fn.fmatter.showMPsIcon = (cellval, opt) ->
     mps = cellval.text or cellval
+    mps = mps.split(',').clean ""
     retVal = ""
     _.each mps, (val) ->
         retVal += $.fn.fmatter.showMPIcon(val)

@@ -94,8 +94,8 @@
                     }
                     customersView.show(type);
                     profileView.hide();
-                    profileView.showed = false;
                     EzBob.App.vent.trigger('uw:grids:refresh');
+                    profileView.showed = false;
                 },
                 profile: function(id, type) {
                     if (!this.isProfileRendered) {

@@ -1,66 +1,12 @@
 ﻿using System;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using OTP.Workplace.Code.jqGrid;
 using PluginWebApp.Code.jqGrid;
-using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter
 {
-    using System.Globalization;
-
     public static class GridHelpers
     {
-        /*
-     * Helpers
-     */
-
-        public static int GetDelinquency(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            var result = 0;
-
-            var loans = customer.Loans.Where(l => l.Status == LoanStatus.Late).ToList();
-            if (!loans.Any()) return 0;
-
-            var scheduleDate = DateTime.UtcNow;
-
-            foreach (
-                var loanScheduleItem in
-                    loans.SelectMany(
-                        loan =>
-                        loan.Schedule.Where(
-                            loanScheduleItem =>
-                            loanScheduleItem.Date < scheduleDate && loanScheduleItem.Status == LoanScheduleStatus.Late))
-                )
-            {
-                scheduleDate = loanScheduleItem.Date;
-            }
-
-            var currentDate = DateTime.UtcNow.ToUniversalTime();
-            if (scheduleDate <= currentDate)
-                result = (currentDate - scheduleDate).Days;
-
-            return result;
-        }
-
-        public static string CalculateStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            var decisionHistory = customer.DecisionHistory.LastOrDefault();
-            if (decisionHistory == null)
-            {
-                return "N/A";
-            }
-            return decisionHistory.Action.ToString();
-        }
-
-        public static DecisionHistory GetLastHistory(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            return customer.DecisionHistory.LastOrDefault();
-        }
-
-        /*
-         * Columns
-         */
         public static void CreateStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -178,8 +124,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Caption = "Calc. Amount",
                     Name = "Amount",
                     Index = "SystemCalculatedSum",
-                    Search = false,
-                    Resizable = false,
+                    Search = true,
+                    Resizable = true,
                     Align = Align.Center,
                     Title = false,
                     Hidden = false,
@@ -187,7 +133,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Width = 75,
                     DataType = TypeCode.Decimal,
-                    Data = x => x.LastCashRequest.SystemCalculatedSum ?? 0
+                    Data = x => x.SystemCalculatedSum
                 });
         }
 
@@ -198,8 +144,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Caption = "Approved Manually",
                     Name = "ManualAmount",
                     Index = "ManualSum",
-                    Search = false,
-                    Sortable = false,
+                    Search = true,
+                    Sortable = true,
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
@@ -207,7 +153,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Width = 105,
                     DataType = TypeCode.Decimal,
-                    Data = x => x.LastCashRequest.ManagerApprovedSum ?? 0
+                    Data = x => x.ManagerApprovedSum
                 });
         }
 
@@ -218,8 +164,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Caption = "Amount Taken",
                     Name = "AmountTaken",
                     Index = "AmountTaken",
-                    Search = false,
-                    Sortable = false,
+                    Search = true,
+                    Sortable = true,
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
@@ -227,7 +173,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Width = 80,
                     DataType = TypeCode.Decimal,
-                    Data = x => x.Loans.Sum(y => y.LoanAmount)
+                    Data = x => x.AmountTaken
                 });
         }
 
@@ -237,17 +183,16 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = "Approves#",
                     Name = "NumApprovals",
-                    Index = "NumApprovals",
-                    Search = false,
-                    Sortable = false,
-                    Resizable = false,
+                    Index = "NumApproves",
+                    Search = true,
+                    Sortable = true,
                     Align = Align.Center,
                     Title = false,
                     Hidden = false,
                     Fixed = false,
                     Width = 65,
                     DataType = TypeCode.String,
-                    Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Approve)
+                    Data = x => x.NumApproves
                 });
         }
 
@@ -257,17 +202,16 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = "Rejects#",
                     Name = "Numrejections",
-                    Index = "Numrejections",
-                    Search = false,
-                    Sortable = false,
-                    Resizable = false,
+                    Index = "NumRejects",
+                    Search = true,
+                    Sortable = true,
                     Align = Align.Center,
                     Title = false,
                     Hidden = false,
                     Fixed = false,
                     Width = 55,
                     DataType = TypeCode.String,
-                    Data = x => x.DecisionHistory.Count(y => y.Action == DecisionActions.Reject)
+                    Data = x => x.NumRejects
                 });
         }
 
@@ -362,6 +306,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Frozen = true,
                     Fixed = false,
+                    Search = true,
                     Formatter = "profileLink",
                     DataType = TypeCode.String,
                     Data = x => new {text = (x.PersonalInfo != null) ? x.PersonalInfo.Fullname : " - ", id = x.Id}
@@ -506,7 +451,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
+                    Search = true,
                     Sortable = true,
                     Width = 85,
                     DataType = TypeCode.String,
@@ -566,7 +511,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
+                    Search = true,
                     Width = 85,
                     DataType = TypeCode.String,
                     Data = x => x.EbayStatus
@@ -586,7 +531,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Width = 105,
-                    Search = false,
+                    Search = true,
                     DataType = TypeCode.String,
                     Data = x => x.AmazonStatus
                 });
@@ -605,7 +550,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Width = 75,
-                    Search = false,
+                    Search = true,
                     DataType = TypeCode.String,
                     Data = x => x.EkmStatus
                 });
@@ -623,7 +568,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
+                    Search = true,
                     Width = 95,
                     DataType = TypeCode.String,
                     Data = x => x.PayPalStatus
@@ -644,7 +589,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Fixed = false,
                     Search = false,
                     Width = 95,
-                    DataType = TypeCode.String,
+                    DataType = TypeCode.Int32,
                     Data = x => x.WizardStep == WizardStepType.AllStep ? (object) "Passed" : x.WizardStep
                 });
         }
@@ -661,11 +606,11 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
-                    Sortable = false,
+                    Search = true,
+                    Sortable = true,
                     Width = 70,
-                    DataType = TypeCode.Int16,
-                    Data = x => GetDelinquency(x)
+                    DataType = TypeCode.Int32,
+                    Data = x => x.Delinquency
                 });
         }
 
@@ -686,8 +631,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Width = 115,
                     DataType = TypeCode.String,
                     Formatter = "showMPsIcon",
-                    //Data = x => x.CustomerMarketPlaces.Select(y => y.Marketplace.Name).ToList()
-                    Data = x => x.CustomerMarketPlaces.GroupBy(m => m.Marketplace.Name).Select(g => g.Count().ToString(CultureInfo.InvariantCulture) + " " + g.Key).ToList()
+                    Data = x=>x.MpList
                 });
         }
 
@@ -707,7 +651,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Sortable = false,
                     Width = 90,
                     DataType = TypeCode.String,
-                    Data = x => CalculateStatus(x)
+                    Data = x => x.LastStatus
                 });
         }
 
@@ -723,11 +667,11 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
-                    Sortable = false,
+                    Search = true,
+                    Sortable = true,
                     Width = 65,
                     DataType = TypeCode.String,
-                    Data = x => x.Loans.Sum(y => y.Balance)
+                    Data = x => x.OutstandingBalance
                 });
         }
 
@@ -757,17 +701,17 @@ namespace EzBob.Web.Areas.Underwriter
             {
                 Caption = "First Loan Date",
                 Name = "FirstLoanDate",
-                Index = "Loans.Date",
+                Index = "FirstLoanDate",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
-                Search = false,
-                Sortable = false,
+                Search = true,
+                Sortable = true,
                 Width = 85,
                 DataType = TypeCode.String,
-                Data = x => x.Loans.First().Date,
+                Data = x => x.FirstLoanDate,
                 Formatter = "dateNative"
             });
         }
@@ -778,17 +722,17 @@ namespace EzBob.Web.Areas.Underwriter
             {
                 Caption = "Last Loan Date",
                 Name = "LastLoanDate",
-                Index = "Loans.Date",
+                Index = "LastLoanDate",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
                 Hidden = false,
                 Fixed = false,
-                Search = false,
-                Sortable = false,
+                Search = true,
+                Sortable = true,
                 Width = 85,
                 DataType = TypeCode.String,
-                Data = x => x.Loans.Last().Date,
+                Data = x => x.LastLoanDate,
                 Formatter = "dateNative"
             });
         }
@@ -805,31 +749,11 @@ namespace EzBob.Web.Areas.Underwriter
                 Title = false,
                 Hidden = false,
                 Fixed = false,
-                Search = false,
-                Sortable = false,
+                Search = true,
+                Sortable = true,
                 Width = 105,
                 DataType = TypeCode.String,
-                Data = x => x.Loans.Last().LoanAmount
-            });
-        }
-
-        public static void CreateTotalPrincipalTakenColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
-                Caption = "Total Principal Taken",
-                Name = "TotalPrincipalTaken",
-                Index = "TotalPrincipalTaken",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Sortable = false,
-                Width = 115,
-                DataType = TypeCode.String,
-                Data = x => x.Loans.Sum(y=>y.LoanAmount)
+                Data = x => x.LastLoanAmount
             });
         }
 
@@ -845,11 +769,11 @@ namespace EzBob.Web.Areas.Underwriter
                 Title = false,
                 Hidden = false,
                 Fixed = false,
-                Search = false,
-                Sortable = false,
+                Search = true,
+                Sortable = true,
                 Width = 115,
                 DataType = TypeCode.String,
-                Data = x => x.Loans.SelectMany(l => l.TransactionsWithPaypointSuccesefull).Sum(t => t.LoanRepayment)
+                Data = x => x.TotalPrincipalRepaid
             });
         }
 
@@ -865,12 +789,12 @@ namespace EzBob.Web.Areas.Underwriter
                 Title = false,
                 Hidden = false,
                 Fixed = false,
-                Search = false,
-                Sortable = false,
+                Search = true,
+                Sortable = true,
                 Width = 115,
                 DataType = TypeCode.String,
                 Formatter = "dateNative",
-                Data = x => x.Loans.SelectMany(y => y.Schedule).Where(s => s.Status == LoanScheduleStatus.StillToPay || s.Status == LoanScheduleStatus.Late).OrderBy(s => s.Date).Select(s => s.Date).FirstOrDefault()
+                Data = x => x.NextRepaymentDate
             });
         }
     }
