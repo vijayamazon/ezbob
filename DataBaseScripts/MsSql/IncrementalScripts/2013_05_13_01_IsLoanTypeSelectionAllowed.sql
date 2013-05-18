@@ -6,7 +6,8 @@ SET @TableName = 'CashRequests'
 
 IF EXISTS (SELECT * FROM syscolumns WHERE name = 'IsLoanTypeSelectionAllowed' AND id = OBJECT_ID(@TableName))
 BEGIN
-	SELECT @DefaultConstraint = NAME FROM sys.default_constraints WHERE parent_object_id = object_ID(@TableName)
+	SELECT @DefaultConstraint = NAME FROM sys.default_constraints WHERE parent_object_id = object_ID(@TableName) AND NAME = 'DF_CashRequests_IsLoanType'
+		
 	SET @DropStmt = 'ALTER TABLE ' + @TableName + ' DROP CONSTRAINT ' + @DefaultConstraint
 
 	EXEC(@DropStmt)
@@ -23,7 +24,7 @@ SET @TableName = 'Customer'
 
 IF EXISTS (SELECT * FROM syscolumns WHERE name = 'IsLoanTypeSelectionAllowed' AND id = OBJECT_ID(@TableName))
 BEGIN
-	SELECT @DefaultConstraint = NAME FROM sys.default_constraints WHERE parent_object_id = object_ID(@TableName)
+	SELECT @DefaultConstraint = NAME FROM sys.default_constraints WHERE parent_object_id = object_ID(@TableName) AND NAME = 'DF_Customer_IsLoanType'
 	SET @DropStmt = 'ALTER TABLE ' + @TableName + ' DROP CONSTRAINT ' + @DefaultConstraint
 
 	EXEC(@DropStmt)
