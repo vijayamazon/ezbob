@@ -570,20 +570,32 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             sList.Add(new AccountStatus {Status = "", StatusColor = "white"});
                         }
 
-                        if (caisDetails.LastUpdatedDate != null)
-                        {
-							var histStart = new DateTime(caisDetails.LastUpdatedDate.CCYY, caisDetails.LastUpdatedDate.MM, 1);
-							accountInfo.SettlementDate = FormattingUtils.FormatDateToString(new DateTime(caisDetails.LastUpdatedDate.CCYY, caisDetails.LastUpdatedDate.MM, caisDetails.LastUpdatedDate.DD));
+	                    int relevantYear, relevantMonth, relevantDay;
+						if (caisDetails.SettlementDate != null)
+						{
+							relevantYear = caisDetails.SettlementDate.CCYY;
+							relevantMonth = caisDetails.SettlementDate.MM;
+							relevantDay = caisDetails.SettlementDate.DD;
+						}
+						else
+						{
+							relevantYear = caisDetails.LastUpdatedDate.CCYY;
+							relevantMonth = caisDetails.LastUpdatedDate.MM;
+							relevantDay = caisDetails.LastUpdatedDate.DD;
+						}
 
-                            for (int i = 0; i < mthsCount; i++)
-                            {
-                                var histDate = histStart.AddMonths(-i);
-                                string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
-                                var idx = displayedMonths.IndexOf(histDate);
-                                if (idx >= 0)
-                                    sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
-                            }
+						var histStart = new DateTime(relevantYear, relevantMonth, 1);
+						accountInfo.SettlementDate = FormattingUtils.FormatDateToString(new DateTime(relevantYear, relevantMonth, relevantDay));
+
+                        for (int i = 0; i < mthsCount; i++)
+                        {
+                            var histDate = histStart.AddMonths(-i);
+                            string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
+                            var idx = displayedMonths.IndexOf(histDate);
+                            if (idx >= 0)
+                                sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
                         }
+
                         accountInfo.LatestStatuses = sList.ToArray();
 
                         int repaymentPeriod = 0;
