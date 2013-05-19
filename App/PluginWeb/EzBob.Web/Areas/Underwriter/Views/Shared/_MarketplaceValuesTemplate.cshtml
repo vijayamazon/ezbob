@@ -10,6 +10,8 @@
         <%
             var m = marketplaces[0];
             var ai = m.AnalysisDataInfo;
+            var y = m.Yodlee;
+            console.log(m,y);
             var marketplaceType = m.Name;
             var 
                 sumReview1M = ai.NegativeFeedbackrate1M * 1.0 + ai.PositiveFeedbackRate1M * 1.0 + ai.NeutralFeedbackrate1M * 1.0,
@@ -1071,6 +1073,167 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+            <%}%>
+            @* *** Yodlee   *** *@
+            <%if(marketplaceType == "Yodlee"){%>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#yodleetab1" data-toggle="tab">Aggregates</a></li>
+                    <li><a href="#yodleetab2" data-toggle="tab">Bank Account Details</a></li>
+                    <%_.each(y.banks, function(bank, i) {%>
+                        <li><a href="#yodleetab<%= (i + 3) %>" data-toggle="tab">Bank <%= (i+1) %> Transactions</a></li>
+                    <%});%>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="yodleetab1">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>1M</th>
+                                    <th>3M</th>
+                                    <th>6M</th>
+                                    <th>12M</th>
+                                    <th>15M</th>
+                                    <th>18M</th>
+                                    <th>24M</th>
+                                    <th>24M+</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Income</td>
+                                    <td><%-ai.TotlaIncome1M!=undefined ? GBPValues(ai.TotlaIncome1M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome3M!=undefined ? GBPValues(ai.TotlaIncome3M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome6M!=undefined ? GBPValues(ai.TotlaIncome6M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome12M!=undefined ? GBPValues(ai.TotlaIncome12M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome15M!=undefined ? GBPValues(ai.TotlaIncome15M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome18M!=undefined ? GBPValues(ai.TotlaIncome18M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncome24M!=undefined ? GBPValues(ai.TotlaIncome24M, true): "-"%></td>
+                                    <td><%-ai.TotlaIncomeLifetime!=undefined ? GBPValues(ai.TotlaIncomeLifetime, true): "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Expense</td>
+                                    <td><%-ai.TotalExpense1M!=undefined ? GBPValues(ai.TotalExpense1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense3M!=undefined ? GBPValues(ai.TotalExpense3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense6M!=undefined ? GBPValues(ai.TotalExpense6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense12M!=undefined ? GBPValues(ai.TotalExpense12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense15M!=undefined ? GBPValues(ai.TotalExpense15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense18M!=undefined ? GBPValues(ai.TotalExpense18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpense24M!=undefined ? GBPValues(ai.TotalExpense24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.TotalExpenseLifetime!=undefined ? GBPValues(ai.TotalExpenseLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>Current Balance</td>
+                                    <td><%-ai.CurrentBalance1M!=undefined ? GBPValues(ai.CurrentBalance1M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance3M!=undefined ? GBPValues(ai.CurrentBalance3M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance6M!=undefined ? GBPValues(ai.CurrentBalance6M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance12M!=undefined ? GBPValues(ai.CurrentBalance12M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance15M!=undefined ? GBPValues(ai.CurrentBalance15M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance18M!=undefined ? GBPValues(ai.CurrentBalance18M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalance24M!=undefined ? GBPValues(ai.CurrentBalance24M, true) + "x" : "-"%></td>
+                                    <td><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) + "x" : "-"%></td>
+                                </tr>
+                                <tr>
+                                    <td>AvailableBalance</td>
+                                    <td><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance12M!=undefined ? GBPValues(ai.AvailableBalance12M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance15M!=undefined ? GBPValues(ai.AvailableBalance15M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance18M!=undefined ? GBPValues(ai.AvailableBalance18M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalance24M!=undefined ? GBPValues(ai.AvailableBalance24M, true): "-"%></td>
+                                    <td><%-ai.AvailableBalanceLifetime!=undefined ? GBPValues(ai.AvailableBalanceLifetime, true): "-"%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="yodleetab2">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th>customName</th>
+                                    <th>customDescription</th>
+                                    <th>isDeleted</th>
+                                    <th>accountNumber</th>
+                                    <th>accountHolder</th>
+                                    <th>availableBalance</th>
+                                    <th>term</th>
+                                    <th>accountName</th>
+                                    <th>routingNumber</th>
+                                    <th>accountNicknameAtSrcSite</th>
+                                    <th>secondaryAccountHolderName</th>
+                                    <th>accountOpenDate</th>
+                                    <th>taxesWithheldYtd</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%_.each(y.banks, function(bank, i) {%>
+                                <tr>
+                                    <td><%-bank.customName!=undefined ? bank.customName : "-"%></td>
+                                    <td><%-bank.customDescription!=undefined ? bank.customDescription : "-"%></td>
+                                    <td><%-bank.isDeleted!=undefined ? bank.isDeleted : "-"%></td>
+                                    <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
+                                    <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
+                                    <td><%-bank.availableBalance!=undefined ? bank.availableBalance : "-"%></td>
+                                    <td><%-bank.term!=undefined ? bank.term : "-"%></td>
+                                    <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
+                                    <td><%-bank.routingNumber!=undefined ? bank.routingNumber : "-"%></td>
+                                    <td><%-bank.accountNicknameAtSrcSite!=undefined ? bank.accountNicknameAtSrcSite : "-"%></td>
+                                    <td><%-bank.secondaryAccountHolderName!=undefined ? bank.secondaryAccountHolderName : "-"%></td>
+                                    <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
+                                    <td><%-bank.taxesWithheldYtd!=undefined ? bank.taxesWithheldYtd : "-"%></td>
+                                </tr>
+                                <%});%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%_.each(y.banks, function(bank, i) {%>
+                    <div class="tab-pane" id="yodleetab<%= (i+3)%>">
+                        <table class="table table-bordered table-striped  blue-header centered">
+                            <thead>
+                                <tr>
+                                    <th>transactionType</th>
+                                    <th>transactionStatus</th>
+                                    <th>transactionBaseType</th>
+                                    <th>isDeleted</th>
+                                    <th>lastUpdated</th>
+                                    <th>transactionId</th>
+                                    <th>transactionDate</th>
+                                    <th>runningBalance</th>
+                                    <th>userDescription</th>
+                                    <th>memo</th>
+                                    <th>category</th>
+                                    <th>postDate</th>
+                                    <th>transactionAmount</th>
+                                    <th>description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%_.each(bank.transactions, function(transaction, j) {%>
+                                <tr>
+                                    <td><%-transaction.transactionType!=undefined ? transaction.transactionType : "-"%></td>
+                                    <td><%-transaction.transactionStatus!=undefined ? transaction.transactionStatus : "-"%></td>
+                                    <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
+                                    <td><%-transaction.isDeleted!=undefined ? transaction.isDeleted : "-"%></td>
+                                    <td><%-transaction.lastUpdated!=undefined ? transaction.lastUpdated : "-"%></td>
+                                    <td><%-transaction.transactionId!=undefined ? transaction.transactionId : "-"%></td>
+                                    <td><%-transaction.transactionDate!=undefined ? transaction.transactionDate : "-"%></td>
+                                    <td><%-transaction.runningBalance!=undefined ? transaction.runningBalance : "-"%></td>
+                                    <td><%-transaction.userDescription!=undefined ? transaction.userDescription : "-"%></td>
+                                    <td><%-transaction.memo!=undefined ? transaction.memo : "-"%></td>
+                                    <td><%-transaction.category!=undefined ? transaction.category : "-"%></td>
+                                    <td><%-transaction.postDate!=undefined ? transaction.postDate : "-"%></td>
+                                    <td><%-transaction.transactionAmount!=undefined ? transaction.transactionAmount : "-"%></td>
+                                    <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                                </tr>
+                                <%});%>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%});%>
                 </div>
             </div>
             <%}%>

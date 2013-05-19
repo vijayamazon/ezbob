@@ -22,12 +22,93 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string AskvilleStatus { get; set; }
         public string AskvilleGuid { get; set; }
 
+        //eBay
         public EBayModel EBay { get; set; }
+
+        //Aggregates
         public Dictionary<string, string> AnalysisDataInfo { get; set; }
 
+        //Feedbacks
         public int PositiveFeedbacks { get; set; }
         public int NegativeFeedbacks { get; set; }
         public int NeutralFeedbacks { get; set; }
+
+        //Yodlee
+        public YodleeModel Yodlee { get; set; }
+    }
+
+    public class YodleeModel
+    {
+        public IEnumerable<YodleeBankModel> banks { get; set; }
+    }
+
+    public class YodleeBankModel
+    {
+        public YodleeBankModel()
+        {
+            customName = "-";
+            customDescription = "-";
+            isDeleted = "-";
+            accountNumber = "-";
+            accountHolder = "-";
+            availableBalance = "-";
+            term = "-";
+            accountName = "-";
+            routingNumber = "-";
+            accountNicknameAtSrcSite = "-";
+            secondaryAccountHolderName = "-";
+            accountOpenDate = "-";
+            taxesWithheldYtd = "-";
+        }
+        public string customName { get; set; }
+        public string customDescription { get; set; }
+        public string isDeleted { get; set; }
+        public string accountNumber { get; set; }
+        public string accountHolder { get; set; }
+        public string availableBalance { get; set; }
+        public string term { get; set; }
+        public string accountName { get; set; }
+        public string routingNumber { get; set; }
+        public string accountNicknameAtSrcSite { get; set; }
+        public string secondaryAccountHolderName { get; set; }
+        public string accountOpenDate { get; set; }
+        public string taxesWithheldYtd { get; set; }
+        public IEnumerable<YodleeTransactionModel> transactions { get; set; }
+    }
+
+    public class YodleeTransactionModel
+    {
+        public YodleeTransactionModel()
+        {
+            transactionType = "-";
+            transactionStatus = "-";
+            transactionBaseType = "-";
+            isDeleted = "-";
+            lastUpdated = "-";
+            transactionId = "-";
+            transactionDate = "-";
+            runningBalance = "-";
+            userDescription = "-";
+            memo = "-";
+            category = "-";
+            postDate = "-";
+            transactionAmount = "-";
+            description = "-";
+        }
+        public string transactionType { get; set; }
+        public string transactionStatus { get; set; }
+        public string transactionBaseType { get; set; }
+        public string isDeleted { get; set; }
+        public string lastUpdated { get; set; }
+        public string transactionId { get; set; }
+        public string transactionDate { get; set; }
+        public string runningBalance { get; set; }
+        public string userDescription { get; set; }
+        public string memo { get; set; }
+        public string category { get; set; }
+        public string postDate { get; set; }
+        public string transactionAmount { get; set; }
+        public string description { get; set; }
     }
 
     public class EBayModel

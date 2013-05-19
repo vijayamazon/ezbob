@@ -479,7 +479,8 @@ i.ebay,
 i.paypal,
 i.volusion,
 i.paypoint,
-i.play {
+i.play,
+i.yodlee {
     display: inline-block;
     height: 16px;
     width: 16px;

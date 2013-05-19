@@ -3,8 +3,6 @@ using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    using System;
-
     public class MP_YodleeOrderItemMap : ClassMap<MP_YodleeOrderItem>
     {
         public MP_YodleeOrderItemMap()
