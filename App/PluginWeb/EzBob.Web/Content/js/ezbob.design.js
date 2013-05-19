@@ -822,19 +822,6 @@ EzBob.validateRestorePasswordForm = function (el) {
     });
 };
 
-EzBob.validateDirectorForm = function (el) {
-    var e = el;
-    return e.validate({
-        rules: {
-            DirectorName: EzBob.Validation.NameValidationObject,
-            DirectorDateOfBirth: { required: true, requiredDate: true }
-
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-    });
-};
-
 EzBob.validateCompanyDetailForm = function (el) {
     var e = el || $(".CompanyDetailForm");
     return e.validate({
