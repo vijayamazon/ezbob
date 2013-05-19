@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using ExperianLib;
-using ExperianLib.Dictionaries;
-using ExperianLib.Ebusiness;
-using ExperianLib.IdIdentityHub;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using Scorto.Web;
-using EzBob.Web.Infrastructure;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Drawing;
+	using System.Globalization;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ExperianLib;
+	using ExperianLib.Dictionaries;
+	using ExperianLib.Ebusiness;
+	using ExperianLib.IdIdentityHub;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Scorto.Web;
+	using Infrastructure;
+
     public class CreditBureauController : Controller
     {
         private readonly CustomerRepository _customers;

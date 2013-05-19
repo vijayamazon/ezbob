@@ -1,13 +1,13 @@
-﻿using System;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using PaymentServices.Calculators;
-using Scorto.Web;
-using log4net;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using PaymentServices.Calculators;
+	using Scorto.Web;
+	using log4net;
+
     public class AdminController : Controller
     {
 

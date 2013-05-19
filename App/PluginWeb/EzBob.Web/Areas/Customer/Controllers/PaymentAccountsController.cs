@@ -1,28 +1,28 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.CommonLib;
-using EzBob.PayPal;
-using EzBob.PayPalDbLib.Models;
-using EzBob.PayPalServiceLib;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models.Strings;
-using NHibernate;
-using PostcodeAnywhere;
-using Scorto.Web;
-using StructureMap;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
+	using System.Linq;
+	using System.Text.RegularExpressions;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.CommonLib;
+	using EzBob.PayPal;
+	using EzBob.PayPalDbLib.Models;
+	using EzBob.PayPalServiceLib;
+	using EzBob.Web.ApplicationCreator;
+	using EzBob.Web.Code.MpUniq;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.csrf;
+	using EzBob.Web.Models.Strings;
+	using NHibernate;
+	using PostcodeAnywhere;
+	using Scorto.Web;
+	using StructureMap;
+	using log4net;
+
     public class PaymentAccountsController : Controller
     {
         private readonly DatabaseDataHelper _helper;

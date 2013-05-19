@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure
 {
+	using System;
+
     [AttributeUsage(AttributeTargets.Class)]
     public class RestfullErrorHandlingAttribute : Attribute
     {

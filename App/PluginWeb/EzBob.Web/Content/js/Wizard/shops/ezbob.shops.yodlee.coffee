@@ -11,14 +11,26 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     template: '#YodleeAccoutInfoTemplate'
  
     events: 
-        'click a.connect-payPoint': 'connect'
-        "click a.back": "back"
+        #'click a.connect-yodlee': 'connect'
+        'click a.back': 'back'
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+        'change input[name="Bank"]': 'bankChanged'
 
+    bankChanged: ->
+        temp = @$el.find('#Bank_DAG')
+        console.log(temp, temp.attr('checked'))
+        temp = @$el.find('#Bank_Santander')
+        console.log(temp, temp.attr('checked'))
+        @$el.find('.SantanderContainer').toggleClass('hide', temp.attr('checked') != 'checked')
+        temp = @$el.find('#Bank_HSBC')
+        console.log(temp, temp.attr('checked'))
+        @$el.find('.HSBCContainer').toggleClass('hide', temp.attr('checked') != 'checked')
+
+        #show the relevant object hide all others
     ui:
         id : '#yodleeId'
-        connect: 'a.connect-payPoint'
+        connect: 'a.connect-dag'
         form: 'form'
 
     inputChanged: ->
@@ -27,9 +39,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     connect: ->
         return false if not @validator.form()
-        return false if @$el.find('a.connect-payPoint').hasClass('disabled')
+        return false if @$el.find('a.connect-yodlee').hasClass('disabled')
 
-        acc = new EzBob.YodleeAccountModel({mid: @ui.mid.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})
+        acc = new EzBob.YodleeAccountModel({bankId: 1234, bankName: 'Santander'})
         xhr = acc.save()
         if not xhr
             EzBob.App.trigger 'error', 'Yodlee Account Saving Error'

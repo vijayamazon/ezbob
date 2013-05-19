@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EzBob.Web.Models
+﻿namespace EzBob.Web.Models
 {
+	using System.ComponentModel.DataAnnotations;
+
     public class LogOnModel
     {
         [Required]
@@ -17,5 +17,5 @@ namespace EzBob.Web.Models
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
-}
+	}
 }

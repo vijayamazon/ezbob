@@ -42,15 +42,28 @@
     YodleeAccountInfoView.prototype.template = '#YodleeAccoutInfoTemplate';
 
     YodleeAccountInfoView.prototype.events = {
-      'click a.connect-payPoint': 'connect',
-      "click a.back": "back",
+      'click a.back': 'back',
       'change input': 'inputChanged',
-      'keyup input': 'inputChanged'
+      'keyup input': 'inputChanged',
+      'change input[name="Bank"]': 'bankChanged'
+    };
+
+    YodleeAccountInfoView.prototype.bankChanged = function() {
+      var temp;
+
+      temp = this.$el.find('#Bank_DAG');
+      console.log(temp, temp.attr('checked'));
+      temp = this.$el.find('#Bank_Santander');
+      console.log(temp, temp.attr('checked'));
+      this.$el.find('.SantanderContainer').toggleClass('hide', temp.attr('checked') !== 'checked');
+      temp = this.$el.find('#Bank_HSBC');
+      console.log(temp, temp.attr('checked'));
+      return this.$el.find('.HSBCContainer').toggleClass('hide', temp.attr('checked') !== 'checked');
     };
 
     YodleeAccountInfoView.prototype.ui = {
       id: '#yodleeId',
-      connect: 'a.connect-payPoint',
+      connect: 'a.connect-dag',
       form: 'form'
     };
 
@@ -68,13 +81,12 @@
       if (!this.validator.form()) {
         return false;
       }
-      if (this.$el.find('a.connect-payPoint').hasClass('disabled')) {
+      if (this.$el.find('a.connect-yodlee').hasClass('disabled')) {
         return false;
       }
       acc = new EzBob.YodleeAccountModel({
-        mid: this.ui.mid.val(),
-        vpnPassword: this.ui.vpnPassword.val(),
-        remotePassword: this.ui.remotePassword.val()
+        bankId: 1234,
+        bankName: 'Santander'
       });
       xhr = acc.save();
       if (!xhr) {

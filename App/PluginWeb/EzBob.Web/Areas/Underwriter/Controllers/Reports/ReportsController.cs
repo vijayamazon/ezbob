@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Aspose.Cells;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Areas.Underwriter.Models.Reports;
-using EzBob.Web.Code;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
+	using Models.Reports;
+	using Code;
+	using StructureMap;
+
     public class ReportsController : Controller
     {
         //
