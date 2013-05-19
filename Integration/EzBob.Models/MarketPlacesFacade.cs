@@ -19,12 +19,13 @@ namespace EzBob.Web.Areas.Underwriter
     {
         private readonly EbayAmazonCategoryRepository _ebayAmazonCategoryRepository;
         private readonly CustomerMarketPlaceRepository _customerMarketplaces;
-
+        private readonly MP_YodleeOrderRepository _yodleeOrderRepository;
         public MarketPlacesFacade(EbayAmazonCategoryRepository ebayAmazonCategoryRepository,
-                                  CustomerMarketPlaceRepository customerMarketplaces)
+                                  CustomerMarketPlaceRepository customerMarketplaces, MP_YodleeOrderRepository yodleeOrderRepository)
         {
             _ebayAmazonCategoryRepository = ebayAmazonCategoryRepository;
             _customerMarketplaces = customerMarketplaces;
+            _yodleeOrderRepository = yodleeOrderRepository;
         }
 
         public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(EZBob.DatabaseLib.Model.Database.Customer customer)
@@ -106,6 +107,12 @@ namespace EzBob.Web.Areas.Underwriter
                                   ? "Error"
                                   : "Done";
 
+                    IQueryable<MP_YodleeOrderItem> yodleeData = null;
+                    if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
+                    {
+                        yodleeData = _yodleeOrderRepository.GetOrdersItemsByMakretplaceId(mp.Id);
+                    }
+
                     return new MarketPlaceModel
                         {
                             Id = mp.Id,
@@ -131,67 +138,61 @@ namespace EzBob.Web.Areas.Underwriter
                             SellerInfoStoreURL = sellerInfoStoreUrl,
                             Categories = categorieValues,
                             EBay = BuildEBay(ebayUserData, ebayAccount, ebayFeedBack),
-                            Yodlee = BuildYodlee(mp)
+                            Yodlee = BuildYodlee(yodleeData)
                         };
                 });
             return models;
         }
 
-        private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp)
+        private YodleeModel BuildYodlee(IEnumerable<MP_YodleeOrderItem> yodleeData)
         {
             var model = new YodleeModel();
-            var yodlee = new YodleeServiceInfo();
-            if (mp.Marketplace.InternalId == yodlee.InternalId)
+            var banks = new List<YodleeBankModel>();
+            foreach (var bank in yodleeData)
             {
-                var order = mp.YodleeOrders.LastOrDefault();
-                var banks = new List<YodleeBankModel>();
-                foreach (var bank in order.OrderItems)
-                {
-                    var yodleeBankModel = new YodleeBankModel
-                        {
-                            customName = bank.customName,
-                            customDescription = bank.customDescription,
-                            isDeleted = bank.isDeleted.ToString(),
-                            accountNumber = bank.accountNumber,
-                            accountHolder = bank.accountHolder,
-                            availableBalance = bank.availableBalance.ToString(),
-                            term = bank.term,
-                            accountName = bank.accountName,
-                            routingNumber = bank.routingNumber,
-                            accountNicknameAtSrcSite = bank.accountNicknameAtSrcSite,
-                            secondaryAccountHolderName = bank.secondaryAccountHolderName,
-                            accountOpenDate = bank.accountOpenDate.ToString(),
-                            taxesWithheldYtd = bank.taxesWithheldYtd.ToString(),
-                        };
-                    var transactions = new List<YodleeTransactionModel>();
-                    foreach (var transaction in bank.OrderItemBankTransactions)
+                var yodleeBankModel = new YodleeBankModel
                     {
-                        var yodleeTransactionModel = new YodleeTransactionModel
-                            {
-                                transactionType = transaction.transactionType,
-                                transactionStatus = transaction.transactionStatus,
-                                transactionBaseType = transaction.transactionBaseType,
-                                isDeleted = transaction.isDeleted.ToString(),
-                                lastUpdated = transaction.lastUpdated.ToString(),
-                                transactionId = transaction.transactionId,
-                                transactionDate = transaction.transactionDate.ToString(),
-                                runningBalance = transaction.runningBalance.ToString(),
-                                userDescription = transaction.userDescription,
-                                memo = transaction.memo,
-                                category = transaction.category,
-                                postDate = transaction.postDate.ToString(),
-                                transactionAmount = transaction.transactionAmount.ToString(),
-                                description = transaction.description,
-                            };
-                        transactions.Add(yodleeTransactionModel);
-                    }
-                    yodleeBankModel.transactions = transactions;
-                    banks.Add(yodleeBankModel);
+                        customName = bank.customName,
+                        customDescription = bank.customDescription,
+                        isDeleted = bank.isDeleted.ToString(),
+                        accountNumber = bank.accountNumber,
+                        accountHolder = bank.accountHolder,
+                        availableBalance = bank.availableBalance.ToString(),
+                        term = bank.term,
+                        accountName = bank.accountName,
+                        routingNumber = bank.routingNumber,
+                        accountNicknameAtSrcSite = bank.accountNicknameAtSrcSite,
+                        secondaryAccountHolderName = bank.secondaryAccountHolderName,
+                        accountOpenDate = bank.accountOpenDate.ToString(),
+                        taxesWithheldYtd = bank.taxesWithheldYtd.ToString(),
+                    };
+                var transactions = new List<YodleeTransactionModel>();
+                foreach (var transaction in bank.OrderItemBankTransactions)
+                {
+                    var yodleeTransactionModel = new YodleeTransactionModel
+                        {
+                            transactionType = transaction.transactionType,
+                            transactionStatus = transaction.transactionStatus,
+                            transactionBaseType = transaction.transactionBaseType,
+                            isDeleted = transaction.isDeleted.ToString(),
+                            lastUpdated = transaction.lastUpdated.ToString(),
+                            transactionId = transaction.transactionId,
+                            transactionDate = transaction.transactionDate.ToString(),
+                            runningBalance = transaction.runningBalance.ToString(),
+                            userDescription = transaction.userDescription,
+                            memo = transaction.memo,
+                            category = transaction.category,
+                            postDate = transaction.postDate.ToString(),
+                            transactionAmount = transaction.transactionAmount.ToString(),
+                            description = transaction.description,
+                        };
+                    transactions.Add(yodleeTransactionModel);
                 }
-                model.banks = banks;
-                return model;
+                yodleeBankModel.transactions = transactions;
+                banks.Add(yodleeBankModel);
             }
-            return null;
+            model.banks = banks;
+            return model;
         }
 
         private static EBayModel BuildEBay(MP_EbayUserData ebayUserData, MP_EbayUserAccountData ebayAccount, MP_EbayFeedback ebayFeedBack)

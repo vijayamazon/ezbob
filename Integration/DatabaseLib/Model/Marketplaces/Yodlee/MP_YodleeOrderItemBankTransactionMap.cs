@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Database
         {
             Table("MP_YodleeOrderItemBankTransaction");
             Id(x => x.Id);
-            References(x => x.YodleeOrderItem, "OrderItemId");
+            References(x => x.YodleeOrderItem).Column("OrderItemId");
 
             Map(x => x.isSeidFromDataSource).Nullable();
             Map(x => x.isSeidFromDataSourceSpecified);

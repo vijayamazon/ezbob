@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Database
         {
             Table("MP_YodleeOrderItem");
             Id(x => x.Id);
-            References(x => x.Order, "OrderId");
+            References(x => x.Order).Column("OrderId");
             HasMany(x => x.OrderItemBankTransactions).KeyColumn("OrderItemId").Cascade.All();
 
             Map(x => x.isSeidFromDataSource, "isSeidFromDataSource").Nullable();
@@ -41,15 +41,15 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.tranListToDate, "tranListToDate").CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.tranListFromDate, "tranListFromDate").CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.availableBalance, "availableBalance").Nullable();
-            Map(x => x.availableBalanceCurrency, "availableBalanceCurrency").Length(3);
+            Map(x => x.availableBalanceCurrency, "availableBalanceCurrency").Length(3).Nullable();
             Map(x => x.currentBalance, "currentBalance").Nullable();
-            Map(x => x.currentBalanceCurrency, "currentBalanceCurrency").Length(3);
+            Map(x => x.currentBalanceCurrency, "currentBalanceCurrency").Length(3).Nullable();
             Map(x => x.interestEarnedYtd, "interestEarnedYtd").Nullable();
-            Map(x => x.interestEarnedYtdCurrency, "interestEarnedYtdCurrency").Length(3);
+            Map(x => x.interestEarnedYtdCurrency, "interestEarnedYtdCurrency").Length(3).Nullable();
             Map(x => x.prevYrInterest, "prevYrInterest").Nullable();
-            Map(x => x.prevYrInterestCurrency, "prevYrInterestCurrency").Length(3);
+            Map(x => x.prevYrInterestCurrency, "prevYrInterestCurrency").Length(3).Nullable();
             Map(x => x.overdraftProtection, "overdraftProtection").Nullable();
-            Map(x => x.overdraftProtectionCurrency, "overdraftProtectionCurrency").Length(3);
+            Map(x => x.overdraftProtectionCurrency, "overdraftProtectionCurrency").Length(3).Nullable();
             Map(x => x.term, "term").Length(300);
             Map(x => x.accountName, "accountName").Length(300);
             Map(x => x.annualPercentYield, "annualPercentYield").Nullable();
@@ -71,15 +71,15 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.accountOpenDate, "accountOpenDate").CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.accountCloseDate, "accountCloseDate").CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.maturityAmount, "maturityAmount").Nullable();
-            Map(x => x.maturityAmountCurrency, "maturityAmountCurrency").Length(3);
+            Map(x => x.maturityAmountCurrency, "maturityAmountCurrency").Length(3).Nullable();
             Map(x => x.taxesWithheldYtd, "taxesWithheldYtd").Nullable();
-            Map(x => x.taxesWithheldYtdCurrency, "taxesWithheldYtdCurrency").Length(3);
+            Map(x => x.taxesWithheldYtdCurrency, "taxesWithheldYtdCurrency").Length(3).Nullable();
             Map(x => x.taxesPaidYtd, "taxesPaidYtd").Nullable();
-            Map(x => x.taxesPaidYtdCurrency, "taxesPaidYtdCurrency").Length(3);
+            Map(x => x.taxesPaidYtdCurrency, "taxesPaidYtdCurrency").Length(3).Nullable();
             Map(x => x.budgetBalance, "budgetBalance").Nullable();
-            Map(x => x.budgetBalanceCurrency, "budgetBalanceCurrency").Length(3);
+            Map(x => x.budgetBalanceCurrency, "budgetBalanceCurrency").Length(3).Nullable();
             Map(x => x.straightBalance, "straightBalance").Nullable();
-            Map(x => x.straightBalanceCurrency, "straightBalanceCurrency").Length(3);
+            Map(x => x.straightBalanceCurrency, "straightBalanceCurrency").Length(3).Nullable();
             //public AccountClassification? accountClassification { get; set; }
             Map(x => x.accountClassificationSpecified, "accountClassificationSpecified");
 

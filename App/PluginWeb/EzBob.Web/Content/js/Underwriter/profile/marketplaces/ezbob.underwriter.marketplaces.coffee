@@ -11,8 +11,8 @@ class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
         ai = @get 'AnalysisDataInfo'
         accountAge = @get 'AccountAge'
         age = if (accountAge isnt "-" and accountAge isnt 'undefined') then EzBob.SeniorityFormat(accountAge, 0) else "-"
-        anualSales = (ai.TotalSumofOrders12M or ai.TotalSumofOrders6M or ai.TotalSumofOrders3M or ai.TotalSumofOrders1M or 0) * 1
-        inventory = if not isNaN((ai.TotalValueofInventoryLifetime * 1)) then (ai.TotalValueofInventoryLifetime * 1) else "-"
+        anualSales = if ai then (ai.TotalSumofOrders12M or ai.TotalSumofOrders6M or ai.TotalSumofOrders3M or ai.TotalSumofOrders1M or 0) * 1 else 0
+        inventory = if ai and not isNaN((ai.TotalValueofInventoryLifetime * 1)) then (ai.TotalValueofInventoryLifetime * 1) else "-"
         @set {age: age, anualSales: anualSales, inventory: inventory}, {silent: true}
 
 class EzBob.Underwriter.MarketPlaces extends Backbone.Collection
