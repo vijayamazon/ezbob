@@ -299,6 +299,13 @@ namespace EzBob.Web.Controllers
                     customer.ReferenceSource = sourceref.Value;
                 }
 
+				var ezbobab = Request.Cookies["ezbobab"];
+				if (ezbobab != null) {
+					var cookie = new HttpCookie("ezbobab", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
+					Response.Cookies.Add(cookie);
+					customer.ABTesting = ezbobab.Value;
+				}
+
                 var link = _confirmation.GenerateLink(customer);
 
                 _zoho.RegisterLead(customer);

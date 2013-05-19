@@ -331,6 +331,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual CardInfo CurrentCard { get; set; }
 
+		public virtual string ABTesting { get; set; }
+
         /// <summary>
         /// Идентификатор записи в системе ZohoCRM
         /// </summary>

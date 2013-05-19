@@ -206,6 +206,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.IsTest);
             Map(x => x.ZohoId);
             Map(x => x.BankAccountValidationInvalidAttempts);
+            Map(x => x.ABTesting).Length(512);
 
             Component(x => x.CollectionStatus, m =>
                 {

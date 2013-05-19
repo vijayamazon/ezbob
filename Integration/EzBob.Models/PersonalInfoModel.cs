@@ -28,6 +28,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public decimal? WebSiteTurnOver { get; set; }
         public decimal? OverallTurnOver { get; set; }
         public string ReferenceSource { get; set; }
+        public string ABTesting { get; set; }
 
         public PersonalInfoModel()
         {
@@ -81,6 +82,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             }
 
             ReferenceSource = customer.ReferenceSource;
+            ABTesting = customer.ABTesting;
         }
 
         public string ZohoId { get; set; }
