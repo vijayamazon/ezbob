@@ -107,7 +107,7 @@ namespace EzBob.Web.Areas.Underwriter
                                   ? "Error"
                                   : "Done";
 
-                    IQueryable<MP_YodleeOrderItem> yodleeData = null;
+                    List<MP_YodleeOrderItem> yodleeData = null;
                     if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
                     {
                         yodleeData = _yodleeOrderRepository.GetOrdersItemsByMakretplaceId(mp.Id);

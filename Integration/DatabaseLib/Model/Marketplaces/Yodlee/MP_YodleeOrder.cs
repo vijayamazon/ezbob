@@ -41,6 +41,7 @@ namespace EZBob.DatabaseLib.Model.Database
             return _session
                 .Query<MP_YodleeOrderItem>()
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                .FetchMany(oi => oi.OrderItemBankTransactions)
                 .ToList();
         }
 
