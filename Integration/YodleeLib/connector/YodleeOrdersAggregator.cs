@@ -8,44 +8,45 @@ namespace YodleeLib.connector
     using EzBob.CommonLib.TimePeriodLogic;
     using log4net;
 
-    internal class YodleeOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType>
+    internal class YodleeOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<YodleeTransactionItem>, YodleeTransactionItem, YodleeDatabaseFunctionType>
     {
-        public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<YodleeOrderItem> data, ICurrencyConvertor currencyConverter)
+        public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeTransactionItem>, YodleeTransactionItem, YodleeDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<YodleeTransactionItem> data, ICurrencyConvertor currencyConverter)
         {
             return new YodleeOrdersAggregator(data, currencyConverter);
         }
     }
 
-    internal class YodleeOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeOrderItem>, YodleeOrderItem, YodleeDatabaseFunctionType>
+    internal class YodleeOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<YodleeTransactionItem>, YodleeTransactionItem, YodleeDatabaseFunctionType>
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeOrdersAggregator));
 
-        public YodleeOrdersAggregator(ReceivedDataListTimeDependentInfo<YodleeOrderItem> orders, ICurrencyConvertor currencyConvertor)
+        public YodleeOrdersAggregator(ReceivedDataListTimeDependentInfo<YodleeTransactionItem> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
 
         }
 
-        protected override object InternalCalculateAggregatorValue(YodleeDatabaseFunctionType functionType, IEnumerable<YodleeOrderItem> orders)
+        protected override object InternalCalculateAggregatorValue(YodleeDatabaseFunctionType functionType, IEnumerable<YodleeTransactionItem> orders)
         {
-            switch (functionType)
-            {
+            //switch (functionType)
+            //{
 
-                case YodleeDatabaseFunctionType.TotlaIncome:
-                    return GetTotlaIncome(orders);
+            //    case YodleeDatabaseFunctionType.TotlaIncome:
+            //        return GetTotlaIncome(orders);
 
-                case YodleeDatabaseFunctionType.TotalExpense:
-                    return GetTotalExpense(orders);
+            //    case YodleeDatabaseFunctionType.TotalExpense:
+            //        return GetTotalExpense(orders);
 
-                case YodleeDatabaseFunctionType.CurrentBalance:
-                    return GetCurrentBalance(orders);
+            //    case YodleeDatabaseFunctionType.CurrentBalance:
+            //        return GetCurrentBalance(orders);
 
-                case YodleeDatabaseFunctionType.AvailableBalance:
-                    return GetAvailableBalance(orders);
+            //    case YodleeDatabaseFunctionType.AvailableBalance:
+            //        return GetAvailableBalance(orders);
 
-                default:
-                    throw new NotImplementedException();
-            }
+            //    default:
+            //        throw new NotImplementedException();
+            //}
+            return null;
         }
 
         private double GetAvailableBalance(IEnumerable<YodleeOrderItem> orders)

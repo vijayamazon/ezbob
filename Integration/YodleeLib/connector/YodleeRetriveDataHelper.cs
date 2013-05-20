@@ -53,10 +53,10 @@
 
 
             ////store agregated
-            //var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-            //                        ElapsedDataMemberType.AggregateData,
-            //                        () => { return CreateOrdersAggregationInfo(yodleeOrderItem, Helper.CurrencyConverter); });
-            //// Save
+            var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                                    ElapsedDataMemberType.AggregateData,
+                                    () => { return CreateOrdersAggregationInfo(yodleeOrderItem, Helper.CurrencyConverter); });
+            // Save
             //ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
             //                ElapsedDataMemberType.StoreAggregatedData,
             //                () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
@@ -68,7 +68,7 @@
                 GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData);
 
         }
-        
+
         protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
         {
             /*
@@ -119,27 +119,23 @@
                     YodleeDatabaseFunctionType.AvailableBalance,
                 };
 
-            //var updated = orders.RecordTime;
-            //var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-            //var allDataInfo = new ReceivedDataListTimeDependentInfo<YodleeOrderItem>(allData, TimePeriodEnum.Month3, 3);
-            //var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<YodleeOrderItem>(), orders, nodesCreationFactory);
 
-            //if (timeChain.HasNoData)
-            //{
-            //    return null;
-            //}
-            ////var data = new ReceivedDataListTimeDependentInfo<YodleeOrderItem>(orders, TimePeriodEnum.Month3, 3);
-            ////var timePeriodData = new Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<YodleeOrderItem>>();  TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-            //var dict = new Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<YodleeOrderItem>>();
-            //var leaf = timeChain.Leaf as TimePeriodNodeWithData<YodleeOrderItem>;
-            //var timePeriodChain = new TimePeriodChainWithData<YodleeOrderItem>(leaf);
-            //var allData = timePeriodChain.GetAllData();
+            var updated = DateTime.UtcNow;//todo:use time from server
+            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
 
-            //dict.Add(TimePeriodEnum.Month3, allDataInfo);
-            //var factory = new YodleeOrdersAggregatorFactory();
+            ReceivedDataListTimeDependentBase<YodleeTransactionItem> tr = YodleeTransactionList.Create(orders);
+            var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<YodleeTransactionItem>(), tr, nodesCreationFactory);
 
-            //return DataAggregatorHelper.AggregateData(factory, dict, aggregateFunctionArray, updated, currencyConverter);
-            return null;
+            if (timeChain.HasNoData)
+            {
+                return null;
+            }
+
+            var timePeriodChain = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+            
+            var factory = new YodleeOrdersAggregatorFactory();
+
+            return DataAggregatorHelper.AggregateData(factory, timePeriodChain, aggregateFunctionArray, updated, currencyConverter);
         }
 
     }

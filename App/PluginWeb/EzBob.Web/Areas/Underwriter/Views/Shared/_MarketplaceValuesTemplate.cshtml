@@ -1154,36 +1154,36 @@
                         <table class="table table-bordered table-striped  blue-header centered">
                             <thead>
                                 <tr>
-                                    <th>customName</th>
-                                    <th>customDescription</th>
-                                    <th>isDeleted</th>
-                                    <th>accountNumber</th>
-                                    <th>accountHolder</th>
-                                    <th>availableBalance</th>
-                                    <th>term</th>
-                                    <th>accountName</th>
-                                    <th>routingNumber</th>
-                                    <th>accountNicknameAtSrcSite</th>
-                                    <th>secondaryAccountHolderName</th>
-                                    <th>accountOpenDate</th>
-                                    <th>taxesWithheldYtd</th>
+                                    <th>Account Name</th>
+                                    <th>Account Number</th>
+                                    <th>Available Balance</th>
+                                    <th>Account Holder</th>
+                                    <th>Account Open Date</th>
+                                    <th>Custom Name</th>
+                                    <th>Custom Description</th>
+                                    <th>Is Deleted</th>
+                                    <th>Term</th>
+                                    <th>Routing Number</th>
+                                    <th>Account Nickname At SrcSite</th>
+                                    <th>Secondary Account Holder Name</th>
+                                    <th>Taxes Withheld Ytd</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <%_.each(y.banks, function(bank, i) {%>
-                                <tr>
+                                <tr onclick="window.location='#yodleetab<%= (i+3)%>'">
+                                    <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
+                                    <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
+                                    <td><%-bank.availableBalance!=undefined ? bank.availableBalance : "-"%></td>
+                                    <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
+                                    <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
                                     <td><%-bank.customName!=undefined ? bank.customName : "-"%></td>
                                     <td><%-bank.customDescription!=undefined ? bank.customDescription : "-"%></td>
                                     <td><%-bank.isDeleted!=undefined ? bank.isDeleted : "-"%></td>
-                                    <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
-                                    <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
-                                    <td><%-bank.availableBalance!=undefined ? bank.availableBalance : "-"%></td>
                                     <td><%-bank.term!=undefined ? bank.term : "-"%></td>
-                                    <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                                     <td><%-bank.routingNumber!=undefined ? bank.routingNumber : "-"%></td>
                                     <td><%-bank.accountNicknameAtSrcSite!=undefined ? bank.accountNicknameAtSrcSite : "-"%></td>
                                     <td><%-bank.secondaryAccountHolderName!=undefined ? bank.secondaryAccountHolderName : "-"%></td>
-                                    <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
                                     <td><%-bank.taxesWithheldYtd!=undefined ? bank.taxesWithheldYtd : "-"%></td>
                                 </tr>
                                 <%});%>
@@ -1195,20 +1195,20 @@
                         <table class="table table-bordered table-striped  blue-header centered">
                             <thead>
                                 <tr>
-                                    <th>transactionType</th>
-                                    <th>transactionStatus</th>
-                                    <th>transactionBaseType</th>
-                                    <th>isDeleted</th>
-                                    <th>lastUpdated</th>
-                                    <th>transactionId</th>
-                                    <th>transactionDate</th>
-                                    <th>runningBalance</th>
-                                    <th>userDescription</th>
-                                    <th>memo</th>
-                                    <th>category</th>
-                                    <th>postDate</th>
-                                    <th>transactionAmount</th>
-                                    <th>description</th>
+                                    <th>Transaction Type</th>
+                                    <th>Transaction Status</th>
+                                    <th>Transaction Base Type</th>
+                                    <th>Transaction Amount</th>
+                                    <th>Transaction Date</th>
+                                    <th>Transaction Id</th>
+                                    <th>Category</th>
+                                    <th>Running Balance</th>
+                                    <th>Description</th>
+                                    <th>User Description</th>
+                                    <th>Memo</th>
+                                    <th>Post Date</th>
+                                    <th>Last Updated</th>
+                                    <th>Is Deleted</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1217,17 +1217,17 @@
                                     <td><%-transaction.transactionType!=undefined ? transaction.transactionType : "-"%></td>
                                     <td><%-transaction.transactionStatus!=undefined ? transaction.transactionStatus : "-"%></td>
                                     <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
-                                    <td><%-transaction.isDeleted!=undefined ? transaction.isDeleted : "-"%></td>
-                                    <td><%-transaction.lastUpdated!=undefined ? transaction.lastUpdated : "-"%></td>
-                                    <td><%-transaction.transactionId!=undefined ? transaction.transactionId : "-"%></td>
+                                    <td><%-transaction.transactionAmount!=undefined ? transaction.transactionAmount : "-"%></td>
                                     <td><%-transaction.transactionDate!=undefined ? transaction.transactionDate : "-"%></td>
+                                    <td><%-transaction.transactionId!=undefined ? transaction.transactionId : "-"%></td>
+                                    <td><%-transaction.category!=undefined ? transaction.category : "-"%></td>
                                     <td><%-transaction.runningBalance!=undefined ? transaction.runningBalance : "-"%></td>
+                                    <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
                                     <td><%-transaction.userDescription!=undefined ? transaction.userDescription : "-"%></td>
                                     <td><%-transaction.memo!=undefined ? transaction.memo : "-"%></td>
-                                    <td><%-transaction.category!=undefined ? transaction.category : "-"%></td>
                                     <td><%-transaction.postDate!=undefined ? transaction.postDate : "-"%></td>
-                                    <td><%-transaction.transactionAmount!=undefined ? transaction.transactionAmount : "-"%></td>
-                                    <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                                    <td><%-transaction.lastUpdated!=undefined ? transaction.lastUpdated : "-"%></td>
+                                    <td><%-transaction.isDeleted!=undefined ? transaction.isDeleted : "-"%></td>
                                 </tr>
                                 <%});%>
                             </tbody>
