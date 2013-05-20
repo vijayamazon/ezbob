@@ -79,6 +79,12 @@
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PlayOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\PlayOrdersList.cs" />
+    <Compile Include="Model\Database\CustomerLoyaltyProgramPointsMap.cs" />
+    <Compile Include="Model\Database\CustomerLoyaltyProgramPoints.cs" />
+    <Compile Include="Model\Database\LoyaltyProgramActionMap.cs" />
+    <Compile Include="Model\Database\LoyaltyProgramAction.cs" />
+    <Compile Include="Model\Database\LoyaltyProgramActionTypeMap.cs" />
+    <Compile Include="Model\Database\LoyaltyProgramActionType.cs" />
     <Compile Include="Model\Loans\DiscountPlan.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />

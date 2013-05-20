@@ -5,9 +5,11 @@ using System.Linq;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
+using EzBob.CommonLib;
 using Iesi.Collections.Generic;
 using NHibernate.Type;
 using Scorto.NHibernate.Types;
+using StructureMap;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using Marketplaces.Yodlee;
@@ -480,7 +482,19 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal TotalPrincipalRepaid { get; set; }
         public virtual DateTime? NextRepaymentDate { get; set; }
         public virtual DateTime? DateOfLate { get; set; }
-	}
+
+		public virtual long LoyaltyPoints() {
+			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
+			return p == null? 0 : p.EarnedPoints;
+		} // LoyaltyPoints
+
+		public virtual DateTime? LastLoyaltyProgramActionDate() {
+			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
+			return p == null? (DateTime?)null : p.LastActionDate;
+		} // LastLoyaltyProgramActionDate
+    }
 
 
 

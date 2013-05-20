@@ -99,6 +99,8 @@ namespace EzBob.Web.Areas.Customer.Models
         public bool IsLoanDetailsFixed { get; set; }
 
         public int IsLoanTypeSelectionAllowed { get; set; }
+
+		public long LoyaltyPoints { get; set; }
     }
 
     public class LimitedInfoMap

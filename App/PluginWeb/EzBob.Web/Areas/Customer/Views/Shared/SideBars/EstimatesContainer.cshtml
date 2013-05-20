@@ -1,7 +1,30 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib
+@using EZBob.DatabaseLib.Model.Database
+@using EzBob.CommonLib
+@using StructureMap
+@model dynamic
+@{
+	var bIsAuth = User.Identity.IsAuthenticated;
+}
 
 <div class="marketing_container">
-    <div class="marketing_message">
-        <p><strong><span style="font-size: 20px">Sign up is <br />Free,<br />Fast and <br />Secure</span></strong></p>
-    </div>
+	<div class="marketing_message">
+		<p><strong><span style="font-size: 20px">@{
+			bool bDefaultText = true;
+
+			if (false && bIsAuth) { // TODO: revive some day...
+				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+				Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+
+				if (oCustomer != null) {
+					WriteLiteral(string.Format("{0:N0}<br>points<br>earned", oCustomer.LoyaltyPoints()));
+					bDefaultText = false;
+				} // if customer found
+			} // if authorised
+
+			if (bDefaultText) {
+				WriteLiteral("Sign up is<br />Free,<br />Fast and<br />Secure");
+			} // if default text
+	}</span></strong></p>
+</div>
 </div>

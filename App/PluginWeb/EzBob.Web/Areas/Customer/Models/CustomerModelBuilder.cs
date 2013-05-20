@@ -175,6 +175,8 @@ namespace EzBob.Web.Areas.Customer.Models
             var cr = cus.LastCashRequest;
             customerdModel.IsLoanDetailsFixed = !_changeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
+	        customerdModel.LoyaltyPoints = customer.LoyaltyPoints();
+
             return customerdModel;
         }
 

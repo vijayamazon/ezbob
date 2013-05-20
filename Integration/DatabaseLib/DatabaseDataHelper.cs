@@ -71,6 +71,7 @@ namespace EZBob.DatabaseLib
         private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
         private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
 	    private readonly ILoanTypeRepository _LoanTypeRepository;
+	    private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
         private ISession _session;
 
         public DatabaseDataHelper(ISession session)
@@ -94,9 +95,12 @@ namespace EZBob.DatabaseLib
             _MP_EbayOrderRepository = new MP_EbayOrderRepository(session);
             _MP_EbayTransactionsRepository = new MP_EbayTransactionsRepository(session);
 			_LoanTypeRepository = new LoanTypeRepository(session);
+			_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
         }
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
+
+		public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { return _CustomerLoyaltyPoints; } }
 
         public ICurrencyConvertor CurrencyConverter
         {
@@ -118,8 +122,9 @@ namespace EZBob.DatabaseLib
             return client;
         }
 
-
-
+		public Customer FindCustomerByEmail(string sEmail) {
+			return _CustomerRepository.TryGetByEmail(sEmail);
+		} // FindCustomerByEmail
 
         public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
         {

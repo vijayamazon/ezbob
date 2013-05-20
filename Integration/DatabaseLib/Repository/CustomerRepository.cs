@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         Customer GetCustomerByRefNum(string refnumber);
         Customer GetChecked(int id);
         Customer GetAndInitialize(int id);
+	    Customer TryGetByEmail(string sEmail);
     }
 
 	public class CustomerRepository : NHibernateRepositoryBase<Customer>, ICustomerRepository
@@ -50,6 +51,10 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             if(customer == null) throw new InvalidCustomerException(string.Format("Customer ref. #{0} was not found", refnumber));
             return customer;
         }
+
+		public Customer TryGetByEmail(string sEmail) {
+			return _session.QueryOver<Customer>().Where(c => c.Name == sEmail).SingleOrDefault<Customer>();
+		} // TryGetByEmail
 
 	    public Customer GetChecked(int id)
 	    {
