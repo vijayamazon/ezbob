@@ -62,5 +62,10 @@ namespace EzBob.Configuration
         {
             get { return GetValueWithDefault<decimal>("CardLimitAmount", "500"); }
         }
+
+        public bool EnableDebugErrorCodeN
+        {
+            get { return GetValueWithDefault<bool>("EnableDebugErrorCodeN", "true"); }
+        }
     }
 }

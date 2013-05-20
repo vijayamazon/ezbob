@@ -185,13 +185,14 @@
 
             if (_config.DebugMode)
             {
-                var tempErrorStr = "";
                 var code = "A";
                 var isValid = true;
+                var message = "debug mode";
+                var respCode = 0;
 
                 if (!_config.IsValidCard)
                 {
-                    tempErrorStr = "Card is not valid";
+                    message = "Card is not valid";
                     code = "B";
                     isValid = false;
                 }
@@ -199,23 +200,23 @@
                 {
                     if (_config.EnableCardLimit && amount > _config.CardLimitAmount)
                     {
-                        tempErrorStr = "Amount more than card amount";
+                        message = "Amount more than card amount";
                         code = "P:A";
                         isValid = false;
                     }
                 }
 
-                str = string.Format("?valid={0}&trans_id={1}&code={2}&auth_code=9999", isValid, transactionId,code);
+                if (_config.EnableDebugErrorCodeN)
+                {
+                    isValid = false;
+                    transactionId = "1b333df7-03a4-4092-81d9-72a686794d362013-05-20_09:41:39";
+                    code = "N";
+                    message = "DECLINED";
+                    respCode = 5;
+                }
 
-                ret = new PayPointReturnData
-                    {
-                        AuthCode = "",
-                        Code = code,
-                        Error = tempErrorStr,
-                        Message = "",
-                        NewTransId = newTransactionId,
-                        OutStr = str
-                    };
+                str = string.Format("?valid={0}&trans_id={1}&code={2}&auth_code=9999&message={3}&resp_code={4}", isValid, transactionId, code, message,respCode);
+                ret = new PayPointReturnData(str);
             }
             else
             {
