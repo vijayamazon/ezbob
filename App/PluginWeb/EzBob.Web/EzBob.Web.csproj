@@ -463,6 +463,7 @@
     <Content Include="Content\css\images\sprites\social_sprite_round.png" />
     <Content Include="Content\css\images\star.png" />
     <Content Include="Content\css\images\tick.png" />
+    <Content Include="Content\css\images\yodlee.png" />
     <Content Include="Content\css\jquery.jqplot.css" />
     <Content Include="Content\css\loan-type-selector.css" />
     <Content Include="Content\css\loanDetails.css">

@@ -334,6 +334,20 @@ div.shop-connected {
     margin-top: 5px;
 }
 
+    .source_labels.Yodlee {
+		background: url(images/yodlee.png) no-repeat 0 0;
+	    width: 5em;
+	    margin-right: auto;
+	    margin-left: auto;
+    }
+
+    .source_labels_on.Yodlee {
+		background: url(images/yodlee.png) no-repeat 0 0;
+	    width: 5em;
+	    margin-right: auto;
+	    margin-left: auto;
+    }
+
     .source_labels.eBay {
         background-position: 0 -1px;
         width: 81px;

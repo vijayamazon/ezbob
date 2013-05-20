@@ -7,16 +7,18 @@
 					<tbody>
 						<tr>
 							<td style="width: 187px;">
-								<% switch (shopClass) {
-								case 'eBay':
-								case 'paypal':
+								<% switch (shopClass) 
+									{
+										case 'eBay':
+										case 'paypal':
 											%><a href="#<%- shopClass %>_help" class="source_help"><%
-									break;
-								default:
+											break;
+										default:
 											%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
-									break;
-								} // switch
-									%><div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
+											break;
+									} // switch
+								%>
+								<div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
 								</a>
 							</td>
 							<td style="vertical-align: middle;"><% if(shops.length) {%>
