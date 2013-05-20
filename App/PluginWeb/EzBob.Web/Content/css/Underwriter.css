@@ -116,6 +116,10 @@
 
 #payPal-details { overflow: auto; }
 
+.yodleeTabTable .nowrap {
+    white-space: nowrap;
+}
+
 
 .nav-tabs { border-bottom: 1px solid #DDDDDD; }
 
