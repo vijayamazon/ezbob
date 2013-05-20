@@ -40,8 +40,8 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.ManagerName);
 
             Map(x => x.EscalationReason).Length(200);
-            Map(x => x.RejectedReason).Length(200);
-            Map(x => x.ApprovedReason).Length(200);
+			Map(x => x.RejectedReason).Length(200);
+			Map(x => x.ApprovedReason).Length(200);
 
             Map(x => x.Details);
             Map(x => x.PendingStatus).CustomType<PendingStatusType>();
@@ -305,6 +305,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                         order by s.[Date])")
                 .Not.Insert()
                 .Not.Update();
+
             Map(x => x.DateOfLate)
                 .Formula(
                     @"(select MIN(s.[Date]) from [Loan] l left join [LoanSchedule] s
@@ -312,6 +313,14 @@ namespace EZBob.DatabaseLib.Model.Database {
                      where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
                 .Not.Insert()
                 .Not.Update();
+
+
+			// TODO: Should be only one
+			HasMany(x => x.YodleeAccounts)
+				.AsSet()
+				.KeyColumn("CustomerId")
+				.Inverse()
+				.Cascade.All();
         }
 	}
 }

@@ -23,11 +23,12 @@ namespace YodleeLib
         /// Displays basic information about all items belonging to the user.
         /// </summary>
         /// <param name="userContext"></param>
-        public void displayItemSummariesWithoutItemData(UserContext userContext)
+		public object[] displayItemSummariesWithoutItemData(UserContext userContext)
         {
             object[] itemSummaries =
                 dataService.getItemSummariesWithoutItemData(userContext);
-            _printItemSummaries(itemSummaries);
+            //_printItemSummaries(itemSummaries);
+	        return itemSummaries;
         }
 
         /// <summary>

@@ -1,6 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
+	using CommonLib.Security;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using YodleeLib;
 	using YodleeLib.connector;
 	using System.Linq;
@@ -11,7 +14,6 @@
 	using Scorto.Web;
 	using Code.MpUniq;
 	using log4net;
-	using CommonLib.Security;
 	using ApplicationCreator;
 	using NHibernate;
 
@@ -20,20 +22,23 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
-		private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
+		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly YodleeConnector _validator = new YodleeConnector();
 		private readonly ISession _session;
+		private readonly DatabaseDataHelper _helper;
 
 		public YodleeMarketPlacesController(
 			IEzbobWorkplaceContext context,
+			DatabaseDataHelper helper, 
 			IRepository<MP_MarketplaceType> mpTypes,
 			IMPUniqChecker mpChecker,
 			IAppCreator appCreator,
 			ISession session)
 		{
 			_context = context;
+			_helper = helper;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
@@ -46,12 +51,12 @@
 		{
 			var oEsi = new YodleeServiceInfo();
 
-			var Yodlees = _customer
+			var yodlees = _customer
 				.CustomerMarketPlaces
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
 				.Select(YodleeAccountModel.ToModel)
 				.ToList();
-			return this.JsonNet(Yodlees);
+			return this.JsonNet(yodlees);
 		}
 
 		[Transactional]
@@ -117,21 +122,98 @@
 			return this.JsonNet(new { error = "not implemented" });
 		}
 
-		public void Success()
+		[Transactional]
+		public ViewResult Success()
 		{
-			int a = 1;
+			var ym = new YodleeMain();
+			var customer = _context.Customer;
+
+			var yodleeAccount = customer.YodleeAccounts.FirstOrDefault();
+			
+			// check if was success
+			//object[] oa = x.displayItemSummariesWithoutItemData(ym); // TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
+			long itemId = ym.GetItemId(yodleeAccount.Username, yodleeAccount.Password);
+			
+			var oEsi = new YodleeServiceInfo();
+			int marketPlaceId = _mpTypes
+				.GetAll()
+				.First(a => a.InternalId == oEsi.InternalId)
+				.Id;
+
+			var mp = new MP_CustomerMarketPlace
+			{
+				Marketplace = _mpTypes.Get(marketPlaceId),
+				DisplayName = yodleeAccount.Username,
+				SecurityData = Encryptor.EncryptBytes(yodleeAccount.Password),
+				Customer = _customer,
+				Created = DateTime.UtcNow,
+				UpdatingStart = DateTime.UtcNow,
+				Updated = DateTime.UtcNow,
+				UpdatingEnd = DateTime.UtcNow
+			};
+
+			_customer.CustomerMarketPlaces.Add(mp); 
+			
+			var securityData = new YodleeSecurityInfo
+			{
+				ItemId = itemId,
+				Name = yodleeAccount.Username,
+				Password = yodleeAccount.Password,
+				MarketplaceId = mp.Id
+			};
+			
+			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
+			
+			if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+				customer.WizardStep = WizardStepType.Marketplace;
+			
+			_helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace, securityData, customer);
+			
+			_session.Flush();
+			//_appCreator.YodleeAdded(_context.Customer, mp.Id); // TODO: activate strategy
+
+			//return View("someview");
+			return null;
+			//return View(YodleeAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(u.Username, yodleeDatabaseMarketPlace, customer)));
 		}
 
+		[Transactional]
 		public RedirectResult AttachYodlee(int csId, string bankName)
 		{
-			// Create yodlee account for this customer, or get existing one from DB
+			var yodleeMain = new YodleeMain();
+			var x = _customer.YodleeAccounts;
+			YodleeAccounts yodleeAccount;
+			if (x.FirstOrDefault() == null)
+			{
+				var banksRepository = new YodleeBanksRepository(_session);
+				YodleeBanks bank = banksRepository.Search(csId);
+				
+				var rnd = new Random();
+                int randomNumber = rnd.Next(9000) + 1000;
+				
+				// Create new account
+				yodleeAccount = new YodleeAccounts
+					{
+						CreationDate = DateTime.UtcNow,
+						Customer = _customer,
+						Username = string.Format("{0}{1}", _customer.Name.Split(new [] { '@' })[0], randomNumber),
+						Password = "1A4d7u",
+						Bank = bank
+					};
 
+				var accountsRepository = new YodleeAccountsRepository(_session);
+				int accountId = (int)accountsRepository.Save(yodleeAccount);
+
+				yodleeMain.RegisterUser(yodleeAccount.Username, yodleeAccount.Password, _customer.Name);
+			}
+			else
+			{
+				yodleeAccount = x.First();
+			}
+			
 			var callback = Url.Action("Success", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
-			//	string url = "https://www.google.com";
-
-			YodleeLib.YodleeMain ym = new YodleeMain();
-			string finalUrl = ym.GetFinalUrl(csId, callback);
-
+			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, yodleeAccount.Password);
+			
 			return Redirect(finalUrl);
 		}
 	}

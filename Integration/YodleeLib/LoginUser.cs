@@ -16,6 +16,7 @@ namespace YodleeLib
         readonly LoginService loginService;
         OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService;
         private static IYodleeMarketPlaceConfig _config;
+
         public LoginUser()
         {
             _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();

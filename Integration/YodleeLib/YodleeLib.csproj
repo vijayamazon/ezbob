@@ -82,6 +82,7 @@
     <Compile Include="DisplayBankData.cs" />
     <Compile Include="DisplayItemInfo.cs" />
     <Compile Include="FormFieldsVisitor.cs" />
+    <Compile Include="RegisterUser.cs" />
     <Compile Include="util\FormUtil.cs" />
     <Compile Include="util\IOUtils.cs" />
     <Compile Include="LoginUser.cs" />

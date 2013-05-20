@@ -1,7 +1,9 @@
 ﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
 	using System;
+	using ApplicationMng.Repository;
 	using Database;
+	using NHibernate;
 
 	public class YodleeAccounts
 	{
@@ -18,5 +20,17 @@
 		public virtual string Username { get; set; }
 		public virtual string Password { get; set; }
 		public virtual DateTime? CreationDate { get; set; }
+	}
+
+	public interface IYodleeAccountsRepository : IRepository<YodleeAccounts>
+    {
+    }
+
+	public class YodleeAccountsRepository : NHibernateRepositoryBase<YodleeAccounts>, IYodleeAccountsRepository
+	{
+		public YodleeAccountsRepository(ISession session)
+			: base(session)
+		{
+		}
 	}
 }

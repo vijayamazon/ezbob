@@ -16,7 +16,7 @@
 
         }
 
-        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, int itemId)
+        public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, long itemId)
         {
             //TODO: implement
             var yodlee = new YodleeMain();

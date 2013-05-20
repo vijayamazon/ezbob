@@ -10,8 +10,9 @@ using NHibernate.Type;
 using Scorto.NHibernate.Types;
 
 namespace EZBob.DatabaseLib.Model.Database {
+	using Marketplaces.Yodlee;
 
-    public enum PendingStatus
+	public enum PendingStatus
     {
         AML,
         Bank,
@@ -169,6 +170,11 @@ namespace EZBob.DatabaseLib.Model.Database {
             get { return _cashRequests; }
             set { _cashRequests = value; }
         }
+
+
+
+		//public virtual YodleeAccounts YodleeAccount { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<YodleeAccounts> YodleeAccounts { get; set; }
 
         public virtual Application LastStartedMainStrategy { get; set; }
         public virtual DateTime? LastStartedMainStrategyEndTime { get; set; }
