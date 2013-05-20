@@ -4,6 +4,7 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
+using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Infrastructure.csrf;
@@ -21,7 +22,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IEzbobWorkplaceContext _context;
         private readonly IAppCreator _creator;
         private readonly IEzBobConfiguration _config;
-        private readonly ILoanTypeRepository _loanTypes;
+        private readonly CashRequestBuilder _crBuilder;
         private readonly ISession _session;
 
         //----------------------------------------------------------------------
@@ -30,14 +31,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IEzbobWorkplaceContext context, 
             IAppCreator creator, 
             IEzBobConfiguration config,
-            ILoanTypeRepository loanTypes,
+            CashRequestBuilder crBuilder,
             ISession session)
         {
             _customerModelBuilder = customerModelBuilder;
             _context = context;
             _creator = creator;
             _config = config;
-            _loanTypes = loanTypes;
+            _crBuilder = crBuilder;
             _session = session;
         }
 
@@ -87,29 +88,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             customer.ApplyCount = customer.ApplyCount + 1;
 
-            var cashRequest = new CashRequest
-            {
-                CreationDate = DateTime.UtcNow,
-                Customer = _context.Customer,
-                InterestRate = 0.06m,
-                RepaymentPeriod = _loanTypes.GetDefault().RepaymentPeriod,
-                LoanType = _loanTypes.GetDefault(),
-                OfferStart = DateTime.UtcNow,
-                OfferValidUntil = DateTime.UtcNow.AddDays(1)
-            };
+            var cashRequest = _crBuilder.CreateCashRequest(customer);
 
-            customer.CashRequests.Add(cashRequest);
-
-            if (customer.CustomerMarketPlaces.Any(x => x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays))
-            {
-                //UpdateAllMarketplaces не успевает проставить UpdatingEnd = null для того что бы MainStrategy подождала окончание его работы
-                foreach (var val in customer.CustomerMarketPlaces)
-                {
-                    val.UpdatingEnd = null;
-                }
-                _creator.UpdateAllMarketplaces(customer);
-            }
-            _creator.Evaluate(_context.User);
+            _crBuilder.ForceEvaluate(customer, false);
             
             return this.JsonNet(new {});
         }

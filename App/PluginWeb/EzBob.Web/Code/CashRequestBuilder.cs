@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
+using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Loans;
+using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
 
@@ -7,31 +11,62 @@ namespace EzBob.Web.Code
 {
     public class CashRequestBuilder
     {
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly LoanScheduleCalculator _calculator;
-        private readonly APRCalculator _aprCalc;
+        private readonly ILoanTypeRepository _loanTypes;
+        private readonly IDiscountPlanRepository _discounts;
+        private readonly IAppCreator _creator;
+        private readonly IUsersRepository _users;
+        private readonly IEzBobConfiguration _config;
 
-        public CashRequestBuilder(IEzbobWorkplaceContext context)
+        public CashRequestBuilder(
+                                    ILoanTypeRepository loanTypes, 
+                                    IDiscountPlanRepository discounts, 
+                                    IAppCreator creator,
+                                    IUsersRepository users,
+                                    IEzBobConfiguration config
+            )
         {
-            _context = context;
-            _calculator = new LoanScheduleCalculator();
-            _aprCalc = new APRCalculator();
+            _loanTypes = loanTypes;
+            _discounts = discounts;
+            _creator = creator;
+            _users = users;
+            _config = config;
         }
 
-        public CashRequest CreateCashRequest(int amount)
+        public CashRequest CreateCashRequest(Customer customer)
         {
-            var schedule = _calculator.Calculate(amount);
-            var apr = _aprCalc.Calculate(amount, schedule);
+            var loanType = _loanTypes.GetDefault();
+            var discount = _discounts.GetDefault();
 
-            var cashRequest = new CashRequest()
-            {
-                CreationDate = DateTime.UtcNow,
-                Customer = _context.Customer,
-                APR = (decimal)apr,
-                InterestRate = _calculator.Interest
-            };
+            var cashRequest = new CashRequest
+                                  {
+                                      CreationDate = DateTime.UtcNow,
+                                      Customer = customer,
+                                      InterestRate = 0.06M,
+                                      LoanType = loanType,
+                                      RepaymentPeriod = loanType.RepaymentPeriod,
+                                      UseSetupFee = false,
+                                      DiscountPlan = discount,
+                                      OfferValidUntil = DateTime.UtcNow.AddDays(1),
+                                      OfferStart = DateTime.UtcNow
+                                  };
+
+            customer.CashRequests.Add(cashRequest);
 
             return cashRequest;
+        }
+
+        public void ForceEvaluate(Customer customer, bool isUnderwriterForced)
+        {
+            if (customer.CustomerMarketPlaces.Any(x => x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays))
+            {
+                //UpdateAllMarketplaces не успевает проставить UpdatingEnd = null для того что бы MainStrategy подождала окончание его работы
+                foreach (var val in customer.CustomerMarketPlaces)
+                {
+                    val.UpdatingEnd = null;
+                }
+                _creator.UpdateAllMarketplaces(customer);
+            }
+            _creator.Evaluate(_users.Get(customer.Id), isUnderwriterForced);
         }
     }
 }

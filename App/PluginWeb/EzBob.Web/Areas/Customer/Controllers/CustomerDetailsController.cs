@@ -28,18 +28,24 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
         private readonly IZohoFacade _crm;
         private readonly IAppCreator _creator;
-        private readonly ILoanTypeRepository _loanTypes;
         private readonly ISession _session;
+        private readonly CashRequestBuilder _crBuilder;
         private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper(); 
 
-        public CustomerDetailsController(IEzbobWorkplaceContext context, IPersonalInfoHistoryRepository personalInfoHistoryRepository, IZohoFacade crm, IAppCreator creator, ILoanTypeRepository loanTypes, ISession session)
+        public CustomerDetailsController(
+                                            IEzbobWorkplaceContext context, 
+                                            IPersonalInfoHistoryRepository personalInfoHistoryRepository, 
+                                            IZohoFacade crm, 
+                                            IAppCreator creator, 
+                                            ISession session,
+                                            CashRequestBuilder crBuilder)
         {
             _context = context;
             _personalInfoHistoryRepository = personalInfoHistoryRepository;
             _crm = crm;
             _creator = creator;
-            _loanTypes = loanTypes;
             _session = session;
+            _crBuilder = crBuilder;
         }
         //---------------------------------------------------------------------------------------------------------------------------
         [Transactional]
@@ -76,18 +82,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             customer.IsSuccessfullyRegistered = true;
 
-            var cashRequest = new CashRequest
-            {
-                CreationDate = DateTime.UtcNow,
-                Customer = customer,
-                InterestRate = 0.06M,
-                LoanType = _loanTypes.GetDefault(),
-                RepaymentPeriod = _loanTypes.GetDefault().RepaymentPeriod,
-                UseSetupFee = false
-            };
+            var cashRequest = _crBuilder.CreateCashRequest(customer);
 
             customer.WizardStep = WizardStepType.AllStep;
-            customer.CashRequests.Add(cashRequest);
 
             _session.Flush();
             _creator.Evaluate(_context.User);

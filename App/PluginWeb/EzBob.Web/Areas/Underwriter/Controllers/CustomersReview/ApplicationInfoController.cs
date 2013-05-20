@@ -7,7 +7,6 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
@@ -23,8 +22,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly ICustomerRepository _customerRepository;
         private readonly ICashRequestsRepository _cashRequestsRepository;
 
-        private readonly IAppCreator _creator;
-        private readonly IUsersRepository _users;
         private readonly IApplicationRepository _applications;
         private readonly IEzBobConfiguration _config;
         private readonly IZohoFacade _crm;
@@ -32,20 +29,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly LoanLimit _limit;
         private readonly IPacNetBalanceRepository _funds;
         private readonly IDiscountPlanRepository _discounts;
+        private readonly CashRequestBuilder _crBuilder;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
         public ApplicationInfoController(ICustomerRepository customerRepository, ICashRequestsRepository cashRequestsRepository,
-                                         IAppCreator creator, IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config,
+                                         IApplicationRepository applications, IEzBobConfiguration config,
                                          IZohoFacade crm, ILoanTypeRepository loanTypes, LoanLimit limit,
-                                            IPacNetBalanceRepository funds, IDiscountPlanRepository discounts)
+                                            IPacNetBalanceRepository funds, IDiscountPlanRepository discounts, CashRequestBuilder crBuilder)
         {
             _customerRepository = customerRepository;
             _cashRequestsRepository = cashRequestsRepository;
-            _creator = creator;
-            _users = users;
             _applications = applications;
             _config = config;
             _crm = crm;
@@ -53,6 +49,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _limit = limit;
             _funds = funds;
             _discounts = discounts;
+            _crBuilder = crBuilder;
         }
 
         [Ajax]
@@ -328,40 +325,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
             var customer = _customerRepository.Get(Id);
-            var loanType = customer.LastCashRequest.LoanType;
 
-            var cashRequest = new CashRequest()
-            {
-                CreationDate = DateTime.UtcNow,
-                Customer = customer,
-                InterestRate = 0.06m,
-                LoanType = loanType,
-                RepaymentPeriod = loanType.RepaymentPeriod,
-                UseSetupFee = false
-            };
+            var cashRequest = _crBuilder.CreateCashRequest(customer);
+            cashRequest.LoanType = customer.LastCashRequest.LoanType;
 
-            customer.OfferStart = DateTime.UtcNow;
-            customer.OfferValidUntil = DateTime.UtcNow.AddDays(1);
-            customer.CashRequests.Add(cashRequest);
+            _crBuilder.ForceEvaluate(customer, false);
+
+            customer.OfferStart = cashRequest.OfferStart;
+            customer.OfferValidUntil = cashRequest.OfferValidUntil;
             customer.CreditResult = null;
-
-            cashRequest.OfferStart = customer.OfferStart;
-            cashRequest.OfferValidUntil = customer.OfferValidUntil;
 
             _crm.UpdateCashRequest(cashRequest);
 
             _crm.CreateOffer(customer, cashRequest);
 
-            if (customer.CustomerMarketPlaces.Any(x => x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays))
-            {
-                //UpdateAllMarketplaces не успевает проставить UpdatingEnd = null для того что бы MainStrategy подождала окончание его работы
-                foreach (var val in customer.CustomerMarketPlaces)
-                {
-                    val.UpdatingEnd = null;
-                }
-                _creator.UpdateAllMarketplaces(customer);
-            }
-            _creator.Evaluate(_users.Get(Id), false);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
