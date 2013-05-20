@@ -236,6 +236,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="IsValidCard" value="True" />
 		<property name="EnableCardLimit" value="False" />
 		<property name="CardLimitAmount" value="False" />
+        <property name="EnableDebugErrorCodeN" value="True" />
     </module>
     <module id="Experian">
         <!--consumer-->
