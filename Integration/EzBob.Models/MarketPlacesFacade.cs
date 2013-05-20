@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
@@ -41,11 +42,6 @@ namespace EzBob.Web.Areas.Underwriter
                 mp =>
                 {
                     var isAmazon = mp.Marketplace.Name == "Amazon";
-                    var data = new Dictionary<string, string>();
-
-                    var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-                    var av =
-                        analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 
                     var amazonFeedback = mp.AmazonFeedback.LastOrDefault();
                     var amazonSellerRating = amazonFeedback != null ? amazonFeedback.UserRaining : 0;
@@ -82,19 +78,8 @@ namespace EzBob.Web.Areas.Underwriter
                     var categories = _ebayAmazonCategoryRepository.CategoryForMarketplace(mp);
                     var categorieValues = categories.Select(x => x.Name);
 
-                    if (av != null)
-                    {
-                        foreach (var info in av)
-                        {
-                            var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
-                            string temp;
-                            data.TryGetValue(val, out temp);
-                            if (temp == null)
-                            {
-                                data.Add(val, info.Value.ToString());
-                            }
-                        }
-                    }
+                    var data = GetAnalysisFunctionValues(mp);
+
                     var sellerInfoStoreUrl = SellerInfoStoreUrl(mp, isAmazon, ebayUserData);
 
                     var askvilleTmp = askville.GetAskvilleByMarketplace(mp);
@@ -142,6 +127,31 @@ namespace EzBob.Web.Areas.Underwriter
                         };
                 });
             return models;
+        }
+
+        private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)
+        {
+            var data = new Dictionary<string, string>();
+
+            var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+            var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+
+
+            if (av != null)
+            {
+                foreach (var info in av)
+                {
+                    var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
+                    string temp;
+                    data.TryGetValue(val, out temp);
+                    if (temp == null)
+                    {
+                        data.Add(val, info.Value.ToString());
+                    }
+                }
+            }
+
+            return data;
         }
 
         private YodleeModel BuildYodlee(IEnumerable<MP_YodleeOrderItem> yodleeData)
