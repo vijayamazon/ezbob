@@ -1,0 +1,94 @@
+﻿<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#paypointtab1" data-toggle="tab">Orders</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="paypointtab1">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sum of authorised orders</td>
+                        <td><%-ai.SumofOrders1M!=undefined ? GBPValues(ai.SumofOrders1M, true): "-"%></td>
+                        <td><%-ai.SumofOrders3M!=undefined ? GBPValues(ai.SumofOrders3M, true): "-"%></td>
+                        <td><%-ai.SumofOrders6M!=undefined ? GBPValues(ai.SumofOrders6M, true): "-"%></td>
+                        <td><%-ai.SumofOrders12M!=undefined ? GBPValues(ai.SumofOrders12M, true): "-"%></td>
+                        <td><%-ai.SumofOrders15M!=undefined ? GBPValues(ai.SumofOrders15M, true): "-"%></td>
+                        <td><%-ai.SumofOrders18M!=undefined ? GBPValues(ai.SumofOrders18M, true): "-"%></td>
+                        <td><%-ai.SumofOrders24M!=undefined ? GBPValues(ai.SumofOrders24M, true): "-"%></td>
+                        <td><%-ai.SumofOrdersLifetime!=undefined ? GBPValues(ai.SumofOrdersLifetime, true): "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Number of orders</td>
+                        <td><%-ai.NumofOrders1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders1M) : "-"%></td>
+                        <td><%-ai.NumofOrders3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders3M) : "-"%></td>
+                        <td><%-ai.NumofOrders6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders6M) : "-"%></td>
+                        <td><%-ai.NumofOrders12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders12M) : "-"%></td>
+                        <td><%-ai.NumofOrders15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders15M) : "-"%></td>
+                        <td><%-ai.NumofOrders18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders18M) : "-"%></td>
+                        <td><%-ai.NumofOrders24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders24M) : "-"%></td>
+                        <td><%-ai.NumofOrdersLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrdersLifetime) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Orders Average</td>
+                        <td><%-ai.AverageOrder1M!=undefined ? GBPValues(ai.AverageOrder1M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder3M!=undefined ? GBPValues(ai.AverageOrder3M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder6M!=undefined ? GBPValues(ai.AverageOrder6M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder12M!=undefined ? GBPValues(ai.AverageOrder12M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder15M!=undefined ? GBPValues(ai.AverageOrder15M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder18M!=undefined ? GBPValues(ai.AverageOrder18M, true) : "-"%></td>
+                        <td><%-ai.AverageOrder24M!=undefined ? GBPValues(ai.AverageOrder24M, true) : "-"%></td>
+                        <td><%-ai.AverageOrderLifetime!=undefined ? GBPValues(ai.AverageOrderLifetime, true) : "-"%></td>
+                    </tr>                                
+                    <tr>
+                        <td>Num Of Failures</td>
+                        <td><%-ai.NumofFailures1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures1M) : "-"%></td>
+                        <td><%-ai.NumofFailures3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures3M) : "-"%></td>
+                        <td><%-ai.NumofFailures6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures6M) : "-"%></td>
+                        <td><%-ai.NumofFailures12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures12M) : "-"%></td>
+                        <td><%-ai.NumofFailures15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures15M) : "-"%></td>
+                        <td><%-ai.NumofFailures18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures18M) : "-"%></td>
+                        <td><%-ai.NumofFailures24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailures24M) : "-"%></td>
+                        <td><%-ai.NumofFailuresLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofFailuresLifetime) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Cancellation Rate</td>
+                        <td><%-ai.CancellationRate1M!=undefined ? EzBob.roundNumber(ai.CancellationRate1M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate3M!=undefined ? EzBob.roundNumber(ai.CancellationRate3M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate6M!=undefined ? EzBob.roundNumber(ai.CancellationRate6M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate12M!=undefined ? EzBob.roundNumber(ai.CancellationRate12M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate15M!=undefined ? EzBob.roundNumber(ai.CancellationRate15M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate18M!=undefined ? EzBob.roundNumber(ai.CancellationRate18M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRate24M!=undefined ? EzBob.roundNumber(ai.CancellationRate24M*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationRateLifetime!=undefined ? EzBob.roundNumber(ai.CancellationRateLifetime*cancellationRateFactor, cancellationRateRound) + "%" : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Cancellation Value</td>
+                        <td><%-ai.CancellationValue1M!=undefined ? EzBob.roundNumber(ai.CancellationValue1M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue3M!=undefined ? EzBob.roundNumber(ai.CancellationValue3M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue6M!=undefined ? EzBob.roundNumber(ai.CancellationValue6M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue12M!=undefined ? EzBob.roundNumber(ai.CancellationValue12M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue15M!=undefined ? EzBob.roundNumber(ai.CancellationValue15M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue18M!=undefined ? EzBob.roundNumber(ai.CancellationValue18M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValue24M!=undefined ? EzBob.roundNumber(ai.CancellationValue24M*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                        <td><%-ai.CancellationValueLifetime!=undefined ? EzBob.roundNumber(ai.CancellationValueLifetime*cancellationValueFactor, cancellationValueRound) + "%" : "-"%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

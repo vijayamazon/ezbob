@@ -1,0 +1,227 @@
+﻿<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Orders</a></li>
+        <li><a href="#tab2" data-toggle="tab">Feedbacks</a></li>
+        <li><a href="#tab3" data-toggle="tab">Inventory</a></li>
+        <li><a href="#tab4" data-toggle="tab">Categories</a></li>
+        <li><a href="#tab6" data-toggle="tab">Account details</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total sum of orders</td>
+                        <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders12M!=undefined ? GBPValues(ai.TotalSumofOrders12M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders15M!=undefined ? GBPValues(ai.TotalSumofOrders15M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true): "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Number of orders</td>
+                        <td><%-ai.NumofOrders1M  || "-"%></td>
+                        <td><%-ai.NumofOrders3M  || "-"%></td>
+                        <td><%-ai.NumofOrders6M  || "-"%></td>
+                        <td><%-ai.NumofOrders12M  || "-"%></td>
+                        <td><%-ai.NumofOrders15M  || "-"%></td>
+                        <td><%-ai.NumofOrders18M  || "-"%></td>
+                        <td><%-ai.NumofOrders24M  || "-"%></td>
+                        <td><%-ai.NumofOrdersLifetime  || "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Total items ordered</td>
+                        <td><%-ai.TotalItemsOrdered1M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered3M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered6M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered12M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered15M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered18M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrdered24M  || "-"%></td>
+                        <td><%-ai.TotalItemsOrderedLifetime  || "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Average items per order</td>
+                        <td><%-ai.AverageItemsperOrder1M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder1M, 1) + "x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder3M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder3M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder6M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder6M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder12M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder12M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder15M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder15M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder18M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder18M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrder24M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder24M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsperOrderLifetime != undefined ? EzBob.roundNumber( ai.AverageItemsperOrderLifetime, 1)+"x" : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Average sum of order</td>
+                        <td><%-ai.AverageSumofOrder1M!=undefined ? GBPValues(ai.AverageSumofOrder1M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder3M!=undefined ? GBPValues(ai.AverageSumofOrder3M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder6M!=undefined ? GBPValues(ai.AverageSumofOrder6M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder12M!=undefined ? GBPValues(ai.AverageSumofOrder12M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder15M!=undefined ? GBPValues(ai.AverageSumofOrder15M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder18M!=undefined ? GBPValues(ai.AverageSumofOrder18M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrder24M!=undefined ? GBPValues(ai.AverageSumofOrder24M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumofOrderLifetime!=undefined ? GBPValues(ai.AverageSumofOrderLifetime, true) + "x" : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Cancelled orders count</td>
+                        <td><%-ai.CancelledOrdersCount1M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount3M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount6M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount12M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount15M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount18M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCount24M  || "-"%></td>
+                        <td><%-ai.CancelledOrdersCountLifetime  || "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Orders cancellation rate</td>
+                        <td><%-ai.OrdersCancellationRate1M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate1M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate3M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate3M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate6M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate6M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate12M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate12M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate15M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate15M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate18M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate18M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRate24M!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRate24M*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                        <td><%-ai.OrdersCancellationRateLifetime!=undefined ? EzBob.roundNumber(ai.OrdersCancellationRateLifetime*cancellationRateFactor, cancellationRateRound) + "%" : ""%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>30 days</th>
+                        <th>90 days</th>
+                        <th>1 year</th>
+                        <th>Lifetime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Positive</td>
+                        <td><%-ai.PositiveFeedbackRate1M%> (<%-positivePercent1M%>%)</td>
+                        <td><%-ai.PositiveFeedbackRate3M%> (<%-positivePercent3M%>%)</td>
+                        <td><%-ai.PositiveFeedbackRate12M%> (<%-positivePercent12M%>%)</td>
+                        <td><%-ai.PositiveFeedbackRateLifetime%> (<%-positivePercentLifetime%>%)</td>
+                    </tr>
+                    <tr>
+                        <td>Neutral</td>
+                        <td><%-ai.NeutralFeedbackrate1M%> (<%-neutralPercent1M%>%)</td>
+                        <td><%-ai.NeutralFeedbackrate3M%> (<%-neutralPercent3M%>%)</td>
+                        <td><%-ai.NeutralFeedbackrate12M%> (<%-neutralPercent12M%>%)</td>
+                        <td><%-ai.NeutralFeedbackrateLifetime%> (<%-neutralPercentLifetime%>%)</td>
+                    </tr>
+                    <tr>
+                        <td>Negative</td>
+                        <td><%-ai.NegativeFeedbackrate1M%> (<%-negativePercent1M%>%)</td>
+                        <td><%-ai.NegativeFeedbackrate3M%> (<%-negativePercent3M%>%)</td>
+                        <td><%-ai.NegativeFeedbackrate12M%> (<%-negativePercent12M%>%)</td>
+                        <td><%-ai.NegativeFeedbackrateLifetime%> (<%-negativePercentLifetime%>%)</td>
+                    </tr>
+                    <tr>
+                        <td>Number of reviews</td>
+                        <td><%-sumReview1M%></td>
+                        <td><%-sumReview3M%></td>
+                        <td><%-sumReview12M%></td>
+                        <td><%-sumReviewLifetime%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab3">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Parameter name</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Items in Inventory</td>
+                        <td><%-m.AnalysisDataInfo.TotalItemsinInventoryLifetime || "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Total Value of Inventory</td>
+                        <td><%-GBPValues( m.AnalysisDataInfo.TotalValueofInventoryLifetime  || 0, true )%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab4">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <tbody>
+                    <%if(m.Categories.length == 0){%>
+                    <tr>
+                        <td><i>No data in database</i></td>
+                    </tr>
+                    <%}%>
+
+                        <%_.each(m.Categories, function(val, i){%>
+                        <tr>
+                            <td><%-val%></td>
+                        </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab5">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Parameter name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Not implemented now</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab6">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+
+                    <tr>
+                        <th>Parameter name</th>
+                        <th colspan="2">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>StoreURL</td>
+                        <td colspan="2">
+                            <a target="_blank" href="<%- m.SellerInfoStoreURL %>"><%-m.SellerInfoStoreURL%></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Askville status</td>
+                        <td class="askvilleStatus"><%-m.AskvilleStatus%></td>
+                        <td style="width: 100px;">
+                            <button class="btn" id="recheck-askville" data-guid="<%-m.AskvilleGuid%>" data-marketplaceid="<%-m.Id%>"><i class="icon-refresh"></i>Recheck</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
