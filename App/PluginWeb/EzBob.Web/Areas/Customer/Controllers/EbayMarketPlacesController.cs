@@ -165,7 +165,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (! isUpdate)
                 {
-                    _creator.EbayAdded(_context.Customer, mp.Id);
+                    _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
                 }
 
                 if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)

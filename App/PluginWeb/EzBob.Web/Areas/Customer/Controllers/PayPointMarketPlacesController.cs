@@ -84,7 +84,7 @@
 					customer.WizardStep = WizardStepType.Marketplace;
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
 
-                _appCreator.EbayAdded(customer, payPoint.Id);
+                _appCreator.CustomerMarketPlaceAdded(customer, payPoint.Id);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException e)

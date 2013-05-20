@@ -27,11 +27,7 @@ namespace ezmanage
         {
         }
 
-        public void EbayAdded(Customer user, int umi)
-        {
-        }
-
-        public void PayPalAdded(Customer user, int umi)
+        public void CustomerMarketPlaceAdded(Customer user, int umi)
         {
         }
 
@@ -44,10 +40,6 @@ namespace ezmanage
                                                    string district, string town, string county, string postcode,
                                                    string bankAccount,
                                                    string sortCode)
-        {
-        }
-
-        public void AmazonAdded(Customer user, int umi)
         {
         }
 

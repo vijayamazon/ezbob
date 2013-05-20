@@ -66,18 +66,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             switch(mp.Marketplace.Name)
             {
                 case "Amazon":
-                    _appCreator.AmazonAdded(customer, umi);
-                    break;
 				case "eBay":
 				case "EKM":
 				case "Yodlee": 
                 case "Volusion": 
                 case "Play": 
                 case "PayPoint": 
-                    _appCreator.EbayAdded(customer, umi);
-                    break;
                 case "Pay Pal": 
-                    _appCreator.PayPalAdded(customer, umi);
+                    _appCreator.CustomerMarketPlaceAdded(customer, umi);
                     break;
             }
         }

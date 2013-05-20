@@ -100,7 +100,7 @@
 			//		_customer.WizardStep = WizardStepType.Marketplace;
 
 			//	_session.Flush();
-			//	_appCreator.EbayAdded(customer, mp.Id);
+			//	_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 
 			//	return this.JsonNet(YodleeAccountModel.ToModel(mp));
 			//}
@@ -170,7 +170,7 @@
 			_helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace, securityData, customer);
 			
 			_session.Flush();
-			//_appCreator.YodleeAdded(_context.Customer, mp.Id); // TODO: activate strategy
+			_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
 			//return View("someview");
 			return null;

@@ -95,7 +95,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 					_customer.WizardStep = WizardStepType.Marketplace;
 
                 _session.Flush();
-                _appCreator.EbayAdded(customer, mp.Id);
+                _appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 				
                 return this.JsonNet(EkmAccountModel.ToModel(mp));
             }

@@ -217,7 +217,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             }
             var customer = _customers.Get(customerId);
             _customerMarketplaces.ClearUpdatingEnd(umi);
-            _appCreator.PayPalAdded(customer, umi);
+			_appCreator.CustomerMarketPlaceAdded(customer, umi);
         }
 
         [Ajax]

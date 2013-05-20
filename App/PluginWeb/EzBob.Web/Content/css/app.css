@@ -272,10 +272,6 @@ ul.documents {
     box-shadow: 0 0 10px #71a61f;
 }
 
-.source_labels {
-    display: inline-block;
-}
-
 .source_description {
     padding: 10px;
     width: 90%;
@@ -323,6 +319,10 @@ div.shop-connected {
     width: 9px;
     height: 9px;
     vertical-align: middle;
+}
+
+.source_labels {
+    display: inline-block;
 }
 
 .source_labels, .source_labels_on {

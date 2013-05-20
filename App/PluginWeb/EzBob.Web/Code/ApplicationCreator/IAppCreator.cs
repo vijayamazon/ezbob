@@ -11,12 +11,10 @@ namespace EzBob.Web.ApplicationCreator
         void ThreeInvalidAttempts(User user, string firstName, string password);
         void PasswordChanged(User user, string firstName, string password);
         void PasswordRestored(User user, string emailTo, string firstName,  string password);
-        void EbayAdded(Customer user, int umi);
-        void PayPalAdded(Customer user, int umi);
+        void CustomerMarketPlaceAdded(Customer user, int umi);
         void Evaluate(User user, bool isUnderwriterForced = false);
         void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
                                        string district, string town, string county, string postcode, string bankAccount, string sortCode);
-        void AmazonAdded(Customer user, int umi);
         void GetCashFailed(User user, string firstName);
         void PayEarly(User user,  DateTime date, decimal? amount, string firstName );
         void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer);

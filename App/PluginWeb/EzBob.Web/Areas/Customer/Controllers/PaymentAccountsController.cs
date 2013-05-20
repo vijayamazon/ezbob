@@ -96,7 +96,7 @@
 			_helper.SaveOrUpdateAcctountInfo( mp, personalData );
             
 			_session.Flush();
-            _creator.PayPalAdded(_context.Customer, mp.Id);
+            _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
             return View(rermissionsGranted);
         }

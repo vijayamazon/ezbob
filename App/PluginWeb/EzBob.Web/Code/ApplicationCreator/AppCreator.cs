@@ -109,7 +109,7 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.RestorePasswordStrategyName);
         }
 
-        public void EbayAdded(Customer customer, int umi)
+        public void CustomerMarketPlaceAdded(Customer customer, int umi)
         {
             var strategyParameters = new[]
                                              {
@@ -118,19 +118,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("userId", customer.Id)
                                              };
             var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.EbayStrategyName);
-        }
-
-        public void PayPalAdded(Customer customer, int umi)
-        {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("umi", umi),
-                                                 new StrategyParameter("refNum", customer.RefNumber),
-                                                 new StrategyParameter("userId", customer.Id)
-                                             };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.PayPalStrategyName);
+            CreateApplication(user, strategyParameters, _config.CustomerMarketPlaceStrategyName);
         }
 
         public void Evaluate(User user, bool isUnderwriterForced = false)
@@ -165,18 +153,6 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("idhubBranchCode", sortCode)
                                          };
             CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
-        }
-
-        public void AmazonAdded(Customer customer, int umi)
-        {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("umi", umi),
-                                                 new StrategyParameter("refNum", customer.RefNumber),
-                                                 new StrategyParameter("userId", customer.Id)
-                                             };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.AmazonStrategyName);
         }
 
         public void GetCashFailed(User user, string firstName)

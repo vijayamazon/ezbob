@@ -15,8 +15,7 @@ namespace EzBob.Web.Infrastructure
         string ChangePasswordStrategyName { get; }
         string ThreeInvalidAttemptsStrategyName { get; }
         string ScoringResultStrategyName { get; }
-        string AmazonStrategyName { get; }
-        string EbayStrategyName { get; }
+        string CustomerMarketPlaceStrategyName { get; }
         string PayPalStrategyName { get; }
         bool CheckStoreUniqueness { get; }
         string PostcodeConnectionKey { get; }
@@ -100,14 +99,9 @@ namespace EzBob.Web.Infrastructure
             get { return GetValueWithDefault<string>("ScoringResultStrategyName", "ScoringResult"); }
         }
 
-        public string AmazonStrategyName
+        public string CustomerMarketPlaceStrategyName
         {
-            get { return GetValueWithDefault<string>("AmazonStrategyName", "Amazon"); }
-        }
-
-        public string EbayStrategyName
-        {
-            get { return GetValueWithDefault<string>("EbayStrategyName", "Amazon"); }
+			get { return GetValueWithDefault<string>("CustomerMarketPlaceStrategyName", "Update Customer Market Place Data"); }
         }
 
         public string PayPalStrategyName

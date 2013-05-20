@@ -137,7 +137,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					customer.WizardStep = WizardStepType.Marketplace;
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
 
-				_appCreator.EbayAdded(customer, mp.Id); // TODO: implement and use VolusionAdded
+				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id); // TODO: implement and use VolusionAdded
 
 				return this.JsonNet(VolusionAccountModel.ToModel(mp));
 			}

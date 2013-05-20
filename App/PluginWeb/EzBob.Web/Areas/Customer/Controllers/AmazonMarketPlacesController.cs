@@ -167,7 +167,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer);
 
                 _session.Flush();
-                _creator.AmazonAdded(_context.Customer, marketplace.Id);
+                _creator.CustomerMarketPlaceAdded(_context.Customer, marketplace.Id);
 
                 if (_config.AskvilleEnabled)
                 {
