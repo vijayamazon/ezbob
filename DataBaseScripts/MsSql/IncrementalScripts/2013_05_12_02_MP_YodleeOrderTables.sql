@@ -45,13 +45,13 @@ CREATE TABLE dbo.MP_YodleeOrderItem
     ,customName NVARCHAR(300)
     ,customDescription NVARCHAR(300)
     ,isDeleted INT 
-    ,isDeletedSpecified NVARCHAR(300)
+    ,isDeletedSpecified BIT
     ,lastUpdated INT 
     ,lastUpdatedSpecified BIT 
     ,hasDetails INT 
-    ,hasDetailsSpecified INT 
+    ,hasDetailsSpecified BIT 
     ,interestRate FLOAT  
-    ,interestRateSpecified FLOAT
+    ,interestRateSpecified BIT
     ,accountNumber NVARCHAR(300)
     ,link NVARCHAR(300)
     ,accountHolder NVARCHAR(300)
