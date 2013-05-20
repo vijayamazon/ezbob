@@ -138,7 +138,7 @@ namespace EzBob.Web.Areas.Underwriter
                             SellerInfoStoreURL = sellerInfoStoreUrl,
                             Categories = categorieValues,
                             EBay = BuildEBay(ebayUserData, ebayAccount, ebayFeedBack),
-                            Yodlee = BuildYodlee(yodleeData)
+                            Yodlee = yodleeData != null ? BuildYodlee(yodleeData) : null
                         };
                 });
             return models;

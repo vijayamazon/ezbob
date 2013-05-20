@@ -170,13 +170,36 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
                     .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
                     .Where(oi => oi.PurchaseDate != null)
                     .Select(oi => oi.PurchaseDate).Min();
-
                 case "eBay": return
                     _session.Query<MP_EbayUserData>()
                     .Where(eud => eud.CustomerMarketPlace.Id == marketplaceId)
                     .Where(eud => eud.RegistrationDate != null)
                     .Select(eud => eud.RegistrationDate).Min();
-
+                case "EKM": return
+                    _session.Query<MP_EkmOrderItem>()
+                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                    .Where(oi => oi.OrderDate != null)
+                    .Select(oi => oi.OrderDate).Min();
+                case "Volusion": return
+                    _session.Query<MP_VolusionOrderItem>()
+                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                    .Where(oi => oi.PaymentDate != null)
+                    .Select(oi => oi.PaymentDate).Min();
+                case "PayPoint": return
+                    _session.Query<MP_PayPointOrderItem>()
+                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                    .Where(oi => oi.date != null)
+                    .Select(oi => oi.date).Min();
+                case "Play": return
+                    _session.Query<MP_PlayOrderItem>()
+                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                    .Where(oi => oi.PaymentDate != null)
+                    .Select(oi => oi.PaymentDate).Min();
+                case "Yodlee": return
+                    _session.Query<MP_YodleeOrderItem>()
+                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                    .Where(oi => oi.accountOpenDate != null)
+                    .Select(oi => oi.accountOpenDate).Min();
                 default:
                     return null;
             }

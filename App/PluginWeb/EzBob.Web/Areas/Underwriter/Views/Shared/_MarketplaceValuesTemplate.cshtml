@@ -13,7 +13,6 @@
             if(!ai) { ai = new Object();}
             var y = m.Yodlee;
             var marketplaceType = m.Name;
-            console.log(m,y,marketplaceType);
             var 
                 sumReview1M = ai.NegativeFeedbackrate1M * 1.0 + ai.PositiveFeedbackRate1M * 1.0 + ai.NeutralFeedbackrate1M * 1.0,
                 sumReview3M = ai.NegativeFeedbackrate3M * 1.0 + ai.PositiveFeedbackRate3M * 1.0 + ai.NeutralFeedbackrate3M * 1.0,
@@ -1078,13 +1077,13 @@
             </div>
             <%}%>
             @* *** Yodlee   *** *@
-            <%if(marketplaceType == "Yodlee"){ console.log('yodlee');%>
+            <%if(marketplaceType == "Yodlee"){%>
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#yodleetab1" data-toggle="tab">Aggregates</a></li>
                     <li><a href="#yodleetab2" data-toggle="tab">Bank Account Details</a></li>
                     <%_.each(y.banks, function(bank, i) {%>
-                        <li><a href="#yodleetab<%= (i + 3) %>" data-toggle="tab">Bank <%= (i+1) %> Transactions</a></li>
+                        <li><a href="#yodleetab<%= (i + 3) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
                     <%});%>
                 </ul>
                 <div class="tab-content">
