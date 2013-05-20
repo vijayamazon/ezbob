@@ -1083,7 +1083,7 @@
                     <li class="active"><a href="#yodleetab1" data-toggle="tab">Aggregates</a></li>
                     <li><a href="#yodleetab2" data-toggle="tab">Bank Account Details</a></li>
                     <%_.each(y.banks, function(bank, i) {%>
-                        <li><a href="#yodleetab<%= (i + 3) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
+                        <li><a href="#yodleetab<%= (i + 3) %>" id="yodleeTabLink<%= (i + 3) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
                     <%});%>
                 </ul>
                 <div class="tab-content">
@@ -1171,7 +1171,7 @@
                             </thead>
                             <tbody>
                                 <%_.each(y.banks, function(bank, i) {%>
-                                <tr onclick="window.location='#yodleetab<%= (i+3)%>'">
+                                <tr onclick="$('#yodleeTabLink<%= (i + 3) %>').click();">
                                     <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                                     <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
                                     <td><%-bank.availableBalance!=undefined ? bank.availableBalance : "-"%></td>
