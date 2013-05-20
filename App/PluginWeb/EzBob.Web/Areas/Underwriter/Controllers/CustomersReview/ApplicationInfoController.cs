@@ -326,7 +326,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             var customer = _customerRepository.Get(Id);
 
-            var cashRequest = _crBuilder.CreateCashRequest(customer);
+            var currentRequest = customer.LastCashRequest;
+            var cashRequest = _crBuilder.CloneCashRequest(customer, currentRequest);
             cashRequest.LoanType = customer.LastCashRequest.LoanType;
 
             _crBuilder.ForceEvaluate(customer, false);
