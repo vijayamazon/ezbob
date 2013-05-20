@@ -473,6 +473,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal LastLoanAmount { get; set; }
         public virtual decimal TotalPrincipalRepaid { get; set; }
         public virtual DateTime? NextRepaymentDate { get; set; }
+        public virtual DateTime? DateOfLate { get; set; }
 	}
 
 

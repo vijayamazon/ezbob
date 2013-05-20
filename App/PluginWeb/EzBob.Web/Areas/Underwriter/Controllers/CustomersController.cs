@@ -360,6 +360,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLate()
         {
             var gridModel = CreateColumnsApproved();
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.DateOfLatePayment(gridModel);
+            gridModel.Columns.First(x => x.Index == "OfferValidUntil").Hidden = true;
             GridHelpers.CreateDelinquencyColumn(gridModel);
             return gridModel;
         }

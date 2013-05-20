@@ -305,6 +305,13 @@ namespace EZBob.DatabaseLib.Model.Database {
                         order by s.[Date])")
                 .Not.Insert()
                 .Not.Update();
+            Map(x => x.DateOfLate)
+                .Formula(
+                    @"(select MIN(s.[Date]) from [Loan] l left join [LoanSchedule] s
+                     on l.Id = s.[LoanId] 
+                     where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
+                .Not.Insert()
+                .Not.Update();
         }
 	}
 }

@@ -125,11 +125,11 @@ namespace EzBob.Web.Areas.Underwriter
                     Name = "Amount",
                     Index = "SystemCalculatedSum",
                     Search = true,
-                    Resizable = true,
+                    Resizable = false,
                     Align = Align.Center,
                     Title = false,
                     Hidden = false,
-                    Sortable = false,
+                    Sortable = true,
                     Fixed = false,
                     Width = 75,
                     DataType = TypeCode.Decimal,
@@ -143,7 +143,7 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = "Approved Manually",
                     Name = "ManualAmount",
-                    Index = "ManualSum",
+                    Index = "ManagerApprovedSum",
                     Search = true,
                     Sortable = true,
                     Resizable = false,
@@ -600,7 +600,7 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = "Delinquency",
                     Name = "Delinquency",
-                    Index = "Id",
+                    Index = "Delinquency",
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
@@ -670,7 +670,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Search = true,
                     Sortable = true,
                     Width = 65,
-                    DataType = TypeCode.String,
+                    DataType = TypeCode.Decimal,
                     Data = x => x.OutstandingBalance
                 });
         }
@@ -710,7 +710,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Search = true,
                 Sortable = true,
                 Width = 85,
-                DataType = TypeCode.String,
+                DataType = TypeCode.DateTime,
                 Data = x => x.FirstLoanDate,
                 Formatter = "dateNative"
             });
@@ -731,7 +731,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Search = true,
                 Sortable = true,
                 Width = 85,
-                DataType = TypeCode.String,
+                DataType = TypeCode.DateTime,
                 Data = x => x.LastLoanDate,
                 Formatter = "dateNative"
             });
@@ -743,7 +743,7 @@ namespace EzBob.Web.Areas.Underwriter
             {
                 Caption = "Last Loan Amount",
                 Name = "LastLoanAmount",
-                Index = "Loans.Amount",
+                Index = "LastLoanAmount",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
@@ -752,7 +752,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Search = true,
                 Sortable = true,
                 Width = 105,
-                DataType = TypeCode.String,
+                DataType = TypeCode.Decimal,
                 Data = x => x.LastLoanAmount
             });
         }
@@ -772,7 +772,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Search = true,
                 Sortable = true,
                 Width = 115,
-                DataType = TypeCode.String,
+                DataType = TypeCode.Decimal,
                 Data = x => x.TotalPrincipalRepaid
             });
         }
@@ -783,7 +783,7 @@ namespace EzBob.Web.Areas.Underwriter
             {
                 Caption = "Next Repayment Date",
                 Name = "LastLoanAmount",
-                Index = "Loans.Amount",
+                Index = "NextRepaymentDate",
                 Resizable = false,
                 Align = Align.Center,
                 Title = false,
@@ -792,9 +792,30 @@ namespace EzBob.Web.Areas.Underwriter
                 Search = true,
                 Sortable = true,
                 Width = 115,
-                DataType = TypeCode.String,
+                DataType = TypeCode.DateTime,
                 Formatter = "dateNative",
                 Data = x => x.NextRepaymentDate
+            });
+        }
+
+        public static void DateOfLatePayment(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Date of Late Payment",
+                Name = "DateOfLate",
+                Index = "DateOfLate",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = true,
+                Sortable = true,
+                Width = 125,
+                DataType = TypeCode.DateTime,
+                Formatter = "dateNative",
+                Data = x => x.DateOfLate
             });
         }
     }
