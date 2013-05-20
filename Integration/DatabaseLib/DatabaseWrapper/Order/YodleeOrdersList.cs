@@ -1,46 +1,96 @@
 using System;
 using System.Collections.Generic;
-using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
 using EzBob.CommonLib.ReceivedDataListLogic;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 {
-    public class YodleeOrderItem
+    using System.Linq;
+
+    public class YodleeOrderDictionary
     {
         public Dictionary<BankData, List<BankTransactionData>> Data { get; set; }
     }
 
     public class YodleeTransactionItem : TimeDependentRangedDataBase
     {
-        private BankTransactionData _Data;
+        public BankTransactionData _Data { get; private set; }
         public YodleeTransactionItem(BankTransactionData data)
         {
-            this._Data = data;
+            _Data = data;
         }
 
         public override DateTime RecordTime
         {
-            get { return _Data.transactionDate.date.Value; }
+            get
+            {
+                DateTime date;
+                if (_Data.transactionDate != null && _Data.transactionDate.dateSpecified && _Data.transactionDate.date != null)
+                {
+                    date = _Data.transactionDate.date.Value;
+                }
+                else if (_Data.postDate != null && _Data.postDate.dateSpecified && _Data.postDate.date != null)
+                {
+                    date = _Data.postDate.date.Value;
+                }
+                else
+                {
+                    date = DateTime.UtcNow;
+                }
+                return date;
+            }
         }
     }
 
     public class YodleeTransactionList : ReceivedDataListTimeMarketTimeDependentBase<YodleeTransactionItem>
     {
-        public YodleeTransactionList(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection = null) : base(submittedDate, collection)
+        public YodleeTransactionList(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection = null)
+            : base(submittedDate, collection)
         {
         }
 
-        public static YodleeTransactionList Create(YodleeOrderItem item) 
+        public static YodleeTransactionList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
         {
-            //todo: dict to  YodleeTransactionItem
-            return null;
+            List<YodleeTransactionItem> list = (from item in dictionary.Data.Keys from bankTransaction in dictionary.Data[item] select new YodleeTransactionItem(bankTransaction)).ToList();
+            return new YodleeTransactionList(submittedDate, list);
         }
 
         public override ReceivedDataListTimeDependentBase<YodleeTransactionItem> Create(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection)
         {
             return new YodleeTransactionList(submittedDate, collection);
+        }
+    }
+
+    public class YodleeAccountItem : TimeDependentRangedDataBase
+    {
+        public BankData _Data { get; private set; }
+        public YodleeAccountItem(BankData data)
+        {
+            _Data = data;
+        }
+
+        public override DateTime RecordTime
+        {
+            get { return _Data.asOfDate != null && _Data.asOfDate.dateSpecified ? _Data.asOfDate.date.Value : DateTime.UtcNow; }
+        }
+    }
+
+    public class YodleeAccountList : ReceivedDataListTimeMarketTimeDependentBase<YodleeAccountItem>
+    {
+        public YodleeAccountList(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection = null)
+            : base(submittedDate, collection)
+        {
+        }
+
+        public static YodleeAccountList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
+        {
+            List<YodleeAccountItem> list = dictionary.Data.Keys.Select(yodleeAccountItem => new YodleeAccountItem(yodleeAccountItem)).ToList();
+            return new YodleeAccountList(submittedDate, list);
+        }
+
+        public override ReceivedDataListTimeDependentBase<YodleeAccountItem> Create(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection)
+        {
+            return new YodleeAccountList(submittedDate, collection);
         }
     }
 

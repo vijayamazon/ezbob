@@ -38,9 +38,10 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public List<MP_YodleeOrderItem> GetOrdersItemsByMakretplaceId(int marketplaceId)
         {
+            var yodleeOrder = _session.Query<MP_YodleeOrder>().OrderBy(o => o.Id).AsEnumerable().Last(o => o.CustomerMarketPlace.Id == marketplaceId);
             return _session
                 .Query<MP_YodleeOrderItem>()
-                .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+                .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId && oi.Order == yodleeOrder)
                 .FetchMany(oi => oi.OrderItemBankTransactions)
                 .ToList();
         }

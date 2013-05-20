@@ -764,7 +764,7 @@ namespace EZBob.DatabaseLib
             _CustomerMarketplaceRepository.Update(customerMarketPlace);
         }
 
-        public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderItem ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+        public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
@@ -1990,6 +1990,30 @@ namespace EZBob.DatabaseLib
             return _session.Query<MP_YodleeOrderItemBankTransaction>();
         }
 
+        public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+        {
+            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+            var orders = new EkmOrdersList(submittedDate);
+
+            orders.AddRange(customerMarketPlace.EkmOrders.SelectMany(ekmOrder => ekmOrder.OrderItems).Select(o => new EkmOrderItem
+                {
+                    OrderNumber = o.OrderNumber,
+                    CustomerID = o.CustomerId,
+                    CompanyName = o.CompanyName,
+                    FirstName = o.FirstName,
+                    LastName = o.LastName,
+                    EmailAddress = o.EmailAddress,
+                    TotalCost = o.TotalCost,
+                    OrderDate = o.OrderDate,
+                    OrderStatus = o.OrderStatus,
+                    OrderDateIso = o.OrderDateIso,
+                    OrderStatusColour = o.OrderStatusColour,
+                    
+                }).Distinct());
+
+            return orders;
+        }
     }
 
     public class eBayFindOrderItemInfoData

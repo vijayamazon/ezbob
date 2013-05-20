@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
 using EzBob.CommonLib.ReceivedDataListLogic;
 using EzBob.CommonLib.TimePeriodLogic;
 

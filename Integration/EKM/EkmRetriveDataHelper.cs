@@ -30,7 +30,6 @@ namespace EKM
         {
             var securityInfo = (EkmSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
 
-            //store orders
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
         }
 
@@ -39,33 +38,40 @@ namespace EKM
             //retreive data from ekm api
             var ordersList = EkmConnector.GetOrders(securityInfo.Name, securityInfo.Password);
 
-            var ekmOrderItem = new List<EkmOrderItem>();
+            var ekmOrderList = new List<EkmOrderItem>();
             foreach (var order in ordersList)
             {
                 try
                 {
-                    ekmOrderItem.Add(order.ToEkmOrderItem());
+                    ekmOrderList.Add(order.ToEkmOrderItem());
                 }
                 catch (Exception e)
                 {
                     log.Error("Failed to create EKMOrderItem", e);
-                    log.DebugFormat("Original order is: {0}", order.ToString());
+                    log.DebugFormat("Original order is: {0}", order);
                     throw;
                 }
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-            var allOrders = new EkmOrdersList(DateTime.UtcNow, ekmOrderItem);
+
+            var newOrders = new EkmOrdersList(DateTime.UtcNow, ekmOrderList);
+            //store orders
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
-                                    () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));
+                                    () => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, newOrders, historyRecord));
 
+            //retrieve orders
+            var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                                    ElapsedDataMemberType.RetrieveDataFromDatabase,
+                                    () => Helper.GetAllEkmOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
-            //store agregated
+            //calculate aggregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.AggregateData,
-                                    () => { return CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter); });
-            // Save
+                                    () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
+            
+            // store aggregated
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
                             () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
