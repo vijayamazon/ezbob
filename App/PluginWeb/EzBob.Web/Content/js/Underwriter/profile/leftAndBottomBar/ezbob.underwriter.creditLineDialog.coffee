@@ -80,7 +80,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         AllowSendingEmail:
             selector: "input[name='allowSendingEmail']"
         IsLoanTypeSelectionAllowed:
-            selector: "input[name='isLoanTypeSelectionAllowed']"
+            selector: "select[name='isLoanTypeSelectionAllowed']"
 
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings
