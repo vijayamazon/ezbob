@@ -572,11 +572,7 @@
       , target = (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7
       , option = $(target).data('collapse') ? 'toggle' : $this.data()
   	$this[$(target).hasClass('in') ? 'addClass' : 'removeClass']('collapsed')
-  	console.log('a')
-  	console.log($(target))
   	$(target).collapse(option)
-  	console.log('b')
-  	console.log($(target))
   	var arrow = $this.attr('data-target')
   	if ($(target).hasClass('in')) {
   		$(arrow)[0].innerText = '▲'
