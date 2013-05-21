@@ -191,7 +191,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Width = 65,
-                    DataType = TypeCode.String,
+                    DataType = TypeCode.Int32,
                     Data = x => x.NumApproves
                 });
         }
@@ -210,7 +210,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Width = 55,
-                    DataType = TypeCode.String,
+                    DataType = TypeCode.Int32,
                     Data = x => x.NumRejects
                 });
         }
