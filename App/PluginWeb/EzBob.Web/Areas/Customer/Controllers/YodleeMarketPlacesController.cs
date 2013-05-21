@@ -131,13 +131,13 @@
 
 			var yodleeAccount = customer.YodleeAccounts.FirstOrDefault();
 			
-			// check if was success
-			//object[] oa = x.displayItemSummariesWithoutItemData(ym); // TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
+			// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
 			long itemId = ym.GetItemId(yodleeAccount.Username, yodleeAccount.Password);
 			
 			if (itemId == -1)
 			{
-				// return failure
+				throw new Exception("yuly test");
+				//return View("Error", (object)"Failed linking account");
 			}
 
 			var oEsi = new YodleeServiceInfo();
@@ -158,18 +158,11 @@
 			
 			if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 				customer.WizardStep = WizardStepType.Marketplace;
-
-			/*var customerMarketPlaceRepository = new CustomerMarketPlaceRepository(_session);
-			customerMarketPlaceRepository.Save(mp);
-
-			_session.Flush();*/
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace, securityData, customer);
 			
 			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
 
-			//return View("someview");
-			return null;
-			//return View(YodleeAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(u.Username, yodleeDatabaseMarketPlace, customer)));
+			return View();
 		}
 
 		[Transactional]

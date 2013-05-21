@@ -19,6 +19,19 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'change input[type="radio"]': 'radioChanged'
         'click #yodleeContinueBtn': 'continueClicked'
 
+    initialize: ->
+        that = this;
+        window.AccountAdded = (result) ->
+            EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+            that.trigger('completed');
+            that.trigger('ready');
+            that.trigger('back');
+        
+
+        window.AccountAddingError = (msg) ->
+            EzBob.App.trigger('error', msg)
+            that.trigger('back')
+
     radioChanged:(el) ->
         checked = @$el.find("input[type='radio'][name!='Bank']:checked") 
         if checked.length > 0
@@ -97,6 +110,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     getDocumentTitle: ->
         "Link Yodlee Account"
+
+    AccountAdded: ->
+        EzBob.App.trigger 'ct:storebase.shop.connected'
 
 
 class EzBob.YodleeAccountModel extends Backbone.Model

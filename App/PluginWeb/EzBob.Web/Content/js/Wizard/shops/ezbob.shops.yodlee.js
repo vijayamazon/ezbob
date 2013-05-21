@@ -45,20 +45,47 @@
       'click a.back': 'back',
       'change input': 'inputChanged',
       'keyup input': 'inputChanged',
-      'change input[name="Bank"]': 'bankChanged'
+      'change input[name="Bank"]': 'bankChanged',
+      'change input[type="radio"]': 'radioChanged',
+      'click #yodleeContinueBtn': 'continueClicked'
+    };
+
+    YodleeAccountInfoView.prototype.initialize = function() {
+      var that;
+
+      that = this;
+      window.AccountAdded = function(result) {
+        EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+        that.trigger('completed');
+        that.trigger('ready');
+        return that.trigger('back');
+      };
+      return window.AccountAddingError = function(msg) {
+        EzBob.App.trigger('error', msg);
+        return that.trigger('back');
+      };
+    };
+
+    YodleeAccountInfoView.prototype.radioChanged = function(el) {
+      var checked, url;
+
+      checked = this.$el.find("input[type='radio'][name!='Bank']:checked");
+      if (checked.length > 0) {
+        url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (checked.val()) + "&bankName=" + (checked.attr('name'));
+        this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
+        console.log('remove');
+      }
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
-      var temp;
+      var bank;
 
-      temp = this.$el.find('#Bank_DAG');
-      console.log(temp, temp.attr('checked'));
-      temp = this.$el.find('#Bank_Santander');
-      console.log(temp, temp.attr('checked'));
-      this.$el.find('.SantanderContainer').toggleClass('hide', temp.attr('checked') !== 'checked');
-      temp = this.$el.find('#Bank_HSBC');
-      console.log(temp, temp.attr('checked'));
-      return this.$el.find('.HSBCContainer').toggleClass('hide', temp.attr('checked') !== 'checked');
+      this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
+      this.$el.find(".SubBank:not([class*='hide'])").addClass('hide');
+      bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
+      this.$el.find("." + bank + "Container").removeClass('hide');
+      console.log('add');
+      return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
     };
 
     YodleeAccountInfoView.prototype.ui = {
@@ -72,6 +99,12 @@
 
       enabled = EzBob.Validation.checkForm(this.validator);
       return this.ui.connect.toggleClass('disabled', !enabled);
+    };
+
+    YodleeAccountInfoView.prototype.continueClicked = function() {
+      if (this.$el.find('#yodleeContinueBtn').hasClass('disabled')) {
+        return false;
+      }
     };
 
     YodleeAccountInfoView.prototype.connect = function() {
@@ -140,6 +173,10 @@
 
     YodleeAccountInfoView.prototype.getDocumentTitle = function() {
       return "Link Yodlee Account";
+    };
+
+    YodleeAccountInfoView.prototype.AccountAdded = function() {
+      return EzBob.App.trigger('ct:storebase.shop.connected');
     };
 
     return YodleeAccountInfoView;
