@@ -3,6 +3,7 @@
 	using System;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -123,7 +124,7 @@
 		}
 
 		[Transactional]
-		public ViewResult Success()
+		public ViewResult YodleeCallback()
 		{
 			var ym = new YodleeMain();
 			var customer = _context.Customer;
@@ -134,43 +135,37 @@
 			//object[] oa = x.displayItemSummariesWithoutItemData(ym); // TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
 			long itemId = ym.GetItemId(yodleeAccount.Username, yodleeAccount.Password);
 			
+			if (itemId == -1)
+			{
+				// return failure
+			}
+
 			var oEsi = new YodleeServiceInfo();
 			int marketPlaceId = _mpTypes
 				.GetAll()
 				.First(a => a.InternalId == oEsi.InternalId)
 				.Id;
 
-			var mp = new MP_CustomerMarketPlace
-			{
-				Marketplace = _mpTypes.Get(marketPlaceId),
-				DisplayName = yodleeAccount.Username,
-				SecurityData = Encryptor.EncryptBytes(yodleeAccount.Password),
-				Customer = _customer,
-				Created = DateTime.UtcNow,
-				UpdatingStart = DateTime.UtcNow,
-				Updated = DateTime.UtcNow,
-				UpdatingEnd = DateTime.UtcNow
-			};
-
-			_customer.CustomerMarketPlaces.Add(mp); 
-			
 			var securityData = new YodleeSecurityInfo
 			{
 				ItemId = itemId,
 				Name = yodleeAccount.Username,
 				Password = yodleeAccount.Password,
-				MarketplaceId = mp.Id
+				MarketplaceId = marketPlaceId
 			};
 			
 			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
 			
 			if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 				customer.WizardStep = WizardStepType.Marketplace;
+
+			/*var customerMarketPlaceRepository = new CustomerMarketPlaceRepository(_session);
+			customerMarketPlaceRepository.Save(mp);
+
+			_session.Flush();*/
+			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace, securityData, customer);
 			
-			_helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace, securityData, customer);
-			
-			_session.Flush();
-			_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
+			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
 
 			//return View("someview");
 			return null;
@@ -210,8 +205,8 @@
 			{
 				yodleeAccount = x.First();
 			}
-			
-			var callback = Url.Action("Success", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
+
+			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
 			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, yodleeAccount.Password);
 			
 			return Redirect(finalUrl);
