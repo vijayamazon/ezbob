@@ -1040,7 +1040,6 @@
     <Content Include="App_Code\EzTable.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccountDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\PayPal.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\PayPalAccounts.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\BankAccounts.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\DebitCards.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\AddDebitCard.cshtml" />
