@@ -2,6 +2,7 @@
 using EZBob.DatabaseLib.Model.Database;
 using OTP.Workplace.Code.jqGrid;
 using PluginWebApp.Code.jqGrid;
+using PluginWebApp.Code.jqGrid.SearchOperators;
 
 namespace EzBob.Web.Areas.Underwriter
 {
@@ -782,7 +783,7 @@ namespace EzBob.Web.Areas.Underwriter
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
             {
                 Caption = "Next Repayment Date",
-                Name = "LastLoanAmount",
+                Name = "NextRepaymentDate",
                 Index = "NextRepaymentDate",
                 Resizable = false,
                 Align = Align.Center,

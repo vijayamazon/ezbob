@@ -234,7 +234,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.OutstandingBalance)
-                .Formula("(select sum(l.Balance) from [Loan] l where l.CustomerId = Id)")
+                .Formula("(select ISNULL(sum(l.Balance), 0) from [Loan] l where l.CustomerId = Id)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.ManagerApprovedSum)
@@ -260,7 +260,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.AmountTaken)
-                .Formula("(select sum(l.LoanAmount) from [Loan] l where l.CustomerId = Id)")
+                .Formula("(select ISNULL(sum(l.LoanAmount),0) from [Loan] l where l.CustomerId = Id)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.LastStatus)
