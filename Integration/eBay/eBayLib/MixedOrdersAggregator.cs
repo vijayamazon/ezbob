@@ -37,7 +37,7 @@ namespace EzBob.eBayLib
 			switch ( functionType )
 			{
 				case eBayDatabaseFunctionType.NumOfOrders:
-					return GetEbayValue<int>( functionType, orders ) + GetShipedOrdersCount( ordersTeraPeak );
+                    return GetNumOfOrders(orders, ordersTeraPeak);
 				
 				case eBayDatabaseFunctionType.AverageItemsPerOrder:
 
@@ -56,23 +56,15 @@ namespace EzBob.eBayLib
 					return newValueAverageSum;
 
 				case eBayDatabaseFunctionType.CancelledOrdersCount:
-					return GetEbayValue<int>( functionType, orders ) + GetCancelledOrdersCount( ordersTeraPeak );
+					return GetCancelledOrdersCount(orders, ordersTeraPeak);
 					
 				case eBayDatabaseFunctionType.OrdersCancellationRate:
-
-					var canceled = GetEbayValue<int>(eBayDatabaseFunctionType.CancelledOrdersCount, orders) +
-						GetCancelledOrdersCount(ordersTeraPeak);
-
-					var numOfOrder = GetEbayValue<int>( eBayDatabaseFunctionType.NumOfOrders, orders ) +
-						canceled +
-						GetShipedOrdersCount( ordersTeraPeak );
-
-					
-
-					return numOfOrder == 0? 0:  canceled / (double)numOfOrder;
+                    var canceled = GetCancelledOrdersCount(orders, ordersTeraPeak);
+                    var numOfOrder = GetNumOfOrders(orders, ordersTeraPeak);
+                    return numOfOrder == 0 ? 0 : canceled / ((double)numOfOrder + canceled);
 
 				case eBayDatabaseFunctionType.TotalItemsOrdered:
-					return GetEbayValue<int>( functionType, orders ) + GetTotalItemsOrdered( ordersTeraPeak );
+					return GetTotalItemsOrdered(orders, ordersTeraPeak);
 
 				case eBayDatabaseFunctionType.TotalSumOfOrders:
 					return GetEbayValue<double>(functionType, orders) + GetTotalSumOfOrders( ordersTeraPeak );
@@ -82,7 +74,22 @@ namespace EzBob.eBayLib
 			}
 		}
 
-		private T GetEbayValue<T>( eBayDatabaseFunctionType funcType, IEnumerable<MixedReceivedDataItem> orders )
+	    private int GetNumOfOrders(IEnumerable<MixedReceivedDataItem> orders, IEnumerable<TeraPeakDatabaseSellerDataItem> ordersTeraPeak)
+	    {
+	        return GetEbayValue<int>(eBayDatabaseFunctionType.NumOfOrders, orders) + GetShipedOrdersCount(ordersTeraPeak);
+	    }
+
+	    private int GetTotalItemsOrdered(IEnumerable<MixedReceivedDataItem> orders, IEnumerable<TeraPeakDatabaseSellerDataItem> ordersTeraPeak)
+	    {
+            return GetEbayValue<int>(eBayDatabaseFunctionType.TotalItemsOrdered, orders) + GetTotalItemsOrdered(ordersTeraPeak);
+	    }
+
+	    private int GetCancelledOrdersCount(IEnumerable<MixedReceivedDataItem> orders, IEnumerable<TeraPeakDatabaseSellerDataItem> ordersTeraPeak)
+	    {
+            return GetEbayValue<int>(eBayDatabaseFunctionType.CancelledOrdersCount, orders) + GetCancelledOrdersCount(ordersTeraPeak);
+	    }
+
+	    private T GetEbayValue<T>( eBayDatabaseFunctionType funcType, IEnumerable<MixedReceivedDataItem> orders )
 		{
 			var rez = default(T);
 
@@ -103,7 +110,7 @@ namespace EzBob.eBayLib
 
 		private IEnumerable<TeraPeakDatabaseSellerDataItem>  GetTeraPeakOrders( IEnumerable<MixedReceivedDataItem> orders )
 		{
-			return orders.Where( o => o.Data is TeraPeakDatabaseSellerDataItem ).Select( o => o.Data as TeraPeakDatabaseSellerDataItem );
+			return orders.Where( o => o.Data is TeraPeakDatabaseSellerDataItem ).Select( o => o.Data as TeraPeakDatabaseSellerDataItem ).ToList();
 		}
 
 		private int GetShipedOrdersCount( IEnumerable<TeraPeakDatabaseSellerDataItem> orders )
