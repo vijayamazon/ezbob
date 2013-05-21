@@ -67,15 +67,23 @@ namespace Integration.Play {
 			} // foreach
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
-			var allOrders = new PlayOrdersList(DateTime.UtcNow, oPlayOrders);
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StorePlayOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord)
+				() => Helper.StorePlayOrdersData(
+					databaseCustomerMarketPlace,
+					new PlayOrdersList(DateTime.UtcNow, oPlayOrders),
+					historyRecord
+				)
 			);
 
-			// store agregated
+			// retrieve orders
+			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									ElapsedDataMemberType.RetrieveDataFromDatabase,
+									() => Helper.GetAllPlayOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
+
+			// calculate aggregated
 			IEnumerable<IWriteDataInfo<PlayDatabaseFunctionType>> aggregatedData =
 				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 					elapsedTimeInfo,
@@ -83,7 +91,7 @@ namespace Integration.Play {
 					() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
 				);
 
-			// Save
+			// store aggregated
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreAggregatedData,

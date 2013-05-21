@@ -2014,6 +2014,40 @@ namespace EZBob.DatabaseLib
 
             return orders;
         }
+
+		public VolusionOrdersList GetAllVolusionOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new VolusionOrdersList(submittedDate);
+
+			orders.AddRange(customerMarketPlace.VolusionOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new VolusionOrderItem {
+				CurrencyCode = o.CurrencyCode,
+				OrderStatus = o.OrderStatus,
+				NativeOrderId = o.NativeOrderId,
+				PaymentDate = o.PaymentDate,
+				PurchaseDate = o.PurchaseDate,
+				TotalCost = o.TotalCost
+			}).Distinct());
+
+			return orders;
+		} // GetAllVolusionOrdersData
+
+		public PlayOrdersList GetAllPlayOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new PlayOrdersList(submittedDate);
+
+			orders.AddRange(customerMarketPlace.PlayOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new PlayOrderItem {
+				CurrencyCode = o.CurrencyCode,
+				OrderStatus = o.OrderStatus,
+				NativeOrderId = o.NativeOrderId,
+				PaymentDate = o.PaymentDate,
+				PurchaseDate = o.PurchaseDate,
+				TotalCost = o.TotalCost
+			}).Distinct());
+
+			return orders;
+		} // GetAllPlayOrdersData
     }
 
     public class eBayFindOrderItemInfoData

@@ -67,15 +67,23 @@ namespace Integration.Volusion {
 			} // foreach
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
-			var allOrders = new VolusionOrdersList(DateTime.UtcNow, oVolusionOrders);
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreVolusionOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord)
+				() => Helper.StoreVolusionOrdersData(
+					databaseCustomerMarketPlace,
+					new VolusionOrdersList(DateTime.UtcNow, oVolusionOrders),
+					historyRecord
+				)
 			);
 
-			// store agregated
+			// retrieve orders
+			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									ElapsedDataMemberType.RetrieveDataFromDatabase,
+									() => Helper.GetAllVolusionOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
+
+			// calculate aggregated
 			IEnumerable<IWriteDataInfo<VolusionDatabaseFunctionType>> aggregatedData =
 				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 					elapsedTimeInfo,
@@ -83,7 +91,7 @@ namespace Integration.Volusion {
 					() => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter)
 				);
 
-			// Save
+			// Store aggregated
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreAggregatedData,
