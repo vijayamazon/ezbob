@@ -1,6 +1,4 @@
-﻿@using EzBob.Web.Areas.Customer.Controllers
-@model dynamic
-
+﻿@model dynamic
 <script id="YodleeAccoutInfoTemplate" type="text/template">
     @accountInfo()
 </script>
@@ -11,97 +9,70 @@
         <div class="wizard-top-notification">
             <h2 class="form_start">Please Select a Bank</h2>
         </div>
-        <form id="yodleeAccount">                              
+        <form id="yodleeAccount">
             <div class="bank-account-instructions clearfix">
-	            <div class="bank-account">
-					
-		            <div class="form_field_container GenderCtrl">
-						<!-- The labels should be images -->
-			            Bank
-			            <input type="radio" name="Bank" value="DAG" id="Bank_DAG"><label for="Bank_DAG">DAG</label>
-			            <input type="radio" name="Bank" value="Santander" id="Bank_Santander"><label for="Bank_Santander">Santander</label>
-			            <input type="radio" name="Bank" value="HSBC" id="Bank_HSBC"><label for="Bank_HSBC">HSBC</label>
-			            <input type="radio" name="Bank" value="Barclays" id="Bank_Barclays"><label for="Bank_Barclays">Barclays</label>
-			            <input type="radio" name="Bank" value="Lloyds" id="Bank_Lloyds"><label for="Bank_Lloyds">Lloyds</label>
-			            <input type="radio" name="Bank" value="RBS" id="Bank_RBS"><label for="Bank_RBS">RBS</label>
-			            <input type="radio" name="Bank" value="Natwest" id="Bank_Natwest"><label for="Bank_Natwest">Natwest</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl DAGContainer SubBank hide">
-			            DAG
-			            <input type="radio" name="DAG" value="DAG" id="DAG_DAG"><label for="DAG_DAG">DAG</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl hide SubBank SantanderContainer">
-			            Santander
-			            <input type="radio" name="Santander" value="4416" id="Santander_4416"><label for="Santander_4416">Santander (UK) csId=4416</label>
-			            <input type="radio" name="Santander" value="20344" id="Santander_20344"><label for="Santander_20344">Santander Business Banking (UK) csId=20344</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl hide SubBank HSBCContainer">
-			            HSBC
-			            <input type="radio" name="HSBC" value="4567" id="HSBC_4567"><label for="HSBC_4567">HSBC Bank (UK) csId=4567</label>
-			            <input type="radio" name="HSBC" value="17583" id="HSBC_17583"><label for="HSBC_17583">HSBC Business Bank (UK) csId=17583</label>
-			            <input type="radio" name="HSBC" value="12279" id="HSBC_12279"><label for="HSBC_12279">HSBC Private Bank (UK) csId=12279</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl SubBank BarclaysContainer hide">
-			            Barclays
-			            <input type="radio" name="Barclays" value="4721" id="Barclays_4721"><label for="Barclays_4721">Barclays (Pin Sentry Users) (UK) csId=4721</label>
-			            <input type="radio" name="Barclays" value="18539" id="Barclays_18539"><label for="Barclays_18539">Barclays (Basic Access) (UK) csId=18539</label>
-			            <input type="radio" name="Barclays" value="19302" id="Barclays_19302"><label for="Barclays_19302">Barclays Business Bank (UK) csId=19302</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl SubBank LloydsContainer hide">
-			            Lloyds
-			            <input type="radio" name="Lloyds" value="16284" id="Lloyds_16284"><label for="Lloyds_16284">Lloyds TSB Business Banking (UK) csId=16284</label>
-			            <input type="radio" name="Lloyds" value="4495" id="Lloyds_4495"><label for="Lloyds_4495">Lloyds TSB (UK) csId=4495</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl SubBank RBSContainer hide">
-			            RBS
-			            <input type="radio" name="RBS" value="19505" id="RBS_19505"><label for="RBS_19505">Royal Bank of Scotland Offshore Digital Banking (UK) csId=19505</label>
-			            <input type="radio" name="RBS" value="13203" id="RBS_13203"><label for="RBS_13203">Royal Bank of Scotland (UK) csId=13203</label>
-		            </div>
-					
-		            <div class="form_field_container GenderCtrl SubBank NatwestContainer hide">
-			            Natwest
-			            <input type="radio" name="Natwest" value="19008" id="Natwest_19008"><label for="Natwest_19008">NatWest Bank Business Bankline (UK) csId=19008</label>
-			            <input type="radio" name="Natwest" value="10249" id="Natwest_10249"><label for="Natwest_10249">NatWest Bank (UK) csId=10249</label>
-		            </div>
-					
-					
-					
-					
-		            <!--
-		            <a href="#" class="button orange connect-dag disabled pull-right">DAG</a>
-					-->
-					
+                <div class="bank-account">
 
-		            
-			        <div class="control-group clearfix" style="padding-right: 68px;">
-						<a href="@Url.Action("AttachYodlee", "YodleeMarketPlaces", new {Area = "Customer",csId = 11195, bankName = "DAG" })" target="_blank" class="button orange pull-right" id="yodleeContinueBtn">Continue</a>
-				        <a href="#" class="button orange connect-yodlee disabled pull-right">Link Account</a>
-				        <a href="#" class="back button grey pull-right">Back</a>
-			        </div>
-	            </div>
-				
-				<div class="hide">
-					<div id="dag_help" class="help_window">
-						<h2>Link dag Account</h2>
-						<p>Please follow the instructions and click continue below to link your DAG account.</p>
-						<div class="help_image help_dag"></div>
-						<br>
-						<div class="alignright" style="padding: 0 10px 0 0;">
-							<a href="@Url.Action("AttachDAG", "YodleeMarketPlaces", new { Area = "Customer" })" target="_blank" class="button orange connect-dag pull-right">Link DAG</a>
-						</div>
-						<div class="clear">
-							
-						</div>
-						<hr>
-						<div class="help_security"></div>
-					</div>
-				</div>
+                    <div class="form_field_container BankContainer">
+                        <!-- The labels should be images -->
+                        Bank
+                        <input type="radio" name="Bank" value="DAG" id="Bank_DAG"><label for="Bank_DAG">DAG</label>
+                        <input type="radio" name="Bank" value="Santander" id="Bank_Santander"><label for="Bank_Santander">Santander</label>
+                        <input type="radio" name="Bank" value="HSBC" id="Bank_HSBC"><label for="Bank_HSBC">HSBC</label>
+                        <input type="radio" name="Bank" value="Barclays" id="Bank_Barclays"><label for="Bank_Barclays">Barclays</label>
+                        <input type="radio" name="Bank" value="Lloyds" id="Bank_Lloyds"><label for="Bank_Lloyds">Lloyds</label>
+                        <input type="radio" name="Bank" value="RBS" id="Bank_RBS"><label for="Bank_RBS">RBS</label>
+                        <input type="radio" name="Bank" value="Natwest" id="Bank_Natwest"><label for="Bank_Natwest">Natwest</label>
+                    </div>
+
+                    <div class="form_field_container hide DAGContainer SubBank">
+                        DAG
+                        <input type="radio" name="DAG" value="DAG" id="DAG_DAG"><label for="DAG_DAG">DAG</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank SantanderContainer">
+                        Santander
+                        <input type="radio" name="Santander" value="4416" id="Santander_4416"><label for="Santander_4416">Santander (UK) csId=4416</label>
+                        <input type="radio" name="Santander" value="20344" id="Santander_20344"><label for="Santander_20344">Santander Business Banking (UK) csId=20344</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank HSBCContainer">
+                        HSBC
+                        <input type="radio" name="HSBC" value="4567" id="HSBC_4567"><label for="HSBC_4567">HSBC Bank (UK) csId=4567</label>
+                        <input type="radio" name="HSBC" value="17583" id="HSBC_17583"><label for="HSBC_17583">HSBC Business Bank (UK) csId=17583</label>
+                        <input type="radio" name="HSBC" value="12279" id="HSBC_12279"><label for="HSBC_12279">HSBC Private Bank (UK) csId=12279</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank BarclaysContainer">
+                        Barclays
+                        <input type="radio" name="Barclays" value="4721" id="Barclays_4721"><label for="Barclays_4721">Barclays (Pin Sentry Users) (UK) csId=4721</label>
+                        <input type="radio" name="Barclays" value="18539" id="Barclays_18539"><label for="Barclays_18539">Barclays (Basic Access) (UK) csId=18539</label>
+                        <input type="radio" name="Barclays" value="19302" id="Barclays_19302"><label for="Barclays_19302">Barclays Business Bank (UK) csId=19302</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank LloydsContainer">
+                        Lloyds
+                        <input type="radio" name="Lloyds" value="16284" id="Lloyds_16284"><label for="Lloyds_16284">Lloyds TSB Business Banking (UK) csId=16284</label>
+                        <input type="radio" name="Lloyds" value="4495" id="Lloyds_4495"><label for="Lloyds_4495">Lloyds TSB (UK) csId=4495</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank RBSContainer">
+                        RBS
+                        <input type="radio" name="RBS" value="19505" id="RBS_19505"><label for="RBS_19505">Royal Bank of Scotland Offshore Digital Banking (UK) csId=19505</label>
+                        <input type="radio" name="RBS" value="13203" id="RBS_13203"><label for="RBS_13203">Royal Bank of Scotland (UK) csId=13203</label>
+                    </div>
+
+                    <div class="form_field_container hide SubBank NatwestContainer">
+                        Natwest
+                        <input type="radio" name="Natwest" value="19008" id="Natwest_19008"><label for="Natwest_19008">NatWest Bank Business Bankline (UK) csId=19008</label>
+                        <input type="radio" name="Natwest" value="10249" id="Natwest_10249"><label for="Natwest_10249">NatWest Bank (UK) csId=10249</label>
+                    </div>
+
+                    <div class="control-group clearfix" style="padding-right: 68px;">
+                        <a href="#" target="_blank" class="button orange pull-right disabled" id="yodleeContinueBtn">Continue</a>
+                        <a href="#" class="back button grey pull-right">Back</a>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

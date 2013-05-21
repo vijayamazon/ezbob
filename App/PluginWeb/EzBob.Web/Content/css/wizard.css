@@ -216,18 +216,24 @@ ul.list_none
 
 #AccountNumber { width: 215px;}
 
-.GenderCtrl input {
+.GenderCtrl input, 
+.BankContainer input,
+.SubBank input {
 	margin: -5px 0 0 15px;
+}
+
+.GenderCtrl label,
+.BankContainer label, 
+.SubBank label {
+	display: inline;
+	font-weight: normal;
+	margin-left: 5px;
 }
 
 img#GenderImage,
 img.gender_image { margin-left: 210px; }
 
-.GenderCtrl label {
-	display: inline;
-	font-weight: normal;
-	margin-left: 5px;
-}
+
 
 h1.form_start,
 h2.form_start {
