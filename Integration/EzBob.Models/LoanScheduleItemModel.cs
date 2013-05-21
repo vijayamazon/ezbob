@@ -21,6 +21,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public decimal Balance { get; set; }
         public decimal BalanceBeforeRepayment { get; set; }
         public decimal Fees { get; set; }
+		public decimal InterestRate { get; set; }
 
         public static LoanScheduleItemModel FromLoanScheduleItem(LoanScheduleItem s)
         {
@@ -39,7 +40,8 @@ namespace EzBob.Web.Areas.Customer.Models
                     LoanRepayment = s.LoanRepayment,
                     Balance = s.Balance,
                     BalanceBeforeRepayment = s.BalanceBeforeRepayment,
-                    Fees = s.Fees
+                    Fees = s.Fees,
+					InterestRate = s.InterestRate
                 };
         }
     }

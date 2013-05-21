@@ -11,7 +11,7 @@
         <%}%>
     </div>
     <p class="offer-status"></p>
-    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%><br/>
+    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <span class="underwriter-only"><%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%></span><br/>
     Repayment period: <b><%- RepaymentPerion %></b><br/>
     Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br/>
     Loan type: <b><%- LoanType %></b><br><br>
@@ -26,16 +26,16 @@
         <table class="table table-bordered table-striped payment-schedule-table">
         <thead>
             <tr>
-                <th width="80" >Due Date</th>
-                <th >Principal</th>
-                <th >Interest</th>
-                <th >
+                <th width="80">Due Date</th>
+                <th>Principal</th>
+                <th colspan="2">Interest</th>
+                <th>
                     Fees
                     <%if(setupFee){%>
                         *
                     <%}%>
                 </th>
-                <th >Total</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +44,7 @@
                     <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
                     <td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
                     <td><%-EzBob.formatPounds(line.Interest)%></td>
+                    <td><%-EzBob.formatPercents(line.InterestRate, 1)%></td>
                     
                     <td style="text-align: center">
                         <%

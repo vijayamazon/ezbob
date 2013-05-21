@@ -987,3 +987,5 @@ table.payment-schedule-table td{font-size: 16px;}
 }
 
 select.selectheight { height: 30px; }
+
+#get-cash .underwriter-only { display: none; }
