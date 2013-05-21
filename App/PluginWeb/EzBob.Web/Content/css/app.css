@@ -334,7 +334,7 @@ div.shop-connected {
     margin-top: 5px;
 }
 
-    .source_labels.Yodlee {
+    .source_labels.Yodlee, .source_labels.yodlee {
 		background: url(images/yodlee.png) no-repeat 0 0;
 		width: 167px;
 		margin-right: auto;
@@ -343,7 +343,7 @@ div.shop-connected {
 		margin-bottom: 2px;
     }
 
-    .source_labels_on.Yodlee {
+    .source_labels_on.Yodlee, .source_labels_on.yodlee {
 		background: url(images/yodlee.png) no-repeat 0 0;
 		width: 167px;
 		margin-right: auto;
@@ -352,42 +352,42 @@ div.shop-connected {
 		margin-bottom: 2px;
     }
 
-    .source_labels.eBay {
+    .source_labels.eBay, .source_labels.ebay {
         background-position: 0 -1px;
         width: 81px;
     }
 
-    .source_labels_on.eBay {
+    .source_labels_on.eBay, .source_labels_on.ebay {
         background-position: 0 -41px;
         width: 81px;
     }
 
-    .source_labels.Amazon {
+    .source_labels.Amazon, .source_labels.amazon {
         background-position: -85px -1px;
         width: 110px;
     }
 
-    .source_labels_on.Amazon {
+    .source_labels_on.Amazon, .source_labels_on.amazon {
         background-position: -85px -41px;
         width: 110px;
     }
 
-    .source_labels.EKM {
+    .source_labels.EKM, .source_labels.ekm {
         background-position: -558px -2px;
         width: 150px;
     }
 
-    .source_labels_on.EKM {
+    .source_labels_on.EKM, .source_labels_on.ekm {
         background-position: -558px -42px;
         width: 150px;
     }
 
-    .source_labels.Volusion {
+    .source_labels.Volusion, .source_labels.volusion {
         background-position: -868px -3px;
         width: 98px;
     }
 
-    .source_labels_on.Volusion {
+    .source_labels_on.Volusion, .source_labels_on.volusion {
         background-position: -868px -43px;
         width: 98px;
     }
@@ -402,22 +402,22 @@ div.shop-connected {
         width: 111px;
     }
 
-    .source_labels.PayPoint {
+    .source_labels.PayPoint, .source_labels.paypoint {
         background-position: -967px -1px;
         width: 167px;
     }
 
-    .source_labels_on.PayPoint {
+    .source_labels_on.PayPoint, .source_labels_on.paypoint {
         background-position: -967px -41px;
         width: 167px;
     }
 
-    .source_labels.Play {
+    .source_labels.Play, .source_labels.play {
         background-position: -195px 0;
         width: 116px;
     }
 
-    .source_labels_on.Play {
+    .source_labels_on.Play, .source_labels_on.play {
         background-position: -195px -40px;
         width: 116px;
     }

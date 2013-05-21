@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.AmazonServiceLib;
-using EzBob.PayPal;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using StructureMap;
@@ -31,12 +29,9 @@ namespace EzBob.Web.Areas.Underwriter
 
         public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            var paypal = new PayPalDatabaseMarketPlace();
             var askville = ObjectFactory.GetInstance<AskvilleRepository>();
 
-            var marketplaces = customer.CustomerMarketPlaces
-                                       .Where(mp => mp.Marketplace.InternalId != paypal.InternalId).ToList();
-
+            var marketplaces = customer.CustomerMarketPlaces.ToList();
 
             var models = marketplaces.Select(
                 mp =>
