@@ -55,25 +55,6 @@ namespace EzBob.Web.Code
             return cashRequest;
         }
 
-        public CashRequest CloneCashRequest(Customer customer, CashRequest request)
-        {
-            var cashRequest = new CashRequest
-            {
-                CreationDate = DateTime.UtcNow,
-                Customer = customer,
-                InterestRate = 0.06M,
-                LoanType = request.LoanType,
-                RepaymentPeriod = request.LoanType.RepaymentPeriod,
-                UseSetupFee = false,
-                DiscountPlan = request.DiscountPlan,
-                OfferValidUntil = DateTime.UtcNow.AddDays(1),
-                OfferStart = DateTime.UtcNow
-            };
-
-            customer.CashRequests.Add(cashRequest);
-            return cashRequest;
-        }
-
         public void ForceEvaluate(Customer customer, bool isUnderwriterForced)
         {
             if (customer.CustomerMarketPlaces.Any(x => x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays))
