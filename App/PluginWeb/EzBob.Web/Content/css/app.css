@@ -970,8 +970,9 @@ input[type="color"],
 	margin-top: 20px;
 }
 
-.eBayPaypalRule { font-weight: bold; color: red; margin-top: 0.6em; }
+.eBayPaypalRule, .YodleeRule { font-weight: bold; color: red; margin-top: 0.6em; }
 
-.cont-button .eBayPaypalRule { float: left; }
+.cont-button .eBayPaypalRule,
+.cont-button .YodleeRule { float: left; }
 
 div.full_width { width: 581px; }

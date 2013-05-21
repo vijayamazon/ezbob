@@ -52,9 +52,20 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         hasEbay = @stores.eBay.button.model.length > 0
         hasPaypal = @stores.paypal.button.model.length > 0
 
-        @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
+        hasOtherThanYodlee = false
+        for shopName, shopInfo of @stores
+            if shopName is 'Yodlee'
+                continue
+            if shopInfo.button.model.length > 0
+                hasOtherThanYodlee = true
+                break
 
-        @$el.find(".next").toggleClass("disabled", !hasFilledShops or (hasEbay and not hasPaypal))
+        hasOnlyYodlee = @stores.Yodlee.button.model.length > 0 and not hasOtherThanYodlee
+
+        @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
+        @$el.find(".YodleeRule").toggleClass("hide", not hasOnlyYodlee)
+
+        @$el.find(".next").toggleClass("disabled", !hasFilledShops or hasOnlyYodlee or (hasEbay and not hasPaypal))
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
