@@ -75,6 +75,7 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="DatabaseWrapper\Order\IChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\VolusionOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PlayOrderItem.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeOrderMap.cs" />
+    <Compile Include="DistinctOrders.cs" />
     <Compile Include="PacNetBalance.cs" />
     <Compile Include="Common\DatabaseFunction.cs" />
     <Compile Include="Common\DatabaseFunctionStorage.cs" />

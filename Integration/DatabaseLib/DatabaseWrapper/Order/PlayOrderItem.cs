@@ -2,7 +2,7 @@ using System;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
-	public class PlayOrderItem : TimeDependentRangedDataBase {
+	public class PlayOrderItem : TimeDependentRangedDataBase, IChannelGrabberOrderItem {
 		public virtual string NativeOrderId { get; set; }
 		public virtual double? TotalCost { get; set; }
 		public virtual string CurrencyCode { get; set; }

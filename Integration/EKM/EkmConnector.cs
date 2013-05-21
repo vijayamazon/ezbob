@@ -20,8 +20,6 @@
         private static string NoErrorIndication = "No data returned";
         private static string LineBreak = "<br />";
 
-      
-
         public bool Validate(string userName, string password, out string errMsg)
         {
             var apiKey = GetApiKey(userName, password);
@@ -51,7 +49,6 @@
 
             errMsg = string.Empty;
             return true;
-
         }
 
         public static ApiKey GetApiKey(string userName, string password)
@@ -82,7 +79,7 @@
             return getKeyResponse;
         }
 
-        public static List<Order> GetOrders(string userName, string password)
+        public static List<Order> GetOrders(string userName, string password, DateTime fromDate)
         {
             var apiKey = EkmConnector.GetApiKey(userName, password);
             var myBinding = new BasicHttpBinding() { Name = PartnerEndpointName };
@@ -93,15 +90,14 @@
             // Your unique APIKey must be passed with each request
             getOrdersRequest.APIKey = apiKey.Key;
             getOrdersRequest.PartnerKey = PartnerKey;
-            getOrdersRequest.FromDate = GetToday(); // "2012-01-01";
-            getOrdersRequest.ToDate = GetOneYearBack(); // "2013-02-11";
+            getOrdersRequest.ToDate = GetToday();
+	        getOrdersRequest.FromDate = Get00Format(fromDate);
             var Orders = new List<Order>();
             getOrdersRequest.ItemsPerPage = 100;
             int iPage = 0;
             OrdersObject getOrdersResponse;
             do
             {
-                //ReadSalesPage(getOrdersResponse);
                 iPage++;
                 getOrdersRequest.PageNumber = iPage;
                 getOrdersResponse = shopClient.GetOrders(getOrdersRequest);
@@ -114,71 +110,13 @@
             return Orders;
         }
 
-        private static string Get00Format(DateTime d)
-        {
-            return string.Format("{0}-{1}-{2}", d.Year.ToString("00"), d.Month.ToString("00"), d.Day.ToString("00"));
+        private static string Get00Format(DateTime d) {
+	        return d.ToString("yyyy-MM-dd");
         }
 
         private static string GetToday()
         {
             return Get00Format(DateTime.Now);
         }
-
-        private static string GetOneYearBack()
-        {
-            return Get00Format(DateTime.Now.AddYears(-1));
-        }
-
-        private static bool IsEndOfOrders(OrdersObject orders)
-        {
-            // Check if the request failed
-            if (orders.Status == StatusCodes.Failure)
-            {
-                // Output the errors explaining why the request failed
-                foreach (var error in orders.Errors)
-                {
-                    //   if (error == NoErrorIndication) //causing infite loop
-                    //{
-                    return true;
-                    //}
-                }
-            }
-            return false;
-        }
-
-        /*
-        private void ReadSalesPage(OrdersObject orders)
-        {
-            // Output the shop data (List of shops orders)
-            foreach (var order in orders.Orders)
-            {
-                string orderType = order.OrderStatus;
-                if (order.TotalCost.HasValue)
-                {
-                    try
-                    {
-                        if (status.ContainsKey(orderType))
-                        {
-                            status[orderType] += order.TotalCost.Value;
-                        }
-                        else
-                        {
-                            status["Other"] += order.TotalCost.Value;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        status["Other"] += order.TotalCost.Value;
-                    }
-                    string monthKey = GetMonthKey(order.OrderDateISO);
-                    months[monthKey] = months[monthKey] + order.TotalCost.Value;
-                    revenue += order.TotalCost.Value;
-                }
-                sales += 1;
-            }
-            Logger.InfoFormat("Page Store Revenue: {0}", revenue);
-            Logger.InfoFormat("Page Sales #: {0}", sales);
-        }
-         */
     }
 }

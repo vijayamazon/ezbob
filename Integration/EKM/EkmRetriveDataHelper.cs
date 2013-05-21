@@ -36,7 +36,11 @@ namespace EKM
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             //retreive data from ekm api
-            var ordersList = EkmConnector.GetOrders(securityInfo.Name, securityInfo.Password);
+            var ordersList = EkmConnector.GetOrders(
+				securityInfo.Name,
+				securityInfo.Password,
+				Helper.GetEkmDeltaPeriod(databaseCustomerMarketPlace)
+			);
 
             var ekmOrderList = new List<EkmOrderItem>();
             foreach (var order in ordersList)

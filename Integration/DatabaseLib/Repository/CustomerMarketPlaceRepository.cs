@@ -155,55 +155,78 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 	        return Get(databaseCustomerMarketPlace.Id);
         }
 
-        public DateTime? Seniority(int marketplaceId)
-        {
-            var mp = GetAll().FirstOrDefault(x => x.Id == marketplaceId);
-            if (mp == null)
-            {
-                return null;
-            }
+		public DateTime? Seniority(int marketplaceId) {
+			var mp = GetAll().FirstOrDefault(x => x.Id == marketplaceId);
+			if (mp == null) {
+				return null;
+			}
 
-            switch (mp.Marketplace.Name)
-            {
-                case "Amazon": return
-                    _session.Query<MP_AmazonOrderItem2>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.PurchaseDate != null)
-                    .Select(oi => oi.PurchaseDate).Min();
-                case "eBay": return
-                    _session.Query<MP_EbayUserData>()
-                    .Where(eud => eud.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(eud => eud.RegistrationDate != null)
-                    .Select(eud => eud.RegistrationDate).Min();
-                case "EKM": return
-                    _session.Query<MP_EkmOrderItem>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.OrderDate != null)
-                    .Select(oi => oi.OrderDate).Min();
-                case "Volusion": return
-                    _session.Query<MP_VolusionOrderItem>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.PaymentDate != null)
-                    .Select(oi => oi.PaymentDate).Min();
-                case "PayPoint": return
-                    _session.Query<MP_PayPointOrderItem>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.date != null)
-                    .Select(oi => oi.date).Min();
-                case "Play": return
-                    _session.Query<MP_PlayOrderItem>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.PaymentDate != null)
-                    .Select(oi => oi.PaymentDate).Min();
-                case "Yodlee": return
-                    _session.Query<MP_YodleeOrderItem>()
-                    .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-                    .Where(oi => oi.accountOpenDate != null)
-                    .Select(oi => oi.accountOpenDate).Min();
-                default:
-                    return null;
-            }
-        }
+			switch (mp.Marketplace.Name) {
+			case "Amazon": {
+					var s = _session.Query<MP_AmazonOrderItem2>()
+							   .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+							   .Where(oi => oi.PurchaseDate != null)
+							   .Select(oi => oi.PurchaseDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "eBay": {
+					var s = _session.Query<MP_EbayUserData>()
+						.Where(eud => eud.CustomerMarketPlace.Id == marketplaceId)
+						.Where(eud => eud.RegistrationDate != null)
+						.Select(eud => eud.RegistrationDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "EKM": {
+					var s = _session.Query<MP_EkmOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.OrderDate != null)
+						.Select(oi => oi.OrderDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "Volusion": {
+					var s = _session.Query<MP_VolusionOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.PaymentDate != null)
+						.Select(oi => oi.PaymentDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "PayPoint": {
+					var s = _session.Query<MP_PayPointOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.date != null)
+						.Select(oi => oi.date);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "Play": {
+					var s = _session.Query<MP_PlayOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.PaymentDate != null)
+						.Select(oi => oi.PaymentDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "Yodlee": {
+					var s = _session.Query<MP_YodleeOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.accountOpenDate != null)
+						.Select(oi => oi.accountOpenDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+			default:
+				return null;
+			}
+		}
 
         public string GetUpdatedStatus(int marketplacId)
         {

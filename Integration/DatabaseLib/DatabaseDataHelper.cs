@@ -2010,7 +2010,7 @@ namespace EZBob.DatabaseLib
                     OrderDateIso = o.OrderDateIso,
                     OrderStatusColour = o.OrderStatusColour,
                     
-                }).Distinct());
+                }).Distinct(new EkmOrderComparer()));
 
             return orders;
         }
@@ -2027,7 +2027,7 @@ namespace EZBob.DatabaseLib
 				PaymentDate = o.PaymentDate,
 				PurchaseDate = o.PurchaseDate,
 				TotalCost = o.TotalCost
-			}).Distinct());
+			}).Distinct(new VolusionOrderComparer()));
 
 			return orders;
 		} // GetAllVolusionOrdersData
@@ -2044,10 +2044,90 @@ namespace EZBob.DatabaseLib
 				PaymentDate = o.PaymentDate,
 				PurchaseDate = o.PurchaseDate,
 				TotalCost = o.TotalCost
-			}).Distinct());
+			}).Distinct(new PlayOrderComparer()));
 
 			return orders;
 		} // GetAllPlayOrdersData
+
+		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			return !GetCustomerMarketPlace(databaseCustomerMarketPlace).YodleeOrders.IsEmpty;
+		} // HasYodleeOrders
+
+		public DateTime GetEkmDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var def = DateTime.Today.AddYears(-1);
+
+			try {
+				MP_EkmOrder o = customerMarketPlace.EkmOrders.OrderBy(x => x.Id).AsQueryable().Last();
+				return o == null ? def : o.Created.AddMonths(-1);
+			}
+			catch (Exception) {
+				return def;
+			}
+		} // GetEkmDeltaPeriod
+
+		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			DateTime dThen = DateTime.Today.AddYears(-1);
+
+			try {
+				MP_PayPointOrder ppo = customerMarketPlace.PayPointOrders.OrderBy(x => x.Id).AsQueryable().Last();
+
+				if (ppo != null)
+					dThen = ppo.Created.AddMonths(-1);
+			}
+			catch (Exception) {
+				// so what? ignored.
+			}
+
+			return
+				dThen.Year +
+				dThen.Month.ToString("00") + "-" +
+				DateTime.Today.Year +
+				DateTime.Today.Month.ToString("00");
+		} // GetPayPointDeltaPeriod
+
+	    public PayPointOrdersList GetAllPayPointOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new PayPointOrdersList(submittedDate);
+
+			orders.AddRange(customerMarketPlace.PayPointOrders.SelectMany(anOrder => anOrder.OrderItems).Select(x => new PayPointOrderItem {
+				acquirer = x.acquirer,
+				amount = x.amount,
+				auth_code = x.auth_code,
+				authorised = x.authorised,
+				card_type = x.card_type,
+				cid = x.cid,
+				classType = x.classType,
+				company_no = x.company_no,
+				country = x.country,
+				currency = x.currency,
+				cv2avs = x.cv2avs,
+				date = x.date,
+				start_date = x.start_date,
+				ExpiryDate = x.ExpiryDate,
+				deferred = x.deferred,
+				emvValue = x.emvValue,
+				fraud_code = x.fraud_code,
+				FraudScore = x.FraudScore,
+				ip = x.ip,
+				lastfive = x.lastfive,
+				merchant_no = x.merchant_no,
+				message = x.message,
+				MessageType = x.MessageType,
+				mid = x.mid,
+				name = x.name,
+				options = x.options,
+				status = x.status,
+				tid = x.tid,
+				trans_id = x.trans_id
+			}).Distinct(new PayPointOrderComparer()));
+
+			return orders;
+		} // GetAllPayPointOrdersData
     }
 
     public class eBayFindOrderItemInfoData

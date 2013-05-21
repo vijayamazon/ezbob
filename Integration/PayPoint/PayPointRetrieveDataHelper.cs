@@ -44,7 +44,7 @@
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             var secVpnService = new SECVPNService();
-            string condition = DateTime.Today.AddYears(-1).Year + DateTime.Today.Month.ToString("00") + "-" + DateTime.Today.Year + DateTime.Today.Month.ToString("00");
+	        string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
             string reportXmlString = secVpnService.getReport(securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
 
             var payPointDataSet = new PayPointDataSet();
@@ -95,17 +95,22 @@
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-            var allOrders = new PayPointOrdersList(DateTime.UtcNow, payPointOrders);
+
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
-                                    () => Helper.StorePayPointOrdersData(databaseCustomerMarketPlace, allOrders, historyRecord));
+                                    () => Helper.StorePayPointOrdersData(databaseCustomerMarketPlace, new PayPointOrdersList(DateTime.UtcNow, payPointOrders), historyRecord));
 
+			// retrieve orders
+			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									ElapsedDataMemberType.RetrieveDataFromDatabase,
+									() => Helper.GetAllPayPointOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
-            //store agregated
+            // Calculate aggregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.AggregateData,
                                     () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
-            // Save
+
+            // Store aggregated
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
                             () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));

@@ -12,7 +12,6 @@ CREATE TABLE [dbo].[PayPointCard](
 	[TransactionId] [nvarchar](250) NULL,
 	[CardNo] [nvarchar](50) NULL,
 	[ExpireDate] [datetime] NULL,
-	[ExpireDateString] [nvarchar](50) NULL,
-	[CardHolder] [nvarchar](150) NULL
+	[ExpireDateString] [nvarchar](50) NULL
 ) ON [PRIMARY]
 GO

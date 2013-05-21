@@ -1,7 +1,4 @@
-@echo off
-
 net stop ScortoService
-
 robocopy App\service\agent\ c:\ezbobSrv\ /e
 robocopy Integration\NodeEzBobLib\bin\Debug\ c:\ezbobSrv\ /e
 robocopy Integration\CustomSchedulers\bin\Debug\ c:\ezbobSrv\ /e
@@ -14,8 +11,4 @@ robocopy Integration\Play\bin\Debug\ c:\ezbobSrv\ /e
 robocopy App\service\Servicestarter\bin\Debug\ c:\ezbobSrv\ /e
 robocopy Integration\PaymentServices\bin\Debug\ c:\ezbobSrv\ /e
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
-
 net start ScortoService
-
-echo Alles in ordnung.
-

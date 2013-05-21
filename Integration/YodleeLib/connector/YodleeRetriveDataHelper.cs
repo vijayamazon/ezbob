@@ -29,30 +29,32 @@
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
         }
 
-        private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-        {
+        private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+	        if (Helper.HasYodleeOrders(databaseCustomerMarketPlace))
+		        return; // TODO: remove once Yodlee refresh is supported.
+
             //retreive data from Yodlee api
             var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId);
-            var yodleeOrderItem = new YodleeOrderDictionary();
-            yodleeOrderItem.Data = ordersList;
 
-            var elapsedTimeInfo = new ElapsedTimeInfo();
+	        var elapsedTimeInfo = new ElapsedTimeInfo();
+
+			var allOrders = new YodleeOrderDictionary { Data = ordersList };
 
             //save orders data
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-                                    ElapsedDataMemberType.StoreDataToDatabase,
-                                    () => Helper.StoreYodleeOrdersData(databaseCustomerMarketPlace, yodleeOrderItem, historyRecord));
+				ElapsedDataMemberType.StoreDataToDatabase,
+				() => Helper.StoreYodleeOrdersData(
+					databaseCustomerMarketPlace,
+					allOrders,
+					historyRecord)
+				);
 
-
-            //TODO: retrive all data from db
-            //var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-            //                        ElapsedDataMemberType.RetrieveDataFromDatabase,
-            //                        () => Helper.GetAllAmazonOrdersData(submittedDate, databaseCustomerMarketPlace));
+            // TODO: support Yodlee refresh
 
             //calculate transactions aggregated data
             var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.AggregateData,
-                                    () => CreateTransactionsAggregationInfo(yodleeOrderItem, Helper.CurrencyConverter));
+                                    () => CreateTransactionsAggregationInfo(allOrders, Helper.CurrencyConverter));
             // store transactions aggregated data
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
@@ -61,7 +63,7 @@
             //calculate accounts aggregated data
             var accountsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.AggregateData,
-                                    () => CreateAccountsAggregationInfo(yodleeOrderItem, Helper.CurrencyConverter));
+                                    () => CreateAccountsAggregationInfo(allOrders, Helper.CurrencyConverter));
             // store accounts aggregated data
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                             ElapsedDataMemberType.StoreAggregatedData,
