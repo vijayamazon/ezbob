@@ -475,7 +475,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual int NumRejects { get; set; }
         public virtual int NumApproves { get; set; }
         public virtual int Delinquency { get; set; }
-        public virtual int AmountTaken { get; set; }
+        public virtual decimal AmountTaken { get; set; }
         public virtual string LastStatus { get; set; }
         public virtual DateTime? FirstLoanDate { get; set; }
         public virtual DateTime? LastLoanDate { get; set; }
@@ -483,6 +483,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal TotalPrincipalRepaid { get; set; }
         public virtual DateTime? NextRepaymentDate { get; set; }
         public virtual DateTime? DateOfLate { get; set; }
+        public virtual decimal LateAmount { get; set; }
 
 		public virtual long LoyaltyPoints() {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;

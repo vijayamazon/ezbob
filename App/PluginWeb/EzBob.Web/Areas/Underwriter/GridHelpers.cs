@@ -177,6 +177,25 @@ namespace EzBob.Web.Areas.Underwriter
                     Data = x => x.AmountTaken
                 });
         }
+        public static void CreateLateAmount(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+                {
+                    Caption = "Late Amount",
+                    Name = "LateAmount",
+                    Index = "LateAmount",
+                    Search = true,
+                    Sortable = true,
+                    Resizable = false,
+                    Align = Align.Center,
+                    Title = false,
+                    Hidden = false,
+                    Fixed = false,
+                    Width = 80,
+                    DataType = TypeCode.Decimal,
+                    Data = x => x.LateAmount
+                });
+        }
 
         public static void CreateNumApprovals(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {

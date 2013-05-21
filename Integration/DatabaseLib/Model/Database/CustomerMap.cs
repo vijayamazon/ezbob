@@ -313,7 +313,12 @@ namespace EZBob.DatabaseLib.Model.Database {
                      where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
                 .Not.Insert()
                 .Not.Update();
-
+            Map(x=>x.LateAmount)
+                .Formula(@"(select ISNULL(SUM(s.[LoanRepayment]),0) from [LoanSchedule] s left join [Loan] l 
+                        on l.[Id] = s.[LoanId]
+                        where l.[CustomerId] = Id)")
+                .Not.Insert()
+                .Not.Update();
 
 			// TODO: Should be only one
 			HasMany(x => x.YodleeAccounts)

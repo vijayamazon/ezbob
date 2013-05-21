@@ -388,6 +388,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateLastLoanDateColumn(gridModel);
             GridHelpers.CreateLastLoanAmountColumn(gridModel);
             GridHelpers.CreateAmountTaken(gridModel);
+            GridHelpers.CreateLateAmount(gridModel);
             GridHelpers.CreateTotalPrincipalRepaidColumn(gridModel);
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             GridHelpers.CreateNextRepaymentDateColumn(gridModel);
