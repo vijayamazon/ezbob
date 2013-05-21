@@ -54,7 +54,7 @@
       var that;
 
       that = this;
-      window.AccountAdded = function(result) {
+      window.YodleeAccountAdded = function(result) {
         EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
         that.trigger('completed');
         that.trigger('ready');
@@ -175,7 +175,7 @@
       return "Link Yodlee Account";
     };
 
-    YodleeAccountInfoView.prototype.AccountAdded = function() {
+    YodleeAccountInfoView.prototype.YodleeAccountAdded = function() {
       return EzBob.App.trigger('ct:storebase.shop.connected');
     };
 

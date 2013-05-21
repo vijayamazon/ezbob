@@ -21,7 +21,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     initialize: ->
         that = this;
-        window.AccountAdded = (result) ->
+        window.YodleeAccountAdded = (result) ->
             EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
             that.trigger('completed');
             that.trigger('ready');
@@ -111,7 +111,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     getDocumentTitle: ->
         "Link Yodlee Account"
 
-    AccountAdded: ->
+    YodleeAccountAdded: ->
         EzBob.App.trigger 'ct:storebase.shop.connected'
 
 

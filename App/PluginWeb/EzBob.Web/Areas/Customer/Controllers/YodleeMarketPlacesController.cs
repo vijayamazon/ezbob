@@ -1,9 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
-	using CommonLib.Security;
+	using System.Collections.Generic;
 	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -50,77 +49,8 @@
 		[Transactional]
 		public JsonNetResult Accounts()
 		{
-			var oEsi = new YodleeServiceInfo();
-
-			var yodlees = _customer
-				.CustomerMarketPlaces
-				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
-				.Select(YodleeAccountModel.ToModel)
-				.ToList();
+			List<YodleeAccountModel> yodlees = _customer.YodleeAccounts.Select(YodleeAccountModel.ToModel).ToList();
 			return this.JsonNet(yodlees);
-		}
-
-		[Transactional]
-		[Ajax]
-		[HttpPost]
-		public JsonNetResult Accounts(YodleeAccountModel model)
-		{
-			//string errorMsg;
-			//if (!_validator.Validate(model.login, model.password, out errorMsg))
-			//{
-			//	var errorObject = new { error = errorMsg };
-			//	return this.JsonNet(errorObject);
-			//}
-			//try
-			//{
-			//	var customer = _context.Customer;
-			//	var username = model.login;
-			//	var Yodlee = new YodleeDatabaseMarketPlace();
-			//	_mpChecker.Check(Yodlee.InternalId, customer, username);
-			//	var oEsi = new YodleeServiceInfo();
-			//	int marketPlaceId = _mpTypes
-			//		.GetAll()
-			//		.First(a => a.InternalId == oEsi.InternalId)
-			//		.Id;
-
-			//	var mp = new MP_CustomerMarketPlace
-			//				 {
-			//					 Marketplace = _mpTypes.Get(marketPlaceId),
-			//					 DisplayName = model.login,
-			//					 SecurityData = Encryptor.EncryptBytes(model.password),
-			//					 Customer = _customer,
-			//					 Created = DateTime.UtcNow,
-			//					 UpdatingStart = DateTime.UtcNow,
-			//					 Updated = DateTime.UtcNow,
-			//					 UpdatingEnd = DateTime.UtcNow
-			//				 };
-
-			//	_customer.CustomerMarketPlaces.Add(mp); 
-
-			//	if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
-			//		_customer.WizardStep = WizardStepType.Marketplace;
-
-			//	_session.Flush();
-			//	_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
-
-			//	return this.JsonNet(YodleeAccountModel.ToModel(mp));
-			//}
-			//catch (MarketPlaceAddedByThisCustomerException e)
-			//{
-			//	Log.Debug(e);
-			//	return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
-			//}
-			//catch (MarketPlaceIsAlreadyAddedException e)
-			//{
-			//	Log.Debug(e);
-			//	return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
-			//}
-			//catch (Exception e)
-			//{
-			//	Log.Error(e);
-			//	return this.JsonNet(new { error = e.Message });
-			//}
-			return this.JsonNet(new { error = "not implemented" });
 		}
 
 		[Transactional]
@@ -136,8 +66,8 @@
 			
 			if (itemId == -1)
 			{
-				throw new Exception("yuly test");
-				//return View("Error", (object)"Failed linking account");
+				var handleErrorInfo = new HandleErrorInfo(new Exception("Failed linking account"), "YodleeMarketPlaces", "YodleeCallback" );
+				return View("Error", handleErrorInfo);
 			}
 
 			var oEsi = new YodleeServiceInfo();
@@ -169,9 +99,9 @@
 		public RedirectResult AttachYodlee(int csId, string bankName)
 		{
 			var yodleeMain = new YodleeMain();
-			var x = _customer.YodleeAccounts;
+			var yodleeAccounts = _customer.YodleeAccounts;
 			YodleeAccounts yodleeAccount;
-			if (x.FirstOrDefault() == null)
+			if (yodleeAccounts.FirstOrDefault() == null)
 			{
 				var banksRepository = new YodleeBanksRepository(_session);
 				YodleeBanks bank = banksRepository.Search(csId);
@@ -192,11 +122,13 @@
 				var accountsRepository = new YodleeAccountsRepository(_session);
 				int accountId = (int)accountsRepository.Save(yodleeAccount);
 
+				Log.DebugFormat("Created yodlee account: {0}", accountId);
+
 				yodleeMain.RegisterUser(yodleeAccount.Username, yodleeAccount.Password, _customer.Name);
 			}
 			else
 			{
-				yodleeAccount = x.First();
+				yodleeAccount = yodleeAccounts.First();
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
@@ -209,15 +141,14 @@
 	public class YodleeAccountModel
 	{
 		public int bankId { get; set; }
-		public string bankName { get; set; }
-		public string displayName { get { return bankName; } }
+		public string displayName { get; set; }
 
-		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace account)
+		public static YodleeAccountModel ToModel(YodleeAccounts account)
 		{
 			return new YodleeAccountModel
 				{
-					bankId = 1, // TODO: get real id
-					bankName = account.DisplayName
+					bankId = account.Id,
+					displayName = account.Bank.Name
 				};
 		}
 	}
