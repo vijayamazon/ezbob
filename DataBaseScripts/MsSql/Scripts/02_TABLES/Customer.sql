@@ -83,6 +83,7 @@ CREATE TABLE [dbo].[Customer](
 	[PendingStatus] [nvarchar](50) NULL,
 	[DateRejected] [datetime] NULL,
 	[IsLoanTypeSelectionAllowed] [int] NULL,
+	[ABTesting] [nvarchar](512) NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -169,6 +169,36 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>TR_CustomerPersonalInfoLoyalty</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_CustomerPersonalInfoLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>TR_CustomerSignupLoyalty</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_CustomerSignupLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerLoyaltyProgram</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgram.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerLoyaltyProgramAction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgramAction.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerLoyaltyProgramMP</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgramMP.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_DSSTR_STRATEGY_STRATEGYID</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_DSSTR_STRATEGY_STRATEGYID.sql</oFileName>
@@ -199,9 +229,27 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>TR_LoanTakenLoyalty</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_LoanTakenLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoanOptions_Loan</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanOptions_Loan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>TR_RepaymentLoyalty</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_RepaymentLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoyaltyProgramActionType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoyaltyProgramActionType.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -307,6 +355,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>TR_AccountCheckedLoyalty</oName>
+    <oRank>2</oRank>
+    <oFileName>09_TRIGGERS\TR_AccountCheckedLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_CurrencyRateHistory_MP_Currency</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_CurrencyRateHistory_MP_Currency.sql</oFileName>
@@ -323,6 +377,12 @@
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_CustomerMarketPlace_MarketPlace.sql</oFileName>
     <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>TR_CustomerLinkAccountLoyalty</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_CustomerLinkAccountLoyalty.sql</oFileName>
+    <oType>Trigger</oType>
   </DependencyData>
   <DependencyData>
     <oName>FK_MP_CustomerMarketplaceUpdatingActionLog_MP_CustomerMarketPlaceUpdatingHistory</oName>
@@ -829,6 +889,12 @@
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CustomerLoyaltyProgramPoints</oName>
+    <oRank>1</oRank>
+    <oFileName>04_VIEWS\CustomerLoyaltyProgramPoints.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>ExceededApplication</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\ExceededApplication.sql</oFileName>
@@ -838,6 +904,12 @@
     <oName>ExceededStrategy</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\ExceededStrategy.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoyaltyProgramCheckedAccounts</oName>
+    <oRank>1</oRank>
+    <oFileName>04_VIEWS\LoyaltyProgramCheckedAccounts.sql</oFileName>
     <oType>View</oType>
   </DependencyData>
   <DependencyData>

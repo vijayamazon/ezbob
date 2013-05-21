@@ -421,6 +421,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CustomerLoyaltyProgram</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgram.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerLoyaltyProgramAction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgramAction.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerLoyaltyProgramMP</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerLoyaltyProgramMP.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CustomerLoyaltyProgram</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\CustomerLoyaltyProgram.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>CustomerScoringResult</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\CustomerScoringResult.sql</oFileName>
@@ -490,6 +514,12 @@
     <oName>DiscountPlan</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\DiscountPlan.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -706,6 +736,24 @@
     <oName>Log4Net</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\Log4Net.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoyaltyProgramActionType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoyaltyProgramActionType.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoyaltyProgramActions</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\LoyaltyProgramActions.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoyaltyProgramActionTypes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\LoyaltyProgramActionTypes.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
