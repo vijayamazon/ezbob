@@ -6,6 +6,8 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.AmazonServiceLib;
+using EzBob.PayPal;
+using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using StructureMap;
@@ -118,10 +120,18 @@ namespace EzBob.Web.Areas.Underwriter
                             SellerInfoStoreURL = sellerInfoStoreUrl,
                             Categories = categorieValues,
                             EBay = BuildEBay(ebayUserData, ebayAccount, ebayFeedBack),
-                            Yodlee = yodleeData != null ? BuildYodlee(yodleeData) : null
+                            Yodlee = yodleeData != null ? BuildYodlee(yodleeData) : null,
+                            PayPal = BuildPayPal(mp)
                         };
                 });
             return models;
+        }
+
+        private PayPalAccountModel BuildPayPal(MP_CustomerMarketPlace marketplace)
+        {
+            var paypal = new PayPalDatabaseMarketPlace();
+            if (marketplace.Marketplace.InternalId != paypal.InternalId) return null;
+            return PayPalAccountModel.Create(marketplace.Id);
         }
 
         private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)

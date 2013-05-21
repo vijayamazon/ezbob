@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EZBob.DatabaseLib.Model.Database;
+using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
@@ -24,6 +24,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         //eBay
         public EBayModel EBay { get; set; }
+
+        public PayPalAccountModel PayPal { get; set; }
 
         //Aggregates
         public Dictionary<string, string> AnalysisDataInfo { get; set; }

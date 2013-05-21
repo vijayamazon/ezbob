@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class PaymentsAccountModel
     {
-        public List<PayPalModel> PayPalAccounts
-        {
-            get { return _payPalAccounts; }
-        }
-
         public List<BankAccountModel> BankAccounts
         {
             get { return _bankAccounts; }
@@ -25,7 +19,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public BankAccountModel CurrentBankAccount { get; set; }
 
-        private readonly List<PayPalModel> _payPalAccounts = new List<PayPalModel>();
         private readonly List<BankAccountModel> _bankAccounts = new List<BankAccountModel>();
         private readonly List<PayPointCardModel> _paypointCards = new List<PayPointCardModel>();
     }

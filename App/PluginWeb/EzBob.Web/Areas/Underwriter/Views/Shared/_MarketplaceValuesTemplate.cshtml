@@ -103,6 +103,10 @@
             <%if(marketplaceType == "Yodlee"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/Yodlee");}
             <%}%>
+            @* *** PayPal   *** *@
+            <%if(marketplaceType == "Pay Pal"){%>
+                @{ Html.RenderPartial("MarketPlaceDetails/PayPal");}
+            <%}%>
         </fieldset>
     </div>  
 }

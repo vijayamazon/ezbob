@@ -20,7 +20,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
     {
         private readonly CustomerRepository _customers;
         private readonly ICustomerMarketPlaceRepository _customerMarketplaces;
-        private readonly IPayPalDetailsRepository _payPalDetails;
         private readonly ISortCodeChecker _sortCodeChecker;
         private readonly IPayPointFacade _payPointFacade;
         private readonly IWorkplaceContext _context;
@@ -29,7 +28,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public PaymentAccountsController(CustomerRepository customers,
                                             IAppCreator appCreator,
                                             ICustomerMarketPlaceRepository customerMarketplaces,
-                                            IPayPalDetailsRepository payPalDetails,
                                             ISortCodeChecker sortCodeChecker,
                                             IPayPointFacade payPointFacade,
                                             IWorkplaceContext context
@@ -38,7 +36,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _customers = customers;
             _appCreator = appCreator;
             _customerMarketplaces = customerMarketplaces;
-            _payPalDetails = payPalDetails;
             _sortCodeChecker = sortCodeChecker;
             _payPointFacade = payPointFacade;
             _context = context;
@@ -57,8 +54,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
             }
             
-            model.PayPalAccounts.AddRange(customer.GetPayPalAccounts());
-
             model.PayPointCards.AddRange(customer.PayPointCards.Select(PayPointCardModel.FromCard));
 
             model.CurrentBankAccount = BankAccountModel.FromCard(customer.CurrentCard);
@@ -148,65 +143,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             return this.JsonNet(new {r = card.Id});
         }
 
-        [Ajax]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult Details(int id)
-        {
-            var payments = new PayPalAccountGeneralPaymentsInfoModel();
-            var total = new List<PayPalGeneralDataRowModel>();
 
-            var details = _payPalDetails.GetDetails(id);
-
-            var detailIncome = details.DetailIncome.Select(row => new PayPalGeneralDataRowModel(row)).ToList();
-            var detailExpenses = details.DetailExpenses.Select(row => new PayPalGeneralDataRowModel(row)).ToList();
-
-            total.Add(new PayPalGeneralDataRowModel(details.TotalIncome));
-            total.Add(new PayPalGeneralDataRowModel(details.TotalExpenses));
-            total.Add(new PayPalGeneralDataRowModel(details.TotalTransactions) { Pounds = false });
-
-            payments.Data = total;
-
-            var detailPayments = new PayPalAccountDetailPaymentsInfoModel
-                {
-                    Income = ProcessPayments(detailIncome, details), 
-                    Expenses = ProcessPayments(detailExpenses, details)
-                };
-
-            var generalInfo = details.Marketplace.Customer.GetPayPalAccounts().FirstOrDefault(x => x.id == id);
-            var model = new PayPalAccountModel { GeneralInfo = generalInfo, PersonalInfo = new PayPalAccountInfoModel(details.Marketplace.PersonalInfo), DetailPayments = detailPayments, Payments = payments };
-            return this.JsonNet(model);
-        }
-
-        private static IEnumerable<PayPalGeneralDataRowModel> ProcessPayments(ICollection<PayPalGeneralDataRowModel> payments, PayPalDetailsModel details)
-        {
-            var percents = new List<double?>();
-            foreach (var payPalGeneralDataRowModel in payments)
-            {
-                var v1 = payPalGeneralDataRowModel.FirstNotNull();
-                var v2 = details.TotalIncome.FirstNotNull();
-                var percent = (v1 / v2) * 100;
-                payPalGeneralDataRowModel.Type = string.Format("{0} ({1:0.00}%)", payPalGeneralDataRowModel.Type, percent ?? 0);
-                payPalGeneralDataRowModel.Percent = percent;
-                percents.Add(percent);
-            }
-
-            var otherIncomePercent = 100 - percents.Sum();
-            var otherIncomeRow = new PayPalGeneralDataRowModel
-                {
-                    Type = string.Format("Other ({0:0.00}%)", otherIncomePercent),
-                    M1 = details.TotalIncome.M1 - payments.Sum(x => x.M1),
-                    M3 = details.TotalIncome.M3 - payments.Sum(x => x.M3),
-                    M6 = details.TotalIncome.M6 - payments.Sum(x => x.M6),
-                    M12 = details.TotalIncome.M12 - payments.Sum(x => x.M12),
-                    M15 = details.TotalIncome.M15 - payments.Sum(x => x.M15),
-                    M18 = details.TotalIncome.M18 - payments.Sum(x => x.M18),
-                    M24 = details.TotalIncome.M24 - payments.Sum(x => x.M24),
-                    M24Plus = details.TotalIncome.M24Plus - payments.Sum(x => x.M24Plus)
-                };
-            payments.Add(otherIncomeRow);
-            return payments.OrderByDescending(x => x.Percent).ToList();
-        }
 
         [Ajax]
         public void ReCheckPaypal(int customerId, int umi)

@@ -1,0 +1,175 @@
+﻿<%
+            var pi = m.PayPal.PersonalInfo;
+            var p = m.PayPal.Payments;
+            var pdi = m.PayPal.DetailPayments.Income;
+            var pde = m.PayPal.DetailPayments.Expenses;
+            var gi = m.PayPal.GeneralInfo;
+%>
+
+<div class="paypalDetail">
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#payments" data-toggle="tab">Payments info</a></li>
+            <li><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
+            <li><a href="#categories" data-toggle="tab">Categories info</a></li>
+        </ul>                                                      
+        <div class="tab-content">
+            <div class="tab-pane active" id="payments">
+                <table class="table table-bordered table-striped marketplace-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>1M</th>
+                            <th>3M</th>
+                            <th>6M</th>
+                            <th>12M</th>
+                            <th>15M</th>
+                            <th>18M</th>
+                            <th>24M</th>
+                            <th>24M+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% _.each(p.Data, function(dataRow, i){
+                        %>
+                        <tr>
+                            <td><%-dataRow.Type%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M1)  : dataRow.M1 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M3)  : dataRow.M3 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M6)  : dataRow.M6 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M12) : dataRow.M12 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M15) : dataRow.M15 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M18) : dataRow.M18 || '-'%></td>
+                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M24) : dataRow.M24 || '-'%></td>
+                            <td class="bold"><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M24Plus) : dataRow.M24Plus || '-'%></td>
+                        </tr>
+                        <%}) %>
+       
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane" id="payPaldetails">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Parameter name</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Full Name</td>
+                            <td><%-pi.FullName || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Date of Birth</td>
+                            <td><%-pi.DateOfBirth || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Email</td>
+                            <td><%-pi.Email || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Phone</td>
+                            <td><%-pi.Phone || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Buisness Name</td>
+                            <td><%-pi.BuisnessName || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Street 1</td>
+                            <td><%-pi.Street1 || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Street 2</td>
+                            <td><%-pi.Street2 || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>City</td>
+                            <td><%-pi.City || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>State</td>
+                            <td><%-pi.State || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Postcode</td>
+                            <td><%-pi.Postcode || ''%></td>
+                        </tr> 
+                        <tr>
+                            <td>Country</td>
+                            <td><%-pi.Country || ''%></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>                            
+            <div class="tab-pane" id="categories">
+                <table class="table table-bordered table-striped marketplace-table">
+                    <thead>
+                        <tr>
+                            <th>Lifetime income split</th>
+                            <th>1M</th>
+                            <th>3M</th>
+                            <th>6M</th>
+                            <th>12M</th>
+                            <th>15M</th>
+                            <th>18M</th>
+                            <th>24M</th>
+                            <th>24M+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% _.each(pdi, function(dataRowi, i){
+                        %>
+                        <tr>
+                            <td><%-dataRowi.Type%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M1)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M3)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M6)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M12)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M15)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M18)%></td>
+                            <td><%-EzBob.formatPounds(dataRowi.M24)%></td>
+                            <td class="bold"><%-EzBob.formatPounds(dataRowi.M24Plus)%></td>
+                        </tr>
+                        <%}) %>
+       
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-striped marketplace-table">
+                    <thead>
+                        <tr>
+                            <th>Lifetime expenses split</th>
+                            <th>1M</th>
+                            <th>3M</th>
+                            <th>6M</th>
+                            <th>12M</th>
+                            <th>15M</th>
+                            <th>18M</th>
+                            <th>24M</th>
+                            <th>24M+</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% _.each(pde, function(dataRowe, i){
+                        %>
+                        <tr>
+                            <td><%-dataRowe.Type%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M1)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M3)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M6)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M12)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M15)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M18)%></td>
+                            <td><%-EzBob.formatPounds(dataRowe.M24)%></td>
+                            <td class="bold"><%-EzBob.formatPounds(dataRowe.M24Plus)%></td>
+                        </tr>
+                        <%}) %>
+       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
