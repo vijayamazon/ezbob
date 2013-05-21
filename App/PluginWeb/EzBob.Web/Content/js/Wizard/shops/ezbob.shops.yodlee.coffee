@@ -16,18 +16,25 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
         'change input[name="Bank"]': 'bankChanged'
+        'change input[type="radio"]': 'radioChanged'
+        'click #yodleeContinueBtn': 'continueClicked'
+
+    radioChanged:(el) ->
+        checked = @$el.find("input[type='radio'][name!='Bank']:checked") 
+        if checked.length > 0
+            url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{checked.val()}&bankName=#{checked.attr('name')}"
+            @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
+            console.log 'remove'
+            return
 
     bankChanged: ->
-        temp = @$el.find('#Bank_DAG')
-        console.log(temp, temp.attr('checked'))
-        temp = @$el.find('#Bank_Santander')
-        console.log(temp, temp.attr('checked'))
-        @$el.find('.SantanderContainer').toggleClass('hide', temp.attr('checked') != 'checked')
-        temp = @$el.find('#Bank_HSBC')
-        console.log(temp, temp.attr('checked'))
-        @$el.find('.HSBCContainer').toggleClass('hide', temp.attr('checked') != 'checked')
-
-        #show the relevant object hide all others
+        @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
+        @$el.find(".SubBank:not([class*='hide'])").addClass('hide')
+        bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
+        @$el.find("." + bank + "Container").removeClass('hide')
+        console.log 'add'
+        $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
+       
     ui:
         id : '#yodleeId'
         connect: 'a.connect-dag'
@@ -36,6 +43,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     inputChanged: ->
         enabled =  EzBob.Validation.checkForm(@validator) 
         @ui.connect.toggleClass('disabled', !enabled)
+
+    continueClicked: ->
+        return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
 
     connect: ->
         return false if not @validator.form()

@@ -1,7 +1,6 @@
 ﻿namespace YodleeLib.connector
 {
     using System.Collections.Generic;
-    using config;
     using log4net;
 
     public class YodleeConnector
@@ -18,7 +17,6 @@
 
         public static Dictionary<BankData, List<BankTransactionData>> GetOrders(string userName, string password, long itemId)
         {
-            //TODO: implement
             var yodlee = new YodleeMain();
             yodlee.loginUser(userName, password);
             var lu = new LoginUser();
@@ -32,7 +30,8 @@
             {
                 _Log.ErrorFormat("Yodlee GetOrders error: {0}", error);
             }
-            // var orders = new Dictionary<BankData, List<BankTransactionData>>();
+
+            //todo implement refresh logic
             return orders;
         }
     }
