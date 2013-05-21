@@ -54,7 +54,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             
             if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
             {
-                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null);
+                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
             }
             
             model.PayPalAccounts.AddRange(customer.GetPayPalAccounts());
@@ -259,7 +259,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             var customer = _customers.GetChecked(customerId);
 
-            customer.TryAddPayPointCard(trans_id, card_no, expiry);
+            customer.TryAddPayPointCard(trans_id, card_no, expiry, customer.PersonalInfo.Fullname);
 
             _appCreator.PayPointAddedByUnderwriter(_context.User, customer, card_no);
 
@@ -271,7 +271,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public JsonNetResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
         {
             var customer = _customers.GetChecked(customerId);
-            customer.TryAddPayPointCard(transactionid, cardno, expiredate.ToString("MMyy"));
+            customer.TryAddPayPointCard(transactionid, cardno, expiredate.ToString("MMyy"), customer.PersonalInfo.Fullname);
 
             _appCreator.PayPointAddedByUnderwriter( _context.User, customer, cardno);
 

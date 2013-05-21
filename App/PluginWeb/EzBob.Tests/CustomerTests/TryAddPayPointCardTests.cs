@@ -12,7 +12,7 @@ namespace EzBob.Tests.CustomerTests
         public void adds_new_credit_card_after_callback()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "3917", "1014");
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "3917", "1014", null);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(card.ExpireDate.Value.Year, Is.EqualTo(2014));
@@ -25,7 +25,7 @@ namespace EzBob.Tests.CustomerTests
         public void adds_new_test_credit_card_after_callback()
         {
             var customer = new EZBob.DatabaseLib.Model.Database.Customer();
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null);
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(card.ExpireDate.HasValue, Is.False);
@@ -51,7 +51,7 @@ namespace EzBob.Tests.CustomerTests
             customer.PayPointCards.Add(payPointCard);
 
 
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "1234", "1014");
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", "1234", "1014", null);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(1));
             Assert.That(customer.PayPointCards.First().TransactionId, Is.EqualTo("0f22b1c-e8ec-4299-83c2-ed9f9443abf2"));
@@ -71,7 +71,7 @@ namespace EzBob.Tests.CustomerTests
                                    };
             customer.PayPointCards.Add(payPointCard);
 
-            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null);
+            var card = customer.TryAddPayPointCard("0f22b1c-e8ec-4299-83c2-ed9f9443abf2", null, null, null);
 
             Assert.That(customer.PayPointCards.Count, Is.EqualTo(2));
         }

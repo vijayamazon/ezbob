@@ -13,6 +13,7 @@ namespace EZBob.DatabaseLib.Model
         public virtual string CardNo { get; set; }
         public virtual DateTime? ExpireDate { get; set; }
         public virtual string ExpireDateString { get; set; }
+        public virtual string CardHolder { get; set; }
     }
 
     public class PayPointCardMap : ClassMap<PayPointCard>
@@ -26,6 +27,7 @@ namespace EZBob.DatabaseLib.Model
             Map(x => x.CardNo).Length(50);
             Map(x => x.ExpireDate);
             Map(x => x.ExpireDateString).Length(50);
+            Map(x => x.CardHolder).Length(150);
         }
     }
 

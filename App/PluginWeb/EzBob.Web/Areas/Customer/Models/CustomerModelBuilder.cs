@@ -193,7 +193,7 @@ namespace EzBob.Web.Areas.Customer.Models
             //Add paypoint cards for old customers
             if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
             {
-                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null);
+                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
             }
 
             return customer.PayPointCards.Select(PayPointCardModel.FromCard).OrderByDescending(x=>x.IsDefault).ToArray();

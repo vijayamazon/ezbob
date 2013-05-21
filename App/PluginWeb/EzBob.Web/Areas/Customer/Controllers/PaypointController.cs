@@ -123,7 +123,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 }
             }
 
-            customer.TryAddPayPointCard(trans_id, card_no, expiry);
+            customer.TryAddPayPointCard(trans_id, card_no, expiry, customer.PersonalInfo.Fullname);
 
             var confirmation = new PaymentConfirmationModel
                 {

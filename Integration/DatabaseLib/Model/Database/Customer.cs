@@ -399,7 +399,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// <param name="cardNo">Last digits of credit card. null for test card</param>
         /// <param name="expiry">Format: MMYY</param>
         /// <returns></returns>
-        public virtual PayPointCard TryAddPayPointCard(string transId, string cardNo, string expiry)
+        public virtual PayPointCard TryAddPayPointCard(string transId, string cardNo, string expiry, string cardHolder)
         {
             
             var card = new PayPointCard()
@@ -408,7 +408,8 @@ namespace EZBob.DatabaseLib.Model.Database {
                 DateAdded = DateTime.UtcNow,
                 CardNo = cardNo,
                 TransactionId = transId,
-                ExpireDateString = expiry
+                ExpireDateString = expiry,
+                CardHolder = cardHolder
             };
 
             if (!string.IsNullOrEmpty(expiry) && expiry.Length == 4)
