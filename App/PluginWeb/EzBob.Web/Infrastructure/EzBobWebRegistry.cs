@@ -121,6 +121,7 @@ namespace EzBob.Web.Infrastructure
             if (bobconfig.ZohoCRM.Enabled)
             {
                 /*For<IZohoFacade>().Use<ZohoFacade>();*/
+                /*For<IZohoFacade>().Use<ZohoFacadeSignaled>();*/
                 For<IZohoFacade>().Use<ZohoFacadeSignaled>();
             }
             else

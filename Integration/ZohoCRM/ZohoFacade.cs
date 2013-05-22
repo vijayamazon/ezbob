@@ -352,6 +352,7 @@ namespace ZohoCRM
                                                   c.SetValue("Num of loans", customer.Loans.Count);
                                                   
                                                   c.SetValue("IsTest", customer.IsTest ? "1" : "0");
+                                                  c.SetValue("Step", GetStep(customer));
 
                                                   if (customer.Medal.HasValue)
                                                   {
@@ -407,6 +408,29 @@ namespace ZohoCRM
                 log.Error(e);
             }
         }
+
+        private int GetStep(Customer customer)
+        {
+            if (customer.WizardStep == WizardStepType.SignUp) return 1;
+            if (customer.WizardStep == WizardStepType.Marketplace) return 2;
+            if (customer.WizardStep == WizardStepType.PaymentAccounts) return 3;
+            if (customer.WizardStep == WizardStepType.AllStep)
+            {
+                if (!customer.Loans.Any())
+                {
+                    if (customer.CreditResult == CreditResultStatus.Rejected) return 5;
+                    if (customer.CreditResult == CreditResultStatus.Approved) return 6;
+                }
+                else
+                {
+                    if (customer.CreditResult == CreditResultStatus.Approved) return 8;
+                    if (customer.CreditResult == CreditResultStatus.Rejected) return 9;
+                }
+                return 4;
+            }
+            return 0;
+        }
+
         public void UpdateLoans(Customer customer)
         {
             try
