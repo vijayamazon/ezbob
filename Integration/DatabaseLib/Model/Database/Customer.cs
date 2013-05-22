@@ -485,7 +485,15 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual DateTime? DateOfLate { get; set; }
         public virtual decimal LateAmount { get; set; }
 
-		public virtual long LoyaltyPoints() {
+        public bool LoanForCurrentOfferIsTaken
+        {
+            get
+            {
+                return Loans.Select(l => l.CashRequest.Id).Contains(LastCashRequest.Id);
+            }
+        }
+
+        public virtual long LoyaltyPoints() {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
 			return p == null? 0 : p.EarnedPoints;

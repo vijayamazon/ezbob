@@ -416,15 +416,16 @@ namespace ZohoCRM
             if (customer.WizardStep == WizardStepType.PaymentAccounts) return 3;
             if (customer.WizardStep == WizardStepType.AllStep)
             {
-                if (!customer.Loans.Any())
+                if (customer.Loans.Any())
                 {
-                    if (customer.CreditResult == CreditResultStatus.Rejected) return 5;
-                    if (customer.CreditResult == CreditResultStatus.Approved) return 6;
+                    if (customer.CreditResult == CreditResultStatus.Approved && !customer.LoanForCurrentOfferIsTaken) return 8;
+                    if (customer.ActiveLoans.Any()) return 7;
+                    if (customer.CreditResult == CreditResultStatus.Rejected) return 9;
                 }
                 else
                 {
-                    if (customer.CreditResult == CreditResultStatus.Approved) return 8;
-                    if (customer.CreditResult == CreditResultStatus.Rejected) return 9;
+                    if (customer.CreditResult == CreditResultStatus.Rejected) return 5;
+                    if (customer.CreditResult == CreditResultStatus.Approved) return 6;
                 }
                 return 4;
             }
