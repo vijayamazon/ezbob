@@ -931,6 +931,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
       <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
     </Content>
+    <Content Include="Views\Shared\_Copyright.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
@@ -1159,7 +1162,9 @@
     <Content Include="Areas\Customer\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Web.config" />
+    <Content Include="Areas\Underwriter\Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Customer\Views\_ViewStart.cshtml" />
@@ -1445,12 +1450,10 @@
     <Content Include="Views\Shared\_Start.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />
     <Content Include="Views\Shared\_HowItWorks.cshtml" />
-    <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_DynamicLogin.cshtml" />
     <Content Include="Views\Shared\_TopButtons.cshtml" />
     <Content Include="Views\Shared\_FiveIcons.cshtml" />
     <Content Include="Views\Account\AdminLogOn.cshtml" />
-    <Content Include="Views\Shared\_FooterSimple.cshtml" />
     <Content Include="Views\Shared\_MyProfile.cshtml" />
     <Content Include="Views\Landing\Index.cshtml" />
     <Content Include="Views\Home\ActivateStore.cshtml" />
@@ -1466,7 +1469,6 @@
     <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
     <Content Include="Views\PaypointTemplate\Index.cshtml" />
     <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />
-    <Content Include="Views\Shared\_Copyright.cshtml" />
     <Content Include="Views\Shared\_FrameKiller.cshtml" />
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
