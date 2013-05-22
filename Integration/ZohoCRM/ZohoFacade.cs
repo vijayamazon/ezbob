@@ -228,6 +228,7 @@ namespace ZohoCRM
 
         public virtual void UpdateOrCreate(Customer customer)
         {
+            CheckZohoId(customer);
             if (string.IsNullOrEmpty(customer.ZohoId))
             {
                 RegisterLead(customer);
@@ -235,7 +236,6 @@ namespace ZohoCRM
             }
             else
             {
-                CheckZohoId(customer);
                 UpdateCustomer(customer);
             }
         }
