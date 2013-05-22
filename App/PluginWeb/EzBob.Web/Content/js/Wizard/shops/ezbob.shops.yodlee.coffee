@@ -5,7 +5,7 @@ class EzBob.YodleeAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
         super({name: 'Yodlee', logoText: '', shops: @model})
     update: ->
-        @model.fetch()
+        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
 
 class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     template: '#YodleeAccoutInfoTemplate'
@@ -29,9 +29,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             
             that.trigger('completed');
             that.trigger('ready');
-            EzBob.App.trigger 'ct:storebase.shop.connected'
             that.trigger('back');
-        
 
         window.AccountAddingError = (msg) ->
             EzBob.App.trigger('error', msg)

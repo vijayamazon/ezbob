@@ -35,7 +35,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
                 }
                 else
                 {
-                    date = DateTime.UtcNow;
+                    date = DateTime.Today;
                 }
                 return date;
             }
@@ -71,7 +71,9 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
         public override DateTime RecordTime
         {
-            get { return _Data.asOfDate != null && _Data.asOfDate.dateSpecified ? _Data.asOfDate.date.Value : DateTime.UtcNow; }
+            get {
+	            return _Data.asOfDate != null && _Data.asOfDate.dateSpecified ? _Data.asOfDate.date.Value : DateTime.Today;
+            }
         }
     }
 

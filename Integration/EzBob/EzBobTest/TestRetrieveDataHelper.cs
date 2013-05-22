@@ -113,7 +113,7 @@ namespace EzBobTest
         [Test]
         public void UpdateCustomerMarketplace()
         {
-            var umi = 2148;
+            var umi = 2152;
             UpdateCustomerMarketplace(umi);
 
             /*var umis = new[] { 2408, 268, 2222 };

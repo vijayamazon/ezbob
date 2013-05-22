@@ -1,4 +1,5 @@
 ﻿<div class="tabbable yodleeTabTable">
+	<% console.log('yo', y, ai); %>
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#yodleetab1" data-toggle="tab">Aggregates</a></li>
                     <li><a href="#yodleetab2" data-toggle="tab">Bank Account Details</a></li>
@@ -25,14 +26,14 @@
                             <tbody>
                                 <tr>
                                     <td>Total Income</td>
-                                    <td><%-ai.TotlaIncome1M!=undefined ? GBPValues(ai.TotlaIncome1M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome3M!=undefined ? GBPValues(ai.TotlaIncome3M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome6M!=undefined ? GBPValues(ai.TotlaIncome6M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome12M!=undefined ? GBPValues(ai.TotlaIncome12M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome15M!=undefined ? GBPValues(ai.TotlaIncome15M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome18M!=undefined ? GBPValues(ai.TotlaIncome18M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncome24M!=undefined ? GBPValues(ai.TotlaIncome24M, true): "-"%></td>
-                                    <td><%-ai.TotlaIncomeLifetime!=undefined ? GBPValues(ai.TotlaIncomeLifetime, true): "-"%></td>
+                                    <td><%-ai.TotalIncome1M!=undefined ? GBPValues(ai.TotalIncome1M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome3M!=undefined ? GBPValues(ai.TotalIncome3M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome6M!=undefined ? GBPValues(ai.TotalIncome6M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome12M!=undefined ? GBPValues(ai.TotalIncome12M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome15M!=undefined ? GBPValues(ai.TotalIncome15M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome18M!=undefined ? GBPValues(ai.TotalIncome18M, true): "-"%></td>
+                                    <td><%-ai.TotalIncome24M!=undefined ? GBPValues(ai.TotalIncome24M, true): "-"%></td>
+                                    <td><%-ai.TotalIncomeLifetime!=undefined ? GBPValues(ai.TotalIncomeLifetime, true): "-"%></td>
                                 </tr>
                                 <tr>
                                     <td>Total Expense</td>
@@ -94,7 +95,7 @@
                                 <tr onclick="$('#yodleeTabLink<%= (i + 3) %>').click();">
                                     <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                                     <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
-                                    <td><%-bank.availableBalance!=undefined ? bank.availableBalance : "-"%></td>
+                                    <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
                                     <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
                                     <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
                                     <td><%-bank.customName!=undefined ? bank.customName : "-"%></td>
@@ -137,7 +138,7 @@
                                     <td><%-transaction.transactionType!=undefined ? transaction.transactionType : "-"%></td>
                                     <td><%-transaction.transactionStatus!=undefined ? transaction.transactionStatus : "-"%></td>
                                     <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
-                                    <td><%-transaction.transactionAmount!=undefined ? transaction.transactionAmount : "-"%></td>
+                                    <td><%-transaction.transactionAmount!=undefined ? GBPValues(transaction.transactionAmount, true) : "-"%></td>
                                     <td><%-transaction.transactionDate!=undefined ? transaction.transactionDate : "-"%></td>
                                     <td><%-transaction.transactionId!=undefined ? transaction.transactionId : "-"%></td>
                                     <td><%-transaction.category!=undefined ? transaction.category : "-"%></td>
