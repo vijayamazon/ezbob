@@ -38,8 +38,6 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
 
     events:
         "click .bankAccounts tbody tr"   : "showBankAccount"
-        "click .paypalAccounts tbody tr" : "rowClick"
-        "click .reCheck-paypal"          : "reCheckPaypal"
         "click .checkeBankAccount"       : "checkBanckAccount"
         "click .add-existing"            : "addExistingCard"
         "click .setDefault"              : "setDefault"
@@ -109,38 +107,6 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
             xhr2.done =>
                 @_showBankAccount(id)
                 BlockUi 'Off'
-
-    rowClick: (e) ->
-        return if e.target.nodeName is "A"
-        return if e.target.nodeName is "I"
-
-        marketplaceId = e.currentTarget.getAttribute("data-id")
-                
-        view = new EzBob.Underwriter.PayPalAccountDetailsView(
-            model: new EzBob.Underwriter.PayPalAccountDetailsModel(marketplaceId: marketplaceId)
-        )
-
-        BlockUi "On"
-        view.model.fetch().done ->
-            BlockUi "Off"
-            EzBob.App.jqmodal.show view
-
-        false
-
-    reCheckPaypal: (e) ->
-        el = $(e.currentTarget)
-        umi = el.attr("umi")
-        EzBob.ShowMessage "", "Are you sure?", (=> @doReCheck(umi, el)), "Yes", null, "No"
-        false
-
-    doReCheck: (umi, el) ->
-        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/ReCheckPaypal", { customerId: @model.customerId, umi: umi}
-        xhr.done(=>
-            EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck has been started. ", null, "OK"
-            @.trigger "rechecked", {umi: umi, el: el}
-        )
-        xhr.fail (data) ->
-            console.error data.responseText
 
     addExistingCard: ->
         model = new EzBob.Underwriter.PayPointCardModel()

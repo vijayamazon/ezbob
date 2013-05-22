@@ -1174,12 +1174,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\ProfileSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\Marketplaces.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Underwriter\Views\Shared\CreditBureau.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -1189,13 +1183,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\MedalCalculator.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\LoanHistory.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Underwriter\Views\Shared\_LoanTransactions.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\CustomerInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
