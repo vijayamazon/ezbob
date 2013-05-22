@@ -55,7 +55,11 @@
 
       that = this;
       window.YodleeAccountAdded = function(result) {
-        EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+        if (result.error) {
+          EzBob.App.trigger('error', result.error);
+        } else {
+          EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+        }
         that.trigger('completed');
         that.trigger('ready');
         return that.trigger('back');
@@ -73,7 +77,6 @@
       if (checked.length > 0) {
         url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (checked.val()) + "&bankName=" + (checked.attr('name'));
         this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
-        console.log('remove');
       }
     };
 
@@ -84,7 +87,6 @@
       this.$el.find(".SubBank:not([class*='hide'])").addClass('hide');
       bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
       this.$el.find("." + bank + "Container").removeClass('hide');
-      console.log('add');
       return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
     };
 
@@ -175,7 +177,7 @@
       return "Link Yodlee Account";
     };
 
-    YodleeAccountInfoView.prototype.YodleeAccountAdded = function() {
+    YodleeAccountInfoView.prototype.YodleeAccountAdded = function(model) {
       return EzBob.App.trigger('ct:storebase.shop.connected');
     };
 

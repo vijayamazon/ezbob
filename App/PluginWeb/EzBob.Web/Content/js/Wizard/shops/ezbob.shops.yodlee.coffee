@@ -22,7 +22,11 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     initialize: ->
         that = this;
         window.YodleeAccountAdded = (result) ->
-            EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+            if (result.error)
+                EzBob.App.trigger('error', result.error);
+            else
+                EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+
             that.trigger('completed');
             that.trigger('ready');
             that.trigger('back');
@@ -37,7 +41,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         if checked.length > 0
             url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{checked.val()}&bankName=#{checked.attr('name')}"
             @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
-            console.log 'remove'
             return
 
     bankChanged: ->
@@ -45,7 +48,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find(".SubBank:not([class*='hide'])").addClass('hide')
         bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
         @$el.find("." + bank + "Container").removeClass('hide')
-        console.log 'add'
         $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
        
     ui:
@@ -112,7 +114,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     getDocumentTitle: ->
         "Link Yodlee Account"
 
-    YodleeAccountAdded: ->
+    YodleeAccountAdded: (model) -> 
         EzBob.App.trigger 'ct:storebase.shop.connected'
 
 

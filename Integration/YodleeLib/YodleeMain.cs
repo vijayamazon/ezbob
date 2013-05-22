@@ -116,14 +116,16 @@ namespace YodleeLib
 				// No items were found for the user.
 				return -1;
 			}
-			
-			foreach (object t in oa)
+
+			var itemSummary = (ItemSummary)oa[oa.Length - 1];
+
+			if (itemSummary.refreshInfo.statusCode != 0)
 			{
-				var itemSummary = (ItemSummary)t;
-				return itemSummary.itemId; // TODO: the normal id should be added
+				return -1;
 			}
 
-			return -1;
+
+			return itemSummary.itemId;
 		}
     }
 }

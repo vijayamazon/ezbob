@@ -16,9 +16,9 @@
             <h2>success</h2>
             If this windows is not automatically closed, close it.
         </div>
-        <script type="text/javascript">
-        	window.opener.YodleeAccountAdded();
-            self.close();
-        </script>
+	    <script type="text/javascript">
+    		window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+    		self.close();
+    	</script>
     </body>
 </html>

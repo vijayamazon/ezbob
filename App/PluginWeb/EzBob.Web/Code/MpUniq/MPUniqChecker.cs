@@ -7,8 +7,8 @@ namespace EzBob.Web.Code.MpUniq
 {
     public class MPUniqChecker : AMPUniqChecker
     {
-        private readonly ICustomerMarketPlaceRepository _customerMarketPlaceRepository;
-        private readonly IMP_WhiteListRepository _whiteList;
+		protected readonly ICustomerMarketPlaceRepository _customerMarketPlaceRepository;
+        protected readonly IMP_WhiteListRepository _whiteList;
 
         public MPUniqChecker(ICustomerMarketPlaceRepository customerMarketPlaceRepository, IMP_WhiteListRepository whiteList)
         {
