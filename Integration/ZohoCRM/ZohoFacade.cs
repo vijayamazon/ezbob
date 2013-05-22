@@ -350,6 +350,8 @@ namespace ZohoCRM
                                                   c.SetValue("Gender", pi.Gender.ToString());
                                                   c.SetValue("Customers status", "enabled");
                                                   c.SetValue("Num of loans", customer.Loans.Count);
+                                                  
+                                                  c.SetValue("IsTest", customer.IsTest ? "1" : "0");
 
                                                   if (customer.Medal.HasValue)
                                                   {

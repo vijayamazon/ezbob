@@ -242,6 +242,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var cust = _customerRepository.Get(id);
             cust.IsTest = enbaled;
+            _crm.UpdateCustomer(cust);
             Log.DebugFormat("Customer({0}).IsTest = {1}", id, enbaled);
         }
 

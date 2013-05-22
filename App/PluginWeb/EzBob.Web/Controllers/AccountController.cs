@@ -308,12 +308,12 @@ namespace EzBob.Web.Controllers
 
                 var link = _confirmation.GenerateLink(customer);
 
-                _zoho.RegisterLead(customer);
-
                 if (Request.Cookies["istest"] != null)
                 {
                     customer.IsTest = true;
                 }
+
+                _zoho.RegisterLead(customer);
 
                 _customers.Save(customer);
 
