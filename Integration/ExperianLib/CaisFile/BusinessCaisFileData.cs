@@ -21,7 +21,10 @@ namespace ExperianLib.CaisFile
         //-----------------------------------------------------------------------------------
         public void ReadFromFile(string filePath)
         {
-            ReadFromReader(File.OpenText(filePath));
+            using (var caisReader = File.OpenText(filePath))
+            {
+                ReadFromReader(caisReader);
+            }
         }
 
         //-----------------------------------------------------------------------------------
