@@ -316,7 +316,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x=>x.LateAmount)
                 .Formula(@"(select ISNULL(SUM(s.[LoanRepayment]),0) from [LoanSchedule] s left join [Loan] l 
                         on l.[Id] = s.[LoanId]
-                        where l.[CustomerId] = Id)")
+                        where s.[Status] like 'Late' and l.[CustomerId] = Id)")
                 .Not.Insert()
                 .Not.Update();
 
