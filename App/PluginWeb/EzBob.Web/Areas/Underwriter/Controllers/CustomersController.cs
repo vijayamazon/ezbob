@@ -362,6 +362,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var gridModel = CreateColumnsApproved();
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             GridHelpers.DateOfLatePayment(gridModel);
+            GridHelpers.CreateLateAmount(gridModel);
             gridModel.Columns.First(x => x.Index == "OfferValidUntil").Hidden = true;
             GridHelpers.CreateDelinquencyColumn(gridModel);
             return gridModel;
@@ -388,7 +389,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateLastLoanDateColumn(gridModel);
             GridHelpers.CreateLastLoanAmountColumn(gridModel);
             GridHelpers.CreateAmountTaken(gridModel);
-            GridHelpers.CreateLateAmount(gridModel);
             GridHelpers.CreateTotalPrincipalRepaidColumn(gridModel);
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             GridHelpers.CreateNextRepaymentDateColumn(gridModel);
