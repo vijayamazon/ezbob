@@ -5,12 +5,12 @@
 <div id="customers-view" style="display: none;">
     <div class="tabbable tabs-left" id="applications-tabs">
         <ul class="nav nav-tabs ui-state-default left-underwriter-menu">
-            <li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Waiting for decision</a></li>
+            <li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Waiting for decision(<span id="waiting-count"></span>)</a></li>
             @if (Model.Escalated != null)
             {
-                <li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated</a></li>
+                <li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
             }
-            <li><a href="#customers/pending" data-target="#pending" data-toggle="tab">Pending</a></li>
+            <li><a href="#customers/pending" data-target="#pending" data-toggle="tab">Pending(<span id="pending-count"></span>)</a></li>
             <li><a href="#customers/approved" data-target="#approved" data-toggle="tab">Approved</a></li>
             <li><a href="#customers/loans" data-target="#loans" data-toggle="tab">Loans</a></li>
             <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
