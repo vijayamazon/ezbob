@@ -50,7 +50,9 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', res.error
                 return false
 
-            @model.add(acc)
+            try
+                @model.add(acc)
+
             EzBob.App.trigger('info', "PayPoint Account Added Successfully");
             @ui.mid.val("") 
             @ui.vpnPassword.val("")

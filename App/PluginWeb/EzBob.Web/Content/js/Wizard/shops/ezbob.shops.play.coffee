@@ -56,8 +56,10 @@ class EzBob.PlayAccountInfoView extends Backbone.Marionette.ItemView
             if (res.error)
                 EzBob.App.trigger 'error', res.error
                 return false
+            
+            try
+                @model.add(acc)
 
-            @model.add(acc)
             EzBob.App.trigger('info', "Play.com Account Added Successfully");
             @ui.login.val("") 
             @ui.password.val("")

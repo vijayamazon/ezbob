@@ -9,12 +9,15 @@ using EKM;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
 using log4net;
-using EzBob.CommonLib.Security;
 using EzBob.Web.ApplicationCreator;
 using NHibernate;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
+    using CommonLib;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.DatabaseWrapper;
+
     public class EkmMarketPlacesController : Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
@@ -25,9 +28,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IAppCreator _appCreator;
         private readonly EkmConnector _validator = new EkmConnector();
         private readonly ISession _session;
+        private readonly DatabaseDataHelper _helper;
 
         public EkmMarketPlacesController(
             IEzbobWorkplaceContext context,
+            DatabaseDataHelper helper,
             IRepository<MP_MarketplaceType> mpTypes,
             IMPUniqChecker mpChecker,
             IAppCreator appCreator,
@@ -39,6 +44,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _mpChecker = mpChecker;
             _appCreator = appCreator;
             _session = session;
+            _helper = helper;
         }
 
         [Transactional]
@@ -77,26 +83,17 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     .First(a => a.InternalId == oEsi.InternalId)
                     .Id;
 
-                var mp = new MP_CustomerMarketPlace
-                             {
-                                 Marketplace = _mpTypes.Get(marketPlaceId),
-                                 DisplayName = model.login,
-                                 SecurityData = Encryptor.EncryptBytes(model.password),
-                                 Customer = _customer,
-                                 Created = DateTime.UtcNow,
-                                 UpdatingStart = DateTime.UtcNow,
-                                 Updated = DateTime.UtcNow,
-                                 UpdatingEnd = DateTime.UtcNow
-                             };
+                var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
 
-				_customer.CustomerMarketPlaces.Add(mp); 
-				
-				if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
-					_customer.WizardStep = WizardStepType.Marketplace;
+                var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo, customer);
 
                 _session.Flush();
+
+                if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
+                    _customer.WizardStep = WizardStepType.Marketplace;
+
                 _appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
-				
+
                 return this.JsonNet(EkmAccountModel.ToModel(mp));
             }
             catch (MarketPlaceAddedByThisCustomerException e)
@@ -124,14 +121,27 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public string password { get; set; }
         public string displayName { get { return login; } }
 
-        public static EkmAccountModel ToModel(MP_CustomerMarketPlace account)
+        public static EkmAccountModel ToModel(IDatabaseCustomerMarketPlace account)
         {
-            return new EkmAccountModel()
+            var oSecInfo = SerializeDataHelper.DeserializeType<EkmSecurityInfo>(account.SecurityData);
+            return new EkmAccountModel
                        {
                            id = account.Id,
-                           login = account.DisplayName,
-                           password = Encryptor.Decrypt(account.SecurityData)
+                           login = oSecInfo.Name,
+                           password = oSecInfo.Password,
                        };
         }
+
+        public static EkmAccountModel ToModel(MP_CustomerMarketPlace account)
+        {
+            var oSecInfo = SerializeDataHelper.DeserializeType<EkmSecurityInfo>(account.SecurityData);
+
+            return new EkmAccountModel
+            {
+                id = account.Id,
+                login = oSecInfo.Name,
+                password = oSecInfo.Password,
+            };
+        } // ToModel
     }
 }

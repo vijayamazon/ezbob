@@ -19,7 +19,9 @@ using EzBob.CommonLib.Security;
 using EzBob.Web.ApplicationCreator;
 
 namespace EzBob.Web.Areas.Customer.Controllers {
-	public class VolusionAccountModel {
+    using NHibernate;
+
+    public class VolusionAccountModel {
 		public int id { get; set; }
 		public string login { get; set; }
 		public string password { get; set; }
@@ -62,6 +64,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		private readonly IAppCreator _appCreator;
 		private readonly VolusionConnector _validator = new VolusionConnector();
 		private readonly DatabaseDataHelper _helper;
+        private readonly ISession _session;
 
 		public VolusionMarketPlacesController(
 			IEzbobWorkplaceContext context,
@@ -70,6 +73,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			IRepository<MP_MarketplaceType> mpTypes,
 			IRepository<MP_CustomerMarketPlace> marketplaces,
 			VolusionMPUniqChecker mpChecker,
+            ISession session,
 			IAppCreator appCreator
 		) {
 			_context = context;
@@ -80,6 +84,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
 			_appCreator = appCreator;
+		    _session = session;
 		} // constructor
 
 		[Transactional]
@@ -135,9 +140,10 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
 
-				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id); // TODO: implement and use VolusionAdded
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
+                _session.Flush();
+				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id); 
 
 				return this.JsonNet(VolusionAccountModel.ToModel(mp));
 			}

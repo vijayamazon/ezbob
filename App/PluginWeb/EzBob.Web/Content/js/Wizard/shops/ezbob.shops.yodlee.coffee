@@ -82,8 +82,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             if (res.error)
                 EzBob.App.trigger 'error', res.error
                 return false
+            try
+                @model.add(acc)
 
-            @model.add(acc)
             EzBob.App.trigger('info', "Yodlee Account Added Successfully");
             @ui.mid.val("") 
             @ui.vpnPassword.val("")

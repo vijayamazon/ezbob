@@ -132,7 +132,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					customer.WizardStep = WizardStepType.Marketplace;
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, play, oSecInfo, customer);
 
-				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id); // TODO: implement and use PlayAdded
+				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 
 				return this.JsonNet(PlayAccountModel.ToModel(mp));
 			}
