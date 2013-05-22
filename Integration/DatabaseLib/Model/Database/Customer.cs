@@ -485,7 +485,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual DateTime? DateOfLate { get; set; }
         public virtual decimal LateAmount { get; set; }
 
-        public bool LoanForCurrentOfferIsTaken
+        public virtual bool LoanForCurrentOfferIsTaken
         {
             get
             {
