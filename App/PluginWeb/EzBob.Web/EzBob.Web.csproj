@@ -1180,9 +1180,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_ExportToExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\Underwriter\Views\Shared\MedalCalculator.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Areas\Underwriter\Views\Shared\_LoanTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
