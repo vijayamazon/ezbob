@@ -25,7 +25,11 @@ namespace ExperianLib.CaisFile
         {
             if (data.Length != 1364) throw new Exception("Invalid string length, must be 1364 characters");
             TotalRecords = Utils.ToInt32(data, 20, 8);
+        }
 
+        public bool IsTrailer(string data)
+        {
+            return data.Length == 1364 && data.StartsWith("99999999999999999999");
         }
     }
 }

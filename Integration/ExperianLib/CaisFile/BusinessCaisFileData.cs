@@ -21,7 +21,7 @@ namespace ExperianLib.CaisFile
         //-----------------------------------------------------------------------------------
         public void ReadFromFile(string filePath)
         {
-            ReadFromString(File.ReadAllText(filePath));
+            ReadFromReader(File.OpenText(filePath));
         }
 
         //-----------------------------------------------------------------------------------
@@ -37,6 +37,33 @@ namespace ExperianLib.CaisFile
                 Accounts.Add(acc);
             }
             Trailer.Deserialize(lines[lines.Length - 1]);
+        }
+
+        public void ReadFromReader(StreamReader caisReader)
+        {
+            int linesRead = 0;
+            string line;
+            while ((line = caisReader.ReadLine()) != null)
+            {
+                linesRead++;
+                if (Trailer.IsTrailer(line))
+                {
+                    Trailer.Deserialize(line);
+                    break;
+                }
+
+                if (linesRead == 1)
+                {
+                    Header.Deserialize(line);
+                    continue;
+                }
+                
+                var acc = new BusinessAccountRecord();
+                acc.Deserialize(line);
+                Accounts.Add(acc);
+            }
+
+            if (linesRead < 2) throw new Exception("Invalid input string, at least 3 lines expected");
         }
 
         //-----------------------------------------------------------------------------------

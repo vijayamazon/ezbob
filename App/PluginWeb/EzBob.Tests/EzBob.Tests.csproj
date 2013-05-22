@@ -88,6 +88,12 @@
   <ItemGroup>
     <Compile Include="AmazonRateInfoFixture.cs" />
     <Compile Include="AnalysisFunctionTimePeriodRepositoryFixture.cs" />
+    <Compile Include="CAIS\cais.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>cais.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CAIS\CAISParseFixture.cs" />
     <Compile Include="CustomLoanCanBeAltered.cs" />
     <Compile Include="DiscountPlanFixture.cs" />
     <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
@@ -141,6 +147,10 @@
     <Compile Include="SerializeDataHelperFixture.cs" />
     <Compile Include="ZohoCRMTests\RegisterLead.cs" />
     <Compile Include="ZohoCRMTests\ZohoFixture.cs" />
+    <EmbeddedResource Include="CAIS\cais.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>cais.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -178,6 +188,10 @@
       <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
       <Name>EKM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ExperianLib\ExperianLib.csproj">
+      <Project>{D91F3FD0-9E1B-41FF-AE2E-67F051198F51}</Project>
+      <Name>ExperianLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
       <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
       <Name>EzBob.Configuration</Name>
@@ -211,7 +225,9 @@
       <Name>PostcodeAnywhere</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="CAIS\cais-big.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
