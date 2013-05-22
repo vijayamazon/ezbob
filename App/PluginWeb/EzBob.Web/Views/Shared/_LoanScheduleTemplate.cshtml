@@ -1,96 +1,69 @@
 ﻿@model dynamic
-
 <script id="loan-schedule-template" type="text/template">
-    @talbe()
-    @footer()
-    <div>
-        <%if(setupFee){%>
-            <div class="setupFeeFooter">
-                * origination fee will be deducted from the loan transfer
-            </div>
-        <%}%>
-    </div>
-    <p class="offer-status"></p>
-    Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b> <span class="underwriter-only"><%if(OfferedCreditLine < EzBob.Config.MinLoan){%> <span class="red">(Offered sum is less than min limit)</span> <%}%></span><br/>
-    Repayment period: <b><%- RepaymentPerion %></b><br/>
-    Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br/>
-    Loan type: <b><%- LoanType %></b><br><br>
+	<div class="simple-well clearfix apply-for-loan-total-block">
+		<div class="formula">
+			<div class="total">Loan<span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
+			<img class="plus" src="@Url.Content("~/Content/img/plus.png")">
+			<div class="cost">Cost<span class="gelt"><%-EzBob.formatPounds(totalInterest)%></span></div>
+			<img class="eq" src="@Url.Content("~/Content/img/arrow-right.png")">
+			<div class="due">Total<span class="gelt"><%-EzBob.formatPounds(total)%></span> </div>
+		</div>
 
-    <%if(isShowExportBlock){%>
-        <a href="#" class="pull-right print-link excel-link">Export to Excel</a>
+		<% if (isShowGift) { %><div class="free-gift">Pay early at any time and reduce your costs.</div><% } %>
+
+		<div class="rlc">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %>, <span class="apr">APR = <%- apr %>%</span></div>
+	</div>
+
+	<table class="table table-bordered table-striped payment-schedule-table">
+		<thead>
+			<tr>
+				<th width="80">Due Date</th>
+				<th>Principal</th>
+				<th>Interest</th>
+				<th>Rate</th>
+				<th>Fees<%if(setupFee) { %> * <% } %></th>
+				<th>Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%_.each(schedule, function(line, i){%>
+				<tr>
+					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
+					<td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
+					<td><%-EzBob.formatPounds(line.Interest)%></td>
+					<td><%-EzBob.formatPercents(line.InterestRate, 1)%></td>
+
+					<td style="text-align: center"><%
+						var fee = setupFee > 0 && i == 0 ? setupFee : 0;
+						if (line.Fees) fee += line.Fees; %>
+							<%-fee !=0 ? EzBob.formatPounds(fee) : '-' %><%- setupFee && i == 0 ? '*' : '' %>
+					</td>
+
+					<td>
+						<b class="apply-loan-total"><%-EzBob.formatPounds(line.AmountDue)%></b>
+					</td>
+				</tr>
+			<%});%>
+		</tbody>
+	</table>
+
+	<div>
+		<% if (setupFee) { %>
+			<div class="setupFeeFooter">* origination fee will be deducted from the loan transfer</div>
+		<% } %>
+	</div>
+	<p class="offer-status"></p>
+
+	<div class="underwriter-only">
+		Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b><% if (OfferedCreditLine < EzBob.Config.MinLoan) { %><span class="red">(Offered sum is less than min limit)</span><% } %><br />
+		Repayment period: <b><%- RepaymentPerion %></b><br />
+		Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br />
+		Loan type: <b><%- LoanType %></b><br>
+		<br>
+	</div>
+
+	<% if(isShowExportBlock) { %>
+	<a href="#" class="pull-right print-link excel-link">Export to Excel</a>
 	<a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
-    <%}%>
+	<% } %>
 </script>
-
-@helper talbe(){
-        <table class="table table-bordered table-striped payment-schedule-table">
-        <thead>
-            <tr>
-                <th width="80">Due Date</th>
-                <th>Principal</th>
-                <th colspan="2">Interest</th>
-                <th>
-                    Fees
-                    <%if(setupFee){%>
-                        *
-                    <%}%>
-                </th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(schedule, function(line, i){%>
-                <tr>
-                    <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-                    <td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
-                    <td><%-EzBob.formatPounds(line.Interest)%></td>
-                    <td><%-EzBob.formatPercents(line.InterestRate, 1)%></td>
-                    
-                    <td style="text-align: center">
-                        <%
-                            var fee = setupFee > 0 && i == 0 ? setupFee : 0;
-                            if (line.Fees) fee += line.Fees;
-                        %>
-                        <%-fee !=0 ? EzBob.formatPounds(fee):'-'%><%-setupFee && i == 0 ? '*' : ''%>
-                    </td>
-                    
-                    <td>
-                        <b class="apply-loan-total" ><%-EzBob.formatPounds(line.AmountDue)%></b>
-                    </td>
-                </tr>
-            <%});%>
-        </tbody>
-    </table>
-}
-@helper footer()
-{
-    <div class="simple-well clearfix apply-for-loan-total-block">
-        <div class="total-block-total">
-            <p>Loan<br/>
-                <b><%-EzBob.formatPounds(totalPrincipal)%></b>
-            </p>
-        </div>
-        <div class="total-block-cost">
-            <p>
-                Cost<br/>
-                <b><%-EzBob.formatPounds(totalInterest)%></b>
-            </p>
-        </div>
-        <div class="total-block-total-due">
-            <p>Total<br/>
-                <b><%-EzBob.formatPounds(total)%></b>
-            </p>
-        </div>
-        <span class="ric">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %>, &nbsp;&nbsp;&nbsp; APR = <%- apr %>%</span>
-        <%if(isShowGift){%>
-        <div  class="free-gift-block free-gift">
-            <p>Did you know: You can always pay any amount at any time, <br/>
-                above the specified amount, and save on interest costs.<br/>
-                There are no pre-payment penalties or charges.
-            </p>
-        </div>
-        <%}%>
-        <i class="separator-image1"></i>
-        <i class="separator-image2"></i>
-    </div>
-}

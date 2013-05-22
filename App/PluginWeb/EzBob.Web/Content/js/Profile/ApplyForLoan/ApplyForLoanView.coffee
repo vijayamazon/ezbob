@@ -37,7 +37,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .agreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
-    'click .select-loan-type': 'loanTypeChanged'
+    'click .plan': 'loanTypeChanged'
 
   ui:
     submit: ".submit"
@@ -45,10 +45,13 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     loanAmount: "input[name='loanAmount']"
 
   loanTypeChanged: (e) =>
-    oTarget = $(e.target)
+    if e.target.tagName.toLowerCase() is 'a'
+        return
 
-    newLoanTypeID = oTarget.attr('loan-type')
-    newRepaymentPeriod = oTarget.attr('repayment-period')
+    aryID = $(e.target).closest('.plan').attr('id').split '-'
+
+    newLoanTypeID = aryID[2]
+    newRepaymentPeriod = aryID[3]
 
     if newLoanTypeID == @currentLoanTypeID and newRepaymentPeriod == @currentRepaymentPeriod
       return
@@ -58,7 +61,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
     @setCurrentlyActiveLoanType()
 
-    @neededCashChanged()
+    @neededCashChanged true
 
   setCurrentlyActiveLoanType: =>
     @$('div.currently-active').removeClass('currently-active')
@@ -79,7 +82,15 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @model.set "loanType", @currentLoanTypeID
     @model.set "repaymentPeriod", @currentRepaymentPeriod
 
-  recalculateSchedule: (val) ->
+  recalculateSchedule: (args) ->
+    console.log 'recalculateSchedule', args
+    val = args.value
+    unless args.reloadSelectedOnly is true
+      $.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
+        for loanKey, offer of data
+          $('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
+          $('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
+
     BlockUi "on", @$el.find('#block-loan-schedule')
     BlockUi "on", @$el.find('#block-agreement')
     sMoreParams = '&loanType=' + @currentLoanTypeID + '&repaymentPeriod=' + @currentRepaymentPeriod
@@ -99,10 +110,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     scheduleView.render()
     @createAgreementView schedule.Agreement
 
-  neededCashChanged: ->
+  neededCashChanged: (reloadSelectedOnly) ->
     value = @model.get("neededCash")
     @ui.submit.attr "href", @model.get("url")
-    @recalculateThrottled value
+    @recalculateThrottled value: value, reloadSelectedOnly: reloadSelectedOnly
     @ui.loanAmount.autoNumericSet value
     @$el.find("#loan-slider").slider "value", value
 
@@ -140,7 +151,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @$el.find("#loan-slider").slider sliderOptions
     
     #this.$el.find('input[name="loanAmount"]').numericOnly();
-    @$el.find("input[name=\"loanAmount\"]").moneyFormat()
+    @$el.find('input[name=loanAmount]').autoNumeric EzBob.moneyFormatNoDecimals
     @neededCashChanged()
 
     @$el.find("img[rel]").setPopover 'right'

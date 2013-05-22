@@ -1,25 +1,29 @@
 ﻿@using EZBob.DatabaseLib
+@using EZBob.DatabaseLib.Model.Database
 @using EzBob.CommonLib
+@using EzBob.Models
+@using EzBob.Web.Areas.Customer.Controllers
+@using EzBob.Web.Areas.Customer.Models
+@using EzBob.Web.Code
+@using EzBob.Web.Code.Agreements
+@using PaymentServices.Calculators
 @using StructureMap
 @model dynamic
+
 @helper ApplyForLoanTemplate() {
 	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
-	int[] aryLoanPeriods = {6, 10};
-
 	<div id="loan-type-selector" class="hide">
-		<h2>Choose the right loan for your business</h2>
-		@foreach (var nPeriod in aryLoanPeriods) {
+		<h2>Choose The Right Loan For Your Business</h2>
+		@foreach (var nPeriod in ScheduleController.LoanPeriods) {
 			foreach (var lt in oDBHelper.LoanTypeRepository.GetAll()) {
 				<div class="plan" id="loan-type-@lt.Id-@nPeriod">
 					<h3>@lt.Name<span>@nPeriod Months</span></h3>
-					<button class="button green select-loan-type" loan-type="@lt.Id" repayment-period="@nPeriod">Select</button>
+					<button class="button green">Select</button>
 					<ul>
-						<li>Advantage Point 1</li>
-						<li>Advantage Point 2</li>
-						<li>Advantage Point 3</li>
-						<li>Advantage Point 4</li>
-						<li><a href="#">Read More...</a></li>
+						<li>Interest: <span class="Interest"></span>
+						<li>Total: <span class="Total"></span></li>
+						<!-- li><a href="#">Read More...</a></li !-->
 					</ul>
 				</div>
 			}
@@ -28,26 +32,19 @@
 
 	<div class="loan-amount-header">
 		<h2 style="margin-top: 8px;">Choose Loan Amount</h2>
-		<div class="guarantee-img"></div>
 	</div>
 
-	<h3 class="apply-header-approved">You are eligible for <b><%-EzBob.formatPounds(CreditSum)%></b></h3>
-	<h3 class="apply-header-approved">Valid for <b class="offerValidFor"><%-OfferValid%></b> hrs.</h3>
-
 	<div class="cash-question">
-		<h3>How much cash do you need?</h3>
-
 		<div class="row-fluid">
-
 			<div class="slider-wrapper clearfix span8">
 				<div id="loan-slider"></div>
 				<div class="slider-text">
 					<div class="pull-right slider-upto">
 						<text class="hm_blue">up to </text>
-						<%-EzBob.formatPounds(maxCash)%>
+						<%-EzBob.formatPoundsNoDecimals(maxCash)%>
 					</div>
 					<div class="pull-left ">
-						<text class=""><%-EzBob.formatPounds(minCash)%></text>
+						<text class=""><%-EzBob.formatPoundsNoDecimals(minCash)%></text>
 					</div>
 					<div class="slider-ticks"></div>
 				</div>

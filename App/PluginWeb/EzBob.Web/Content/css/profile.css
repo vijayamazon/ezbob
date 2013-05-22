@@ -642,106 +642,6 @@ body .other-amount-label {
     font-size: 14px;
 }
 
-.apply-for-loan-total-block {
-    font-size: 12px;
-    font-weight: normal;
-    padding: 20px 10px 0 10px;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.apply-for-loan-total-block > p {
-    font-size: 10px;
-    position: absolute;
-    right: 60px;
-}
-
-.apply-for-loan-total-block > div {
-    display: inline-block;
-    height: 70px;
-    vertical-align: central;
-    padding-left: 90px;
-    background-repeat: no-repeat;
-    font-weight: bold;
-    position: relative;
-    width: 40px;
-}
-
-.apply-for-loan-total-block > div b {
-    color: #8BAC2B;
-}
-
-.apply-for-loan-total-block p {
-    position: absolute;
-    top: 0;
-    left: 64px;
-}
-
-.apply-for-loan-total-block .total-block-total {
-    background-image: url(../img/image-money64.png);
-    margin-left: 10px;
-}
-.apply-for-loan-total-block .total-block-total p {
-    /*line-height: 30px;*/
-    padding-top: 10px;
-    width: 90px;
-}
-
-.total-block-total-due {
-    margin-left: 0px;
-}
-
-.total-block-cost {
-    margin-left: 60px;
-    background-position: 0 15px;
-    background-image: url(../img/image-money32.png);
-    width: 20px;
-}
-
-.total-block-cost p{left: 35px;}
-
-.total-block-cost p {padding-top: 10px;}
-
-.total-block-total-due p {
-    padding-top: 10px;
-    left: 50px;
-    width: 90px;
-}
-
-.separator-image1, .separator-image2
-{
-    position: absolute;
-    top: 20px;
-    display: block;
-    width: 40px;
-    height: 40px;
-}
-
-.separator-image1 {
-    background-image: url(../img/arrow-right.png);
-    left: 330px;
-}
-
-.separator-image2 {
-    background-image: url(../img/plus.png);
-    width: 48px;
-    height: 48px;
-    left: 160px;
-}
-
-.apply-for-loan-total-block .apr {
-    font-size: 10px;
-    position: absolute;
-    left: 25px;
-    bottom: 1px;
-}
-
-.apply-for-loan-total-block .ric {
-    font-size: 12px;
-    position: absolute;
-    left: 25px;
-    bottom: 0px;
-}
 
 #message-sign {
     float: right;
@@ -965,27 +865,74 @@ table.payment-schedule-table td{font-size: 16px;}
     margin-top: 40px;
 }
 
-.free-gift {
-    background-image: url(../img/free-gift-icon.png);
-    background-position:10px 10px;
-    
-}
-.free-gift-block {
-    width: 370px !important;
-    background-color: #007F46;
-    color: #f5f5f5;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    
-}
-
-.free-gift-block p {
-    margin-top: 10px;
-    font-size: 13px;
-    -webkit-text-shadow: none;
-    text-shadow: none;
-}
-
 select.selectheight { height: 30px; }
 
 #get-cash .underwriter-only { display: none; }
+
+.apply-for-loan-total-block {
+	font-size: 12px;
+	position: relative;
+	font-weight: normal;
+	padding: 20px 10px 0 10px;
+	margin-bottom: 20px;
+	width: 600px;
+}
+
+.apply-for-loan-total-block .formula {
+	position: relative;
+	width: 600px;
+	height: 70px;
+}
+
+.apply-for-loan-total-block .formula img      { position: absolute; }
+.apply-for-loan-total-block .formula img.plus { left: 170px; top: 0; }
+.apply-for-loan-total-block .formula img.eq   { left: 420px; top: 3px; } 
+
+.apply-for-loan-total-block .formula .total,
+.apply-for-loan-total-block .formula .cost,
+.apply-for-loan-total-block .formula .due {
+	width: 90px;
+	height: 70px;
+	position: absolute;
+	top: 0;
+	background-repeat: no-repeat;
+	padding-top: 16px;
+	font-weight: bold;
+}
+
+.apply-for-loan-total-block .formula .total {
+	left: 0;
+	background-image: url(../img/image-money64.png); background-position: top left;
+	padding-left: 70px;
+}
+.apply-for-loan-total-block .formula .cost {
+	left: 255px;
+	background-image: url(../img/image-money32.png); background-position: 16px 16px;
+	padding-left: 54px;
+}
+.apply-for-loan-total-block .formula .due { left: 510px; }
+
+.apply-for-loan-total-block .gelt { color: #8BAC2B; display: block; }
+
+.apply-for-loan-total-block .free-gift {
+	-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
+	background-image: url(../img/free-gift-icon.png);
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	background-color: #007F46;
+	color: #f5f5f5;
+	border-radius: 10px;
+	margin-bottom: 10px;
+	font-size: 1.5em;
+	height: 70px;
+	width: 600px;
+	padding: 24px 0 0 80px;
+}
+
+.apply-for-loan-total-block .rlc {
+	font-size: 10px;
+}
+.apply-for-loan-total-block .apr {
+	display: inline-block;
+	margin-left: 16px;
+}

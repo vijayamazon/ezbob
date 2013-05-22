@@ -60,6 +60,16 @@
 	background-image: linear-gradient(#fff, #eee);
 }
 
+#loan-type-selector .plan:hover h3 {
+	background-color: #ffe4b5;
+	background-image: -moz-linear-gradient(#fff,#ffe4b5);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ffe4b5));
+	background-image: -webkit-linear-gradient(#fff, #ffe4b5);
+	background-image: -o-linear-gradient(#fff, #ffe4b5);
+	background-image: -ms-linear-gradient(#fff, #ffe4b5);
+	background-image: linear-gradient(#fff, #ffe4b5);
+}
+
 #loan-type-selector .currently-active h3 {
 	background-color: #ddd;
 	background-image: -moz-linear-gradient(#eee,#ddd);
@@ -73,6 +83,16 @@
 	-moz-border-radius: 5px 5px 0 0;
 	-webkit-border-radius: 5px 5px 0 0;
 	border-radius: 5px 5px 0 0;
+}
+
+#loan-type-selector .currently-active:hover h3 {
+	background-color: #ffa500;
+	background-image: -moz-linear-gradient(#fff,#ffa500);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ffa500));
+	background-image: -webkit-linear-gradient(#fff, #ffa500);
+	background-image: -o-linear-gradient(#fff, #ffa500);
+	background-image: -ms-linear-gradient(#fff, #ffa500);
+	background-image: linear-gradient(#fff, #ffa500);
 }
 
 #loan-type-selector .plan:nth-child(1) h3 {
