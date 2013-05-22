@@ -51,7 +51,12 @@
 		[Transactional]
 		public JsonNetResult Accounts()
 		{
-			List<YodleeAccountModel> yodlees = _customer.YodleeAccounts.Select(YodleeAccountModel.ToModel).ToList();
+			var oEsi = new YodleeServiceInfo();
+			List<YodleeAccountModel> yodlees = _customer
+				.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
+				.Select(YodleeAccountModel.ToModel)
+				.ToList();
 			return this.JsonNet(yodlees);
 		}
 
@@ -162,7 +167,17 @@
 				displayName = account.Bank.Name
 			};
 		}
+
 		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace)
+		{
+			return new YodleeAccountModel
+			{
+				bankId = marketplace.Customer.YodleeAccounts.First().Id,
+				displayName = marketplace.Customer.YodleeAccounts.First().Bank.Name
+			};
+		}
+
+		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace)
 		{
 			return new YodleeAccountModel
 			{
