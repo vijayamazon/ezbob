@@ -462,6 +462,7 @@
     <Content Include="Content\css\images\sprites\social_sprite.png" />
     <Content Include="Content\css\images\sprites\social_sprite_round.png" />
     <Content Include="Content\css\images\star.png" />
+    <Content Include="Content\css\images\sticky_chat_bg.png" />
     <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\images\yodlee.png" />
     <Content Include="Content\css\jquery.jqplot.css" />
