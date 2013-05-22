@@ -26,9 +26,10 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger('error', result.error);
             else
                 EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
-
+            
             that.trigger('completed');
             that.trigger('ready');
+            EzBob.App.trigger 'ct:storebase.shop.connected'
             that.trigger('back');
         
 

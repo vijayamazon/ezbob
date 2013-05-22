@@ -70,7 +70,7 @@ ul.footer_nav li li a{font-weight:normal;}
 /*-- sub footer navigation --*/
 ul.sub_footer_nav{margin:0; padding:0; list-style:none; overflow:hidden;}
 ul.sub_footer_nav li{float:left; margin:0;}
-ul.sub_footer_nav li a{float:left; display:block; padding:10px 10px 10px 0; color:#fff; text-shadow:0 1px 1px #000;text-decoration: underline;}
+ul.sub_footer_nav li a{float:left; display:block; padding:10px 10px 10px 0; color:#fff; text-shadow:0 1px 1px #000;}
 /*-- sub page navigation --*/
 #child_nav{
 	/*border:1px #ccc solid; 
