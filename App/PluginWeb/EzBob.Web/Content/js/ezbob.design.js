@@ -405,6 +405,10 @@ Array.prototype.clean = function (deleteValue) {
     return this;
 };
 
+String.prototype.toBool = function () {
+    return this.toLowerCase() === "true";
+};
+
 String.prototype.isNullOrEmpty = function () {
     return EzBob.isNullOrEmpty(this);
 };

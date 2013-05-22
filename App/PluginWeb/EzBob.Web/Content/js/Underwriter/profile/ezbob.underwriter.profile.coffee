@@ -184,9 +184,21 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @changeDecisionButtonsState()
 
     show: (id) ->
+        BlockUi "on"
+        xhr = $.get "#{window.gRootPath}Underwriter/Customers/CheckCustomer?customerId=#{id}"
+        xhr.done (res)=>
+            BlockUi "off"
+            if res.error
+                EzBob.ShowMessage res.error,"Something went wrong"
+                return
+            result = res.toBool()
+            if result then @_show(id) 
+            else EzBob.ShowMessage("Customer Credit result is null or IsSuccessfullyRegistered = false","Error") 
+
+    _show: (id) ->
         @hide()
+        BlockUi "on"
         scrollTop()
-        BlockUi "On"
         that = this
         @customerId = id
         @personalInfoModel.set

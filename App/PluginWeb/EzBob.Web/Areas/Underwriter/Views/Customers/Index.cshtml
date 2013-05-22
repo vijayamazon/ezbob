@@ -123,6 +123,19 @@
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').tab('show');
             }
+
+            var getCustomerId = function() {
+                var res = prompt("Customer ID?");
+                if (!EzBob.isNullOrEmpty(res)) {
+                    profileView.router.navigate("profile/" + res, { trigger: true, replace: true });
+                }
+            };
+            
+            $("#liClient > a").on("click", function() {
+                getCustomerId();
+                return false;
+            });
+            Mousetrap.bind("ctrl+g", getCustomerId);
         });
         
         @if (Model.Escalated != null)

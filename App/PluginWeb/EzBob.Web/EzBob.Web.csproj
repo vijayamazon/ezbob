@@ -950,6 +950,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Play.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Yodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\YodleeCallback.cshtml" />
+    <Content Include="Content\js\lib\mousetrap_1.4.0.js" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

@@ -53,7 +53,10 @@
                         @RoleUrl()
                     </li>
                     <li id="liApplications" class="active">
-                        <a href='@Url.Action("Index", "Customers")#'>Customers</a>
+                        <a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
+                    </li>
+                    <li id="liClient">
+                        <a href='#'>Go to Customer Id</a>
                     </li>
                     <li id="liReports" class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
