@@ -769,9 +769,6 @@
     <Content Include="Content\img\what-ezbob-overview.png" />
     <Content Include="Content\img\yahoonews.png" />
     <Content Include="Content\img\your-profile-picture.jpg" />
-    <Content Include="Content\js\App\ezbob.bindings.js">
-      <DependentUpon>ezbob.bindings.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\App\ezbob.clicktale.js" />
     <Content Include="Content\js\App\ezbob.GA.js">
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
@@ -909,12 +906,6 @@
     </Content>
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.js">
-      <DependentUpon>ezbob.underwriter.creditLineDialog.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
-      <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>

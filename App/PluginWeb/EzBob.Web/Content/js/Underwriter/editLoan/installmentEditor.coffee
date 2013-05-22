@@ -52,19 +52,19 @@ class EzBob.InstallmentEditor extends Backbone.Marionette.ItemView
     bindings:
         Date:
             selector: "input[name='date']"
-            converter: EzBob.BidingConverters.dateTime
+            converter: EzBob.BindingConverters.dateTime
         Balance:
             selector: "input[name='balance']"
-            converter: EzBob.BidingConverters.floatNumbers
+            converter: EzBob.BindingConverters.floatNumbers
         Principal:
             selector: "input[name='loanRepayment']"
-            converter: EzBob.BidingConverters.floatNumbers
+            converter: EzBob.BindingConverters.floatNumbers
         InterestRate:
             selector: "input[name='interestRate']"
-            converter: EzBob.BidingConverters.percents
+            converter: EzBob.BindingConverters.percents
         Total:
             selector: "input[name='totalRepayment']"
-            converter: EzBob.BidingConverters.floatNumbers
+            converter: EzBob.BindingConverters.floatNumbers
     ui:
         form: "form"
         shift: ".shift-installments :checkbox"

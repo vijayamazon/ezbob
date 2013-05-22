@@ -42,6 +42,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     save:-> 
         return unless @ui.form.valid()
         postData = @getPostData()
+
         action = "#{window.gRootPath}Underwriter/ApplicationInfo/ChangeCreditLine"
         post = $.post action, postData
         post.done => @model.fetch()
@@ -49,28 +50,29 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     
     getPostData:->
         m = @cloneModel.toJSON()
-        data=
-            id:m.CashRequestId
-            loanType:$("#loan-type option:selected").val()
-            amount:parseFloat(@$el.find("#offeredCreditLine").autoNumericGet())
-            interestRate:m.InterestRate
-            repaymentPeriod:m.RepaymentPerion
-            offerStart:m.StartingFromDate
-            offerValidUntil:m.OfferValidateUntil
-            useSetupFee:m.UseSetupFee
-            allowSendingEmail:m.AllowSendingEmail
-            isLoanTypeSelectionAllowed:m.IsLoanTypeSelectionAllowed
+        data =
+            id                          : m.CashRequestId
+            loanType                    : m.LoanTypeId
+            discountPlan                : m.DiscountPlanId
+            amount                      : m.amount
+            interestRate                : m.InterestRate
+            repaymentPeriod             : m.RepaymentPerion
+            offerStart                  : m.StartingFromDate
+            offerValidUntil             : m.OfferValidateUntil
+            useSetupFee                 : m.UseSetupFee
+            allowSendingEmail           : m.AllowSendingEmail
+            isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
         return data
             
     bindings:
        # OfferedCreditLine:
         #    selector: "input[name='offeredCreditLine']"
         InterestRate:
-            selector:"input[name='interestRate']"
-            converter:EzBob.BidingConverters.percentsFormat
+            selector: "input[name='interestRate']"
+            converter: EzBob.BindingConverters.percentsFormat
         RepaymentPerion:
             selector: "input[name='repaymentPeriod']"
-            converter:EzBob.BidingConverters.notNull            
+            converter:EzBob.BindingConverters.notNull
         StartingFromDate:
             selector:"input[name='startingFromDate']"
         OfferValidateUntil:
@@ -81,6 +83,12 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             selector: "input[name='allowSendingEmail']"
         IsLoanTypeSelectionAllowed:
             selector: "select[name='isLoanTypeSelectionAllowed']"
+        DiscountPlanId: "select[name='discount-plan']"
+        LoanTypeId: "select[name='loan-type']"
+        amount:
+            selector: "#offeredCreditLine"
+            converter: EzBob.BindingConverters.moneyFormat
+
 
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings

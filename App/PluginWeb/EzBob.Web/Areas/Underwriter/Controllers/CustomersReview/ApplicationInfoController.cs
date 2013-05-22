@@ -347,7 +347,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Transactional]
         [Ajax]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed)
+        public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan)
         {
             var cr = _cashRequestsRepository.Get(id);
             var loanT = _loanTypes.Get(loanType);
@@ -361,6 +361,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             cr.EmailSendingBanned = !allowSendingEmail;
             cr.LoanTemplate = null;
             cr.IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed;
+            cr.DiscountPlan = _discounts.Get(discountPlan);
 
             _crm.UpdateCashRequest(cr);
        

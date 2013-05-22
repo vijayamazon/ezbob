@@ -15,10 +15,10 @@ class EzBob.FeeEditor extends Backbone.Marionette.ItemView
     bindings:
         Date:
             selector: "input[name='date']"
-            converter: EzBob.BidingConverters.dateTime
+            converter: EzBob.BindingConverters.dateTime
         Fees:
             selector: "input[name='fees']"
-            converter: EzBob.BidingConverters.floatNumbers
+            converter: EzBob.BindingConverters.floatNumbers
         Description:
             selector: "textarea[name='description']"
     ui:

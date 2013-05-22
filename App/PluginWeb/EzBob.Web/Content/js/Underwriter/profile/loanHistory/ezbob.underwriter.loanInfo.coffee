@@ -225,7 +225,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         xhr = @model.fetch()
         xhr.done =>
             dialog = new EzBob.Underwriter.CreditLineDialog (model: @model)
-            dialog.render()
             EzBob.App.modal.show dialog 
 
 class ModelUpdater

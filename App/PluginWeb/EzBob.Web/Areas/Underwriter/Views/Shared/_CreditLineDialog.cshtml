@@ -8,6 +8,7 @@
         <form id="credit-line-form" class="form-horizontal" action="/" method="POST" >
             <div class="row">
                 <div class="span8">
+                    
                     <div class="control-group">
                         <label for="loan-type" class="control-label">Loan Type:</label>
                         <div class="controls">
@@ -81,6 +82,20 @@
 							</select>
                         </div>
                     </div>
+                    
+                    <div class="control-group">
+                        <label for="loan-type" class="control-label">Discount Plan:</label>
+                        <div class="controls">
+                            <select id="discount-plan" name="discount-plan" class="valid selectheight">
+                                <%_.each(DiscountPlans, function(discountPlan){
+                                    var selected = (discountPlan.Id == DiscountPlanId) ? "selected='selected'" : "";
+                                %>
+                                    <option <%= selected  %> value="<%=discountPlan.Id%>"><%=discountPlan.Name%></option>
+                                <%});%>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </form>

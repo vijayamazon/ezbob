@@ -92,7 +92,7 @@ class EzBob.Underwriter.CollectionStatusView extends Backbone.Marionette.Layout
     bindings:
         CollectionDateOfDeclaration:
             selector: "input[name='collectionDateOfDeclaration']"
-            converter: EzBob.BidingConverters.dateTime
+            converter: EzBob.BindingConverters.dateTime
         CollectionDescription:
             selector: "#collectionDescription"
      
