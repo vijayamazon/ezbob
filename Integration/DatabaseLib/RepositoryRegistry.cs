@@ -1,4 +1,5 @@
 ﻿using ApplicationMng.Repository;
+using EZBob.DatabaseLib.PyaPalDetails;
 using StructureMap.Configuration.DSL;
 
 namespace EZBob.DatabaseLib
@@ -8,6 +9,7 @@ namespace EZBob.DatabaseLib
         public RepositoryRegistry()
         {
             For<ICustomerAddressRepository>().Use<CustomerAddressRepository>();
+            For<IPayPalDetailsRepository>().Use<PayPalDetailsRepository>();
         }
     }
 }
