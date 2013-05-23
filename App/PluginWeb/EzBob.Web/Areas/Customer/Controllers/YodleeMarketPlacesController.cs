@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using Underwriter.Models;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -60,6 +61,31 @@
 				.Select(YodleeAccountModel.ToModel)
 				.ToList();
 			return this.JsonNet(yodlees);
+		}
+
+		[Transactional]
+		public JsonNetResult Banks()
+		{
+			var repository = new YodleeBanksRepository(_session);
+			var banks = repository.GetAll();
+
+			var dict = new Dictionary<string, YodleeParentBankModel>();
+			foreach (var bank in banks)
+			{
+				if (bank.Active)
+				{
+					var sub = new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name};
+					if (!dict.ContainsKey(bank.ParentBank))
+					{
+						dict.Add(bank.ParentBank, new YodleeParentBankModel { parentBankName = bank.ParentBank, subBanks = new List<YodleeSubBankModel>()});
+					}
+					dict[bank.ParentBank].subBanks.Add(sub);
+				}
+			}
+
+			var resultBanks = dict.Values.ToList();
+
+			return this.JsonNet(resultBanks);
 		}
 
 		[Transactional]
@@ -215,5 +241,18 @@
 				displayName = marketplace.Customer.YodleeAccounts.First().Bank.Name
 			};
 		}
+	}
+
+
+	public class YodleeParentBankModel
+	{
+		public string parentBankName { get; set; }
+		public List<YodleeSubBankModel> subBanks { get; set; }
+	}
+
+	public class YodleeSubBankModel
+	{
+		public int csId { get; set; }
+		public string displayName { get; set; }
 	}
 }

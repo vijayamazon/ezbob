@@ -19,8 +19,14 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'change input[type="radio"]': 'radioChanged'
         'click #yodleeContinueBtn': 'continueClicked'
 
-    initialize: ->
+    initialize: (options) ->
         that = this;
+
+        @YodleeBanks = new EzBob.YodleeBanks()
+        @YodleeBanks.fetch().done => 
+            if @YodleeBanks.length > 0
+                @render
+
         window.YodleeAccountAdded = (result) ->
             if (result.error)
                 EzBob.App.trigger('error', result.error);
@@ -61,50 +67,20 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     continueClicked: ->
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
 
-    connect: ->
-        return false if not @validator.form()
-        return false if @$el.find('a.connect-yodlee').hasClass('disabled')
-
-        acc = new EzBob.YodleeAccountModel({bankId: 1234, bankName: 'Santander'})
-        xhr = acc.save()
-        if not xhr
-            EzBob.App.trigger 'error', 'Yodlee Account Saving Error'
-            return false
-
-        BlockUi('on')
-        xhr.always =>
-            BlockUi('off')
-
-        xhr.fail (jqXHR, textStatus, errorThrown) =>
-            console.log textStatus
-            EzBob.App.trigger 'error', 'Yodlee Account Saving Error'
-
-        xhr.done (res) =>
-            if (res.error)
-                EzBob.App.trigger 'error', res.error
-                return false
-            try
-                @model.add(acc)
-
-            EzBob.App.trigger('info', "Yodlee Account Added Successfully");
-            @ui.mid.val("") 
-            @ui.vpnPassword.val("")
-            @ui.remotePassword.val("")
-            @inputChanged()
-            @trigger('completed');
-            @trigger 'back'
-
-        false
-
     render: ->
         super()
 
         oFieldStatusIcons = $ 'IMG.field_status'
         oFieldStatusIcons.filter('.required').field_status({ required: true })
         oFieldStatusIcons.not('.required').field_status({ required: false })
+        
+        
 
         @validator = EzBob.validatePayPointShopForm @ui.form
         return @
+
+    serializeData: ->
+        return {YodleeBanks: @YodleeBanks.toJSON()}
 
     back: ->
         @trigger 'back'
@@ -124,3 +100,9 @@ class EzBob.YodleeAccounts extends Backbone.Collection
     model: EzBob.YodleeAccountModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Accounts"
 
+class EzBob.YodleeBankModel extends Backbone.Model
+    urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
+
+class EzBob.YodleeBanks extends Backbone.Collection
+    model: EzBob.YodleeBankModel
+    url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"

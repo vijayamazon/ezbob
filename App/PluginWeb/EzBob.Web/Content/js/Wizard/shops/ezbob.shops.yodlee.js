@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -24,7 +24,9 @@
     };
 
     YodleeAccountButtonView.prototype.update = function() {
-      return this.model.fetch();
+      return this.model.fetch().done(function() {
+        return EzBob.App.trigger('ct:storebase.shop.connected');
+      });
     };
 
     return YodleeAccountButtonView;
@@ -50,10 +52,17 @@
       'click #yodleeContinueBtn': 'continueClicked'
     };
 
-    YodleeAccountInfoView.prototype.initialize = function() {
-      var that;
+    YodleeAccountInfoView.prototype.initialize = function(options) {
+      var that,
+        _this = this;
 
       that = this;
+      this.YodleeBanks = new EzBob.YodleeBanks();
+      this.YodleeBanks.fetch().done(function() {
+        if (_this.YodleeBanks.length > 0) {
+          return _this.render;
+        }
+      });
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
           EzBob.App.trigger('error', result.error);
@@ -109,50 +118,6 @@
       }
     };
 
-    YodleeAccountInfoView.prototype.connect = function() {
-      var acc, xhr,
-        _this = this;
-
-      if (!this.validator.form()) {
-        return false;
-      }
-      if (this.$el.find('a.connect-yodlee').hasClass('disabled')) {
-        return false;
-      }
-      acc = new EzBob.YodleeAccountModel({
-        bankId: 1234,
-        bankName: 'Santander'
-      });
-      xhr = acc.save();
-      if (!xhr) {
-        EzBob.App.trigger('error', 'Yodlee Account Saving Error');
-        return false;
-      }
-      BlockUi('on');
-      xhr.always(function() {
-        return BlockUi('off');
-      });
-      xhr.fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus);
-        return EzBob.App.trigger('error', 'Yodlee Account Saving Error');
-      });
-      xhr.done(function(res) {
-        if (res.error) {
-          EzBob.App.trigger('error', res.error);
-          return false;
-        }
-        _this.model.add(acc);
-        EzBob.App.trigger('info', "Yodlee Account Added Successfully");
-        _this.ui.mid.val("");
-        _this.ui.vpnPassword.val("");
-        _this.ui.remotePassword.val("");
-        _this.inputChanged();
-        _this.trigger('completed');
-        return _this.trigger('back');
-      });
-      return false;
-    };
-
     YodleeAccountInfoView.prototype.render = function() {
       var oFieldStatusIcons;
 
@@ -166,6 +131,12 @@
       });
       this.validator = EzBob.validatePayPointShopForm(this.ui.form);
       return this;
+    };
+
+    YodleeAccountInfoView.prototype.serializeData = function() {
+      return {
+        YodleeBanks: this.YodleeBanks.toJSON()
+      };
     };
 
     YodleeAccountInfoView.prototype.back = function() {
@@ -212,6 +183,36 @@
     YodleeAccounts.prototype.url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Accounts";
 
     return YodleeAccounts;
+
+  })(Backbone.Collection);
+
+  EzBob.YodleeBankModel = (function(_super) {
+    __extends(YodleeBankModel, _super);
+
+    function YodleeBankModel() {
+      _ref4 = YodleeBankModel.__super__.constructor.apply(this, arguments);
+      return _ref4;
+    }
+
+    YodleeBankModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
+
+    return YodleeBankModel;
+
+  })(Backbone.Model);
+
+  EzBob.YodleeBanks = (function(_super) {
+    __extends(YodleeBanks, _super);
+
+    function YodleeBanks() {
+      _ref5 = YodleeBanks.__super__.constructor.apply(this, arguments);
+      return _ref5;
+    }
+
+    YodleeBanks.prototype.model = EzBob.YodleeBankModel;
+
+    YodleeBanks.prototype.url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
+
+    return YodleeBanks;
 
   })(Backbone.Collection);
 

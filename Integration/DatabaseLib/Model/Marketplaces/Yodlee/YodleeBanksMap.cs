@@ -7,9 +7,11 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 		public YodleeBanksMap()
         {
 			Table("YodleeBanks");
-            Id(x => x.Id);
-			Map(x => x.Name, "Name").Length(300);
+			Id(x => x.Id);
+			Map(x => x.Name).Length(300);
 			Map(x => x.ContentServiceId);
+			Map(x => x.ParentBank).Length(100);
+			Map(x => x.Active);
         }
     }
 }
