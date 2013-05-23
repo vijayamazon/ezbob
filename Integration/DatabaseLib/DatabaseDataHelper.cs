@@ -100,7 +100,7 @@ namespace EZBob.DatabaseLib
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
 
-		public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { return _CustomerLoyaltyPoints; } }
+		public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { _session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
 
 		public ICurrencyConvertor CurrencyConverter
 		{

@@ -3,14 +3,17 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using ApplicationMng.Repository;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Loans;
+using EzBob.CommonLib;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Infrastructure.csrf;
 using Scorto.Web;
+using StructureMap;
 using log4net;
 using NHibernate;
 using NHibernate.Linq;
@@ -72,5 +75,21 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             return View(wizardModel);
         }       
+
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		[Transactional]
+		public JsonNetResult EarnedPointsStr() {
+			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+			EZBob.DatabaseLib.Model.Database.Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+			string sPoints = "";
+
+			if (oCustomer != null)
+				sPoints = string.Format("{0:N0}", oCustomer.LoyaltyPoints());
+
+			return this.JsonNet(new { EarnedPointsStr = sPoints });
+		} // EarnedPointsStr
+
     }
 }

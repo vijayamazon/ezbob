@@ -12,7 +12,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             store.view.on "back", @back, this
             store.button.on "ready", @ready, this
 
-        EzBob.App.on "ct:storebase.shop.connected", @render, this
+        EzBob.App.on "ct:storebase.shop.connected", @shopConnected, this
         EzBob.App.on "ct:storebase." + @name + ".connect", @connect, this
 
     completed: (name) ->
@@ -24,6 +24,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @$el.find(">div").hide()
         @storeList.show()
         $(document).attr "title", @oldTitle
+        @updateEarnedPoints()
         false
 
     next: ->
@@ -37,6 +38,15 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         unless @isReady
             @isReady = true
             @$el.find(".next").show()
+
+    updateEarnedPoints: ->
+        $.getJSON("#{window.gRootPath}Customer/Wizard/EarnedPointsStr").done (data) ->
+            if data.EarnedPointsStr
+                $('#EarnedPoints').text data.EarnedPointsStr
+
+    shopConnected: ->
+        @updateEarnedPoints()
+        @render()
 
     render: ->
         $.colorbox.close()

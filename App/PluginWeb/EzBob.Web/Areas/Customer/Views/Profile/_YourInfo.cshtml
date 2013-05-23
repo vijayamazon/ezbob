@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using EzBob.Configuration
+@model dynamic
 <script id="your-info-template" type="text/template">
   @using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm" }))
   {
@@ -115,12 +116,14 @@
             </div>
         </div>   
 
-        <!--<div class="control-group">
-            <label class="control-label">Points:</label>
+        @if (DBConfigurationValues.Instance.DisplayEarnedPoints) {
+        <div class="control-group">
+            <label class="control-label">Earned points:</label>
             <div class="controls">
                 <input type="text" value="<%- LoyaltyPoints %>" readonly="readonly"/>
             </div>
-        </div>-->
+        </div>
+        }
     </fieldset>
 
 </script>

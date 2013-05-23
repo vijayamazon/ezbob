@@ -1,30 +1,35 @@
 ﻿@using EZBob.DatabaseLib
+@using EZBob.DatabaseLib.Model
 @using EZBob.DatabaseLib.Model.Database
 @using EzBob.CommonLib
+@using EzBob.Configuration
 @using StructureMap
 @model dynamic
 @{
+	var oCfg = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
 	var bIsAuth = User.Identity.IsAuthenticated;
 }
 
 <div class="marketing_container">
 	<div class="marketing_message">
-		<p><strong><span style="font-size: 20px">@{
-			bool bDefaultText = true;
+		<p>
+			<strong><span style="font-size: 20px">@{
+				bool bDefaultText = true;
 
-			if (false && bIsAuth) { // TODO: revive some day...
-				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-				Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+				if (DBConfigurationValues.Instance.DisplayEarnedPoints && bIsAuth) {
+					var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+					Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
 
-				if (oCustomer != null) {
-					WriteLiteral(string.Format("{0:N0}<br>points<br>earned", oCustomer.LoyaltyPoints()));
-					bDefaultText = false;
-				} // if customer found
-			} // if authorised
+					if (oCustomer != null) {
+						WriteLiteral(string.Format("<text id=EarnedPoints>{0:N0}</text><br>points<br>earned", oCustomer.LoyaltyPoints()));
+						bDefaultText = false;
+					} // if customer found
+				} // if authorised
 
-			if (bDefaultText) {
-				WriteLiteral("Sign up is<br />Free,<br />Fast and<br />Secure");
-			} // if default text
-	}</span></strong></p>
-</div>
+				if (bDefaultText) {
+					WriteLiteral("Sign up is<br />Free,<br />Fast and<br />Secure");
+				} // if default text
+			}</span></strong>
+		</p>
+	</div>
 </div>

@@ -207,6 +207,11 @@ EzBob.ThankYouWizardPage = Backbone.View.extend({
         this.template = $('#lastWizardThankYouPage').html();
     },
     render: function () {
+        $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
+            if (data.EarnedPointsStr)
+                $('#EarnedPoints').text(data.EarnedPointsStr);
+        });
+
         this.$el.html(this.template);
         $('.sidebarBox').find('li[rel]').setPopover('left');
         return this;
