@@ -412,7 +412,7 @@ table tr.editing td { background-color: beige !important; }
     background-color: #efefef;
     padding: 10px 0;
     border-radius: 5px;
-    width: 152px;
+    width: 165px;
     clear: both;
 }
 
@@ -430,7 +430,7 @@ ul.left-underwriter-menu > li > a:hover {
     color: #0088CC !important;
 }
 .customer-grids { 
-    margin-left: 154px;
+    margin-left: 167px;
     position: absolute;
     bottom: 0;
     top: 41px;
