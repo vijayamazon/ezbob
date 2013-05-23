@@ -2,6 +2,8 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Text;
+	using CommonLib.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
@@ -71,7 +73,8 @@
 				var yodleeAccount = customer.YodleeAccounts.FirstOrDefault();
 
 				// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
-				long itemId = ym.GetItemId(yodleeAccount.Username, yodleeAccount.Password);
+				string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
+				long itemId = ym.GetItemId(yodleeAccount.Username, decryptedPassword);
 
 				if (itemId == -1)
 				{
@@ -122,16 +125,13 @@
 				var banksRepository = new YodleeBanksRepository(_session);
 				YodleeBanks bank = banksRepository.Search(csId);
 				
-				var rnd = new Random();
-                int randomNumber = rnd.Next(9000) + 1000;
-				
 				// Create new account
 				yodleeAccount = new YodleeAccounts
 					{
 						CreationDate = DateTime.UtcNow,
 						Customer = _customer,
-						Username = string.Format("{0}{1}", _customer.Name.Split(new [] { '@' })[0], randomNumber),
-						Password = "1A4d7u",
+						Username = _customer.Name,
+						Password = Encryptor.Encrypt(GenerateRandomPassword()),
 						Bank = bank
 					};
 
@@ -140,7 +140,7 @@
 
 				Log.DebugFormat("Created yodlee account: {0}", accountId);
 
-				yodleeMain.RegisterUser(yodleeAccount.Username, yodleeAccount.Password, _customer.Name);
+				yodleeMain.RegisterUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password), _customer.Name);
 			}
 			else
 			{
@@ -148,9 +148,39 @@
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
-			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, yodleeAccount.Password);
+			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 			
 			return Redirect(finalUrl);
+		}
+
+		private string GenerateRandomPassword()
+		{
+			var rnd = new Random();
+			var sb = new StringBuilder();
+			sb.Append(GenerateLowercaseLetter(rnd));
+			sb.Append(GenerateLowercaseLetter(rnd));
+			sb.Append(GenerateUppercaseLetter(rnd));
+			sb.Append(GenerateLowercaseLetter(rnd));
+			sb.Append(GenerateUppercaseLetter(rnd));
+			sb.Append(GenerateDigit(rnd));
+			sb.Append(GenerateDigit(rnd));
+			sb.Append(GenerateDigit(rnd));
+			return sb.ToString();
+		}
+
+		private static int GenerateDigit(Random rnd)
+		{
+			return rnd.Next(10);
+		}
+
+		private static char GenerateLowercaseLetter(Random rnd)
+		{
+			return (char)(rnd.Next(26) + 65);
+		}
+
+		private static char GenerateUppercaseLetter(Random rnd)
+		{
+			return (char)(rnd.Next(26) + 97);
 		}
 	}
 
