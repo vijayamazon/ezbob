@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using ApplicationMng.Repository;
+using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Experian;
 using NHibernate;
 using Newtonsoft.Json;
 using log4net;
 
-namespace EZBob.DatabaseLib.Model.Database.Repository
+namespace EZBob.DatabaseLib.Repository
 {
 	public class ExperianBankCacheRepository : NHibernateRepositoryBase<MP_ExperianBankCache>
 	{

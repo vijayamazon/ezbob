@@ -6,6 +6,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Experian;
+using ExperianLib.Dictionaries;
 using ExperianLib.Properties;
 using EzBob.Configuration;
 using EzBobIntegration.Web_References.Consumer;
@@ -193,6 +195,7 @@ namespace ExperianLib
                     person.JsonPacket = JsonConvert.SerializeObject(output);
                     person.JsonPacketInput = JsonConvert.SerializeObject(input);
                     repo.SaveOrUpdate(person);
+                    SaveDefaultAccountIntoDb(output, customerId);
                 }
 
                 return new ConsumerServiceResult(output, birthDate);
@@ -201,6 +204,46 @@ namespace ExperianLib
             {
                 Log.Error(ex);
                 return new ConsumerServiceResult{Error = "Exception: " + ex.Message};
+            }
+        }
+
+        public void SaveDefaultAccountIntoDb(OutputRoot output, int customerId)
+        {
+            var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+            var customer = customerRepo.Get(customerId);
+            var cais = output.Output.FullConsumerData.ConsumerData.CAIS;
+            var dateAdded = DateTime.UtcNow;
+            var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<ExperianDefaultAccount>>();
+
+            foreach (var caisData in cais)
+            {
+                foreach (var detail in caisData.CAISDetails.Where(detail => detail.AccountStatus == "F"))
+                {
+                    int relevantYear, relevantMonth, relevantDay;
+                    if (detail.SettlementDate != null)
+                    {
+                        relevantYear = detail.SettlementDate.CCYY;
+                        relevantMonth = detail.SettlementDate.MM;
+                        relevantDay = detail.SettlementDate.DD;
+                    }
+                    else
+                    {
+                        relevantYear = detail.LastUpdatedDate.CCYY;
+                        relevantMonth = detail.LastUpdatedDate.MM;
+                        relevantDay = detail.LastUpdatedDate.DD;
+                    }
+
+                    var settlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
+
+                    repo.Save(new ExperianDefaultAccount
+                        {
+                            AccountType = AccountTypeDictionary.GetAccountType(detail.AccountType ?? string.Empty),
+                            Date = settlementDate,
+                            DelinquencyType = "Default",
+                            Customer = customer,
+                            DateAdded = dateAdded
+                        });
+                }
             }
         }
     }

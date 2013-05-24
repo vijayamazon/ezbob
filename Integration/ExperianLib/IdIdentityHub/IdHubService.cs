@@ -2,10 +2,9 @@
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using System.Xml;
-using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Repository;
 using ExperianLib.Web_References.IDHubService;
 using EzBob.Configuration;
-using Scorto.Configuration;
 using StructureMap;
 using log4net;
 using AddressType = ExperianLib.Web_References.IDHubService.AddressType;
@@ -17,7 +16,7 @@ namespace ExperianLib.IdIdentityHub
     {
         readonly ExperianIntegrationParams _config;
         private static readonly ILog Log = LogManager.GetLogger(typeof(IdHubService));
-        private ExperianBankCacheRepository _bankCacheRepository;
+        private readonly ExperianBankCacheRepository _bankCacheRepository;
 
         public IdHubService()
         {

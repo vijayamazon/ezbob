@@ -86,6 +86,7 @@
     <Compile Include="Model\Database\LoyaltyProgramAction.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionTypeMap.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionType.cs" />
+    <Compile Include="Model\Experian\ExperianDefaultAccount.cs" />
     <Compile Include="Model\Loans\DiscountPlan.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
@@ -263,7 +264,7 @@
     <Compile Include="Model\Database\MedalStatisticDataRow.cs" />
     <Compile Include="Model\Database\MedalStatisticDataRowMap.cs" />
     <Compile Include="Model\Marketplaces\MP_AlertDocument.cs" />
-    <Compile Include="Model\Marketplaces\MP_ExperianBankCache.cs" />
+    <Compile Include="Model\Experian\MP_ExperianBankCache.cs" />
     <Compile Include="Model\Currency\Currency.cs" />
     <Compile Include="Model\Currency\CurrencyRateHistory.cs" />
     <Compile Include="Model\Database\ExposurePerMedalDataRowMap.cs" />
@@ -288,7 +289,7 @@
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransaction.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayTransactionMap.cs" />
     <Compile Include="Model\Loans\PacnetTransaction.cs" />
-    <Compile Include="Model\Marketplaces\MP_ExperianDataCache.cs" />
+    <Compile Include="Model\Experian\MP_ExperianDataCache.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedback.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItem.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonFeedbackItemMap.cs" />
