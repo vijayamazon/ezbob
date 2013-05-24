@@ -125,14 +125,18 @@
             }
 
             var getCustomerId = function() {
-                var res = prompt("Customer ID?");
-                if (!IsInt(res, true)) {
-                    EzBob.ShowMessage("Incorrect input", "Warning");
-                    return;
-                }
-                if (!EzBob.isNullOrEmpty(res)) {
-                    profileView.router.navigate("profile/" + res, { trigger: true, replace: true });
-                }
+                EzBob.ShowMessage("<input type='text' class='goto-customerId'/>",
+                    "Customer ID?",
+                    function() {
+                        var val = $(".goto-customerId").val();
+                        if (!IsInt(val, true)) {
+                            EzBob.ShowMessage("Incorrect input", "Warning");
+                            return;
+                        }
+                        profileView.router.navigate("profile/" + val, { trigger: true, replace: true });
+                    },"OK",null,"Cancel"
+                );
+                $(".goto-customerId").numericOnly();
             };
             
             $("#liClient > a").on("click", function() {

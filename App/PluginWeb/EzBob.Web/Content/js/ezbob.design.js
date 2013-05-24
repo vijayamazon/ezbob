@@ -524,19 +524,19 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
     var buttonModel = [{
         text: okText || "OK",
         click: function () {
-            $(this).dialog("destroy");
             if (typeof (cbOk) == 'function') {
                 cbOk();
             }
+            $(this).dialog("close");
         }
     }];
     if (cbCancel != undefined || cancelText != undefined) {
         buttonModel.push({
             click: function () {
-                $(this).dialog("destroy");
                 if (typeof (cbCancel) == 'function') {
                     cbCancel();
                 }
+                $(this).dialog("close");
             },
             text: cancelText
         });
@@ -549,7 +549,11 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
             resizable: false,
             buttons: buttonModel,
             dialogClass: "confirmationDialog",
-            zIndex: 3999
+            zIndex: 3999,
+            close: function() {
+                modalpopup.remove();
+                $(this).remove();
+            }
 
         });
     //added ezbob style
