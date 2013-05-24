@@ -433,8 +433,8 @@ namespace ZohoCRM
                 if (customer.Loans.Any())
                 {
                     if (customer.CreditResult == CreditResultStatus.Approved && !customer.LoanForCurrentOfferIsTaken) return 8;
+                    if (customer.CreditResult == CreditResultStatus.Rejected) return 9; 
                     if (customer.ActiveLoans.Any()) return 7;
-                    if (customer.CreditResult == CreditResultStatus.Rejected) return 9;
                 }
                 else
                 {
