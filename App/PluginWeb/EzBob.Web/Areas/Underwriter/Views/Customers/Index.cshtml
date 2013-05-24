@@ -126,6 +126,10 @@
 
             var getCustomerId = function() {
                 var res = prompt("Customer ID?");
+                if (!IsInt(res, true)) {
+                    EzBob.ShowMessage("Incorrect input", "Warning");
+                    return;
+                }
                 if (!EzBob.isNullOrEmpty(res)) {
                     profileView.router.navigate("profile/" + res, { trigger: true, replace: true });
                 }

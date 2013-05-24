@@ -192,8 +192,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                 EzBob.ShowMessage res.error,"Something went wrong"
                 return
             result = res.toBool()
-            if result then @_show(id) 
+            if result 
+                @_show(id)
+                return 
             else EzBob.ShowMessage("Customer Credit result is null or IsSuccessfullyRegistered = false","Error") 
+        @router.navigate("", { trigger: true, replace: true });
 
     _show: (id) ->
         @hide()

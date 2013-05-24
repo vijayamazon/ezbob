@@ -360,6 +360,11 @@ GBPValues = function (val, showCurrencySign) {
     return result;
 };
 
+IsInt = function (val, isOnlyPositive) {
+    var reg = isOnlyPositive ? /^\d+$/ : /^-?\d+$/;
+    return reg.test(val);
+};
+
 SerializeArrayToEasyObject = function (array) {
     var easyObject = {};
     $.each(array, function (index, value) {
