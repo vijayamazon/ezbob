@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Mixed">
   <Name>Main_Strat</Name>
-  <Description />
+  <Description>Performs all Experian checks, provides system decision. May take several hours. 24 hours limit. Trigger -  wizard finished. Underwriter triggers: 1. Credit check 2. New Credit Line. Dashboard triggers: Request cash</Description>
   <Workspace Name="Main_Strat">
     <NodeElement Name="12 times (12 hours)" NodeId="Comparison62566035" />
     <NodeElement Name="18 times = (3 hours)" NodeId="Comparison856123" />
