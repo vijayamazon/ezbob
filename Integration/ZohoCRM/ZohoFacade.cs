@@ -317,22 +317,24 @@ namespace ZohoCRM
             }
         }
 
-        private void UpdateEntity<T>(Action<T> action, string id) where T : ZohoEntity
+        private bool UpdateEntity<T>(Action<T> action, string id) where T : ZohoEntity
         {
-            if (string.IsNullOrEmpty(id)) return;
+            if (string.IsNullOrEmpty(id)) return false;
 
             var c = _crm.GetRecordById<T>(id);
             if (c == null)
             {
                 log.Error("Entity wasn't found for the given id");
-                return;
+                return false;
             }
             action(c);
             var r = _crm.UpdateRecord(c);
             if (!r)
             {
                 log.Error("Updating failed");
+                return false;
             }
+            return true;
         }
 
         public void UpdateCustomer(Customer customer)
@@ -340,7 +342,7 @@ namespace ZohoCRM
             try
             {
                 if (string.IsNullOrEmpty(customer.ZohoId)) return;
-                UpdateEntity<ZohoContact>(c =>
+                var res = UpdateEntity<ZohoContact>(c =>
                                               {
                                                   var pi = customer.PersonalInfo;
 
@@ -406,6 +408,14 @@ namespace ZohoCRM
                                                   UpdateLoans(customer);
                                                   UpdateOffers(customer);
                                               }, customer.ZohoId);
+                if (!res)
+                {
+                    UpdateEntity<ZohoLead>(l =>
+                                               {
+                                                   l.SetValue("IsTest", customer.IsTest ? "1" : "0");
+                                                   l.SetValue("Step", GetStep(customer));
+                                               }, customer.ZohoId);
+                }
             }
             catch (Exception e)
             {
