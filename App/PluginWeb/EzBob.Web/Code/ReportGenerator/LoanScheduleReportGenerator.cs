@@ -19,11 +19,11 @@ namespace EzBob.Web.Code.ReportGenerator
 
         public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell, string header)
         {
-            int row = 4;
+            int row = 6;
             var column = 1;
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Payment Schedule";
-            HeaderReportGenerator.CreateHeader(worksheet, header, column);
+            HeaderReportGenerator.CreateHeader(worksheet, header, column, column, 9);
 
 
             CreateXlsHeader(worksheet, row, column, isExcell);

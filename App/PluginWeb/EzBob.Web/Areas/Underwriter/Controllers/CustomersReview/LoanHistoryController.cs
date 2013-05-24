@@ -292,10 +292,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
                 return this.JsonNet(new { error = "loan does not exists" });
             }
-            var loansDetailsBuilder = new LoansDetailsBuilder();
-            var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
-
-            return new LoanScheduleReportResult(details, isExcel, customer);
+            return new LoanScheduleReportResult(_rolloverRepository, loan, isExcel, customer);
         }
     }
 }

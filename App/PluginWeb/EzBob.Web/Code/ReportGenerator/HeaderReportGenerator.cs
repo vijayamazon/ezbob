@@ -5,7 +5,7 @@ namespace EzBob.Web.Code.ReportGenerator
 {
     public class HeaderReportGenerator 
     {
-        public static void CreateHeader(Worksheet worksheet, string header, int column)
+        public static void CreateHeader(Worksheet worksheet, string header, int column, int startHeaderMessageColumn, int lengthHeaderMessage)
         {
             worksheet.Cells.Merge(0, column + 1, 4, 1);
             var filePath = HttpContext.Current.Server.MapPath("~/Content/img/ezbob-logo.png");
@@ -19,8 +19,9 @@ namespace EzBob.Web.Code.ReportGenerator
                 picture.UpperDeltaY = 200;
             */
 
-            worksheet.Cells.Merge(1, column + 2, 2, 6);
-            worksheet.Cells[1, column + 2].PutValue(header);
+            //worksheet.Cells.Merge(1, column + 2, 2, 6);
+            worksheet.Cells.Merge(4, startHeaderMessageColumn, 2, lengthHeaderMessage);
+            worksheet.Cells[4, startHeaderMessageColumn].PutValue(header);
         }
     }
 }

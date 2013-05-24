@@ -28,7 +28,7 @@ namespace EzBob.Web.Code.ReportGenerator
                                         ((_customer.PersonalInfo.MiddleInitial == null) ? " ": (" " + _customer.PersonalInfo.MiddleInitial) + " ") + 
                                         _customer.PersonalInfo.Surname
                 ),
-                _customer.Id, _loanOffer.Details.Date.ToString("dd_MM_yyyy"));
+                _customer.RefNumber, _loanOffer.Details.Date.ToString("dd_MM_yyyy"));
             var content = generator.GenerateReport(_loanOffer, _isExcel, _isShowDetails, header);
             var fileName = header+"."+fileFormat;
             var f = new FileContentResult(content, "application/"+fileFormat) { FileDownloadName = fileName };

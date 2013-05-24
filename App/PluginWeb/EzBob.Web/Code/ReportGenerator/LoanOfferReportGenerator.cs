@@ -20,10 +20,10 @@ namespace EzBob.Web.Code.ReportGenerator
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Loan Offer";
 
-            int row = 4;
+            int row = 6;
             int column = 1;
 
-            HeaderReportGenerator.CreateHeader(worksheet, header, column -1);
+            HeaderReportGenerator.CreateHeader(worksheet, header, column -1, column, 7);
 
             worksheet.Cells.SetColumnWidth(0, 1);
             worksheet.Cells.SetColumnWidth(1, 16);
