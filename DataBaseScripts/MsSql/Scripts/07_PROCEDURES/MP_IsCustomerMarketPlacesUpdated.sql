@@ -24,9 +24,7 @@ BEGIN
 	FROM Customer c
 		LEFT JOIN MP_CustomerMarketPlace cmp ON cmp.CustomerId = c.Id
 				
-	WHERE c.Id = @pCustomerId and MarketPlaceId not in ( 
-					select Id from MP_MarketplaceType
-					where Name = 'Pay Pal')
+	WHERE c.Id = @pCustomerId
 	
 		AND (cmp.UpdatingStart IS NULL
 		      OR ( cmp.UpdatingStart IS NOT NULL

@@ -9,9 +9,9 @@ CREATE PROCEDURE [dbo].[UpdateExperianBusiness]
 (@CompanyRefNumber nvarchar(50),
  @ExperianError nvarchar(max),
  @ExperianScore int, 
- @ExperianResult nvarchar(500),
- @ExperianWarning nvarchar(max),
- @ExperianReject nvarchar(max),
+ --@ExperianResult nvarchar(500),
+ --@ExperianWarning nvarchar(max),
+ --@ExperianReject nvarchar(max),
  @CustomerId bigint)
 
 AS
@@ -20,9 +20,9 @@ BEGIN
 UPDATE [dbo].[MP_ExperianDataCache]
    SET [ExperianError] = @ExperianError, 
     [ExperianScore] = @ExperianScore, 
-    [ExperianResult] = @ExperianResult,
-    [ExperianWarning] = @ExperianWarning,
-    [ExperianReject] = @ExperianReject,
+--    [ExperianResult] = @ExperianResult,
+--    [ExperianWarning] = @ExperianWarning,
+--    [ExperianReject] = @ExperianReject,
     [CustomerId] = @CustomerId
  WHERE CompanyRefNumber = @CompanyRefNumber
 

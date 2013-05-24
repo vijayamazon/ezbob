@@ -11,9 +11,9 @@ CREATE PROCEDURE [dbo].[UpdateExperianConsumer]
  @PostCode nvarchar(500),
  @ExperianError nvarchar(max),
  @ExperianScore int, 
- @ExperianResult nvarchar(500),
- @ExperianWarning nvarchar(max),
- @ExperianReject nvarchar(max),
+ --@ExperianResult nvarchar(500),
+ --@ExperianWarning nvarchar(max),
+ --@ExperianReject nvarchar(max),
  @CustomerId bigint,
  @DirectorId bigint)
 
@@ -21,13 +21,13 @@ AS
 BEGIN
 
 UPDATE [dbo].[MP_ExperianDataCache]
-   SET [ExperianError] = @ExperianError, 
-    [ExperianScore] = @ExperianScore, 
-    [ExperianResult] = @ExperianResult,
-    [ExperianWarning] = @ExperianWarning,
-    [ExperianReject] = @ExperianReject,
-    [CustomerId] = @CustomerId,
-    [DirectorId] = @DirectorId 
+   SET [ExperianError]  = @ExperianError, 
+       [ExperianScore]  = @ExperianScore, 
+--     [ExperianResult] = @ExperianResult,
+--     [ExperianWarning]= @ExperianWarning,
+--     [ExperianReject] = @ExperianReject,
+       [CustomerId]     = @CustomerId,
+       [DirectorId]     = @DirectorId 
  WHERE Name = @Name and Surname = @Surname and PostCode=@PostCode
 
 
