@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using MarketplaceWebServiceOrders.MarketplaceWebServiceOrders.Model;
+using log4net;
 
 namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
 {
@@ -40,6 +41,7 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
         private MarketplaceWebServiceOrdersConfig config = null;
 
         private const String REQUEST_THROTTLED_ERROR_CODE = "RequestThrottled";
+        private static ILog _log = LogManager.GetLogger(typeof(MarketplaceWebServiceOrdersClient));
 
         /// <summary>
         /// Constructs MarketplaceWebServiceOrdersClient with AWS Access Key ID and AWS Secret Key
@@ -218,78 +220,86 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
 
 			HttpWebRequest request = ConfigureWebRequest( requestData.Length );
 			/* Submit the request and read response body */
-			try
-			{
-				using ( Stream requestStream = request.GetRequestStream() )
-				{
-					requestStream.Write( requestData, 0, requestData.Length );
-				}
-				using ( HttpWebResponse httpResponse = request.GetResponse() as HttpWebResponse )
-				{
-					statusCode = httpResponse.StatusCode;
-					using ( StreamReader reader = new StreamReader( httpResponse.GetResponseStream(), Encoding.UTF8 ) )
-					{
-						responseBody = reader.ReadToEnd();
-					}
-				}
-				/* Attempt to deserialize response into <Action> Response type */
-				XmlSerializer serializer = new XmlSerializer( typeof( T ) );
-				using ( StringReader responseReader = new StringReader( responseBody ) )
-				{
-					response = (T)serializer.Deserialize( responseReader );
-				}				
-			}
-			/* Web exception is thrown on unsucessful responses */
-			catch ( WebException we )
-			{				
-				using ( HttpWebResponse httpErrorResponse = (HttpWebResponse)we.Response as HttpWebResponse )
-				{
-					if ( httpErrorResponse == null )
-					{
-						throw new MarketplaceWebServiceOrdersException( we );
-					}
-					statusCode = httpErrorResponse.StatusCode;
-					using ( StreamReader reader = new StreamReader( httpErrorResponse.GetResponseStream(), Encoding.UTF8 ) )
-					{
-						responseBody = reader.ReadToEnd();
-					}
-				}
+            try
+            {
+                try
+                {
+                    using ( Stream requestStream = request.GetRequestStream() )
+                    {
+                        requestStream.Write( requestData, 0, requestData.Length );
+                    }
+                    using ( HttpWebResponse httpResponse = request.GetResponse() as HttpWebResponse )
+                    {
+                        statusCode = httpResponse.StatusCode;
+                        using ( StreamReader reader = new StreamReader( httpResponse.GetResponseStream(), Encoding.UTF8 ) )
+                        {
+                            responseBody = reader.ReadToEnd();
+                        }
+                    }
+                    /* Attempt to deserialize response into <Action> Response type */
+                    XmlSerializer serializer = new XmlSerializer( typeof( T ) );
+                    using ( StringReader responseReader = new StringReader( responseBody ) )
+                    {
+                        response = (T)serializer.Deserialize( responseReader );
+                    }				
+                }
+                    /* Web exception is thrown on unsucessful responses */
+                catch ( WebException we )
+                {				
+                    using ( HttpWebResponse httpErrorResponse = (HttpWebResponse)we.Response as HttpWebResponse )
+                    {
+                        if ( httpErrorResponse == null )
+                        {
+                            throw new MarketplaceWebServiceOrdersException( we );
+                        }
+                        statusCode = httpErrorResponse.StatusCode;
+                        using ( StreamReader reader = new StreamReader( httpErrorResponse.GetResponseStream(), Encoding.UTF8 ) )
+                        {
+                            responseBody = reader.ReadToEnd();
+                        }
+                    }
 
-				/* Attempt to deserialize response into ErrorResponse type */
-				using ( StringReader responseReader = new StringReader( responseBody ) )
-				{
-					try
-					{
-						XmlSerializer serializer = new XmlSerializer( typeof( ErrorResponse ) );
-						ErrorResponse errorResponse = (ErrorResponse)serializer.Deserialize( responseReader );
-						Error error = errorResponse.Error[0];
+                    /* Attempt to deserialize response into ErrorResponse type */
+                    using ( StringReader responseReader = new StringReader( responseBody ) )
+                    {
+                        try
+                        {
+                            XmlSerializer serializer = new XmlSerializer( typeof( ErrorResponse ) );
+                            ErrorResponse errorResponse = (ErrorResponse)serializer.Deserialize( responseReader );
+                            Error error = errorResponse.Error[0];
 						
-						/* Throw formatted exception with information available from the error response */
-						throw new MarketplaceWebServiceOrdersException(
-							error.Message,
-							statusCode,
-							error.Code,
-							error.Type,
-							errorResponse.RequestId,
-							errorResponse.ToXML() );
-					}
-					catch ( MarketplaceWebServiceOrdersException mwsErr )
-					{
-						throw mwsErr;
-					}
-					catch ( Exception e )
-					{
-						throw ReportAnyErrors( responseBody, statusCode, e );
-					}
-				}
-			}
+                            /* Throw formatted exception with information available from the error response */
+                            throw new MarketplaceWebServiceOrdersException(
+                                error.Message,
+                                statusCode,
+                                error.Code,
+                                error.Type,
+                                errorResponse.RequestId,
+                                errorResponse.ToXML() );
+                        }
+                        catch ( MarketplaceWebServiceOrdersException mwsErr )
+                        {
+                            throw mwsErr;
+                        }
+                        catch ( Exception e )
+                        {
+                            throw ReportAnyErrors( responseBody, statusCode, e );
+                        }
+                    }
+                }
 
-			/* Catch other exceptions, attempt to convert to formatted exception,
+                    /* Catch other exceptions, attempt to convert to formatted exception,
 			 * else rethrow wrapped exception */
-			catch ( Exception e )
-			{
-				throw new MarketplaceWebServiceOrdersException( e.Message, statusCode, e, responseBody );
-			}
+                catch ( Exception e )
+                {
+                    throw new MarketplaceWebServiceOrdersException( e.Message, statusCode, e, responseBody );
+                }
+            }
+            catch (Exception)
+            {
+                _log.ErrorFormat("\nRequest:\n{0}\nResponce:\n{1}", queryString, responseBody);
+                throw;
+            }
             return response;
         }
 
