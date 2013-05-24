@@ -50,7 +50,11 @@ namespace ZohoCRM
             {
                 log.DebugFormat("Registering lead {0}", customer.Name);
                 var lead = new ZohoLead("Wizard", "SignUp", customer.Name);
+                
                 lead.SetValue("Reg. Customers Status", "New Customer");
+                lead.SetValue("IsTest", customer.IsTest ? "1" : "0");
+                lead.SetValue("Step", GetStep(customer));
+
                 var response = _crm.InsertRecord(lead);
                 response.ThrowIfError();
                 customer.ZohoId = response.RecordDetails.First().Id;
