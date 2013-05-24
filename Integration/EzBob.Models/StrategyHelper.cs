@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib.TimePeriodLogic;
 using StructureMap;
@@ -9,11 +10,14 @@ namespace EzBob.Models
     public class StrategyHelper
     {
         private readonly CustomerRepository _customers;
+        private readonly DecisionHistoryRepository _decisionHistory;
 
         public StrategyHelper()
         {
+            _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
         }
+
         public double GetAnualTurnOverByCustomer(int customerId)
         {
             var customer = _customers.Get(customerId);
@@ -46,6 +50,11 @@ namespace EzBob.Models
                 }
             }
             return sum;
+        }
+
+        public void AddRejectIntoDecisionHistory(int customerId, string comment)
+        {
+            _decisionHistory.LogAction(DecisionActions.Reject, comment, null, _customers.Get(customerId));
         }
     }
 }
