@@ -16,7 +16,8 @@
                         <div class="form_field_container BankContainer">
                             Bank
                             <% _.each(YodleeBanks, function (bank, i) { %>
-                            <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>"><label for="Bank_<%- bank.parentBankName %>"><%- bank.parentBankName %></label>
+                            <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide"/>
+                            <img class="<%- bank.parentBankName %> <%- bank.parentBankName %>-off" />
                             <%});%>    
                         </div>
                     

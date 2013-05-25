@@ -222,6 +222,106 @@ ul.list_none
 	margin: -5px 0 0 15px;
 }
 
+.BankContainer img {
+    display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+    height: 40px;
+    width: 100px;
+    
+}
+
+    .BankContainer img.HSBC-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.HSBC-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.Barclays-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.Barclays-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.Lloyds-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.Lloyds-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.RBS-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.RBS-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.Santander-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.Santander-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.NatWest-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.NatWest-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+    .BankContainer img.DAG-off {
+        display: inline-block;
+		background: url(images/star.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+    .BankContainer img.DAG-on {
+        display: inline-block;
+		background: url(images/fail.png) no-repeat 0 0;
+        height: 40px;
+        width: 100px;
+    }
+
+
 .GenderCtrl label,
 .BankContainer label, 
 .SubBank label {
