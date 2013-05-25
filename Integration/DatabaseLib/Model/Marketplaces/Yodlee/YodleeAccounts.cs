@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
 	using System;
+	using System.Linq;
 	using ApplicationMng.Repository;
 	using Database;
 	using NHibernate;
@@ -31,6 +32,11 @@
 		public YodleeAccountsRepository(ISession session)
 			: base(session)
 		{
+		}
+
+		public YodleeAccounts Search(int customerId)
+		{
+			return GetAll().FirstOrDefault(b => b.Customer.Id == customerId);
 		}
 	}
 }

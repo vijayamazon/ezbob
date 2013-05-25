@@ -319,13 +319,6 @@ namespace EZBob.DatabaseLib.Model.Database {
                         where s.[Status] like 'Late' and l.[CustomerId] = Id)")
                 .Not.Insert()
                 .Not.Update();
-
-			// TODO: Should be only one
-			HasMany(x => x.YodleeAccounts)
-				.AsSet()
-				.KeyColumn("CustomerId")
-				.Inverse()
-				.Cascade.All();
         }
 	}
 }

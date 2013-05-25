@@ -55,11 +55,12 @@
 		public JsonNetResult Accounts()
 		{
 			var oEsi = new YodleeServiceInfo();
-			List<YodleeAccountModel> yodlees = _customer
-				.CustomerMarketPlaces
-				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
-				.Select(YodleeAccountModel.ToModel)
-				.ToList();
+			var yodlees = new List<YodleeAccountModel>();
+
+			foreach (var marketplace in _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId))
+			{
+				yodlees.Add(YodleeAccountModel.ToModel(marketplace, new YodleeAccountsRepository(_session)));
+			}
 			return this.JsonNet(yodlees);
 		}
 
@@ -95,8 +96,8 @@
 			{
 				var ym = new YodleeMain();
 				var customer = _context.Customer;
-
-				var yodleeAccount = customer.YodleeAccounts.FirstOrDefault();
+				var repository = new YodleeAccountsRepository(_session);
+				var yodleeAccount = repository.Search(customer.Id);
 
 				// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
 				string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
@@ -131,7 +132,7 @@
 				                                                          securityData, customer);
 
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
-				return View(YodleeAccountModel.ToModel(marketPlace));
+				return View(YodleeAccountModel.ToModel(marketPlace, new YodleeAccountsRepository(_session)));
 			}
 			catch (MarketPlaceAddedByThisCustomerException e)
 			{
@@ -144,9 +145,9 @@
 		public RedirectResult AttachYodlee(int csId, string bankName)
 		{
 			var yodleeMain = new YodleeMain();
-			var yodleeAccounts = _customer.YodleeAccounts;
-			YodleeAccounts yodleeAccount;
-			if (yodleeAccounts.FirstOrDefault() == null)
+			var repository = new YodleeAccountsRepository(_session);
+			var yodleeAccount = repository.Search(_customer.Id);
+			if (yodleeAccount == null)
 			{
 				var banksRepository = new YodleeBanksRepository(_session);
 				YodleeBanks bank = banksRepository.Search(csId);
@@ -167,10 +168,6 @@
 				Log.DebugFormat("Created yodlee account: {0}", accountId);
 
 				yodleeMain.RegisterUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password), _customer.Name);
-			}
-			else
-			{
-				yodleeAccount = yodleeAccounts.First();
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
@@ -224,21 +221,23 @@
 			};
 		}
 
-		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace)
+		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace, YodleeAccountsRepository yodleeAccountsRepository)
 		{
+			var yodleeAccount = yodleeAccountsRepository.Search(marketplace.Customer.Id);
 			return new YodleeAccountModel
 			{
-				bankId = marketplace.Customer.YodleeAccounts.First().Id,
-				displayName = marketplace.Customer.YodleeAccounts.First().Bank.Name
+				bankId = yodleeAccount.Id,
+				displayName = yodleeAccount.Bank.Name
 			};
 		}
 
-		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace)
+		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeAccountsRepository yodleeAccountsRepository)
 		{
+			var yodleeAccount = yodleeAccountsRepository.Search(marketplace.Customer.Id);
 			return new YodleeAccountModel
 			{
-				bankId = marketplace.Customer.YodleeAccounts.First().Id,
-				displayName = marketplace.Customer.YodleeAccounts.First().Bank.Name
+				bankId = yodleeAccount.Id,
+				displayName = yodleeAccount.Bank.Name
 			};
 		}
 	}

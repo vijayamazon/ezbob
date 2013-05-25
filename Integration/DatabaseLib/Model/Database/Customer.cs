@@ -173,11 +173,6 @@ namespace EZBob.DatabaseLib.Model.Database {
             set { _cashRequests = value; }
         }
 
-
-
-		//public virtual YodleeAccounts YodleeAccount { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<YodleeAccounts> YodleeAccounts { get; set; }
-
         public virtual Application LastStartedMainStrategy { get; set; }
         public virtual DateTime? LastStartedMainStrategyEndTime { get; set; }
         /// <summary>
