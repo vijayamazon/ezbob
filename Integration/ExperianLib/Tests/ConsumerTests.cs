@@ -34,7 +34,7 @@ namespace ExperianLib.Tests
                 LocationLine6 = "CT18 8BJ".ToUpper(),
             };
             var dob = new DateTime(1990, 08, 17);
-            var result = service.GetConsumerInfo("ABUL", "FAYER", "M", dob, null, loc, "PL", 1);
+            var result = service.GetConsumerInfo("ABUL", string.Empty, "FAYER", "M", dob, null, loc, "PL", 1);
             if(result.IsError)
             {
                 Log.Error("Error from consumer service: " + result.Error);

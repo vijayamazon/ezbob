@@ -28,7 +28,7 @@ namespace ExperianLib
             _config = ConfigurationRootBob.GetConfiguration().Experian;
         }
 
-        public ConsumerServiceResult GetConsumerInfo(string firstName, string surname, string gender, DateTime? birthDate, 
+        public ConsumerServiceResult GetConsumerInfo(string firstName, string middleName, string surname, string gender, DateTime? birthDate, 
                                                         InputLocationDetailsUKLocation ukLocation,
                                                         InputLocationDetailsMultiLineLocation mlLocation,
                                                         string applicationType,
@@ -51,7 +51,21 @@ namespace ExperianLib
                             break;
                         case "TestSurnameThree":
                             outputString = Resources.output022;
-                            break;
+							break;
+						case "TestSurnameFour":
+							string filename = !string.IsNullOrEmpty(middleName) ? middleName : @"C:\Temp\Experian.xml";
+		                    string content = string.Empty;
+		                    try
+		                    {
+								content = File.ReadAllText(filename);
+		                    }
+		                    catch (Exception e)
+		                    {
+			                    Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
+		                    }
+
+							outputString = content;
+							break;
                     }
 
                     var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
