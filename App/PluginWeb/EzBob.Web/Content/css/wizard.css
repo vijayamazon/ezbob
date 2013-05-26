@@ -224,9 +224,18 @@ ul.list_none
     width: 400px;
 }
 
+select.SubBank {
+    overflow: hidden;
+}
+
+select.SubBank::-webkit-scrollbar { 
+    display: none; 
+}
+
 a.radio-fx {
     padding: 15px;
 }
+
 .BankContainer span {
     display: inline-block;
     background: url(images/star.png) no-repeat 0 0;

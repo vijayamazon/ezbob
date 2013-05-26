@@ -16,7 +16,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'keyup input': 'inputChanged'
         'change input[name="Bank"]': 'bankChanged'
         'click #yodleeContinueBtn': 'continueClicked'
-        'change select': "subBankSelectionChanged"
+        'click .radio-fx': 'parentBankSelected'
+        'click .SubBank': 'subBankSelectionChanged'
 
     initialize: (options) ->
         that = this;
@@ -47,10 +48,25 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         
     bankChanged: ->
         @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
+
         currentSubBanks = @$el.find(".SubBank:not([class*='hide'])")
         currentSubBanks.addClass('hide')
         currentSubBanks.find('option').removeAttr('selected')
+        
         @$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide')
+
+    radioChanged:(el) ->
+        checked = @$el.find("input[type='radio'][name!='Bank']:checked") 
+        if checked.length > 0
+            url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{checked.val()}&bankName=#{checked.attr('name')}"
+            @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
+            return
+
+    bankChanged: ->
+        @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
+        @$el.find(".SubBank:not([class*='hide'])").addClass('hide')
+        bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
+        @$el.find("." + bank + "Container").removeClass('hide')
         $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
        
     ui:
@@ -65,10 +81,12 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     continueClicked: ->
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
 
-        #@$el.find('.source_header_on').removeClass('source_header_on').addClass('source_header')
+    parentBankSelected: (evt)->
+        evt.preventDefault()
+        @$el.find('#Bank_' + evt.currentTarget.id).click()
         @$el.find('span.on').removeClass('on').addClass('off')
-        #$(evt.currentTarget).removeClass('source_header').addClass('source_header_on')
         $(evt.currentTarget).find('span.off').removeClass('off').addClass('on')
+        return
 
     render: ->
         super()
@@ -78,7 +96,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         oFieldStatusIcons.not('.required').field_status({ required: false })
         @validator = EzBob.validatePayPointShopForm @ui.form
         return @
-    
+
     serializeData: ->
         return {YodleeBanks: @YodleeBanks.toJSON()}
 
