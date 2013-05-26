@@ -16,7 +16,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'keyup input': 'inputChanged'
         'change input[name="Bank"]': 'bankChanged'
         'click #yodleeContinueBtn': 'continueClicked'
-        'click .radio-fx': 'parentBankSelected' #should be removed
         'click img': 'parentBankImageClicked'
         'change select': "subBankSelectionChanged"
 
@@ -102,15 +101,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @validator = EzBob.validatePayPointShopForm @ui.form
 
         return @
-
-    parentBankSelected: ->
-    
-        $check = @$el.prev(".BankContainer input:radio")
-        unique = "." + @className.split(" ")[1] + " span"
-        $(unique).attr "class", "radio"
-        @$el.find("span").attr "class", "radio-checked"
-        $check.attr "checked", true
-        false
     
     serializeData: ->
         return {YodleeBanks: @YodleeBanks.toJSON()}

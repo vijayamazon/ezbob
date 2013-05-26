@@ -49,7 +49,6 @@
       'keyup input': 'inputChanged',
       'change input[name="Bank"]': 'bankChanged',
       'click #yodleeContinueBtn': 'continueClicked',
-      'click .radio-fx': 'parentBankSelected',
       'click img': 'parentBankImageClicked',
       'change select': "subBankSelectionChanged"
     };
@@ -154,17 +153,6 @@
       });
       this.validator = EzBob.validatePayPointShopForm(this.ui.form);
       return this;
-    };
-
-    YodleeAccountInfoView.prototype.parentBankSelected = function() {
-      var $check, unique;
-
-      $check = this.$el.prev(".BankContainer input:radio");
-      unique = "." + this.className.split(" ")[1] + " span";
-      $(unique).attr("class", "radio");
-      this.$el.find("span").attr("class", "radio-checked");
-      $check.attr("checked", true);
-      return false;
     };
 
     YodleeAccountInfoView.prototype.serializeData = function() {
