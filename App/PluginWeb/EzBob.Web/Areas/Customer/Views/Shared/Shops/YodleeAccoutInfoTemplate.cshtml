@@ -15,6 +15,7 @@
                     <% if (YodleeBanks) { console.log(YodleeBanks); %>
                         <div class="form_field_container BankContainer">
                             Bank
+                            <br/>
                             <% _.each(YodleeBanks, function (bank, i) { %>
                             <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide"/>
                             <img class="<%- bank.parentBankName %> <%- bank.parentBankName %>-off" />
@@ -22,14 +23,12 @@
                         </div>
                     
                         <% _.each(YodleeBanks, function (bank, i) {%>
-                            <div class="form_field_container hide <%- bank.parentBankName %>Container SubBank">
-                                <%- bank.parentBankName %>
+                            <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
                                 <% _.each(bank.subBanks, function (sub, i) { %>
-                                    <input type="radio" name="<%- bank.parentBankName %>" value="<%- sub.csId %>" id="<%- bank.parentBankName %>_<%- sub.csId %>"><label for="<%- bank.parentBankName %>_<%- sub.csId %>"><%- sub.displayName %></label>
+                                <option value="<%- sub.csId %>"><%- sub.displayName %></option>
                                 <%});%>
-                            </div>
+                            </select>
                         <%});%>
-
                     <%}%>
 
                     <div class="control-group clearfix" style="padding-right: 68px;">

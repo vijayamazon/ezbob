@@ -217,9 +217,11 @@ ul.list_none
 #AccountNumber { width: 215px;}
 
 .GenderCtrl input, 
-.BankContainer input,
-.SubBank input {
+.BankContainer input {
 	margin: -5px 0 0 15px;
+}
+.SubBank {
+    width: 400px;
 }
 
 .BankContainer img {

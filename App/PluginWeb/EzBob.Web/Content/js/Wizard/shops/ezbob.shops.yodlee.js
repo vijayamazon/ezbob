@@ -48,10 +48,10 @@
       'change input': 'inputChanged',
       'keyup input': 'inputChanged',
       'change input[name="Bank"]': 'bankChanged',
-      'change input[type="radio"]': 'radioChanged',
       'click #yodleeContinueBtn': 'continueClicked',
       'click .radio-fx': 'parentBankSelected',
-      'click img': 'parentBankImageClicked'
+      'click img': 'parentBankImageClicked',
+      'change select': "subBankSelectionChanged"
     };
 
     YodleeAccountInfoView.prototype.initialize = function(options) {
@@ -91,21 +91,20 @@
       return inp.trigger('click');
     };
 
-    YodleeAccountInfoView.prototype.radioChanged = function(el) {
-      var checked, url;
+    YodleeAccountInfoView.prototype.subBankSelectionChanged = function(el) {
+      var url;
 
-      checked = this.$el.find("input[type='radio'][name!='Bank']:checked");
-      if (checked.length > 0) {
-        url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (checked.val()) + "&bankName=" + (checked.attr('name'));
-        this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
-      }
+      url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (this.$el.find("option:selected").val()) + "&bankName=" + (this.$el.find("input[type='radio'][name='Bank']:checked").attr('value'));
+      return this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
-      var arr, bank, baseName, currentVal, element, i, length;
+      var arr, baseName, currentSubBanks, currentVal, element, i, length;
 
       this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
-      this.$el.find(".SubBank:not([class*='hide'])").addClass('hide');
+      currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
+      currentSubBanks.addClass('hide');
+      currentSubBanks.find('option').removeAttr('selected');
       arr = this.$el.find("input[type='radio'][name='Bank']:not(checked)").next();
       length = arr.length;
       i = 0;
@@ -119,8 +118,7 @@
       currentVal = element.attr('class');
       baseName = currentVal.split(" ")[0];
       element.removeClass(baseName + '-off').addClass(baseName + '-on');
-      bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
-      this.$el.find("." + bank + "Container").removeClass('hide');
+      this.$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide');
       return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
     };
 
@@ -161,9 +159,7 @@
     YodleeAccountInfoView.prototype.parentBankSelected = function() {
       var $check, unique;
 
-      console.log('a', e, this, this.className);
       $check = this.$el.prev(".BankContainer input:radio");
-      console.log('check', $check);
       unique = "." + this.className.split(" ")[1] + " span";
       $(unique).attr("class", "radio");
       this.$el.find("span").attr("class", "radio-checked");
