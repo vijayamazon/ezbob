@@ -49,21 +49,25 @@
       'keyup input': 'inputChanged',
       'change input[name="Bank"]': 'bankChanged',
       'click #yodleeContinueBtn': 'continueClicked',
-      'click img': 'parentBankImageClicked',
-      'change select': "subBankSelectionChanged"
+      'click .radio-fx': 'parentBankSelected',
+      'click .SubBank': 'subBankSelectionChanged'
     };
 
-    YodleeAccountInfoView.prototype.initialize = function(options) {
-      var that,
-        _this = this;
+    YodleeAccountInfoView.prototype.loadBanks = function() {
+      var _this = this;
 
-      that = this;
-      this.YodleeBanks = new EzBob.YodleeBanks();
-      this.YodleeBanks.fetch().done(function() {
+      return this.YodleeBanks.fetch().done(function() {
         if (_this.YodleeBanks.length > 0) {
           return _this.render;
         }
       });
+    };
+
+    YodleeAccountInfoView.prototype.initialize = function(options) {
+      var that;
+
+      that = this;
+      this.YodleeBanks = new EzBob.YodleeBanks();
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
           EzBob.App.trigger('error', result.error);
@@ -80,16 +84,6 @@
       };
     };
 
-    YodleeAccountInfoView.prototype.parentBankImageClicked = function(el) {
-      var baseName, currentVal, img, inp;
-
-      img = el.target;
-      currentVal = img.getAttribute('class');
-      baseName = '#Bank_' + currentVal.split(" ")[0];
-      inp = this.$el.find(baseName);
-      return inp.trigger('click');
-    };
-
     YodleeAccountInfoView.prototype.subBankSelectionChanged = function(el) {
       var url;
 
@@ -98,26 +92,32 @@
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
-      var arr, baseName, currentSubBanks, currentVal, element, i, length;
+      var currentSubBanks;
 
       this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
       currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
       currentSubBanks.addClass('hide');
       currentSubBanks.find('option').removeAttr('selected');
-      arr = this.$el.find("input[type='radio'][name='Bank']:not(checked)").next();
-      length = arr.length;
-      i = 0;
-      while (i < length) {
-        currentVal = arr[i].getAttribute('class');
-        baseName = currentVal.split(" ")[0];
-        arr[i].setAttribute('class', arr[i].getAttribute('class').replace(baseName + '-on', baseName + '-off'));
-        i++;
+      return this.$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide');
+    };
+
+    YodleeAccountInfoView.prototype.radioChanged = function(el) {
+      var checked, url;
+
+      checked = this.$el.find("input[type='radio'][name!='Bank']:checked");
+      if (checked.length > 0) {
+        url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (checked.val()) + "&bankName=" + (checked.attr('name'));
+        this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
       }
-      element = this.$el.find("input[type='radio'][name='Bank']:checked").next();
-      currentVal = element.attr('class');
-      baseName = currentVal.split(" ")[0];
-      element.removeClass(baseName + '-off').addClass(baseName + '-on');
-      this.$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide');
+    };
+
+    YodleeAccountInfoView.prototype.bankChanged = function() {
+      var bank;
+
+      this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
+      this.$el.find(".SubBank:not([class*='hide'])").addClass('hide');
+      bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
+      this.$el.find("." + bank + "Container").removeClass('hide');
       return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
     };
 
@@ -138,6 +138,13 @@
       if (this.$el.find('#yodleeContinueBtn').hasClass('disabled')) {
         return false;
       }
+    };
+
+    YodleeAccountInfoView.prototype.parentBankSelected = function(evt) {
+      evt.preventDefault();
+      this.$el.find('#Bank_' + evt.currentTarget.id).click();
+      this.$el.find('span.on').removeClass('on').addClass('off');
+      $(evt.currentTarget).find('span.off').removeClass('off').addClass('on');
     };
 
     YodleeAccountInfoView.prototype.render = function() {

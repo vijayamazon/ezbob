@@ -297,7 +297,7 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
             }
             catch (Exception)
             {
-                _log.ErrorFormat("\nRequest:\n{0}\nResponce:\n{1}", queryString, responseBody);
+                _log.ErrorFormat("\nRequest:\n{0}\nResponse:\n{1}", queryString, responseBody);
                 throw;
             }
             return response;

@@ -46,6 +46,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
         this.constructor.__super__.initialize.apply(this, [{ model: model, steps: this.steps}]);
     },
     signed: function () {
+        this.storeView.StoreInfoView.YodleeAccountInfoView.loadBanks();
     },
     evaluate: function () {
         $(document).attr("title", "Wizard Complete: Welcome to EZBOB | EZBOB");

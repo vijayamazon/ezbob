@@ -19,14 +19,15 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'click .radio-fx': 'parentBankSelected'
         'click .SubBank': 'subBankSelectionChanged'
 
+    loadBanks: () ->
+        @YodleeBanks.fetch().done =>
+            if @YodleeBanks.length > 0
+                @render
+
     initialize: (options) ->
         that = this;
 
-        @YodleeBanks = new EzBob.YodleeBanks()
-        @YodleeBanks.fetch().done => 
-            # we don't get here when customer is in sign up
-            if @YodleeBanks.length > 0
-                @render
+        @YodleeBanks = new EzBob.YodleeBanks()        
 
         window.YodleeAccountAdded = (result) ->
             if (result.error)
@@ -117,10 +118,11 @@ class EzBob.YodleeAccountModel extends Backbone.Model
 class EzBob.YodleeAccounts extends Backbone.Collection
     model: EzBob.YodleeAccountModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Accounts"
-
+    
 class EzBob.YodleeBankModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
 
 class EzBob.YodleeBanks extends Backbone.Collection
     model: EzBob.YodleeBankModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
+
