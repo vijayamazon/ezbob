@@ -335,7 +335,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="GetCashFailed4TimesStrategyName" value="Get_Cash_Failed" />
         <property name="PayEarlyStrategyName" value="PayEarly" />
         <property name="PayPointNameValidationFailedStrategyName" value="PayPointNameValidationFailed" />
-        <property name="RestoretrategyName" value="RestorePassword" />
+        <property name="RestorePasswordStrategyName" value="RestorePassword" />
         <property name="ApprovedUserStrategyName" value="Approved_User" />
         <property name="RejectUserStrategyName" value="Rejected_User" />
         <property name="MoreAMLInformationStrategyName" value="More_AML_Information" />
