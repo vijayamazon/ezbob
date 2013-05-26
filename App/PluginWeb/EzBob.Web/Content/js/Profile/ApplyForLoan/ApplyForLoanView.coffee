@@ -17,7 +17,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @fixed = @customer.get('IsLoanDetailsFixed')
     @isLoanTypeSelectionAllowed = @customer.get('IsLoanTypeSelectionAllowed')
 
-    @currentLoanTypeID = @customer.get('LastApprovedLoanTypeID')
+    @currentLoanTypeID = 1 # magic number for backward compatibility.
     @currentRepaymentPeriod = @customer.get('LastApprovedRepaymentPeriod')
 
     @recalculateThrottled = _.debounce @recalculateSchedule, 250
@@ -32,41 +32,24 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   events:
     "click .submit": "submit"
-    "change input[name='loanAmount']": "loanAmountChanged"
     "change .preAgreementTermsRead": "showSubmit"
     "change .agreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
-    'click .plan': 'loanTypeChanged'
 
   ui:
     submit: ".submit"
     agreement: ".agreement"
-    loanAmount: "input[name='loanAmount']"
 
-  loanTypeChanged: (e) =>
-    if e.target.tagName.toLowerCase() is 'a'
-        return
+  loanSelectionChanged: (e) =>
+    @currentRepaymentPeriod = @$('#loan-sliders .period-slider').slider 'value'
+    amount = @$('#loan-sliders .amount-slider').slider 'value'
 
-    aryID = $(e.target).closest('.plan').attr('id').split '-'
-
-    newLoanTypeID = aryID[2]
-    newRepaymentPeriod = aryID[3]
-
-    if newLoanTypeID == @currentLoanTypeID and newRepaymentPeriod == @currentRepaymentPeriod
-      return
-
-    @currentLoanTypeID = newLoanTypeID
-    @currentRepaymentPeriod = newRepaymentPeriod
-
-    @setCurrentlyActiveLoanType()
+    @model.set "neededCash", parseInt(amount, 10)
+    @model.set "loanType", @currentLoanTypeID
+    @model.set "repaymentPeriod", @currentRepaymentPeriod
 
     @neededCashChanged true
-
-  setCurrentlyActiveLoanType: =>
-    @$('div.currently-active').removeClass('currently-active')
-    sCurrentlyActive = @currentLoanTypeID + '-' + @currentRepaymentPeriod
-    @$('#loan-type-' + sCurrentlyActive).addClass('currently-active')
 
   showSubmit: ->
     readPreAgreement = $(".preAgreementTermsRead").is(":checked")
@@ -76,20 +59,13 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @$el.find(".submit").toggleClass "disabled", not read
     @$el.find("#getChashContinueBtn").toggleClass "disabled", not read
 
-  loanAmountChanged: (e) ->
-    amount = @ui.loanAmount.autoNumericGet()
-    @model.set "neededCash", parseInt(amount, 10)
-    @model.set "loanType", @currentLoanTypeID
-    @model.set "repaymentPeriod", @currentRepaymentPeriod
-
   recalculateSchedule: (args) ->
-    console.log 'recalculateSchedule', args
     val = args.value
-    unless args.reloadSelectedOnly is true
-      $.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
-        for loanKey, offer of data
-          $('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
-          $('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
+    # unless args.reloadSelectedOnly is true
+      # $.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
+        # for loanKey, offer of data
+          # $('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
+          # $('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
 
     BlockUi "on", @$el.find('#block-loan-schedule')
     BlockUi "on", @$el.find('#block-agreement')
@@ -114,44 +90,20 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     value = @model.get("neededCash")
     @ui.submit.attr "href", @model.get("url")
     @recalculateThrottled value: value, reloadSelectedOnly: reloadSelectedOnly
-    @ui.loanAmount.autoNumericSet value
-    @$el.find("#loan-slider").slider "value", value
 
   onRender: ->
     if @fixed
       @$(".cash-question").hide()
 
-    if @isLoanTypeSelectionAllowed in [ 1, '1' ]
-      @$('#loan-type-selector').show()
-      @setCurrentlyActiveLoanType()
+    console.log 'zzuzuz', @isLoanTypeSelectionAllowed
 
-    updateSlider = (event, ui) =>
-      percent = (ui.value - min) / (max - min) * 100
-      slider = @$el.find(".ui-slider")
-      slider.css "background", "-webkit-linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
-      slider.css "background", "-moz-linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
-      slider.css "background", "-o-linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
-      slider.css "background", "-ms-linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
-      slider.css "-pie-background", "linear-gradient(left, rgba(30,87,153,1) 0%,rgba(41,137,216,1) #{percent}%,rgba(201,201,201,1) #{percent}%,rgba(229,229,229,1) 100%)"
-      return  if ui.value is @model.get("neededCash")
-      @model.set "neededCash", ui.value
-      @model.set "loanType", @currentLoanTypeID
-      @model.set "repaymentPeriod", @currentRepaymentPeriod
+    InitAmountPeriodSliders {
+        container: @$('#loan-sliders'),
+        amount: { min: @model.get('minCash'), max: @model.get('maxCash'), start: @model.get('maxCash'), step: 100 },
+        period: { min: 3, max: 12, start: @model.get('repaymentPeriod'), step: 1, hide: not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) },
+        callback: (ignored, sEvent) => @loanSelectionChanged() if sEvent is 'change'
+    }
 
-    max = @model.get("maxCash")
-    min = @model.get("minCash")
-    sliderOptions =
-      max: max
-      min: min
-      value: @model.get("neededCash")
-      step: EzBob.Config.GetCashSliderStep
-      slide: updateSlider
-      change: updateSlider
-
-    @$el.find("#loan-slider").slider sliderOptions
-    
-    #this.$el.find('input[name="loanAmount"]').numericOnly();
-    @$el.find('input[name=loanAmount]').autoNumeric EzBob.moneyFormatNoDecimals
     @neededCashChanged()
 
     @$el.find("img[rel]").setPopover 'right'

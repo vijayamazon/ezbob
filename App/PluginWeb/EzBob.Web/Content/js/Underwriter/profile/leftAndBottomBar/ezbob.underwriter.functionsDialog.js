@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -20,6 +20,7 @@
     },
     render: function(id) {
       var buttonName;
+
       this.$el.html(this.template(this.model));
       buttonName = this.getButtonName();
       this.$el.find(".button-ok").val(buttonName);
@@ -70,6 +71,7 @@
     },
     BtnOkClicked: function(e) {
       var data, req, that;
+
       that = this;
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
@@ -169,6 +171,8 @@
       return true;
     },
     onShow: function() {
+      var _ref;
+
       this.renderDetails();
       this.renderSchedule();
       this.model.on("change", this.renderDetails, this);
@@ -176,11 +180,15 @@
         this.$el.find(".button-ok").addClass("disabled");
       }
       if (this.model.get("OfferExpired")) {
-        return this.$el.find(".button-ok").addClass("disabled");
+        this.$el.find(".button-ok").addClass("disabled");
+      }
+      if ((_ref = this.model.get("IsLoanTypeSelectionAllowed")) === 1 || _ref === '1') {
+        return this.$el.find(".change-offer-details").attr('disabled', 'disabled');
       }
     },
     renderDetails: function() {
       var details;
+
       details = _.template($("#approve-details").html(), this.model.toJSON());
       this.$el.find("#details").html(details);
       if (this.model.get("IsModified")) {
@@ -191,11 +199,13 @@
     },
     renderSchedule: function() {
       var that;
+
       that = this;
       return $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate", {
         id: this.model.get("CashRequestId")
       }).done(function(data) {
         var scheduleView;
+
         scheduleView = new EzBob.LoanScheduleView({
           el: that.$el.find(".loan-schedule"),
           schedule: data,
@@ -209,14 +219,23 @@
     getButtonName: function() {
       return "Approve";
     },
-    dlgWidth: 540,
+    dlgWidth: 650,
     dlgHeight: 750,
     onSaved: function() {
+      var that;
+
+      that = this;
       this.renderSchedule();
-      return this.model.fetch();
+      return $.post(window.gRootPath + "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed", {
+        id: this.model.get("CashRequestId"),
+        loanTypeSelection: 2
+      }).done(function() {
+        return that.model.fetch();
+      });
     },
     changeLoanDetails: function() {
       var loan, that, xhr;
+
       that = this;
       loan = new EzBob.LoanModelTemplate({
         CashRequestId: this.model.get("CashRequestId"),
@@ -225,6 +244,7 @@
       xhr = loan.fetch();
       xhr.done(function() {
         var view;
+
         view = new EzBob.EditLoanView({
           model: loan
         });
@@ -235,11 +255,13 @@
     },
     exportToPdf: function(e) {
       var $el;
+
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=false&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
     },
     exportToExcel: function(e) {
       var $el;
+
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=true&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
     }

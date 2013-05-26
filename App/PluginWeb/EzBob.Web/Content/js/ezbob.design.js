@@ -624,16 +624,7 @@ EzBob.formatPercents = function (num, precision) {
 };
 
 EzBob.formatLoanType = function(loanTypeSelection, loanType) {
-	switch (loanTypeSelection) {
-	case 1:
-	case '1':
-		return 'customer selected';
-		break;
-		
-	default:
-		return loanType;
-		break;
-	} // switch
+	return loanType;
 }; // formatLoanType
 
 EzBob.formatLoanTypeSelection = function(num) {

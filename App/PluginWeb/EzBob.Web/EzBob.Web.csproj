@@ -406,6 +406,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\alertify.css" />
+    <Content Include="Content\css\amount-period-sliders.css" />
     <Content Include="Content\css\app.css" />
     <Content Include="Content\css\bootstrap-modal.css" />
     <Content Include="Content\css\captcha.css" />
@@ -755,6 +756,7 @@
     <Content Include="Content\img\silver-3.png" />
     <Content Include="Content\img\silver-btn.png" />
     <Content Include="Content\img\silver.png" />
+    <Content Include="Content\img\slider_handle.png" />
     <Content Include="Content\img\start-main-bg.jpg" />
     <Content Include="Content\img\store-logos.png" />
     <Content Include="Content\img\store-sprites.png" />
@@ -807,6 +809,7 @@
     <Content Include="Content\js\ezbob.csrf.js" />
     <Content Include="Content\js\ezbob.customerModel.js" />
     <Content Include="Content\js\lib\alertify.js" />
+    <Content Include="Content\js\lib\amount-period-sliders.js" />
     <Content Include="Content\js\lib\backbone.marionette.js" />
     <Content Include="Content\js\lib\Backbone.ModelBinder.js" />
     <Content Include="Content\js\lib\bootstrap-modal.js" />
@@ -920,6 +923,9 @@
     </Content>
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.js">
+      <DependentUpon>ezbob.underwriter.creditLineDialog.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>

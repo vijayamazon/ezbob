@@ -170,17 +170,6 @@ body .agreement-text {
     position:relative\0/
 }
 
-.ui-slider a.ui-slider-handle, .ui-slider a.ui-slider-handle:hover {
-    background-image: url(../img/tray.png);
-    border: none transparent;
-    background-color: transparent;
-    width: 19px;
-    height: 19px;
-    background-position: 0 0;
-    top: -4px;
-    filter: none;
-}
-
 #loanDetailsModal {
     width: 900px;
     left: 40%;
@@ -418,10 +407,6 @@ body .apply-header-approved {
 body .apply-header-approved b{
     font-size: 18px;
     color: #8bac2b;
-}
-
-.slider-wrapper {
-    padding-top: 5px;
 }
 
 body .get-cash-amount {
@@ -791,11 +776,6 @@ html body .right {
 }
 .changePassword select {
     width: 98%;
-}
-
-
-#loan-slider .ui-slider-handle {
-    cursor: pointer;
 }
 
 .dashboard-frame td.caption {

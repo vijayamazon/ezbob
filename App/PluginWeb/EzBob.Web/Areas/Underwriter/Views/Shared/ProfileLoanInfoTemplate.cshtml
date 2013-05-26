@@ -200,7 +200,7 @@
             <%} else{%>
             @RawCell("Discount plan:", "<%= m.DiscountPlan %>")
             <%}%>
-            <%if(m.Editable){%>
+            <%if (false && m.Editable) { // alexbo May 26 2013: Loan type cannot be changed for now %>
             @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
             <%} else{%>
             @RawCell("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")

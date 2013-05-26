@@ -171,7 +171,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
     getButtonName: ->
         "Approve"
 
-    dlgWidth: 540
+    dlgWidth: 650
     dlgHeight: 750
     onSaved: ->
         that = this

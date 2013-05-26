@@ -11,52 +11,12 @@
 @model dynamic
 
 @helper ApplyForLoanTemplate() {
-	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-
-	<div id="loan-type-selector" class="hide">
-		<h2>Choose The Right Loan For Your Business</h2>
-		@foreach (var nPeriod in ScheduleController.LoanPeriods) {
-			foreach (var lt in oDBHelper.LoanTypeRepository.GetAll()) {
-				<div class="plan" id="loan-type-@lt.Id-@nPeriod">
-					<h3>@lt.Name<span>@nPeriod Months</span></h3>
-					<button class="button green">Select</button>
-					<ul>
-						<li>Interest: <span class="Interest"></span>
-						<li>Total: <span class="Total"></span></li>
-						<!-- li><a href="#">Read More...</a></li !-->
-					</ul>
-				</div>
-			}
-		}
-	</div>
-
 	<div class="loan-amount-header">
 		<h2 style="margin-top: 8px;">Choose Loan Amount</h2>
 	</div>
 
 	<div class="cash-question">
-		<div class="row-fluid">
-			<div class="slider-wrapper clearfix span8">
-				<div id="loan-slider"></div>
-				<div class="slider-text">
-					<div class="pull-right slider-upto">
-						<text class="hm_blue">up to </text>
-						<%-EzBob.formatPoundsNoDecimals(maxCash)%>
-					</div>
-					<div class="pull-left ">
-						<text class=""><%-EzBob.formatPoundsNoDecimals(minCash)%></text>
-					</div>
-					<div class="slider-ticks"></div>
-				</div>
-			</div>
-
-			<div class="span4">
-				<div style="width: 135px;" class="pull-right">
-					<input type="text" name="loanAmount" class="input-small get-cash-amount white" placeholder="" value="<%-neededCash%>" />
-					<img class="help-btn pull-righ" width="25" height="25" src='@Url.Content("~/Content/Img/question.png")' rel="popover" data-content="You can choose a loan amount by using the slide bar or by entering the amount in the field box." data-original-title="Help"  alt=""/>
-				</div>
-			</div>
-		</div>
+		<div id="loan-sliders"></div>
 	</div>
 
 	<div id="block-loan-schedule">
