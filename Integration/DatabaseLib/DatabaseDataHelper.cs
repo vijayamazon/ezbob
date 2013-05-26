@@ -35,6 +35,8 @@ using Iesi.Collections.Generic;
 
 namespace EZBob.DatabaseLib
 {
+	using EzBob.CommonLib.Security;
+
 	public enum CustomerMarketplaceUpdateActionType
 	{
 		UpdateInventoryInfo,
@@ -443,9 +445,28 @@ namespace EZBob.DatabaseLib
 			}
 		}
 
-		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IMarketplaceType marketplaceType, IMarketPlaceSecurityInfo securityData, Customer customer)
+
+		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname,
+																			IMarketplaceType marketplaceType,
+																			IMarketPlaceSecurityInfo securityData,
+																			Customer customer)
 		{
 			var serializedSecurityData = SerializeDataHelper.Serialize(securityData);
+			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer);
+		}
+
+
+		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname,
+																			IMarketplaceType marketplaceType,
+																			string password,
+																			Customer customer)
+		{
+			var serializedSecurityData = Encryptor.EncryptBytes(password);
+			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer);
+		}
+
+		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IMarketplaceType marketplaceType, byte[] serializedSecurityData, Customer customer)
+		{
 			int customerMarketPlaceId;
 			var now = DateTime.UtcNow;
 

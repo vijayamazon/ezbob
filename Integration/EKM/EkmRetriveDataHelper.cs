@@ -28,17 +28,10 @@ namespace EKM
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            var securityInfo = (EkmSecurityInfo)RetrieveCustomerSecurityInfo(databaseCustomerMarketPlace.Id);
-
-            UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-        }
-
-        private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-        {
-            //retreive data from ekm api
+            // Retreive data from ekm api
             var ordersList = EkmConnector.GetOrders(
-				securityInfo.Name,
-				securityInfo.Password,
+				databaseCustomerMarketPlace.DisplayName,
+				Encryptor.Decrypt(databaseCustomerMarketPlace.SecurityData),
 				Helper.GetEkmDeltaPeriod(databaseCustomerMarketPlace)
 			);
 
@@ -88,9 +81,7 @@ namespace EKM
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-			var ekmSecurityInfo = (SerializeDataHelper.DeserializeType<EkmSecurityInfo>(customerMarketPlace.SecurityData));
-            return ekmSecurityInfo;
+	        return null;
         }
 
         private IEnumerable<IWriteDataInfo<EkmDatabaseFunctionType>> CreateOrdersAggregationInfo(EkmOrdersList orders, ICurrencyConvertor currencyConverter)

@@ -15,6 +15,7 @@ using NHibernate;
 namespace EzBob.Web.Areas.Customer.Controllers
 {
     using CommonLib;
+    using CommonLib.Security;
     using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 
@@ -85,7 +86,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
 
-                var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo, customer);
+                var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
 
                 _session.Flush();
 
@@ -123,24 +124,21 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         public static EkmAccountModel ToModel(IDatabaseCustomerMarketPlace account)
         {
-            var oSecInfo = SerializeDataHelper.DeserializeType<EkmSecurityInfo>(account.SecurityData);
             return new EkmAccountModel
                        {
                            id = account.Id,
-                           login = oSecInfo.Name,
-                           password = oSecInfo.Password,
+                           login = account.DisplayName,
+                           password = Encryptor.Decrypt(account.SecurityData),
                        };
         }
 
         public static EkmAccountModel ToModel(MP_CustomerMarketPlace account)
         {
-            var oSecInfo = SerializeDataHelper.DeserializeType<EkmSecurityInfo>(account.SecurityData);
-
             return new EkmAccountModel
             {
                 id = account.Id,
-                login = oSecInfo.Name,
-                password = oSecInfo.Password,
+				login = account.DisplayName,
+				password = Encryptor.Decrypt(account.SecurityData),
             };
         } // ToModel
     }
