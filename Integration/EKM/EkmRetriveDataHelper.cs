@@ -88,11 +88,8 @@ namespace EKM
 
         public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(int customerMarketPlaceId)
         {
-            var ekmSecurityInfo = new EkmSecurityInfo();
             IDatabaseCustomerMarketPlace customerMarketPlace = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
-            ekmSecurityInfo.Password = Encryptor.Decrypt(customerMarketPlace.SecurityData);
-            ekmSecurityInfo.Name = customerMarketPlace.DisplayName;
-            ekmSecurityInfo.MarketplaceId = customerMarketPlace.Id;
+			var ekmSecurityInfo = (SerializeDataHelper.DeserializeType<EkmSecurityInfo>(customerMarketPlace.SecurityData));
             return ekmSecurityInfo;
         }
 
