@@ -224,103 +224,106 @@ ul.list_none
     width: 400px;
 }
 
-.BankContainer img {
+a.radio-fx {
+    padding: 15px;
+}
+.BankContainer span {
     display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
+    background: url(images/star.png) no-repeat 0 0;
     height: 40px;
     width: 100px;
     
 }
 
-    .BankContainer img.HSBC-off {
+    .BankContainer span.HSBC.off {
         display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
+        background: url(images/yodlee/hsbc_off.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
+        width: 222px;
     }
-    .BankContainer img.HSBC-on {
+    .BankContainer span.HSBC.on {
         display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
+        background: url(images/yodlee/hsbc_on.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
-    }
-
-    .BankContainer img.Barclays-off {
-        display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
-    }
-    .BankContainer img.Barclays-on {
-        display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
+        width: 222px;
     }
 
-    .BankContainer img.Lloyds-off {
+    .BankContainer span.Barclays.off {
         display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
+        background: url(images/yodlee/barclays_off.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
+        width: 237px;
     }
-    .BankContainer img.Lloyds-on {
+    .BankContainer span.Barclays.on {
         display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
+        background: url(images/yodlee/barclays_on.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
-    }
-
-    .BankContainer img.RBS-off {
-        display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
-    }
-    .BankContainer img.RBS-on {
-        display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
+        width: 237px;
     }
 
-    .BankContainer img.Santander-off {
+    .BankContainer span.Lloyds.off {
         display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
+        background: url(images/yodlee/llioyds_off.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
+        width: 170px;
     }
-    .BankContainer img.Santander-on {
+    .BankContainer span.Lloyds.on {
         display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
+        background: url(images/yodlee/llioyds_on.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
-    }
-
-    .BankContainer img.NatWest-off {
-        display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
-    }
-    .BankContainer img.NatWest-on {
-        display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
-        height: 40px;
-        width: 100px;
+        width: 170px;
     }
 
-    .BankContainer img.DAG-off {
+    .BankContainer span.RBS.off {
         display: inline-block;
-		background: url(images/star.png) no-repeat 0 0;
+        background: url(images/yodlee/rbs_off.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
+        width: 68px;
     }
-    .BankContainer img.DAG-on {
+    .BankContainer span.RBS.on {
         display: inline-block;
-		background: url(images/fail.png) no-repeat 0 0;
+        background: url(images/yodlee/rbs_on.png) no-repeat 0 0;
         height: 40px;
-        width: 100px;
+        width: 68px;
+    }
+
+    .BankContainer span.Santander.off {
+        display: inline-block;
+        background: url(images/yodlee/santander_off.png) no-repeat 0 0;
+        height: 40px;
+        width: 117px;
+    }
+    .BankContainer span.Santander.on {
+        display: inline-block;
+        background: url(images/yodlee/santander_on.png) no-repeat 0 0;
+        height: 40px;
+        width: 117px;
+    }
+
+    .BankContainer span.NatWest.off {
+        display: inline-block;
+        background: url(images/yodlee/natwest_off.png) no-repeat 0 0;
+        height: 40px;
+        width: 219px;
+    }
+    .BankContainer span.NatWest.on {
+        display: inline-block;
+        background: url(images/yodlee/natwest_on.png) no-repeat 0 0;
+        height: 40px;
+        width: 219px;
+    }
+
+    .BankContainer span.DAG.off {
+        display: inline-block;
+        background: url(images/yodlee/dag_off.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
+    }
+    .BankContainer span.DAG.on {
+        display: inline-block;
+        background: url(images/yodlee/dag_on.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
     }
 
 

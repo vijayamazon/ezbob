@@ -12,14 +12,15 @@
         <form id="yodleeAccount">
             <div class="bank-account-instructions clearfix">
                 <div class="bank-account">
-                    <% if (YodleeBanks) { console.log(YodleeBanks); %>
+                    <% if (YodleeBanks) { %>
                         <div class="form_field_container BankContainer">
-                            Bank
                             <br/>
                             <% _.each(YodleeBanks, function (bank, i) { %>
-                            <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide"/>
-                            <img class="<%- bank.parentBankName %> <%- bank.parentBankName %>-off" />
-                            <%});%>    
+                                <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
+                                <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
+                                    <span class="<%- bank.parentBankName %> off" ></span>
+                                </a>
+                            <%});%>
                         </div>
                     
                         <% _.each(YodleeBanks, function (bank, i) {%>
