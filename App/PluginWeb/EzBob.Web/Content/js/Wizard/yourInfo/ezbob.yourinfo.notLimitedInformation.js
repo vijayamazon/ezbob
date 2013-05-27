@@ -31,7 +31,12 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		$('.director_address').each(function() {
 			nAddressCount++;
-			if ($(this).find('[name=addressInput]').length)
+
+			var oAddrInput = $(this).find('.addAddressInput');
+
+			if (oAddrInput.length)
+				oAddrInput.addClass('error');
+			else
 				nFilledAddressCount++;
 		}); // each director address
 
