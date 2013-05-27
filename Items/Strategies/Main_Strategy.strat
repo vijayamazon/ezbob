@@ -57,8 +57,12 @@
     <NodeElement Name="Is Business" NodeId="Comparison39575399" />
     <NodeElement Name="is BWA Error" NodeId="Comparison42392236" />
     <NodeElement Name="is BWA Error" NodeId="Comparison20503483" />
-    <NodeElement Name="Is rejected" NodeId="Comparison14715976" />
-    <NodeElement Name="Is rejected" NodeId="Comparison49253056" />
+    <NodeElement Name="Is rejected (Experian)" NodeId="Comparison47544505" />
+    <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison14715976" />
+    <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison47974306" />
+    <NodeElement Name="Is rejected (Experian)" NodeId="Comparison42838347" />
+    <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison49253056" />
+    <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison25377797" />
     <NodeElement Name="IsAMLStartedFromWeb" NodeId="Comparison66744080" />
     <NodeElement Name="IsCustomerMPUpdated" NodeId="Comparison21652305" />
     <NodeElement Name="Limited business" NodeId="ScriptNode65432437" />
@@ -3407,6 +3411,23 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
+      <DisplayName>Is rejected (PayPal)</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison25377797</Name>
+      <PointF>
+        <X>1208.81433</X>
+        <Y>1756</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
       <DisplayName>StopNode</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
@@ -3430,8 +3451,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison26778105</Name>
       <PointF>
-        <X>230.903717</X>
-        <Y>1716</Y>
+        <X>170.903732</X>
+        <Y>1696</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3447,7 +3468,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison20625205</Name>
       <PointF>
-        <X>1330.90369</X>
+        <X>1430.90369</X>
         <Y>1776</Y>
       </PointF>
       <SuperNodeName />
@@ -3458,14 +3479,14 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Is rejected</DisplayName>
+      <DisplayName>Is rejected (Totals)</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49253056</Name>
       <PointF>
-        <X>1252.07117</X>
-        <Y>1776</Y>
+        <X>1311.336</X>
+        <Y>1696</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3872,7 +3893,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB45682816</Name>
       <PointF>
-        <X>495.999878</X>
+        <X>536</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -3883,13 +3904,13 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Is rejected</DisplayName>
+      <DisplayName>Is rejected (Totals)</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison14715976</Name>
       <PointF>
-        <X>272.0712</X>
+        <X>251.33609</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -3923,7 +3944,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison51472511</Name>
       <PointF>
-        <X>348.586853</X>
+        <X>368.586853</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -3940,7 +3961,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison46140787</Name>
       <PointF>
-        <X>1188.58679</X>
+        <X>1168.58679</X>
         <Y>1656</Y>
       </PointF>
       <SuperNodeName />
@@ -4333,7 +4354,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison12965330</Name>
       <PointF>
-        <X>1327.28015</X>
+        <X>1427.28015</X>
         <Y>1956</Y>
       </PointF>
       <SuperNodeName />
@@ -5321,6 +5342,57 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is rejected (PayPal)</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison47974306</Name>
+      <PointF>
+        <X>388.814362</X>
+        <Y>1756</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is rejected (Experian)</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison42838347</Name>
+      <PointF>
+        <X>204.4074</X>
+        <Y>1756</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is rejected (Experian)</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison47544505</Name>
+      <PointF>
+        <X>1324.40735</X>
+        <Y>1776</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -10743,6 +10815,182 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>(TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000) AND 
+((PayPal_TotalSumOfOrders3M &lt; 1500 OR PayPal_TotalSumOfOrders1Y &lt; 7000) AND PayPal_NumberOfStores &gt; 0)
+
+
+
+
+
+// OLD
+//PolicyRulesStatus = "Rejected" OR ExperianAMLResult = "Rejected" OR ExperianOverIndebtednessReject = "Rejected" OR ExperianBusinessResult = "Rejected" OR ExperianRiskSegment  = "High Risk" OR CustomerEliminated = 1 OR AmountOfMPsPassed = 0 OR ModelLoanOffer = 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797ExperianAMLResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797ModelLoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797TotalSumOfOrders1YTotal</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797TotalSumOfOrders3MTotal</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797PolicyRulesStatus</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797AmountOfMPsPassed</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797ExperianRiskSegment</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797ExperianBusinessResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797ExperianOverIndebtednessReject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797CustomerEliminated</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797PayPal_TotalSumOfOrders3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797PayPal_TotalSumOfOrders1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <Name>Comparison25377797PayPal_NumberOfStores</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>Comparison26778105</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -10867,9 +11115,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <OwnerName>Comparison49253056</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Inintial_ExperianConsumerScore &lt; 500 OR 
-((TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000) AND 
-((PayPal_TotalSumOfOrders3M &lt; 1500 OR PayPal_TotalSumOfOrders1Y &lt; 7000) AND PayPal_NumberOfStores &gt; 0))
+      <InitialValue>TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000
 
 
 
@@ -10880,18 +11126,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison49253056</OwnerName>
-      <Name>Comparison49253056Inintial_ExperianConsumerScore</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -11007,42 +11241,6 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableDescriptor>
       <OwnerName>Comparison49253056</OwnerName>
       <Name>Comparison49253056CustomerEliminated</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison49253056</OwnerName>
-      <Name>Comparison49253056PayPal_TotalSumOfOrders3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison49253056</OwnerName>
-      <Name>Comparison49253056PayPal_TotalSumOfOrders1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison49253056</OwnerName>
-      <Name>Comparison49253056PayPal_NumberOfStores</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -11344,9 +11542,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <OwnerName>Comparison14715976</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Inintial_ExperianConsumerScore &lt; 500 OR 
-((TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000) AND 
-((PayPal_TotalSumOfOrders3M &lt; 1500 OR PayPal_TotalSumOfOrders1Y &lt; 7000) AND PayPal_NumberOfStores &gt; 0))
+      <InitialValue>(TotalSumOfOrders3MTotal  &lt; 1500 OR TotalSumOfOrders1YTotal &lt; 7000)
 
 
 
@@ -11358,18 +11554,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison14715976</OwnerName>
-      <Name>Comparison14715976Inintial_ExperianConsumerScore</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -11485,42 +11669,6 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableDescriptor>
       <OwnerName>Comparison14715976</OwnerName>
       <Name>Comparison14715976CustomerEliminated</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison14715976</OwnerName>
-      <Name>Comparison14715976PayPal_TotalSumOfOrders3M</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison14715976</OwnerName>
-      <Name>Comparison14715976PayPal_TotalSumOfOrders1Y</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Comparison14715976</OwnerName>
-      <Name>Comparison14715976PayPal_NumberOfStores</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -13402,6 +13550,413 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>(PayPal_TotalSumOfOrders3M &lt; 1500 OR PayPal_TotalSumOfOrders1Y &lt; 7000) AND PayPal_NumberOfStores &gt; 0
+
+
+
+
+
+
+// OLD
+//PolicyRulesStatus = "Rejected" OR ExperianAMLResult = "Rejected" OR ExperianOverIndebtednessReject = "Rejected" OR ExperianBusinessResult = "Rejected" OR ExperianRiskSegment  = "High Risk" OR CustomerEliminated = 1 OR AmountOfMPsPassed = 0 OR ModelLoanOffer = 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306ExperianAMLResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306ModelLoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306PolicyRulesStatus</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306AmountOfMPsPassed</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306ExperianRiskSegment</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306ExperianBusinessResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306ExperianOverIndebtednessReject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306CustomerEliminated</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306PayPal_TotalSumOfOrders3M</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306PayPal_TotalSumOfOrders1Y</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <Name>Comparison47974306PayPal_NumberOfStores</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>Inintial_ExperianConsumerScore &lt; 500 
+
+
+
+
+
+
+// OLD
+//PolicyRulesStatus = "Rejected" OR ExperianAMLResult = "Rejected" OR ExperianOverIndebtednessReject = "Rejected" OR ExperianBusinessResult = "Rejected" OR ExperianRiskSegment  = "High Risk" OR CustomerEliminated = 1 OR AmountOfMPsPassed = 0 OR ModelLoanOffer = 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347Inintial_ExperianConsumerScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347ExperianAMLResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347ModelLoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347PolicyRulesStatus</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347AmountOfMPsPassed</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347ExperianRiskSegment</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347ExperianBusinessResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347ExperianOverIndebtednessReject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <Name>Comparison42838347CustomerEliminated</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>Inintial_ExperianConsumerScore &lt; 500
+
+
+
+
+
+// OLD
+//PolicyRulesStatus = "Rejected" OR ExperianAMLResult = "Rejected" OR ExperianOverIndebtednessReject = "Rejected" OR ExperianBusinessResult = "Rejected" OR ExperianRiskSegment  = "High Risk" OR CustomerEliminated = 1 OR AmountOfMPsPassed = 0 OR ModelLoanOffer = 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505Inintial_ExperianConsumerScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505ExperianAMLResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505ModelLoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505PolicyRulesStatus</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505AmountOfMPsPassed</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505ExperianRiskSegment</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505ExperianBusinessResult</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505ExperianOverIndebtednessReject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
+      <Name>Comparison47544505CustomerEliminated</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors>
     <VariableConstraintDescriptor>
@@ -15239,7 +15794,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison26778105</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison14715976</TargetNodeName>
+      <TargetNodeName>Comparison42838347</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -15260,7 +15815,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1360</X>
+          <X>1460</X>
           <Y>1880</Y>
         </PointF>
       </IntermediatePoints>
@@ -15268,7 +15823,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison20625205</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison49253056</TargetNodeName>
+      <TargetNodeName>Comparison47544505</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -15304,7 +15859,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison49253056</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <TargetNodeName>Comparison25377797</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -15381,7 +15936,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison14715976</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB40193221</TargetNodeName>
+      <TargetNodeName>Comparison47974306</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -15659,7 +16214,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1320</X>
+          <X>1440</X>
           <Y>1980</Y>
         </PointF>
       </IntermediatePoints>
@@ -16032,6 +16587,102 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison25377797</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison46140787</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison25377797</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison47974306</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison51472511</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison47974306</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB40193221</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison42838347</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison14715976</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison42838347</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB40193221</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison47544505</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison49253056</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison47544505</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -18409,174 +19060,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976Inintial_ExperianConsumerScore</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianAMLResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976ExperianAMLResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ModelLoanOffer</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976ModelLoanOffer</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976TotalSumOfOrders1YTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976TotalSumOfOrders3MTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976PolicyRulesStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976AmountOfMPsPassed</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976ExperianRiskSegment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976ExperianBusinessResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976ExperianOverIndebtednessReject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>CustomerEliminated</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976CustomerEliminated</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976PayPal_TotalSumOfOrders3M</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976PayPal_TotalSumOfOrders1Y</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
-      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
-      <TargetVariableName>Comparison14715976PayPal_NumberOfStores</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056Inintial_ExperianConsumerScore</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianAMLResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056ExperianAMLResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ModelLoanOffer</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056ModelLoanOffer</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056TotalSumOfOrders1YTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056TotalSumOfOrders3MTotal</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056PolicyRulesStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056AmountOfMPsPassed</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056ExperianRiskSegment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056ExperianBusinessResult</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056ExperianOverIndebtednessReject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>CustomerEliminated</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056CustomerEliminated</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056PayPal_TotalSumOfOrders3M</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056PayPal_TotalSumOfOrders1Y</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
-      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
-      <TargetVariableName>Comparison49253056PayPal_NumberOfStores</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
       <TargetVariableOwnerName>MailNode51710936</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
@@ -18742,6 +19225,378 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>ErrorMPsNum</SourceVariableName>
       <TargetVariableOwnerName>Comparison26778105</TargetVariableOwnerName>
       <TargetVariableName>Comparison26778105ErrorMPsNum</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347Inintial_ExperianConsumerScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison42838347</TargetVariableOwnerName>
+      <TargetVariableName>Comparison42838347CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976TotalSumOfOrders1YTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976TotalSumOfOrders3MTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison14715976</TargetVariableOwnerName>
+      <TargetVariableName>Comparison14715976CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306PayPal_TotalSumOfOrders3M</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306PayPal_TotalSumOfOrders1Y</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47974306</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47974306PayPal_NumberOfStores</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505Inintial_ExperianConsumerScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison47544505</TargetVariableOwnerName>
+      <TargetVariableName>Comparison47544505CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056TotalSumOfOrders1YTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056TotalSumOfOrders3MTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison49253056</TargetVariableOwnerName>
+      <TargetVariableName>Comparison49253056CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianAMLResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797ExperianAMLResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ModelLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797ModelLoanOffer</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797TotalSumOfOrders1YTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797TotalSumOfOrders3MTotal</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PolicyRulesStatus</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797PolicyRulesStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AmountOfMPsPassed</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797AmountOfMPsPassed</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianRiskSegment</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797ExperianRiskSegment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianBusinessResult</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797ExperianBusinessResult</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianOverIndebtednessReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797ExperianOverIndebtednessReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerEliminated</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797CustomerEliminated</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797PayPal_TotalSumOfOrders3M</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797PayPal_TotalSumOfOrders1Y</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
+      <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
+      <TargetVariableName>Comparison25377797PayPal_NumberOfStores</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -19362,6 +20217,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
+      <OwnerName>Comparison25377797</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
       <OwnerName>StopNode55449228</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -19675,6 +20538,30 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar23416123</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison47974306</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison42838347</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison47544505</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
