@@ -1,4 +1,5 @@
 ﻿using ApplicationMng.Repository;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Database.Repository;
@@ -6,6 +7,7 @@ using EZBob.DatabaseLib.Model.Email;
 using EZBob.DatabaseLib.Model.Loans;
 using EZBob.DatabaseLib.PyaPalDetails;
 using EZBob.DatabaseLib.Repository;
+using EzBob.CommonLib;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Controllers;
 using EzBob.Web.Areas.Customer.Models;
@@ -77,6 +79,7 @@ namespace ezmanage
             For<IAgreementsTemplatesProvider>().Use<EzAgreementsTemplateProvider>();
             For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
             For<IUsersRepository>().Use<UsersRepository>();
+            For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
         }
     }
 }

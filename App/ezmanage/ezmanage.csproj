@@ -104,6 +104,10 @@
     <Compile Include="EzRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
