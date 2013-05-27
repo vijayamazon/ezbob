@@ -335,6 +335,32 @@ a.radio-fx {
         width: 41px;
     }
 
+    .BankContainer span.Halifax.off {
+        display: inline-block;
+        background: url(images/yodlee/halifax_off.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
+    }
+    .BankContainer span.Halifax.on {
+        display: inline-block;
+        background: url(images/yodlee/halifax_on.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
+    }
+
+    .BankContainer span.Nationwide.off {
+        display: inline-block;
+        background: url(images/yodlee/nationwide_off.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
+    }
+    .BankContainer span.Nationwide.on {
+        display: inline-block;
+        background: url(images/yodlee/nationwide_on.png) no-repeat 0 0;
+        height: 40px;
+        width: 41px;
+    }
+
 
 .GenderCtrl label,
 .BankContainer label, 
