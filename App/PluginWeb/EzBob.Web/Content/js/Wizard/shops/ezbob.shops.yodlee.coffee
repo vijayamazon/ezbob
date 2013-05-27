@@ -4,6 +4,7 @@ root.EzBob = root.EzBob or {}
 class EzBob.YodleeAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
         super({name: 'Yodlee', logoText: '', shops: @model})
+
     update: ->
         @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
 
@@ -17,13 +18,13 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'change input[name="Bank"]': 'bankChanged'
         'click #yodleeContinueBtn': 'continueClicked'
         'click .radio-fx': 'parentBankSelected'
-        'click .SubBank': 'subBankSelectionChanged'
+        'change .SubBank': 'subBankSelectionChanged'
 
     loadBanks: () ->
         @YodleeBanks.fetch().done =>
             if @YodleeBanks.length > 0
                 @render
-
+                
     initialize: (options) ->
         that = this;
 
@@ -39,23 +40,22 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             that.trigger('ready');
             that.trigger('back');
 
-        window.AccountAddingError = (msg) ->
+        window.YodleeAccountAddingError = (msg) ->
             EzBob.App.trigger('error', msg)
             that.trigger('back')
 
+        window.YodleeAccountRetry = () ->
+            that.attemptsLeft = that.attemptsLeft - 1
+            console.log(that.$el.find("#yodleeContinueBtn"))  
+            return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
+
+        return false
+        
     subBankSelectionChanged:(el) ->
+        return false if (this.$el.find(".SubBank option:selected").length == 0)            
         url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{@$el.find("option:selected").val()}&bankName=#{this.$el.find("input[type='radio'][name='Bank']:checked").attr('value')}"
         @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
         
-    bankChanged: ->
-        @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
-
-        currentSubBanks = @$el.find(".SubBank:not([class*='hide'])")
-        currentSubBanks.addClass('hide')
-        currentSubBanks.find('option').removeAttr('selected')
-        
-        @$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide')
-
     bankChanged: ->
         @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
         currentSubBanks = @$el.find(".SubBank:not([class*='hide'])")
@@ -75,6 +75,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @ui.connect.toggleClass('disabled', !enabled)
 
     continueClicked: ->
+        @attemptsLeft = 3
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
 
     parentBankSelected: (evt)->
@@ -86,11 +87,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
-
-        oFieldStatusIcons = $ 'IMG.field_status'
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
-        @validator = EzBob.validatePayPointShopForm @ui.form
+        @validator = EzBob.validatePayPointShopForm @ui.form # what is this for
         return @
 
     serializeData: ->
@@ -102,11 +99,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     getDocumentTitle: ->
         "Link Yodlee Account"
-
-    YodleeAccountAdded: (model) -> 
-        EzBob.App.trigger 'ct:storebase.shop.connected'
-
-
+        
 class EzBob.YodleeAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/Accounts"
 

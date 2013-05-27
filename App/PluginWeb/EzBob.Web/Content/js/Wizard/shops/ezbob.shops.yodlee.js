@@ -50,7 +50,7 @@
       'change input[name="Bank"]': 'bankChanged',
       'click #yodleeContinueBtn': 'continueClicked',
       'click .radio-fx': 'parentBankSelected',
-      'click .SubBank': 'subBankSelectionChanged'
+      'change .SubBank': 'subBankSelectionChanged'
     };
 
     YodleeAccountInfoView.prototype.loadBanks = function() {
@@ -78,27 +78,29 @@
         that.trigger('ready');
         return that.trigger('back');
       };
-      return window.AccountAddingError = function(msg) {
+      window.YodleeAccountAddingError = function(msg) {
         EzBob.App.trigger('error', msg);
         return that.trigger('back');
       };
+      window.YodleeAccountRetry = function() {
+        that.attemptsLeft = that.attemptsLeft - 1;
+        console.log(that.$el.find("#yodleeContinueBtn"));
+        return {
+          url: that.$el.find('#yodleeContinueBtn').attr('href'),
+          attemptsLeft: that.attemptsLeft
+        };
+      };
+      return false;
     };
 
     YodleeAccountInfoView.prototype.subBankSelectionChanged = function(el) {
       var url;
 
+      if (this.$el.find(".SubBank option:selected").length === 0) {
+        return false;
+      }
       url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (this.$el.find("option:selected").val()) + "&bankName=" + (this.$el.find("input[type='radio'][name='Bank']:checked").attr('value'));
       return this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
-    };
-
-    YodleeAccountInfoView.prototype.bankChanged = function() {
-      var currentSubBanks;
-
-      this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
-      currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
-      currentSubBanks.addClass('hide');
-      currentSubBanks.find('option').removeAttr('selected');
-      return this.$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide');
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
@@ -127,6 +129,7 @@
     };
 
     YodleeAccountInfoView.prototype.continueClicked = function() {
+      this.attemptsLeft = 3;
       if (this.$el.find('#yodleeContinueBtn').hasClass('disabled')) {
         return false;
       }
@@ -140,16 +143,7 @@
     };
 
     YodleeAccountInfoView.prototype.render = function() {
-      var oFieldStatusIcons;
-
       YodleeAccountInfoView.__super__.render.call(this);
-      oFieldStatusIcons = $('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
       this.validator = EzBob.validatePayPointShopForm(this.ui.form);
       return this;
     };
@@ -167,10 +161,6 @@
 
     YodleeAccountInfoView.prototype.getDocumentTitle = function() {
       return "Link Yodlee Account";
-    };
-
-    YodleeAccountInfoView.prototype.YodleeAccountAdded = function(model) {
-      return EzBob.App.trigger('ct:storebase.shop.connected');
     };
 
     return YodleeAccountInfoView;

@@ -18,7 +18,7 @@
 
     public class PayPointMarketPlacesController: Controller
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(PayPointMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
         private readonly ICustomerRepository _customers;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;

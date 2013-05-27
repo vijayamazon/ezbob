@@ -1,24 +1,40 @@
 ﻿@using Newtonsoft.Json
 @model dynamic
-
 @{
-    Layout = null;
+}
+<h2>Trying to add bank account. Please wait a minute.</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            if (querystring('oauth_error_code').length > 0) {
+                console.log('Error while trying to link account');
+                    
+                var variables = window.opener.YodleeAccountRetry();
+                console.log('Variables:', variables);
+                var attemptsLeft = variables.attemptsLeft;
+                var url = variables.url;
+                    
+                if (attemptsLeft <= 0) {
+                    window.opener.YodleeAccountAddingError("Error occurred while trying to add bank account");
+                    self.close();
+                } else {
+                    console.log('Retrying...');
+                    document.location.href = url;
+                }
+            } else {
+                window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+                self.close();
+            }
+
+            function querystring(key) {
+                var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+                var r = [], m;
+                while ((m = re.exec(document.location.search)) != null) r.push(m[1]);
+                return r;
+            }
+        });
+    </script>
 }
 
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>title</title>
-    </head>
-    <body>
-        <div>
-            <h2>success</h2>
-            If this windows is not automatically closed, close it.
-        </div>
-	    <script type="text/javascript">
-    		window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
-    		self.close();
-    	</script>
-    </body>
-</html>
