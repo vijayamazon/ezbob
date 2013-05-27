@@ -471,10 +471,14 @@
     <Content Include="Content\css\images\yodlee\barclays_on.png" />
     <Content Include="Content\css\images\yodlee\dag_off.png" />
     <Content Include="Content\css\images\yodlee\dag_on.png" />
+    <Content Include="Content\css\images\yodlee\halifax_off.png" />
+    <Content Include="Content\css\images\yodlee\halifax_on.png" />
     <Content Include="Content\css\images\yodlee\hsbc_off.png" />
     <Content Include="Content\css\images\yodlee\hsbc_on.png" />
     <Content Include="Content\css\images\yodlee\llioyds_off.png" />
     <Content Include="Content\css\images\yodlee\llioyds_on.png" />
+    <Content Include="Content\css\images\yodlee\nationwide_off.png" />
+    <Content Include="Content\css\images\yodlee\nationwide_on.png" />
     <Content Include="Content\css\images\yodlee\natwest_off.png" />
     <Content Include="Content\css\images\yodlee\natwest_on.png" />
     <Content Include="Content\css\images\yodlee\rbs_off.png" />
