@@ -104,8 +104,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string Account { get; set; } // done
         public string TermAndfreq { get; set; } // done
         public string Limit { get; set; } // done
-        public string AccBalance { get; set; } // done
-        public string AccountStatus { get; set; } // done
+		public string AccBalance { get; set; } // done
+		public string AccountStatus { get; set; } // done
+		public string DateType { get; set; } // done
         public string SettlementDate { get; set; } // done
         public string CashWithdrawals { get; set; } // done
         public string MinimumPayment { get; set; } // done

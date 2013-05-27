@@ -525,7 +525,9 @@
                         //accountInfo.TermAndfreq =
                         //    PaymentFrequencyDictionary.GetPaymentFrequency(caisDetails.PaymentFrequency ?? string.Empty);
                         var accStatus = caisDetails.AccountStatus;
-                        accountInfo.AccountStatus = GetAccountStatusString(accStatus);
+	                    string dateType;
+						accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
+						accountInfo.DateType = dateType;
                         if (accStatus == "F")
                             numberOfDefaults++;
 
@@ -838,19 +840,24 @@
             return string.Format("{0} months", repaymentMonths);
         }
 
-        protected string GetAccountStatusString(string status)
+        protected string GetAccountStatusString(string status, out string dateType)
         {
             switch (status)
             {
                 case "D":
+		            dateType = "Delinquent Date";
                     return "Delinquent";
-                case "A":
+				case "A":
+					dateType = "Last Update Date";
                     return "Active";
-                case "F":
+				case "F":
+					dateType = "Default Date";
                     return "Default";
-                case "S":
+				case "S":
+					dateType = "Settlement Date";
                     return "Settled";
-                default:
+				default:
+					dateType = "Unknown Date Type";
                     return status;
             }
         }
