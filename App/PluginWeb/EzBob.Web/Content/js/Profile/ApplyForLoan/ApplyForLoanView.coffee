@@ -80,7 +80,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     scheduleView = new EzBob.LoanScheduleView(
       el: @$el.find(".loan-schedule")
       schedule: schedule
-      isShowGift: true
+      isShowGift: false
       isShowExportBlock:false
     )
     scheduleView.render()
@@ -94,8 +94,6 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   onRender: ->
     if @fixed
       @$(".cash-question").hide()
-
-    console.log 'zzuzuz', @isLoanTypeSelectionAllowed
 
     InitAmountPeriodSliders {
         container: @$('#loan-sliders'),

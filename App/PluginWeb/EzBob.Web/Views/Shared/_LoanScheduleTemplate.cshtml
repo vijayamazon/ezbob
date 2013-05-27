@@ -17,7 +17,7 @@
 	<table class="table table-bordered table-striped payment-schedule-table">
 		<thead>
 			<tr>
-				<th width="80">Due Date</th>
+				<th>Due Date</th>
 				<th>Principal</th>
 				<th>Interest</th>
 				<th>Rate</th>
@@ -29,18 +29,18 @@
 			<%_.each(schedule, function(line, i){%>
 				<tr>
 					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-					<td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
-					<td><%-EzBob.formatPounds(line.Interest)%></td>
-					<td><%-EzBob.formatPercents(line.InterestRate, 1)%></td>
+					<td><%-EzBob.formatPounds1(line.LoanRepayment)%></td>
+					<td><%-EzBob.formatPounds1(line.Interest)%></td>
+					<td><%-EzBob.formatPercents1(line.InterestRate)%></td>
 
 					<td style="text-align: center"><%
 						var fee = setupFee > 0 && i == 0 ? setupFee : 0;
 						if (line.Fees) fee += line.Fees; %>
-							<%-fee !=0 ? EzBob.formatPounds(fee) : '-' %><%- setupFee && i == 0 ? '*' : '' %>
+							<%-fee !=0 ? EzBob.formatPounds1(fee) : '-' %><%- setupFee && i == 0 ? '*' : '' %>
 					</td>
 
 					<td>
-						<b class="apply-loan-total"><%-EzBob.formatPounds(line.AmountDue)%></b>
+						<b class="apply-loan-total"><%-EzBob.formatPounds1(line.AmountDue)%></b>
 					</td>
 				</tr>
 			<%});%>

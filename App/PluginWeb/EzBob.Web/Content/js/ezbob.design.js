@@ -382,9 +382,10 @@ BlockUi = function (action, element) {
             backgroundColor: '#000',
             '-webkit-border-radius': '10px',
             '-moz-border-radius': '10px',
-            opacity: .5,
+            opacity: 0.5,
             color: '#fff'
         };
+        $.blockUI.defaults.overlayCSS.backgroundColor = '#ffffff';
         var options = { message: div, css: style, baseZ: 1000000, };
         element ? $(element).block(options) : $.blockUI(options);
     } else {
@@ -562,9 +563,11 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
     return modalpopup;
 };
 
-EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };
+EzBob.moneyFormat  = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };
+EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };
 EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '0', vMax: '999999999999999' };
-EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.percentFormat  = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
 
 
 EzBob.formatIntWithCommas = function (val) {
@@ -580,6 +583,10 @@ EzBob.formatPoundsWidhDash = function (val) {
 
 EzBob.formatPounds = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormat);
+};
+
+EzBob.formatPounds1 = function (val) {
+    return EzBob.formatPoundsFormat(val, EzBob.moneyFormat1);
 };
 
 EzBob.formatPoundsNoDecimals = function (val) {
@@ -623,6 +630,15 @@ EzBob.formatPercents = function (num, precision) {
     if (num == null || num === "") return "";
     var p = precision || 2;
     return EzBob.roundNumber(num * 100, p) + "%";
+};
+
+EzBob.formatPercents1 = function (num) {
+	var s = EzBob.formatPercents(num, 1);
+
+	if (s.indexOf('.') < 0)
+		s = s.replace(/%$/, '.0%');
+	
+	return s;
 };
 
 EzBob.formatLoanType = function(loanTypeSelection, loanType) {

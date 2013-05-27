@@ -1,9 +1,8 @@
 ﻿input[name="answer"] {
     color: #555;
 }
-#profile-content {
-    padding: 0px 62px 0 62px;
-}
+
+/*#profile-content { padding: 0px 62px 0 62px; }*/
 
 .d-widgets 
 {
@@ -858,10 +857,18 @@ select.selectheight { height: 30px; }
 	width: 600px;
 }
 
+#block-loan-schedule .apply-for-loan-total-block {
+	width: 960px !important;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
 .apply-for-loan-total-block .formula {
 	position: relative;
 	width: 600px;
 	height: 70px;
+	margin: 0 auto;
 }
 
 .apply-for-loan-total-block .formula img      { position: absolute; }
@@ -911,6 +918,8 @@ select.selectheight { height: 30px; }
 
 .apply-for-loan-total-block .rlc {
 	font-size: 10px;
+	width: 600px;
+	margin: 0 auto;
 }
 .apply-for-loan-total-block .apr {
 	display: inline-block;
