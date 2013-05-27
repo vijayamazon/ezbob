@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
 
 @helper RawCell(params string[] arguments){
     @EzTable.RawCell(Html, arguments)
@@ -190,16 +191,19 @@
             @*
             @RawCellWithButton("Details", "<%- m.Details || '' %>", "editDetails")
             *@
+            
             <%if(m.Editable){%>
-            @RawCellWithButtonNear("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
+                @RawCellWithButtonNear("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>", "allowSendingEmail")
             <%} else{%>
-            @RawCell("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
+                @RawCell("Send Emails:", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
             <%}%>
+            
             <%if(m.Editable){%>
-            @RawCellWithButtonNear("Discount plan:", "<%= m.DiscountPlan %>", "discountPlan")
+                @EzHtml.RawCell("Discount plan:", "<%= m.DiscountPlan %>").Tooltip("<%= m.DiscountPlanPercents %>").Button("discountPlan").Render()
             <%} else{%>
-            @RawCell("Discount plan:", "<%= m.DiscountPlan %>")
+                @EzHtml.RawCell("Discount plan:", "<%= m.DiscountPlan %>").Tooltip("<%= m.DiscountPlanPercents %>").Render()
             <%}%>
+            
             <%if (false && m.Editable) { // alexbo May 26 2013: Loan type cannot be changed for now %>
             @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
             <%} else{%>

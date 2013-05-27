@@ -81,18 +81,4 @@ namespace EzBob.Web.Infrastructure.Html
             return this;
         }
     }
-
-    public interface IHtmlRender
-    {
-        MvcHtmlString Render();
-    }
-
-    public static class EzHtml
-    {
-        public static InputTextBuilder InputText()
-        {
-            var builder = new InputTextBuilder();
-            return builder;
-        }
-    }
 }

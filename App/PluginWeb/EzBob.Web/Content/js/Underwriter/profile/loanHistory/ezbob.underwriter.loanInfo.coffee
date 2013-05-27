@@ -209,6 +209,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         m: @model.toJSON()
     
     onRender: ->
+        @$el.find(".tltp").tooltip()
+        @$el.find(".tltp-left").tooltip({placement: "left"})
         @UpdateNewCreditLineState()
         @LoanTypeSelectionAllowedChanged()
 

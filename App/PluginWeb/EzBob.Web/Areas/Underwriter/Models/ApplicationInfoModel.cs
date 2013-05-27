@@ -42,6 +42,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public DiscountPlanModel[] DiscountPlans { get; set; }
         public string DiscountPlan { get; set; }
+        public string DiscountPlanPercents { get; set; }
         public int DiscountPlanId { get; set; }
     }
 
@@ -52,7 +53,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public static DiscountPlanModel Create(DiscountPlan discountPlan)
         {
-            return new DiscountPlanModel{Id = discountPlan.Id, Name = discountPlan.Name};
+            return new DiscountPlanModel{Id = discountPlan.Id, Name = discountPlan.NameWithPercents};
         }
     }
 

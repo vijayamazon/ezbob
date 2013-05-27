@@ -36,6 +36,14 @@ namespace EZBob.DatabaseLib.Model.Loans
                 return _discounts;
             }
         }
+
+        public virtual string NameWithPercents
+        {
+            get
+            {
+                return string.Format("{0}  ({1})", Name, ValuesStr);
+            }
+        }
     }
 
     public interface IDiscountPlanRepository : IRepository<DiscountPlan>

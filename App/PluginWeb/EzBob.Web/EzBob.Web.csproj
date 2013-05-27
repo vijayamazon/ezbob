@@ -373,7 +373,10 @@
     <Compile Include="Infrastructure\EzBobHandleErrorAttribute.cs" />
     <Compile Include="Infrastructure\EzBobWebRegistry.cs" />
     <Compile Include="Infrastructure\Filters\GlobalAreaAuthorizationFilter.cs" />
-    <Compile Include="Infrastructure\Html\IInputTextBuilder.cs" />
+    <Compile Include="Infrastructure\Html\EzHtml.cs" />
+    <Compile Include="Infrastructure\Html\IHtmlRender.cs" />
+    <Compile Include="Infrastructure\Html\InputTextBuilder.cs" />
+    <Compile Include="Infrastructure\Html\RawCellBuilder.cs" />
     <Compile Include="Infrastructure\IEzbobWorkplaceContext.cs" />
     <Compile Include="Infrastructure\Filters\IsSuccessfullyRegisteredFilter.cs" />
     <Compile Include="Infrastructure\csrf\JsonAntiForgeryHttpContextWrapper.cs" />
