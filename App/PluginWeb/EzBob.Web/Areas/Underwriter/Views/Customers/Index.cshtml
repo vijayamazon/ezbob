@@ -58,7 +58,7 @@
                     { el: '#waiting', url: '@Url.Action(@Model.WaitingForDecision.Action, new {Area = "Underwriter"})', model: @Model.WaitingForDecision.ColModel, names: @Model.WaitingForDecision.ColNames }
                     @if (Model.Escalated != null)
                     {
-                    <text>
+                        <text>
                     ,
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
@@ -107,9 +107,9 @@
                     profileView.showed = true;
                 },
                 profilePopup: function(id, type) {
-                    var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId : id });
+                    var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
                     profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
-                    
+
                     var that = this;
                     profilePopupView.on("close", function() {
                         that.navigate("#customers/RegisteredCustomers");
@@ -117,39 +117,34 @@
                     EzBob.App.modal.show(profilePopupView);
                 }
             });
-            profileView.router =  new underwriterRouter();
+            profileView.router = new underwriterRouter();
             Backbone.history.start();
+            profileView.on("customerNotFull", function(customerId) {
+                profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
+                profileView.router.navigate("#profile/"+customerId+"/RegisteredCustomers", { trigger: true, replace: true });
+            });
 
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').tab('show');
             }
 
-            var getCustomerId = function() {
-                EzBob.ShowMessage("<input type='text' class='goto-customerId'/>",
-                    "Customer ID?",
-                    function() {
-                        var val = $(".goto-customerId").val();
-                        if (!IsInt(val, true)) {
-                            EzBob.ShowMessage("Incorrect input", "Warning");
-                            return;
-                        }
-                        profileView.router.navigate("profile/" + val, { trigger: true, replace: true });
-                    },"OK",null,"Cancel"
-                );
-                $(".goto-customerId").numericOnly();
-            };
-            
+            var a = new EzBob.Underwriter.goToCustomerId();
+            a.on("ok", function(id) {
+                profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
+            });
+
             $("#liClient > a").on("click", function() {
-                getCustomerId();
+                a.render();
                 return false;
             });
-            Mousetrap.bind("ctrl+g", getCustomerId);
+
         });
-        
+
         @if (Model.Escalated != null)
         {
             <text>  var escalatedFlag = 1;  </text>
-        } else 
+        }
+        else
         {
             <text>  var escalatedFlag = 0;  </text>
         }

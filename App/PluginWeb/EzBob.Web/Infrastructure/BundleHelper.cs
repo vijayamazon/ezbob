@@ -198,6 +198,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
                 //Underwriter
                          .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
+                         .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 
                 //Customer grid
                          .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")

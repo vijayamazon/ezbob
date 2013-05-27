@@ -558,6 +558,8 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
         });
     //added ezbob style
     modalpopup.parents('.ui-dialog').find("button").addClass('btn');
+
+    return modalpopup;
 };
 
 EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };

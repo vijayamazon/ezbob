@@ -197,8 +197,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                 @_show(id)
                 return true
             else 
-                EzBob.ShowMessage("Customer Credit result is null or IsSuccessfullyRegistered = false","Error") 
-                @router.navigate("", { trigger: true, replace: true });
+                @trigger "customerNotFull", id
 
     _show: (id) ->
         @hide()
