@@ -101,16 +101,6 @@
       return this.$el.find("." + this.$el.find("input[type='radio'][name='Bank']:checked").attr('value') + "Container").removeClass('hide');
     };
 
-    YodleeAccountInfoView.prototype.radioChanged = function(el) {
-      var checked, url;
-
-      checked = this.$el.find("input[type='radio'][name!='Bank']:checked");
-      if (checked.length > 0) {
-        url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (checked.val()) + "&bankName=" + (checked.attr('name'));
-        this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
-      }
-    };
-
     YodleeAccountInfoView.prototype.bankChanged = function() {
       var bank, currentSubBanks;
 
