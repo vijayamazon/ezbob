@@ -20,9 +20,12 @@
                                 <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
                                     <span class="<%- bank.parentBankName %> off" ></span>
                                 </a>
+                                <% if (i % 2 !== 0) { %>
+                                    <br/>
+                                <% } %>
                             <%});%>
                         </div>
-                    
+                        <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
                         <% _.each(YodleeBanks, function (bank, i) {%>
                             <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
                                 <% _.each(bank.subBanks, function (sub, i) { %>

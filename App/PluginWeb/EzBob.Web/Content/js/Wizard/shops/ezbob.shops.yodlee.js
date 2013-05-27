@@ -45,8 +45,6 @@
 
     YodleeAccountInfoView.prototype.events = {
       'click a.back': 'back',
-      'change input': 'inputChanged',
-      'keyup input': 'inputChanged',
       'change input[name="Bank"]': 'bankChanged',
       'click #yodleeContinueBtn': 'continueClicked',
       'click .radio-fx': 'parentBankSelected',
@@ -109,23 +107,11 @@
       this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
       currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
       currentSubBanks.addClass('hide');
+      this.$el.find("#subTypeHeader[class*='hide']").removeClass('hide');
       currentSubBanks.find('option').removeAttr('selected');
       bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
       this.$el.find("." + bank + "Container").removeClass('hide');
       return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
-    };
-
-    YodleeAccountInfoView.prototype.ui = {
-      id: '#yodleeId',
-      connect: 'a.connect-dag',
-      form: 'form'
-    };
-
-    YodleeAccountInfoView.prototype.inputChanged = function() {
-      var enabled;
-
-      enabled = EzBob.Validation.checkForm(this.validator);
-      return this.ui.connect.toggleClass('disabled', !enabled);
     };
 
     YodleeAccountInfoView.prototype.continueClicked = function() {
@@ -144,7 +130,6 @@
 
     YodleeAccountInfoView.prototype.render = function() {
       YodleeAccountInfoView.__super__.render.call(this);
-      this.validator = EzBob.validatePayPointShopForm(this.ui.form);
       return this;
     };
 

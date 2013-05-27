@@ -13,8 +13,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
  
     events: 
         'click a.back': 'back'
-        'change input': 'inputChanged'
-        'keyup input': 'inputChanged'
         'change input[name="Bank"]': 'bankChanged'
         'click #yodleeContinueBtn': 'continueClicked'
         'click .radio-fx': 'parentBankSelected'
@@ -59,21 +57,13 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     bankChanged: ->
         @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
         currentSubBanks = @$el.find(".SubBank:not([class*='hide'])")
-        currentSubBanks.addClass('hide')        
+        currentSubBanks.addClass('hide')  
+        @$el.find("#subTypeHeader[class*='hide']").removeClass('hide') 
         currentSubBanks.find('option').removeAttr('selected')
         bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
         @$el.find("." + bank + "Container").removeClass('hide')
         $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
        
-    ui:
-        id : '#yodleeId'
-        connect: 'a.connect-dag'
-        form: 'form'
-
-    inputChanged: ->
-        enabled =  EzBob.Validation.checkForm(@validator) 
-        @ui.connect.toggleClass('disabled', !enabled)
-
     continueClicked: ->
         @attemptsLeft = 3
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
@@ -87,7 +77,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
-        @validator = EzBob.validatePayPointShopForm @ui.form # what is this for
         return @
 
     serializeData: ->

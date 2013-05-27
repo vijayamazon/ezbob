@@ -1,4 +1,6 @@
-﻿@using Newtonsoft.Json
+﻿@using EzBob.Web.Areas.Customer.Controllers
+@using Newtonsoft.Json
+@using log4net
 @model dynamic
 @{
 }
@@ -21,6 +23,8 @@
                     self.close();
                 } else {
                     console.log('Retrying...');
+                    @{ILog Log = LogManager.GetLogger(typeof (YodleeMarketPlacesController));
+                      Log.ErrorFormat("Link Yodlee Retrying...");}
                     document.location.href = url;
                 }
             } else {
