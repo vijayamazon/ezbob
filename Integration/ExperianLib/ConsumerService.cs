@@ -73,6 +73,7 @@ namespace ExperianLib
                     var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate);
                     consumerServiceResult.ExperianResult = "Passed";
                     consumerServiceResult.LastUpdateDate = DateTime.Now;
+                    SaveDefaultAccountIntoDb(outputRoot, customerId);
                     return consumerServiceResult;
                 }
 
