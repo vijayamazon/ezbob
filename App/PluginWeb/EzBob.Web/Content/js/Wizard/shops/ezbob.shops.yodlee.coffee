@@ -65,7 +65,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     bankChanged: ->
         @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
-        @$el.find(".SubBank:not([class*='hide'])").addClass('hide')
+        currentSubBanks = @$el.find(".SubBank:not([class*='hide'])")
+        currentSubBanks.addClass('hide')        
+        currentSubBanks.find('option').removeAttr('selected')
         bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
         @$el.find("." + bank + "Container").removeClass('hide')
         $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')

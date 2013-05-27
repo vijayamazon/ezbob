@@ -112,10 +112,12 @@
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
-      var bank;
+      var bank, currentSubBanks;
 
       this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
-      this.$el.find(".SubBank:not([class*='hide'])").addClass('hide');
+      currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
+      currentSubBanks.addClass('hide');
+      currentSubBanks.find('option').removeAttr('selected');
       bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
       this.$el.find("." + bank + "Container").removeClass('hide');
       return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
