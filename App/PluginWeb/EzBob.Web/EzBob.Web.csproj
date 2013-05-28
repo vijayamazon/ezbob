@@ -799,6 +799,7 @@
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
+    <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
     <Content Include="Content\js\controls\Captcha.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js">
@@ -999,9 +1000,6 @@
     </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.js">
       <DependentUpon>ezbob.underwriter.loanHistorys.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
-      <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>

@@ -127,6 +127,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/bootstrap-modalmanager.js")
                          .Add("~/Content/js/lib/underscore.js")
                          .Add("~/Content/js/lib/backbone.js")
+                         .Add("~/Content/js/lib/Backbone.EzBob.js")
                          .Add("~/Content/js/lib/Backbone.ModelBinder.js")
                          .Add("~/Content/js/lib/handlebars.js")
                          .Add("~/Content/js/lib/backbone.marionette.js")
