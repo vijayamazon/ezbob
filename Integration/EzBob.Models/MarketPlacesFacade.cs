@@ -94,12 +94,6 @@ namespace EzBob.Web.Areas.Underwriter
 								  ? "Error"
 								  : "Done";
 
-					List<MP_YodleeOrderItem> yodleeData = null;
-					if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
-					{
-						yodleeData = _yodleeOrderRepository.GetOrdersItemsByMakretplaceId(mp.Id);
-					}
-
 					return new MarketPlaceModel
 						{
 							Id = mp.Id,
@@ -125,7 +119,7 @@ namespace EzBob.Web.Areas.Underwriter
 							SellerInfoStoreURL = sellerInfoStoreUrl,
 							Categories = categorieValues,
 							EBay = BuildEBay(ebayUserData, ebayAccount, ebayFeedBack),
-							Yodlee = yodleeData != null ? BuildYodlee(yodleeData) : null,
+							Yodlee = BuildYodlee(mp),
 							PayPal = BuildPayPal(mp)
 						};
 				});
@@ -164,8 +158,16 @@ namespace EzBob.Web.Areas.Underwriter
 			return data;
 		}
 
-		private YodleeModel BuildYodlee(IEnumerable<MP_YodleeOrderItem> yodleeData)
+		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp)
 		{
+            List<MP_YodleeOrderItem> yodleeData = null;
+            if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
+            {
+                yodleeData = _yodleeOrderRepository.GetOrdersItemsByMakretplaceId(mp.Id);
+            }
+
+		    if (yodleeData == null) return null;
+
 			var model = new YodleeModel();
 			var banks = new List<YodleeBankModel>();
 
