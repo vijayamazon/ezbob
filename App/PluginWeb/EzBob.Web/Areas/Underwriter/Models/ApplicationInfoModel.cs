@@ -1,7 +1,4 @@
-﻿using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class ApplicationInfoModel
     {
@@ -44,37 +41,5 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string DiscountPlan { get; set; }
         public string DiscountPlanPercents { get; set; }
         public int DiscountPlanId { get; set; }
-    }
-
-    public class DiscountPlanModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public static DiscountPlanModel Create(DiscountPlan discountPlan)
-        {
-            return new DiscountPlanModel{Id = discountPlan.Id, Name = discountPlan.NameWithPercents};
-        }
-    }
-
-    public class LoanTypesModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-
-        public int value { get; set; }
-        public string text { get; set; }
-        public int  RepaymentPeriod { get; set; }
-        public static LoanTypesModel Create(LoanType lt)
-        {
-            return new LoanTypesModel()
-                       {
-                           Id = lt.Id,
-                           Name = lt.Name,
-                           value = lt.Id,
-                           text = lt.Name,
-                           RepaymentPeriod = lt.RepaymentPeriod
-                       };
-        }
     }
 }
