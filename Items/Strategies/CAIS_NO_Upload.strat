@@ -9,6 +9,7 @@
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
     <NodeElement Name="BusinessCounter &gt; 0" NodeId="Comparison41337601" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
     <NodeElement Name="Consumer" NodeId="Comparison29504734" />
@@ -1497,6 +1498,23 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Close Files</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode62435929</Name>
+      <PointF>
+        <X>370.118835</X>
+        <Y>556</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -5004,14 +5022,23 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar17957270</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>StopNode49532829</TargetNodeName>
+      <TargetNodeName>ScriptNode62435929</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>260</X>
+          <Y>520</Y>
+        </PointF>
+        <PointF>
+          <X>400</X>
+          <Y>520</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignmentB23018869</SourceNodeName>
@@ -5112,21 +5139,29 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison58319463</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>StopNode49532829</TargetNodeName>
+      <TargetNodeName>ScriptNode62435929</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode62435929</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>StopNode49532829</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>400</X>
-          <Y>500</Y>
-        </PointF>
-        <PointF>
           <X>120</X>
-          <Y>500</Y>
+          <Y>580</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -6260,6 +6295,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SigningOutlets />
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ScriptNode62435929</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
   </SigningNodeDescriptors>
   <ScriptDescriptors>
     <ScriptDescriptor>
@@ -6268,7 +6311,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
 from System import *
 from ExperianLib.CaisFile import *
 
-file = CaisFileData()
+file = CaisFileManager.GetCaisFileData()
 #optionally read file from disk
 #file.ReadFromFile("f:\\TEMP\\ezbob\\exper cb\\CAIS-TestPortfolio.txt")
 h = file.Header
@@ -6323,21 +6366,7 @@ account.OriginalDefaultBalance= Convert.ToInt32(OriginalDefaultBalance)
 account.PaymentFrequency="M"
 account.NewAccountNumber= ""
 
-file.Accounts.Add(account)
-
-#Var1= DateTime.Now.ToString("MM_dd_yyyy")
-
-#write file to disk
-#file.WriteToFile("c:\\CAIS\\Personal_" + Var1 + ".txt")
-#file.WriteToFile("c:\\CAIS\\PIF1160B.txt")
-
-#Upload to server
-#sending = CaisFileSender()
-#sending .UploadFile("c:\\CAIS\PIF1160B.txt")
-
-
-file.WriteToFile(dir_path+"\\PIF1160B.txt")
-file.WriteToFile(dir_path2+"\\PIF1160B.txt")</Script>
+file.Accounts.Add(account)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
@@ -6346,7 +6375,7 @@ file.WriteToFile(dir_path2+"\\PIF1160B.txt")</Script>
 from System import *
 from ExperianLib.CaisFile import *
 
-cais = BusinessCaisFileData()
+cais = CaisFileManager.GetBusinessCaisFileData()
 cais.Header.CompanyPortfolioName = "Orange Money"
 cais.Header.CreditCardBehaviouralSharingFlag = ""
 cais.Header.DateOfCreation = DateTime.Now
@@ -6447,16 +6476,7 @@ record.NewAccountNumber = ""
 record.NewProprietorPartnerDirectorNumber = ""
 
 
-cais.Accounts.Add(record)
-#cais.WriteToFile("c:\\CAIS\\Commercial_" + Var1 + ".txt")
-#cais.WriteToFile("c:\\CAIS\\PIF1160a.txt")
-
-#Upload to server
-#sending = CaisFileSender()
-#sending .UploadFile("c:\\CAIS\\PIF1160a.txt")
-
-cais.WriteToFile(dir_path+"\\PIF1160a.txt")
-cais.WriteToFile(dir_path2+"\\PIF1160a.txt")</Script>
+cais.Accounts.Add(record)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
@@ -6515,6 +6535,23 @@ System.IO.Directory.CreateDirectory(dir_path)
 System.IO.Directory.CreateDirectory(dir_path2)
 localtime = localtime1
  </Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode62435929</OwnerName>
+      <Script>clr.AddReference("ExperianLib")
+from System import *
+from ExperianLib.CaisFile import *
+
+b = CaisFileManager.GetBusinessCaisFileData()
+b.WriteToFile(dir_path+"\\PIF1160a.txt")
+b.WriteToFile(dir_path2+"\\PIF1160a.txt")
+CaisFileManager.RemoveBusinessCaisFileData()
+
+c = CaisFileManager.GetCaisFileData()
+c.WriteToFile(dir_path+"\\PIF1160B.txt")
+c.WriteToFile(dir_path2+"\\PIF1160B.txt")
+CaisFileManager.RemoveCaisFileData()</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
   </ScriptDescriptors>
