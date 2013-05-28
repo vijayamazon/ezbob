@@ -171,7 +171,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     loc.LocationLine5 = customerMainAddress.County;
                     loc.LocationLine6 = customerMainAddress.Postcode;
                 }
-				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.MiddleInitial, customer.PersonalInfo.Surname,
+				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
                                                          customer.PersonalInfo.Gender.ToString(), // should be Gender
                                                          customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, true);
 

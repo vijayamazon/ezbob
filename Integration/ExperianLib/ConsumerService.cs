@@ -18,7 +18,9 @@ using log4net;
 
 namespace ExperianLib
 {
-    public class ConsumerService
+	using EZBob.DatabaseLib.Model.Database.Repository;
+
+	public class ConsumerService
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
         readonly ExperianIntegrationParams _config;
@@ -28,7 +30,7 @@ namespace ExperianLib
             _config = ConfigurationRootBob.GetConfiguration().Experian;
         }
 
-        public ConsumerServiceResult GetConsumerInfo(string firstName, string middleName, string surname, string gender, DateTime? birthDate, 
+        public ConsumerServiceResult GetConsumerInfo(string firstName, string surname, string gender, DateTime? birthDate, 
                                                         InputLocationDetailsUKLocation ukLocation,
                                                         InputLocationDetailsMultiLineLocation mlLocation,
                                                         string applicationType,
@@ -53,6 +55,10 @@ namespace ExperianLib
                             outputString = Resources.output022;
 							break;
 						case "TestSurnameFour":
+							var customers = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+		                    var customer = customers.Get(customerId);
+		                    var middleName = customer.PersonalInfo.MiddleInitial;
+
 							string filename = !string.IsNullOrEmpty(middleName) ? middleName : @"C:\Temp\Experian.xml";
 		                    string content = string.Empty;
 		                    try

@@ -76,7 +76,7 @@
             {
 
                 var consumerSrv = new ConsumerService();
-				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.MiddleInitial, customer.PersonalInfo.Surname,
+				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
                                                          customer.PersonalInfo.Gender.ToString(), // should be Gender
                                                          customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, true);
 
@@ -191,7 +191,7 @@
                     dirLoc.LocationLine6 = directorMainAddress.Postcode;
                 }
 
-                var result = consumerSrv.GetConsumerInfo(director.Name, director.Middle, director.Surname,
+                var result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
                                                  director.Gender.ToString(),
                                                  director.DateOfBirth, null, dirLoc, "PL", customer.Id, true);
                 var dirModel = generateConsumerModel(-1, result);
