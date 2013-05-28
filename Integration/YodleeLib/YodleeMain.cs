@@ -8,27 +8,25 @@ namespace YodleeLib
 
 	public class YodleeMain : ApplicationSuper
 	{
-		public UserContext userContext = null;
-		ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
-		ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
-		private static IYodleeMarketPlaceConfig _config;
+		public UserContext UserContext = null;
+		readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
+		readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
+		private static IYodleeMarketPlaceConfig config;
 
 		public YodleeMain()
 		{
-			_config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
-			contentServieTravelService.Url = _config.soapServer + "/" + contentServieTravelService.GetType().FullName;
-			serverVersionManagementService.Url = _config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
+			config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			contentServieTravelService.Url = config.soapServer + "/" + contentServieTravelService.GetType().FullName;
+			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
 
-		public string loginUser(string userName, string password)
+		public string LoginUser(string userName, string password)
 		{
-			//userName = "Stas";
-			//password = "Ab12cD";
 			var loginUser = new LoginUser();
 
 			try
 			{
-				userContext = loginUser.loginUser(userName, password);
+				UserContext = loginUser.loginUser(userName, password);
 				return "User Logged in Successfully..";
 			}
 			catch (SoapException se)
@@ -42,13 +40,13 @@ namespace YodleeLib
 			var registerUser = new RegisterUser();
 			try
 			{
-				userContext = registerUser.DoRegisterUser(userName, password, email);
+				UserContext = registerUser.DoRegisterUser(userName, password, email);
 			}
-			catch (SoapException se)
+			catch (SoapException)
 			{
 				
 			}
-			catch (Exception exc)
+			catch (Exception)
 			{
 				
 			}
@@ -56,17 +54,17 @@ namespace YodleeLib
 
 		public string GetFinalUrl(int csId, string callback, string username, string password)
 		{
-			string url = _config.AddAccountURL;
+			string url = config.AddAccountURL;
 			const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_csid=";
 			var oAuthBase = new OAuthBase();
 			string timestamp = oAuthBase.GenerateTimeStamp();
 			string nonce = oAuthBase.GenerateNonce();
-			string applicationKey = _config.ApplicationKey;
-			string applicationToken = _config.ApplicationToken;
+			string applicationKey = config.ApplicationKey;
+			string applicationToken = config.ApplicationToken;
 
-			loginUser(username, password);
+			LoginUser(username, password);
 			var lu = new LoginUser();
-			OAuthAccessToken token = lu.getAccessTokens(userContext);
+			OAuthAccessToken token = lu.getAccessTokens(UserContext);
 
 			string normalizedUrl;
 			string normalizedRequestParameters;
@@ -96,9 +94,9 @@ namespace YodleeLib
 
 		public long GetItemId(string username, string password)
 		{
-			loginUser(username, password);
+			LoginUser(username, password);
 			var di = new DisplayItemInfo();
-			object[] oa = di.displayItemSummariesWithoutItemData(userContext); // TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
+			object[] oa = di.displayItemSummariesWithoutItemData(UserContext);
 
 			if (oa == null || oa.Length == 0)
 			{
@@ -110,11 +108,24 @@ namespace YodleeLib
 
 			if (itemSummary.refreshInfo.statusCode != 0)
 			{
+				//RemoveItem(itemSummary.itemId); // TODO: we should delete for credentials associated failures but not all of them
 				return -1;
 			}
 
-
 			return itemSummary.itemId;
+		}
+
+		private void RemoveItem(long itemId)
+		{
+			try
+			{
+				var itemManagement = new ItemManagementService();
+				itemManagement.Url = config.soapServer + "/" + "ItemManagementService";
+				itemManagement.removeItem(UserContext, itemId, true);
+			}
+			catch (Exception)
+			{
+			}
 		}
 	}
 }
