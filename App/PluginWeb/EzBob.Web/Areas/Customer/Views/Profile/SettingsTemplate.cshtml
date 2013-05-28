@@ -93,7 +93,7 @@
                     <div class="control-group">
                         <label class="control-label">Question:</label>
                         <div class="controls">
-                            <select>
+                            <select class="selectheight">
                                 <%_.each(settings.SecurityQuestions.toJSON(), function(question){%>
                                 <%if(settings.SecurityQuestionId!=undefined){%>
                                 <option value="<%-question.Id%>" <%if ( question.Id == settings.SecurityQuestionId){%> selected="selected" <%}%>  ><%-question.Name%></option>
