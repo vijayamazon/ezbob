@@ -640,6 +640,7 @@
             model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M.ToString();
             model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults.ToString();
 
+	        accList.Sort(new AccountInfoComparer());
             model.AccountsInformation = accList.ToArray();
 
             model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0].ToString();
@@ -844,20 +845,20 @@
         {
             switch (status)
             {
-                case "D":
-		            dateType = "Delinquent Date";
-                    return "Delinquent";
-				case "A":
-					dateType = "Last Update Date";
-                    return "Active";
-				case "F":
-					dateType = "Default Date";
-                    return "Default";
-				case "S":
-					dateType = "Settlement Date";
-                    return "Settled";
+				case DelinquentCaisStatusName:
+					dateType = DelinquentDateType;
+					return DelinquentStatusName;
+				case ActiveCaisStatusName:
+					dateType = ActiveDateType;
+					return ActiveStatusName;
+				case DefaultCaisStatusName:
+					dateType = DefaultDateType;
+					return DefaultStatusName;
+				case SettledCaisStatusName:
+					dateType = SettledDateType;
+					return SettledStatusName;
 				default:
-					dateType = "Unknown Date Type";
+					dateType = UnknownDateType;
                     return status;
             }
         }
@@ -986,6 +987,49 @@
                 info.NameScore, 
                 info.AddressScore,
                 string.IsNullOrEmpty(info.AccountStatus) ? "-" : info.AccountStatus);
-        }
+		}
+
+		private const string DefaultCaisStatusName = "F";
+		private const string DefaultStatusName = "Default";
+		private const string DefaultDateType = "Default Date";
+
+		private const string DelinquentCaisStatusName = "D";
+		private const string DelinquentStatusName = "Delinquent";
+		private const string DelinquentDateType = "Delinquent Date";
+
+		private const string ActiveCaisStatusName = "A";
+		private const string ActiveStatusName = "Active";
+		private const string ActiveDateType = "Last Update Date";
+
+	    private const string SettledCaisStatusName = "S";
+		private const string SettledStatusName = "Settled";
+		private const string SettledDateType = "Settlement Date";
+
+	    private const string UnknownDateType = "Unknown Date Type";
+
+	    public class AccountInfoComparer : IComparer<AccountInfo>
+		{
+			private static readonly Dictionary<string, int> sortedValues = new Dictionary<string, int> { { DefaultStatusName, 1 }, { DelinquentStatusName, 2 }, { ActiveStatusName, 3 }, { SettledStatusName, 4 } };
+
+			public int Compare(AccountInfo x, AccountInfo y)
+			{
+				if (sortedValues.ContainsKey(x.AccountStatus) && sortedValues.ContainsKey(y.AccountStatus))
+				{
+					return sortedValues[x.AccountStatus].CompareTo(sortedValues[y.AccountStatus]);
+				}
+
+				if (sortedValues.ContainsKey(x.AccountStatus))
+				{
+					return 1;
+				}
+
+				if (sortedValues.ContainsKey(y.AccountStatus))
+				{
+					return -1;
+				}
+
+				return 0;
+			}
+		}
     }
 }
