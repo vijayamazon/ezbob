@@ -56,5 +56,14 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual ISet<MP_PlayOrder> PlayOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
         public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
-    }
+
+        public virtual string GetUpdatingStatus()
+        {
+            return (UpdatingStart != null && UpdatingEnd == null)
+                       ? "In progress"
+                       : (!String.IsNullOrEmpty(UpdateError))
+                             ? "Error"
+                             : "Done";
+        }
+	}
 }

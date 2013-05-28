@@ -2,7 +2,6 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.MarketPlaceDetailModel = Backbone.Model.extend({
-
 });
 
 EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
@@ -17,9 +16,16 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
         this.template = _.template($('#marketplace-values-template').html());
     },
     render: function () {
-        var that = this;
-        var shop = this.model.at(this.options.currentId);
-        var content = (this.template({ marketplaces: [shop.toJSON()], summary: null, customerId: this.options.customerId }));
+        var that = this,
+            shop = this.model.get(this.options.currentId)
+
+        var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
+        data[shop.get("IsPaymentAccount") ? "accounts" : "marketplaces"].push(shop.toJSON());
+
+        data.hideAccounts = data.accounts.length == 0;
+        data.hideMarketplaces = data.marketplaces == 0;
+
+        var content = (this.template(data));
         if (this.container) {
             this.container.html(content);
         } else {

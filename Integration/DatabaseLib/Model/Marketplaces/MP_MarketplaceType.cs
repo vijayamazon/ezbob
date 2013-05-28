@@ -31,7 +31,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class AmazonMarketPlaceType : MP_MarketplaceType
     {
-
     }
 
     public class AmazonMarketPlaceTypeMap : SubclassMap<AmazonMarketPlaceType>

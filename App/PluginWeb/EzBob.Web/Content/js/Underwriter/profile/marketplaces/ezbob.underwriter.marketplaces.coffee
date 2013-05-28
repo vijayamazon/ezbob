@@ -3,6 +3,8 @@ root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter or {}
 
 class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
+    idAttribute: "Id"
+
     initialize: ->
         @on 'change reset', @recalculate, @
         @recalculate()
@@ -51,7 +53,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return if e.target.tagName is 'I'
         id = e.currentTarget.getAttribute("data-id")
         return unless id
-        shop = @model.at(id)
+        shop = @model.get(id)
 
         @detailView = new EzBob.Underwriter.MarketPlaceDetailsView el: @$el.find('#marketplace-details'), model: @model, currentId: id, customerId: @model.customerId
         @detailView.on "reCheck", @reCheckmarketplaces, @
@@ -64,7 +66,10 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     serializeData: ->
         data = 
             customerId: @model.customerId
-            marketplaces: @model.toJSON()
+            marketplaces: _.pluck @model.where(IsPaymentAccount: false), "attributes"
+            accounts: _.pluck @model.where(IsPaymentAccount: true), "attributes"
+            hideAccounts: false
+            hideMarketplaces: false
             summary:
                 anualSales : 0
                 inventory : 0

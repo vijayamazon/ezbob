@@ -69,6 +69,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,6 +89,21 @@
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
+    <Compile Include="Marketplaces\Builders\EBayMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\EBayModel.cs" />
+    <Compile Include="Marketplaces\MarketPlaceModel.cs" />
+    <Compile Include="Marketplaces\PaymentAccountsModel.cs" />
+    <Compile Include="Marketplaces\PayPalAccountDetailPaymentsInfoModel.cs" />
+    <Compile Include="Marketplaces\PayPalAccountGeneralPaymentsInfoModel.cs" />
+    <Compile Include="Marketplaces\PayPalAccountInfoModel.cs" />
+    <Compile Include="Marketplaces\PayPalAccountModel.cs" />
+    <Compile Include="Marketplaces\PayPalGeneralDataRowModel.cs" />
+    <Compile Include="Marketplaces\YodleeBankModel.cs" />
+    <Compile Include="Marketplaces\Builders\YodleeMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\YodleeModel.cs" />
+    <Compile Include="Marketplaces\YodleeTransactionModel.cs" />
+    <Compile Include="Marketplaces\Builders\AmazonMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\Builders\IMarketplaceModelBuilder.cs" />
     <Compile Include="IPayEarlyCalculator.cs" />
     <Compile Include="LoanAgreementModel.cs" />
     <Compile Include="LoanChargesModel.cs" />
@@ -96,14 +112,12 @@
     <Compile Include="LoanOffer.cs" />
     <Compile Include="LoanScheduleItemModel.cs" />
     <Compile Include="LoanTransactionModel.cs" />
-    <Compile Include="MarketPlaceModel.cs" />
-    <Compile Include="MarketPlacesFacade.cs" />
-    <Compile Include="PayPalAccountDetailPaymentsInfoModel.cs" />
-    <Compile Include="PayPalAccountGeneralPaymentsInfoModel.cs" />
-    <Compile Include="PayPalAccountInfoModel.cs" />
-    <Compile Include="PayPalAccountModel.cs" />
-    <Compile Include="PayPalGeneralDataRowModel.cs" />
-    <Compile Include="PayPalModel.cs" />
+    <Compile Include="Marketplaces\Builders\MarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\MarketPlacesFacade.cs" />
+    <Compile Include="Marketplaces\Builders\MPRegistry.cs" />
+    <Compile Include="Marketplaces\Builders\PayPalMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\Builders\PayPointMarketplaceModelBuilder.cs" />
+    <Compile Include="PayPalModelBuilder.cs" />
     <Compile Include="PayPointCardModel.cs" />
     <Compile Include="PersonalInfoModel.cs" />
     <Compile Include="ProfileSummaryModel.cs" />
@@ -172,6 +186,7 @@
       <Name>YodleeLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

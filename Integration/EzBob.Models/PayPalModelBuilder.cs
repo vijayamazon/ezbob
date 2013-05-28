@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.PyaPalDetails;
 using EzBob.Web.Areas.Customer.Models;
+using EzBob.Web.Areas.Underwriter.Models;
 using StructureMap;
 
-namespace EzBob.Web.Areas.Underwriter.Models
+namespace EzBob.Models
 {
-    public class PayPalAccountModel
+    public class PayPalModelBuilder
     {
-        public PayPalModel GeneralInfo { get; set; }
-        public PayPalAccountInfoModel PersonalInfo { get; set; }
-        public PayPalAccountGeneralPaymentsInfoModel Payments { get; set; }
-        public PayPalAccountDetailPaymentsInfoModel DetailPayments { get; set; }
-
-        public static PayPalAccountModel Create(int id)
+        public static PayPalAccountModel Create(MP_CustomerMarketPlace mp)
         {
-            IPayPalDetailsRepository _payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
-            var details = _payPalDetails.GetDetails(id);
+            var _payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
+            var details = _payPalDetails.GetDetails(mp.Id);
 
             var payments = new PayPalAccountGeneralPaymentsInfoModel();
             var total = new List<PayPalGeneralDataRowModel>();
@@ -37,9 +36,59 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 Expenses = ProcessPayments(detailExpenses, details)
             };
 
-            var generalInfo = details.Marketplace.Customer.GetPayPalAccounts().FirstOrDefault(x => x.id == id);
+            var generalInfo = CreatePayPalAccountModelModel(mp);
+
             var model = new PayPalAccountModel { GeneralInfo = generalInfo, PersonalInfo = new PayPalAccountInfoModel(details.Marketplace.PersonalInfo), DetailPayments = detailPayments, Payments = payments };
             return model;
+        }
+
+        public static PaymentAccountsModel CreatePayPalAccountModelModel(MP_CustomerMarketPlace m)
+        {
+            var values = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(m.Id);
+            var analisysFunction = values;
+            var av = values.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+
+            var tnop = 0.0;
+            var tnip = 0.0;
+            var tc = 0;
+            if (av != null)
+            {
+                var tnipN =
+                    av.FirstOrDefault(
+                        x => x.ParameterName == "Total Net In Payments" && x.CountMonths == av.Max(i => i.CountMonths));
+                var tnopN =
+                    av.FirstOrDefault(
+                        x => x.ParameterName == "Total Net Out Payments" && x.CountMonths == av.Max(i => i.CountMonths));
+                var tcN =
+                    av.FirstOrDefault(
+                        x => x.ParameterName == "Transactions Number" && x.CountMonths == av.Max(i => i.CountMonths));
+
+                if (tnipN != null) tnip = Math.Abs(Convert.ToDouble(tnipN.Value, CultureInfo.InvariantCulture));
+                if (tnopN != null) tnop = Math.Abs(Convert.ToDouble(tnopN.Value, CultureInfo.InvariantCulture));
+                if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
+            }
+
+            var transactionsMinDate = m.PayPalTransactions.Any()
+                                          ? m.PayPalTransactions.Min(
+                                              x =>
+                                              x.TransactionItems.Any() ? x.TransactionItems.Min(y => y.Created) : DateTime.Now)
+                                          : DateTime.Now;
+
+            var seniority = DateTime.Now - transactionsMinDate;
+
+            var status = m.GetUpdatingStatus();
+
+            var payPalModel = new PaymentAccountsModel
+            {
+                displayName = m.DisplayName,
+                TotalNetInPayments = tnip,
+                TotalNetOutPayments = tnop,
+                TransactionsNumber = tc,
+                id = m.Id,
+                Seniority = (seniority.Days * 1.0 / 30).ToString(CultureInfo.InvariantCulture),
+                Status = status
+            };
+            return payPalModel;
         }
 
 
@@ -71,8 +120,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
             };
             payments.Add(otherIncomeRow);
             return payments.OrderByDescending(x => x.Percent).ToList();
-        }
-
+        } 
     }
-
 }

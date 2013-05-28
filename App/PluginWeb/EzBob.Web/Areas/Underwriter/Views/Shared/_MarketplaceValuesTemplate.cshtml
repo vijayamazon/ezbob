@@ -8,7 +8,7 @@
     <div class="marketplaceDetail">
         @MarketPlaces()
         <%
-            var m = marketplaces[0];
+            var m = marketplaces[0] || accounts[0];
             var ai = m.AnalysisDataInfo;
             if(!ai) { ai = new Object();}
             var y = m.Yodlee;
@@ -114,7 +114,7 @@
 @helper MarketPlaces()
 {
     <div style="overflow: auto">
-        <table class="table table-bordered table-striped marketplace-table blue-header centered">
+        <table class="table table-bordered table-striped marketplace-table blue-header centered <%if (hideMarketplaces) print('hide');%>">
             <thead>
                 <tr>
                     <th></th>
@@ -130,50 +130,84 @@
             </thead>
             <tbody>
                 <% if(summary){%>
-                        <tr class="bold" style="font-size: 18px;">
-                            <td>Total</td>
-                            <td></td>
-                            <td></td>
-                            <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
-                            <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
-                            <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                <tr class="bold" style="font-size: 18px;">
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
+                    <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 <%}%>
-                    <% _.each(marketplaces, function(m,i){ %>
-                    <tr data-id="<%-i%>">
-                        <td>
-                            <div class="source_labels_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div>
-                        </td>
-                        <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-                        <td class="centered"><%- m.age %></td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
-                        <td class="centered"><%- m.RaitingPercent%> %</td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
-                        <td><%- m.EluminatingStatus %></td>
-                        <td><%- m.UpdatingStatus %>
-                            <% if(m.UpdateError){%>
-                            <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+                <% _.each(marketplaces, function(m,i){ %>
+                <tr data-id="<%- m.Id %>">
+                    <td>
+                        <div class="source_labels_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div>
+                    </td>
+                    <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+                    <td class="centered"><%- m.age %></td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
+                    <td class="centered"><%- m.RaitingPercent%> %</td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
+                    <td><%- m.EluminatingStatus %></td>
+                    <td><%- m.UpdatingStatus %>
+                        <% if(m.UpdateError){%>
+                        <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+                        <br />
+                        <%}%>
+                    </td>
+                    <td class="centered">
+                        <div style="width: 100px;">
+
+                            <a href="#" class="btn btn-mini reCheck-amazon" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                            <% if(m.UpdateError && m.Name == 'eBay'){ %>
+                            <br/>
+                            <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
                             <br />
                             <%}%>
-                        </td>
-                        <td class="centered">
-                            <div style="width: 100px;">
-
-                                <a href="#" class="btn btn-mini reCheck-amazon" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-                                <% if(m.UpdateError && m.Name == 'eBay'){ %>
-                                <br/>
-                                <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
-                                <br />
-                                <%}%>
                                 
-                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
-                            </div>
-                        </td>
-                    </tr>
+                            <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+                        </div>
+                    </td>
+                </tr>
                 <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div>
+          <table class="table table-bordered table-striped marketplace-table paypalAccounts blue-header centered <%if (hideAccounts) print('hide');%>">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Seniority</th>
+                    <th>Number of Transactions</th>
+                    <th>Total In Payments</th>
+                    <th>Total Out Payments</th>
+                    <th>Updated</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% _.each(accounts, function(pa, i){%>
+                <tr data-id="<%- pa.Id %>">
+                    <td><div class="source_labels_on <%- pa.Name.replace(' ', '').toLowerCase() %>"></div></td>
+                    <td><a href="<%- pa.SellerInfoStoreURL %>" target="_blank"><%- pa.Type %></a></td>
+                    <td><%- pa.age %></td>
+                    <td><%- pa.PaymentAccountBasic.TransactionsNumber %></td>
+                    <td><%- EzBob.formatPounds(pa.PaymentAccountBasic.TotalNetInPayments) %></td>
+                    <td><%- EzBob.formatPounds(pa.PaymentAccountBasic.TotalNetOutPayments) %></td>
+                    <td><%- pa.UpdatingStatus %></td>
+                    <td>
+                        <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- pa.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+                        <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- pa.Id %>" ><i class="icon-tag"></i></a>
+                    </td>
+                </tr>
+                <%}) %>
+   
             </tbody>
         </table>
     </div>

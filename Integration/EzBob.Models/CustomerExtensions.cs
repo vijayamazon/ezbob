@@ -1,6 +1,8 @@
 ﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.CommonLib;
+using EzBob.Models;
+using EzBob.Web.Areas.Underwriter.Models;
 using Iesi.Collections.Generic;
 using StructureMap;
 
@@ -45,17 +47,10 @@ namespace EzBob.Web.Areas.Customer.Models
             return GetPayPalCustomerMarketPlaces(customer).ToList().Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
         }
 
-        public static IEnumerable<PayPalModel> GetPayPalAccounts(this Customer customer)
+        public static IEnumerable<PaymentAccountsModel> GetPayPalAccounts(this Customer customer)
         {
-            var marketpalces = GetPayPalCustomerMarketPlaces(customer).ToList();
-            var res = new List<PayPalModel>();
-            foreach (var m in marketpalces)
-            {
-                var payPalModel = PayPalModel.CreatePayPalModel(m);
-
-                res.Add(payPalModel);
-            }
-            return res;
+            var marketpalces = GetPayPalCustomerMarketPlaces(customer);
+            return marketpalces.Select(m => PayPalModelBuilder.CreatePayPalAccountModelModel(m)).ToList();
         }
 
         public static IEnumerable<SimpleMarketPlaceModel> GetAmazonMarketPlaces(this Customer customer)
