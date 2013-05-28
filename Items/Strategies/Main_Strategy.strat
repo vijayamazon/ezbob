@@ -3403,7 +3403,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB53063620</Name>
       <PointF>
-        <X>928.537048</X>
+        <X>908.537048</X>
         <Y>1156</Y>
       </PointF>
       <SuperNodeName />
@@ -21213,6 +21213,7 @@ api = StrategyHelper()
 
 TotalSumOfOrders1YTotal = api.GetAnualTurnOverByCustomer(CustomerId)
 TotalSumOfOrders3MTotal = api.GetTotalSumOfOrders3M(CustomerId)
+MarketplaceSeniority = api.MarketplaceSeniority(CustomerId)
 </Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
