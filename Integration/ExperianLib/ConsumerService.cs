@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Serialization;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
@@ -12,15 +11,12 @@ using ExperianLib.Properties;
 using EzBob.Configuration;
 using EzBobIntegration.Web_References.Consumer;
 using Newtonsoft.Json;
-using Scorto.Configuration;
 using StructureMap;
 using log4net;
 
 namespace ExperianLib
 {
-	using EZBob.DatabaseLib.Model.Database.Repository;
-
-	public class ConsumerService
+    public class ConsumerService
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
         readonly ExperianIntegrationParams _config;
@@ -79,7 +75,11 @@ namespace ExperianLib
                     var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate);
                     consumerServiceResult.ExperianResult = "Passed";
                     consumerServiceResult.LastUpdateDate = DateTime.Now;
-                    SaveDefaultAccountIntoDb(outputRoot, customerId);
+                    Log.InfoFormat("Get consumer info for test user: {0}", surname);
+                    if (!checkInCacheOnly)
+                    {
+                        SaveDefaultAccountIntoDb(outputRoot, customerId);
+                    }
                     return consumerServiceResult;
                 }
 

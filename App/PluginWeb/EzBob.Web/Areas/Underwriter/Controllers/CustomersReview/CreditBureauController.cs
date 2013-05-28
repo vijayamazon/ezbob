@@ -59,22 +59,22 @@
         public JsonNetResult Index(int id)
         {
             var customer = _customers.Get(id);
-            var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().First();
+            var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
 
-            var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation
-                          {
-                              LocationLine1 = customerMainAddress.Line1,
-                              LocationLine2 = customerMainAddress.Line2,
-                              LocationLine3 = customerMainAddress.Line3,
-                              LocationLine4 = customerMainAddress.Town,
-                              LocationLine5 = customerMainAddress.County,
-                              LocationLine6 = customerMainAddress.Postcode,
-                          };
-
+            var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
+            if (customerMainAddress != null)
+            {
+                loc.LocationLine1 = customerMainAddress.Line1;
+                loc.LocationLine2 = customerMainAddress.Line2;
+                loc.LocationLine3 = customerMainAddress.Line3;
+                loc.LocationLine4 = customerMainAddress.Town;
+                loc.LocationLine5 = customerMainAddress.County;
+                loc.LocationLine6 = customerMainAddress.Postcode;
+            }
+            
             var model = new CreditBureauModel();
             try
             {
-
                 var consumerSrv = new ConsumerService();
 				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
                                                          customer.PersonalInfo.Gender.ToString(), // should be Gender
