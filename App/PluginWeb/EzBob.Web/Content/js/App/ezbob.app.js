@@ -25,7 +25,5 @@ EzBob.Config = {
     XMinLoan: 100,
     MaxLoan: 10000,
     PayPalEnabled: false,
-    HideAlertsTab: false,
-    HidePassedAlertsTab: false,
     PasswordPolicyType: "simple"
 }

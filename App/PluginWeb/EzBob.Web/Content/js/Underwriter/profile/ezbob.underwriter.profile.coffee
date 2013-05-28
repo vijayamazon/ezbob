@@ -59,19 +59,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @paymentAccountsModel
         )
         @paymentAccountsView.on "rechecked", @mpRechecked, @paymentAccountsModel
-        unless EzBob.Config.HideAlertsTab
-            @alertsModel = new EzBob.Underwriter.AlertsModel()
-            @alertsView = new EzBob.Underwriter.AlertsView(
-                el: @$el.find("#alerts")
-                model: @alertsModel
-            )
-        unless EzBob.Config.HidePassedAlertsTab
-            @alertsPassedModel = new EzBob.Underwriter.AlertsModel()
-            @alertsPassedModel.showPassed = true
-            @alertsPassedView = new EzBob.Underwriter.AlertsView(
-                el: alertPassed
-                model: @alertsPassedModel
-            )
         @medalCalculationModel = new EzBob.Underwriter.MedalCalculationModel()
         @medalCalculationView = new EzBob.Underwriter.MedalCalculationView(
             el: medalCalculations
@@ -252,22 +239,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
         @paymentAccountsModel.customerId = id
         @paymentAccountsModel.fetch()
-        unless EzBob.Config.HideAlertsTab
-            @alertsModel.clear silent: true
-            @alertsModel.set
-                Id: id
-            ,
-                silent: true
-
-            @alertsModel.fetch()
-        unless EzBob.Config.HidePassedAlertsTab
-            @alertsPassedModel.clear silent: true
-            @alertsPassedModel.set
-                Id: id
-            ,
-                silent: true
-
-            @alertsPassedModel.fetch()
         @medalCalculationModel.set
             Id: id
         ,
