@@ -56,5 +56,12 @@ namespace EzBob.Models
         {
             _decisionHistory.LogAction(DecisionActions.Reject, comment, null, _customers.Get(customerId));
         }
+
+        public int MarketplaceSeniority(int customerId)
+        {
+            var seniority = _customers.MarketplacesSeniority(customerId);
+            var senDate = seniority != null ? seniority.Value.Date : DateTime.UtcNow;
+            return Convert.ToInt32((DateTime.UtcNow - senDate).TotalDays);
+        }
     }
 }

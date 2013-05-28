@@ -16,6 +16,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         Customer GetChecked(int id);
         Customer GetAndInitialize(int id);
 	    Customer TryGetByEmail(string sEmail);
+        DateTime? MarketplacesSeniority(int id, bool onlyForEluminationPassed = false);
     }
 
 	public class CustomerRepository : NHibernateRepositoryBase<Customer>, ICustomerRepository
