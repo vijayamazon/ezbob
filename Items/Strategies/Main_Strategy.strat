@@ -21540,20 +21540,7 @@ if App_BankAccountType == "Personal"  and  BWABusinessCheck == "1"  and App_Sort
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode61122718</OwnerName>
-      <Script>clr.AddReference("ExperianLib") 
-from EZBob.DatabaseLib.Model.Database.Repository import *
-from EZBob.DatabaseLib.Model.Database import MP_Alert, AlertsSeverity
-from StructureMap import *
-
-service = ObjectFactory.GetInstance[AlertRepository]()
- 
-if ExperianAMLError  == None: 
- service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLWarning, AlertsSeverity.Warning, StrategyStartedDateTime) 
- service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLReject, AlertsSeverity.Reject, StrategyStartedDateTime)
- service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLPassed, AlertsSeverity.Passed, StrategyStartedDateTime)
-else: 
- service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLError, AlertsSeverity.Error, StrategyStartedDateTime) 
- </Script>
+      <Script></Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
@@ -21580,83 +21567,12 @@ if App_BankAccountType == "Personal"  and  BWABusinessCheck == "1"  and App_Sort
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode48993026</OwnerName>
-      <Script>clr.AddReference("ExperianLib")
-from System import * 
-from ExperianLib.IdIdentityHub import * 
-
-service = IdHubService()
-
-#call service AML A:  Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine2, string addressLine3, string town, string county, string postCode)
-results = service.Authenticate(App_FirstName, None, App_Surname, App_Gender, App_DateOfBirth, App_Line1Prev, App_Line2Prev, App_Line3Prev, App_Line4Prev, None, App_Line6Prev,userId)
-
-""" results contains:HasError, Error, AuthenticationIndexType, ReturnedHRP array of ReturnedHRPType
-ReturnedHRPType is:
-HighRiskPolRuleID
-HighRiskPolRuleText"""
-
-#rule example:
-if results.HasError == False:
- ExperianAMLAuthentication = results.AuthenticationIndexType
- ExperianAMLResult = "Passed"
- for returnedHrp in results.ReturnedHRP:
-    if returnedHrp.HighRiskPolRuleID == "U001":
-       ExperianAMLWarning += "#2, Mortality||"+CP_Experian_Actions_AMLMortality + ";"
-       ExperianAMLResult = "Warning" 
-    elif returnedHrp.HighRiskPolRuleID == "U004":
-       ExperianAMLWarning += "#3, Accommodation address||"+CP_Experian_Actions_AMLAccommodationAddress	 + ";"
-       ExperianAMLResult = "Warning"
-    elif returnedHrp.HighRiskPolRuleID == "U007":
-       ExperianAMLReject += "#4, Developed Identity;"       
-    elif returnedHrp.HighRiskPolRuleID == "U013":
-       ExperianAMLWarning += "#5, Redirection||"+CP_Experian_Actions_AMLRedirection + ";"
-       ExperianAMLResult = "Warning"
-    elif returnedHrp.HighRiskPolRuleID == "U015" or returnedHrp.HighRiskPolRuleID == "U131" or returnedHrp.HighRiskPolRuleID == "U133" or returnedHrp.HighRiskPolRuleID == "U135":
-       ExperianAMLReject += "#6, Sanctions;"
-       ExperianAMLResult = "Warning"
-    elif returnedHrp.HighRiskPolRuleID == "U018":
-       ExperianAMLWarning += "#7, Inconsistencies||"+CP_Experian_Actions_AMLInconsistencies + ";"  
-       ExperianAMLResult = "Warning"
-    elif returnedHrp.HighRiskPolRuleID == "U0132" or returnedHrp.HighRiskPolRuleID == "U0134":
-       ExperianAMLWarning += "#8, PEP||"+CP_Experian_Actions_AMLPEP+ ";"    
-       ExperianAMLResult = "Warning"
-    elif returnedHrp.HighRiskPolRuleID == "U007":
-       ExperianAMLReject += "#4, Developed Identity;"
-       ExperianAMLResult = "Rejected"
-       
-       
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U001":
-       ExperianAMLPassed += "#2, NO Mortality;"
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U004":
-       ExperianAMLPassed += "#3, NO Accommodation address;"
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U007":
-       ExperianAMLPassed += "#4, NO Developed Identity;"       
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U013":
-       ExperianAMLPassed += "#5, NO Redirection;"
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U015" or returnedHrp.HighRiskPolRuleID == "U131" or returnedHrp.HighRiskPolRuleID == "U133" or returnedHrp.HighRiskPolRuleID == "U135":
-       ExperianAMLPassed += "#6, NO Sanctions;"
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U018":
-       ExperianAMLPassed += "#7, NO Inconsistencies;"  
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U0132" or returnedHrp.HighRiskPolRuleID == "U0134":
-       ExperianAMLPassed += "#8, NO PEP;"    
-    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U007":
-       ExperianAMLPassed += "#4, NO Developed Identity;"       
-else:
-  ExperianAMLError = results.Error</Script>
+      <Script></Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode22579256</OwnerName>
-      <Script>clr.AddReference("ExperianLib") 
-from EZBob.DatabaseLib.Model.Database.Repository import *
-from EZBob.DatabaseLib.Model.Database import MP_Alert, AlertsSeverity
-from StructureMap import *
-
-service = ObjectFactory.GetInstance[AlertRepository]()
-if ExperianBWAError  == None:
- service.AddAlert(CustomerId, "EXPERIAN BWA",ExperianBWAWarning, AlertsSeverity.Warning, StrategyStartedDateTime)
- service.AddAlert(CustomerId, "EXPERIAN BWA",ExperianBWAPassed, AlertsSeverity.Passed, StrategyStartedDateTime)
-else:
- service.AddAlert(CustomerId,"EXPERIAN BWA",ExperianBWAError, AlertsSeverity.Error, StrategyStartedDateTime)</Script>
+      <Script></Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
