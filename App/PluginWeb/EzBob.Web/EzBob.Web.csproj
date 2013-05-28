@@ -304,7 +304,6 @@
     <Compile Include="Code\PostCode\PostcodeSearchListModel.cs" />
     <Compile Include="Areas\Customer\Models\CustomerModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertDocsController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AlertsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ApiChecksLogController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\ApplicationInfoController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CrossCheckController.cs" />

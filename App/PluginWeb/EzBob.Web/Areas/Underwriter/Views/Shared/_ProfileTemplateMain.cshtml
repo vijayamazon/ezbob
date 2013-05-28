@@ -13,15 +13,6 @@
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
-                    
-                    <% if(!EzBob.Config.HideAlertsTab){%>
-                        <li><a href="#alerts-main" data-toggle="tab">Alerts</a></li>    
-                    <%};%>
-                    
-                    <% if(!EzBob.Config.HidePassedAlertsTab){%>
-                        <li><a href="#alerts-passed" data-toggle="tab">Passed Alerts</a></li>
-                    <%};%>                    
-
                     <li><a href="#marketplaces" data-toggle="tab">Marketplaces</a></li>
                     <li><a href="#payment-accounts" data-toggle="tab">Payment Accounts</a></li>
                     <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
@@ -33,10 +24,6 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="profile-summary"></div>
-                    <div class="tab-pane" id="alerts-main">
-                        <div id="alerts"></div>
-                    </div>
-                    <div class="tab-pane" id="alerts-passed"></div>
                     <div class="tab-pane" id="marketplaces"></div>
                     <div class="tab-pane" id="payment-accounts"></div>
                     <div class="tab-pane" id="credit-bureau"></div>

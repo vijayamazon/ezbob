@@ -81,7 +81,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         Warning,
         Reject,
         Error,
-        InProgress
+        InProgress,
+        NotPerformed
     }
 
     public class Lighter
@@ -114,6 +115,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     Icon = "icon-remove-sign";
                     ButtonStyle = "btn-danger btn-more-danger";
                     Caption = "Error";
+                    break;
+                case LightsState.NotPerformed:
+                    Icon = "icon-ban-circle";
+                    ButtonStyle = "btn";
+                    Caption = "Not Performed ";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("state");

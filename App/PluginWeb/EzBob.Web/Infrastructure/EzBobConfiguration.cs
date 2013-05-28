@@ -39,8 +39,6 @@ namespace EzBob.Web.Infrastructure
         string UpdateMarketplacesStrategyName { get; }
         string FeeAddedStrategyName { get; }
         bool ManagementPartEnabled { get; }
-        bool HideAlertsTab { get; }
-        bool HidePassedAlertsTab { get; }
         int UpdateOnReapplyLastDays { get; }
         IPostcodeAnywhereConfig PostcodeAnywhereConfig { get; }
         string EmailRolloverAddedStrategyName { get; }
@@ -87,8 +85,6 @@ namespace EzBob.Web.Infrastructure
             get { return GetValueWithDefault<string>("CAISNoUploadStrategyName", "CAIS_NO_Upload"); }
         }        
 
-        public virtual bool HideAlertsTab { get { return GetValueWithDefault<bool>("HideAlertsTab", "False"); } }
-        public virtual bool HidePassedAlertsTab { get { return GetValueWithDefault<bool>("HidePassedAlertsTab", "False"); } }
         public int UpdateOnReapplyLastDays
         {
             get { return GetValueWithDefault<int>("UpdateOnReapplyLastDays", "14"); }

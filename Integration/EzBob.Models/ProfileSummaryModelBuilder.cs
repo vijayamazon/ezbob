@@ -16,13 +16,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class ProfileSummaryModelBuilder
     {
-        private readonly AlertRepository _alertRepository;
         private readonly CustomerRepository _customerRepository;
         private readonly IDecisionHistoryRepository _decisions;
 
-        public ProfileSummaryModelBuilder(AlertRepository alertRepository, CustomerRepository customerRepository, IDecisionHistoryRepository decisions)
+        public ProfileSummaryModelBuilder(CustomerRepository customerRepository, IDecisionHistoryRepository decisions)
         {
-            _alertRepository = alertRepository;
             _customerRepository = customerRepository;
             _decisions = decisions;
         }
@@ -35,12 +33,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
             var summary = new ProfileSummaryModel();
 
             summary.Id = customer.Id;
-            var alerts = _alertRepository.GetByCustomerId(customer.Id);
             var marketplacesSeniority = _customerRepository.MarketplacesSeniority(customer.Id, false);
-
-
             var paypalInternalId = new PayPalDatabaseMarketPlace().InternalId;
-
             var marketplacesAll = customer.CustomerMarketPlaces
                 .Where(mp => mp.Marketplace.InternalId != paypalInternalId).ToList();
 
@@ -115,7 +109,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     Inventory = string.Format("{0:0.#}", inventory),
                     Seniority = String.Format("{0:0.#}", minAccountAgeTotalMonth),
                     TotalPositiveReviews = String.Format("{0:0.#} ({1:0.#}%)", totalPositiveReviews, (totalReviews != 0 ? totalPositiveReviews / totalReviews * 100 : 0)),
-                    Lighter = new Lighter(ObtainMarketPlacesState(alerts, marketplaces))
+                    Lighter = new Lighter(ObtainMarketPlacesState(marketplaces))
                 };
 
             summary.PaymentAccounts =
@@ -231,7 +225,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             return LightsState.Passed;
         }
 
-        private LightsState ObtainMarketPlacesState(List<MP_Alert> alerts, List<MP_CustomerMarketPlace> marketplaces)
+        private LightsState ObtainMarketPlacesState(List<MP_CustomerMarketPlace> marketplaces)
         {
             if (marketplaces.Any(x => (!String.IsNullOrEmpty(x.UpdateError))))
             {
@@ -243,10 +237,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 return LightsState.InProgress;
             }
 
-            if (!alerts.Any()) return LightsState.Reject;
-
-            return alerts.Any(x => x.AlertType.IndexOf("Elimination Orders Total", StringComparison.Ordinal) > -1 && x.AlertSeverity != AlertsSeverity.Passed) ?
-                LightsState.Reject : LightsState.Passed;
+            return LightsState.Passed;
         }
 
 
@@ -256,6 +247,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 return LightsState.Reject;
             if (customer.AMLResult == "Warning" || customer.BWAResult == "Warning")
                 return LightsState.Warning;
+            if (customer.AMLResult == "Not performed" || customer.BWAResult == "Not performed")
+                return LightsState.NotPerformed;
 
             return LightsState.Passed;
         }

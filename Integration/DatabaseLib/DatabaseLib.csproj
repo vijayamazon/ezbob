@@ -272,7 +272,6 @@
     <Compile Include="Model\Database\ExposureDataBaseRow.cs" />
     <Compile Include="Model\Database\ExposurePerMedalDataRow.cs" />
     <Compile Include="Model\Database\ExposurePerUnderwriterDataRow.cs" />
-    <Compile Include="Model\Marketplaces\MP_Alert.cs" />
     <Compile Include="Model\Marketplaces\MP_ServiceLog.cs" />
     <Compile Include="Model\Database\Askville.cs">
       <SubType>Code</SubType>
@@ -356,7 +355,6 @@
     <Compile Include="Repository\ExperianBankCacheRepository.cs" />
     <Compile Include="Repository\ExposurePerUnderwriterReportRepository.cs" />
     <Compile Include="Repository\CurrencyRateRepository.cs" />
-    <Compile Include="Repository\AlertRepository.cs" />
     <Compile Include="Repository\CustomerMarketPlaceRepository.cs" />
     <Compile Include="Repository\CustomerMarketPlaceUpdatingHistoryRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />

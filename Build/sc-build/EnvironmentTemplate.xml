@@ -391,8 +391,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="AskvilleEnabled" value="False" />
         <property name="TargetsEnabled" value="False" />
         <property name="PostcodeAnywhereConfig" value="PostcodeAnywhereConfigEzBob"/>
-        <property name="HideAlertsTab" value="True" />
-        <property name="HidePassedAlertsTab" value="True" />
 		<property name="GetSatisfactionEnabled" value="True" />	
 		<!-- simple, hard -->
 		<property name="PasswordPolicyType" value="simple" />	

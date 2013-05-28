@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
-using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
 using EzBob.Web.Infrastructure.csrf;
-using NHibernate.Linq;
 using Scorto.Web;
 using StructureMap;
 
