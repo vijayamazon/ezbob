@@ -549,7 +549,7 @@
             <RepaymentPeriod>0</RepaymentPeriod>
             <Sex>M</Sex>
             <PaymentFrequency>M</PaymentFrequency>
-            <AccountStatus>S</AccountStatus>
+            <AccountStatus>F</AccountStatus>
             <NumAddInfoBlocks>0</NumAddInfoBlocks>
             <CompanyType>02</CompanyType>
             <AccountType>05</AccountType>
