@@ -328,7 +328,6 @@
     <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryItemMap.cs" />
     <Compile Include="Model\Marketplaces\MP_EbayAmazonInventoryMap.cs" />
     <Compile Include="Model\Marketplaces\MP_MarketplaceType.cs" />
-    <Compile Include="Model\Marketplaces\MP_MarketplaceTypeMap.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrder.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayOrderItemMap.cs" />

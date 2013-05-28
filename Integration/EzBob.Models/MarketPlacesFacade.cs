@@ -120,7 +120,8 @@ namespace EzBob.Web.Areas.Underwriter
 							Categories = categorieValues,
 							EBay = BuildEBay(ebayUserData, ebayAccount, ebayFeedBack),
 							Yodlee = BuildYodlee(mp),
-							PayPal = BuildPayPal(mp)
+							PayPal = BuildPayPal(mp),
+                            IsPaymentAccount = mp.Marketplace.IsPaymentAccount
 						};
 				});
 			return models;

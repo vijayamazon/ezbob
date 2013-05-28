@@ -36,6 +36,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         //Yodlee
         public YodleeModel Yodlee { get; set; }
+
+        public bool IsPaymentAccount { get; set; }
     }
 
     public class YodleeModel
