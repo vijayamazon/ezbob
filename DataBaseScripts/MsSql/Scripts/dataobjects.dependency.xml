@@ -577,6 +577,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>ExperianDefaultAccount</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ExperianDefaultAccount.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_ExperianDefaultAccountsData_CustomerId</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_ExperianDefaultAccountsData_CustomerId.sql</oFileName>
@@ -1708,6 +1714,24 @@
     <oName>SingleRunApplication</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\SingleRunApplication.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_PK_SiteAnalyticsCodesId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalytics</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\SiteAnalytics.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalyticsCodes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SiteAnalyticsCodes.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

@@ -703,6 +703,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_PK_SiteAnalyticsCodesId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FKEA3BC91D4A086D8C</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FKEA3BC91D4A086D8C.sql</oFileName>
