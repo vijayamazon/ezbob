@@ -123,7 +123,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
             var discountPlan = (cr.DiscountPlan ?? _discounts.GetDefault());
             model.DiscountPlan = discountPlan.Name;
-            model.DiscountPlanPercents = string.Format("({0})", discountPlan.ValuesStr);
+            model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
             model.DiscountPlanId = discountPlan.Id;
 
             model.Reason = cr.UnderwriterComment;

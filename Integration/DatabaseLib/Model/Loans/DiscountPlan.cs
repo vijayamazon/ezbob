@@ -41,6 +41,7 @@ namespace EZBob.DatabaseLib.Model.Loans
         {
             get
             {
+                if (Discounts.Length == 0 || Discounts.All(d => d == 0) || Name == "No Discount") return Name;
                 return string.Format("{0}  ({1})", Name, ValuesStr);
             }
         }
