@@ -9,7 +9,6 @@
 }
 
 <div class="row-fluid ">
-    <div class="span9">
         <div id="profile-content" style="padding-right: 20px; padding-top: 16px;">
             <div id="header-container"></div>
             <h1>Congratulations</h1>
@@ -67,18 +66,17 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 <script id="paypoint-schedule-template" type="text/template">
     <table class="table table-bordered table-striped payment-schedule-table">
         <thead>
             <tr>
-                <th width="80" >Due Date</th>
-                <th >Principal</th>
-                <th >Interest</th>
-                <th >Fees</th>
-                <th >Total</th>
+                <th>Due Date</th>
+                <th>Principal</th>
+                <th>Interest</th>
+                <th>Fees</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -94,11 +92,11 @@
             %>
             <tr>
                 <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-                <td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
-                <td><%-EzBob.formatPounds(line.Interest)%></td>
-                <td><%-EzBob.formatPounds(0)%></td>
+                <td><%-EzBob.formatPounds1(line.LoanRepayment)%></td>
+                <td><%-EzBob.formatPounds1(line.Interest)%></td>
+                <td><%-EzBob.formatPounds1(0)%></td>
                 <td>
-                    <b class="apply-loan-total" ><%-EzBob.formatPounds(line.AmountDue)%></b>
+                    <b class="apply-loan-total" ><%-EzBob.formatPounds1(line.AmountDue)%></b>
                 </td>
             </tr>
             <%});%>
@@ -122,9 +120,9 @@
         <div class="narrow-wizard-header">
             <%
                 var steps = [
-                    { num: 0, title: "Choose<br/>Amount", css: "completed" },
-                    { num: 1, title: "Bank &<br/>Debit", css: "completed" },
-                    { num: 2, title: "Get<br/>Cash", css: "active completed" }
+                    { title: "Choose Loan Term", css: "completed complete" },
+                    { title: "Enter Bank & Debit", css: "completed complete" },
+                    { title: "Get Cash", css: "active completed complete" }
                 ];
         %>
                 @{Html.RenderPartial("_StepsDashboard");}

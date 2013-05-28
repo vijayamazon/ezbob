@@ -2,16 +2,17 @@
 <script id="loan-schedule-template" type="text/template">
 	<div class="simple-well clearfix apply-for-loan-total-block">
 		<div class="formula">
-			<div class="total">Loan<span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
-			<img class="plus" src="@Url.Content("~/Content/img/plus.png")">
-			<div class="cost">Cost<span class="gelt"><%-EzBob.formatPounds(totalInterest)%></span></div>
-			<img class="eq" src="@Url.Content("~/Content/img/arrow-right.png")">
-			<div class="due">Total<span class="gelt"><%-EzBob.formatPounds(total)%></span> </div>
+			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds1(totalPrincipal)%></span></div>
+			<div class="plus"></div>
+			<div class="cost">Cost: <span class="gelt"><%-EzBob.formatPounds1(totalInterest)%></span></div>
+			<div class="eq"></div>
+			<div class="due">Total: <span class="gelt"><%-EzBob.formatPounds1(total)%></span></div>
 		</div>
 
-		<% if (isShowGift) { %><div class="free-gift">Pay early at any time and reduce your costs.</div><% } %>
-
-		<div class="rlc">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %>, <span class="apr">APR = <%- apr %>%</span></div>
+		<div class="rlc">
+			<div class="apr">APR = <%- apr %>%</div>
+			<div class="real-cost">Real Loan Cost = <%- EzBob.formatPercents(realInterestCost) %></div>
+		</div>
 	</div>
 
 	<table class="table table-bordered table-striped payment-schedule-table">

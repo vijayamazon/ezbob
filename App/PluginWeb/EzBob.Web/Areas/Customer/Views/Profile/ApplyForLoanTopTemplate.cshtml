@@ -4,9 +4,9 @@
 		<div class="narrow-wizard-header">
 			<%
 				var steps = [
-					{ num: 0, title: "Choose<br />Amount", css: "active" },
-					{ num: 1, title: "Bank &<br />Debit" },
-					{ num: 2, title: "Get<br />Cash" }
+					{ num: 0, title: "Choose Loan Term", css: "active current" },
+					{ num: 1, title: "Enter Bank & Debit" },
+					{ num: 2, title: "Get Cash" }
 				];
 			%>
 			@{Html.RenderPartial("_StepsDashboard");}

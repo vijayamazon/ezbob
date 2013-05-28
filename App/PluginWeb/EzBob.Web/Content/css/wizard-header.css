@@ -1,4 +1,5 @@
-﻿.dashboard-steps {
+﻿/*
+.dashboard-steps {
     margin-bottom: 10px;
     background-image: url(../img/wizard-bg.png);
     background-repeat: repeat-x;
@@ -172,3 +173,4 @@ li.active > .progress_tip {
     .ez_progress_bar.active {
         display: block;
     }
+*/

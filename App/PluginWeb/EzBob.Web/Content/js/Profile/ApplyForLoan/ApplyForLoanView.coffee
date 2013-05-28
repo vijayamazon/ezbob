@@ -93,7 +93,10 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   onRender: ->
     if @fixed
-      @$(".cash-question").hide()
+        @$(".cash-question").hide()
+
+    if not (@isLoanTypeSelectionAllowed in [ 1, '1' ])
+        @$('.duration-select-allowed').hide()
 
     InitAmountPeriodSliders {
         container: @$('#loan-sliders'),

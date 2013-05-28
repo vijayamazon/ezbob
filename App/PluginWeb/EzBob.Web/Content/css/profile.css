@@ -854,37 +854,34 @@ select.selectheight { height: 30px; }
 	font-weight: normal;
 	padding: 20px 10px 0 10px;
 	margin-bottom: 20px;
-	width: 600px;
-}
-
-#block-loan-schedule .apply-for-loan-total-block {
-	width: 960px !important;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	box-sizing: border-box;         /* Opera/IE 8+ */
+	width: 100% !important;
+}
+
+#block-loan-schedule .apply-for-loan-total-block {
+	font-size: 20px;
 }
 
 .apply-for-loan-total-block .formula {
 	position: relative;
-	width: 600px;
 	height: 70px;
 	margin: 0 auto;
 }
 
-.apply-for-loan-total-block .formula img      { position: absolute; }
-.apply-for-loan-total-block .formula img.plus { left: 170px; top: 0; }
-.apply-for-loan-total-block .formula img.eq   { left: 420px; top: 3px; } 
-
-.apply-for-loan-total-block .formula .total,
-.apply-for-loan-total-block .formula .cost,
-.apply-for-loan-total-block .formula .due {
-	width: 90px;
-	height: 70px;
+.apply-for-loan-total-block .formula > div {
+	width: 20%;
+	height: 100%;
 	position: absolute;
 	top: 0;
 	background-repeat: no-repeat;
-	padding-top: 16px;
 	font-weight: bold;
+	white-space: nowrap;
+	padding-top: 25px;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 .apply-for-loan-total-block .formula .total {
@@ -892,14 +889,32 @@ select.selectheight { height: 30px; }
 	background-image: url(../img/image-money64.png); background-position: top left;
 	padding-left: 70px;
 }
+
+.apply-for-loan-total-block .formula .plus {
+	left: 23%;
+	background-image: url(../img/plus.png);
+	background-position: center center;
+}
+
 .apply-for-loan-total-block .formula .cost {
-	left: 255px;
+	left: 40%;
 	background-image: url(../img/image-money32.png); background-position: 16px 16px;
 	padding-left: 54px;
 }
-.apply-for-loan-total-block .formula .due { left: 510px; }
 
-.apply-for-loan-total-block .gelt { color: #8BAC2B; display: block; }
+.apply-for-loan-total-block .formula .eq {
+	left: 60%;
+	background-image: url(../img/arrow-right.png);
+	background-position: center center;
+}
+
+.apply-for-loan-total-block .formula .due {
+	right: 0;
+}
+
+/* .apply-for-loan-total-block .formula .due { left: 510px; } */
+
+.apply-for-loan-total-block .gelt { color: #8BAC2B; }
 
 .apply-for-loan-total-block .free-gift {
 	-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
@@ -918,10 +933,19 @@ select.selectheight { height: 30px; }
 
 .apply-for-loan-total-block .rlc {
 	font-size: 10px;
-	width: 600px;
-	margin: 0 auto;
+	position: relative;
 }
-.apply-for-loan-total-block .apr {
-	display: inline-block;
-	margin-left: 16px;
-}
+
+.apply-for-loan-total-block .rlc .apr { float: right; }
+.apply-for-loan-total-block .rlc .real-cost { float: left; }
+
+.bank-account .for-radio { display: inline !important; }
+
+.bank-account #AccountNumber { width: 316px; }
+
+.bank-account #baPersonal { margin: 0 4px -3px 4px; }
+.bank-account #baBusiness { margin: 0 4px -3px 28px; }
+
+.bank-account .control-group { margin-bottom: 12px; }
+
+.bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }

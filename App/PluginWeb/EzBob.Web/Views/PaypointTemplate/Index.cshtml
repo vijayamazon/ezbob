@@ -1,6 +1,6 @@
 ﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "PayPoint: Fill Debit Card Details | EZBOB";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "PayPoint: Fill Debit Card Details | EZBOB";
 }
 
 @model dynamic
@@ -39,35 +39,30 @@
 
 @helper DashboardHeader()
 {
-    <div class="dashboard-steps narrow-dashboard-header">
-        <ul>
-            <li data-step-num="0" class="completed">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no1">1</div>
-                <div class="step-text"><span>Choose<br/>Amount</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-            <li data-step-num="1" class="active">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no2">2</div>
-                <div class="step-text"><span>Bank &<br/>Debit</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-            <li data-step-num="2" class="">
-                <div class="arrow-left"></div>
-                <div class="dashboard-step-no dashboard-step-no3">3</div>
-                <div class="step-text"><span>Get<br/>Cash</span></div>
-                <div class="completition"></div>
-                <div class="arrow-right arrow-last"></div>
-            </li>
-        </ul>
-    </div>
+	<div class="dashboard-steps narrow-dashboard-header">
+		<ul class="application_steps">
+			<li data-step-num="0" class="completed complete">
+				<span class="step_label">Step 1:
+				</span>
+				Choose Loan Term
+			</li>
+
+			<li data-step-num="1" class="active current">
+				<span class="step_label">Step 2:
+				</span>
+				Enter Bank &amp; Debit
+			</li>
+
+			<li data-step-num="2" class="">
+				<span class="step_label">Step 3:
+				</span>
+				Get Cash
+			</li>
+		</ul>
+	</div>
 } 
 
-@helper Hiddens()
-{
+@helper Hiddens() {
     <text><input type="hidden" name="merchant" value="${merchant}">
           <input type="hidden" name="trans_id" value="${trans_id}">
           <input type="hidden" name="callback" value="${callback}">

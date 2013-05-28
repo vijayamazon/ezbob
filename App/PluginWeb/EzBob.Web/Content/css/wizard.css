@@ -206,15 +206,7 @@ ul.list_none
     vertical-align:middle;
 }
 
-#SortCode2, #SortCode3 {
-    width: 54px;
-}
-#SortCode1 {
-    width: 53px;
-}
 #wizard .notifications > div { margin-right: 18px;}
-
-#AccountNumber { width: 215px;}
 
 .BankContainer {
     width: 580px;

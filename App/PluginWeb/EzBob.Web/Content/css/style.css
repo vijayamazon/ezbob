@@ -203,6 +203,7 @@ ul.star li{background:url(images/star.png) no-repeat 0 0; padding:0 0 0 30px;}
 .contact_form:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
 .contact_form:focus{border:1px #666 solid;}
 
+body .form_field_look,
 body .form_field {
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0 0 20px 0;
@@ -213,7 +214,11 @@ body .form_field {
 	-webkit-box-shadow: 0 0 10px #ccc;
 	box-shadow: 0 0 10px #ccc;
 }
+
+body .form_field_look:hover,
 body .form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; -webkit-box-shadow: 0 0 5px #39f; box-shadow: 0 0 5px #39f;}
+
+body .form_field_look:focus,
 body .form_field:focus{border:1px #666 solid;}
 
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
