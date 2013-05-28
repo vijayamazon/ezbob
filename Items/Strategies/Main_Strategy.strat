@@ -103,6 +103,7 @@
     <NodeElement Name="Reject" NodeId="MailNode45094547" />
     <NodeElement Name="rejection exception" NodeId="Comparison20625205" />
     <NodeElement Name="rejection exception" NodeId="Comparison26778105" />
+    <NodeElement Name="Desicion History" NodeId="ScriptNode32715345" />
     <NodeElement Name="Start Node" NodeId="StartNode7786314" />
     <NodeElement Name="Stop Node" NodeId="StopNode2967967" />
     <NodeElement Name="StopNode" NodeId="StopNode55449228" />
@@ -1539,7 +1540,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode36110264</Name>
       <PointF>
-        <X>749.649536</X>
+        <X>749.6496</X>
         <Y>596</Y>
       </PointF>
       <SuperNodeName />
@@ -3419,8 +3420,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison25377797</Name>
       <PointF>
-        <X>1248.81433</X>
-        <Y>1796</Y>
+        <X>1208.81433</X>
+        <Y>1756</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3454,7 +3455,7 @@
       <Name>Comparison26778105</Name>
       <PointF>
         <X>130.903732</X>
-        <Y>1696</Y>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3471,7 +3472,7 @@
       <Name>Comparison20625205</Name>
       <PointF>
         <X>1430.90369</X>
-        <Y>1776</Y>
+        <Y>1816</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3487,7 +3488,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49253056</Name>
       <PointF>
-        <X>1311.336</X>
+        <X>1331.336</X>
         <Y>1656</Y>
       </PointF>
       <SuperNodeName />
@@ -3895,8 +3896,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB45682816</Name>
       <PointF>
-        <X>536</X>
-        <Y>1836</Y>
+        <X>496</X>
+        <Y>1916</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -3912,8 +3913,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison14715976</Name>
       <PointF>
-        <X>231.33609</X>
-        <Y>1836</Y>
+        <X>351.3361</X>
+        <Y>1776</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3930,7 +3931,7 @@
       <Name>MultiAssignmentB2167900</Name>
       <PointF>
         <X>174.625885</X>
-        <Y>1936</Y>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -3946,8 +3947,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison51472511</Name>
       <PointF>
-        <X>368.586853</X>
-        <Y>1836</Y>
+        <X>308.586853</X>
+        <Y>1936</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -4135,8 +4136,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB14992622</Name>
       <PointF>
-        <X>516</X>
-        <Y>2036</Y>
+        <X>496</X>
+        <Y>2076</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -4186,8 +4187,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode55782176</Name>
       <PointF>
-        <X>606.67865</X>
-        <Y>2036</Y>
+        <X>586.67865</X>
+        <Y>2076</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -4203,8 +4204,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode55195733</Name>
       <PointF>
-        <X>412.670074</X>
-        <Y>1936</Y>
+        <X>392.670074</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -4220,7 +4221,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode14955490</Name>
       <PointF>
-        <X>782.0326</X>
+        <X>782.032654</X>
         <Y>1856</Y>
       </PointF>
       <SuperNodeName />
@@ -4237,8 +4238,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode15553361</Name>
       <PointF>
-        <X>616</X>
-        <Y>1936</Y>
+        <X>596</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -4255,7 +4256,7 @@
       <Name>MultiAssignmentB40193221</Name>
       <PointF>
         <X>496</X>
-        <Y>1696</Y>
+        <Y>1716</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -4373,8 +4374,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>CreditProduct66600851</Name>
       <PointF>
-        <X>498.45282</X>
-        <Y>1936</Y>
+        <X>478.45282</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeCreditProduct</TypeName>
@@ -4961,8 +4962,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode45094547</Name>
       <PointF>
-        <X>616</X>
-        <Y>1836</Y>
+        <X>596</X>
+        <Y>1916</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -4978,8 +4979,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode51710936</Name>
       <PointF>
-        <X>336</X>
-        <Y>1936</Y>
+        <X>296</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -5357,7 +5358,7 @@
       <Name>Comparison47974306</Name>
       <PointF>
         <X>448.814362</X>
-        <Y>1776</Y>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -5374,7 +5375,7 @@
       <Name>Comparison42838347</Name>
       <PointF>
         <X>164.4074</X>
-        <Y>1756</Y>
+        <Y>1776</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -5408,7 +5409,7 @@
       <Name>Comparison32263575</Name>
       <PointF>
         <X>1340.88391</X>
-        <Y>1736</Y>
+        <Y>1756</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -5424,11 +5425,28 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison23009248</Name>
       <PointF>
-        <X>320.883942</X>
-        <Y>1736</Y>
+        <X>220.883942</X>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Desicion History</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode32715345</Name>
+      <PointF>
+        <X>677.2148</X>
+        <Y>1996</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -15940,7 +15958,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints>
         <PointF>
           <X>120</X>
-          <Y>2060</Y>
+          <Y>2100</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -16134,7 +16152,12 @@ CompanyType = "SoleTrader"</InitialValue>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>760</X>
+          <Y>2100</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>MailNode55195733</SourceNodeName>
@@ -16163,7 +16186,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>MailNode15553361</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode14955490</TargetNodeName>
+      <TargetNodeName>ScriptNode32715345</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -16538,10 +16561,6 @@ CompanyType = "SoleTrader"</InitialValue>
           <Y>1580</Y>
         </PointF>
         <PointF>
-          <X>460</X>
-          <Y>1580</Y>
-        </PointF>
-        <PointF>
           <X>340</X>
           <Y>1580</Y>
         </PointF>
@@ -16710,11 +16729,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints>
         <PointF>
           <X>200</X>
-          <Y>1920</Y>
-        </PointF>
-        <PointF>
-          <X>440</X>
-          <Y>1920</Y>
+          <Y>1960</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -16808,6 +16823,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode32715345</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode14955490</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -20709,6 +20736,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <SigningOutlets />
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ScriptNode32715345</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
   </SigningNodeDescriptors>
   <ScriptDescriptors>
     <ScriptDescriptor>
@@ -21146,6 +21181,14 @@ api = StrategyHelper()
 TotalSumOfOrders1YTotal = api.GetAnualTurnOverByCustomer(CustomerId)
 TotalSumOfOrders3MTotal = api.GetTotalSumOfOrders3M(CustomerId)
 </Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode32715345</OwnerName>
+      <Script>from EzBob.Models import *
+api = StrategyHelper()
+
+NetTakoyPeremennoy = api.AddRejectIntoDecisionHistory(CustomerId, Auto-Reject)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
   </ScriptDescriptors>
