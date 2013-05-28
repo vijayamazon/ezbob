@@ -86,6 +86,7 @@
     <Compile Include="CaisFile\BusinessHeader.cs" />
     <Compile Include="CaisFile\BusinessTrailer.cs" />
     <Compile Include="CaisFile\CaisFileData.cs" />
+    <Compile Include="CaisFile\CaisFileManager.cs" />
     <Compile Include="CaisFile\CaisFileSender.cs" />
     <Compile Include="CaisFile\Header.cs" />
     <Compile Include="CaisFile\Trailer.cs" />
