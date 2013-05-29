@@ -15,10 +15,8 @@
 
 @section Js{
     <script type="text/javascript">
-        $("#liReports").removeClass("active");
-        $("#liApplications").removeClass("active");
+        $(".container-fluid > ul.nav > li[id]").removeClass("active");
         $("#liCAIS").addClass("active");
-        $("#liStrategySettings").removeClass("active");
         var view = new EzBob.Underwriter.CAIS.CaisManageView({ el: ".content" });
     </script>
 }

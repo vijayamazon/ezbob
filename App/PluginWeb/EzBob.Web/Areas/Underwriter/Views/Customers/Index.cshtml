@@ -74,7 +74,7 @@
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
-            
+
 
             var underwriterRouter = Backbone.Router.extend({
                 initialize: function() {
@@ -86,14 +86,14 @@
                     "customers/:type": "customers",
                     "profile/:id": "profile",
                     "profile/:id/:type": "profilePopup",
-                    "settings": "settings"
-                    
+                    "settings": "settings"                    
                 },
                 customers: function(type) {
                     if (!this.isCustomersRendered) {
                         this.isCustomersRendered = true;
                         customersView.render();
                     }
+                    this.switchMenuTo("liApplications");
                     customersView.show(type);
                     profileView.hide();
                     EzBob.App.vent.trigger('uw:grids:refresh');
@@ -101,6 +101,7 @@
                     strategySettingsView.hide();
                 },
                 profile: function(id, type) {
+                    this.switchMenuTo("liApplications");
                     if (!this.isProfileRendered) {
                         this.isProfileRendered = true;
                         profileView.render();
@@ -121,48 +122,48 @@
                     EzBob.App.modal.show(profilePopupView);
                 },
                 settings: function() {
-                    $("#liReports").removeClass("active");
-                    $("#liApplications").removeClass("active");
-                    $("#liCAIS").removeClass("active");
-                    $("#liStrategySettings").addClass("active");
+                    this.switchMenuTo("liStrategySettings");
                     customersView.hide();
                     profileView.hide();
                     profileView.showed = false;
                     strategySettingsView.show();
-
+                },
+                switchMenuTo: function(name) {
+                    $(".container-fluid > ul.nav > li[id]").removeClass("active");
+                    $("#" + name).addClass("active");
                 }
-                
-            });
-            profileView.router = new underwriterRouter();
-            Backbone.history.start();
-            profileView.on("customerNotFull", function(customerId) {
-                profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
-                profileView.router.navigate("#profile/"+customerId+"/RegisteredCustomers", { trigger: true, replace: true });
-            });
+        });
 
-            if (window.location.hash != "") {
-                $('a[href="' + window.location.hash + '"]').tab('show');
-            }
+        profileView.router = new underwriterRouter();
+        Backbone.history.start();
+        profileView.on("customerNotFull", function(customerId) {
+            profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
+            profileView.router.navigate("#profile/" + customerId + "/RegisteredCustomers", { trigger: true, replace: true });
+        });
 
-            var a = new EzBob.Underwriter.goToCustomerId();
-            a.on("ok", function(id) {
-                profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
-            });
+        if (window.location.hash != "") {
+            $('a[href="' + window.location.hash + '"]').tab('show');
+        }
 
-            $("#liClient > a").on("click", function() {
-                a.render();
-                return false;
-            });
+        var a = new EzBob.Underwriter.goToCustomerId();
+        a.on("ok", function(id) {
+            profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
+        });
+
+        $("#liClient > a").on("click", function() {
+            a.render();
+            return false;
+        });
 
         });
 
-        @if (Model.Escalated != null)
-        {
-            <text>  var escalatedFlag = 1;  </text>
-        }
-        else
-        {
-            <text>  var escalatedFlag = 0;  </text>
-        }
+            @if (Model.Escalated != null)
+            {
+                <text>  var escalatedFlag = 1;  </text>
+            }
+            else
+            {
+                <text>  var escalatedFlag = 0;  </text>
+            }
     </script>
 }

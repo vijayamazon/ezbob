@@ -1,31 +1,15 @@
 ﻿@model dynamic
 
-@{
-    ViewBag.Title = "Configuration Variables";
-    Layout = "../Shared/_Layout.cshtml";
-}
-
 <script type="text/template" id="strategy-detail-settings">
     @StrategySettings()
 </script>
-
-@section Js{
-    <script type="text/javascript">
-        $("#liReports").removeClass("active");
-        $("#liApplications").removeClass("active");
-        $("#liCAIS").removeClass("active");
-        $("#liStrategySettings").addClass("active");
-        console.log("Variables view!!!");
-    </script>
-}
-
 
 @helper StrategySettings()
 {
     @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
     <div class="alert-block">    
         @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
-            <table class="table table-bordered table-striped blue-header squeezed darker">
+        <table class="table table-bordered table-striped blue-header squeezed darker">
             <thead>
                 <tr>
                     <th colspan="3">Strategy Settings</th>
@@ -69,10 +53,9 @@
                 </tr>                    
             </tbody>
         </table>
-    <div class="pull-right">
-        <button class="btn" name="SaveBtn" ><i class="icon-ok-sign" />Save</button> 
-        <button class="btn" name="CancelBtn" ><i class="icon-remove-sign" />Cancel</button> 
+        <div class="pull-right">
+            <button class="btn" name="SaveBtn" ><i class="icon-ok-sign" />Save</button> 
+            <button class="btn" name="CancelBtn" ><i class="icon-remove-sign" />Cancel</button> 
+        </div>
     </div>
-    </div>
-
 }

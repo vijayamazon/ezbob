@@ -14,10 +14,8 @@
 {
     <script type="text/javascript">
         $(function () {
+            $(".container-fluid > ul.nav > li[id]").removeClass("active");
             $("#liReports").addClass("active");
-            $("#liApplications").removeClass("active");
-            $("#liCAIS").removeClass("active");
-            $("#liStrategySettings").removeClass("active");
 
             var el = $("#timeFilter");
             el.change(function () {
