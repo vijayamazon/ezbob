@@ -43,18 +43,10 @@
         
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
-            var secVpnService = new SECVPNService();
-	        string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
-            string reportXmlString = secVpnService.getReport(securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
-
-            var payPointDataSet = new PayPointDataSet();
-            using (Stream xmlStream = reportXmlString.ToStream())
-            {
-                payPointDataSet.ReadXml(xmlStream);
-            }
-
+			string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
+	        var payPointTransactions = PayPointConnector.getOrders(condition, securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword);
             var payPointOrders = new List<PayPointOrderItem>();
-            foreach (PayPointDataSet.TransactionRow x in payPointDataSet.Transaction)
+			foreach (PayPointDataSet.TransactionRow x in payPointTransactions)
             {
                 var order = new PayPointOrderItem
                     {
