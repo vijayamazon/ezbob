@@ -11,34 +11,29 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.Marionette.ItemVie
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
         @model = new EzBob.Underwriter.StrategySettingsModel
-        xhr = @model.fetch()
-        xhr.done => @render()
-        #@bind 'change', @model.save()
+        @update()
         @
 
     bindings:
-        EnableAutomaticRejection: "select[name='enableAutomaticRejection']"
-        EnableAutomaticApproval: "select[name='enableAutomaticApproval']"
-        LowCreditScore: "input[name='lowCreditScore']"
-        TotalAnnualTurnover: "input[name='totalAnnualTurnover']"
-        TotalThreeMonthTurnover: "input[name='totalThreeMonthTurnover']"
-        EnableAutomaticRejectionDesc: "td[name='enableAutomaticRejectionDesc']"
-        EnableAutomaticApprovalDesc: "td[name='enableAutomaticApprovalDesc']"
-        LowCreditScoreDesc: "td[name='lowCreditScoreDesc']"
-        TotalAnnualTurnoverDesc: "td[name='totalAnnualTurnoverDesc']"
-        TotalThreeMonthTurnoverDesc: "td[name='totalThreeMonthTurnoverDesc']"
+        EnableAutomaticRejection:   "select[name='enableAutomaticRejection']"
+        EnableAutomaticApproval:    "select[name='enableAutomaticApproval']"
+        LowCreditScore:             "input[name='lowCreditScore']"
+        TotalAnnualTurnover:        "input[name='totalAnnualTurnover']"
+        TotalThreeMonthTurnover:    "input[name='totalThreeMonthTurnover']"
 
     events:
-        "click button[name='SaveBtn']": "saveSettings"
-        "click button[name='CancelBtn']": "cancelSettings"
+        "click button[name='SaveBtn']":     "saveSettings"
+        "click button[name='CancelBtn']":   "cancelSettings"
 
     saveSettings: ->
         @model.save()
 
     cancelSettings: ->
+        @update()
+    
+    update: ->
         xhr = @model.fetch()
         xhr.done => @render()
-
 
     onRender: -> 
         @modelBinder.bind @model, @el, @bindings
