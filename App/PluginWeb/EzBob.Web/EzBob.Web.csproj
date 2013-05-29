@@ -237,6 +237,7 @@
     <Compile Include="Areas\Underwriter\Controllers\Reports\CaisReportsHistoryController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\StrategySettingsController.cs" />
     <Compile Include="Areas\Underwriter\Models\ApplicationInfoModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
@@ -975,6 +976,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Yodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\YodleeCallback.cshtml" />
     <Content Include="Content\js\lib\mousetrap_1.4.0.js" />
+    <Content Include="Areas\Underwriter\Views\Shared\StrategySettings.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1462,6 +1464,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.stManage.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

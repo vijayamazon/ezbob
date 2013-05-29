@@ -200,6 +200,7 @@ namespace EzBob.Web.Infrastructure
                 //Underwriter
                          .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                          .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.stManage.coffee")
 
                 //Customer grid
                          .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")

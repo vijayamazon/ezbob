@@ -35,12 +35,12 @@
     </div>
 </div>
 <div id="profile-view" style="display: none;"></div>
+<div id="settings-view" style="display: none;"></div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
-}
-@{
     Html.RenderPartial("_CustomersPopupTemplate");
+    Html.RenderPartial("StrategySettings");
 }
 @section Js{
     <script type="text/javascript">
@@ -73,6 +73,8 @@
 
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
+            var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
+            
 
             var underwriterRouter = Backbone.Router.extend({
                 initialize: function() {
@@ -83,7 +85,9 @@
                     "": "customers",
                     "customers/:type": "customers",
                     "profile/:id": "profile",
-                    "profile/:id/:type": "profilePopup"
+                    "profile/:id/:type": "profilePopup",
+                    "settings": "settings"
+                    
                 },
                 customers: function(type) {
                     if (!this.isCustomersRendered) {
@@ -94,6 +98,7 @@
                     profileView.hide();
                     EzBob.App.vent.trigger('uw:grids:refresh');
                     profileView.showed = false;
+                    strategySettingsView.hide();
                 },
                 profile: function(id, type) {
                     if (!this.isProfileRendered) {
@@ -103,6 +108,7 @@
                     customersView.hide();
                     profileView.show(id, type);
                     profileView.showed = true;
+                    strategySettingsView.hide();
                 },
                 profilePopup: function(id, type) {
                     var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
@@ -113,7 +119,19 @@
                         that.navigate("#customers/RegisteredCustomers");
                     });
                     EzBob.App.modal.show(profilePopupView);
+                },
+                settings: function() {
+                    $("#liReports").removeClass("active");
+                    $("#liApplications").removeClass("active");
+                    $("#liCAIS").removeClass("active");
+                    $("#liStrategySettings").addClass("active");
+                    customersView.hide();
+                    profileView.hide();
+                    profileView.showed = false;
+                    strategySettingsView.show();
+
                 }
+                
             });
             profileView.router = new underwriterRouter();
             Backbone.history.start();

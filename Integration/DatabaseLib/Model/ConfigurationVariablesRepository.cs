@@ -19,5 +19,11 @@ namespace EZBob.DatabaseLib.Model
         {
             return _session.QueryOver<ConfigurationVariable>().Where(c => c.Name== name).SingleOrDefault<ConfigurationVariable>();
         }
+        public void SetByName(string name, string value)
+        {
+            var property = _session.QueryOver<ConfigurationVariable>().Where(c => c.Name == name).SingleOrDefault<ConfigurationVariable>();
+            property.Value = value;
+            _session.Update(property);
+        }
     }
 }
