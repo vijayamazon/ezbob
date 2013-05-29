@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Repository;
-using ExperianLib.CaisFile;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Areas.Underwriter.Models.CAIS;
 using EzBob.Web.Infrastructure.csrf;
 using Scorto.Web;
-using StructureMap;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
@@ -27,21 +18,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public string LowCreditScoreDesc { get; set; }
         public string TotalAnnualTurnoverDesc { get; set; }
         public string TotalThreeMonthTurnoverDesc { get; set; }
-
     }
 
     public class StrategySettingsController : Controller
     {
-        //
-        // GET: /Underwriter/StrategySettings/
-        
-        private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
-        private StrategySettingsModel _currentSettings;
 
-        public StrategySettingsController()
+        private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
+
+        public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository)
         {
-            _configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-            _currentSettings = new StrategySettingsModel();
+            _configurationVariablesRepository = configurationVariablesRepository;
         }
 
         private StrategySettingsModel GetSettings()
@@ -51,7 +37,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var lowCreditScore = _configurationVariablesRepository.GetByName("LowCreditScore");
             var totalAnnualTurnover = _configurationVariablesRepository.GetByName("TotalAnnualTurnover");
             var totalThreeMonthTurnover = _configurationVariablesRepository.GetByName("TotalThreeMonthTurnover");
-            _currentSettings = new StrategySettingsModel
+            
+            var currentSettings = new StrategySettingsModel
             {
                 EnableAutomaticRejection = enableAutomaticRejection.Value,
                 EnableAutomaticRejectionDesc = enableAutomaticRejection.Description,
@@ -64,7 +51,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 TotalThreeMonthTurnover = totalThreeMonthTurnover.Value,
                 TotalThreeMonthTurnoverDesc = totalThreeMonthTurnover.Description
             };
-            return _currentSettings;
+            
+            return currentSettings;
         }
 
         [Ajax]
@@ -75,23 +63,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             return this.JsonNet(GetSettings());
         }
+
         [Ajax]
         [ValidateJsonAntiForgeryToken]
         [HttpPost]
         [Transactional]
-        public JsonNetResult Index(StrategySettingsModel st)
+        public JsonNetResult Index(StrategySettingsModel newSettings)
         {
-            if (_currentSettings.EnableAutomaticApproval != st.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticRejection", st.EnableAutomaticRejection);
-            if (_currentSettings.EnableAutomaticApproval != st.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticApproval", st.EnableAutomaticApproval);
-            if (_currentSettings.LowCreditScore != st.LowCreditScore) _configurationVariablesRepository.SetByName("LowCreditScore", st.LowCreditScore);
-            if (_currentSettings.TotalAnnualTurnover != st.TotalAnnualTurnover) _configurationVariablesRepository.SetByName("TotalAnnualTurnover", st.TotalAnnualTurnover);
-            if (_currentSettings.TotalThreeMonthTurnover!= st.TotalThreeMonthTurnover) _configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", st.TotalThreeMonthTurnover);
-            return this.JsonNet(GetSettings());
+            var oldSettings = GetSettings();           
+
+            if (oldSettings.EnableAutomaticApproval != newSettings.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticRejection", newSettings.EnableAutomaticRejection);
+            if (oldSettings.EnableAutomaticApproval != newSettings.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticApproval", newSettings.EnableAutomaticApproval);
+            if (oldSettings.LowCreditScore != newSettings.LowCreditScore) _configurationVariablesRepository.SetByName("LowCreditScore", newSettings.LowCreditScore);
+            if (oldSettings.TotalAnnualTurnover != newSettings.TotalAnnualTurnover) _configurationVariablesRepository.SetByName("TotalAnnualTurnover", newSettings.TotalAnnualTurnover);
+            if (oldSettings.TotalThreeMonthTurnover!= newSettings.TotalThreeMonthTurnover) _configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", newSettings.TotalThreeMonthTurnover);
+            return this.JsonNet(newSettings);
         }
-
-
     }
 }
-
-
-

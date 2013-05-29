@@ -6,6 +6,7 @@ namespace EZBob.DatabaseLib.Model
     public interface IConfigurationVariablesRepository : IRepository<ConfigurationVariable>
     {
         ConfigurationVariable GetByName(string name);
+        void SetByName(string name, string value);
     }
 
     public class ConfigurationVariablesRepository : NHibernateRepositoryBase<ConfigurationVariable>, IConfigurationVariablesRepository
