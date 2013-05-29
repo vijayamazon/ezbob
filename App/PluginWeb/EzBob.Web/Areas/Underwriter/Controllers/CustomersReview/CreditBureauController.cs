@@ -503,133 +503,137 @@
 
             try
             {
-                foreach (var caisData in eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS)
-                {
-                    foreach (var caisDetails in caisData.CAISDetails)
+                if (eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS != null)
+                    foreach (var caisData in eInfo.Output.Output.FullConsumerData.ConsumerData.CAIS)
                     {
-                        var accountInfo = new AccountInfo();
-                        DateTime? openDate;
-                        try
+                        foreach (var caisDetails in caisData.CAISDetails)
                         {
-                            openDate = new DateTime(caisDetails.CAISAccStartDate.CCYY,
-                                                    caisDetails.CAISAccStartDate.MM,
-                                                    caisDetails.CAISAccStartDate.DD);
-                        }
-                        catch
-                        {
-                            openDate = null;
-                        }
-                        accountInfo.OpenDate = (openDate == null) ? string.Empty : openDate.Value.ToShortDateString();
-                        accountInfo.Account =
-                            AccountTypeDictionary.GetAccountType(caisDetails.AccountType ?? string.Empty);
-                        //accountInfo.TermAndfreq =
-                        //    PaymentFrequencyDictionary.GetPaymentFrequency(caisDetails.PaymentFrequency ?? string.Empty);
-                        var accStatus = caisDetails.AccountStatus;
-	                    string dateType;
-						accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
-						accountInfo.DateType = dateType;
-                        if (accStatus == "F")
-                            numberOfDefaults++;
-
-                        var accType = getAccountType(caisDetails.AccountType);
-                        if (accType < 0)
-                            continue;
-
-                        if ((accStatus == "D") || (accStatus == "A"))
-                        {
-                            accounts[accType]++;
-                            var ws = caisDetails.WorstStatus;
-                            worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
-
-                            double limit = 0;
-                            if ((caisDetails.CreditLimit != null) && (caisDetails.CreditLimit.Amount != null))
+                            var accountInfo = new AccountInfo();
+                            DateTime? openDate;
+                            try
                             {
-                                string l = caisDetails.CreditLimit.Amount.Replace("£", "");
-                                double.TryParse(l, out limit);
+                                openDate = new DateTime(caisDetails.CAISAccStartDate.CCYY,
+                                                        caisDetails.CAISAccStartDate.MM,
+                                                        caisDetails.CAISAccStartDate.DD);
                             }
-                            limits[accType] += limit;
-
-                            double balance = 0;
-                            if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
+                            catch
                             {
-                                string b = caisDetails.Balance.Amount.Replace("£", "");
-                                double.TryParse(b, out balance);
+                                openDate = null;
                             }
-                            balances[accType] += balance;
+                            accountInfo.OpenDate = (openDate == null)
+                                                       ? string.Empty
+                                                       : openDate.Value.ToShortDateString();
+                            accountInfo.Account =
+                                AccountTypeDictionary.GetAccountType(caisDetails.AccountType ?? string.Empty);
+                            //accountInfo.TermAndfreq =
+                            //    PaymentFrequencyDictionary.GetPaymentFrequency(caisDetails.PaymentFrequency ?? string.Empty);
+                            var accStatus = caisDetails.AccountStatus;
+                            string dateType;
+                            accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
+                            accountInfo.DateType = dateType;
+                            if (accStatus == "F")
+                                numberOfDefaults++;
 
-                            numberOfAccounts++;
-                            if ((openDate != null) && (openDate.Value >= DateTime.Today.AddMonths(-3)))
-                                numberOfAcc3M++;
-                        }
+                            var accType = getAccountType(caisDetails.AccountType);
+                            if (accType < 0)
+                                continue;
 
-                        string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
-                        int mthsCount = 0;
-                        int.TryParse(caisDetails.NumOfMonthsHistory ?? "0", out mthsCount);
-
-                        var sList = new List<AccountStatus>();
-                        for (int i = 0; i < StatusHistoryMonths; i++)
-                        {
-                            sList.Add(new AccountStatus {Status = "", StatusColor = "white"});
-                        }
-
-	                    int relevantYear, relevantMonth, relevantDay;
-						if (caisDetails.SettlementDate != null)
-						{
-							relevantYear = caisDetails.SettlementDate.CCYY;
-							relevantMonth = caisDetails.SettlementDate.MM;
-							relevantDay = caisDetails.SettlementDate.DD;
-						}
-						else
-						{
-							relevantYear = caisDetails.LastUpdatedDate.CCYY;
-							relevantMonth = caisDetails.LastUpdatedDate.MM;
-							relevantDay = caisDetails.LastUpdatedDate.DD;
-						}
-
-						var histStart = new DateTime(relevantYear, relevantMonth, 1);
-						accountInfo.SettlementDate = FormattingUtils.FormatDateToString(new DateTime(relevantYear, relevantMonth, relevantDay));
-
-                        for (int i = 0; i < mthsCount; i++)
-                        {
-                            var histDate = histStart.AddMonths(-i);
-                            string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
-                            var idx = displayedMonths.IndexOf(histDate);
-                            if (idx >= 0)
-                                sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
-                        }
-
-                        accountInfo.LatestStatuses = sList.ToArray();
-
-                        int repaymentPeriod = 0;
-                        int.TryParse(caisDetails.RepaymentPeriod ?? string.Empty, out repaymentPeriod);
-
-                        accountInfo.TermAndfreq = GetRepaymentPeriodString(repaymentPeriod);
-
-                        accountInfo.Limit = caisDetails.CreditLimit.Amount;
-                        accountInfo.AccBalance = caisDetails.Balance.Amount;
-                        
-                        accountInfo.CashWithdrawals = string.Empty;
-                        accountInfo.MinimumPayment = string.Empty;
-
-                        if(caisDetails.CardHistories != null)
-                        {
-                            foreach (var cardHistory in caisDetails.CardHistories)
+                            if ((accStatus == "D") || (accStatus == "A"))
                             {
-                                accountInfo.CashWithdrawals = string.Format(
-                                    "{0} ({1})", cardHistory.NumCashAdvances ?? "0",
-                                    cardHistory.CashAdvanceAmount ?? "0");
-                                accountInfo.MinimumPayment = cardHistory.PaymentCode ?? string.Empty;
-                                break;
+                                accounts[accType]++;
+                                var ws = caisDetails.WorstStatus;
+                                worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
+
+                                double limit = 0;
+                                if ((caisDetails.CreditLimit != null) && (caisDetails.CreditLimit.Amount != null))
+                                {
+                                    string l = caisDetails.CreditLimit.Amount.Replace("£", "");
+                                    double.TryParse(l, out limit);
+                                }
+                                limits[accType] += limit;
+
+                                double balance = 0;
+                                if ((caisDetails.Balance != null) && (caisDetails.Balance.Amount != null))
+                                {
+                                    string b = caisDetails.Balance.Amount.Replace("£", "");
+                                    double.TryParse(b, out balance);
+                                }
+                                balances[accType] += balance;
+
+                                numberOfAccounts++;
+                                if ((openDate != null) && (openDate.Value >= DateTime.Today.AddMonths(-3)))
+                                    numberOfAcc3M++;
                             }
+
+                            string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
+                            int mthsCount = 0;
+                            int.TryParse(caisDetails.NumOfMonthsHistory ?? "0", out mthsCount);
+
+                            var sList = new List<AccountStatus>();
+                            for (int i = 0; i < StatusHistoryMonths; i++)
+                            {
+                                sList.Add(new AccountStatus {Status = "", StatusColor = "white"});
+                            }
+
+                            int relevantYear, relevantMonth, relevantDay;
+                            if (caisDetails.SettlementDate != null)
+                            {
+                                relevantYear = caisDetails.SettlementDate.CCYY;
+                                relevantMonth = caisDetails.SettlementDate.MM;
+                                relevantDay = caisDetails.SettlementDate.DD;
+                            }
+                            else
+                            {
+                                relevantYear = caisDetails.LastUpdatedDate.CCYY;
+                                relevantMonth = caisDetails.LastUpdatedDate.MM;
+                                relevantDay = caisDetails.LastUpdatedDate.DD;
+                            }
+
+                            var histStart = new DateTime(relevantYear, relevantMonth, 1);
+                            accountInfo.SettlementDate =
+                                FormattingUtils.FormatDateToString(new DateTime(relevantYear, relevantMonth, relevantDay));
+
+                            for (int i = 0; i < mthsCount; i++)
+                            {
+                                var histDate = histStart.AddMonths(-i);
+                                string indicator = (statuses.Length > i) ? statuses.Substring(i, 1) : string.Empty;
+                                var idx = displayedMonths.IndexOf(histDate);
+                                if (idx >= 0)
+                                    sList[idx].Status = AccountStatusDictionary.GetAccountStatusString(indicator);
+                            }
+
+                            accountInfo.LatestStatuses = sList.ToArray();
+
+                            int repaymentPeriod = 0;
+                            int.TryParse(caisDetails.RepaymentPeriod ?? string.Empty, out repaymentPeriod);
+
+                            accountInfo.TermAndfreq = GetRepaymentPeriodString(repaymentPeriod);
+
+                            accountInfo.Limit = caisDetails.CreditLimit.Amount;
+                            accountInfo.AccBalance = caisDetails.Balance.Amount;
+
+                            accountInfo.CashWithdrawals = string.Empty;
+                            accountInfo.MinimumPayment = string.Empty;
+
+                            if (caisDetails.CardHistories != null)
+                            {
+                                foreach (var cardHistory in caisDetails.CardHistories)
+                                {
+                                    accountInfo.CashWithdrawals = string.Format(
+                                        "{0} ({1})", cardHistory.NumCashAdvances ?? "0",
+                                        cardHistory.CashAdvanceAmount ?? "0");
+                                    accountInfo.MinimumPayment = cardHistory.PaymentCode ?? string.Empty;
+                                    break;
+                                }
+                            }
+
+                            accountInfo.Years = years.ToArray();
+                            accountInfo.Quarters = quarters.ToArray();
+                            accountInfo.MonthsDisplayed = monthsList.ToArray();
+
+                            accList.Add(accountInfo);
                         }
-
-                        accountInfo.Years = years.ToArray();
-                        accountInfo.Quarters = quarters.ToArray();
-                        accountInfo.MonthsDisplayed = monthsList.ToArray();
-
-                        accList.Add(accountInfo);
                     }
-                }
             }
             catch (Exception)
             {
