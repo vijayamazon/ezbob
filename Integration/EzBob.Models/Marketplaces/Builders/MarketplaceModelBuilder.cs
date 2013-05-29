@@ -77,7 +77,6 @@ namespace EzBob.Models
             var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
             var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 
-
             if (av != null)
             {
                 foreach (var info in av)

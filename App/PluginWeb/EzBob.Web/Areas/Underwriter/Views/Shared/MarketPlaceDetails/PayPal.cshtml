@@ -1,9 +1,9 @@
 ﻿<%
-            var pi = m.PayPal.PersonalInfo;
-            var p = m.PayPal.Payments;
-            var pdi = m.PayPal.DetailPayments.Income;
-            var pde = m.PayPal.DetailPayments.Expenses;
-            var gi = m.PayPal.GeneralInfo;
+    var pi = m.PayPal.PersonalInfo;
+    var p = m.PayPal.Payments;
+    var pdi = m.PayPal.DetailPayments.Income;
+    var pde = m.PayPal.DetailPayments.Expenses;
+    var gi = m.PayPal.GeneralInfo;
 %>
 
 <div class="paypalDetail">
@@ -12,7 +12,7 @@
             <li class="active"><a href="#payments" data-toggle="tab">Payments info</a></li>
             <li><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
             <li><a href="#categories" data-toggle="tab">Categories info</a></li>
-        </ul>                                                      
+        </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="payments">
                 <table class="table table-bordered table-striped marketplace-table">
@@ -30,8 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% _.each(p.Data, function(dataRow, i){
-                        %>
+                        <% _.each(p.Data, function(dataRow, i){ %>
                         <tr>
                             <td><%-dataRow.Type%></td>
                             <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M1)  : dataRow.M1 || '-'%></td>

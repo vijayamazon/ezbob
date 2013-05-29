@@ -9,5 +9,4 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public PayPalAccountGeneralPaymentsInfoModel Payments { get; set; }
         public PayPalAccountDetailPaymentsInfoModel DetailPayments { get; set; }
     }
-
 }

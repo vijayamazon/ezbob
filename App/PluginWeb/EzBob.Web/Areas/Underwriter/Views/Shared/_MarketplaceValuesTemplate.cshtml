@@ -192,18 +192,18 @@
                 </tr>
             </thead>
             <tbody>
-                <% _.each(accounts, function(pa, i){%>
-                <tr data-id="<%- pa.Id %>">
-                    <td><div class="source_labels_on <%- pa.Name.replace(' ', '').toLowerCase() %>"></div></td>
-                    <td><a href="<%- pa.SellerInfoStoreURL %>" target="_blank"><%- pa.Type %></a></td>
-                    <td><%- pa.age %></td>
-                    <td><%- pa.PaymentAccountBasic.TransactionsNumber %></td>
-                    <td><%- EzBob.formatPounds(pa.PaymentAccountBasic.TotalNetInPayments) %></td>
-                    <td><%- EzBob.formatPounds(pa.PaymentAccountBasic.TotalNetOutPayments) %></td>
-                    <td><%- pa.UpdatingStatus %></td>
+                <% _.each(accounts, function(m, i){%>
+                <tr data-id="<%- m.Id %>">
+                    <td><div class="source_labels_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div></td>
+                    <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+                    <td><%- m.age %></td>
+                    <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
+                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
+                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetOutPayments) %></td>
+                    <td><%- m.UpdatingStatus %></td>
                     <td>
-                        <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- pa.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
-                        <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- pa.Id %>" ><i class="icon-tag"></i></a>
+                        <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+                        <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
                     </td>
                 </tr>
                 <%}) %>
