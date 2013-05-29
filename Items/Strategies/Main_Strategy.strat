@@ -7802,6 +7802,18 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>App_DirGenderScalar</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>AssignmentB38325791</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -9846,6 +9858,18 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode39199023</OwnerName>
+      <Name>App_DirGenderScalar</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode39199023</OwnerName>
       <Name>App_DirLine1</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -9945,6 +9969,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <Name>App_DirDateOfBirth</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode39199023</OwnerName>
+      <Name>App_DirGender</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -16533,7 +16569,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>760</X>
+          <X>780</X>
           <Y>2100</Y>
         </PointF>
       </IntermediatePoints>
@@ -18202,66 +18238,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>App_DirLine6</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
       <TargetVariableName>App_Line6</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_DirNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_DirSurnameScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirSurname</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_DirDateOfBirthScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirDateOfBirth</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_DirIdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirId</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line1</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine1</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line2</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine2</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line3</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine3</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line4</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine4</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line5</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine5</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Line6</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
-      <TargetVariableName>App_DirLine6</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -20243,6 +20219,78 @@ CompanyType = "SoleTrader"</InitialValue>
       <TargetVariableOwnerName>Comparison25377797</TargetVariableOwnerName>
       <TargetVariableName>Comparison25377797LowTotalThreeMonthTurnoverNum</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirGender</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirGenderScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirNameScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirSurnameScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirSurname</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirDateOfBirthScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirDateOfBirth</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirIdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line1</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine1</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line2</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine2</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line3</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine3</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line4</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine4</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line5</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine5</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Line6</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirLine6</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_DirGenderScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode39199023</TargetVariableOwnerName>
+      <TargetVariableName>App_DirGender</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -21540,7 +21588,20 @@ if App_BankAccountType == "Personal"  and  BWABusinessCheck == "1"  and App_Sort
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode61122718</OwnerName>
-      <Script></Script>
+      <Script>clr.AddReference("ExperianLib") 
+from EZBob.DatabaseLib.Model.Database.Repository import *
+from EZBob.DatabaseLib.Model.Database import MP_Alert, AlertsSeverity
+from StructureMap import *
+
+service = ObjectFactory.GetInstance[AlertRepository]()
+ 
+if ExperianAMLError  == None: 
+ service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLWarning, AlertsSeverity.Warning, StrategyStartedDateTime) 
+ service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLReject, AlertsSeverity.Reject, StrategyStartedDateTime)
+ service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLPassed, AlertsSeverity.Passed, StrategyStartedDateTime)
+else: 
+ service.AddAlert(CustomerId,"EXPERIAN AML",ExperianAMLError, AlertsSeverity.Error, StrategyStartedDateTime) 
+ </Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
@@ -21567,12 +21628,83 @@ if App_BankAccountType == "Personal"  and  BWABusinessCheck == "1"  and App_Sort
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode48993026</OwnerName>
-      <Script></Script>
+      <Script>clr.AddReference("ExperianLib")
+from System import * 
+from ExperianLib.IdIdentityHub import * 
+
+service = IdHubService()
+
+#call service AML A:  Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine2, string addressLine3, string town, string county, string postCode)
+results = service.Authenticate(App_FirstName, None, App_Surname, App_Gender, App_DateOfBirth, App_Line1Prev, App_Line2Prev, App_Line3Prev, App_Line4Prev, None, App_Line6Prev,userId)
+
+""" results contains:HasError, Error, AuthenticationIndexType, ReturnedHRP array of ReturnedHRPType
+ReturnedHRPType is:
+HighRiskPolRuleID
+HighRiskPolRuleText"""
+
+#rule example:
+if results.HasError == False:
+ ExperianAMLAuthentication = results.AuthenticationIndexType
+ ExperianAMLResult = "Passed"
+ for returnedHrp in results.ReturnedHRP:
+    if returnedHrp.HighRiskPolRuleID == "U001":
+       ExperianAMLWarning += "#2, Mortality||"+CP_Experian_Actions_AMLMortality + ";"
+       ExperianAMLResult = "Warning" 
+    elif returnedHrp.HighRiskPolRuleID == "U004":
+       ExperianAMLWarning += "#3, Accommodation address||"+CP_Experian_Actions_AMLAccommodationAddress	 + ";"
+       ExperianAMLResult = "Warning"
+    elif returnedHrp.HighRiskPolRuleID == "U007":
+       ExperianAMLReject += "#4, Developed Identity;"       
+    elif returnedHrp.HighRiskPolRuleID == "U013":
+       ExperianAMLWarning += "#5, Redirection||"+CP_Experian_Actions_AMLRedirection + ";"
+       ExperianAMLResult = "Warning"
+    elif returnedHrp.HighRiskPolRuleID == "U015" or returnedHrp.HighRiskPolRuleID == "U131" or returnedHrp.HighRiskPolRuleID == "U133" or returnedHrp.HighRiskPolRuleID == "U135":
+       ExperianAMLReject += "#6, Sanctions;"
+       ExperianAMLResult = "Warning"
+    elif returnedHrp.HighRiskPolRuleID == "U018":
+       ExperianAMLWarning += "#7, Inconsistencies||"+CP_Experian_Actions_AMLInconsistencies + ";"  
+       ExperianAMLResult = "Warning"
+    elif returnedHrp.HighRiskPolRuleID == "U0132" or returnedHrp.HighRiskPolRuleID == "U0134":
+       ExperianAMLWarning += "#8, PEP||"+CP_Experian_Actions_AMLPEP+ ";"    
+       ExperianAMLResult = "Warning"
+    elif returnedHrp.HighRiskPolRuleID == "U007":
+       ExperianAMLReject += "#4, Developed Identity;"
+       ExperianAMLResult = "Rejected"
+       
+       
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U001":
+       ExperianAMLPassed += "#2, NO Mortality;"
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U004":
+       ExperianAMLPassed += "#3, NO Accommodation address;"
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U007":
+       ExperianAMLPassed += "#4, NO Developed Identity;"       
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U013":
+       ExperianAMLPassed += "#5, NO Redirection;"
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U015" or returnedHrp.HighRiskPolRuleID == "U131" or returnedHrp.HighRiskPolRuleID == "U133" or returnedHrp.HighRiskPolRuleID == "U135":
+       ExperianAMLPassed += "#6, NO Sanctions;"
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U018":
+       ExperianAMLPassed += "#7, NO Inconsistencies;"  
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U0132" or returnedHrp.HighRiskPolRuleID == "U0134":
+       ExperianAMLPassed += "#8, NO PEP;"    
+    elif returnedHrp.HighRiskPolRuleID &lt;&gt; "U007":
+       ExperianAMLPassed += "#4, NO Developed Identity;"       
+else:
+  ExperianAMLError = results.Error</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
       <OwnerName>ScriptNode22579256</OwnerName>
-      <Script></Script>
+      <Script>clr.AddReference("ExperianLib") 
+from EZBob.DatabaseLib.Model.Database.Repository import *
+from EZBob.DatabaseLib.Model.Database import MP_Alert, AlertsSeverity
+from StructureMap import *
+
+service = ObjectFactory.GetInstance[AlertRepository]()
+if ExperianBWAError  == None:
+ service.AddAlert(CustomerId, "EXPERIAN BWA",ExperianBWAWarning, AlertsSeverity.Warning, StrategyStartedDateTime)
+ service.AddAlert(CustomerId, "EXPERIAN BWA",ExperianBWAPassed, AlertsSeverity.Passed, StrategyStartedDateTime)
+else:
+ service.AddAlert(CustomerId,"EXPERIAN BWA",ExperianBWAError, AlertsSeverity.Error, StrategyStartedDateTime)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
