@@ -65,8 +65,18 @@ namespace ZohoCRM
             }
         }
 
+        private bool IsLeadConverted(Customer customer)
+        {
+            return _crm.GetRecordById<ZohoContact>(customer.ZohoId) != null;
+        }
+
         public virtual void ConvertLead(Customer customer)
         {
+            if (IsLeadConverted(customer))
+            {
+                log.WarnFormat("Lead {0} already converted. ZohoId #{1}",customer.Name, customer.ZohoId);
+                return;
+            }
             try
             {
                 log.DebugFormat("Converting lead {0}", customer.Name);
@@ -453,13 +463,13 @@ namespace ZohoCRM
                 if (string.IsNullOrEmpty(customer.ZohoId)) return;
                 foreach (var loan in customer.Loans)
                 {
+                    CheckZohoId(loan);
                     if (string.IsNullOrEmpty(loan.ZohoId))
                     {
                         CreateLoan(customer, loan);
                     }
                     else
                     {
-                        CheckZohoId(loan);
                         UpdateEntity<ZohoSalesOrder>(p => UpdateLoanFields(p, loan), loan.ZohoId);
                         UpdateLoanAgreements(loan);
                     }

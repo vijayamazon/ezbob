@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
+﻿using ZohoCRM;
+
+namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
 	using System.Collections.Generic;
@@ -7,7 +9,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using Underwriter.Models;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -30,9 +31,9 @@
 		private readonly Customer _customer;
 		private readonly YodleeMpUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
-		private readonly YodleeConnector _validator = new YodleeConnector();
-		private readonly ISession _session;
+	    private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
+        private readonly IZohoFacade _crm;
 
 		public YodleeMarketPlacesController(
 			IEzbobWorkplaceContext context,
@@ -40,7 +41,7 @@
 			IRepository<MP_MarketplaceType> mpTypes,
 			YodleeMpUniqChecker mpChecker,
 			IAppCreator appCreator,
-			ISession session)
+			ISession session, IZohoFacade crm)
 		{
 			_context = context;
 			_helper = helper;
@@ -49,6 +50,7 @@
 			_mpChecker = mpChecker;
 			_appCreator = appCreator;
 			_session = session;
+		    _crm = crm;
 		}
 
 		[Transactional]
@@ -131,6 +133,7 @@
 				var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace,
 				                                                          securityData, customer);
 
+                _crm.ConvertLead(customer);
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
 				return View(YodleeAccountModel.ToModel(marketPlace, new YodleeAccountsRepository(_session)));
 			}

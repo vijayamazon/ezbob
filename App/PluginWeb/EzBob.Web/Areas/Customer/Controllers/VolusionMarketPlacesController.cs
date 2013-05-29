@@ -6,7 +6,6 @@ using ApplicationMng.Repository;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
@@ -14,8 +13,8 @@ using Scorto.Web;
 using Integration.Volusion;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
+using ZohoCRM;
 using log4net;
-using EzBob.CommonLib.Security;
 using EzBob.Web.ApplicationCreator;
 
 namespace EzBob.Web.Areas.Customer.Controllers {
@@ -29,7 +28,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		public string url { get; set; }
 
 		public static VolusionAccountModel ToModel(MP_CustomerMarketPlace account) {
-			VolusionSecurityInfo oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
+			var oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
 
 			return new VolusionAccountModel {
 				id = account.Id,
@@ -41,7 +40,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		} // ToModel
 
 		public static VolusionAccountModel ToModel(IDatabaseCustomerMarketPlace account) {
-			VolusionSecurityInfo oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
+			var oSecInfo = SerializeDataHelper.DeserializeType<VolusionSecurityInfo>(account.SecurityData);
 
 			return new VolusionAccountModel {
 				id = account.Id,
@@ -54,36 +53,31 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 	} // class VolusionAccountModel
 
 	public class VolusionMarketPlacesController : Controller {
-		private static readonly ILog _log = LogManager.GetLogger(typeof(VolusionMarketPlacesController));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(VolusionMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly ICustomerRepository _customers;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
-		private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
-		private EZBob.DatabaseLib.Model.Database.Customer _customer;
+	    private readonly IRepository<MP_MarketplaceType> _mpTypes;
+	    private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly VolusionConnector _validator = new VolusionConnector();
 		private readonly DatabaseDataHelper _helper;
         private readonly ISession _session;
+        private readonly IZohoFacade _crm;
 
 		public VolusionMarketPlacesController(
 			IEzbobWorkplaceContext context,
-			DatabaseDataHelper helper, 
-			ICustomerRepository customers,
+			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
-			IRepository<MP_CustomerMarketPlace> marketplaces,
 			VolusionMPUniqChecker mpChecker,
             ISession session,
-			IAppCreator appCreator
-		) {
+			IAppCreator appCreator, IZohoFacade crm) {
 			_context = context;
 			_helper = helper;
-			_customers = customers;
-			_mpTypes = mpTypes;
-			_marketplaces = marketplaces;
-			_customer = context.Customer;
+		    _mpTypes = mpTypes;
+		    _customer = context.Customer;
 			_mpChecker = mpChecker;
 			_appCreator = appCreator;
+		    _crm = crm;
 		    _session = session;
 		} // constructor
 
@@ -105,14 +99,14 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		[HttpPost]
 		public JsonNetResult Accounts(VolusionAccountModel model) {
 			try {
-				_validator.Validate(_log, _context.Customer, model.displayName, model.url, model.login, model.password);
+				_validator.Validate(Log, _context.Customer, model.displayName, model.url, model.login, model.password);
 			}
 			catch (ChannelGrabberApiException cge) {
-				_log.Error("Failed to validate Volusion account, continuing with registration.");
-				_log.Error(cge);
+				Log.Error("Failed to validate Volusion account, continuing with registration.");
+				Log.Error(cge);
 			}
 			catch (Exception e) {
-				_log.Error(e);
+				Log.Error(e);
 				return this.JsonNet(new { error = e.Message });
 			} // try
 
@@ -144,7 +138,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, volusion, oSecInfo, customer);
                 _session.Flush();
 				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id); 
-
+                _crm.ConvertLead(customer);
 				return this.JsonNet(VolusionAccountModel.ToModel(mp));
 			}
 			catch (MarketPlaceAddedByThisCustomerException e) {
@@ -154,7 +148,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
 			}
 			catch (Exception e) {
-				_log.Error(e);
+				Log.Error(e);
 				return this.JsonNet(new { error = e.Message });
 			} // try
 		} // Accounts

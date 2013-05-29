@@ -1,11 +1,12 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
+﻿using ZohoCRM;
+
+namespace EzBob.Web.Areas.Customer.Controllers
 {
     using System;
     using System.Linq;
     using System.Web.Mvc;
     using ApplicationMng.Repository;
     using EZBob.DatabaseLib.Model.Database;
-    using EZBob.DatabaseLib.Model.Database.Repository;
     using Infrastructure;
     using Scorto.Web;
     using PayPoint;
@@ -18,43 +19,39 @@
 
     public class PayPointMarketPlacesController: Controller
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(PayPointMarketPlacesController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
-        private readonly ICustomerRepository _customers;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
-        private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
-        private Customer _customer;
+        private readonly Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
-        private readonly int payPointMarketTypeId;
+        private readonly int _payPointMarketTypeId;
+        private readonly IZohoFacade _crm;
 
         public PayPointMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper, 
-            ICustomerRepository customers, 
             IRepository<MP_MarketplaceType> mpTypes, 
-            IRepository<MP_CustomerMarketPlace> marketplaces, 
             IMPUniqChecker mpChecker,
-            IAppCreator appCreator)
+            IAppCreator appCreator, IZohoFacade crm)
         {
             _context = context;
             _helper = helper;
-            _customers = customers;
             _mpTypes = mpTypes;
-            _marketplaces = marketplaces;
             _customer = context.Customer;
             _mpChecker = mpChecker;
             _appCreator = appCreator;
+            _crm = crm;
 
             var payPointServiceInfo = new PayPointServiceInfo();
-            payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
+            _payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
         }
 
         [Transactional]
         public JsonNetResult Accounts()
         {
-            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == payPointMarketTypeId).Select(PayPointAccountModel.ToModel).ToList();
+            var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == _payPointMarketTypeId).Select(PayPointAccountModel.ToModel).ToList();
             return this.JsonNet(payPoints);
         }
 
@@ -67,7 +64,7 @@
             if (!PayPointConnector.Validate(model.mid, model.vpnPassword, model.remotePassword, out errorMsg))
             {
 				var errorObject = new { error = errorMsg };
-				_log.ErrorFormat("PayPoint validation failed: {0}", errorObject);
+				Log.ErrorFormat("PayPoint validation failed: {0}", errorObject);
                 return this.JsonNet(errorObject);
             }
             try
@@ -83,23 +80,23 @@
 				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
-
+                _crm.ConvertLead(customer);
                 _appCreator.CustomerMarketPlaceAdded(customer, payPoint.Id);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException e)
 			{
-				_log.Error(e);
+				Log.Error(e);
                 return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
             }
             catch (MarketPlaceIsAlreadyAddedException e)
 			{
-				_log.Error(e);
+				Log.Error(e);
                 return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
                 return this.JsonNet(new { error = e.Message });
             }
         }

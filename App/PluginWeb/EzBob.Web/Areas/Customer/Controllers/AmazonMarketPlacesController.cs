@@ -183,7 +183,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
                     customer.WizardStep = WizardStepType.Marketplace;
 
-                _crm.UpdateCustomer(customer);
+                _crm.ConvertLead(customer);
 
                 _customerRepository.SaveOrUpdate(customer);
 
