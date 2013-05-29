@@ -66,8 +66,8 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     serializeData: ->
         data = 
             customerId: @model.customerId
-            marketplaces: _.pluck @model.where(IsPaymentAccount: false), "attributes"
-            accounts: _.pluck @model.where(IsPaymentAccount: true), "attributes"
+            marketplaces: _.sortBy _.pluck(@model.where(IsPaymentAccount: false), "attributes"), "UWPriority"
+            accounts: _.sortBy _.pluck(@model.where(IsPaymentAccount: true), "attributes"), "UWPriority"
             hideAccounts: false
             hideMarketplaces: false
             summary:
