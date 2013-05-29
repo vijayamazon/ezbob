@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
 <environment id="${environmentId}">
-    <property name="ChannelGrabberServiceUrl" value="" />
+    <property name="ChannelGrabberServiceUrl" value="http://channel-grabber-url" />
     <property name="_VolusionShopName" value="" />
     <property name="_VolusionShopUrl" value="" />
     <property name="_VolusionShopLogin" value="" />
