@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
+using System.Text;
 using System.Threading.Tasks;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
@@ -161,6 +163,8 @@ namespace EzBob.PayPalServiceLib
 						var service = CreateService( reqInfo );
 						resp = service.TransactionSearch( ref cred, request );
 
+                        WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
+
 						requestsCounter.IncrementRequests( "TransactionSearch" );
 						//-----------------
 						if ( resp.Ack == AckCodeType.Failure )
@@ -238,6 +242,30 @@ namespace EzBob.PayPalServiceLib
 			       		              	}
 			       	};
 		}
+
+        public static string GetLogFor(object target)
+        {
+            var properties =
+                from property in target.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                select new
+                {
+                    Name = property.Name,
+                    Value = property.GetValue(target, null)
+                };
+
+            var builder = new StringBuilder();
+
+            foreach (var property in properties)
+            {
+                builder
+                    .Append(property.Name)
+                    .Append(" = ")
+                    .Append(property.Value)
+                    .AppendLine();
+            }
+
+            return builder.ToString();
+        }
 	}
 
 	internal class PayPalServiceResponceExceptionWrapper : ServiceResponceExceptionWrapperBase
