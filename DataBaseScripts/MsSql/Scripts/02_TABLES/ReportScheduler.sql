@@ -16,9 +16,12 @@ CREATE TABLE [dbo].[ReportScheduler](
 	[Header] [nvarchar](300) NULL,
 	[Fields] [nvarchar](300) NULL,
 	[ToEmail] [nvarchar](300) NULL,
+	[IsMonthToDate] [bit] NOT NULL,
  CONSTRAINT [PK_ReportScheduler] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[ReportScheduler] ADD  CONSTRAINT [DF_RptSchedule_MonthToDate]  DEFAULT ((0)) FOR [IsMonthToDate]
 GO

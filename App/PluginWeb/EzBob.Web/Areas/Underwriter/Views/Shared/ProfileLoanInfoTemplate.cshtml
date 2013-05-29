@@ -204,7 +204,7 @@
                 @EzHtml.RawCell("Discount plan:", "<%= m.DiscountPlan %>").Tooltip("<%= m.DiscountPlanPercents %>").Render()
             <%}%>
             
-            <%if (false && m.Editable) { // alexbo May 26 2013: Loan type cannot be changed for now %>
+            <%if(m.Editable){%>
             @RawCellWithButtonNear("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
             <%} else{%>
             @RawCell("Loan Type:", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")

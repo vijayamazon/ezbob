@@ -474,17 +474,26 @@ div.shop-connected {
 	.marketing_container {
 		text-align: center;
 		/*margin-top: 147px;*/
-		margin-bottom: 20px;
+		margin: 120px 0 20px 0;
 	}
 
     .marketing_container .marketing_message {
         padding: 5px;
         border: 1px #a2c966 solid;
-        background: #efffd7;
+        background: white;
         margin: 0 0 20px 0;
         font-size: 16px;
         color: #71a61f;
     }
+
+	.marketing_container .marketing_message li {
+		font-size: 12px !important;
+		text-align: left !important;
+		color: #333333;
+		list-style-type: none;
+		background: url(../img/ok16.png) no-repeat top left;
+		padding-left: 20px;
+	}
 
     .marketing_container .large {
         font-size: 40px;

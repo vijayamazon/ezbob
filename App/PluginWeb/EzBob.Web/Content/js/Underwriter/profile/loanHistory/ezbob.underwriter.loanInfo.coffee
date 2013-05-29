@@ -154,7 +154,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     isLoanTypeSelectionAllowed: ->
-        console.log @model
         d = new EzBob.Dialogs.ComboEdit
             model: @model
             propertyName: "IsLoanTypeSelectionAllowed"
@@ -170,6 +169,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     LoanTypeSelectionAllowedChanged: =>
         if @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
+            if @model.get('LoanTypeId') != 1
+                @model.set 'LoanTypeId', 1
         else
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled')
 

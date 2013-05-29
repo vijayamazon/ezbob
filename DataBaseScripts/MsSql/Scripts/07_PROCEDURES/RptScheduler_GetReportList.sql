@@ -8,7 +8,17 @@ GO
 CREATE PROCEDURE RptScheduler_GetReportList
 AS
 BEGIN
-SELECT Type, Title, StoredProcedure, IsDaily, IsWeekly, IsMonthly, Header, Fields, ToEmail
-FROM ReportScheduler
+	SELECT
+		Type,
+		Title,
+		StoredProcedure,
+		IsDaily,
+		IsWeekly,
+		IsMonthly,
+		IsMonthToDate,
+		Header,
+		Fields,
+		ToEmail
+	FROM ReportScheduler
 END
 GO
