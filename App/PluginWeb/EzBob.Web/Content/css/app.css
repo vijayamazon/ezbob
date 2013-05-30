@@ -334,6 +334,11 @@ div.shop-connected {
     margin-top: -1px;
 }
 
+.source_labels_on.new-ribbon {
+    display: none;
+    visibility: hidden;
+}
+
 .source_labels, .source_labels_on {
     background: url(images/source_sprite.png) no-repeat 0 0;
     height: 40px;
@@ -344,8 +349,8 @@ div.shop-connected {
 }
 
     .source_labels.Yodlee, .source_labels.yodlee {
-        background-position: -1247px -1px;
-		width: 119px;
+        background-position: -1134px -1px;
+		width: 116px;
 		/*margin-right: auto;
 		margin-left: auto;
 		margin-top: 3px;
@@ -353,8 +358,8 @@ div.shop-connected {
     }
 
     .source_labels_on.Yodlee, .source_labels_on.yodlee {
-		background-position: -1247px -41px;
-		width: 119px;
+		background-position: -1134px -41px;
+		width: 116px;
 		/*margin-right: auto;
 		margin-left: auto;
 		margin-top: 3px;
