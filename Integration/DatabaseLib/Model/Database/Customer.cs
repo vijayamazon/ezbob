@@ -226,7 +226,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 
         public virtual string PayPointTransactionId { get; set; }
-        
 
         private Iesi.Collections.Generic.ISet<PayPointCard> _payPointCards = new HashedSet<PayPointCard>();
         public virtual Iesi.Collections.Generic.ISet<PayPointCard> PayPointCards
@@ -325,15 +324,10 @@ namespace EZBob.DatabaseLib.Model.Database {
         /// amount if it was payed
         /// </summary>
         public virtual decimal SetupFee { get; set; }
-
         public virtual string ReferenceSource { get; set; }
-
         public virtual EmailConfirmationRequestState EmailState { get; set; }
-
         public virtual bool IsTest { get; set; }
-
         public virtual CardInfo CurrentCard { get; set; }
-
 		public virtual string ABTesting { get; set; }
 
         /// <summary>
