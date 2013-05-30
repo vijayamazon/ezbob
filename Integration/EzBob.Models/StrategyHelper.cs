@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib.TimePeriodLogic;
+using NHibernate;
 using StructureMap;
 
 namespace EzBob.Models
@@ -11,9 +13,11 @@ namespace EzBob.Models
     {
         private readonly CustomerRepository _customers;
         private readonly DecisionHistoryRepository _decisionHistory;
+        private readonly ISession _session;
 
         public StrategyHelper()
         {
+            _session = ObjectFactory.GetInstance<ISession>();
             _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
         }
@@ -54,7 +58,12 @@ namespace EzBob.Models
 
         public void AddRejectIntoDecisionHistory(int customerId, string comment)
         {
-            _decisionHistory.LogAction(DecisionActions.Reject, comment, null, _customers.Get(customerId));
+            var customer = _customers.Get(customerId);
+            var cr = customer.LastCashRequest;
+            cr.UnderwriterDecision = CreditResultStatus.Rejected;
+            cr.UnderwriterDecisionDate = DateTime.UtcNow;
+            cr.UnderwriterComment = comment;
+            _decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
         }
 
         public int MarketplaceSeniority(int customerId)
