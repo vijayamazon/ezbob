@@ -414,7 +414,7 @@ Array.prototype.clean = function (deleteValue) {
 };
 
 Convert.toBool = function(val) {
-    return val.toString().toLowerCase() === "true";
+    return String(val).toLowerCase() === "true";
 };
 
 String.prototype.toBool = function () {
