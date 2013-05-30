@@ -4,21 +4,23 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
-using Scorto.NHibernate.Repository;
 using YodleeLib.connector;
 
 namespace EzBob.Models
 {
-    class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
+	using NHibernate;
+	using Scorto.NHibernate.Repository;
+
+	class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
     {
         private readonly MP_YodleeOrderRepository _yodleeOrderRepository;
-        private readonly ICurrencyConvertor _currencyConvertor;
+        private readonly ISession _session;
 
-        public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, CustomerMarketPlaceRepository customerMarketplaces, ICurrencyConvertor currencyConvertor)
+        public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, CustomerMarketPlaceRepository customerMarketplaces, ISession session)
             : base(customerMarketplaces)
         {
             _yodleeOrderRepository = yodleeOrderRepository;
-            _currencyConvertor = currencyConvertor;
+            _session = session;
         }
 
         public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
@@ -43,7 +45,7 @@ namespace EzBob.Models
 
             var model = new YodleeModel();
             var banks = new List<YodleeBankModel>();
-
+            var _currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
             foreach (var bank in yodleeData)
             {
                 var yodleeBankModel = new YodleeBankModel

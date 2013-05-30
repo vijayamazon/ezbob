@@ -54,7 +54,6 @@ class EzBob.VolusionAccountInfoView extends Backbone.Marionette.ItemView
             BlockUi('off')
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
-            console.log textStatus
             EzBob.App.trigger 'error', 'Volusion Account Saving Error'
 
         xhr.done (res) =>

@@ -42,7 +42,6 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
             BlockUi('off')
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
-            console.log textStatus
             EzBob.App.trigger 'error', 'PayPoint Account Saving Error'
 
         xhr.done (res) =>
