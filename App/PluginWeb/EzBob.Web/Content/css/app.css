@@ -325,6 +325,15 @@ div.shop-connected {
     display: inline-block;
 }
 
+.source_labels.new-ribbon {
+    background: url(images/new_ribbon.png) no-repeat 0 0;
+    height: 25px;
+    width: 25px;
+    display: block;
+    float: left;
+    margin-top: -1px;
+}
+
 .source_labels, .source_labels_on {
     background: url(images/source_sprite.png) no-repeat 0 0;
     height: 40px;
@@ -335,21 +344,21 @@ div.shop-connected {
 }
 
     .source_labels.Yodlee, .source_labels.yodlee {
-		background: url(images/yodlee.png) no-repeat 0 0;
-		width: 167px;
-		margin-right: auto;
+        background-position: -1247px -1px;
+		width: 119px;
+		/*margin-right: auto;
 		margin-left: auto;
 		margin-top: 3px;
-		margin-bottom: 2px;
+		margin-bottom: 2px;*/
     }
 
     .source_labels_on.Yodlee, .source_labels_on.yodlee {
-		background: url(images/yodlee.png) no-repeat 0 0;
-		width: 167px;
-		margin-right: auto;
+		background-position: -1247px -41px;
+		width: 119px;
+		/*margin-right: auto;
 		margin-left: auto;
 		margin-top: 3px;
-		margin-bottom: 2px;
+		margin-bottom: 2px;*/
     }
 
     .source_labels.eBay, .source_labels.ebay {
@@ -404,12 +413,12 @@ div.shop-connected {
 
     .source_labels.PayPoint, .source_labels.paypoint {
         background-position: -967px -1px;
-        width: 167px;
+        width: 163px;
     }
 
     .source_labels_on.PayPoint, .source_labels_on.paypoint {
         background-position: -967px -41px;
-        width: 167px;
+        width: 163px;
     }
 
     .source_labels.Play, .source_labels.play {

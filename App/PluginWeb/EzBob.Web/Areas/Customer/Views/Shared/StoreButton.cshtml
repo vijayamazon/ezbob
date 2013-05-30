@@ -13,6 +13,11 @@
 										case 'paypal':
 											%><a href="#<%- shopClass %>_help" class="source_help"><%
 											break;
+                                        case 'Yodlee':
+                                        case 'Play':%>
+                                            <a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'>
+                                                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%> new-ribbon"></div>
+                                            <%break;
 										default:
 											%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
 											break;
