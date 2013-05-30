@@ -218,8 +218,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="cobrandId" value="6910005960" />
 		<property name="applicationId" value="58EEA306454D869DFF721D0D00B82D00" />
 		<property name="username" value="private-ezbob" />
-		<property name="password" value="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAACYUcbqgZP06Nusmb24bvFgAAAAACAAAAAAAQZgAAAAEAACAAAABZ7EnC9mAJXNVJ82SVYtV0hRblF8c3iEYkQgAEdqxftQAAAAAOgAAAAAIAACAAAAA3Ak5qJtzdF6QgIlNinCzDrwNpUFuztNxdp8WJFA8bdzAAAAAkgLjy0sI6Zv0rE1Tp47QB0KoE
-T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInFr+hULl6KaLG5fx43SpuhTsRQDf3FQ+CsyvGTzmU7zpDBVZVLFg==" />
+		<property name="password" value="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAMGkgsna5WUe606bnAU3QbQAAAAACAAAAAAAQZgAAAAEAACAAAACSmOTtGceaKDlonAwd61ps8LsbhxJE0z8oZx78kg/yewAAAAAOgAAAAAIAACAAAACCtvFBVxvbNwszRQnneFCe3Hd1Ka3IMq25YDS1IYhZ2zAAAAD1aALT0ih6lsOMmGV3on3hqmy3PP/26DrzuSw/V0vjM82FM4R3U3ra78Yv65upSoZAAAAAZSjY6PH1l7ACiTSyB4mfb4SvRRQAZbdR8jKWLpvUc/PYsH4LsEjhlsu+/2R6cJ+Azrdx3m2tkxsbMQaA4pahxQ==" />
 		<property name="soapServer" value="https://sdkint11.yodlee.com/yodsoap/services" />
 		<property name="tncVersion" value="2" />
 		
