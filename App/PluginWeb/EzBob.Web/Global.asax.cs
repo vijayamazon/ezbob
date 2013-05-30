@@ -15,8 +15,6 @@ using EzBob.Web.Areas.Underwriter.Models.Reports;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Scorto.Web;
 using Scorto.Web.Services;
 using SquishIt.Less;
@@ -86,13 +84,26 @@ namespace EzBob.Web
             Scorto.NHibernate.NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
             InitAspose();
-            Bundle.RegisterScriptPreprocessor(new CoffeeScriptPreprocessor());
-            Bundle.RegisterScriptPreprocessor(new LessPreprocessor());
+            ConfigureSquishIt();
 
             var bs = ObjectFactory.GetInstance<MarketPlacesBootstrap>();
             bs.InitValueTypes();
             bs.InitDatabaseMarketPlaceTypes();
 
+        }
+
+        private static void ConfigureSquishIt()
+        {
+            if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<CoffeeScriptPreprocessor>());
+                Bundle.RegisterScriptPreprocessor(new CachingPreprocessor<LessPreprocessor>());
+            }
+            else
+            {
+                Bundle.RegisterScriptPreprocessor(new CoffeeScriptPreprocessor());
+                Bundle.RegisterScriptPreprocessor(new LessPreprocessor());
+            }
         }
 
         static void InitAspose()

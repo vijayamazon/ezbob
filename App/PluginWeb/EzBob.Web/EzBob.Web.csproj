@@ -366,6 +366,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\CachingPreprocessor.cs" />
     <Compile Include="Infrastructure\DecimalModelBinder.cs" />
     <Compile Include="Infrastructure\Filters\CaptchaValidationFilter.cs" />
     <Compile Include="Infrastructure\csrf\AntiForgeryHtmlHelper.cs" />
