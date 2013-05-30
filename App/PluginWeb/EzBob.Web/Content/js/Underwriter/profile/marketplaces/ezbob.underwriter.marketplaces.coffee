@@ -44,6 +44,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     events:
         "click .reCheck-amazon": "reCheckmarketplaces"
         "click .reCheck-ebay": "reCheckmarketplaces"
+        "click .reCheck-paypal" : "reCheckPaypal"
         "click tbody tr": "rowClick"
         "click .mp-error-description" : "showMPError"
         "click .renew-token": "renewTokenClicked"
@@ -113,6 +114,21 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 console.error data.responseText
         EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
         false
+
+    reCheckPaypal: (e) ->
+        el = $(e.currentTarget)
+        umi = el.attr("umi")
+        EzBob.ShowMessage "", "Are you sure?", (=> @doReCheck(umi, el)), "Yes", null, "No"
+        false
+
+    doReCheck: (umi, el) ->
+        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/ReCheckPaypal", { customerId: @model.customerId, umi: umi}
+        xhr.done(=>
+            EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck has been started. ", null, "OK"
+            @.trigger "rechecked", {umi: umi, el: el}
+        )
+        xhr.fail (data) ->
+            console.error data.responseText
 
     renewTokenClicked: (e)->
         umi = $(e.currentTarget).data "umi"
