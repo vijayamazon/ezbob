@@ -3,6 +3,7 @@
     using System;
     using EzBob.CommonLib;
     using EzBob.CommonLib.ReceivedDataListLogic;
+    using EzBob.CommonLib.Security;
     using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
     using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
     using EZBob.DatabaseLib;
@@ -34,7 +35,7 @@
 		        return; // TODO: remove once Yodlee refresh is supported.
 
             //retreive data from Yodlee api
-            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, securityInfo.Password, securityInfo.ItemId);
+            var ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encryptor.Decrypt(securityInfo.Password), securityInfo.ItemId);
 
 	        var elapsedTimeInfo = new ElapsedTimeInfo();
 
