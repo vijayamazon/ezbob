@@ -453,6 +453,7 @@
     <Content Include="Content\css\images\lock_64.png" />
     <Content Include="Content\css\images\nav_bg.png" />
     <Content Include="Content\css\images\nav_bg_on.png" />
+    <Content Include="Content\css\images\new_ribbon.png" />
     <Content Include="Content\css\images\ok.png" />
     <Content Include="Content\css\images\pdf.png" />
     <Content Include="Content\css\images\play-icon-hover.png" />
