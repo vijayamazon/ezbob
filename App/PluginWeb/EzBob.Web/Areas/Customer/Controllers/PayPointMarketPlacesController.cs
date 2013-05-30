@@ -87,7 +87,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             catch (MarketPlaceAddedByThisCustomerException e)
 			{
 				Log.Error(e);
-                return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
+				return this.JsonNet(new { error = DbStrings.AccountAddedByYou });
             }
             catch (MarketPlaceIsAlreadyAddedException e)
 			{

@@ -5,6 +5,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 	using System;
 	using System.Collections.Generic;
 	using System.Text;
+	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -61,7 +62,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 			foreach (var marketplace in _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId))
 			{
-				yodlees.Add(YodleeAccountModel.ToModel(marketplace, new YodleeAccountsRepository(_session)));
+				yodlees.Add(YodleeAccountModel.ToModel(marketplace, new YodleeBanksRepository(_session)));
 			}
 			return this.JsonNet(yodlees);
 		}
@@ -94,54 +95,64 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		[Transactional]
 		public ViewResult YodleeCallback()
 		{
+			var ym = new YodleeMain();
+			var customer = _context.Customer;
+			var repository = new YodleeAccountsRepository(_session);
+			var yodleeAccount = repository.Search(customer.Id);
+
+			// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
+			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
+			string displayname;
+			long csId;
+			long itemId = ym.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
+
+			if (itemId == -1)
+			{
+				return View(new { error = "Failure linking account" });
+			}
+
+			var oEsi = new YodleeServiceInfo();
+			int marketPlaceId = _mpTypes
+				.GetAll()
+				.First(a => a.InternalId == oEsi.InternalId)
+				.Id;
+			
+			var securityData = new YodleeSecurityInfo
+				{
+					ItemId = itemId,
+					Name = yodleeAccount.Username,
+					Password = yodleeAccount.Password,
+					MarketplaceId = marketPlaceId,
+					CsId = csId
+				};
+
+			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
+
+			if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+				customer.WizardStep = WizardStepType.Marketplace;
+			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace,
+				                                                        securityData, customer);
+
+            _crm.ConvertLead(customer);
+			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
+			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
+		}
+
+		[Transactional]
+		public JsonNetResult CheckYodleeUniqueness(int csId)
+		{
 			try
 			{
-				var ym = new YodleeMain();
-				var customer = _context.Customer;
-				var repository = new YodleeAccountsRepository(_session);
-				var yodleeAccount = repository.Search(customer.Id);
-
-				// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
-				string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
-				long itemId = ym.GetItemId(yodleeAccount.Username, decryptedPassword);
-
-				if (itemId == -1)
-				{
-					return View(new { error = "Failure linking account" });
-				}
-
 				var oEsi = new YodleeServiceInfo();
-				int marketPlaceId = _mpTypes
-					.GetAll()
-					.First(a => a.InternalId == oEsi.InternalId)
-					.Id;
-
-				_mpChecker.Check(oEsi.InternalId, customer, itemId, _session);
-
-				var securityData = new YodleeSecurityInfo
-					{
-						ItemId = itemId,
-						Name = yodleeAccount.Username,
-						Password = yodleeAccount.Password,
-						MarketplaceId = marketPlaceId
-					};
-
-				var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
-
-				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
-					customer.WizardStep = WizardStepType.Marketplace;
-				var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(yodleeAccount.Username, yodleeDatabaseMarketPlace,
-				                                                          securityData, customer);
-
-                _crm.ConvertLead(customer);
-				_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
-				return View(YodleeAccountModel.ToModel(marketPlace, new YodleeAccountsRepository(_session)));
+				_mpChecker.Check(oEsi.InternalId, _customer, csId, _session);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e)
 			{
 				Log.Debug(e);
-				return View(new {error = DbStrings.StoreAddedByYou});
+				return this.JsonNet(new { error = DbStrings.AccountAddedByYou });
 			}
+
+			return this.JsonNet(new { success = 1 });
 		}
 
 		[Transactional]
@@ -154,19 +165,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			{
 				var banksRepository = new YodleeBanksRepository(_session);
 				YodleeBanks bank = banksRepository.Search(csId);
-				
+
 				// Create new account
 				yodleeAccount = new YodleeAccounts
 					{
 						CreationDate = DateTime.UtcNow,
 						Customer = _customer,
 						Username = _customer.Name,
-						Password = Encryptor.Encrypt(GenerateRandomPassword()),
+						Password = Encryptor.Encrypt(yodleeMain.GenerateRandomPassword()),
 						Bank = bank
 					};
 
 				var accountsRepository = new YodleeAccountsRepository(_session);
-				int accountId = (int)accountsRepository.Save(yodleeAccount);
+				int accountId = (int) accountsRepository.Save(yodleeAccount);
 
 				Log.DebugFormat("Created yodlee account: {0}", accountId);
 
@@ -178,36 +189,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			
 			return Redirect(finalUrl);
 		}
-
-		private string GenerateRandomPassword()
-		{
-			var rnd = new Random();
-			var sb = new StringBuilder();
-			sb.Append(GenerateLowercaseLetter(rnd));
-			sb.Append(GenerateLowercaseLetter(rnd));
-			sb.Append(GenerateUppercaseLetter(rnd));
-			sb.Append(GenerateLowercaseLetter(rnd));
-			sb.Append(GenerateUppercaseLetter(rnd));
-			sb.Append(GenerateDigit(rnd));
-			sb.Append(GenerateDigit(rnd));
-			sb.Append(GenerateDigit(rnd));
-			return sb.ToString();
-		}
-
-		private static int GenerateDigit(Random rnd)
-		{
-			return rnd.Next(10);
-		}
-
-		private static char GenerateLowercaseLetter(Random rnd)
-		{
-			return (char)(rnd.Next(26) + 65);
-		}
-
-		private static char GenerateUppercaseLetter(Random rnd)
-		{
-			return (char)(rnd.Next(26) + 97);
-		}
 	}
 
 	public class YodleeAccountModel
@@ -215,32 +196,27 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		public int bankId { get; set; }
 		public string displayName { get; set; }
 
-		public static YodleeAccountModel ToModel(YodleeAccounts account)
+		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository)
 		{
+			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(marketplace.SecurityData);
+
+			var yodleeBank = yodleeBanksRepository.Search(securityInfo.CsId);
 			return new YodleeAccountModel
 			{
-				bankId = account.Id,
-				displayName = account.Bank.Name
+				bankId = yodleeBank.Id,
+				displayName = yodleeBank.Name
 			};
 		}
 
-		public static YodleeAccountModel ToModel(IDatabaseCustomerMarketPlace marketplace, YodleeAccountsRepository yodleeAccountsRepository)
+		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeBanksRepository yodleeBanksRepository)
 		{
-			var yodleeAccount = yodleeAccountsRepository.Search(marketplace.Customer.Id);
-			return new YodleeAccountModel
-			{
-				bankId = yodleeAccount.Id,
-				displayName = yodleeAccount.Bank.Name
-			};
-		}
+			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(marketplace.SecurityData);
 
-		public static YodleeAccountModel ToModel(MP_CustomerMarketPlace marketplace, YodleeAccountsRepository yodleeAccountsRepository)
-		{
-			var yodleeAccount = yodleeAccountsRepository.Search(marketplace.Customer.Id);
+			var yodleeBank = yodleeBanksRepository.Search(securityInfo.CsId);
 			return new YodleeAccountModel
 			{
-				bankId = yodleeAccount.Id,
-				displayName = yodleeAccount.Bank.Name
+				bankId = yodleeBank.Id,
+				displayName = yodleeBank.Name
 			};
 		}
 	}
@@ -254,7 +230,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 	public class YodleeSubBankModel
 	{
-		public int csId { get; set; }
+		public long csId { get; set; }
 		public string displayName { get; set; }
 	}
 }

@@ -37,9 +37,9 @@
 			throw new NotImplementedException("YodleeMPUniqChecker does not support Check(market place, customer, login, url");
 		} // Check
 
-		public void Check(Guid marketplaceType, Customer customer, long itemId, ISession _session)
+		public void Check(Guid marketplaceType, Customer customer, long csId, ISession _session)
 		{
-			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, string.Format("{0}", itemId)))
+			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, string.Format("{0}", csId)))
 			{
 				return;
 			}
@@ -51,7 +51,7 @@
 				if (mpCustomerMarketPlace.Customer.Id == customer.Id && mpCustomerMarketPlace.Marketplace.InternalId == marketplaceType)
 				{
 					var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mpCustomerMarketPlace.SecurityData);
-					if (securityInfo.ItemId == itemId)
+					if (securityInfo.CsId == csId)
 					{
 						throw new MarketPlaceAddedByThisCustomerException();
 					}

@@ -71,6 +71,7 @@
     <Compile Include="connector\YodleeRetriveDataHelper.cs" />
     <Compile Include="connector\YodleeSecurityInfo.cs" />
     <Compile Include="connector\YodleeServiceInfo.cs" />
+    <Compile Include="YodleePasswrodGenerator.cs" />
     <Compile Include="datatypes\AccountType.cs" />
     <Compile Include="AddItem.cs" />
     <Compile Include="ApplicationSuper.cs" />

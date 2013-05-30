@@ -32,7 +32,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             if (result.error)
                 EzBob.App.trigger('error', result.error);
             else
-                EzBob.App.trigger('info', 'Congratulations. Yodlee account was added successfully.');
+                EzBob.App.trigger('info', 'Congratulations. Bank account was added successfully.');
             
             that.trigger('completed');
             that.trigger('ready');
@@ -64,9 +64,21 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find("." + bank + "Container").removeClass('hide')
         $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
        
-    continueClicked: ->
-        @attemptsLeft = 3
+    continueClicked: (e) ->  
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
+
+        e.preventDefault()
+        xhr = $.post "#{window.gRootPath}Customer/YodleeMarketPlaces/CheckYodleeUniqueness", {csId: @$el.find("option:selected").val()}
+        that = @
+        xhr.done (result) =>
+            if result.error
+                EzBob.App.trigger('error', result.error)
+                return false
+            else
+                that.attemptsLeft = 5                
+                win = window.open(that.$el.find('#yodleeContinueBtn').attr('href'), '_blank')
+                win.focus()
+                #document.location.href = that.$el.find('#yodleeContinueBtn').attr('href');
 
     parentBankSelected: (evt)->
         evt.preventDefault()
@@ -102,4 +114,7 @@ class EzBob.YodleeBankModel extends Backbone.Model
 class EzBob.YodleeBanks extends Backbone.Collection
     model: EzBob.YodleeBankModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
+    
+class EzBob.YodleeUniqunessModel extends Backbone.Model
+    urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/CheckYodleeUniqueness"
 
