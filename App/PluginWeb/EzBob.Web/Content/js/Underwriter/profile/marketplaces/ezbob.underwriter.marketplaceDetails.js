@@ -11,13 +11,12 @@ EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
     }
 });
 
-EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
+EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     initialize: function () {
         this.template = _.template($('#marketplace-values-template').html());
     },
     render: function () {
-        var that = this,
-            shop = this.model.get(this.options.currentId)
+        var shop = this.model.get(this.options.currentId);
 
         var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
         data[shop.get("IsPaymentAccount") ? "accounts" : "marketplaces"].push(shop.toJSON());
@@ -25,44 +24,15 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
         data.hideAccounts = data.accounts.length == 0;
         data.hideMarketplaces = data.marketplaces == 0;
 
-        var content = (this.template(data));
-        if (this.container) {
-            this.container.html(content);
-        } else {
-            this.container = $('<div/>');
-            this.container.dialog({
-                modal: true,
-                resizable: false,
-                title: that.model.get('Name'),
-                position: "center",
-                draggable: false,
-                width: "73%",
-                height: "600",
-                dialogClass: "marketplaceDetail",
-                close: function () { $(this).remove(); },
-                open: function () {
-                    $(this).html(content);
-                }
-            });
-        }
-        
-        this.container.find("#recheck-askville").click(function (e) {
-            that.recheckAskville.call(that, e);
-        });
-        
-        this.container.find(".reCheck-amazon, .reCheck-ebay").click(function (e) {
-            that.reCheck.call(that, e);
-        });
-        
-        this.container.find(".renew-token").click(function (e) {
-            that.renewTokenClicked.call(that, e);
-        });
-        this.container.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+        this.$el.html(this.template(data));
+        this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+
         return this;
     },
     events: {
         "click .reCheck-amazon": "reCheck",
         "click .reCheck-ebay": "reCheck",
+        "click .reCheck-paypal": "reCheckPayPal",
         "click .renew-token": "renewTokenClicked"
     },
     
@@ -72,6 +42,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
     },
     reCheck: function (e) {
         this.trigger("reCheck", e);
+        return false;
+    },
+    reCheckPayPal: function (e) {
+        this.trigger("reCheck-PayPal", e);
         return false;
     },
     recheckAskville: function(e) {
@@ -94,5 +68,17 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.View.extend({
             },
             "Yes", null, "No");
         return false;
+    },
+    jqoptions: function () {
+        return {
+            modal: true,
+            resizable: false,
+            title: this.model.get('Name'),
+            position: "center",
+            draggable: false,
+            width: "73%",
+            height: "600",
+            dialogClass: "marketplaceDetail"
+        };
     }
 });
