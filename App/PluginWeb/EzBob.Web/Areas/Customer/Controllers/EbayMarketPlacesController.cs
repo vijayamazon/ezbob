@@ -14,13 +14,14 @@ using EzBob.eBayLib;
 using EzBob.eBayServiceLib;
 using NHibernate;
 using Scorto.Web;
+using ZohoCRM;
 using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
     public class EbayMarketPlacesController : Controller
     {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(EbayMarketPlacesController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(EbayMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
         private readonly DatabaseDataHelper _helper;
         private readonly CustomerRepository _customers;
@@ -28,6 +29,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly eBayServiceHelper _eBayServiceHelper;
         private readonly IAppCreator _creator;
         private readonly IMPUniqChecker _mpChecker;
+        private readonly IZohoFacade _crm;
 
         public EbayMarketPlacesController(
             IEzbobWorkplaceContext context, 
@@ -36,7 +38,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ISession session, 
             eBayServiceHelper eBayServiceHelper, 
             IAppCreator creator,
-            IMPUniqChecker mpChecker)
+            IMPUniqChecker mpChecker, IZohoFacade crm)
         {
             _context = context;
             _helper = helper;
@@ -45,6 +47,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _eBayServiceHelper = eBayServiceHelper;
             _creator = creator;
             _mpChecker = mpChecker;
+            _crm = crm;
         }
 
         [Transactional]
@@ -67,11 +70,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             try
             {
                 sid = _eBayServiceHelper.CreateSessionId();
-                _log.InfoFormat("SID: '{0}' was generated", sid);
+                Log.InfoFormat("SID: '{0}' was generated", sid);
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
             }
             return Json(new { sid = sid }, JsonRequestBehavior.AllowGet);
         }
@@ -83,11 +86,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 var url = _eBayServiceHelper.CreateUrl(sid);
                 urlValue = url.Value;
-                _log.InfoFormat("Url: '{0}' was generated", urlValue);
+                Log.InfoFormat("Url: '{0}' was generated", urlValue);
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
             }
             return Json(new { url = urlValue }, JsonRequestBehavior.AllowGet);
         }
@@ -110,14 +113,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
             try
             {
                 sid = _eBayServiceHelper.CreateSessionId();
-                _log.InfoFormat("SID: '{0}' was generated", sid);
+                Log.InfoFormat("SID: '{0}' was generated", sid);
                 var url = _eBayServiceHelper.CreateUrl(sid);
                 urlValue = url.Value;
-                _log.InfoFormat("Url: '{0}' was generated", urlValue);
+                Log.InfoFormat("Url: '{0}' was generated", urlValue);
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
             }
             return Json(new { url = urlValue, sid = sid }, JsonRequestBehavior.AllowGet);
         }
@@ -131,7 +134,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var customer = _context.Customer;
                 if (customer == null)
                 {
-                    _log.ErrorFormat("Customer is not authorized in system");
+                    Log.ErrorFormat("Customer is not authorized in system");
                     return Json(new { error = "Customer is not authorized in system" }, JsonRequestBehavior.AllowGet);
                 }
 
@@ -144,18 +147,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (string.IsNullOrEmpty(sid))
                 {
-                    _log.Error("Sid is empty");
+                    Log.Error("Sid is empty");
                     return Json(new { error = "Username is empty" }, JsonRequestBehavior.AllowGet);
                 }
                 if (string.IsNullOrEmpty(username))
                 {
-                    _log.Error("Username is empty");
+                    Log.Error("Username is empty");
                     return Json(new { error = "Username is empty" }, JsonRequestBehavior.AllowGet);
                 }
 
-                _log.InfoFormat("Saving sid {0} for username {1}", sid, username);
+                Log.InfoFormat("Saving sid {0} for username {1}", sid, username);
                 var token = _eBayServiceHelper.FetchToken(sid);
-                _log.InfoFormat("Token {0} was generated.", token);
+                Log.InfoFormat("Token {0} was generated.", token);
 
                 var eBaySecurityInfo = new eBaySecurityInfo {Token = token};
 
@@ -171,21 +174,22 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
                     customer.WizardStep = WizardStepType.Marketplace;
 
+                _crm.ConvertLead(customer);
                 _customers.SaveOrUpdate(customer); 
 
                 return Json(new { msg = string.Format("Congratulations. Your shop was {0} successfully.", isUpdate ? "updated" : "added") }, JsonRequestBehavior.AllowGet);
             }
-            catch (MarketPlaceAddedByThisCustomerException e)
+            catch (MarketPlaceAddedByThisCustomerException)
             {
                 return Json(new { error = DbStrings.StoreAddedByYou }, JsonRequestBehavior.AllowGet);
             }
-            catch (MarketPlaceIsAlreadyAddedException e)
+            catch (MarketPlaceIsAlreadyAddedException)
             {
                 return Json(new { error = DbStrings.StoreAlreadyExistsInDb }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
                 return Json(new { error = e.Message }, JsonRequestBehavior.AllowGet);
             }
         }

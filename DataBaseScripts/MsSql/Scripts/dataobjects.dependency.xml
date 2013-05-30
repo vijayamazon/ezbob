@@ -517,12 +517,6 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
-    <oName>EkmConnectorConfigs</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -796,12 +790,6 @@
     <oName>MonitoredSites</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MonitoredSites.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_Alert</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\MP_Alert.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1714,24 +1702,6 @@
     <oName>SingleRunApplication</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\SingleRunApplication.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>FK_PK_SiteAnalyticsCodesId</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>SiteAnalytics</oName>
-    <oRank>2</oRank>
-    <oFileName>02_TABLES\SiteAnalytics.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>SiteAnalyticsCodes</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\SiteAnalyticsCodes.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

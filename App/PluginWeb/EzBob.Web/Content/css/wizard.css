@@ -228,115 +228,98 @@ select.SubBank::-webkit-scrollbar {
     display: none; 
 }
 
-a.radio-fx {
-    padding: 15px;
+.BankContainer a.radio-fx {
+    /*padding: 15px;*/
+    width: 45%;
+    display: inline-block;
 }
-
+ 
 .BankContainer span {
     display: inline-block;
-    background: url(images/star.png) no-repeat 0 0;
+    background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
     height: 40px;
-    width: 45%;
     
 }
 
     .BankContainer span.HSBC.off {
-        display: inline-block;
-        background: url(images/yodlee/hsbc_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -406px -1px;
+        width: 153px;
     }
     .BankContainer span.HSBC.on {
-        display: inline-block;
-        background: url(images/yodlee/hsbc_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -406px -41px;
+        width: 153px;
     }
 
     .BankContainer span.Barclays.off {
-        display: inline-block;
-        background: url(images/yodlee/barclays_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -746px -1px;
+        width: 177px;
     }
     .BankContainer span.Barclays.on {
-        display: inline-block;
-        background: url(images/yodlee/barclays_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -746px -41px;
+        width: 177px;
     }
 
     .BankContainer span.Lloyds.off {
-        display: inline-block;
-        background: url(images/yodlee/llioyds_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -193px -1px;
+        width: 210px;
     }
     .BankContainer span.Lloyds.on {
-        display: inline-block;
-        background: url(images/yodlee/llioyds_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -193px -41px;
+        width: 210px;
     }
 
     .BankContainer span.RBS.off {
-        display: inline-block;
-        background: url(images/yodlee/rbs_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -653px -1px;
+        width: 93px;
     }
     .BankContainer span.RBS.on {
-        display: inline-block;
-        background: url(images/yodlee/rbs_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -653px -41px;
+        width: 93px;
     }
 
     .BankContainer span.Santander.off {
-        display: inline-block;
-        background: url(images/yodlee/santander_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: 0 -1px;
+        width: 193px;
     }
     .BankContainer span.Santander.on {
-        display: inline-block;
-        background: url(images/yodlee/santander_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: 0 -41px;
+        width: 193px;
     }
 
     .BankContainer span.NatWest.off {
-        display: inline-block;
-        background: url(images/yodlee/natwest_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -928px -1px;
+        width: 165px;
     }
     .BankContainer span.NatWest.on {
-        display: inline-block;
-        background: url(images/yodlee/natwest_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -928px -41px;
+        width: 165px;
     }
 
     .BankContainer span.DAG.off {
-        display: inline-block;
         background: url(images/yodlee/dag_off.png) no-repeat 0 0;
-        height: 40px;
+         width: 80px;
     }
     .BankContainer span.DAG.on {
-        display: inline-block;
         background: url(images/yodlee/dag_on.png) no-repeat 0 0;
-        height: 40px;
+         width: 80px;
     }
 
     .BankContainer span.Halifax.off {
-        display: inline-block;
-        background: url(images/yodlee/halifax_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -562px -1px;
+        width: 88px;
     }
     .BankContainer span.Halifax.on {
-        display: inline-block;
-        background: url(images/yodlee/halifax_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -562px -41px;
+        width: 88px;
     }
 
     .BankContainer span.Nationwide.off {
-        display: inline-block;
-        background: url(images/yodlee/nationwide_off.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -1098px -1px;
+        width: 180px;
     }
     .BankContainer span.Nationwide.on {
-        display: inline-block;
-        background: url(images/yodlee/nationwide_on.png) no-repeat 0 0;
-        height: 40px;
+        background-position: -1098px -41px;
+        width: 180px;
     }
 
 

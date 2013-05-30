@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
+﻿using ZohoCRM;
+
+namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
 	using System.Linq;
@@ -8,15 +10,15 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBob.CommonLib;
-	using EzBob.PayPal;
-	using EzBob.PayPalDbLib.Models;
-	using EzBob.PayPalServiceLib;
-	using EzBob.Web.ApplicationCreator;
-	using EzBob.Web.Code.MpUniq;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Infrastructure.csrf;
-	using EzBob.Web.Models.Strings;
+	using CommonLib;
+	using PayPal;
+	using PayPalDbLib.Models;
+	using PayPalServiceLib;
+	using ApplicationCreator;
+	using Code.MpUniq;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Web.Models.Strings;
 	using NHibernate;
 	using PostcodeAnywhere;
 	using Scorto.Web;
@@ -32,8 +34,9 @@
         private readonly ISession _session;
         private readonly IMPUniqChecker _mpChecker;
         private readonly ISortCodeChecker _sortCodeChecker;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(PaymentAccountsController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PaymentAccountsController));
     	private readonly IPayPalConfig _payPalConfig;
+        private readonly IZohoFacade _crm;
 
     	public PaymentAccountsController(
             DatabaseDataHelper helper,
@@ -42,7 +45,7 @@
             IAppCreator creator,
             ISession session,
             IMPUniqChecker mpChecker,
-            ISortCodeChecker sortCodeChecker)
+            ISortCodeChecker sortCodeChecker, IZohoFacade crm)
         {
             _helper = helper;
             _customers = customers;
@@ -51,6 +54,7 @@
             _session = session;
     	    _mpChecker = mpChecker;
     	    _sortCodeChecker = sortCodeChecker;
+    	    _crm = crm;
     	    _payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();	
         }
 
@@ -94,7 +98,7 @@
 
 			var mp = _helper.SaveOrUpdateCustomerMarketplace( personalData.Email, paypal, securityData, customer );
 			_helper.SaveOrUpdateAcctountInfo( mp, personalData );
-            
+            _crm.ConvertLead(customer);
 			_session.Flush();
             _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
@@ -144,7 +148,7 @@
             }
             catch (Exception e)
             {
-                _log.Error("Adding paypal failed", e);
+                Log.Error("Adding paypal failed", e);
                 return View("PPAttachError");
             }
         }

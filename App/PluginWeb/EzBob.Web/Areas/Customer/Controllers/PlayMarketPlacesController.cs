@@ -6,7 +6,6 @@ using ApplicationMng.Repository;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
@@ -14,6 +13,7 @@ using Scorto.Web;
 using Integration.Play;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
+using ZohoCRM;
 using log4net;
 using EzBob.Web.ApplicationCreator;
 
@@ -50,33 +50,28 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 	public class PlayMarketPlacesController : Controller {
 		private static readonly ILog _log = LogManager.GetLogger(typeof(PlayMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly ICustomerRepository _customers;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
-		private readonly IRepository<MP_CustomerMarketPlace> _marketplaces;
-		private EZBob.DatabaseLib.Model.Database.Customer _customer;
+	    private readonly IRepository<MP_MarketplaceType> _mpTypes;
+	    private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly PlayConnector _validator = new PlayConnector();
 		private readonly DatabaseDataHelper _helper;
+        private readonly IZohoFacade _crm;
 
 		public PlayMarketPlacesController(
 			IEzbobWorkplaceContext context,
-			DatabaseDataHelper helper, 
-			ICustomerRepository customers,
+			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
-			IRepository<MP_CustomerMarketPlace> marketplaces,
 			PlayMPUniqChecker mpChecker,
-			IAppCreator appCreator
-		) {
+			IAppCreator appCreator, IZohoFacade crm) {
 			_context = context;
 			_helper = helper;
-			_customers = customers;
-			_mpTypes = mpTypes;
-			_marketplaces = marketplaces;
-			_customer = context.Customer;
+		    _mpTypes = mpTypes;
+		    _customer = context.Customer;
 			_mpChecker = mpChecker;
 			_appCreator = appCreator;
-		} // constructor
+		    _crm = crm;
+			} // constructor
 
 		[Transactional]
 		public JsonNetResult Accounts() {
@@ -131,7 +126,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(username, play, oSecInfo, customer);
-
+                _crm.ConvertLead(customer);
 				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 
 				return this.JsonNet(PlayAccountModel.ToModel(mp));

@@ -8,13 +8,13 @@ using Scorto.Web;
 using EKM;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
+using ZohoCRM;
 using log4net;
 using EzBob.Web.ApplicationCreator;
 using NHibernate;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    using CommonLib;
     using CommonLib.Security;
     using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
@@ -30,6 +30,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly EkmConnector _validator = new EkmConnector();
         private readonly ISession _session;
         private readonly DatabaseDataHelper _helper;
+        private readonly IZohoFacade _crm;
 
         public EkmMarketPlacesController(
             IEzbobWorkplaceContext context,
@@ -37,7 +38,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IRepository<MP_MarketplaceType> mpTypes,
             IMPUniqChecker mpChecker,
             IAppCreator appCreator,
-            ISession session)
+            ISession session, IZohoFacade crm)
         {
             _context = context;
             _mpTypes = mpTypes;
@@ -45,6 +46,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _mpChecker = mpChecker;
             _appCreator = appCreator;
             _session = session;
+            _crm = crm;
             _helper = helper;
         }
 
@@ -87,12 +89,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
 
                 var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
-
-                _session.Flush();
-
                 if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
                     _customer.WizardStep = WizardStepType.Marketplace;
 
+                _session.Flush();
+
+                _crm.ConvertLead(customer);
                 _appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 
                 return this.JsonNet(EkmAccountModel.ToModel(mp));

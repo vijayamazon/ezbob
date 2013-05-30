@@ -39,12 +39,15 @@ namespace EzBob.Web.Models.Strings
         /// <summary>
         /// Fetches string like You've already added this PayPal account
         /// </summary>
-        public static string PayPalAddedByYou { get { return Strings.GetByKey("PayPalAddedByYou"); } }
-        /// <summary>
-        /// Fetches string like You've already added this store. If you have another store please add it now. 
-
-        /// </summary>
-        public static string StoreAddedByYou { get { return Strings.GetByKey("StoreAddedByYou"); } }
+		public static string PayPalAddedByYou { get { return Strings.GetByKey("PayPalAddedByYou"); } }
+		/// <summary>
+		/// Fetches string like You've already added this store. If you have another store please add it now. 
+		/// </summary>
+		public static string StoreAddedByYou { get { return Strings.GetByKey("StoreAddedByYou"); } }
+		/// <summary>
+		/// Fetches string like You've already added this account. If you have another account please add it now. 
+		/// </summary>
+		public static string AccountAddedByYou { get { return Strings.GetByKey("AccountAddedByYou"); } }
         /// <summary>
         /// Fetches string like You are now opening a FREE, SECURE, and PERSONAL account and minutes away from receiving monies.
         /// </summary>

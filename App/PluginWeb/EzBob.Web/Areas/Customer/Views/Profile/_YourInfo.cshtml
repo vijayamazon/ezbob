@@ -4,19 +4,15 @@
   @using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm" }))
   {
       <div class="row-fluid" style="position: relative;">
-        <div class="span1">
-            &nbsp;
-        </div>
         <div class="span6 personal-info">
         </div>
-        <div class="span2" style="overflow: hidden; height: 725px; padding-top:9px;">
+          @*
+        <div class="" style="overflow: hidden; height: 725px; padding-top:9px; ">
             <img src='@Url.Content("~/Content/img/gradient-line.png")' style='display: block; margin: 0px auto' alt=""/>
         </div>
+          *@
         <div class="span6">
             <div class="company-info"/>
-        </div>
-        <div class="span1">
-            &nbsp;
         </div>
     </div>
       <div class="row-fluid">

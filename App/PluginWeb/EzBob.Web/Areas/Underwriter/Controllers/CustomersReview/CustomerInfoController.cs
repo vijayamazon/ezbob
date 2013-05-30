@@ -1,8 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Infrastructure;
+using NHibernate;
 using Scorto.Web;
 using ZohoCRM;
 
@@ -12,12 +12,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
     {
         private readonly IZohoFacade _crm;
         private readonly ICustomerRepository _customers;
-        
+        private readonly ISession _session;
 
-        public CustomerInfoController(IZohoFacade crm, ICustomerRepository customers)
+        public CustomerInfoController(IZohoFacade crm, ICustomerRepository customers, ISession session)
         {
             _crm = crm;
             _customers = customers;
+            _session = session;
         }
 
         [Ajax]
@@ -27,7 +28,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var customer = _customers.Get(id); 
             var model = new PersonalInfoModel();
-            model.InitFromCustomer(customer);
+            model.InitFromCustomer(customer, _session);
             return this.JsonNet(model);
         }
 

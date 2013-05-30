@@ -11,10 +11,8 @@
     <script type="text/javascript">
         $(function () {
             if (querystring('oauth_error_code').length > 0) {
-                console.log('Error while trying to link account');
                     
                 var variables = window.opener.YodleeAccountRetry();
-                console.log('Variables:', variables);
                 var attemptsLeft = variables.attemptsLeft;
                 var url = variables.url;
                     

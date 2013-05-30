@@ -54,7 +54,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
     updateCRM: ->
         that = this
         BlockUi "On"
-        xhr = $.post(window.gRootPath + "Underwriter/CustomerInfo/UpdateCrm",
+        xhr = $.post("#{window.gRootPath}Underwriter/CustomerInfo/UpdateCrm",
             id: @model.get("Id")
         )
         xhr.done ->

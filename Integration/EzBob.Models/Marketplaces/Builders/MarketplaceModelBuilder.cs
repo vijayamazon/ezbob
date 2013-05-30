@@ -54,6 +54,7 @@ namespace EzBob.Models
                 RaitingPercent = "-",
                 SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
                 IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
+                UWPriority = mp.Marketplace.UWPriority
             };
 
             InitializeSpecificData(mp, model);
@@ -76,7 +77,6 @@ namespace EzBob.Models
 
             var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
             var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-
 
             if (av != null)
             {

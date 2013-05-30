@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApplicationMng.Model;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using NHibernate;
 using StructureMap;
 
 namespace EzBob.Web.Areas.Underwriter.Models
@@ -29,13 +32,16 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public decimal? OverallTurnOver { get; set; }
         public string ReferenceSource { get; set; }
         public string ABTesting { get; set; }
+        public bool IsMainStratFinished { get; set; }
+        public string StrategyError { get; set; }
 
         public PersonalInfoModel()
         {
             IndustryFields = new List<string>();
+            StrategyError = "";
         }
 
-        public void InitFromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer)
+        public void InitFromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer, ISession session = null)
         {
             if (customer == null) return;
 
@@ -83,6 +89,21 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
             ReferenceSource = customer.ReferenceSource;
             ABTesting = customer.ABTesting;
+            var app = customer.LastStartedMainStrategy;
+
+            IsMainStratFinished = app != null &&
+                (app.State == ApplicationStrategyState.SecurityViolation ||
+                 app.State == ApplicationStrategyState.StrategyFinishedWithoutErrors ||
+                 app.State == ApplicationStrategyState.StrategyFinishedWithErrors ||
+                 app.State == ApplicationStrategyState.Error
+                ) || app == null;
+
+            if (app != null)
+            {
+                var sql = string.Format("SELECT top 1 ErrorMsg FROM Application_Application where ApplicationId = {0}",
+                                    app.Id);
+                StrategyError = session != null ? session.CreateSQLQuery(sql).UniqueResult<string>() : "";
+            }
         }
 
         public string ZohoId { get; set; }

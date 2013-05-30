@@ -8,14 +8,14 @@
 	{
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
-		public virtual int ContentServiceId { get; set; }
+		public virtual long ContentServiceId { get; set; }
 		public virtual string ParentBank { get; set; }
 		public virtual bool Active { get; set; }
 	}
 
 	public interface IYodleeBanksRepository : IRepository<YodleeBanks>
 	{
-		YodleeBanks Search(int csId);
+		YodleeBanks Search(long csId);
 	}
 
 	public class YodleeBanksRepository : NHibernateRepositoryBase<YodleeBanks>, IYodleeBanksRepository
@@ -25,7 +25,7 @@
 		{
 		}
 
-		public YodleeBanks Search(int csId)
+		public YodleeBanks Search(long csId)
 		{
 			return GetAll().FirstOrDefault(b => b.ContentServiceId == csId);
 		}

@@ -20,6 +20,8 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .KeyColumn("CustomerId")
                 .Inverse()
                 .Cascade.All();
+            References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
+            Map(x => x.PayPointTransactionId, "PayPointTransactionId").Length(250);
             References(x => x.LastStartedMainStrategy, "LastStartedMainStrategyId");
             Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();
             Map(x => x.CreditResult).CustomType<CreditResultStatusType>();
@@ -276,18 +278,6 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id order by Id desc)")
                 .Not.Insert()
                 .Not.Update();
-            Map(x => x.PayPointTransactionId)
-                .Formula(@"(SELECT ISNULL( 	
-                            (SELECT c.[PayPointTransactionId] FROM [Customer] c where c.[Id] = Id),
-                            (SELECT top 1 p.[TransactionId] from [PayPointCard] p where p.[CustomerId] = Id)))")
-                .Not.Insert()
-                .Not.Update();
-            References(x => x.CurrentCard)
-                .Formula(@"(SELECT ISNULL( 	
-                                (SELECT c.[CurrentDebitCard] FROM [Customer] c where c.[Id] = Id),
-                                (SELECT top 1 ci.[Id] from [CardInfo] ci where ci.[CustomerId] = Id)))")
-                .Cascade
-                .All();
             Map(x => x.LastLoanAmount)
                 .Formula("(select top 1 l.[LoanAmount] from [Loan] l where l.[CustomerId] = Id order by l.[Id] desc)")
                 .Not.Insert()

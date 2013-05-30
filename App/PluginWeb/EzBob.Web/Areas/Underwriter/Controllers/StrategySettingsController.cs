@@ -70,9 +70,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public JsonNetResult Index(StrategySettingsModel newSettings)
         {
-            var oldSettings = GetSettings();           
+            var oldSettings = GetSettings();
 
-            if (oldSettings.EnableAutomaticApproval != newSettings.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticRejection", newSettings.EnableAutomaticRejection);
+            if (oldSettings.EnableAutomaticRejection != newSettings.EnableAutomaticRejection) _configurationVariablesRepository.SetByName("EnableAutomaticRejection", newSettings.EnableAutomaticRejection);
             if (oldSettings.EnableAutomaticApproval != newSettings.EnableAutomaticApproval) _configurationVariablesRepository.SetByName("EnableAutomaticApproval", newSettings.EnableAutomaticApproval);
             if (oldSettings.LowCreditScore != newSettings.LowCreditScore) _configurationVariablesRepository.SetByName("LowCreditScore", newSettings.LowCreditScore);
             if (oldSettings.TotalAnnualTurnover != newSettings.TotalAnnualTurnover) _configurationVariablesRepository.SetByName("TotalAnnualTurnover", newSettings.TotalAnnualTurnover);

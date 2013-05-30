@@ -11,6 +11,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @bindTo @personalInfo, "change", @UpdateNewCreditLineState, this
         @bindTo @personalInfo, "change:CreditResult", @changeCreditResult, this
         EzBob.App.vent.on 'newCreditLine:done', @showCreditLineDialog, this
+        EzBob.App.vent.on 'newCreditLine:error', @showErrorDialog
 
     events:
         "click [name='startingDateChangeButton']"           : "editStartingDate"
@@ -135,7 +136,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine",
             Id: @model.get("CustomerId")
         ).done((response) =>
-            updater = new ModelUpdater(@personalInfo, 'CreditResult')
+            updater = new ModelUpdater(@personalInfo, 'IsMainStratFinished')
             updater.start()
         ).fail (data) ->
             console.error data.responseText
@@ -154,7 +155,6 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     isLoanTypeSelectionAllowed: ->
-        console.log @model
         d = new EzBob.Dialogs.ComboEdit
             model: @model
             propertyName: "IsLoanTypeSelectionAllowed"
@@ -170,6 +170,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     LoanTypeSelectionAllowedChanged: =>
         if @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
+            if @model.get('LoanTypeId') != 1
+                @model.set 'LoanTypeId', 1
         else
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').removeAttr('disabled')
 
@@ -229,6 +231,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             dialog = new EzBob.Underwriter.CreditLineDialog (model: @model)
             EzBob.App.modal.show dialog 
 
+    showErrorDialog: (errorMsg)->
+        EzBob.ShowMessage errorMsg, "Something went wrong"
+
 class ModelUpdater
     constructor: (@model, @property) ->
 
@@ -238,9 +243,12 @@ class ModelUpdater
             @check()
     
     check: ->
-        if not @model.get(@property).isNullOrEmpty()
+        if Convert.toBool(@model.get(@property))
             BlockUi 'off'
-            EzBob.App.vent.trigger('newCreditLine:done')
+            if @model.get('StrategyError') != null
+                EzBob.App.vent.trigger('newCreditLine:error', @model.get('StrategyError'))
+            else
+                EzBob.App.vent.trigger('newCreditLine:done')
             return
         else
             setTimeout @start, 1000

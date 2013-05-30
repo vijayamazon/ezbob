@@ -135,7 +135,6 @@ namespace Deveel.Web.Zoho {
 			var response = GetResponse(module, method, parameters);
 			response.ThrowIfError();
 		    var collection = response.LoadCollectionFromResul<T>();
-		    if (!collection.Any()) Log.ErrorFormat("Code: {1}. Message: {0}.", response.Message, response.Code);
 			return collection;
 		}
 

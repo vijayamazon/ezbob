@@ -10,6 +10,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string Description { get; set; }
 		public virtual bool Active { get; set; }
         public virtual bool IsPaymentAccount { get { return false; } }
+        public virtual int UWPriority { get { return 0; } }
 	}
 
     public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType>
@@ -31,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class AmazonMarketPlaceType : MP_MarketplaceType
     {
+        public override int UWPriority { get { return 2; } }
     }
 
     public class AmazonMarketPlaceTypeMap : SubclassMap<AmazonMarketPlaceType>
@@ -43,7 +45,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class eBayMarketPlaceType : MP_MarketplaceType
     {
-
+        public override int UWPriority { get { return 1; } }
     }
 
     public class eBayMarketPlaceTypeMap : SubclassMap<eBayMarketPlaceType>
@@ -57,6 +59,7 @@ namespace EZBob.DatabaseLib.Model.Database {
     public class PayPalMarketPlaceType : MP_MarketplaceType
     {
         public override bool IsPaymentAccount { get { return true; } }
+        public override int UWPriority { get { return 1; } }
     }
 
     public class PayPalMarketPlaceTypeMap : SubclassMap<PayPalMarketPlaceType>
@@ -69,7 +72,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class EKMMarketPlaceType : MP_MarketplaceType
     {
-
+        public override int UWPriority { get { return 3; } }
     }
 
     public class EKMMarketPlaceTypeMap : SubclassMap<EKMMarketPlaceType>
@@ -83,7 +86,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class VolusionMarketPlaceType : MP_MarketplaceType
     {
-
+        public override int UWPriority { get { return 4; } }
     }
 
     public class VolusionMarketPlaceTypeMap : SubclassMap<VolusionMarketPlaceType>
@@ -97,6 +100,7 @@ namespace EZBob.DatabaseLib.Model.Database {
     public class PayPointMarketPlaceType : MP_MarketplaceType
     {
         public override bool IsPaymentAccount { get { return true; } }
+        public override int UWPriority { get { return 2; } }
     }
 
     public class PayPointMarketPlaceTypeMap : SubclassMap<PayPointMarketPlaceType>
@@ -109,7 +113,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class PlayMarketPlaceType : MP_MarketplaceType
     {
-
+        public override int UWPriority { get { return 5; } }
     }
 
     public class PlayMarketPlaceTypeMap : SubclassMap<PlayMarketPlaceType>
@@ -123,6 +127,7 @@ namespace EZBob.DatabaseLib.Model.Database {
     public class YodleeMarketPlaceType : MP_MarketplaceType
     {
         public override bool IsPaymentAccount { get { return true; } }
+        public override int UWPriority { get { return 3; } }
     }
 
     public class YodleeMarketPlaceTypeMap : SubclassMap<YodleeMarketPlaceType>

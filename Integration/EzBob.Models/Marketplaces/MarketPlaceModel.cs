@@ -41,5 +41,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public bool IsPaymentAccount { get; set; }
 
         public PaymentAccountsModel PaymentAccountBasic { get; set; }
+
+        public int UWPriority { get; set; }
     }
 }

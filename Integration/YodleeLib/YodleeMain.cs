@@ -92,8 +92,10 @@ namespace YodleeLib
 			return finalUrl;
 		}
 
-		public long GetItemId(string username, string password)
+		public long GetItemId(string username, string password, out string displayname, out long csId)
 		{
+			displayname = string.Empty;
+			csId = -1;
 			LoginUser(username, password);
 			var di = new DisplayItemInfo();
 			object[] oa = di.displayItemSummariesWithoutItemData(UserContext);
@@ -112,6 +114,8 @@ namespace YodleeLib
 				return -1;
 			}
 
+			csId = itemSummary.contentServiceId;
+			displayname = itemSummary.itemDisplayName;
 			return itemSummary.itemId;
 		}
 
@@ -126,6 +130,12 @@ namespace YodleeLib
 			catch (Exception)
 			{
 			}
+		}
+
+
+		public string GenerateRandomPassword()
+		{
+			return YodleePasswrodGenerator.GenerateRandomPassword();
 		}
 	}
 }

@@ -38,7 +38,14 @@ namespace EzBob.Models
 
             var generalInfo = CreatePayPalAccountModelModel(mp);
 
-            var model = new PayPalAccountModel { GeneralInfo = generalInfo, PersonalInfo = new PayPalAccountInfoModel(details.Marketplace.PersonalInfo), DetailPayments = detailPayments, Payments = payments };
+            var model = new PayPalAccountModel 
+            {
+                GeneralInfo = generalInfo,
+                PersonalInfo = new PayPalAccountInfoModel(details.Marketplace.PersonalInfo),
+                DetailPayments = detailPayments,
+                Payments = payments 
+            };
+
             return model;
         }
 
