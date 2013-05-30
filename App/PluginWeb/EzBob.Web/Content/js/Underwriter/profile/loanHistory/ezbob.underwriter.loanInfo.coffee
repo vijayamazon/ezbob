@@ -245,7 +245,7 @@ class ModelUpdater
     check: ->
         if Convert.toBool(@model.get(@property))
             BlockUi 'off'
-            if @model.get('StrategyError').indexOf('WithoutErrors') is -1
+            if @model.get('StrategyError') != null
                 EzBob.App.vent.trigger('newCreditLine:error', @model.get('StrategyError'))
             else
                 EzBob.App.vent.trigger('newCreditLine:done')

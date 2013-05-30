@@ -5,6 +5,7 @@ using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using NHibernate;
 using StructureMap;
 
 namespace EzBob.Web.Areas.Underwriter.Models
@@ -37,9 +38,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public PersonalInfoModel()
         {
             IndustryFields = new List<string>();
+            StrategyError = "";
         }
 
-        public void InitFromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer)
+        public void InitFromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer, ISession session = null)
         {
             if (customer == null) return;
 
@@ -96,7 +98,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
                  app.State == ApplicationStrategyState.Error
                 ) || app == null;
 
-            StrategyError = app!=null ? app.State.ToString() : "";
+            if (app != null)
+            {
+                var sql = string.Format("SELECT top 1 ErrorMsg FROM Application_Application where ApplicationId = {0}",
+                                    app.Id);
+                StrategyError = session != null ? session.CreateSQLQuery(sql).UniqueResult<string>() : "";
+            }
         }
 
         public string ZohoId { get; set; }
