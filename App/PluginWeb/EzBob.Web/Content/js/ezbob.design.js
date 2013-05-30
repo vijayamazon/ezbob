@@ -241,6 +241,8 @@ $(function () {
 })(jQuery);
 
 //-----------  Helper functions  -----------  
+Convert = {};
+
 function ValueOrDefault(value, defaultValue) {
     return EzBob.isNullOrEmpty(value) ? defaultValue : value;
 }
@@ -411,8 +413,12 @@ Array.prototype.clean = function (deleteValue) {
     return this;
 };
 
+Convert.toBool = function(val) {
+    return val.toString().toLowerCase() === "true";
+};
+
 String.prototype.toBool = function () {
-    return this.toLowerCase() === "true";
+    Convert.toBool(this);
 };
 
 String.prototype.isNullOrEmpty = function () {

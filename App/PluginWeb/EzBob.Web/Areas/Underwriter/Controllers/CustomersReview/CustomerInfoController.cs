@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Infrastructure;
@@ -12,7 +11,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
     {
         private readonly IZohoFacade _crm;
         private readonly ICustomerRepository _customers;
-        
 
         public CustomerInfoController(IZohoFacade crm, ICustomerRepository customers)
         {

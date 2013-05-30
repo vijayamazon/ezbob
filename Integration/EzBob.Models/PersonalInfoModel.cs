@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApplicationMng.Model;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using StructureMap;
@@ -29,6 +31,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public decimal? OverallTurnOver { get; set; }
         public string ReferenceSource { get; set; }
         public string ABTesting { get; set; }
+        public bool IsMainStratFinished { get; set; }
+        public string StrategyError { get; set; }
 
         public PersonalInfoModel()
         {
@@ -83,6 +87,16 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
             ReferenceSource = customer.ReferenceSource;
             ABTesting = customer.ABTesting;
+            var app = customer.LastStartedMainStrategy;
+
+            IsMainStratFinished = app != null &&
+                (app.State == ApplicationStrategyState.SecurityViolation ||
+                 app.State == ApplicationStrategyState.StrategyFinishedWithoutErrors ||
+                 app.State == ApplicationStrategyState.StrategyFinishedWithErrors ||
+                 app.State == ApplicationStrategyState.Error
+                ) || app == null;
+
+            StrategyError = app!=null ? app.State.ToString() : "";
         }
 
         public string ZohoId { get; set; }
