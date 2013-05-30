@@ -57,7 +57,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             model.PayPointCards.AddRange(customer.PayPointCards.Select(PayPointCardModel.FromCard));
 
             model.CurrentBankAccount = BankAccountModel.FromCard(customer.CurrentCard);
-            model.BankAccounts.AddRange(customer.BankAccounts.Where(a => a.Id != model.CurrentBankAccount.Id).Select(BankAccountModel.FromCard));
+            
+            int currentBankAccountId = 0;
+            if (model.CurrentBankAccount != null) currentBankAccountId = model.CurrentBankAccount.Id;
+
+            model.BankAccounts.AddRange(customer.BankAccounts.Where(a => a.Id != currentBankAccountId).Select(BankAccountModel.FromCard));
 
             return this.JsonNet(model);
         }

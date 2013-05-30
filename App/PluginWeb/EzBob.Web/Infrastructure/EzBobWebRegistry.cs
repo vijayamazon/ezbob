@@ -139,6 +139,7 @@ namespace EzBob.Web.Infrastructure
             For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
             For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
             For<IDiscountPlanRepository>().Use <DiscountPlanRepository>();
+            For<ICurrencyConvertor>().Use<CurrencyConvertor>();
         }
     }
 }
