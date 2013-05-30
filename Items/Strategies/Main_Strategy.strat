@@ -3995,7 +3995,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB2167900</Name>
       <PointF>
-        <X>174.625885</X>
+        <X>174.6259</X>
         <Y>1996</Y>
       </PointF>
       <SuperNodeName />
@@ -21738,7 +21738,7 @@ MarketplaceSeniority = api.MarketplaceSeniority(CustomerId)
       <Script>from EzBob.Models import *
 api = StrategyHelper()
 
-NetTakoyPeremennoy = api.AddRejectIntoDecisionHistory(CustomerId, AutoReject)</Script>
+NetTakoyPeremennoy = api.AddRejectIntoDecisionHistory(CustomerId, 'AutoReject')</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
