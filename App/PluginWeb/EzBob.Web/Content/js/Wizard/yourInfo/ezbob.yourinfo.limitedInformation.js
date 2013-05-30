@@ -42,10 +42,9 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	next: function () {
 		var nAddressCount = 0;
 		var nFilledAddressCount = 0;
-
 		$('.director_address').each(function () {
 			nAddressCount++;
-			var oAddrInput = $(this).find('.addAddressInput');
+			var oAddrInput = $(this).find('.addAddressInput:visible');
 
 			if (oAddrInput.length)
 				oAddrInput.addClass('error');
