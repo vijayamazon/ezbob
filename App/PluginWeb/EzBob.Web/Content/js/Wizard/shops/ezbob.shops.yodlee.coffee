@@ -27,7 +27,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         that = this;
 
         @YodleeBanks = new EzBob.YodleeBanks()        
-
+        @loadBanks()
         window.YodleeAccountAdded = (result) ->
             if (result.error)
                 EzBob.App.trigger('error', result.error);

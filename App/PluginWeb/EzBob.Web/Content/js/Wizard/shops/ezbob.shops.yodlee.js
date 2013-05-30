@@ -66,6 +66,7 @@
 
       that = this;
       this.YodleeBanks = new EzBob.YodleeBanks();
+      this.loadBanks();
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
           EzBob.App.trigger('error', result.error);

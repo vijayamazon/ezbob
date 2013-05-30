@@ -452,6 +452,128 @@ div.shop-connected {
         width: 55px;
     }
 
+.BankContainer {
+    width: 580px;
+}
+
+.GenderCtrl input, 
+.BankContainer input {
+	margin: -5px 0 0 15px;
+}
+.SubBank {
+    width: 400px;
+}
+
+select.SubBank {
+    overflow: hidden;
+}
+
+select.SubBank::-webkit-scrollbar { 
+    display: none; 
+}
+
+.BankContainer a.radio-fx {
+    /*padding: 15px;*/
+    width: 45%;
+    display: inline-block;
+}
+
+.BankContainer label, 
+.SubBank label {
+	display: inline;
+	font-weight: normal;
+	margin-left: 5px;
+}
+ 
+.BankContainer span {
+    display: inline-block;
+    background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
+    height: 40px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+    .BankContainer span.HSBC.off {
+        background-position: -406px -1px;
+        width: 153px;
+    }
+    .BankContainer span.HSBC.on {
+        background-position: -406px -41px;
+        width: 153px;
+    }
+
+    .BankContainer span.Barclays.off {
+        background-position: -746px -1px;
+        width: 177px;
+    }
+    .BankContainer span.Barclays.on {
+        background-position: -746px -41px;
+        width: 177px;
+    }
+
+    .BankContainer span.Lloyds.off {
+        background-position: -193px -1px;
+        width: 210px;
+    }
+    .BankContainer span.Lloyds.on {
+        background-position: -193px -41px;
+        width: 210px;
+    }
+
+    .BankContainer span.RBS.off {
+        background-position: -653px -1px;
+        width: 93px;
+    }
+    .BankContainer span.RBS.on {
+        background-position: -653px -41px;
+        width: 93px;
+    }
+
+    .BankContainer span.Santander.off {
+        background-position: 0 -1px;
+        width: 193px;
+    }
+    .BankContainer span.Santander.on {
+        background-position: 0 -41px;
+        width: 193px;
+    }
+
+    .BankContainer span.NatWest.off {
+        background-position: -928px -1px;
+        width: 165px;
+    }
+    .BankContainer span.NatWest.on {
+        background-position: -928px -41px;
+        width: 165px;
+    }
+
+    .BankContainer span.DAG.off {
+        background: url(images/yodlee/dag_off.png) no-repeat 0 0;
+         width: 80px;
+    }
+    .BankContainer span.DAG.on {
+        background: url(images/yodlee/dag_on.png) no-repeat 0 0;
+         width: 80px;
+    }
+
+    .BankContainer span.Halifax.off {
+        background-position: -562px -1px;
+        width: 88px;
+    }
+    .BankContainer span.Halifax.on {
+        background-position: -562px -41px;
+        width: 88px;
+    }
+
+    .BankContainer span.Nationwide.off {
+        background-position: -1098px -1px;
+        width: 180px;
+    }
+    .BankContainer span.Nationwide.on {
+        background-position: -1098px -41px;
+        width: 180px;
+    }
+
 .source_table {
     width: 100%;
 }
