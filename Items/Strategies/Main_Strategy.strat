@@ -21738,7 +21738,7 @@ MarketplaceSeniority = api.MarketplaceSeniority(CustomerId)
       <Script>from EzBob.Models import *
 api = StrategyHelper()
 
-NetTakoyPeremennoy = api.AddRejectIntoDecisionHistory(CustomerId, Auto-Reject)</Script>
+NetTakoyPeremennoy = api.AddRejectIntoDecisionHistory(CustomerId, AutoReject)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
