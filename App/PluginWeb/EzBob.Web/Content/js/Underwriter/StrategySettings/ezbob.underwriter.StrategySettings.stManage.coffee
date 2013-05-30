@@ -37,6 +37,9 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.Marionette.ItemVie
 
     onRender: -> 
         @modelBinder.bind @model, @el, @bindings
+        if !$("body").hasClass("role-manager") 
+            @$el.find("select[name='enableAutomaticRejection'], select[name='enableAutomaticApproval'], input[name='lowCreditScore'], input[name='totalAnnualTurnover'], input[name='totalThreeMonthTurnover']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
+            @$el.find("button[name='SaveBtn'], button[name='CancelBtn']").hide();
 
     show: (type) ->
         this.$el.show()
