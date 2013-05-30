@@ -1,8 +1,9 @@
 ﻿@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewBag.Title = "PayPoint: Fill Debit Card Details | EZBOB";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "PayPoint: Fill Debit Card Details | EZBOB";
 }
 
+@using EzBob.Web.Infrastructure
 @model dynamic
 
 @section head{
@@ -10,59 +11,55 @@
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
-        EzBob.GA = EzBob.GA || function () { };
+        EzBob.GA = EzBob.GA || function() {
+        };
     </script>
     <style>
-        .error {
+        .error { color: red; }
+
+        .error h3 {
+            font-size: 14px;
+            margin-bottom: 0px;
             color: red;
         }
 
-            .error h3 {
-                font-size: 14px;
-                margin-bottom: 0px;
-                color: red;
-            }
+        .paypont-form .control-label { font-weight: normal; }
 
-        .paypont-form .control-label {
-            font-weight: normal;
-        }
+        body header + .inner, .main-page { margin: 0 auto !important; }
 
-        body header + .inner, .main-page {
-            margin: 0 auto !important;
-        }
+        select { height: 30px !important; }
 
-        select {
-            height: 30px !important;
-        }
+        .dashboard-steps { background-image: none !important; }
     </style>
 }
 
 @helper DashboardHeader()
 {
-	<div class="dashboard-steps narrow-dashboard-header">
-		<ul class="application_steps">
-			<li data-step-num="0" class="completed complete">
-				<span class="step_label">Step 1:
-				</span>
-				Choose Loan Term
-			</li>
+    <div class="dashboard-steps narrow-dashboard-header">
+        <ul class="application_steps">
+            <li data-step-num="0" class="completed complete">
+                <span class="step_label">Step 1:
+                </span>
+                Choose Loan Term
+            </li>
 
-			<li data-step-num="1" class="active current">
-				<span class="step_label">Step 2:
-				</span>
-				Enter Bank &amp; Debit
-			</li>
+            <li data-step-num="1" class="active current">
+                <span class="step_label">Step 2:
+                </span>
+                Enter Bank &amp; Debit
+            </li>
 
-			<li data-step-num="2" class="">
-				<span class="step_label">Step 3:
-				</span>
-				Get Cash
-			</li>
-		</ul>
-	</div>
+            <li data-step-num="2" class="">
+                <span class="step_label">Step 3:
+                </span>
+                Get Cash
+            </li>
+        </ul>
+    </div>
 } 
 
-@helper Hiddens() {
+@helper Hiddens()
+{
     <text><input type="hidden" name="merchant" value="${merchant}">
           <input type="hidden" name="trans_id" value="${trans_id}">
           <input type="hidden" name="callback" value="${callback}">
@@ -128,8 +125,7 @@
         <div class="pages">
             <div>
                 <div class="row-fluid">
-                    <div class="span2"></div>
-                    <div class="span8" style="padding-top: 16px;">
+                    <div class="span12" style="padding-top: 16px;">
                         @DashboardHeader()
                         <div class="PayPointHeader">
                             <h2>Enter your debit card details</h2>
@@ -220,8 +216,7 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span2"></div>
-                <div class="span8">
+                <div class="span12">
                     <hr>
                     ${paypal:=<table id="paypal_table">
                                   <tbody>
@@ -257,7 +252,6 @@
                                         For your re-assurance, this page is loaded from <b>https://www.secpay.com</b>. PayPoint.net
                                         incorporates the SECPay service.}
                                     </td>
-                                    <td valign="top" rowspan="2" style="text-align: center; width: 150px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -300,7 +294,7 @@
 
         var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
 
-        $(function () {
+        $(function() {
             $('form').attr('action', document.location.href);
             var amount = $('.amount').val();
             var isPayEarly = amount != 5;
@@ -333,12 +327,12 @@
             if (isPayEarly) {
                 $('#amount-group').show();
                 $('.PayPointHeader h3').hide();
-                //$(".dashboard-steps").hide();
+                $(".dashboard-steps").hide();
             }
 
             $('li[rel]').popover({ placement: 'left' });
 
-            $('input[name="back"]').click(function () {
+            $('input[name="back"]').click(function() {
                 history.go(-1);
             });
 
@@ -346,7 +340,7 @@
             contactUs.template = $(".contactUs").html();
             contactUs.render();
 
-            $('input[type="submit"]').click(function (e) {
+            $('input[type="submit"]').click(function(e) {
                 if (!validator.form()) {
                     return false;
                 }
@@ -365,7 +359,7 @@
             });
 
             $.validator.addMethod(
-                "validateLastDateOfPayment", function (value, element, date) {
+                "validateLastDateOfPayment", function(value, element, date) {
                     date = $.browser.msie ? date._d : date;
                     var expirydate = moment(value, "MM/YY");
                     var res = expirydate > date;
@@ -377,9 +371,9 @@
     <script type="text/javascript">
         adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
         adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
-        (function () {
+        (function() {
             var oldonload = window.onload;
-            window.onload = function () {
+            window.onload = function() {
                 __adroll_loaded = true;
                 var scr = document.createElement("script");
                 var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
@@ -394,4 +388,8 @@
             };
         }());
     </script>
+}
+
+@section customJs{
+    @BundleHelper.RenderPaypointTemplateJs()
 }

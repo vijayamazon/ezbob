@@ -38,10 +38,7 @@
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
         <![endif]-->
     @{ Html.RenderPartial("_GoogleAnalytics"); }
-
     @{Html.RenderPartial("security_template");}
-
-
 </head>
 
 <body>
@@ -81,8 +78,15 @@
         @{ Html.RenderPartial("_LoginSimple"); }
     </script>
 
-    @BundleHelper.RenderJs()
-    @BundleHelper.RenderProfileJs()
+    @if (IsSectionDefined("customJs"))
+    {
+        @RenderSection("customJs")
+    }
+    else
+    {
+        @BundleHelper.RenderJs()
+        @BundleHelper.RenderProfileJs()
+    }
     @RenderSection("Js", false)
     @{ Html.RenderPartial("_ClickTale"); }
     @{ Html.RenderPartial("_AddRoll"); }

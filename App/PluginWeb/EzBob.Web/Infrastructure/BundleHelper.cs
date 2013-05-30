@@ -110,6 +110,23 @@ namespace EzBob.Web.Infrastructure
                          .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
 
+        public static MvcHtmlString RenderPaypointTemplateJs()
+        {
+            return Bundle.JavaScript()
+                         .AddString(GetDbStrings())
+                         .Add("~/Content/js/lib/jquery-1.8.3.js")
+                         .Add("~/Content/js/lib/jquery.blockUI.js")
+                         .Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
+                         .Add("~/Content/js/lib/jquery.validate.js")
+                         .Add("~/Content/js/lib/moment.js")
+                         .Add("~/Content/js/lib/jsuri-1.1.1.js")
+                         .Add("~/Content/js/lib/bootstrap.js")
+                         .Add("~/Content/js/lib/underscore.js")
+                         .Add("~/Content/js/lib/backbone.js")
+                         .Add("~/Content/js/contactUs/ezbo.contactUs.js")
+                         .Add("~/Content/js/App/ezbob.validation.js")
+                         .MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
+        }
 
         public static MvcHtmlString RenderJs()
         {
