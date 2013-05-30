@@ -47,7 +47,8 @@ namespace EzBob.Web.Code
                                       UseSetupFee = false,
                                       DiscountPlan = discount,
                                       OfferValidUntil = DateTime.UtcNow.AddDays(1),
-                                      OfferStart = DateTime.UtcNow
+                                      OfferStart = DateTime.UtcNow,
+									  IsLoanTypeSelectionAllowed = 1
                                   };
 
             customer.CashRequests.Add(cashRequest);
