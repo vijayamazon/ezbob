@@ -355,15 +355,19 @@ namespace ZohoCRM
                 var res = UpdateEntity<ZohoContact>(c =>
                                               {
                                                   var pi = customer.PersonalInfo;
-
-                                                  c.DateOfBirth = pi.DateOfBirth.Value;
-                                                  c.FirstName = pi.FirstName;
-                                                  c.LastName = pi.Surname;
-                                                  c.Mobile = pi.MobilePhone;
-                                                  c.Phone = pi.DaytimePhone;
-
-                                                  c.SetValue("Date of Birth", pi.DateOfBirth.Value);
-                                                  c.SetValue("Gender", pi.Gender.ToString());
+                                                  if (pi != null)
+                                                  {
+                                                      c.DateOfBirth = pi.DateOfBirth.Value;
+                                                      c.FirstName = pi.FirstName;
+                                                      c.LastName = pi.Surname;
+                                                      c.Mobile = pi.MobilePhone;
+                                                      c.Phone = pi.DaytimePhone;
+                                                      c.SetValue("Claimed Overall Turnover", pi.OverallTurnOver);
+                                                      c.SetValue("Claimed Website Turnover", pi.WebSiteTurnOver);
+                                                      c.SetValue("Date of Birth", pi.DateOfBirth.Value);
+                                                      c.SetValue("Gender", pi.Gender.ToString());
+                                                  }
+                                                  
                                                   c.SetValue("Customers status", "enabled");
                                                   c.SetValue("Num of loans", customer.Loans.Count);
                                                   
@@ -375,11 +379,10 @@ namespace ZohoCRM
                                                       c.SetValue("Medal", customer.Medal.ToString());
                                                   }
 
-                                                  c.SetValue("Claimed Overall Turnover", pi.OverallTurnOver);
-                                                  c.SetValue("Claimed Website Turnover", pi.WebSiteTurnOver);
+                                                  
                                                   c.SetValue("Number of Stores", 0);
 
-                                                  if (customer.AddressInfo != null && customer.AddressInfo.PersonalAddress != null)
+                                                  if (customer.AddressInfo != null && customer.AddressInfo.PersonalAddress.Any())
                                                   {
                                                       var address = customer.AddressInfo.PersonalAddress.Last();
                                                       c.SetValue("Mailing Street",
@@ -518,18 +521,26 @@ namespace ZohoCRM
             if (_marketPlacesFacade == null || _profileSummaryModelBuilder == null) return;
 
             var models = _marketPlacesFacade.GetMarketPlaceModels(customer);
-            var profile = _profileSummaryModelBuilder.CreateProfile(customer);
+            
+            if (customer.PersonalInfo != null)
+            {
+                var profile = _profileSummaryModelBuilder.CreateProfile(customer);
+                c.SetValue("Bureau Score", profile.CreditBureau.CreditBureauScore);
+                c.SetValue("Shops turnover", profile.MarketPlaces.AnualTurnOver);
+                c.SetValue("PayPal Income", FormattingUtils.FormatPounds((decimal)profile.PaymentAccounts.NetIncome));
+                c.SetValue("MP Seniority", profile.MarketPlaces.Seniority);
+                c.SetValue("AML", profile.AmlBwa.Aml);
+                c.SetValue("AML Status", profile.AmlBwa.Aml);
+                c.SetValue("BANK", profile.AmlBwa.Bwa);
+                c.SetValue("BANK Status", profile.AmlBwa.Bwa);
+            }
+            
 
             var info = new PersonalInfoModel();
             info.InitFromCustomer(customer);
-
             var shops = customer.CustomerMarketPlaces.Where(s => s.Marketplace.Name != "Pay Pal").ToList();
-
-            c.SetValue("Number of Stores", shops.Count);
-
             var shopsStirng = string.Join(", ", shops.Select(m => m.Marketplace.Name).Distinct().ToArray());
-            c.SetValue("Shops", shopsStirng);
-
+            
             int num = 1;
             foreach (var mp in models)
             {
@@ -539,18 +550,9 @@ namespace ZohoCRM
                 num = num + 1;
             }
 
-            c.SetValue("Shops turnover", profile.MarketPlaces.AnualTurnOver);
-            c.SetValue("PayPal Income", FormattingUtils.FormatPounds((decimal)profile.PaymentAccounts.NetIncome));
-            c.SetValue("MP Seniority", profile.MarketPlaces.Seniority);
-
-            c.SetValue("AML", profile.AmlBwa.Aml);
-            c.SetValue("AML Status", profile.AmlBwa.Aml);
-            c.SetValue("BANK", profile.AmlBwa.Bwa);
-            c.SetValue("BANK Status", profile.AmlBwa.Bwa);
-
+            c.SetValue("Shops", shopsStirng);
+            c.SetValue("Number of Stores", shops.Count);
             c.SetValue("Industry", string.Join(", ", info.TopCategories.ToArray()));
-
-            c.SetValue("Bureau Score", profile.CreditBureau.CreditBureauScore);
         }
     }
 }
