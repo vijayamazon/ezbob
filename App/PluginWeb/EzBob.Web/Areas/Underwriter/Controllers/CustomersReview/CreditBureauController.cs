@@ -310,8 +310,8 @@
 
             GetScorePositionAndColor(score, out pos, out align, out valPos, out color);
 
-            var checkStatus = ((eInfo == null) || string.IsNullOrEmpty(eInfo.ExperianResult))
-                                  ? "Unknown"
+            var checkStatus = ((eInfo == null) || !string.IsNullOrEmpty(eInfo.Error))
+                                  ? "Error"
                                   : eInfo.ExperianResult;
 
             var checkIcon = "icon-remove-sign";

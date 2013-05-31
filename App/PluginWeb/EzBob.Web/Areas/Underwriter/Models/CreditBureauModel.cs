@@ -23,7 +23,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string ModelType { get; set; }
         public bool CheckFailed
         {
-            get { return CheckStatus == "Unknown"; }
+            get { return CheckStatus == "Error"; }
         }
         public string CheckStatus { get; set; } // done
         public string CheckIcon { get; set; } // done
