@@ -472,8 +472,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Ajax]
         public bool CheckCustomer(int customerId)
         {
-            var customer = _customers.GetChecked(customerId);
-            return customer.IsSuccessfullyRegistered && customer.CreditResult != null;
+            try
+            {
+                _customers.GetChecked(customerId);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

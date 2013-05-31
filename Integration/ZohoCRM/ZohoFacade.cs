@@ -217,7 +217,7 @@ namespace ZohoCRM
 
         private void CheckZohoId(CashRequest cashRequest)
         {
-            if (_crm.GetRecordById<ZohoPotential>(cashRequest.ZohoId) == null)
+            if (cashRequest.ZohoId == null || _crm.GetRecordById<ZohoPotential>(cashRequest.ZohoId) == null)
             {
                 var name = string.Format("{0} {1} ({2})", 
                     cashRequest.Customer.PersonalInfo.FirstName, 
@@ -266,13 +266,13 @@ namespace ZohoCRM
         {
             foreach (var offer in customer.CashRequests)
             {
+                CheckZohoId(offer);
                 if (string.IsNullOrEmpty(offer.ZohoId))
                 {
                     CreateOffer(customer, offer);
                 }
                 else
                 {
-                    CheckZohoId(offer);
                     UpdateEntity<ZohoPotential>(p =>
                     {
                         UpdateOffer(p, offer);

@@ -171,6 +171,21 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @changeDecisionButtonsState()
 
     show: (id) ->
+        BlockUi "on"
+        xhr = $.get "#{window.gRootPath}Underwriter/Customers/CheckCustomer?customerId=#{id}"
+        xhr.done (res)=>
+            BlockUi "off"
+            if res.error
+                EzBob.ShowMessage res.error,"Something went wrong"
+                @router.navigate("", { trigger: true, replace: true });
+                return true
+            if Convert.toBool(res)
+                @_show(id)
+                return true
+            EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
+            @router.navigate("", { trigger: true, replace: true });
+
+    _show: (id) ->
         @hide()
         BlockUi "on"
         scrollTop()
