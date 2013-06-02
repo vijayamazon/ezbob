@@ -106,19 +106,31 @@ namespace Integration.ChannelGrabberAPI {
 
 			int nRqID = SendGenerateOrdersRq(oCustomer, oAccountData);
 
-			while (!AreOrdersGenerated(oCustomer, oAccountData, nRqID)) {
+			OrderFetchStatus nRes = FetchOrdersRq(oCustomer, oAccountData, nRqID);
+
+			while (nRes == OrderFetchStatus.NotReady) {
 				Debug("Not ready, sleeping...");
 				Thread.Sleep(SleepTime);
-			} // while
 
-			List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, oAccountData);
+				nRes = FetchOrdersRq(oCustomer, oAccountData, nRqID);
+			} // forever
 
-			Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
-				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
-				lst.Count, lst.Count == 1 ? "" : "s"
+			if (nRes == OrderFetchStatus.Complete) {
+				List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, oAccountData);
+
+				Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
+					ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
+					lst.Count, lst.Count == 1 ? "" : "s"
+				);
+
+				return lst;
+			} // if
+
+			Info("GetOrders for {0} customer {1} ({2}) completed with error, no orders received.",
+				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id
 			);
 
-			return lst;
+			return new List<ChannelGrabberOrder>();
 		} // GetOrders
 
 		#endregion method GetOrders
@@ -336,16 +348,22 @@ namespace Integration.ChannelGrabberAPI {
 
 		#endregion SendGenerateOrdersRq
 
-		#region AreOrdersGenerated
+		#region FetchOrdersRq
 
-		private bool AreOrdersGenerated(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
+		private OrderFetchStatus FetchOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
 			Debug("Tesing whether orders are ready...");
-			return API.IsComplete(
-				ExecuteRequest(BuildOrdersGeneratedRq(oCustomer, oAccountData, nRqID))
-			);
-		} // AreOrdersGenerated
 
-		#endregion AreOrdersGenerated
+			XmlDocument doc = ExecuteRequest(BuildOrdersGeneratedRq(oCustomer, oAccountData, nRqID));
+
+			if (API.IsError(doc)) {
+				Error("Error while fetching orders: {0}", API.GetError(doc));
+				return OrderFetchStatus.Error;
+			} // if
+
+			return API.IsComplete(doc) ? OrderFetchStatus.Complete : OrderFetchStatus.NotReady;
+		} // FetchOrdersRq
+
+		#endregion FetchOrdersRq
 
 		#region LoadOrders
 
@@ -467,6 +485,16 @@ namespace Integration.ChannelGrabberAPI {
 		} // BuildRegisterShopRq
 
 		#endregion method BuildRegisterShopRq
+
+		#region enum OrderFetchStatus
+
+		private enum OrderFetchStatus {
+			Complete,
+			Error,
+			NotReady
+		} // enum OrderFetchStatus
+
+		#endregion enum OrderFetchStatus
 
 		#region method BuildValidityRq
 

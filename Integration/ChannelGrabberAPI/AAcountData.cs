@@ -114,6 +114,9 @@ namespace Integration.ChannelGrabberAPI {
 
 			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
 				if (IsMe(oNode)) {
+					if (!API.IsEqual(oNode, "validity", "true"))
+						throw new ChannelGrabberApiException("Cannot validate: invalid credentials.");
+
 					if (onFound(oNode))
 						break;
 				} // if
