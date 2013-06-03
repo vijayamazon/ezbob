@@ -309,6 +309,10 @@ namespace EZBob.DatabaseLib.Model.Database {
                         where s.[Status] like 'Late' and l.[CustomerId] = Id)")
                 .Not.Insert()
                 .Not.Update();
+            Map(x => x.CustomerStatus)
+                .Formula("(select top(1) CreditResult from [Customer] c where c.[Id] =Id)")
+                .Not.Insert()
+                .Not.Update();
         }
 	}
 }

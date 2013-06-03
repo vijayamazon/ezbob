@@ -14,15 +14,15 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = " Customer Status",
                     Name = "CreditResult",
-                    Index = "CreditResult",
+                    Index = "CustomerStatus",
+                    DataType = TypeCode.String,
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
                     Hidden = false,
                     Fixed = false,
                     Width = 120,
-                    DataType = TypeCode.String,
-                    Data = x => x.CreditResult.ToString()
+                    Data = x => x.CustomerStatus
                 });
         }
 
