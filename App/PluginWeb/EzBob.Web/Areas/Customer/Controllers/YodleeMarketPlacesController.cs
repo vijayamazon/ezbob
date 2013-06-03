@@ -100,7 +100,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(customer.Id);
 
-			// TODO: this should be run before the redirection only for customers that have existing yodlee accounts for this csid
 			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
 			string displayname;
 			long csId;

@@ -20,9 +20,6 @@
                     window.opener.YodleeAccountAddingError("Error occurred while trying to add bank account");
                     self.close();
                 } else {
-                    console.log('Retrying...');
-                    @{ILog Log = LogManager.GetLogger(typeof (YodleeMarketPlacesController));
-                      Log.ErrorFormat("Link Yodlee Retrying...");}
                     document.location.href = url;
                 }
             } else {
