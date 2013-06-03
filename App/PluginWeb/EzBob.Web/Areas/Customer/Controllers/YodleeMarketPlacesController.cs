@@ -138,7 +138,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		}
 
 		[Transactional]
-		public JsonNetResult CheckYodleeUniqueness(int csId)
+		public ActionResult AttachYodlee(int csId, string bankName)
 		{
 			try
 			{
@@ -148,15 +148,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			catch (MarketPlaceAddedByThisCustomerException e)
 			{
 				Log.Debug(e);
-				return this.JsonNet(new { error = DbStrings.AccountAddedByYou });
+				return View((object)DbStrings.AccountAddedByYou);
 			}
 
-			return this.JsonNet(new { success = 1 });
-		}
 
-		[Transactional]
-		public RedirectResult AttachYodlee(int csId, string bankName)
-		{
+
 			var yodleeMain = new YodleeMain();
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(_customer.Id);

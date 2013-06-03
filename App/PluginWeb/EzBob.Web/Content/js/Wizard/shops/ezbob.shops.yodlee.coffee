@@ -25,8 +25,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
                 
     initialize: (options) ->
         that = this;
-
-        @YodleeBanks = new EzBob.YodleeBanks()        
+        @YodleeBanks = new EzBob.YodleeBanks()
         @loadBanks()
         window.YodleeAccountAdded = (result) ->
             if (result.error)
@@ -44,13 +43,13 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
         window.YodleeAccountRetry = () ->
             that.attemptsLeft = that.attemptsLeft - 1
-            console.log(that.$el.find("#yodleeContinueBtn"))  
+            console.log(that.$el.find("#yodleeContinueBtn"))
             return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
 
         return false
         
     subBankSelectionChanged:(el) ->
-        return false if (this.$el.find(".SubBank option:selected").length == 0)            
+        return false if (this.$el.find(".SubBank option:selected").length == 0) 
         url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{@$el.find("option:selected").val()}&bankName=#{this.$el.find("input[type='radio'][name='Bank']:checked").attr('value')}"
         @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
         
@@ -66,19 +65,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
        
     continueClicked: (e) ->  
         return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
-
-        e.preventDefault()
-        xhr = $.post "#{window.gRootPath}Customer/YodleeMarketPlaces/CheckYodleeUniqueness", {csId: @$el.find("option:selected").val()}
-        that = @
-        xhr.done (result) =>
-            if result.error
-                EzBob.App.trigger('error', result.error)
-                return false
-            else
-                that.attemptsLeft = 5                
-                win = window.open(that.$el.find('#yodleeContinueBtn').attr('href'), '_blank')
-                win.focus()
-                #document.location.href = that.$el.find('#yodleeContinueBtn').attr('href');
 
     parentBankSelected: (evt)->
         evt.preventDefault()
@@ -115,6 +101,4 @@ class EzBob.YodleeBanks extends Backbone.Collection
     model: EzBob.YodleeBankModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
     
-class EzBob.YodleeUniqunessModel extends Backbone.Model
-    urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/CheckYodleeUniqueness"
 
