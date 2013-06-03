@@ -218,6 +218,10 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                          .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
                          .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.stManage.coffee")
+                         .Add("~/Content/js/lib/highcharts/highcharts.js")
+                         .Add("~/Content/js/lib/highcharts/exporting.js")
+                         .Add("~/Content/js/lib/highcharts/highcharts-more.js")
+                         .Add("~/Content/js/lib/highcharts/makeChart.js")
 
                 //Customer grid
                          .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")

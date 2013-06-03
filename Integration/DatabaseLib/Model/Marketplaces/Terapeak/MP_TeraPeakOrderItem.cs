@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using ApplicationMng.Repository;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
@@ -23,4 +28,24 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public virtual RangeMarkerType RangeMarker { get; set; }
 	}
+    public interface IMP_TeraPeakOrderItemRepository : IRepository<MP_TeraPeakOrderItem>
+    {
+    }
+
+    public class MP_TeraPeakOrderItemRepository : NHibernateRepositoryBase<MP_TeraPeakOrderItem>, IMP_TeraPeakOrderItemRepository
+    {
+        public MP_TeraPeakOrderItemRepository(ISession session)
+            : base(session)
+        {
+        }
+
+        public List<MP_TeraPeakOrderItem> GetTeraPeakOrderItems(int customerMarketPlaceId)
+        {
+            return _session
+                .Query<MP_TeraPeakOrderItem>()
+                .Where(o => o.Order.CustomerMarketPlace.Id == customerMarketPlaceId)
+                .OrderBy(o => o.StartDate)
+                .ToList();
+        }
+    }
 }

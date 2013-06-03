@@ -17,7 +17,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     },
     render: function () {
         var shop = this.model.get(this.options.currentId);
-
+        drawChart(shop.get("Id"));
         var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
         data[shop.get("IsPaymentAccount") ? "accounts" : "marketplaces"].push(shop.toJSON());
 

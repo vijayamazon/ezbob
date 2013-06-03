@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
@@ -16,14 +17,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly MarketPlacesFacade _marketPlaces;
         private readonly CustomerMarketPlaceRepository _customerMarketplaces;
         private readonly IAppCreator _appCreator;
+        private readonly MP_TeraPeakOrderItemRepository _teraPeakOrderItems;
 
-        public MarketPlacesController(CustomerRepository customers, AnalyisisFunctionValueRepository functions, CustomerMarketPlaceRepository customerMarketplaces, MarketPlacesFacade marketPlaces, IAppCreator appCreator)
+        public MarketPlacesController(CustomerRepository customers, AnalyisisFunctionValueRepository functions, CustomerMarketPlaceRepository customerMarketplaces, MarketPlacesFacade marketPlaces, IAppCreator appCreator, MP_TeraPeakOrderItemRepository teraPeakOrderItems)
         {
             _customerMarketplaces = customerMarketplaces;
             _marketPlaces = marketPlaces;
             _appCreator = appCreator;
             _functions = functions;
             _customers = customers;
+            _teraPeakOrderItems = teraPeakOrderItems;
         }
 
         [Ajax]
@@ -35,6 +38,22 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var models = GetCustomerMarketplaces(customer);
             return this.JsonNet(models);
         }
+        [Ajax]
+        [HttpGet]
+        [Transactional]
+        public JsonNetResult GetTeraPeakOrderItems(int customerMarketPlaceId)
+        {
+            var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);
+            return this.JsonNet(data.Select(item => new Double?[2] { (ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2, item.Revenue }).Cast<object>().ToArray());
+
+        }
+
+        public static long ToUnixTimestamp(DateTime d)
+        {
+                var duration = d - new DateTime(1970, 1, 1, 0, 0, 0);
+                return (long)duration.TotalSeconds * 1000;
+        }
+
 
         public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(EZBob.DatabaseLib.Model.Database.Customer customer)
         {

@@ -813,6 +813,10 @@
     <Content Include="Content\js\lib\bootstrap-modal.js" />
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
     <Content Include="Content\js\lib\handlebars.js" />
+    <Content Include="Content\js\lib\highcharts\exporting.js" />
+    <Content Include="Content\js\lib\highcharts\highcharts-more.js" />
+    <Content Include="Content\js\lib\highcharts\highcharts.js" />
+    <Content Include="Content\js\lib\highcharts\makeChart.js" />
     <Content Include="Content\js\lib\html5shiv.js" />
     <Content Include="Content\js\lib\attardi.labels.js" />
     <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
