@@ -532,10 +532,14 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
         text: okText || "OK",
         click: function () {
             if (typeof (cbOk) == 'function') {
-                cbOk();
+                var okFunc = cbOk();
+                log(okFunc);
+                if (okFunc) $(this).dialog("close");
+            } else {
+                $(this).dialog("close");
             }
-            $(this).dialog("close");
-        }
+        },
+        class: "ok-button"
     }];
     if (cbCancel != undefined || cancelText != undefined) {
         buttonModel.push({
