@@ -468,19 +468,23 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             }
         }
 
+        private enum CustomerState
+        {
+            NotSuccesfullyRegistred,
+            EmptyCreditResultResult,
+            NotFound,
+            Ok
+        }
+
         [HttpGet]
         [Ajax]
-        public bool CheckCustomer(int customerId)
+        public JsonNetResult CheckCustomer(int customerId)
         {
-            try
-            {
-                _customers.GetChecked(customerId);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var customer = _customers.TryGet(customerId);
+            if (customer == null) return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
+            if (!customer.IsSuccessfullyRegistered) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
+            //if (customer.CreditResult == null) return this.JsonNet(new { State = CustomerState.EmptyCreditResultResult.ToString() });
+            return this.JsonNet(new { State = CustomerState.Ok.ToString() });
         }
     }
 }

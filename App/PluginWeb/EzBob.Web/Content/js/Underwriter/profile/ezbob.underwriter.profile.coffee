@@ -179,11 +179,17 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                 EzBob.ShowMessage res.error,"Something went wrong"
                 @router.navigate("", { trigger: true, replace: true });
                 return true
-            if Convert.toBool(res)
-                @_show(id)
-                return true
-            EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
-            @router.navigate("", { trigger: true, replace: true });
+            switch res.State
+                when "NotFound" 
+                    EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
+                    @router.navigate("", { trigger: true, replace: true });
+                    break;
+                when "NotSuccesfullyRegistred" 
+                    @trigger "customerNotFull", id
+                    break;
+                when "Ok"
+                    @_show(id)
+                    break;
 
     _show: (id) ->
         @hide()
