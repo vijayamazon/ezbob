@@ -179,7 +179,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Transactional]
         [HttpGet]
-        public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string expiry, int customerId)
+        public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
         {
             if (test_status == "true")
             {
@@ -198,11 +198,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 throw new Exception("check hash failed");
             }
 
-            var customer = _customers.GetChecked(customerId);
+            var cus = _customers.GetChecked(customerId);
+            if (string.IsNullOrEmpty(customer)) customer = cus.PersonalInfo.Fullname;
 
-            customer.TryAddPayPointCard(trans_id, card_no, expiry, customer.PersonalInfo.Fullname);
+            cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
 
-            _appCreator.PayPointAddedByUnderwriter(_context.User, customer, card_no);
+            _appCreator.PayPointAddedByUnderwriter(_context.User, cus, card_no);
 
             return View("PayPointAdded");
         }

@@ -161,7 +161,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
-                //if (string.IsNullOrEmpty(customer)) customer = "Unknown PayPoint Name";
+
                 var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
 
                 var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
