@@ -38,8 +38,6 @@
 		<MultiCopy CopyFrom="$(Src)\DataBaseScripts\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\"/>
 		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		
-		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\CustomSchedulers\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Signals\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
@@ -48,11 +46,17 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\PayPoint\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\Volusion\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\YodleeLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\AgentRegistry\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\PaymentServices\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\ZohoCRM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Deveel\Deveel.ZohoCRM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		
+		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		
 		
 		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
 		

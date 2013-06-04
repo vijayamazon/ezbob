@@ -96,6 +96,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
 					UserId = personalData.Email
 				};
 
+            if (customer.WizardStep != WizardStepType.AllStep)
+                customer.WizardStep = WizardStepType.Marketplace;
+
 			var mp = _helper.SaveOrUpdateCustomerMarketplace( personalData.Email, paypal, securityData, customer );
 			_helper.SaveOrUpdateAcctountInfo( mp, personalData );
 			_session.Flush();
