@@ -40,10 +40,11 @@
 		public static PayPointDataSet.TransactionDataTable GetOrders(string condition, string mid, string vpnPassword, string remotePassword)
 		{
 			var secVpnService = new SECVPNService { Timeout = 3000000 };// 50 minutes - overrides default of 100000
+			string reportXmlString = null;
 			var payPointDataSet = new PayPointDataSet();
 			try
 			{
-				string reportXmlString = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
+				reportXmlString = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
 				using (Stream xmlStream = reportXmlString.ToStream())
 				{
 					payPointDataSet.ReadXml(xmlStream);
@@ -51,7 +52,7 @@
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Error getting PayPoint orders. Marketplace will appear empty. Try to recheck later. Exception:{0}", e);
+				log.ErrorFormat("Error getting PayPoint orders. Marketplace will appear empty. Try to recheck later. The xml was:{0} Exception:{1}", reportXmlString ?? string.Empty, e);
 			}
 
 			return payPointDataSet.Transaction;
