@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportAuthenticationLib", "ReportAuthenticationLib.csproj", "{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddUsersTool", "..\AddUsersTool\AddUsersTool.csproj", "{76A2D80F-8277-483E-85E1-639A3DECCC82}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A2D80F-8277-483E-85E1-639A3DECCC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A2D80F-8277-483E-85E1-639A3DECCC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A2D80F-8277-483E-85E1-639A3DECCC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A2D80F-8277-483E-85E1-639A3DECCC82}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

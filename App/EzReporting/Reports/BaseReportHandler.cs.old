@@ -1,0 +1,437 @@
+﻿namespace Reports
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Text;
+    using DbConnection;
+    using Mailer;
+    using Logger;
+
+    public class BaseReportHandler
+    {
+        public const string DefaultToEMail = "dailyreports@ezbob.com";
+        public const string DefaultFromEMailPassword = "ezbob2012";
+        public const string DefaultFromEMail = "ezbob@ezbob.com";
+
+        public string BuildPlainedPaymentReport(Report report, string today, string tomorrow)
+        {
+            var bodyText = new StringBuilder();
+            bodyText.Append("<html><body><h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
+            bodyText = PaymentReport(bodyText, today);
+            bodyText.Append("</body></html>");
+            return bodyText.ToString();
+        }
+
+        public void AddReportToList(ref List<Report> reportList, DataRow row, string defaultToEmail)
+        {
+            ReportType type;
+            if (!Enum.TryParse<ReportType>(row["Type"].ToString(), out type))
+            {
+                type = ReportType.RPT_GENERIC;
+            }
+            string title = row["Title"].ToString();
+            string storedProcedure = row["StoredProcedure"].ToString();
+            bool isDaily = (bool)row["IsDaily"];
+            bool isWeekly = (bool)row["IsWeekly"];
+            bool isMonthly = (bool)row["IsMonthly"];
+            string[] headers = row["Header"].ToString().Split(',');
+            string[] fields = row["Fields"].ToString().Split(',');
+            string toEmail = string.IsNullOrEmpty(row["ToEmail"].ToString()) ? defaultToEmail : row["ToEmail"].ToString();
+            reportList.Add(new Report
+            {
+                Type = type,
+                Title = title,
+                StoredProcedure = storedProcedure,
+                IsDaily = isDaily,
+                IsWeekly = isWeekly,
+                IsMonthly = isMonthly,
+                Headers = headers,
+                Fields = fields,
+                ToEmail = toEmail
+            });
+        }
+
+        public void SendReport(string subject, string mailBody, string toAddressStr = DefaultToEMail, string period = "Daily")
+        {
+            Mailer.SendMail(DefaultFromEMail, DefaultFromEMailPassword, "EZBOB " + period + " Client Report", mailBody, toAddressStr);
+            Logger.DebugFormat("Mail {0} sent to: {1}", subject, toAddressStr);
+        }
+
+        public string BuildNewClientReport(Report report, string today, string tomorrow)
+        {
+            var bodyText = new StringBuilder();
+            bodyText.Append("<html><body><h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
+            AdsReport(bodyText, today);
+            bodyText.Append("<p>");
+            CustomerReport(bodyText, today);
+            bodyText.Append("</body></html>");
+
+            return bodyText.ToString();
+        }
+
+        private void CustomerReport(StringBuilder bodyText, String today)
+        {
+            try
+            {
+                DataTable dt = DbConnection.ExecuteSpReader("RptCustomerReport", new SqlParameter("@DateStart", today));
+
+                int lineCounter = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (lineCounter == 0)
+                    {
+                        bodyText.Append("<table border=1 cellpadding='3' cellspacing='0'><thead><tr>");
+                        bodyText.Append("<td> Email </td><td> Status </td><td> Wizard Finished </td><td> Account # </td><td> Credit Offer </td><td> Source Ad </td>");
+                        bodyText.Append("</tr><thead><tbody>");
+                    }
+                    bodyText.Append("<tr>");
+                    bodyText.Append("<td>").Append(row["Name"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["Status"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["IsSuccessfullyRegistered"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["AccountNumber"]).Append("</td>");
+                    bodyText.Append("<td style='text-align: right;'>").Append(row["CreditSum"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["ReferenceSource"]).Append("</td>");
+                    bodyText.Append("</tr>");
+                    lineCounter++;
+                }
+                bodyText.Append("</tbody></table>");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+        }
+
+        private void AdsReport(StringBuilder bodyText, String today)
+        {
+            try
+            {
+                DataTable dt = DbConnection.ExecuteSpReader("RptAdsReport", new SqlParameter("@time", today));
+
+                int lineCounter = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (lineCounter == 0)
+                    {
+                        bodyText.Append("<table border=1 cellpadding='3' cellspacing='0'><thead><tr>");
+                        bodyText.Append("<td> Ad Name </td><td> # </td><td> Total Credit Approved </td>");
+                        bodyText.Append("</tr></thead><tbody>");
+                    }
+                    bodyText.Append("<tr>");
+                    bodyText.Append("<td>").Append(row["ReferenceSource"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["TotalUsers"]).Append("</td>");
+                    bodyText.Append("<td style='text-align: right;'>").Append(row["TotalCredit"]).Append("</td>");
+                    bodyText.Append("</tr>");
+                    lineCounter++;
+                }
+                bodyText.Append("</tbody></table>");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+        }
+
+        private StringBuilder PaymentReport(StringBuilder bodyText, String today)
+        {
+            try
+            {
+                DataTable dt = DbConnection.ExecuteSpReader("RptPaymentReport", new SqlParameter("@DateStart", today), new SqlParameter("@DateEnd", DateTime.Today.AddDays(3).ToString("yyyy-MM-dd")));
+
+                int lineCounter = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (lineCounter == 0)
+                    {
+                        bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'><thead><tr>");
+                        bodyText.Append("<th> Id </th><th> Name </th><th> Email </th><th> Date </th><th> Amount </th>");
+                        bodyText.Append("</tr><thead><tbody>");
+                    }
+                    bodyText.Append("<tr>");
+                    bodyText.Append("<td>").Append(row["Id"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["Firstname"]).Append(" ").Append(row["SurName"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["Name"]).Append("</td>");
+                    bodyText.Append("<td>").Append(row["DATE"]).Append("</td>");
+                    bodyText.Append("<td style='text-align: right;'>").Append(row["AmountDue"]).Append("</td>");
+                    bodyText.Append("</tr>");
+                    lineCounter++;
+                }
+                bodyText.Append("</tbody></table>");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+
+            return bodyText;
+        }
+
+        public string BuildDailyStatsReportBody(Report report, string today, string tomorrow)
+        {
+            var bodyText = new StringBuilder();
+            bodyText.Append("<html><body><h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
+            bodyText = DailyStatsReport(bodyText, today, tomorrow);
+            bodyText.Append("</body></html>");
+            return bodyText.ToString();
+        }
+
+        private void TableTD(StringBuilder bodyText, string val)
+        {
+            bodyText.Append("<td>").Append(val).Append("</td>");
+        }
+
+        private bool IsApplicationHeader(string db, bool isNew)
+        {
+            return db == "Applications" && isNew;
+        }
+
+        private bool IsApplicationLine(string db)
+        {
+            return db == "Applications";
+        }
+
+        private bool IsLoanHeader(string db, bool isNew)
+        {
+            return db == "Loans" && isNew;
+        }
+
+        private bool IsLoanLine(string db)
+        {
+            return db == "Loans";
+        }
+
+        private bool IsPaymentHeader(string db, bool isNew)
+        {
+            return db == "Payments" && isNew;
+        }
+
+        private bool IsPaymentLine(string db)
+        {
+            return db == "Payments";
+        }
+
+        private bool IsRegisterHeader(string db, bool isNew)
+        {
+            return db == "Registers" && isNew;
+        }
+
+        private bool IsRegusterLine(string db)
+        {
+            return db == "Registers";
+        }
+
+        private StringBuilder DailyStatsReport(StringBuilder bodyText, string today, string tomorrow)
+        {
+            try
+            {
+                DataTable dt = DbConnection.ExecuteSpReader("RptDailyStats", new SqlParameter("@DateStart", today), new SqlParameter("@DateEnd", tomorrow));
+
+                bool firstLoansLine = true;
+                bool firstApplicationLine = true;
+                bool firstPaymentLine = true;
+                bool firstRegisterLine = true;
+                foreach (DataRow row in dt.Rows)
+                {
+                    string firstVal = row[0].ToString();
+                    if (IsApplicationHeader(firstVal, firstApplicationLine))
+                    {
+                        bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'> <tr>");
+                        bodyText.Append("<td> Application </td><td> #</td><td> Descision </td><td> Value</td>");
+                        bodyText.Append("</tr>");
+                        firstApplicationLine = false;
+                    }
+
+                    if (IsApplicationLine(firstVal))
+                    {
+                        bodyText.Append("<tr>");
+                        TableTD(bodyText, row[1].ToString());
+                        TableTD(bodyText, row[2].ToString());
+                        TableTD(bodyText, row[3].ToString());
+                        TableTD(bodyText, row[4].ToString());
+                        bodyText.Append("</tr>");
+                        bodyText.Append("</table></p>");
+                    }
+
+                    if (IsLoanHeader(firstVal, firstLoansLine))
+                    {
+                        bodyText.Append("</table>");
+                        bodyText.Append("<p>");
+                        bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'> <tr>");
+                        bodyText.Append("<td> Loans </td><td> #</td><td> Value</td>");
+                        bodyText.Append("</tr>");
+                        firstLoansLine = false;
+                    }
+
+                    if (IsLoanLine(firstVal))
+                    {
+                        bodyText.Append("<tr>");
+                        TableTD(bodyText, row[1].ToString());
+                        TableTD(bodyText, row[2].ToString());
+                        TableTD(bodyText, row[4].ToString());
+                        bodyText.Append("</tr>");
+                    }
+
+                    if (IsPaymentHeader(firstVal, firstPaymentLine))
+                    {
+                        bodyText.Append("</table>");
+                        bodyText.Append("<p>");
+                        bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'> <tr>");
+                        bodyText.Append("<td> Payments </td><td> Value</td>");
+                        bodyText.Append("</tr>");
+                        firstLoansLine = false;
+                    }
+
+                    if (IsPaymentLine(firstVal))
+                    {
+                        bodyText.Append("<tr>");
+                        TableTD(bodyText, row[2].ToString());
+                        TableTD(bodyText, row[4].ToString());
+                        bodyText.Append("</tr>");
+                    }
+
+                    if (IsRegisterHeader(firstVal, firstRegisterLine))
+                    {
+                        bodyText.Append("</table>");
+                        bodyText.Append("<p>");
+                        bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'> <tr>");
+                        bodyText.Append("<td> Registers </td>");
+                        bodyText.Append("</tr>");
+                        firstLoansLine = false;
+                    }
+
+                    if (IsRegusterLine(firstVal))
+                    {
+                        bodyText.Append("<tr>");
+                        TableTD(bodyText, row[2].ToString());
+                        bodyText.Append("</tr>");
+                    }
+                }
+
+                bodyText.Append("</table>");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+
+            return bodyText;
+        }
+
+        public string BuildInWizardReport(Report report, string today, string tomorrow)
+        {
+            var bodyText = new StringBuilder();
+            bodyText.Append("<html><body><h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
+            bodyText.Append("<p>");
+            bodyText.Append("Clients that enetered Shops but did not complete:");
+            bodyText.Append("<p>");
+            DailyInWizardReport(bodyText, today, tomorrow);
+            bodyText.Append("<p>");
+            bodyText.Append("Clients that just enetered their email:");
+            bodyText.Append("<p>");
+            DailyStep1Report(bodyText, today, tomorrow);
+            bodyText.Append("</body></html>");
+            return bodyText.ToString();
+        }
+
+        private void DailyInWizardReport(StringBuilder bodyText, string fromDate, string toDate)
+        {
+            string[] headers;
+            string[] fields;
+            GetHeaderAndFields(ReportType.RPT_IN_WIZARD, out headers, out fields);
+            TableReport(bodyText, "RptNewClients", fromDate, toDate, headers, fields, true);
+        }
+
+        private void DailyStep1Report(StringBuilder bodyText, string fromDate, string toDate)
+        {
+            string[] headers;
+            string[] fields;
+            GetHeaderAndFields(ReportType.RPT_IN_WIZARD, out headers, out fields);
+            TableReport(bodyText, "RptNewClientsStep1", fromDate, toDate, headers, fields, true);
+        }
+
+
+        private void GetHeaderAndFields(ReportType type, out string[] header, out string[] fields)
+        {
+            header = null;
+            fields = null;
+
+            DataTable dt = DbConnection.ExecuteSpReader("RptScheduler_GetHeaderAndFields", new SqlParameter("@Type", type.ToString()));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                header = row[0].ToString().Split(',');
+                fields = row[1].ToString().Split(',');
+            }
+        }
+
+        public StringBuilder TableReport(StringBuilder bodyText, string spName, string startDate, string endDate, string[] headers, string[] fields , bool isSharones = false)
+        {
+            try
+            {
+                DataTable dt = DbConnection.ExecuteSpReader(spName, new SqlParameter("@DateStart", startDate), new SqlParameter("@DateEnd", endDate));
+
+                int lineCounter = 0;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (lineCounter == 0)
+                    {
+                        if (isSharones)
+                        {
+                            bodyText.Append("<table border=1 cellpadding='3' cellspacing='0'><thead><tr>");
+                        }
+                        else
+                        {
+                            bodyText.Append("<table id='tableReportData' border=1 cellpadding='3' cellspacing='0'><thead><tr>");
+                        }
+                        
+                        for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
+                        {
+                            bodyText.Append("<th> ").Append(headers[columnIndex]).Append("</th>");
+                        }
+
+                        bodyText.Append("</tr></thead><tbody>");
+                    }
+
+                    bodyText.Append("<tr>");
+                    for (int columnIndex = 0; columnIndex < fields.Length; columnIndex++)
+                    {
+                        if (headers[columnIndex].Contains("Value") ||
+                            headers[columnIndex].Contains("Amount Due") ||
+                            headers[columnIndex].Contains("InterestRate") ||
+                            headers[columnIndex].Contains("Interest") ||
+                            headers[columnIndex].Contains("LoanRepayment") ||
+                            headers[columnIndex].Contains("Payment #") ||
+                            headers[columnIndex].Contains("Max Approved") ||
+                            headers[columnIndex].Contains("Total Loans") ||
+                            headers[columnIndex].Contains("Annual Turnover") ||
+                            headers[columnIndex].Contains("Credit Score") ||
+                            headers[columnIndex].Contains("Repaid") ||
+                            headers[columnIndex].Contains("Principal") ||
+                            headers[columnIndex].Contains("Loan") ||
+                            headers[columnIndex].Contains("Approved") ||
+                            headers[columnIndex].Contains("Open Credit") ||
+                            headers[columnIndex].Contains("Offer To Client") ||
+                            headers[columnIndex].Contains("Fees"))
+                        {
+                            bodyText.Append("<td style='text-align: right;'> ").Append(row[fields[columnIndex]]).Append("</td>");
+                        }
+                        else
+                        {
+                            bodyText.Append("<td> ").Append(row[fields[columnIndex]]).Append("</td>");
+                        }
+                    }
+                    bodyText.Append("</tr>");
+                    lineCounter++;
+                }
+                bodyText.Append("</tbody></table>");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
+            return bodyText;
+        }
+    }
+}

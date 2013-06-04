@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports", "Reports\Reports.csproj", "{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzReportToEMail", "EzReportToEMail\EzReportToEMail.csproj", "{43184D00-8241-456E-A101-FE65665E9759}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzReportsWeb", "EzReportsWeb\EzReportsWeb.csproj", "{93B2B33D-53CD-4B77-895B-6A35DD813967}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportAuthenticationLib", "ReportAuthenticationLib\ReportAuthenticationLib.csproj", "{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43184D00-8241-456E-A101-FE65665E9759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43184D00-8241-456E-A101-FE65665E9759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43184D00-8241-456E-A101-FE65665E9759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43184D00-8241-456E-A101-FE65665E9759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B2B33D-53CD-4B77-895B-6A35DD813967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B2B33D-53CD-4B77-895B-6A35DD813967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B2B33D-53CD-4B77-895B-6A35DD813967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B2B33D-53CD-4B77-895B-6A35DD813967}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

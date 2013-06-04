@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/DbConnection.dll">
+      <publishTime>05/27/2013 13:22:06</publishTime>
+    </File>
+    <File Include="bin/EzReportsWeb.dll">
+      <publishTime>05/27/2013 13:24:31</publishTime>
+    </File>
+    <File Include="bin/log4net.dll">
+      <publishTime>04/14/2013 17:47:52</publishTime>
+    </File>
+    <File Include="bin/Logger.dll">
+      <publishTime>05/27/2013 13:23:01</publishTime>
+    </File>
+    <File Include="bin/Mailer.dll">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="bin/ReportAuthenticationLib.dll">
+      <publishTime>05/27/2013 13:24:30</publishTime>
+    </File>
+    <File Include="bin/Reports.dll">
+      <publishTime>05/27/2013 13:24:30</publishTime>
+    </File>
+    <File Include="css/combined.css">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="Default.aspx">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/back_disabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/back_enabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/back_enabled_hover.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/ezbob_logo.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/favicon32x32.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/forward_disabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/forward_enabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/forward_enabled_hover.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/nav_bg.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/nav_bg2.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/nav_bg3.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/show_report.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/sort_asc.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/sort_asc_disabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/sort_both.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/sort_desc.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="images/sort_desc_disabled.png">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="js/jquery.dataTables.min.js">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="js/jquery.js">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="Login.aspx">
+      <publishTime>04/14/2013 17:47:53</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>05/27/2013 13:24:31</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

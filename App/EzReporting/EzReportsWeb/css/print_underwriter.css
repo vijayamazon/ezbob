@@ -1,0 +1,7 @@
+footer, .main-header, #shadow-left, #shadow-right, .five-icons, .top-button {
+    display: none;
+}
+
+body {
+    background-image: none;
+}
