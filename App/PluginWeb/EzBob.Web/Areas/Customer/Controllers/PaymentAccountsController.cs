@@ -98,8 +98,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 			var mp = _helper.SaveOrUpdateCustomerMarketplace( personalData.Email, paypal, securityData, customer );
 			_helper.SaveOrUpdateAcctountInfo( mp, personalData );
-            _crm.ConvertLead(customer);
 			_session.Flush();
+            _crm.ConvertLead(customer);
             _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
             return View(rermissionsGranted);
@@ -235,7 +235,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (customer.WizardStep != WizardStepType.AllStep)
                     customer.WizardStep = WizardStepType.PaymentAccounts;
-
+                _crm.ConvertLead(customer);
                 _customers.Update(customer);
 
                 return this.JsonNet(new {msg = "Well done! You've added your bank account!"});
