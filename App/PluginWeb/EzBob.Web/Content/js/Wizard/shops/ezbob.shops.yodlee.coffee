@@ -43,7 +43,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
         window.YodleeAccountRetry = () ->
             that.attemptsLeft = that.attemptsLeft - 1
-            console.log(that.$el.find("#yodleeContinueBtn"))
             return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
 
         return false

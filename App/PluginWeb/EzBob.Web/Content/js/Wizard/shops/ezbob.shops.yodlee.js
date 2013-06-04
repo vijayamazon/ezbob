@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6,
+  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -83,7 +83,6 @@
       };
       window.YodleeAccountRetry = function() {
         that.attemptsLeft = that.attemptsLeft - 1;
-        console.log(that.$el.find("#yodleeContinueBtn"));
         return {
           url: that.$el.find('#yodleeContinueBtn').attr('href'),
           attemptsLeft: that.attemptsLeft
@@ -116,29 +115,9 @@
     };
 
     YodleeAccountInfoView.prototype.continueClicked = function(e) {
-      var that, xhr,
-        _this = this;
-
       if (this.$el.find('#yodleeContinueBtn').hasClass('disabled')) {
         return false;
       }
-      e.preventDefault();
-      xhr = $.post("" + window.gRootPath + "Customer/YodleeMarketPlaces/CheckYodleeUniqueness", {
-        csId: this.$el.find("option:selected").val()
-      });
-      that = this;
-      return xhr.done(function(result) {
-        var win;
-
-        if (result.error) {
-          EzBob.App.trigger('error', result.error);
-          return false;
-        } else {
-          that.attemptsLeft = 5;
-          win = window.open(that.$el.find('#yodleeContinueBtn').attr('href'), '_blank');
-          return win.focus();
-        }
-      });
     };
 
     YodleeAccountInfoView.prototype.parentBankSelected = function(evt) {
@@ -231,19 +210,5 @@
     return YodleeBanks;
 
   })(Backbone.Collection);
-
-  EzBob.YodleeUniqunessModel = (function(_super) {
-    __extends(YodleeUniqunessModel, _super);
-
-    function YodleeUniqunessModel() {
-      _ref6 = YodleeUniqunessModel.__super__.constructor.apply(this, arguments);
-      return _ref6;
-    }
-
-    YodleeUniqunessModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/CheckYodleeUniqueness";
-
-    return YodleeUniqunessModel;
-
-  })(Backbone.Model);
 
 }).call(this);
