@@ -2199,10 +2199,20 @@ namespace EZBob.DatabaseLib
 
 			try
 			{
-				MP_PayPointOrder ppo = customerMarketPlace.PayPointOrders.OrderBy(x => x.Id).AsQueryable().Last();
+				MP_PayPointOrder ppo = customerMarketPlace.PayPointOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
 
 				if (ppo != null)
-					dThen = ppo.Created.AddMonths(-1);
+				{
+					MP_PayPointOrderItem item = ppo.OrderItems.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+					if (item != null && item.date.HasValue)
+					{
+						dThen = item.date.Value.AddMonths(-1);
+					}
+					else
+					{
+						dThen = ppo.Created.AddMonths(-1);
+					}
+				}
 			}
 			catch (Exception)
 			{
