@@ -44,7 +44,7 @@
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPointSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
 			string condition = Helper.GetPayPointDeltaPeriod(databaseCustomerMarketPlace);
-	        var payPointTransactions = PayPointConnector.getOrders(condition, securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword);
+	        var payPointTransactions = PayPointConnector.GetOrders(condition, securityInfo.Mid, securityInfo.VpnPassword, securityInfo.RemotePassword);
             var payPointOrders = new List<PayPointOrderItem>();
 			foreach (PayPointDataSet.TransactionRow x in payPointTransactions)
             {
@@ -83,7 +83,6 @@
                 order.ExpiryDate = !DateTime.TryParse(x.ExpiryDate, out result) ? (DateTime?)null : result;
                 order.start_date = !DateTime.TryParse(x.start_date, out result) ? (DateTime?)null : result;
                 payPointOrders.Add(order);
-                
             }
 
             var elapsedTimeInfo = new ElapsedTimeInfo();

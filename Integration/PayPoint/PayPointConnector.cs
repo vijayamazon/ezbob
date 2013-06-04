@@ -1,9 +1,13 @@
 ﻿namespace PayPoint
 {
+	using System;
 	using System.IO;
+	using log4net;
 
 	public class PayPointConnector
 	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(PayPointConnector));
+
 		/// <summary>
 		/// checks if the mid, vpn and remote passwords are correct
 		/// </summary>
@@ -21,6 +25,7 @@
 		/// https://www.paypoint.net/secnet/app (Click on "Account" then "Remote Passwords" 
 		/// and select Remote from the drop down list). 
 		/// </param>
+		/// <param name="errMsg">Contains error message or empty</param>
 		/// <returns>true if credentials correct, false otherwise</returns>
 		public static bool Validate(string mid, string vpnPassword, string remotePassword, out string errMsg)
 		{
@@ -32,17 +37,23 @@
 			return isValid;
 		}
 
-		public static PayPointDataSet.TransactionDataTable getOrders(string condition, string mid, string vpnPassword, string remotePassword)
+		public static PayPointDataSet.TransactionDataTable GetOrders(string condition, string mid, string vpnPassword, string remotePassword)
 		{
-			var secVpnService = new SECVPNService();
-			secVpnService.Timeout = 3000000; // 50 minutes - overrides default of 100000
-			string reportXmlString = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
-
+			var secVpnService = new SECVPNService { Timeout = 3000000 };// 50 minutes - overrides default of 100000
 			var payPointDataSet = new PayPointDataSet();
-			using (Stream xmlStream = reportXmlString.ToStream())
+			try
 			{
-				payPointDataSet.ReadXml(xmlStream);
+				string reportXmlString = secVpnService.getReport(mid, vpnPassword, remotePassword, "XML-Report", "Date", condition, "GBP", string.Empty, false, true);
+				using (Stream xmlStream = reportXmlString.ToStream())
+				{
+					payPointDataSet.ReadXml(xmlStream);
+				}
 			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Error getting PayPoint orders. Marketplace will appear empty. Try to recheck later. Exception:{0}", e);
+			}
+
 			return payPointDataSet.Transaction;
 		}
 	}
