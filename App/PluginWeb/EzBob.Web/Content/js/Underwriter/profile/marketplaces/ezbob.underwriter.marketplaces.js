@@ -17,19 +17,26 @@
       return _ref;
     }
 
+    MarketPlaceModel.prototype.idAttribute = "Id";
+
     MarketPlaceModel.prototype.initialize = function() {
       this.on('change reset', this.recalculate, this);
       return this.recalculate();
     };
 
     MarketPlaceModel.prototype.recalculate = function() {
-      var accountAge, age, ai, anualSales, inventory;
+      var accountAge, age, ai, anualSales, inventory, pp;
 
       ai = this.get('AnalysisDataInfo');
       accountAge = this.get('AccountAge');
+      anualSales = ai ? (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1 : 0;
+      inventory = ai && !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
+      pp = this.get("PayPal");
+      if (pp) {
+        accountAge = pp.GeneralInfo.Seniority;
+        anualSales = pp.GeneralInfo.TotalNetInPayments;
+      }
       age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
-      anualSales = (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1;
-      inventory = !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
       return this.set({
         age: age,
         anualSales: anualSales,
@@ -89,8 +96,8 @@
     };
 
     MarketPlacesView.prototype.events = {
-      "click .reCheck-amazon": "reCheckmarketplaces",
-      "click .reCheck-ebay": "reCheckmarketplaces",
+      "click .reCheckMP": "reCheckmarketplaces",
+      "click .reCheck-paypal": "reCheckPaypal",
       "click tbody tr": "rowClick",
       "click .mp-error-description": "showMPError",
       "click .renew-token": "renewTokenClicked"
@@ -109,14 +116,15 @@
       if (!id) {
         return;
       }
-      shop = this.model.at(id);
+      shop = this.model.get(id);
       this.detailView = new EzBob.Underwriter.MarketPlaceDetailsView({
-        el: this.$el.find('#marketplace-details'),
         model: this.model,
         currentId: id,
         customerId: this.model.customerId
       });
+      EzBob.App.jqmodal.show(this.detailView);
       this.detailView.on("reCheck", this.reCheckmarketplaces, this);
+      this.detailView.on("reCheck-PayPal", this.reCheckPaypal, this);
       this.detailView.on("recheck-token", this.renewToken);
       this.detailView.customerId = this.model.customerId;
       return this.detailView.render();
@@ -131,7 +139,14 @@
 
       data = {
         customerId: this.model.customerId,
-        marketplaces: this.model.toJSON(),
+        marketplaces: _.sortBy(_.pluck(this.model.where({
+          IsPaymentAccount: false
+        }), "attributes"), "UWPriority"),
+        accounts: _.sortBy(_.pluck(this.model.where({
+          IsPaymentAccount: true
+        }), "attributes"), "UWPriority"),
+        hideAccounts: false,
+        hideMarketplaces: false,
         summary: {
           anualSales: 0,
           inventory: 0,
@@ -187,6 +202,38 @@
       };
       EzBob.ShowMessage("", "Are you sure?", okFn, "Yes", null, "No");
       return false;
+    };
+
+    MarketPlacesView.prototype.reCheckPaypal = function(e) {
+      var el, umi,
+        _this = this;
+
+      el = $(e.currentTarget);
+      umi = el.attr("umi");
+      EzBob.ShowMessage("", "Are you sure?", (function() {
+        return _this.doReCheck(umi, el);
+      }), "Yes", null, "No");
+      return false;
+    };
+
+    MarketPlacesView.prototype.doReCheck = function(umi, el) {
+      var xhr,
+        _this = this;
+
+      xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/ReCheckPaypal", {
+        customerId: this.model.customerId,
+        umi: umi
+      });
+      xhr.done(function() {
+        EzBob.ShowMessage("Wait a few minutes", "The marketplace recheck has been started. ", null, "OK");
+        return _this.trigger("rechecked", {
+          umi: umi,
+          el: el
+        });
+      });
+      return xhr.fail(function(data) {
+        return console.error(data.responseText);
+      });
     };
 
     MarketPlacesView.prototype.renewTokenClicked = function(e) {

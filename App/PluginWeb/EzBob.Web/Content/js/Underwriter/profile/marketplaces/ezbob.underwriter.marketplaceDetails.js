@@ -30,8 +30,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         return this;
     },
     events: {
-        "click .reCheck-amazon": "reCheck",
-        "click .reCheck-ebay": "reCheck",
+        "click .reCheckMP": "reCheck",
         "click .reCheck-paypal": "reCheckPayPal",
         "click .renew-token": "renewTokenClicked"
     },

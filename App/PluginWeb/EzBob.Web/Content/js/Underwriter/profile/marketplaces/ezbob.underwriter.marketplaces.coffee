@@ -47,7 +47,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         "click tbody tr": "rowClick"
         "click .mp-error-description" : "showMPError"
         "click .renew-token": "renewTokenClicked"
-
+        
     rowClick: (e) ->
         return if e.target.getAttribute('href')
         return if e.target.tagName is 'I'
