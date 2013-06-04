@@ -162,7 +162,7 @@
                     <td class="centered">
                         <div style="width: 100px;">
 
-                            <a href="#" class="btn btn-mini reCheck-amazon" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                            <a href="#" class="btn btn-mini reCheckMP <%- m.Name.replace(' ', '').toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
                             <% if(m.UpdateError && m.Name == 'eBay'){ %>
                             <br/>
                             <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
@@ -202,8 +202,14 @@
                     <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetOutPayments) %></td>
                     <td><%- m.UpdatingStatus %></td>
                     <td>
+                        <% if(m.Name.toLowerCase() === 'paypal') { %>
                         <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
                         <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
+                        <%}else{%>
+                        <a href="#" class="btn btn-mini reCheckMP <%- m.Name.replace(' ', '').toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                        <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+                        <%}%>
+
                     </td>
                 </tr>
                 <%}) %>

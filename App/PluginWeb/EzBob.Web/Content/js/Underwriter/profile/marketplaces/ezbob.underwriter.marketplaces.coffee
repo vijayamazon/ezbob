@@ -42,8 +42,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             @detailView.render()
 
     events:
-        "click .reCheck-amazon": "reCheckmarketplaces"
-        "click .reCheck-ebay": "reCheckmarketplaces"
+        "click .reCheckMP": "reCheckmarketplaces"
         "click .reCheck-paypal" : "reCheckPaypal"
         "click tbody tr": "rowClick"
         "click .mp-error-description" : "showMPError"
