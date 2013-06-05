@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ezbob.Logger;
+using Html;
 using Reports;
 using Ezbob.Database;
 
@@ -20,33 +21,30 @@ namespace EzReportsWeb {
 			return reportList;
 		} // GetReportsList
 
-		internal string GetReportData(System.Web.UI.WebControls.ListItem selectedReport, string fromDate, string toDate, bool isDaily) {
+		internal ATag GetReportData(System.Web.UI.WebControls.ListItem selectedReport, string fromDate, string toDate, bool isDaily) {
 			Report report = GetReport(selectedReport.Text);
+
 			if (report == null)
-				return "<span>Error Occured, try later</span>";
+				return new Span().Append(new Text("Error Occured, try later"));
 
 			report.IsDaily = isDaily;
-			string reportData;
 
 			switch (report.Type) {
 			case ReportType.RPT_NEW_CLIENT:
-				reportData = BuildNewClientReport(report, fromDate, toDate);
-				break;
-			case ReportType.RPT_PLANNED_PAYTMENT:
-				reportData = BuildPlainedPaymentReport(report, fromDate, toDate);
-				break;
-			case ReportType.RPT_DAILY_STATS:
-				reportData = BuildDailyStatsReportBody(report, fromDate, toDate);
-				break;
-			case ReportType.RPT_IN_WIZARD:
-				reportData = BuildInWizardReport(report, fromDate, toDate);
-				break;
-			default:
-				reportData = HandleGenericReport(report, fromDate, toDate);
-				break;
-			} // switch
+				return BuildNewClientReport(report, fromDate, toDate);
 
-			return reportData;
+			case ReportType.RPT_PLANNED_PAYTMENT:
+				return BuildPlainedPaymentReport(report, fromDate, toDate);
+
+			case ReportType.RPT_DAILY_STATS:
+				return BuildDailyStatsReportBody(report, fromDate, toDate);
+
+			case ReportType.RPT_IN_WIZARD:
+				return BuildInWizardReport(report, fromDate, toDate);
+
+			default:
+				return BuildReport(report, fromDate, toDate, "");
+			} // switch
 		} // GetReportData
 
 		private Report GetReport(string title) {
@@ -57,21 +55,21 @@ namespace EzReportsWeb {
 			return null;
 		} // GetReport
 
-		private string HandleGenericReport(Report report, string fromDate, string toDate) {
-			return BuildReport(report, fromDate, toDate, "");
-		} // HandleGenericReport
+		private ATag BuildReport(Report report, string fromDate, string toDate, string period) {
+			var oRpt = new Div();
 
-		private string BuildReport(Report report, string fromDate, string toDate, string period) {
-			var bodyText = new StringBuilder();
-			if (report.IsDaily)
-				bodyText.Append("<body><h1> " + period + " " + report.Title + " " + fromDate + "</h1>");
-			else
-				bodyText.Append("<body><h1> " + period + " " + report.Title + " " + fromDate + " - " + toDate + "</h1>");
+			var h1 = new H1();
 
-			TableReport(bodyText, report.StoredProcedure, fromDate, toDate, report.Headers, report.Fields);
-			bodyText.Append("</body>");
+			var oRptTitle = new Text(period + " " + report.Title + " " + fromDate);
 
-			return bodyText.ToString();
+			oRpt.Append(h1.Append(oRptTitle));
+
+			if (!report.IsDaily)
+				oRptTitle.Append(" - " + toDate);
+
+			oRpt.Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns));
+
+			return oRpt;
 		} // BuildReport
 
 		private List<Report> reportList;

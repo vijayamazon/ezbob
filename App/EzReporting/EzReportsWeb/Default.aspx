@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="EzReportsWeb.Default" %>
 <%@ Import Namespace="System" %>
+<%@ Import Namespace="Reports" %>
 <!DOCTYPE html>
 <script runat="server">
 	protected String GetYesterday() {
@@ -49,6 +50,7 @@
 			//});
 		});
 	</script>
+	<%= Report.GetStyle().ToString() %>
 </head>
 
 <body>

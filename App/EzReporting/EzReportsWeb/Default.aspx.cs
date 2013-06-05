@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.UI;
 using Ezbob.Logger;
+using Html;
 using Reports;
 using System.Web;
 using Ezbob.Database;
@@ -28,8 +29,8 @@ namespace EzReportsWeb {
 				ddlReportTypes.DataSource = reportsList;
 				ddlReportTypes.DataBind();
 
-              //  fromDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
-              //  toDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
+				//  fromDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
+				//  toDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
 			} // if
 		} // Page_Load
 
@@ -54,16 +55,18 @@ namespace EzReportsWeb {
 				break;
 
 			case "Custom":
-                    DateTime.TryParse(Request.Form["fromDate"], out fDate);
-                    DateTime.TryParse(Request.Form["toDate"], out tDate);
+				DateTime.TryParse(Request.Form["fromDate"], out fDate);
+				DateTime.TryParse(Request.Form["toDate"], out tDate);
 				if (tDate.DayOfYear - fDate.DayOfYear == 1)
 					isDaily = true;
 
 				break;
 			} // switch
 
-			string data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate.ToString("yyyy-MM-dd"), tDate.ToString("yyyy-MM-dd"), isDaily);
-			var reportData = new LiteralControl(data);
+			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate.ToString("yyyy-MM-dd"), tDate.ToString("yyyy-MM-dd"), isDaily);
+
+			var reportData = new LiteralControl(data.ToString());
+
 			divReportData.Controls.Add(reportData);
 		} // btnShowReport_Click
 

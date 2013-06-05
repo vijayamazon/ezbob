@@ -57,6 +57,22 @@ namespace ReportAuthenticationLib {
 			} // using
 		} // ResetPassword
 
+		public void AddUserToDb(string userName, string name)
+		{
+			using (var deriveBytes = new Rfc2898DeriveBytes(userName, 20))
+			{
+				byte[] salt = deriveBytes.Salt;
+				byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
+				m_oDB.ExecuteNonQuery("RptAddReportUser",
+									  new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
+									  new QueryParameter("@Name", name) { Type = SqlDbType.NVarChar, Size = 50 },
+									  new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) },
+									  new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) });
+
+				// save salt and key to database
+			}
+		}
+
 		private AConnection m_oDB;
 	} // class ReportAuthentication
 } // namespace ReportAuthenticationLib

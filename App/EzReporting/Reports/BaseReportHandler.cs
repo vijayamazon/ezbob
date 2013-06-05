@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Text;
+using System.Globalization;
 using Ezbob.Database;
 using Ezbob.Logger;
+using Html;
+using PreMailerDotNet;
 
 namespace Reports {
 	using Mailer;
@@ -13,6 +14,7 @@ namespace Reports {
 		public const string DefaultToEMail = "dailyreports@ezbob.com";
 		public const string DefaultFromEMailPassword = "ezbob2012";
 		public const string DefaultFromEMail = "ezbob@ezbob.com";
+		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
 
 		private static string Lock = "";
 
@@ -22,12 +24,10 @@ namespace Reports {
 
 		protected AConnection DB { get; private set; }
 
-		public string BuildPlainedPaymentReport(Report report, string today, string tomorrow) {
-			var bodyText = new StringBuilder();
-			bodyText.Append(ReportsStyling.BodyHtmlStyle).Append("<h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
-			bodyText = PaymentReport(bodyText, today);
-			bodyText.Append("</body>");
-			return bodyText.ToString();
+		public ATag BuildPlainedPaymentReport(Report report, string today, string tomorrow) {
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.Title + " " + today)))
+				.Append(PaymentReport(today));
 		} // BuildPlainedPaymentReport
 
 		public void AddReportToList(List<Report> reportList, DataRow row, string defaultToEmail) {
@@ -43,138 +43,164 @@ namespace Reports {
 				IsDaily = (bool)row["IsDaily"],
 				IsWeekly = (bool)row["IsWeekly"],
 				IsMonthly = (bool)row["IsMonthly"],
-				Headers = row["Header"].ToString().Split(','),
-				Fields = row["Fields"].ToString().Split(','),
+				Columns = Report.ParseHeaderAndFields(row["Header"].ToString(), row["Fields"].ToString()),
 				ToEmail = (string.IsNullOrEmpty(row["ToEmail"].ToString()) ? defaultToEmail : row["ToEmail"].ToString()),
 				IsMonthToDate = (bool)row["IsMonthToDate"]
 			});
 		} // AddReportToList
 
-		public void SendReport(string subject, string mailBody, string toAddressStr = DefaultToEMail, string period = "Daily") {
+		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily") {
+			var email = new Html.Html();
+
+			email
+				.Append(new Head().Append(Report.GetStyle()))
+				.Append(mailBody);
+
+			string sEmail = PreMailer.MoveCssInline(email.ToString(), true);
+
 			lock (Lock) {
-				Mailer.SendMail(DefaultFromEMail, DefaultFromEMailPassword, "EZBOB " + period + " Client Report", mailBody, toAddressStr);
-				Debug("Mail {0} sent to: {1}", subject, toAddressStr);
+				Mailer.SendMail(
+					DefaultFromEMail,
+					DefaultFromEMailPassword,
+					"EZBOB " + period + " " + subject + " Client Report",
+					sEmail,
+					toAddressStr
+				);
 			} // lock
+
+			Debug("Mail {0} sent to: {1}", subject, toAddressStr);
+			Debug("Before embedding styles: {0}", email.ToString());
+			Debug("After embedding styles: {0}", sEmail);
 		} // SendReport
 
-		public string BuildNewClientReport(Report report, string today, string tomorrow) {
-			var bodyText = new StringBuilder();
-			bodyText.Append(ReportsStyling.BodyHtmlStyle).Append("<h1>").Append(report.Title).Append(" ").Append(today).Append("</h1>");
-			AdsReport(bodyText, today);
-			bodyText.Append("<p>");
-			CustomerReport(bodyText, today);
-			bodyText.Append("</body>");
-
-			return bodyText.ToString();
+		public ATag BuildNewClientReport(Report report, string today, string tomorrow) {
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.Title + " " + today)))
+				.Append(AdsReport(today))
+				.Append(CustomerReport(today));
 		} // BuildNewClientReport
 
-		private void CustomerReport(StringBuilder bodyText, String today) {
+		private ATag CustomerReport(string today) {
+			Table tbl = new Table();
+
 			try {
 				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", today));
 
-				int lineCounter = 0;
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Email")))
+					.Append(new Th().Append(new Text("Status")))
+					.Append(new Th().Append(new Text("Wizard Finished")))
+					.Append(new Th().Append(new Text("Account #")))
+					.Append(new Th().Append(new Text("Credit Offer")))
+					.Append(new Th().Append(new Text("Source Ad")));
+
+				oTr.ApplyToChildren<Class>("H");
+
+				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
+
+				Tbody tbody = new Tbody();
+				tbl.Append(tbody);
+
 				foreach (DataRow row in dt.Rows) {
-					if (lineCounter == 0) {
-						bodyText.Append("<table style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append("Email </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Status </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Wizard Finished </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Account # </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Credit Offer </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Source Ad </th>");
-						bodyText.Append("</tr></thead><tbody>");
-					}
-					bodyText.Append("<tr>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["Name"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["Status"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["IsSuccessfullyRegistered"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["AccountNumber"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdAlignRightHtmlStyle).Append(row["CreditSum"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["ReferenceSource"]).Append("</td>");
-					bodyText.Append("</tr>");
-					lineCounter++;
-				}
-				bodyText.Append("</tbody></table>");
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Status"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["IsSuccessfullyRegistered"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["AccountNumber"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["CreditSum"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())));
+
+					tbody.Append(oTr);
+				} // for each data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
+
+			return tbl;
 		} // CustomerReport
 
-		private void AdsReport(StringBuilder bodyText, String today) {
+		private ATag AdsReport(string today) {
+			Table tbl = new Table();
+
 			try {
 				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", today));
 
-				int lineCounter = 0;
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Ad Name")))
+					.Append(new Th().Append(new Text("#")))
+					.Append(new Th().Append(new Text("Total Credit Approved")));
+
+				oTr.ApplyToChildren<Class>("H");
+
+				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
+
+				Tbody tbody = new Tbody();
+				tbl.Append(tbody);
+
 				foreach (DataRow row in dt.Rows) {
-					if (lineCounter == 0) {
-						bodyText.Append("<table style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append("Ad Name </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" # </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append("Total Credit Approved </th>");
-						bodyText.Append("</tr></thead><tbody>");
-					}
-					bodyText.Append("<tr>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["ReferenceSource"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["TotalUsers"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdAlignRightHtmlStyle).Append(row["TotalCredit"]).Append("</td>");
-					bodyText.Append("</tr>");
-					lineCounter++;
-				}
-				bodyText.Append("</tbody></table>");
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["TotalUsers"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["TotalCredit"].ToString())));
+
+					tbody.Append(oTr);
+				} // foreach data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
+
+			return tbl;
 		} // AdsReport
 
-		private StringBuilder PaymentReport(StringBuilder bodyText, String today) {
+		private ATag PaymentReport(string today) {
+			Table tbl = new Table();
+
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
 					new QueryParameter("@DateStart", today),
 					new QueryParameter("@DateEnd", DateTime.Today.AddDays(3).ToString("yyyy-MM-dd"))
 				);
 
-				int lineCounter = 0;
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Id")))
+					.Append(new Th().Append(new Text("Name")))
+					.Append(new Th().Append(new Text("Email")))
+					.Append(new Th().Append(new Text("Date")))
+					.Append(new Th().Append(new Text("Amount")));
+
+				oTr.ApplyToChildren<Class>("H");
+
+				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append( new Thead().Append(oTr) );
+
+				var tbody = new Tbody();
+				tbl.Append(tbody);
+
 				foreach (DataRow row in dt.Rows) {
-					if (lineCounter == 0) {
-						bodyText.Append("<table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append(" Id </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Name </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Email </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Date </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Amount </th>");
-						bodyText.Append("</tr><thead><tbody>");
-					}
-					bodyText.Append("<tr>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["Id"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["Firstname"]).Append(" ").Append(row["SurName"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["Name"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row["DATE"]).Append("</td>");
-					bodyText.Append(ReportsStyling.TdAlignRightHtmlStyle).Append(row["AmountDue"]).Append("</td>");
-					bodyText.Append("</tr>");
-					lineCounter++;
-				}
-				bodyText.Append("</tbody></table>");
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Id"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Firstname"] + " " + row["SurName"])))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["DATE"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["AmountDue"].ToString())));
+
+					tbody.Append(oTr);
+				} // foreach data row
+
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
 
-			return bodyText;
+			return tbl;
 		} // PaymentReport
 
-		public string BuildDailyStatsReportBody(Report report, string today, string tomorrow) {
-			var bodyText = new StringBuilder();
-			bodyText.Append(ReportsStyling.BodyHtmlStyle).Append("<h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
-			bodyText = DailyStatsReport(bodyText, today, tomorrow);
-			bodyText.Append("</body>");
-			return bodyText.ToString();
+		public ATag BuildDailyStatsReportBody(Report report, string today, string tomorrow) {
+			return new Body().Add<Class>("Body")
+				.Append( new H1().Append(new Text(report.Title + " " + today)) )
+				.Append( DailyStatsReport(today, tomorrow) );
 		} // BuildDailyStatsReportBody
-
-		private void TableTD(StringBuilder bodyText, string val) {
-			bodyText.Append(ReportsStyling.TdHtmlStyle).Append(val).Append("</td>");
-		} // TableID
 
 		private bool IsApplicationHeader(string db, bool isNew) {
 			return db == "Applications" && isNew;
@@ -208,7 +234,12 @@ namespace Reports {
 			return db == "Registers";
 		} // IsRegisterLine
 
-		private StringBuilder DailyStatsReport(StringBuilder bodyText, string today, string tomorrow) {
+		private ATag DailyStatsReport(string today, string tomorrow) {
+			Div oRpt = new Div();
+
+			Table tbl = null;
+			Tbody tbody = null;
+
 			try {
 				DataTable dt = DB.ExecuteReader("RptDailyStats",
 					new QueryParameter("@DateStart", today),
@@ -219,190 +250,248 @@ namespace Reports {
 				bool firstApplicationLine = true;
 				bool firstPaymentLine = true;
 				bool firstRegisterLine = true;
+
 				foreach (DataRow row in dt.Rows) {
 					string firstVal = row[0].ToString();
+
 					if (IsApplicationHeader(firstVal, firstApplicationLine)) {
-						bodyText.Append("<p><table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append(" Application </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" #</th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Descision </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Value</th>");
-						bodyText.Append("</tr></thead><tbody>");
+						tbl = new Table();
+
+						ATag oTr = new Tr().Add<Class>("HR")
+							.Append(new Th().Append(new Text("Application")))
+							.Append(new Th().Append(new Text("#")))
+							.Append(new Th().Append(new Text("Decision")))
+							.Append(new Th().Append(new Text("Value")));
+
+						oTr.ApplyToChildren<Class>("H");
+
+						tbl.Add<ID>("tableReportData")
+						.Append(new Thead().Append(oTr)); 
+
+						tbody = new Tbody();
+						tbl.Append(tbody);
+
+						oRpt.Append(new P().Append(tbl));
+
 						firstApplicationLine = false;
-					}
+					} // if first application line
 
 					if (IsApplicationLine(firstVal)) {
-						bodyText.Append("<tr>");
-						TableTD(bodyText, row[1].ToString());
-						TableTD(bodyText, row[2].ToString());
-						TableTD(bodyText, row[3].ToString());
-						TableTD(bodyText, row[4].ToString());
-						bodyText.Append("</tr>");
+						var oTr = new Tr();
+						tbody.Append(oTr);
 
-					}
+						for (var i = 1; i <= 4; i++)
+							oTr.Append(new Td().Add<Class>("L").Append(new Text(row[i].ToString())));
+					} // if is application line
 
 					if (IsLoanHeader(firstVal, firstLoansLine)) {
-						bodyText.Append("</tbody></table></p>");
-						bodyText.Append("<p><table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append(" Loans </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" # </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Value </th>");
-						bodyText.Append("</tr></thead><tbody>");
+						tbl = new Table();
+
+						ATag oTr = new Tr().Add<Class>("HR")
+							.Append(new Th().Append(new Text("Loans")))
+							.Append(new Th().Append(new Text("#")))
+							.Append(new Th().Append(new Text("Value")));
+
+						oTr.ApplyToChildren<Class>("H");
+
+						tbl.Add<ID>("tableReportData")
+						.Append(new Thead().Append(oTr));
+
+						tbody = new Tbody();
+						tbl.Append(tbody);
+
+						oRpt.Append(new P().Append(tbl));
+
 						firstLoansLine = false;
-					}
+					} // if is loan header
 
 					if (IsLoanLine(firstVal)) {
-						bodyText.Append("<tr>");
-						TableTD(bodyText, row[1].ToString());
-						TableTD(bodyText, row[2].ToString());
-						TableTD(bodyText, row[4].ToString());
-						bodyText.Append("</tr>");
+						var oTr = new Tr();
+						tbody.Append(oTr);
 
-					}
+						foreach (var i in new[] { 1, 2, 4 })
+							oTr.Append(new Td().Add<Class>("L").Append(new Text(row[i].ToString())));
+					} // if is loan line
 
 					if (IsPaymentHeader(firstVal, firstPaymentLine)) {
-						bodyText.Append("</tbody></table></p>");
-						bodyText.Append("<p><table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append("Payments </th>").
-								 Append(ReportsStyling.ThHtmlStyle).Append(" Value </th>");
-						bodyText.Append("</tr></thead><tbody>");
+						tbl = new Table();
+
+						ATag oTr = new Tr().Add<Class>("HR")
+							.Append(new Th().Append(new Text("Payments")))
+							.Append(new Th().Append(new Text("Value")));
+
+						oTr.ApplyToChildren<Class>("H");
+
+						tbl.Add<ID>("tableReportData")
+						.Append(new Thead().Append(oTr));
+
+						tbody = new Tbody();
+						tbl.Append(tbody);
+
+						oRpt.Append(new P().Append(tbl));
+
 						firstLoansLine = false;
-					}
+					} // if is first payment line
 
 					if (IsPaymentLine(firstVal)) {
-						bodyText.Append("<tr>");
-						TableTD(bodyText, row[2].ToString());
-						TableTD(bodyText, row[4].ToString());
-						bodyText.Append("</tr>");
+						var oTr = new Tr();
+						tbody.Append(oTr);
 
-					}
+						foreach (var i in new[] { 2, 4 })
+							oTr.Append(new Td().Add<Class>("L").Append(new Text(row[i].ToString())));
+					} // if payment line
 
 					if (IsRegisterHeader(firstVal, firstRegisterLine)) {
-						bodyText.Append("</tbody></table></p>");
-						bodyText.Append("<p><table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						bodyText.Append(ReportsStyling.ThHtmlStyle).Append(" Registers </th>");
-						bodyText.Append("</tr></thead><tbody>");
+						tbl = new Table();
+
+						tbl.Add<ID>("tableReportData")
+						.Append(new Thead().Append(new Tr().Add<Class>("HR")
+							.Append(new Th().Add<Class>("H").Append(new Text("Registers")))
+						));
+
+						tbody = new Tbody();
+						tbl.Append(tbody);
+
+						oRpt.Append(new P().Append(tbl));
+
 						firstLoansLine = false;
-					}
+					} // if is register header
 
-					if (IsRegisterLine(firstVal)) {
-						bodyText.Append("<tr>");
-						TableTD(bodyText, row[2].ToString());
-						bodyText.Append("</tr>");
-					}
-				}
-				bodyText.Append("</tbody></table></p>");
-
+					if (IsRegisterLine(firstVal))
+						tbody.Append( new Tr().Append(new Td().Add<Class>("L").Append(new Text(row[2].ToString()))) );
+				} // for each data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
 
-			return bodyText;
+			return oRpt;
 		} // DailyStatsReport
 
-		public string BuildInWizardReport(Report report, string today, string tomorrow) {
-			var bodyText = new StringBuilder();
-			bodyText.Append(ReportsStyling.BodyHtmlStyle).Append("<h1> ").Append(report.Title).Append(" ").Append(today).Append("</h1>");
-			bodyText.Append("<p>");
-			bodyText.Append("Clients that enetered Shops but did not complete:");
-			bodyText.Append("<p>");
-			DailyInWizardReport(bodyText, today, tomorrow);
-			bodyText.Append("<p>");
-			bodyText.Append("Clients that just enetered their email:");
-			bodyText.Append("<p>");
-			DailyStep1Report(bodyText, today, tomorrow);
-			bodyText.Append("</body>");
-			return bodyText.ToString();
+		public ATag BuildInWizardReport(Report report, string today, string tomorrow) {
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.Title + " " + today)))
+				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
+
+				.Append(new P().Append(TableReport("RptNewClients", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)))
+
+				.Append(new P().Append(new Text("Clients that just enetered their email:")))
+
+				.Append(new P().Append(TableReport("RptNewClientsStep1", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)));
 		} // BuildInWizardReport
 
-		private void DailyInWizardReport(StringBuilder bodyText, string fromDate, string toDate) {
-			string[] headers;
-			string[] fields;
-			GetHeaderAndFields(ReportType.RPT_IN_WIZARD, out headers, out fields);
-			TableReport(bodyText, "RptNewClients", fromDate, toDate, headers, fields, true);
-		} // DailyInWizardReport
-
-		private void DailyStep1Report(StringBuilder bodyText, string fromDate, string toDate) {
-			string[] headers;
-			string[] fields;
-			GetHeaderAndFields(ReportType.RPT_IN_WIZARD, out headers, out fields);
-			TableReport(bodyText, "RptNewClientsStep1", fromDate, toDate, headers, fields, true);
-		} // DailyStep1Report
-
-		private void GetHeaderAndFields(ReportType type, out string[] header, out string[] fields) {
-			header = null;
-			fields = null;
-
+		private ColumnInfo[] GetHeaderAndFields(ReportType type) {
 			DataTable dt = DB.ExecuteReader("RptScheduler_GetHeaderAndFields", new QueryParameter("@Type", type.ToString()));
 
+			string sHeader = null;
+			string sFields = null;
+
 			foreach (DataRow row in dt.Rows) {
-				header = row[0].ToString().Split(',');
-				fields = row[1].ToString().Split(',');
-			}
+				sHeader = row[0].ToString();
+				sFields = row[1].ToString();
+			} // for each
+
+			return Report.ParseHeaderAndFields(sHeader, sFields);
 		} // GetHeadersAndFields
 
-		public void TableReport(StringBuilder bodyText, string spName, string startDate, string endDate, string[] headers, string[] fields, bool isSharones = false) {
+		public ATag TableReport(string spName, string startDate, string endDate, ColumnInfo[] columns, bool isSharones = false) {
+			var tbl = new Table().Add<Class>("Report");
+
 			try {
 				DataTable dt = DB.ExecuteReader(spName,
 					new QueryParameter("@DateStart", startDate),
 					new QueryParameter("@DateEnd", endDate)
 				);
 
+				if (!isSharones)
+					tbl.Add<ID>("tableReportData");
+
+				var tr = new Tr().Add<Class>("HR");
+
+				for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
+					if (columns[columnIndex].IsVisible)
+						tr.Append(new Th().Add<Class>("H").Append(new Text(columns[columnIndex].Caption)));
+
+				tbl.Append(new Thead().Append(tr));
+
+				var oTbody = new Tbody();
+				tbl.Append(oTbody);
+
 				int lineCounter = 0;
+
 				foreach (DataRow row in dt.Rows) {
-					if (lineCounter == 0) {
-						if (isSharones) {
-							bodyText.Append("<table style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
+					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Even" : "Odd");
+					oTbody.Append(oTr);
+
+					List<string> oClassesToApply = new List<string>();
+
+					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++) {
+						ColumnInfo col = columns[columnIndex];
+						var oValue = row[col.FieldName];
+
+						if (col.IsVisible) {
+							var oTd = new Td();
+							oTr.Append(oTd);
+
+							if (IsNumber(oValue))
+								oTd.Add<Class>("R").Append(new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2))));
+							else
+								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
 						}
 						else {
-							bodyText.Append("<table id='tableReportData' style=").Append(ReportsStyling.TableHtmlStyle).Append("><thead>").Append(ReportsStyling.TrHeadHtmlStyle);
-						}
+							if (col.ValueType == ValueType.CssClass)
+								oClassesToApply.Add(oValue.ToString());
+						} // if
+					} // for each column
 
-						for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++) {
-							bodyText.Append(ReportsStyling.ThHtmlStyle).Append(headers[columnIndex]).Append("</th>");
-						}
+					if (oClassesToApply.Count > 0)
+						oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
 
-						bodyText.Append("</tr></thead><tbody>");
-					}
-					else if (lineCounter % 2 == 0) {
-						bodyText.Append(ReportsStyling.TrBodyEven);
-					}
-					else {
-						bodyText.Append(ReportsStyling.TrBodyOdd);
-					}
-					for (int columnIndex = 0; columnIndex < fields.Length; columnIndex++) {
-						if (headers[columnIndex].Contains("Value") ||
-							headers[columnIndex].Contains("Amount Due") ||
-							headers[columnIndex].Contains("InterestRate") ||
-							headers[columnIndex].Contains("Interest") ||
-							headers[columnIndex].Contains("LoanRepayment") ||
-							headers[columnIndex].Contains("Payment #") ||
-							headers[columnIndex].Contains("Max Approved") ||
-							headers[columnIndex].Contains("Total Loans") ||
-							headers[columnIndex].Contains("Annual Turnover") ||
-							headers[columnIndex].Contains("Credit Score") ||
-							headers[columnIndex].Contains("Repaid") ||
-							headers[columnIndex].Contains("Principal") ||
-							headers[columnIndex].Contains("Loan") ||
-							headers[columnIndex].Contains("Approved") ||
-							headers[columnIndex].Contains("Open Credit") ||
-							headers[columnIndex].Contains("Offer To Client") ||
-							headers[columnIndex].Contains("Fees")) {
-							bodyText.Append(ReportsStyling.TdAlignRightHtmlStyle).Append(row[fields[columnIndex]]).Append("</td>");
-						}
-						else {
-							bodyText.Append(ReportsStyling.TdHtmlStyle).Append(row[fields[columnIndex]]).Append("</td>");
-						}
-					}
-					bodyText.Append("</tr>");
 					lineCounter++;
-				}
-				bodyText.Append("</tbody></table>");
+				} // for each data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
+
+			return tbl;
 		} // TableReport
+
+		private static bool IsNumber(object value) {
+			return IsInt(value) || IsFloat(value);
+		} // IsNumber
+
+		private static bool IsInt(object value) {
+			return value is sbyte
+				|| value is byte
+				|| value is short
+				|| value is ushort
+				|| value is int
+				|| value is uint
+				|| value is long
+				|| value is ulong;
+		} // IsInt
+
+		private static bool IsFloat(object value) {
+			return value is float
+				|| value is double
+				|| value is decimal;
+		} // IsFloat
+
+		private string NumStr(object oNumber, string sFormat) {
+			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, FormatInfo);
+
+			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
+		} // NumStr
 	} // class BaseReportHandler
 } // namespace Reports

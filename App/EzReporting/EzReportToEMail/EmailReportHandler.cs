@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Text;
+using Html;
 using Reports;
 using Ezbob.Database;
 using Ezbob.Logger;
@@ -15,7 +16,6 @@ namespace EzReportToEMail {
 		private const string WeeklyPerdiod = "Weekly";
 		private const string MonthlyPerdiod = "Monthly";
 		private const string MonthToDatePerdiod = "Month to Date";
-		private static string Lock = "";
 
 		public EmailReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {
 		} // constructor
@@ -29,29 +29,23 @@ namespace EzReportToEMail {
 			string tomorrow = dToday.AddDays(1).ToString("yyyy-MM-dd");
 
 			Parallel.ForEach<Report> (reportList, (report) => {
-				lock (Lock) {
-					Debug(report.Title);
-				}
+				Debug(report.Title);
 
 				switch (report.Type) {
 				case ReportType.RPT_NEW_CLIENT:
-					string newClientReportBody = BuildNewClientReport(report, today, tomorrow);
-					SendReport(report.Title, newClientReportBody, report.ToEmail);
+					SendReport(report.Title, BuildNewClientReport(report, today, tomorrow), report.ToEmail);
 					break;
 
 				case ReportType.RPT_PLANNED_PAYTMENT:
-					string plainedPaymentReportBody = BuildPlainedPaymentReport(report, today, tomorrow);
-					SendReport(report.Title, plainedPaymentReportBody, report.ToEmail);
+					SendReport(report.Title, BuildPlainedPaymentReport(report, today, tomorrow), report.ToEmail);
 					break;
 
 				case ReportType.RPT_DAILY_STATS:
-					string dailyStatsReportBody = BuildDailyStatsReportBody(report, today, tomorrow);
-					SendReport(report.Title, dailyStatsReportBody, report.ToEmail);
+					SendReport(report.Title, BuildDailyStatsReportBody(report, today, tomorrow), report.ToEmail);
 					break;
 
 				case ReportType.RPT_IN_WIZARD:
-					string inWizardReportBody = BuildInWizardReport(report, today, tomorrow);
-					SendReport(report.Title, inWizardReportBody, report.ToEmail);
+					SendReport(report.Title, BuildInWizardReport(report, today, tomorrow), report.ToEmail);
 					break;
 
 				default:
@@ -87,34 +81,56 @@ namespace EzReportToEMail {
 		} // HandleGenericReport
 
 		private void BuildReport(Report report, string fromDate, string toDate, string period) {
-			var bodyText = new StringBuilder();
-			bodyText.Append(Reports.ReportsStyling.BodyHtmlStyle);
-			bodyText.Append(ReportsStyling.HeaderDiv).Append(ReportsStyling.HeaderLogo);
+			var body = new Body().Add<Class>("Body");
+
+			var oTbl = new Table().Add<Class>("Header");
+			body.Append(oTbl);
+
+			var oImgLogo = new Img()
+				.Add<Class>("Logo")
+				.Add<Src>("http://www.ezbob.com/wp-content/themes/ezbob/images/ezbob_logo.png");
+
+			var oLogoLink = new A()
+				.Add<Href>("http://www.ezbob.com/")
+				.Add<Class>("logo_ezbob")
+				.Add<Class>("indent_text")
+				.Add<ID>("ezbob_logo")
+				.Add<Title>("Fast business loans for Ebay and Amazon merchants")
+				.Add<Alt>("Fast business loans for Ebay and Amazon merchants")
+				.Append(oImgLogo);
+
+			var oTr = new Tr();
+			oTbl.Append(oTr);
+
+			oTr.Append(new Td().Append(oLogoLink));
+
+			H1 oRptTitle = new H1();
+
+			oTr.Append(new Td().Append(oRptTitle));
+
+			string month = DateTime.Parse(fromDate).ToString("MMMMM yyyy", CultureInfo.GetCultureInfo("en-GB"));
 
 			switch (period) {
 			case DailyPerdiod:
-				bodyText.Append("<td><h1> " + period + " " + report.Title + " " + fromDate + "</h1></td>");
+				oRptTitle.Append(new Text(period + " " + report.Title + " for " + fromDate));
 				break;
 
 			case WeeklyPerdiod:
-				bodyText.Append("<td><h1> " + period + " " + report.Title + " " + fromDate + " - " + toDate + "</h1></td>");
+				oRptTitle.Append(new Text(period + " " + report.Title + " for " + fromDate + " - " + toDate));
 				break;
 
 			case MonthlyPerdiod:
-				string month = DateTime.Parse(fromDate).ToString("MMMMM", CultureInfo.GetCultureInfo("en-US"));
-				bodyText.Append("<td><h1> " + period + " " + report.Title + " " + month + "</h1></td>");
+				oRptTitle.Append(new Text(period + " " + report.Title + " for " + month));
 				break;
 
 			case MonthToDatePerdiod:
-				bodyText.Append("<td><h1> " + period + " " + report.Title + " until " + toDate + "</h1></td>");
+				oRptTitle.Append(new Text(period + " " + report.Title + " for " + month + " Until " + toDate));
 				break;
 			} // switch
 
-			bodyText.Append("</tr></table>");
-			TableReport(bodyText, report.StoredProcedure, fromDate, toDate, report.Headers, report.Fields);
-			bodyText.Append("</body>");
+			body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns)));
 
-			SendReport(report.Title, bodyText.ToString(), report.ToEmail, period);
+			SendReport(report.Title, body, report.ToEmail, period);
 		} // BuildReport
 
 		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {
