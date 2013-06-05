@@ -33,11 +33,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EzEnvironment">
+      <HintPath>..\..\..\Lib\Ezbob\EzEnvironment.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\3rdParty\Log4Net\log4net.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Logger">
-      <HintPath>..\..\Dlls\Logger.dll</HintPath>
+      <HintPath>..\..\..\Lib\Ezbob\Logger.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -55,15 +58,9 @@
     <Compile Include="QueryParameter.cs" />
     <Compile Include="SqlConnection.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\EzEnvironment\EzEnvironment.csproj">
-      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
-      <Name>EzEnvironment</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath)  $(ProjectDir)\..\..\Dlls</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetPath)  $(ProjectDir)\..\..\..\Lib\Ezbob\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
