@@ -167,7 +167,14 @@
 
 			if (campaignClickStats.GetCampaignClickStatListCount() > 0)
 			{
-				SerializeToXml(campaignClickStats);
+				try
+				{
+					SerializeToXml(campaignClickStats);
+				}
+				catch (Exception ex)
+				{
+					Logger.ErrorFormat("Can't serialize to file {0}", ex);
+				}
 				DbCommands.DeleteCampaignClickStatsTable();
 				var campaignClickStatsList = campaignClickStats.GetCampaignClickStatsList();
 				foreach (var campaignClickStat in campaignClickStatsList)
@@ -181,7 +188,8 @@
 		{
 			var serializer = new XmlSerializer(typeof(CampaignClickStats));
 
-			using (var writer = new StreamWriter("stats.xml"))
+			var path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\stats.xml";
+			using (var writer = new StreamWriter(path))
 			{
 				serializer.Serialize(writer, stats);
 			}
