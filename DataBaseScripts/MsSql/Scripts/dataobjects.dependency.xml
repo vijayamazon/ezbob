@@ -349,8 +349,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CashRequests_DiscountPlan</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CashRequests_DiscountPlan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>CashRequests</oName>
-    <oRank>1</oRank>
+    <oRank>2</oRank>
     <oFileName>02_TABLES\CashRequests.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -514,6 +520,12 @@
     <oName>DiscountPlan</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\DiscountPlan.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -754,6 +766,12 @@
     <oName>LoyaltyProgramActionTypes</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoyaltyProgramActionTypes.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MC_CampaignClicks</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MC_CampaignClicks.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1702,6 +1720,24 @@
     <oName>SingleRunApplication</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\SingleRunApplication.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_PK_SiteAnalyticsCodesId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalytics</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\SiteAnalytics.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalyticsCodes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SiteAnalyticsCodes.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

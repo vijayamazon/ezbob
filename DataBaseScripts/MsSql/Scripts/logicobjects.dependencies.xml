@@ -163,6 +163,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CashRequests_DiscountPlan</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CashRequests_DiscountPlan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_Customer_CardInfo</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_Customer_CardInfo.sql</oFileName>
@@ -700,6 +706,12 @@
     <oName>FK_Security_UserRoleRelation_Security_User</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_Security_UserRoleRelation_Security_User.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_PK_SiteAnalyticsCodesId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -2284,6 +2296,12 @@
     <oName>RptScheduler_GetReportList</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptScheduler_GetReportList.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptSiteAnalytics</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptSiteAnalytics.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
