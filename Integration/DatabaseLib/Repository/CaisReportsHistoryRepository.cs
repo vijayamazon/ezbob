@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Repository
         {
         }
 
-        public void AddFile(string fileData, string name, string folderName, int type, int ofItems, int goodUsers,
+        public void AddFile(byte[] fileData, string name, string folderName, int type, int ofItems, int goodUsers,
                             int defaults)
         {
             Save(new CaisReportsHistory
@@ -35,7 +35,7 @@ namespace EZBob.DatabaseLib.Repository
                 });
         }
 
-        public void UpdateFile(string fileData, int id)
+        public void UpdateFile(byte[] fileData, int id)
         {
             var model = Get(id);
             if (model == null) throw new FileNotFoundException();

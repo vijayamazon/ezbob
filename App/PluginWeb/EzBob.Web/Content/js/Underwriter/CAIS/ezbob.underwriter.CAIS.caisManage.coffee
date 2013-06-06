@@ -39,7 +39,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         BlockUi "on"
         @model.fetch().done => BlockUi "off"
         @checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles()
-        @bindTo @checkedModel, "add remove", @checkedFileModelChanged, @
+        @bindTo @checkedModel, "add remove reset", @checkedFileModelChanged, @
    
     ui:
         count:".reports-count"
@@ -69,11 +69,13 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         sendFn = =>
             BlockUi "on"
             xhr = @checkedModel.sendToServer()
-            xhr.done (response)->
+            xhr.done (response)=>
                 if response and response.error != undefined
                     EzBob.ShowMessage "<pre>{0}</pre>".f(response.error), "Error"
                     return
                 EzBob.ShowMessage "File(s) successfully sended ", "Successful"
+                @checkedModel.reset()
+                @render()
             xhr.fail ()->
                 EzBob.ShowMessage "Something went wrong", "Error occured"
             xhr.always ->

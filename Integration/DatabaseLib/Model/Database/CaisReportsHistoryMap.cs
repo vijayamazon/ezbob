@@ -17,7 +17,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.UploadStatus).CustomType<CaisUploadStatus>();
             Map(x => x.DirName);
             Map(x => x.Defaults);
-            Map(x => x.FileData).CustomType("StringClob").LazyLoad();
+            Map(x => x.FileData).Length(int.MaxValue).LazyLoad();
         }
     }
 }

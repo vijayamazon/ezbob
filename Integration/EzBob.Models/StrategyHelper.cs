@@ -1,13 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
-using ExperianLib.CaisFile;
 using EzBob.CommonLib.TimePeriodLogic;
+using EzBob.Web.Code;
 using NHibernate;
 using StructureMap;
+using System.IO.Compression;
 
 namespace EzBob.Models
 {
@@ -79,8 +82,13 @@ namespace EzBob.Models
 
         public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
         {
-            _caisReportsHistoryRepository.AddFile(data, name, foldername, type, ofItems, goodUsers, defaults);
+            _caisReportsHistoryRepository.AddFile(ZipString.Zip(data), name, foldername, type, ofItems, goodUsers, defaults);
         }
 
+        public string GetCAISFileById(int id)
+        {
+            var file = _caisReportsHistoryRepository.Get(id);
+            return file != null ? ZipString.Unzip(file.FileData) : "";
+        }
     }
 }

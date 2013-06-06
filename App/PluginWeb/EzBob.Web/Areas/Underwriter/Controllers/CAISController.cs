@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Repository;
 using ExperianLib.CaisFile;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
+using EzBob.Web.Code;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
@@ -56,7 +58,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public string GetOneFile(int id)
         {
             var cais = _caisReportsHistoryRepository.Get(id);
-            return cais != null ? cais.FileData : "Not found";
+            return cais != null ? ZipString.Unzip(cais.FileData) : "Not found";
         }
 
         [Ajax]
@@ -64,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public void SaveFileChange(string fileContent, int id)
         {
-            _caisReportsHistoryRepository.UpdateFile(fileContent, id);
+            _caisReportsHistoryRepository.UpdateFile(ZipString.Zip(fileContent), id);
             _appCreator.CAISUpdate(_context.User, id);
         }
 
@@ -95,7 +97,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             
             try
             {
-                sender.UploadData(file.FileData, file.FileName);
+                sender.UploadData(ZipString.Unzip(file.FileData), file.FileName);
                 file.UploadStatus = CaisUploadStatus.Uploaded;
             }
             catch (Exception)

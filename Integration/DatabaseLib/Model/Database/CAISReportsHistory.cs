@@ -26,6 +26,6 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual CaisUploadStatus? UploadStatus { get; set; }
         public virtual string DirName { get; set; }
         public virtual int? Defaults { get; set; }
-        public virtual string FileData { get; set; }
+        public virtual byte[] FileData { get; set; }
     }
 }
