@@ -3,6 +3,8 @@ using System.Linq;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Repository;
+using ExperianLib.CaisFile;
 using EzBob.CommonLib.TimePeriodLogic;
 using NHibernate;
 using StructureMap;
@@ -14,12 +16,14 @@ namespace EzBob.Models
         private readonly CustomerRepository _customers;
         private readonly DecisionHistoryRepository _decisionHistory;
         private readonly ISession _session;
+        private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
 
         public StrategyHelper()
         {
             _session = ObjectFactory.GetInstance<ISession>();
             _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
+            _caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
         }
 
         public double GetAnualTurnOverByCustomer(int customerId)
@@ -72,5 +76,11 @@ namespace EzBob.Models
             var senDate = seniority != null ? seniority.Value.Date : DateTime.UtcNow;
             return Convert.ToInt32((DateTime.UtcNow - senDate).TotalDays);
         }
+
+        public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
+        {
+            _caisReportsHistoryRepository.AddFile(data, name, foldername, type, ofItems, goodUsers, defaults);
+        }
+
     }
 }

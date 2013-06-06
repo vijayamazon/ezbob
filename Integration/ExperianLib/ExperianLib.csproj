@@ -45,9 +45,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Caches.SysCache2">
-      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
@@ -68,13 +65,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

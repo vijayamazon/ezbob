@@ -8,14 +8,14 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
 {
     public class CaisModel
     {
-        public virtual string Date { get; set; }
-        public virtual string FileName { get; set; }
-        public virtual string Type { get; set; }
-        public virtual string OfItems { get; set; }
-        public virtual string GoodUsers { get; set; }
-        public virtual string CaisUploadStatus { get; set; }
-        public virtual string FilePath { get; set; }
-        public virtual string Defaults { get; set; }
+        public string Date { get; set; }
+        public string FileName { get; set; }
+        public string Type { get; set; }
+        public string OfItems { get; set; }
+        public string GoodUsers { get; set; }
+        public string CaisUploadStatus { get; set; }
+        public string Defaults { get; set; }
+        public int Id { get; set; }
 
         public static List<CaisModel> FromModel(IEnumerable<CaisReportsHistory>  reportsHistory)
         {
@@ -23,11 +23,11 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
             return model
                 .Select(x => new CaisModel
                     {
+                        Id = x.Id,
                         CaisUploadStatus = x.UploadStatus.ToString(),
                         Date = FormattingUtils.FormatDateTimeToString(x.Date),
                         GoodUsers = x.GoodUsers.ToString(),
                         FileName = x.FileName,
-                        FilePath = x.FilePath,
                         Type = x.Type.ToString(),
                         OfItems = x.OfItems.ToString(),
                         Defaults = x.Defaults.HasValue ? x.Defaults.Value.ToString(CultureInfo.InvariantCulture) : "-"
@@ -37,6 +37,6 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
 
     public class CaisSendModel
     {
-        public string Path { get; set; }
+        public int Id { get; set; }
     }
 }

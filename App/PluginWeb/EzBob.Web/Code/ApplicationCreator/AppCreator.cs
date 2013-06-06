@@ -365,5 +365,15 @@ namespace EzBob.Web.Code.ApplicationCreator
             }
             CreateApplication(user, new StrategyParameter[]{}, _config.CAISNoUploadStrategyName);
         }
+
+        public void CAISUpdate(User user, int caisId)
+        {
+            var strategyParameters = new[]
+                {
+                    new StrategyParameter("userId", user.Id),
+                    new StrategyParameter("caisId", caisId)
+                };
+            CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
+        }
     }
 }
