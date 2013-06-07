@@ -235,7 +235,10 @@ namespace ExperianLib
             var cais = output.Output.FullConsumerData.ConsumerData.CAIS;
             var dateAdded = DateTime.UtcNow;
             var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<ExperianDefaultAccount>>();
-
+            if (cais == null)
+            {
+                return;
+            }
             foreach (var caisData in cais)
             {
                 foreach (var detail in caisData.CAISDetails.Where(detail => detail.AccountStatus == "F"))
