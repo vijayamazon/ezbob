@@ -78,7 +78,7 @@
                 var consumerSrv = new ConsumerService();
 				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
                                                          customer.PersonalInfo.Gender.ToString(), // should be Gender
-                                                         customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, true);
+                                                         customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
 
                 model = generateConsumerModel(customer.Id, result);
 
@@ -193,7 +193,7 @@
 
                 var result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
                                                  director.Gender.ToString(),
-                                                 director.DateOfBirth, null, dirLoc, "PL", customer.Id, true);
+                                                 director.DateOfBirth, null, dirLoc, "PL", customer.Id, 0, true);
                 var dirModel = generateConsumerModel(-1, result);
                 dirModel.Name = director.Name;
                 dirModel.MiddleName = director.Middle;

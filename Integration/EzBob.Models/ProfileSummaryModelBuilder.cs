@@ -167,7 +167,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 }
 				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
                                                          customer.PersonalInfo.Gender.ToString(), // should be Gender
-                                                         customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, true);
+                                                         customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
 
                 if (result != null)
                 {
