@@ -121,12 +121,15 @@
 		{
 			McCampaign.Campaigns campaigns;
 			int page = 0;
+			const int campaignsPerPage = 50;
+			const int maxNumOfPages = 1000 / campaignsPerPage;
+
 			var campaignClickStats = new CampaignClickStats();
 			
 			do
 			{
 				campaigns = Mc.Campaigns(
-					new McCampaign.Filter { ListID = Constants.EzbobCustomersListId }, limit: 50, start: page);
+					new McCampaign.Filter { ListID = Constants.EzbobCustomersListId }, limit: campaignsPerPage, start: page);
 
 				Logger.DebugFormat("num of campaigns {0} on page {1}", campaigns.Data.Count, page);
 
@@ -156,7 +159,7 @@
 					}
 				}
 				page++;
-			} while (campaigns.Data.Count > 0);
+			} while (campaigns.Data.Count > 0 && page < maxNumOfPages);
 			
 			/*
 			campaignClickStats.AddStat("test", "test", "test", DateTime.Now.ToString("yyyy-MM-dd"),
