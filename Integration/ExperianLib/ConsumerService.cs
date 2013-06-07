@@ -26,13 +26,17 @@ namespace ExperianLib
             _config = ConfigurationRootBob.GetConfiguration().Experian;
         }
 
-        public ConsumerServiceResult GetConsumerInfo(string firstName, string surname, string gender, DateTime? birthDate, 
-                                                        InputLocationDetailsUKLocation ukLocation,
-                                                        InputLocationDetailsMultiLineLocation mlLocation,
-                                                        string applicationType,
-                                                        int customerId, 
-                                                        bool checkInCacheOnly = false
-                                                     )
+        public ConsumerServiceResult GetConsumerInfo(string firstName,
+                                                     string surname,
+                                                     string gender,
+                                                     DateTime? birthDate,
+                                                     InputLocationDetailsUKLocation ukLocation,
+                                                     InputLocationDetailsMultiLineLocation mlLocation,
+                                                     string applicationType,
+                                                     int customerId,
+                                                     int directorId,
+                                                     bool checkInCacheOnly = false
+            )
         {
             try
             {
@@ -215,6 +219,8 @@ namespace ExperianLib
                     person.LastUpdateDate = DateTime.Now;
                     person.JsonPacket = JsonConvert.SerializeObject(output);
                     person.JsonPacketInput = JsonConvert.SerializeObject(input);
+                    person.CustomerId = customerId;
+                    if (directorId != 0) person.DirectorId = directorId;
                     repo.SaveOrUpdate(person);
                     SaveDefaultAccountIntoDb(output, customerId);
                 }
