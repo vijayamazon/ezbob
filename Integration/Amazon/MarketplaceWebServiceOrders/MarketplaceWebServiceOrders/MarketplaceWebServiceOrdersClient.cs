@@ -279,6 +279,15 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
                         }
                         catch ( MarketplaceWebServiceOrdersException mwsErr )
                         {
+                            if (mwsErr.Message == "Invalid ids presented")
+                            {
+                                var mpid = parameters["MarketplaceId.Id.1"];
+                                if (!string.IsNullOrEmpty(mpid))
+                                {
+                                    string message = string.Format("Amazon call failed. Possible issue - wrong MarketplaceId ({0})", mpid);
+                                    _log.Error(message);
+                                }
+                            }
                             throw mwsErr;
                         }
                         catch ( Exception e )

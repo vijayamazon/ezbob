@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonRateInfoFixture.cs" />
+    <Compile Include="Amazon\ListOrdersFixture.cs" />
     <Compile Include="AnalysisFunctionTimePeriodRepositoryFixture.cs" />
     <Compile Include="CAIS\cais.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -175,6 +176,10 @@
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Amazon\MarketplaceWebServiceOrders\MarketplaceWebServiceOrders.csproj">
+      <Project>{2AD52941-1F8A-3ED6-9F00-69F6F6AB2803}</Project>
+      <Name>MarketplaceWebServiceOrders</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
