@@ -19,21 +19,30 @@ namespace EzBob.Signals.ZohoCRM
             try
             {
                 customerRepository.EnsureTransaction(() =>
-                {
-                    var customer = customerRepository.Get(Message.CustomerId);
-
-                    switch (Message.MethodType)
                     {
-                        case ZohoMethodType.UpdateOrCreate: zohoFacade.UpdateOrCreate(customer); break;
-                        case ZohoMethodType.RegisterLead: zohoFacade.RegisterLead(customer); break;
-                        case ZohoMethodType.ConvertLead: zohoFacade.ConvertLead(customer); break;
-                    }
-                    Common.RemoveMessage(Signal.Id, Log);
-                });
+                        var customer = customerRepository.Get(Message.CustomerId);
+
+                        switch (Message.MethodType)
+                        {
+                            case ZohoMethodType.UpdateOrCreate:
+                                zohoFacade.UpdateOrCreate(customer);
+                                break;
+                            case ZohoMethodType.RegisterLead:
+                                zohoFacade.RegisterLead(customer);
+                                break;
+                            case ZohoMethodType.ConvertLead:
+                                zohoFacade.ConvertLead(customer);
+                                break;
+                        }
+                    });
             }
             catch (Exception e)
             {
                 Log.Error(e);
+            }
+            finally
+            {
+                Common.RemoveMessage(Signal.Id, Log);
             }
         }
 
