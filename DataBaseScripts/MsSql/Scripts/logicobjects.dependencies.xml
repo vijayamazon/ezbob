@@ -709,12 +709,6 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
-    <oName>FK_PK_SiteAnalyticsCodesId</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_PK_SiteAnalyticsCodesId.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>FKEA3BC91D4A086D8C</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FKEA3BC91D4A086D8C.sql</oFileName>
@@ -952,6 +946,12 @@
     <oName>vAppDetails</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\vAppDetails.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>vPacnetBalance</oName>
+    <oRank>2</oRank>
+    <oFileName>04_VIEWS\vPacnetBalance.sql</oFileName>
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
@@ -2137,6 +2137,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>pPacnetBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\pPacnetBalance.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>ResetAllSignals</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\ResetAllSignals.sql</oFileName>
@@ -2932,6 +2938,12 @@
     <oName>fnInspector_GetTuskListOld</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\fnInspector_GetTuskListOld.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>fnPacnetBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\fnPacnetBalance.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>

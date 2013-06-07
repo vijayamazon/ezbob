@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
 using FluentNHibernate.Mapping;
 using NHibernate;
 using NHibernate.Linq;
@@ -12,7 +11,10 @@ namespace EZBob.DatabaseLib
     {
         public int Id { get; set; }
         public decimal CurrentBalance { get; set; }
-        public DateTime Date { get; set; }
+        public decimal ReservedAmount { get; set; }
+        public decimal Adjusted { get; set; }
+        public decimal Loans { get; set; }
+        public DateTime? Date { get; set; }
     }
 
     public class PacNetBalanceMap : ClassMap<PacNetBalance>
@@ -20,9 +22,12 @@ namespace EZBob.DatabaseLib
         public PacNetBalanceMap()
         {
             Not.LazyLoad();
-            Table("PacNetBalance");
+            Table("vPacnetBalance");
             Id(x => x.Id);
-            Map(x => x.CurrentBalance, "CurrentBalance");
+            Map(x => x.CurrentBalance, "PacnetBalance");
+            Map(x => x.ReservedAmount);
+            Map(x => x.Adjusted);
+            Map(x => x.Loans);
             Map(x => x.Date);
         }
     }
@@ -30,6 +35,7 @@ namespace EZBob.DatabaseLib
     public interface IPacNetBalanceRepository : IRepository<PacNetBalance>
     {
         decimal GetFunds();
+        PacNetBalance GetBalance();
     }
 
     public class PacNetBalanceRepository : NHibernateRepositoryBase<PacNetBalance>, IPacNetBalanceRepository
@@ -40,16 +46,14 @@ namespace EZBob.DatabaseLib
 
         public decimal GetFunds()
         {
-            var funds = _session.Query<PacNetBalance>().OrderByDescending(x => x.Date).FirstOrDefault();
-            if (funds == null) return 0;
-
-            var loans = _session.Query<Model.Database.Loans.Loan>().Where(l => l.Date > funds.Date);
-            if (!loans.Any()) return funds.CurrentBalance;
-
-            var taken = loans.Sum(l => l.LoanAmount - l.SetupFee);
-            return funds.CurrentBalance - taken;
+            var funds = GetBalance();
+            return funds.Adjusted;
         }
 
+        public PacNetBalance GetBalance()
+        {
+            return _session.Query<PacNetBalance>().First();
+        }
     }
 
 }

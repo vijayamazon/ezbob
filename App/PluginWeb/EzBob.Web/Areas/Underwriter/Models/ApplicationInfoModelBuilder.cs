@@ -67,7 +67,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
             model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
             model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
 
-            model.FundsAvaliable = FormattingUtils.FormatPounds(_funds.GetFunds());
+            var balance = _funds.GetBalance();
+
+            model.FundsAvaliable = FormattingUtils.FormatPounds(balance.Adjusted);
+            model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
             //Status = "Active";
             model.Details = customer.Details;
             var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
