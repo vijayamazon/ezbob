@@ -396,6 +396,16 @@ div.shop-connected {
         width: 150px;
     }
 
+    .source_labels.FreeAgent, .source_labels.freeagent {
+        background-position: -558px -2px;
+        width: 150px;
+    }
+
+    .source_labels_on.FreeAgent, .source_labels_on.freeagent {
+        background-position: -558px -42px;
+        width: 150px;
+    }
+
     .source_labels.Volusion, .source_labels.volusion {
         background-position: -868px -3px;
         width: 98px;
@@ -760,6 +770,11 @@ table.dashboard_sources {
         width: 75px;
     }
 
+    .source_label_small.freeagent {
+        background-position: -98px -20px;
+        width: 75px;
+    }
+
     .source_label_small.paypal {
         background-position: -195px -20px;
         width: 100px;
@@ -1069,6 +1084,10 @@ input[type="color"],
     height: 543px;
 }
 .help_EKM {
+    background: url(images/help/help_ekm.jpg) no-repeat center center;
+}
+
+.help_FreeAgent {
     background: url(images/help/help_ekm.jpg) no-repeat center center;
 }
 

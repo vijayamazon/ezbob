@@ -76,6 +76,7 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="DatabaseWrapper\Order\FreeAgentOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\IChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\VolusionOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
@@ -89,6 +90,10 @@
     <Compile Include="Model\Database\LoyaltyProgramActionType.cs" />
     <Compile Include="Model\Experian\ExperianDefaultAccount.cs" />
     <Compile Include="Model\Loans\DiscountPlan.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrder.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderMap.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />

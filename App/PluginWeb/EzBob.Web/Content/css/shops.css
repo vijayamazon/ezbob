@@ -39,7 +39,15 @@
     background-position: 0px -1324px;
 }
 
+.FreeAgent-logo {
+    background-position: 0px -1324px;
+}
+
 .EKM-logo:hover {
+    background-position: 0px -1176px;
+}
+
+.FreeAgent-logo:hover {
     background-position: 0px -1176px;
 }
 

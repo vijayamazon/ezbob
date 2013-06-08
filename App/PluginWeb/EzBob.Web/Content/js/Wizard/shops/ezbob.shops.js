@@ -47,6 +47,16 @@
       this.EKMAccountInfoView = new EzBob.EKMAccountInfoView({
         model: this.ekmAccounts
       });
+      this.freeAgentAccounts = new EzBob.FreeAgentAccounts();
+      this.freeAgentAccounts.fetch().done(function() {
+        return _this.render();
+      });
+      this.freeAgentButtonView = new EzBob.FreeAgentAccountButtonView({
+        model: this.freeAgentAccounts
+      });
+      this.FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView({
+        model: this.freeAgentAccounts
+      });
       this.volusionAccounts = new EzBob.VolusionAccounts();
       this.volusionAccounts.fetch().done(function() {
         return _this.render();
@@ -87,7 +97,6 @@
       this.PayPalInfoView = new EzBob.PayPalInfoView({
         model: this.payPalAccounts
       });
-
       this.playAccounts = new EzBob.PlayAccounts();
       this.playAccounts.fetch().done(function() {
         return _this.render();
@@ -98,7 +107,6 @@
       this.playAccountInfoView = new EzBob.PlayAccountInfoView({
         model: this.playAccounts
       });
-
       this.stores = {
         "eBay": {
           view: this.EbayStoreView,
@@ -136,17 +144,23 @@
           active: 0,
           priority: 5
         },
+        "Play": {
+          view: this.playAccountInfoView,
+          button: this.playButtonView,
+          active: 0,
+          priority: 6
+        },
         "Yodlee": {
           view: this.YodleeAccountInfoView,
           button: this.YodleeButtonView,
           active: 0,
-          priority: 6
-        },
-		"Play": {
-          view: this.playAccountInfoView,
-          button: this.playButtonView,
-          active: 0,
           priority: 7
+        },
+        "FreeAgent": {
+          view: this.FreeAgentAccountInfoView,
+          button: this.freeAgentButtonView,
+          active: 0,
+          priority: 8
         }
       };
       _ref1 = EzBob.Config.ActiveMarketPlaces;

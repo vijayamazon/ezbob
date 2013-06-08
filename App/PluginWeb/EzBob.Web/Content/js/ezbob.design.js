@@ -1004,18 +1004,30 @@ EzBob.validatemanualPaymentForm = function (el) {
     });
 };
 
-EzBob.validateEkmShopForm = function(el) {
-	var e = el || $('form');
+EzBob.validateEkmShopForm = function (el) {
+    var e = el || $('form');
 
-	return e.validate({
-		rules: {
-			ekm_login: { required: true, minlength: 2, maxlength: 30 },
-			ekm_password: { required: true, minlength: 2, maxlength: 30 }
-		},
-		errorPlacement: EzBob.Validation.errorPlacement,
-		unhighlight: EzBob.Validation.unhighlightFS,
-		highlight: EzBob.Validation.highlightFS
-	});
+    return e.validate({
+        rules: {
+            ekm_login: { required: true, minlength: 2, maxlength: 30 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
+
+EzBob.validateFreeAgentAccountForm = function (el) {
+    var e = el || $('form');
+
+    return e.validate({
+        rules: {
+            freeagent_name: { required: true, minlength: 2, maxlength: 30 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
 };
 
 EzBob.validatePayPointShopForm = function(el) {

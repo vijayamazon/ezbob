@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
+    <Compile Include="Areas\Customer\Controllers\FreeAgentMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\PlayMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\PlayMarketPlacesController.cs" />
@@ -938,6 +939,9 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
+      <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
@@ -975,6 +979,8 @@
     <Content Include="Content\js\lib\mousetrap_1.4.0.js" />
     <Content Include="Areas\Underwriter\Views\Shared\StrategySettings.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\AttachYodlee.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\FreeAgent.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\FreeAgentAccoutInfoTemplate.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1277,6 +1283,10 @@
       <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
       <Name>EzBob</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
+      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
       <Name>PaymentServices</Name>
@@ -1463,6 +1473,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.stManage.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

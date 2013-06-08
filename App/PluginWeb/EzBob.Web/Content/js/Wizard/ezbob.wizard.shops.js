@@ -23,12 +23,13 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var amazons, ebays, ekms, payPoints, paypals, plays, shop, stores, volusions, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+      var amazons, ebays, ekms, freeagents, payPoints, paypals, plays, shop, stores, volusions, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _q;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
+      freeagents = this.get("freeagentsAccounts");
       volusions = this.get("volusionShops");
       plays = this.get("playShops");
       payPoints = this.get("payPointAccounts");
@@ -76,18 +77,25 @@
           type: "PayPoint"
         });
       }
-      for (_o = 0, _len6 = paypals.length; _o < _len6; _o++) {
-        shop = paypals[_o];
+      for (_o = 0, _len6 = yodlees.length; _o < _len6; _o++) {
+        shop = yodlees[_o];
+        stores.push({
+          displayName: shop.displayName,
+          type: "Yodlee"
+        });
+      }
+      for (_p = 0, _len7 = paypals.length; _p < _len7; _p++) {
+        shop = paypals[_p];
         stores.push({
           displayName: shop.displayName,
           type: "paypal"
         });
       }
-      for (_p = 0, _len7 = yodlees.length; _p < _len7; _p++) {
-        shop = yodlees[_p];
+      for (_q = 0, _len8 = freeagents.length; _q < _len8; _q++) {
+        shop = freeagents[_q];
         stores.push({
           displayName: shop.displayName,
-          type: "Yodlee"
+          type: "FreeAgent"
         });
       }
       return stores;

@@ -122,6 +122,10 @@
       <Project>{590C01C7-CF2C-4D5B-A307-3EB7EC61FB0D}</Project>
       <Name>EKM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\FreeAgent\FreeAgent.csproj">
+      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PayPal\PayPalDbLib\PayPalDbLib.csproj">
       <Project>{F80EB367-9E8A-4317-A6BC-C3FC2FD9770E}</Project>
       <Name>PayPalDbLib</Name>

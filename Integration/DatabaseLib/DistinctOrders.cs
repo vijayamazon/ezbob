@@ -39,6 +39,19 @@ namespace EZBob.DatabaseLib {
 
 	#endregion class EkmOrderComparer
 
+	class FreeAgentOrderComparer : AOrderComparer<FreeAgentOrderItem>
+	{
+		public override bool AreEqual(FreeAgentOrderItem a, FreeAgentOrderItem b)
+		{
+			return a.Id == b.Id;
+		} // AreEqual
+
+		public override int HashCode(FreeAgentOrderItem a)
+		{
+			return a.Id.GetHashCode();
+		} // HashCode
+	} // class FreeAgentOrderComparer
+
 	#region class ChannelGrabberOrderComparer
 
 	class ChannelGrabberOrderComparer<T> : AOrderComparer<T> where T: class, IChannelGrabberOrderItem {

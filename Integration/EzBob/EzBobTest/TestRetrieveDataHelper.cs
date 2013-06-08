@@ -1,38 +1,37 @@
-using System;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Threading;
-using System.Xml;
-using EKM;
-using Integration.Volusion;
-using Integration.Play;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob;
-using EzBob.AmazonLib;
-using EzBob.AmazonServiceLib;
-using EzBob.CommonLib;
-using EzBob.PayPal;
-using EzBob.PayPalDbLib.Models;
-using EzBob.PayPalServiceLib;
-using EzBob.eBayLib;
-using EzBob.eBayLib.Config;
-using EzBob.eBayServiceLib;
-using NHibernate;
-using NUnit.Framework;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
-using Scorto.NHibernate;
-using Scorto.RegistryScanner;
-using StructureMap;
-using StructureMap.Pipeline;
-using log4net;
-using log4net.Config;
-
 namespace EzBobTest
 {
+	using System;
+	using System.Collections.Concurrent;
+	using System.Linq;
+	using System.Threading;
+	using System.Xml;
+	using EKM;
+	using FreeAgent;
+	using Integration.Volusion;
+	using Integration.Play;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob;
+	using EzBob.AmazonLib;
+	using EzBob.AmazonServiceLib;
+	using EzBob.CommonLib;
+	using EzBob.PayPal;
+	using EzBob.PayPalDbLib.Models;
+	using EzBob.PayPalServiceLib;
+	using EzBob.eBayLib;
+	using EzBob.eBayLib.Config;
+	using EzBob.eBayServiceLib;
+	using NHibernate;
+	using NUnit.Framework;
+	using Scorto.Configuration;
+	using Scorto.Configuration.Loader;
+	using Scorto.NHibernate;
+	using Scorto.RegistryScanner;
+	using StructureMap;
+	using StructureMap.Pipeline;
+	using log4net;
+	using log4net.Config;
     using PayPoint;
     using YodleeLib.connector;
 
@@ -53,8 +52,9 @@ namespace EzBobTest
             NHibernateManager.FluentAssemblies.Add(typeof(EkmDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(VolusionDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(PlayDatabaseMarketPlace).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
             Scanner.Register();
             ObjectFactory.Configure(x =>
             {
@@ -113,7 +113,7 @@ namespace EzBobTest
         [Test]
         public void UpdateCustomerMarketplace()
         {
-            var umi = 2152;
+			var umi = 7442;
             UpdateCustomerMarketplace(umi);
 
             /*var umis = new[] { 2408, 268, 2222 };

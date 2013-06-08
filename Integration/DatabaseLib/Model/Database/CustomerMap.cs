@@ -223,8 +223,9 @@ namespace EZBob.DatabaseLib.Model.Database {
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
-            Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
-            Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
+			Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
+			Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
+			Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
             Map(x => x.MPStatus)
                 .Formula(
                     @"CASE WHEN (SELECT COUNT(*) FROM [MP_CustomerMarketPlace] c where c.UpdatingEnd is null and c.CustomerId = Id) > 0 THEN 'not updated' ELSE 'updated' END")

@@ -68,20 +68,33 @@ namespace EZBob.DatabaseLib.Model.Database {
         {
             DiscriminatorValue("Pay Pal");
         }
-    }
+	}
 
-    public class EKMMarketPlaceType : MP_MarketplaceType
-    {
-        public override int UWPriority { get { return 3; } }
-    }
+	public class EKMMarketPlaceType : MP_MarketplaceType
+	{
+		public override int UWPriority { get { return 3; } }
+	}
 
-    public class EKMMarketPlaceTypeMap : SubclassMap<EKMMarketPlaceType>
-    {
-        public EKMMarketPlaceTypeMap()
-        {
-            DiscriminatorValue("EKM");
-        }
-    }
+	public class EKMMarketPlaceTypeMap : SubclassMap<EKMMarketPlaceType>
+	{
+		public EKMMarketPlaceTypeMap()
+		{
+			DiscriminatorValue("EKM");
+		}
+	}
+
+	public class FreeAgentMarketPlaceType : MP_MarketplaceType
+	{
+		public override int UWPriority { get { return 6; } }
+	}
+
+	public class FreeAgentMarketPlaceTypeMap : SubclassMap<FreeAgentMarketPlaceType>
+	{
+		public FreeAgentMarketPlaceTypeMap()
+		{
+			DiscriminatorValue("FreeAgent");
+		}
+	}
 
 
     public class VolusionMarketPlaceType : MP_MarketplaceType

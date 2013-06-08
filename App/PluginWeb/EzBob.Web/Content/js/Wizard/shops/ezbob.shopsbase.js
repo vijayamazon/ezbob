@@ -28,7 +28,7 @@
         store.view.on("back", this.back, this);
         store.button.on("ready", this.ready, this);
       }
-      EzBob.App.on("ct:storebase.shop.connected", this.render, this);
+      EzBob.App.on("ct:storebase.shop.connected", this.shopConnected, this);
       return EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
     };
 
@@ -42,6 +42,7 @@
       this.$el.find(">div").hide();
       this.storeList.show();
       $(document).attr("title", this.oldTitle);
+      this.updateEarnedPoints();
       return false;
     };
 
@@ -62,8 +63,21 @@
       }
     };
 
+    StoreInfoBaseView.prototype.updateEarnedPoints = function() {
+      return $.getJSON("" + window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
+        if (data.EarnedPointsStr) {
+          return $('#EarnedPoints').text(data.EarnedPointsStr);
+        }
+      });
+    };
+
+    StoreInfoBaseView.prototype.shopConnected = function() {
+      this.updateEarnedPoints();
+      return this.render();
+    };
+
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasEbay, hasFilledShops, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
+      var accountsList, hasEbay, hasFilledShops, hasOnlyYodlee, hasOtherThanYodlee, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
 
       $.colorbox.close();
       that = this;
@@ -77,8 +91,22 @@
       hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
       hasEbay = this.stores.eBay.button.model.length > 0;
       hasPaypal = this.stores.paypal.button.model.length > 0;
+      hasOtherThanYodlee = false;
+      _ref1 = this.stores;
+      for (shopName in _ref1) {
+        shopInfo = _ref1[shopName];
+        if (shopName === 'Yodlee') {
+          continue;
+        }
+        if (shopInfo.button.model.length > 0) {
+          hasOtherThanYodlee = true;
+          break;
+        }
+      }
+      hasOnlyYodlee = this.stores.Yodlee.button.model.length > 0 && !hasOtherThanYodlee;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
-      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || (hasEbay && !hasPaypal));
+      this.$el.find(".YodleeRule").toggleClass("hide", !hasOnlyYodlee);
+      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodlee || (hasEbay && !hasPaypal));
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
         if (!shop.active) {
@@ -127,6 +155,8 @@
           return this.$el.find("#play_name").focus();
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
+        case "FreeAgent":
+          return this.$el.find("#freeagent_name").focus();
       }
     };
 

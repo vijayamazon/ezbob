@@ -1,17 +1,9 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.CommonLib;
-using EzBob.Models;
-using EzBob.Web.Areas.Underwriter.Models;
-using Iesi.Collections.Generic;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
-    using PayPoint;
-    using System;
+	using FreeAgent;
+	using PayPoint;
+	using EzBob.Models;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using EKM;
     using EZBob.DatabaseLib.Model.Database;
@@ -61,12 +53,21 @@ namespace EzBob.Web.Areas.Customer.Models
             return simpleMarketPlaceModels;
         }
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this Customer customer) {
-	        var oEsi = new EkmServiceInfo();
-            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
-            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
-            return simpleMarketPlaceModels;
-        }
+		public static IEnumerable<SimpleMarketPlaceModel> GetEkmShops(this Customer customer)
+		{
+			var oEsi = new EkmServiceInfo();
+			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
+			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+			return simpleMarketPlaceModels;
+		}
+
+		public static IEnumerable<SimpleMarketPlaceModel> GetFreeAgentAccounts(this Customer customer)
+		{
+			var oEsi = new FreeAgentServiceInfo();
+			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
+			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+			return simpleMarketPlaceModels;
+		}
 
         public static IEnumerable<SimpleMarketPlaceModel> GetVolusionShops(this Customer customer) {
 	        var oVsi = new VolusionServiceInfo();

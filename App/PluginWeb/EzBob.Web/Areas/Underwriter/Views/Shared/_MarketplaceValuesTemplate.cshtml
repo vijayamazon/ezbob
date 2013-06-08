@@ -86,6 +86,10 @@
             <%if(marketplaceType == "EKM"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/EKM");}
             <%}%>
+             @* *** FreeAgent *** *@
+            <%if(marketplaceType == "FreeAgent"){%>
+                @{ Html.RenderPartial("MarketPlaceDetails/FreeAgent");}
+            <%}%>
             @* *** PayPoint   *** *@
             <%if(marketplaceType == "PayPoint"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/PayPoint");}

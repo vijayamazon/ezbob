@@ -454,8 +454,9 @@ namespace EZBob.DatabaseLib.Model.Database {
         //calculated with formula
         public virtual string EbayStatus { get; set; }
         public virtual string AmazonStatus { get; set; }
-        public virtual string PayPalStatus { get; set; }
-        public virtual string EkmStatus { get; set; }
+		public virtual string PayPalStatus { get; set; }
+		public virtual string EkmStatus { get; set; }
+		public virtual string FreeAgentStatus { get; set; }
         public virtual string MPStatus { get; set; }
         public virtual string MpList { get; set; }
         public virtual decimal SystemCalculatedSum { get; set; }

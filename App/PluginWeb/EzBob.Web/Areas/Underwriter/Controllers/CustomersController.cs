@@ -288,8 +288,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateRegisteredDateColumn(gridModel);
             GridHelpers.CreateEbayStatusColumn(gridModel);
             GridHelpers.CreateAmazonStatusColumn(gridModel);
-            GridHelpers.CreateEkmStatusColumn(gridModel);
-            GridHelpers.CreatePayPalStatusColumn(gridModel);
+			GridHelpers.CreateEkmStatusColumn(gridModel);
+			GridHelpers.CreatePayPalStatusColumn(gridModel);
+			GridHelpers.CreateFreeAgentStatusColumn(gridModel);
             GridHelpers.CreateWizardStepColumn(gridModel);
             return gridModel;
         }

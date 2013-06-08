@@ -23,6 +23,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
         
+        @freeAgentAccounts = new EzBob.FreeAgentAccounts()
+        @freeAgentAccounts.fetch().done => @render()
+        @freeAgentButtonView = new EzBob.FreeAgentAccountButtonView(model: @freeAgentAccounts)
+        @FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView(model: @freeAgentAccounts)
+        
         @volusionAccounts = new EzBob.VolusionAccounts()
         @volusionAccounts.fetch().done => @render()
         @volusionButtonView = new EzBob.VolusionAccountButtonView(model: @volusionAccounts)
@@ -89,6 +94,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 button: @YodleeButtonView
                 active: 0
                 priority: 7
+            "FreeAgent":
+                view: @FreeAgentAccountInfoView
+                button: @freeAgentButtonView
+                active: 0
+                priority: 8
 
          for j in EzBob.Config.ActiveMarketPlaces
              if @stores[j]

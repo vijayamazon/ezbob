@@ -5,6 +5,8 @@ using Iesi.Collections.Generic;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using Marketplaces.FreeAgent;
+
 	public class MP_CustomerMarketplaceUpdatingHistory
 	{
 		public MP_CustomerMarketplaceUpdatingHistory()
@@ -30,7 +32,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual MP_EbayUserData EbayUserData { get; set; }
 		public virtual MP_PayPalTransaction PayPalTransaction { get; set; }
 
-        public virtual MP_EkmOrder EkmOrder { get; set; }
+		public virtual MP_EkmOrder EkmOrder { get; set; }
+		public virtual MP_FreeAgentOrder FreeAgentOrder { get; set; }
         public virtual MP_VolusionOrder VolusionOrder { get; set; }
         public virtual MP_PlayOrder PlayOrder { get; set; }
         public virtual MP_PayPointOrder PayPointOrder { get; set; }

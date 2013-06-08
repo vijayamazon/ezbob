@@ -10,8 +10,9 @@ using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
+	using Marketplaces.FreeAgent;
 
-    public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
+	public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
     {
         bool Exists(Customer customer, MP_MarketplaceType marketplaceType);
         IEnumerable<MP_CustomerMarketPlace> Get(Customer customer, MP_MarketplaceType marketplaceType);
@@ -177,14 +178,25 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 						.Where(eud => eud.RegistrationDate != null)
 						.Select(eud => eud.RegistrationDate);
 					return !s.Any() ? (DateTime?)null : s.Min();
-				}
+			}
 
 
-			case "EKM": {
+			case "EKM":
+				{
 					var s = _session.Query<MP_EkmOrderItem>()
 						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.OrderDate != null)
 						.Select(oi => oi.OrderDate);
+					return !s.Any() ? (DateTime?)null : s.Min();
+				}
+
+
+			case "FreeAgent":
+				{
+					var s = _session.Query<MP_FreeAgentOrderItem>()
+						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.dated_on != null)
+						.Select(oi => oi.dated_on);
 					return !s.Any() ? (DateTime?)null : s.Min();
 				}
 

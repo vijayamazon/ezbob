@@ -99,6 +99,7 @@ ul.storelist li span {
     word-wrap: break-word;
 }
 
+#freeagentAccount input[type="text"],
 #ekmAccount input[type="text"], #ekmAccount input[type="password"],
 #payPointAccount input[type="text"], #payPointAccount input[type="password"], #payPointAccount input[type="password"] { width: 245px; }
 

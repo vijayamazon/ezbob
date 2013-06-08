@@ -36,6 +36,7 @@ using Iesi.Collections.Generic;
 namespace EZBob.DatabaseLib
 {
 	using EzBob.CommonLib.Security;
+	using Model.Marketplaces.FreeAgent;
 
 	public enum CustomerMarketplaceUpdateActionType
 	{
@@ -783,6 +784,54 @@ namespace EZBob.DatabaseLib
 				});
 
 			customerMarketPlace.EkmOrders.Add(mpOrder);
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		public void StoreFreeAgentOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			LogData("Orders Data", customerMarketPlace, ordersData);
+
+			if (ordersData == null)
+			{
+				return;
+			}
+
+			DateTime submittedDate = DateTime.UtcNow;
+			var mpOrder = new MP_FreeAgentOrder
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = submittedDate,
+				HistoryRecord = historyRecord
+			};
+
+			ordersData.ForEach(
+				dataItem =>
+				{
+					var mpOrderItem = new MP_FreeAgentOrderItem
+					{
+						Order = mpOrder,
+						url = dataItem.url,
+						contact = dataItem.contact,
+						currency = dataItem.currency,
+						dated_on = dataItem.dated_on,
+						due_on = dataItem.due_on,
+						due_value = dataItem.due_value,
+						exchange_rate = dataItem.exchange_rate,
+						Id = dataItem.Id,
+						net_value = dataItem.net_value,
+						total_value = dataItem.total_value,
+						paid_value = dataItem.paid_value,
+						status = dataItem.status,
+						omit_header = dataItem.omit_header,
+						payment_terms_in_days = dataItem.payment_terms_in_days,
+						paid_on = dataItem.paid_on
+					};
+					mpOrder.OrderItems.Add(mpOrderItem);
+				});
+
+			customerMarketPlace.FreeAgentOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
@@ -2113,20 +2162,49 @@ namespace EZBob.DatabaseLib
 			var orders = new EkmOrdersList(submittedDate);
 
 			orders.AddRange(customerMarketPlace.EkmOrders.SelectMany(ekmOrder => ekmOrder.OrderItems).Select(o => new EkmOrderItem
-				{
-					OrderNumber = o.OrderNumber,
-					CustomerID = o.CustomerId,
-					CompanyName = o.CompanyName,
-					FirstName = o.FirstName,
-					LastName = o.LastName,
-					EmailAddress = o.EmailAddress,
-					TotalCost = o.TotalCost,
-					OrderDate = o.OrderDate,
-					OrderStatus = o.OrderStatus,
-					OrderDateIso = o.OrderDateIso,
-					OrderStatusColour = o.OrderStatusColour,
+			{
+				OrderNumber = o.OrderNumber,
+				CustomerID = o.CustomerId,
+				CompanyName = o.CompanyName,
+				FirstName = o.FirstName,
+				LastName = o.LastName,
+				EmailAddress = o.EmailAddress,
+				TotalCost = o.TotalCost,
+				OrderDate = o.OrderDate,
+				OrderStatus = o.OrderStatus,
+				OrderDateIso = o.OrderDateIso,
+				OrderStatusColour = o.OrderStatusColour,
 
-				}).Distinct(new EkmOrderComparer()));
+			}).Distinct(new EkmOrderComparer()));
+
+			return orders;
+		}
+
+		public FreeAgentOrdersList GetAllFreeAgentOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new FreeAgentOrdersList(submittedDate);
+
+			orders.AddRange(customerMarketPlace.FreeAgentOrders.SelectMany(freeAgentOrder => freeAgentOrder.OrderItems).Select(o => new FreeAgentOrderItem
+			{
+				Id = o.Id,
+				url =  o.url,
+				contact = o.contact,
+				dated_on = o.dated_on,
+				due_on = o.due_on,
+				reference = o.reference,
+				currency = o.currency,
+				exchange_rate = o.exchange_rate,
+				net_value = o.net_value,
+				total_value = o.total_value,
+				paid_value = o.paid_value,
+				due_value = o.due_value,
+				status = o.status,
+				omit_header = o.omit_header,
+				payment_terms_in_days = o.payment_terms_in_days,
+				paid_on = o.paid_on
+			}).Distinct(new FreeAgentOrderComparer()));
 
 			return orders;
 		}
@@ -2190,6 +2268,23 @@ namespace EZBob.DatabaseLib
 				return def;
 			}
 		} // GetEkmDeltaPeriod
+
+		public DateTime GetFreeAgentDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var def = DateTime.Today.AddYears(-1);
+
+			try
+			{
+				MP_FreeAgentOrder o = customerMarketPlace.FreeAgentOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault(); // qqq - should nake sure something is fetched here
+				return o == null ? def : o.Created.AddMonths(-1);
+			}
+			catch (Exception)
+			{
+				return def;
+			}
+		} // GetFreeAgentDeltaPeriod
 
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{

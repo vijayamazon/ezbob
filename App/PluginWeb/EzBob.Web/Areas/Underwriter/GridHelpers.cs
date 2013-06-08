@@ -557,24 +557,43 @@ namespace EzBob.Web.Areas.Underwriter
                 });
         }
 
-        public static void CreateEkmStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-                {
-                    Caption = "Ekm Status",
-                    Name = "EkmStatus",
-                    Index = "EkmStatus",
-                    Resizable = false,
-                    Align = Align.Center,
-                    Title = false,
-                    Hidden = false,
-                    Fixed = false,
-                    Width = 75,
-                    Search = true,
-                    DataType = TypeCode.String,
-                    Data = x => x.EkmStatus
-                });
-        }
+		public static void CreateEkmStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Ekm Status",
+				Name = "EkmStatus",
+				Index = "EkmStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 75,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.EkmStatus
+			});
+		}
+
+		public static void CreateFreeAgentStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "FreeAgent Status",
+				Name = "FreeAgentStatus",
+				Index = "FreeAgentStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 75,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.FreeAgentStatus
+			});
+		}
 
         public static void CreatePayPalStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
