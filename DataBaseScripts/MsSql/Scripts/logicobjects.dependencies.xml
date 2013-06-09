@@ -163,12 +163,6 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
-    <oName>FK_CashRequests_DiscountPlan</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_CashRequests_DiscountPlan.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>FK_Customer_CardInfo</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_Customer_CardInfo.sql</oFileName>
@@ -251,6 +245,24 @@
     <oRank>1</oRank>
     <oFileName>09_TRIGGERS\TR_RepaymentLoyalty.sql</oFileName>
     <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Loan</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Loan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Schedule</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Schedule.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Transaction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Transaction.sql</oFileName>
+    <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
     <oName>FK_LoyaltyProgramActionType</oName>
@@ -922,6 +934,12 @@
     <oName>MinLoanSchedule</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\MinLoanSchedule.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RegisteredCustomers</oName>
+    <oRank>2</oRank>
+    <oFileName>04_VIEWS\RegisteredCustomers.sql</oFileName>
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
@@ -2221,6 +2239,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptFinancialStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptFinancialStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptGetCampaignClickStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptGetCampaignClickStats.sql</oFileName>
@@ -2236,6 +2260,12 @@
     <oName>RptGetUserReports</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptGetUserReports.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoansGiven</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoansGiven.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2293,6 +2323,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptPaymentsReceived</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptPaymentsReceived.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptScheduler_GetHeaderAndFields</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptScheduler_GetHeaderAndFields.sql</oFileName>
@@ -2305,15 +2341,15 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
-    <oName>RptSiteAnalytics</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\RptSiteAnalytics.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>RptSourceRef</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptSourceRef.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptTstRpt</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptTstRpt.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

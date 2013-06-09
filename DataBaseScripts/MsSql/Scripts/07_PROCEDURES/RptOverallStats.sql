@@ -19,7 +19,7 @@ DECLARE @Money_Given FLOAT = (SELECT sum(Amount)
 								   FROM Loan 
 								   WHERE CustomerId 
 								   NOT IN (SELECT Id FROM Customer WHERE IsTest = 1)))
-DECLARE @Money_Repaid FLOAT = (SELECT sum(Amount) 
+DECLARE @Money_Repaid FLOAT = (SELECT sum(Principal) 
 					   FROM LoanTransaction 
 					   WHERE Status='Done' AND 
 					   Type='PaypointTransaction' AND 

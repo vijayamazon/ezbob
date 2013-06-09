@@ -349,14 +349,8 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
-    <oName>FK_CashRequests_DiscountPlan</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_CashRequests_DiscountPlan.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>CashRequests</oName>
-    <oRank>2</oRank>
+    <oRank>1</oRank>
     <oFileName>02_TABLES\CashRequests.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -706,6 +700,30 @@
     <oName>LoanSchedule</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoanSchedule.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Loan</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Loan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Schedule</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Schedule.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanST_Transaction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanST_Transaction.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoanScheduleTransaction</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\LoanScheduleTransaction.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

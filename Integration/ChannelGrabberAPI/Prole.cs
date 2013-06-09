@@ -413,8 +413,9 @@ namespace Integration.ChannelGrabberAPI {
 
 			if (oResponse.StatusCode != HttpStatusCode.OK) {
 				var sErrorMsg = string.Format(
-					"Request fail: failed to execute request.\nStatus: {0}\nError msg: {1}",
+					"Request fail: failed to execute request.\nStatus: {0} - {1}\nError msg: {2}",
 					oResponse.StatusCode,
+					oResponse.StatusCode.ToString(),
 					oResponse.ErrorMessage
 				);
 
