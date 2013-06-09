@@ -33,10 +33,16 @@ class EzBob.PlayAccountInfoView extends Backbone.Marionette.ItemView
         return false if not @validator.form()
         return false if @$el.find('a.connect-play').hasClass('disabled')
 
+        name = @ui.name.val()
+
+        aryMatch = /^(http:\/\/|https:\/\/)?(www\.)?play\.com\/([^\?\/]+)/.exec name
+
+        name = aryMatch[3] if aryMatch
+
         acc = new EzBob.PlayAccountModel({
             login: @ui.login.val(),
             password: @ui.password.val(),
-            name: @ui.name.val()
+            name: name
         })
 
         xhr = acc.save()
