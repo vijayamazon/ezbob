@@ -7,18 +7,23 @@ namespace Integration.ChannelGrabberAPI {
 	public class ChannelGrabberOrder {
 		#region public
 
-		#region constructor
+		#region method Create
 
-		public ChannelGrabberOrder(XmlNode oNode) {
-			NativeOrderId = API.GetString(oNode, API.IdNode);
-			TotalCost     = API.GetDouble(oNode, "total");
-			CurrencyCode  = API.GetString(oNode, "currency");
-			PaymentDate   = API.GetDate(oNode, "paymentDate");
-			PurchaseDate  = API.GetDate(oNode, "purchaseDate");
-			OrderStatus   = API.GetString(oNode, "status");
-		} // constructor
+		public static ChannelGrabberOrder Create(XmlNode oNode, string sShopTypeName, IAccountData oAccountData) {
+			string sOrderShopTypeName = API.GetString(oNode, "accountType");
 
-		#endregion constructor
+			if (sOrderShopTypeName.ToLower() != sShopTypeName)
+				return null;
+
+			int nAccountID = API.GetInt(oNode, "accountId");
+
+			if (nAccountID != oAccountData.Id())
+				return null;
+
+			return new ChannelGrabberOrder(oNode);
+		} // Create
+
+		#endregion method Create
 
 		#region public properties
 
@@ -33,10 +38,21 @@ namespace Integration.ChannelGrabberAPI {
 
 		#endregion public
 
-		#region protected
-		#endregion protected
-
 		#region private
+
+		#region constructor
+
+		private ChannelGrabberOrder(XmlNode oNode) {
+			NativeOrderId = API.GetString(oNode, API.IdNode);
+			TotalCost     = API.GetDouble(oNode, "total");
+			CurrencyCode  = API.GetString(oNode, "currency");
+			PaymentDate   = API.GetDate(oNode, "paymentDate");
+			PurchaseDate  = API.GetDate(oNode, "purchaseDate");
+			OrderStatus   = API.GetString(oNode, "status");
+		} // constructor
+
+		#endregion constructor
+
 		#endregion private
 	} // class ChannelGrabberOrder
 

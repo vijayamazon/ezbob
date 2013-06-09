@@ -374,9 +374,13 @@ namespace Integration.ChannelGrabberAPI {
 
 			XmlDocument doc = ExecuteRequest(BuildOrdersRq(oCustomer));
 
+			string sShopTypeName = ShopTypeName.ToLower();
+
 			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
-				var o = new ChannelGrabberOrder(oNode);
-				lst.Add(o);
+				var o = ChannelGrabberOrder.Create(oNode, sShopTypeName, oAccountData);
+
+				if (o != null)
+					lst.Add(o);
 			} // foreach
 
 			Debug("Loading list of orders complete, {0} order{1} loaded.", lst.Count, lst.Count == 1 ? "" : "s");
