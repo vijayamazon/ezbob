@@ -29,7 +29,7 @@
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
-      freeagents = this.get("freeagentsAccounts");
+      freeagents = this.get("freeagentAccounts");
       volusions = this.get("volusionShops");
       plays = this.get("playShops");
       payPoints = this.get("payPointAccounts");

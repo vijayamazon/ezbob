@@ -13,7 +13,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     ebays = @get("ebayStores").toJSON()
     amazons = @get("amazonMarketplaces").toJSON()
     ekms = @get("ekmShops")
-    freeagents = @get("freeagentsAccounts")
+    freeagents = @get("freeagentAccounts")
     volusions = @get("volusionShops")
     plays = @get("playShops")
     payPoints = @get("payPointAccounts")
