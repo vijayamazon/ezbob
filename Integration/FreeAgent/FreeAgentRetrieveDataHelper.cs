@@ -33,12 +33,11 @@
 			);
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
-
-			var newOrders = new FreeAgentOrdersList(DateTime.UtcNow, freeAgentOrderList);
-            //store orders
+			
+			//store orders
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
                                     ElapsedDataMemberType.StoreDataToDatabase,
-									() => Helper.StoreFreeAgentOrdersData(databaseCustomerMarketPlace, newOrders, historyRecord));
+									() => Helper.StoreFreeAgentOrdersData(databaseCustomerMarketPlace, freeAgentOrderList, historyRecord));
 
             //retrieve orders
             var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
