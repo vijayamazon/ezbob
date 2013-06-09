@@ -16,4 +16,20 @@ namespace Integration.ChannelGrabberAPI {
 	} // class ChannelGrabberApiException
 
 	#endregion class ChannelGrabberApiException
+
+	#region class ConnectionFailChannelGrabberApiException
+
+	public class ConnectionFailChannelGrabberApiException : ChannelGrabberApiException {
+		#region public
+
+		#region constructor
+
+		public ConnectionFailChannelGrabberApiException(string sMsg) : base(sMsg) {} // constructor
+
+		#endregion constructor
+
+		#endregion public
+	} // class ConnectionFailChannelGrabberApiException
+
+	#endregion class ConnectionFailChannelGrabberApiException
 } // namespace Integration.ChannelGrabberAPI

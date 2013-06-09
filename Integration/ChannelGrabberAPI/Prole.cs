@@ -420,7 +420,11 @@ namespace Integration.ChannelGrabberAPI {
 				);
 
 				Error(sErrorMsg);
-				throw new ChannelGrabberApiException(sErrorMsg);
+
+				if (oResponse.StatusCode == 0)
+					throw new ConnectionFailChannelGrabberApiException(sErrorMsg);
+				else
+					throw new ChannelGrabberApiException(sErrorMsg);
 			} // if
 
 			var doc = new XmlDocument();

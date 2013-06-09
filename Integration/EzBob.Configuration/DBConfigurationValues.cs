@@ -17,8 +17,14 @@ namespace EzBob.Configuration {
 		CAISPath,
 		CAISPath2,
 		EnableAutomaticRejection,
-		DisplayEarnedPoints
+		DisplayEarnedPoints,
+		ChannelGrabberRejectPolicy,
 	} // enum Variables
+
+	public enum ChannelGrabberRejectPolicy {
+		Never,
+		ConnectionFail,
+	} // enum ChannelGrabberRejectPolicy
 
 	#endregion enum variables
 
@@ -46,6 +52,14 @@ namespace EzBob.Configuration {
 
 		public bool DisplayEarnedPoints { get { return RawDisplayEarnedPoints == "1"; } }
 
+		public ChannelGrabberRejectPolicy ChannelGrabberRejectPolicy {
+			get {
+				ChannelGrabberRejectPolicy cgrp = ChannelGrabberRejectPolicy.Never;
+				ChannelGrabberRejectPolicy.TryParse(RawChannelGrabberRejectPolicy, true, out cgrp);
+				return cgrp;
+			} // get
+		} // ChannelGrabberRejectPolicy
+
 		#endregion properties
 
 		#region raw properties
@@ -63,6 +77,7 @@ namespace EzBob.Configuration {
 		public string RawCAISPath2 { get { return this[Variables.CAISPath2]; } }
 		public string RawEnableAutomaticRejection { get { return this[Variables.EnableAutomaticRejection]; } }
 		public string RawDisplayEarnedPoints { get { return this[Variables.DisplayEarnedPoints]; } }
+		public string RawChannelGrabberRejectPolicy { get { return this[Variables.ChannelGrabberRejectPolicy]; } }
 
 		#endregion raw properties
 

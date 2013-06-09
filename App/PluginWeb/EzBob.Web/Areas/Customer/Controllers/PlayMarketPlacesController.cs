@@ -7,6 +7,7 @@ using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
+using EzBob.Configuration;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
 using Scorto.Web;
@@ -92,6 +93,15 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		public JsonNetResult Accounts(PlayAccountModel model) {
 			try {
 				_validator.Validate(_log, _context.Customer, model.name, model.login, model.password);
+			}
+			catch (ConnectionFailChannelGrabberApiException cge) {
+				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
+					_log.Error(cge);
+					return this.JsonNet(new {error = cge.Message});
+				} // if
+
+				_log.Error("Failed to validate Play account, continuing with registration.");
+				_log.Error(cge);
 			}
 			catch (ChannelGrabberApiException cge) {
 				_log.Error("Failed to validate Play account, continuing with registration.");

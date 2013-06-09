@@ -7,6 +7,7 @@ using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
+using EzBob.Configuration;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
 using Scorto.Web;
@@ -100,6 +101,15 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		public JsonNetResult Accounts(VolusionAccountModel model) {
 			try {
 				_validator.Validate(Log, _context.Customer, model.displayName, model.url, model.login, model.password);
+			}
+			catch (ConnectionFailChannelGrabberApiException cge) {
+				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
+					Log.Error(cge);
+					return this.JsonNet(new {error = cge.Message});
+				} // if
+
+				Log.Error("Failed to validate Volusion account, continuing with registration.");
+				Log.Error(cge);
 			}
 			catch (ChannelGrabberApiException cge) {
 				Log.Error("Failed to validate Volusion account, continuing with registration.");
