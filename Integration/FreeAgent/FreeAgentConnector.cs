@@ -9,13 +9,14 @@
 	public class FreeAgentConnector
 	{
 		// TODO: get from config
-		public const string InvoicesRequest = "https://api.freeagent.com/v2/invoices?nested_invoice_items=true";
+		public const string InvoicesRequest = "https://api.freeagent.com/v2/invoices?nested_invoice_items=true&view=last_{0}_months";
 		
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(FreeAgentConnector));
 
-		public static FreeAgentOrdersList GetOrders(FreeAgentSecurityInfo securityInfo, DateTime fromDate)
+		public static FreeAgentOrdersList GetOrders(FreeAgentSecurityInfo securityInfo, int numOfMonths)
 		{
-			var request = new RestRequest(Method.GET) { Resource = InvoicesRequest };
+			string timedInvoicesRequest = string.Format(InvoicesRequest, numOfMonths);
+			var request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
 			request.AddHeader("Authorization", "Bearer " + securityInfo.AccessToken);
 
 			var client = new RestClient();

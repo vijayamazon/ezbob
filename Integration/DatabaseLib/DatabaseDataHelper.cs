@@ -2269,21 +2269,33 @@ namespace EZBob.DatabaseLib
 			}
 		} // GetEkmDeltaPeriod
 
-		public DateTime GetFreeAgentDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public int GetFreeAgentDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var def = DateTime.Today.AddYears(-1);
+			MP_FreeAgentOrder order = customerMarketPlace.FreeAgentOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
+			if (order == null)
+			{
+				return 24;
+			}
 
-			try
+			MP_FreeAgentOrderItem item = order.OrderItems.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
+			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
+
+			DateTime later = DateTime.Today;
+			int monthDiff = 1;
+			while (later > latestExistingDate)
 			{
-				MP_FreeAgentOrder o = customerMarketPlace.FreeAgentOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault(); // qqq - should nake sure something is fetched here
-				return o == null ? def : o.Created.AddMonths(-1);
+				later = later.AddMonths(-1);
+				monthDiff++;
 			}
-			catch (Exception)
+
+			if (monthDiff == 0 || monthDiff > 23)
 			{
-				return def;
+				monthDiff = 24;
 			}
+
+			return monthDiff;
 		} // GetFreeAgentDeltaPeriod
 
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)

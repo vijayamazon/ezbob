@@ -37,7 +37,6 @@
 		public const string OAuthSecret = "J0BGIgMvtkMIHi5fVo94fA";
 		public const string OAuthAuthorizationEndpoint = "https://api.freeagent.com/v2/approve_app";
 		public const string OAuthTokenEndpoint = "https://api.freeagent.com/v2/token_endpoint";
-		public const string InvoicesRequest = "https://api.freeagent.com/v2/invoices?nested_invoice_items=true";
 
 
 		public FreeAgentMarketPlacesController(
