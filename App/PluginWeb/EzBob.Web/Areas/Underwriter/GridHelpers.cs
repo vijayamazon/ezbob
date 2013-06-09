@@ -588,7 +588,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Title = false,
 				Hidden = false,
 				Fixed = false,
-				Width = 75,
+				Width = 95,
 				Search = true,
 				DataType = TypeCode.String,
 				Data = x => x.FreeAgentStatus
