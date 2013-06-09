@@ -517,6 +517,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -778,6 +784,12 @@
     <oName>LoyaltyProgramActionTypes</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoyaltyProgramActionTypes.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MC_CampaignClicks</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MC_CampaignClicks.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1315,6 +1327,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_FreeAgentOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_FreeAgentOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_FreeAgentOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_FreeAgentOrderItem_MP_FreeAgentOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentOrderItem_MP_FreeAgentOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_FreeAgentOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_FreeAgentOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_MarketplaceType</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_MarketplaceType.sql</oFileName>
@@ -1726,6 +1762,18 @@
     <oName>SingleRunApplication</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\SingleRunApplication.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalytics</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SiteAnalytics.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>SiteAnalyticsCodes</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\SiteAnalyticsCodes.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

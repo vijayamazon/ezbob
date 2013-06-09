@@ -24,7 +24,9 @@
     };
 
     FreeAgentAccountButtonView.prototype.update = function() {
-      return this.model.fetch();
+      return this.model.fetch().done(function() {
+        return EzBob.App.trigger('ct:storebase.shop.connected');
+      });
     };
 
     return FreeAgentAccountButtonView;
@@ -42,79 +44,35 @@
     FreeAgentAccountInfoView.prototype.template = '#FreeAgentAccoutInfoTemplate';
 
     FreeAgentAccountInfoView.prototype.events = {
-      'click a.connect-freeagent': 'connect',
-      "click a.back": "back",
-      'change input': 'inputChanged',
-      'keyup input': 'inputChanged'
+      'click #freeagentContinueBtn': 'continueClicked',
+      "click a.back": "back"
     };
 
-    FreeAgentAccountInfoView.prototype.ui = {
-      displayName: '#freeagent_name',
-      connect: 'a.connect-freeagent',
-      form: 'form'
-    };
+    FreeAgentAccountInfoView.prototype.initialize = function(options) {
+      var that;
 
-    FreeAgentAccountInfoView.prototype.inputChanged = function() {
-      var enabled;
-
-      enabled = EzBob.Validation.checkForm(this.validator);
-      return this.ui.connect.toggleClass('disabled', !enabled);
-    };
-
-    FreeAgentAccountInfoView.prototype.connect = function() {
-      var acc, xhr,
-        _this = this;
-
-      if (!this.validator.form()) {
-        return false;
-      }
-      if (this.$el.find('a.connect-freeagent').hasClass('disabled')) {
-        return false;
-      }
-      acc = new EzBob.FreeAgentAccountModel({
-        displayName: this.ui.displayName.val()
-      });
-      xhr = acc.save();
-      if (!xhr) {
-        EzBob.App.trigger('error', 'FreeAgent Account Saving Error');
-        return false;
-      }
-      BlockUi('on');
-      xhr.always(function() {
-        return BlockUi('off');
-      });
-      xhr.fail(function(jqXHR, textStatus, errorThrown) {
-        return EzBob.App.trigger('error', 'FreeAgent Account Saving Error');
-      });
-      xhr.done(function(res) {
-        if (res.error) {
-          EzBob.App.trigger('error', res.error);
-          return false;
+      that = this;
+      window.FreeAgentAccountAdded = function(result) {
+        if (result.error) {
+          EzBob.App.trigger('error', result.error);
+        } else {
+          EzBob.App.trigger('info', 'Congratulations. Free Agent account was added successfully.');
         }
-        try {
-          _this.model.add(acc);
-        } catch (_error) {}
-        EzBob.App.trigger('info', "FreeAgent Account Added Successfully");
-        _this.ui.displayName.val("");
-        _this.inputChanged();
-        _this.trigger('completed');
-        return _this.trigger('back');
-      });
+        that.trigger('completed');
+        that.trigger('ready');
+        return that.trigger('back');
+      };
       return false;
     };
 
-    FreeAgentAccountInfoView.prototype.render = function() {
-      var oFieldStatusIcons;
+    FreeAgentAccountInfoView.prototype.continueClicked = function(e) {
+      if (this.$el.find('#freeagentContinueBtn').hasClass('disabled')) {
+        return false;
+      }
+    };
 
+    FreeAgentAccountInfoView.prototype.render = function() {
       FreeAgentAccountInfoView.__super__.render.call(this);
-      oFieldStatusIcons = $('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
-      this.validator = EzBob.validateFreeAgentAccountForm(this.ui.form);
       return this;
     };
 

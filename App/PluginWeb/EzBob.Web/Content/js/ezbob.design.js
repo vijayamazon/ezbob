@@ -1017,19 +1017,6 @@ EzBob.validateEkmShopForm = function (el) {
     });
 };
 
-EzBob.validateFreeAgentAccountForm = function (el) {
-    var e = el || $('form');
-
-    return e.validate({
-        rules: {
-            freeagent_name: { required: true, minlength: 2, maxlength: 30 }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-    });
-};
-
 EzBob.validatePayPointShopForm = function(el) {
 	var e = el || $('form');
 

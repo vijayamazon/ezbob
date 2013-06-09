@@ -4,65 +4,36 @@ root.EzBob = root.EzBob or {}
 class EzBob.FreeAgentAccountButtonView extends EzBob.StoreButtonView
     initialize: ->
         super({name: 'FreeAgent', logoText: '', shops: @model})
+
     update: ->
-        @model.fetch()
+        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
 
 class EzBob.FreeAgentAccountInfoView extends Backbone.Marionette.ItemView
     template: '#FreeAgentAccoutInfoTemplate'
     
     events: 
-        'click a.connect-freeagent': 'connect'
+        'click #freeagentContinueBtn': 'continueClicked'
         "click a.back": "back"
-        'change input': 'inputChanged'
-        'keyup input': 'inputChanged'
+                
+    initialize: (options) ->
+        that = this;
+        window.FreeAgentAccountAdded = (result) ->            
+            if (result.error)
+                EzBob.App.trigger('error', result.error);
+            else
+                EzBob.App.trigger('info', 'Congratulations. Free Agent account was added successfully.');
+            
+            that.trigger('completed');
+            that.trigger('ready');
+            that.trigger('back');
 
-    ui:
-        displayName : '#freeagent_name'
-        connect     : 'a.connect-freeagent'
-        form        : 'form'
-
-    inputChanged: ->
-        enabled =  EzBob.Validation.checkForm(@validator)
-        @ui.connect.toggleClass('disabled', !enabled)
-
-    connect: ->
-        return false if not @validator.form()            
-        return false if @$el.find('a.connect-freeagent').hasClass('disabled')            
-        acc = new EzBob.FreeAgentAccountModel({displayName: @ui.displayName.val()})
-        xhr = acc.save()
-        if not xhr
-            EzBob.App.trigger 'error', 'FreeAgent Account Saving Error'
-            return false
-
-        BlockUi('on')
-        xhr.always =>
-            BlockUi('off')
-
-        xhr.fail (jqXHR, textStatus, errorThrown) =>
-            EzBob.App.trigger 'error', 'FreeAgent Account Saving Error'
-
-        xhr.done (res) =>
-            if (res.error)
-                EzBob.App.trigger 'error', res.error
-                return false
-            try
-                @model.add(acc)
-
-            EzBob.App.trigger('info', "FreeAgent Account Added Successfully");
-            @ui.displayName.val("") 
-            @inputChanged()
-            @trigger('completed');
-            @trigger 'back'
-
-        false
+        return false
+        
+    continueClicked: (e) ->  
+        return false if @$el.find('#freeagentContinueBtn').hasClass('disabled')
 
     render: ->
         super()
-        oFieldStatusIcons = $ 'IMG.field_status'
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
-
-        @validator = EzBob.validateFreeAgentAccountForm @ui.form
         return @
 
     back: ->
@@ -71,7 +42,6 @@ class EzBob.FreeAgentAccountInfoView extends Backbone.Marionette.ItemView
 
     getDocumentTitle: ->
         "Link FreeAgent Account"
-
 
 class EzBob.FreeAgentAccountModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/FreeAgentMarketPlaces/Accounts"

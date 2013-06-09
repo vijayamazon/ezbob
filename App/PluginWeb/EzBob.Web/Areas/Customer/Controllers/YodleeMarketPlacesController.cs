@@ -150,9 +150,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 				Log.Debug(e);
 				return View((object)DbStrings.AccountAddedByYou);
 			}
-
-
-
+			
 			var yodleeMain = new YodleeMain();
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(_customer.Id);

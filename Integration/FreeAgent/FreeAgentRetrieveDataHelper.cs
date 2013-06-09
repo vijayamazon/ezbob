@@ -27,7 +27,6 @@
         {
             // Retreive data from free agent api
 			var freeAgentOrderList = FreeAgentConnector.GetOrders(
-				databaseCustomerMarketPlace.DisplayName,
 				SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData), 
 				Helper.GetFreeAgentDeltaPeriod(databaseCustomerMarketPlace)
 			);

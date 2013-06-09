@@ -14,7 +14,7 @@
                 <div class="bank-account">
                     @EzForm.InputText("freeagent_name", "FreeAgent Display Name", cls:"form_field", isRequired: true, statusIcon: true)
                     <div class="control-group clearfix" style="padding-right: 68px;">
-                        <a href="#" class="button orange connect-freeagent disabled pull-right">Link Account</a>
+                        <a target="_blank" class="button orange pull-right" href="@Url.Action("AttachFreeAgent","FreeAgentMarketPlaces")" id="freeagentContinueBtn">Link Account</a>
                         <a href="#" class="back button grey pull-right">Back</a>
                     </div>
                 </div>

@@ -571,6 +571,18 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_FreeAgentOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_FreeAgentOrderItem_MP_FreeAgentOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentOrderItem_MP_FreeAgentOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_PersonalInfoItem_MP_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_PersonalInfoItem_MP_CustomerMarketPlace.sql</oFileName>
@@ -3130,6 +3142,12 @@
     <oName>GetMarketPlaceStatus</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\GetMarketPlaceStatus.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetMarketPlaceStatusByName</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\GetMarketPlaceStatusByName.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
