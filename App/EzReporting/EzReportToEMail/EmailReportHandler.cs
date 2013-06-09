@@ -20,10 +20,8 @@ namespace EzReportToEMail {
 		public EmailReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {
 		} // constructor
 
-		public void ExecuteReportHandler() {
+		public void ExecuteReportHandler(DateTime dToday) {
 			IEnumerable<Report> reportList = GetReportsList();
-
-			var dToday = DateTime.Today;
 
 			string today = dToday.ToString("yyyy-MM-dd");
 			string tomorrow = dToday.AddDays(1).ToString("yyyy-MM-dd");

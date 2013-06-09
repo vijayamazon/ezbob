@@ -84,3 +84,13 @@ App/PluginWeb/EzBob.Web/Content/js/Wizard/shops/ezbob.shopsbase.js
 App/PluginWeb/EzBob.Web/Content/js/Profile/ApplyForLoan/ApplyForLoanView.js
 App/EzReporting/~$ReportingDoc.docx
 App/EzReporting/EzReportsWeb/bin/
+App/EzReporting/EzReportToEMail/bin
+App/EzReporting/EzReportToEMail/obj
+App/EzReporting/ReportAuthenticationLib/bin
+App/EzReporting/ReportAuthenticationLib/obj
+App/EzReporting/Reports/bin
+App/EzReporting/Reports/obj
+App/EzReporting/Reports/bin
+App/EzReporting/Reports/obj
+App/Utils/EzEnvironment/bin
+App/Utils/EzEnvironment/obj

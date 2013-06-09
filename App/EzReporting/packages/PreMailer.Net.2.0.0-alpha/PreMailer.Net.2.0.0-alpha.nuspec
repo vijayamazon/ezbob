@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>PreMailer.Net</id>
+    <version>2.0.0-alpha</version>
+    <title>PreMailer.Net</title>
+    <authors>Martin H. Normark</authors>
+    <owners>Martin H. Normark</owners>
+    <licenseUrl>http://www.opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>https://github.com/milkshakesoftware/PreMailer.Net</projectUrl>
+    <iconUrl>https://github.com/milkshakesoftware/PreMailer.Net/raw/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Use PreMailer.Net before sending HTML e-mails. E-mail clients are very primitive HTML renderers, and it is very difficult to achieve full support for rich HTML e-mail accross e-mail clients.
+
+One thing that makes it easier, is to move all CSS from a style section in the HTML Head, to inline style attributes on each element.
+
+Create your e-mails with embedded style sections, and have PreMailer.Net move that CSS to inline style attributes before sending.</description>
+    <summary>PreMailer.Net is a C# utility for moving CSS to inline style attributes, to gain maximum E-mail client compatibility.</summary>
+    <releaseNotes>Updated package to include pull request #11
+
+*** Breaking Changes ***
+The namespace of PreMailer.Net is not PreMailerDotNet
+
+The PreMailer class is now static.
+
+https://github.com/milkshakesoftware/PreMailer.Net/pull/11</releaseNotes>
+    <copyright>Milkshake Software</copyright>
+    <language>en-US</language>
+    <tags>email css newsletter html</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="HtmlAgilityPack" version="1.4.6" />
+        <dependency id="Fizzler" version="0.9.3" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
