@@ -45,7 +45,7 @@
     <NodeElement Name="ezbob_scoring_model" NodeId="NestedStrategy49520203" />
     <NodeElement Name="Get Aggregates" NodeId="ScriptNode7786836" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode39199023" />
-    <NodeElement Name="Get_Automatic_ReRejects" NodeId="DataSourceNodeScalar19643918" />
+    <NodeElement Name="Get_Automatic_ReRejects" NodeId="DataSourceNodeScalar51189702" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar58058165" />
     <NodeElement Name="Get_Customer_Address_and_Previous_Address" NodeId="DataSourceNodeScalar15136387" />
     <NodeElement Name="Get_CustomerInformation" NodeId="DataSourceNodeScalar43717433" />
@@ -4778,6 +4778,111 @@
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>Get_Automatic_ReRejects</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;Get_Automatic_ReRejectsHUoEbzgbFoiQ0yMMqLTe8Q==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;NewCustomer_ReReject&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;OldCustomer_ReReject&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;PrincipalPaidAmount&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LoanAmountTaken&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomerID&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar51189702</Name>
+      <PointF>
+        <X>1911.40125</X>
+        <Y>1956</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
       <DefaultPinName />
       <Description />
       <DisplayName>Conditional Assignment</DisplayName>
@@ -5478,111 +5583,6 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>Get_Automatic_ReRejects</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;Get_Automatic_ReRejectstNkOnudFDJFSrbiTo2RGdQ==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;NewCustomer_ReReject&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;OldCustomer_ReReject&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;PrincipalPaidAmount&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;LoanAmountTaken&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CustomerID&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;Direction&gt;Input&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar19643918</Name>
-      <PointF>
-        <X>1911.40125</X>
-        <Y>1956</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -12974,6 +12974,90 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>NewCustomer_ReReject</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>OldCustomer_ReReject</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>PrincipalPaidAmount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>LoanAmountTaken</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>CustomerID</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>DataSourceNodeScalar65768047</OwnerName>
       <Name>PayPal_Volusion_PayPoint_Num</Name>
       <TypeName>System.Double</TypeName>
@@ -14034,90 +14118,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <Description />
       <IsInput>true</IsInput>
       <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>NewCustomer_ReReject</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>OldCustomer_ReReject</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>PrincipalPaidAmount</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>LoanAmountTaken</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>CustomerID</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>DataSourceName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description>Variable for setting name of Data Source that will be used in current node</Description>
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
-      <Name>ScortoInternalErrorMessage</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -15422,25 +15422,16 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar19643918</SourceNodeName>
-      <SourceNodeOutletName>Exception</SourceNodeOutletName>
-      <TargetNodeName>MailNode48824575</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar51189702</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment24182971</TargetNodeName>
       <SuperNodeName />
-      <Caption>Exception</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-23296</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>2000</X>
-          <Y>1580</Y>
-        </PointF>
-        <PointF>
-          <X>340</X>
-          <Y>1580</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment16902413</SourceNodeName>
@@ -16824,21 +16815,30 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar19643918</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment24182971</TargetNodeName>
+      <SourceNodeName>DataSourceNodeScalar51189702</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode48824575</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Exception</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-23296</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>2000</X>
+          <Y>1580</Y>
+        </PointF>
+        <PointF>
+          <X>340</X>
+          <Y>1580</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar51366941</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar19643918</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar51189702</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -19700,43 +19700,43 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>CustomerID</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Re_Reject_NewCustomer_ReReject</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>NewCustomer_ReReject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Re_Reject_OldCustomer_ReReject</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>OldCustomer_ReReject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Re_Reject_PrincipalPaidAmount</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>PrincipalPaidAmount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Re_Reject_LoanAmountTaken</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar19643918</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceNodeScalar51189702</TargetVariableOwnerName>
       <TargetVariableName>LoanAmountTaken</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -20652,6 +20652,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar51189702</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
       <OwnerName>ConditionalAssignment44014924</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -20757,14 +20765,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>Comparison36836846</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>DataSourceNodeScalar19643918</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
