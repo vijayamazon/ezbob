@@ -1,6 +1,7 @@
 Debug/
 obj/
 Obj/
+bin/
 _ReSharper*/
 *.suo
 *.csproj.user

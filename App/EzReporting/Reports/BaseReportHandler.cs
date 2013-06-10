@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using Ezbob.Database;
 using Ezbob.Logger;
-using Html;
+using global::Html;
 using PreMailerDotNet;
+using Aspose.Cells;
+
 
 namespace Reports {
 	using Mailer;
@@ -15,6 +20,7 @@ namespace Reports {
 		public const string DefaultFromEMailPassword = "ezbob2012";
 		public const string DefaultFromEMail = "ezbob@ezbob.com";
 		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
+	    public static string DefaultAttachment = "";
 
 		private static string Lock = "";
 
@@ -49,26 +55,42 @@ namespace Reports {
 			});
 		} // AddReportToList
 
-		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily") {
-			var email = new Html.Html();
+		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily")
+		{
 
-			email
-				.Append(new Head().Append(Report.GetStyle()))
-				.Append(mailBody);
+            var email = new Html.Html();
+
+		    email
+		        .Append(new Head().Append(Report.GetStyle()))
+		        .Append(mailBody);
+
 
 			string sEmail = PreMailer.MoveCssInline(email.ToString(), true);
 
-			lock (Lock) {
+            lock (Lock) {
 				Mailer.SendMail(
 					DefaultFromEMail,
 					DefaultFromEMailPassword,
 					"EZBOB " + period + " " + subject + " Client Report",
 					sEmail,
-					toAddressStr
+					toAddressStr,
+                    DefaultAttachment
 				);
 			} // lock
 
-			Debug("Mail {0} sent to: {1}", subject, toAddressStr);
+            if (!String.IsNullOrEmpty(DefaultAttachment)) 
+            {
+                try
+                {
+                    File.Delete(DefaultAttachment);
+                }
+                catch (Exception e)
+                {
+                    Error(e.ToString());
+                }
+            }
+
+            Debug("Mail {0} sent to: {1}", subject, toAddressStr);
 			Debug("Before embedding styles: {0}", email.ToString());
 			Debug("After embedding styles: {0}", sEmail);
 		} // SendReport
@@ -369,7 +391,7 @@ namespace Reports {
 		} // DailyStatsReport
 
 		public ATag BuildInWizardReport(Report report, string today, string tomorrow) {
-			return new Body().Add<Class>("Body")
+            return new Html.Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.Title + " " + today)))
 				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
 
@@ -394,7 +416,8 @@ namespace Reports {
 			return Report.ParseHeaderAndFields(sHeader, sFields);
 		} // GetHeadersAndFields
 
-		public ATag TableReport(string spName, string startDate, string endDate, ColumnInfo[] columns, bool isSharones = false) {
+        public ATag TableReport(string spName, string startDate, string endDate, ColumnInfo[] columns, bool isSharones = false, String RptTitle = "")
+        {
 			var tbl = new Table().Add<Class>("Report");
 
 			try {
@@ -449,15 +472,121 @@ namespace Reports {
 
 					lineCounter++;
 				} // for each data row
+                MakeExcelTablice(dt, spName, RptTitle);
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
-
 			return tbl;
 		} // TableReport
 
-		private static bool IsNumber(object value) {
+        static void InitAspose()
+        {
+            var license = new License();
+
+            using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("Reports.Aspose.Total.lic"))
+            {
+                s.Position = 0;
+                license.SetLicense(s);
+            }
+        }
+
+	    private static void MakeExcelTablice(DataTable dt, String headerName, String title)
+	    {
+            InitAspose();
+
+	        const int fc = 1; // first column
+            const int fr = 3; // first row
+
+            var wb = new Workbook();
+            wb.Worksheets.Clear();
+            var sheet = wb.Worksheets.Add("Report");
+
+            sheet.Cells.Merge(fr - 2, fc, 1, 6);
+            sheet.Cells[fr - 2, fc].PutValue(title.Replace("<h1>", "").Replace("</h1>",""));
+            sheet.Cells.ImportDataTable(dt, true, fr, fc);
+            sheet.AutoFitColumns();
+
+            sheet.Cells.SetColumnWidth(0, 1);
+
+            var titleStyle = sheet.Cells[fc, fr].GetStyle();
+            var headerStyle = sheet.Cells[fc, fr].GetStyle();
+            var lightStyle = sheet.Cells[fc, fr].GetStyle();
+            var darkStyle = sheet.Cells[fc, fr].GetStyle();
+            var footerStyle = sheet.Cells[fc, fr].GetStyle();
+
+            titleStyle.VerticalAlignment = TextAlignmentType.Center;
+            titleStyle.HorizontalAlignment = TextAlignmentType.Center;
+            titleStyle.Pattern = BackgroundType.Solid;
+            titleStyle.Font.IsBold = true;
+            titleStyle.ForegroundColor = Color.Linen;
+            sheet.Cells[fr - 2, fc].SetStyle(titleStyle);
+
+
+            headerStyle.VerticalAlignment = TextAlignmentType.Center;
+            headerStyle.HorizontalAlignment = TextAlignmentType.Center;
+            headerStyle.Borders[BorderType.BottomBorder].Color = Color.Black;
+            headerStyle.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Medium;
+            headerStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
+            headerStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
+            headerStyle.Borders[BorderType.RightBorder].Color = Color.Black;
+            headerStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
+            headerStyle.Borders[BorderType.TopBorder].Color = Color.Black;
+            headerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
+            headerStyle.Pattern = BackgroundType.Solid;
+            headerStyle.Font.IsBold = true;
+            headerStyle.ForegroundColor = Color.NavajoWhite;
+
+            lightStyle.VerticalAlignment = TextAlignmentType.Center;
+            lightStyle.HorizontalAlignment = TextAlignmentType.Left;
+            lightStyle.Pattern = BackgroundType.Solid;
+            lightStyle.Font.IsBold = false;
+            lightStyle.ForegroundColor = Color.Linen;
+            lightStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
+            lightStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
+            lightStyle.Borders[BorderType.RightBorder].Color = Color.Black;
+            lightStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
+
+
+            darkStyle.VerticalAlignment = TextAlignmentType.Center;
+            darkStyle.HorizontalAlignment = TextAlignmentType.Left;
+            darkStyle.Pattern = BackgroundType.Solid;
+            darkStyle.Font.IsBold = false;
+            darkStyle.ForegroundColor = Color.LightGray;
+            darkStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
+            darkStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
+            darkStyle.Borders[BorderType.RightBorder].Color = Color.Black;
+            darkStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
+
+
+            footerStyle.Borders[BorderType.TopBorder].Color = Color.Black;
+            footerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
+
+
+
+            for (var it = fc; it < dt.Columns.Count + fc; it++ )
+                sheet.Cells[fr, it].SetStyle(headerStyle);
+
+            for (var row = fr+1; row <= dt.Rows.Count + fr; row++)
+            {
+                for (var column = fc; column < dt.Columns.Count + fc; column++)
+                    sheet.Cells[row, column].SetStyle(lightStyle);
+                if (++row > (dt.Rows.Count + fr)) continue;
+                for (var column = fc; column < dt.Columns.Count + fc; column++)
+                    sheet.Cells[row, column].SetStyle(darkStyle);
+            }
+
+            for (var it = fc; it < dt.Columns.Count + fc; it++)
+                sheet.Cells[fr + dt.Rows.Count + 1, it].SetStyle(footerStyle);
+
+	        DefaultAttachment = headerName + ".xlsx";
+            wb.Save(DefaultAttachment);
+	    }
+
+
+
+
+	    private static bool IsNumber(object value) {
 			return IsInt(value) || IsFloat(value);
 		} // IsNumber
 

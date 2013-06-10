@@ -33,35 +33,40 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Fizzler, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.dll</HintPath>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="Fizzler.Sandbox, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.Sandbox.dll</HintPath>
+    <Reference Include="Aspose.Words">
+      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
-    <Reference Include="Fizzler.Systems.HtmlAgilityPack, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+    <Reference Include="Fizzler">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Sandbox">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\HtmlAgilityPack4.5\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Utils\Logger\lib\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Logger">
+      <HintPath>..\..\..\Lib\Ezbob\Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="Mailer">
       <HintPath>..\..\..\Lib\Ezbob\Mailer.dll</HintPath>
     </Reference>
-    <Reference Include="PreMailerDotNet, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler\PreMailerDotNet.dll</HintPath>
+    <Reference Include="PreMailerDotNet">
+      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\PreMailerDotNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -81,23 +86,20 @@
     <Compile Include="tags.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Aspose.Total.lic" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Report.css" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Utils\EzEnvironment\EzEnvironment.csproj">
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
       <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
       <Name>EzEnvironment</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Utils\Logger\Logger.csproj">
-      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
-      <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

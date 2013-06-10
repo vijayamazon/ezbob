@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Text;
 using Html;
 using Reports;
 using Ezbob.Database;
@@ -126,7 +124,7 @@ namespace EzReportToEMail {
 				break;
 			} // switch
 
-			body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns)));
+            body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, false, oRptTitle.ToString())));
 
 			SendReport(report.Title, body, report.ToEmail, period);
 		} // BuildReport

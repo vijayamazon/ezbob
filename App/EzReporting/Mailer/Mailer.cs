@@ -8,7 +8,7 @@
 
     public class Mailer
     {
-        public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, int retries = 5)
+        public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, string fileAttachment = "", int retries = 5)
         {
             string body = mailBody;
 
@@ -30,6 +30,12 @@
             })
             {
                 int tryCounter = 0;
+
+                if (!String.IsNullOrEmpty(fileAttachment)) {
+                    var attachment = new Attachment(fileAttachment);
+                    message.Attachments.Clear();
+                    message.Attachments.Add(attachment);
+                    }
                 while (tryCounter < retries)
                 {
                     try
