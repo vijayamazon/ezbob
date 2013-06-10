@@ -34,6 +34,7 @@ BEGIN
 		t.Type = 'PaypointTransaction'
 		AND
 		t.Status = 'Done'
+
 			
 	CREATE TABLE #output (
 		Caption NVARCHAR(128),

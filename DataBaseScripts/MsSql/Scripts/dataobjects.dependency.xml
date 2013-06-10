@@ -349,8 +349,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CashRequests_DiscountPlan</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CashRequests_DiscountPlan.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>CashRequests</oName>
-    <oRank>1</oRank>
+    <oRank>2</oRank>
     <oFileName>02_TABLES\CashRequests.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -1327,6 +1333,18 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_FreeAgentCompany_MP_FreeAgentOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentCompany_MP_FreeAgentOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_FreeAgentCompany</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_FreeAgentCompany.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_FreeAgentOrder_MP_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentOrder_MP_CustomerMarketPlace.sql</oFileName>
@@ -1348,6 +1366,18 @@
     <oName>MP_FreeAgentOrderItem</oName>
     <oRank>5</oRank>
     <oFileName>02_TABLES\MP_FreeAgentOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_FreeAgentUsers_MP_FreeAgentOrder</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_FreeAgentUsers_MP_FreeAgentOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_FreeAgentUsers</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_FreeAgentUsers.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
