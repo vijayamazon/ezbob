@@ -1,19 +1,20 @@
+IF OBJECT_ID ('dbo.MP_FreeAgentInvoiceItem') IS NOT NULL
+	DROP TABLE dbo.MP_FreeAgentInvoiceItem
+GO
 IF OBJECT_ID ('dbo.MP_FreeAgentOrderItem') IS NOT NULL
 	DROP TABLE dbo.MP_FreeAgentOrderItem
 GO
-IF OBJECT_ID ('dbo.MP_FreeAgentInvoice') IS NOT NULL
-	DROP TABLE dbo.MP_FreeAgentInvoice
-GO
-
 IF OBJECT_ID ('dbo.MP_FreeAgentCompany') IS NOT NULL
 	DROP TABLE dbo.MP_FreeAgentCompany
 GO
-
 IF OBJECT_ID ('dbo.MP_FreeAgentUsers') IS NOT NULL
 	DROP TABLE dbo.MP_FreeAgentUsers
 GO
 IF OBJECT_ID ('dbo.MP_FreeAgentOrder') IS NOT NULL
 	DROP TABLE dbo.MP_FreeAgentOrder
+GO
+IF OBJECT_ID ('dbo.MP_FreeAgentInvoice') IS NOT NULL
+	DROP TABLE dbo.MP_FreeAgentInvoice
 GO
 IF OBJECT_ID ('dbo.MP_FreeAgentRequest') IS NOT NULL
 	DROP TABLE dbo.MP_FreeAgentRequest
