@@ -14,7 +14,6 @@
 		public MP_FreeAgentRequest()
 		{
 			Invoices = new HashedSet<MP_FreeAgentInvoice>();
-			// can place company & users here too
 		}
 
 		public virtual int Id { get; set; }

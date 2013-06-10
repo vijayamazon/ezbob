@@ -11,6 +11,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 			Id(x => x.Id);
 			References(x => x.Request, "RequestId");
 
+			HasMany(x => x.Items).KeyColumn("InvoiceId").Cascade.All();
+
 			Map(x => x.url).Length(250);
 			Map(x => x.contact).Length(250);
 			Map(x => x.dated_on).CustomType<UtcDateTimeType>();

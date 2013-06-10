@@ -87,7 +87,7 @@
 			string approvalToken = Request.QueryString["code"];
 			AccessTokenContainer accessTokenContainer = null;
 
-			// Why do I have to use this dummy?
+			// Why does this dummyCallback needed?
 			var dummyCallback = Url.Action("FreeAgentCallback", "FreeAgentMarketPlaces", new { Area = "Customer" }, "https");
 
 			string accessTokenRequest = string.Format("{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
@@ -129,7 +129,6 @@
 				.Id;
 
 			var freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
-			var freeAgentUsers = FreeAgentConnector.GetUsers(accessTokenContainer.access_token);
 
 			var securityData = new FreeAgentSecurityInfo
 			{

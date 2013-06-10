@@ -832,6 +832,24 @@ namespace EZBob.DatabaseLib
 						payment_terms_in_days = dataItem.payment_terms_in_days,
 						paid_on = dataItem.paid_on
 					};
+
+					invoice.Items = new HashedSet<MP_FreeAgentInvoiceItem>();
+					foreach (var item in dataItem.invoice_items)
+					{
+						var mpItem = new MP_FreeAgentInvoiceItem
+							{
+								Invoice = invoice,
+								url = item.url,
+								position = item.position,
+								description = item.description,
+								item_type = item.item_type,
+								price = item.price,
+								quantity = item.quantity,
+								category = item.category
+							};
+						invoice.Items.Add(mpItem);
+					}
+
 					mpRequest.Invoices.Add(invoice);
 				});
 

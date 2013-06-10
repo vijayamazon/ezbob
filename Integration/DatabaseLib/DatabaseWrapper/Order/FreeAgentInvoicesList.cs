@@ -25,6 +25,19 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	}
 
 	[Serializable]
+	public class FreeAgentInvoiceItem
+	{
+		public int Id { get; set; }
+		public string url { get; set; }
+		public int position { get; set; }
+		public string description { get; set; }
+		public string item_type { get; set; }
+		public decimal price { get; set; }
+		public decimal quantity { get; set; }
+		public string category { get; set; }
+	}
+
+	[Serializable]
 	public class FreeAgentInvoice : TimeDependentRangedDataBase
 	{
 		public int Id { get; set; }
@@ -42,7 +55,9 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string status { get; set; }
 		public bool omit_header { get; set; }
 		public int payment_terms_in_days { get; set; }
-		public DateTime paid_on { get; set; }
+		public DateTime? paid_on { get; set; }
+
+		public List<FreeAgentInvoiceItem> invoice_items { get; set; }
 
 		public override DateTime RecordTime
 		{
@@ -51,7 +66,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	}
 
 	[Serializable]
-	public class InvoicesList
+	public class InvoicesListHelper
 	{
 		public List<FreeAgentInvoice> Invoices { get; set; }
 	}

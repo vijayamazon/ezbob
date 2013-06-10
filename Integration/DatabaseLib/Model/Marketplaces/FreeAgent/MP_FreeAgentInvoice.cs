@@ -1,12 +1,15 @@
 namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 {
 	using System;
+	using Iesi.Collections.Generic;
 
 	public class MP_FreeAgentInvoice
 	{
 		public virtual int Id { get; set; }
 
 		public virtual MP_FreeAgentRequest Request { get; set; }
+
+		public virtual ISet<MP_FreeAgentInvoiceItem> Items { get; set; }
 
 		public virtual string url { get; set; }
 		public virtual string contact { get; set; }
@@ -22,6 +25,6 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 		public virtual string status { get; set; }
 		public virtual bool omit_header { get; set; }
 		public virtual int payment_terms_in_days { get; set; }
-		public virtual DateTime paid_on { get; set; }
+		public virtual DateTime? paid_on { get; set; }
 	}
 }

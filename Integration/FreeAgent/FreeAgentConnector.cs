@@ -27,7 +27,7 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var invoicesList = (InvoicesList)js.Deserialize(response.Content, typeof(InvoicesList));
+			var invoicesList = (InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper));
 			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoicesList.Invoices);
 			return freeAgentInvoicesList;
         }

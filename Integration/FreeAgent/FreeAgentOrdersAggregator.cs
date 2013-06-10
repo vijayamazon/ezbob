@@ -32,8 +32,6 @@ namespace FreeAgent
 
 		private double GetTotalSumOfInvoices(IEnumerable<FreeAgentInvoice> invoice)
 		{
-			// should sum according to net_value?
-			// convert currency here?
 			return (double)invoice.Sum(o => o.net_value);
         }
 
