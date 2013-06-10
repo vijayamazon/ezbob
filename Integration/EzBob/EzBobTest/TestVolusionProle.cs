@@ -74,12 +74,14 @@ namespace Integration.ChannelGrabberAPI {
 
 		[Test]
 		public void TestGetOrders() {
-			var oApi = new VolusionProle(m_oLog, m_oCustomer);
-
-			List<ChannelGrabberOrder> lst = oApi.GetOrders(new VolusionAccountData {
+			var ad = new VolusionAccountData {
 				endpoint = m_sShopUrl,
 				username = m_sShopUserName
-			});
+			};
+
+			var oApi = new Connector(ad, m_oLog, m_oCustomer);
+
+			List<ChannelGrabberOrder> lst = oApi.GetOrders();
 
 			Assert.AreNotEqual(lst.Count, 0);
 		} // TestGetOrders

@@ -31,27 +31,14 @@ namespace Integration.Volusion {
 				databaseCustomerMarketPlace.Id
 			);
 
-			// Store orders
-			UpdateClientOrdersInfo(
-				databaseCustomerMarketPlace,
-				securityInfo,
-				ActionAccessType.Full,
-				historyRecord
-			);
-		} // InternalUpdateInfo
+			var ad = new VolusionAccountData {
+				endpoint = securityInfo.Url,
+				username = securityInfo.Login
+			};
 
-		private void UpdateClientOrdersInfo(
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			VolusionSecurityInfo securityInfo,
-			ActionAccessType actionAccessType,
-			MP_CustomerMarketplaceUpdatingHistory historyRecord
-		) {
-			List<ChannelGrabberOrder> oRawOrders = VolusionConnector.GetOrders(
-				ms_oLog,
-				databaseCustomerMarketPlace.Customer,
-				securityInfo.Url,
-				securityInfo.Login
-			);
+			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
+
+			List<ChannelGrabberOrder> oRawOrders = ctr.GetOrders();
 
 			var oVolusionOrders = new List<VolusionOrderItem>();
 
@@ -97,7 +84,7 @@ namespace Integration.Volusion {
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);
-		} // UpdateClientOrdersInfo
+		} // InternalUpdateInfo
 
 		protected override void AddAnalysisValues(
 			IDatabaseCustomerMarketPlace marketPlace,

@@ -65,14 +65,12 @@
     <Compile Include="ChannelGrabberCustomer.cs" />
     <Compile Include="ChannelGrabberOrder.cs" />
     <Compile Include="PlayAccountData.cs" />
-    <Compile Include="PlayProle.cs" />
     <Compile Include="IJsonable.cs" />
     <Compile Include="Jsonable.cs" />
-    <Compile Include="Prole.cs" />
+    <Compile Include="Connector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IAccountData.cs" />
     <Compile Include="VolusionAccountData.cs" />
-    <Compile Include="VolusionProle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">

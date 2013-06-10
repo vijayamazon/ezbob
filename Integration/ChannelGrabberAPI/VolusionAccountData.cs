@@ -6,6 +6,8 @@ namespace Integration.ChannelGrabberAPI {
 	public class VolusionAccountData : AAccountData {
 		#region public
 
+		public VolusionAccountData() : base("Volusion") {}
+
 		#region public properties for JSON
 
 		public string name     { get; set; }

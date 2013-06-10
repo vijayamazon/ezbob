@@ -4,6 +4,8 @@ namespace Integration.ChannelGrabberAPI {
 	#region interface IAccountData
 
 	public interface IAccountData : IJsonable {
+		string AccountTypeName();
+
 		/// <summary>
 		/// Verifies that Channel Grabber service returned valid data as a reply for
 		/// account registration request.

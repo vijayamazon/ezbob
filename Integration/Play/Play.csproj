@@ -58,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PlayConnector.cs" />
     <Compile Include="PlayDatabaseFunctionFactory.cs" />
     <Compile Include="PlayDatabaseFunctionStorage.cs" />
     <Compile Include="PlayDatabaseMarketPlace.cs" />

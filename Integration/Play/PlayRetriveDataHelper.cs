@@ -31,27 +31,14 @@ namespace Integration.Play {
 				databaseCustomerMarketPlace.Id
 			);
 
-			// Store orders
-			UpdateClientOrdersInfo(
-				databaseCustomerMarketPlace,
-				securityInfo,
-				ActionAccessType.Full,
-				historyRecord
-			);
-		} // InternalUpdateInfo
+			var ad = new PlayAccountData {
+				name = securityInfo.Name,
+				username = securityInfo.Login
+			};
 
-		private void UpdateClientOrdersInfo(
-			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-			PlaySecurityInfo securityInfo,
-			ActionAccessType actionAccessType,
-			MP_CustomerMarketplaceUpdatingHistory historyRecord
-		) {
-			List<ChannelGrabberOrder> oRawOrders = PlayConnector.GetOrders(
-				ms_oLog,
-				databaseCustomerMarketPlace.Customer,
-				securityInfo.Name,
-				securityInfo.Login
-			);
+			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
+
+			List<ChannelGrabberOrder> oRawOrders = ctr.GetOrders();
 
 			var oPlayOrders = new List<PlayOrderItem>();
 
@@ -97,7 +84,7 @@ namespace Integration.Play {
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);
-		} // UpdateClientOrdersInfo
+		} // InternalUpdateInfo
 
 		protected override void AddAnalysisValues(
 			IDatabaseCustomerMarketPlace marketPlace,

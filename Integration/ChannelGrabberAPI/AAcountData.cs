@@ -5,6 +5,12 @@ namespace Integration.ChannelGrabberAPI {
 	public abstract class AAccountData : AJsonable, IAccountData {
 		#region public
 
+		#region property AccountTypeName
+
+		public virtual string AccountTypeName() { return m_sAccountTypeName; } // AccountTypeName
+
+		#endregion property AccountTypeName
+
 		#region method VerifyRegistrationInProgresss
 
 		public void VerifyRegistrationInProgress(XmlDocument doc) {
@@ -87,7 +93,8 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region constructor
 
-		protected AAccountData() {
+		protected AAccountData(string sAccountTypeName) {
+			m_sAccountTypeName = sAccountTypeName;
 			m_nAccountID = 0;
 		} // constructor
 
@@ -143,6 +150,7 @@ namespace Integration.ChannelGrabberAPI {
 		#endregion method SaveAccountID
 
 		private int m_nAccountID;
+		private string m_sAccountTypeName;
 
 		private const string IdNode = "id";
 

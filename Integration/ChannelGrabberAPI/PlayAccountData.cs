@@ -6,6 +6,8 @@ namespace Integration.ChannelGrabberAPI {
 	public class PlayAccountData : AAccountData {
 		#region public
 
+		public PlayAccountData() : base("Play") {}
+
 		#region public properties for JSON
 
 		public string name     { get; set; }

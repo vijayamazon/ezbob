@@ -55,7 +55,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 	    private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
-		private readonly PlayConnector _validator = new PlayConnector();
 		private readonly DatabaseDataHelper _helper;
         private readonly IZohoFacade _crm;
 
@@ -91,8 +90,16 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Accounts(PlayAccountModel model) {
+			var ad = new PlayAccountData {
+				name = model.name,
+				username = model.login,
+				password = model.password
+			};
+
+			var ctr = new Connector(ad, _log, _context.Customer);
+
 			try {
-				_validator.Validate(_log, _context.Customer, model.name, model.login, model.password);
+				ctr.Validate();
 			}
 			catch (ConnectionFailChannelGrabberApiException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
@@ -104,8 +111,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				_log.Error(cge);
 			}
 			catch (ChannelGrabberApiException cge) {
-				_log.Error("Failed to validate Play account, continuing with registration.");
+				_log.Error("Failed to validate Play account.");
 				_log.Error(cge);
+				return this.JsonNet(new { error = cge.Message });
 			}
 			catch (Exception e) {
 				_log.Error(e);

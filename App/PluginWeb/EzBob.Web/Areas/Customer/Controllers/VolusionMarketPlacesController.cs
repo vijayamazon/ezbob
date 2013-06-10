@@ -60,7 +60,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 	    private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
-		private readonly VolusionConnector _validator = new VolusionConnector();
 		private readonly DatabaseDataHelper _helper;
         private readonly ISession _session;
         private readonly IZohoFacade _crm;
@@ -99,8 +98,17 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Accounts(VolusionAccountModel model) {
+			var ad = new VolusionAccountData {
+				name = model.displayName,
+				endpoint = model.url,
+				username = model.login,
+				password = model.password
+			};
+
+			var ctr = new Connector(ad, Log, _context.Customer);
+
 			try {
-				_validator.Validate(Log, _context.Customer, model.displayName, model.url, model.login, model.password);
+				ctr.Validate();
 			}
 			catch (ConnectionFailChannelGrabberApiException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
@@ -112,8 +120,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				Log.Error(cge);
 			}
 			catch (ChannelGrabberApiException cge) {
-				Log.Error("Failed to validate Volusion account, continuing with registration.");
+				Log.Error("Failed to validate Volusion account.");
 				Log.Error(cge);
+				return this.JsonNet(new { error = cge.Message });
 			}
 			catch (Exception e) {
 				Log.Error(e);

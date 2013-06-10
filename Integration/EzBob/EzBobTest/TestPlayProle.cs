@@ -73,12 +73,14 @@ namespace Integration.ChannelGrabberAPI {
 
 		[Test]
 		public void TestGetOrders() {
-			var oApi = new PlayProle(m_oLog, m_oCustomer);
-
-			List<ChannelGrabberOrder> lst = oApi.GetOrders(new PlayAccountData {
+			var ad = new PlayAccountData {
 				name = m_sShopName,
 				username = m_sShopUserName
-			});
+			};
+
+			var oApi = new Connector(ad, m_oLog, m_oCustomer);
+
+			List<ChannelGrabberOrder> lst = oApi.GetOrders();
 
 			Assert.AreNotEqual(lst.Count, 0);
 		} // TestGetOrders

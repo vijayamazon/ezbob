@@ -10,17 +10,6 @@ using log4net;
 using Scorto.Configuration;
 
 namespace Integration.ChannelGrabberAPI {
-	#region enum ShopTypes
-
-	public enum ShopTypes {
-		Volusion,
-		Kashflow,
-		Magento,
-		Play,
-	} // enum ShopTypes
-
-	#endregion enum ShopTypes
-
 	#region enum LogMsgTypes
 
 	public enum LogMsgTypes {
@@ -33,27 +22,58 @@ namespace Integration.ChannelGrabberAPI {
 
 	#endregion enum LogMsgTypes
 
-	#region class Prole
+	#region class Connector
 
-	public abstract class Prole : ConfigurationRoot {
+	public class Connector : ConfigurationRoot {
 		#region public
 
-		#region property ShopType
+		#region constructor
 
-		public abstract ShopTypes ShopType { get; }
+		public Connector(IAccountData oAccountData, ILog log, Customer oCustomer) {
+			m_oAccountData = oAccountData;
 
-		#endregion property ShopType
+			m_oLog = log;
+
+			Debug("Creating a ChannelGrabber API Connector class...");
+
+			if (oCustomer == null)
+				throw new ChannelGrabberApiException("Customer information not specified.");
+
+			m_oCustomer = oCustomer;
+
+			ConfigurationRoot o = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
+
+			string sServiceUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
+
+			if (sServiceUrl == string.Empty)
+				throw new ChannelGrabberApiException("Service URL not specified.");
+
+			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
+
+			m_oRestClient = new RestClient(sServiceUrl);
+
+			XmlNodeList lst = ExecuteRequest().SelectNodes(ServiceValidateXpath);
+
+			if ((null == lst) || (2 > lst.Count))
+				throw new ChannelGrabberApiException("Failed to parse Service output.");
+
+			Debug("Creating a ChannelGrabber API Connector class succeeded.");
+		} // constructor
+
+		#endregion constructor
 
 		#region property ShopTypeName
 
-		public string ShopTypeName { get { return ShopType.ToString(); } }
+		public virtual string ShopTypeName {
+			get { return m_oAccountData.AccountTypeName(); }
+		} // ShopTypeName
 
 		#endregion property ShopTypeName
 
 		#region method Validate
 
-		public virtual void Validate(IAccountData oAccountData) {
-			Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, oAccountData);
+		public virtual void Validate() {
+			Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, m_oAccountData);
 
 			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
 
@@ -73,7 +93,7 @@ namespace Integration.ChannelGrabberAPI {
 
 			Debug("Customer details loaded successfully.");
 
-			ValidateShop(oCustomer, oAccountData);
+			ValidateShop(oCustomer, m_oAccountData);
 
 			Info("Validate {0} customer complete.", ShopTypeName);
 		} // Validate
@@ -82,10 +102,10 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method GetOrders
 
-		public List<ChannelGrabberOrder> GetOrders(IAccountData oAccountData) {
+		public List<ChannelGrabberOrder> GetOrders() {
 			Info(
 				"GetOrders for {0} customer {1} ({2}) started with parameters [ {3} ]",
-				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id, oAccountData
+				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id, m_oAccountData
 			);
 
 			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
@@ -100,23 +120,23 @@ namespace Integration.ChannelGrabberAPI {
 
 			Debug("Verifying account id...");
 
-			oAccountData.VerifyAccountID(
+			m_oAccountData.VerifyAccountID(
 				ExecuteRequest(BuildRegisterShopRq(oCustomer))
 			);
 
-			int nRqID = SendGenerateOrdersRq(oCustomer, oAccountData);
+			int nRqID = SendGenerateOrdersRq(oCustomer, m_oAccountData);
 
-			OrderFetchStatus nRes = FetchOrdersRq(oCustomer, oAccountData, nRqID);
+			OrderFetchStatus nRes = FetchOrdersRq(oCustomer, m_oAccountData, nRqID);
 
 			while (nRes == OrderFetchStatus.NotReady) {
 				Debug("Not ready, sleeping...");
 				Thread.Sleep(SleepTime);
 
-				nRes = FetchOrdersRq(oCustomer, oAccountData, nRqID);
+				nRes = FetchOrdersRq(oCustomer, m_oAccountData, nRqID);
 			} // forever
 
 			if (nRes == OrderFetchStatus.Complete) {
-				List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, oAccountData);
+				List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, m_oAccountData);
 
 				Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
 					ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
@@ -138,39 +158,6 @@ namespace Integration.ChannelGrabberAPI {
 		#endregion public
 
 		#region protected
-
-		#region constructor
-
-		protected Prole(ILog log, Customer oCustomer) {
-			m_oLog = log;
-
-			Debug("Creating a ChannelGrabber API prole class...");
-
-			if (oCustomer == null)
-				throw new ChannelGrabberApiException("Customer information not specified.");
-
-			m_oCustomer = oCustomer;
-
-			ConfigurationRoot o = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
-
-			string sServiceUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
-
-			if (sServiceUrl == string.Empty)
-				throw new ChannelGrabberApiException("ChannelGrabber Service URL not specified.");
-
-			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
-
-			m_oRestClient = new RestClient(sServiceUrl);
-
-			XmlNodeList lst = ExecuteRequest().SelectNodes(ServiceValidateXpath);
-
-			if ((null == lst) || (2 > lst.Count))
-				throw new ChannelGrabberApiException("Failed to parse ChannelGrabber Service output.");
-
-			Debug("Creating a ChannelGrabber API prole class succeeded.");
-		} // constructor
-
-		#endregion constructor
 
 		#region method Say
 
@@ -548,6 +535,7 @@ namespace Integration.ChannelGrabberAPI {
 		private ILog m_oLog;
 		private Customer m_oCustomer;
 		private RestClient m_oRestClient;
+		private IAccountData m_oAccountData;
 
 		#endregion private fields
 
@@ -572,7 +560,7 @@ namespace Integration.ChannelGrabberAPI {
 		#endregion infrastructure
 
 		#endregion private
-	} // class Prole
+	} // class Connector
 
-	#endregion class Prole
+	#endregion class Connector
 } // namespace ChannelGrabberAPI
