@@ -23,6 +23,7 @@ namespace EZBob.DatabaseLib
         {
             Not.LazyLoad();
             Table("vPacnetBalance");
+			ReadOnly();
             Id(x => x.Id);
             Map(x => x.CurrentBalance, "PacnetBalance");
             Map(x => x.ReservedAmount);
