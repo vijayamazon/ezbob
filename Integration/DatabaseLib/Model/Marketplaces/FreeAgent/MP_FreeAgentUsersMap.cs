@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 		{
 			Table("MP_FreeAgentUsers");
 			Id(x => x.Id);
-			References( x => x.Order, "OrderId" );
+			References(x => x.Request, "RequestId");
 
 			Map(x => x.url).Length(250);
 			Map(x => x.first_name).Length(250);

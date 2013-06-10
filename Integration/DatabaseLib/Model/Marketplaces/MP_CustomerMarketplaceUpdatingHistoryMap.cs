@@ -61,7 +61,7 @@ namespace EZBob.DatabaseLib.Model.Database
 				.PropertyRef(p => p.HistoryRecord)
 				.Cascade.All();
 
-			HasOne(x => x.FreeAgentOrder)
+			HasOne(x => x.FreeAgentRequest)
 				.PropertyRef(p => p.HistoryRecord)
 				.Cascade.All();
 

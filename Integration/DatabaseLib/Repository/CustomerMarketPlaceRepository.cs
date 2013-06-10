@@ -193,8 +193,8 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			case "FreeAgent":
 				{
-					var s = _session.Query<MP_FreeAgentOrderItem>()
-						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+					var s = _session.Query<MP_FreeAgentInvoice>()
+						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.dated_on != null)
 						.Select(oi => oi.dated_on);
 					return !s.Any() ? (DateTime?)null : s.Min();

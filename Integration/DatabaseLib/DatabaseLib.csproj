@@ -94,10 +94,10 @@
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentCompanyMap.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentUsers.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentCompany.cs" />
-    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrder.cs" />
-    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItem.cs" />
-    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItemMap.cs" />
-    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequest.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentInvoice.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentInvoiceMap.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequestMap.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />

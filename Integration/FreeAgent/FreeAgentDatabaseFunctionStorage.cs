@@ -7,8 +7,8 @@
 
 	public enum FreeAgentDatabaseFunctionType
     {
-        NumOfOrders,
-        TotalSumOfOrders,
+        NumOfOrders, // TODO: change order to invoice and test entire flow
+		TotalSumOfOrders, // TODO: change order to invoice and test entire flow
     }
 
 	internal class FreeAgentDatabaseFunctionStorage : DatabaseFunctionStorage<FreeAgentDatabaseFunctionType>

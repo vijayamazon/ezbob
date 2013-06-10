@@ -16,7 +16,7 @@
 		
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(FreeAgentConnector));
 
-		public static FreeAgentOrdersList GetOrders(string accessToken, int numOfMonths)
+		public static FreeAgentInvoicesList GetInvoices(string accessToken, int numOfMonths)
 		{
 			string monthPart = numOfMonths == -1 ? string.Empty : string.Format(InvoicesRequestMonthPart, numOfMonths);
 			string timedInvoicesRequest = string.Format("{0}{1}", InvoicesRequest, monthPart);
@@ -28,8 +28,8 @@
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
 			var invoicesList = (InvoicesList)js.Deserialize(response.Content, typeof(InvoicesList));
-			var freeAgentOrdersItemList = new FreeAgentOrdersList(DateTime.UtcNow, invoicesList.Invoices);
-			return freeAgentOrdersItemList;
+			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoicesList.Invoices);
+			return freeAgentInvoicesList;
         }
 
 		public static FreeAgentCompany GetCompany(string accessToken)

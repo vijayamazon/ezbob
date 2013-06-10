@@ -8,7 +8,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 	{
 		public virtual int Id { get; set; }
 
-		public virtual MP_FreeAgentOrder Order { get; set; }
+		public virtual MP_FreeAgentRequest Request { get; set; }
 
 		public virtual string url { get; set; }
 		public virtual string first_name { get; set; }

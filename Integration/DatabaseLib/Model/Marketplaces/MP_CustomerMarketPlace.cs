@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			TeraPeakOrders = new HashedSet<MP_TeraPeakOrder>();
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
 			EkmOrders = new HashedSet<MP_EkmOrder>();
-			FreeAgentOrders = new HashedSet<MP_FreeAgentOrder>();
+			FreeAgentRequests = new HashedSet<MP_FreeAgentRequest>();
             VolusionOrders = new HashedSet<MP_VolusionOrder>();
             PlayOrders = new HashedSet<MP_PlayOrder>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
@@ -54,7 +54,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual ISet<MP_AnalyisisFunctionValue> AnalysysFunctionValues { get; set; }
 
 		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
-		public virtual ISet<MP_FreeAgentOrder> FreeAgentOrders { get; set; }
+		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
         public virtual ISet<MP_VolusionOrder> VolusionOrders { get; set; }
         public virtual ISet<MP_PlayOrder> PlayOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }

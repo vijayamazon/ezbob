@@ -8,44 +8,44 @@ namespace FreeAgent
 	using EzBob.CommonLib.TimePeriodLogic;
 	using log4net;
 
-	internal class FreeAgentOrdersAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<FreeAgentOrderItem>, FreeAgentOrderItem, FreeAgentDatabaseFunctionType>
+	internal class FreeAgentInvoicesAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
-		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentOrderItem>, FreeAgentOrderItem, FreeAgentDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<FreeAgentOrderItem> data, ICurrencyConvertor currencyConverter)
+		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> data, ICurrencyConvertor currencyConverter)
         {
-			return new FreeAgentOrdersAggregator(data, currencyConverter);
+			return new FreeAgentInvoicesAggregator(data, currencyConverter);
         }
     }
 
-    internal class FreeAgentOrdersAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentOrderItem>, FreeAgentOrderItem, FreeAgentDatabaseFunctionType>
+	internal class FreeAgentInvoicesAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentOrdersAggregator));
-      
-		public FreeAgentOrdersAggregator(ReceivedDataListTimeDependentInfo<FreeAgentOrderItem> orders, ICurrencyConvertor currencyConvertor)
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentInvoicesAggregator));
+
+		public FreeAgentInvoicesAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
         }
 
-		private int GetOrdersCount(IEnumerable<FreeAgentOrderItem> orders)
+		private int GetInvoicesCount(IEnumerable<FreeAgentInvoice> invoice)
 		{
-			return orders.Count();
+			return invoice.Count();
         }
 
-		private double GetTotalSumOfOrders(IEnumerable<FreeAgentOrderItem> orders)
+		private double GetTotalSumOfInvoices(IEnumerable<FreeAgentInvoice> invoice)
 		{
 			// should sum according to net_value?
 			// convert currency here?
-			return (double)orders.Sum(o => o.net_value);
+			return (double)invoice.Sum(o => o.net_value);
         }
 
-        protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentOrderItem> orders)
+		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentInvoice> orders)
         {
             switch (functionType)
             {
                 case FreeAgentDatabaseFunctionType.NumOfOrders:
-                    return GetOrdersCount(orders);
+					return GetInvoicesCount(orders);
 
                 case FreeAgentDatabaseFunctionType.TotalSumOfOrders:
-                    return GetTotalSumOfOrders(orders);
+					return GetTotalSumOfInvoices(orders);
 
                 default:
                     throw new NotImplementedException();

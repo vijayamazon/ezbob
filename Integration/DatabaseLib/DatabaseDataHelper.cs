@@ -790,54 +790,55 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public MP_FreeAgentOrder StoreFreeAgentOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			LogData("Orders Data", customerMarketPlace, ordersData);
+			LogData("Invoices Data", customerMarketPlace, invoices);
 
-			if (ordersData == null)
+			if (invoices == null)
 			{
 				return null;
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_FreeAgentOrder
+			var mpRequest = new MP_FreeAgentRequest
 			{
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
-			ordersData.ForEach(
+			invoices.ForEach(
 				dataItem =>
 				{
-					var mpOrderItem = new MP_FreeAgentOrderItem
+					var invoice = new MP_FreeAgentInvoice
 					{
-						Order = mpOrder,
+						Id = dataItem.Id,
+						Request = mpRequest,
 						url = dataItem.url,
 						contact = dataItem.contact,
-						currency = dataItem.currency,
 						dated_on = dataItem.dated_on,
 						due_on = dataItem.due_on,
-						due_value = dataItem.due_value,
+						reference = dataItem.reference,
+						currency = dataItem.currency,
 						exchange_rate = dataItem.exchange_rate,
-						Id = dataItem.Id,
 						net_value = dataItem.net_value,
 						total_value = dataItem.total_value,
 						paid_value = dataItem.paid_value,
+						due_value = dataItem.due_value,
 						status = dataItem.status,
 						omit_header = dataItem.omit_header,
 						payment_terms_in_days = dataItem.payment_terms_in_days,
 						paid_on = dataItem.paid_on
 					};
-					mpOrder.OrderItems.Add(mpOrderItem);
+					mpRequest.Invoices.Add(invoice);
 				});
 
-			customerMarketPlace.FreeAgentOrders.Add(mpOrder);
+			customerMarketPlace.FreeAgentRequests.Add(mpRequest);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 
-			return mpOrder;
+			return mpRequest;
 		}
 
 		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company)
@@ -2198,13 +2199,13 @@ namespace EZBob.DatabaseLib
 			return orders;
 		}
 
-		public FreeAgentOrdersList GetAllFreeAgentOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public FreeAgentInvoicesList GetAllFreeAgentInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var orders = new FreeAgentOrdersList(submittedDate);
-
-			orders.AddRange(customerMarketPlace.FreeAgentOrders.SelectMany(freeAgentOrder => freeAgentOrder.OrderItems).Select(o => new FreeAgentOrderItem
+			var orders = new FreeAgentInvoicesList(submittedDate);
+			
+			orders.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
 			{
 				Id = o.Id,
 				url =  o.url,
@@ -2222,7 +2223,7 @@ namespace EZBob.DatabaseLib
 				omit_header = o.omit_header,
 				payment_terms_in_days = o.payment_terms_in_days,
 				paid_on = o.paid_on
-			}).Distinct(new FreeAgentOrderComparer()));
+			}).Distinct(new FreeAgentInvoiceComparer()));
 
 			return orders;
 		}
@@ -2291,13 +2292,13 @@ namespace EZBob.DatabaseLib
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			MP_FreeAgentOrder order = customerMarketPlace.FreeAgentOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
+			MP_FreeAgentRequest order = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
 			if (order == null)
 			{
 				return -1;
 			}
 
-			MP_FreeAgentOrderItem item = order.OrderItems.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
+			MP_FreeAgentInvoice item = order.Invoices.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
 			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
 
 			DateTime later = DateTime.Today;

@@ -33,7 +33,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual MP_PayPalTransaction PayPalTransaction { get; set; }
 
 		public virtual MP_EkmOrder EkmOrder { get; set; }
-		public virtual MP_FreeAgentOrder FreeAgentOrder { get; set; }
+		public virtual MP_FreeAgentRequest FreeAgentRequest { get; set; }
         public virtual MP_VolusionOrder VolusionOrder { get; set; }
         public virtual MP_PlayOrder PlayOrder { get; set; }
         public virtual MP_PayPointOrder PayPointOrder { get; set; }

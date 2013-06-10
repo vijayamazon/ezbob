@@ -39,16 +39,16 @@ namespace EZBob.DatabaseLib {
 
 	#endregion class EkmOrderComparer
 
-	class FreeAgentOrderComparer : AOrderComparer<FreeAgentOrderItem>
+	class FreeAgentInvoiceComparer : AOrderComparer<FreeAgentInvoice>
 	{
-		public override bool AreEqual(FreeAgentOrderItem a, FreeAgentOrderItem b)
+		public override bool AreEqual(FreeAgentInvoice a, FreeAgentInvoice b)
 		{
-			return a.Id == b.Id;
+			return a.reference == b.reference;
 		} // AreEqual
 
-		public override int HashCode(FreeAgentOrderItem a)
+		public override int HashCode(FreeAgentInvoice a)
 		{
-			return a.Id.GetHashCode();
+			return a.reference.GetHashCode();
 		} // HashCode
 	} // class FreeAgentOrderComparer
 

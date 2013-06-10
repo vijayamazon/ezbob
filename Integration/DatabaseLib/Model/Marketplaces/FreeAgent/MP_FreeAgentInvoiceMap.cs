@@ -3,13 +3,13 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 
-	public class MP_FreeAgentOrderItemMap : ClassMap<MP_FreeAgentOrderItem>
+	public class MP_FreeAgentInvoiceMap : ClassMap<MP_FreeAgentInvoice>
 	{
-		public MP_FreeAgentOrderItemMap()
+		public MP_FreeAgentInvoiceMap()
 		{
-			Table("MP_FreeAgentOrderItem");
+			Table("MP_FreeAgentInvoice");
 			Id(x => x.Id);
-			References( x => x.Order, "OrderId" );
+			References(x => x.Request, "RequestId");
 
 			Map(x => x.url).Length(250);
 			Map(x => x.contact).Length(250);

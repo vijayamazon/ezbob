@@ -6,26 +6,26 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	using EzBob.CommonLib.TimePeriodLogic;
 
 	[Serializable]
-	public class FreeAgentOrdersList : ReceivedDataListTimeMarketTimeDependentBase<FreeAgentOrderItem>
+	public class FreeAgentInvoicesList : ReceivedDataListTimeMarketTimeDependentBase<FreeAgentInvoice>
 	{
-		public FreeAgentOrdersList()
+		public FreeAgentInvoicesList()
 			:base (DateTime.Now, null)
 		{
 		}
 
-		public FreeAgentOrdersList(DateTime submittedDate, IEnumerable<FreeAgentOrderItem> collection = null) 
+		public FreeAgentInvoicesList(DateTime submittedDate, IEnumerable<FreeAgentInvoice> collection = null) 
 			: base(submittedDate, collection)
 		{
 		}
 
-		public override ReceivedDataListTimeDependentBase<FreeAgentOrderItem> Create(DateTime submittedDate, IEnumerable<FreeAgentOrderItem> collection)
+		public override ReceivedDataListTimeDependentBase<FreeAgentInvoice> Create(DateTime submittedDate, IEnumerable<FreeAgentInvoice> collection)
 		{
-			return new FreeAgentOrdersList(submittedDate, collection);
+			return new FreeAgentInvoicesList(submittedDate, collection);
 		}
 	}
 
 	[Serializable]
-	public class FreeAgentOrderItem : TimeDependentRangedDataBase
+	public class FreeAgentInvoice : TimeDependentRangedDataBase
 	{
 		public int Id { get; set; }
 		public string url { get; set; }
@@ -53,6 +53,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	[Serializable]
 	public class InvoicesList
 	{
-		public List<FreeAgentOrderItem> Invoices { get; set; }
+		public List<FreeAgentInvoice> Invoices { get; set; }
 	}
 }

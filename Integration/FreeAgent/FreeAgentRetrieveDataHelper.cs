@@ -27,49 +27,46 @@
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             // Retreive data from free agent api
-	        string accessToken =
-		        (SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData))
-			        .AccessToken;
-			var freeAgentOrderList = FreeAgentConnector.GetOrders(
+	        string accessToken = (SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData)).AccessToken;
+			var freeAgentInvoices = FreeAgentConnector.GetInvoices(
 				accessToken, 
-				Helper.GetFreeAgentDeltaPeriod(databaseCustomerMarketPlace)
-			);
+				Helper.GetFreeAgentDeltaPeriod(databaseCustomerMarketPlace));
 
 			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
 			FreeAgentUsersList freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
 			
             var elapsedTimeInfo = new ElapsedTimeInfo();
 			
-			// Store orders
-			var mpOrder = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			// Store request and invoices
+			var mpRequest = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreFreeAgentOrdersData(databaseCustomerMarketPlace, freeAgentOrderList, historyRecord));
+				() => Helper.StoreFreeAgentRequestAndInvoicesData(databaseCustomerMarketPlace, freeAgentInvoices, historyRecord));
 
-            //retrieve orders
-            var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+            // Retrieve all distinct invoices
+            var allInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
                 ElapsedDataMemberType.RetrieveDataFromDatabase,
-				() => Helper.GetAllFreeAgentOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
+				() => Helper.GetAllFreeAgentInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 			
-            //calculate aggregated
+            // Calculate aggregated
             var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
                 ElapsedDataMemberType.AggregateData,
-                () => CreateOrdersAggregationInfo(allOrders, Helper.CurrencyConverter));
+				() => CreateInvoicesAggregationInfo(allInvoices, Helper.CurrencyConverter));
             
-            // store aggregated
+            // Store aggregated
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
                 ElapsedDataMemberType.StoreAggregatedData,
                 () => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
 
-	        if (mpOrder != null)
+			if (mpRequest != null)
 	        {
 		        // Store company data
 		        var mpFreeAgentCompany = new MP_FreeAgentCompany
 			        {
-				        Order = mpOrder,
+						Request = mpRequest,
 				        url = freeAgentCompany.url,
 				        name = freeAgentCompany.name,
 				        subdomain = freeAgentCompany.subdomain,
@@ -95,7 +92,8 @@
 		        {
 			        var mpFreeAgentUsers = new MP_FreeAgentUsers
 				        {
-					        Order = mpOrder,
+							Request = mpRequest,
+							url = user.url,
 					        first_name = user.first_name,
 					        last_name = user.last_name,
 					        email = user.email,
@@ -125,7 +123,7 @@
 	        return null;
         }
 
-		private IEnumerable<IWriteDataInfo<FreeAgentDatabaseFunctionType>> CreateOrdersAggregationInfo(FreeAgentOrdersList orders, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<FreeAgentDatabaseFunctionType>> CreateInvoicesAggregationInfo(FreeAgentInvoicesList invoices, ICurrencyConvertor currencyConverter)
         {
             var aggregateFunctionArray = new[]
                 {
@@ -133,9 +131,9 @@
                     FreeAgentDatabaseFunctionType.TotalSumOfOrders
                 };
 
-            var updated = orders.SubmittedDate;
+			var updated = invoices.SubmittedDate;
             var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			TimePeriodChainWithData<FreeAgentOrderItem> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<FreeAgentOrderItem>(), orders, nodesCreationFactory);
+			TimePeriodChainWithData<FreeAgentInvoice> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<FreeAgentInvoice>(), invoices, nodesCreationFactory);
 
             if (timeChain.HasNoData)
             {
@@ -143,7 +141,7 @@
             }
 
             var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new FreeAgentOrdersAggregatorFactory();
+			var factory = new FreeAgentInvoicesAggregatorFactory();
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
         }
     }
