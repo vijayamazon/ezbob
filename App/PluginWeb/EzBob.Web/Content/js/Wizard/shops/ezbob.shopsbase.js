@@ -155,8 +155,6 @@
           return this.$el.find("#play_name").focus();
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
-        case "FreeAgent":
-          return this.$el.find("#freeagent_name").focus();
       }
     };
 

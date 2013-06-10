@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessTokenContainer.cs" />
+    <Compile Include="FreeAgentUsers.cs" />
+    <Compile Include="FreeAgentCompany.cs" />
     <Compile Include="FreeAgentConnector.cs" />
     <Compile Include="FreeAgentDatabaseFunctionFactory.cs" />
     <Compile Include="FreeAgentDatabaseFunctionStorage.cs" />

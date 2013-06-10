@@ -27,7 +27,6 @@
         private readonly Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
-		private readonly FreeAgentConnector _validator = new FreeAgentConnector();
         private readonly ISession _session;
         private readonly DatabaseDataHelper _helper;
         private readonly IZohoFacade _crm;
@@ -129,7 +128,8 @@
 				.First(a => a.InternalId == oEsi.InternalId)
 				.Id;
 
-			string accountName = "bla"; // TODO: should be filled from company api request
+			var freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
+			var freeAgentUsers = FreeAgentConnector.GetUsers(accessTokenContainer.access_token);
 
 			var securityData = new FreeAgentSecurityInfo
 			{
@@ -139,14 +139,14 @@
 				TokenType = accessTokenContainer.token_type,
 				RefreshToken = accessTokenContainer.refresh_token,
 				MarketplaceId = marketPlaceId,
-				Name = accountName
+				Name = freeAgentCompany.name
 			};
 
 			var freeAgentDatabaseMarketPlace = new FreeAgentDatabaseMarketPlace();
 
 			if (_customer.WizardStep != WizardStepType.PaymentAccounts || _customer.WizardStep != WizardStepType.AllStep)
 				_customer.WizardStep = WizardStepType.Marketplace;
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, freeAgentDatabaseMarketPlace, securityData, _customer);
+			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
 
 			_crm.ConvertLead(_customer);
 			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);

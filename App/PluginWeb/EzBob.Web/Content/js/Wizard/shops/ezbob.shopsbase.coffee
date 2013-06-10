@@ -117,10 +117,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 @$el.find("#play_name").focus()
             when "PayPoint"
                 @$el.find("#payPoint_login").focus()
-            when "FreeAgent"
-                @$el.find("#freeagent_name").focus()
-            #when "bank-account"
-            #    @$el.find("#AccountNumber").focus()
             else
 
     setDocumentTitle: (view) ->

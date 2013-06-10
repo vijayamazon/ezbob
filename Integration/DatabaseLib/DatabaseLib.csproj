@@ -90,6 +90,10 @@
     <Compile Include="Model\Database\LoyaltyProgramActionType.cs" />
     <Compile Include="Model\Experian\ExperianDefaultAccount.cs" />
     <Compile Include="Model\Loans\DiscountPlan.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentUsersMap.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentCompanyMap.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentUsers.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentCompany.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrder.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItem.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentOrderItemMap.cs" />

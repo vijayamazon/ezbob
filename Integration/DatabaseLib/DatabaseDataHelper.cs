@@ -16,7 +16,6 @@ using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.DatabaseWrapper.Products;
 using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
 using EZBob.DatabaseLib.DatabaseWrapper.UsersData;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EZBob.DatabaseLib.Exceptions;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
@@ -75,6 +74,8 @@ namespace EZBob.DatabaseLib
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
 		private readonly ILoanTypeRepository _LoanTypeRepository;
 		private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
+		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
+		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -99,6 +100,8 @@ namespace EZBob.DatabaseLib
 			_MP_EbayTransactionsRepository = new MP_EbayTransactionsRepository(session);
 			_LoanTypeRepository = new LoanTypeRepository(session);
 			_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
+			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
+			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 		}
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
@@ -787,7 +790,7 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreFreeAgentOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public MP_FreeAgentOrder StoreFreeAgentOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
@@ -795,7 +798,7 @@ namespace EZBob.DatabaseLib
 
 			if (ordersData == null)
 			{
-				return;
+				return null;
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
@@ -833,6 +836,21 @@ namespace EZBob.DatabaseLib
 
 			customerMarketPlace.FreeAgentOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+
+			return mpOrder;
+		}
+
+		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company)
+		{
+			_FreeAgentCompanyRepository.SaveOrUpdate(company);
+		}
+
+		public void StoreFreeAgentUsersData(List<MP_FreeAgentUsers> users)
+		{
+			foreach (MP_FreeAgentUsers user in users)
+			{
+				_FreeAgentUsersRepository.SaveOrUpdate(user);
+			}
 		}
 
 		public void StoreYodleeOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeOrderDictionary ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -2276,7 +2294,7 @@ namespace EZBob.DatabaseLib
 			MP_FreeAgentOrder order = customerMarketPlace.FreeAgentOrders.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
 			if (order == null)
 			{
-				return 24;
+				return -1;
 			}
 
 			MP_FreeAgentOrderItem item = order.OrderItems.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
@@ -2290,9 +2308,9 @@ namespace EZBob.DatabaseLib
 				monthDiff++;
 			}
 
-			if (monthDiff == 0 || monthDiff > 23)
+			if (monthDiff == 0)
 			{
-				monthDiff = 24;
+				monthDiff = -1;
 			}
 
 			return monthDiff;
