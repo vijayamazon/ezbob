@@ -1,5 +1,7 @@
 using System;
+using ApplicationMng.Repository;
 using Iesi.Collections.Generic;
+using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database
 {

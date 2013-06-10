@@ -115,23 +115,10 @@ namespace EzBob.TeraPeakServiceLib
 	public class SearchQueryResult
 	{
 		public QueryResultStatistic Statistics { get; set; }
+        public Category[] Categories { get; set; }
 	}
 
-	[XmlRoot( "Statistics" )]
-	public class QueryResultStatistic
-	{
-		public string Revenue { get; set; }
-		public string Listings { get; set; }
-		public string Transactions { get; set; }
-		public string Successful { get; set; }
-		public string Bids { get; set; }
-		public string ItemsOffered { get; set; }
-		public string ItemsSold { get; set; }
-		public string AverageSellersPerDay { get; set; }
-		public string SuccessRate { get; set; }
-	}	
-
-	public class QueryResultError
+    public class QueryResultError
 	{
 		[XmlElement("Error")]
 		public QueryResultErrorItem Error { get; set; }

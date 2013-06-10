@@ -146,6 +146,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefNumberFixture.cs" />
     <Compile Include="SerializeDataHelperFixture.cs" />
+    <Compile Include="Terapeak\CategoriesFixture.cs" />
     <Compile Include="ZohoCRMTests\RegisterLead.cs" />
     <Compile Include="ZohoCRMTests\ZohoFixture.cs" />
     <EmbeddedResource Include="CAIS\cais.resx">
@@ -208,6 +209,10 @@
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
       <Name>PaymentServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
+      <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
+      <Name>TeraPeakServiceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>

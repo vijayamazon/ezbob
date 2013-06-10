@@ -22,6 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map( x => x.AverageSellersPerDay );
 			Map( x => x.SuccessRate );
 			Map(x => x.RangeMarker).CustomType<int>();
+		    HasMany(x => x.CategoryStatistics).AsList().OrderBy("Listings").Inverse().KeyColumn("OrderItemId").Cascade.All();
 		}
 	}
 }

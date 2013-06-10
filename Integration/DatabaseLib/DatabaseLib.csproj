@@ -104,6 +104,9 @@
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderMap.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategory.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategoryStatistics.cs" />
+    <Compile Include="Model\Marketplaces\Terapeak\TeraPeackHelper.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeAccountsMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeBanksMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeAccounts.cs" />

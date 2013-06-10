@@ -43,7 +43,7 @@ namespace EzBob.CommonLib.TrapForThrottlingLogic
 			WriteToLog( string.Format( "TrapForThrottling::CreateSimpleWait ({0})", name ), WriteLogType.Info );
 			var item = new TrapForThrottlingSimpleWait( name, requestQuota, requestQuoteTimePeriodType );
 
-			return AddItemToStorage( item );			
+			return AddItemToStorage( item );
 		}
 
 		public static void Exit()

@@ -10,7 +10,8 @@ namespace EZBob.DatabaseLib.Model.Database
 {
 	public class MP_TeraPeakOrderItem
 	{
-		public virtual int Id { get; set; }
+        private IList<MP_TeraPeakCategoryStatistics> _categoryStatistics = new List<MP_TeraPeakCategoryStatistics>();
+	    public virtual int Id { get; set; }
 
 		public virtual MP_TeraPeakOrder Order { get; set; }
 
@@ -27,7 +28,14 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual double? SuccessRate { get; set; }
 
 		public virtual RangeMarkerType RangeMarker { get; set; }
+
+	    public virtual IList<MP_TeraPeakCategoryStatistics> CategoryStatistics
+	    {
+	        get { return _categoryStatistics; }
+	        set { _categoryStatistics = value; }
+	    }
 	}
+
     public interface IMP_TeraPeakOrderItemRepository : IRepository<MP_TeraPeakOrderItem>
     {
     }

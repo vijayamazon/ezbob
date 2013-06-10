@@ -1623,41 +1623,10 @@ namespace EZBob.DatabaseLib
 				return;
 			}
 
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var order = new MP_TeraPeakOrder
-				{
-					CustomerMarketPlace = customerMarketPlace,
-					Created = data.Submitted,
-					HistoryRecord = historyRecord
-				};
-
-			DateTime? lastItemEndDate = null;
-
-			if (data.Count > 0)
-			{
-				lastItemEndDate = data.Max(o => o.EndDate);
-				data.ForEach(o => order.OrderItems.Add(new MP_TeraPeakOrderItem
-					{
-						Order = order,
-						Bids = o.Bids,
-						ItemsOffered = o.ItemsOffered,
-						ItemsSold = o.ItemsSold,
-						Listings = o.Listings,
-						Revenue = o.Revenue,
-						SuccessRate = o.SuccessRate,
-						Successful = o.Successful,
-						AverageSellersPerDay = o.AverageSellersPerDay,
-						Transactions = o.Transactions,
-						StartDate = o.StartDate,
-						EndDate = o.EndDate,
-						RangeMarker = o.RangeMarker
-					}));
-			}
-
-
-			order.LastOrderItemEndDate = lastItemEndDate;
-			customerMarketPlace.TeraPeakOrders.Add(order);
+		    var helper = new TeraPeackHelper();
+            helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
 
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData
@@ -7,6 +8,25 @@ namespace EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData
 	{
 		Full, Partial, Temporary
 	}
+
+    public class TeraPeakCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public int Level { get; set; }
+        public int ParentCategoryID { get; set; }
+    }
+
+    public class CategoryStatistics
+    {
+        public int Listings { get; set; }
+        public int Successful { get; set; }
+        public int ItemsSold { get; set; }
+        public double Revenue { get; set; }
+        public double SuccessRate { get; set; }
+        public TeraPeakCategory Category { get; set; }
+    }
 
 	public class TeraPeakDatabaseSellerDataItem : ITimeRangedData
 	{
@@ -28,6 +48,8 @@ namespace EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData
 		public int? ItemsSold { get; set; }
 		public int? AverageSellersPerDay { get; set; }
 		public double? SuccessRate { get; set; }
+
+        public virtual List<CategoryStatistics> Categories { get; set; }
 
 		public RangeMarkerType RangeMarker { get; set; }
 

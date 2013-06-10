@@ -606,9 +606,8 @@ namespace EzBob.eBayLib
 					{
 						var elapsedTimeInfo = new ElapsedTimeInfo();
 						
-						// по-умолчанию берем данные за 12 месяцев (на данный момент TeraPeak отдает информация только за 1 год)							
+						// по-умолчанию берем данные за 12 месяцев (на данный момент TeraPeak отдает информация только за 1 год)
 						int countMonthsForRetrieveData = MaxPossibleRetriveMonthsFromTeraPeak;
-
 
 						DateTime now = DateTime.UtcNow;
 

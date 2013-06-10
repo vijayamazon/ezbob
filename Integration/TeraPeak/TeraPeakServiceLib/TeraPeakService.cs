@@ -66,7 +66,7 @@ namespace EzBob.TeraPeakServiceLib
 			var service = new TeraPeakService( connectionProvider, credentionProvider );
 			var req = new TeraPeakSearchBySellerRequester( service );
 
-			return req.Run( requestInfo );			
+			return req.Run( requestInfo );
 		}
 
 		/*public string SearchByProduct(string searchString)
@@ -138,10 +138,10 @@ namespace EzBob.TeraPeakServiceLib
 			WriteToLog( string.Format( "TeraPeak Request :\n{0}", requestString ) );
 			string resultString = DoRequest( requestString );
 			WriteToLog( string.Format( "TeraPeak Response :\n{0}", resultString ) );
-			return ParceResult( resultString );
+			return ParseResult( resultString );
 		}
 
-		private GetSellerResearchResults ParceResult( string resultString )
+		private GetSellerResearchResults ParseResult( string resultString )
 		{
 			return SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>( resultString );
 		}
@@ -149,9 +149,7 @@ namespace EzBob.TeraPeakServiceLib
 		protected void WriteToLog( string message, WriteLogType messageType = WriteLogType.Info, Exception ex = null )
 		{
 			WriteLoggerHelper.Write(message, messageType, null, ex);
-			Debug.WriteLine( message );
 		}
-		
 	}
 
 	public enum TeraPeakRequestStepEnum

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Linq;
 using EzBob.CommonLib;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
@@ -54,7 +56,9 @@ namespace EzBob.TeraPeakServiceLib
 			
 			var resultSellerInfo = new ResultSellerInfo
 			{				
-				ReturnDurationData = true
+				ReturnDurationData = true,
+                ReturnCategoryInformation = true,
+                ReturnAllData = true
 			};
 
 			var queue = new TerapeakRequestsQueue( ranges );
@@ -93,9 +97,8 @@ namespace EzBob.TeraPeakServiceLib
 					break;
 				}
 				
-				data.Add(ParceResultData(datesRange, rez));
+				data.Add(ParseResultData(datesRange, rez));
 
-				
 				queue.Remove(datesRange);
 
 			}
@@ -123,42 +126,68 @@ namespace EzBob.TeraPeakServiceLib
 			return data != null && data.SearchResults != null && data.SearchResults.Statistics != null;
 		}
 
-		private TeraPeakDatabaseSellerDataItem ParceResultData( SearchQueryDatesRange searchQueryDates, GetSellerResearchResults data )
+		private TeraPeakDatabaseSellerDataItem ParseResultData( SearchQueryDatesRange searchQueryDates, GetSellerResearchResults data )
 		{
 			if ( !HasDataInResult(data) )
 			{
 				return null;
 			}
-			var stat = data.SearchResults.Statistics;
 
 			var startDate = searchQueryDates.StartDate;
 			var endDate = searchQueryDates.EndDate;
-			return new TeraPeakDatabaseSellerDataItem( startDate, endDate )
-			       	{
-			       		AverageSellersPerDay = ParveValueInt( stat.AverageSellersPerDay ),
-			       		Bids = ParveValueInt( stat.Bids ),
-			       		ItemsOffered = ParveValueInt( stat.ItemsOffered ),
-			       		ItemsSold = ParveValueInt( stat.ItemsSold ),
-			       		Listings = ParveValueInt( stat.Listings ),
-			       		Revenue = ParveValueDouble( stat.Revenue ),
-			       		SuccessRate = ParveValueDouble( stat.SuccessRate ),
-			       		Successful = ParveValueInt( stat.Successful ),
-			       		Transactions = ParveValueInt( stat.Transactions ),
-						RangeMarker = searchQueryDates.RangeMarker
-			       	};
+			return CreateTeraPeakDatabaseSellerDataItem(searchQueryDates, startDate, endDate, data);
 		}
 
-		private int? ParveValueInt( string value )
-		{
-			return String.IsNullOrWhiteSpace( value ) ? (int?)null : Int32.Parse( value );
-		}
+	    private static TeraPeakDatabaseSellerDataItem CreateTeraPeakDatabaseSellerDataItem(SearchQueryDatesRange searchQueryDates, DateTime startDate, DateTime endDate, GetSellerResearchResults data)
+	    {
+            var stat = data.SearchResults.Statistics;
 
-		private double? ParveValueDouble( string value )
-		{
-			return String.IsNullOrWhiteSpace( value ) ? (double?)null : Double.Parse( value );
-		}
+	        return new TeraPeakDatabaseSellerDataItem( startDate, endDate )
+	            {
+	                AverageSellersPerDay = stat.AverageSellersPerDay,
+	                Bids = stat.Bids,
+	                ItemsOffered = stat.ItemsOffered,
+	                ItemsSold = stat.ItemsSold,
+	                Listings = stat.Listings,
+	                Revenue = stat.Revenue,
+	                SuccessRate = stat.SuccessRate,
+	                Successful = stat.Successful,
+	                Transactions = stat.Transactions,
+	                RangeMarker = searchQueryDates.RangeMarker,
+                    Categories = CreateCategories(data)
+	            };
+	    }
 
-		private void WriteToLog( string message, WriteLogType messageType = WriteLogType.Debug, Exception ex = null )
+	    private static List<CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics> CreateCategories(GetSellerResearchResults data)
+	    {
+	        return data.SearchResults.Categories.Select(c => CreateCategory(c)).ToList();
+	    }
+
+        private static CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics CreateCategory(Category category)
+        {
+            var stat = category.Statistics;
+
+            var tpCategory = new TeraPeakCategory()
+                {
+                    FullName = category.FullName,
+                    Id = category.Id,
+                    Level = category.Level,
+                    Name = category.Name,
+                    ParentCategoryID = category.ParentCategoryID
+                };
+
+            return new CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics()
+	            {
+	                ItemsSold = stat.ItemsSold,
+                    Listings = stat.Listings,
+                    Revenue = stat.Revenue,
+                    SuccessRate = stat.SuccessRate,
+                    Successful = stat.Successful,
+                    Category = tpCategory
+	            };
+        }
+
+	    private void WriteToLog( string message, WriteLogType messageType = WriteLogType.Debug, Exception ex = null )
 		{
 			WriteLoggerHelper.Write(message, messageType, null, ex);
 			Debug.WriteLine( message );

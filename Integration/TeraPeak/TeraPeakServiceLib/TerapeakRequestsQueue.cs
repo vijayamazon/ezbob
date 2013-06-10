@@ -50,7 +50,7 @@ namespace EzBob.TeraPeakServiceLib
 
 		public TerapeakRequestsQueue( IEnumerable<SearchQueryDatesRange> initDataRange )
 		{
-			initDataRange.OrderByDescending( i => i.StartDate ).ToList().ForEach( i => _Data.AddFirst( i ) );			
+			initDataRange.OrderByDescending( i => i.StartDate ).ToList().ForEach( i => _Data.AddFirst( i ) );
 		}
 
 		public bool HasItems
