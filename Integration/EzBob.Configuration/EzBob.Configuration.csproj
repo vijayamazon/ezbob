@@ -65,6 +65,7 @@
     <Compile Include="DBConfigurationValues.cs" />
     <Compile Include="ExperianIntegrationParams.cs" />
     <Compile Include="IZohoConfig.cs" />
+    <Compile Include="MandrillConfig.cs" />
     <Compile Include="PacNetConfiguration.cs" />
     <Compile Include="PayPointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

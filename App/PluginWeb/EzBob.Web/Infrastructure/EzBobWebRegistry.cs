@@ -25,6 +25,7 @@ using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Code.PostCode;
 using EzBob.Web.Models.Repository;
 using EzBob.eBayLib.Config;
+using MailApi;
 using PayPal.Platform.SDK;
 using PaymentServices.Calculators;
 using PostcodeAnywhere;
@@ -142,6 +143,7 @@ namespace EzBob.Web.Infrastructure
             For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
             For<IDiscountPlanRepository>().Use <DiscountPlanRepository>();
             For<ICurrencyConvertor>().Use<CurrencyConvertor>();
+            For<IMail>().Use<Mail>();
         }
     }
 }

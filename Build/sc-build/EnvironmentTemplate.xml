@@ -46,6 +46,15 @@
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
 	<property name="YodleeConfig" value ="YodleeUAT"/>
     <property name="ZohoCRM" value="ZohoCRM"/>
+	<property name="MandrillConfig" value="MandrillConfig"/>
+
+    <module id="MandrillConfig">
+        <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />
+        <property name="BaseSecureUrl" value="https://mandrillapp.com/api/1.0/" />
+        <property name="SendTemplatePath" value="/messages/send-template.json" />
+        <property name="FinishWizardTemplateName" value="finishwizardtemplate" />
+    </module>
+	
     <module id="ZohoCRM">
       <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
       <property name="Enabled" value="False"/>

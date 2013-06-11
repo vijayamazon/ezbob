@@ -1288,6 +1288,10 @@
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\MailApi\MailApi.csproj">
+      <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
+      <Name>MailApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
       <Name>PaymentServices</Name>
