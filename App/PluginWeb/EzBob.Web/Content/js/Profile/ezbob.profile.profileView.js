@@ -24,7 +24,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
         this.profileMain = $('#profile-main');
         this.signContainer = $("#message-sign");
-        
+
         this.processingMessageView.on('getCash', this.getCash, this);
         this.processingMessageView.on('payEarly', this.makePayment, this);
 
@@ -34,8 +34,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         this.router.on("payEarly", this.makePayment, this);
         this.router.on("menuWidgetShown", this.menuWidgetShown, this);
     },
-    
-    render: function () {        
+
+    render: function () {
         this.profileMain.show();
 
         this.payEarly.render();
@@ -56,18 +56,19 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         return this;
     },
     loanDetails: function (id) {
-        
+
         EzBob.App.GA.trackPage('/Customer/Profile/LoanDetails');
 
         var loan = new EzBob.Profile.LoanModel();
         loan.loanId = id;
         loan.fetch();
-        
+
         var loanDetailView = new EzBob.Profile.LoanDetailsView({ model: loan, customer: this.customer });
         loanDetailView.render();
-        
+
         this.profileMain.hide();
         this.getCashRegion.show(loanDetailView);
+        this.marketing("LoanDetails");
     },
     getCash: function () {
         $(document).attr("title", "Get Cash: Select Loan Amount | EZBOB");
@@ -77,25 +78,27 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
         applyForLoanView.on('back', this.applyForLoanBack, this);
         applyForLoanView.on('submit', this.applyForLoanSubmit, this);
-        
+
         this.getCashRegion.show(applyForLoanView);
         this.profileMain.hide();
+        this.marketing("GetCash");
     },
     menuWidgetShown: function () {
         $(document).attr("title", "Dashboard: User Dashboard | EZBOB");
         this.getCashRegion.close();
         this.profileMain.show();
         scrollTop();
+        this.marketing("Dashboard");
     },
     applyForLoanBack: function () {
         this.router.navigate("");
         this.menuWidgetShown();
     },
-    
+
     payErlyBack: function () {
         this.router.previous();
     },
-    
+
     applyForLoanSubmit: function (creditSum) {
         this.applyForLoanBack();
         this.getCashModel.set('availableCredit', this.getCashModel.get('availableCredit') - creditSum);
@@ -111,6 +114,37 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
         this.getCashRegion.show(payEarlyView);
         this.profileMain.hide();
+        this.marketing("MakePayment");
+    },
+
+    marketing: function (page) {
+        var marketing;
+        var isDashboard = true;
+        switch (page) {
+            case "Dashboard":
+                marketing = EzBob.dbStrings.MarketingDashboard;
+                break;
+            case "MakePayment":
+                marketing = EzBob.dbStrings.MarketingDashboardMakePayment;
+                break;
+            case "GetCash":
+                marketing = EzBob.dbStrings.MarketingDashboardGetCash;
+                break;
+            case "LoanDetails":
+                marketing = EzBob.dbStrings.MarketingDashboardLoanDetails;
+                break;
+            default:
+                isDashboard = false;
+                marketing = EzBob.dbStrings.MarketingDefault;
+                break;
+        }
+        if (isDashboard) {
+            $("#defaultMarketing").hide();
+            $("#marketingProggress").show().html(marketing);
+        } else {
+            $("#defaultMarketing").show();
+            $("#marketingProggress").hide().html(marketing);
+        }
     }
 });
 
@@ -146,7 +180,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         _.each(this.widgets, function (w) {
             w.render().$el.hide().appendTo(that.profileWidgets);
         });
-        
+
         if (EzBob.Config.ShowChangePasswordPage) {
             this.settings();
             this.widgets.Settings.editPassword();
@@ -163,11 +197,11 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.on('all', this.storeRoute, this);
         this.previousViews = [];
     },
-    
+
     storeRoute: function () {
         this.previousViews.push(Backbone.history.fragment);
     },
-      
+
     previous: function () {
         if (this.previousViews.length > 1) {
             this.navigate(this.previousViews[this.previousViews.length - 3], true);
@@ -177,7 +211,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     ctNavigate: function (name) {
         //this.navigate(name, { trigger: true });
         var handler = this.routes[name];
-        if(handler){
+        if (handler) {
             this[handler]();
         }
     },
@@ -196,6 +230,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.menu.find('.nav li.active').removeClass('active');
         this.menu.find('.nav li:has(a[href="#' + name + '"])').addClass('active');
         this.trigger('menuWidgetShown');
+        this.marketing(name);
     },
 
     routes: {
@@ -228,17 +263,63 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     },
     settings: function () {
         this.activate("Settings");
+        this.marketing("Settings");
     },
     getCash: function () {
         EzBob.CT.recordEvent('ct:profile:getCash');
         this.trigger('getCash');
+        this.marketing("GetCash");
     },
     payEarly: function (id) {
         EzBob.CT.recordEvent('ct:profile:payEarly', id);
         this.trigger('payEarly', id);
+        this.marketing("PayEarly");
     },
     loanDetails: function (id) {
         EzBob.CT.recordEvent('ct:profile:loanDetails', id);
         this.trigger('details', id);
+        this.marketing("LoanDetails");
+    },
+
+    marketing: function (page) {
+        var marketing;
+        var isDashboard = true;
+        switch (page) {
+            case "AccountActivity":
+                marketing = EzBob.dbStrings.MarketingDashboardAccountActivity;
+                break;
+            case "YourDetails":
+                marketing = EzBob.dbStrings.MarketingDashboardYourDetails;
+                break;
+            case "YourStores":
+                marketing = EzBob.dbStrings.MarketingDashboardYourStores;
+                break;
+            case "PaymentAccounts":
+                marketing = EzBob.dbStrings.MarketingDashboardPaymentAccounts;
+                break;
+            case "PayEarly":
+                marketing = EzBob.dbStrings.MarketingDashboardPayEarly;
+                break;
+            case "Settings":
+                marketing = EzBob.dbStrings.MarketingDashboardSettings;
+                break;
+            case "LoanDetails":
+                marketing = EzBob.dbStrings.MarketingDashboardLoanDetails;
+                break;
+            case "GetCash":
+                marketing = EzBob.dbStrings.MarketingDashboardGetCash;
+                break;
+            default:
+                isDashboard = false;
+                marketing = EzBob.dbStrings.MarketingDefault;
+                break;
+        }
+        if (isDashboard) {
+            $("#defaultMarketing").hide();
+            $("#marketingProggress").show().html(marketing);
+        } else {
+            $("#defaultMarketing").show();
+            $("#marketingProggress").hide().html(marketing);
+        }
     }
 });
