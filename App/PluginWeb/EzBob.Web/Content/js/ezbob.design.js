@@ -863,8 +863,8 @@ EzBob.validateCompanyDetailForm = function (el) {
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
             DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
-            DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
+            MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
             TypeOfBusiness: { required: true },
             ResidentialStatus: { required: true },
             Gender: { regex: "^M|F$", required: true },
@@ -876,13 +876,13 @@ EzBob.validateCompanyDetailForm = function (el) {
             //limited company info
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
             LimitedCompanyName: { required: true, minlength: 2 },
-            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
 
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },
             NonLimitedTimeInBusiness: { required: true },
             NonLimitedTimeAtAddress: { required: true, digits: true },
-            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" }
+            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
@@ -945,9 +945,9 @@ EzBob.validateYourInfoEditForm = function (el) {
     var e = el || $(".editYourInfoForm");
     return e.validate({
         rules: {
-            DayTimePhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            MobilePhone: { required: true, regex: "^0[0-9]{9,10}$" },
-            BusinessPhone: { required: true, regex: "^0[0-9]{9,10}$" },
+            DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
+            MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
+            BusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
             OverallTurnOver: { required: true, digits: true, min: 1 },
             WebSiteTurnOver: { required: true, digits: true, min: 1 }
         },
