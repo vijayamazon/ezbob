@@ -14863,7 +14863,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>Re_Reject_NewCustomer_ReReject &gt; 0 OR
-(Re_Reject_OldCustomer_ReReject &gt; 0 AND ( Re_Reject_LoanAmountTaken*0.5 &lt;= Re_Reject_LoanAmountTaken-Re_Reject_PrincipalPaidAmount))</InitialValue>
+(Re_Reject_OldCustomer_ReReject &gt; 0 AND ( Re_Reject_LoanAmountTaken*0.5 &lt;= Re_Reject_PrincipalPaidAmount))</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
