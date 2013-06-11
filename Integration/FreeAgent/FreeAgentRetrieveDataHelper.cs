@@ -27,13 +27,10 @@
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
             // Retreive data from free agent api
-			string accessToken = (SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData)).AccessToken;
+	        string accessToken = (SerializeDataHelper.DeserializeType<FreeAgentSecurityInfo>(databaseCustomerMarketPlace.SecurityData)).AccessToken;
 			var freeAgentInvoices = FreeAgentConnector.GetInvoices(
-				accessToken,
-				Helper.GetFreeAgentInvoiceDeltaPeriod(databaseCustomerMarketPlace));
-			var freeAgentExpenses = FreeAgentConnector.GetExpenses(
-				accessToken,
-				Helper.GetFreeAgentExpenseDeltaPeriod(databaseCustomerMarketPlace));
+				accessToken, 
+				Helper.GetFreeAgentDeltaPeriod(databaseCustomerMarketPlace));
 
 			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
 			FreeAgentUsersList freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
@@ -44,7 +41,7 @@
 			var mpRequest = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreFreeAgentRequestAndInvoicesAndExpensesData(databaseCustomerMarketPlace, freeAgentInvoices, freeAgentExpenses, historyRecord));
+				() => Helper.StoreFreeAgentRequestAndInvoicesData(databaseCustomerMarketPlace, freeAgentInvoices, historyRecord));
 
             // Retrieve all distinct invoices
             var allInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(

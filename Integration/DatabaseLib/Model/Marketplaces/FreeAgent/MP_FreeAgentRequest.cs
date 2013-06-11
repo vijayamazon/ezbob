@@ -14,7 +14,6 @@
 		public MP_FreeAgentRequest()
 		{
 			Invoices = new HashedSet<MP_FreeAgentInvoice>();
-			Expenses = new HashedSet<MP_FreeAgentExpense>();
 		}
 
 		public virtual int Id { get; set; }
@@ -22,7 +21,6 @@
 		public virtual DateTime Created { get; set; }
 
 		public virtual Iesi.Collections.Generic.ISet<MP_FreeAgentInvoice> Invoices { get; set; }
-		public virtual Iesi.Collections.Generic.ISet<MP_FreeAgentExpense> Expenses { get; set; }
 
 		public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
 	}

@@ -46,6 +46,7 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\PayPoint\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\Volusion\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\YodleeLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\FreeAgent\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\AgentRegistry\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\PaymentServices\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\ZohoCRM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>

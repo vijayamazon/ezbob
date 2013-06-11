@@ -790,12 +790,16 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesAndExpensesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, FreeAgentExpensesList expenses, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public MP_FreeAgentRequest StoreFreeAgentRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, FreeAgentInvoicesList invoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("Invoices Data", customerMarketPlace, invoices);
-			LogData("Expenses Data", customerMarketPlace, expenses);
+
+			if (invoices == null)
+			{
+				return null;
+			}
 
 			DateTime submittedDate = DateTime.UtcNow;
 			var mpRequest = new MP_FreeAgentRequest
@@ -810,6 +814,7 @@ namespace EZBob.DatabaseLib
 				{
 					var invoice = new MP_FreeAgentInvoice
 					{
+						Id = dataItem.Id,
 						Request = mpRequest,
 						url = dataItem.url,
 						contact = dataItem.contact,
@@ -832,47 +837,20 @@ namespace EZBob.DatabaseLib
 					foreach (var item in dataItem.invoice_items)
 					{
 						var mpItem = new MP_FreeAgentInvoiceItem
-						{
-							Invoice = invoice,
-							url = item.url,
-							position = item.position,
-							description = item.description,
-							item_type = item.item_type,
-							price = item.price,
-							quantity = item.quantity,
-							category = item.category
-						};
+							{
+								Invoice = invoice,
+								url = item.url,
+								position = item.position,
+								description = item.description,
+								item_type = item.item_type,
+								price = item.price,
+								quantity = item.quantity,
+								category = item.category
+							};
 						invoice.Items.Add(mpItem);
 					}
 
 					mpRequest.Invoices.Add(invoice);
-				});
-
-			expenses.ForEach(
-				dataItem =>
-				{
-					var expense = new MP_FreeAgentExpense
-					{
-						Request = mpRequest,
-						url = dataItem.url,
-						username = dataItem.user,
-						category = dataItem.category,
-						dated_on = dataItem.dated_on,
-						gross_value = dataItem.gross_value,
-						sales_tax_rate = dataItem.sales_tax_rate,
-						description = dataItem.description,
-						manual_sales_tax_amount = dataItem.manual_sales_tax_amount,
-						updated_at = dataItem.updated_at,
-						created_at = dataItem.created_at,
-						attachment_url = dataItem.attachment.url,
-						attachment_content_src = dataItem.attachment.content_src,
-						attachment_content_type = dataItem.attachment.content_type,
-						attachment_file_name = dataItem.attachment.file_name,
-						attachment_file_size = dataItem.attachment.file_size,
-						attachment_description = dataItem.attachment.description,
-					};
-
-					mpRequest.Expenses.Add(expense);
 				});
 
 			customerMarketPlace.FreeAgentRequests.Add(mpRequest);
@@ -2216,6 +2194,7 @@ namespace EZBob.DatabaseLib
 			
 			orders.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
 			{
+				Id = o.Id,
 				url =  o.url,
 				contact = o.contact,
 				dated_on = o.dated_on,
@@ -2296,7 +2275,7 @@ namespace EZBob.DatabaseLib
 			}
 		} // GetEkmDeltaPeriod
 
-		public int GetFreeAgentInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public int GetFreeAgentDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
@@ -2323,22 +2302,7 @@ namespace EZBob.DatabaseLib
 			}
 
 			return monthDiff;
-		} // GetFreeAgentInvoiceDeltaPeriod
-
-		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			MP_FreeAgentRequest order = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (order == null)
-			{
-				return null;
-			}
-
-			MP_FreeAgentExpense item = order.Expenses.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
-			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
-			return latestExistingDate.AddMonths(-1);
-		} // GetFreeAgentExpenseDeltaPeriod
+		} // GetFreeAgentDeltaPeriod
 
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
