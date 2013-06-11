@@ -29,19 +29,18 @@ namespace EZBob.DatabaseLib
 		{
 			var rez = new List<IWriteDataInfo<TEnum>>();
 
-			if ( timePeriodData != null )
-			{
-				foreach (var valuePair in timePeriodData)
-				{
-					var allData = valuePair.Value as T;
+		    if (timePeriodData == null) return rez;
 
-					DataAggregatorBase<T, TItem, TEnum> aggeregator = dataAggregatorFactory.CreateDataAggregator( allData, currencyConvertor );					
-					var list = funcList.Select(func => CreateWriteDataValue(aggeregator, func, updatedDate));
-					rez.AddRange(list);
-					
-				}
-			}
-			return rez;
+		    foreach (var valuePair in timePeriodData)
+		    {
+		        var allData = valuePair.Value as T;
+
+		        DataAggregatorBase<T, TItem, TEnum> aggeregator = dataAggregatorFactory.CreateDataAggregator( allData, currencyConvertor );
+		        var list = funcList.Select(func => CreateWriteDataValue(aggeregator, func, updatedDate));
+		        rez.AddRange(list);
+		    }
+		    
+            return rez;
 		}
 	}
 }

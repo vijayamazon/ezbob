@@ -790,11 +790,12 @@ namespace EzBob.eBayLib
 					{
 						eBayDatabaseFunctionType.AverageItemsPerOrder,
 						eBayDatabaseFunctionType.AverageSumOfOrder, 
-						eBayDatabaseFunctionType.CancelledOrdersCount, 
-						eBayDatabaseFunctionType.NumOfOrders, 						
-						eBayDatabaseFunctionType.TotalItemsOrdered, 
-						eBayDatabaseFunctionType.TotalSumOfOrders, 
-						eBayDatabaseFunctionType.OrdersCancellationRate, 
+						eBayDatabaseFunctionType.CancelledOrdersCount,
+						eBayDatabaseFunctionType.NumOfOrders,
+						eBayDatabaseFunctionType.TotalItemsOrdered,
+						eBayDatabaseFunctionType.TotalSumOfOrders,
+						eBayDatabaseFunctionType.OrdersCancellationRate,
+                        eBayDatabaseFunctionType.TopCategories
 					};
 
 			var updated = orders.SubmittedDate;

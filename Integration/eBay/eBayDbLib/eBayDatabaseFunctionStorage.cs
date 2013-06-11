@@ -85,6 +85,7 @@ namespace EzBob.eBayDbLib
 		TotalSumOfOrders,
 		InventoryTotalItems,
 		InventoryTotalValue,
+        TopCategories
 	}
 
 	internal class eBayDatabaseFunctionStorage : DatabaseFunctionStorage<eBayDatabaseFunctionType>
@@ -103,6 +104,7 @@ namespace EzBob.eBayDbLib
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{B90CA21F-069B-4076-BB87-D6FC09457971}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalItems, DatabaseValueTypeEnum.Integer, "{4D8E5159-5001-4DD8-8B25-EB86C9D1F891}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalValue, DatabaseValueTypeEnum.Double, "{E612A31D-C9F8-4636-BDC9-E7671BA29A48}" );
+            CreateFunctionAndAddToCollection(eBayDatabaseFunctionType.TopCategories, DatabaseValueTypeEnum.String, "{0E0D49A5-0C37-4820-BC02-0E884059666A}");
 			
 			// user info
 			/*
@@ -225,6 +227,10 @@ namespace EzBob.eBayDbLib
 
 				case eBayDatabaseFunctionType.InventoryTotalItems:
 					displayName = "Total Items in Inventory";
+					break;
+
+                case eBayDatabaseFunctionType.TopCategories:
+					displayName = "Top Categories";
 					break;
 				/*case eBayDatabaseFunctionType.UserBillingEmail:
 					name = "UserBillingEmail";

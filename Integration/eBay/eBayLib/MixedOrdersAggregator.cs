@@ -36,7 +36,11 @@ namespace EzBob.eBayLib
 
 			switch ( functionType )
 			{
-				case eBayDatabaseFunctionType.NumOfOrders:
+				case eBayDatabaseFunctionType.TopCategories:
+			        var agg = new TopCategoriesAggregator();
+                    return agg.GetTopCategories(GetTeraPeakOrders(orders));
+                
+                case eBayDatabaseFunctionType.NumOfOrders:
                     return GetNumOfOrders(orders, ordersTeraPeak);
 				
 				case eBayDatabaseFunctionType.AverageItemsPerOrder:
@@ -73,6 +77,8 @@ namespace EzBob.eBayLib
 					throw new NotImplementedException();
 			}
 		}
+
+
 
 	    private int GetNumOfOrders(IEnumerable<MixedReceivedDataItem> orders, IEnumerable<TeraPeakDatabaseSellerDataItem> ordersTeraPeak)
 	    {

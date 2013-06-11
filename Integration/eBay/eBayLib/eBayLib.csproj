@@ -77,6 +77,7 @@
     <Compile Include="MixedOrdersAggregator.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TopCategoriesAggregator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
