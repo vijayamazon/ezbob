@@ -1,13 +1,11 @@
-using System;
-using EzBob.AmazonServiceLib.Config;
-using EzBob.PayPalServiceLib;
-using EzBob.eBayLib.Config;
-using Scorto.Configuration;
-using StructureMap;
-
 namespace EzBob.Configuration
 {
-    using YodleeLib.config;
+	using FreeAgent.Config;
+	using YodleeLib.config;
+	using AmazonServiceLib.Config;
+	using PayPalServiceLib;
+	using eBayLib.Config;
+	using Scorto.Configuration;
     using AmazonEnvConnectionConfig = AmazonServiceLib.Config.AmazonEnvConnectionConfig;
 
     public class EzBobConfigRoot : ConfigurationRoot
@@ -42,9 +40,14 @@ namespace EzBob.Configuration
             get { return GetConfiguration<AmazonEvnSettings>("AmazonSetings"); }
         }
 
-        public IYodleeMarketPlaceConfig YodleeConfig
-        {
-            get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }
-        }
+		public IYodleeMarketPlaceConfig YodleeConfig
+		{
+			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }
+		}
+
+		public IFreeAgentConfig FreeAgentConfig
+		{
+			get { return GetConfiguration<FreeAgentEnvConnectionConfig>("FreeAgentConfig"); }
+		}
     }
 }

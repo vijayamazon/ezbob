@@ -35,7 +35,8 @@ using ZohoCRM;
 
 namespace EzBob.Web.Infrastructure
 {
-    using YodleeLib.config;
+	using FreeAgent.Config;
+	using YodleeLib.config;
 
     public class PluginWebRegistry : Registry
     {
@@ -66,8 +67,9 @@ namespace EzBob.Web.Infrastructure
             For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
             For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
             For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);
-            For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
-            For<IYodleeMarketPlaceConfig>().Singleton().Use(localRoot.YodleeConfig);
+			For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
+			For<IYodleeMarketPlaceConfig>().Singleton().Use(localRoot.YodleeConfig);
+			For<IFreeAgentConfig>().Singleton().Use(localRoot.FreeAgentConfig);
             For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
             For<IDbStringRepository>().Use<DbStringRepository>();
             For<EzBobConfigRoot>().Use(c => localRoot);

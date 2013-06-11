@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0"?>
 <environment id="${environmentId}">
-    <property name="ChannelGrabberServiceUrl" value="http://channel-grabber-url" />
+    <property name="FreeAgentConfig" value ="FreeAgent"/>		
+	<module id="FreeAgent">
+		<property name="OAuthIdentifier" value="HeVzWPTKA70HptIMgGFl5w" />
+		<property name="OAuthSecret" value="J0BGIgMvtkMIHi5fVo94fA" />
+		<property name="OAuthAuthorizationEndpoint" value="https://api.freeagent.com/v2/approve_app" />
+		<property name="OAuthTokenEndpoint" value="https://api.freeagent.com/v2/token_endpoint" />
+		<property name="InvoicesRequest" value="https://api.freeagent.com/v2/invoices?nested_invoice_items=true" />
+		<property name="InvoicesRequestMonthPart" value="&amp;view=last_{0}_months" />
+		<property name="CompanyRequest" value="https://api.freeagent.com/v2/company" />
+		<property name="UsersRequest" value="https://api.freeagent.com/v2/users" />
+		<property name="ExpensesRequest" value="https://api.freeagent.com/v2/expenses" />
+		<property name="ExpensesRequestDatePart" value="?from_date={0}-{1}-{2}" />
+	</module>
+	<property name="ChannelGrabberServiceUrl" value="http://channel-grabber-url" />
     <property name="_VolusionShopName" value="" />
     <property name="_VolusionShopUrl" value="" />
     <property name="_VolusionShopLogin" value="" />

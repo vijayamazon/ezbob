@@ -130,6 +130,10 @@
       <Project>{59FB16F3-4CCD-43E9-BBC4-5246E62AC70E}</Project>
       <Name>eBayServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FreeAgent\FreeAgent.csproj">
+      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>

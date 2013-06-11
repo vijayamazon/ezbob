@@ -1,17 +1,17 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonServiceLib.Config;
-using EzBob.CommonLib;
-using EzBob.PayPalServiceLib;
-using EzBob.PayPalServiceLib.Common;
-using EzBob.TeraPeakServiceLib;
-using EzBob.eBayLib.Config;
-using Scorto.Configuration;
-using StructureMap.Configuration.DSL;
-
-namespace EzBob.Configuration
+﻿namespace EzBob.Configuration
 {
-    using YodleeLib.config;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using AmazonServiceLib.Config;
+	using CommonLib;
+	using PayPalServiceLib;
+	using PayPalServiceLib.Common;
+	using TeraPeakServiceLib;
+	using eBayLib.Config;
+	using Scorto.Configuration;
+	using StructureMap.Configuration.DSL;
+	using FreeAgent.Config;
+	using YodleeLib.config;
 
     public class EzBobRegistry : Registry
 	{
@@ -25,8 +25,9 @@ namespace EzBob.Configuration
 				For<IEbayMarketplaceTypeConnection>().Use( ezBobConfigRoot.eBayConfig);
 				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
-				For<IAmazonMarketplaceSettings>().Use( ezBobConfigRoot.AmazonSetings );
-                For<IYodleeMarketPlaceConfig>().Singleton().Use(ezBobConfigRoot.YodleeConfig);
+				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
+				For<IYodleeMarketPlaceConfig>().Singleton().Use(ezBobConfigRoot.YodleeConfig);
+				For<IFreeAgentConfig>().Singleton().Use(ezBobConfigRoot.FreeAgentConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

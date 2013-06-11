@@ -11,9 +11,11 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
     using FreeAgent;
-    using Infrastructure;
+	using FreeAgent.Config;
+	using Infrastructure;
 	using Scorto.Web;
 	using Code.MpUniq;
+	using StructureMap;
 	using ZohoCRM;
 	using log4net;
 	using ApplicationCreator;
@@ -30,12 +32,7 @@
         private readonly ISession _session;
         private readonly DatabaseDataHelper _helper;
         private readonly IZohoFacade _crm;
-		
-		// TODO: Move these to config
-		public const string OAuthIdentifier = "HeVzWPTKA70HptIMgGFl5w";
-		public const string OAuthSecret = "J0BGIgMvtkMIHi5fVo94fA";
-		public const string OAuthAuthorizationEndpoint = "https://api.freeagent.com/v2/approve_app";
-		public const string OAuthTokenEndpoint = "https://api.freeagent.com/v2/token_endpoint";
+		private static readonly IFreeAgentConfig config = ObjectFactory.GetInstance<IFreeAgentConfig>();
 
 
 		public FreeAgentMarketPlacesController(
@@ -76,7 +73,7 @@
 
 			string authorisationRequest =
 				string.Format("{0}?redirect_uri={1}&response_type=code&client_id={2}&state=xyz",
-							  OAuthAuthorizationEndpoint, callback, OAuthIdentifier);
+							  config.OAuthAuthorizationEndpoint, callback, config.OAuthIdentifier);
 
 			return Redirect(authorisationRequest);
 		}
@@ -91,7 +88,7 @@
 			var dummyCallback = Url.Action("FreeAgentCallback", "FreeAgentMarketPlaces", new { Area = "Customer" }, "https");
 
 			string accessTokenRequest = string.Format("{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
-													  OAuthTokenEndpoint, Request.QueryString["code"], dummyCallback, OAuthSecret, OAuthIdentifier);
+													  config.OAuthTokenEndpoint, Request.QueryString["code"], dummyCallback, config.OAuthSecret, config.OAuthIdentifier);
 			var request = (HttpWebRequest)WebRequest.Create(accessTokenRequest);
 			request.ContentType = "application/x-www-form-urlencoded";
 			request.Method = "POST";
