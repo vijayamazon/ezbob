@@ -27,7 +27,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	[Serializable]
 	public class FreeAgentInvoiceItem
 	{
-		public int Id { get; set; }
 		public string url { get; set; }
 		public int position { get; set; }
 		public string description { get; set; }
@@ -40,7 +39,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	[Serializable]
 	public class FreeAgentInvoice : TimeDependentRangedDataBase
 	{
-		public int Id { get; set; }
 		public string url { get; set; }
 		public string contact { get; set; }
 		public DateTime dated_on { get; set; }
