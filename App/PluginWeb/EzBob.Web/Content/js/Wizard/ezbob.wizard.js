@@ -228,37 +228,6 @@ EzBob.Wizard = Backbone.View.extend({
             current: current,
             progress: this.progress
         };
-
-        var marketing;
-        var isWizard = true;
-        switch (this.progress) {
-            case 0:
-                marketing = EzBob.dbStrings.MarketingWizardStep1;
-                break;
-            case 30:
-                marketing = EzBob.dbStrings.MarketingWizardStep2;
-                break;
-            case 70:
-                marketing = EzBob.dbStrings.MarketingWizardStep3;
-                break;
-            case 90:
-                marketing = EzBob.dbStrings.MarketingWizardStep35;
-                break;
-            case 100:
-                marketing = EzBob.dbStrings.MarketingWizardStep4;
-                break;
-            default:
-                isWizard = false;
-                marketing = EzBob.dbStrings.MarketingDefault;
-                break;
-        }
-        if (isWizard) {
-            this.$el.find("#defaultMarketing").hide();
-            this.$el.find("#marketingProggress").show().html(marketing);
-        } else {
-            this.$el.find("#defaultMarketing").show();
-            this.$el.find("#marketingProggress").hide().html(marketing);
-        }
         
         this.$el.find(".wizard-progress").html(this.progressTemplate(data));
 

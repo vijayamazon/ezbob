@@ -30,8 +30,8 @@
 				var service = new AnalyticsService(initializer);
 
 				const string profileId = "ga:60953365";
-				string startDate = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd");// "2013-03-23";
-				string endDate = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"); // "2013-03-23";
+				string startDate = DateTime.Today.ToString("yyyy-MM-dd");// "2013-03-23";
+				string endDate = DateTime.Today.ToString("yyyy-MM-dd"); // "2013-03-23";
 
 				const string metrics = "ga:visits,ga:visitors";
 				DataResource.GaResource.GetRequest request = service.Data.Ga.Get(profileId, startDate, endDate, metrics);
@@ -76,24 +76,24 @@
 				}
 
 				DateTime date = DateTime.ParseExact(dateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-
+				string dbDate = date.ToString("yyyy-MM-dd");
 				var log = new LegacyLog();
 				var conn = new SqlConnection(log);
 
 				conn.ExecuteNonQuery("InsertSiteAnalytics", 
-					new QueryParameter("@Date", date.ToString("yyyy-MM-dd")),
+					new QueryParameter("@Date", dbDate),
 					new QueryParameter("@CodeName", Consts.UkVisitis),
 					new QueryParameter("@Value", uk));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", date.ToString("yyyy-MM-dd")),
+					new QueryParameter("@Date", dbDate),
 					new QueryParameter("@CodeName", Consts.UkVisitors),
 					new QueryParameter("@Value", ukUnique));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", date.ToString("yyyy-MM-dd")),
+					new QueryParameter("@Date", dbDate),
 					new QueryParameter("@CodeName", Consts.WorldWideVisitis),
 					new QueryParameter("@Value", all - ukraine - israel));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", date.ToString("yyyy-MM-dd")),
+					new QueryParameter("@Date", dbDate),
 					new QueryParameter("@CodeName", Consts.WorldWideVisitors),
 					new QueryParameter("@Value", allunique - ukraineUnique - israelUnique));
 

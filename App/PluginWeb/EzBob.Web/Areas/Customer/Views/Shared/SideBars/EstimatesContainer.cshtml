@@ -3,37 +3,37 @@
 @using EZBob.DatabaseLib.Model.Database
 @using EzBob.CommonLib
 @using EzBob.Configuration
-@using EzBob.Web.Models.Strings
 @using StructureMap
 @model dynamic
 @{
-    var oCfg = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
-    var bIsAuth = User.Identity.IsAuthenticated;
-    var marketingDefault = new HtmlString(DbStrings.MarketingDefault); 
+	var oCfg = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
+	var bIsAuth = User.Identity.IsAuthenticated;
 }
 
 <div class="marketing_container">
-    <div class="marketing_message">
-        <div>
-            <strong>
-                <span style="font-size: 20px">
-                    @{
-                        if (DBConfigurationValues.Instance.DisplayEarnedPoints && bIsAuth)
-                        {
-                            var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-                            Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+	<div class="marketing_message">
+		<p>
+			<strong><span style="font-size: 20px">@{
+				bool bDefaultText = true;
 
-                            if (oCustomer != null)
-                            {
-                                WriteLiteral(string.Format("<text id=EarnedPoints>{0:N0}</text><br>points<br>earned", oCustomer.LoyaltyPoints()));
-                            } // if customer found
-                        } // if authorised
-                    }
-                    
-                    <span id="marketingProggress" style="display: none"></span>
-                    <span id="defaultMarketing">@(new HtmlString(DbStrings.MarketingDefault))</span>
-                </span>
-            </strong>
-        </div>
-    </div>
+				if (DBConfigurationValues.Instance.DisplayEarnedPoints && bIsAuth) {
+					var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+					Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+
+					if (oCustomer != null) {
+						WriteLiteral(string.Format("<text id=EarnedPoints>{0:N0}</text><br>points<br>earned", oCustomer.LoyaltyPoints()));
+						bDefaultText = false;
+					} // if customer found
+				} // if authorised
+
+				if (bDefaultText) {
+					<ul>
+						<li>100% safe &amp; secure</li>
+						<li>97% would use us again</li>
+						<li>98% commend our speed and service</li>
+					</ul>
+				} // if default text
+			}</span></strong>
+		</p>
+	</div>
 </div>
