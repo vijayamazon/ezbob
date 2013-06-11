@@ -16,7 +16,9 @@ CREATE PROCEDURE [dbo].[UpdateCashRequestsReApproval]
  @OfferValidDays int,
  @EmailSendingBanned int,
  @LoanTypeId int,
- @UnderwriterComment nvarchar(200))
+ @UnderwriterComment nvarchar(200),
+ @IsLoanTypeSelectionAllowed int,
+ @DiscountPlanId int)
  
  
 AS
@@ -37,7 +39,10 @@ UPDATE [dbo].[CashRequests]
  OfferValidUntil = @OfferValidUntil, 
  EmailSendingBanned = @EmailSendingBanned,
  LoanTypeId  = @LoanTypeId,
- UnderwriterComment = @UnderwriterComment
+ UnderwriterComment = @UnderwriterComment,
+ IsLoanTypeSelectionAllowed= @IsLoanTypeSelectionAllowed,
+ DiscountPlanId = @DiscountPlanId
+ 
 
  WHERE Id = (select MAX(id) from CashRequests
 				where IdCustomer=@CustomerId)
