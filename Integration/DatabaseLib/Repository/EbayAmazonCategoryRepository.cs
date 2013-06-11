@@ -19,45 +19,39 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 			return GetAll().FirstOrDefault( i => i.CategoryId == catId );
 		}
 
-        public  List<MP_EbayAmazonCategory> CategoryForMarketplace(MP_CustomerMarketPlace marketplace)
+        public List<string> CategoryForMarketplace(MP_CustomerMarketPlace marketplace)
         {
             return marketplace.Marketplace.Name == "Amazon" ? GetAmazonCategories(marketplace) : GetEbayCategories(marketplace);
         }
 
-	    public List<MP_EbayAmazonCategory> GetEbayCategories(MP_CustomerMarketPlace marketplace)
+	    public List<string> GetEbayCategories(MP_CustomerMarketPlace marketplace)
 	    {
+	        var categories = marketplace.TeraPeakOrders.SelectMany(t => t.OrderItems)
+	                   .SelectMany(t => t.CategoryStatistics)
+	                   .Select(c => c.Category.FullName)
+	                   .Distinct()
+	                   .ToList();
+
+            if (categories.Any())
+            {
+                return categories;
+            }
+
             return _session.Query<MP_EbayTransaction>()
                 .Where(x => x.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
                 .Where(x => x.OrderItemDetail.PrimaryCategory != null)
-                .Select(x => x.OrderItemDetail.PrimaryCategory)
-                .Distinct().ToList();
+                .Select(x => x.OrderItemDetail.PrimaryCategory.Name)
+                .Distinct()
+                .ToList();
 	    }
 
-	    public List<MP_EbayAmazonCategory> GetAmazonCategories(MP_CustomerMarketPlace marketplace)
+	    public List<string> GetAmazonCategories(MP_CustomerMarketPlace marketplace)
 	    {
             return _session.Query<MP_AmazonOrderItemDetailCatgory>()
                 .Where(x => x.OrderItemDetail.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
-                .Select(x => x.Category)
-                .Distinct().ToList();
+                .Select(x => x.Category.Name)
+                .Distinct()
+                .ToList();
 	    }
-
-	    public string GetTopCategories(MP_CustomerMarketPlace marketplace)
-        {
-            var categories = CategoryForMarketplace(marketplace);
-
-            if (!categories.Any()) return "";
-
-            string topCategories;
-            if (marketplace.Marketplace.Name == "Amazon")
-            {
-                var min = categories.Min(y => y.Parent.Id);
-                topCategories = categories.Where(x => x.Parent.Id == min).Select(x => x.Name).FirstOrDefault();
-            }
-            else
-            {
-                topCategories = categories.Select(x => x.Name.Split(':')[0]).FirstOrDefault();
-            }
-            return topCategories;
-        }
 	}
 }

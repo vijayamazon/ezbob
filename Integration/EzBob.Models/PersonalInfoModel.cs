@@ -49,17 +49,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
             IsTest = customer.IsTest;
             ZohoId = customer.ZohoId;
 
-            var ebayAmazonCategoryRepository = ObjectFactory.GetInstance<EbayAmazonCategoryRepository>();
-            TopCategories = new List<string>();
-            foreach (var mp in customer.CustomerMarketPlaces)
-            {
-                var category = ebayAmazonCategoryRepository.GetTopCategories(mp);
-                if (!string.IsNullOrEmpty(category))
-                {
-                    TopCategories.Add(category);
-                }
-            }
-
             if (customer.PersonalInfo != null)
             {
                 Name = customer.PersonalInfo.Fullname;

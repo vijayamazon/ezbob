@@ -108,23 +108,9 @@
             @RawCell("A/B Testing", "<%- ABTesting || '-' %>")
             @RawCell("User score", "<%- CreditScore %>")
             @RawCell("Registration date", "<%- EzBob.formatDate(RegistrationDate) %>")
-            <%
-            _.each(IndustryFields, function(v){
-            %>
-            <tr>
-                <td>Industry field</td>
-                <td><%=TopCategories.length != 0 ? TopCategories.join("; <br />") : "-"%></td>
-            </tr>
-            <%
-            });
-            %>
-            
             @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
-
             @RawCell("User status", "<%- UserStatus %>")
-    
             @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
-            
             @RawCellWithButtonNearUpdate("CRM:", "<%= ZohoId ? 'Yes' : 'No' %>", "updateCRM")
             
         </tbody>

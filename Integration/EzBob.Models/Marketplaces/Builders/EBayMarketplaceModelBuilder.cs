@@ -40,9 +40,7 @@ namespace EzBob.Models
 
             model.RaitingPercent = raiting != null ? raiting.ToString() : "-";
 
-            var categories = _ebayAmazonCategoryRepository.GetEbayCategories(mp);
-            var categorieValues = categories.Select(x => x.Name);
-            model.Categories = categorieValues;
+            model.Categories = _ebayAmazonCategoryRepository.GetEbayCategories(mp);
 
             model.EBay = BuildEBay(mp.EbayUserData.LastOrDefault(), mp.EbayUserAccountData.LastOrDefault(), ebayFeedBack);
         }
