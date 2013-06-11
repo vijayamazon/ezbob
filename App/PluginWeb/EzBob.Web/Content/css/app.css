@@ -631,7 +631,9 @@ select.SubBank::-webkit-scrollbar {
         font-size: 16px;
         color: #71a61f;
     }
-
+        .marketing_container .marketing_message ul {
+            margin: 0;
+        }
 	.marketing_container .marketing_message li {
 		font-size: 12px !important;
 		text-align: left !important;
