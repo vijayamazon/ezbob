@@ -66,6 +66,14 @@ namespace EzBob.Models
             _decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
         }
 
+        public void AddApproveIntoDecisionHistory(int customerId, string comment)
+        {
+            var customer = _customers.Get(customerId);
+            var cr = customer.LastCashRequest;
+            cr.UnderwriterComment = comment;
+            _decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
+        }
+
         public int MarketplaceSeniority(int customerId)
         {
             var seniority = _customers.MarketplacesSeniority(customerId);
