@@ -50,7 +50,7 @@ namespace EzBob.PayPal
 		{
 			var formula = _payPalFormulaRepository.GetByFormulaName("TotalNetRevenues").AsEnumerable();
 			var result = data.Join(formula,
-								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount.Value >= 0 },
+								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
 								   f => new { status = f.Status, type = f.Type, positive = f.Positive }, (d, f) => d);
 			return result.Sum(t => CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
 
