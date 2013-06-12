@@ -63,6 +63,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApplication", "Integration\TestApplication\TestApplication.csproj", "{D3A1CE56-CD53-4A83-B8EC-65B55DB5839F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBob.Web", "App\PluginWeb\EzBob.Web\EzBob.Web.csproj", "{829AA60E-CC9F-4BE6-95E1-BC7990147D15}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE254378-4CF8-400C-BCC4-A9AF01550350} = {DE254378-4CF8-400C-BCC4-A9AF01550350}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log4NetCustomAppenders", "App\PluginWeb\Log4NetCustomAppenders\Log4NetCustomAppenders.csproj", "{9B99CD18-9414-4842-9792-E33B6605F330}"
 EndProject
