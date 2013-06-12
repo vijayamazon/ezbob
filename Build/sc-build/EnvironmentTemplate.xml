@@ -2,8 +2,8 @@
 <environment id="${environmentId}">
     <property name="FreeAgentConfig" value ="FreeAgent"/>		
 	<module id="FreeAgent">
-		<property name="OAuthIdentifier" value="HeVzWPTKA70HptIMgGFl5w" />
-		<property name="OAuthSecret" value="J0BGIgMvtkMIHi5fVo94fA" />
+		<property name="OAuthIdentifier" value="1BQ5Np7Wjmiq0YEl3Gn-tw" />
+		<property name="OAuthSecret" value="k84-Inqfs408L8JoHIvfYw" />
 		<property name="OAuthAuthorizationEndpoint" value="https://api.freeagent.com/v2/approve_app" />
 		<property name="OAuthTokenEndpoint" value="https://api.freeagent.com/v2/token_endpoint" />
 		<property name="InvoicesRequest" value="https://api.freeagent.com/v2/invoices?nested_invoice_items=true" />
