@@ -145,8 +145,9 @@ namespace EzBob.PayPal
 			var aggregateFunctionArray = new[]
 					{
 						PayPalDatabaseFunctionType.TransactionsNumber,
-						PayPalDatabaseFunctionType.TotalNetInPayments, 
-						PayPalDatabaseFunctionType.TotalNetOutPayments, 
+						PayPalDatabaseFunctionType.TotalNetInPayments,
+						PayPalDatabaseFunctionType.TotalNetOutPayments,
+						PayPalDatabaseFunctionType.TotalNetRevenues, 
 					};
 
 			var updated = data.SubmittedDate;
@@ -163,7 +164,7 @@ namespace EzBob.PayPal
 
 			var factory = new PayPalTransactionAgregatorFactory();
 
-			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );			
+			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );
 			
 		}
 

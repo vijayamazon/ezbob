@@ -103,6 +103,8 @@
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentInvoice.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentInvoiceMap.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequestMap.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormula.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormulaMap.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
     <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLog.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLogMap.cs" />
     <Compile Include="Model\Marketplaces\MP_WhiteList.cs" />
+    <Compile Include="PyaPalDetails\IPayPalAggregationFormulaRepository.cs" />
     <Compile Include="PyaPalDetails\PayPalDetailsModel.cs" />
     <Compile Include="PyaPalDetails\PayPalDetailsRepository.cs" />
     <Compile Include="PyaPalDetails\IPayPalDetailsRepository.cs" />
