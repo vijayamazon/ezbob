@@ -32,10 +32,13 @@
 				const string profileId = "ga:60953365";
 				string startDate = DateTime.Today.ToString("yyyy-MM-dd");// "2013-03-23";
 				string endDate = DateTime.Today.ToString("yyyy-MM-dd"); // "2013-03-23";
-
+				
 				const string metrics = "ga:visits,ga:visitors";
 				DataResource.GaResource.GetRequest request = service.Data.Ga.Get(profileId, startDate, endDate, metrics);
-				//var req = new GaData.QueryData();
+				
+				//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
+				//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
+				/*foreach (Profile profile in profiles.Items){Console.WriteLine("Profile Timezone: " + profile.Timezone);}*/
 
 				request.Dimensions = "ga:date,ga:country";
 				GaData data = request.Fetch();

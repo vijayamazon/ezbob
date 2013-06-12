@@ -1,6 +1,8 @@
 IF OBJECT_ID ('dbo.MP_PayPalAggregationFormula') IS NOT NULL
+BEGIN
+	ALTER TABLE MP_PayPalAggregationFormula ALTER COLUMN Positive BIT NULL
 	RETURN 
-
+END
 CREATE TABLE dbo.MP_PayPalAggregationFormula
 	(
 	  Id          INT IDENTITY NOT NULL
@@ -8,7 +10,7 @@ CREATE TABLE dbo.MP_PayPalAggregationFormula
 	, FormulaName NVARCHAR (300) NOT NULL
 	, Type        NVARCHAR (300) NOT NULL
 	, Status      NVARCHAR (300) NOT NULL
-	, Positive    BIT NOT NULL
+	, Positive    BIT
 	)
 
 
@@ -27,3 +29,4 @@ INSERT INTO MP_PayPalAggregationFormula VALUES (1,'TotalNetRevenues', 'Reserve R
 INSERT INTO MP_PayPalAggregationFormula VALUES (1,'TotalNetRevenues', 'Reserve Hold', 'placed', 0)
 
 GO
+ 
