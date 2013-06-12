@@ -370,7 +370,6 @@ namespace EzBob.Web.Code.ApplicationCreator
         {
             var strategyParameters = new[]
                 {
-                    new StrategyParameter("userId", user.Id),
                     new StrategyParameter("caisId", caisId)
                 };
             CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);

@@ -58,7 +58,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public string GetOneFile(int id)
         {
             var cais = _caisReportsHistoryRepository.Get(id);
-            return cais != null ? ZipString.Unzip(cais.FileData) : "Not found";
+            if (cais == null)
+            {
+                throw new FileNotFoundException();
+            }
+            return ZipString.Unzip(cais.FileData);
         }
 
         [Ajax]

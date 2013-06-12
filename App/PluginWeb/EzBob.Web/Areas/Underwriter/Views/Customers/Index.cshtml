@@ -5,7 +5,7 @@
 <div id="customers-view" style="display: none;">
     <div class="tabbable tabs-left" id="applications-tabs">
         <ul class="nav nav-tabs ui-state-default left-underwriter-menu">
-            <li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Waiting for decision(<span id="waiting-count"></span>)</a></li>
+            <li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Decision(<span id="waiting-count"></span>)</a></li>
             @if (Model.Escalated != null)
             {
                 <li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
@@ -16,7 +16,7 @@
             <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
             <li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
             <li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
-            <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered customers</a></li>
+            <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered</a></li>
         </ul>
         <div class="tab-content customer-grids">
             <div class="tab-pane active" id="waiting"></div>
