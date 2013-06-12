@@ -2,6 +2,8 @@
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 
 namespace EZBob.DatabaseLib {
+	using System;
+
 	#region class AOrderComparer
 
 	abstract class AOrderComparer<T> : EqualityComparer<T> where T: class {
@@ -50,7 +52,22 @@ namespace EZBob.DatabaseLib {
 		{
 			return a.reference.GetHashCode();
 		} // HashCode
-	} // class FreeAgentOrderComparer
+	} // class FreeAgentInvoiceComparer
+
+	class FreeAgentExpenseComparer : AOrderComparer<FreeAgentExpense>
+	{
+		public override bool AreEqual(FreeAgentExpense a, FreeAgentExpense b)
+		{
+			return DateTime.Compare(a.dated_on, b.dated_on) == 0 &&
+				DateTime.Compare(a.updated_at, b.updated_at) == 0 &&
+				DateTime.Compare(a.created_at, b.created_at) == 0;
+		} // AreEqual
+
+		public override int HashCode(FreeAgentExpense a)
+		{
+			return a.dated_on.GetHashCode() & a.updated_at.GetHashCode() & a.created_at.GetHashCode();
+		} // HashCode
+	} // class FreeAgentExpenseComparer
 
 	#region class ChannelGrabberOrderComparer
 

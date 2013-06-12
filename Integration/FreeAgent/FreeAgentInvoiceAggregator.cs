@@ -8,19 +8,19 @@ namespace FreeAgent
 	using EzBob.CommonLib.TimePeriodLogic;
 	using log4net;
 
-	internal class FreeAgentInvoicesAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
+	internal class FreeAgentInvoiceAggregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
 		public override DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType> CreateDataAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> data, ICurrencyConvertor currencyConverter)
         {
-			return new FreeAgentInvoicesAggregator(data, currencyConverter);
+			return new FreeAgentInvoiceAggregator(data, currencyConverter);
         }
     }
 
-	internal class FreeAgentInvoicesAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
+	internal class FreeAgentInvoiceAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentInvoice>, FreeAgentInvoice, FreeAgentDatabaseFunctionType>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentInvoicesAggregator));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentInvoiceAggregator));
 
-		public FreeAgentInvoicesAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> orders, ICurrencyConvertor currencyConvertor)
+		public FreeAgentInvoiceAggregator(ReceivedDataListTimeDependentInfo<FreeAgentInvoice> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
         {
         }
