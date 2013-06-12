@@ -8,6 +8,7 @@ using EzBob.PayPalDbLib;
 
 namespace EzBob.PayPal
 {
+	using EZBob.DatabaseLib.Model.Marketplaces.PayPal;
 	using EZBob.DatabaseLib.PayPal;
 	using StructureMap;
 
@@ -41,37 +42,87 @@ namespace EzBob.PayPal
 				case PayPalDatabaseFunctionType.TotalNetRevenues:
 					return GetTotalNetRevenues(data);
 
+				case PayPalDatabaseFunctionType.TotalNetExpenses:
+					return GetTotalNetExpenses(data);
+
+				case PayPalDatabaseFunctionType.NumOfTotalTransactions:
+					return GetNumOfTotalTransactions(data);
+
+				case PayPalDatabaseFunctionType.RevenuesForTransactions:
+					return GetRevenuesForTransactions(data);
+
+				case PayPalDatabaseFunctionType.NetNumOfRefundsAndReturns:
+					return GetNetNumOfRefundsAndReturns(data);
+
+				case PayPalDatabaseFunctionType.TransferAndWireOut:
+					return GetTransferAndWireOut(data);
+
+				case PayPalDatabaseFunctionType.TransferAndWireIn:
+					return GetTransferAndWireIn(data);
+
 				default:
 					throw new NotImplementedException();
 			}
 		}
 
+		private object GetSum(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula)
+		{
+			var result = data.Join(formula,
+								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
+								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
+			return result.Sum(t => CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+		}
+
+		private object GetCount(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula)
+		{
+			var result = data.Join(formula,
+								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
+								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
+			return result.Count();
+		}
 		private object GetTotalNetRevenues(IEnumerable<PayPalTransactionItem> data)
 		{
 			var formula = _payPalFormulaRepository.GetByFormulaName("TotalNetRevenues").AsEnumerable();
-			var result = data.Join(formula,
-								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
-								   f => new { status = f.Status, type = f.Type, positive = f.Positive }, (d, f) => d);
-			return result.Sum(t => CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+			return GetSum(data, formula);
+		}
 
-			/*
-			return data
-				.Where(t =>
-						(t.Status == "Completed" && t.Type == "Payment" && t.NetAmount.Value > 0) ||
-						(t.Status == "Cleared" && t.Type == "Payment" && t.NetAmount.Value > 0) ||
-						(t.Status == "Pending" && t.Type == "Payment" && t.NetAmount.Value < 0) ||
-						(t.Status == "Returned" && t.Type == "Payment" && t.NetAmount.Value < 0) ||
-						(t.Status == "completed&refunded" && t.Type == "Recurring Payment" && t.NetAmount.Value > 0) ||
-						(t.Status == "Refunded by eBay" && t.Type == "Payment" && t.NetAmount.Value > 0) ||
-						(t.Status == "Partially Refunded" && t.Type == "Payment" && t.NetAmount.Value > 0) ||
-						(t.Status == "Completed" && t.Type == "Refund" && t.NetAmount.Value < 0) ||
-						(t.Status == "Completed" && t.Type == "Cash Back Bonus" && t.NetAmount.Value > 0) ||
-						(t.Status == "Completed" && t.Type == "Bonus" && t.NetAmount.Value > 0) ||
-						(t.Status == "Completed" && t.Type == "Fee" && t.NetAmount.Value < 0) ||
-						(t.Status == "released" && t.Type == "Reserve Release" && t.NetAmount.Value > 0) ||
-						(t.Status == "placed" && t.Type == "Reserve Hold" && t.NetAmount.Value < 0))
-				.Sum(t => CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
-			*/
+		private object GetTotalNetExpenses(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("TotalNetExpenses").AsEnumerable();
+			return GetSum(data, formula);
+		}
+
+		private object GetNumOfTotalTransactions(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("NumOfTotalTransactions").AsEnumerable();
+			return GetCount(data, formula);
+		}
+
+		private object GetRevenuesForTransactions(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("RevenuesForTransactions").AsEnumerable();
+			return GetSum(data, formula);
+		}
+
+		private object GetNetNumOfRefundsAndReturns(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("NetNumOfRefundsAndReturns").AsEnumerable();
+			var result = data.Join(formula,
+								   d => new { status = d.Status, type = d.Type },
+								   f => new { status = f.Status, type = f.Type }, (d, f) => d);
+			return result.Count();
+		}
+
+		private object GetTransferAndWireOut(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("TransferAndWireOut").AsEnumerable();
+			return GetSum(data, formula);
+		}
+
+		private object GetTransferAndWireIn(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("TransferAndWireIn").AsEnumerable();
+			return GetSum(data, formula);
 		}
 
 		private object GetTransactionsNumber(IEnumerable<PayPalTransactionItem> data)
