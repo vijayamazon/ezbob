@@ -6,6 +6,8 @@ using StructureMap.Configuration.DSL;
 
 namespace EzBob.PayPal
 {
+	using EZBob.DatabaseLib.PyaPalDetails;
+
 	public class PluginRegistry : Registry
 	{
 		public PluginRegistry()
@@ -14,6 +16,7 @@ namespace EzBob.PayPal
             For<IMarketplaceType>().Use<PayPalDatabaseMarketPlace>().Named(paypal.DisplayName);
 			For<DatabaseMarketplaceBase<PayPalDatabaseFunctionType>>().Use<PayPalDatabaseMarketPlace>();
             For<IMarketplaceRetrieveDataHelper>().Use<PayPalRetriveDataHelper>().Named(paypal.DisplayName);
+			For<IPayPalAggregationFormulaRepository>().Use<PayPalAggregationFormulaRepository>();
 		}
 	}
 }
