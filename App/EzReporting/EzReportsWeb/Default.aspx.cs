@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Mime;
 using System.Web.UI;
+using Aspose.Cells;
+using Aspose.Words;
 using Ezbob.Logger;
 using Html;
 using Reports;
@@ -69,6 +73,54 @@ namespace EzReportsWeb {
 
 			divReportData.Controls.Add(reportData);
 		} // btnShowReport_Click
+
+        protected void BtnGetExcelClick(object sender, EventArgs e)
+        {
+            DateTime today = DateTime.Today;//.ToString("yyyy-MM-dd");
+            DateTime tomorrow = DateTime.Today.AddDays(1);//.ToString("yyyy-MM-dd");
+            DateTime fDate = today;
+            DateTime tDate = tomorrow;
+            bool isDaily = false;
+
+            switch (rblFilter.SelectedValue)
+            {
+                case "Daily":
+                    isDaily = true;
+                    break;
+
+                case "Weekly":
+                    fDate = DateTime.Today.AddDays(-7);//.ToString("yyyy-MM-dd");
+                    break;
+
+                case "Monthly":
+                    fDate = DateTime.Today.AddMonths(-1);//.ToString("yyyy-MM-dd");
+                    break;
+
+                case "Custom":
+                    DateTime.TryParse(Request.Form["fromDate"], out fDate);
+                    DateTime.TryParse(Request.Form["toDate"], out tDate);
+                    if (tDate.DayOfYear - fDate.DayOfYear == 1)
+                        isDaily = true;
+
+                    break;
+            } // switch
+
+            var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, fDate.ToString("yyyy-MM-dd"), tDate.ToString("yyyy-MM-dd"), isDaily);
+
+            var filename = (ddlReportTypes.SelectedItem + "_"+ fDate.ToString("yyyy-MM-dd") + ".xlsx").Replace(" ","_");
+            var ostream = new MemoryStream();
+            wb.Save(ostream, FileFormatType.Excel2007Xlsx);
+
+            Response.Clear();
+            Response.ContentType = "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
+            Response.BinaryWrite(ostream.ToArray());
+            // myMemoryStream.WriteTo(Response.OutputStream); //works too
+            Response.Flush();
+            Response.Close();
+            Response.End();
+            ostream.Close();
+            } // BtnGetExcelClick
 
 		protected void rblFilter_SelectedIndexChanged(object sender, EventArgs e) {
 			divCustomFilter.Visible = rblFilter.SelectedValue == "Custom";

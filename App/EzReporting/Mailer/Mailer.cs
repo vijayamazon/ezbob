@@ -1,16 +1,21 @@
-﻿namespace Mailer
+﻿using System.IO;
+
+namespace Mailer
 {
     using System;
     using System.Net;
     using System.Net.Mail;
     using System.Threading;
     using Logger;
+    using Aspose.Cells;
+    using Aspose.Words;
 
     public class Mailer
     {
-        public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, string fileAttachment = "", int retries = 5)
+        public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, Workbook wb = null, int retries = 5)
         {
             string body = mailBody;
+            var ostream = new MemoryStream();
 
             var smtp = new SmtpClient
             {
@@ -31,11 +36,15 @@
             {
                 int tryCounter = 0;
 
-                if (!String.IsNullOrEmpty(fileAttachment)) {
-                    var attachment = new Attachment(fileAttachment);
+                if (wb != null)
+                {
                     message.Attachments.Clear();
+                    wb.Save(ostream, FileFormatType.Excel2007Xlsx);
+                    ostream.Position = 0;
+                    var attachment = new Attachment(ostream, subject + ".xlsx", "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                     message.Attachments.Add(attachment);
-                    }
+                }
+
                 while (tryCounter < retries)
                 {
                     try
@@ -55,6 +64,7 @@
                     }
                 }
             }
+            ostream.Close();
         }
     }
 }

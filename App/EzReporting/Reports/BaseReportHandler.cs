@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Remoting.Contexts;
+using System.Web;
 using Ezbob.Database;
 using Ezbob.Logger;
 using global::Html;
@@ -55,7 +57,7 @@ namespace Reports {
 			});
 		} // AddReportToList
 
-		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily")
+		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily", Workbook wb = null )
 		{
 
             var email = new Html.Html();
@@ -74,9 +76,9 @@ namespace Reports {
 					"EZBOB " + period + " " + subject + " Client Report",
 					sEmail,
 					toAddressStr,
-                    DefaultAttachment
+                    wb
 				);
-			} // lock
+            } // lock
 
             if (!String.IsNullOrEmpty(DefaultAttachment)) 
             {
@@ -209,7 +211,6 @@ namespace Reports {
 
 					tbody.Append(oTr);
 				} // foreach data row
-
 			}
 			catch (Exception e) {
 				Error(e.ToString());
@@ -402,6 +403,124 @@ namespace Reports {
 				.Append(new P().Append(TableReport("RptNewClientsStep1", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)));
 		} // BuildInWizardReport
 
+
+
+        public Workbook BuildNewClientXls(Report report, string today, string tomorrow)
+        {
+            var title = report.Title + " " + today;
+            var wb = new Workbook();
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", today));
+                wb = AddSheetToExcel(dt, title, "RptAdsReport");
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", today));
+                wb = AddSheetToExcel(dt, title, "RptCustomerReport", String.Empty, wb);
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            return wb;
+        } // BuildNewClientXls
+
+        public Workbook BuildPlainedPaymentXls(Report report, string today, string tomorrow)
+        {
+            var title = report.Title + " " + today;
+            var wb = new Workbook();
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptPaymentReport",
+                    new QueryParameter("@DateStart", today),
+                    new QueryParameter("@DateEnd", DateTime.Today.AddDays(3).ToString("yyyy-MM-dd"))
+                    );
+                wb = AddSheetToExcel(dt, title, "RptPaymentReport");
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            return wb;
+        } // BuildPlainedPaymentXls
+
+
+        public Workbook BuildDailyStatsXls(Report report, string today, string tomorrow)
+        {
+            var title = report.Title + " " + today;
+            var wb = new Workbook();
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptDailyStats",
+                    new QueryParameter("@DateStart", today),
+                    new QueryParameter("@DateEnd", tomorrow)
+                   );
+                wb = AddSheetToExcel(dt, title, "RptDailyStats");
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            return wb;
+        } // BuildDailyStatsXls
+
+        public Workbook BuildInWizardXls(Report report, string today, string tomorrow)
+        {
+            var title = report.Title + " " + today;
+            var sometext = String.Empty;
+            var wb = new Workbook();
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptNewClients",
+                    new QueryParameter("@DateStart", today),
+                    new QueryParameter("@DateEnd", tomorrow)
+                   );
+                sometext = "Clients that entered Shops but did not complete:";
+                wb = AddSheetToExcel(dt, title, "RptNewClients", sometext);
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            try
+            {
+                DataTable dt = DB.ExecuteReader("RptNewClientsStep1",
+                    new QueryParameter("@DateStart", today),
+                    new QueryParameter("@DateEnd", tomorrow)
+                   );
+                sometext = "Clients that just entered their email:";
+                wb = AddSheetToExcel(dt, title, "RptNewClientsStep1", sometext, wb);
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            return wb;
+        } // BuildInWizardXls
+
+        public Workbook XlsReport(string spName, string startDate, string endDate, String rptTitle = "")
+        {
+            var wb = new Workbook();
+            try
+            {
+                DataTable dt = DB.ExecuteReader(spName,
+                    new QueryParameter("@DateStart", startDate),
+                    new QueryParameter("@DateEnd", endDate)
+                   );
+                wb = AddSheetToExcel(dt, rptTitle, spName, String.Empty);
+            }
+            catch (Exception e)
+            {
+                Error(e.ToString());
+            }
+            return wb;
+        } // XlsReport
+
 		private ColumnInfo[] GetHeaderAndFields(ReportType type) {
 			DataTable dt = DB.ExecuteReader("RptScheduler_GetHeaderAndFields", new QueryParameter("@Type", type.ToString()));
 
@@ -472,7 +591,7 @@ namespace Reports {
 
 					lineCounter++;
 				} // for each data row
-                MakeExcelTablice(dt, spName, RptTitle);
+                var wb = AddSheetToExcel(dt, spName, RptTitle);
 			}
 			catch (Exception e) {
 				Error(e.ToString());
@@ -480,7 +599,7 @@ namespace Reports {
 			return tbl;
 		} // TableReport
 
-        static void InitAspose()
+        public static void InitAspose()
         {
             var license = new License();
 
@@ -491,19 +610,26 @@ namespace Reports {
             }
         }
 
-	    private static void MakeExcelTablice(DataTable dt, String headerName, String title)
+        private static Workbook AddSheetToExcel(DataTable dt, String title, String sheetName = "", String someText = "", Workbook wb = null)
 	    {
             InitAspose();
 
 	        const int fc = 1; // first column
-            const int fr = 3; // first row
+            const int fr = 4; // first row
+            const int frn = 1; // first row for title
 
-            var wb = new Workbook();
-            wb.Worksheets.Clear();
-            var sheet = wb.Worksheets.Add("Report");
+            if (wb == null) // first initialization, if we will use it multimple times.
+            {
+                wb = new Workbook();
+                wb.Worksheets.Clear();
+            } 
+            if (String.IsNullOrEmpty(sheetName)) sheetName = "Report"; // default sheetName
+            var sheet = wb.Worksheets.Add(sheetName); // add new specific sheet to document.
 
-            sheet.Cells.Merge(fr - 2, fc, 1, 6);
-            sheet.Cells[fr - 2, fc].PutValue(title.Replace("<h1>", "").Replace("</h1>",""));
+            sheet.Cells.Merge(frn, fc, 1, dt.Columns.Count);
+            sheet.Cells[frn, fc].PutValue(title.Replace("<h1>", "").Replace("</h1>",""));
+            sheet.Cells.Merge(frn + 1, fc, 1, dt.Columns.Count);
+            sheet.Cells[frn+1, fc].PutValue(someText);
             sheet.Cells.ImportDataTable(dt, true, fr, fc);
             sheet.AutoFitColumns();
 
@@ -520,8 +646,7 @@ namespace Reports {
             titleStyle.Pattern = BackgroundType.Solid;
             titleStyle.Font.IsBold = true;
             titleStyle.ForegroundColor = Color.Linen;
-            sheet.Cells[fr - 2, fc].SetStyle(titleStyle);
-
+            sheet.Cells[frn, fc].SetStyle(titleStyle);
 
             headerStyle.VerticalAlignment = TextAlignmentType.Center;
             headerStyle.HorizontalAlignment = TextAlignmentType.Center;
@@ -579,8 +704,9 @@ namespace Reports {
             for (var it = fc; it < dt.Columns.Count + fc; it++)
                 sheet.Cells[fr + dt.Rows.Count + 1, it].SetStyle(footerStyle);
 
-	        DefaultAttachment = headerName + ".xlsx";
-            wb.Save(DefaultAttachment);
+            //DefaultAttachment = filename + ".xlsx";
+            //wb.Save(DefaultAttachment);
+	        return wb;
 	    }
 
 
