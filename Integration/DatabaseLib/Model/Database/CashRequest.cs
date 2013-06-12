@@ -15,14 +15,11 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual long Id { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual int? IdUnderwriter { get; set; }
-        public virtual int? IdManager { get; set; }
         public virtual DateTime? CreationDate { get; set; }
         public virtual SystemDecision? SystemDecision { get; set; }
         public virtual CreditResultStatus? UnderwriterDecision { get; set; }
-        public virtual CreditResultStatus? ManagerDecision { get; set; }
         public virtual DateTime? SystemDecisionDate { get; set; }
         public virtual DateTime? UnderwriterDecisionDate { get; set; }
-        public virtual DateTime? ManagerDecisionDate { get; set; }
         public virtual DateTime? EscalatedDate { get; set; }
         public virtual double? SystemCalculatedSum { get; set; }
         public virtual double? ManagerApprovedSum { get; set; }

@@ -2,7 +2,7 @@
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    public class CashRequestMap : ClassMap<CashRequest> 
+    public sealed class CashRequestMap : ClassMap<CashRequest> 
     {
         public CashRequestMap()
         {
@@ -12,14 +12,11 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.HasLoans);
             References(x => x.Customer, "IdCustomer");
             Map(x => x.IdUnderwriter);
-            Map(x => x.IdManager);
             Map(x => x.CreationDate);
-            Map(x => x.SystemDecision).CustomType<SystemDecisionType>(); ;
+            Map(x => x.SystemDecision).CustomType<SystemDecisionType>();
             Map(x => x.UnderwriterDecision).CustomType<CreditResultStatusType>();
-            Map(x => x.ManagerDecision).CustomType<CreditResultStatusType>();
             Map(x => x.SystemDecisionDate);
             Map(x => x.UnderwriterDecisionDate);
-            Map(x => x.ManagerDecisionDate);
             Map(x => x.EscalatedDate);
             Map(x => x.SystemCalculatedSum);
             Map(x => x.ManagerApprovedSum);

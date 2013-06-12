@@ -289,7 +289,6 @@ namespace ZohoCRM
             zohoPotential.SetValue("Amount", cashRequest.ApprovedSum());
             zohoPotential.SetValue("System decision", cashRequest.SystemDecision.ToString());
             zohoPotential.SetValue("Underwriter decision", cashRequest.UnderwriterDecision.ToString());
-            zohoPotential.SetValue("Manager decision", cashRequest.ManagerDecision.ToString());
             zohoPotential.SetValue("Interest rate", cashRequest.InterestRate*100);
             zohoPotential.SetValue("Repayment period", cashRequest.RepaymentPeriod);
             zohoPotential.SetValue("Use setup fee", cashRequest.UseSetupFee ? "Yes" : "No");
