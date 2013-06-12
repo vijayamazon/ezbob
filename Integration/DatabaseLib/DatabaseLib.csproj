@@ -223,10 +223,10 @@
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLog.cs" />
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLogMap.cs" />
     <Compile Include="Model\Marketplaces\MP_WhiteList.cs" />
-    <Compile Include="PyaPalDetails\IPayPalAggregationFormulaRepository.cs" />
-    <Compile Include="PyaPalDetails\PayPalDetailsModel.cs" />
-    <Compile Include="PyaPalDetails\PayPalDetailsRepository.cs" />
-    <Compile Include="PyaPalDetails\IPayPalDetailsRepository.cs" />
+    <Compile Include="PayPal\IPayPalAggregationFormulaRepository.cs" />
+    <Compile Include="PayPal\PayPalDetailsModel.cs" />
+    <Compile Include="PayPal\PayPalDetailsRepository.cs" />
+    <Compile Include="PayPal\IPayPalDetailsRepository.cs" />
     <Compile Include="RepositoryRegistry.cs" />
     <Compile Include="Repository\CaisFlagRepository.cs" />
     <Compile Include="Repository\CaisReportsHistoryRepository.cs" />

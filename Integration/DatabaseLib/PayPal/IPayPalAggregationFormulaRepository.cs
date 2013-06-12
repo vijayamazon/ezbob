@@ -1,4 +1,4 @@
-﻿namespace EZBob.DatabaseLib.PyaPalDetails
+﻿namespace EZBob.DatabaseLib.PayPal
 {
 	using System.Collections.Generic;
 	using System.Linq;

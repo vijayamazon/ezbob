@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using EZBob.DatabaseLib.Model.Database;
 
-namespace EZBob.DatabaseLib.PyaPalDetails
+namespace EZBob.DatabaseLib.PayPal
 {
     public class PayPalDetailsModel
     {

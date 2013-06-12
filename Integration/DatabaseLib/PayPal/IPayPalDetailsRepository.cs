@@ -2,7 +2,7 @@
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 
-namespace EZBob.DatabaseLib.PyaPalDetails
+namespace EZBob.DatabaseLib.PayPal
 {
     public interface IPayPalDetailsRepository : IRepository<PayPalGeneralDetailDataRow>
     {

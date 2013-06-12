@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.PyaPalDetails;
+using EZBob.DatabaseLib.PayPal;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using StructureMap;

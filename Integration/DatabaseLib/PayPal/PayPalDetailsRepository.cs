@@ -4,7 +4,7 @@ using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using NHibernate;
 
-namespace EZBob.DatabaseLib.PyaPalDetails
+namespace EZBob.DatabaseLib.PayPal
 {
     public class PayPalDetailsRepository : NHibernateRepositoryBase<PayPalGeneralDetailDataRow>, IPayPalDetailsRepository
     {

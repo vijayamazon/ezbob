@@ -6,7 +6,7 @@ using StructureMap.Configuration.DSL;
 
 namespace EzBob.PayPal
 {
-	using EZBob.DatabaseLib.PyaPalDetails;
+	using EZBob.DatabaseLib.PayPal;
 
 	public class PluginRegistry : Registry
 	{

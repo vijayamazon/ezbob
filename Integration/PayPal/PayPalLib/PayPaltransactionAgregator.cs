@@ -8,7 +8,7 @@ using EzBob.PayPalDbLib;
 
 namespace EzBob.PayPal
 {
-	using EZBob.DatabaseLib.PyaPalDetails;
+	using EZBob.DatabaseLib.PayPal;
 	using StructureMap;
 
 	internal class PayPalTransactionAgregatorFactory : DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<PayPalTransactionItem>, PayPalTransactionItem, PayPalDatabaseFunctionType>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.PyaPalDetails;
+using EZBob.DatabaseLib.PayPal;
 using EzBob.Models;
 using EzBob.Web.ApplicationCreator;
 using PostcodeAnywhere;

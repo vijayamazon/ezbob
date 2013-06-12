@@ -8,7 +8,7 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Email;
 using EZBob.DatabaseLib.Model.Loans;
-using EZBob.DatabaseLib.PyaPalDetails;
+using EZBob.DatabaseLib.PayPal;
 using EZBob.DatabaseLib.Repository;
 using EzBob.AmazonServiceLib.Config;
 using EzBob.Configuration;

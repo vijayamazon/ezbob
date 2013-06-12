@@ -1,6 +1,6 @@
 ﻿using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.PyaPalDetails;
+using EZBob.DatabaseLib.PayPal;
 using StructureMap.Configuration.DSL;
 
 namespace EZBob.DatabaseLib
