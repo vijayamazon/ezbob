@@ -655,10 +655,10 @@ EzBob.formatPercents = function (num, precision) {
 };
 
 EzBob.formatPercents1 = function (num) {
-	var s = EzBob.formatPercents(num, 1);
+	var s = EzBob.formatPercents(num, 2);
 
 	if (s.indexOf('.') < 0)
-		s = s.replace(/%$/, '.0%');
+		s = s.replace(/%$/, '.00%');
 	
 	return s;
 };
