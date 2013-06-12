@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Repository;
 using ExperianLib.CaisFile;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
+using EzBob.Web.Code;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
     public class CAISController : Controller
     {
-        private readonly IAppCreator _appCreator;
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
+        private readonly IAppCreator _appCreator;
         private readonly IWorkplaceContext _context;
 
-        public CAISController(IAppCreator appCreator, IWorkplaceContext context,
-                              CaisReportsHistoryRepository caisReportsHistoryRepository)
+        public CAISController(CaisReportsHistoryRepository caisReportsHistoryRepository, IAppCreator appCreator, IWorkplaceContext context)
         {
+            _caisReportsHistoryRepository = caisReportsHistoryRepository;
             _appCreator = appCreator;
             _context = context;
-            _caisReportsHistoryRepository = caisReportsHistoryRepository;
         }
 
         public ActionResult Index()
@@ -31,9 +32,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         [Ajax]
         [HttpPost]
-        public void Generate()
+        public JsonNetResult Generate()
         {
-            _appCreator.CAISGenerate(_context.User);
+            try
+            {
+                _appCreator.CAISGenerate(_context.User);
+            }
+            catch (Exception e)
+            {
+                return this.JsonNet(new {error = e});
+            }
+            return null;
         }
 
         [Ajax]
@@ -46,48 +55,55 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         [Ajax]
         [HttpGet]
-        public string GetOneFile(string path)
+        public string GetOneFile(int id)
         {
-            using (var file = new StreamReader(path))
-            {
-                return file.ReadToEnd();
-            }
+            var cais = _caisReportsHistoryRepository.Get(id);
+            return cais != null ? ZipString.Unzip(cais.FileData) : "Not found";
         }
 
         [Ajax]
         [HttpPost]
-        [NoCache]
-        public void SaveFileChange(string fileContent, string fullFileName)
+        [Transactional]
+        public void SaveFileChange(string fileContent, int id)
         {
-            using (var file = new StreamWriter(fullFileName))
-            {
-                file.Write(fileContent);
-            }
+            _caisReportsHistoryRepository.UpdateFile(ZipString.Zip(fileContent), id);
+            _appCreator.CAISUpdate(_context.User, id);
         }
 
         [Ajax]
         [HttpPost]
-        public void SendFiles(IEnumerable<CaisSendModel> model)
+        [Transactional]
+        public JsonNetResult SendFiles(IEnumerable<CaisSendModel> model)
         {
-            var sender = new CaisFileSender();
             var error = new HashSet<string>();
             foreach (var el in model)
             {
-                using (var file = new StreamReader(el.Path))
+                try
                 {
-                    try
-                    {
-                        sender.UploadData(file.ReadToEnd(), el.Path);
-                    }
-                    catch (Exception e)
-                    {
-                        error.Add(e.Message);
-                    }
+                    SendCAISFile(el.Id);
+                }
+                catch (Exception e)
+                {
+                    error.Add(e.Message);
                 }
             }
-            if (error.Count > 0)
+            return error.Count > 0 ? this.JsonNet(string.Join(Environment.NewLine, error)) : null;
+        }
+
+        private void SendCAISFile(int id)
+        {
+            var file = _caisReportsHistoryRepository.Get(id);
+            var sender = new CaisFileSender();
+            
+            try
             {
-                throw new Exception(string.Join(Environment.NewLine, error));
+                sender.UploadData(ZipString.Unzip(file.FileData), file.FileName);
+                file.UploadStatus = CaisUploadStatus.Uploaded;
+            }
+            catch (Exception)
+            {
+                file.UploadStatus = CaisUploadStatus.UploadError;
+                throw;
             }
         }
     }

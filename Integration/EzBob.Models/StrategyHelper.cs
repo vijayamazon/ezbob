@@ -1,11 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Repository;
 using EzBob.CommonLib.TimePeriodLogic;
+using EzBob.Web.Code;
 using NHibernate;
 using StructureMap;
+using System.IO.Compression;
 
 namespace EzBob.Models
 {
@@ -14,12 +19,14 @@ namespace EzBob.Models
         private readonly CustomerRepository _customers;
         private readonly DecisionHistoryRepository _decisionHistory;
         private readonly ISession _session;
+        private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
 
         public StrategyHelper()
         {
             _session = ObjectFactory.GetInstance<ISession>();
             _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
+            _caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
         }
 
         public double GetAnualTurnOverByCustomer(int customerId)
@@ -79,6 +86,17 @@ namespace EzBob.Models
             var seniority = _customers.MarketplacesSeniority(customerId);
             var senDate = seniority != null ? seniority.Value.Date : DateTime.UtcNow;
             return Convert.ToInt32((DateTime.UtcNow - senDate).TotalDays);
+        }
+
+        public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
+        {
+            _caisReportsHistoryRepository.AddFile(ZipString.Zip(data), name, foldername, type, ofItems, goodUsers, defaults);
+        }
+
+        public string GetCAISFileById(int id)
+        {
+            var file = _caisReportsHistoryRepository.Get(id);
+            return file != null ? ZipString.Unzip(file.FileData) : "";
         }
     }
 }

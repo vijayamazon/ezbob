@@ -106,5 +106,10 @@ namespace ezmanage
         public void CAISGenerate(User customer)
         {
         }
+
+        public void CAISUpdate(User user, int caisId)
+        {
+            
+        }
     }
 }

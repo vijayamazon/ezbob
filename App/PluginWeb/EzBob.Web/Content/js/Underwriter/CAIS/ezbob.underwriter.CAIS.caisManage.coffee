@@ -5,6 +5,7 @@ EzBob.Underwriter.CAIS = EzBob.Underwriter.CAIS or {}
 
 class EzBob.Underwriter.CAIS.ListOfFilesModel extends Backbone.Model
     url: "#{gRootPath}Underwriter/CAIS/ListOfFiles"
+
     default:
         cais: {}
 
@@ -16,13 +17,13 @@ class EzBob.Underwriter.CAIS.ListOfFilesModel extends Backbone.Model
 
 class EzBob.Underwriter.CAIS.SelectedFile extends Backbone.Model
     default:
-        path: ""
+        id: ""
 
 class EzBob.Underwriter.CAIS.SelectedFiles extends Backbone.Collection
     model: EzBob.Underwriter.CAIS.SelectedFile
 
-    getModelByPath: (path)->
-       @filter (val) -> return val.get("path") == path
+    getModelById: (id)->
+       @filter (val) -> return val.get("id") == id
 
     url: "#{gRootPath}Underwriter/CAIS/SendFiles"
 
@@ -38,14 +39,13 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         BlockUi "on"
         @model.fetch().done => BlockUi "off"
         @checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles()
-        @bindTo @checkedModel, "add remove", @checkedFileModelChanged, @
+        @bindTo @checkedModel, "add remove reset", @checkedFileModelChanged, @
    
     ui:
         count:".reports-count"
         send: ".send"
 
     onRender: ->
-        @$el.find('[data-toggle="tooltip"]').tooltip()
         @checkedFileModelChanged()
         
     serializeData: ->
@@ -62,23 +62,24 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     events:
         "click .generate": "generateClicked"
         "click .send ": "sendFile"
-        "click [data-path]": "fileSelected"
-        "click [data-file-path]": "fileChecked"
+        "dblclick [data-id]": "fileSelected"
+        "click [data-id]": "fileChecked"
 
     sendFile: ->
         sendFn = =>
             BlockUi "on"
             xhr = @checkedModel.sendToServer()
-            xhr.done (response)->
+            xhr.done (response)=>
                 if response and response.error != undefined
                     EzBob.ShowMessage "<pre>{0}</pre>".f(response.error), "Error"
                     return
                 EzBob.ShowMessage "File(s) successfully sended ", "Successful"
+                @checkedModel.reset()
+                @render()
             xhr.fail ()->
                 EzBob.ShowMessage "Something went wrong", "Error occured"
             xhr.always ->
                 BlockUi "off"
-                
         EzBob.ShowMessage "Are you sure you want to send selected files?", "Confirmation", sendFn, "Send", null, "Cancel"
     
     fileViewChanged: (e)->
@@ -94,10 +95,10 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         return if _.keys($(e.target).data()).length > 0
         $el = $(e.currentTarget)
         checked = $el.hasClass("checked")
-        filePath = $el.data "file-path"
+        id= $el.data "id"
         $el.toggleClass "checked", !checked
-        if not checked then @checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({ path: filePath })) else
-            @checkedModel.remove(@checkedModel.getModelByPath(filePath))
+        if not checked then @checkedModel.add(new EzBob.Underwriter.CAIS.SelectedFile({ id: id})) else
+            @checkedModel.remove(@checkedModel.getModelById(id))
 
     generateClicked: (e)->
         $el = $(e.currentTarget)
@@ -115,16 +116,16 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     fileSelected: (e)->
         self = @
         $el = $(e.currentTarget)
-        filePath = $el.data "path"
+        id = $el.data "id"
         BlockUi "on"
-        ($.get "#{gRootPath}Underwriter/CAIS/GetOneFile", {path: filePath})
+        ($.get "#{gRootPath}Underwriter/CAIS/GetOneFile", {id: id})
         .done (response) => 
             if response.error
                 EzBob.ShowMessage response.error, "Error"
                 return
             dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>#{response}</textarea>" )    
             dialog.dialog
-                title: filePath
+                title: id
                 width: '75%'
                 height: 600
                 modal: true
@@ -135,7 +136,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                         text: "Save file changes"
                         click: (e)-> self.saveFileChange(e)
                         class:'btn btn-primary save-change disabled',
-                        'data-file-path': filePath 
+                        'data-id': id 
                     }
                     {
                         text: "Close"
@@ -152,15 +153,15 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         return if $el.hasClass "disabled"
         $caisTextarea = ($ "textarea:visible")
         caisContent = $caisTextarea.val()
-        filePath = $el.data "file-path"
+        id = $el.data "id"
         saveFn = ->
             BlockUi "on"
-            xhr = $.post "#{gRootPath}CAIS/SaveFileChange", { fileContent: caisContent, fullFileName: filePath }
+            xhr = $.post "#{gRootPath}CAIS/SaveFileChange", { fileContent: caisContent, id: id}
             xhr.done (response)->
                 if response.error 
                     EzBob.ShowMessage response.error, "Something went wrong"
                     return false
-                EzBob.ShowMessage "File #{filePath} successfully saved ", "Successful"
+                EzBob.ShowMessage "File ##{id} successfully saved ", "Successful"
                 self.resetFileView()
             xhr.fail ->
                 EzBob.ShowMessage "Error occured", "Something went wrong"

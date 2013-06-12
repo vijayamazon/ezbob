@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Underwriter.Models
