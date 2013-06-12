@@ -41,13 +41,6 @@
       return _ref1;
     }
 
-    FreeAgentAccountInfoView.prototype.template = '#FreeAgentAccoutInfoTemplate';
-
-    FreeAgentAccountInfoView.prototype.events = {
-      'click #freeagentContinueBtn': 'continueClicked',
-      "click a.back": "back"
-    };
-
     FreeAgentAccountInfoView.prototype.initialize = function(options) {
       var that;
 
@@ -59,35 +52,14 @@
           EzBob.App.trigger('info', 'Congratulations. Free Agent account was added successfully.');
         }
         that.trigger('completed');
-        that.trigger('ready');
-        return that.trigger('back');
+        return that.trigger('ready');
       };
       return false;
     };
 
-    FreeAgentAccountInfoView.prototype.continueClicked = function(e) {
-      if (this.$el.find('#freeagentContinueBtn').hasClass('disabled')) {
-        return false;
-      }
-    };
-
-    FreeAgentAccountInfoView.prototype.render = function() {
-      FreeAgentAccountInfoView.__super__.render.call(this);
-      return this;
-    };
-
-    FreeAgentAccountInfoView.prototype.back = function() {
-      this.trigger('back');
-      return false;
-    };
-
-    FreeAgentAccountInfoView.prototype.getDocumentTitle = function() {
-      return "Link FreeAgent Account";
-    };
-
     return FreeAgentAccountInfoView;
 
-  })(Backbone.Marionette.ItemView);
+  })(Backbone.View);
 
   EzBob.FreeAgentAccountModel = (function(_super) {
     __extends(FreeAgentAccountModel, _super);

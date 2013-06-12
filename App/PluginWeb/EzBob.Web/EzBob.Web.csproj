@@ -443,10 +443,13 @@
     <Content Include="Content\css\images\favicon57x57.png" />
     <Content Include="Content\css\images\favicon72x72.png" />
     <Content Include="Content\css\images\footer_bg.png" />
+    <Content Include="Content\css\images\freeagent_off.png" />
+    <Content Include="Content\css\images\freeagent_on.png" />
     <Content Include="Content\css\images\gauge.png" />
     <Content Include="Content\css\images\green_dot.png" />
     <Content Include="Content\css\images\help\help_ebay.jpg" />
     <Content Include="Content\css\images\help\help_ekm.jpg" />
+    <Content Include="Content\css\images\help\help_freeagent.jpg" />
     <Content Include="Content\css\images\help\help_paypal.jpg" />
     <Content Include="Content\css\images\help\help_security.jpg" />
     <Content Include="Content\css\images\help_ebay.jpg" />
@@ -980,7 +983,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\StrategySettings.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\AttachYodlee.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\FreeAgent.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\Shops\FreeAgentAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\FreeAgentMarketPlaces\FreeAgentCallback.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">

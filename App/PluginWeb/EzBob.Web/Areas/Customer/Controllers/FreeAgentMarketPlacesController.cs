@@ -23,7 +23,7 @@
 
     public class FreeAgentMarketPlacesController : Controller
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
+        private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
@@ -111,7 +111,8 @@
 			}
 			catch (Exception e)
 			{
-				errorMessage = string.Format("Failure getting access token. Exception:{0}", e);
+				errorMessage = "Failure getting access token";
+				log.WarnFormat("{0}. Exception:{1}", errorMessage, e);
 			}
 
 			if (accessTokenContainer == null)

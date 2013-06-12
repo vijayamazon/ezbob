@@ -397,13 +397,13 @@ div.shop-connected {
     }
 
     .source_labels.FreeAgent, .source_labels.freeagent {
-        background-position: -558px -2px;
-        width: 150px;
+        background: url(images/freeagent_off.png) no-repeat 0 0;
+        width: 161px;
     }
 
     .source_labels_on.FreeAgent, .source_labels_on.freeagent {
-        background-position: -558px -42px;
-        width: 150px;
+        background: url(images/freeagent_on.png) no-repeat 0 0;
+        width: 161px;
     }
 
     .source_labels.Volusion, .source_labels.volusion {
@@ -573,11 +573,11 @@ select.SubBank::-webkit-scrollbar {
 
     .BankContainer span.DAG.off {
         background: url(images/yodlee/dag_off.png) no-repeat 0 0;
-         width: 80px;
+        width: 80px;
     }
     .BankContainer span.DAG.on {
         background: url(images/yodlee/dag_on.png) no-repeat 0 0;
-         width: 80px;
+        width: 80px;
     }
 
     .BankContainer span.Halifax.off {
@@ -1090,7 +1090,7 @@ input[type="color"],
 }
 
 .help_FreeAgent {
-    background: url(images/help/help_ekm.jpg) no-repeat center center;
+    background: url(images/help/help_freeagent.jpg) no-repeat center center;
 }
 
 .help_eBay {
