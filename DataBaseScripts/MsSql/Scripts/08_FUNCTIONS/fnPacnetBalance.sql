@@ -22,7 +22,7 @@ begin
     
 	select @reservedAmount = sum(c.CreditSum)  from Customer c where c.CreditSum > 0 and c.CreditResult = 'Approved' and c.Status = 'Approved' and c.ValidFor >= GETUTCDATE() and c.ApplyForLoan <= GETUTCDATE()
 
-	select top(1) @pacNet = pb.Amount, @lastUpdate = pb.Date from PacNetBalance pb order by pb.Date desc
+	select top(1) @pacNet = pb.CurrentBalance, @lastUpdate = pb.Date from PacNetBalance pb order by pb.Date desc
 
 	select @loans = ISNULL(sum(l.LoanAmount - l.SetupFee), 0) from Loan l where l.Date > @lastUpdate
 
