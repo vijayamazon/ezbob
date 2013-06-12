@@ -857,20 +857,28 @@ namespace EZBob.DatabaseLib
 						url = dataItem.url,
 						username = dataItem.user,
 						category = dataItem.category,
+						currency = dataItem.currency,
 						dated_on = dataItem.dated_on,
 						gross_value = dataItem.gross_value,
+						native_gross_value = dataItem.native_gross_value,
 						sales_tax_rate = dataItem.sales_tax_rate,
+						sales_tax_value = dataItem.sales_tax_value,
+						native_sales_tax_value = dataItem.native_sales_tax_value,
 						description = dataItem.description,
 						manual_sales_tax_amount = dataItem.manual_sales_tax_amount,
 						updated_at = dataItem.updated_at,
 						created_at = dataItem.created_at,
-						attachment_url = dataItem.attachment.url,
-						attachment_content_src = dataItem.attachment.content_src,
-						attachment_content_type = dataItem.attachment.content_type,
-						attachment_file_name = dataItem.attachment.file_name,
-						attachment_file_size = dataItem.attachment.file_size,
-						attachment_description = dataItem.attachment.description
+						
 					};
+					if (dataItem.attachment != null)
+					{
+						expense.attachment_url = dataItem.attachment.url;
+						expense.attachment_content_src = dataItem.attachment.content_src;
+						expense.attachment_content_type = dataItem.attachment.content_type;
+						expense.attachment_file_name = dataItem.attachment.file_name;
+						expense.attachment_file_size = dataItem.attachment.file_size;
+						expense.attachment_description = dataItem.attachment.description;
+					}
 
 					mpRequest.Expenses.Add(expense);
 				});
@@ -2248,13 +2256,17 @@ namespace EZBob.DatabaseLib
 				user = o.username,
 				category = o.category,
 				dated_on = o.dated_on,
+				currency = o.currency,
 				gross_value = o.gross_value,
+				native_gross_value = o.native_gross_value,
 				sales_tax_rate = o.sales_tax_rate,
+				sales_tax_value = o.sales_tax_value,
+				native_sales_tax_value = o.native_sales_tax_value,
 				description = o.description,
 				manual_sales_tax_amount = o.manual_sales_tax_amount,
 				updated_at = o.updated_at,
 				created_at = o.created_at,
-				attachment = new FreeAgentExpenseAttachment()
+				attachment = new FreeAgentExpenseAttachment
 				{
 					url = o.attachment_url,
 					content_src = o.attachment_content_src,

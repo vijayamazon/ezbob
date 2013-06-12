@@ -15,8 +15,12 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 			Map(x => x.username).Length(250);
 			Map(x => x.category).Length(250);
 			Map(x => x.dated_on).CustomType<UtcDateTimeType>();
+			Map(x => x.currency).Length(10);
 			Map(x => x.gross_value);
+			Map(x => x.native_gross_value);
 			Map(x => x.sales_tax_rate);
+			Map(x => x.sales_tax_value);
+			Map(x => x.native_sales_tax_value);
 			Map(x => x.description).Length(250);
 			Map(x => x.manual_sales_tax_amount);
 			Map(x => x.updated_at).CustomType<UtcDateTimeType>();

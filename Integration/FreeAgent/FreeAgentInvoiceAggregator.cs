@@ -25,25 +25,25 @@ namespace FreeAgent
         {
         }
 
-		private int GetInvoicesCount(IEnumerable<FreeAgentInvoice> invoice)
+		private int GetInvoicesCount(IEnumerable<FreeAgentInvoice> invoices)
 		{
-			return invoice.Count();
+			return invoices.Count();
         }
 
-		private double GetTotalSumOfInvoices(IEnumerable<FreeAgentInvoice> invoice)
+		private double GetTotalSumOfInvoices(IEnumerable<FreeAgentInvoice> invoices)
 		{
-			return (double)invoice.Sum(o => o.net_value);
+			return invoices.Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
         }
 
-		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentInvoice> orders)
+		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentInvoice> invoices)
         {
             switch (functionType)
             {
                 case FreeAgentDatabaseFunctionType.NumOfOrders:
-					return GetInvoicesCount(orders);
+					return GetInvoicesCount(invoices);
 
                 case FreeAgentDatabaseFunctionType.TotalSumOfOrders:
-					return GetTotalSumOfInvoices(orders);
+					return GetTotalSumOfInvoices(invoices);
 
                 default:
                     throw new NotImplementedException();

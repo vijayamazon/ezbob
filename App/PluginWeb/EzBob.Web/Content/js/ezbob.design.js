@@ -339,7 +339,14 @@ GBPValues = function (val, showCurrencySign) {
     if (val == undefined) {
         return "-";
     }
+    
+    var isNegative = false;
     val = val.toString();
+    if (val.indexOf('-') == 0) {
+        isNegative = true;
+        val = val.substring(1);
+    }
+
     val = val.replace(',', '.');
     var valSplit = val.split('.');
     val = valSplit[0];
@@ -354,10 +361,16 @@ GBPValues = function (val, showCurrencySign) {
         if (i % 3 == 0 && i != 0) retVal = "," + retVal;
         retVal = val[length - i - 1] + retVal;
     }
-    var result = !showCurrencySign ?
-        (retVal + (valSplit[1] != undefined ? "." + valSplit[1] : "")) :
-        ($("<input />").autoNumeric(EzBob.moneyFormat).autoNumericSet(retVal + (valSplit[1] != undefined ? "." + valSplit[1] : ""))).val();
 
+    var result;
+    if (!showCurrencySign) {
+        result = (isNegative ? '-' : '') + (retVal + (valSplit[1] != undefined ? "." + valSplit[1] : ""))
+    } else {
+        result = ($("<input />").autoNumeric(EzBob.moneyFormat).autoNumericSet(retVal + (valSplit[1] != undefined ? "." + valSplit[1] : ""))).val();
+        if (isNegative) {
+            result = result.replace(' ', ' -');
+        }
+    }
 
     return result;
 };

@@ -42,8 +42,12 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string user { get; set; }
 		public string category { get; set; }
 		public DateTime dated_on { get; set; }
+		public string currency { get; set; }
 		public decimal gross_value { get; set; }
+		public decimal native_gross_value { get; set; }
 		public decimal? sales_tax_rate { get; set; }
+		public decimal sales_tax_value { get; set; }
+		public decimal native_sales_tax_value { get; set; }
 		public string description { get; set; }
 		public decimal? manual_sales_tax_amount { get; set; }
 		public DateTime updated_at { get; set; }

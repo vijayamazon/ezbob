@@ -18,7 +18,7 @@ namespace FreeAgent
 
 	internal class FreeAgentExpenseAggregator : DataAggregatorBase<ReceivedDataListTimeDependentInfo<FreeAgentExpense>, FreeAgentExpense, FreeAgentDatabaseFunctionType>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentExpenseAggregator));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(FreeAgentExpenseAggregator));
 
 		public FreeAgentExpenseAggregator(ReceivedDataListTimeDependentInfo<FreeAgentExpense> orders, ICurrencyConvertor currencyConvertor)
             : base(orders, currencyConvertor)
@@ -32,7 +32,7 @@ namespace FreeAgent
 
 		private double GetTotalSumOfExpenses(IEnumerable<FreeAgentExpense> expenses)
 		{
-			return (double)expenses.Sum(o => o.gross_value);
+			return expenses.Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value);
         }
 
 		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentExpense> expenses)
