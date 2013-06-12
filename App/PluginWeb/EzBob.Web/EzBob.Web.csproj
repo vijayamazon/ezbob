@@ -242,6 +242,7 @@
     <Compile Include="Areas\Underwriter\Models\ApplicationInfoModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\CustomersModel.cs" />
     <Compile Include="Areas\Underwriter\Models\DiscountPlanModel.cs" />
     <Compile Include="Areas\Underwriter\Models\IdHubCustomAddressModel.cs" />
     <Compile Include="Areas\Underwriter\Models\LoanOptionsViewModel.cs" />

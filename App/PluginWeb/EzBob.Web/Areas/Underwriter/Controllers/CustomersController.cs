@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
@@ -486,6 +487,34 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             if (!customer.IsSuccessfullyRegistered) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
             //if (customer.CreditResult == null) return this.JsonNet(new { State = CustomerState.EmptyCreditResultResult.ToString() });
             return this.JsonNet(new { State = CustomerState.Ok.ToString() });
+        }
+
+        [HttpGet]
+        [Ajax]
+        public JsonNetResult GetCounters()
+        {
+            var model = new List<CustomersCountersModel>
+                {
+                    new CustomersCountersModel
+                        {
+                            Count =
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.WaitingForDecision),
+                            Name = "waiting"
+                        },
+                    new CustomersCountersModel
+                        {
+                            Count =
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.ApprovedPending),
+                            Name = "pending"
+                        },
+                    new CustomersCountersModel
+                        {
+                            Count =
+                                _customers.GetAll().Count(x => x.CreditResult == null && x.IsSuccessfullyRegistered),
+                            Name = "RegisteredCustomers"
+                        }
+                };
+            return this.JsonNet(model);
         }
     }
 }

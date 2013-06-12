@@ -40,7 +40,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
             console.log status
         loadComplete: (data)->
             BlockUi "off", $(list)
-            $(settings.el + "-count").text(data.records);
         gridComplete: ->
             ( settings.$el.find "[data-toggle='tooltip']" ).tooltip()
             BlockUi "off", $(list)

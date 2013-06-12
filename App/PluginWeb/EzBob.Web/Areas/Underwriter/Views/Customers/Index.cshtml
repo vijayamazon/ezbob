@@ -16,7 +16,7 @@
             <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
             <li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
             <li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
-            <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered</a></li>
+            <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered(<span id="RegisteredCustomers-count"></span>)</a></li>
         </ul>
         <div class="tab-content customer-grids">
             <div class="tab-pane active" id="waiting"></div>
@@ -71,6 +71,17 @@
                 ]
             };
 
+            //count updater
+            var timer;
+            function updateCounters() {
+                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters");
+                xhr.done(function(response) {
+                    _.each(response, function(val) {
+                        $("#"+val.Name+"-count").text(val.Count);
+                    });
+                });
+            }
+            
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
@@ -86,9 +97,10 @@
                     "customers/:type": "customers",
                     "profile/:id": "profile",
                     "profile/:id/:type": "profilePopup",
-                    "settings": "settings"                    
+                    "settings": "settings"
                 },
                 customers: function(type) {
+                    timer = timer || setInterval(updateCounters, 2000);
                     if (!this.isCustomersRendered) {
                         this.isCustomersRendered = true;
                         customersView.render();
@@ -101,6 +113,8 @@
                     strategySettingsView.hide();
                 },
                 profile: function(id, type) {
+                    clearInterval(timer);
+                    timer = null;
                     this.switchMenuTo("liApplications");
                     if (!this.isProfileRendered) {
                         this.isProfileRendered = true;
@@ -132,38 +146,38 @@
                     $(".container-fluid > ul.nav > li[id]").removeClass("active");
                     $("#" + name).addClass("active");
                 }
+            });
+
+            profileView.router = new underwriterRouter();
+            Backbone.history.start();
+            profileView.on("customerNotFull", function(customerId) {
+                profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
+                profileView.router.navigate("#profile/" + customerId + "/RegisteredCustomers", { trigger: true, replace: true });
+            });
+
+            if (window.location.hash != "") {
+                $('a[href="' + window.location.hash + '"]').tab('show');
+            }
+
+            var a = new EzBob.Underwriter.goToCustomerId();
+            a.on("ok", function(id) {
+                profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
+            });
+
+            $("#liClient > a").on("click", function() {
+                a.render();
+                return false;
+            });
+
         });
 
-        profileView.router = new underwriterRouter();
-        Backbone.history.start();
-        profileView.on("customerNotFull", function(customerId) {
-            profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
-            profileView.router.navigate("#profile/" + customerId + "/RegisteredCustomers", { trigger: true, replace: true });
-        });
-
-        if (window.location.hash != "") {
-            $('a[href="' + window.location.hash + '"]').tab('show');
+        @if (Model.Escalated != null)
+        {
+            <text>  var escalatedFlag = 1;  </text>
         }
-
-        var a = new EzBob.Underwriter.goToCustomerId();
-        a.on("ok", function(id) {
-            profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
-        });
-
-        $("#liClient > a").on("click", function() {
-            a.render();
-            return false;
-        });
-
-        });
-
-            @if (Model.Escalated != null)
-            {
-                <text>  var escalatedFlag = 1;  </text>
-            }
-            else
-            {
-                <text>  var escalatedFlag = 0;  </text>
-            }
+        else
+        {
+            <text>  var escalatedFlag = 0;  </text>
+        }
     </script>
 }
