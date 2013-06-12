@@ -203,6 +203,16 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         public virtual CashRequest CashRequest { get; set; }
 
+        /// <summary>
+        /// Неоплаченный interest. Пересчитывается каждый день.
+        /// </summary>
+        public virtual decimal? InterestDue { get; set; }
+
+        /// <summary>
+        /// Дата и время послднего автоматического пересчета кредита.
+        /// </summary>
+        public virtual DateTime? LastRecalculation { get; set; }
+
         public virtual List<LoanScheduleItem> FindLateScheduledItems()
         {
             return Schedule.Where(s => s.Status == LoanScheduleStatus.Late).OrderBy(s => s.Date).ToList();
@@ -455,6 +465,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         IEnumerable<Loan> GetLoansWithoutAgreements();
         IEnumerable<Loan> ByCustomer(int customerId);
         IEnumerable<Loan> LiveLoans();
+        IQueryable<Loan> NotPaid();
     }
 
     public class LoanRepository : NHibernateRepositoryBase<Loan>, ILoanRepository
@@ -483,6 +494,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public IEnumerable<Loan> LiveLoans()
         {
             return GetAll().Where(l => l.Status == LoanStatus.Live);
+        }
+
+        public IQueryable<Loan> NotPaid()
+        {
+            return GetAll().Where(l => l.Status != LoanStatus.PaidOff && l.Status != LoanStatus.WrittenOff);
         }
     }
 
@@ -560,7 +576,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                .Cache.ReadWrite().Region("LongTerm").ReadWrite();
             HasMany(x => x.Charges)
                 .AsBag()
-                .OrderBy("Date")
+                .OrderBy("`Date`")
                 .KeyColumn("LoanId")
                 .Cascade.AllDeleteOrphan()
                 .Inverse();
@@ -571,6 +587,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.LastReportedCaisStatus, "LastReportedCAISStatus");
             Map(x => x.LastReportedCaisStatusDate, "LastReportedCAISStatusDate").CustomType<UtcDateTimeType>();
             Map(x => x.Modified);
+            Map(x => x.InterestDue);
+            Map(x => x.LastRecalculation);
         }
     }
 

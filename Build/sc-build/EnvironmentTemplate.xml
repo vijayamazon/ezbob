@@ -506,18 +506,29 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
     <module id="ScortoFlowSignalFinishStrategy" path="${serviceDeployFolder}Scorto.Flow.Signal.FinishStrategy.dll" />
     <module id="ScortoFlowSignalCreateOlapCube" path="${serviceDeployFolder}Scorto.Flow.Signal.CreateOlapCube.dll" />
     <module id="ExternalNodeExecutionResetSignalHandler" path="${serviceDeployFolder}Scorto.Flow.Signal.ExternalNodeExecutionReset.dll" />
+    
     <module id="scortoSrv_Schedulers">
         <item name="ExternalNodeExecutionResetChecker" value="ExternalNodeExecutionResetChecker" />
         <item name="CurrencyUpdater" value="CurrencyUpdater" />
+        <item name="ScheduledServices" value="ScheduledServices" />
     </module>
+    
     <module id="ExternalNodeExecutionResetChecker" path="${serviceDeployFolder}Scorto.Flow.Signal.ExternalNodeExecutionReset.dll" />
     <!-- Disables expired sessions. Period in ms. -->
+    
     <module id="SessionExpirationScheduler" path="SessionExpiration.dll">
         <property name="Period" value="20000" />
     </module>
+    
     <module id="CurrencyUpdater" path="CustomSchedulers.dll">
         <property name="Period" value="43200000" />
     </module>
+
+    <module id="ScheduledServices" path="ScheduledServices.dll">
+        <!-- run it every hour-->
+        <property name="Period" value="3600000" />
+    </module>
+
     <module id="Engine" path="${serviceDeployFolder}Engine.dll" />
     <module id="TestNodes" path="${serviceDeployFolder}TestNodes.dll" />
     <module id="WaitingNode" path="${serviceDeployFolder}Scorto.Autonodes.WaitingNode.dll" />
