@@ -1,11 +1,14 @@
 ﻿<div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="#freeagenttab1" data-toggle="tab">Orders</a>
+            <a href="#freeagentinvoicestab" data-toggle="tab">Invoices</a>
+        </li>
+        <li>
+            <a href="#freeagentexpensestab" data-toggle="tab">Expenses</a>
         </li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="freeagenttab1">
+        <div class="tab-pane active" id="freeagentinvoicestab">
             <table class="table table-bordered table-striped  blue-header centered">
                 <thead>
                     <tr>
@@ -23,14 +26,14 @@
                 <tbody>
                     <tr>
                         <td>Total sum of orders</td>
-                        <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders12M!=undefined ? GBPValues(ai.TotalSumofOrders12M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders15M!=undefined ? GBPValues(ai.TotalSumofOrders15M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true): "-"%></td>
+                        <td><%-ai.TotalSumofOrders1M!=undefined ? ai.TotalSumofOrders1M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders3M!=undefined ? ai.TotalSumofOrders3M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders6M!=undefined ? ai.TotalSumofOrders6M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders12M!=undefined ? ai.TotalSumofOrders12M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders15M!=undefined ? ai.TotalSumofOrders15M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders18M!=undefined ? ai.TotalSumofOrders18M : "-"%></td>
+                        <td><%-ai.TotalSumofOrders24M!=undefined ? ai.TotalSumofOrders24M : "-"%></td>
+                        <td><%-ai.TotalSumofOrdersLifetime!=undefined ? ai.TotalSumofOrdersLifetime : "-"%></td>
                     </tr>
                     <tr>
                         <td>Number of orders</td>
@@ -42,6 +45,47 @@
                         <td><%-ai.NumofOrders18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders18M) :  "-"%></td>
                         <td><%-ai.NumofOrders24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders24M) :  "-"%></td>
                         <td><%-ai.NumofOrdersLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrdersLifetime) : "-"%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="freeagentexpensestab">
+            <table class="table table-bordered table-striped  blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total sum of orders</td>
+                        <td><%-ai.TotalSumofExpenses1M!=undefined ? ai.TotalSumofExpenses1M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses3M!=undefined ? ai.TotalSumofExpenses3M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses6M!=undefined ? ai.TotalSumofExpenses6M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses12M!=undefined ? ai.TotalSumofExpenses12M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses15M!=undefined ? ai.TotalSumofExpenses15M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses18M!=undefined ? ai.TotalSumofExpenses18M : "-"%></td>
+                        <td><%-ai.TotalSumofExpenses24M!=undefined ? ai.TotalSumofExpenses24M : "-"%></td>
+                        <td><%-ai.TotalSumofExpensesLifetime!=undefined ? ai.TotalSumofExpensesLifetime : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Number of orders</td>
+                        <td><%-ai.NumofExpenses1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses1M) : "-"%></td>
+                        <td><%-ai.NumofExpenses3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses3M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses6M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses12M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses15M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses18M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses24M) :  "-"%></td>
+                        <td><%-ai.NumofExpensesLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpensesLifetime) : "-"%></td>
                     </tr>
                 </tbody>
             </table>

@@ -869,7 +869,7 @@ namespace EZBob.DatabaseLib
 						attachment_content_type = dataItem.attachment.content_type,
 						attachment_file_name = dataItem.attachment.file_name,
 						attachment_file_size = dataItem.attachment.file_size,
-						attachment_description = dataItem.attachment.description,
+						attachment_description = dataItem.attachment.description
 					};
 
 					mpRequest.Expenses.Add(expense);
@@ -2212,11 +2212,11 @@ namespace EZBob.DatabaseLib
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var orders = new FreeAgentInvoicesList(submittedDate);
-			
-			orders.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
+			var invoices = new FreeAgentInvoicesList(submittedDate);
+
+			invoices.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
 			{
-				url =  o.url,
+				url = o.url,
 				contact = o.contact,
 				dated_on = o.dated_on,
 				due_on = o.due_on,
@@ -2233,7 +2233,39 @@ namespace EZBob.DatabaseLib
 				paid_on = o.paid_on
 			}).Distinct(new FreeAgentInvoiceComparer()));
 
-			return orders;
+			return invoices;
+		}
+
+		public FreeAgentExpensesList GetAllFreeAgentExpensesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var expenses = new FreeAgentExpensesList(submittedDate);
+
+			expenses.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).Select(o => new FreeAgentExpense
+			{
+				url = o.url,
+				user = o.username,
+				category = o.category,
+				dated_on = o.dated_on,
+				gross_value = o.gross_value,
+				sales_tax_rate = o.sales_tax_rate,
+				description = o.description,
+				manual_sales_tax_amount = o.manual_sales_tax_amount,
+				updated_at = o.updated_at,
+				created_at = o.created_at,
+				attachment = new FreeAgentExpenseAttachment()
+				{
+					url = o.attachment_url,
+					content_src = o.attachment_content_src,
+					content_type = o.attachment_content_type,
+					file_name = o.attachment_file_name,
+					file_size = o.attachment_file_size,
+					description = o.attachment_description
+				}
+			}).Distinct(new FreeAgentExpenseComparer()));
+
+			return expenses;
 		}
 
 		public VolusionOrdersList GetAllVolusionOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)

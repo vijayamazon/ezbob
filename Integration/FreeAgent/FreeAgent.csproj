@@ -63,13 +63,14 @@
     <Compile Include="Config\FreeAgentConfig.cs" />
     <Compile Include="Config\FreeAgentEnvConnectionConfig.cs" />
     <Compile Include="Config\FreeAgentConfigRoot.cs" />
+    <Compile Include="FreeAgentExpenseAggregator.cs" />
     <Compile Include="FreeAgentUsers.cs" />
     <Compile Include="FreeAgentCompany.cs" />
     <Compile Include="FreeAgentConnector.cs" />
     <Compile Include="FreeAgentDatabaseFunctionFactory.cs" />
     <Compile Include="FreeAgentDatabaseFunctionStorage.cs" />
     <Compile Include="FreeAgentDatabaseMarketPlace.cs" />
-    <Compile Include="FreeAgentOrdersAggregator.cs" />
+    <Compile Include="FreeAgentInvoiceAggregator.cs" />
     <Compile Include="FreeAgentRegistry.cs" />
     <Compile Include="FreeAgentRetrieveDataHelper.cs" />
     <Compile Include="FreeAgentSecurityInfo.cs" />

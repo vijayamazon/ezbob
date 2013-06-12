@@ -74,7 +74,9 @@
 						</td>
 						<td style="text-align: center;">
 							<asp:ImageButton ID="btnShowReport" runat="server" OnClick="btnShowReport_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />&nbsp;
+							<asp:ImageButton ID="BtnGetExcel" runat="server" OnClick="BtnGetExcelClick" ImageUrl="~/images/xls_icon.png" CssClass="center ReportButton" />&nbsp;
 						</td>
+
 						<td id="tdEntries"></td>
 						<td id="tdShowing"></td>
 					</tr>

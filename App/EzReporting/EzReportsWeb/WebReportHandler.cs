@@ -1,10 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Collections.Generic;
 using System.Text;
 using Ezbob.Logger;
 using Html;
 using Reports;
 using Ezbob.Database;
+using Aspose.Cells;
+using Aspose.Words;
 
 namespace EzReportsWeb {
 	public class WebReportHandler : BaseReportHandler {
@@ -47,6 +50,38 @@ namespace EzReportsWeb {
 			} // switch
 		} // GetReportData
 
+        internal Workbook GetWorkBook(System.Web.UI.WebControls.ListItem selectedReport, string fromDate, string toDate, bool isDaily)
+        {
+            InitAspose();            
+
+            Report report = GetReport(selectedReport.Text);
+            if (report == null)
+            {
+                var errBook = new Workbook();
+                errBook.Worksheets.Clear();
+                var se = errBook.Worksheets.Add("Error !!!");
+                se.Cells.Merge(1, 1, 1, 6);
+                se.Cells[1, 1].PutValue("Error: Type reports for this customer cannot be obtained !!!");
+                return errBook;
+            }
+
+            report.IsDaily = isDaily;
+
+            switch (report.Type)
+            {
+                case ReportType.RPT_NEW_CLIENT:
+                            return BuildNewClientXls(report, fromDate, toDate);
+                case ReportType.RPT_PLANNED_PAYTMENT:
+                            return BuildPlainedPaymentXls(report, fromDate, toDate);
+                case ReportType.RPT_DAILY_STATS:
+                            return BuildDailyStatsXls(report, fromDate, toDate);
+                case ReportType.RPT_IN_WIZARD:
+                            return BuildInWizardXls(report, fromDate, toDate);
+                    default:
+                    return BuildXls(report, fromDate, toDate, "");
+            } // switch
+        } // GetWorkBook
+
 		private Report GetReport(string title) {
 			foreach (Report report in reportList)
 				if (report.Title.Equals(title))
@@ -71,6 +106,13 @@ namespace EzReportsWeb {
 
 			return oRpt;
 		} // BuildReport
+
+        private Workbook BuildXls(Report report, string fromDate, string toDate, string period)
+        {
+            var xlsTitle =  period + " " + report.Title + " " + fromDate;
+            if (!report.IsDaily) xlsTitle += " - " + toDate;
+            return XlsReport(report.StoredProcedure, fromDate, toDate, xlsTitle);
+        } // BuildXls
 
 		private List<Report> reportList;
 	} // class WebReportHandler

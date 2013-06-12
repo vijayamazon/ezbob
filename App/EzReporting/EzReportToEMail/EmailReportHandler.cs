@@ -7,6 +7,8 @@ using Html;
 using Reports;
 using Ezbob.Database;
 using Ezbob.Logger;
+using Aspose.Cells;
+
 
 namespace EzReportToEMail {
 	public class EmailReportHandler : BaseReportHandler {
@@ -29,19 +31,43 @@ namespace EzReportToEMail {
 
 				switch (report.Type) {
 				case ReportType.RPT_NEW_CLIENT:
-					SendReport(report.Title, BuildNewClientReport(report, today, tomorrow), report.ToEmail);
+                    SendReport(
+                                report.Title, 
+                                BuildNewClientReport(report, today, tomorrow), 
+                                report.ToEmail, 
+                                "Daily", 
+                                BuildNewClientXls(report, today, tomorrow)
+                                );
 					break;
 
 				case ReportType.RPT_PLANNED_PAYTMENT:
-					SendReport(report.Title, BuildPlainedPaymentReport(report, today, tomorrow), report.ToEmail);
+					SendReport(
+                                report.Title, 
+                                BuildPlainedPaymentReport(report, today, tomorrow), 
+                                report.ToEmail,
+                                "Daily",
+                                BuildPlainedPaymentXls(report, today, tomorrow)
+                                );
 					break;
 
 				case ReportType.RPT_DAILY_STATS:
-					SendReport(report.Title, BuildDailyStatsReportBody(report, today, tomorrow), report.ToEmail);
+					SendReport(
+                                report.Title, 
+                                BuildDailyStatsReportBody(report, today, tomorrow), 
+                                report.ToEmail,
+                                "Daily",
+                                BuildDailyStatsXls(report, today, tomorrow)
+                                );
 					break;
 
 				case ReportType.RPT_IN_WIZARD:
-					SendReport(report.Title, BuildInWizardReport(report, today, tomorrow), report.ToEmail);
+					SendReport(
+                                report.Title, 
+                                BuildInWizardReport(report, today, tomorrow), 
+                                report.ToEmail,
+                                "Daily",
+                                BuildInWizardXls(report, today, tomorrow)
+                                );
 					break;
 
 				default:
@@ -91,7 +117,7 @@ namespace EzReportToEMail {
 				.Add<Class>("logo_ezbob")
 				.Add<Class>("indent_text")
 				.Add<ID>("ezbob_logo")
-				.Add<Title>("Fast business loans for Ebay and Amazon merchants")
+                .Add<Html.Title>("Fast business loans for Ebay and Amazon merchants")
 				.Add<Alt>("Fast business loans for Ebay and Amazon merchants")
 				.Append(oImgLogo);
 
@@ -126,7 +152,12 @@ namespace EzReportToEMail {
 
             body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, false, oRptTitle.ToString())));
 
-			SendReport(report.Title, body, report.ToEmail, period);
+			SendReport(
+                        report.Title, 
+                        body, 
+                        report.ToEmail, 
+                        period,
+                        XlsReport(report.StoredProcedure, fromDate, toDate, oRptTitle.ToString()));
 		} // BuildReport
 
 		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {
