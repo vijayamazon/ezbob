@@ -143,6 +143,7 @@ namespace EzBob.Web.Infrastructure
             For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
             For<IDiscountPlanRepository>().Use <DiscountPlanRepository>();
             For<ICurrencyConvertor>().Use<CurrencyConvertor>();
+            For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
             For<IMail>().Use<Mail>();
         }
     }
