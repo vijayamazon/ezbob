@@ -1274,7 +1274,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode62435929</Name>
       <PointF>
-        <X>230.11882</X>
+        <X>210.11882</X>
         <Y>536</Y>
       </PointF>
       <SuperNodeName />
@@ -5983,8 +5983,8 @@ import time
 localtime1   = time.localtime()
 timeString  = time.strftime("%Y-%m-%d-%H-%M-%S", localtime1)
 
-dir_path = path + timeString
-dir_path2 = path2 + timeString
+dir_path = path +"\\" +  timeString
+dir_path2 = path2+"\\" + timeString
 System.IO.Directory.CreateDirectory(dir_path)
 System.IO.Directory.CreateDirectory(dir_path2)
 localtime = localtime1
@@ -5999,6 +5999,7 @@ from ExperianLib.CaisFile import *
 from EzBob.Models import *
 
 api = StrategyHelper()
+
 
 
 b = CaisFileManager.GetBusinessCaisFileData()
@@ -6028,6 +6029,7 @@ CaisFileManager.RemoveCaisFileData()
       <Script>clr.AddReference("ExperianLib")
 from System import *
 from ExperianLib.CaisFile import *
+from EzBob.Models import *
 
 help = StrategyHelper() 
 a = help.GetCAISFileById(caisId)
