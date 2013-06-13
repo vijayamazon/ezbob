@@ -20,7 +20,7 @@ begin
 	DECLARE @lastUpdate datetime
 	DECLARE @loans decimal(18,4)
     
-	select @reservedAmount = sum(c.CreditSum)  from Customer c where c.CreditSum > 0 and c.CreditResult = 'Approved' and c.Status = 'Approved' and c.ValidFor >= GETUTCDATE() and c.ApplyForLoan <= GETUTCDATE()
+	select @reservedAmount = sum(c.CreditSum)  from Customer c where c.CreditSum > 0 and c.CreditResult = 'Approved' and c.Status = 'Approved' and c.ValidFor >= GETUTCDATE() and c.ApplyForLoan <= GETUTCDATE() and c.IsTest = 0
 
 	select top(1) @pacNet = pb.CurrentBalance, @lastUpdate = pb.Date from PacNetBalance pb order by pb.Date desc
 
