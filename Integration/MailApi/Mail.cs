@@ -2,6 +2,7 @@
 using System.Net;
 using EzBob.Configuration;
 using MailApi.Model;
+using Moq;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Deserializers;
@@ -15,9 +16,9 @@ namespace MailApi
         private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
         private readonly IMandrillConfig _config;
 
-        public Mail()
+        public Mail(IMandrillConfig config = null)
         {
-            _config = ConfigurationRootBob.GetConfiguration().MandrillConfig;
+            _config = config ?? ConfigurationRootBob.GetConfiguration().MandrillConfig;
             _client = new RestClient(_config.BaseSecureUrl);
             _client.AddHandler("application/json", new JsonDeserializer());
         }
@@ -43,7 +44,7 @@ namespace MailApi
             return message;
         }
 
-        private void Send(EmailModel email)
+        private string Send(EmailModel email)
         {
             var request = new RestRequest(_config.SendTemplatePath, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(email);
@@ -55,22 +56,28 @@ namespace MailApi
             {
                 var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
                 Log.Error(new MandrillException(error, string.Format("Post failed {0}", _config.SendTemplatePath)));
-                return;
+                return "InternalServerError";
             }
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 Log.Error(response.ErrorException);
-                return;
+                return "HttpStatusCode not OK";
             }
             var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response.Content);
             if (responseDeserialized[0].status.ToLower() != "sent")
             {
                 Log.Warn(responseDeserialized[0].ToString());
-                return;
+                return "status not 'sent'";
             }
             Log.Info(responseDeserialized[0].ToString());
+            return "OK";
         }
         //----------------------------------------------------------------------------------
+        public string ForUnitTest(string emailTo, Dictionary<string, string> vars)
+        {
+            var message = PrepareEmail(_config.FinishWizardTemplateName, emailTo, vars, "Finish Application");
+            return Send(message);
+        }
 
         public void SendMessageFinishWizard(string emailTo, string fullName)
         {
