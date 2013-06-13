@@ -4,12 +4,12 @@
   <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Comparison" NodeId="Comparison16159142" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
@@ -70,8 +70,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>StopNode49532829</Name>
       <PointF>
-        <X>131.46965</X>
-        <Y>556</Y>
+        <X>91.46965</X>
+        <Y>536</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeStop</TypeName>
@@ -338,7 +338,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>CreditProduct27789888</Name>
       <PointF>
         <X>338.4528</X>
-        <Y>136</Y>
+        <Y>236</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeCreditProduct</TypeName>
@@ -1002,8 +1002,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB57354364</Name>
       <PointF>
-        <X>320.0998</X>
-        <Y>256</Y>
+        <X>320.099762</X>
+        <Y>356</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -1019,8 +1019,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB23018869</Name>
       <PointF>
-        <X>192.574875</X>
-        <Y>356</Y>
+        <X>312.5749</X>
+        <Y>536</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -1072,8 +1072,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode14931696</Name>
       <PointF>
-        <X>232.67009</X>
-        <Y>256</Y>
+        <X>352.670074</X>
+        <Y>456</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -1209,6 +1209,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       &lt;ConstraintString /&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString /&gt;
       &lt;Direction&gt;Input&lt;/Direction&gt;
       &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
@@ -1273,7 +1275,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>ScriptNode62435929</Name>
       <PointF>
         <X>230.11882</X>
-        <Y>476</Y>
+        <Y>536</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeScript</TypeName>
@@ -5994,24 +5996,31 @@ localtime = localtime1
       <Script>clr.AddReference("ExperianLib")
 from System import *
 from ExperianLib.CaisFile import *
+from EzBob.Models import *
+
+api = StrategyHelper()
 
 
 b = CaisFileManager.GetBusinessCaisFileData()
 b.WriteToFile(dir_path+"\\PIF1160a.txt")
 b.WriteToFile(dir_path2+"\\PIF1160a.txt")
+with open(dir_path+"\\PIF1160a.txt", 'r') as content_file:
+    content = content_file.read()
+api.SaveCAISFile(content, "PIF1160a.txt", dir_path, 2, BusinessCounter, BusinessGoodCounter, BusinessDefaultsCounter)
 CaisFileManager.RemoveBusinessCaisFileData()
 
 c = CaisFileManager.GetCaisFileData()
 c.WriteToFile(dir_path+"\\PIF1160B.txt")
 c.WriteToFile(dir_path2+"\\PIF1160B.txt")
+with open(dir_path+"\\PIF1160B.txt", 'r') as content_file:
+    content = content_file.read()
+api.SaveCAISFile(content, "PIF1160B.txt", dir_path, 1, ConsumerCounter, ConsumerGoodCounter, ConsumerDefaultsCounter)
 CaisFileManager.RemoveCaisFileData()
 
 
-SaveCAISFile(b, "PIF1160a.txt", dir_path, 2, BusinessCounter, BusinessGoodCounter, BusinessDefaultsCounter)
-SaveCAISFile(b, "PIF1160a.txt", dir_path2, 2, BusinessCounter, BusinessGoodCounter, BusinessDefaultsCounter)
 
-SaveCAISFile(c, "PIF1160B.txt", dir_path, 1, ConsumerCounter, ConsumerGoodCounter, ConsumerDefaultsCounter)
-SaveCAISFile(c, "PIF1160B.txt", dir_path2, 1, ConsumerCounter, ConsumerGoodCounter, ConsumerDefaultsCounter)</Script>
+
+</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
@@ -6025,7 +6034,7 @@ a = help.GetCAISFileById(caisId)
 
 
 
-a.WriteToFile(DB_DirName+DB_FileName)
+a.WriteToFile(DB_DirName+"\\" +DB_FileName)
 
 
 
