@@ -485,7 +485,7 @@ namespace ZohoCRM
 
         private void CheckZohoId(Loan loan)
         {
-            if (_crm.GetRecordById<ZohoSalesOrder>(loan.ZohoId) == null)
+            if (loan.ZohoId != null && _crm.GetRecordById<ZohoSalesOrder>(loan.ZohoId) == null)
             {
                 var name = string.Format("{0} {1} ({2})", 
                     loan.Customer.PersonalInfo.FirstName, 
@@ -551,7 +551,8 @@ namespace ZohoCRM
 
             c.SetValue("Shops", shopsStirng);
             c.SetValue("Number of Stores", shops.Count);
-            c.SetValue("Industry", string.Join(", ", info.TopCategories.ToArray()));
+            var strings = info.TopCategories != null? info.TopCategories.ToArray() : new string[]{};
+            c.SetValue("Industry", string.Join(", ", strings));
         }
     }
 }
