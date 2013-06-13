@@ -211,7 +211,11 @@
 			var aggregateFunctionArray = new[]
                 {
                     FreeAgentDatabaseFunctionType.NumOfOrders,
-                    FreeAgentDatabaseFunctionType.TotalSumOfOrders
+                    FreeAgentDatabaseFunctionType.TotalSumOfOrders,
+                    FreeAgentDatabaseFunctionType.SumOfPaidInvoices,
+                    FreeAgentDatabaseFunctionType.SumOfOverdueInvoices,
+                    FreeAgentDatabaseFunctionType.SumOfOpenInvoices,
+                    FreeAgentDatabaseFunctionType.SumOfDraftInvoices
                 };
 
 			var updated = invoices.SubmittedDate;
