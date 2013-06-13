@@ -5,12 +5,6 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
--- =============================================
--- Author:		Oleg Zemskyi
--- Create date: 2013-01-22
--- Description:	Get MarketPlace status
--- 23.01.2013	OZ1	Optimization
--- =============================================
 create FUNCTION [dbo].[GetMarketPlaceStatus]
 (	
   @marketplaceId INT, @customerid INT
@@ -18,36 +12,17 @@ create FUNCTION [dbo].[GetMarketPlaceStatus]
 RETURNS NVARCHAR(16)
 AS BEGIN
 	DECLARE @status NVARCHAR(64)
-	DECLARE @mt TABLE (
-	MarketPlaceId INT,
-	CustomerId INT,
-	STATUS nvarchar (64),
-	DisplayName NVARCHAR (64)
-	)
-
-INSERT INTO @mt
-SELECT MarketPlaceId, CustomerId, 
-			   case when updateError is not null or updateError = ''  then 'Error'  
-               when UpdatingStart is not null and UpdatingEnd is null then  'Updating' 
-               when UpdatingStart is not null and UpdatingEnd is not null then  'Completed'  
-			   END
-			   'Status', DisplayName 
-FROM [dbo].[MP_CustomerMarketPlace] where id IN 
+SELECT @status =
 (
-	SELECT id  FROM MP_CustomerMarketPlace WHERE marketplaceId = @marketplaceId and customerid = @customerid
-
+	SELECT ISNULL(
+		(select 
+			CASE
+				WHEN( SELECT COUNT(*) from [MP_CustomerMarketPlace] mp where (mp.updateError is not null or mp.updateError = '') and mp.CustomerId = @customerId and marketplaceId = @marketplaceId) > 0 then 'Error'
+				WHEN( SELECT COUNT(*) from [MP_CustomerMarketPlace] mp where (UpdatingStart is not null and UpdatingEnd is null) and mp.CustomerId = @customerId and marketplaceId = @marketplaceId) > 0 then 'Updating'
+				WHEN( SELECT COUNT(*) from [MP_CustomerMarketPlace] mp where (UpdatingStart is not null and UpdatingEnd is not null) and mp.CustomerId = @customerId and marketplaceId = @marketplaceId) > 0 then 'Completed'
+			END), 
+		'N/A')
 )
-
-IF (select COUNT (*) FROM @mt WHERE STATUS='Error')>0 
-set @status='Error'
-ELSE
-	IF (select COUNT (*) FROM @mt WHERE STATUS='Updating')>0
-	SET @status= 'Updating'
-	ELSE
-		IF (select COUNT (*) FROM @mt WHERE STATUS='Completed')>0
-		SET @status= 'Completed'
-		ELSE 
-			SET @status ='N/A'
 RETURN @status
 end
 GO
