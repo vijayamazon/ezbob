@@ -71,7 +71,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [HttpGet]
         [NoCache]
         [Transactional]
-        public ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string expiry)
+        public ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry)
         {
             if (test_status == "true")
             {
@@ -79,12 +79,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 expiry = string.Format("{0}{1}", "01", DateTime.Now.AddYears(2).Year.ToString().Substring(2, 2));
             }
 
-            var customer = _context.Customer;
+            var customerContext = _context.Customer;
 
             if (!_payPointFacade.CheckHash(hash, Request.Url))
             {
-                Log.ErrorFormat("Paypoint callback is not authenticated for user {0}", customer.Id);
-                _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint callback is not authenticated for user {0}", customer.Id));
+                Log.ErrorFormat("Paypoint callback is not authenticated for user {0}", customerContext.Id);
+                _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint callback is not authenticated for user {0}", customerContext.Id));
                 return View("Error");
             }
 
@@ -107,36 +107,38 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 return View(TempData.Get<PaymentConfirmationModel>());
             }
 
-            var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customer);
+            var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customerContext);
 
-            _appCreator.PayEarly(_context.User, DateTime.Now, amount, customer.PersonalInfo.FirstName);
+            _appCreator.PayEarly(_context.User, DateTime.Now, amount, customerContext.PersonalInfo.FirstName);
             _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
             var refNumber = "";
 
             if(loanId > 0)
             {
-                var loan = customer.GetLoan(loanId);
+                var loan = customerContext.GetLoan(loanId);
                 if(loan != null)
                 {
                     refNumber = loan.RefNumber;
                 }
             }
+            
+            if (string.IsNullOrEmpty(customer)) customer = customerContext.PersonalInfo.Fullname;
 
-            customer.TryAddPayPointCard(trans_id, card_no, expiry, customer.PersonalInfo.Fullname);
+            customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer);
 
             var confirmation = new PaymentConfirmationModel
                 {
                     amount = amount.ToString(CultureInfo.InvariantCulture),
                     saved = res.Saved,
                     savedPounds = res.SavedPounds,
-                    card_no = customer.CreditCardNo,
-                    email = customer.Name,
-                    surname = customer.PersonalInfo.Surname,
-                    name = customer.PersonalInfo.FirstName,
+                    card_no = customerContext.CreditCardNo,
+                    email = customerContext.Name,
+                    surname = customerContext.PersonalInfo.Surname,
+                    name = customerContext.PersonalInfo.FirstName,
                     refnum = refNumber,
                     transRefnums = res.TransactionRefNumbersFormatted,
-                    hasLateLoans = customer.HasLateLoans,
+                    hasLateLoans = customerContext.HasLateLoans,
                     isRolloverPaid = res.RolloverWasPaid
                 };
 
