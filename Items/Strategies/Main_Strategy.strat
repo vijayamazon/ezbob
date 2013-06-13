@@ -24,7 +24,8 @@
     <NodeElement Name="BWA" NodeId="ScriptNode48461154" />
     <NodeElement Name="BWA Only" NodeId="Comparison3771332" />
     <NodeElement Name="BWA Prev" NodeId="ScriptNode17518665" />
-    <NodeElement Name="Cap Limit" NodeId="ConditionalAssignment30350780" />
+    <NodeElement Name="Condition" NodeId="ConditionalAssignment30350780" />
+    <NodeElement Name="Cap Limit" NodeId="ConditionalAssignment17190527" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment44014924" />
     <NodeElement Name="ConfigurationVariables_MainStrat" NodeId="DataSourceNodeScalar11063471" />
     <NodeElement Name="Counter+1" NodeId="AssignmentB38325791" />
@@ -3530,7 +3531,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison20625205</Name>
       <PointF>
-        <X>1570.90369</X>
+        <X>1530.90369</X>
         <Y>1856</Y>
       </PointF>
       <SuperNodeName />
@@ -4204,14 +4205,14 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Cap Limit</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;LoanOffer_EmailSendingBanned = "True"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;LoanOffer_EmailSendingBanned_new := 1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;LoanOffer_EmailSendingBanned = "False"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;LoanOffer_EmailSendingBanned_new := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;App_HomeOwner = "Home owner" AND MaxCapHomeOwnerNum &amp;lt; ModelLoanOffer&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ModelLoanOffer := MaxCapHomeOwnerNum&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_ReApprovalSum := MaxCapHomeOwnerNum&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;App_HomeOwner &amp;lt;&amp;gt; "Home owner" AND MaxCapNotHomeOwnerNum &amp;lt; ModelLoanOffer&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ModelLoanOffer := MaxCapNotHomeOwnerNum&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_ReApprovalSum := MaxCapNotHomeOwnerNum&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+      <DisplayName>Condition</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;LoanOffer_EmailSendingBanned = "True"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;LoanOffer_EmailSendingBanned_new := 1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;LoanOffer_EmailSendingBanned = "False"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;LoanOffer_EmailSendingBanned_new := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment30350780</Name>
       <PointF>
-        <X>1014.24646</X>
-        <Y>2016</Y>
+        <X>1014.16858</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
@@ -4746,7 +4747,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison12965330</Name>
       <PointF>
-        <X>1456.818</X>
+        <X>1436.818</X>
         <Y>2136</Y>
       </PointF>
       <SuperNodeName />
@@ -4780,8 +4781,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB11807865</Name>
       <PointF>
-        <X>1216.95422</X>
-        <Y>2096</Y>
+        <X>1179.95422</X>
+        <Y>2089</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -5561,8 +5562,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB21191429</Name>
       <PointF>
-        <X>1136</X>
-        <Y>2016</Y>
+        <X>1116</X>
+        <Y>1996</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -5578,8 +5579,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB56883622</Name>
       <PointF>
-        <X>1236</X>
-        <Y>1956</Y>
+        <X>1199</X>
+        <Y>1949</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -5629,7 +5630,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison14297538</Name>
       <PointF>
-        <X>1519.29944</X>
+        <X>1499.29944</X>
         <Y>2016</Y>
       </PointF>
       <SuperNodeName />
@@ -5701,8 +5702,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison34450770</Name>
       <PointF>
-        <X>1260.753</X>
-        <Y>2016</Y>
+        <X>1223.753</X>
+        <Y>2009</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -5752,7 +5753,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison37753964</Name>
       <PointF>
-        <X>1420.13123</X>
+        <X>1400.13123</X>
         <Y>2016</Y>
       </PointF>
       <SuperNodeName />
@@ -6061,6 +6062,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Cap Limit</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;App_HomeOwner = "Home owner" AND MaxCapHomeOwnerNum &amp;lt; ModelLoanOffer&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ModelLoanOffer := MaxCapHomeOwnerNum&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_ReApprovalSum := MaxCapHomeOwnerNum&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;App_HomeOwner &amp;lt;&amp;gt; "Home owner" AND MaxCapNotHomeOwnerNum &amp;lt; ModelLoanOffer&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ModelLoanOffer := MaxCapNotHomeOwnerNum&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_ReApprovalSum := MaxCapNotHomeOwnerNum&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ConditionalAssignment17190527</Name>
+      <PointF>
+        <X>1614.24646</X>
+        <Y>2136</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -18251,7 +18269,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1480</X>
+          <X>1460</X>
           <Y>1880</Y>
         </PointF>
       </IntermediatePoints>
@@ -18446,7 +18464,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison36836846</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison12965330</TargetNodeName>
+      <TargetNodeName>ConditionalAssignment17190527</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18575,6 +18593,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceNodeName>ScriptNode44277779</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>ScriptNode14955490</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ConditionalAssignment17190527</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison12965330</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -22823,6 +22853,14 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar11063471</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ConditionalAssignment17190527</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
