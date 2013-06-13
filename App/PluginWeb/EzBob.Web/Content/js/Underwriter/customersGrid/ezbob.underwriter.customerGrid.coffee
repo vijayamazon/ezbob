@@ -65,6 +65,7 @@ EzBob.Underwriter.customerGrid = (settings) ->
 
     checkbox = $("<input type='checkbox'>Show test customers</input>").on("change", ->
         isTest = checkbox.is(":checked")
+        EzBob.Config.isTest = isTest
         checkboxes = $(".show-test-customers input")
         if isTest
             checkboxes.attr "checked", "checked"
@@ -74,6 +75,7 @@ EzBob.Underwriter.customerGrid = (settings) ->
     )
     checkbox.on "reload", ->
         isTest = checkbox.is(":checked")
+        EzBob.Config.isTest = isTest
         $(list).jqGrid "setGridParam",
             postData:
                 IsTest: isTest

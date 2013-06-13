@@ -73,15 +73,16 @@
 
             //count updater
             var timer;
+
             function updateCounters() {
-                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters");
+                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters", {isTest: EzBob.Config.isTest});
                 xhr.done(function(response) {
                     _.each(response, function(val) {
-                        $("#"+val.Name+"-count").text(val.Count);
+                        $("#" + val.Name + "-count").text(val.Count);
                     });
                 });
             }
-            
+
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
