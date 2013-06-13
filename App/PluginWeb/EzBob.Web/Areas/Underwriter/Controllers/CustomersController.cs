@@ -492,7 +492,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [HttpGet]
         [Ajax]
         public JsonNetResult GetCounters()
-        {
+        {   
             var model = new List<CustomersCountersModel>
                 {
                     new CustomersCountersModel
@@ -512,7 +512,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                             Count =
                                 _customers.GetAll().Count(x => x.CreditResult == null && x.IsSuccessfullyRegistered),
                             Name = "RegisteredCustomers"
-                        }
+                        },
+                    new CustomersCountersModel
+                        {
+                            Count =
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.Escalated),
+                            Name = "escalated"
+                        },
                 };
             return this.JsonNet(model);
         }
