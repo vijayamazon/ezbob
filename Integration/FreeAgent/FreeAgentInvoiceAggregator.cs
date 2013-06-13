@@ -33,7 +33,27 @@ namespace FreeAgent
 		private double GetTotalSumOfInvoices(IEnumerable<FreeAgentInvoice> invoices)
 		{
 			return invoices.Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
-        }
+		}
+
+		private double GetSumOfPaidInvoices(IEnumerable<FreeAgentInvoice> invoices)
+		{
+			return invoices.Where(o => o.status == "Paid").Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
+		}
+
+		private double GetSumOfOverdueInvoices(IEnumerable<FreeAgentInvoice> invoices)
+		{
+			return invoices.Where(o => o.status == "Overdue").Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
+		}
+
+		private double GetSumOfOpenInvoices(IEnumerable<FreeAgentInvoice> invoices)
+		{
+			return invoices.Where(o => o.status == "Open").Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
+		}
+
+		private double GetSumOfDraftInvoices(IEnumerable<FreeAgentInvoice> invoices)
+		{
+			return invoices.Where(o => o.status == "Draft").Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
+		}
 
 		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentInvoice> invoices)
         {
@@ -42,8 +62,20 @@ namespace FreeAgent
                 case FreeAgentDatabaseFunctionType.NumOfOrders:
 					return GetInvoicesCount(invoices);
 
-                case FreeAgentDatabaseFunctionType.TotalSumOfOrders:
+				case FreeAgentDatabaseFunctionType.TotalSumOfOrders:
 					return GetTotalSumOfInvoices(invoices);
+
+				case FreeAgentDatabaseFunctionType.SumOfPaidInvoices:
+					return GetSumOfPaidInvoices(invoices);
+
+				case FreeAgentDatabaseFunctionType.SumOfOverdueInvoices:
+					return GetSumOfOverdueInvoices(invoices);
+
+				case FreeAgentDatabaseFunctionType.SumOfOpenInvoices:
+					return GetSumOfOpenInvoices(invoices);
+
+				case FreeAgentDatabaseFunctionType.SumOfDraftInvoices:
+					return GetSumOfDraftInvoices(invoices);
 
                 default:
                     throw new NotImplementedException();

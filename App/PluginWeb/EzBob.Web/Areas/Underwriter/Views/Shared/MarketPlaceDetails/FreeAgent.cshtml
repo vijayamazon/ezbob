@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Number of orders</td>
+                        <td>Number of invoices</td>
                         <td><%-ai.NumofOrders1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders1M) : "-"%></td>
                         <td><%-ai.NumofOrders3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders3M) :  "-"%></td>
                         <td><%-ai.NumofOrders6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders6M) :  "-"%></td>
@@ -36,7 +36,7 @@
                         <td><%-ai.NumofOrdersLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrdersLifetime) : "-"%></td>
                     </tr>
                     <tr>
-                        <td>Total sum of orders</td>
+                        <td>Total sum of invoices</td>
                         <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true) : "-"%></td>
                         <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true) : "-"%></td>
                         <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true) : "-"%></td>
@@ -45,6 +45,50 @@
                         <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true) : "-"%></td>
                         <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true) : "-"%></td>
                         <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Sum of paid invoices</td>
+                        <td><%-ai.Sumofpaidinvoices1M!=undefined ? GBPValues(ai.Sumofpaidinvoices1M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices3M!=undefined ? GBPValues(ai.Sumofpaidinvoices3M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices6M!=undefined ? GBPValues(ai.Sumofpaidinvoices6M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices12M!=undefined ? GBPValues(ai.Sumofpaidinvoices12M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices15M!=undefined ? GBPValues(ai.Sumofpaidinvoices15M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices18M!=undefined ? GBPValues(ai.Sumofpaidinvoices18M, true) : "-"%></td>
+                        <td><%-ai.Sumofpaidinvoices24M!=undefined ? GBPValues(ai.Sumofpaidinvoices24M, true) : "-"%></td>
+                        <td><%-ai.SumofpaidinvoicesLifetime!=undefined ? GBPValues(ai.SumofpaidinvoicesLifetime, true) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Sum of overdue invoices</td>
+                        <td><%-ai.Sumofoverdueinvoices1M!=undefined ? GBPValues(ai.Sumofoverdueinvoices1M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices3M!=undefined ? GBPValues(ai.Sumofoverdueinvoices3M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices6M!=undefined ? GBPValues(ai.Sumofoverdueinvoices6M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices12M!=undefined ? GBPValues(ai.Sumofoverdueinvoices12M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices15M!=undefined ? GBPValues(ai.Sumofoverdueinvoices15M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices18M!=undefined ? GBPValues(ai.Sumofoverdueinvoices18M, true) : "-"%></td>
+                        <td><%-ai.Sumofoverdueinvoices24M!=undefined ? GBPValues(ai.Sumofoverdueinvoices24M, true) : "-"%></td>
+                        <td><%-ai.SumofoverdueinvoicesLifetime!=undefined ? GBPValues(ai.SumofoverdueinvoicesLifetime, true) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Sum of open invoices</td>
+                        <td><%-ai.Sumofopeninvoices1M!=undefined ? GBPValues(ai.Sumofopeninvoices1M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices3M!=undefined ? GBPValues(ai.Sumofopeninvoices3M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices6M!=undefined ? GBPValues(ai.Sumofopeninvoices6M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices12M!=undefined ? GBPValues(ai.Sumofopeninvoices12M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices15M!=undefined ? GBPValues(ai.Sumofopeninvoices15M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices18M!=undefined ? GBPValues(ai.Sumofopeninvoices18M, true) : "-"%></td>
+                        <td><%-ai.Sumofopeninvoices24M!=undefined ? GBPValues(ai.Sumofopeninvoices24M, true) : "-"%></td>
+                        <td><%-ai.SumofopeninvoicesLifetime!=undefined ? GBPValues(ai.SumofopeninvoicesLifetime, true) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Sum of draft invoices</td>
+                        <td><%-ai.Sumofdraftinvoices1M!=undefined ? GBPValues(ai.Sumofdraftinvoices1M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices3M!=undefined ? GBPValues(ai.Sumofdraftinvoices3M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices6M!=undefined ? GBPValues(ai.Sumofdraftinvoices6M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices12M!=undefined ? GBPValues(ai.Sumofdraftinvoices12M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices15M!=undefined ? GBPValues(ai.Sumofdraftinvoices15M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices18M!=undefined ? GBPValues(ai.Sumofdraftinvoices18M, true) : "-"%></td>
+                        <td><%-ai.Sumofdraftinvoices24M!=undefined ? GBPValues(ai.Sumofdraftinvoices24M, true) : "-"%></td>
+                        <td><%-ai.SumofdraftinvoicesLifetime!=undefined ? GBPValues(ai.SumofdraftinvoicesLifetime, true) : "-"%></td>
                     </tr>
                 </tbody>
             </table>
@@ -66,7 +110,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Number of orders</td>
+                        <td>Number of expenses</td>
                         <td><%-ai.NumofExpenses1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses1M) : "-"%></td>
                         <td><%-ai.NumofExpenses3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses3M) :  "-"%></td>
                         <td><%-ai.NumofExpenses6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses6M) :  "-"%></td>
@@ -77,7 +121,7 @@
                         <td><%-ai.NumofExpensesLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpensesLifetime) : "-"%></td>
                     </tr>
                     <tr>
-                        <td>Total sum of orders</td>
+                        <td>Total sum of expenses</td>
                         <td><%-ai.TotalSumofExpenses1M!=undefined ? GBPValues(ai.TotalSumofExpenses1M, true) : "-"%></td>
                         <td><%-ai.TotalSumofExpenses3M!=undefined ? GBPValues(ai.TotalSumofExpenses3M, true) : "-"%></td>
                         <td><%-ai.TotalSumofExpenses6M!=undefined ? GBPValues(ai.TotalSumofExpenses6M, true) : "-"%></td>

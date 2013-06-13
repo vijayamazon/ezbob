@@ -491,32 +491,32 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         [HttpGet]
         [Ajax]
-        public JsonNetResult GetCounters()
+        public JsonNetResult GetCounters(bool isTest)
         {   
             var model = new List<CustomersCountersModel>
                 {
                     new CustomersCountersModel
                         {
                             Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.WaitingForDecision),
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.WaitingForDecision && (isTest || x.IsTest == false)),
                             Name = "waiting"
                         },
                     new CustomersCountersModel
                         {
                             Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.ApprovedPending),
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.ApprovedPending && (isTest || x.IsTest == false)),
                             Name = "pending"
                         },
                     new CustomersCountersModel
                         {
                             Count =
-                                _customers.GetAll().Count(x => x.CreditResult == null && x.IsSuccessfullyRegistered),
+                                _customers.GetAll().Count(x => x.CreditResult == null && x.IsSuccessfullyRegistered && (isTest || x.IsTest == false)),
                             Name = "RegisteredCustomers"
                         },
                     new CustomersCountersModel
                         {
                             Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.Escalated),
+                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.Escalated && (isTest || x.IsTest == false)),
                             Name = "escalated"
                         },
                 };

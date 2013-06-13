@@ -85,7 +85,7 @@
 
 				conn.ExecuteNonQuery("InsertSiteAnalytics", 
 					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.UkVisitis),
+					new QueryParameter("@CodeName", Consts.UkVisits),
 					new QueryParameter("@Value", uk));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
 					new QueryParameter("@Date", dbDate),
@@ -93,7 +93,7 @@
 					new QueryParameter("@Value", ukUnique));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
 					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.WorldWideVisitis),
+					new QueryParameter("@CodeName", Consts.WorldWideVisits),
 					new QueryParameter("@Value", all - ukraine - israel));
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
 					new QueryParameter("@Date", dbDate),
