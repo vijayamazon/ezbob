@@ -108,10 +108,11 @@ namespace Deveel.Web.Zoho {
 			}
 
 			var response = client.Execute(request);
+            
+            LogRequestResponse(response, request);
+
 			if (response.StatusCode != HttpStatusCode.OK)
 				throw response.ErrorException;
-
-		    LogRequestResponse(response, request);
 			return response.Content;
 		}
 
