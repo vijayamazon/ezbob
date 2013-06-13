@@ -1,6 +1,7 @@
 ﻿namespace FreeAgent
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Web.Script.Serialization;
@@ -72,6 +73,19 @@
 			var expensesList = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
 			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expensesList.Expenses);
 			return freeAgentExpenesList;
+		}
+
+		public static FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl)
+		{
+			var request = new RestRequest(Method.GET) { Resource = categoryUrl };
+			request.AddHeader("Authorization", "Bearer " + accessToken);
+
+			var client = new RestClient();
+
+			IRestResponse response = client.Execute(request);
+			var js = new JavaScriptSerializer();
+			var expenseCategories = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
+			return expenseCategories.admin_expenses_categories;
 		}
 		
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage)

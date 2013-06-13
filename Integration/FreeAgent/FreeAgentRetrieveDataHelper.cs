@@ -18,9 +18,12 @@
     {
 		private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentRetrieveDataHelper));
 
+		readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;
+
 		public FreeAgentRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<FreeAgentDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
+			expenseCategories = Helper.GetExpenseCategories();
         }
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -67,7 +70,10 @@
 				accessToken,
 				Helper.GetFreeAgentExpenseDeltaPeriod(databaseCustomerMarketPlace));
 
-			log.Info("Getting company...");
+			log.Info("Filling expenses category...");
+	        FillExpensesCategory(freeAgentExpenses, accessToken);
+
+	        log.Info("Getting company...");
 			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
 
 			log.Info("Getting users...");
@@ -88,6 +94,24 @@
 			CalculateAndStoreAggregatedInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedExpenseData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
         }
+
+		private void FillExpensesCategory(IEnumerable<FreeAgentExpense> freeAgentExpenses, string accessToken)
+		{
+			foreach (var expense in freeAgentExpenses)
+			{
+				if (expenseCategories.ContainsKey(expense.category))
+				{
+					expense.categoryItem = expenseCategories[expense.category];
+				}
+				else
+				{
+					log.InfoFormat("Getting expenses category:{0}", expense.category);
+					expense.categoryItem = FreeAgentConnector.GetExpenseCategory(accessToken, expense.category);
+					expense.categoryItem.Id = Helper.AddExpenseCategory(expense.categoryItem);
+					expenseCategories.Add(expense.categoryItem.url, expense.categoryItem);
+				}
+			}
+		}
 
 		private void CalculateAndStoreAggregatedExpenseData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 		                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord,

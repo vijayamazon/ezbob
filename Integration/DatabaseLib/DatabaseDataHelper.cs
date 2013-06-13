@@ -76,6 +76,7 @@ namespace EZBob.DatabaseLib
 		private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
+		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -102,6 +103,7 @@ namespace EZBob.DatabaseLib
 			_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
+			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
 		}
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
@@ -879,6 +881,7 @@ namespace EZBob.DatabaseLib
 						expense.attachment_file_size = dataItem.attachment.file_size;
 						expense.attachment_description = dataItem.attachment.description;
 					}
+					expense.Category = _FreeAgentExpenseCategoryRepository.Get(dataItem.categoryItem.Id);
 
 					mpRequest.Expenses.Add(expense);
 				});
@@ -2460,6 +2463,42 @@ namespace EZBob.DatabaseLib
 
 			return orders;
 		} // GetAllPayPointOrdersData
+		
+		public Dictionary<string, FreeAgentExpenseCategory> GetExpenseCategories()
+		{
+			var categoriesMap = new Dictionary<string, FreeAgentExpenseCategory>();
+			foreach (MP_FreeAgentExpenseCategory dbCategory in _FreeAgentExpenseCategoryRepository.GetAll())
+			{
+				var category = new FreeAgentExpenseCategory
+					{
+						Id = dbCategory.Id,
+						url = dbCategory.url,
+						description = dbCategory.description,
+						nominal_code = dbCategory.nominal_code,
+						allowable_for_tax = dbCategory.allowable_for_tax,
+						tax_reporting_name = dbCategory.tax_reporting_name,
+						auto_sales_tax_rate = dbCategory.auto_sales_tax_rate
+					};
+
+				categoriesMap.Add(category.url, category);
+			}
+
+			return categoriesMap;
+		}
+
+		public int AddExpenseCategory(FreeAgentExpenseCategory category)
+		{
+			var dbCategory = new MP_FreeAgentExpenseCategory
+				{
+					url = category.url,
+					description = category.description,
+					nominal_code = category.nominal_code,
+					allowable_for_tax = category.allowable_for_tax,
+					tax_reporting_name = category.tax_reporting_name,
+					auto_sales_tax_rate = category.auto_sales_tax_rate
+				};
+			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
+		}
 	}
 
 	public class eBayFindOrderItemInfoData

@@ -34,6 +34,18 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public int file_size { get; set; }
 		public string description { get; set; }
 	}
+	
+	[Serializable]
+	public class FreeAgentExpenseCategory
+	{
+		public int Id { get; set; }
+		public string url { get; set; }
+		public string description { get; set; }
+		public string nominal_code { get; set; }
+		public bool allowable_for_tax { get; set; }
+		public string tax_reporting_name { get; set; }
+		public string auto_sales_tax_rate { get; set; }
+	}
 
 	[Serializable]
 	public class FreeAgentExpense : TimeDependentRangedDataBase
@@ -54,6 +66,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public DateTime created_at { get; set; }
 
 		public FreeAgentExpenseAttachment attachment { get; set; }
+		public FreeAgentExpenseCategory categoryItem { get; set; }
 
 		public override DateTime RecordTime
 		{
@@ -65,5 +78,11 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	public class ExpensesListHelper
 	{
 		public List<FreeAgentExpense> Expenses { get; set; }
+	}
+
+	[Serializable]
+	public class ExpenseCategoriesListHelper
+	{
+		public FreeAgentExpenseCategory admin_expenses_categories { get; set; }
 	}
 }

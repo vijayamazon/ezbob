@@ -37,13 +37,5 @@
 			: base(session)
         {
         }
-
-		public List<MP_FreeAgentInvoice> GetOrdersItemsByMakretplaceId(int marketplaceId)
-        {
-            return _session
-				.Query<MP_FreeAgentInvoice>()
-                .Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
-                .ToList();
-        }
     }
 }
