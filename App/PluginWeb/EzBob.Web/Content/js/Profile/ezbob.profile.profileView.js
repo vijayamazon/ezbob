@@ -138,7 +138,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
                 marketing = EzBob.dbStrings.MarketingDefault;
                 break;
         }
-        if (isDashboard) {
+        if (isDashboard && marketing) {
             $("#defaultMarketing").hide();
             $("#marketingProggress").show().html(marketing);
         } else {
@@ -314,7 +314,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
                 marketing = EzBob.dbStrings.MarketingDefault;
                 break;
         }
-        if (isDashboard) {
+        if (isDashboard && marketing) {
             $("#defaultMarketing").hide();
             $("#marketingProggress").show().html(marketing);
         } else {

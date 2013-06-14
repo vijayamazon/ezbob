@@ -252,7 +252,7 @@ EzBob.Wizard = Backbone.View.extend({
                 marketing = EzBob.dbStrings.MarketingDefault;
                 break;
         }
-        if (isWizard) {
+        if (isWizard && marketing) {
             this.$el.find("#defaultMarketing").hide();
             this.$el.find("#marketingProggress").show().html(marketing);
         } else {
