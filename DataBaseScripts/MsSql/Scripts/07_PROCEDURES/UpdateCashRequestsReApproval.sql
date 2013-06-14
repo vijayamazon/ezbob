@@ -8,6 +8,7 @@ GO
 CREATE PROCEDURE [dbo].[UpdateCashRequestsReApproval] 
 (@CustomerId int,
 
+ @UnderwriterDecision nvarchar(50),
  @ManagerApprovedSum decimal(18, 0),
  @APR decimal(18, 0),
  @RepaymentPeriod int, 
@@ -30,6 +31,8 @@ set   @OfferValidUntil = DATEADD(DD, @OfferValidDays ,GETUTCDATE())
 
 UPDATE [dbo].[CashRequests]
    SET  
+ UnderwriterDecision = @UnderwriterDecision,
+ UnderwriterDecisionDate = GETUTCDATE(),
  ManagerApprovedSum = @ManagerApprovedSum,
  APR = @APR,
  RepaymentPeriod = @RepaymentPeriod, 
