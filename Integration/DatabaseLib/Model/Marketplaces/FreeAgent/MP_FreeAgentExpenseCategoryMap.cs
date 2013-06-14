@@ -10,6 +10,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 			Table("MP_FreeAgentExpenseCategory");
 			Id(x => x.Id);
 
+			Map(x => x.category_group).Length(250);
 			Map(x => x.url).Length(250);
 			Map(x => x.description).Length(250);
 			Map(x => x.nominal_code).Length(250);

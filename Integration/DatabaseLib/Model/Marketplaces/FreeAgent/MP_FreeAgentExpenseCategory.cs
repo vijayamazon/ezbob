@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 	{
 		public virtual int Id { get; set; }
 
+		public virtual string category_group { get; set; }
 		public virtual string url { get; set; }
 		public virtual string description { get; set; }
 		public virtual string nominal_code { get; set; }

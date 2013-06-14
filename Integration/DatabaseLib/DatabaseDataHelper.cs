@@ -2472,6 +2472,7 @@ namespace EZBob.DatabaseLib
 				var category = new FreeAgentExpenseCategory
 					{
 						Id = dbCategory.Id,
+						category_group = dbCategory.category_group,
 						url = dbCategory.url,
 						description = dbCategory.description,
 						nominal_code = dbCategory.nominal_code,
@@ -2490,6 +2491,7 @@ namespace EZBob.DatabaseLib
 		{
 			var dbCategory = new MP_FreeAgentExpenseCategory
 				{
+					category_group = category.category_group,
 					url = category.url,
 					description = category.description,
 					nominal_code = category.nominal_code,

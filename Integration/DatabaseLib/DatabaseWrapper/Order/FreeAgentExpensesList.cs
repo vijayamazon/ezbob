@@ -40,6 +40,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	{
 		public int Id { get; set; }
 		public string url { get; set; }
+		public string category_group { get; set; }
 		public string description { get; set; }
 		public string nominal_code { get; set; }
 		public bool? allowable_for_tax { get; set; }
@@ -93,16 +94,17 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 			{
 				if (admin_expenses_categories != null)
 				{
+					admin_expenses_categories.category_group = "admin_expenses_categories";
 					return admin_expenses_categories;
 				}
 				if (general_categories != null)
 				{
+					general_categories.category_group = "general_categories";
 					return general_categories;
 				}
+				cost_of_sales_categories.category_group = "cost_of_sales_categories";
 				return cost_of_sales_categories;
 			}
 		}
 	}
-
-	
 }
