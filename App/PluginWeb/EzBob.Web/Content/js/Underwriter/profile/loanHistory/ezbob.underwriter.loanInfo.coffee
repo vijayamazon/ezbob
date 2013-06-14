@@ -11,7 +11,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         @bindTo @personalInfo, "change", @UpdateNewCreditLineState, this
         @bindTo @personalInfo, "change:CreditResult", @changeCreditResult, this
         EzBob.App.vent.on 'newCreditLine:done', @showCreditLineDialog, this
-        EzBob.App.vent.on 'newCreditLine:error', @showErrorDialog
+        EzBob.App.vent.on 'newCreditLine:error', @showErrorDialog, this
+        EzBob.App.vent.on 'newCreditLine:pass', @showNothing, this
 
     events:
         "click [name='startingDateChangeButton']"           : "editStartingDate"
@@ -234,6 +235,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     showErrorDialog: (errorMsg)->
         EzBob.ShowMessage errorMsg, "Something went wrong"
 
+    showNothing: (errorMsg)->
+        @
+
 class ModelUpdater
     constructor: (@model, @property) ->
 
@@ -245,6 +249,9 @@ class ModelUpdater
     check: ->
         if Convert.toBool(@model.get(@property))
             BlockUi 'off'
+            if @model.get('CreditResult') != "WaitingForDecision"
+                EzBob.App.vent.trigger('newCreditLine:pass')
+                return
             if @model.get('StrategyError') != null
                 EzBob.App.vent.trigger('newCreditLine:error', @model.get('StrategyError'))
             else
