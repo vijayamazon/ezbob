@@ -74,10 +74,35 @@ namespace EzBob.CommonLib.TimePeriodLogic.DependencyChain
 			}
 
 			var fromDate = GetLeftBoundary( date, _TimeBoundaryCalculateStrategy);
-			var toDate = fromDate.AddMonths( 1 ).AddSeconds(-1);
+			DateTime toDate = GetToDate(TimePeriodType, date, fromDate);
 			
 			var data = GetThisTimePeriodData();
 			return data.Any( d => d.Include( fromDate, toDate ) );
+		}
+
+		private DateTime GetToDate(TimePeriodEnum timePeriodType, DateTime finalDate, DateTime fromDate)
+		{
+			switch (timePeriodType)
+			{
+				case TimePeriodEnum.Month:
+					return finalDate;
+				case TimePeriodEnum.Month3:
+					return finalDate.AddMonths(-1).AddSeconds(1);
+				case TimePeriodEnum.Month6:
+					return fromDate.AddMonths(3).AddSeconds(-1);
+				case TimePeriodEnum.Year:
+					return fromDate.AddMonths(6).AddSeconds(-1);
+				case TimePeriodEnum.Month15:
+					return fromDate.AddMonths(3).AddSeconds(-1);
+				case TimePeriodEnum.Month18:
+					return fromDate.AddMonths(3).AddSeconds(-1);
+				case TimePeriodEnum.Year2:
+					return fromDate.AddMonths(6).AddSeconds(-1);
+				case TimePeriodEnum.Lifetime:
+					return finalDate;
+				default:
+					return DateTime.UtcNow;
+			}
 		}
 
 		public void SetSourceData(ReceivedDataListTimeDependentBase<T> allData)
