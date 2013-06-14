@@ -85,7 +85,7 @@
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
 			var expenseCategories = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
-			return expenseCategories.admin_expenses_categories;
+			return expenseCategories.Category;
 		}
 		
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage)

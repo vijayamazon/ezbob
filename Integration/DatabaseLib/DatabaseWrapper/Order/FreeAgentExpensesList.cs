@@ -42,7 +42,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string url { get; set; }
 		public string description { get; set; }
 		public string nominal_code { get; set; }
-		public bool allowable_for_tax { get; set; }
+		public bool? allowable_for_tax { get; set; }
 		public string tax_reporting_name { get; set; }
 		public string auto_sales_tax_rate { get; set; }
 	}
@@ -84,5 +84,25 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	public class ExpenseCategoriesListHelper
 	{
 		public FreeAgentExpenseCategory admin_expenses_categories { get; set; }
+		public FreeAgentExpenseCategory general_categories { get; set; }
+		public FreeAgentExpenseCategory cost_of_sales_categories { get; set; }
+
+		public FreeAgentExpenseCategory Category
+		{
+			get
+			{
+				if (admin_expenses_categories != null)
+				{
+					return admin_expenses_categories;
+				}
+				if (general_categories != null)
+				{
+					return general_categories;
+				}
+				return cost_of_sales_categories;
+			}
+		}
 	}
+
+	
 }
