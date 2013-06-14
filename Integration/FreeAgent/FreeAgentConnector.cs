@@ -70,8 +70,52 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var expensesList = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
-			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expensesList.Expenses);
+			var expenses = new Dictionary<string, FreeAgentExpense>();
+			bool finished = false;
+			while (!finished)
+			{
+				var expensesList = (ExpensesListHelper) js.Deserialize(response.Content, typeof (ExpensesListHelper));
+
+				foreach (FreeAgentExpense expense in expensesList.Expenses)
+				{
+					if (!expenses.ContainsKey(expense.url))
+					{
+						expenses.Add(expense.url, expense);
+					}
+				}
+
+				if (expensesList.Expenses.Count > 24)
+				{
+					DateTime latest = expensesList.Expenses[0].dated_on;
+					foreach (FreeAgentExpense expense in expensesList.Expenses)
+					{
+						if (latest < expense.dated_on)
+						{
+							latest = expense.dated_on;
+						}
+					}
+					if (fromDate.HasValue)
+					{
+						if (latest.Year == fromDate.Value.Year && latest.Month == fromDate.Value.Month && latest.Day == fromDate.Value.Day)
+						{
+							latest = latest.AddDays(1);
+						}
+					}
+					fromDate = latest;
+
+					fromDatePart = string.Format(config.ExpensesRequestDatePart, fromDate.Value.Year, fromDate.Value.Month, fromDate.Value.Day);
+					expensesRequest = string.Format("{0}{1}", config.ExpensesRequest, fromDatePart);
+					request = new RestRequest(Method.GET) { Resource = expensesRequest };
+					request.AddHeader("Authorization", "Bearer " + accessToken);
+
+					response = client.Execute(request);
+				}
+				else
+				{
+					finished = true;
+				}
+			}
+			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses.Values);
 			return freeAgentExpenesList;
 		}
 
