@@ -27,69 +27,29 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var invoices = new Dictionary<string, FreeAgentInvoice>();
-			bool finished = false;
-			while (!finished)
+
+			var invoices = new List<FreeAgentInvoice>(((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper))).Invoices);
+			string nextUrl = GetNextUrl(response);
+
+			while (nextUrl != null)
 			{
-				var invoicesList = (InvoicesListHelper) js.Deserialize(response.Content, typeof (InvoicesListHelper));
-
-				foreach (FreeAgentInvoice invoice in invoicesList.Invoices)
+				if (!nextUrl.Contains("nested_invoice_items"))
 				{
-					if (!invoices.ContainsKey(invoice.url))
-					{
-						invoices.Add(invoice.url, invoice);
-					}
+					// This is done to workaround an issue in FreeAgent's API (The pagination removes this parameter)
+					nextUrl = nextUrl.Replace("?", "?nested_invoice_items=true&");
 				}
 
-				if (invoicesList.Invoices.Count > 24)
-				{
-					DateTime latest = invoicesList.Invoices[0].dated_on;
-					foreach (FreeAgentInvoice invoice in invoicesList.Invoices)
-					{
-						if (latest < invoice.dated_on)
-						{
-							latest = invoice.dated_on;
-						}
-					}
+				request = new RestRequest(Method.GET) { Resource = nextUrl };
+				request.AddHeader("Authorization", "Bearer " + accessToken);
+				response = client.Execute(request);
 
-					if (numOfMonths != -1)
-					{
-						int newnumOfMonth = 12 * (DateTime.UtcNow.Year - latest.Year) + DateTime.UtcNow.Month - latest.Month;
-						if (newnumOfMonth == 0)
-						{
-							newnumOfMonth = 1;
-						}
-						if (newnumOfMonth >= numOfMonths)
-						{
-							numOfMonths--;
-						}
-						else
-						{
-							numOfMonths = newnumOfMonth;
-						}
-					}
-					else
-					{
-						numOfMonths = 12 * (DateTime.UtcNow.Year - latest.Year) + DateTime.UtcNow.Month - latest.Month;
-						if (numOfMonths == 0)
-						{
-							numOfMonths = 1;
-						}
-					}
+				var invoicesList = (InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper));
+				invoices.AddRange(invoicesList.Invoices);
 
-					monthPart = string.Format(config.InvoicesRequestMonthPart, numOfMonths);
-					timedInvoicesRequest = string.Format("{0}{1}", config.InvoicesRequest, monthPart);
-					request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
-					request.AddHeader("Authorization", "Bearer " + accessToken);
-
-					response = client.Execute(request);
-				}
-				else
-				{
-					finished = true;
-				}
+				nextUrl = GetNextUrl(response);
 			}
-			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoices.Values);
+
+			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoices);
 			return freeAgentInvoicesList;
         }
 
@@ -131,53 +91,50 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var expenses = new Dictionary<string, FreeAgentExpense>();
-			bool finished = false;
-			while (!finished)
+			var expenses = new List<FreeAgentExpense>(((ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper))).Expenses);
+			string nextUrl = GetNextUrl(response);
+			
+			while (nextUrl != null)
 			{
-				var expensesList = (ExpensesListHelper) js.Deserialize(response.Content, typeof (ExpensesListHelper));
+				request = new RestRequest(Method.GET) {Resource = nextUrl};
+				request.AddHeader("Authorization", "Bearer " + accessToken);
+				response = client.Execute(request);
 
-				foreach (FreeAgentExpense expense in expensesList.Expenses)
-				{
-					if (!expenses.ContainsKey(expense.url))
-					{
-						expenses.Add(expense.url, expense);
-					}
-				}
+				var expensesList = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
+				expenses.AddRange(expensesList.Expenses);
 
-				if (expensesList.Expenses.Count > 24)
+				nextUrl = GetNextUrl(response);
+			}
+
+			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses);
+			return freeAgentExpenesList;
+		}
+
+		private static string GetNextUrl(IRestResponse response)
+		{
+			try
+			{
+				foreach (var header in response.Headers)
 				{
-					DateTime latest = expensesList.Expenses[0].dated_on;
-					foreach (FreeAgentExpense expense in expensesList.Expenses)
+					if (header.Name == "Link")
 					{
-						if (latest < expense.dated_on)
+						var paginationParts = header.Value.ToString().Split(',');
+						foreach (var paginationPart in paginationParts)
 						{
-							latest = expense.dated_on;
+							if (paginationPart.Contains("rel='next'"))
+							{
+								var nextUrlPart = paginationPart.Split(';')[0];
+								return nextUrlPart.Substring(1, nextUrlPart.Length - 2);
+							}
 						}
 					}
-					if (fromDate.HasValue)
-					{
-						if (latest.Year == fromDate.Value.Year && latest.Month == fromDate.Value.Month && latest.Day == fromDate.Value.Day)
-						{
-							latest = latest.AddDays(1);
-						}
-					}
-					fromDate = latest;
-
-					fromDatePart = string.Format(config.ExpensesRequestDatePart, fromDate.Value.Year, fromDate.Value.Month, fromDate.Value.Day);
-					expensesRequest = string.Format("{0}{1}", config.ExpensesRequest, fromDatePart);
-					request = new RestRequest(Method.GET) { Resource = expensesRequest };
-					request.AddHeader("Authorization", "Bearer " + accessToken);
-
-					response = client.Execute(request);
-				}
-				else
-				{
-					finished = true;
 				}
 			}
-			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses.Values);
-			return freeAgentExpenesList;
+			catch (Exception)
+			{
+				return null;
+			}
+			return null;
 		}
 
 		public static FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl)
