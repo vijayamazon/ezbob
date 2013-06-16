@@ -11,8 +11,11 @@
 									{
 										case 'eBay':
 										case 'paypal':
-										case 'FreeAgent':
 											%><a href="#<%- shopClass %>_help" class="source_help"><%
+											break;
+										case 'FreeAgent':
+											%><a href="#<%- shopClass %>_help" class="source_help">
+                                              <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%> new-ribbon"/><%
 											break;
                                         case 'Yodlee':
                                         case 'Play':%>
