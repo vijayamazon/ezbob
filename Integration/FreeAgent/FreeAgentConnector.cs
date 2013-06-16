@@ -27,8 +27,69 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var invoicesList = (InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper));
-			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoicesList.Invoices);
+			var invoices = new Dictionary<string, FreeAgentInvoice>();
+			bool finished = false;
+			while (!finished)
+			{
+				var invoicesList = (InvoicesListHelper) js.Deserialize(response.Content, typeof (InvoicesListHelper));
+
+				foreach (FreeAgentInvoice invoice in invoicesList.Invoices)
+				{
+					if (!invoices.ContainsKey(invoice.url))
+					{
+						invoices.Add(invoice.url, invoice);
+					}
+				}
+
+				if (invoicesList.Invoices.Count > 24)
+				{
+					DateTime latest = invoicesList.Invoices[0].dated_on;
+					foreach (FreeAgentInvoice invoice in invoicesList.Invoices)
+					{
+						if (latest < invoice.dated_on)
+						{
+							latest = invoice.dated_on;
+						}
+					}
+
+					if (numOfMonths != -1)
+					{
+						int newnumOfMonth = 12 * (DateTime.UtcNow.Year - latest.Year) + DateTime.UtcNow.Month - latest.Month;
+						if (newnumOfMonth == 0)
+						{
+							newnumOfMonth = 1;
+						}
+						if (newnumOfMonth >= numOfMonths)
+						{
+							numOfMonths--;
+						}
+						else
+						{
+							numOfMonths = newnumOfMonth;
+						}
+					}
+					else
+					{
+						numOfMonths = 12 * (DateTime.UtcNow.Year - latest.Year) + DateTime.UtcNow.Month - latest.Month;
+						if (numOfMonths == 0)
+						{
+							numOfMonths = 1;
+						}
+					}
+
+					monthPart = string.Format(config.InvoicesRequestMonthPart, numOfMonths);
+					timedInvoicesRequest = string.Format("{0}{1}", config.InvoicesRequest, monthPart);
+					request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
+					request.AddHeader("Authorization", "Bearer " + accessToken);
+
+					response = client.Execute(request);
+				}
+				else
+				{
+					finished = true;
+				}
+			}
+			var freeAgentInvoicesList = new FreeAgentInvoicesList(DateTime.UtcNow, invoices.Values);
 			return freeAgentInvoicesList;
         }
 
