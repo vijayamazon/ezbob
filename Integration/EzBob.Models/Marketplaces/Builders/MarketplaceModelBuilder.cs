@@ -98,5 +98,22 @@ namespace EzBob.Models
         protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
         {
         }
+
+		protected MP_AnalyisisFunctionValue GetEarliestValueFor(MP_CustomerMarketPlace mp, string functionName)
+		{
+			var functionsMatchingName = mp.AnalysysFunctionValues.Where(v => v.AnalyisisFunction.Name == functionName);
+			MP_AnalyisisFunctionValue latest = null;
+			long max = 0;
+			foreach (var mpAnalyisisFunctionValue in functionsMatchingName)
+			{
+				if (mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id > max && mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id < 9)
+				{
+					max = mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id;
+					latest = mpAnalyisisFunctionValue;
+				}
+			}
+
+			return latest;
+		}
     }
 }

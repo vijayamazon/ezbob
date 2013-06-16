@@ -11,8 +11,9 @@ namespace EzBob.Models.Marketplaces
             For<IMarketplaceModelBuilder>().Use<PayPalMarketplaceModelBuilder>().Named(typeof(PayPalMarketPlaceType).ToString());
             For<IMarketplaceModelBuilder>().Use<AmazonMarketplaceModelBuilder>().Named(typeof(AmazonMarketPlaceType).ToString());
             For<IMarketplaceModelBuilder>().Use<EBayMarketplaceModelBuilder>().Named(typeof(eBayMarketPlaceType).ToString());
-            For<IMarketplaceModelBuilder>().Use<PayPointMarketplaceModelBuilder>().Named(typeof(PayPointMarketPlaceType).ToString());
-            For<IMarketplaceModelBuilder>().Use<YodleeMarketplaceModelBuilder>().Named(typeof(YodleeMarketPlaceType).ToString());
+			For<IMarketplaceModelBuilder>().Use<PayPointMarketplaceModelBuilder>().Named(typeof(PayPointMarketPlaceType).ToString());
+			For<IMarketplaceModelBuilder>().Use<YodleeMarketplaceModelBuilder>().Named(typeof(YodleeMarketPlaceType).ToString());
+			For<IMarketplaceModelBuilder>().Use<FreeAgentMarketplaceModelBuilder>().Named(typeof(FreeAgentMarketPlaceType).ToString());
         }
     }
 }

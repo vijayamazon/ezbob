@@ -203,7 +203,8 @@
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
                     <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
-                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetOutPayments) %></td>
+                    <td><%- GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
+                   
                     <td><%- m.UpdatingStatus %></td>
                     <td>
                         <% if(m.Name.toLowerCase() === 'paypal') { %>

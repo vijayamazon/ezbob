@@ -89,6 +89,7 @@
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
+    <Compile Include="Marketplaces\Builders\FreeAgentMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EBayMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\EBayModel.cs" />
     <Compile Include="Marketplaces\MarketPlaceModel.cs" />

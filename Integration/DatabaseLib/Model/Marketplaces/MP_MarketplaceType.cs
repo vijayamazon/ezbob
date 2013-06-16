@@ -85,7 +85,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class FreeAgentMarketPlaceType : MP_MarketplaceType
 	{
-		public override int UWPriority { get { return 6; } }
+		public override bool IsPaymentAccount { get { return true; } }
+		public override int UWPriority { get { return 4; } }
 	}
 
 	public class FreeAgentMarketPlaceTypeMap : SubclassMap<FreeAgentMarketPlaceType>
