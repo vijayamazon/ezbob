@@ -33,7 +33,12 @@ namespace FreeAgent
 		private double GetTotalSumOfExpenses(IEnumerable<FreeAgentExpense> expenses)
 		{
 			return expenses.Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value);
-        }
+		}
+
+		private double GetTotalExpensesByCategoryGroup(IEnumerable<FreeAgentExpense> expenses, string categoryGroupName)
+		{
+			return expenses.Where(o => o.categoryItem.category_group == categoryGroupName).Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value);
+		}
 
 		protected override object InternalCalculateAggregatorValue(FreeAgentDatabaseFunctionType functionType, IEnumerable<FreeAgentExpense> expenses)
         {
@@ -44,6 +49,15 @@ namespace FreeAgent
 
 				case FreeAgentDatabaseFunctionType.TotalSumOfExpenses:
 					return GetTotalSumOfExpenses(expenses);
+
+				case FreeAgentDatabaseFunctionType.SumOfAdminExpensesCategory:
+					return GetTotalExpensesByCategoryGroup(expenses, "admin_expenses_categories");
+
+				case FreeAgentDatabaseFunctionType.SumOfCostOfSalesExpensesCategory:
+					return GetTotalExpensesByCategoryGroup(expenses, "cost_of_sales_categories");
+
+				case FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory:
+		            return GetTotalExpensesByCategoryGroup(expenses, "general_categories");
 
                 default:
                     throw new NotImplementedException();

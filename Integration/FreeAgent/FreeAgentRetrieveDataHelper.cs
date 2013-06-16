@@ -92,7 +92,7 @@
 			StoreUsersData(mpRequest, freeAgentUsers, elapsedTimeInfo);
 
 			CalculateAndStoreAggregatedInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
-			CalculateAndStoreAggregatedExpenseData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+			CalculateAndStoreAggregatedExpenseData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, accessToken);
         }
 
 		private void FillExpensesCategory(IEnumerable<FreeAgentExpense> freeAgentExpenses, string accessToken)
@@ -115,13 +115,17 @@
 
 		private void CalculateAndStoreAggregatedExpenseData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 		                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord,
-		                                                    ElapsedTimeInfo elapsedTimeInfo)
+		                                                    ElapsedTimeInfo elapsedTimeInfo,
+		                                                    string accessToken)
 		{
 			log.Info("Fetching all distinct expenses");
 			var allExpenses = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllFreeAgentExpensesData(DateTime.UtcNow, databaseCustomerMarketPlace));
+			
+			log.Info("Filling expenses category for aggregations...");
+			FillExpensesCategory(allExpenses, accessToken);
 
 			log.InfoFormat("Creating aggregated data for {0} expenses", allExpenses);
 			var expensesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -260,10 +264,13 @@
 		private IEnumerable<IWriteDataInfo<FreeAgentDatabaseFunctionType>> CreateExpensesAggregationInfo(FreeAgentExpensesList expenses, ICurrencyConvertor currencyConverter)
 		{
 			var aggregateFunctionArray = new[]
-                {
-                    FreeAgentDatabaseFunctionType.NumOfExpenses,
-                    FreeAgentDatabaseFunctionType.TotalSumOfExpenses
-                };
+				{
+					FreeAgentDatabaseFunctionType.NumOfExpenses,
+					FreeAgentDatabaseFunctionType.TotalSumOfExpenses,
+					FreeAgentDatabaseFunctionType.SumOfAdminExpensesCategory,
+					FreeAgentDatabaseFunctionType.SumOfCostOfSalesExpensesCategory,
+					FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory
+				};
 
 			var updated = expenses.SubmittedDate;
 			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();

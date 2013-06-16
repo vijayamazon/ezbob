@@ -14,7 +14,10 @@
 		SumOfPaidInvoices,
 		SumOfOverdueInvoices,
 		SumOfOpenInvoices,
-		SumOfDraftInvoices
+		SumOfDraftInvoices,
+		SumOfAdminExpensesCategory,
+		SumOfCostOfSalesExpensesCategory,
+		SumOfGeneralExpensesCategory
     }
 
 	internal class FreeAgentDatabaseFunctionStorage : DatabaseFunctionStorage<FreeAgentDatabaseFunctionType>
@@ -32,6 +35,9 @@
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfOverdueInvoices, DatabaseValueTypeEnum.Double, "{1E68EE0E-B5B9-4A90-BC84-7F968138A475}");
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfOpenInvoices, DatabaseValueTypeEnum.Double, "{C82D1469-9DC5-4E17-8B11-668D96D8455B}");
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfDraftInvoices, DatabaseValueTypeEnum.Double, "{2FDC394F-A138-4ABA-A7A0-CF77412EB2B3}");
+			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfAdminExpensesCategory, DatabaseValueTypeEnum.Double, "{25114086-64E1-4A5B-807E-5519BF4D9ED8}");
+			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfCostOfSalesExpensesCategory, DatabaseValueTypeEnum.Double, "{83BFA5E1-D8D8-48EF-9DEB-25F5968B7097}");
+			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory, DatabaseValueTypeEnum.Double, "{AEE87345-0818-4203-9EB0-42F474A4153F}");
         }
 
 		public static FreeAgentDatabaseFunctionStorage Instance
@@ -84,6 +90,18 @@
 
 				case FreeAgentDatabaseFunctionType.SumOfDraftInvoices:
 					displayName = "Sum of draft invoices";
+					break;
+
+				case FreeAgentDatabaseFunctionType.SumOfAdminExpensesCategory:
+					displayName = "Sum of admin expenses category";
+					break;
+
+				case FreeAgentDatabaseFunctionType.SumOfCostOfSalesExpensesCategory:
+					displayName = "Sum of cost of sales expenses category";
+					break;
+
+				case FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory:
+					displayName = "Sum of general expenses category";
 					break;
 
                 default:
