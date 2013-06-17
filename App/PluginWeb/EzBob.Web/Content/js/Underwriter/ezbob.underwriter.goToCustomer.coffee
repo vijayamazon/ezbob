@@ -11,10 +11,12 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         @on "NotFound", @notFound
 
     template: ->
-        $("<div id='go-to-template'/>").html("
-        <input type='text' class='goto-customerId'/>
-        <br/>
-        <div class='error-place' style='color:red'></div>")
+        el = $("<div id='go-to-template'/>").html("
+            <input type='text' class='goto-customerId' autocomplete='off'/>
+            <br/>
+            <div class='error-place' style='color:red'></div>")
+        $('body').append el
+        return el
 
     ui:
         "input"      : ".goto-customerId"
@@ -28,12 +30,18 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
             , => 
                 @okTrigger()
             , "OK", null, "Cancel")
-        @ui.input.numericOnly()
+        
         @ui.input.on "keydown", (e)=>@keydowned(e)
         @okBtn = $(".ok-button")
+        @ui.input.autocomplete
+            source: "#{gRootPath}Underwriter/Customers/FindCustomer"
+            autoFocus: true
+            minLength: 3
 
     okTrigger: ->
         val = @ui.input.val()
+        unless IsInt(val, true)
+            val = val.substring(0, val.indexOf(','))
         unless IsInt(val, true)
             @addError "Incorrect input"
             return false

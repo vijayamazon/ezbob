@@ -11,6 +11,7 @@ using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Linq;
 using PluginWebApp.Code.jqGrid;
 using Scorto.PluginWeb.Core.jqGrid;
 using Scorto.Web;
@@ -521,6 +522,27 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         },
                 };
             return this.JsonNet(model);
+        }
+        
+        [HttpGet]
+        [Ajax]
+        public JsonNetResult FindCustomer(string term)
+        {
+            int id;
+            int.TryParse(term, out id);
+
+            var findResult =
+                _session.Query<EZBob.DatabaseLib.Model.Database.Customer>()
+                        .Where(x => x.IsSuccessfullyRegistered)
+                        .Where(
+                            c =>
+                            c.Id == id || c.Name.Contains(term) ||
+                            c.PersonalInfo.Fullname.Contains(term))
+                        .Select(x => string.Format("{0}, {1}, {2}", x.Id, x.PersonalInfo.Fullname, x.Name))
+                        .Take(20);
+
+            var retVal = new HashSet<string>(findResult);
+            return this.JsonNet(retVal.Take(5));
         }
     }
 }
