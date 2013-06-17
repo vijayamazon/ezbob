@@ -16,5 +16,10 @@ namespace EZBob.DatabaseLib.Repository
         {
             return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
         }
+
+		public MP_ServiceLog GetFirst()
+		{
+			return GetAll().FirstOrDefault();
+		}
     }
 }

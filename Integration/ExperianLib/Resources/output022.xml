@@ -534,9 +534,12 @@
               <Caption>C</Caption>
             </CreditLimit>
             <Balance>
+              <Amount>3000</Amount>
               <Narrative>S</Narrative>
             </Balance>
-            <CurrentDefBalance />
+            <CurrentDefBalance>
+              <Amount>2000</Amount>
+            </CurrentDefBalance>
             <DelinquentBalance />
             <AccountStatusCodes>U           </AccountStatusCodes>
             <Status1To2>0</Status1To2>
@@ -592,11 +595,15 @@
             </MatchDetails>
             <InformationSource>T</InformationSource>
             <CreditLimit>
-              <Amount>£400     </Amount>
+              <Amount>£400</Amount>
               <Caption>C</Caption>
             </CreditLimit>
-            <Balance />
-            <CurrentDefBalance />
+            <Balance>
+              <Amount>5000</Amount>
+            </Balance>
+            <CurrentDefBalance>
+              <Amount>6000</Amount>
+            </CurrentDefBalance>
             <DelinquentBalance />
             <AccountStatusCodes>00000       </AccountStatusCodes>
             <Status1To2>0</Status1To2>

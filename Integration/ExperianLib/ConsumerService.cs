@@ -16,6 +16,8 @@ using log4net;
 
 namespace ExperianLib
 {
+	using EZBob.DatabaseLib.Repository;
+
 	public class ConsumerService
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
@@ -80,9 +82,10 @@ namespace ExperianLib
 					consumerServiceResult.ExperianResult = "Passed";
 					consumerServiceResult.LastUpdateDate = DateTime.Now;
 					Log.InfoFormat("Get consumer info for test user: {0}", surname);
+					var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
 					if (!checkInCacheOnly)
 					{
-						SaveDefaultAccountIntoDb(outputRoot, customerId);
+						SaveDefaultAccountIntoDb(outputRoot, customerId, sl.GetFirst());
 					}
 					return consumerServiceResult;
 				}
