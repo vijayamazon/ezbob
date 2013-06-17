@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-
-namespace EZBob.DatabaseLib {
-	using System;
+﻿namespace EZBob.DatabaseLib {
+	using System.Collections.Generic;
+	using DatabaseWrapper.Order;
 
 	#region class AOrderComparer
 
-	abstract class AOrderComparer<T> : EqualityComparer<T> where T: class {
+	public abstract class AOrderComparer<T> : EqualityComparer<T> where T : class
+	{
 		public override bool Equals(T a, T b) {
 			if (object.ReferenceEquals(a, b))
 				return true;
@@ -41,31 +40,29 @@ namespace EZBob.DatabaseLib {
 
 	#endregion class EkmOrderComparer
 
-	class FreeAgentInvoiceComparer : AOrderComparer<FreeAgentInvoice>
+	public class FreeAgentInvoiceComparer : AOrderComparer<FreeAgentInvoice>
 	{
 		public override bool AreEqual(FreeAgentInvoice a, FreeAgentInvoice b)
 		{
-			return a.reference == b.reference;
+			return a.url == b.url;
 		} // AreEqual
 
 		public override int HashCode(FreeAgentInvoice a)
 		{
-			return a.reference.GetHashCode();
+			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentInvoiceComparer
 
-	class FreeAgentExpenseComparer : AOrderComparer<FreeAgentExpense>
+	public class FreeAgentExpenseComparer : AOrderComparer<FreeAgentExpense>
 	{
 		public override bool AreEqual(FreeAgentExpense a, FreeAgentExpense b)
 		{
-			return DateTime.Compare(a.dated_on, b.dated_on) == 0 &&
-				DateTime.Compare(a.updated_at, b.updated_at) == 0 &&
-				DateTime.Compare(a.created_at, b.created_at) == 0;
+			return a.url == b.url;
 		} // AreEqual
 
 		public override int HashCode(FreeAgentExpense a)
 		{
-			return a.dated_on.GetHashCode() & a.updated_at.GetHashCode() & a.created_at.GetHashCode();
+			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentExpenseComparer
 

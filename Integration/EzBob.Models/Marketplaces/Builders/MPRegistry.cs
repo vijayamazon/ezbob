@@ -1,9 +1,10 @@
-﻿using EZBob.DatabaseLib.Model.Database;
-using StructureMap.Configuration.DSL;
-
-namespace EzBob.Models.Marketplaces
+﻿namespace EzBob.Models.Marketplaces
 {
-    public class MPRegistry : Registry
+	using Builders;
+	using EZBob.DatabaseLib.Model.Database;
+	using StructureMap.Configuration.DSL;
+
+	public class MPRegistry : Registry
     {
         public MPRegistry()
         {

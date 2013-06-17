@@ -18,7 +18,7 @@
     {
 		private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentRetrieveDataHelper));
 
-		readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;
+		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories;
 
 		public FreeAgentRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<FreeAgentDatabaseFunctionType> marketplace)
             : base(helper, marketplace)

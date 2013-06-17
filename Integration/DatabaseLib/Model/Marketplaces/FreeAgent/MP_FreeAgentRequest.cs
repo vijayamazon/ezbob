@@ -37,5 +37,13 @@
 			: base(session)
         {
         }
+
+		public List<MP_FreeAgentRequest> GetRequestsByMakretplaceId(int marketplaceId)
+		{
+			return _session
+				.Query<MP_FreeAgentRequest>()
+				.Where(oi => oi.CustomerMarketPlace.Id == marketplaceId)
+				.ToList();
+		}
     }
 }

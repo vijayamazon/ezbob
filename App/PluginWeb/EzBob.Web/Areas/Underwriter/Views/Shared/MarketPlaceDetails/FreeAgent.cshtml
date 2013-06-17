@@ -6,10 +6,16 @@
         <li>
             <a href="#freeagentexpensestab" data-toggle="tab">Expenses</a>
         </li>
+        <li>
+            <a href="#freeagentinvoicedetailstab" data-toggle="tab">Invoice Details</a>
+        </li>
+        <li>
+            <a href="#freeagentexpensedetailstab" data-toggle="tab">Expense Details</a>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="freeagentinvoicestab">
-            <table class="table table-bordered table-striped  blue-header centered rright">
+            <table class="table table-bordered table-striped blue-header centered">
                 <thead>
                     <tr>
                         <th></th>
@@ -27,12 +33,12 @@
                     <tr>
                         <td>Number of invoices</td>
                         <td><%-ai.NumofOrders1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders1M) : "-"%></td>
-                        <td><%-ai.NumofOrders3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders3M) :  "-"%></td>
-                        <td><%-ai.NumofOrders6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders6M) :  "-"%></td>
-                        <td><%-ai.NumofOrders12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders12M) :  "-"%></td>
-                        <td><%-ai.NumofOrders15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders15M) :  "-"%></td>
-                        <td><%-ai.NumofOrders18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders18M) :  "-"%></td>
-                        <td><%-ai.NumofOrders24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders24M) :  "-"%></td>
+                        <td><%-ai.NumofOrders3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders3M) : "-"%></td>
+                        <td><%-ai.NumofOrders6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders6M) : "-"%></td>
+                        <td><%-ai.NumofOrders12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders12M) : "-"%></td>
+                        <td><%-ai.NumofOrders15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders15M) : "-"%></td>
+                        <td><%-ai.NumofOrders18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders18M) : "-"%></td>
+                        <td><%-ai.NumofOrders24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders24M) : "-"%></td>
                         <td><%-ai.NumofOrdersLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrdersLifetime) : "-"%></td>
                     </tr>
                     <tr>
@@ -94,7 +100,7 @@
             </table>
         </div>
         <div class="tab-pane" id="freeagentexpensestab">
-            <table class="table table-bordered table-striped  blue-header centered rright">
+            <table class="table table-bordered table-striped blue-header centered">
                 <thead>
                     <tr>
                         <th></th>
@@ -112,12 +118,12 @@
                     <tr>
                         <td>Number of expenses</td>
                         <td><%-ai.NumofExpenses1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses1M) : "-"%></td>
-                        <td><%-ai.NumofExpenses3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses3M) :  "-"%></td>
-                        <td><%-ai.NumofExpenses6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses6M) :  "-"%></td>
-                        <td><%-ai.NumofExpenses12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses12M) :  "-"%></td>
-                        <td><%-ai.NumofExpenses15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses15M) :  "-"%></td>
-                        <td><%-ai.NumofExpenses18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses18M) :  "-"%></td>
-                        <td><%-ai.NumofExpenses24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses24M) :  "-"%></td>
+                        <td><%-ai.NumofExpenses3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses3M) : "-"%></td>
+                        <td><%-ai.NumofExpenses6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses6M) : "-"%></td>
+                        <td><%-ai.NumofExpenses12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses12M) : "-"%></td>
+                        <td><%-ai.NumofExpenses15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses15M) : "-"%></td>
+                        <td><%-ai.NumofExpenses18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses18M) : "-"%></td>
+                        <td><%-ai.NumofExpenses24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenses24M) : "-"%></td>
                         <td><%-ai.NumofExpensesLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpensesLifetime) : "-"%></td>
                     </tr>
                     <tr>
@@ -164,6 +170,56 @@
                         <td><%-ai.Sumofgeneralexpensescategory24M!=undefined ? GBPValues(ai.Sumofgeneralexpensescategory24M, true) : "-"%></td>
                         <td><%-ai.SumofgeneralexpensescategoryLifetime!=undefined ? GBPValues(ai.SumofgeneralexpensescategoryLifetime, true) : "-"%></td>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="freeagentinvoicedetailstab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Net Value</th>
+                        <th>Paid Value</th>
+                        <th>Due Value</th>
+                        <th>Status</th>
+                        <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(m.FreeAgent.Invoices, function(invoice, i) {%>
+                    <tr>
+                        <td><%-invoice.dated_on!=undefined ? EzBob.formatDateTime(invoice.dated_on) : "-"%></td>
+                        <td><%-invoice.net_value!=undefined ? GBPValues(invoice.net_value, true) : "-"%></td>
+                        <td><%-invoice.paid_value!=undefined ? GBPValues(invoice.paid_value, true) : "-"%></td>
+                        <td><%-invoice.due_value!=undefined ? GBPValues(invoice.due_value, true) : "-"%></td>
+                        <td><%-invoice.status!=undefined ? invoice.status : "-"%></td>
+                        <td><%-invoice.currency!=undefined ? invoice.currency : "-"%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="freeagentexpensedetailstab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Gross Value</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Currency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(m.FreeAgent.Expenses, function(expense, i) {%>
+                    <tr>
+                        <td><%-expense.dated_on!=undefined ? EzBob.formatDateTime(expense.dated_on) : "-"%></td>
+                        <td><%-expense.gross_value!=undefined ? GBPValues(expense.gross_value, true) : "-"%></td>
+                        <td><%-expense.description!=undefined ? expense.description : "-"%></td>
+                        <td><%-expense.categoryItem.description!=undefined ? expense.categoryItem.description : "-"%></td>
+                        <td><%-expense.currency!=undefined ? expense.currency : "-"%></td>
+                    </tr>
+                    <%});%>
                 </tbody>
             </table>
         </div>

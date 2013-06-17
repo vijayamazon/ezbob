@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using EzBob.Web.Areas.Customer.Models;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class MarketPlaceModel
+	using System.Collections.Generic;
+	using Customer.Models;
+	using EzBob.Models.Marketplaces;
+
+	public class MarketPlaceModel
     {
         public int Id { get; set; }
         public string Type { get; set; }
@@ -41,6 +42,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public bool IsPaymentAccount { get; set; }
 
         public PaymentAccountsModel PaymentAccountBasic { get; set; }
+
+		public FreeAgentModel FreeAgent { get; set; }
 
         public int UWPriority { get; set; }
     }
