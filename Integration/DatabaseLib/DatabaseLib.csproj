@@ -410,6 +410,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
+      <Project>{978d5af5-ab9d-4aae-bfbf-2820f991613b}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
