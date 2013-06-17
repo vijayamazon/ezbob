@@ -8,6 +8,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Scorto.NHibernate.Repository;
 	using Web.Areas.Customer.Models;
 	using Web.Areas.Underwriter.Models;
 
@@ -15,9 +16,13 @@ namespace EzBob.Models.Marketplaces.Builders
     {
 		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories = new Dictionary<string, FreeAgentExpenseCategory>();
 
-		public FreeAgentMarketplaceModelBuilder(MP_FreeAgentExpenseCategoryRepository freeAgentExpenseCategoryRepository, CustomerMarketPlaceRepository customerMarketplaces)
+		private readonly ICurrencyConvertor currencyConverter;
+
+		public FreeAgentMarketplaceModelBuilder(MP_FreeAgentExpenseCategoryRepository freeAgentExpenseCategoryRepository, CustomerMarketPlaceRepository customerMarketplaces, CurrencyRateRepository currencyRateRepository)
             : base(customerMarketplaces)
         {
+			currencyConverter = new CurrencyConvertor(currencyRateRepository);
+
 			foreach (MP_FreeAgentExpenseCategory dbCategory in freeAgentExpenseCategoryRepository.GetAll())
 			{
 				var category = new FreeAgentExpenseCategory
@@ -91,7 +96,7 @@ namespace EzBob.Models.Marketplaces.Builders
 							category = o.category,
 							dated_on = o.dated_on,
 							currency = o.currency,
-							gross_value = o.gross_value,
+							gross_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value,
 							native_gross_value = o.native_gross_value,
 							sales_tax_rate = o.sales_tax_rate,
 							sales_tax_value = o.sales_tax_value,
@@ -131,9 +136,9 @@ namespace EzBob.Models.Marketplaces.Builders
 							reference = o.reference,
 							currency = o.currency,
 							exchange_rate = o.exchange_rate,
-							net_value = o.net_value,
-							total_value = o.total_value,
-							paid_value = o.paid_value,
+							net_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value,
+							total_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.total_value, o.dated_on).Value,
+							paid_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.paid_value, o.dated_on).Value,
 							due_value = o.due_value,
 							status = o.status,
 							omit_header = o.omit_header,

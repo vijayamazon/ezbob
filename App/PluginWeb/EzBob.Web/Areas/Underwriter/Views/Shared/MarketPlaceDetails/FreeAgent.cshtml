@@ -182,7 +182,6 @@
                         <th>Paid Value</th>
                         <th>Due Value</th>
                         <th>Status</th>
-                        <th>Currency</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -193,7 +192,6 @@
                         <td><%-invoice.paid_value!=undefined ? GBPValues(invoice.paid_value, true) : "-"%></td>
                         <td><%-invoice.due_value!=undefined ? GBPValues(invoice.due_value, true) : "-"%></td>
                         <td><%-invoice.status!=undefined ? invoice.status : "-"%></td>
-                        <td><%-invoice.currency!=undefined ? invoice.currency : "-"%></td>
                     </tr>
                     <%});%>
                 </tbody>
@@ -207,7 +205,6 @@
                         <th>Gross Value</th>
                         <th>Description</th>
                         <th>Category</th>
-                        <th>Currency</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -217,7 +214,6 @@
                         <td><%-expense.gross_value!=undefined ? GBPValues(expense.gross_value, true) : "-"%></td>
                         <td><%-expense.description!=undefined ? expense.description : "-"%></td>
                         <td><%-expense.categoryItem.description!=undefined ? expense.categoryItem.description : "-"%></td>
-                        <td><%-expense.currency!=undefined ? expense.currency : "-"%></td>
                     </tr>
                     <%});%>
                 </tbody>
