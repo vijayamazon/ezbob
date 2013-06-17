@@ -645,8 +645,11 @@ namespace Reports {
             titleStyle.HorizontalAlignment = TextAlignmentType.Center;
             titleStyle.Pattern = BackgroundType.Solid;
             titleStyle.Font.IsBold = true;
-            titleStyle.ForegroundColor = Color.Linen;
+            titleStyle.ForegroundColor = ColorTranslator.FromHtml("#EEEEEE");
+            titleStyle.BackgroundColor = ColorTranslator.FromHtml("#EEEEEE");
+            titleStyle.Font.Color = ColorTranslator.FromHtml("#666666");
             sheet.Cells[frn, fc].SetStyle(titleStyle);
+
 
             headerStyle.VerticalAlignment = TextAlignmentType.Center;
             headerStyle.HorizontalAlignment = TextAlignmentType.Center;
@@ -660,29 +663,33 @@ namespace Reports {
             headerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
             headerStyle.Pattern = BackgroundType.Solid;
             headerStyle.Font.IsBold = true;
-            headerStyle.ForegroundColor = Color.NavajoWhite;
+            headerStyle.ForegroundColor = ColorTranslator.FromHtml("#9AB1D1");
+            headerStyle.BackgroundColor = ColorTranslator.FromHtml("#9AB1D1");
+            headerStyle.Font.Color = ColorTranslator.FromHtml("#FFFFFF");
 
             lightStyle.VerticalAlignment = TextAlignmentType.Center;
             lightStyle.HorizontalAlignment = TextAlignmentType.Left;
             lightStyle.Pattern = BackgroundType.Solid;
             lightStyle.Font.IsBold = false;
-            lightStyle.ForegroundColor = Color.Linen;
             lightStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
             lightStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
             lightStyle.Borders[BorderType.RightBorder].Color = Color.Black;
             lightStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
-
+            lightStyle.ForegroundColor = ColorTranslator.FromHtml("#FFFFFF");
+            lightStyle.BackgroundColor = ColorTranslator.FromHtml("#FFFFFF");
+            lightStyle.Font.Color = ColorTranslator.FromHtml("#000000");
 
             darkStyle.VerticalAlignment = TextAlignmentType.Center;
             darkStyle.HorizontalAlignment = TextAlignmentType.Left;
             darkStyle.Pattern = BackgroundType.Solid;
             darkStyle.Font.IsBold = false;
-            darkStyle.ForegroundColor = Color.LightGray;
             darkStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
             darkStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
             darkStyle.Borders[BorderType.RightBorder].Color = Color.Black;
             darkStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
-
+            darkStyle.ForegroundColor = ColorTranslator.FromHtml("#F9F9F9");
+            darkStyle.BackgroundColor = ColorTranslator.FromHtml("#F9F9F9");
+            darkStyle.Font.Color = ColorTranslator.FromHtml("#000000");
 
             footerStyle.Borders[BorderType.TopBorder].Color = Color.Black;
             footerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
