@@ -43,7 +43,6 @@
 	#region class FreeAgentInvoiceComparer
 	
 	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice> {
-
 		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b) {
 			return a.url == b.url;
 		} // AreEqual
@@ -54,9 +53,10 @@
 	} // class FreeAgentInvoiceComparer
 
 	#endregion class FreeAgentInvoiceComparer
-	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense> {
 
-	#region FreeAgentExpenseComparer
+	#region class FreeAgentExpenseComparer
+
+	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense> {
 		public override bool AreEqual(MP_FreeAgentExpense a, MP_FreeAgentExpense b) {
 			return a.url == b.url;
 		} // AreEqual
@@ -66,7 +66,7 @@
 		} // HashCode
 	} // class FreeAgentExpenseComparer
 
-	#endregion FreeAgentExpenseComparer
+	#endregion class FreeAgentExpenseComparer
 
 	#region class ChannelGrabberOrderComparer
 

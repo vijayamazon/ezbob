@@ -1,0 +1,222 @@
+[
+	{
+		"Name": "Volusion",
+		"DisplayName": "Volusion",
+		"Description": "Volusion",
+		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",     "NodeName": "name",     "UniqueIDPosition": -1 },
+				{ "PropertyName": "URL",      "NodeName": "endpoint", "UniqueIDPosition":  0 },
+				{ "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  1 },
+				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition": -1 }
+			],
+
+			"ToStringArguments": [
+				"{0} ({1} @ {2})", "Name", "Login", "URL"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{e512f12d-207c-46f8-8d61-b1199bc34555}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}" },
+			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "volusionShops",
+			"SortPriority": 4,
+			"IsNew": false,
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "URL",
+						"Type": "Text",
+						"Caption": "Volusion Shop URL",
+						"ValidationRules": { "required": true, "url": true, "maxlength": 300 },
+						"ValidationMessages": [
+							{ "PropertyName": "url", "Message": "Please enter a valid URL" }
+						]
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "Email associated with the Volusion account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Text",
+						"Caption": "Encrypted password for the Volusion account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [
+					"You need to enter the Encrypted Password for your Admin Area.",
+					"You can find your encrypted password in the Volusion API section of your store.",
+					"Volusion support direct number: 0800.520.0312.",
+					"<div>",
+						"To retrieve your Encrypted Password:",
+						"<ol>",
+							"<li>Login to your shop admin area.</li>",
+							"<li>Go to <strong>Inventory</strong> &raquo; <strong>Import/Export</strong> &raquo; <strong>Volusion API</strong> &raquo; <strong>Get Help</strong>.</li>",
+							"<li>Scroll the page down and follow the link <strong>Volusion API Integration Help</strong>.</li>",
+							"<li>Open the <strong>URL with Query String and General Information for Importing and Exporting</strong> section.</li>",
+							"<li>Your Encrypted Password is the part of the address between <strong>EncryptedPassword=</strong> and <strong>&amp;</strong>.</li>",
+						"</ol>",
+					"</div>"
+				],
+				"OnBeforeLink": [
+					"var aryDisplayName = /^http[s]?:\\/\\/([^\\/\\?]+)/.exec(accountModel.url);",
+					"accountModel.name = (aryDisplayName && aryDisplayName.length && aryDisplayName.length == 2) ? aryDisplayName[1] : accountModel.url;",
+					"accountModel.name = accountModel.name || accountModel.url;",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background-position", "Value": "-868px -3px" },
+					{ "Property": "width", "Value": "98px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background-position", "Value": "-868px -43px" },
+					{ "Property": "width", "Value": "98px" }
+				]
+			}
+		}
+	},
+
+	{
+		"Name":        "Play",
+		"DisplayName": "Play.com",
+		"Description": "Play.com",
+		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Login",     "NodeName": "username",  "UniqueIDPosition":  1                  },
+				{ "PropertyName": "Password",  "NodeName": "password",  "UniqueIDPosition": -1                  },
+				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -1, "Default": "-1" }
+			],
+
+			"ToStringArguments": [
+				"{0} as {1}", "Name", "Login"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BEA6E606-EA64-4903-BF10-82CF16D6220A}" },
+			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "playShops",
+			"SortPriority": 6,
+			"IsNew": true,
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Name",
+						"Type": "Text",
+						"Caption": "The name of the account",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "Email associated with the PlayTrade account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Password",
+						"Caption": "The password for the PlayTrade account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [ 
+					"var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);",
+					"if (aryMatch) accountModel.name = aryMatch[3];",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background-position", "Value": "-195px 0px" },
+					{ "Property": "width", "Value": "116px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background-position", "Value": "-195px -40px" },
+					{ "Property": "width", "Value": "116px" }
+				]
+			}
+		}
+	},
+
+	{
+		"Name":        "Shopify",
+		"DisplayName": "Shopify.com",
+		"Description": "Shopify.com",
+		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition": -8                  },
+				{ "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
+				{ "PropertyName": "Login",     "NodeName": "apiKey",    "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Password",  "NodeName": "secret",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "-1" }
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Name", "URL"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}" },
+			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "shopifyShops",
+			"SortPriority": 11,
+			"IsNew": true,
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "URL",
+						"Type": "Text",
+						"Caption": "The URL to the shop",
+						"ValidationRules": { "required": true, "url": true, "minlength": 89, "maxlength": 300 }
+					},
+				],
+				"Notes": [
+					"<p>You should provide URL to a private application connected to your shop. ",
+					"<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank>Instructions on creating a private application.</a></p>",
+					"<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
+					"<blockquote>https://a5a18488246744828f621d0073eda6d8:b0ce472ffd5b4025af3ed570353c5d56@test-shop.myshopify.com/admin/orders.xml</blockquote>",
+					"Enter your example URL in the above field.</p>"
+				],
+				"OnBeforeLink": [
+					"var aryMatch = /^https:\\/\\/([0-9A-Za-z]{32}):([0-9A-Za-z]{32})@(.+)\\.myshopify\\.com(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
+					"if (!aryMatch) return null;",
+					"accountModel.name = aryMatch[3];",
+					"accountModel.apiKey = aryMatch[1];",
+					"accountModel.secret = aryMatch[2];",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background-position", "Value": "-195px 0px" },
+					{ "Property": "width", "Value": "116px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background-position", "Value": "-195px -40px" },
+					{ "Property": "width", "Value": "116px" }
+				]
+			}
+		}
+	}
+]
+
