@@ -40,7 +40,7 @@ end
 CLOSE tp_Cursor
 DEALLOCATE tp_Cursor;
 
-select * from #Incomes
+select NEWID() as Id, * from #Incomes
 DROP TABLE #Incomes
 END
 GO

@@ -3,6 +3,7 @@
   <sql-query name="GetPayPalExpensesDetails" >
     <query-param name="marketplaceId" type="System.Int32"/>
     <return class="PayPalGeneralDetailDataRow" >
+      <return-property column="Id" name="Id"/>
       <return-property column="Payer" name="Type"/>
       <return-property column="M1" name="M1"/>
       <return-property column="M3" name="M3"/>

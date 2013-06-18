@@ -6,7 +6,6 @@ namespace EZBob.DatabaseLib.PayPal
 	using ApplicationMng.Repository;
 	using Model.Database;
 	using NHibernate;
-	using DbConnection;
 
 	public class PayPalDetailsRepository : NHibernateRepositoryBase<PayPalGeneralDetailDataRow>, IPayPalDetailsRepository
     {
@@ -60,37 +59,29 @@ namespace EZBob.DatabaseLib.PayPal
         }
         public IEnumerable<PayPalGeneralDetailDataRow> TotalExpenses(int marketPlaceId)
         {
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalTotalExpensesByMarketplace", DbConnection.CreateParam("@marketplaceId", marketPlaceId));
-			return GetResults(dt);
-            /*return _session.GetNamedQuery("GetPayPalTotalExpensesByMarketplace")
+            return _session.GetNamedQuery("GetPayPalTotalExpensesByMarketplace")
                 .SetParameter("marketplaceId", marketPlaceId)
-                .List<PayPalGeneralDetailDataRow>();*/
+                .List<PayPalGeneralDetailDataRow>();
         }
         public IEnumerable<PayPalGeneralDetailDataRow> ExpensesDetails(int marketPlaceId)
         {
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalExpensesDetails", DbConnection.CreateParam("@marketplaceId", marketPlaceId));
-			return GetResults(dt);
-            /*return _session.GetNamedQuery("GetPayPalExpensesDetails")
+            return _session.GetNamedQuery("GetPayPalExpensesDetails")
                 .SetParameter("marketplaceId", marketPlaceId)
-                .Future<PayPalGeneralDetailDataRow>();*/
+                .Future<PayPalGeneralDetailDataRow>();
         }
 
         public IEnumerable<PayPalGeneralDetailDataRow> TotalIncome(int marketPlaceId)
-		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalTotalIncomeByMarketplace", DbConnection.CreateParam("@marketplaceId", marketPlaceId));
-			return GetResults(dt);
-			//return _session.GetNamedQuery("GetPayPalTotalIncomeByMarketplace")
-			//	.SetParameter("marketplaceId", marketPlaceId)
-			//	.Future<PayPalGeneralDetailDataRow>();
+        {
+			return _session.GetNamedQuery("GetPayPalTotalIncomeByMarketplace")
+				.SetParameter("marketplaceId", marketPlaceId)
+				.Future<PayPalGeneralDetailDataRow>();
         }
 
         public IEnumerable<PayPalGeneralDetailDataRow> TotalTransactions(int marketPlaceId)
 		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalTotalTransactionsByMarketplace", DbConnection.CreateParam("@marketplaceId", marketPlaceId));
-			return GetResults(dt);
-			//return _session.GetNamedQuery("GetPayPalTotalTransactionsByMarketplace")
-			//	.SetParameter("marketplaceId", marketPlaceId)
-			//	.Future<PayPalGeneralDetailDataRow>();
+			return _session.GetNamedQuery("GetPayPalTotalTransactionsByMarketplace")
+				.SetParameter("marketplaceId", marketPlaceId)
+				.Future<PayPalGeneralDetailDataRow>();
         }
 
         public PayPalDetailsModel GetDetails(int id)

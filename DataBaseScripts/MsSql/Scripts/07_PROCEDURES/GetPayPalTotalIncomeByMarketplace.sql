@@ -10,6 +10,6 @@ CREATE PROCEDURE [dbo].[GetPayPalTotalIncomeByMarketplace]
 AS
 BEGIN
 
-	SELECT * from GetTotalIncomePayPalTransactions (@marketplaceId)
+	SELECT NEWID() as Id, * from GetTotalIncomePayPalTransactions (@marketplaceId)
 END
 GO
