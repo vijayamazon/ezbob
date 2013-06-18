@@ -23,18 +23,24 @@
 					switch (condition)
 					{
 						case Constants.ConditionType.DayAfter:
-							fromDate = DateTime.Today.AddDays(-1);
 							toDate = DateTime.Today;
 							break;
-						case Constants.ConditionType.ThreeDays:
-							fromDate = DateTime.Today.AddDays(-4);
-							toDate = DateTime.Today.AddDays(-3);
-							break;
+						//case Constants.ConditionType.ThreeDays:
+						//	fromDate = DateTime.Today.AddDays(-4);
+						//	toDate = DateTime.Today.AddDays(-3);
+						//	break;
 						case Constants.ConditionType.Week:
-							fromDate = DateTime.Today.AddDays(-8);
 							toDate = DateTime.Today.AddDays(-7);
 							break;
+						case Constants.ConditionType.TwoWeeks:
+							toDate = DateTime.Today.AddDays(-14);
+							break;
+						case Constants.ConditionType.Month:
+							toDate = DateTime.Today.AddMonths(-1);
+							break;
 					}
+
+					fromDate = toDate.AddDays(-1);
 
 					switch (campaign)
 					{
@@ -48,7 +54,7 @@
 							sqlCmdStr = string.Format(Constants.GetLastStepCustomersSp, fromDate.AddDays(-1).ToString("yyyy-MM-dd"), toDate.AddDays(-1).ToString("yyyy-MM-dd"));
 							break;
 					}
-					
+
 
 					var log = new LegacyLog();
 					var conn = new SqlConnection(log);
@@ -114,12 +120,19 @@
 				case Constants.ConditionType.DayAfter:
 					subscriber.DayAfter = DateTime.Today;
 					break;
-				case Constants.ConditionType.ThreeDays:
-					subscriber.ThreeDays = DateTime.Today;
-					break;
+				//case Constants.ConditionType.ThreeDays:
+				//	subscriber.ThreeDays = DateTime.Today;
+				//	break;
 				case Constants.ConditionType.Week:
 					subscriber.Week = DateTime.Today;
 					break;
+				case Constants.ConditionType.TwoWeeks:
+					subscriber.TwoWeeks = DateTime.Today;
+					break;
+				case Constants.ConditionType.Month:
+					subscriber.Month = DateTime.Today;
+					break;
+
 			}
 			subscriberList.Add(subscriber);
 		}

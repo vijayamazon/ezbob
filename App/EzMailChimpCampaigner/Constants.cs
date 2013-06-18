@@ -1,71 +1,84 @@
 ﻿namespace EzMailChimpCampaigner
 {
-    public static class Constants
-    {
-        public enum CampaignsType
-        {
-            OnlyRegisteredEmail,
-            OnlyRegisteredStore,
-            DidntTakeLoan,
-        }
+	public static class Constants
+	{
+		public enum CampaignsType
+		{
+			OnlyRegisteredEmail,
+			OnlyRegisteredStore,
+			DidntTakeLoan,
+		}
 
-        public enum ConditionType
-        {
-            DayAfter,
-            ThreeDays,
-            Week
-        }
+		public enum ConditionType
+		{
+			DayAfter,
+			//ThreeDays,
+			Week,
+			TwoWeeks,
+			Month
+		}
 
-        public const string GetFirstStepCustomersSp = "GetFirstStepCustomers '{0}','{1}'";
-        public const string GetSecondStepCustomersSp = "GetSecondStepCustomers '{0}','{1}'";
-        public const string GetLastStepCustomersSp = "GetLastStepCustomers '{0}','{1}'";
+		public const string GetFirstStepCustomersSp = "GetFirstStepCustomers '{0}','{1}'";
+		public const string GetSecondStepCustomersSp = "GetSecondStepCustomers '{0}','{1}'";
+		public const string GetLastStepCustomersSp = "GetLastStepCustomers '{0}','{1}'";
 
-        public const string FromEmail = "customercare@ezbob.com";
-        public const string FromEmailName = "EZBOB";
+		public const string FromEmail = "customercare@ezbob.com";
+		public const string FromEmailName = "EZBOB";
 
-        public const string EzbobCustomersListId = "0371913807";
+		public const string EzbobCustomersListId = "0371913807";
 
-        public const string FirstStepCustomersDayAfterSubject = "Fund your business with EZBOB";
-        public const string FirstStepCustomersThreeDaysSubject = "You are less than 10 minutes away from cash";
-        public const string FirstStepCustomersWeekSubject = "Get your business financed today";
+		public const string FirstStepCustomersDayAfterSubject = "Jumpstart your business get up to £40K for one year";
+		//public const string FirstStepCustomersThreeDaysSubject = "You are less than 10 minutes away from cash";
+		//public const string FirstStepCustomersWeekSubject = "Get your business financed today";
 
-        public const string SecondStepCustomersDayAfterSubject = "EZBOB has a £*|LOANOFFER|* loan to offer you";
-        public const string SecondStepCustomersThreeDaysSubject = "You're pre-qualified for approximately £*|LOANOFFER|*";
-        public const string SecondStepCustomersWeekSubject = "Your business is eligible for a £*|LOANOFFER|* loan";
+		public const string SecondStepCustomersDayAfterSubject = "Your business pre-qualifies for £*|LOANOFFER|* in funding";
+		public const string SecondStepCustomersWeekSubject = "Take advantage: EZBOB pre-qualified you for £*|LOANOFFER|*";
+		public const string SecondStepCustomersTwoWeeksSubject = "Reminder: you are pre-qualified for £*|LOANOFFER|* up to 12 months";
+		public const string SecondStepCustomersMonthSubject = ""; //TODO: add subject
 
-        public const string LastStepCustomersDayAfterSubject = "You were recently approved for a £*|LOANOFFER|* loan!";
-        public const string LastStepCustomersThreeDaysSubject = "EZBOB has £*|LOANOFFER|* available for you today";
-        public const string LastStepCustomersWeekSubject = "EZBOB helps your business to grow with a £*|LOANOFFER|* loan";
+		public const string LastStepCustomersDayAfterSubject = "*|FNAME|* £*|LOANOFFER|* in funding is waiting for you!";
+		public const string LastStepCustomersWeekSubject = "*|FNAME|* £*|LOANOFFER|* is just a click away";
+		public const string LastStepCustomersTwoWeeksSubject = "*|FNAME|* Join the thousands of E-retailers that have benefited";
+		public const string LastStepCustomersMonthSubject = "Jumpstart your business with *|LOANOFFER|* from EZBOB";
 
-        public const string FirstStepCustomersTitle = "EZBOB Registered Email";
-        public const string SecondStepCustomersTitle = "EZBOB Registered Store";
-        public const string LastStepCustomersTitle = "EZBOB Didnt Take Offer";
+		public const string FirstStepCustomersTitle = "EZBOB Registered Email";
+		public const string SecondStepCustomersTitle = "EZBOB Registered Store";
+		public const string LastStepCustomersTitle = "EZBOB Didnt Take Offer";
 
-        public const int FirstStepCustomersDayAfterTemplateId = 44149;
-        public const int SecondStepCustomersDayAfterTemplateId = 39833;
-        public const int LastStepCustomersDayAfterTemplateId = 39861;
+		public const int FirstStepCustomersDayAfterTemplateId = 67421;//44149;
+		public const int SecondStepCustomersDayAfterTemplateId = 66273;//39833;
+		public const int LastStepCustomersDayAfterTemplateId = 67405;//39861;
+		
 
-        public const int FirstStepCustomersThreeDaysTemplateId = 39813;
-        public const int SecondStepCustomersThreeDaysTemplateId = 44237;
-        public const int LastStepCustomersThreeDaysTemplateId = 48169;
+		//public const int FirstStepCustomersThreeDaysTemplateId = 39813;
+		//public const int SecondStepCustomersThreeDaysTemplateId = 44237;
+		//public const int LastStepCustomersThreeDaysTemplateId = 48169;
 
-        public const int FirstStepCustomersWeekTemplateId = 44165;
-        public const int SecondStepCustomersWeekTemplateId = 44245;
-        public const int LastStepCustomersWeekTemplateId = 48149;
+		//public const int FirstStepCustomersWeekTemplateId = 44165;
+		public const int SecondStepCustomersWeekTemplateId = 66269;//44245;
+		public const int LastStepCustomersWeekTemplateId = 67409;//48149;
 
-        public const string SignUpProcessGroupId = "8209";
-        public const string SignUpProcessGroupName = "SignUpProcess";
-        public const string EmailField = "EMAIL";
-        public const string EmailTypeField = "EMAIL_TYPE";
-        public const string FirstNameField = "FNAME";
-        public const string LoanOfferField = "LOANOFFER";
-        public const string DayAfterConditionField = "DAYAFTER";
-        public const string ThreeDaysConditionField = "THREEDAYS";
-        public const string WeekConditionField = "WEEK";
+		public const int SecondStepCustomersTwoWeeksTemplateId = 66285;
+		public const int LastStepCustomersTwoWeeksTemplateId = 67413;
 
-        public const string GoogleAnalyticsKie = "google";
-        public const string GoogleAnalyticsValue = "UA-32583191";
+		public const int SecondStepCustomersMonthTemplateId = 66289;
+		public const int LastStepCustomersMonthTemplateId = 67417;
 
-        public static string[] Conditions = { DayAfterConditionField, ThreeDaysConditionField, WeekConditionField };
-    }
+		public const string SignUpProcessGroupId = "8209";
+		public const string SignUpProcessGroupName = "SignUpProcess";
+		public const string EmailField = "EMAIL";
+		public const string EmailTypeField = "EMAIL_TYPE";
+		public const string FirstNameField = "FNAME";
+		public const string LoanOfferField = "LOANOFFER";
+		public const string DayAfterConditionField = "DAYAFTER";
+		public const string ThreeDaysConditionField = "THREEDAYS";
+		public const string WeekConditionField = "WEEK";
+		public const string TwoWeeksConditionField = "TWOWEEKS";
+		public const string MonthConditionField = "MONTH";
+
+		public const string GoogleAnalyticsKie = "google";
+		public const string GoogleAnalyticsValue = "UA-32583191";
+
+		public static string[] Conditions = { DayAfterConditionField, WeekConditionField, TwoWeeksConditionField, MonthConditionField };
+	}
 }

@@ -1,16 +1,19 @@
 ﻿namespace EzMailChimpCampaigner
 {
-    using System;
+	using System;
 
-    public class Subscriber
-    {
-        public string Email { get; set; }
-        public string Group { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public decimal LoanOffer { get; set; }
-        public DateTime? DayAfter { get; set; }
-        public DateTime? ThreeDays { get; set; }
-        public DateTime? Week { get; set; }
-    }
+	public class Subscriber
+	{
+		public string Email { get; set; }
+		public string Group { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public decimal LoanOffer { get; set; }
+		public DateTime? DayAfter { get; set; }
+		//public DateTime? ThreeDays { get; set; }
+		public DateTime? Week { get; set; }
+		public DateTime? TwoWeeks { get; set; }
+		public DateTime? Month { get; set; }
+
+	}
 }

@@ -56,8 +56,8 @@
 			Logger.Debug(subject);
 			foreach (Subscriber subscriber in list)
 			{
-				Logger.DebugFormat("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} ThreeDays:{4} Week:{5}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.ThreeDays, subscriber.Week);
-				Console.WriteLine("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} ThreeDays:{4} Week:{5}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.ThreeDays, subscriber.Week);
+				Logger.DebugFormat("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} Week:{4} TwoWeeks:{5} Month: {6}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.Week, subscriber.TwoWeeks, subscriber.Month);
+				Console.WriteLine("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} Week:{4} TwoWeeks:{5} Month: {6}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.Week, subscriber.TwoWeeks, subscriber.Month);
 			}
 		}
 

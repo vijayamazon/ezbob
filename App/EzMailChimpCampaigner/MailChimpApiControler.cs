@@ -54,13 +54,21 @@
 				{
 					entry.Add(Constants.DayAfterConditionField, subscriber.DayAfter);
 				}
-				if (subscriber.ThreeDays.HasValue)
-				{
-					entry.Add(Constants.ThreeDaysConditionField, subscriber.ThreeDays);
-				}
+				//if (subscriber.ThreeDays.HasValue)
+				//{
+				//	entry.Add(Constants.ThreeDaysConditionField, subscriber.ThreeDays);
+				//}
 				if (subscriber.Week.HasValue)
 				{
 					entry.Add(Constants.WeekConditionField, subscriber.Week);
+				}
+				if (subscriber.TwoWeeks.HasValue)
+				{
+					entry.Add(Constants.TwoWeeksConditionField, subscriber.TwoWeeks);
+				}
+				if (subscriber.Month.HasValue)
+				{
+					entry.Add(Constants.MonthConditionField, subscriber.Month);
 				}
 				batch.Add(entry);
 			}
@@ -239,7 +247,7 @@
 							LastName = "Dulman",
 							LoanOffer = 20M,
 							//DayAfter = DateTime.Today,//.ToString("yyyy-MM-dd"),
-							ThreeDays = DateTime.Today, //.ToString("yyyy-MM-dd"),
+							TwoWeeks = DateTime.Today, //.ToString("yyyy-MM-dd"),
 							//Week = DateTime.Today,//.ToString("yyyy-MM-dd"),
 						},
 					new Subscriber
