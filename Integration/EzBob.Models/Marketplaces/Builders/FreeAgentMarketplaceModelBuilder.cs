@@ -87,64 +87,67 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		private FreeAgentModel BuildFreeAgent(MP_CustomerMarketPlace mp)
 		{
+			var dbInvoices = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new FreeAgentInvoiceComparer()).OrderByDescending(invoice => invoice.dated_on);
+			var dbExpenses = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).OrderByDescending(expense => expense.Request.Id).Distinct(new FreeAgentExpenseComparer()).OrderByDescending(expense => expense.dated_on);
+			
 			var model = new FreeAgentModel
 				{
-					Expenses = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).Select(o => new FreeAgentExpense
+					Expenses = dbExpenses.Select(o => new FreeAgentExpense
+					{
+						url = o.url,
+						user = o.username,
+						category = o.category,
+						dated_on = o.dated_on,
+						currency = o.currency,
+						gross_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value,
+						native_gross_value = o.native_gross_value,
+						sales_tax_rate = o.sales_tax_rate,
+						sales_tax_value = o.sales_tax_value,
+						native_sales_tax_value = o.native_sales_tax_value,
+						description = o.description,
+						manual_sales_tax_amount = o.manual_sales_tax_amount,
+						updated_at = o.updated_at,
+						created_at = o.created_at,
+						attachment = new FreeAgentExpenseAttachment
 						{
-							url = o.url,
-							user = o.username,
-							category = o.category,
-							dated_on = o.dated_on,
-							currency = o.currency,
-							gross_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value,
-							native_gross_value = o.native_gross_value,
-							sales_tax_rate = o.sales_tax_rate,
-							sales_tax_value = o.sales_tax_value,
-							native_sales_tax_value = o.native_sales_tax_value,
-							description = o.description,
-							manual_sales_tax_amount = o.manual_sales_tax_amount,
-							updated_at = o.updated_at,
-							created_at = o.created_at,
-							attachment = new FreeAgentExpenseAttachment
-								{
-									url = o.attachment_url,
-									content_src = o.attachment_content_src,
-									content_type = o.attachment_content_type,
-									file_name = o.attachment_file_name,
-									file_size = o.attachment_file_size,
-									description = o.attachment_description
-								},
-							categoryItem = expenseCategories.ContainsKey(o.category) ? expenseCategories[o.category] :
-								new FreeAgentExpenseCategory 
-									{ 
-										allowable_for_tax = false, 
-										auto_sales_tax_rate = string.Empty, 
-										category_group = string.Empty, 
-										description = string.Empty, 
-										Id = 0, 
-										nominal_code = string.Empty, 
-										tax_reporting_name = string.Empty, 
-										url = string.Empty
-									}
-						}).Distinct(new FreeAgentExpenseComparer()),
-					Invoices = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
-						{
-							url = o.url,
-							contact = o.contact,
-							dated_on = o.dated_on,
-							due_on = o.due_on,
-							reference = o.reference,
-							currency = o.currency,
-							exchange_rate = o.exchange_rate,
-							net_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value,
-							total_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.total_value, o.dated_on).Value,
-							paid_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.paid_value, o.dated_on).Value,
-							due_value = o.due_value,
-							status = o.status,
-							omit_header = o.omit_header,
-							payment_terms_in_days = o.payment_terms_in_days,
-							paid_on = o.paid_on
-						}).Distinct(new FreeAgentInvoiceComparer())
+							url = o.attachment_url,
+							content_src = o.attachment_content_src,
+							content_type = o.attachment_content_type,
+							file_name = o.attachment_file_name,
+							file_size = o.attachment_file_size,
+							description = o.attachment_description
+						},
+						categoryItem = expenseCategories.ContainsKey(o.category) ? expenseCategories[o.category] :
+							new FreeAgentExpenseCategory
+							{
+								allowable_for_tax = false,
+								auto_sales_tax_rate = string.Empty,
+								category_group = string.Empty,
+								description = string.Empty,
+								Id = 0,
+								nominal_code = string.Empty,
+								tax_reporting_name = string.Empty,
+								url = string.Empty
+							}
+					}),
+					Invoices = dbInvoices.Select(o => new FreeAgentInvoice
+					{
+						url = o.url,
+						contact = o.contact,
+						dated_on = o.dated_on,
+						due_on = o.due_on,
+						reference = o.reference,
+						currency = o.currency,
+						exchange_rate = o.exchange_rate,
+						net_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value,
+						total_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.total_value, o.dated_on).Value,
+						paid_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.paid_value, o.dated_on).Value,
+						due_value = o.due_value,
+						status = o.status,
+						omit_header = o.omit_header,
+						payment_terms_in_days = o.payment_terms_in_days,
+						paid_on = o.paid_on
+					})
 				};
 
 			return model;

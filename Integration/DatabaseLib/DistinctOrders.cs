@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib {
 	using System.Collections.Generic;
 	using DatabaseWrapper.Order;
+	using Model.Marketplaces.FreeAgent;
 
 	#region class AOrderComparer
 
@@ -40,27 +41,27 @@
 
 	#endregion class EkmOrderComparer
 
-	public class FreeAgentInvoiceComparer : AOrderComparer<FreeAgentInvoice>
+	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice>
 	{
-		public override bool AreEqual(FreeAgentInvoice a, FreeAgentInvoice b)
+		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b)
 		{
 			return a.url == b.url;
 		} // AreEqual
 
-		public override int HashCode(FreeAgentInvoice a)
+		public override int HashCode(MP_FreeAgentInvoice a)
 		{
 			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentInvoiceComparer
 
-	public class FreeAgentExpenseComparer : AOrderComparer<FreeAgentExpense>
+	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense>
 	{
-		public override bool AreEqual(FreeAgentExpense a, FreeAgentExpense b)
+		public override bool AreEqual(MP_FreeAgentExpense a, MP_FreeAgentExpense b)
 		{
 			return a.url == b.url;
 		} // AreEqual
 
-		public override int HashCode(FreeAgentExpense a)
+		public override int HashCode(MP_FreeAgentExpense a)
 		{
 			return a.url.GetHashCode();
 		} // HashCode

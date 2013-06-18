@@ -101,11 +101,21 @@ namespace EzBob.Models
 
 		protected MP_AnalyisisFunctionValue GetEarliestValueFor(MP_CustomerMarketPlace mp, string functionName)
 		{
-			var functionsMatchingName = mp.AnalysysFunctionValues.Where(v => v.AnalyisisFunction.Name == functionName);
+			var functionsMatchingName = mp.AnalysysFunctionValues.Where(v => v.AnalyisisFunction.Name == functionName).OrderByDescending(v => v.Updated);
 			MP_AnalyisisFunctionValue latest = null;
 			long max = 0;
+			DateTime? latestTime = null;
 			foreach (var mpAnalyisisFunctionValue in functionsMatchingName)
 			{
+				if (latestTime == null)
+				{
+					latestTime = mpAnalyisisFunctionValue.Updated;
+				}
+				else if (latestTime != mpAnalyisisFunctionValue.Updated)
+				{
+					return latest;
+				}
+
 				if (mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id > max && mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id < 9)
 				{
 					max = mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Id;

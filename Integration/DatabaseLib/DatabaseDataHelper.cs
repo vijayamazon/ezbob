@@ -2225,7 +2225,9 @@ namespace EZBob.DatabaseLib
 
 			var invoices = new FreeAgentInvoicesList(submittedDate);
 
-			invoices.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).Select(o => new FreeAgentInvoice
+			var dbInvoices = customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new FreeAgentInvoiceComparer()).OrderByDescending(invoice => invoice.dated_on);
+			
+			invoices.AddRange(dbInvoices.Select(o => new FreeAgentInvoice
 			{
 				url = o.url,
 				contact = o.contact,
@@ -2242,7 +2244,7 @@ namespace EZBob.DatabaseLib
 				omit_header = o.omit_header,
 				payment_terms_in_days = o.payment_terms_in_days,
 				paid_on = o.paid_on
-			}).Distinct(new FreeAgentInvoiceComparer()));
+			}));
 
 			return invoices;
 		}
@@ -2253,7 +2255,9 @@ namespace EZBob.DatabaseLib
 
 			var expenses = new FreeAgentExpensesList(submittedDate);
 
-			expenses.AddRange(customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).Select(o => new FreeAgentExpense
+			var dbExpenses = customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).OrderByDescending(expense => expense.Request.Id).Distinct(new FreeAgentExpenseComparer()).OrderByDescending(expense => expense.dated_on);
+
+			expenses.AddRange(dbExpenses.Select(o => new FreeAgentExpense
 			{
 				url = o.url,
 				user = o.username,
@@ -2278,7 +2282,7 @@ namespace EZBob.DatabaseLib
 					file_size = o.attachment_file_size,
 					description = o.attachment_description
 				}
-			}).Distinct(new FreeAgentExpenseComparer()));
+			}));
 
 			return expenses;
 		}
