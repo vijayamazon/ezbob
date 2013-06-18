@@ -30,6 +30,7 @@ using MarketplaceWebService;
 using MarketplaceWebService.Attributes;
 using System.Reflection;
 using System.Collections.Specialized;
+using log4net;
 
 
 namespace MarketplaceWebService
@@ -46,6 +47,8 @@ namespace MarketplaceWebService
         private String awsAccessKeyId = null;
         private String awsSecretAccessKey = null;
         private MarketplaceWebServiceConfig config = null;
+
+        private static ILog log = LogManager.GetLogger(typeof (MarketplaceWebServiceClient));
 
         /// <summary>
         /// Constructs MarketplaceWebServiceClient with AWS Access Key ID and AWS Secret Key.
@@ -539,6 +542,12 @@ namespace MarketplaceWebService
 
             bool isStreamingResponse = ExpectStreamingResponse(typeof(K));
 
+            if (log.IsDebugEnabled)
+            {
+                log.DebugFormat("Calling action {0}", actionName);
+                log.DebugFormat("Parameters: {0}", queryString);
+            }
+
 			/* Submit the request and read response body */
 			try
 			{
@@ -600,6 +609,9 @@ namespace MarketplaceWebService
 
 						StreamReader reader = new StreamReader( httpResponse.GetResponseStream(), Encoding.UTF8 );
 						responseBody = reader.ReadToEnd();
+
+                        log.DebugFormat("Response is: {0}", responseBody);
+
 						XmlSerializer serlizer = new XmlSerializer( typeof( T ) );
 						response = (T)serlizer.Deserialize( new StringReader( responseBody ) );
 					}
@@ -620,6 +632,7 @@ namespace MarketplaceWebService
 					statusCode = httpErrorResponse.StatusCode;
 					StreamReader reader = new StreamReader( httpErrorResponse.GetResponseStream(), Encoding.UTF8 );
 					responseBody = reader.ReadToEnd();
+                    log.DebugFormat("Error response is: {0}", responseBody);
 				}
 
 				/* Attempt to deserialize response into ErrorResponse type */

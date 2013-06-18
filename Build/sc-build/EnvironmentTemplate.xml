@@ -774,6 +774,9 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
             <logger name="Scorto.Schedulers.SessionExpirationScheduler">
                 <level value="INFO" />
             </logger>
+            <logger name="MarketplaceWebService.MarketplaceWebServiceClient">
+                <level value="INFO" />
+            </logger>
             <logger additivity="false" name="EzBob.CommonLib.WriteLoggerHelper">
                 <level value="DEBUG" />
                 <appender-ref ref="RollingFile2" />

@@ -73,7 +73,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
 			RequestAndWait(reportRequestList);
 
-			return ParseOrdersResult(getFlatFileOrdersDataRequestStr, reportRequestList);			
+			return ParseOrdersResult(getFlatFileOrdersDataRequestStr, reportRequestList);
 		}
 
 		private void RequestAndWait(RequestsListInfo reportRequestList)
@@ -441,6 +441,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 		private string GetData(string[] list, AmazonOrderDataEnum itemIndex)
 		{
 			var indx = (int)itemIndex;
+		    if (indx >= list.Length) return "";
 			return list[indx];
 		}
 		
