@@ -282,8 +282,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         /// </summary>
         public virtual string ZohoId { get; set; }
 
-        public virtual PayPointCard PayPointCard { get; set; }
-
         public virtual string LastReportedCaisStatus { get; set; }
 
         public virtual DateTime? LastReportedCaisStatusDate { get; set; }
@@ -582,7 +580,6 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                 .Inverse();
             Map(x => x.AgreementModel).CustomType("StringClob");
             Map(x => x.ZohoId).Length(100);
-            References(x => x.PayPointCard, "PayPointCardId");
             References(x => x.LoanType, "LoanTypeId");
             Map(x => x.LastReportedCaisStatus, "LastReportedCAISStatus");
             Map(x => x.LastReportedCaisStatusDate, "LastReportedCAISStatusDate").CustomType<UtcDateTimeType>();

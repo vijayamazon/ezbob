@@ -116,11 +116,6 @@
                 
                 var payPointTransactionId = customer.PayPointTransactionId;
 
-                if (loan.PayPointCard != null && !string.IsNullOrEmpty(loan.PayPointCard.TransactionId))
-                {
-                    payPointTransactionId = loan.PayPointCard.TransactionId;
-                }
-
                 var now = DateTime.UtcNow;
 
                 try

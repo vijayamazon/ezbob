@@ -82,7 +82,6 @@ namespace EzBob.Web.Code
             loan.Customer = cus;
             loan.Status = LoanStatus.Live;
             loan.CashRequest = cr;
-            loan.PayPointCard = card;
             loan.LoanType = cr.LoanType;
 
             loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
