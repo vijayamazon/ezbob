@@ -4,7 +4,7 @@
 	<div class="row-fluid">
 		<h2 class="form_start">Personal Information</h2>
 		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" })) {
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>First Name</span>

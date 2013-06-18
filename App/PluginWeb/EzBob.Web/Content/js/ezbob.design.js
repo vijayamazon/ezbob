@@ -916,6 +916,42 @@ EzBob.validateCompanyDetailForm = function (el) {
         
     });
 };
+EzBob.validatePersonalDetailsForm = function (el) {
+    var e = el || $(".PersonalDetailsForm");
+    return e.validate({
+        ignore: "",
+        rules: {
+            //personal info
+            FirstName: EzBob.Validation.NameValidationObject,
+            Surname: { required: true },
+            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
+            DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
+            MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
+            TypeOfBusiness: { required: true },
+            ResidentialStatus: { required: true },
+            Gender: { regex: "^M|F$", required: true },
+            MartialStatus: { required: true },
+            OverallTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
+            WebSiteTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
+            TimeAtAddress: { required: true },
+        },
+        messages: {
+            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
+            day: { digits: "Incorect day" },
+            month: { digits: "Incorect month" },
+            year: { digits: "Incorect year" },
+            ResidentialStatus: { required: "This field is required" },
+            TimeAtAddress: { regex: "This field is required" },
+            Gender: { regex: "Gender field is required" },
+            MartialStatus: { required: "Martial status field is required" },
+            MobilePhone: { regex: "Please enter a valid UK number" },
+            DayTimePhone: { regex: "Please enter a valid UK number" },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
 
 EzBob.validateLimitedCompanyDetailForm = function (el) {
     var e = el || $(".LimitedCompanyDetailForm");

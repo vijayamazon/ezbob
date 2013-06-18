@@ -74,6 +74,12 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		return this;
 	},
+	
+
+	getValidator: function () {
+	    return EzBob.validateNonLimitedCompanyDetailForm;
+	},
+
 	NonLimitedCompanyAddressChanged: function (evt, oModel) {
 		this.companyAddressValidator = oModel.collection.length > 0;
 		this.clearAddressError("#NonLimitedCompanyAddress");

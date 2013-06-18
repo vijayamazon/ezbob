@@ -20,17 +20,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'change input[name="ConsentToSearch"]': 'consentToSearchChanged',
             'click label[for="ConsentToSearch"] a': 'showConsent',
-            'change input[name="FirstName"]': 'firstNameChanged',
-            'change input[name="MiddleInitial"]': 'middleNameChanged',
-            'change input[name="Surname"]': 'surnameChanged',
-            'change input[name="OverallTurnOver"]': 'overallTurnOverChanged',
-            'change input[name="WebSiteTurnOver"]': 'webSiteTurnOverImageChanged',
-            'change select[name="MartialStatus"]': "martialStatusChanged",
-            'change select[name="TimeAtAddress"]': "timeAtAddressChanged",
-            'change select[name="ResidentialStatus"]': "residentialStatusChanged",
-            'change input[name="DayTimePhone"]': 'dayTimePhoneChanged',
-            'change input[name="MobilePhone"]': 'mobilePhoneChanged',
-            'change input[name="Gender"]': 'genderChanged',
             'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
             'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
             'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged",
@@ -63,43 +52,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     	this.day = true;
     	this.dateOfBirthChanged();
     },
-	firstNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "FirstNameImage", "#FirstName");
-	},
-    genderChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "GenderImage", "#GenderCtrl_M");
-    },
-    dayTimePhoneChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "DayTimePhoneImage", "#DayTimePhone");
-    },
-    mobilePhoneChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "MobilePhoneImage", "#MobilePhone");
-    },
-    martialStatusChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "MartialStatusImage", "#MartialStatus");
-    },
-    timeAtAddressChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "TimeAtAddressImage", "#TimeAtAddress");
-    },
-    residentialStatusChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "ResidentialStatusImage", "#ResidentialStatus");
-    },
-    middleNameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "MiddleNameImage", "#MiddleInitial");
-    },
-    surnameChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "SurnameImage", "#Surname");
-    },
-    overallTurnOverChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "OverallTurnOverImage", "#OverallTurnOver");
-    },
-    webSiteTurnOverImageChanged: function () {
-    	EzBob.Validation.displayIndication(this.validator, "WebSiteTurnOverImage", "#WebSiteTurnOver");
-    },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
     },
+
     render: function () {
         this.constructor.__super__.render.call(this);
         var that = this;
@@ -118,6 +75,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.$el.find("#WebSiteTurnOver").moneyFormat();
         this.$el.find("#OverallTurnOver").moneyFormat();
     },
+    
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
             id: this.model.get('Id'),
@@ -152,6 +110,10 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.$el.find("input[name='FirstName']").val(this.$el.find("input[name='FirstName']").val().trim());
         this.$el.find("input[name='MiddleInitial']").val(trim(this.$el.find("input[name='MiddleInitial']").val().trim()));
         this.$el.find("input[name='Surname']").val(this.$el.find("input[name='Surname']").val().trim());
+    },
+    
+    getValidator: function () {
+        return EzBob.validatePersonalDetailsForm;
     },
 
     next: function (e) {

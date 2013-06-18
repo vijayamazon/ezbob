@@ -40,7 +40,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		var directorsView = new EzBob.DirectorMainView({ model: this.model.get('LimitedDirectors'), name: 'limitedDirectors', hidden: this.$el.find('.directorsData') });
 		directorsView.render().$el.appendTo(this.$el.find('.directors'));
-		this.validator = EzBob.validateLimitedCompanyDetailForm($('form.LimitedCompanyDetailForm'));
 		this.$el.find(".cashInput").cashEdit();
 		this.$el.find(".addressCaption").hide();
 
@@ -48,6 +47,11 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 	},
+	
+	getValidator: function () {
+	    return EzBob.validateLimitedCompanyDetailForm;
+	},
+
 	next: function () {
 		var nAddressCount = 0;
 		var nFilledAddressCount = 0;

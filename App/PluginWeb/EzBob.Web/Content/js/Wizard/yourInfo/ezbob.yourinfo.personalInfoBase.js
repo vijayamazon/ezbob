@@ -9,7 +9,7 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('form');
-        this.validator = EzBob.validateCompanyDetailForm(this.form);
+        this.validator = this.getValidator()(this.form);
 
         this.$el.find(".ezDateTime").splittedDateTime();
         this.$el.find('.phonenumber').numericOnly(11);
