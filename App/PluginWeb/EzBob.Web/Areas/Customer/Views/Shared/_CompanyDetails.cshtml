@@ -190,7 +190,8 @@
 	<div class="row-fluid">
 		<h2 class="form_start">Company Information</h2> 
 		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" }))
+   {
 				<div class="control-group">
 					<div class="controls">
 						<label class="control-label attardi-input"><span>Registration #</span>
@@ -230,7 +231,7 @@
 		</div>
 
 		<div class="form_buttons_container">
-			<a href="#" class="next btn-continue button orange continue">Complete</a>
+			<a href="#" class="next btn-continue button orange continue disabled">Complete</a>
 			<a href="#" class="back btn-back button grey">Back</a>
 		</div>
 	</div>
@@ -240,7 +241,8 @@
 	<div class="row-fluid">
 		<h2 class="form_start">Company Information</h2>
 		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" }))
+   {
 				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
 				<div class="control-group">

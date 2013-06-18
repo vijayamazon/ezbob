@@ -8,11 +8,21 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.companyAddressValidator = false;
 
 		this.events = _.extend({}, this.events, {
-			'change input[name="LimitedCompanyName"]': 'limitedCompanyNameChanged',
+			/*'change input[name="LimitedCompanyName"]': 'limitedCompanyNameChanged',
 			'change input[name="LimitedCompanyNumber"]': 'limitedCompanyNumberChanged',
-			'change input[name="LimitedBusinessPhone"]': 'limitedBusinessPhoneChanged'
+			'change input[name="LimitedBusinessPhone"]': 'limitedBusinessPhoneChanged',
+			*/
+            'change input': 'inputChanged',
+		    'keyup input': 'inputChanged'
 		});
 	},
+	
+	inputChanged: function () {
+	    var enabled = EzBob.Validation.checkForm(this.validator);
+	    console.log('enabled', enabled);
+        $('.continue').toggleClass('disabled', !enabled);
+    },
+	/*
 	limitedCompanyNameChanged: function () {
 		EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNameImage", "#LimitedCompanyName");
 	},
@@ -21,17 +31,16 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	},
 	limitedBusinessPhoneChanged: function () {
 		EzBob.Validation.displayIndication(this.validator, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone");
-	},
+	},*/
 	render: function () {
 		this.constructor.__super__.render.call(this);
-
 		var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress'), name: "LimitedCompanyAddress", max: 1 });
 		limitedAddressView.render().$el.appendTo(this.$el.find('#LimitedCompanyAddress'));
 		this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
 
 		var directorsView = new EzBob.DirectorMainView({ model: this.model.get('LimitedDirectors'), name: 'limitedDirectors', hidden: this.$el.find('.directorsData') });
 		directorsView.render().$el.appendTo(this.$el.find('.directors'));
-
+		this.validator = EzBob.validateLimitedCompanyDetailForm($('form.LimitedCompanyDetailForm'));
 		this.$el.find(".cashInput").cashEdit();
 		this.$el.find(".addressCaption").hide();
 

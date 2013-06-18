@@ -917,6 +917,46 @@ EzBob.validateCompanyDetailForm = function (el) {
     });
 };
 
+EzBob.validateLimitedCompanyDetailForm = function (el) {
+    var e = el || $(".LimitedCompanyDetailForm");
+    return e.validate({
+        rules: {
+            //limited company info
+            LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
+            LimitedCompanyName: { required: true, minlength: 2 },
+            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
+        },
+        messages: {
+            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+
+    });
+};
+
+EzBob.validateNonLimitedCompanyDetailForm = function (el) {
+    var e = el || $(".NonLimitedCompanyDetailForm");
+    return e.validate({
+        rules: {
+            //Non limited company info
+            NonLimitedCompanyName: { required: true, minlength: 2 },
+            NonLimitedTimeInBusiness: { required: true },
+            NonLimitedTimeAtAddress: { required: true, digits: true },
+            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
+        },
+        messages: {
+            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+        },
+        
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
+
 EzBob.validateSortCode = function (el) {
     var e = el || $(".bankAccount");
     return e.validate({
