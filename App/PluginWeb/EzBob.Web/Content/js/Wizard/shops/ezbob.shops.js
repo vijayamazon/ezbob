@@ -20,7 +20,7 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var j, _i, _len, _ref1,
+      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, vendorInfo, _i, _len, _ref1,
         _this = this;
 
       this.ebayStores = this.model.get("ebayStores");
@@ -57,16 +57,6 @@
       this.FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView({
         model: this.freeAgentAccounts
       });
-      this.volusionAccounts = new EzBob.VolusionAccounts();
-      this.volusionAccounts.fetch().done(function() {
-        return _this.render();
-      });
-      this.volusionButtonView = new EzBob.VolusionAccountButtonView({
-        model: this.volusionAccounts
-      });
-      this.volusionAccountInfoView = new EzBob.VolusionAccountInfoView({
-        model: this.volusionAccounts
-      });
       this.PayPointAccounts = new EzBob.PayPointAccounts();
       this.PayPointAccounts.fetch().done(function() {
         return _this.render();
@@ -97,16 +87,26 @@
       this.PayPalInfoView = new EzBob.PayPalInfoView({
         model: this.payPalAccounts
       });
-      this.playAccounts = new EzBob.PlayAccounts();
-      this.playAccounts.fetch().done(function() {
-        return _this.render();
-      });
-      this.playButtonView = new EzBob.PlayAccountButtonView({
-        model: this.playAccounts
-      });
-      this.playAccountInfoView = new EzBob.PlayAccountInfoView({
-        model: this.playAccounts
-      });
+      aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+      for (accountTypeName in aryCGAccounts) {
+        ignore = aryCGAccounts[accountTypeName];
+        lc = accountTypeName.toLowerCase();
+        acc = new EzBob.CGAccounts([], {
+          accountType: accountTypeName
+        });
+        acc.fetch().done(function() {
+          return _this.render();
+        });
+        this[lc + 'Accounts'] = acc;
+        this[lc + 'ButtonView'] = new EzBob.CGAccountButtonView({
+          model: acc,
+          accountType: accountTypeName
+        });
+        this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView({
+          model: acc,
+          accountType: accountTypeName
+        });
+      }
       this.stores = {
         "eBay": {
           view: this.EbayStoreView,
@@ -132,23 +132,11 @@
           active: 0,
           priority: 3
         },
-        "Volusion": {
-          view: this.volusionAccountInfoView,
-          button: this.volusionButtonView,
-          active: 0,
-          priority: 4
-        },
         "PayPoint": {
           view: this.PayPointAccountInfoView,
           button: this.PayPointButtonView,
           active: 0,
           priority: 5
-        },
-        "Play": {
-          view: this.playAccountInfoView,
-          button: this.playButtonView,
-          active: 0,
-          priority: 6
         },
         "Yodlee": {
           view: this.YodleeAccountInfoView,
@@ -163,6 +151,16 @@
           priority: 8
         }
       };
+      for (accountTypeName in aryCGAccounts) {
+        vendorInfo = aryCGAccounts[accountTypeName];
+        lc = accountTypeName.toLowerCase();
+        this.stores[accountTypeName] = {
+          view: this[lc + 'AccountInfoView'],
+          button: this[lc + 'ButtonView'],
+          active: 0,
+          priority: vendorInfo.ClientSide.SortPriority
+        };
+      }
       _ref1 = EzBob.Config.ActiveMarketPlaces;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         j = _ref1[_i];

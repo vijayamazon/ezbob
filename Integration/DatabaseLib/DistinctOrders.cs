@@ -5,8 +5,7 @@
 
 	#region class AOrderComparer
 
-	public abstract class AOrderComparer<T> : EqualityComparer<T> where T : class
-	{
+	public abstract class AOrderComparer<T> : EqualityComparer<T> where T : class {
 		public override bool Equals(T a, T b) {
 			if (object.ReferenceEquals(a, b))
 				return true;
@@ -29,7 +28,7 @@
 
 	#region class EkmOrderComparer
 
-	class EkmOrderComparer : AOrderComparer<EkmOrderItem>  {
+	class EkmOrderComparer : AOrderComparer<EkmOrderItem> {
 		public override bool AreEqual(EkmOrderItem a, EkmOrderItem b) {
 			return a.OrderNumber == b.OrderNumber;
 		} // AreEqual
@@ -41,52 +40,51 @@
 
 	#endregion class EkmOrderComparer
 
-	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice>
-	{
-		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b)
-		{
+	#region class FreeAgentInvoiceComparer
+	
+	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice> {
+
+		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b) {
 			return a.url == b.url;
 		} // AreEqual
 
-		public override int HashCode(MP_FreeAgentInvoice a)
-		{
+		public override int HashCode(MP_FreeAgentInvoice a) {
 			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentInvoiceComparer
 
-	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense>
-	{
-		public override bool AreEqual(MP_FreeAgentExpense a, MP_FreeAgentExpense b)
-		{
+	#endregion class FreeAgentInvoiceComparer
+	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense> {
+
+	#region FreeAgentExpenseComparer
+		public override bool AreEqual(MP_FreeAgentExpense a, MP_FreeAgentExpense b) {
 			return a.url == b.url;
 		} // AreEqual
 
-		public override int HashCode(MP_FreeAgentExpense a)
-		{
+		public override int HashCode(MP_FreeAgentExpense a) {
 			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentExpenseComparer
 
+	#endregion FreeAgentExpenseComparer
+
 	#region class ChannelGrabberOrderComparer
 
-	class ChannelGrabberOrderComparer<T> : AOrderComparer<T> where T: class, IChannelGrabberOrderItem {
-		public override bool AreEqual(T a, T b) {
+	class ChannelGrabberOrderComparer : AOrderComparer<ChannelGrabberOrderItem> {
+		public override bool AreEqual(ChannelGrabberOrderItem a, ChannelGrabberOrderItem b) {
 			return a.NativeOrderId == b.NativeOrderId;
 		} // AreEqual
 
-		public override int HashCode(T a) {
+		public override int HashCode(ChannelGrabberOrderItem a) {
 			return a.NativeOrderId.GetHashCode();
 		} // HashCode
 	} // class ChannelGrabberOrderComparer
 
 	#endregion class ChannelGrabberOrderComparer
 
-	class VolusionOrderComparer : ChannelGrabberOrderComparer<VolusionOrderItem> {}
-	class PlayOrderComparer : ChannelGrabberOrderComparer<PlayOrderItem> {}
-
 	#region class PayPointOrderComparer
 
-	class PayPointOrderComparer : AOrderComparer<PayPointOrderItem>  {
+	class PayPointOrderComparer : AOrderComparer<PayPointOrderItem> {
 		public override bool AreEqual(PayPointOrderItem a, PayPointOrderItem b) {
 			return (a.trans_id == b.trans_id) && (a.date == b.date);
 		} // AreEqual
@@ -97,5 +95,4 @@
 	} // class PayPointOrderComparer
 
 	#endregion class PayPointOrderComparer
-
 } // namespace EZBob.DatabaseLib

@@ -99,17 +99,24 @@ $.fn.fmatter.showMedalIcon = (cellval) ->
     text = cellval.text or cellval
     "<i data-toggle='tooltip' title='#{text}' class='#{text.toLowerCase().replace(/\s/g, '')}'></i>"
 
-$.fn.fmatter.showMPIcon = (cellval) ->
+$.fn.fmatter.showMPIcon = (cellval, aryCGAccounts) ->
     text = cellval.text or cellval
-    className = text.replace(/\s|\d/g,'').toLowerCase()
+    className = text.replace(/\s|\d/g,'')
+    className = if aryCGAccounts[className] then 'cgaccount' else className.toLowerCase()
     "<i data-toggle='tooltip' title='#{text}' class='#{className}'></i>"
 
 $.fn.fmatter.showMPsIcon = (cellval, opt) ->
+    if not $.fn.fmatter.showMPsIcon.prototype.CGAccounts
+        $.fn.fmatter.showMPsIcon.prototype.CGAccounts = $.parseJSON $('div#cg-account-list').text()
+
     mps = cellval.text or cellval
     mps = mps.split(',').clean ""
+
     retVal = ""
+
     _.each mps, (val) ->
-        retVal += $.fn.fmatter.showMPIcon(val)
+        retVal += $.fn.fmatter.showMPIcon val, $.fn.fmatter.showMPsIcon.prototype.CGAccounts
+
     "<div style='overflow: auto; width: 102%'>#{retVal + ' '}</div>"
 
 $.fn.fmatter.profileLink = (cellval, opts) ->

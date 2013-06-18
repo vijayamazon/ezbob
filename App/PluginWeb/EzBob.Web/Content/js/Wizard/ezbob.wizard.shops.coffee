@@ -7,15 +7,13 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
       ebayStores: new EzBob.EbayStoreModels(options.ebayMarketPlaces)
       amazonMarketplaces: new EzBob.AmazonStoreModels(options.amazonMarketPlaces)
 
-
   getStores: ->
     stores = []
+
     ebays = @get("ebayStores").toJSON()
     amazons = @get("amazonMarketplaces").toJSON()
     ekms = @get("ekmShops")
     freeagents = @get("freeAgentAccounts")
-    volusions = @get("volusionShops")
-    plays = @get("playShops")
     payPoints = @get("payPointAccounts")
     yodlees = @get("yodleeAccounts")
     paypals = @get("paypalAccounts")
@@ -29,12 +27,6 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     for shop in ekms
         stores.push {displayName: shop.displayName, type: "EKM"}
 
-    for shop in volusions
-        stores.push {displayName: shop.displayName, type: "Volusion"}
-
-    for shop in plays
-        stores.push {displayName: shop.displayName, type: "Play"}
-
     for shop in payPoints
         stores.push {displayName: shop.displayName, type: "PayPoint"}
 
@@ -46,6 +38,16 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     for shop in freeagents
         stores.push {displayName: shop.displayName, type: "FreeAgent"}
+
+    aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
+
+    for accountTypeName, ignore of aryCGAccounts
+      atlc = accountTypeName.toLowerCase()
+
+      listOfShops = @get(atlc + 'Shops')
+
+      for shop in listOfShops
+        stores.push { displayName: shop.displayName, type: accountTypeName }
 
     return stores
 

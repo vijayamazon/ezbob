@@ -76,13 +76,12 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentExpensesList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentInvoicesList.cs" />
     <Compile Include="DatabaseWrapper\Order\IChannelGrabberOrderItem.cs" />
-    <Compile Include="DatabaseWrapper\Order\VolusionOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
-    <Compile Include="DatabaseWrapper\Order\PlayOrderItem.cs" />
-    <Compile Include="DatabaseWrapper\Order\PlayOrdersList.cs" />
     <Compile Include="Model\Database\CustomerLoyaltyProgramPointsMap.cs" />
     <Compile Include="Model\Database\CustomerLoyaltyProgramPoints.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionMap.cs" />
@@ -93,6 +92,10 @@
     <Compile Include="Model\Loans\DiscountPlan.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentExpenseCategoryMap.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentExpenseCategory.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_ChannelGrabberOrder.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_ChannelGrabberOrderItem.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_ChannelGrabberOrderItemMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_ChannelGrabberOrderMap.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentExpenseMap.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentExpense.cs" />
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentInvoiceItemMap.cs" />
@@ -107,10 +110,6 @@
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequestMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormula.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormulaMap.cs" />
-    <Compile Include="Model\Marketplaces\Play\MP_PlayOrder.cs" />
-    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItem.cs" />
-    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderItemMap.cs" />
-    <Compile Include="Model\Marketplaces\Play\MP_PlayOrderMap.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategory.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategoryStatistics.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\TeraPeackHelper.cs" />
@@ -157,7 +156,6 @@
     <Compile Include="DatabaseWrapper\Order\AmazonOrderItemDetailsList.cs" />
     <Compile Include="DatabaseWrapper\Order\AmazonOrdersList2.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrderItem.cs" />
-    <Compile Include="DatabaseWrapper\Order\VolusionOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\PayPointOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EkmOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\EBayDatabaseExternalTransactionList.cs" />
@@ -199,10 +197,6 @@
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
-    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrder.cs" />
-    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItem.cs" />
-    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderItemMap.cs" />
-    <Compile Include="Model\Marketplaces\Volusion\MP_VolusionOrderMap.cs" />
     <Compile Include="Model\PayPointCard.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrder.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItem.cs" />
@@ -410,6 +404,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    </ProjectReference>
+    <ProjectReference Include="..\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
+      <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
+      <Name>ChannelGrabberConfig</Name>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

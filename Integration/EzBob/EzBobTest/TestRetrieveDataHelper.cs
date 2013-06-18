@@ -7,8 +7,6 @@ namespace EzBobTest
 	using System.Xml;
 	using EKM;
 	using FreeAgent;
-	using Integration.Volusion;
-	using Integration.Play;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -43,15 +41,14 @@ namespace EzBobTest
         [SetUp]
         public void Init()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
+            EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(PayPalDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(EkmDatabaseMarketPlace).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(VolusionDatabaseMarketPlace).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(PlayDatabaseMarketPlace).Assembly);
+            // NHibernateManager.FluentAssemblies.Add(typeof(DatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
@@ -62,7 +59,9 @@ namespace EzBobTest
                 x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
             });
 
-            XmlElement configurationElement = ConfigurationRoot.GetConfiguration().XmlElementLog;
+	        var cfg = ConfigurationRoot.GetConfiguration();
+
+            XmlElement configurationElement = cfg.XmlElementLog;
             XmlConfigurator.Configure(configurationElement);
 
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
@@ -96,18 +95,6 @@ namespace EzBobTest
             var id = 35;
             UpdateCustomer(id);
 
-        }
-
-        [Test]
-        public void UpdateVolusionMarketplace()
-        {
-            UpdateCustomerMarketplace(2143);
-        }
-
-        [Test]
-        public void UpdatePlayMarketplace()
-        {
-            UpdateCustomerMarketplace(2143); // TODO: put real market place id here
         }
 
         [Test]

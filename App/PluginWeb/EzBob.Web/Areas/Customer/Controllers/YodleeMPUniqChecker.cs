@@ -32,11 +32,6 @@
 
 		#region method Check
 
-		public override void Check(Guid marketplaceType, Customer customer, string login, string url)
-		{
-			throw new NotImplementedException("YodleeMPUniqChecker does not support Check(market place, customer, login, url");
-		} // Check
-
 		public void Check(Guid marketplaceType, Customer customer, long csId, ISession _session)
 		{
 			if (_whiteList.IsMarketPlaceInWhiteList(marketplaceType, string.Format("{0}", csId)))

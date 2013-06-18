@@ -6,35 +6,42 @@
 				<table>
 					<tbody>
 						<tr>
-							<td style="width: 187px;">
-								<% switch (shopClass) 
-									{
-										case 'eBay':
-										case 'paypal':
-											%><a href="#<%- shopClass %>_help" class="source_help"><%
-											break;
-										case 'FreeAgent':
-											%><a href="#<%- shopClass %>_help" class="source_help">
-                                              <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%> new-ribbon"/><%
-											break;
-                                        case 'Yodlee':
-                                        case 'Play':%>
-                                            <a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'>
-                                                <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%> new-ribbon"></div>
-                                            <%break;
-										default:
-											%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
-											break;
+							<td style="width: 187px;"><%
+								switch (shopClass) {
+								case 'eBay':
+								case 'paypal':
+								case 'FreeAgent':
+									%><a href="#<%- shopClass %>_help" class="source_help"><%
+									break;
+								default:
+									%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
+									break;
+								} // switch
+
+								(function (shopClass) {
+									var bNew = (shopClass == 'Yodlee');
+
+									if (!bNew) {
+										var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+
+										if (aryCGAccounts[shopClass])
+											bNew = aryCGAccounts[shopClass].ClientSide.IsNew;
+									} // if
+
+									if (bNew) {
+										%><div class="<%= shops.length ? 'source_labels_on' : 'source_labels' %> new-ribbon"></div><%
 									} // switch
-								%>
-								<div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%>  <%- shopClass %>"><%- name %></div>
-								</a>
+								})(shopClass);
+
+								%><div class="aligncenter <%= shops.length ? 'source_labels_on' : 'source_labels'%> <%- shopClass %>"><%- name %></div></a>
 							</td>
 							<td style="vertical-align: middle;"><% if(shops.length) {%>
 									<div class="tooltipdiv" data-toggle="tooltip" data-placement="bottom" data-original-title="<%- shopNames %>">
 										<a class="accordion-toggle label green" data-toggle="collapsewithlinkedarrow" data-target="#arrow<%- shopClass %>" href="#description<%-shopClass%>">
-                                            <div style="float:left"><%= shops.length%></div><div id="arrow<%- shopClass %>" class="alignright downarrowbutton">▼</div>
-										</a> Account<%= shops.length == 1 ? '' : 's' %> Linked
+											<div style="float: left"><%= shops.length%></div>
+											<div id="arrow<%- shopClass %>" class="alignright downarrowbutton">▼</div>
+										</a>
+										&nbsp;Account<%= shops.length == 1 ? '' : 's' %> Linked
 									</div>
 								<%} else {%>
 									<div>No Accounts Linked</div>

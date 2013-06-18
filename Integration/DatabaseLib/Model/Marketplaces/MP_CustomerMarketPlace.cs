@@ -21,8 +21,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
 			EkmOrders = new HashedSet<MP_EkmOrder>();
 			FreeAgentRequests = new HashedSet<MP_FreeAgentRequest>();
-            VolusionOrders = new HashedSet<MP_VolusionOrder>();
-            PlayOrders = new HashedSet<MP_PlayOrder>();
+			ChannelGrabberOrders = new HashedSet<MP_ChannelGrabberOrder>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
             YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
@@ -55,8 +54,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
 		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
-        public virtual ISet<MP_VolusionOrder> VolusionOrders { get; set; }
-        public virtual ISet<MP_PlayOrder> PlayOrders { get; set; }
+        public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
         public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 

@@ -71,32 +71,33 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             return this.JsonNet(values.Select(v => new FunctionValueModel(v)));
         }
 
-        [Ajax]
-        public void ReCheckMarketplaces(int umi)
-        {
-            var mp = _customerMarketplaces.Get(umi);
-            if (mp.UpdatingEnd == null && mp.UpdatingStart != null)
-            {
-                throw new Exception("Strategy already started");
-            }
+		[Ajax]
+		public void ReCheckMarketplaces(int umi) {
+			var mp = _customerMarketplaces.Get(umi);
 
-            var customer = mp.Customer;
-            _customerMarketplaces.ClearUpdatingEnd(umi);
-            switch(mp.Marketplace.Name)
-            {
-                case "Amazon":
-				case "eBay":
-				case "EKM":
-				case "FreeAgent":
-				case "Yodlee": 
-                case "Volusion": 
-                case "Play": 
-                case "PayPoint": 
-                case "Pay Pal": 
-                    _appCreator.CustomerMarketPlaceAdded(customer, umi);
-                    break;
-            }
-        }
+			if (mp.UpdatingEnd == null && mp.UpdatingStart != null)
+				throw new Exception("Strategy already started");
+
+			var customer = mp.Customer;
+			_customerMarketplaces.ClearUpdatingEnd(umi);
+
+			switch (mp.Marketplace.Name) {
+			case "Amazon":
+			case "eBay":
+			case "EKM":
+			case "FreeAgent":
+			case "Yodlee":
+			case "PayPoint":
+			case "Pay Pal":
+				_appCreator.CustomerMarketPlaceAdded(customer, umi);
+				break;
+
+			default:
+				if (null != Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
+					_appCreator.CustomerMarketPlaceAdded(customer, umi);
+				break;
+			} // switch
+		} // ReCheckMarketplaces
 
         [Ajax]
         [HttpGet]

@@ -23,15 +23,13 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var amazons, ebays, ekms, freeagents, payPoints, paypals, plays, shop, stores, volusions, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _q;
+      var accountTypeName, amazons, aryCGAccounts, atlc, ebays, ekms, freeagents, ignore, listOfShops, payPoints, paypals, shop, stores, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
       freeagents = this.get("freeAgentAccounts");
-      volusions = this.get("volusionShops");
-      plays = this.get("playShops");
       payPoints = this.get("payPointAccounts");
       yodlees = this.get("yodleeAccounts");
       paypals = this.get("paypalAccounts");
@@ -56,47 +54,46 @@
           type: "EKM"
         });
       }
-      for (_l = 0, _len3 = volusions.length; _l < _len3; _l++) {
-        shop = volusions[_l];
-        stores.push({
-          displayName: shop.displayName,
-          type: "Volusion"
-        });
-      }
-      for (_m = 0, _len4 = plays.length; _m < _len4; _m++) {
-        shop = plays[_m];
-        stores.push({
-          displayName: shop.displayName,
-          type: "Play"
-        });
-      }
-      for (_n = 0, _len5 = payPoints.length; _n < _len5; _n++) {
-        shop = payPoints[_n];
+      for (_l = 0, _len3 = payPoints.length; _l < _len3; _l++) {
+        shop = payPoints[_l];
         stores.push({
           displayName: shop.displayName,
           type: "PayPoint"
         });
       }
-      for (_o = 0, _len6 = yodlees.length; _o < _len6; _o++) {
-        shop = yodlees[_o];
+      for (_m = 0, _len4 = yodlees.length; _m < _len4; _m++) {
+        shop = yodlees[_m];
         stores.push({
           displayName: shop.displayName,
           type: "Yodlee"
         });
       }
-      for (_p = 0, _len7 = paypals.length; _p < _len7; _p++) {
-        shop = paypals[_p];
+      for (_n = 0, _len5 = paypals.length; _n < _len5; _n++) {
+        shop = paypals[_n];
         stores.push({
           displayName: shop.displayName,
           type: "paypal"
         });
       }
-      for (_q = 0, _len8 = freeagents.length; _q < _len8; _q++) {
-        shop = freeagents[_q];
+      for (_o = 0, _len6 = freeagents.length; _o < _len6; _o++) {
+        shop = freeagents[_o];
         stores.push({
           displayName: shop.displayName,
           type: "FreeAgent"
         });
+      }
+      aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+      for (accountTypeName in aryCGAccounts) {
+        ignore = aryCGAccounts[accountTypeName];
+        atlc = accountTypeName.toLowerCase();
+        listOfShops = this.get(atlc + 'Shops');
+        for (_p = 0, _len7 = listOfShops.length; _p < _len7; _p++) {
+          shop = listOfShops[_p];
+          stores.push({
+            displayName: shop.displayName,
+            type: accountTypeName
+          });
+        }
       }
       return stores;
     };

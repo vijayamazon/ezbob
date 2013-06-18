@@ -103,9 +103,8 @@ ul.storelist li span {
 #ekmAccount input[type="text"], #ekmAccount input[type="password"],
 #payPointAccount input[type="text"], #payPointAccount input[type="password"], #payPointAccount input[type="password"] { width: 245px; }
 
-#volusionAccount input[type="text"], #volusionAccount input[type="password"],
-#playAccount input[type="text"], #playAccount input[type="password"]
-{ width: 400px; }
+.cg-link-account-form input[type="text"],
+.cg-link-account-form input[type="password"] { width: 400px; }
 
 .field-validation-error { display: block; font-weight: bold;}
 

@@ -11,8 +11,6 @@
     using PayPal;
     using YodleeLib.connector;
     using eBayLib;
-    using Integration.Volusion;
-    using Integration.Play;
 
     public static class CustomerExtensions
     {
@@ -69,19 +67,20 @@
 			return simpleMarketPlaceModels;
 		}
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetVolusionShops(this Customer customer) {
-	        var oVsi = new VolusionServiceInfo();
-            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oVsi.InternalId);
-            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
-            return simpleMarketPlaceModels;
-        } // GetVolusionShops
+		public static IEnumerable<SimpleMarketPlaceModel> GetChannelGrabberShops(this Customer customer) {
+			var oOutput = new List<SimpleMarketPlaceModel>();
 
-        public static IEnumerable<SimpleMarketPlaceModel> GetPlayShops(this Customer customer) {
-	        var oVsi = new PlayServiceInfo();
-            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oVsi.InternalId);
-            var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
-            return simpleMarketPlaceModels;
-        } // GetPlayShops
+			Integration.ChannelGrabberConfig.Configuration.Instance.ForEachVendor(vi => {
+				var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == vi.Guid());
+
+				oOutput.AddRange(marketplaces.Select(m => new SimpleMarketPlaceModel {
+					displayName = m.DisplayName,
+					storeInfoStepModelShops = vi.ClientSide.StoreInfoStepModelShops
+				}));
+			});
+
+			return oOutput;
+		} // GetChannelGrabberShops
 
         public static IEnumerable<SimpleMarketPlaceModel> GetPayPointAccounts(this Customer customer)
         {

@@ -145,16 +145,19 @@
     };
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
+      var aryCGAccounts;
+
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
           return this.$el.find("#ekm_login").focus();
-        case "Volusion":
-          return this.$el.find("#volusion_url").focus();
-        case "Play":
-          return this.$el.find("#play_name").focus();
         case "PayPoint":
           return this.$el.find("#payPoint_login").focus();
+        default:
+          aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+          if (aryCGAccounts[storeName]) {
+            return $('.form_field', '#' + storeName.toLowerCase() + 'Account').first().focus();
+          }
       }
     };
 

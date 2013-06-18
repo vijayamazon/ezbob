@@ -69,11 +69,7 @@ namespace EZBob.DatabaseLib.Model.Database
                 .PropertyRef(p => p.HistoryRecord)
                 .Cascade.All();
 
-            HasOne(x => x.VolusionOrder)
-                .PropertyRef(p => p.HistoryRecord)
-                .Cascade.All();
-
-            HasOne(x => x.PlayOrder)
+            HasOne(x => x.ChannelGrabberOrder)
                 .PropertyRef(p => p.HistoryRecord)
                 .Cascade.All();
 

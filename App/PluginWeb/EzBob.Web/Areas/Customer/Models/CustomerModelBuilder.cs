@@ -64,8 +64,7 @@ namespace EzBob.Web.Areas.Customer.Models
 			customerdModel.freeAgentAccounts = customer.GetFreeAgentAccounts();
 			customerdModel.payPointAccounts = customer.GetPayPointAccounts();
 			customerdModel.yodleeAccounts = customer.GetYodleeAccounts();
-            customerdModel.volusionShops = customer.GetVolusionShops();
-            customerdModel.playShops = customer.GetPlayShops();
+			customerdModel.cgShops = customer.GetChannelGrabberShops();
             customerdModel.paypalAccounts = customer.GetPayPalAccountsSimple();
 
 			customerdModel.LastApprovedLoanTypeID = customer.LastCashRequest != null ? customer.LastCashRequest.LoanType.Id : 0;

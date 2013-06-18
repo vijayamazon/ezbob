@@ -8,52 +8,66 @@
 var EzBob = EzBob || {};
 
 EzBob.SignUpWizard = EzBob.Wizard.extend({
-    initialize: function (options) {
-        this.customer = options.customer;
+	initialize: function (options) {
+		this.customer = options.customer;
 
-        var storeInfoStepModel = new EzBob.StoreInfoStepModel({
-            ebayMarketPlaces: options.ebayMarketPlaces,
-            amazonMarketPlaces: options.amazonMarketPlaces,
-            ekmMarketPlaces: options.ekmMarketPlaces,
-            freeagentMarketPlaces: options.freeagentMarketPlaces,
-            yodleeAccounts: options.yodleeAccounts,
-            volusionMarketPlaces: options.volusionMarketPlaces,
-            playMarketPlaces: options.playMarketPlaces,
-            paypointMarketPlaces: options.paypointMarketPlaces
-        });
+		var modelArgs = {
+			ebayMarketPlaces: options.ebayMarketPlaces,
+			amazonMarketPlaces: options.amazonMarketPlaces,
+			ekmMarketPlaces: options.ekmMarketPlaces,
+			freeagentMarketPlaces: options.freeagentMarketPlaces,
+			yodleeAccounts: options.yodleeAccounts,
+			paypointMarketPlaces: options.paypointMarketPlaces
+		};
 
-        var yourInformationStepModel = new EzBob.YourInformationStepModel();
+		var cgShops = options.cgShops;
 
-        this.steps = [];
+		for (var i in cgShops) {
+			if (!cgShops.hasOwnProperty(i))
+				continue;
 
-        this.signUpStepView = new EzBob.QuickSignUpStepView({ model: this.customer });
-        this.signUpStepView.on('ready', this.signed, this);
-        this.addStep("Create an Account", this.signUpStepView);
+			var o = cgShops[i];
 
-        this.personInfoView = new EzBob.YourInformationStepView({model: this.customer});
-        this.personInfoView.on('ready', this.evaluate, this);
+			if (!modelArgs[o.storeInfoStepModelShops])
+				modelArgs[o.storeInfoStepModelShops] = [];
 
-        this.evaluated = false; // if the evaluation strategy has ran
+			modelArgs[o.storeInfoStepModelShops].push(o);
+		} // for each cg shop
 
-        var stepModels = new EzBob.WizardSteps([this.customer, storeInfoStepModel, yourInformationStepModel]);
-        var model = new EzBob.WizardModel({ stepModels: stepModels, total: stepModels.length, allowed: 3 });
+		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
 
-        this.storeView = new EzBob.StoreInfoStepView({ model: storeInfoStepModel });
-        this.storeView.on('ready', this.signed, this);
-        
-        this.addStep("Link Accounts", this.storeView);
-        this.addStep("Enter Information", this.personInfoView);
+		var yourInformationStepModel = new EzBob.YourInformationStepModel();
 
-        this.constructor.__super__.initialize.apply(this, [{ model: model, steps: this.steps}]);
-    },
-    signed: function () {
-        this.storeView.StoreInfoView.YodleeAccountInfoView.loadBanks();
-    },
-    evaluate: function () {
-        $(document).attr("title", "Wizard Complete: Welcome to EZBOB | EZBOB");
-        if (this.evaluated) return;
-        this.evaluated = true;
-        EzBob.App.GA.trackPage('/Customer/Wizard/Success');
-    }
+		this.steps = [];
+
+		this.signUpStepView = new EzBob.QuickSignUpStepView({ model: this.customer });
+		this.signUpStepView.on('ready', this.signed, this);
+		this.addStep("Create an Account", this.signUpStepView);
+
+		this.personInfoView = new EzBob.YourInformationStepView({ model: this.customer });
+		this.personInfoView.on('ready', this.evaluate, this);
+
+		this.evaluated = false; // if the evaluation strategy has ran
+
+		var stepModels = new EzBob.WizardSteps([this.customer, storeInfoStepModel, yourInformationStepModel]);
+		var model = new EzBob.WizardModel({ stepModels: stepModels, total: stepModels.length, allowed: 3 });
+
+		this.storeView = new EzBob.StoreInfoStepView({ model: storeInfoStepModel });
+		this.storeView.on('ready', this.signed, this);
+
+		this.addStep("Link Accounts", this.storeView);
+		this.addStep("Enter Information", this.personInfoView);
+
+		this.constructor.__super__.initialize.apply(this, [{ model: model, steps: this.steps }]);
+	},
+	signed: function () {
+		this.storeView.StoreInfoView.YodleeAccountInfoView.loadBanks();
+	},
+	evaluate: function () {
+		$(document).attr("title", "Wizard Complete: Welcome to EZBOB | EZBOB");
+		if (this.evaluated) return;
+		this.evaluated = true;
+		EzBob.App.GA.trackPage('/Customer/Wizard/Success');
+	}
 });
 

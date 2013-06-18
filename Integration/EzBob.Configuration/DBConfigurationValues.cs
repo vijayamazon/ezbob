@@ -1,5 +1,8 @@
-﻿using EZBob.DatabaseLib.Model;
+﻿using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model;
+using EzBob.CommonLib;
 using StructureMap;
+using log4net;
 
 namespace EzBob.Configuration {
 	#region enum variables
@@ -48,6 +51,8 @@ namespace EzBob.Configuration {
 
 		#endregion Instance
 
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(DBConfigurationValues));
+
 		#region properties
 
 		public bool DisplayEarnedPoints { get { return RawDisplayEarnedPoints == "1"; } }
@@ -85,18 +90,29 @@ namespace EzBob.Configuration {
 
 		public string this[Variables v] {
 			get {
-				var rep = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
+				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
-				if (rep == null)
+				if (oDBHelper == null) {
+					ms_oLog.Error("Failed to retrieve database helper.");
 					return null;
+				} // if
+
+				var rep = oDBHelper.ConfigurationVariables;
+
+				if (rep == null) {
+					ms_oLog.Error("Failed to retrieve configuration variables.");
+					return null;
+				} // if
 
 				var oCfgValue = rep.GetByName(v.ToString());
 
-				if (oCfgValue == null)
+				if (oCfgValue == null) {
+					ms_oLog.WarnFormat("Configuration variable not found: {0}", v.ToString());
 					return null;
+				} // if
 
 				return oCfgValue.Value;
-			}
+			} // get
 		} // indexer
 
 		#endregion indexer

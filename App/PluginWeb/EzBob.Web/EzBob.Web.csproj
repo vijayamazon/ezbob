@@ -216,14 +216,11 @@
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
     <Compile Include="Areas\Customer\Controllers\FreeAgentMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMPUniqChecker.cs" />
-    <Compile Include="Areas\Customer\Controllers\PlayMPUniqChecker.cs" />
-    <Compile Include="Areas\Customer\Controllers\PlayMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMarketPlacesController.cs" />
-    <Compile Include="Areas\Customer\Controllers\VolusionMarketPlacesController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CGMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
-    <Compile Include="Areas\Customer\Controllers\VolusionMPUniqChecker.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
@@ -931,6 +928,9 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
+      <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.js">
       <DependentUpon>ezbob.underwriter.creditLineDialog.coffee</DependentUpon>
     </Content>
@@ -946,14 +946,17 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
+      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.js">
+      <DependentUpon>ezbob.shops.cg.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.play.js">
-      <DependentUpon>ezbob.shops.play.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
       <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
@@ -966,21 +969,19 @@
     </Content>
     <Content Include="Views\Shared\_LoginTemplate.cshtml" />
     <Content Include="Content\js\login\ezbob.login.view.coffee" />
-    <Content Include="Areas\Customer\Views\Shared\Shops\VolusionAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Login.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\Shops\PlayAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\CGAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\YodleeAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Ebay.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Amazon.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\EKM.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\PayPoint.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Volusion.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Play.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Yodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\YodleeCallback.cshtml" />
     <Content Include="Content\js\lib\mousetrap_1.4.0.js" />
@@ -1022,9 +1023,6 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
       <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.js">
-      <DependentUpon>ezbob.shops.volusion.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
       <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
@@ -1246,6 +1244,14 @@
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
+      <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
+      <Name>ChannelGrabberConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
+      <Project>{eb0e1f2b-36af-4ec4-b4ce-79bc52f8252b}</Project>
+      <Name>ChannelGrabberFrontend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
@@ -1329,6 +1335,10 @@
     <ProjectReference Include="..\..\..\Integration\Play\Play.csproj">
       <Project>{dfd164c8-a73c-48cd-8664-b8e63478003a}</Project>
       <Name>Play</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Shopify\Shopify.csproj">
+      <Project>{454f3787-03a2-449d-ba52-8fd03954b84f}</Project>
+      <Name>Shopify</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Volusion\Volusion.csproj">
       <Project>{48fec03d-c021-4c8c-89e3-9f6dee55a55d}</Project>
@@ -1477,14 +1487,13 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.volusion.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.stManage.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

@@ -1066,33 +1066,44 @@ EzBob.validatePayPointShopForm = function (el) {
     });
 };
 
-EzBob.validateVolusionShopForm = function (el) {
-    var e = el || $('form');
-    return e.validate({
-        rules: {
-            volusion_url: { required: true, url: true, maxlength: 300 },
-            volusion_login: { required: true, minlength: 2, maxlength: 30 },
-            volusion_password: { required: true, minlength: 2, maxlength: 300 }
-        },
-        messages: {
-            volusion_url: { url: "Please enter a valid URL" }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-    });
-};
+EzBob.validateCGShopForm = function(el, accountType) {
+	var v = {
+		rules: {},
+		messages: {},
+		errorPlacement: EzBob.Validation.errorPlacement,
+		unhighlight: EzBob.Validation.unhighlightFS,
+		highlight: EzBob.Validation.highlightFS
+	};
 
-EzBob.validatePlayShopForm = function (el) {
-    var e = el || $('form');
-    return e.validate({
-        rules: {
-            play_name: { required: true, maxlength: 300 },
-            play_login: { required: true, minlength: 2, maxlength: 30 },
-            play_password: { required: true, minlength: 2, maxlength: 300 }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-    });
+	var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+
+	var lf = aryCGAccounts[accountType].ClientSide.LinkForm;
+
+	var atlc = accountType.toLowerCase();
+
+	for (var i in lf.Fields) {
+		if (!lf.Fields.hasOwnProperty(i))
+			continue;
+
+		var fi = lf.Fields[i];
+
+		var r = {};
+		var m = {};
+
+		for (var j in fi.ValidationRules)
+			if (fi.ValidationRules[j])
+				r[j] = fi.ValidationRules[j];
+
+		for (var j in fi.ValidationMessages) {
+			var msg = fi.ValidationMessages[j];
+			m[msg.PropertyName] = msg.Message;
+		} // for
+
+		var pn = atlc + '_' + fi.PropertyName.toLowerCase();
+
+		v.rules[pn] = r;
+		v.messages[pn] = m;
+	} // for each field
+
+	return el.validate(v);
 };

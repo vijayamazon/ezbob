@@ -98,19 +98,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	}
 
 
-    public class VolusionMarketPlaceType : MP_MarketplaceType
-    {
-        public override int UWPriority { get { return 4; } }
-    }
-
-    public class VolusionMarketPlaceTypeMap : SubclassMap<VolusionMarketPlaceType>
-    {
-        public VolusionMarketPlaceTypeMap()
-        {
-            DiscriminatorValue("Volusion");
-        }
-    }
-
     public class PayPointMarketPlaceType : MP_MarketplaceType
     {
         public override bool IsPaymentAccount { get { return true; } }
@@ -125,6 +112,19 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
     }
 
+    public class VolusionMarketPlaceType : MP_MarketplaceType
+    {
+        public override int UWPriority { get { return 4; } }
+    }
+
+    public class VolusionMarketPlaceTypeMap : SubclassMap<VolusionMarketPlaceType>
+    {
+        public VolusionMarketPlaceTypeMap()
+        {
+            DiscriminatorValue("Volusion");
+        }
+    }
+
     public class PlayMarketPlaceType : MP_MarketplaceType
     {
         public override int UWPriority { get { return 5; } }
@@ -135,6 +135,19 @@ namespace EZBob.DatabaseLib.Model.Database {
         public PlayMarketPlaceTypeMap()
         {
             DiscriminatorValue("Play");
+        }
+    }
+
+    public class ShopifyMarketPlaceType : MP_MarketplaceType
+    {
+        public override int UWPriority { get { return 6; } }
+    }
+
+    public class ShopifyMarketPlaceTypeMap : SubclassMap<ShopifyMarketPlaceType>
+    {
+        public ShopifyMarketPlaceTypeMap()
+        {
+            DiscriminatorValue("Shopify");
         }
     }
 

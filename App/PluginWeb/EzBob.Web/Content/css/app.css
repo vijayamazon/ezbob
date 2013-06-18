@@ -406,16 +406,6 @@ div.shop-connected {
         width: 161px;
     }
 
-    .source_labels.Volusion, .source_labels.volusion {
-        background-position: -868px -3px;
-        width: 98px;
-    }
-
-    .source_labels_on.Volusion, .source_labels_on.volusion {
-        background-position: -868px -43px;
-        width: 98px;
-    }
-
     .source_labels.paypal {
         background-position: -751px -2px;
         width: 111px;
@@ -434,16 +424,6 @@ div.shop-connected {
     .source_labels_on.PayPoint, .source_labels_on.paypoint {
         background-position: -967px -41px;
         width: 163px;
-    }
-
-    .source_labels.Play, .source_labels.play {
-        background-position: -195px 0;
-        width: 116px;
-    }
-
-    .source_labels_on.Play, .source_labels_on.play {
-        background-position: -195px -40px;
-        width: 116px;
     }
 
     .source_labels.shopify {
@@ -1108,18 +1088,6 @@ input[type="color"],
 }
 
 .help_PayPoint {
-    background: url(images/cb/loading.gif) no-repeat center center;
-    background-color: black;
-    /*TODO provide real image*/
-}
-
-.help_Volusion {
-    background: url(images/cb/loading.gif) no-repeat center center;
-    background-color: black;
-    /*TODO provide real image*/
-}
-
-.help_Play {
     background: url(images/cb/loading.gif) no-repeat center center;
     background-color: black;
     /*TODO provide real image*/

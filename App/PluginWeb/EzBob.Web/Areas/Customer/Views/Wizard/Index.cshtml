@@ -1,5 +1,8 @@
 ﻿@using System.Globalization
 @using EzBob.Web.Infrastructure
+@using Integration.ChannelGrabberConfig
+@using Integration.ChannelGrabberFrontend
+@using Newtonsoft.Json
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,6 +12,9 @@
 <div class="row-fluid wizard-wrapper">
     <div id="wizard"></div>
 </div>
+
+<div class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new AccountModel())</div>
+<div class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
 
 @section Js{
     @{Html.RenderPartial("_SignUpTemplate");}
@@ -23,8 +29,7 @@
     @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
     @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
     @{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/VolusionAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/PlayAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/CGAccoutInfoTemplate");}
     @BundleHelper.RenderWizardJs()
     <script type="text/javascript">
         $(function () {

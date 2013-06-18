@@ -17,21 +17,16 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
         @amazonMarketplaces.on "reset change", @marketplacesChanged, this
         @amazonMarketplaces.on "sync", @render, this
-        
+
         @ekmAccounts = new EzBob.EKMAccounts()
         @ekmAccounts.fetch().done => @render()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
-        
+
         @freeAgentAccounts = new EzBob.FreeAgentAccounts()
         @freeAgentAccounts.fetch().done => @render()
         @freeAgentButtonView = new EzBob.FreeAgentAccountButtonView(model: @freeAgentAccounts)
         @FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView(model: @freeAgentAccounts)
-        
-        @volusionAccounts = new EzBob.VolusionAccounts()
-        @volusionAccounts.fetch().done => @render()
-        @volusionButtonView = new EzBob.VolusionAccountButtonView(model: @volusionAccounts)
-        @volusionAccountInfoView = new EzBob.VolusionAccountInfoView(model: @volusionAccounts)
 
         @PayPointAccounts = new EzBob.PayPointAccounts()
         @PayPointAccounts.fetch().done => @render()
@@ -48,10 +43,17 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @PayPalButtonView = new EzBob.PayPalButtonView(model: @payPalAccounts)
         @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)
 
-        @playAccounts = new EzBob.PlayAccounts()
-        @playAccounts.fetch().done => @render()
-        @playButtonView = new EzBob.PlayAccountButtonView(model: @playAccounts)
-        @playAccountInfoView = new EzBob.PlayAccountInfoView(model: @playAccounts)
+        aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
+
+        for accountTypeName, ignore of aryCGAccounts
+            lc = accountTypeName.toLowerCase()
+
+            acc = new EzBob.CGAccounts [], accountType: accountTypeName
+            acc.fetch().done => @render()
+
+            this[lc + 'Accounts'] = acc
+            this[lc + 'ButtonView'] = new EzBob.CGAccountButtonView model: acc, accountType: accountTypeName
+            this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView model: acc, accountType: accountTypeName
 
         @stores =
             "eBay":
@@ -74,21 +76,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 button: @ekmButtonView
                 active: 0
                 priority: 3
-            "Volusion":
-                view: @volusionAccountInfoView
-                button: @volusionButtonView
-                active: 0
-                priority: 4
             "PayPoint":
                 view: @PayPointAccountInfoView
                 button: @PayPointButtonView
                 active: 0
                 priority: 5
-            "Play":
-                view: @playAccountInfoView
-                button: @playButtonView
-                active: 0
-                priority: 6
             "Yodlee":
                 view: @YodleeAccountInfoView
                 button: @YodleeButtonView
@@ -100,9 +92,18 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 active: 0
                 priority: 8
 
-         for j in EzBob.Config.ActiveMarketPlaces
-             if @stores[j]
-                 @stores[j].active = 1
+        for accountTypeName, vendorInfo of aryCGAccounts
+            lc = accountTypeName.toLowerCase()
+
+            @stores[accountTypeName] =
+                view: this[lc + 'AccountInfoView']
+                button: this[lc + 'ButtonView']
+                active: 0
+                priority: vendorInfo.ClientSide.SortPriority
+
+        for j in EzBob.Config.ActiveMarketPlaces
+            if @stores[j]
+                @stores[j].active = 1
 
         @name = "shops"
         super()

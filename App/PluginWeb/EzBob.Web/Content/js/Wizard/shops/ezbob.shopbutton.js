@@ -15,10 +15,6 @@
       return _ref;
     }
 
-    StoreButtonView.prototype.events = {
-      "click .addAccount": "addAccount"
-    };
-
     StoreButtonView.prototype.template = "#store-button-template";
 
     StoreButtonView.prototype.initialize = function(options) {
@@ -26,7 +22,7 @@
       this.logoText = options.logoText;
       this.shops = options.shops;
       if (this.shops) {
-        this.shops.on("change reset", this.render, this);
+        this.shops.on("change reset sync", this.render, this);
       }
       return this.shopClass = options.name.replace(' ', '');
     };
@@ -51,28 +47,9 @@
     StoreButtonView.prototype.onRender = function() {
       this.$el.find('.tooltipdiv').tooltip();
       return this.$el.find('.source_help').colorbox({
-        inline: true
+        inline: true,
+        transition: 'none'
       });
-    };
-
-    StoreButtonView.prototype.addAccount = function() {
-      console.log('continue');
-      if (this.disabled) {
-        console.log('continue dis');
-        if (this.disabledText) {
-          EzBob.ShowMessage(this.disabledText);
-        }
-        return false;
-      }
-      if (!this.isAddingAllowed()) {
-        return false;
-      }
-      if (this.name === "bank-account" && this.model.get("bankAccountAdded")) {
-        return;
-      }
-      console.log('continue sel');
-      this.trigger("selected", this.name);
-      return false;
     };
 
     StoreButtonView.prototype.isAddingAllowed = function() {

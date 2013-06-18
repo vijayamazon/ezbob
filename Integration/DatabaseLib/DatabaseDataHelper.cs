@@ -77,6 +77,7 @@ namespace EZBob.DatabaseLib
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
+		private readonly IConfigurationVariablesRepository _ConfigurationVariables;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -104,7 +105,10 @@ namespace EZBob.DatabaseLib
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
+			_ConfigurationVariables = new ConfigurationVariablesRepository(session);
 		}
+
+		public IConfigurationVariablesRepository ConfigurationVariables { get { return _ConfigurationVariables; } }
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
 
@@ -1190,27 +1194,23 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreVolusionOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, VolusionOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
+		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ChannelGrabberOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			LogData("Volusion Orders Data", customerMarketPlace, ordersData);
+			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
 
 			if (ordersData == null)
 				return;
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_VolusionOrder
-			{
+			var mpOrder = new MP_ChannelGrabberOrder {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
-			ordersData.ForEach(dataItem =>
-			{
-				var mpOrderItem = new MP_VolusionOrderItem
-				{
+			ordersData.ForEach(dataItem => {
+				var mpOrderItem = new MP_ChannelGrabberOrderItem {
 					Order = mpOrder,
 					NativeOrderId = dataItem.NativeOrderId,
 					TotalCost = dataItem.TotalCost,
@@ -1223,46 +1223,9 @@ namespace EZBob.DatabaseLib
 				mpOrder.OrderItems.Add(mpOrderItem);
 			});
 
-			customerMarketPlace.VolusionOrders.Add(mpOrder);
+			customerMarketPlace.ChannelGrabberOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		} // StoreVolusionOrdersData
-
-		public void StorePlayOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PlayOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			LogData("Play Orders Data", customerMarketPlace, ordersData);
-
-			if (ordersData == null)
-				return;
-
-			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_PlayOrder
-			{
-				CustomerMarketPlace = customerMarketPlace,
-				Created = submittedDate,
-				HistoryRecord = historyRecord
-			};
-
-			ordersData.ForEach(dataItem =>
-			{
-				var mpOrderItem = new MP_PlayOrderItem
-				{
-					Order = mpOrder,
-					NativeOrderId = dataItem.NativeOrderId,
-					TotalCost = dataItem.TotalCost,
-					CurrencyCode = dataItem.CurrencyCode,
-					PaymentDate = dataItem.PaymentDate,
-					PurchaseDate = dataItem.PurchaseDate,
-					OrderStatus = dataItem.OrderStatus,
-				};
-
-				mpOrder.OrderItems.Add(mpOrderItem);
-			});
-
-			customerMarketPlace.PlayOrders.Add(mpOrder);
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		} // StorePlayOrdersData
+		} // StoreChannelGrabberOrdersData
 
 		private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
 		{
@@ -2287,43 +2250,23 @@ namespace EZBob.DatabaseLib
 			return expenses;
 		}
 
-		public VolusionOrdersList GetAllVolusionOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var orders = new VolusionOrdersList(submittedDate);
+			var orders = new ChannelGrabberOrdersList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.VolusionOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new VolusionOrderItem
-			{
+			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem {
 				CurrencyCode = o.CurrencyCode,
 				OrderStatus = o.OrderStatus,
 				NativeOrderId = o.NativeOrderId,
 				PaymentDate = o.PaymentDate,
 				PurchaseDate = o.PurchaseDate,
 				TotalCost = o.TotalCost
-			}).Distinct(new VolusionOrderComparer()));
+			}).Distinct(new ChannelGrabberOrderComparer()));
 
 			return orders;
-		} // GetAllVolusionOrdersData
-
-		public PlayOrdersList GetAllPlayOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			var orders = new PlayOrdersList(submittedDate);
-
-			orders.AddRange(customerMarketPlace.PlayOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new PlayOrderItem
-			{
-				CurrencyCode = o.CurrencyCode,
-				OrderStatus = o.OrderStatus,
-				NativeOrderId = o.NativeOrderId,
-				PaymentDate = o.PaymentDate,
-				PurchaseDate = o.PurchaseDate,
-				TotalCost = o.TotalCost
-			}).Distinct(new PlayOrderComparer()));
-
-			return orders;
-		} // GetAllPlayOrdersData
+		} // GetAllChannelGrabberOrdersData
 
 		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{

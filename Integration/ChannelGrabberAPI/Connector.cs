@@ -4,7 +4,8 @@ using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Xml;
-using EZBob.DatabaseLib.Model.Database;
+using Integration.ChannelGrabberConfig;
+using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 using RestSharp;
 using log4net;
 using Scorto.Configuration;
@@ -29,7 +30,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region constructor
 
-		public Connector(IAccountData oAccountData, ILog log, Customer oCustomer) {
+		public Connector(AccountData oAccountData, ILog log, DBCustomer oCustomer) {
 			m_oAccountData = oAccountData;
 
 			m_oLog = log;
@@ -37,7 +38,7 @@ namespace Integration.ChannelGrabberAPI {
 			Debug("Creating a ChannelGrabber API Connector class...");
 
 			if (oCustomer == null)
-				throw new ChannelGrabberApiException("Customer information not specified.");
+				throw new ApiException("Customer information not specified.");
 
 			m_oCustomer = oCustomer;
 
@@ -46,7 +47,7 @@ namespace Integration.ChannelGrabberAPI {
 			string sServiceUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
 
 			if (sServiceUrl == string.Empty)
-				throw new ChannelGrabberApiException("Service URL not specified.");
+				throw new ApiException("Service URL not specified.");
 
 			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
 
@@ -55,7 +56,7 @@ namespace Integration.ChannelGrabberAPI {
 			XmlNodeList lst = ExecuteRequest().SelectNodes(ServiceValidateXpath);
 
 			if ((null == lst) || (2 > lst.Count))
-				throw new ChannelGrabberApiException("Failed to parse Service output.");
+				throw new ApiException("Failed to parse Service output.");
 
 			Debug("Creating a ChannelGrabber API Connector class succeeded.");
 		} // constructor
@@ -75,9 +76,9 @@ namespace Integration.ChannelGrabberAPI {
 		public virtual void Validate() {
 			Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, m_oAccountData);
 
-			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
+			Dictionary<string, Customer> oCustomers = LoadCustomers();
 
-			ChannelGrabberCustomer oCustomer = null;
+			Customer oCustomer = null;
 
 			if (oCustomers.ContainsKey(m_oCustomer.Name))
 				oCustomer = oCustomers[m_oCustomer.Name];
@@ -89,7 +90,7 @@ namespace Integration.ChannelGrabberAPI {
 			} // if
 
 			if ((oCustomer == null) || !oCustomer.IsValid())
-				throw new ChannelGrabberApiException("Failed to load customer details.");
+				throw new ApiException("Failed to load customer details.");
 
 			Debug("Customer details loaded successfully.");
 
@@ -102,21 +103,21 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method GetOrders
 
-		public List<ChannelGrabberOrder> GetOrders() {
+		public List<Order> GetOrders() {
 			Info(
 				"GetOrders for {0} customer {1} ({2}) started with parameters [ {3} ]",
 				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id, m_oAccountData
 			);
 
-			Dictionary<string, ChannelGrabberCustomer> oCustomers = LoadCustomers();
+			Dictionary<string, Customer> oCustomers = LoadCustomers();
 
-			ChannelGrabberCustomer oCustomer =
+			Customer oCustomer =
 				oCustomers.ContainsKey(m_oCustomer.Name)
 					? oCustomers[m_oCustomer.Name]
 					: null;
 
 			if ((oCustomer == null) || !oCustomer.IsValid())
-				throw new ChannelGrabberApiException("Failed to load customer details.");
+				throw new ApiException("Failed to load customer details.");
 
 			Debug("Verifying account id...");
 
@@ -136,7 +137,7 @@ namespace Integration.ChannelGrabberAPI {
 			} // forever
 
 			if (nRes == OrderFetchStatus.Complete) {
-				List<ChannelGrabberOrder> lst = LoadOrders(oCustomer, m_oAccountData);
+				List<Order> lst = LoadOrders(oCustomer, m_oAccountData);
 
 				Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
 					ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
@@ -150,7 +151,7 @@ namespace Integration.ChannelGrabberAPI {
 				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id
 			);
 
-			return new List<ChannelGrabberOrder>();
+			return new List<Order>();
 		} // GetOrders
 
 		#endregion method GetOrders
@@ -248,8 +249,8 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method LoadCustomers
 
-		private Dictionary<string, ChannelGrabberCustomer> LoadCustomers() {
-			var oCustomers = new Dictionary<string, ChannelGrabberCustomer>();
+		private Dictionary<string, Customer> LoadCustomers() {
+			var oCustomers = new Dictionary<string, Customer>();
 
 			Info("Loading list of customers started...");
 
@@ -261,7 +262,7 @@ namespace Integration.ChannelGrabberAPI {
 			} // if
 
 			foreach (XmlNode oNode in oNodeList) {
-				var oCustomer = new ChannelGrabberCustomer(oNode);
+				var oCustomer = new Customer(oNode);
 
 				if (oCustomer.IsValid()) {
 					oCustomers[oCustomer.Name] = oCustomer;
@@ -279,7 +280,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method ValidateShop
 
-		private void ValidateShop(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+		private void ValidateShop(Customer oCustomer, AccountData oAccountData) {
 			Debug("Validating shop details...");
 
 			string sRequest = BuildRegisterShopRq(oCustomer);
@@ -301,16 +302,16 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method CreateCustomer
 
-		private ChannelGrabberCustomer CreateCustomer(string sCustomerName, string sCountry) {
+		private Customer CreateCustomer(string sCustomerName, string sCountry) {
 			Debug("Creating Channel Grabber customer {0} from {1}...", sCustomerName, sCountry);
 
-			var oCustomer = new ChannelGrabberCustomer(sCustomerName, sCountry);
+			var oCustomer = new Customer(sCustomerName, sCountry);
 
 			oCustomer.FromXml(ExecuteRequest(CustomersRq, oCustomer));
 
 			if (!oCustomer.IsValid()) {
 				Error("Failed to create customer: invalid data. {0}", oCustomer);
-				throw new ChannelGrabberApiException("Failed to create customer: invalid data returned.");
+				throw new ApiException("Failed to create customer: invalid data returned.");
 			} // if
 
 			Debug("Customer details: {0}", oCustomer);
@@ -327,44 +328,44 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region SendGenerateOrdersRq
 
-		private int SendGenerateOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+		private int SendGenerateOrdersRq(Customer oCustomer, AccountData oAccountData) {
 			Debug("Sending generate orders request...");
 			XmlDocument doc = ExecutePostRequest(BuildGenerateOrdersRq(oCustomer, oAccountData));
-			return API.GetInt(doc, API.IdNode);
+			return XmlUtil.GetInt(doc, XmlUtil.IdNode);
 		} // SendGenerateOrdersRq
 
 		#endregion SendGenerateOrdersRq
 
 		#region FetchOrdersRq
 
-		private OrderFetchStatus FetchOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
+		private OrderFetchStatus FetchOrdersRq(Customer oCustomer, AccountData oAccountData, int nRqID) {
 			Debug("Tesing whether orders are ready...");
 
 			XmlDocument doc = ExecuteRequest(BuildOrdersGeneratedRq(oCustomer, oAccountData, nRqID));
 
-			if (API.IsError(doc)) {
-				Error("Error while fetching orders: {0}", API.GetError(doc));
+			if (XmlUtil.IsError(doc)) {
+				Error("Error while fetching orders: {0}", XmlUtil.GetError(doc));
 				return OrderFetchStatus.Error;
 			} // if
 
-			return API.IsComplete(doc) ? OrderFetchStatus.Complete : OrderFetchStatus.NotReady;
+			return XmlUtil.IsComplete(doc) ? OrderFetchStatus.Complete : OrderFetchStatus.NotReady;
 		} // FetchOrdersRq
 
 		#endregion FetchOrdersRq
 
 		#region LoadOrders
 
-		private List<ChannelGrabberOrder> LoadOrders(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+		private List<Order> LoadOrders(Customer oCustomer, AccountData oAccountData) {
 			Debug("Loading list of orders...");
 
-			var lst = new List<ChannelGrabberOrder>();
+			var lst = new List<Order>();
 
 			XmlDocument doc = ExecuteRequest(BuildOrdersRq(oCustomer));
 
 			string sShopTypeName = ShopTypeName.ToLower();
 
 			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
-				var o = ChannelGrabberOrder.Create(oNode, sShopTypeName, oAccountData);
+				var o = Order.Create(oNode, sShopTypeName, oAccountData);
 
 				if (o != null)
 					lst.Add(o);
@@ -413,9 +414,9 @@ namespace Integration.ChannelGrabberAPI {
 				Error(sErrorMsg);
 
 				if (oResponse.StatusCode == 0)
-					throw new ConnectionFailChannelGrabberApiException(sErrorMsg);
-				else
-					throw new ChannelGrabberApiException(sErrorMsg);
+					throw new ConnectionFailException(sErrorMsg);
+
+				throw new ApiException(sErrorMsg);
 			} // if
 
 			var doc = new XmlDocument();
@@ -429,13 +430,13 @@ namespace Integration.ChannelGrabberAPI {
 				);
 
 				Error(sErrorMsg);
-				throw new ChannelGrabberApiException(sErrorMsg);
+				throw new ApiException(sErrorMsg);
 			} // try
 
 			if (null == doc.DocumentElement) {
 				var sErrorMsg = string.Format("Request fail: failed to parse response: no root node.");
 				Error(sErrorMsg);
-				throw new ChannelGrabberApiException(sErrorMsg);
+				throw new ApiException(sErrorMsg);
 			} // if
 
 			Debug("Response output parsed successfully.\nRequest succeeded.");
@@ -474,7 +475,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method BuildRegisterShopRq
 
-		private string BuildRegisterShopRq(ChannelGrabberCustomer oCustomer) {
+		private string BuildRegisterShopRq(Customer oCustomer) {
 			return string.Format(
 				RegisterShopRq, oCustomer.Id, ShopTypeName.ToLower()
 			);
@@ -494,7 +495,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method BuildValidityRq
 
-		private string BuildValidityRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+		private string BuildValidityRq(Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
 				ValidityReportRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
 			);
@@ -504,7 +505,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method BuildGenerateOrdersRq
 
-		private string BuildGenerateOrdersRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData) {
+		private string BuildGenerateOrdersRq(Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
 				GenerateOrdersRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
 			);
@@ -514,7 +515,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method BuildOrdersGeneratedRq
 
-		private string BuildOrdersGeneratedRq(ChannelGrabberCustomer oCustomer, IAccountData oAccountData, int nRqID) {
+		private string BuildOrdersGeneratedRq(Customer oCustomer, AccountData oAccountData, int nRqID) {
 			return string.Format(
 				OrdersGeneratedRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id(), nRqID
 			);
@@ -524,7 +525,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method BuildOrdersRq
 
-		private string BuildOrdersRq(ChannelGrabberCustomer oCustomer) {
+		private string BuildOrdersRq(Customer oCustomer) {
 			return string.Format(OrdersRq, oCustomer.Id);
 		} // BuildOrdersRq
 
@@ -533,9 +534,9 @@ namespace Integration.ChannelGrabberAPI {
 		#region private fields
 
 		private ILog m_oLog;
-		private Customer m_oCustomer;
+		private DBCustomer m_oCustomer;
 		private RestClient m_oRestClient;
-		private IAccountData m_oAccountData;
+		private AccountData m_oAccountData;
 
 		#endregion private fields
 

@@ -1,4 +1,7 @@
 ﻿@using EzBob.Web.Infrastructure
+@using Integration.ChannelGrabberConfig
+@using Integration.ChannelGrabberFrontend
+@using Newtonsoft.Json
 @model EzBob.Web.Models.WizardModel
 
 @{
@@ -226,7 +229,8 @@
         </div>
     </script>
 
-
+<div class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new AccountModel())</div>
+<div class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
 
     @{Html.RenderPartial("EbayStoreInfo");}
     @{Html.RenderPartial("AmazonStoreInfo");}
@@ -249,8 +253,7 @@
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/EKMAccoutInfoTemplate.cshtml");}
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/YodleeAccoutInfoTemplate.cshtml");}
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/PayPointAccoutInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/VolusionAccoutInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/PlayAccoutInfoTemplate.cshtml");}
+    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/CGAccoutInfoTemplate.cshtml");}
 
     <script type="text/javascript">
         $(function () {

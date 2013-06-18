@@ -94,15 +94,6 @@
             <%if(marketplaceType == "PayPoint"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/PayPoint");}
             <%}%>
-            @* *** Volusion   *** *@
-            <%if(marketplaceType == "Volusion"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/Volusion");}
-            <%}%>
-
-            @* *** Play.com   *** *@
-            <%if(marketplaceType == "Play"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/Play");}
-            <%}%>
             @* *** Yodlee   *** *@
             <%if(marketplaceType == "Yodlee"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/Yodlee");}
@@ -111,6 +102,15 @@
             <%if(marketplaceType == "Pay Pal"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/PayPal");}
             <%}%>
+
+            @* *** Channel Grabber *** *@
+            <% (function() {
+                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+
+                if (aryCGAccounts[marketplaceType]) {
+                    %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
+                } // if
+            })(); %>
         </fieldset>
     </div>  
 }

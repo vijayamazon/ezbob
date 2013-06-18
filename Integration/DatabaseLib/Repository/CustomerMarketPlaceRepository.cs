@@ -162,6 +162,14 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 				return null;
 			}
 
+			if (null != Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name)) {
+				var s = _session.Query<MP_ChannelGrabberOrderItem>()
+					.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
+					.Where(oi => oi.PaymentDate != null)
+					.Select(oi => oi.PaymentDate);
+				return !s.Any() ? (DateTime?)null : s.Min();
+			} // if Channel Grabber marketplace
+
 			switch (mp.Marketplace.Name) {
 			case "Amazon": {
 					var s = _session.Query<MP_AmazonOrderItem2>()
@@ -201,29 +209,11 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 				}
 
 
-			case "Volusion": {
-					var s = _session.Query<MP_VolusionOrderItem>()
-						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-						.Where(oi => oi.PaymentDate != null)
-						.Select(oi => oi.PaymentDate);
-					return !s.Any() ? (DateTime?)null : s.Min();
-				}
-
-
 			case "PayPoint": {
 					var s = _session.Query<MP_PayPointOrderItem>()
 						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.date != null)
 						.Select(oi => oi.date);
-					return !s.Any() ? (DateTime?)null : s.Min();
-				}
-
-
-			case "Play": {
-					var s = _session.Query<MP_PlayOrderItem>()
-						.Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
-						.Where(oi => oi.PaymentDate != null)
-						.Select(oi => oi.PaymentDate);
 					return !s.Any() ? (DateTime?)null : s.Min();
 				}
 

@@ -169,34 +169,6 @@ table.rright tbody td:not(:first-child) { text-align: right; }
     word-wrap: break-word;
 }
 
-
-
-.shop-eBay, .shop-Amazon, .shop-EKM, .shop-FreeAgent, .shop-Volusion, .shop-PayPoint, .shop-Play {
-    background-image: url(../img/store-logos.png);
-    width: 119px;
-    height: 35px;
-    margin-left: 25px;
-}
-
-.shop-Amazon { }
-
-.shop-eBay {
-    background-position: 0 -35px;
-    margin-left: 20px;
-}
-
-.shop-EKM { background-position: 0 -70px; }
-
-.shop-FreeAgent { background-position: 0 -70px; }
-
-.shop-PayPoint {
-    background-position: 0 -105px;
-    margin-left: 20px;
-}
-
-.shop-Volusion, .shop-Play
-{ background-position: 0 -70px; } /* TODO: fix the offset */
-
 .marketplace-table tr { vertical-align: middle; }
 
 .show-test-customers { margin-top: 20px; }
@@ -484,9 +456,8 @@ i.ekm,
 i.freeagent,
 i.ebay,
 i.paypal,
-i.volusion,
+i.cgaccount,
 i.paypoint,
-i.play,
 i.yodlee {
     display: inline-block;
     height: 16px;

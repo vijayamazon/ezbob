@@ -38,6 +38,7 @@ namespace EzBob.Web.Infrastructure
 		                 .Add("~/Content/css/attardi.labels.css")
 		                 .Add("~/Content/css/loan-type-selector.css")
 		                 .Add("~/Content/css/amount-period-sliders.css")
+                         .AddString(Integration.ChannelGrabberConfig.Configuration.Instance.GetSourceLabelCSS())
                          .MvcRender("~/Content/css/min/combined_#.css");
         }
 
@@ -64,6 +65,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/css/attardi.labels.css")
                          .Add("~/Content/css/loan-type-selector.css")
 		                 .Add("~/Content/css/amount-period-sliders.css")
+                         .AddString(Integration.ChannelGrabberConfig.Configuration.Instance.GetSourceLabelCSS())
                          .MvcRender("~/Content/css/min/customer_#.css");
         }
 
@@ -107,6 +109,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/css/attardi.labels.css")
                          .Add("~/Content/css/loan-type-selector.css")
 		                 .Add("~/Content/css/amount-period-sliders.css")
+                         .AddString(Integration.ChannelGrabberConfig.Configuration.Instance.GetSourceLabelCSS())
                          .MvcRender("~/Content/css/min/profile_combined_#.css");
         }
 
@@ -289,8 +292,7 @@ namespace EzBob.Web.Infrastructure
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.freeagent.coffee")
-                        .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                        .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.yodlee.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
@@ -313,8 +315,7 @@ namespace EzBob.Web.Infrastructure
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.freeagent.coffee")
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
 						.Add("~/Content/js/Wizard/shops/ezbob.shops.yodlee.coffee")
-                        .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                        .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
+                        .Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
                         .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                         .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
                         .Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
@@ -367,8 +368,7 @@ namespace EzBob.Web.Infrastructure
 						 .Add("~/Content/js/Wizard/shops/ezbob.shops.ekm.coffee")
 						 .Add("~/Content/js/Wizard/shops/ezbob.shops.freeagent.coffee")
 						 .Add("~/Content/js/Wizard/shops/ezbob.shops.yodlee.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.volusion.coffee")
-                         .Add("~/Content/js/Wizard/shops/ezbob.shops.play.coffee")
+                         .Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
                          .Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
                          .Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")

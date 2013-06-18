@@ -111,13 +111,12 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         switch storeName
             when "EKM"
                 @$el.find("#ekm_login").focus()
-            when "Volusion"
-                @$el.find("#volusion_url").focus()
-            when "Play"
-                @$el.find("#play_name").focus()
             when "PayPoint"
                 @$el.find("#payPoint_login").focus()
             else
+                aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
+                if aryCGAccounts[storeName]
+                    $('.form_field', '#' + storeName.toLowerCase() + 'Account').first().focus()
 
     setDocumentTitle: (view) ->
         title = view.getDocumentTitle()

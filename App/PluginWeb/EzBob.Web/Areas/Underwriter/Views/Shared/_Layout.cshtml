@@ -1,5 +1,7 @@
 ﻿@using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.csrf
+@using Integration.ChannelGrabberConfig
+@using Newtonsoft.Json
 @using Scorto.Web
 @using StructureMap
 
@@ -40,6 +42,7 @@
             $('.navbar.menu .roleImg').tooltip({placement: "bottom"});
         </script>
         @RenderSection("Js", false)
+        <div class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
     </body>
 </html>
 
