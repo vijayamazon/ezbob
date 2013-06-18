@@ -53,6 +53,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: summaryInfo
             model: @summaryInfoModel
         )
+        EzBob.App.vent.on 'newCreditLine:done', => @summaryInfoModel.fetch()
+        EzBob.App.vent.on 'newCreditLine:pass', => @summaryInfoModel.fetch()
+
         @paymentAccountsModel = new EzBob.Underwriter.PaymentAccountsModel()
         @paymentAccountsView = new EzBob.Underwriter.PaymentAccountView(
             el: paymentAccounts
