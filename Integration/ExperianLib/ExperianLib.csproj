@@ -103,11 +103,6 @@
     <Compile Include="IdIdentityHub\BaseIdHubResult.cs" />
     <Compile Include="IdIdentityHub\IdHubService.cs" />
     <Compile Include="InteractiveService.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Tests\BaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\CaisTests.cs" />
@@ -192,15 +187,7 @@
     <EmbeddedResource Include="Ebusiness\LimitedBusinessRequest.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Resources\output007.xml" />
-    <None Include="Resources\output020.xml" />
-    <None Include="Resources\output022.xml" />
     <Content Include="Web References\ExpAuth\expauth.disco" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">

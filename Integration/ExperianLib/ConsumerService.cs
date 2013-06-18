@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Experian;
 using ExperianLib.Dictionaries;
-using ExperianLib.Properties;
 using EzBob.Configuration;
 using EzBobIntegration.Web_References.Consumer;
 using Newtonsoft.Json;
@@ -43,54 +43,11 @@ namespace ExperianLib
 		{
 			try
 			{
-				if (surname.IndexOf("TestSurname") == 0)
+                //debug mode
+				if (surname.IndexOf("TestSurnameDebugMode", StringComparison.Ordinal) == 0)
 				{
-					var outputString = Resources.output007;
-					switch (surname)
-					{
-						case "TestSurnameOne":
-							outputString = Resources.output007;
-							break;
-						case "TestSurnameTwo":
-							outputString = Resources.output020;
-							break;
-						case "TestSurnameThree":
-							outputString = Resources.output022;
-							break;
-						case "TestSurnameFour":
-							var customers = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
-							var customer = customers.Get(customerId);
-							var middleName = customer.PersonalInfo.MiddleInitial;
-
-							string filename = !string.IsNullOrEmpty(middleName) ? middleName : @"C:\Temp\Experian.xml";
-							string content = string.Empty;
-							try
-							{
-								content = File.ReadAllText(filename);
-							}
-							catch (Exception e)
-							{
-								Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
-							}
-
-							outputString = content;
-							break;
-					}
-
-					var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
-					var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(outputString));
-					var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate);
-					consumerServiceResult.ExperianResult = "Passed";
-					consumerServiceResult.LastUpdateDate = DateTime.Now;
-					Log.InfoFormat("Get consumer info for test user: {0}", surname);
-					var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
-					if (!checkInCacheOnly)
-					{
-						SaveDefaultAccountIntoDb(outputRoot, customerId, sl.GetFirst());
-					}
-					return consumerServiceResult;
+                    return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
 				}
-
 
 				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 				Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
@@ -126,10 +83,12 @@ namespace ExperianLib
 					if ((DateTime.Now - person.LastUpdateDate).TotalDays <= _config.UpdateConsumerDataPeriodDays)
 					{
 						Log.InfoFormat("GetConsumerInfo: return data from cache for firstName={0}, surname={1}, last update date={2}", firstName, surname, person.LastUpdateDate);
-						var consumerServiceResult = new ConsumerServiceResult(JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket), birthDate);
-						consumerServiceResult.ExperianResult = person.ExperianResult;
-						consumerServiceResult.LastUpdateDate = person.LastUpdateDate;
-						return consumerServiceResult;
+						var consumerServiceResult = new ConsumerServiceResult(JsonConvert.DeserializeObject<OutputRoot>(person.JsonPacket), birthDate)
+						    {
+						        ExperianResult = person.ExperianResult,
+						        LastUpdateDate = person.LastUpdateDate
+						    };
+					    return consumerServiceResult;
 					}
 				}
 				else if (checkInCacheOnly)
@@ -238,11 +197,55 @@ namespace ExperianLib
 			}
 		}
 
-		public void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog)
+	    private ConsumerServiceResult ConsumerDebugResult(string surname, DateTime? birthDate, int customerId,
+	                                                      bool checkInCacheOnly)
+	    {
+	        var customers = ObjectFactory.GetInstance<CustomerRepository>();
+	        var customer = customers.Get(customerId);
+            var content = string.Empty;
+	        string middleName = null;
+            TryRead(() => middleName = customer.PersonalInfo.MiddleInitial);
+
+            if (!string.IsNullOrEmpty(middleName))
+            {
+                int mpSeviceLogId;
+                int.TryParse(middleName, out mpSeviceLogId);
+                var log = ObjectFactory.GetInstance<ServiceLogRepository>();
+                TryRead(() => content = log.GetById(mpSeviceLogId).ResponseData);
+            }
+            else
+            {
+                try
+                {
+                    const string filename = @"C:\Temp\Experian.xml";
+                    content = File.ReadAllText(filename);
+                }
+                catch (Exception e)
+                {
+                    Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", @"C:\Temp\Experian.xml", e);
+                }
+            }
+	        var outputRootSerializer = new XmlSerializer(typeof (OutputRoot));
+            var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
+	        var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate)
+	            {
+	                ExperianResult = "Passed",
+	                LastUpdateDate = DateTime.Now
+	            };
+	        Log.InfoFormat("Get consumer info for test user: {0}", surname);
+	        var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
+	        if (!checkInCacheOnly)
+	        {
+	            SaveDefaultAccountIntoDb(outputRoot, customerId, sl.GetFirst());
+	        }
+	        return consumerServiceResult;
+	    }
+
+	    public void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog)
 		{
 			var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
 			var customer = customerRepo.Get(customerId);
-		    var cais = new OutputFullConsumerDataConsumerDataCAIS[]{};
+		    OutputFullConsumerDataConsumerDataCAIS[] cais = null;
 			var dateAdded = DateTime.UtcNow;
 			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<ExperianDefaultAccount>>();
 
@@ -275,8 +278,9 @@ namespace ExperianLib
                     var balance =0;
 				    var reg = new Regex("[^0-9,]");
 
-                    TryRead(() => int.TryParse(reg.Replace(detail.CurrentDefBalance.Amount, ""), out currentDefBalance));
-                    TryRead(() => int.TryParse(reg.Replace(detail.Balance.Amount,""), out balance));
+                    OutputFullConsumerDataConsumerDataCAISCAISDetails tempDetail = detail;
+                    TryRead(() => int.TryParse(reg.Replace(tempDetail.CurrentDefBalance.Amount, ""), out currentDefBalance));
+                    TryRead(() => int.TryParse(reg.Replace(tempDetail.Balance.Amount, ""), out balance));
 
 					repo.Save(new ExperianDefaultAccount
 						{
@@ -300,7 +304,10 @@ namespace ExperianLib
             {
                 a();
             }
-            catch{}
+            catch (Exception e)
+            {
+                Log.Warn(e);
+            }
         }
 	}
 }

@@ -21,5 +21,10 @@ namespace EZBob.DatabaseLib.Repository
 		{
 			return GetAll().FirstOrDefault();
 		}
+
+        public MP_ServiceLog GetById(int id)
+        {
+            return GetAll().First(x => x.Id == id);
+        }
     }
 }
