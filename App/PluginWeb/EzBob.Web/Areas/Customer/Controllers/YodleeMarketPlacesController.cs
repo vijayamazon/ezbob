@@ -1,10 +1,8 @@
-﻿using ZohoCRM;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
+	using ZohoCRM;
 	using System.Collections.Generic;
-	using System.Text;
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
@@ -168,18 +166,20 @@ namespace EzBob.Web.Areas.Customer.Controllers
 						Password = Encryptor.Encrypt(yodleeMain.GenerateRandomPassword()),
 						Bank = bank
 					};
-
-				var accountsRepository = new YodleeAccountsRepository(_session);
-				int accountId = (int) accountsRepository.Save(yodleeAccount);
-
-				Log.DebugFormat("Created yodlee account: {0}", accountId);
-
+				
+				Log.InfoFormat("Registering yodlee user: {0}", yodleeAccount.Username);
 				yodleeMain.RegisterUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password), _customer.Name);
+				
+				Log.Info("Creating yodlee account...");
+				var accountsRepository = new YodleeAccountsRepository(_session);
+				int accountId = (int)accountsRepository.Save(yodleeAccount);
+				Log.InfoFormat("Created yodlee account for user:{0} with id:{1}", yodleeAccount.Username, accountId);
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
 			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
-			
+
+			Log.Info("Redirecting to yodlee:");
 			return Redirect(finalUrl);
 		}
 	}

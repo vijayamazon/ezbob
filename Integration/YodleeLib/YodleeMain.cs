@@ -1,13 +1,13 @@
-﻿using System;
-using System.Web.Services.Protocols;
-
-namespace YodleeLib
+﻿namespace YodleeLib
 {
+	using System;
 	using StructureMap;
 	using config;
+	using log4net;
 
 	public class YodleeMain : ApplicationSuper
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
 		readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
 		readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
@@ -20,18 +20,17 @@ namespace YodleeLib
 			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
 
-		public string LoginUser(string userName, string password)
+		public void LoginUser(string userName, string password)
 		{
-			var loginUser = new LoginUser();
-
 			try
 			{
+				var loginUser = new LoginUser();
 				UserContext = loginUser.loginUser(userName, password);
-				return "User Logged in Successfully..";
+				Log.InfoFormat("Yodlee user '{0}' logged in successfully", userName);
 			}
-			catch (SoapException se)
+			catch (Exception e)
 			{
-				return "User login failed -> " + se.Message;
+				Log.WarnFormat("Yodlee user '{0}' login failed: {1} ", userName, e.Message);
 			}
 		}
 
@@ -41,14 +40,11 @@ namespace YodleeLib
 			try
 			{
 				UserContext = registerUser.DoRegisterUser(userName, password, email);
+				Log.InfoFormat("Yodlee user '{0}' registered successfully", userName);
 			}
-			catch (SoapException)
+			catch (Exception e)
 			{
-				
-			}
-			catch (Exception)
-			{
-				
+				Log.WarnFormat("Yodlee user '{0}' registration failed: {1} ", userName, e.Message);
 			}
 		}
 
@@ -103,6 +99,7 @@ namespace YodleeLib
 			if (oa == null || oa.Length == 0)
 			{
 				// No items were found for the user.
+				Log.InfoFormat("No items were found for the user '{0}'", username);
 				return -1;
 			}
 
@@ -110,6 +107,7 @@ namespace YodleeLib
 
 			if (itemSummary.refreshInfo.statusCode != 0)
 			{
+				Log.WarnFormat("Item status code is not '0' but '{0}' for user {1}", itemSummary.refreshInfo.statusCode, username);
 				//RemoveItem(itemSummary.itemId); // TODO: we should delete for credentials associated failures but not all of them
 				return -1;
 			}
@@ -131,7 +129,6 @@ namespace YodleeLib
 			{
 			}
 		}
-
 
 		public string GenerateRandomPassword()
 		{

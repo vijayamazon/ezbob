@@ -82,7 +82,7 @@
         return that.trigger('back');
       };
       window.YodleeAccountRetry = function() {
-        that.attemptsLeft = that.attemptsLeft - 1;
+        that.attemptsLeft = (that.attemptsLeft || 5) - 1;
         return {
           url: that.$el.find('#yodleeContinueBtn').attr('href'),
           attemptsLeft: that.attemptsLeft
