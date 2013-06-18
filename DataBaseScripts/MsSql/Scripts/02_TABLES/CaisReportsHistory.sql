@@ -13,8 +13,9 @@ CREATE TABLE [dbo].[CaisReportsHistory](
 	[OfItems] [int] NULL,
 	[GoodUsers] [int] NULL,
 	[UploadStatus] [int] NULL,
-	[FilePath] [nvarchar](400) NULL,
+	[DirName] [nvarchar](400) NULL,
 	[Defaults] [int] NULL,
+	[FileData] [varbinary](max) NULL,
  CONSTRAINT [PK_CaisReportsHistory] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

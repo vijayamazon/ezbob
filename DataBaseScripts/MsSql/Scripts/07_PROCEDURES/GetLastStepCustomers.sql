@@ -10,14 +10,13 @@ CREATE PROCEDURE GetLastStepCustomers
 	@DateEnd      DATETIME
 AS
 BEGIN
-	SELECT Customer.Name AS eMail, Customer.FirstName AS FirstName, Customer.Surname AS SurName, ManagerApprovedSum AS MaxApproved 
-	FROM CashRequests, Customer 
-	WHERE IdCustomer = Customer.Id 
-	AND UnderwriterDecision = 'Approved' 
-	AND UnderwriterDecisionDate BETWEEN @DateStart AND @DateEnd 
-	AND IdCustomer NOT IN(SELECT CustomerId FROM Loan WHERE CreationDate BETWEEN @DateStart AND @DateEnd) 
+	SELECT DISTINCT c.Name AS eMail, c.FirstName AS FirstName, c.Surname AS SurName, ManagerApprovedSum AS MaxApproved 
+	FROM CashRequests cr, Customer c  
+	WHERE cr.UnderwriterDecision = 'Approved'
+	AND cr.IdCustomer = c.Id 
+	AND UnderwriterDecisionDate BETWEEN @DateStart AND @DateEnd
+	AND cr.Id IN (SELECT cr.Id FROM CashRequests cr EXCEPT SELECT l.RequestCashId FROM Loan l)
 	AND ManagerApprovedSum IS NOT NULL 
-	--AND OfferValidUntil < @DateEnd
-	AND Customer.IsTest = 0
+	AND c.IsTest = 0
 END
 GO

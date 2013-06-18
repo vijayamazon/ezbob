@@ -49,6 +49,8 @@ CREATE TABLE [dbo].[Loan](
 	[LastReportedCAISStatusDate] [datetime] NULL,
 	[LoanTypeId] [int] NULL,
 	[Modified] [bit] NULL,
+	[LastRecalculation] [datetime] NULL,
+	[InterestDue] [decimal](18, 4) NULL,
  CONSTRAINT [PK_Loan] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MP_FreeAgentUsers](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[OrderId] [int] NOT NULL,
+	[RequestId] [int] NOT NULL,
 	[url] [nvarchar](250) NULL,
 	[first_name] [nvarchar](250) NULL,
 	[last_name] [nvarchar](250) NULL,
@@ -23,8 +23,8 @@ CREATE TABLE [dbo].[MP_FreeAgentUsers](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-CREATE NONCLUSTERED INDEX [IX_MP_FreeAgentUsersOrderId] ON [dbo].[MP_FreeAgentUsers] 
+CREATE NONCLUSTERED INDEX [IX_MP_FreeAgentUsersRequestId] ON [dbo].[MP_FreeAgentUsers] 
 (
-	[OrderId] ASC
+	[RequestId] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
