@@ -15,7 +15,7 @@ namespace ScheduledServices.InterestCalculation
 
         public override void ExecuteIteration()
         {
-            if (DateTime.UtcNow.Hour != 1) return;
+            //if (DateTime.UtcNow.Hour != 1) return;
             UpdateLoans();
         }
 
