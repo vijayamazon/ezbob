@@ -13,32 +13,51 @@
             <div class="bank-account-instructions clearfix">
                 <div class="bank-account">
                     <% if (YodleeBanks) { %>
-                        <div class="form_field_container BankContainer">
-                            <br/>
-                            <% _.each(YodleeBanks, function (bank, i) { %>
-                                <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
-                                <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
-                                    <span class="<%- bank.parentBankName %> off" ></span>
-                                </a>
-                                <% if (i % 2 !== 0) { %>
-                                    <br/>
-                                <% } %>
-                            <%});%>
-                        </div>
-                        <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
-                        <% _.each(YodleeBanks, function (bank, i) {%>
-                            <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
-                                <% _.each(bank.subBanks, function (sub, i) { %>
-                                <option value="<%- sub.csId %>"><%- sub.displayName %></option>
-                                <%});%>
-                            </select>
+                    <div class="form_field_container BankContainer">
+                        <br />
+                        <% _.each(YodleeBanks, function (bank, i) { %>
+                        <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
+                        <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
+                            <span class="<%- bank.parentBankName %> off"></span>
+                        </a>
+                        <% if (i % 2 !== 0) { %>
+                        <br />
+                        <% } %>
                         <%});%>
+                    </div>
+                    <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
+                    <% _.each(YodleeBanks, function (bank, i) {%>
+                    <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
+                        <% _.each(bank.subBanks, function (sub, i) { %>
+                        <option value="<%- sub.csId %>"><%- sub.displayName %></option>
+                        <%});%>
+                    </select>
+                    <%});%>
                     <%}%>
 
                     <div class="control-group clearfix" style="padding-right: 68px;">
-                        <a href="#" target="_blank" class="button orange pull-right disabled" id="yodleeContinueBtn">Link Account</a>
+                        <a href="#yodlee_help" class="button orange pull-right disabled yodlee_help" id="yodleeLinkAccountBtn">Link Account</a>
                         <a href="#" class="back button grey pull-right">Back</a>
                     </div>
+                </div>
+            </div>
+
+            <div class="hide">
+                <div id="yodlee_help" class="help_window">
+                    <h2>Link Bank Account</h2>
+                    <p>
+                        Please click continue button below to link your bank account.
+                        <br />
+                        You will be redirected, this will take around 30 seconds.
+                    </p>
+                    @*<div class="help_image help_<%- shopClass %>"></div>*@
+                    <br>
+                    <div class="alignright" style="padding: 0 10px 0 0;">
+                        <a href="#" target="_blank" class="button orange pull-right" id="yodleeContinueBtn" onclick="$.colorbox.close();">Continue</a>
+                    </div>
+                    <div class="clear"></div>
+                    <hr>
+                    <div class="help_security"></div>
                 </div>
             </div>
         </form>

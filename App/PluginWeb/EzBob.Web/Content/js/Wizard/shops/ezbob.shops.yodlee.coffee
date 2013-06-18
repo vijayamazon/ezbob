@@ -14,9 +14,10 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     events: 
         'click a.back': 'back'
         'change input[name="Bank"]': 'bankChanged'
-        'click #yodleeContinueBtn': 'continueClicked'
+        #'click #yodleeContinueBtn': 'continueClicked'
         'click .radio-fx': 'parentBankSelected'
         'change .SubBank': 'subBankSelectionChanged'
+        'click #yodleeLinkAccountBtn': 'linkAccountClicked'
 
     loadBanks: () ->
         @YodleeBanks.fetch().done =>
@@ -50,7 +51,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     subBankSelectionChanged:(el) ->
         return false if (this.$el.find(".SubBank option:selected").length == 0) 
         url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{@$el.find("option:selected").val()}&bankName=#{this.$el.find("input[type='radio'][name='Bank']:checked").attr('value')}"
-        @$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled')
+        @$el.find("#yodleeContinueBtn").attr("href", url)
+        @$el.find("#yodleeLinkAccountBtn").removeClass('disabled')
         
     bankChanged: ->
         @$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked')
@@ -60,10 +62,14 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         currentSubBanks.find('option').removeAttr('selected')
         bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
         @$el.find("." + bank + "Container").removeClass('hide')
-        $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled')
-       
-    continueClicked: (e) ->  
-        return false if @$el.find('#yodleeContinueBtn').hasClass('disabled')
+        $("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled')
+    
+    linkAccountClicked: ->
+        return false if @$el.find('#yodleeLinkAccountBtn').hasClass('disabled')
+        @$el.find('.yodlee_help').colorbox({ inline:true, transition: 'none' });
+    
+    continueClicked: ->
+        $.colorbox.close()
 
     parentBankSelected: (evt)->
         evt.preventDefault()
@@ -74,6 +80,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
+        $.colorbox.close()
+        
         return @
 
     serializeData: ->
