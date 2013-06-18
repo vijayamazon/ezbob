@@ -8,10 +8,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.companyAddressValidator = false;
 
 		this.events = _.extend({}, this.events, {
-			/*'change input[name="LimitedCompanyName"]': 'limitedCompanyNameChanged',
-			'change input[name="LimitedCompanyNumber"]': 'limitedCompanyNumberChanged',
-			'change input[name="LimitedBusinessPhone"]': 'limitedBusinessPhoneChanged',
-			*/
             'change input': 'inputChanged',
 		    'keyup input': 'inputChanged'
 		});
@@ -19,19 +15,9 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	
 	inputChanged: function () {
 	    var enabled = EzBob.Validation.checkForm(this.validator);
-	    console.log('enabled', enabled);
         $('.continue').toggleClass('disabled', !enabled);
     },
-	/*
-	limitedCompanyNameChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNameImage", "#LimitedCompanyName");
-	},
-	limitedCompanyNumberChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "LimitedCompanyNumberImage", "#LimitedCompanyNumber");
-	},
-	limitedBusinessPhoneChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "LimitedBusinessPhoneImage", "#LimitedBusinessPhone");
-	},*/
+	
 	render: function () {
 		this.constructor.__super__.render.call(this);
 		var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress'), name: "LimitedCompanyAddress", max: 1 });
@@ -42,10 +28,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		directorsView.render().$el.appendTo(this.$el.find('.directors'));
 		this.$el.find(".cashInput").cashEdit();
 		this.$el.find(".addressCaption").hide();
-
-		var oFieldStatusIcons = this.$el.find('IMG.field_status');
-		oFieldStatusIcons.filter('.required').field_status({ required: true });
-		oFieldStatusIcons.not('.required').field_status({ required: false });
 	},
 	
 	getValidator: function () {

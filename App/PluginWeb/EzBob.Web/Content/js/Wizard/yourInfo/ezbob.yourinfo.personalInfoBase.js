@@ -16,6 +16,10 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 
         this.$el.find('li[rel]').setPopover("left");
         
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
+        
         return this;
     },
     events: {

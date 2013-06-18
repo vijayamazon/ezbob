@@ -7,23 +7,13 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.ViewName = "NonLimited";
 		this.companyAddressValidator = false;
 		this.events = _.extend({}, this.events, {
-			'change input[name="NonLimitedCompanyName"]': 'nonLimitedCompanyNameChanged',
-			'change input[name="NonLimitedBusinessPhone"]': 'nonLimitedBusinessPhoneChanged',
-			'change select[name="NonLimitedTimeAtAddress"]': "nonLimitedTimeAtAddressChanged",
-			'change select[name="NonLimitedTimeInBusiness"]': "nonLimitedTimeInBusinessChanged"
+		    'change input': 'inputChanged',
+		    'keyup input': 'inputChanged'
 		});
 	},
-	nonLimitedCompanyNameChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "NonLimitedCompanyNameImage", "#NonLimitedCompanyName");
-	},
-	nonLimitedBusinessPhoneChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "NonLimitedBusinessPhoneImage", "#NonLimitedBusinessPhone");
-	},
-	nonLimitedTimeAtAddressChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeAtAddressImage", "#NonLimitedTimeAtAddress");
-	},
-	nonLimitedTimeInBusinessChanged: function () {
-		EzBob.Validation.displayIndication(this.validator, "NonLimitedTimeInBusinessImage", "#NonLimitedTimeInBusiness");
+	inputChanged: function () {
+	    var enabled = EzBob.Validation.checkForm(this.validator);
+	    $('.continue').toggleClass('disabled', !enabled);
 	},
 	next: function () {
 		var nAddressCount = 0;

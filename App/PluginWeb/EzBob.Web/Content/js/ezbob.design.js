@@ -339,7 +339,7 @@ GBPValues = function (val, showCurrencySign) {
     if (val == undefined) {
         return "-";
     }
-    
+
     var isNegative = false;
     val = val.toString();
     if (val.indexOf('-') == 0) {
@@ -426,7 +426,7 @@ Array.prototype.clean = function (deleteValue) {
     return this;
 };
 
-Convert.toBool = function(val) {
+Convert.toBool = function (val) {
     return String(val).toLowerCase() === "true";
 };
 
@@ -573,7 +573,7 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
             buttons: buttonModel,
             dialogClass: "confirmationDialog",
             zIndex: 3999,
-            close: function() {
+            close: function () {
                 modalpopup.remove();
                 $(this).remove();
             }
@@ -585,10 +585,10 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
     return modalpopup;
 };
 
-EzBob.moneyFormat  = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };
+EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };
 EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };
 EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '0', vMax: '999999999999999' };
-EzBob.percentFormat  = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
+EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
 
 
@@ -655,39 +655,39 @@ EzBob.formatPercents = function (num, precision) {
 };
 
 EzBob.formatPercents1 = function (num) {
-	var s = EzBob.formatPercents(num, 2);
+    var s = EzBob.formatPercents(num, 2);
 
-	if (s.indexOf('.') < 0)
-		s = s.replace(/%$/, '.00%');
-	
-	return s;
+    if (s.indexOf('.') < 0)
+        s = s.replace(/%$/, '.00%');
+
+    return s;
 };
 
-EzBob.formatLoanType = function(loanTypeSelection, loanType) {
-	return loanType;
+EzBob.formatLoanType = function (loanTypeSelection, loanType) {
+    return loanType;
 }; // formatLoanType
 
-EzBob.formatLoanTypeSelection = function(num) {
-	switch (num) {
-	case 0:
-	case '0':
-		return 'No';
-		break;
-		
-	case 1:
-	case '1':
-		return 'Yes';
-		break;
-		
-	case 2:
-	case '2':
-		return 'Forbidden';
-		break;
-		
-	default:
-		return 'UNKNOWN';
-		break;
-	} // switch
+EzBob.formatLoanTypeSelection = function (num) {
+    switch (num) {
+        case 0:
+        case '0':
+            return 'No';
+            break;
+
+        case 1:
+        case '1':
+            return 'Yes';
+            break;
+
+        case 2:
+        case '2':
+            return 'Forbidden';
+            break;
+
+        default:
+            return 'UNKNOWN';
+            break;
+    } // switch
 }; // formatLoanTypeSelection
 
 EzBob.formatDateHuman = function (date) {
@@ -866,62 +866,10 @@ EzBob.validateRestorePasswordForm = function (el) {
     });
 };
 
-EzBob.validateCompanyDetailForm = function (el) {
-    var e = el || $(".CompanyDetailForm");
-    return e.validate({
-        ignore: "",
-        rules: {
-            //personal info
-            FirstName: EzBob.Validation.NameValidationObject,
-            Surname: { required: true },
-            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
-            DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
-            MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
-            TypeOfBusiness: { required: true },
-            ResidentialStatus: { required: true },
-            Gender: { regex: "^M|F$", required: true },
-            MartialStatus: { required: true },
-            OverallTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
-            WebSiteTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
-            TimeAtAddress: { required: true },
-
-            //limited company info
-            LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
-            LimitedCompanyName: { required: true, minlength: 2 },
-            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
-
-            //Non limited company info
-            NonLimitedCompanyName: { required: true, minlength: 2 },
-            NonLimitedTimeInBusiness: { required: true },
-            NonLimitedTimeAtAddress: { required: true, digits: true },
-            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
-        },
-        messages: {
-            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
-            day: { digits: "Incorect day" },
-            month: { digits: "Incorect month" },
-            year: { digits: "Incorect year" },
-            ResidentialStatus: { required: "This field is required" },
-            TimeAtAddress: { regex: "This field is required" },
-            Gender: { regex: "Gender field is required" },
-            MartialStatus: { required: "Martial status field is required" },
-            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-            MobilePhone: { regex: "Please enter a valid UK number" },
-            DayTimePhone: { regex: "Please enter a valid UK number" },
-            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlight
-        
-    });
-};
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
     return e.validate({
-        ignore: "",
         rules: {
-            //personal info
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
             DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
@@ -929,20 +877,18 @@ EzBob.validatePersonalDetailsForm = function (el) {
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
             TypeOfBusiness: { required: true },
             ResidentialStatus: { required: true },
-            Gender: { regex: "^M|F$", required: true },
+            Gender: { required: true },
             MartialStatus: { required: true },
             OverallTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
             WebSiteTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
             TimeAtAddress: { required: true },
+            ConsentToSearch: { required: true }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
-            day: { digits: "Incorect day" },
-            month: { digits: "Incorect month" },
-            year: { digits: "Incorect year" },
             ResidentialStatus: { required: "This field is required" },
             TimeAtAddress: { regex: "This field is required" },
-            Gender: { regex: "Gender field is required" },
+            Gender: { required: "Gender field is required" },
             MartialStatus: { required: "Martial status field is required" },
             MobilePhone: { regex: "Please enter a valid UK number" },
             DayTimePhone: { regex: "Please enter a valid UK number" },
@@ -986,7 +932,7 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
         messages: {
             NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
         },
-        
+
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
         highlight: EzBob.Validation.highlightFS
@@ -1105,48 +1051,48 @@ EzBob.validateEkmShopForm = function (el) {
     });
 };
 
-EzBob.validatePayPointShopForm = function(el) {
-	var e = el || $('form');
+EzBob.validatePayPointShopForm = function (el) {
+    var e = el || $('form');
 
-	return e.validate({
-		rules: {
-			payPoint_mid: { required: true, minlength: 2, maxlength: 30 },
-			payPoint_vpnPassword: { required: true, minlength: 2, maxlength: 30 },
-			payPoint_remotePassword: { required: true, minlength: 2, maxlength: 30 }
-		},
-		errorPlacement: EzBob.Validation.errorPlacement,
-		unhighlight: EzBob.Validation.unhighlightFS,
-		highlight: EzBob.Validation.highlightFS
-	});
+    return e.validate({
+        rules: {
+            payPoint_mid: { required: true, minlength: 2, maxlength: 30 },
+            payPoint_vpnPassword: { required: true, minlength: 2, maxlength: 30 },
+            payPoint_remotePassword: { required: true, minlength: 2, maxlength: 30 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
 };
 
-EzBob.validateVolusionShopForm = function(el) {
-	var e = el || $('form');
-	return e.validate({
-		rules: {
-			volusion_url: { required: true, url: true, maxlength: 300 },
-			volusion_login: { required: true, minlength: 2, maxlength: 30 },
-			volusion_password: { required: true, minlength: 2, maxlength: 300 }
-		},
-		messages: {
-			volusion_url: { url: "Please enter a valid URL" }
-		},
-		errorPlacement: EzBob.Validation.errorPlacement,
-		unhighlight: EzBob.Validation.unhighlightFS,
-		highlight: EzBob.Validation.highlightFS
-	});
+EzBob.validateVolusionShopForm = function (el) {
+    var e = el || $('form');
+    return e.validate({
+        rules: {
+            volusion_url: { required: true, url: true, maxlength: 300 },
+            volusion_login: { required: true, minlength: 2, maxlength: 30 },
+            volusion_password: { required: true, minlength: 2, maxlength: 300 }
+        },
+        messages: {
+            volusion_url: { url: "Please enter a valid URL" }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
 };
 
-EzBob.validatePlayShopForm = function(el) {
-	var e = el || $('form');
-	return e.validate({
-		rules: {
-			play_name: { required: true, maxlength: 300 },
-			play_login: { required: true, minlength: 2, maxlength: 30 },
-			play_password: { required: true, minlength: 2, maxlength: 300 }
-		},
-		errorPlacement: EzBob.Validation.errorPlacement,
-		unhighlight: EzBob.Validation.unhighlightFS,
-		highlight: EzBob.Validation.highlightFS
-	});
+EzBob.validatePlayShopForm = function (el) {
+    var e = el || $('form');
+    return e.validate({
+        rules: {
+            play_name: { required: true, maxlength: 300 },
+            play_login: { required: true, minlength: 2, maxlength: 30 },
+            play_password: { required: true, minlength: 2, maxlength: 300 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
 };

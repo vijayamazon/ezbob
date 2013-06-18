@@ -18,40 +18,46 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
-            'change input[name="ConsentToSearch"]': 'consentToSearchChanged',
             'click label[for="ConsentToSearch"] a': 'showConsent',
-            'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
-            'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
-            'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged",
+            //'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
+            //'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
+            //'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged",
             'focus #OverallTurnOver': "overallTurnOverFocus",
             'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
+            'change input': 'inputChanged'
         });
 
         this.constructor.__super__.initialize.call(this);
     },
+    
+    inputChanged: function() {
+        var enabled = EzBob.Validation.checkForm(this.validator);
+        $('.continue').toggleClass('disabled', !enabled);
+    },
+    
     overallTurnOverFocus: function () {
         $("#OverallTurnOver").change();
     },
     webSiteTurnOverFocus: function () {
         $("#WebSiteTurnOver").change();
     },
-    dateOfBirthChanged: function () {
-	    if (this.year && this.month && this.day) {
-		    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth");
-	    }
-    },
-    dateOfBirthYearChanged: function () {
-    	this.year = true;
-    	this.dateOfBirthChanged();
-    },
-    dateOfBirthMonthChanged: function () {
-    	this.month = true;
-    	this.dateOfBirthChanged();
-    },
-    dateOfBirthDayChanged: function () {
-    	this.day = true;
-    	this.dateOfBirthChanged();
-    },
+    //dateOfBirthChanged: function () {
+	//    if (this.year && this.month && this.day) {
+	//	    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth");
+	//    }
+    //},
+    //dateOfBirthYearChanged: function () {
+    //	this.year = true;
+    //	this.dateOfBirthChanged();
+    //},
+    //dateOfBirthMonthChanged: function () {
+    //	this.month = true;
+    //	this.dateOfBirthChanged();
+    //},
+    //dateOfBirthDayChanged: function () {
+    //	this.day = true;
+    //	this.dateOfBirthChanged();
+    //},
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
@@ -60,9 +66,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     render: function () {
         this.constructor.__super__.render.call(this);
         var that = this;
-
-        //this.$el.find(':radio[value="' + this.type + '"]').attr('checked', 'checked');
-
+        
         var personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: "PersonalAddress", max: 1 });
         personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
 
@@ -96,12 +100,12 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
-        EzBob.Validation.displayIndication(this.validator, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
+        //EzBob.Validation.displayIndication(this.validator, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
-    consentToSearchChanged: function (e) {
-        this.agree = $(e.target).is(':checked');
-        this.$el.find('.btn-next').toggleClass('disabled', !this.agree);
-    },
+    //consentToSearchChanged: function (e) {
+    //    this.agree = $(e.target).is(':checked');
+    //    this.$el.find('.btn-next').toggleClass('disabled', !this.agree);
+    //},
     clearPrevAddressModel: function () {
         this.model.get('PrevPersonAddresses').remove(this.model.get('PrevPersonAddresses').models);
     },
