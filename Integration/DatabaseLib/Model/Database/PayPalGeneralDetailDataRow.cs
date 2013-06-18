@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
     public class PayPalGeneralDetailDataRow
     {
+        public virtual Guid Id { get; set; }
         public virtual string Type { get; set; }
         public virtual double? M1 { get; set; }
         public virtual double? M3 { get; set; }

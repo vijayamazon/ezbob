@@ -54,11 +54,9 @@ namespace EZBob.DatabaseLib.PayPal
 
         public IEnumerable<PayPalGeneralDetailDataRow> IncomeDetails(int marketPlaceId)
         {
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalIncomeDetails", DbConnection.CreateParam("@marketplaceId", marketPlaceId));
-	        return GetResults(dt);
-	        /*return _session.GetNamedQuery("GetPayPalIncomeDetails")
+	        return _session.GetNamedQuery("GetPayPalIncomeDetails")
                 .SetParameter("marketplaceId", marketPlaceId)
-                .Future<PayPalGeneralDetailDataRow>();*/
+                .Future<PayPalGeneralDetailDataRow>();
         }
         public IEnumerable<PayPalGeneralDetailDataRow> TotalExpenses(int marketPlaceId)
         {

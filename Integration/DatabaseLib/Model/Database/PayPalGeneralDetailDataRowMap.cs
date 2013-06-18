@@ -10,7 +10,9 @@ namespace EZBob.DatabaseLib.Model.Database
     {
         public PayPalGeneralDetailDataRowMap()
         {
-            Id(x => x.Type);
+            ReadOnly();
+            Id(x => x.Id);
+            Map(x => x.Type);
             Map(x => x.M1);
             Map(x => x.M3);
             Map(x => x.M6);
