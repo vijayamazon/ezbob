@@ -14,7 +14,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     events: 
         'click a.back': 'back'
         'change input[name="Bank"]': 'bankChanged'
-        #'click #yodleeContinueBtn': 'continueClicked'
         'click .radio-fx': 'parentBankSelected'
         'change .SubBank': 'subBankSelectionChanged'
         'click #yodleeLinkAccountBtn': 'linkAccountClicked'
@@ -68,9 +67,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         return false if @$el.find('#yodleeLinkAccountBtn').hasClass('disabled')
         @$el.find('.yodlee_help').colorbox({ inline:true, transition: 'none' });
     
-    continueClicked: ->
-        $.colorbox.close()
-
     parentBankSelected: (evt)->
         evt.preventDefault()
         @$el.find('#Bank_' + evt.currentTarget.id).click()
