@@ -6,7 +6,7 @@ namespace EzBob.Web.Areas.Customer.Models
     public class CashRequestModel
     {
         public virtual long Id { get; set; }
-        public virtual DateTime StartDate { get; set; }
+        public virtual DateTime? StartDate { get; set; }
         public virtual DateTime? EndDate { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual decimal InterestRate { get; set; }
@@ -25,7 +25,7 @@ namespace EzBob.Web.Areas.Customer.Models
                                c.ManagerApprovedSum.HasValue
                                    ? (decimal) c.ManagerApprovedSum.Value
                                    : 0,
-                           StartDate = c.CreationDate.Value,
+                           StartDate = c.CreationDate,
                            EndDate = c.OfferValidUntil,
                            Comments = c.UnderwriterComment,
                            InterestRate = c.InterestRate,

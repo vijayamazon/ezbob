@@ -233,7 +233,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.MpList).Formula(@"dbo.MP_List (Id)").Not.Insert().Not.Update();
             Map(x => x.SystemCalculatedSum)
                 .Formula(
-                    "(select top(1) cr.SystemCalculatedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by Id desc)")
+                    "(select top(1) cr.SystemCalculatedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by cr.[Id] desc)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.OutstandingBalance)
@@ -242,7 +242,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
             Map(x => x.ManagerApprovedSum)
                 .Formula(
-                    "(select top(1) cr.ManagerApprovedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by Id desc)")
+                    "(select top(1) cr.ManagerApprovedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by cr.[Id] desc)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.NumApproves)
@@ -268,7 +268,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
             Map(x => x.LastStatus)
                 .Formula(
-                    "(select ISNUll( (select top(1) h.Action from [DecisionHistory] h where h.[CustomerId] = Id  order by id desc ) , 'N/A'))")
+                    "(select ISNUll( (select top(1) h.Action from [DecisionHistory] h where h.[CustomerId] = Id  order by h.[id] desc ) , 'N/A'))")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.FirstLoanDate)
@@ -276,7 +276,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.LastLoanDate)
-                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id order by Id desc)")
+                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id order by l.[Id] desc)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.LastLoanAmount)
