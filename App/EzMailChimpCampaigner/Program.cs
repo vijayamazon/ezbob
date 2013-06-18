@@ -62,6 +62,18 @@
 		}
 
 		#region Tests
+
+		private static void TestGetSubscribers()
+		{
+			Campaigns.InitCampaignsList();
+
+			foreach (Campaign campaign in Campaigns.CampaignsList)
+			{
+				List<Subscriber> subscriberList = DbCommands.GetSubscriberList(campaign.CampaignType);
+				PrintSubscrebsList(campaign.Title, subscriberList);
+			}
+		}
+
 		/*static void Tests()
         {
             //Logger.Debug.WriteLine((MailChimpApiControler.GetLists())[0].id);
