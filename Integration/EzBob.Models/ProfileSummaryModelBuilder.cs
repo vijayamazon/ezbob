@@ -194,7 +194,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         private void AddDecisionHistory(ProfileSummaryModel summary, EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            summary.DecisionHistory = _decisions.ByCustomer(customer).Select(d => DecisionHistoryModel.Create(d)).ToList();
+            summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
         }
 
 
