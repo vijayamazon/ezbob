@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
@@ -241,9 +242,11 @@ namespace ExperianLib
 		{
 			var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
 			var customer = customerRepo.Get(customerId);
-			var cais = output.Output.FullConsumerData.ConsumerData.CAIS;
+		    var cais = new OutputFullConsumerDataConsumerDataCAIS[]{};
 			var dateAdded = DateTime.UtcNow;
 			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<ExperianDefaultAccount>>();
+
+            TryRead(() => cais = output.Output.FullConsumerData.ConsumerData.CAIS);
 			if (cais == null)
 			{
 				return;
@@ -268,10 +271,13 @@ namespace ExperianLib
 					}
 
 					var settlementDate = new DateTime(relevantYear, relevantMonth, relevantDay);
-					int currentDefBalance;
-					int.TryParse(detail.CurrentDefBalance.Amount, out currentDefBalance);
-					int balance;
-					int.TryParse(detail.Balance.Amount, out balance);
+					var currentDefBalance =0;
+                    var balance =0;
+				    var reg = new Regex("[^0-9,]");
+
+                    TryRead(() => int.TryParse(reg.Replace(detail.CurrentDefBalance.Amount, ""), out currentDefBalance));
+                    TryRead(() => int.TryParse(reg.Replace(detail.Balance.Amount,""), out balance));
+
 					repo.Save(new ExperianDefaultAccount
 						{
 							AccountType = AccountTypeDictionary.GetAccountType(detail.AccountType ?? string.Empty),
@@ -287,5 +293,14 @@ namespace ExperianLib
 				}
 			}
 		}
+
+        private static void TryRead(Action a)
+        {
+            try
+            {
+                a();
+            }
+            catch{}
+        }
 	}
 }
