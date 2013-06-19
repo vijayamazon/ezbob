@@ -27,7 +27,10 @@ namespace Integration.ChannelGrabberConfig {
 		#region method GetInstance
 
 		public static Configuration GetInstance(ILog oLog = null) {
-			lock (typeof(Configuration)) {
+			lock (typeof(Configuration))
+			{
+			    oLog = oLog ?? LogManager.GetLogger(typeof (Configuration));
+
 				if (ms_oConfiguration != null)
 					return ms_oConfiguration;
 
