@@ -12,17 +12,13 @@
 								case 'paypal':
 									%><a href="#<%- shopClass %>_help" class="source_help"><%
 									break;
-								case 'FreeAgent':
-									%><a href="#<%- shopClass %>_help" class="source_help">
-                                    <div class="<%= shops.length ? 'source_labels_on' : 'source_labels'%> new-ribbon"/><%
-									break;
 								default:
 									%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
 									break;
 								} // switch
 
 								(function (shopClass) {
-									var bNew = (shopClass == 'Yodlee');
+									var bNew = (shopClass == 'Yodlee' || shopClass == 'FreeAgent');
 
 									if (!bNew) {
 										var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
