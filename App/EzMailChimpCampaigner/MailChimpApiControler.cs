@@ -312,7 +312,6 @@
 
 		//static public string CreateCampaign(string listId, int templateId)
 		//{
-		//    //TODO: change from email, from name, subject, title
 		//    campaignCreateParms cParams = new campaignCreateParms();
 		//    cParams.apikey = apikey;
 		//    cParams.options = new campaignCreateOptions()

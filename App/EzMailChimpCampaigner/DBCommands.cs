@@ -65,18 +65,18 @@
 						AddSubscreberToList(ref subscriberList, row, condition, campaign);
 					}
 					Logger.DebugFormat("Added subscrubers from db for campaign:{0} {1}", campaign, condition);
-					subscriberList.Add(new Subscriber()
-						{
-							Group = campaign.ToString(),
-							Email = "adic@ezbob.com",
-							FirstName = "Adi",
-							LastName = "Cohen",
-							LoanOffer = 1500,
-							DayAfter = DateTime.Today,
-							Month = DateTime.Today,
-							TwoWeeks = DateTime.Today,
-							Week = DateTime.Today
-						});
+					//subscriberList.Add(new Subscriber()
+					//	{
+					//		Group = campaign.ToString(),
+					//		Email = "adic@ezbob.com",
+					//		FirstName = "Adi",
+					//		LastName = "Cohen",
+					//		LoanOffer = 1500,
+					//		DayAfter = DateTime.Today,
+					//		Month = DateTime.Today,
+					//		TwoWeeks = DateTime.Today,
+					//		Week = DateTime.Today
+					//	});
 				}
 
 				return subscriberList;
