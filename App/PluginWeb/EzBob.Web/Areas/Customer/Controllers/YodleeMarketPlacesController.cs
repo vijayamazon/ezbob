@@ -93,7 +93,14 @@
 		[Transactional]
 		public ViewResult YodleeCallback()
 		{
-			var ym = new YodleeMain();
+			foreach (string key in HttpContext.Request.Params.Keys)
+			{
+				if (key == "oauth_error_code")
+				{
+					Log.WarnFormat("Yodlee returned an error. oauth_error_code:{0} oauth_error_problem:{1}", HttpContext.Request.Params["oauth_error_code"], HttpContext.Request.Params["oauth_error_problem"]);
+					return View(new { error = "Failure linking account" });
+				}
+			}
 			var customer = _context.Customer;
 			var repository = new YodleeAccountsRepository(_session);
 			var yodleeAccount = repository.Search(customer.Id);
@@ -101,7 +108,9 @@
 			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
 			string displayname;
 			long csId;
-			long itemId = ym.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
+
+			var yodleeMain = new YodleeMain();
+			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
 
 			if (itemId == -1)
 			{
@@ -129,6 +138,8 @@
 				customer.WizardStep = WizardStepType.Marketplace;
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace,
 				                                                        securityData, customer);
+
+			Log.InfoFormat("Added yodlee marketplace: {0}", marketPlace.Id);
 
             _crm.ConvertLead(customer);
 			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
@@ -179,7 +190,7 @@
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
 			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 
-			Log.Info("Redirecting to yodlee:");
+			Log.InfoFormat("Redirecting to yodlee: {0}", finalUrl);
 			return Redirect(finalUrl);
 		}
 	}

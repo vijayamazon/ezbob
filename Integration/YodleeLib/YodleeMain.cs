@@ -9,10 +9,11 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
-		readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
-		readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
+		private readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
+		private readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
 		private static IYodleeMarketPlaceConfig config;
-
+		private bool isLoggedIn;
+		
 		public YodleeMain()
 		{
 			config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
@@ -26,6 +27,7 @@
 			{
 				var loginUser = new LoginUser();
 				UserContext = loginUser.loginUser(userName, password);
+				isLoggedIn = true;
 				Log.InfoFormat("Yodlee user '{0}' logged in successfully", userName);
 			}
 			catch (Exception e)
@@ -40,11 +42,12 @@
 			try
 			{
 				UserContext = registerUser.DoRegisterUser(userName, password, email);
+				isLoggedIn = true;
 				Log.InfoFormat("Yodlee user '{0}' registered successfully", userName);
 			}
 			catch (Exception e)
 			{
-				Log.WarnFormat("Yodlee user '{0}' registration failed: {1} ", userName, e.Message);
+				Log.WarnFormat("Yodlee user '{0}' registration failed: {1}", userName, e.Message);
 			}
 		}
 
@@ -58,7 +61,10 @@
 			string applicationKey = config.ApplicationKey;
 			string applicationToken = config.ApplicationToken;
 
-			LoginUser(username, password);
+			if (!isLoggedIn)
+			{
+				LoginUser(username, password);
+			}
 			var lu = new LoginUser();
 			OAuthAccessToken token = lu.getAccessTokens(UserContext);
 
@@ -94,7 +100,17 @@
 			csId = -1;
 			LoginUser(username, password);
 			var di = new DisplayItemInfo();
-			object[] oa = di.displayItemSummariesWithoutItemData(UserContext);
+
+			object[] oa;
+			try
+			{
+				oa = di.displayItemSummariesWithoutItemData(UserContext);
+			}
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Failure getting yodlee item. Error:{0}", e);
+				return -1;
+			}
 
 			if (oa == null || oa.Length == 0)
 			{
@@ -114,6 +130,9 @@
 
 			csId = itemSummary.contentServiceId;
 			displayname = itemSummary.itemDisplayName;
+			
+			Log.InfoFormat("Received yodlee item id: '{0}'", itemSummary.itemId);
+
 			return itemSummary.itemId;
 		}
 
