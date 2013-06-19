@@ -57,6 +57,7 @@ EzBob.Validation.unhighlight = function (element) {
 
 
 EzBob.Validation.unhighlightFS = function (element) {
+    console.log("uh");
     EzBob.Validation.unhighlight(element);
     var $el = $(element),
         val = $el.val(),
@@ -70,7 +71,26 @@ EzBob.Validation.unhighlightFS = function (element) {
 };
 
 EzBob.Validation.highlightFS = function (element) {
-    $(element).closest('div').find('.field_status').field_status('set', 'fail');
+    console.log("h");
+    element = $(element);
+    //fix for hidden
+    
+    if (element.attr("type") != undefined && element.attr("type") == "hidden") {
+        //fix for empty date validation
+        if ((element.parent('.controls').find("select[value=-]")).length > 0) {
+            element = element.parent('.controls').find("select[value=-]");
+        } else {
+            //fix for incorrect date validation
+            if ((element.parent('.controls').find("select[name='day']")).length > 0) {
+                element = element.parent('.controls').find("select[name='day'],select[name='month'],select[name='year']");
+            }
+        }
+        //fix for number
+        if (element.closest("div").find(".cashInput").length > 0) {
+            element = element.closest("div").find(".cashInput");
+        }
+    }
+    element.closest('div').find('.field_status').field_status('set', 'fail');
 };
 
 //Extends validator method 
@@ -153,8 +173,8 @@ jQuery.extend(jQuery.validator.messages, {
 });
 
 EzBob.Validation.checkDate = function (value) {
-    if (/\d+\/\d+\/\d+/.test(value)) return true;
-    return false;
+    console.log(/\d+\/\d+\/\d+/.test(value));
+    return /\d+\/\d+\/\d+/.test(value);
 };
 
 jQuery.validator.addMethod("requiredDate", EzBob.Validation.checkDate, 'Please enter a valid date.');

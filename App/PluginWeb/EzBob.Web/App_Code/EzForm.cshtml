@@ -343,14 +343,15 @@
                     }
                 </select>
             </label>
-			
+            <input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
+
 			@if (statusIcon) {
 				var sReq = required ? "required" : "";
 				var sId = identificator + "Image";
 				<img id="@sId" class="field_status @sReq"/>
 			}
 
-			<input type="hidden" id='@identificator' class="@identificator @validationClass required" name="@identificator"/>
+			
         </div>
     </div>
 }

@@ -137,7 +137,7 @@ $(function () {
                 }
 
                 hidden.val(day.val() + "/" + month.val() + "/" + year.val()).trigger("change");
-
+                hidden.trigger("focusout");
             });
 
             month.on("change", function () {
@@ -869,10 +869,11 @@ EzBob.validateRestorePasswordForm = function (el) {
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
     return e.validate({
+        
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
-            DateOfBirth: { required: true, requiredDate: true, yearLimit: 18 },
+            DateOfBirth: {  requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
             TypeOfBusiness: { required: true },

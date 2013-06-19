@@ -9,29 +9,20 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.AddressValidator = false;
         this.type = "Personal";
 
-        this.agree = false;
-
-        this.day = false;
-        this.month = false;
-	    this.year = false;
-
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'click label[for="ConsentToSearch"] a': 'showConsent',
-            //'change select[id="DateOfBirthYear"]': "dateOfBirthYearChanged",
-            //'change select[id="DateOfBirthMonth"]': "dateOfBirthMonthChanged",
-            //'change select[id="DateOfBirthDay"]': "dateOfBirthDayChanged",
             'focus #OverallTurnOver': "overallTurnOverFocus",
             'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
-            'change input': 'inputChanged'
+            'change input': 'inputChanged',
         });
 
         this.constructor.__super__.initialize.call(this);
     },
     
-    inputChanged: function() {
-        var enabled = EzBob.Validation.checkForm(this.validator);
+    inputChanged: function () {
+        var enabled = EzBob.Validation.checkForm(this.validator) && this.PrevAddressValidator && this.AddressValidator;
         $('.continue').toggleClass('disabled', !enabled);
     },
     
@@ -41,23 +32,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     webSiteTurnOverFocus: function () {
         $("#WebSiteTurnOver").change();
     },
-    //dateOfBirthChanged: function () {
-	//    if (this.year && this.month && this.day) {
-	//	    EzBob.Validation.displayIndication(this.validator, "DateOfBirthImage", "#DateOfBirth");
-	//    }
-    //},
-    //dateOfBirthYearChanged: function () {
-    //	this.year = true;
-    //	this.dateOfBirthChanged();
-    //},
-    //dateOfBirthMonthChanged: function () {
-    //	this.month = true;
-    //	this.dateOfBirthChanged();
-    //},
-    //dateOfBirthDayChanged: function () {
-    //	this.day = true;
-    //	this.dateOfBirthChanged();
-    //},
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
@@ -94,18 +68,15 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     PersonalAddressModelChange: function (e, el) {
         this.AddressValidator = el.collection && el.collection.length > 0;
+        this.inputChanged();
         this.clearAddressError("#PersonalAddress");
     },
     typeChanged: function (e) {
         this.type = e.target.value;
         var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
         this.$el.find('.btn-next').text(buttonName);
-        //EzBob.Validation.displayIndication(this.validator, "TypeOfBusinessImage", "#TypeOfBusiness", "#RotateImage", "#OkImage", "#FailImage");
     },
-    //consentToSearchChanged: function (e) {
-    //    this.agree = $(e.target).is(':checked');
-    //    this.$el.find('.btn-next').toggleClass('disabled', !this.agree);
-    //},
+    
     clearPrevAddressModel: function () {
         this.model.get('PrevPersonAddresses').remove(this.model.get('PrevPersonAddresses').models);
     },
@@ -121,26 +92,23 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
 
     next: function (e) {
+        
         var $el = $(e.currentTarget);
         if ($el.hasClass("disabled")) {
-            return false;
+            scrollTop();
+            if (!this.validator.form() || !this.PrevAddressValidator || !this.AddressValidator) {
+                if (!this.PrevAddressValidator)
+                    this.addAddressError("#PrevPersonAddresses");
+                if (!this.AddressValidator)
+                    this.addAddressError("#PersonalAddress");
+                if (!this.validator.form())
+                    EzBob.App.trigger("error", "You must fill in all of the fields.");
+
+                return false;
+            }
         }
-
-        scrollTop();
-        if (!this.validator.form() || !this.PrevAddressValidator || !this.AddressValidator) {
-            if (!this.PrevAddressValidator)
-                this.addAddressError("#PrevPersonAddresses");
-            if (!this.AddressValidator)
-                this.addAddressError("#PersonalAddress");
-            if (!this.validator.form())
-                EzBob.App.trigger("error", "You must fill in all of the fields.");
-
-            return false;
-        }
-
+        
         EzBob.App.trigger("clear");
-
-        if (!this.agree) return false;
 
         this.trigger('next', this.type);
         return false;
