@@ -17,6 +17,7 @@
 		<Message Text="Copy files to deploy folder..." Importance="high"/>
 		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
 		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files\EZBOB\"/>
+		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files (x86)\EZBOB\"/>
 	</Target>
 
 	<Target Name="DeleteOldBinary">
