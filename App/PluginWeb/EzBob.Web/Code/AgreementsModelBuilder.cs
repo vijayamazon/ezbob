@@ -9,7 +9,6 @@ using EzBob.Models;
 using EzBob.Web.Areas.Customer.Models;
 using PaymentServices.Calculators;
 
-
 namespace EzBob.Web.Code.Agreements
 {
     public class AgreementsModelBuilder
@@ -104,7 +103,8 @@ namespace EzBob.Web.Code.Agreements
 
             model.Term = _repaymentCalculator.ReCalculateRepaymentPeriod(loan.CashRequest);
             
-            model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
+            //model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
+            model.InterestRatePerDay = model.Schedule[1].InterestRate/30; // For first month
             model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
             model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
 
@@ -131,7 +131,8 @@ namespace EzBob.Web.Code.Agreements
                 Interest = FormattingUtils.NumericFormats(installment.Interest),
                 Fees = "0",
                 Date = FormattingUtils.FormatDateToString(installment.Date),
-                StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1)
+                StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
+                InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100)
             }
                 ).ToList();
         }

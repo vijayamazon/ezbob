@@ -15,6 +15,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public string Date{ get; set; }
         public string StringNumber { get; set; }
         public int Iterration { get; set; }
+        public string InterestRate { get; set; }
     }
 
     [Serializable]

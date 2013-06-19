@@ -79,7 +79,7 @@
     <dd><p  style="text-align: justify; margin-left: 60px;" >
         2.5 Prompt payment is essential. If you are late in paying, you will pay us interest
         on the amount due from when it is due until it is actually received by us at the
-        rate of interest shown above. Therefore, in the event your payment is not immediate
+        rates of interest shown above. Therefore, in the event your payment is not immediate
         (i.e. real time) and consequently payment does not reach our bank for a further
         few days, interest will continue to accrue at the above rate until payment does
         in fact reach us. Please also see Clause 10.3 concerning late payments and default
@@ -114,15 +114,19 @@
 <dl>
     <dt style="margin-left: 30px;"><b>4. Interest</b></dt>
     <dd><p  style="text-align: justify; margin-left: 60px;" >
-        4.1 Interest is payable {{InterestRatePerYearFormatted}} % at  per annum calculated on the daily balance of the
-        loan outstanding and collected in arrears.
-    </p></dd>
+        4.1 Interest is payable at the following interest rates, calculated on the daily balance of the loan outstanding and collected in arrears:
+
+            {{#FormattedSchedules}}
+            <p  style="text-align: justify; margin-left: 60px;" >{{StringNumber}} rate of interest {{InterestRate}}% per annum. Fixed </p>
+            {{/FormattedSchedules}}
+                
+        </p></dd>
     <dd><p  style="text-align: justify; margin-left: 60px;" >
         4.2 If the Customer fails to pay any sum under this Agreement on its due date, the
         Customer shall continue pay interest on such sum from the due date to the date of
         actual payment (both before and after any demand, court decree or judgment) at the
         rate detailed in Clause 4.1. Interest under this sub-clause shall be calculated
-        on a day to day basis.
+        on a day to day basis at the highest rate indicated above.
     </p></dd>
 </dl>
 <dl>

@@ -132,7 +132,10 @@
             The rates of interest which apply to the credit agreement
         </td>
         <td width="50%">
-            Rate of interest {{InterestRatePerYearFormatted}}% per annum. Fixed
+                {{#FormattedSchedules}}
+            <p  style="text-align: justify" >{{StringNumber}} rate of interest {{InterestRate}}% per annum. Fixed </p>
+                {{/FormattedSchedules}}
+
         </td>
     </tr>
     <tr>
@@ -142,7 +145,7 @@
             offers.
         </td>
         <td>
-            APR: {{APR}}%
+            <p> APR: {{APR}}% </p> 
         </td>
     </tr>
     <tr>
@@ -179,7 +182,7 @@
             <p>
                 Also if you do not repay your loan in full and on time we will continue to charge
                 interest on the outstanding credit balance. The rate of interest will be the same
-                as shown above. Interest after default is calculated daily and applied to the outstanding
+                as shown above for the final month. Interest after default is calculated daily and applied to the outstanding
                 balance every calendar month (or when the outstanding balance is repaid in full
                 if earlier).
             </p>
