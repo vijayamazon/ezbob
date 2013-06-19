@@ -216,6 +216,12 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
 
             String queryString = GetParametersAsString(parameters);
 
+            if (_log.IsDebugEnabled)
+            {
+                _log.DebugFormat("Action: {0}", actionName);
+                _log.DebugFormat("Parameters: {0}", queryString);
+            }
+
             byte[] requestData = Encoding.UTF8.GetBytes(queryString);
 
 			HttpWebRequest request = ConfigureWebRequest( requestData.Length );
@@ -234,6 +240,7 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
                         using ( StreamReader reader = new StreamReader( httpResponse.GetResponseStream(), Encoding.UTF8 ) )
                         {
                             responseBody = reader.ReadToEnd();
+                            _log.DebugFormat("Response: {0}", responseBody);
                         }
                     }
                     /* Attempt to deserialize response into <Action> Response type */
@@ -256,6 +263,8 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
                         using ( StreamReader reader = new StreamReader( httpErrorResponse.GetResponseStream(), Encoding.UTF8 ) )
                         {
                             responseBody = reader.ReadToEnd();
+                            _log.DebugFormat("StatusCode: {0}", statusCode);
+                            _log.DebugFormat("Error: {0}", responseBody);
                         }
                     }
 
