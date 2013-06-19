@@ -52,6 +52,7 @@
 							TemplateId = Constants.FirstStepCustomersDayAfterTemplateId,
 							Subject = Constants.FirstStepCustomersDayAfterSubject,
 						};
+					dayList.Add(dayAfter);
 					//threeDays = new Day
 					//{
 					//	Condition = Constants.ThreeDaysConditionField,
@@ -72,6 +73,7 @@
 							TemplateId = Constants.SecondStepCustomersDayAfterTemplateId,
 							Subject = Constants.SecondStepCustomersDayAfterSubject,
 						};
+					dayList.Add(dayAfter);
 					//threeDays = new Day
 					//{
 					//	Condition = Constants.ThreeDaysConditionField,
@@ -84,12 +86,14 @@
 							TemplateId = Constants.SecondStepCustomersWeekTemplateId,
 							Subject = Constants.SecondStepCustomersWeekSubject,
 						};
+					dayList.Add(week);
 					twoWeeks = new Day
 						{
 							Condition = Constants.TwoWeeksConditionField,
 							TemplateId = Constants.SecondStepCustomersTwoWeeksTemplateId,
 							Subject = Constants.SecondStepCustomersTwoWeeksSubject,
 						};
+					dayList.Add(twoWeeks);
 					//todo uncomment once there is subject for it
 					//month = new Day
 					//	{
@@ -105,6 +109,7 @@
 							TemplateId = Constants.LastStepCustomersDayAfterTemplateId,
 							Subject = Constants.LastStepCustomersDayAfterSubject,
 						};
+					dayList.Add(dayAfter);
 					//threeDays = new Day
 					//{
 					//	Condition = Constants.ThreeDaysConditionField,
@@ -117,26 +122,24 @@
 							TemplateId = Constants.LastStepCustomersWeekTemplateId,
 							Subject = Constants.LastStepCustomersWeekSubject,
 						};
+					dayList.Add(week);
 					twoWeeks = new Day
 						{
 							Condition = Constants.TwoWeeksConditionField,
 							TemplateId = Constants.LastStepCustomersTwoWeeksTemplateId,
 							Subject = Constants.LastStepCustomersTwoWeeksSubject,
 						};
+					dayList.Add(twoWeeks);
 					month = new Day
 						{
 							Condition = Constants.MonthConditionField,
-							TemplateId = Constants.SecondStepCustomersMonthTemplateId,
-							Subject = Constants.SecondStepCustomersMonthSubject,
+							TemplateId = Constants.LastStepCustomersMonthTemplateId,
+							Subject = Constants.LastStepCustomersMonthSubject,
 						};
+					dayList.Add(month);
 					break;
 			}
-
-			dayList.Add(dayAfter);
-			//dayList.Add(threeDays);
-			dayList.Add(week);
-			dayList.Add(twoWeeks);
-			dayList.Add(month);
+			
 			return dayList;
 		}
 	}

@@ -36,11 +36,12 @@
 					continue;
 				}
 
-				Logger.DebugFormat("subscriberList is has {0} customers", subscriberList.Count);
+				Logger.DebugFormat("subscriberList has {0} customers", subscriberList.Count);
 				PrintSubscrebsList(campaign.Title, subscriberList);
 				MailChimpApiControler.ListBatchSubscribe(campaign.ListId, subscriberList);
 				foreach (Day day in campaign.DayList)
 				{
+					if (day == null) continue;
 					string campaignId = MailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
 					if (!string.IsNullOrEmpty(campaignId))
 					{

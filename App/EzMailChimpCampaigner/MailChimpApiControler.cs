@@ -85,7 +85,10 @@
 			List.BatchSubscribe batchSubscribe = Mc.ListBatchSubscribe(listId, batch, options);
 			if (batchSubscribe.ErrorCount > 0)
 			{
-				Logger.Error(batchSubscribe.Errors[0].ToString());
+				foreach (var error in batchSubscribe.Errors)
+				{
+					Logger.Error("List.BatchSubscribe error: " + error.Message + " email:" + error.Email + " code:" + error.Code);
+				}
 			}
 			else
 			{
@@ -95,28 +98,36 @@
 
 		static public string CreateSegmentedCampaign(string listId, int templateId, string condition, string subject, string title, string group)
 		{
-			var conditions = new MCList<McCampaign.SegmentCondition>
+			try
+			{
+				var conditions = new MCList<McCampaign.SegmentCondition>
 				{
 					new McCampaign.SegmentCondition("interests-" + Constants.SignUpProcessGroupId, "one", @group),
 					new McCampaign.SegmentCondition(condition, "eq", DateTime.Today.ToString("yyyy-MM-dd"))
 				};
-			var segmentOptions = new McCampaign.SegmentOptions(MailChimp.Types.Campaign.Match.AND, conditions);
-			var options = new McCampaign.Options(listId, subject, Constants.FromEmail, Constants.FromEmailName, "");
-			var analytics = new Input { { Constants.GoogleAnalyticsKie, Constants.GoogleAnalyticsValue } };
-			options.Analytics = new Opt<Input>(analytics);
-			options.TemplateID = templateId;
-			options.Title = title + " " + condition + " " + DateTime.Today.ToShortDateString();
+				var segmentOptions = new McCampaign.SegmentOptions(MailChimp.Types.Campaign.Match.AND, conditions);
+				var options = new McCampaign.Options(listId, subject, Constants.FromEmail, Constants.FromEmailName, "");
+				var analytics = new Input { { Constants.GoogleAnalyticsKie, Constants.GoogleAnalyticsValue } };
+				options.Analytics = new Opt<Input>(analytics);
+				options.TemplateID = templateId;
+				options.Title = title + " " + condition + " " + DateTime.Today.ToShortDateString();
 
-			var cBase = new McCampaign.Content.Base { Text = string.Empty };
-			if (Mc.CampaignSegmentTest(listId, segmentOptions) > 0)
-			{
-				string campaignId = Mc.CampaignCreate(McCampaign.Type.Regular, options, cBase, segmentOptions);
-				Logger.DebugFormat("Created Segmented Campaign {0}", campaignId);
-				return campaignId;
+				var cBase = new McCampaign.Content.Base { Text = string.Empty };
+				if (Mc.CampaignSegmentTest(listId, segmentOptions) > 0)
+				{
+					string campaignId = Mc.CampaignCreate(McCampaign.Type.Regular, options, cBase, segmentOptions);
+					Logger.DebugFormat("Created Segmented Campaign {0}", campaignId);
+					return campaignId;
+				}
+
+				Logger.Debug("No customers in this segment");
+				return string.Empty;
 			}
-
-			Logger.Debug("No customers in this segment");
-			return string.Empty;
+			catch (Exception ex)
+			{
+				Logger.ErrorFormat("CreateSegmentedCampaign error: " + ex);
+				return null;
+			}
 		}
 
 		static public void SendCampaign(string campaignId)
@@ -133,7 +144,7 @@
 			const int maxNumOfPages = 1000 / campaignsPerPage;
 
 			var campaignClickStats = new CampaignClickStats();
-			
+
 			do
 			{
 				campaigns = Mc.Campaigns(
@@ -152,7 +163,7 @@
 						MailChimp.Types.Campaign.Stats.ClickStats clicks = clickStats[url];
 						if (emails.Data.Count == 0)
 						{
-						//	Logger.DebugFormat("campaign {0} with 0 clicks on url {1}", campaign.Title, url);
+							//	Logger.DebugFormat("campaign {0} with 0 clicks on url {1}", campaign.Title, url);
 							campaignClickStats.AddStat(campaign.Title, url, "", campaign.SendTime.Value.ToString("yyyy-MM-dd"),
 													   campaign.EmailsSent, clicks.Clicks);
 						}
@@ -162,13 +173,13 @@
 							//	"{0} campaign: {1} sent mails: {2} num of clicks(stats): {3} num of clicks(email): {4} emails clicks: {5}",
 							//	url, campaign.Title, campaign.EmailsSent, clicks.Clicks, email.Clicks, email.Email);
 							campaignClickStats.AddStat(campaign.Title, url, email.Email, campaign.SendTime.Value.ToString("yyyy-MM-dd"),
-							                           campaign.EmailsSent, clicks.Clicks);
+													   campaign.EmailsSent, clicks.Clicks);
 						}
 					}
 				}
 				page++;
 			} while (campaigns.Data.Count > 0 && page < maxNumOfPages);
-			
+
 			/*
 			campaignClickStats.AddStat("test", "test", "test", DateTime.Now.ToString("yyyy-MM-dd"),
 													   0, 0);
@@ -213,8 +224,8 @@
 			McCampaign.Campaigns campaigns;
 			do
 			{
-				campaigns = Mc.Campaigns(new McCampaign.Filter {ListID = Constants.EzbobCustomersListId},
-				                         limit: 100, start: page);
+				campaigns = Mc.Campaigns(new McCampaign.Filter { ListID = Constants.EzbobCustomersListId },
+										 limit: 100, start: page);
 				foreach (var c in campaigns.Data)
 				{
 					var stats = Mc.CampaignAnalytics(c.ID);
