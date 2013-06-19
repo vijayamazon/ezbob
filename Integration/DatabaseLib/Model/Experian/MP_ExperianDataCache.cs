@@ -1,5 +1,8 @@
 using System;
+using System.Linq;
+using ApplicationMng.Repository;
 using FluentNHibernate.Mapping;
+using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
@@ -19,6 +22,24 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual long? DirectorId { get; set; }
         public virtual int? ExperianScore { get; set; }
 	}
+
+    public interface IExperianDataCacheRepository : IRepository<MP_ExperianDataCache>
+    {
+        MP_ExperianDataCache GetPersonFromCache(string firstName, string surname, DateTime? birthDate, string postcode);
+    }
+
+    public class ExperianDataCacheRepository : NHibernateRepositoryBase<MP_ExperianDataCache>, IExperianDataCacheRepository
+    {
+        public ExperianDataCacheRepository(ISession session) : base(session)
+        {
+        }
+
+        public MP_ExperianDataCache GetPersonFromCache(string firstName, string surname, DateTime? birthDate, string postcode)
+        {
+            return GetAll().FirstOrDefault(c => c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode);
+        }
+    }
+
 
     //-----------------------------------------------------------------------------------
     public sealed class MP_ExperianDataCacheMap : ClassMap<MP_ExperianDataCache>
