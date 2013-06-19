@@ -11,6 +11,7 @@ var EzBob = EzBob || {};
 EzBob.QuickSignUpStepView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#signup-template').html());
+        if (typeof ord == 'undefined') { ord = Math.random() * 10000000000000000; }
         this.on('ready', this.ready, this);
         this.model.on('change:loggedIn', this.render, this);
     },
