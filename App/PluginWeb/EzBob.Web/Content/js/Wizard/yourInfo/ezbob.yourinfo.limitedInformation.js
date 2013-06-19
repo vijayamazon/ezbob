@@ -14,7 +14,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	},
 	
 	inputChanged: function () {
-	    var enabled = EzBob.Validation.checkForm(this.validator);
+	    var enabled = EzBob.Validation.checkForm(this.validator) && this.companyAddressValidator;
         $('.continue').toggleClass('disabled', !enabled);
     },
 	
@@ -63,7 +63,8 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		return false;
 	},
 	LimitedCompanyAddressChanged: function (evt, oModel) {
-		this.companyAddressValidator = oModel.collection.length > 0;
+	    this.companyAddressValidator = oModel.collection.length > 0;
+	    this.inputChanged();
 		this.clearAddressError("#LimitedCompanyAddress");
 	}
 });

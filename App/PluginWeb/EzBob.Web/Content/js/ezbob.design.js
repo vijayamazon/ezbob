@@ -871,9 +871,12 @@ EzBob.validatePersonalDetailsForm = function (el) {
     return e.validate({
         onfocusout: function (element) {
             if ($(element).closest('.ezDateTime').length != 0) {
-                console.log($(element));
                 $(element).closest('.ezDateTime').find("input.hidden-field").valid();
-            } else {
+            } 
+            else if ($(element).hasClass('addAddressInput')) {
+                //do nothing
+            }
+            else {
                 $(element).valid();
             }
         },
@@ -910,6 +913,11 @@ EzBob.validatePersonalDetailsForm = function (el) {
 EzBob.validateLimitedCompanyDetailForm = function (el) {
     var e = el || $(".LimitedCompanyDetailForm");
     return e.validate({
+        onfocusout: function (element) {
+            if (!$(element).hasClass('addAddressInput')) {
+                $(element).valid();
+            }
+        },
         rules: {
             //limited company info
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
@@ -930,6 +938,11 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
 EzBob.validateNonLimitedCompanyDetailForm = function (el) {
     var e = el || $(".NonLimitedCompanyDetailForm");
     return e.validate({
+        onfocusout: function (element) {
+            if (!$(element).hasClass('addAddressInput')) {
+                $(element).valid();
+            }
+        },
         rules: {
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },

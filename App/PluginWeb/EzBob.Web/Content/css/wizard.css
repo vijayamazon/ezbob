@@ -215,7 +215,13 @@ ul.list_none
 }
 
 .GenderCtrl > span {
-    width: 406px;
+    width: 410px;
+    /*padding-left: 5px;*/
+    display: inline-block;
+}
+.GenderCtrl > span.error {
+    width: 408px;
+    /*padding-left: 5px;*/
     display: inline-block;
 }
 

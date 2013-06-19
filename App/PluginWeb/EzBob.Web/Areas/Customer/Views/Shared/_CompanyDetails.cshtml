@@ -1,10 +1,12 @@
 ﻿@using EzBob.Web.Models.Strings
 @model dynamic
-@helper PersonalInfo() {
+@helper PersonalInfo()
+{
 	<div class="row-fluid">
 		<h2 class="form_start">Personal Information</h2>
 		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" })) {
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
+   {
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>First Name</span>
@@ -39,7 +41,7 @@
 			            <input type="radio" name="Gender" value="M" id="GenderCtrl_M" class="required"><label for="GenderCtrl_M">Male</label>
 			            <input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
 			        </span>
-                    <img id="GenderImage" class="field_status required" alt=""/>    
+                    <img id="GenderImage" class="field_status required" alt=""/>
 			    </div>
 
 				@EzForm.DateInput("DateOfBirth", "Date of Birth", required: true, statusIcon: true)
@@ -165,7 +167,7 @@
 						<label for="ConsentToSearch" class="editor-label-with-checkbox"> I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
 					</div>
 				</div>
-		}
+   }
 		</div>
 
 		<div class="form_buttons_container">
@@ -173,7 +175,8 @@
 		</div>
 	</div>
 }
-@helper Director() {
+@helper Director()
+{
 	<div>
 		<h2 class="form_section">Additional Directors (Optional)</h2>
 
@@ -188,7 +191,8 @@
 	</div>
 }
 
-@helper LimitedInfo() {
+@helper LimitedInfo()
+{
 	<div class="row-fluid">
 		<h2 class="form_start">Company Information</h2> 
 		<div>
@@ -229,7 +233,7 @@
 
 				<div class="directors">
 				</div>
-		}
+   }
 		</div>
 
 		<div class="form_buttons_container">
@@ -239,7 +243,8 @@
 	</div>
 }
 
-@helper Nonlimitedinfo() {
+@helper Nonlimitedinfo()
+{
 	<div class="row-fluid">
 		<h2 class="form_start">Company Information</h2>
 		<div>
@@ -308,11 +313,11 @@
 
 				<div class="directors">
 				</div>
-		}
+   }
 		</div>
 
 		<div class="form_buttons_container">
-			<a href="#" class="continue btn-continue next button orange">Complete</a>
+			<a href="#" class="continue btn-continue next button orange disabled">Complete</a>
 			<a href="#" class="back btn-back button grey">Back</a>
 		</div>
 	</div>
@@ -378,10 +383,12 @@
 			</div>
 
 			<div class="form_field_container GenderCtrl">
-				Gender
-				<input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].GenderCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
-				<input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].GenderCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
-				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image"/>
+                <span>
+				    Gender
+				    <input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].GenderCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
+				    <input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].GenderCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
+                </span>
+                <img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image"/>
 			</div>
 
 			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
@@ -429,7 +436,7 @@
 </script>
 
 @{
-	Html.RenderPartial("_TargetingTemplate");
+    Html.RenderPartial("_TargetingTemplate");
 }
 
 <script id="consent-agreement-temlate" type="text/template">

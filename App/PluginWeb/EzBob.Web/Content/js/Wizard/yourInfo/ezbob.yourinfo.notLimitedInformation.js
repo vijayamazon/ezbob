@@ -12,7 +12,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		});
 	},
 	inputChanged: function () {
-	    var enabled = EzBob.Validation.checkForm(this.validator);
+	    var enabled = EzBob.Validation.checkForm(this.validator) && this.companyAddressValidator;
 	    $('.continue').toggleClass('disabled', !enabled);
 	},
 	next: function () {
@@ -71,7 +71,8 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	},
 
 	NonLimitedCompanyAddressChanged: function (evt, oModel) {
-		this.companyAddressValidator = oModel.collection.length > 0;
+	    this.companyAddressValidator = oModel.collection.length > 0;
+	    this.inputChanged();
 		this.clearAddressError("#NonLimitedCompanyAddress");
 	}
 });

@@ -30,9 +30,11 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
     addAddressError: function (el) {
         var error = $('<label class="error" generated="true">This field is required</label>');
         EzBob.Validation.errorPlacement(error, this.$el.find(el));
+        EzBob.Validation.highlightFS(this.$el.find(el));
     },
     clearAddressError: function (el) {
         EzBob.Validation.unhighlight(this.$el.find(el));
+        EzBob.Validation.unhighlightFS(this.$el.find(el));
     },
 
     PrevModelChange: function (el, model) {

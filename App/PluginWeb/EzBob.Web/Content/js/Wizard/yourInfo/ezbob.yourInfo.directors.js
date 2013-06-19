@@ -94,6 +94,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		else
 			oDiv.find('img.field_status').field_status('set', sStatusName);
 	}, // directorDateChanged
+	
 	render: function () {
 		this.$el.html(this.template());
 		this.directorArea = this.$el.find('.directorArea');
@@ -108,7 +109,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
-
+        /*
 		$.each(this.model.models, function (i, val) {
 			var addressElem = that.preffix + 'Address' + i,
 				name = that.preffix + "[" + i + "]." + that.name,
@@ -118,13 +119,15 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			addressView.render().$el.appendTo(that.directorArea.find("#" + addressElem));
 			SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
 		});
-
-		this.$el.attardi_labels('toggle_all');
+        */
+		
 
 		this.$el.find('.director_name_part').each(function () { that.directorNamePartChanged(this); });
 		this.$el.find('.director_gender').first().each(function () { that.directorGenderChanged(this); });
-		this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });
-
+	    
+		this.$el.attardi_labels('toggle_all');
+		/*this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });*/
+        /*
 		this.$el.find('.director_date, img.field_status').each(function() {
 			var oDateUIComponent = $(this);
 
@@ -139,7 +142,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			sID = sID.replace('<%=i%>', oMeta.attr('seqno'));
 
 			oDateUIComponent.attr('id', sID);
-		});
+		});*/
 	},
 	addDirector: function () {
 		this.model.add(new EzBob.DirectorsModel({ Address: new EzBob.AddressModels() }));
