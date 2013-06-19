@@ -214,8 +214,10 @@ ul.list_none
 	margin-left: 5px;
 }
 
-img#GenderImage,
-img.gender_image { margin-left: 210px; }
+.GenderCtrl > span {
+    width: 406px;
+    display: inline-block;
+}
 
 h1.form_start,
 h2.form_start {

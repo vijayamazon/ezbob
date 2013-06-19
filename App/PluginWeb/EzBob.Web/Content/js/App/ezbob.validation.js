@@ -8,22 +8,27 @@ EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, m
 
 //-----------------------------------------------------------------
 EzBob.Validation.errorPlacement = function (error, element) {
+    EzBob.Validation.unhighlight(element);
     if (error.text()) {
         //fix for hidden
         if (element.hasClass("hidden-field")) {
             //fix for empty date validation
-            if ((element.parent('.controls').find("select[value=-]")).length > 0) {
-                element = element.parent('.controls').find("select[value=-]");
+            if ((element.closest('.ezDateTime').find("select[value=-]")).length > 0) {
+                element = element.closest('.ezDateTime').find("select[value=-]");
             } else {
                 //fix for incorrect date validation
-                if ((element.parent('.controls').find("select[name='day']")).length > 0) {
-                    element = element.parent('.controls').find("select[name='day'],select[name='month'],select[name='year']");
+                if ((element.closest('.ezDateTime').find("select[name='day']")).length > 0) {
+                    element = element.closest('.ezDateTime').find("select[name='day'],select[name='month'],select[name='year']");
                 }
             }
             //fix for number
             if (element.closest("div").find(".cashInput").length > 0) {
                 element = element.closest("div").find(".cashInput");
             }
+        }
+        //fix for radio input
+        if (element.attr('type') == 'radio') {
+            element = element.closest("span");
         }
 
         element.attr('data-original-title', error.text());
@@ -39,25 +44,21 @@ EzBob.Validation.errorPlacement = function (error, element) {
 
 //-----------------------------------------------------------------
 EzBob.Validation.unhighlight = function (element) {
-    var $e = $(element);
-
-    if ($e.attr("type") == "hidden") {
-        $e = $("#" + $e.attr("name"));
-    }
-
+    var $e = $(element);    
     //fix for chosen
     $e = $("#" + $e.attr('id') + "_chzn").length == 0 ? $e : $("#" + $e.attr('id') + "_chzn > a");
-    $e.parent('.control-group').removeClass('error');
-    $e.parent('.controls').removeClass('error');
-    $e.parent('.controls').find("*").removeClass('error');
+    $e.closest('.control-group').removeClass('error');
+    $e.closest('.controls').removeClass('error');
+    $e.closest('.controls').find("*").removeClass('error');
     $e.removeClass('error');
     $e.tooltip('disable');
+    $e.closest('.ezDateTime').find('[data-original-title]').tooltip('disable');
     $e.closest("div").find(".cashInput").removeClass("error");
+    $e.closest("span").removeClass("error");
 };
 
 
 EzBob.Validation.unhighlightFS = function (element) {
-    console.log("uh");
     EzBob.Validation.unhighlight(element);
     var $el = $(element),
         val = $el.val(),
@@ -71,26 +72,7 @@ EzBob.Validation.unhighlightFS = function (element) {
 };
 
 EzBob.Validation.highlightFS = function (element) {
-    console.log("h");
-    element = $(element);
-    //fix for hidden
-    
-    if (element.attr("type") != undefined && element.attr("type") == "hidden") {
-        //fix for empty date validation
-        if ((element.parent('.controls').find("select[value=-]")).length > 0) {
-            element = element.parent('.controls').find("select[value=-]");
-        } else {
-            //fix for incorrect date validation
-            if ((element.parent('.controls').find("select[name='day']")).length > 0) {
-                element = element.parent('.controls').find("select[name='day'],select[name='month'],select[name='year']");
-            }
-        }
-        //fix for number
-        if (element.closest("div").find(".cashInput").length > 0) {
-            element = element.closest("div").find(".cashInput");
-        }
-    }
-    element.closest('div').find('.field_status').field_status('set', 'fail');
+    $(element).closest('div').find('.field_status').field_status('set', 'fail');
 };
 
 //Extends validator method 
@@ -172,8 +154,7 @@ jQuery.extend(jQuery.validator.messages, {
     required: "This field is required"
 });
 
-EzBob.Validation.checkDate = function (value) {
-    console.log(/\d+\/\d+\/\d+/.test(value));
+EzBob.Validation.checkDate = function (value) {    
     return /\d+\/\d+\/\d+/.test(value);
 };
 

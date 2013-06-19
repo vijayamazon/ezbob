@@ -869,7 +869,14 @@ EzBob.validateRestorePasswordForm = function (el) {
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
     return e.validate({
-        
+        onfocusout: function (element) {
+            if ($(element).closest('.ezDateTime').length != 0) {
+                console.log($(element));
+                $(element).closest('.ezDateTime').find("input.hidden-field").valid();
+            } else {
+                $(element).valid();
+            }
+        },
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
