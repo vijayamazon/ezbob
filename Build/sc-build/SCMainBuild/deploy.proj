@@ -208,6 +208,7 @@
 			<MultiCopy CopyFrom="$(PathFrom)\service\" CopyTo="c:\Release\service\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\tools\" CopyTo="c:\Release\tools\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\web\" CopyTo="c:\Release\web\"/>
+			<Copy SourceFiles="$(PathFrom)\channelgrabber.json" DestinationFolder="C:\Program Files\EZBOB\"/>
 	</Target>
 	
 	<Target Name="XLSUpdate">

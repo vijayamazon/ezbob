@@ -48,6 +48,7 @@ namespace Integration.ChannelGrabberConfig {
 					string sFileContent = null;
 
 					try {
+                        if (!File.Exists(sFilePath)) continue;
 						sFileContent = File.ReadAllText(sFilePath);
 					}
 					catch (Exception e) {
