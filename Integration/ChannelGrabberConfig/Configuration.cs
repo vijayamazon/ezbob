@@ -27,15 +27,14 @@ namespace Integration.ChannelGrabberConfig {
 		#region method GetInstance
 
 		public static Configuration GetInstance(ILog oLog = null) {
-			lock (typeof(Configuration))
-			{
-			    oLog = oLog ?? LogManager.GetLogger(typeof (Configuration));
-
+			lock (typeof(Configuration)) {
 				if (ms_oConfiguration != null)
 					return ms_oConfiguration;
 
 				var oPaths = new List<string>();
-				
+
+				oLog = oLog ?? LogManager.GetLogger(typeof (Configuration));
+
 				foreach (System.Environment.SpecialFolder nFld in new [] {
 					System.Environment.SpecialFolder.ApplicationData,
 					System.Environment.SpecialFolder.CommonProgramFiles,
@@ -60,7 +59,9 @@ namespace Integration.ChannelGrabberConfig {
 						if (oLog != null)
 							oLog.DebugFormat("Trying to load Channel Grabber configuration from {0}", sFilePath);
 
-                        if (!File.Exists(sFilePath)) continue;
+						if (!File.Exists(sFilePath))
+							continue;
+
 						sFileContent = File.ReadAllText(sFilePath);
 					}
 					catch (Exception e) {
