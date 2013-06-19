@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
@@ -528,6 +529,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Ajax]
         public JsonNetResult FindCustomer(string term)
         {
+            term = Regex.Matches(term, @"[^\s].*[^\s]")[0].Value;
             int id;
             int.TryParse(term, out id);
 
