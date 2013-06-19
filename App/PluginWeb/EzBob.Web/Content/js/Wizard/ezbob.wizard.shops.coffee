@@ -43,12 +43,10 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     for accountTypeName, ignore of aryCGAccounts
       atlc = accountTypeName.toLowerCase()
-
       listOfShops = @get(atlc + 'Shops')
-
-      for shop in listOfShops
-        stores.push { displayName: shop.displayName, type: accountTypeName }
-
+      if listOfShops != undefined
+        for shop in listOfShops
+          stores.push { displayName: shop.displayName, type: accountTypeName }
     return stores
 
 class EzBob.StoreInfoStepView extends Backbone.View
