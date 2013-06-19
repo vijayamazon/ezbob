@@ -20,7 +20,15 @@
                     window.opener.YodleeAccountAddingError("Error occurred while trying to add bank account");
                     self.close();
                 } else {
-                    document.location.href = url;
+                    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+                    if (model != undefined && model.bankId != undefined) {
+                        // In here the marketplace was added properly
+                        window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+                        self.close();
+                    } else {
+                        // In here we retry
+                        document.location.href = url;
+                    }
                 }
             } else {
                 window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));

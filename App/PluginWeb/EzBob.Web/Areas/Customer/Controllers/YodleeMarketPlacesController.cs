@@ -93,12 +93,16 @@
 		[Transactional]
 		public ViewResult YodleeCallback()
 		{
+			Log.InfoFormat("Got to yodlee's callback with params:{0}", HttpContext.Request.Params);
 			foreach (string key in HttpContext.Request.Params.Keys)
 			{
 				if (key == "oauth_error_code")
 				{
 					Log.WarnFormat("Yodlee returned an error. oauth_error_code:{0} oauth_error_problem:{1}", HttpContext.Request.Params["oauth_error_code"], HttpContext.Request.Params["oauth_error_problem"]);
-					return View(new { error = "Failure linking account" });
+					if (HttpContext.Request.Params["oauth_error_code"] == "407")
+					{
+						return View(new {error = "Failure linking account"});
+					}
 				}
 			}
 			var customer = _context.Customer;
@@ -139,7 +143,7 @@
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace,
 				                                                        securityData, customer);
 
-			Log.InfoFormat("Added yodlee marketplace: {0}", marketPlace.Id);
+			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
 
             _crm.ConvertLead(customer);
 			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
