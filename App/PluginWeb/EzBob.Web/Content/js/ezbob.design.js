@@ -112,7 +112,7 @@ $(function () {
                 day = el.find('[name="day"]'),
                 month = el.find('[name="month"]'),
                 year = el.find('[name="year"]'),
-                hidden = el.find('input[type="hidden"]');
+                hidden = el.find('input.hidden-field');
 
             hidden.val(day.val() + "/" + month.val() + "/" + year.val());
 
@@ -766,7 +766,7 @@ Date.prototype.getServerTime = function () {
 $.validator.setDefaults({
     onkeyup: false,
     onChangeFocus: true,
-    ignore: ""
+    ignore: []
 });
 
 EzBob.validateLoginForm = function (el) {

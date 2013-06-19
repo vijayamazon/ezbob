@@ -10,7 +10,7 @@ EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, m
 EzBob.Validation.errorPlacement = function (error, element) {
     if (error.text()) {
         //fix for hidden
-        if (element.attr("type") == "hidden") {
+        if (element.hasClass("hidden-field")) {
             //fix for empty date validation
             if ((element.parent('.controls').find("select[value=-]")).length > 0) {
                 element = element.parent('.controls').find("select[value=-]");
