@@ -16,6 +16,7 @@
 		<!-- Exec Command="unlocker.exe $(ServerBaseFolder) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 		<Message Text="Copy files to deploy folder..." Importance="high"/>
 		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
+		<Copy SourceFiles="(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files\EZBOB\"/>
 	</Target>
 
 	<Target Name="DeleteOldBinary">
@@ -208,7 +209,6 @@
 			<MultiCopy CopyFrom="$(PathFrom)\service\" CopyTo="c:\Release\service\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\tools\" CopyTo="c:\Release\tools\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\web\" CopyTo="c:\Release\web\"/>
-			<Copy SourceFiles="$(PathFrom)\channelgrabber.json" DestinationFolder="C:\Program Files\EZBOB\"/>
 	</Target>
 	
 	<Target Name="XLSUpdate">
