@@ -1,4 +1,5 @@
-﻿using EZBob.DatabaseLib.DatabaseWrapper;
+﻿using EZBob.DatabaseLib.Common;
+using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
 using Integration.ChannelGrabberConfig;
@@ -7,40 +8,24 @@ namespace Integration.ChannelGrabberFrontend {
 	/// <summary>
 	/// This class is used to communicate with UI using json.
 	/// </summary>
-	public class AccountModel {
+	public class AccountModel : IMarketPlaceSecurityInfo {
 		#region static
 
 		#region method ToModel
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
-			return Create(account.Id, SerializeDataHelper.DeserializeType<SecurityInfo>(account.SecurityData));
+			AccountModel m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+			m.id = account.Id;
+			return m;
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
-			return Create(account.Id, SerializeDataHelper.DeserializeType<SecurityInfo>(account.SecurityData));
+			AccountModel m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+			m.id = account.Id;
+			return m;
 		} // ToModel
 
 		#endregion method ToModel
-
-		#region method Create
-
-		private static AccountModel Create(int nAccountID, SecurityInfo si) {
-			return new AccountModel {
-				id = nAccountID,
-				login = si.AccountData.Login,
-				password = si.AccountData.Password,
-				name = si.AccountData.Name,
-				url = si.AccountData.URL,
-				limitDays = si.AccountData.LimitDays,
-				auxLogin = si.AccountData.AuxLogin,
-				auxPassword = si.AccountData.AuxPassword,
-				realmId = si.AccountData.RealmID,
-				accountTypeName = si.AccountData.AccountTypeName(),
-				displayName = si.AccountData.Name,
-			};
-		} // Create
-
-		#endregion method Create
 
 		#endregion static
 
@@ -63,7 +48,8 @@ namespace Integration.ChannelGrabberFrontend {
 
 		#region method Fill
 
-		public void Fill(AccountData oData) {
+		public AccountData Fill() {
+			var oData = new AccountData(Configuration.Instance.GetVendorInfo(accountTypeName));
 			oData.Login = login;
 			oData.Password = password;
 			oData.Name = name;
@@ -72,7 +58,8 @@ namespace Integration.ChannelGrabberFrontend {
 			oData.AuxLogin = auxLogin;
 			oData.AuxPassword = auxPassword;
 			oData.RealmID = realmId;
-		} // Fill
+			return oData;
+		} // FillIn
 
 		#endregion method Fill
 	} // class AccountModel

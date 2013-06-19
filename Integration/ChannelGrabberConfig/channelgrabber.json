@@ -10,7 +10,7 @@
 				{ "PropertyName": "Name",     "NodeName": "name",     "UniqueIDPosition": -1 },
 				{ "PropertyName": "URL",      "NodeName": "endpoint", "UniqueIDPosition":  0 },
 				{ "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  1 },
-				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition": -1 }
+				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition":  2 }
 			],
 
 			"ToStringArguments": [
@@ -74,11 +74,13 @@
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background-position", "Value": "-868px -3px" },
+					{ "Property": "background", Value: "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -3px" },
 					{ "Property": "width", "Value": "98px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background-position", "Value": "-868px -43px" },
+					{ "Property": "background", Value: "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -43px" },
 					{ "Property": "width", "Value": "98px" }
 				]
 			}
@@ -95,7 +97,7 @@
 			"Fields": [
 				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
 				{ "PropertyName": "Login",     "NodeName": "username",  "UniqueIDPosition":  1                  },
-				{ "PropertyName": "Password",  "NodeName": "password",  "UniqueIDPosition": -1                  },
+				{ "PropertyName": "Password",  "NodeName": "password",  "UniqueIDPosition":  2                  },
 				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -1, "Default": "-1" }
 			],
 
@@ -142,11 +144,13 @@
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background-position", "Value": "-195px 0px" },
+					{ "Property": "background", Value: "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
 					{ "Property": "width", "Value": "116px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background-position", "Value": "-195px -40px" },
+					{ "Property": "background", Value: "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "116px" }
 				]
 			}
@@ -161,10 +165,10 @@
 
 		"SecurityData": {
 			"Fields": [
-				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition": -8                  },
+				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
 				{ "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
-				{ "PropertyName": "Login",     "NodeName": "apiKey",    "UniqueIDPosition":  0                  },
-				{ "PropertyName": "Password",  "NodeName": "secret",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "Login",     "NodeName": "apikey",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "Password",  "NodeName": "secret",    "UniqueIDPosition":  2                  },
 				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "-1" }
 			],
 
@@ -203,17 +207,19 @@
 					"var aryMatch = /^https:\\/\\/([0-9A-Za-z]{32}):([0-9A-Za-z]{32})@(.+)\\.myshopify\\.com(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
 					"if (!aryMatch) return null;",
 					"accountModel.name = aryMatch[3];",
-					"accountModel.apiKey = aryMatch[1];",
-					"accountModel.secret = aryMatch[2];",
+					"accountModel.login = aryMatch[1];",
+					"accountModel.password = aryMatch[2];",
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background-position", "Value": "-195px 0px" },
-					{ "Property": "width", "Value": "116px" }
+					{ "Property": "background", Value: "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "104px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background-position", "Value": "-195px -40px" },
-					{ "Property": "width", "Value": "116px" }
+					{ "Property": "background", Value: "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "104px" }
 				]
 			}
 		}

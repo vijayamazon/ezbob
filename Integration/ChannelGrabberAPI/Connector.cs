@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Xml;
 using Integration.ChannelGrabberConfig;
+using Newtonsoft.Json;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 using RestSharp;
 using log4net;
@@ -456,17 +458,51 @@ namespace Integration.ChannelGrabberAPI {
 
 		private RestRequest CreateRequest(string sResource = "", IJsonable oData = null) {
 			Method nMethod = oData == null ? Method.GET : Method.POST;
+			object oJsonData = null;
+
+			var oHeaders = new Dictionary<string, string>();
+			oHeaders["Accept"] = "application/xml";
 
 			var oRequest = new RestRequest(sResource, nMethod);
-			oRequest.AddHeader("Accept", "application/xml");
 
 			if (null != oData) {
-				oRequest.AddHeader("Content-Type", "application/json");
-				oRequest.AddHeader("x-li-format", "json");
+				oHeaders["Content-Type"] = "application/json";
+				oHeaders["x-li-format"] = "json";
 
 				oRequest.RequestFormat = DataFormat.Json;
-				oRequest.AddBody(oData.ToJson());
+
+				oJsonData = oData.ToJson();
+				oRequest.AddBody(oJsonData);
 			} // if
+
+			var aryHeaders = new List<string>();
+
+			foreach (KeyValuePair<string, string> h in oHeaders) {
+				oRequest.AddHeader(h.Key, h.Value);
+				aryHeaders.Add(string.Format("{0}: {1}", h.Key, h.Value));
+			} // for each
+
+			Debug(@"
+*******************************************
+*
+* Request details - begin
+*
+*******************************************
+
+Method: {0}
+
+Resourse: {1}
+
+Headers: {2}
+
+Data: {3}
+
+*******************************************
+*
+* Request details - end
+*
+*******************************************
+", nMethod.ToString(), sResource, string.Join("\n         ", aryHeaders), oJsonData == null ? "-- no data --" : JsonConvert.SerializeObject(oJsonData));
 
 			return oRequest;
 		} // CreateRequest

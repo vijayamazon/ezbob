@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountModel.cs" />
+    <Compile Include="PluginRegistry.cs" />
     <Compile Include="ServiceInfo.cs" />
     <Compile Include="Frontend.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

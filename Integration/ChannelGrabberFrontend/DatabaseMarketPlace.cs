@@ -1,25 +1,24 @@
 ﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
-	public class DatabaseMarketPlace<TSrvInfo> : DatabaseMarketplaceBase<FunctionType> where TSrvInfo: VendorInfo, IMarketplaceServiceInfo, new() {
-		public DatabaseMarketPlace() : base(new TSrvInfo()) {
-			m_oVendorInfo = new TSrvInfo();
+	public class DatabaseMarketPlace : DatabaseMarketplaceBase<FunctionType> {
+		public DatabaseMarketPlace(string sAccountTypeName) : base(new ServiceInfo(sAccountTypeName)) {
+			m_sAccountTypeName = sAccountTypeName;
 		} // constructor
 
 		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {
-			return new RetriveDataHelper(helper, this, m_oVendorInfo);
+			return new RetriveDataHelper(helper, this, Configuration.Instance.GetVendorInfo(m_sAccountTypeName));
 		} // GetRetrieveDataHelper
 
 		public override IDatabaseFunctionFactory<FunctionType> FunctionFactory {
 			get {
-				return new DatabaseFunctionFactory(m_oVendorInfo);
+				return new DatabaseFunctionFactory(Configuration.Instance.GetVendorInfo(m_sAccountTypeName));
 			} // get
 		} // FunctionFactory
 
-		private readonly VendorInfo m_oVendorInfo;
+		private readonly string m_sAccountTypeName;
 	} // class DatabaseMarketPlace
 } // namespace

@@ -27,11 +27,11 @@ namespace Integration.ChannelGrabberFrontend {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			var secInfo = SerializeDataHelper.DeserializeType<SecurityInfo>(
+			var oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(
 				GetDatabaseCustomerMarketPlace(databaseCustomerMarketPlace.Id).SecurityData
 			);
 
-			var ctr = new Connector(secInfo.AccountData, ms_oLog, databaseCustomerMarketPlace.Customer);
+			var ctr = new Connector(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
 
 			var oRawOrders = ctr.GetOrders();
 
@@ -90,7 +90,7 @@ namespace Integration.ChannelGrabberFrontend {
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
 			int customerMarketPlaceId
 		) {
-			return SerializeDataHelper.DeserializeType<SecurityInfo>(
+			return SerializeDataHelper.DeserializeType<AccountModel>(
 				GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData
 			);
 		} // RetrieveSecurityInfo

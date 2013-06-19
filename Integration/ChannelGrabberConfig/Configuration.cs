@@ -34,32 +34,44 @@ namespace Integration.ChannelGrabberConfig {
 				if (ms_oConfiguration != null)
 					return ms_oConfiguration;
 
-				string[] aryPaths = {
-					Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), CompanyName),
-					Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonProgramFiles), CompanyName),
-					Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonProgramFilesX86), CompanyName),
-					Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles), CompanyName),
-					Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFilesX86), CompanyName),
+				var oPaths = new List<string>();
+				
+				foreach (System.Environment.SpecialFolder nFld in new [] {
+					System.Environment.SpecialFolder.ApplicationData,
+					System.Environment.SpecialFolder.CommonProgramFiles,
+					System.Environment.SpecialFolder.CommonProgramFilesX86,
+					System.Environment.SpecialFolder.ProgramFiles,
+					System.Environment.SpecialFolder.ProgramFilesX86
+				}) {
+					try {
+						oPaths.Add(Path.Combine(System.Environment.GetFolderPath(nFld), CompanyName));
+					}
+					catch (Exception) {
+						// silently ignore
+					}
 				};
 
-				foreach (var sDir in aryPaths) {
-					var sFilePath = Path.Combine(sDir, EnvNameFile);
-
-					if (oLog != null)
-						oLog.DebugFormat("Trying to load Channel Grabber configuration from {0}", sFilePath);
-
+				foreach (var sDir in oPaths) {
 					string sFileContent = null;
 
 					try {
+						var sFilePath = Path.Combine(sDir, EnvNameFile);
+
+						if (oLog != null)
+							oLog.DebugFormat("Trying to load Channel Grabber configuration from {0}", sFilePath);
+
                         if (!File.Exists(sFilePath)) continue;
 						sFileContent = File.ReadAllText(sFilePath);
 					}
 					catch (Exception e) {
 						if (oLog != null)
-							oLog.ErrorFormat("Failed to read Channel Grabber configuration from {0} because {1}", sFilePath, e.Message);
+							oLog.ErrorFormat("Failed to read Channel Grabber configuration: {0}", e.Message);
 
 						continue;
 					} // try
+
+					if (sFileContent == null)
+						throw new ConfigException("Failed to load Channel Grabber configuration.");
 
 					ms_oConfiguration = new Configuration(sFileContent, oLog);
 					return ms_oConfiguration;
@@ -103,11 +115,11 @@ namespace Integration.ChannelGrabberConfig {
 			var sb = new StringBuilder();
 
 			ForEachVendor(vi => {
-				sb.AppendFormat(".source_labels.{0}, .source_labels.{1} {{", vi.Name, vi.Name.ToLower());
+				sb.AppendFormat(".source-labels.{0} {{", vi.Name);
 				vi.ClientSide.LinkForm.SourceLabel.ForEach( css => sb.Append(css.ToString()) );
 				sb.Append("}");
 
-				sb.AppendFormat(".source_labels_on.{0}, .source_labels_on.{1} {{", vi.Name, vi.Name.ToLower());
+				sb.AppendFormat(".source-labels_on.{0} {{", vi.Name);
 				vi.ClientSide.LinkForm.SourceLabelOn.ForEach( css => sb.Append(css.ToString()) );
 				sb.Append("}");
 			});
@@ -116,6 +128,18 @@ namespace Integration.ChannelGrabberConfig {
 		} // GetSourceLabelCSS
 
 		#endregion method GetSourceLabelCSS
+
+		#region GetMarketPlaceDiscrimintor
+
+		public string GetMarketplaceDiscriminator() {
+			var sb = new StringBuilder();
+
+			ForEachVendor( vi => sb.AppendFormat(" WHEN '{0}' THEN 'ChannelGrabber'", vi.Name) );
+
+			return sb.ToString();
+		} // GetMarketplaceDiscriminator
+
+		#endregion GetMarketPlaceDiscrimintor
 
 		#endregion public
 

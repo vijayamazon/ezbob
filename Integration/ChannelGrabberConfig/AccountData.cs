@@ -199,7 +199,9 @@ namespace Integration.ChannelGrabberConfig {
 					bResult = false;
 
 					if (bThrowIfNot)
-						throw new ConfigException(string.Format("{0}'s value differs in the service response in {1} node.", fi.PropertyName, fi.NodeName));
+						throw new ConfigException(string.Format("Value of {0} attribute does not match service response ({1} node).", fi.PropertyName, fi.NodeName));
+
+					break;
 				} // if
 			} // foreach
 

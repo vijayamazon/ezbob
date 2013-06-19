@@ -321,11 +321,13 @@ div.shop-connected {
     vertical-align: middle;
 }
 
-.source_labels {
+.source_labels,
+.source-labels {
     display: inline-block;
 }
 
-.source_labels.new-ribbon {
+.source_labels.new-ribbon,
+.source-labels.new-ribbon {
     background: url(images/new_ribbon.png) no-repeat 0 0;
     height: 25px;
     width: 25px;
@@ -334,18 +336,23 @@ div.shop-connected {
     margin-top: -1px;
 }
 
-.source_labels_on.new-ribbon {
+.source_labels_on.new-ribbon,
+.source-labels_on.new-ribbon {
     display: none;
     visibility: hidden;
 }
 
-.source_labels, .source_labels_on {
-    background: url(images/source_sprite.png) no-repeat 0 0;
+.source_labels, .source_labels_on,
+.source-labels, .source-labels_on {
     height: 40px;
     width: 100px;
     display: block;
     text-indent: -9999px;
     margin-top: 5px;
+}
+
+.source_labels, .source_labels_on {
+	background: url(images/source_sprite.png) no-repeat 0 0;
 }
 
     .source_labels.Yodlee, .source_labels.yodlee {
@@ -424,16 +431,6 @@ div.shop-connected {
     .source_labels_on.PayPoint, .source_labels_on.paypoint {
         background-position: -967px -41px;
         width: 163px;
-    }
-
-    .source_labels.shopify {
-        background-position: -314px 0;
-        width: 103px;
-    }
-
-    .source_labels_on.shopify {
-        background-position: -314px -40px;
-        width: 103px;
     }
 
     .source_labels.google_shopping {

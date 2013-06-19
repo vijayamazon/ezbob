@@ -26,7 +26,11 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.InternalId).Not.Nullable();
             Map(x => x.Description);
             Map(x => x.Active);
-            DiscriminateSubClassesOnColumn("Name");
+            DiscriminateSubClassesOnColumn("").Formula(
+				"CASE Name " +
+				Integration.ChannelGrabberConfig.Configuration.Instance.GetMarketplaceDiscriminator() +
+				" ELSE Name END"
+			);
         }
     }
 
@@ -112,45 +116,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
     }
 
-    public class VolusionMarketPlaceType : MP_MarketplaceType
-    {
-        public override int UWPriority { get { return 4; } }
-    }
-
-    public class VolusionMarketPlaceTypeMap : SubclassMap<VolusionMarketPlaceType>
-    {
-        public VolusionMarketPlaceTypeMap()
-        {
-            DiscriminatorValue("Volusion");
-        }
-    }
-
-    public class PlayMarketPlaceType : MP_MarketplaceType
-    {
-        public override int UWPriority { get { return 5; } }
-    }
-
-    public class PlayMarketPlaceTypeMap : SubclassMap<PlayMarketPlaceType>
-    {
-        public PlayMarketPlaceTypeMap()
-        {
-            DiscriminatorValue("Play");
-        }
-    }
-
-    public class ShopifyMarketPlaceType : MP_MarketplaceType
-    {
-        public override int UWPriority { get { return 6; } }
-    }
-
-    public class ShopifyMarketPlaceTypeMap : SubclassMap<ShopifyMarketPlaceType>
-    {
-        public ShopifyMarketPlaceTypeMap()
-        {
-            DiscriminatorValue("Shopify");
-        }
-    }
-
     public class YodleeMarketPlaceType : MP_MarketplaceType
     {
         public override bool IsPaymentAccount { get { return true; } }
@@ -164,4 +129,14 @@ namespace EZBob.DatabaseLib.Model.Database {
             DiscriminatorValue("Yodlee");
         }
     }
-}
+
+	public class ChannelGrabberMarketPlaceType : MP_MarketplaceType {
+		public override int UWPriority { get { return 4; } } // constructor
+	} // class ChannelGrabberMarketPlaceType
+
+	public class ChannelGrabberMarketPlaceTypeMap : SubclassMap<ChannelGrabberMarketPlaceType> {
+		public ChannelGrabberMarketPlaceTypeMap() {
+			DiscriminatorValue("ChannelGrabber");
+		} // constructor
+	} // class ChannelGrabberMarketPlaceTypeMap
+} // namespace EZBob.DatabaseLib.Model.Database

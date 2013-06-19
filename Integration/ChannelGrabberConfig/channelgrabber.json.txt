@@ -1,0 +1,24 @@
+﻿channelgrabber.json File Description
+
+channelgrabber.json describes configuration of connectors powered by Channel Grabber.
+
+FILE LOCATION
+
+The file is used by all the application components (customer wizard, customer dashboard, underwriter, strategies).
+File is searched in these locations (in this order):
+  1. %APPDATA%\Ezbob\channelgrabber.json
+  2. %CommonProgramFiles%\Ezbob\channelgrabber.json
+  3. %CommonProgramFiles(x86)%\Ezbob\channelgrabber.json
+  4. %ProgramFiles%\Ezbob\channelgrabber.json
+  5. %ProgramFiles(x86)%\Ezbob\channelgrabber.json
+
+First found file is used. If found file is malformed following locations are not used.
+64 bit applications look in all the locations while 32 bit applications skip the second and the fourth ones.
+
+FILE FORMAT
+
+File should be valid JSON. It should contain an array of objects, each object describes one vendor.
+
+VENDOR OBJECT
+
+Refer to class Integration.ChannelGrabberConfig.VendorInfo.

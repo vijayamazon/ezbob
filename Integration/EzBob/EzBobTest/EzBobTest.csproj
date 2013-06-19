@@ -152,10 +152,6 @@
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
       <Name>PayPoint</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Play\Play.csproj">
-      <Project>{dfd164c8-a73c-48cd-8664-b8e63478003a}</Project>
-      <Name>Play</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\YodleeLib\YodleeLib.csproj">
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>

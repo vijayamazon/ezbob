@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using EzBob.CommonLib;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
-	public class ServiceInfo : VendorInfo {
+	public class ServiceInfo : VendorInfo, IMarketplaceServiceInfo {
 		public Guid InternalId { get { return Guid(); } }
 
-		protected void Load(string sAccountTypeName) {
+		public ServiceInfo(string sAccountTypeName) {
 			VendorInfo vi = Configuration.Instance.GetVendorInfo(sAccountTypeName);
 
 			if (vi != null) {
@@ -26,6 +27,6 @@ namespace Integration.ChannelGrabberFrontend {
 
 				SetGuid(new Guid(vi.Guid().ToString()));
 			} // if
-		} // Load
+		} // constructor
 	} // ServiceInfo
 } // namespace Integration.ChannelGrabberFrontend

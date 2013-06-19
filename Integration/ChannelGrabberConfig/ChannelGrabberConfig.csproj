@@ -62,6 +62,12 @@
     <Compile Include="SecurityData.cs" />
     <Compile Include="VendorInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="channelgrabber.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="channelgrabber.json.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem copy $(TargetPath) $(ProjectDir)\..\..\App\service\agent</PostBuildEvent>

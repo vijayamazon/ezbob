@@ -9,9 +9,6 @@ using EzBob.Configuration;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberFrontend;
-using Integration.Play;
-using Integration.Volusion;
-using Integration.Shopify;
 using Scorto.Web;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
@@ -75,8 +72,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return this.JsonNet(new { error = sError });
 			} // try
 
-			AccountData ad = new AccountData(oVendorInfo);
-			model.Fill(ad);
+			AccountData ad = model.Fill();
 
 			try {
 				var ctr = new Connector(ad, Log, _context.Customer);
@@ -103,38 +99,18 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 			try {
 				var customer = _context.Customer;
-				IMarketplaceType mktPlace;
 
-				switch (model.accountTypeName) {
-				case VolusionServiceInfo.VendorName:
-					mktPlace = new DatabaseMarketPlace<VolusionServiceInfo>();
-					break;
-
-				case PlayServiceInfo.VendorName:
-					mktPlace = new DatabaseMarketPlace<PlayServiceInfo>();
-					break;
-
-				case ShopifyServiceInfo.VendorName:
-					mktPlace = new DatabaseMarketPlace<ShopifyServiceInfo>();
-					break;
-
-				default:
-					var sError = "Unsupported account type: " + model.accountTypeName;
-					Log.Error(sError);
-					return this.JsonNet(new { error = sError });
-				} // switch
+				IMarketplaceType mktPlace = new DatabaseMarketPlace(model.accountTypeName);
 
 				_mpChecker.Check(mktPlace.InternalId, customer, ad.UniqueID());
 
-				var oSecInfo = new SecurityInfo {
-					MarketplaceId = _mpTypes.GetAll().First(a => a.InternalId == oVendorInfo.Guid()).Id,
-					AccountData = ad
-				};
+				model.id = _mpTypes.GetAll().First(a => a.InternalId == oVendorInfo.Guid()).Id;
+				model.displayName = model.displayName ?? model.name;
 
 				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, oSecInfo, customer);
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, model, customer);
 				_session.Flush();
 				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
 				_crm.ConvertLead(customer);

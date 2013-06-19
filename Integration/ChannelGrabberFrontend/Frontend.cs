@@ -42,17 +42,6 @@ namespace Integration.ChannelGrabberFrontend {
 
 		#endregion method CreateAccountData
 
-		#region method CreateSecurityInfo
-
-		public IMarketPlaceSecurityInfo CreateSecurityInfo(string sAccountTypeName) {
-			return new SecurityInfo {
-				MarketplaceId = 0,
-				AccountData = CreateAccountData(sAccountTypeName)
-			};
-		} // CreateSecurityInfo
-
-		#endregion method CreateSecurityInfo
-
 		#region property Configuration
 
 		public Configuration Configuration { get; private set; }
