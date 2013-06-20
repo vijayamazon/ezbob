@@ -107,7 +107,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oVendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				if (customer.WizardStep != WizardStepType.PaymentAccounts || customer.WizardStep != WizardStepType.AllStep)
+				if (customer.WizardStep != WizardStepType.PaymentAccounts && customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
 
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, model, customer);
