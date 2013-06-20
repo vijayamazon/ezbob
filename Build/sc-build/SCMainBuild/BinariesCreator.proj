@@ -37,7 +37,7 @@
 		<MultiCopy CopyFrom="$(Src)\Items\" CopyTo="$(BuildBin)\%(Edition.Identity)\Items\"/>
 		<MultiCopy CopyFrom="$(Src)\DataBaseScripts\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\"/>
 		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
-		<Copy SourceFiles="$(Src)\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
+		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		
 		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\CustomSchedulers\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
