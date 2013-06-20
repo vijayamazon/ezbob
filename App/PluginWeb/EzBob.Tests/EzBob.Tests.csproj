@@ -113,6 +113,7 @@
     <Compile Include="LoanPaymentFacadeTests\RealCasesFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\PayTotalLateFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\RolloversFixture.cs" />
+    <Compile Include="LoanScheduleCalculatorTests\APRCalculatorTest.cs" />
     <Compile Include="LoanScheduleCalculatorTests\CalculateSavingsFixture.cs" />
     <Compile Include="CrossCheckStatusTests\GetTypeStatusForAllFixture.cs" />
     <Compile Include="CurrencyRateRepositoryFixture.cs" />
