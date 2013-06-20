@@ -1,31 +1,39 @@
 ﻿@model dynamic
+@helper StoresContent() {
+	<table class="table grey-table account-activity-table">
+		<thead>
+			<tr>
+				<th width="250">Account Type</th>
+				<th width="250">Account Name</th>
+				<th width="250">Status</th>
+			</tr>
+		</thead>
+		<tbody><%
+		(function () {
+			var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
-@helper StoresContent(){
-    <table class="table grey-table account-activity-table">
-        <thead>
-            <tr>
-                <th width="250">Account Type</th>
-                <th width="250">Account Name</th>
-                <th width="250">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(stores, function(store, i){%>
-                <%var last = stores.length - 1 == i;%>
-                <tr class="<%= last ? 'last' : '' %>" >
-                    <td class="first" ><div class="source_labels_on <%=store.type%>"></div></td>
-                    <td><%=store.displayName%></td>
-                    <td class="last Live" >LIVE</td>
-                </tr>
-            <%});%>
-        </tbody>
-    </table>
-    <div style="padding-left: 260px;">
-        <a href="#" style="margin-left: 80px;" class="btn-continue button orange add-store">Add Account</a><br/>
-        <span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
-    </div>
+			_.each(stores, function(store, i){
+				var oCG = aryCGAccounts[store.type];
+
+				var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
+
+				%><tr class="<%= (stores.length - 1 == i) ? 'last' : '' %>">
+					<td class="first">
+						<div class="<%= sSourceLabels + '_on ' + store.type %>"></div>
+					</td>
+					<td><%= store.displayName %></td>
+					<td class="last Live">LIVE</td>
+				</tr><%
+			});
+		})();
+		%></tbody>
+	</table>
+	<div style="padding-left: 260px;">
+		<a href="#" style="margin-left: 80px;" class="btn-continue button orange add-store">Add Account</a><br />
+		<span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
+	</div>
 }
 
 <script id="stores-template" type="text/template">
-    @StoresContent()
+	@StoresContent()
 </script>

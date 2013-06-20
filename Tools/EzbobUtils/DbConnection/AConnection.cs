@@ -10,131 +10,36 @@ using System.Configuration;
 using Ezbob.Logger;
 
 namespace Ezbob.Database {
-	public abstract class AConnection : SafeLog, IConnection, IDisposable {
-		#region public
-
-		#region IDisposable implementation
-
-		#region method Dispose
-
-		public void Dispose() {
-			// nothing to do here
-		} // Dispose
-
-		#endregion method Dispose
-
-		#endregion IDisposable implementation
-
-		#region IConnection implementation
-
-		#region method ExecuteScalar
-
-		public T ExecuteScalar<T>(string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteScalar<T>(sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteScalar
-
-		public T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			object oRes = Run(ExecMode.Scalar, nSpecies, sQuery, aryParams);
-
-			if (oRes is DBNull)
-				return default(T);
-
-			return (T)oRes;
-		} // ExecuteScalar
-
-		#endregion method ExecuteScalar
-
-		#region method ExecuteReader
-
-		public DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteReader(sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteReader
-
-		public DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (DataTable)Run(ExecMode.Reader, nSpecies, sQuery, aryParams);
-		} // ExecuteReader
-
-		#endregion method ExecuteReader
-
-		#region method ExecuteNonQuery
-
-		public int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
-			return ExecuteNonQuery(sQuery, CommandSpecies.Auto, aryParams);
-		} // ExecuteNonQuery
-
-		public int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
-			return (int)Run(ExecMode.NonQuery, nSpecies, sQuery, aryParams);
-		} // ExecuteNonQuery
-
-		#endregion method ExecuteNonQuery
-
-		#endregion IConnection implementation
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
-		protected AConnection(ASafeLog log = null, string sConnectionString = null) : base(log) {
-			m_sConnectionString = sConnectionString;
-		} // constructor
-
-		#endregion constructor
-
-		#region abstract methods
-
-		protected abstract DbConnection CreateConnection();
-		protected abstract DbCommand CreateCommand(string sCommand, DbConnection oConnection);
-		protected abstract DbParameter CreateParameter(QueryParameter prm);
-
-		#endregion abstract methods
-
-		#region property ConnectionString
-
-		protected virtual string ConnectionString {
-			get {
-				if (m_sConnectionString != null)
-					return m_sConnectionString;
-
-				var env = new Ezbob.Context.Environment();
-
-				try {
-					m_sConnectionString = ConfigurationManager.ConnectionStrings[env.Context.ToLower()].ConnectionString;
-				}
-				catch (Exception e) {
-					string sMsg = string.Format(
-						"Failed to load connection string from configuration file using name {0}",
-						env.Context.ToLower()
-					);
-
-					Error(sMsg + ": " + e.Message);
-
-					throw new Ezbob.Database.DbException(sMsg, e);
-				} // try
-
-				Info(string.Format("ConnectionString: {0}", m_sConnectionString));
-
-				return m_sConnectionString;
-			} // get
-			set {
-				m_sConnectionString = value;
-			} // set
-		} // ConnectionString
+	public abstract class AConnection : SafeLog, IConnection, IDisposable  {
+		private const int RetryCount = 3;
 
 		private string m_sConnectionString;
 
-		#endregion property ConnectionString
+		private enum ExecMode {
+			Scalar,
+			Reader,
+			NonQuery
+		} // Enum ExecMode
 
-		#region property RetryCount
+		public AConnection(ASafeLog log = null) : base(log) {
+			var env = new Ezbob.Context.Environment();
 
-		protected virtual int RetryCount { get { return 3; } } // RetryCount
+			try {
+				m_sConnectionString = ConfigurationManager.ConnectionStrings[env.Context.ToLower()].ConnectionString;
+			}
+			catch (Exception) {
+				Error("Failed to load connection string from configuration file using name {0}", env.Context.ToLower());
+				throw;
+			}
 
-		#endregion property RetryCount
+			Info(string.Format("ConnectionString: {0}", m_sConnectionString));
+		} // constructor
 
-		#region method Retry
+		public abstract DbConnection CreateConnection(string sConnectionString);
+		public abstract DbCommand CreateCommand(string sCommand, DbConnection oConnection);
+		public abstract DbParameter CreateParameter(QueryParameter prm);
 
-		protected virtual T Retry<T>(Func<T> func) {
+		private T Retry<T>(Func<T> func) {
 			int nCount = RetryCount;
 
 			while (true) {
@@ -158,21 +63,24 @@ namespace Ezbob.Database {
 			} // while
 		} // Retry
 
-		#endregion method Retry
+		public T ExecuteScalar<T>(string sQuery, params QueryParameter[] aryParams) {
+			object oRes = Run(ExecMode.Scalar, sQuery, aryParams);
 
-		#region enum ExecMode
+			if (oRes is DBNull)
+				return default(T);
 
-		protected enum ExecMode {
-			Scalar,
-			Reader,
-			NonQuery
-		} // Enum ExecMode
+			return (T)oRes;
+		} // ExecuteScalar
 
-		#endregion enum ExecMode
+		public DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams) {
+			return (DataTable)Run(ExecMode.Reader, sQuery, aryParams);
+		} // ExecuteReader
 
-		#region method Run
+		public int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams) {
+			return (int)Run(ExecMode.NonQuery, sQuery, aryParams);
+		} // ExecuteNonQuery
 
-		protected virtual object Run(ExecMode nMode, CommandSpecies nSpecies, string spName, params QueryParameter[] aryParams) {
+		private object Run(ExecMode nMode, string spName, params QueryParameter[] aryParams) {
 			var sb = new StringBuilder();
 
 			foreach (var prm in aryParams)
@@ -183,31 +91,11 @@ namespace Ezbob.Database {
 
 			try {
 				return Retry(() => {
-					using (var connection = CreateConnection()) {
+					using (var connection = CreateConnection(m_sConnectionString)) {
 						connection.Open();
 
 						using (var command = CreateCommand(spName, connection)) {
-							switch (nSpecies) {
-							case CommandSpecies.Auto:
-								command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
-								break;
-
-							case CommandSpecies.StoredProcedure:
-								command.CommandType = CommandType.StoredProcedure;
-								break;
-
-							case CommandSpecies.Text:
-								command.CommandType = CommandType.Text;
-								break;
-
-							case CommandSpecies.TableDirect:
-								command.CommandType = CommandType.TableDirect;
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException("nSpecies");
-							} // switch
-
+							command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
 							foreach (var prm in aryParams)
 								command.Parameters.Add(CreateParameter(prm));
 
@@ -230,7 +118,7 @@ namespace Ezbob.Database {
 
 							case ExecMode.NonQuery:
 								int nResult = command.ExecuteNonQuery();
-								PublishRunningTime(guid, sw, string.Format("- {0} row{1} affected", nResult, nResult == 1 ? "" : "s"));
+								PublishRunningTime(guid, sw);
 								return nResult;
 
 							default:
@@ -246,21 +134,13 @@ namespace Ezbob.Database {
 			} // try
 		} // Run
 
-		#endregion method Retry
-
-		#region method PublishRunningTime
-
-		protected void PublishRunningTime(Guid guid, Stopwatch sw, string sMsg = "completed", string sAuxMsg = "") {
-			sAuxMsg = (sAuxMsg ?? "").Trim();
-			if (sAuxMsg != string.Empty)
-				sAuxMsg = " " + sAuxMsg;
-
-			Debug("Query {1} {2} in {0}ms{3}", sw.ElapsedMilliseconds, guid, sMsg, sAuxMsg);
+		private void PublishRunningTime(Guid guid, Stopwatch sw, string sMsg = "completed") {
+			Debug("Query {1} {2} in {0}ms", sw.ElapsedMilliseconds, guid, sMsg);
 		} // PublishRunnigTime
 
-		#endregion method PublishRunningTime
-
-		#endregion protected
+		public void Dispose() {
+			// nothing to do here
+		} // Dispose
 	} // AConnection
 } // namespace Ezbob.Database
 

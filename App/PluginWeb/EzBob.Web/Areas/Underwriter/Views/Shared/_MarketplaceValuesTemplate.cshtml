@@ -132,8 +132,8 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <% if(summary){%>
+            <tbody><%
+                if (summary) { %>
                 <tr class="bold" style="font-size: 18px;">
                     <td>Total</td>
                     <td></td>
@@ -144,12 +144,17 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                </tr>
-                <%}%>
-                <% _.each(marketplaces, function(m,i){ %>
+                </tr><%
+                }
+                (function() {
+                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+                _.each(marketplaces, function(m,i){
+                var oCG = aryCGAccounts[m.Name];
+                var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
+                %>
                 <tr data-id="<%- m.Id %>">
                     <td>
-                        <div class="source_labels_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div>
+                        <div class="<%= sSourceLabels %>_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div>
                     </td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td class="centered"><%- m.age %></td>
@@ -177,7 +182,7 @@
                         </div>
                     </td>
                 </tr>
-                <% }); %>
+                <% }); })(); %>
             </tbody>
         </table>
     </div>
@@ -195,10 +200,14 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <% _.each(accounts, function(m, i){%>
+            <tbody><%
+            (function () {
+                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+                _.each(accounts, function(m,i){
+                var oCG = aryCGAccounts[m.Name];
+                var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
                 <tr data-id="<%- m.Id %>">
-                    <td><div class="source_labels_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div></td>
+                    <td><div class="<%= sSourceLabels %>_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div></td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
@@ -217,8 +226,7 @@
 
                     </td>
                 </tr>
-                <%}) %>
-   
+                <% }) })(); %>
             </tbody>
         </table>
     </div>
