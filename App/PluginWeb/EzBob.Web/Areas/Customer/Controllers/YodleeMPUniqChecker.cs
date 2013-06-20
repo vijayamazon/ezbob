@@ -16,7 +16,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		#region constructor
 
 		public YodleeMpUniqChecker(ICustomerMarketPlaceRepository customerMarketPlaceRepository,
-		                           IMP_WhiteListRepository whiteList)
+								   IMP_WhiteListRepository whiteList)
 			: base(customerMarketPlaceRepository, whiteList)
 		{
 		} // constructor
@@ -42,16 +42,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			}
 
 			var alreadyAdded = _session
-                .QueryOver<MP_CustomerMarketPlace>()
-                .Where(m => m.Customer.Id == customer.Id && m.Marketplace.InternalId == marketplaceType)
-                .List()
-                .Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData))
-                .Any(s => s.CsId == csId);
+				.QueryOver<MP_CustomerMarketPlace>()
+				.Where(m => m.Customer.Id == customer.Id)
+				.JoinQueryOver(m => m.Marketplace)
+				.Where(m => m.InternalId == marketplaceType)
+				.List()
+				.Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData))
+				.Any(s => s.CsId == csId);
 
-            if (alreadyAdded)
-            {
-                throw new MarketPlaceAddedByThisCustomerException();
-            }
+			if (alreadyAdded)
+			{
+				throw new MarketPlaceAddedByThisCustomerException();
+			}
 		}
 
 		#endregion method Check
