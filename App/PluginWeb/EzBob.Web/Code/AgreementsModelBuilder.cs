@@ -133,7 +133,8 @@ namespace EzBob.Web.Code.Agreements
                 Date = FormattingUtils.FormatDateToString(installment.Date),
                 StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
                 InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100),
-                Iterration = i + 1
+                Iterration = i + 1,
+                AprMonthRate = string.Format("{0:0.0}", (installment.LoanRepayment + installment.Interest) * 100 / installment.LoanRepayment)
             }
                 ).ToList();
         }

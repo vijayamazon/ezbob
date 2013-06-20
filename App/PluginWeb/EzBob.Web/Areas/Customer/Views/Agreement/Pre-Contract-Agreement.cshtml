@@ -133,7 +133,7 @@
         </td>
         <td width="50%">
             {{#FormattedSchedules}}
-            <p  style="text-align: justify" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per annum. Fixed </p>
+            <p  style="text-align: justify" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
             {{/FormattedSchedules}}
 
         </td>
@@ -145,7 +145,14 @@
             offers.
         </td>
         <td>
-            <p> APR: {{APR}}% </p> 
+            
+            {{#FormattedSchedules}}
+            <p  style="text-align: justify" > MONTH {{Iterration}}: APR: {{AprMonthRate}}% </p>
+            {{/FormattedSchedules}}
+
+
+            
+
         </td>
     </tr>
     <tr>
