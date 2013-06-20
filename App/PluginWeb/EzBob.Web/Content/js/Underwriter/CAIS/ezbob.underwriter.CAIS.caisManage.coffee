@@ -40,7 +40,12 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         @model.fetch().done => BlockUi "off"
         @checkedModel = new EzBob.Underwriter.CAIS.SelectedFiles()
         @bindTo @checkedModel, "add remove reset", @checkedFileModelChanged, @
-   
+            
+        goToCustomerId.on "ok", (id) ->
+            Redirect "#{gRootPath}Underwriter/Customers#profile/#{id}"
+        ($ "#liClient > a").on "click", ->
+                goToCustomerId.render()
+                false
     ui:
         count:".reports-count"
         send: ".send"
