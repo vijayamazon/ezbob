@@ -276,7 +276,18 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
                             XmlSerializer serializer = new XmlSerializer( typeof( ErrorResponse ) );
                             ErrorResponse errorResponse = (ErrorResponse)serializer.Deserialize( responseReader );
                             Error error = errorResponse.Error[0];
-						
+
+                            if (error.Message == "Invalid ids presented")
+                            {
+                                var mpid = parameters["MarketplaceId.Id.1"];
+                                if (!string.IsNullOrEmpty(mpid))
+                                {
+                                    string message = string.Format("Amazon call failed. Possible issue - wrong MarketplaceId ({0})", mpid);
+                                    _log.Error(message);
+                                    throw new ArgumentException(message);
+                                }
+                            }
+
                             /* Throw formatted exception with information available from the error response */
                             throw new MarketplaceWebServiceOrdersException(
                                 error.Message,
@@ -286,18 +297,9 @@ namespace MarketplaceWebServiceOrders.MarketplaceWebServiceOrders
                                 errorResponse.RequestId,
                                 errorResponse.ToXML() );
                         }
-                        catch ( MarketplaceWebServiceOrdersException mwsErr )
+                        catch (MarketplaceWebServiceOrdersException)
                         {
-                            if (mwsErr.Message == "Invalid ids presented")
-                            {
-                                var mpid = parameters["MarketplaceId.Id.1"];
-                                if (!string.IsNullOrEmpty(mpid))
-                                {
-                                    string message = string.Format("Amazon call failed. Possible issue - wrong MarketplaceId ({0})", mpid);
-                                    _log.Error(message);
-                                }
-                            }
-                            throw mwsErr;
+                            throw;
                         }
                         catch ( Exception e )
                         {
