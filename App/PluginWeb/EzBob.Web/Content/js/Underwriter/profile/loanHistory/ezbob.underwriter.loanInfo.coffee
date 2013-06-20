@@ -129,19 +129,28 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
     runNewCreditLine: (e) ->
         return false  if $(e.currentTarget).hasClass("disabled")
-        @RunCustomerCheck()
+
+        el = ($ "<select/>")
+        .css("height", "30px").css("width", "280px")
+        .append( "<option value='1'>Skip everything, go to manual decision</option>")
+        .append( "<option value='2'>Update everything except of MP's and go to manual decisions</option>")
+        .append( "<option value='3'>Update everything and apply auto rules</option>")
+        .append( "<option value='4'>Update everything and go to manual decision</option>")
+        
+        EzBob.ShowMessage el, "New Credit Line Option", (=>@RunCustomerCheck(el.val())), "OK", null, "Cancel"
+
         false
 
-    RunCustomerCheck: ->
+    RunCustomerCheck: (newCreditLineOption )->
         BlockUi "on"
         $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine",
             Id: @model.get("CustomerId")
+            NewCreditLineOption : newCreditLineOption
         ).done((response) =>
             updater = new ModelUpdater(@personalInfo, 'IsMainStratFinished')
             updater.start()
         ).fail (data) ->
             console.error data.responseText
-        false
 
     allowSendingEmail: ->
         d = new EzBob.Dialogs.CheckBoxEdit

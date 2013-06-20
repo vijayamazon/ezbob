@@ -121,12 +121,13 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.CustomerMarketPlaceStrategyName);
         }
 
-        public void Evaluate(User user, bool isUnderwriterForced = false)
+        public void Evaluate(User user, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced = false)
         {
             var strategyParameters = new[]
                                              {
                                                  new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0)
+                                                 new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
+                                                 new StrategyParameter("NewCreditLineOption", (int)newCreditLineOption)
                                              };
             var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
             var customer = _session.Get<Customer>(user.Id);

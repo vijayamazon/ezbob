@@ -4,6 +4,7 @@ using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
+using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
@@ -250,7 +251,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Ajax]
         [ValidateJsonAntiForgeryToken]
         [Permission(Name = "NewCreditLineButton")]
-        public JsonNetResult RunNewCreditLine(int Id)
+        public JsonNetResult RunNewCreditLine(int Id, int newCreditLineOption)
         {
             var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
             if (anyApps)
@@ -261,7 +262,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var cashRequest = _crBuilder.CreateCashRequest(customer);
             cashRequest.LoanType = _loanTypes.GetDefault();
 
-            _crBuilder.ForceEvaluate(customer, false);
+            _crBuilder.ForceEvaluate(customer, (NewCreditLineOption) newCreditLineOption, false);
 
             customer.OfferStart = cashRequest.OfferStart;
             customer.OfferValidUntil = cashRequest.OfferValidUntil;

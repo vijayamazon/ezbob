@@ -49,7 +49,7 @@
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
-            _creator.Evaluate(_users.Get(Id), true);
+            _creator.Evaluate(_users.Get(Id), NewCreditLineOption.UpdateEverythingExceptMp, true);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 

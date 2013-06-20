@@ -12,7 +12,7 @@ namespace EzBob.Web.ApplicationCreator
         void PasswordChanged(User user, string firstName, string password);
         void PasswordRestored(User user, string emailTo, string firstName,  string password);
         void CustomerMarketPlaceAdded(Customer user, int umi);
-        void Evaluate(User user, bool isUnderwriterForced = false);
+        void Evaluate(User user, NewCreditLineOption runNewCreditLine, bool isUnderwriterForced = false);
         void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
                                        string district, string town, string county, string postcode, string bankAccount, string sortCode);
         void GetCashFailed(User user, string firstName);
@@ -32,5 +32,13 @@ namespace EzBob.Web.ApplicationCreator
         void Escalated(Customer customer);
         void CAISGenerate(User user);
         void CAISUpdate(User user, int caisId);
+    }
+
+    public enum NewCreditLineOption
+    {
+        SkipEverything = 1,
+        UpdateEverythingExceptMp = 2,
+        UpdateEverythingAndApplyAutoRules = 3,
+        UpdateEverythingAndGoToManualDecision = 4,
     }
 }

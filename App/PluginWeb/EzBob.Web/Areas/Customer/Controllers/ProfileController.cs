@@ -90,7 +90,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var cashRequest = _crBuilder.CreateCashRequest(customer);
 
-            _crBuilder.ForceEvaluate(customer, false);
+            _crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
             
             return this.JsonNet(new {});
         }

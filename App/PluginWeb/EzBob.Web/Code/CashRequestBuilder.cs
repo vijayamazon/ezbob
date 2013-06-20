@@ -56,9 +56,15 @@ namespace EzBob.Web.Code
             return cashRequest;
         }
 
-        public void ForceEvaluate(Customer customer, bool isUnderwriterForced)
+        public void ForceEvaluate(Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced)
         {
-            if (customer.CustomerMarketPlaces.Any(x => x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays))
+            if (
+                customer.CustomerMarketPlaces.Any(
+                    x =>
+                    x.UpdatingEnd != null &&
+                    (DateTime.UtcNow - x.UpdatingEnd.Value).Days > _config.UpdateOnReapplyLastDays) &&
+                (newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
+                 newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision))
             {
                 //UpdateAllMarketplaces не успевает проставить UpdatingEnd = null для того что бы MainStrategy подождала окончание его работы
                 foreach (var val in customer.CustomerMarketPlaces)
@@ -67,7 +73,7 @@ namespace EzBob.Web.Code
                 }
                 _creator.UpdateAllMarketplaces(customer);
             }
-            _creator.Evaluate(_users.Get(customer.Id), isUnderwriterForced);
+            _creator.Evaluate(_users.Get(customer.Id), newCreditLineOption, isUnderwriterForced);
         }
     }
 }
