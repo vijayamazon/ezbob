@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
+﻿using System.Linq;
+
+namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -39,19 +41,17 @@
 				return;
 			}
 
-			var queryOverMarketplaces = _session.QueryOver<MP_CustomerMarketPlace>();
+			var alreadyAdded = _session
+                .QueryOver<MP_CustomerMarketPlace>()
+                .Where(m => m.Customer.Id == customer.Id && m.Marketplace.InternalId == marketplaceType)
+                .List()
+                .Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData))
+                .Any(s => s.CsId == csId);
 
-			foreach (MP_CustomerMarketPlace mpCustomerMarketPlace in queryOverMarketplaces.List())
-			{
-				if (mpCustomerMarketPlace.Customer.Id == customer.Id && mpCustomerMarketPlace.Marketplace.InternalId == marketplaceType)
-				{
-					var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mpCustomerMarketPlace.SecurityData);
-					if (securityInfo.CsId == csId)
-					{
-						throw new MarketPlaceAddedByThisCustomerException();
-					}
-				}
-			}
+            if (alreadyAdded)
+            {
+                throw new MarketPlaceAddedByThisCustomerException();
+            }
 		}
 
 		#endregion method Check
