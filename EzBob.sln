@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelGrabberFrontend", "I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelGrabberConfig", "Integration\ChannelGrabberConfig\ChannelGrabberConfig.csproj", "{8AD07DAA-3F09-4279-A390-17ACDE79B44F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelGrabberSecurityInfoConverter", "Integration\ChannelGrabberSecurityInfoConverter\ChannelGrabberSecurityInfoConverter.csproj", "{9F2E9A31-9D68-475A-B976-57C3FF0291BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -642,6 +644,16 @@ Global
 		{8AD07DAA-3F09-4279-A390-17ACDE79B44F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8AD07DAA-3F09-4279-A390-17ACDE79B44F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8AD07DAA-3F09-4279-A390-17ACDE79B44F}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -700,6 +712,7 @@ Global
 		{189D7477-DEE3-4F7B-B703-D24C92352C0C} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
 		{EB0E1F2B-36AF-4EC4-B4CE-79BC52F8252B} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
 		{8AD07DAA-3F09-4279-A390-17ACDE79B44F} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
+		{9F2E9A31-9D68-475A-B976-57C3FF0291BA} = {F4ECA4BA-B168-4EE1-A645-57082504C74E}
 		{DE254378-4CF8-400C-BCC4-A9AF01550350} = {73FD87E5-395F-40CE-B222-0591D6F8D0D6}
 		{E8DE4E4E-1086-45A5-B374-9E48A271B209} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 	EndGlobalSection
