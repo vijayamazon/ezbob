@@ -946,11 +946,53 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.general.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.general.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.rejection.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.automation.rejection.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.js">
       <DependentUpon>ezbob.shops.cg.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.charges.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.charges.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.general.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.general.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.general.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.general.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.min.js">
+      <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
@@ -985,10 +1027,16 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Yodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\YodleeCallback.cshtml" />
     <Content Include="Content\js\lib\mousetrap_1.4.0.js" />
-    <Content Include="Areas\Underwriter\Views\Shared\StrategySettings.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\AttachYodlee.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\FreeAgent.cshtml" />
     <Content Include="Areas\Customer\Views\FreeAgentMarketPlaces\FreeAgentCallback.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\StrategyAutomation.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\StrategySettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ChargesSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_GeneralSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ApprovalSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_AutomationSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_RejectionSettings.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1479,9 +1527,18 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.stManage.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.general.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

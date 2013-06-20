@@ -1,0 +1,26 @@
+﻿@model dynamic
+
+<script type="text/template" id="automation-settings-template">
+    @AutomationSettings()
+</script>
+
+@helper AutomationSettings()
+{
+    @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
+    <div class="alert-block">    
+        @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
+        <table class="table table-bordered table-striped blue-header squeezed darker">
+            <thead>
+                <tr>
+                    <th colspan="3">Automation Settings</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button class="btn" name="SaveAutomationSettings" ><i class="icon-ok-sign" />Save</button> 
+            <button class="btn" name="CancelAutomationSettings" ><i class="icon-remove-sign" />Cancel</button> 
+        </div>
+    </div>
+}

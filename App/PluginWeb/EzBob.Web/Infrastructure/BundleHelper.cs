@@ -220,7 +220,16 @@ namespace EzBob.Web.Infrastructure
                 //Underwriter
                          .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                          .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
-                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.stManage.coffee")
+                // Configuration Variables
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.charges.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.general.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.approval.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.general.coffee")
+                         .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.rejection.coffee")
+
+                // HighCharts
                          .Add("~/Content/js/lib/highcharts/highcharts.js")
                          .Add("~/Content/js/lib/highcharts/exporting.js")
                          .Add("~/Content/js/lib/highcharts/highcharts-more.js")

@@ -1,0 +1,46 @@
+﻿@model dynamic
+
+<script type="text/template" id="general-settings-template">
+    @GeneralSettings()
+</script>
+
+@helper GeneralSettings()
+{
+    @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
+    <div class="alert-block">    
+        @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
+        <table class="table table-bordered table-striped blue-header squeezed darker">
+            <thead>
+                <tr>
+                    <th colspan="3">General Settings</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="20%">BWABusinessCheck: </td>
+                    <td width="20%">
+                        <select name="bwaBusinessCheck" class="selectheight">
+                            <option value="0">Disabled</option>
+                            <option value="1">Enabled</option>
+                        </select>
+                    </td>
+                    <td class="left"><%- BWABusinessCheckDesc %></td> 
+                </tr>                    
+                <tr>
+                    <td>DisplayEarnedPoints: </td>
+                    <td>
+                        <select name="displayEarnedPoints" class="selectheight">
+                            <option value="0">Disabled</option>
+                            <option value="1">Enabled</option>
+                        </select>
+                    </td>
+                    <td><%- DisplayEarnedPointsDesc %></td> 
+                </tr>                    
+            </tbody>
+        </table>
+        <div class="pull-right">
+            <button class="btn" name="SaveGeneralSettings" ><i class="icon-ok-sign" />Save</button> 
+            <button class="btn" name="CancelGeneralSettings" ><i class="icon-remove-sign" />Cancel</button> 
+        </div>
+    </div>
+}

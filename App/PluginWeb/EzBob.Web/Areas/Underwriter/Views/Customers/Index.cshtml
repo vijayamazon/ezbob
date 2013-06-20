@@ -36,11 +36,13 @@
 </div>
 <div id="profile-view" style="display: none;"></div>
 <div id="settings-view" style="display: none;"></div>
+<div id="automation-view" style="display: none;"></div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
     Html.RenderPartial("_CustomersPopupTemplate");
-    Html.RenderPartial("StrategySettings");
+    Html.RenderPartial("AutomationSettings/StrategySettings");
+    Html.RenderPartial("AutomationSettings/StrategyAutomation");
 }
 @section Js{
     <script type="text/javascript">
@@ -86,19 +88,24 @@
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
+            var strategyAutomationView = new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') });
 
 
             var underwriterRouter = Backbone.Router.extend({
                 initialize: function() {
                     this.isCustomersRendered = false;
                     this.isProfileRendered = false;
+                    this.isSettingsRendered = false;
+                    this.isAutomationRendered = false;
+
                 },
                 routes: {
                     "": "customers",
                     "customers/:type": "customers",
                     "profile/:id": "profile",
                     "profile/:id/:type": "profilePopup",
-                    "settings": "settings"
+                    "settings": "settings",
+                    "automation": "automation"
                 },
                 customers: function(type) {
                     timer = timer || setInterval(updateCounters, 5000);
@@ -112,6 +119,7 @@
                     EzBob.App.vent.trigger('uw:grids:refresh');
                     profileView.showed = false;
                     strategySettingsView.hide();
+                    strategyAutomationView.hide();
                 },
                 profile: function(id, type) {
                     clearInterval(timer);
@@ -125,6 +133,7 @@
                     profileView.show(id, type);
                     profileView.showed = true;
                     strategySettingsView.hide();
+                    strategyAutomationView.hide();
                 },
                 profilePopup: function(id, type) {
                     var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
@@ -138,10 +147,27 @@
                 },
                 settings: function() {
                     this.switchMenuTo("liStrategySettings");
+                    if (!this.isSettingsRendered) {
+                        this.isSettingsRendered = true;
+                    strategySettingsView.render();
+                    }
                     customersView.hide();
                     profileView.hide();
                     profileView.showed = false;
+                    strategyAutomationView.hide();
                     strategySettingsView.show();
+                },
+                automation: function() {
+                    this.switchMenuTo("liAutomation");
+                    if (!this.isAutomationRendered) {
+                        this.isAutomationRendered = true;
+                    strategyAutomationView.render();
+                    }
+                    customersView.hide();
+                    profileView.hide();
+                    profileView.showed = false;
+                    strategySettingsView.hide();
+                    strategyAutomationView.show();
                 },
                 switchMenuTo: function(name) {
                     $(".container-fluid > ul.nav > li[id]").removeClass("active");
