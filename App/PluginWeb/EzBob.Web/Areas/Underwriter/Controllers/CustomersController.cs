@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using Aspose.Cells;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.AmazonServiceLib;
+using EzBob.CommonLib;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
@@ -475,7 +479,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private enum CustomerState
         {
             NotSuccesfullyRegistred,
-            EmptyCreditResultResult,
             NotFound,
             Ok
         }
@@ -487,7 +490,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var customer = _customers.TryGet(customerId);
             if (customer == null) return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
             if (!customer.IsSuccessfullyRegistered) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
-            //if (customer.CreditResult == null) return this.JsonNet(new { State = CustomerState.EmptyCreditResultResult.ToString() });
             return this.JsonNet(new { State = CustomerState.Ok.ToString() });
         }
 
@@ -545,6 +547,64 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             var retVal = new HashSet<string>(findResult);
             return this.JsonNet(retVal.Take(5));
+        }
+
+        public string AllMarketplaceId()
+        {
+            var mps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+            var amazon = mps.GetAll().Where(x => x.Marketplace.Name == "Amazon");
+            var retVal = (from a in amazon
+                                   let mid =
+                                       string.Join(",",
+                                                   SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(
+                                                       a.SecurityData).MarketplaceId)
+                                   let mrid =
+                                       SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(a.SecurityData)
+                                                          .MerchantId
+                                   select
+                                       string.Format("Id = {0}, MarketplaceId = {1}, MerchantId = {2}, DisplayName = {3}, Customer.Id = {4}", a.Id, mid, mrid, a.DisplayName, a.Customer.Id))
+                .ToList();
+
+            return string.Join("<br/>", retVal);
+        }
+
+        public FileResult AllMarketplaceIdExcel()
+        {
+            var mps = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
+            var amazon = mps.GetAll().Where(x => x.Marketplace.Name == "Amazon").ToList();
+            var e = new Workbook();
+            var w = e.Worksheets[e.Worksheets.ActiveSheetIndex];
+
+            w.Cells[0,0].PutValue("MPCustomerMarketplaceId");
+            w.Cells[0, 1].PutValue("MarketplaceId");
+            w.Cells[0, 2].PutValue("MerchantId");
+            w.Cells[0, 3].PutValue("DisplayName");
+            w.Cells[0, 4].PutValue("Customer.Id");
+
+            for (var i = 0; i < amazon.Count(); i++ )
+            {
+                var a = amazon.ElementAt(i);
+                var mid = string.Join(",", SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(a.SecurityData).MarketplaceId);
+                var mrid = SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(a.SecurityData).MerchantId;
+
+
+                w.Cells[i + 1, 0].PutValue(a.Id);
+                w.Cells[i + 1, 1].PutValue(mid);
+                w.Cells[i + 1, 2].PutValue(mrid);
+                w.Cells[i + 1, 3].PutValue(a.DisplayName);
+                w.Cells[i + 1, 4].PutValue(a.Customer.Id);
+            }
+
+            using (var streamForDoc = new MemoryStream())
+            {
+                e.Save(streamForDoc, FileFormatType.Excel2007Xlsx);
+                var fs = new FileContentResult(streamForDoc.ToArray(), "application/vnd.ms-excel")
+                    {
+                        FileDownloadName = "AllMarketplaceIdExcel_" + DateTime.UtcNow.ToShortTimeString()
+                    };
+                return fs;
+
+            }
         }
     }
 }
