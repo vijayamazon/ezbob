@@ -55,10 +55,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
             var count = customerSchedule.Count();
             var repaymentAmount = count != 0 ? monthlyRepaymentSum / count : 0;
 
-            var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
-            var currentBalance = customer.Loans.Sum(x => x.Balance);
-            var latePayments = customer.Loans.Sum(x => x.PastDues);
-            var collection = customer.Loans.Where(x => x.IsDefaulted).Sum(x => x.PastDues);
             var inventory = 0d;
 
             foreach (var mp in marketplacesAll)
@@ -106,8 +102,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 {
                     NumberOfStores = String.Format("{0} / {1}", marketplaces.Count, marketplacesAll.Count),
                     AnualTurnOver = anualTurnOver,
-                    Inventory = string.Format("{0:0.#}", inventory),
-                    Seniority = String.Format("{0:0.#}", minAccountAgeTotalMonth),
+                    Inventory = Money(inventory),
+                    Seniority = Money(minAccountAgeTotalMonth),
                     TotalPositiveReviews = String.Format("{0:0.#} ({1:0.#}%)", totalPositiveReviews, (totalReviews != 0 ? totalPositiveReviews / totalReviews * 100 : 0)),
                     Lighter = new Lighter(ObtainMarketPlacesState(marketplaces))
                 };
@@ -125,17 +121,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     new AffordabilityAnalysis
                     {
                         CashAvailabilityOrDeficits = "Not implemented now",
-                        EzBobMonthlyRepayment = String.Format("{0:0.#}", repaymentAmount)
+                        EzBobMonthlyRepayment = Money(repaymentAmount)
                     };
-            summary.LoanActivity =
-                new LoanActivity
-                {
-                    PreviousLoans = String.Format("{0:0.#}", previousLoans),
-                    CurrentBalance = String.Format("{0:0.#}", currentBalance),
-                    LatePaymentsSum = String.Format("{0:0.#}", latePayments),
-                    Collection = String.Format("{0:0.#}", collection),
-                    Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection))
-                };
+            summary.LoanActivity = CreateLoanActivity(customer);
             summary.AmlBwa =
                 new AmlBwa
                 {
@@ -190,6 +178,41 @@ namespace EzBob.Web.Areas.Underwriter.Models
             AddDecisionHistory(summary, customer);
 
             return summary;
+        }
+
+        private LoanActivity CreateLoanActivity(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+
+            var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
+            var currentBalance = customer.Loans.Sum(x => x.Balance);
+            var latePayments = customer.Loans.Sum(x => x.PastDues);
+            var interest = customer.Loans.Where(l => l.Status == LoanStatus.Late).Sum(l => l.InterestDue);
+            var collection = customer.Loans.Where(x => x.IsDefaulted).Sum(x => x.PastDues);
+
+            return new LoanActivity
+                {
+                    PreviousLoans = Money(previousLoans),
+                    CurrentBalance = Money(currentBalance),
+                    LatePaymentsSum = Money(latePayments),
+                    Collection = Money(collection),
+                    LateInterest = Money(interest ?? 0),
+                    Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection))
+                };
+        }
+
+        private static string Money(decimal amount)
+        {
+            return String.Format("{0:0.#}", amount);
+        }
+
+        private static string Money(double amount)
+        {
+            return Money((decimal)amount);
+        }
+
+        private static string Money(int amount)
+        {
+            return Money((decimal)amount);
         }
 
         private void AddDecisionHistory(ProfileSummaryModel summary, EZBob.DatabaseLib.Model.Database.Customer customer)

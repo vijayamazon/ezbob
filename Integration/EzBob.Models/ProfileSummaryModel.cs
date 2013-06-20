@@ -38,7 +38,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string CurrentBalance { get; set; }
         public string LatePaymentsSum { get; set; }
         public string PreviousLoans { get; set; }
-
+        public string LateInterest { get; set; }
     }
 
     public class AffordabilityAnalysis

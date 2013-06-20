@@ -47,6 +47,8 @@ namespace EzBob.Models
         public bool Modified { get; set; }
         public string DiscountPlan { get; set; }
 
+        public decimal? InterestDue { get; set; }
+
         public static LoanModel FromLoan(Loan loan, IPayEarlyCalculator calculator, IPayEarlyCalculator calculatorForNow = null)
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
@@ -82,7 +84,8 @@ namespace EzBob.Models
                     LastReportedCaisStatusDate = loan.LastReportedCaisStatusDate,
                     LoanType = loan.LoanType.Name,
                     Modified = loan.Modified || (loan.CashRequest != null && !string.IsNullOrEmpty(loan.CashRequest.LoanTemplate)),
-                    DiscountPlan = loan.CashRequest.DiscountPlan.Name
+                    DiscountPlan = loan.CashRequest.DiscountPlan.Name,
+                    InterestDue = loan.InterestDue
                 };
         }
     }
