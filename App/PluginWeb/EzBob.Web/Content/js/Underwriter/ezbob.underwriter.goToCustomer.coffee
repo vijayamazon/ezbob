@@ -32,6 +32,7 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
             , "OK", null, "Cancel")
         
         @ui.input.on "keydown", (e)=>@keydowned(e)
+
         @okBtn = $(".ok-button")
         @ui.input.autocomplete
             source: "#{gRootPath}Underwriter/Customers/FindCustomer"
@@ -49,6 +50,7 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         return false
 
     keydowned: (e)->
+        @addError ""
         return if @okBtn.attr("disabled") is "disabled"
         if e.keyCode == 13
             @okTrigger()
