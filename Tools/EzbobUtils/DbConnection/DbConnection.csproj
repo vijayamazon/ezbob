@@ -7,7 +7,7 @@
     <ProjectGuid>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DbConnection</RootNamespace>
+    <RootNamespace>Ezbob.Database</RootNamespace>
     <AssemblyName>DbConnection</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbException.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="AConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

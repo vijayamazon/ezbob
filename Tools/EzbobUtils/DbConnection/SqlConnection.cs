@@ -12,18 +12,34 @@ namespace Ezbob.Database {
 
 		#region constructor
 
-		public SqlConnection(ASafeLog log = null) : base(log) {
+		public SqlConnection(ASafeLog log = null, string sConnectionString = null) : base(log, sConnectionString) {
 		} // constructor
 
-		public override DbConnection CreateConnection(string sConnectionString) {
-			return new System.Data.SqlClient.SqlConnection(sConnectionString);
+		#endregion constructor
+
+		#endregion public
+
+		#region protected
+
+		#region method CreateConnection
+
+		protected override DbConnection CreateConnection() {
+			return new System.Data.SqlClient.SqlConnection(ConnectionString);
 		} // CreateConnection
 
-		public override DbCommand CreateCommand(string sCommand, DbConnection oConnection) {
+		#endregion method CreateConnection
+
+		#region method CreateCommand
+
+		protected override DbCommand CreateCommand(string sCommand, DbConnection oConnection) {
 			return new SqlCommand(sCommand, (System.Data.SqlClient.SqlConnection)oConnection);
 		} // CreateCommand
 
-		public override DbParameter CreateParameter(QueryParameter prm) {
+		#endregion method CreateCommand
+
+		#region method CreateParameter
+
+		protected override DbParameter CreateParameter(QueryParameter prm) {
 			var oParam = (SqlParameter)CreateParameter(prm.Name, prm.Value);
 
 			if (prm.Size != null)
@@ -35,15 +51,15 @@ namespace Ezbob.Database {
 			return oParam;
 		} // CreateParameter
 
-		public virtual DbParameter CreateParameter(string sName, object oValue) {
+		protected virtual DbParameter CreateParameter(string sName, object oValue) {
 			return (oValue is int && (int)oValue == 0)
 					? new SqlParameter(sName, Convert.ToInt32(0))
 					: new SqlParameter(sName, oValue);
 		} // CreateParameter
 
-		#endregion constructor
+		#endregion method CreateParameter
 
-		#endregion public
+		#endregion protected
 	} // class SqlConnection
 
 	#endregion class SqlConnection
