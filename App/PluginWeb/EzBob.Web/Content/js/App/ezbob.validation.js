@@ -132,6 +132,16 @@ $.validator.addMethod(
 );
 
 $.validator.addMethod(
+        "amazonMPValidator",
+        function (value, element) {
+            var trimmed = $.trim(value);
+            var re = /^(A13V1IB3VIYZZH)|(A1PA6795UKMFR9)|(APJ6JRA9NG5V4)|(A1RKKUPIHCS9HS)|(A1F83G8C2ARO7P)$/;
+            return re.test(trimmed);
+        },
+        "Incorrect marketplace ID."
+);
+
+$.validator.addMethod(
         "ezbobEmail",
         function (value, element) {
             return this.optional(element) || /^[a-zA-Z][a-zA-Z0-9\.\-\_]{1,28}[a-zA-Z0-9]@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i.test(value);
