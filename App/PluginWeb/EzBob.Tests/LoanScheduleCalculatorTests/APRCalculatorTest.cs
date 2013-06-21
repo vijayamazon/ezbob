@@ -21,7 +21,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 6, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 1100,
 							BalanceBeforeRepayment = 40000,
@@ -31,7 +31,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 7, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 917,
 							BalanceBeforeRepayment = 33333,
@@ -43,7 +43,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 8, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 733,
 							BalanceBeforeRepayment = 26667,
@@ -54,7 +54,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 9, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 550,
 							BalanceBeforeRepayment = 20000,
@@ -65,7 +65,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 10, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 367,
 							BalanceBeforeRepayment = 13333,
@@ -76,7 +76,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 					new LoanScheduleItem
 						{
 							Date = new DateTime(2013, 11, 7),
-							InterestRate = 0.03M,
+							InterestRate = 0.0275M,
 							LoanRepayment = 6667,
 							Interest = 183,
 							BalanceBeforeRepayment = 6667,
@@ -85,7 +85,7 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 							AmountDue = 6850
 						}
 				};
-			var apr = calc.Calculate(40000, loanSchedule, 0, new DateTime(2013,5,7));
+			var apr = calc.Calculate(40000, loanSchedule, 0, new DateTime(2013, 5, 7));
 			Assert.That(apr, Is.EqualTo(38.11));
 		}
 
@@ -243,6 +243,88 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 				};
 			var apr = calc.Calculate(14000, loanSchedule, 112, new DateTime(2012, 7, 30));
 			Assert.That(apr, Is.EqualTo(83.87));
+		}
+
+		[Test]
+		public void calculateAprMonthly()
+		{
+			var calc = new APRCalculator();
+			var loanSchedule = new List<LoanScheduleItem>
+				{
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 6, 7),
+							InterestRate = 0.03M,
+							LoanRepayment = 6667,
+							Interest = 1100,
+							BalanceBeforeRepayment = 40000,
+							Balance = 33333,
+							AmountDue = 7767
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 7, 7),
+							InterestRate = 0.0275M,
+							LoanRepayment = 6667,
+							Interest = 917,
+							BalanceBeforeRepayment = 33333,
+							Balance = 26667,
+							Fees = 0,
+							AmountDue = 7583
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 8, 7),
+							InterestRate = 0.0275M,
+							LoanRepayment = 6667,
+							Interest = 733,
+							BalanceBeforeRepayment = 26667,
+							Balance = 20000,
+							Fees = 0,
+							AmountDue = 7400
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 9, 7),
+							InterestRate = 0.0275M,
+							LoanRepayment = 6667,
+							Interest = 550,
+							BalanceBeforeRepayment = 20000,
+							Balance = 13333,
+							Fees = 0,
+							AmountDue = 7217
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 10, 7),
+							InterestRate = 0.0275M,
+							LoanRepayment = 6667,
+							Interest = 367,
+							BalanceBeforeRepayment = 13333,
+							Balance = 6667,
+							Fees = 0,
+							AmountDue = 7033
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 11, 7),
+							InterestRate = 0.0275M,
+							LoanRepayment = 6667,
+							Interest = 183,
+							BalanceBeforeRepayment = 6667,
+							Balance = 0,
+							Fees = 0,
+							AmountDue = 6850
+						}
+				};
+			var aprMonthRate = calc.CalculateMonthly(40000, loanSchedule, 0, 0, new DateTime(2013, 5, 7));
+			Assert.That(aprMonthRate, Is.InRange(42.1,42.2));
+			/*
+				var AprMonthRate = Math.Floor((Math.Pow((double)loanSchedule[0].InterestRate + 1, 12) - 1) * 100);
+				Assert.That(AprMonthRate, Is.EqualTo(42));
+			*/
+
 		}
 	}
 }

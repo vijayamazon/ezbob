@@ -91,7 +91,7 @@ namespace EzBob.Web.Code.Agreements
             model.CurentDate = FormattingUtils.FormatDateTimeToString(now);
             model.CurrentDate = now;
 
-            model.FormattedSchedules = CreateSchedule(loan.Schedule.ToList());
+            model.FormattedSchedules = CreateSchedule(loan.LoanAmount,loan.Schedule.ToList(), loan.Date, loan.SetupFee);
 
             model.InterestRate = loan.InterestRate * 100;
             model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
@@ -122,7 +122,7 @@ namespace EzBob.Web.Code.Agreements
             return model;
         }
 
-        private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule)
+        private IList<FormattedSchedule> CreateSchedule(decimal loanAmount, List<LoanScheduleItem> schedule, DateTime loanDate, decimal setupFee)
         {
             return schedule.Select((installment, i) => new FormattedSchedule
             {
@@ -134,9 +134,8 @@ namespace EzBob.Web.Code.Agreements
                 StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
                 InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100),
                 Iterration = i + 1,
-                AprMonthRate = string.Format("{0:0.0}", (installment.LoanRepayment + installment.Interest) * 100 / (installment.LoanRepayment == 0 ? 1 : installment.LoanRepayment))
-            }
-                ).ToList();
+                AprMonthRate = string.Format("{0:0.0}", _aprCalc.CalculateMonthly(loanAmount, schedule, i, setupFee, loanDate))
+            }).ToList();
         }
 
         public void CalculateTotal(bool useSetupFee, List<LoanScheduleItem> schedule, AgreementModel model)
