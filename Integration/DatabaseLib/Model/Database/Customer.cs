@@ -451,6 +451,10 @@ namespace EZBob.DatabaseLib.Model.Database {
             }
         }
 
+
+        public virtual int NumRejects { get; set; }
+        public virtual int NumApproves { get; set; }
+
         //calculated with formula
         public virtual string EbayStatus { get; set; }
         public virtual string AmazonStatus { get; set; }
@@ -462,8 +466,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal SystemCalculatedSum { get; set; }
         public virtual decimal ManagerApprovedSum { get; set; }
         public virtual decimal OutstandingBalance { get; set; }
-        public virtual int NumRejects { get; set; }
-        public virtual int NumApproves { get; set; }
         public virtual int Delinquency { get; set; }
         public virtual decimal AmountTaken { get; set; }
         public virtual string LastStatus { get; set; }

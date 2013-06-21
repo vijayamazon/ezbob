@@ -220,6 +220,9 @@ namespace EZBob.DatabaseLib.Model.Database {
                 });
             Map(x => x.WizardStep).CustomType(typeof (WizardStepType));
 
+            Map(x => x.NumApproves);
+            Map(x => x.NumRejects);
+
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
@@ -245,16 +248,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                     "(select top(1) cr.ManagerApprovedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by cr.[Id] desc)")
                 .Not.Insert()
                 .Not.Update();
-            Map(x => x.NumApproves)
-                .Formula(
-                    @"(select count(*) from [DecisionHistory] d where d.[CustomerId] = Id and d.[Action] = 'Approve')")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.NumRejects)
-                .Formula(
-                    @"(select count(*) from [DecisionHistory] d where d.[CustomerId] = Id and d.[Action] = 'Reject')")
-                .Not.Insert()
-                .Not.Update();
+
             Map(x => x.Delinquency)
                 .Formula(
                     @"(select DATEDIFF(day, ISNULL(MIN(s.[Date]), GETUTCDATE()), GETUTCDATE()) from [Loan] l left join [LoanSchedule] s

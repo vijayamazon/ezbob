@@ -47,6 +47,14 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public void LogAction(DecisionActions action, string comment, User underwriter, Customer customer)
         {
+            if (action == DecisionActions.Approve)
+            {
+                customer.NumApproves++;
+            } else if (action == DecisionActions.Reject)
+            {
+                customer.NumRejects++;
+            }
+
             var cr = customer.LastCashRequest;
             var item = new DecisionHistory()
                            {
