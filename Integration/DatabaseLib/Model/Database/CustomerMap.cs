@@ -298,7 +298,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.CustomerStatus)
-                .Formula("(select top(1) CreditResult from [Customer] c where c.[Id] =Id)")
+                .Formula("CreditResult")
                 .Not.Insert()
                 .Not.Update();
         }
