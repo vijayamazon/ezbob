@@ -531,7 +531,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Ajax]
         public JsonNetResult FindCustomer(string term)
         {
-            term = Regex.Matches(term, @"[^\s].*[^\s]")[0].Value;
+            term = term.Trim();
             int id;
             int.TryParse(term, out id);
 
@@ -546,7 +546,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         .Take(20);
 
             var retVal = new HashSet<string>(findResult);
-            return this.JsonNet(retVal.Take(5));
+            return this.JsonNet(retVal.Take(15));
         }
 
         public string AllMarketplaceId()

@@ -24,15 +24,8 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         "errorPlace" : ".error-place"
         
     onRender: ->
-        @dialog = EzBob.ShowMessage(
-            @ui.template
-            , "Customer ID?"
-            , => 
-                @okTrigger()
-            , "OK", null, "Cancel")
-        
+        @dialog = EzBob.ShowMessage( @ui.template, "Customer ID?",( => @okTrigger()), "OK", null, "Cancel" )
         @ui.input.on "keydown", (e)=>@keydowned(e)
-
         @okBtn = $(".ok-button")
         @ui.input.autocomplete
             source: "#{gRootPath}Underwriter/Customers/FindCustomer"
@@ -52,6 +45,7 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
     keydowned: (e)->
         @addError ""
         return if @okBtn.attr("disabled") is "disabled"
+        return if $('.ui-autocomplete:visible').length != 0
         if e.keyCode == 13
             @okTrigger()
 
