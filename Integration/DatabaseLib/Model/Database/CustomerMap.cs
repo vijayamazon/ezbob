@@ -227,6 +227,11 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.LastStatus);
             Map(x => x.TotalPrincipalRepaid);
 
+            Map(x => x.FirstLoanDate).CustomType<UtcDateTimeType>();
+            Map(x => x.LastLoanDate).CustomType<UtcDateTimeType>();
+            Map(x => x.LastLoanAmount);
+            Map(x => x.AmountTaken);
+
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
@@ -251,22 +256,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
                 .Not.Insert()
                 .Not.Update();
-            Map(x => x.AmountTaken)
-                .Formula("(select ISNULL(sum(l.LoanAmount),0) from [Loan] l where l.CustomerId = Id)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.FirstLoanDate)
-                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.LastLoanDate)
-                .Formula("(select top(1) Date from [Loan] l where l.[CustomerId] =Id order by l.[Id] desc)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.LastLoanAmount)
-                .Formula("(select top 1 l.[LoanAmount] from [Loan] l where l.[CustomerId] = Id order by l.[Id] desc)")
-                .Not.Insert()
-                .Not.Update();
+
             Map(x=>x.NextRepaymentDate)
                 .Formula(@"(select top 1 s.[Date] from [LoanSchedule] s left join [loan] l
                         on l.[Id] = s.[LoanId]
@@ -295,3 +285,4 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 	}
 }
+

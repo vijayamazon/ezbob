@@ -102,7 +102,12 @@ namespace EzBob.Web.Code
             loan.APR = (decimal)aprCalc.Calculate(loanAmount, loan.Schedule, fee, now);
 
             cus.AddLoan(loan);
+            cus.FirstLoanDate = cus.Loans.First().Date;
+            cus.LastLoanDate = cus.Loans.Last().Date;
+            cus.LastLoanAmount = cus.Loans.Last().LoanAmount;
+            cus.AmountTaken = cus.Loans.Sum(x => x.LoanAmount);
             cus.CreditSum = cus.CreditSum - loanAmount;
+
             if (fee > 0) cus.SetupFee = fee;
 
             _loanHistoryRepository.Save(new LoanHistory(loan, now));

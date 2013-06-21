@@ -44,7 +44,7 @@
     <property name="EbaySettings" value ="EbaySettingsData"/>
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
-	<property name="YodleeConfig" value ="YodleeUAT"/>
+	<property name="YodleeConfig" value ="YodleeTrunk"/>
     <property name="ZohoCRM" value="ZohoCRM"/>
 	<property name="MandrillConfig" value="MandrillUATConfig"/>
 
@@ -228,6 +228,21 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/apps/editSiteCredentials.pfmlaw.action" />
     </module>
+
+    <module id="YodleeTrunk">
+      <property name="cobrandId" value="6910005960" />
+      <property name="applicationId" value="58EEA306454D869DFF721D0D00B82D00" />
+      <property name="username" value="private-ezbob" />
+      <property name="password" value="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAiO1dN3o760abQvjFK/zZNQAAAAACAAAAAAAQZgAAAAEAACAAAAAu8YUyYGoA9lW+xUAcdKzamdbYjjI5k0uZfhXLnu9ZmAAAAAAOgAAAAAIAACAAAADJDfpruuIQJNODK/2qAPhS0WKzJGUoSig99/XPHywLhDAAAADXQD9pp7umTYw1BQ8/7vbN9I+x5MrKes7Btf4QoeOAZeNFBZUccrsqNvyYo8IGSh1AAAAA1dtVtith4SL+27VZwggzcJ3JUCJ5ognnY/S4w5pLBqBfRvpOzyBqxqC0vnxJj0J7999yh2pmrcsJPmhozcSXEQ==" />
+      <property name="soapServer" value="https://sdkint11.yodlee.com/yodsoap/services" />
+      <property name="tncVersion" value="2" />
+      <property name="BridgetApplicationID" value="10003200" />
+      <property name="ApplicationKey" value="a458bdf184d34c0cab7ef7ffbb5f016b" />
+      <property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
+      <property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
+      <property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/apps/editSiteCredentials.pfmlaw.action" />
+    </module>
+
 	<module id="YodleeUAT">
 		<property name="cobrandId" value="6910005960" />
 		<property name="applicationId" value="58EEA306454D869DFF721D0D00B82D00" />
