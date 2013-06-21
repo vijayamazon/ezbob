@@ -135,7 +135,7 @@ $.validator.addMethod(
         "amazonMPValidator",
         function (value, element) {
             var trimmed = $.trim(value);
-            var re = /^(A13V1IB3VIYZZH)|(A1PA6795UKMFR9)|(APJ6JRA9NG5V4)|(A1RKKUPIHCS9HS)|(A1F83G8C2ARO7P)$/;
+            var re = /^(A13V1IB3VIYZZH)|(A1PA6795UKMFR9)|(APJ6JRA9NG5V4)|(A1RKKUPIHCS9HS)|(A1F83G8C2ARO7P)$/i;
             return re.test(trimmed);
         },
         "Incorrect marketplace ID."
