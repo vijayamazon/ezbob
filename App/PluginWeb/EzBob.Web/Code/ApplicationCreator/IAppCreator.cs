@@ -16,7 +16,7 @@ namespace EzBob.Web.ApplicationCreator
         void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
                                        string district, string town, string county, string postcode, string bankAccount, string sortCode);
         void GetCashFailed(User user, string firstName);
-        void PayEarly(User user,  DateTime date, decimal? amount, string firstName );
+        void PayEarly(User user,  DateTime date, decimal? amount, string firstName, string refNum );
         void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer);
         void ApprovedUser(User user, Customer customer, decimal? loanAmount);
         void RejectUser(User user, string email, int userId, string firstName);

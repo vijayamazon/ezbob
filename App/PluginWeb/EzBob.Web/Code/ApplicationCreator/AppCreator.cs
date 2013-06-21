@@ -169,7 +169,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         
 
-        public void PayEarly(User user, DateTime date, decimal? amount, string firstName)
+        public void PayEarly(User user, DateTime date, decimal? amount, string firstName, string refNumber)
         {
             var strategyParameters = new[]
                                              {
@@ -177,7 +177,8 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("userId", user.Id),
                                                  new StrategyParameter("Date", date),
                                                  new StrategyParameter("Amount", amount),
-                                                 new StrategyParameter("FirstName", firstName)
+                                                 new StrategyParameter("FirstName", firstName),
+                                                 new StrategyParameter("RefNum", refNumber)
                                              };
             CreateApplication(user, strategyParameters, _config.PayEarlyStrategyName);
         }

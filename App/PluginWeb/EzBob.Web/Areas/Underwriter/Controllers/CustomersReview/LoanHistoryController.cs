@@ -218,7 +218,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             if (model.SendEmail)
             {
-                _appCreator.PayEarly(_users.Get(customer.Id), date, realAmount, customer.PersonalInfo.FirstName);
+                _appCreator.PayEarly(_users.Get(customer.Id), date, realAmount, customer.PersonalInfo.FirstName, customer.GetLoan(model.LoanId).RefNumber);
             }
 
             string requestType = string.Format("Manual payment for customer {0}, amount {1}", customer.PersonalInfo.Fullname, realAmount);

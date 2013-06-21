@@ -109,7 +109,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customerContext);
 
-            _appCreator.PayEarly(_context.User, DateTime.Now, amount, customerContext.PersonalInfo.FirstName);
+            _appCreator.PayEarly(_context.User, DateTime.Now, amount, customerContext.PersonalInfo.FirstName, customerContext.GetLoan(loanId).RefNumber);
             _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
             var refNumber = "";
@@ -177,8 +177,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
 
                 var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "payment from customer", paymentType);
-                
-                _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName);
+
+                _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName, customer.GetLoan(loanId).RefNumber);
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");
                 _crm.UpdateLoans(_context.Customer);
 

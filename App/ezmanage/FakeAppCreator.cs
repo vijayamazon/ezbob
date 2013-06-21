@@ -54,7 +54,7 @@ namespace ezmanage
             
         }
 
-        public void PayEarly(User user, DateTime date, decimal? amount, string firstName)
+        public void PayEarly(User user, DateTime date, decimal? amount, string firstName, string refNumber)
         {
             
         }
