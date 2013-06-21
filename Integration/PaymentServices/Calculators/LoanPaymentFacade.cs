@@ -198,6 +198,12 @@ namespace PaymentServices.Calculators
                     RolloverWasPaid = rolloverWasPaid
                 };
 
+            customer.TotalPrincipalRepaid = customer.Loans
+                                                    .SelectMany(l => l.Transactions)
+                                                    .OfType<PaypointTransaction>()
+                                                    .Where(l => l.Status != LoanTransactionStatus.Error)
+                                                    .Sum(l => l.LoanRepayment);
+
             return payFastModel;
         }
 

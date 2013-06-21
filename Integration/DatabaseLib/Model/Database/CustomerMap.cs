@@ -225,6 +225,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.SystemCalculatedSum);
             Map(x => x.ManagerApprovedSum);
             Map(x => x.LastStatus);
+            Map(x => x.TotalPrincipalRepaid);
 
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
@@ -264,12 +265,6 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
             Map(x => x.LastLoanAmount)
                 .Formula("(select top 1 l.[LoanAmount] from [Loan] l where l.[CustomerId] = Id order by l.[Id] desc)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x=>x.TotalPrincipalRepaid)
-                .Formula(@"(SELECT sum(t.[LoanRepayment]) from [LoanTransaction] t left join [Loan] l
-                        on t.[LoanId] = l.[Id]
-                        where t.[Type] = 'PaypointTransaction'  and l.[CustomerId] = Id and t.[Status] != 'Error')")
                 .Not.Insert()
                 .Not.Update();
             Map(x=>x.NextRepaymentDate)
