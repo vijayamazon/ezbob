@@ -458,6 +458,11 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual decimal ManagerApprovedSum { get; set; }
 
 
+        public virtual DateTime? FirstLoanDate { get; set; }
+        public virtual DateTime? LastLoanDate { get; set; }
+        public virtual decimal AmountTaken { get; set; }
+        public virtual decimal LastLoanAmount { get; set; }
+
         //calculated with formula
         public virtual string EbayStatus { get; set; }
         public virtual string AmazonStatus { get; set; }
@@ -468,11 +473,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string MpList { get; set; }
         public virtual decimal OutstandingBalance { get; set; }
         public virtual int Delinquency { get; set; }
-        public virtual decimal AmountTaken { get; set; }
         public virtual string LastStatus { get; set; }
-        public virtual DateTime? FirstLoanDate { get; set; }
-        public virtual DateTime? LastLoanDate { get; set; }
-        public virtual decimal LastLoanAmount { get; set; }
         public virtual decimal TotalPrincipalRepaid { get; set; }
         public virtual DateTime? NextRepaymentDate { get; set; }
         public virtual DateTime? DateOfLate { get; set; }
