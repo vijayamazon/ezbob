@@ -4,8 +4,8 @@
   <Description>Email to customer – early payment. Trigger - Customer makes an early payment via dashboard.</Description>
   <Workspace Name="PayEarly">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode63858558" />
     <NodeElement Name="Mail Node" NodeId="MailNode20553842" />
+    <NodeElement Name="Mail Node" NodeId="MailNode63858558" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
@@ -262,8 +262,8 @@
     <VariableDescriptor>
       <OwnerName>PayEarly</OwnerName>
       <Name>RefNum</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
