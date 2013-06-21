@@ -222,30 +222,23 @@ namespace EZBob.DatabaseLib.Model.Database {
 
             Map(x => x.NumApproves);
             Map(x => x.NumRejects);
+            Map(x => x.SystemCalculatedSum);
+            Map(x => x.ManagerApprovedSum);
 
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
 			Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
 			Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
-			Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
+            Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
             Map(x => x.MPStatus)
                 .Formula(
                     @"CASE WHEN (SELECT COUNT(*) FROM [MP_CustomerMarketPlace] c where c.UpdatingEnd is null and c.CustomerId = Id) > 0 THEN 'not updated' ELSE 'updated' END")
                 .Not.Insert().Not.Update();
             Map(x => x.MpList).Formula(@"dbo.MP_List (Id)").Not.Insert().Not.Update();
-            Map(x => x.SystemCalculatedSum)
-                .Formula(
-                    "(select top(1) cr.SystemCalculatedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by cr.[Id] desc)")
-                .Not.Insert()
-                .Not.Update();
+            
             Map(x => x.OutstandingBalance)
                 .Formula("(select ISNULL(sum(l.Balance), 0) from [Loan] l where l.CustomerId = Id)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.ManagerApprovedSum)
-                .Formula(
-                    "(select top(1) cr.ManagerApprovedSum from [CashRequests] cr where cr.[IdCustomer] = Id order by cr.[Id] desc)")
                 .Not.Insert()
                 .Not.Update();
 

@@ -47,9 +47,22 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public void LogAction(DecisionActions action, string comment, User underwriter, Customer customer)
         {
+            customer.SystemCalculatedSum = 0;
+            customer.ManagerApprovedSum = 0;
+
             if (action == DecisionActions.Approve)
             {
                 customer.NumApproves++;
+                
+                if (customer.LastCashRequest.SystemCalculatedSum.HasValue)
+                {
+                    customer.SystemCalculatedSum = (decimal)customer.LastCashRequest.SystemCalculatedSum;
+                }
+
+                if (customer.LastCashRequest.ManagerApprovedSum.HasValue)
+                {
+                    customer.ManagerApprovedSum = (decimal)customer.LastCashRequest.ManagerApprovedSum;
+                }
             } else if (action == DecisionActions.Reject)
             {
                 customer.NumRejects++;
