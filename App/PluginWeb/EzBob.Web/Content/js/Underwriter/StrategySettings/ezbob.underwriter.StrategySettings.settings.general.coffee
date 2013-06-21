@@ -23,6 +23,9 @@ class EzBob.Underwriter.SettingsGeneralView extends Backbone.Marionette.ItemView
         "click button[name='CancelGeneralSettings']":   "cancelSettings"
 
     saveSettings: ->
+        BlockUi "on"
+        @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
+        @model.save().complete -> BlockUi "off"
         @model.save()
 
     update: ->

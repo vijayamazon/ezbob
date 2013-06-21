@@ -6,46 +6,48 @@
 
 @helper ChargesSettings()
 {
-    @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
-    <div class="alert-block">    
-        @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
-        <table class="table table-bordered table-striped blue-header squeezed darker">
-            <thead>
-                <tr>
-                    <th colspan="3">Charge Settings</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>LatePaymentCharge: </td>
-                    <td><input name="latePaymentCharge" class="input-large"/></td>
-                    <td ><%- LatePaymentChargeDesc %></td>
-                </tr>                    
-                <tr>
-                    <td>RolloverCharge: </td>
-                    <td><input name="rolloverCharge" class="input-large"/></td>
-                    <td ><%- RolloverChargeDesc %></td>
-                </tr>                    
-                <tr>
-                    <td>PartialPaymentCharge: </td>
-                    <td><input name="partialPaymentCharge" class="input-large"/></td>
-                    <td><%- PartialPaymentChargeDesc %></td>
-                </tr>                    
-                <tr>
-                    <td>AdministrationCharge: </td>
-                    <td><input name="administrationCharge" class="input-large"/></td>
-                    <td><%- AdministrationChargeDesc %></td>
-                </tr>                    
-                <tr>
-                    <td>OtherCharge: </td>
-                    <td><input name="otherCharge" class="input-large"/></td>
-                    <td><%- OtherChargeDesc %></td>
-                </tr>                                    
-            </tbody>
-        </table>
-        <div class="pull-right">
-            <button class="btn" name="SaveChargesSettings" ><i class="icon-ok-sign" />Save</button> 
-            <button class="btn" name="CancelChargesSettings" ><i class="icon-remove-sign" />Cancel</button> 
+    <form>
+        @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
+        <div class="alert-block">    
+            @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
+            <table class="table table-bordered table-striped blue-header squeezed darker">
+                <thead>
+                    <tr>
+                        <th colspan="3">Charge Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LatePaymentCharge: </td>
+                        <td><input name="latePaymentCharge" class="input-large"/></td>
+                        <td ><%- LatePaymentChargeDesc %></td>
+                    </tr>                    
+                    <tr>
+                        <td>RolloverCharge: </td>
+                        <td><input name="rolloverCharge" class="input-large"/></td>
+                        <td ><%- RolloverChargeDesc %></td>
+                    </tr>                    
+                    <tr>
+                        <td>PartialPaymentCharge: </td>
+                        <td><input name="partialPaymentCharge" class="input-large"/></td>
+                        <td><%- PartialPaymentChargeDesc %></td>
+                    </tr>                    
+                    <tr>
+                        <td>AdministrationCharge: </td>
+                        <td><input name="administrationCharge" class="input-large"/></td>
+                        <td><%- AdministrationChargeDesc %></td>
+                    </tr>                    
+                    <tr>
+                        <td>OtherCharge: </td>
+                        <td><input name="otherCharge" class="input-large"/></td>
+                        <td><%- OtherChargeDesc %></td>
+                    </tr>                                    
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <button class="btn" name="SaveChargesSettings" ><i class="icon-ok-sign" />Save</button> 
+                <button class="btn" name="CancelChargesSettings" ><i class="icon-remove-sign" />Cancel</button> 
+            </div>
         </div>
-    </div>
+    </form>
 }

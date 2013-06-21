@@ -6,66 +6,68 @@
 
 @helper GeneralSettings()
 {
-    @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
-    <div class="alert-block">    
-        @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
-        <table class="table table-bordered table-striped blue-header squeezed darker">
-            <thead>
-                <tr>
-                    <th colspan="3">Rejection Settings</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td width="20%">EnableAutomaticRejection: </td>
-                    <td width="20%">
-                        <select name="enableAutomaticRejection" class="selectheight">
-                            <option value="0">Disabled</option>
-                            <option value="1">Enabled</option>
-                        </select>
-                    </td>
-                    <td class="left"><%- EnableAutomaticRejectionDesc %></td> 
-                </tr>                    
-                <tr>
-                    <td>LowCreditScore: </td>
-                    <td><input name="lowCreditScore" class="input-large"/></td>
-                    <td><%- LowCreditScoreDesc %></td>
-                </tr>
-                <tr>
-                    <td>TotalAnnualTurnover: </td>
-                    <td><input name="totalAnnualTurnover" class="input-large"/></td>
-                    <td><%- TotalAnnualTurnoverDesc %></td>
-                </tr>
-                <tr>
-                    <td>TotalThreeMonthTurnover: </td>
-                    <td><input name="totalThreeMonthTurnover" class="input-large"/></td>
-                    <td><%- TotalThreeMonthTurnoverDesc %></td>
-                </tr>
-                <tr>
-                    <td>Reject_Defaults_CreditScore: </td>
-                    <td><input name="reject_Defaults_CreditScore" class="input-large"/></td>
-                    <td><%- Reject_Defaults_CreditScoreDesc %></td>
-                </tr>
-                <tr>
-                    <td>Reject_Defaults_AccountsNum: </td>
-                    <td><input name="reject_Defaults_AccountsNum" class="input-large"/></td>
-                    <td><%- Reject_Defaults_AccountsNumDesc %></td>
-                </tr>
-                <tr>
-                    <td>Reject_Defaults_Amount: </td>
-                    <td><input name="reject_Defaults_Amount" class="input-large"/></td>
-                    <td><%- Reject_Defaults_AmountDesc %></td>
-                </tr>
-                <tr>
-                    <td>Reject_Defaults_MonthsNum: </td>
-                    <td><input name="reject_Defaults_MonthsNum" class="input-large"/></td>
-                    <td><%- Reject_Defaults_MonthsNumDesc %></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pull-right">
-            <button class="btn" name="SaveRejectionSettings" ><i class="icon-ok-sign" />Save</button> 
-            <button class="btn" name="CancelRejectionSettings" ><i class="icon-remove-sign" />Cancel</button> 
+    <form>
+        @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
+        <div class="alert-block">    
+            @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
+            <table class="table table-bordered table-striped blue-header squeezed darker">
+                <thead>
+                    <tr>
+                        <th colspan="3">Rejection Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="20%">EnableAutomaticRejection: </td>
+                        <td width="20%">
+                            <select name="enableAutomaticRejection" class="selectheight">
+                                <option value="0">Disabled</option>
+                                <option value="1">Enabled</option>
+                            </select>
+                        </td>
+                        <td class="left"><%- EnableAutomaticRejectionDesc %></td> 
+                    </tr>                    
+                    <tr>
+                        <td>LowCreditScore: </td>
+                        <td><input name="lowCreditScore" class="input-large"/></td>
+                        <td><%- LowCreditScoreDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>TotalAnnualTurnover: </td>
+                        <td><input name="totalAnnualTurnover" class="input-large"/></td>
+                        <td><%- TotalAnnualTurnoverDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>TotalThreeMonthTurnover: </td>
+                        <td><input name="totalThreeMonthTurnover" class="input-large"/></td>
+                        <td><%- TotalThreeMonthTurnoverDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>Reject_Defaults_CreditScore: </td>
+                        <td><input name="reject_Defaults_CreditScore" class="input-large"/></td>
+                        <td><%- Reject_Defaults_CreditScoreDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>Reject_Defaults_AccountsNum: </td>
+                        <td><input name="reject_Defaults_AccountsNum" class="input-large"/></td>
+                        <td><%- Reject_Defaults_AccountsNumDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>Reject_Defaults_Amount: </td>
+                        <td><input name="reject_Defaults_Amount" class="input-large"/></td>
+                        <td><%- Reject_Defaults_AmountDesc %></td>
+                    </tr>
+                    <tr>
+                        <td>Reject_Defaults_MonthsNum: </td>
+                        <td><input name="reject_Defaults_MonthsNum" class="input-large"/></td>
+                        <td><%- Reject_Defaults_MonthsNumDesc %></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <button class="btn" name="SaveRejectionSettings" ><i class="icon-ok-sign" />Save</button> 
+                <button class="btn" name="CancelRejectionSettings" ><i class="icon-remove-sign" />Cancel</button> 
+            </div>
         </div>
-    </div>
+    </form>
 }

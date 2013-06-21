@@ -26,7 +26,11 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
         "click button[name='CancelChargesSettings']":   "cancelSettings"
 
     saveSettings: ->
-        @model.save()
+        return unless @validator.form()
+        BlockUi "on"
+        @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
+        @model.save().complete -> BlockUi "off"
+        return false
 
     cancelSettings: ->
         @update()
@@ -40,6 +44,7 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
         if !$("body").hasClass("role-manager") 
             @$el.find("input[name='latePaymentCharge'], input[name='rolloverCharge'], input[name='partialPaymentCharge'], input[name='administrationCharge'], input[name='otherCharge']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveChargesSettings'], button[name='CancelChargesSettings']").hide();
+        @setValidator()
 
     show: (type) ->
         this.$el.show()
@@ -49,3 +54,22 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
 
     onClose: ->
         @modelBinder.unbind()
+
+    setValidator: ->
+        @validator = @$el.find('form').validate
+            rules:
+                latePaymentCharge:
+                    required: true
+                    min: 0
+                rolloverCharge:
+                    required: true
+                    min: 0
+                partialPaymentCharge:
+                    required: true
+                    min: 0
+                administrationCharge:
+                    required: true
+                    min: 0
+                otherCharge:
+                    required: true
+                    min: 0

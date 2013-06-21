@@ -31,7 +31,11 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         "click button[name='CancelRejectionSettings']":   "cancelSettings"
 
     saveSettings: ->
-        @model.save()
+        return unless @validator.form()
+        BlockUi "on"
+        @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
+        @model.save().complete -> BlockUi "off"
+        return false
 
     update: ->
         xhr = @model.fetch()
@@ -45,6 +49,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         if !$("body").hasClass("role-manager") 
             @$el.find("select[name='enableAutomaticRejection'], input[name='lowCreditScore'], input[name='totalAnnualTurnover'], input[name='totalThreeMonthTurnover'], input[name='reject_Defaults_CreditScore'], input[name='reject_Defaults_AccountsNum'], input[name='reject_Defaults_Amount'], input[name='reject_Defaults_MonthsNum']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveRejectionSettings'], button[name='CancelRejectionSettings']").hide();
+        @setValidator()
 
     show: (type) ->
         this.$el.show()
@@ -54,3 +59,28 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
 
     onClose: ->
         @modelBinder.unbind()
+
+     setValidator: ->
+        @validator = @$el.find('form').validate
+            rules:
+                lowCreditScore:
+                    required: true
+                    min: 0
+                totalAnnualTurnover:
+                    required: true
+                    min: 0
+                totalThreeMonthTurnover:
+                    required: true
+                    min: 0
+                reject_Defaults_CreditScore:
+                    required: true
+                    min: 0
+                reject_Defaults_AccountsNum:
+                    required: true
+                    min: 0
+                reject_Defaults_Amount:
+                    required: true
+                    min: 0
+                reject_Defaults_MonthsNum:
+                    required: true
+                    min: 0

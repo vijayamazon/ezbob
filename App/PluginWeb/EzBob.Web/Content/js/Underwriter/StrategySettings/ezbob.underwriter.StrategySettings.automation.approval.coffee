@@ -23,6 +23,9 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
 
     saveSettings: ->
         @model.save()
+        BlockUi "on"
+        @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
+        @model.save().complete -> BlockUi "off"
 
     update: ->
         xhr = @model.fetch()

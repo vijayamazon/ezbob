@@ -19,6 +19,9 @@ class EzBob.Underwriter.SettingsAutomationView extends Backbone.Marionette.ItemV
         "click button[name='CancelAutomationSettings']":   "cancelSettings"
 
     saveSettings: ->
+        BlockUi "on"
+        @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
+        @model.save().complete -> BlockUi "off"
         @model.save()
 
     update: ->

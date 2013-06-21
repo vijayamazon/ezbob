@@ -6,31 +6,31 @@
 
 @helper ApprovalSettings()
 {
-    @*<table class="table table-bordered table-striped green-header squeezed darker rright span2" >*@
-    <div class="alert-block">    
-        @*<table class="table table-bordered table-striped blue-header squeezed darker rright" >*@
-        <table class="table table-bordered table-striped blue-header squeezed darker">
-            <thead>
-                <tr>
-                    <th colspan="3">Approval Settings</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td width="20%">EnableAutomaticApproval: </td>
-                    <td width="20%">
-                        <select name="enableAutomaticApproval" class="selectheight">
-                            <option value="0">Disabled</option>
-                            <option value="1">Enabled</option>
-                        </select>
-                    </td>
-                    <td class="left"><%- EnableAutomaticApprovalDesc %></td> 
-                </tr>                    
-            </tbody>
-        </table>
-        <div class="pull-right">
-            <button class="btn" name="SaveApprovalSettings" ><i class="icon-ok-sign" />Save</button> 
-            <button class="btn" name="CancelApprovalSettings" ><i class="icon-remove-sign" />Cancel</button> 
+    <form>
+        <div class="alert-block">
+            <table class="table table-bordered table-striped blue-header squeezed darker">
+                <thead>
+                    <tr>
+                        <th colspan="3">Approval Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td width="20%">EnableAutomaticApproval: </td>
+                        <td width="20%">
+                            <select name="enableAutomaticApproval" class="selectheight">
+                                <option value="0">Disabled</option>
+                                <option value="1">Enabled</option>
+                            </select>
+                        </td>
+                        <td class="left"><%- EnableAutomaticApprovalDesc %></td> 
+                    </tr>                    
+                </tbody>
+            </table>
+            <div class="pull-right">
+                <button class="btn" name="SaveApprovalSettings" ><i class="icon-ok-sign" />Save</button> 
+                <button class="btn" name="CancelApprovalSettings" ><i class="icon-remove-sign" />Cancel</button> 
+            </div>
         </div>
-    </div>
+    </form>
 }
