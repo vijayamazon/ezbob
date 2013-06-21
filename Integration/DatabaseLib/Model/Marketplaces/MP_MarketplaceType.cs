@@ -74,6 +74,20 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 	}
 
+    public class ShopifyType : MP_MarketplaceType
+    {
+        public override bool IsPaymentAccount { get { return true; } }
+        public override int UWPriority { get { return 1; } }
+    }
+
+    public class ShopifyTypeMap : SubclassMap<ShopifyType>
+    {
+        public ShopifyTypeMap()
+        {
+            DiscriminatorValue("Shopify.com");
+        }
+	}
+
 	public class EKMMarketPlaceType : MP_MarketplaceType
 	{
 		public override int UWPriority { get { return 3; } }
