@@ -50,6 +50,10 @@ namespace EZBob.DatabaseLib.Model.Database
             customer.SystemCalculatedSum = 0;
             customer.ManagerApprovedSum = 0;
 
+            var lastAction = customer.DecisionHistory.OrderBy(d => d.Date).LastOrDefault();
+
+            customer.LastStatus = lastAction == null ? "N/A" : lastAction.Action.ToString();
+
             if (action == DecisionActions.Approve)
             {
                 customer.NumApproves++;

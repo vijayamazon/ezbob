@@ -224,6 +224,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.NumRejects);
             Map(x => x.SystemCalculatedSum);
             Map(x => x.ManagerApprovedSum);
+            Map(x => x.LastStatus);
 
             //for better performance some calculated field take out into formula
             Map(x => x.EbayStatus).Formula(@"dbo.GetMarketPlaceStatus (1, Id)").Not.Insert().Not.Update();
@@ -251,11 +252,6 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
             Map(x => x.AmountTaken)
                 .Formula("(select ISNULL(sum(l.LoanAmount),0) from [Loan] l where l.CustomerId = Id)")
-                .Not.Insert()
-                .Not.Update();
-            Map(x => x.LastStatus)
-                .Formula(
-                    "(select ISNUll( (select top(1) h.Action from [DecisionHistory] h where h.[CustomerId] = Id  order by h.[id] desc ) , 'N/A'))")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.FirstLoanDate)
