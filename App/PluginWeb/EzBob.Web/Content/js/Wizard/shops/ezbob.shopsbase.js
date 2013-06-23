@@ -116,6 +116,9 @@
         shop.view.render().$el.hide().appendTo(that.$el);
       }
       this.storeList.appendTo(this.$el);
+      if (!this.ImageInserted) {
+        this.ImageInserted = true;
+      }
       return this;
     };
 

@@ -1,12 +1,15 @@
 ﻿@using EzBob.Web.Models.Strings
+
 @model dynamic
 @helper PersonalInfo()
 {
 	<div class="row-fluid">
-		<h2 class="form_start">Personal Information</h2>
+	    <h2 class="form_start">Personal Information</h2>
+        @*<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobpersonaldetails;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />*@
+
 		<div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
-   {
+            {
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>First Name</span>
@@ -167,7 +170,7 @@
 						<label for="ConsentToSearch" class="editor-label-with-checkbox"> I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
 					</div>
 				</div>
-   }
+            }
 		</div>
 
 		<div class="form_buttons_container">
@@ -416,8 +419,10 @@
 		<section id="full_width">
 			<div class="full_width">
 				<div style="margin: 0 0 20px 0;">
-					<h2 class="form_section">Well done! Application complete</h2>
-					<p>Your application is now being processed and you should be receiving an email with an offer in the next 30 minutes. In some cases the decision could be delayed up to 12 hours due to processing your shop data from the marketplace databases.</p>
+					<h2 class="form_section">Well done! Application complete</h2>                    
+                    @*<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />*@
+					
+                    <p>Your application is now being processed and you should be receiving an email with an offer in the next 30 minutes. In some cases the decision could be delayed up to 12 hours due to processing your shop data from the marketplace databases.</p>
 					<p>In case you don't receive a funding decision from us in the next 12 hours please check your spam/junk folder. If you still did not receive an email please contact our customer care service by phone: 0800 011 4787 or via email: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.</p>
 					@* with new number in case we'll want to restore it:
                         <p>In case you don't receive a funding decision from us in the next 12 hours please check your spam/junk folder. If you still did not receive an email please contact our customer care service by phone: 020 337 11 842 or via email: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.</p>
