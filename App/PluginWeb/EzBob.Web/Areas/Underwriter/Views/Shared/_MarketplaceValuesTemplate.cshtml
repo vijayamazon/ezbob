@@ -1,11 +1,11 @@
-﻿@model dynamic
+﻿﻿@model dynamic
 <script id="marketplace-values-template" type="text/template">
-    @MarketplaceDetails()
+   @MarketplaceDetails()
 </script>
 
 @helper MarketplaceDetails()
 {
-    <div class="marketplaceDetail">
+   <div class="marketplaceDetail">
         @MarketPlaces()
         <%
             var m = marketplaces[0] || accounts[0];
@@ -103,14 +103,14 @@
                 @{ Html.RenderPartial("MarketPlaceDetails/PayPal");}
             <%}%>
 
-            @* *** Channel Grabber *** *@
-            <% (function() {
-                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+           @* *** Channel Grabber *** *@
+           <% (function() {
+               var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
-                if (aryCGAccounts[marketplaceType]) {
-                    %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
-                } // if
-            })(); %>
+               if (aryCGAccounts[marketplaceType]) {
+                   %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
+               } // if
+           })(); %>
         </fieldset>
     </div>  
 }
@@ -132,8 +132,8 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody><%
-                if (summary) { %>
+            <tbody>
+                <% if(summary){%>
                 <tr class="bold" style="font-size: 18px;">
                     <td>Total</td>
                     <td></td>
@@ -144,17 +144,15 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                </tr><%
-                }
-                (function() {
-                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
-                _.each(marketplaces, function(m,i){
-                var oCG = aryCGAccounts[m.Name];
-                var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
+                </tr>
+                <%}%>
+                <% (function(aryCGAccounts) { _.each(marketplaces, function(m,i){
+                var sShopName = m.Name.replace(' ', '');
+                var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 %>
                 <tr data-id="<%- m.Id %>">
                     <td>
-                        <div class="<%= sSourceLabels %>_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div>
+                        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
                     </td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td class="centered"><%- m.age %></td>
@@ -171,7 +169,7 @@
                     <td class="centered">
                         <div style="width: 100px;">
 
-                            <a href="#" class="btn btn-mini reCheckMP <%- m.Name.replace(' ', '').toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                            <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
                             <% if(m.UpdateError && m.Name == 'eBay'){ %>
                             <br/>
                             <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
@@ -182,7 +180,7 @@
                         </div>
                     </td>
                 </tr>
-                <% }); })(); %>
+                <% }); })($.parseJSON($('div#cg-account-list').text())); %>
             </tbody>
         </table>
     </div>
@@ -200,14 +198,13 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody><%
-            (function () {
-                var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
-                _.each(accounts, function(m,i){
-                var oCG = aryCGAccounts[m.Name];
-                var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
+            <tbody>
+                <% (function(aryCGAccounts) { _.each(accounts, function(m, i){
+                var sShopName = m.Name.replace(' ', '');
+                var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+                %>
                 <tr data-id="<%- m.Id %>">
-                    <td><div class="<%= sSourceLabels %>_on <%- m.Name.replace(' ', '').toLowerCase() %>"></div></td>
+                    <td><div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div></td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
@@ -220,13 +217,14 @@
                         <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
                         <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
                         <%}else{%>
-                        <a href="#" class="btn btn-mini reCheckMP <%- m.Name.replace(' ', '').toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                        <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
                         <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
                         <%}%>
 
                     </td>
                 </tr>
-                <% }) })(); %>
+                <%}); })($.parseJSON($('div#cg-account-list').text()));%>
+   
             </tbody>
         </table>
     </div>
