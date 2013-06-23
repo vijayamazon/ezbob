@@ -979,6 +979,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_ChannelGrabberOrder_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_ChannelGrabberOrder_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_ChannelGrabberOrder</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_ChannelGrabberOrder.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_ChannelGrabberOrderItem_MP_Order</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_ChannelGrabberOrderItem_MP_Order.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_ChannelGrabberOrderItem</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_ChannelGrabberOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_Currency</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_Currency.sql</oFileName>

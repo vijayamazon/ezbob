@@ -61,6 +61,10 @@
     <Reference Include="Mailer">
       <HintPath>..\..\..\Lib\Ezbob\Mailer.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PreMailerDotNet">
       <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\PreMailerDotNet.dll</HintPath>
     </Reference>

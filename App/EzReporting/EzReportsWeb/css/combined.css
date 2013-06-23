@@ -448,3 +448,5 @@ table.dataTable thead td:active {
 #divReportData table tbody tr.even {
     background-color: #F9F9F9 !important;
 }
+
+.total { font-weight: bold; color: white; background-color: navy!important; }

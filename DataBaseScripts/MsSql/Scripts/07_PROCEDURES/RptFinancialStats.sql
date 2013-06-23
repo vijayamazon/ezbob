@@ -12,7 +12,16 @@ AS
 BEGIN
 	DECLARE @TotalGivenLoanValue NUMERIC(18, 2)
 	DECLARE @TotalRepaidPrincipal NUMERIC(18, 2)
+	DECLARE @InterestReceived NUMERIC(18, 2)
 
+			
+	CREATE TABLE #output (
+		Caption NVARCHAR(128),
+		Value NUMERIC(18, 2),
+		SortOrder INT IDENTITY NOT NULL
+	)
+
+			
 	SELECT
 		@TotalGivenLoanValue = ISNULL(SUM(t.Amount), 0)
 	FROM
@@ -23,6 +32,8 @@ BEGIN
 		t.Type = 'PacnetTransaction'
 		AND
 		t.Status = 'Done'
+		AND
+		t.PostDate <= @DateStart
 
 	SELECT
 		@TotalRepaidPrincipal = ISNULL(SUM(t.LoanRepayment), 0)
@@ -34,18 +45,18 @@ BEGIN
 		t.Type = 'PaypointTransaction'
 		AND
 		t.Status = 'Done'
+		AND
+		t.PostDate <= @DateStart
 
-			
-	CREATE TABLE #output (
-		Caption NVARCHAR(128),
-		Value NUMERIC(18, 2),
-		SortOrder INT IDENTITY NOT NULL
-	)
-	
+	INSERT INTO #output
+	SELECT
+		'Opening Balance',
+		@TotalGivenLoanValue - @TotalRepaidPrincipal
+
 				
 	INSERT INTO #output
 	SELECT
-		'Loans Issues #',
+		'Loans Issued #',
 		ISNULL(COUNT(*), 0)
 	FROM
 		Loan l
@@ -172,33 +183,8 @@ BEGIN
 		l.Date BETWEEN @DateStart AND @DateEnd
 	
 				
-	INSERT INTO #output
 	SELECT
-		'Yield Interest received / Open balance',
-		CASE @TotalGivenLoanValue
-			WHEN 0 THEN 0
-			ELSE ISNULL(SUM(t.Interest), 0) / @TotalGivenLoanValue
-		END
-	FROM
-		LoanTransaction t
-		INNER JOIN Loan l ON t.LoanId = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
-	WHERE
-		t.Type = 'PaypointTransaction'
-		AND
-		t.Status = 'Done'
-	
-				
-	INSERT INTO #output
-	SELECT
-		'Total money out',
-		@TotalGivenLoanValue - @TotalRepaidPrincipal
-	
-				
-	INSERT INTO #output
-	SELECT
-		'Interest Paid',
-		ISNULL(SUM(t.Interest), 0)
+		@InterestReceived = ISNULL(SUM(t.Interest), 0)
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
@@ -210,7 +196,22 @@ BEGIN
 		AND
 		t.Status = 'Done'
 
+	INSERT INTO #output
+	SELECT
+		'Interest Received',
+		@InterestReceived
+
+			
+	INSERT INTO #output
+	SELECT
+		'Yield %; Interest received / Open balance',
+		CASE @TotalGivenLoanValue
+			WHEN 0 THEN 0
+			ELSE 100 * @InterestReceived / @TotalGivenLoanValue
+		END
+	
 				
+	
 	INSERT INTO #output
 	SELECT
 		'Fees Paid',
@@ -256,6 +257,38 @@ BEGIN
 		cv.Name
 	ORDER BY
 		cv.Name
+	
+				
+	SELECT
+		@TotalGivenLoanValue = ISNULL(SUM(t.Amount), 0)
+	FROM
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+	WHERE
+		t.Type = 'PacnetTransaction'
+		AND
+		t.Status = 'Done'
+		AND
+		t.PostDate <= @DateEnd
+
+	SELECT
+		@TotalRepaidPrincipal = ISNULL(SUM(t.LoanRepayment), 0)
+	FROM
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+	WHERE
+		t.Type = 'PaypointTransaction'
+		AND
+		t.Status = 'Done'
+		AND
+		t.PostDate <= @DateEnd
+
+	INSERT INTO #output
+	SELECT
+		'Closing Balance',
+		@TotalGivenLoanValue - @TotalRepaidPrincipal
 	
 				
 	SELECT

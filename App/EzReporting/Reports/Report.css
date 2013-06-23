@@ -86,3 +86,5 @@
 }
 
 .unmatched { color: red; }
+
+.total { font-weight: bold; color: white; background-color: navy!important; }

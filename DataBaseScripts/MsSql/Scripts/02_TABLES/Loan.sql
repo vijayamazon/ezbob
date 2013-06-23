@@ -44,7 +44,6 @@ CREATE TABLE [dbo].[Loan](
 	[InterestPaid] [decimal](18, 4) NULL,
 	[FeesPaid] [decimal](18, 4) NULL,
 	[ZohoId] [nvarchar](100) NULL,
-	[PayPointCardId] [int] NULL,
 	[LastReportedCAISStatus] [nvarchar](50) NULL,
 	[LastReportedCAISStatusDate] [datetime] NULL,
 	[LoanTypeId] [int] NULL,
