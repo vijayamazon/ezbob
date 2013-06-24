@@ -33,15 +33,13 @@
 
 <p  style="text-align: justify" >Total Amount to be repaid  {{TotalAmount}}</p>
 
-<p  style="text-align: justify" >APR</p>
-            <p  style="text-align: justify; margin-left: 30px;" >Total Loan APR: {{APR}}%</p>
             {{#FormattedSchedules}}
-            <p  style="text-align: justify; margin-left: 30px;" > MONTH {{Iterration}}: APR: {{AprMonthRate}}% </p>
+            <p  style="text-align: justify" > MONTH {{Iterration}}: APR: {{AprMonthRate}}% </p>
             {{/FormattedSchedules}}
 
-<p  style="text-align: justify" >Interest Rate</p>
+
             {{#FormattedSchedules}}
-            <p  style="text-align: justify; margin-left: 30px;" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
+            <p  style="text-align: justify" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
             {{/FormattedSchedules}}
 
 
