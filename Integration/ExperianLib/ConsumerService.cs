@@ -46,12 +46,28 @@ namespace ExperianLib
 			try
 			{
                 //debug mode
+				if (surname == "TestSurnameFour" || surname == "TestSurnameFile")
+				{
+					var customers = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+					var customer = customers.Get(customerId);
+					var middleName = customer.PersonalInfo.MiddleInitial;
+
+					string filename = !string.IsNullOrEmpty(middleName) ? middleName : @"C:\Temp\Experian.xml";
+					try
+					{
+						return CreateConsumerServiceResult(surname, birthDate, customerId, checkInCacheOnly, File.ReadAllText(filename));
+					}
+					catch (Exception e)
+					{
+						Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
+					}
+				}
 				if (surname.IndexOf("TestSurnameDebugMode", StringComparison.Ordinal) == 0)
 				{
-                    return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
+					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
 				}
 
-			    Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
+				Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
 				var postcode = GetPostcode(ukLocation, mlLocation);
 
 				ShifLocation(mlLocation);
@@ -82,7 +98,26 @@ namespace ExperianLib
 			}
 		}
 
-	    private static string GetPostcode(InputLocationDetailsUKLocation ukLocation,
+		private ConsumerServiceResult CreateConsumerServiceResult(string surname, DateTime? birthDate, int customerId,
+		                                                          bool checkInCacheOnly, string content)
+		{
+			var outputRootSerializer = new XmlSerializer(typeof (OutputRoot));
+			var outputRoot = (OutputRoot) outputRootSerializer.Deserialize(new StringReader(content));
+			var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate)
+				{
+					ExperianResult = "Passed",
+					LastUpdateDate = DateTime.Now
+				};
+			Log.InfoFormat("Get consumer info for test user: {0}", surname);
+			var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
+			if (!checkInCacheOnly)
+			{
+				SaveDefaultAccountIntoDb(outputRoot, customerId, sl.GetFirst());
+			}
+			return consumerServiceResult;
+		}
+
+		private static string GetPostcode(InputLocationDetailsUKLocation ukLocation,
 	                                      InputLocationDetailsMultiLineLocation mlLocation)
 	    {
 	        var postcode = (ukLocation != null)
@@ -270,20 +305,8 @@ namespace ExperianLib
                     Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", @"C:\Temp\Experian.xml", e);
                 }
             }
-	        var outputRootSerializer = new XmlSerializer(typeof (OutputRoot));
-            var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(content));
-	        var consumerServiceResult = new ConsumerServiceResult(outputRoot, birthDate)
-	            {
-	                ExperianResult = "Passed",
-	                LastUpdateDate = DateTime.Now
-	            };
-	        Log.InfoFormat("Get consumer info for test user: {0}", surname);
-	        var sl = ObjectFactory.GetInstance<ServiceLogRepository>();
-	        if (!checkInCacheOnly)
-	        {
-	            SaveDefaultAccountIntoDb(outputRoot, customerId, sl.GetFirst());
-	        }
-	        return consumerServiceResult;
+
+			return CreateConsumerServiceResult(surname, birthDate, customerId, checkInCacheOnly, content);
 	    }
 
 	    public void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog)
