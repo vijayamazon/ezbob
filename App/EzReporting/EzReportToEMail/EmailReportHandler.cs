@@ -117,7 +117,7 @@ namespace EzReportToEMail {
 				.Add<Class>("logo_ezbob")
 				.Add<Class>("indent_text")
 				.Add<ID>("ezbob_logo")
-                .Add<Html.Title>("Fast business loans for Ebay and Amazon merchants")
+				.Add<Html.Title>("Fast business loans for Ebay and Amazon merchants")
 				.Add<Alt>("Fast business loans for Ebay and Amazon merchants")
 				.Append(oImgLogo);
 
@@ -150,14 +150,15 @@ namespace EzReportToEMail {
 				break;
 			} // switch
 
-            body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, false, oRptTitle.ToString())));
+			body.Append(new P().Add<Class>("Body").Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, false, oRptTitle.ToString())));
 
 			SendReport(
-                        report.Title, 
-                        body, 
-                        report.ToEmail, 
-                        period,
-                        XlsReport(report.StoredProcedure, fromDate, toDate, oRptTitle.ToString()));
+				report.Title, 
+				body, 
+				report.ToEmail, 
+				period,
+				XlsReport(report.StoredProcedure, fromDate, toDate, oRptTitle.ToString())
+			);
 		} // BuildReport
 
 		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {

@@ -86,7 +86,6 @@
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report.cs" />
-    <Compile Include="ReportsStyling.cs" />
     <Compile Include="tags.cs" />
   </ItemGroup>
   <ItemGroup>

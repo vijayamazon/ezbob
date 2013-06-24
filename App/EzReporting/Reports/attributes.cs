@@ -1,5 +1,4 @@
 ﻿namespace Html {
-
 	public class ID : AAttribute { protected override string Name { get { return "id"; } } }
 
 	public class Class : AAttribute { protected override string Name { get { return "class"; } } }
