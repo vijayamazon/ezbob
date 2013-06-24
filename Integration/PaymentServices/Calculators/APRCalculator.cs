@@ -51,7 +51,7 @@ namespace PaymentServices.Calculators
 			var monthlyRepaimentsCalculatedForMonthlyRate = monthlyRepayments.Select(monthlyRepayment => new LoanScheduleItem
 				{
 					Interest = monthlyRepayment.BalanceBeforeRepayment*monthlyRate,
-					AmountDue = monthlyRepayment.LoanRepayment + monthlyRepayment.Interest, 
+					AmountDue = monthlyRepayment.LoanRepayment + (monthlyRepayment.BalanceBeforeRepayment * monthlyRate), 
 					Date = monthlyRepayment.Date
 				}).ToList();
 
