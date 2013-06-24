@@ -167,8 +167,6 @@
 			"Fields": [
 				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
 				{ "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
-				{ "PropertyName": "Login",     "NodeName": "apikey",    "UniqueIDPosition":  1                  },
-				{ "PropertyName": "Password",  "NodeName": "secret",    "UniqueIDPosition":  2                  },
 				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "-1" }
 			],
 
@@ -204,11 +202,10 @@
 					"Enter your example URL in the above field.</p>"
 				],
 				"OnBeforeLink": [
-					"var aryMatch = /^https:\\/\\/([0-9A-Za-z]{32}):([0-9A-Za-z]{32})@(.+)\\.myshopify\\.com(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
+					"var aryMatch = /^(https:\\/\\/[0-9A-Za-z]{32}:[0-9A-Za-z]{32}@(.+)\\.myshopify\\.com)(\\/admin\\/orders\\.xml)?$/.exec(accountModel.url);",
 					"if (!aryMatch) return null;",
-					"accountModel.name = aryMatch[3];",
-					"accountModel.login = aryMatch[1];",
-					"accountModel.password = aryMatch[2];",
+					"accountModel.name = aryMatch[2];",
+					"accountModel.url = aryMatch[1];",
 					"return accountModel;"
 				],
 				"SourceLabel": [
