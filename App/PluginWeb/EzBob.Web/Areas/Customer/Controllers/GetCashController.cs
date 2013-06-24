@@ -119,7 +119,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             if (test_status == "true")
             {
-                card_no = "1111";
+				// Use last 4 random digits as card number (to enable useful tests)
+				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
+				if (random4Digits.Length > 4)
+				{
+					random4Digits = random4Digits.Substring(random4Digits.Length - 4);
+				}
+				card_no = random4Digits;
                 expiry = string.Format("{0}{1}", "01", DateTime.Now.AddYears(2).Year.ToString().Substring(2, 2));
             }
 
@@ -204,10 +210,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             var card = cus.PayPointCards.First(c => c.Id == cardId);
             DateTime now = DateTime.UtcNow;
             var loan = _loanCreator.CreateLoan(cus, amount, card, now);
-
-            TempData["amount"] = amount;
-            TempData["bankNumber"] = cus.BankAccount.AccountNumber;
-            TempData["card_no"] = card.CardNo;
 
             var url = Url.Action("Index", "PacnetStatus", new {Area = "Customer"}, "https");
 
