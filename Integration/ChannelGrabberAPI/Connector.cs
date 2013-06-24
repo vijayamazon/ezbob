@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Xml;
 using Integration.ChannelGrabberConfig;
@@ -44,12 +43,13 @@ namespace Integration.ChannelGrabberAPI {
 
 			m_oCustomer = oCustomer;
 
-			ConfigurationRoot o = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
+			m_oCfgRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
 
-			string sServiceUrl = o.GetValueWithDefault<string>("ChannelGrabberServiceUrl", string.Empty);
+			string sServiceUrl = LoadCfg<string>(ServiceUrlCfg, "service URL");
 
-			if (sServiceUrl == string.Empty)
-				throw new ApiException("Service URL not specified.");
+			m_nSleepTime = 1000 * LoadCfg<int>(SleepTimeCfg, "sleep time");
+
+			m_nWaitCycleCount = LoadCfg<ulong>(CycleCountCfg, "wait cycle count");
 
 			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
 
@@ -59,6 +59,8 @@ namespace Integration.ChannelGrabberAPI {
 
 			if ((null == lst) || (2 > lst.Count))
 				throw new ApiException("Failed to parse Service output.");
+
+			Debug("When waiting for orders:\n\tsleep for {0:N} ms between poll attempts\n\tretry polling {1:N} times", m_nSleepTime, m_nWaitCycleCount);
 
 			Debug("Creating a ChannelGrabber API Connector class succeeded.");
 		} // constructor
@@ -129,14 +131,17 @@ namespace Integration.ChannelGrabberAPI {
 
 			int nRqID = SendGenerateOrdersRq(oCustomer, m_oAccountData);
 
-			OrderFetchStatus nRes = FetchOrdersRq(oCustomer, m_oAccountData, nRqID);
+			OrderFetchStatus nRes = OrderFetchStatus.NotReady;
 
-			while (nRes == OrderFetchStatus.NotReady) {
-				Debug("Not ready, sleeping...");
-				Thread.Sleep(SleepTime);
-
+			for (ulong wcc = 0; wcc < m_nWaitCycleCount; wcc++) {
 				nRes = FetchOrdersRq(oCustomer, m_oAccountData, nRqID);
-			} // forever
+
+				if (nRes != OrderFetchStatus.NotReady)
+					break;
+
+				Debug("Not ready, sleeping...");
+				Thread.Sleep(m_nSleepTime);
+			} // for
 
 			if (nRes == OrderFetchStatus.Complete) {
 				List<Order> lst = LoadOrders(oCustomer, m_oAccountData);
@@ -567,12 +572,43 @@ Data: {3}
 
 		#endregion method BuildOrdersRq
 
+		#region method LoadCfg
+
+		private T LoadCfg<T>(string sParamName, string sDisplayName) {
+			if ((typeof (T) == typeof (int)) || (typeof (T) == typeof (ulong))) {
+				dynamic x = m_oCfgRoot.GetValue<T>(sParamName);
+
+				if (x < 1)
+					throw new ApiException("Bad configuration: failed to load " + sDisplayName);
+
+				return x;
+			} // if int
+
+			if (typeof (T) == typeof (string)) {
+				var s = m_oCfgRoot.GetValueWithDefault<T>(sParamName, string.Empty);
+
+				if (s.ToString() == string.Empty)
+					throw new ApiException("Bad configuration: failed to load " + sDisplayName);
+
+				return s;
+			} // if string
+
+			throw new ApiException("Unsupported configuration type.");
+		} // LoadCfg
+
+		#endregion method LoadCfg
+
 		#region private fields
 
 		private ILog m_oLog;
 		private DBCustomer m_oCustomer;
 		private RestClient m_oRestClient;
 		private AccountData m_oAccountData;
+
+		private ConfigurationRoot m_oCfgRoot;
+
+		private int m_nSleepTime;
+		private ulong m_nWaitCycleCount;
 
 		#endregion private fields
 
@@ -590,7 +626,9 @@ Data: {3}
 		private const string CustomerXpath = "/resource/resource";
 		private const string ServiceValidateXpath = "/resource/link[@rel]";
 
-		private const int SleepTime = 1000;
+		private const string ServiceUrlCfg = "ChannelGrabberServiceUrl";
+		private const string SleepTimeCfg = "ChannelGrabberSleepTime";
+		private const string CycleCountCfg = "ChannelGrabberCycleCount";
 
 		#endregion private const
 

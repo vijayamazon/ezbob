@@ -8,7 +8,9 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region constructor
 
-		public ApiException(string sMsg) : base(sMsg) {} // constructor
+		public ApiException(string sMsg) : base(sMsg, null) {} // constructor
+
+		public ApiException(string sMsg, Exception e) : base(sMsg, e) {} // constructor
 
 		#endregion constructor
 
@@ -24,7 +26,9 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region constructor
 
-		public ConnectionFailException(string sMsg) : base(sMsg) {} // constructor
+		public ConnectionFailException(string sMsg) : base(sMsg, null) {} // constructor
+
+		public ConnectionFailException(string sMsg, Exception e) : base(sMsg, e) {} // constructor
 
 		#endregion constructor
 
