@@ -1,7 +1,9 @@
-﻿using EZBob.DatabaseLib.Common;
+﻿using System;
+using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
+using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
@@ -14,15 +16,25 @@ namespace Integration.ChannelGrabberFrontend {
 		#region method ToModel
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
-			var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
-			m.id = account.Id;
-			return m;
+			try {
+				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				m.id = account.Id;
+				return m;
+			}
+			catch (Exception e) {
+				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
+			}
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
-			var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
-			m.id = account.Id;
-			return m;
+			try {
+				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				m.id = account.Id;
+				return m;
+			}
+			catch (Exception e) {
+				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
+			}
 		} // ToModel
 
 		#endregion method ToModel

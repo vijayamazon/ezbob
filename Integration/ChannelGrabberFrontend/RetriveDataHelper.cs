@@ -27,7 +27,15 @@ namespace Integration.ChannelGrabberFrontend {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			var oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(databaseCustomerMarketPlace.SecurityData);
+			AccountModel oSecInfo = null;
+
+			try {
+				oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(databaseCustomerMarketPlace.SecurityData);
+			}
+			catch (Exception e) {
+				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})",
+					databaseCustomerMarketPlace.DisplayName, databaseCustomerMarketPlace.Id), e);
+			}
 
 			var ctr = new Connector(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
 
@@ -88,9 +96,15 @@ namespace Integration.ChannelGrabberFrontend {
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
 			int customerMarketPlaceId
 		) {
-			return SerializeDataHelper.DeserializeType<AccountModel>(
-				GetDatabaseCustomerMarketPlace(customerMarketPlaceId).SecurityData
-			);
+			var account = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
+
+			try {
+				return SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+			}
+			catch (Exception e) {
+				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})",
+					account.DisplayName, account.Id), e);
+			}
 		} // RetrieveSecurityInfo
 
 		private IEnumerable<IWriteDataInfo<FunctionType>> CreateOrdersAggregationInfo(
