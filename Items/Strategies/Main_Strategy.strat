@@ -76,9 +76,9 @@
     <NodeElement Name="LimitedRefNum is NULL" NodeId="Comparison7499112" />
     <NodeElement Name="Mail Node" NodeId="MailNode48824575" />
     <NodeElement Name="Mail Node" NodeId="MailNode63859840" />
-    <NodeElement Name="Mail Node" NodeId="MailNode15166578" />
-    <NodeElement Name="Mail Node" NodeId="MailNode12278191" />
-    <NodeElement Name="Mail Node" NodeId="MailNode63660937" />
+    <NodeElement Name="Mail Node" NodeId="MailNode59682570" />
+    <NodeElement Name="Mail Node" NodeId="MailNode35726287" />
+    <NodeElement Name="Mail Node" NodeId="MailNode1037881" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct66600851" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct47422230" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct57802713" />
@@ -112,7 +112,7 @@
     <NodeElement Name="Reject" NodeId="MultiAssignmentB5575003" />
     <NodeElement Name="Reject" NodeId="MailNode51710936" />
     <NodeElement Name="Reject" NodeId="MailNode45094547" />
-    <NodeElement Name="Reject" NodeId="MailNode44611778" />
+    <NodeElement Name="Reject" NodeId="MailNode967080" />
     <NodeElement Name="rejection exception" NodeId="Comparison20625205" />
     <NodeElement Name="Re-Rejection" NodeId="Comparison36836846" />
     <NodeElement Name="Segmentation" NodeId="Segmentation42703783" />
@@ -3565,12 +3565,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode63660937</Name>
+      <Name>MailNode1037881</Name>
       <PointF>
-        <X>612.6701</X>
+        <X>392.670074</X>
         <Y>2196</Y>
       </PointF>
       <SuperNodeName />
@@ -4077,23 +4077,6 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode12278191</Name>
-      <PointF>
-        <X>392.670074</X>
-        <Y>2196</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
       <DisplayName>Update ZOHO</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
@@ -4111,13 +4094,13 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <DisplayName>Reject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode15166578</Name>
+      <Name>MailNode967080</Name>
       <PointF>
-        <X>392.670074</X>
+        <X>616</X>
         <Y>1956</Y>
       </PointF>
       <SuperNodeName />
@@ -5131,14 +5114,14 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Reject</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode44611778</Name>
+      <Name>MailNode35726287</Name>
       <PointF>
-        <X>616</X>
-        <Y>1956</Y>
+        <X>612.6701</X>
+        <Y>2196</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -5868,6 +5851,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode59682570</Name>
+      <PointF>
+        <X>392.670074</X>
+        <Y>1956</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -12688,8 +12688,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
-      <Name>FirstName_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode1037881</OwnerName>
+      <Name>FirstName_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -12700,8 +12700,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
-      <Name>LoanAmount_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode1037881</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -12712,8 +12712,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
-      <Name>EzBob account_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode1037881</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -12724,8 +12724,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
-      <Name>ValidForHours_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode1037881</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -12736,7 +12736,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
+      <OwnerName>MailNode1037881</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -12748,7 +12748,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
+      <OwnerName>MailNode1037881</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -12760,7 +12760,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
+      <OwnerName>MailNode1037881</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -13564,8 +13564,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <Name>FirstName_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode967080</OwnerName>
+      <Name>FirstName_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13576,8 +13576,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <Name>LoanAmount_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
+      <OwnerName>MailNode967080</OwnerName>
+      <Name>EzBob account_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13588,31 +13588,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <Name>EzBob account_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <Name>ValidForHours_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
+      <OwnerName>MailNode967080</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -13624,7 +13600,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
+      <OwnerName>MailNode967080</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -13636,67 +13612,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <Name>Subject</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
-      <Name>FirstName_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
-      <Name>EzBob account_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
-      <Name>AddressTo</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
-      <Name>AddressCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
+      <OwnerName>MailNode967080</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -15012,8 +14928,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
-      <Name>FirstName_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</Name>
+      <OwnerName>MailNode35726287</OwnerName>
+      <Name>FirstName_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -15024,8 +14940,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
-      <Name>EzBob account_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</Name>
+      <OwnerName>MailNode35726287</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -15036,7 +14952,31 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
+      <OwnerName>MailNode35726287</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode35726287</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode35726287</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -15048,7 +14988,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
+      <OwnerName>MailNode35726287</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -15060,7 +15000,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
+      <OwnerName>MailNode35726287</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -15607,6 +15547,66 @@ CompanyType = "SoleTrader"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
+      <Name>FirstName_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
+      <Name>EzBob account_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
       <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -17931,9 +17931,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode51710936</SourceNodeName>
+      <SourceNodeName>MailNode59682570</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode15166578</TargetNodeName>
+      <TargetNodeName>CreditProduct66600851</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18049,9 +18049,9 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignmentB52414126</SourceNodeName>
+      <SourceNodeName>MailNode1037881</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode12278191</TargetNodeName>
+      <TargetNodeName>CreditProduct57802713</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18095,9 +18095,9 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode15166578</SourceNodeName>
+      <SourceNodeName>MailNode51710936</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct66600851</TargetNodeName>
+      <TargetNodeName>MailNode59682570</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18119,9 +18119,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode44611778</SourceNodeName>
+      <SourceNodeName>CreditProduct66600851</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode32715345</TargetNodeName>
+      <TargetNodeName>MailNode967080</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18239,9 +18239,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct66600851</SourceNodeName>
+      <SourceNodeName>MailNode967080</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode44611778</TargetNodeName>
+      <TargetNodeName>ScriptNode32715345</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18950,9 +18950,21 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode12278191</SourceNodeName>
+      <SourceNodeName>MultiAssignmentB52414126</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct57802713</TargetNodeName>
+      <TargetNodeName>MailNode1037881</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode35726287</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode44277779</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18964,19 +18976,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct57802713</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode63660937</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode63660937</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode44277779</TargetNodeName>
+      <TargetNodeName>MailNode35726287</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -21332,62 +21332,62 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EzbobAccount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15166578</TargetVariableOwnerName>
-      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode59682570</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15166578</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode59682570</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15166578</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode59682570</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15166578</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode59682570</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15166578</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode59682570</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EzbobAccount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44611778</TargetVariableOwnerName>
-      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode967080</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44611778</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode967080</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44611778</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode967080</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44611778</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode967080</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44611778</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxFONinK+ouaVF7Jk2O0+B7A==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode967080</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Unfortunately you have been unable to qualify.docxfZ7I7Z6uLkUPsvdxhgvedA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -22202,68 +22202,68 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_OfferValidHours</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
-      <TargetVariableName>ValidForHours_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>UserEmail</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
-      <TargetVariableName>LoanAmount_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_OfferValidHours</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
-      <TargetVariableName>ValidForHours_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
-      <TargetVariableName>LoanAmount_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -22280,7 +22280,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -22430,14 +22430,14 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode12278191</TargetVariableOwnerName>
-      <TargetVariableName>EzBob account_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode1037881</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63660937</TargetVariableOwnerName>
-      <TargetVariableName>EzBob account_Congratulations you are qualified.docxV+FuxOFQJporyre+qsS+Ww==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode35726287</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified.docxrwER2MUKXAEngmz8IHibrA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -23182,7 +23182,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode63660937</OwnerName>
+      <OwnerName>MailNode1037881</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -23286,14 +23286,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode12278191</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
       <OwnerName>ScriptNode14955490</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -23302,7 +23294,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode15166578</OwnerName>
+      <OwnerName>MailNode967080</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -23574,7 +23566,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode44611778</OwnerName>
+      <OwnerName>MailNode35726287</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -23639,6 +23631,14 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar4531414</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode59682570</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
