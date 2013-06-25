@@ -5,19 +5,19 @@
   <Workspace Name="Set_Late_Loan_Status">
     <NodeElement Name="Admin charge?" NodeId="Comparison5094752" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
-    <NodeElement Name="Comparison" NodeId="Comparison24633528" />
     <NodeElement Name="Comparison" NodeId="Comparison66996147" />
+    <NodeElement Name="Comparison" NodeId="Comparison24633528" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar41934404" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
     <NodeElement Name="GetAllLateLoanSchedules" NodeId="DataSourceBehavioral44149718" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral59883787" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral31423475" />
@@ -25,24 +25,24 @@
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Lete" NodeId="AssignmentB33513147" />
     <NodeElement Name="LoanStatus = Late" NodeId="AssignmentB31830735" />
-    <NodeElement Name="Mail Node" NodeId="MailNode25532717" />
-    <NodeElement Name="Mail Node" NodeId="MailNode29881264" />
-    <NodeElement Name="Mail Node" NodeId="MailNode8447158" />
-    <NodeElement Name="Mail Node" NodeId="MailNode44534292" />
     <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode15588695" />
+    <NodeElement Name="Mail Node" NodeId="MailNode36237437" />
+    <NodeElement Name="Mail Node" NodeId="MailNode20679935" />
+    <NodeElement Name="Mail Node" NodeId="MailNode64250399" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
     <NodeElement Name="Script" NodeId="ScriptNode46765253" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
+    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar42176961" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar11203194" />
     <NodeElement Name="UpdateLoanStatus" NodeId="DataSourceNodeScalar66523870" />
@@ -1341,12 +1341,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode8447158</Name>
+      <Name>MailNode36237437</Name>
       <PointF>
-        <X>852.6701</X>
+        <X>1052.67</X>
         <Y>1036</Y>
       </PointF>
       <SuperNodeName />
@@ -1533,13 +1533,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode44534292</Name>
+      <Name>MailNode20679935</Name>
       <PointF>
-        <X>1052.67</X>
-        <Y>1036</Y>
+        <X>852.6701</X>
+        <Y>1156</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -1754,12 +1754,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode25532717</Name>
+      <Name>MailNode64250399</Name>
       <PointF>
-        <X>852.6701</X>
+        <X>1052.67</X>
         <Y>1156</Y>
       </PointF>
       <SuperNodeName />
@@ -1771,13 +1771,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:Locale="en-GB"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode29881264</Name>
+      <Name>MailNode15588695</Name>
       <PointF>
-        <X>1052.67</X>
-        <Y>1156</Y>
+        <X>852.6701</X>
+        <Y>1036</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -4486,8 +4486,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
-      <Name>FeeAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode36237437</OwnerName>
+      <Name>FeeAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4498,8 +4498,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
-      <Name>DelinqDays_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode36237437</OwnerName>
+      <Name>DelinqDays_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4510,8 +4510,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
-      <Name>FirstName_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode36237437</OwnerName>
+      <Name>FirstName_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4522,8 +4522,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
-      <Name>ScheduledAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode36237437</OwnerName>
+      <Name>ScheduledAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4534,8 +4534,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
-      <Name>RefNum_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode36237437</OwnerName>
+      <Name>RefNum_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4546,7 +4546,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
+      <OwnerName>MailNode36237437</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -4558,7 +4558,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
+      <OwnerName>MailNode36237437</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4570,7 +4570,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
+      <OwnerName>MailNode36237437</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4750,8 +4750,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
-      <Name>FeeAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode20679935</OwnerName>
+      <Name>DelinqDays_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4762,8 +4762,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
-      <Name>DelinqDays_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode20679935</OwnerName>
+      <Name>FirstName_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4774,8 +4774,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
-      <Name>FirstName_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode20679935</OwnerName>
+      <Name>ScheduledAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4786,8 +4786,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
-      <Name>ScheduledAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode20679935</OwnerName>
+      <Name>RefNum_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4798,8 +4798,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
-      <Name>RefNum_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</Name>
+      <OwnerName>MailNode20679935</OwnerName>
+      <Name>FeeAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -4810,7 +4810,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
+      <OwnerName>MailNode20679935</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -4822,7 +4822,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
+      <OwnerName>MailNode20679935</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4834,7 +4834,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
+      <OwnerName>MailNode20679935</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -5014,8 +5014,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
-      <Name>DelinqDays_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode64250399</OwnerName>
+      <Name>DelinqDays_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5026,8 +5026,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
-      <Name>FirstName_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode64250399</OwnerName>
+      <Name>FirstName_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5038,8 +5038,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
-      <Name>ScheduledAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode64250399</OwnerName>
+      <Name>ScheduledAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5050,8 +5050,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
-      <Name>RefNum_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode64250399</OwnerName>
+      <Name>RefNum_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5062,8 +5062,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
-      <Name>FeeAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode64250399</OwnerName>
+      <Name>FeeAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5074,7 +5074,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
+      <OwnerName>MailNode64250399</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -5086,7 +5086,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
+      <OwnerName>MailNode64250399</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -5098,7 +5098,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
+      <OwnerName>MailNode64250399</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -5110,8 +5110,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
-      <Name>DelinqDays_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode15588695</OwnerName>
+      <Name>FeeAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5122,8 +5122,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
-      <Name>FirstName_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode15588695</OwnerName>
+      <Name>DelinqDays_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5134,8 +5134,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
-      <Name>ScheduledAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode15588695</OwnerName>
+      <Name>FirstName_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5146,8 +5146,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
-      <Name>RefNum_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode15588695</OwnerName>
+      <Name>ScheduledAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5158,8 +5158,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
-      <Name>FeeAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</Name>
+      <OwnerName>MailNode15588695</OwnerName>
+      <Name>RefNum_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -5170,7 +5170,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
+      <OwnerName>MailNode15588695</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -5182,7 +5182,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
+      <OwnerName>MailNode15588695</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -5194,7 +5194,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
+      <OwnerName>MailNode15588695</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -5719,31 +5719,7 @@
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>AssignmentB31129877</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode44534292</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct24708790</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode8447158</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode44534292</SourceNodeName>
+      <SourceNodeName>MailNode36237437</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>CreditProduct24708790</TargetNodeName>
       <SuperNodeName />
@@ -5755,9 +5731,33 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode8447158</SourceNodeName>
+      <SourceNodeName>MailNode15588695</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>ConditionalAssignment46415143</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>AssignmentB31129877</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode36237437</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>CreditProduct24708790</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode15588695</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5903,9 +5903,9 @@
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode25532717</SourceNodeName>
+      <SourceNodeName>CreditProduct20777609</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment46415143</TargetNodeName>
+      <TargetNodeName>MailNode20679935</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5915,19 +5915,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>AssignmentB41900654</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode29881264</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode29881264</SourceNodeName>
+      <SourceNodeName>MailNode64250399</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>CreditProduct20777609</TargetNodeName>
       <SuperNodeName />
@@ -5939,9 +5927,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct20777609</SourceNodeName>
+      <SourceNodeName>AssignmentB41900654</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode25532717</TargetNodeName>
+      <TargetNodeName>MailNode64250399</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode20679935</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment46415143</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -6758,97 +6758,97 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>emailScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>DaysBetween</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
-      <TargetVariableName>DelinqDays_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
+      <TargetVariableName>DelinqDays_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode44534292</TargetVariableOwnerName>
-      <TargetVariableName>ScheduledAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode36237437</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>DaysBetween</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
-      <TargetVariableName>DelinqDays_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
+      <TargetVariableName>DelinqDays_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
-      <TargetVariableName>ScheduledAmount_LateChargeAdd.docxk1GAaN8QJZ7T0vxMIp2wTw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledAmount_LateChargeAdd.docxc4T6ekdCazsk9YH+zipZqA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode8447158</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15588695</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -6866,97 +6866,97 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>DaysBetween</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
-      <TargetVariableName>DelinqDays_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
+      <TargetVariableName>DelinqDays_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>emailScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode29881264</TargetVariableOwnerName>
-      <TargetVariableName>ScheduledAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode64250399</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>DaysBetween</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
-      <TargetVariableName>DelinqDays_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
+      <TargetVariableName>DelinqDays_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
-      <TargetVariableName>ScheduledAmount_LateChargeAddSecond.docx+vcLKwjCw03sRnqQZA3pyA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledAmount_LateChargeAddSecond.docxGNsiIDoeqLUvnjeTTZdiqg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode25532717</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20679935</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -7362,7 +7362,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode8447158</OwnerName>
+      <OwnerName>MailNode36237437</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -7410,7 +7410,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode44534292</OwnerName>
+      <OwnerName>MailNode20679935</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -7434,7 +7434,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode25532717</OwnerName>
+      <OwnerName>MailNode64250399</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -7442,7 +7442,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode29881264</OwnerName>
+      <OwnerName>MailNode15588695</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
