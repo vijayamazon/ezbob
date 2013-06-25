@@ -116,10 +116,12 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
         model = new EzBob.Underwriter.PayPointCardModel()
         view = new EzBob.Underwriter.AddPayPointCardView( model: model )
         view.on 'save', =>
+            BlockUi "on"
             data = model.toJSON()
             data.customerId = @model.customerId
             xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/AddPayPointCard", data
             xhr.done =>
+                BlockUi "off"
                 @model.fetch()
         EzBob.App.modal.show view
         return false

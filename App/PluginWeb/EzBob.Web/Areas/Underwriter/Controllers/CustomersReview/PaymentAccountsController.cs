@@ -221,6 +221,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var customer = _customers.GetChecked(customerId);
             customer.TryAddPayPointCard(transactionid, cardno, expiredate.ToString("MMyy"), customer.PersonalInfo.Fullname);
 
+            if (string.IsNullOrEmpty(customer.PayPointTransactionId))
+            {
+                SetPaypointDefaultCard(transactionid, customer.Id, cardno);
+            }
+
             _appCreator.PayPointAddedByUnderwriter( _context.User, customer, cardno);
 
             return this.JsonNet(new {});
