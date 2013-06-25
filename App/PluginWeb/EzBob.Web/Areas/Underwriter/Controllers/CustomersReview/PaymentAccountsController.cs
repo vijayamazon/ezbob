@@ -228,10 +228,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Ajax]
         [Transactional]
         [HttpPost]
-        public void SetPaypointDefaultCard(string transactionid, int customerId)
+        public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo)
         {
             var customer = _customers.GetChecked(customerId);
             customer.PayPointTransactionId = transactionid;
+            customer.CreditCardNo = cardNo;
         }
     }
 }

@@ -49,10 +49,14 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
         @$el.find('.bankAccounts i[data-title]').tooltip({placement: "right"})
 
     setPaypointDefault: (e)->
+
         $el = ($ e.currentTarget)
         transactionId = $el.data "transactionid"
+
+        card = _.find @model.get("PayPointCards"), (c) => c.TransactionId == transactionId
+
         BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/SetPaypointDefaultCard", {customerId: @model.customerId, transactionId: transactionId }
+        xhr = $.post "#{window.gRootPath}Underwriter/PaymentAccounts/SetPaypointDefaultCard", {customerId: @model.customerId, transactionId: transactionId, cardNo: card.CardNo }
         xhr.complete ->
             BlockUi "off"
         xhr.done =>
