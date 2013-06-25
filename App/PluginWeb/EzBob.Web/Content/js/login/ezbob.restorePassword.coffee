@@ -41,9 +41,9 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     "change #Answer": "inputAnswerChanged"
 
   restoreClicked: (e) ->
-    false if @ui.restoreBtn.hasClass("disabled")
+    return false if @ui.restoreBtn.hasClass("disabled")
     $el = $(e.currentTarget)
-    false if $el.hasClass("disabled")
+    return false if $el.hasClass("disabled")
     $el.addClass "disabled"
 
     @focus = null
@@ -86,14 +86,14 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @ui.restoreBtn.toggleClass('disabled', !enabled) 
 
   emailKeyuped: ->
-    false if @ui.email.data("changed")
+    return false if @ui.email.data("changed")
     @ui.email.data "changed", true
     @ui.questionArea.hide()
     @ui.getQuestionBtn.show()
     @captcha.$el.closest('.control-group').insertAfter(@ui.email.closest('.control-group'))
 
   getQuestionBtnClicked: ->
-    false if @ui.getQuestionBtn.hasClass("disabled")
+    return false if @ui.getQuestionBtn.hasClass("disabled")
     @mail = @ui.email.val()
     EzBob.App.trigger 'clear'
     @ui.questionArea.hide()
