@@ -93,6 +93,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         EzBob.CT.recordEvent('ct:personalinfo.show', 'personal');
         this.infoView.$el.hide();
         this.PersonalView.$el.show();
+        this.PersonalView.inputChanged();
     },
     complete: function () {
         this.saveData();
