@@ -280,9 +280,9 @@
     var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
     var validationClass = required ? "requiredDate" : "";
     var identificator = new HtmlString(name);
-	var dayIdentificator = identificator + "Day";
-	var monthIdentificator = identificator + "Month";
-	var yearIdentificator = identificator + "Year";
+    var dayIdentificator = new HtmlString(identificator + "Day");
+    var monthIdentificator = new HtmlString(identificator + "Month");
+    var yearIdentificator = new HtmlString(identificator + "Year");
 
     <div class="control-group form_field_container">
         <div class="controls ezDateTime">
@@ -347,7 +347,7 @@
 
 			@if (statusIcon) {
 				var sReq = required ? "required" : "";
-				var sId = identificator + "Image";
+				var sId = new HtmlString(identificator + "Image");
 				<img id="@sId" class="field_status @sReq"/>
 			}
 

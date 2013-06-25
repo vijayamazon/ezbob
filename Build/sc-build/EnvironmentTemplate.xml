@@ -58,6 +58,7 @@
     </module>
 	
 	<module id="MandrillUATConfig">
+        <property name="Enable" value="False" />
         <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
         <property name="BaseSecureUrl" value="https://mandrillapp.com/api/1.0/" />
         <property name="SendTemplatePath" value="/messages/send-template.json" />
