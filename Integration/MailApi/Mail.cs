@@ -2,7 +2,6 @@
 using System.Net;
 using EzBob.Configuration;
 using MailApi.Model;
-using Moq;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Deserializers;
@@ -46,6 +45,10 @@ namespace MailApi
 
         private string Send(EmailModel email)
         {
+            if (!_config.Enable)
+            {
+                return string.Empty;
+            }
             var request = new RestRequest(_config.SendTemplatePath, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(email);
             var response = _client.Post(request);
