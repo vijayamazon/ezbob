@@ -15,35 +15,11 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	    var enabled = EzBob.Validation.checkForm(this.validator) && this.companyAddressValidator;
 	    $('.continue').toggleClass('disabled', !enabled);
 	},
-	next: function () {
-		var nAddressCount = 0;
-		var nFilledAddressCount = 0;
-		
-		$('.director_address').each(function() {
-			nAddressCount++;
-
-			var oAddrInput = $(this).find('.addAddressInput:visible');
-
-			if (oAddrInput.length)
-				oAddrInput.addClass('error');
-			else
-				nFilledAddressCount++;
-		}); // each director address
-
-		var bAddressOk = nAddressCount == nFilledAddressCount;
-
-		if (!this.validator.form() || !this.companyAddressValidator || !bAddressOk) {
-			//if (!this.companyAddressValidator)
-			//	this.addAddressError("#NonLimitedCompanyAddress");
-
-			//if (!bAddressOk || !this.validator.form())
-			//	EzBob.App.trigger("error", "You must fill in all of the fields.");
-
-			return false;
-		} // if
-
-		this.trigger('next');
-		return false;
+	next: function (e) {
+	    var $el = $(e.currentTarget);
+	    if ($el.hasClass("disabled")) return false;
+	    this.trigger('next');
+	    return false;
 	},
 	render: function () {
 		this.constructor.__super__.render.call(this);

@@ -137,6 +137,7 @@ $(function () {
                 }
 
                 hidden.val(day.val() + "/" + month.val() + "/" + year.val()).trigger("change");
+
                 hidden.trigger("focusout");
             });
 
@@ -148,6 +149,9 @@ $(function () {
                 day.trigger("change");
             });
 
+            hidden.on("change:silent", function() {
+                hidden.val(day.val() + "/" + month.val() + "/" + year.val());
+            });
         });
         return this;
     };
@@ -313,7 +317,7 @@ SetDefaultDate = function (el, date, isNow) { //el is hidden split input
     month.val(dateArray[1] * 1);
     year.val(dateArray[2] * 1);
 
-    day.trigger("change");
+    day.trigger("change:silent");
 };
 
 function checkNumber(event) {

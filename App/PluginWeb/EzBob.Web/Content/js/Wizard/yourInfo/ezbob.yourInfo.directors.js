@@ -10,91 +10,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
     },
     events: {
         "click #addDirector": "addDirector",
-        "click .removeDirector": "removeDirector",
-
-        "change .director_name_part": function(jqEvent) { this.directorNamePartChanged(jqEvent.target); },
-        "keyup  .director_name_part": function(jqEvent) { this.directorNamePartChanged(jqEvent.target); },
-        "cut    .director_name_part": function(jqEvent) { this.directorNamePartChanged(jqEvent.target); },
-        "paste  .director_name_part": function(jqEvent) { this.directorNamePartChanged(jqEvent.target); },
-
-        "change .director_gender": function(jqEvent) { this.directorGenderChanged(jqEvent.target); },
-        "keyup  .director_gender": function(jqEvent) { this.directorGenderChanged(jqEvent.target); },
-        "cut    .director_gender": function(jqEvent) { this.directorGenderChanged(jqEvent.target); },
-        "paste  .director_gender": function(jqEvent) { this.directorGenderChanged(jqEvent.target); },
-
-        "change .director_date": function(jqEvent) { this.directorDateChanged(jqEvent.target); },
-        "keyup  .director_date": function(jqEvent) { this.directorDateChanged(jqEvent.target); },
-        "cut    .director_date": function(jqEvent) { this.directorDateChanged(jqEvent.target); },
-        "paste  .director_date": function(jqEvent) { this.directorDateChanged(jqEvent.target); }
+        "click .removeDirector": "removeDirector"
     },
-    directorNamePartChanged: function(oTarget) {
-        oTarget = $(oTarget);
-        var oIcon = oTarget.closest('div').find('img.field_status').first();
-
-        if (oTarget.val() == '') {
-            oIcon.field_status('clear', 'immediately');
-            return;
-        } // if
-
-        var sStatusName = '';
-
-        if (oIcon.hasClass('required'))
-            sStatusName = oTarget.val() ? 'ok' : 'fail';
-        else
-            sStatusName = oTarget.val() ? 'ok' : 'empty';
-
-        oIcon.field_status('set', sStatusName);
-    }, // directorNamePartChanged
-    directorGenderChanged: function(oTarget) {
-        oTarget = $(oTarget);
-        var oParent = oTarget.closest('div');
-
-        var nCheckedCount = 0;
-
-        oParent.find('.director_gender').each(function(idx, oChk) {
-            if ($(oChk).attr('checked')) {
-                nCheckedCount++;
-                return false;
-            } // if
-
-            return true;
-        });
-
-        if (0 == nCheckedCount)
-            oParent.find('img.field_status').field_status('clear', 'right now');
-        else
-            oParent.find('img.field_status').field_status('set', 'ok');
-    }, // directorGenderChanged
-    directorDateChanged: function(oTarget) {
-        var oDiv = $(oTarget).closest('div');
-
-        var nGoodValueCount = 0;
-
-        oDiv.find('.director_date').each(function() {
-            var o = $(this);
-
-            var sEmptyValue = o.attr('empty_value');
-            var sValue = o.val();
-
-            var bEmpty = !sValue || (sEmptyValue && (sValue == sEmptyValue));
-
-            if (!bEmpty)
-                nGoodValueCount++;
-        }); // each
-
-        var sStatusName = '';
-
-        if (nGoodValueCount == 3)
-            sStatusName = 'ok';
-        else if (nGoodValueCount > 0)
-            sStatusName = 'fail';
-
-        if ('' == sStatusName)
-            oDiv.find('img.field_status').field_status('clear', 'immediately');
-        else
-            oDiv.find('img.field_status').field_status('set', sStatusName);
-    }, // directorDateChanged
-
     render: function() {
         this.$el.html(this.template());
         this.directorArea = this.$el.find('.directorArea');
@@ -119,30 +36,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 			addressView.render().$el.appendTo(that.directorArea.find("#" + addressElem));
 			SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
 		});
-        
-
-
-        this.$el.find('.director_name_part').each(function() { that.directorNamePartChanged(this); });
-        this.$el.find('.director_gender').first().each(function() { that.directorGenderChanged(this); });
-
         this.$el.attardi_labels('toggle_all');
-        /*this.$el.find('.director_date').first().each(function () { that.directorDateChanged(this); });*/
-        /*
-		this.$el.find('.director_date, img.field_status').each(function() {
-			var oDateUIComponent = $(this);
-
-			var sID = oDateUIComponent.attr('id');
-
-			if (!sID)
-				return;
-
-			var oMeta = oDateUIComponent.closest('.Directors').find('h1[preffix]').first();
-
-			sID = sID.replace('<%-preffix%>', oMeta.attr('preffix'));
-			sID = sID.replace('<%=i%>', oMeta.attr('seqno'));
-
-			oDateUIComponent.attr('id', sID);
-		});*/
     },
     addDirector: function() {
         this.model.add(new EzBob.DirectorsModel({ Address: new EzBob.AddressModels() }));

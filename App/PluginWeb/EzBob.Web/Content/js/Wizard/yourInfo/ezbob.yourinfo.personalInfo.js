@@ -95,24 +95,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
 
     next: function (e) {
-        
         var $el = $(e.currentTarget);
-        if ($el.hasClass("disabled")) {
-            //scrollTop();
-            if (!this.validator.form() || !this.PrevAddressValidator || !this.AddressValidator) {
-            //    if (!this.PrevAddressValidator)
-            //        this.addAddressError("#PrevPersonAddresses");
-            //    if (!this.AddressValidator)
-            //        this.addAddressError("#PersonalAddress");
-            //    if (!this.validator.form())
-            //        EzBob.App.trigger("error", "You must fill in all of the fields.");
-
-                return false;
-            }
-        }
-        
-        EzBob.App.trigger("clear");
-
+        if ($el.hasClass("disabled")) return false;
         this.trigger('next', this.type);
         return false;
     }
