@@ -8,6 +8,7 @@ using EZBob.DatabaseLib.Model.Database;
 using EzBob.Configuration;
 using EzBob.Web.Infrastructure;
 using Integration.ChannelGrabberAPI;
+using Integration.ChannelGrabberConfig;
 using Integration.ChannelGrabberFrontend;
 using Scorto.Web;
 using EzBob.Web.Code.MpUniq;
@@ -15,7 +16,6 @@ using EzBob.Web.Models.Strings;
 using ZohoCRM;
 using log4net;
 using EzBob.Web.ApplicationCreator;
-using Integration.ChannelGrabberConfig;
 
 namespace EzBob.Web.Areas.Customer.Controllers {
 	using NHibernate;
@@ -25,7 +25,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
-		private readonly IMPUniqChecker _mpChecker;
+		private readonly CGMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ISession _session;
@@ -35,7 +35,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
-			IMPUniqChecker mpChecker,
+			CGMPUniqChecker mpChecker,
 			ISession session,
 			IAppCreator appCreator, IZohoFacade crm) {
 			_context = context;
@@ -72,7 +72,26 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return this.JsonNet(new { error = sError });
 			} // try
 
-			AccountData ad = model.Fill();
+			AccountData ad = null;
+			IMarketplaceType mktPlace = null;
+
+			try {
+				ad = model.Fill();
+
+				mktPlace = new DatabaseMarketPlace(model.accountTypeName);
+
+				_mpChecker.Check(mktPlace.InternalId, _context.Customer, ad.UniqueID());
+			}
+			catch (MarketPlaceAddedByThisCustomerException e) {
+				return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
+			}
+			catch (MarketPlaceIsAlreadyAddedException e) {
+				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
+			}
+			catch (Exception e) {
+				Log.Error(e);
+				return this.JsonNet(new { error = e.Message });
+			} // try
 
 			try {
 				var ctr = new Connector(ad, Log, _context.Customer);
@@ -98,29 +117,17 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			} // try
 
 			try {
-				var customer = _context.Customer;
-
-				IMarketplaceType mktPlace = new DatabaseMarketPlace(model.accountTypeName);
-
-				_mpChecker.Check(mktPlace.InternalId, customer, ad.UniqueID());
-
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oVendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				if (customer.WizardStep != WizardStepType.PaymentAccounts && customer.WizardStep != WizardStepType.AllStep)
-					customer.WizardStep = WizardStepType.Marketplace;
+				if (_context.Customer.WizardStep != WizardStepType.PaymentAccounts && _context.Customer.WizardStep != WizardStepType.AllStep)
+					_context.Customer.WizardStep = WizardStepType.Marketplace;
 
-				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, model, customer);
+				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, model, _context.Customer);
 				_session.Flush();
-				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
-				_crm.ConvertLead(customer);
+				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
+				_crm.ConvertLead(_context.Customer);
 				return this.JsonNet(AccountModel.ToModel(mp));
-			}
-			catch (MarketPlaceAddedByThisCustomerException e) {
-				return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
-			}
-			catch (MarketPlaceIsAlreadyAddedException e) {
-				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
 			}
 			catch (Exception e) {
 				Log.Error(e);

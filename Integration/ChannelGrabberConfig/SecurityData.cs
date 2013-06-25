@@ -86,8 +86,8 @@ namespace Integration.ChannelGrabberConfig {
 
 			Fields.ForEach(f => fld.Add(f.ToString()));
 
-			return string.Format("fields:\n\t{0}\nToString({1})",
-				string.Join("\n", fld.ToArray()),
+			return string.Format("Fields:\n\t{0}\n\tToString({1})",
+				string.Join("\n\t", fld.ToArray()),
 				string.Join(", ", ToStringArguments)
 			);
 		} // ToString

@@ -81,9 +81,9 @@ namespace Integration.ChannelGrabberConfig {
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("{0} ({1} -- {2})\n{3}\n{4}\n{5}",
+			return string.Format("Unique name: {0}\nDisplay name: {1}\nDescription: {2}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
 				Name, DisplayName, Description, Guid(), SecurityData,
-				string.Join("\n", (object[])Aggregators.ToArray())
+				string.Join("\n\t", (object[])Aggregators.ToArray())
 			);
 		} // ToString
 

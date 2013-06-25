@@ -161,7 +161,16 @@ namespace Integration.ChannelGrabberConfig {
 				Vendors[v.Name] = v;
 			});
 
-			Debug(Vendors.ToString());
+			var sb = new StringBuilder();
+
+			sb.AppendFormat("\n****\n\n{0} vendors found:\n\n****\n", Vendors.Count);
+
+			foreach (KeyValuePair<string, VendorInfo> pair in Vendors)
+				sb.AppendFormat("\n{0}\n", pair.Value.ToString());
+
+			sb.AppendFormat("\n****\n\nEnd of vendors list\n\n****\n\n", Vendors.Count);
+
+			Debug(sb.ToString());
 
 			Debug("Parsing Channel Grabber connectors configuration complete.");
 		} // constructor
@@ -174,7 +183,10 @@ namespace Integration.ChannelGrabberConfig {
 			if (Log == null)
 				return;
 
-			Log.DebugFormat(sFormat, args);
+			if (args.Length == 0)
+				Log.Debug(sFormat);
+			else
+				Log.DebugFormat(sFormat, args);
 		} // Debug
 
 		#endregion method Error
@@ -185,7 +197,10 @@ namespace Integration.ChannelGrabberConfig {
 			if (Log == null)
 				return;
 
-			Log.ErrorFormat(sFormat, args);
+			if (args.Length == 0)
+				Log.Error(sFormat);
+			else
+				Log.ErrorFormat(sFormat, args);
 		} // Error
 
 		#endregion method Error

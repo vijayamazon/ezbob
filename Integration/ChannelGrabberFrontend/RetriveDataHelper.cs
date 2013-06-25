@@ -27,9 +27,7 @@ namespace Integration.ChannelGrabberFrontend {
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
-			var oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(
-				GetDatabaseCustomerMarketPlace(databaseCustomerMarketPlace.Id).SecurityData
-			);
+			var oSecInfo = SerializeDataHelper.DeserializeType<AccountModel>(databaseCustomerMarketPlace.SecurityData);
 
 			var ctr = new Connector(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
 

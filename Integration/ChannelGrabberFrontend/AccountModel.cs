@@ -14,13 +14,13 @@ namespace Integration.ChannelGrabberFrontend {
 		#region method ToModel
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
-			AccountModel m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+			var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
 			m.id = account.Id;
 			return m;
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
-			AccountModel m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+			var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
 			m.id = account.Id;
 			return m;
 		} // ToModel

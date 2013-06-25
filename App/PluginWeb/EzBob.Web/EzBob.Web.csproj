@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CGMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\FreeAgentMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMarketPlacesController.cs" />

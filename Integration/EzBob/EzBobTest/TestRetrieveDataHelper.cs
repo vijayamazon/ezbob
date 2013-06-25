@@ -1,3 +1,5 @@
+using Integration.ChannelGrabberFrontend;
+
 namespace EzBobTest
 {
 	using System;
@@ -48,7 +50,7 @@ namespace EzBobTest
             NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(PayPalDatabaseMarketPlace).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(EkmDatabaseMarketPlace).Assembly);
-            // NHibernateManager.FluentAssemblies.Add(typeof(DatabaseMarketPlace).Assembly);
+            NHibernateManager.FluentAssemblies.Add(typeof(DatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
@@ -97,21 +99,18 @@ namespace EzBobTest
 
         }
 
-        [Test]
-        public void UpdateCustomerMarketplace()
-        {
-			var umi = 6453;
-            UpdateCustomerMarketplace(umi);
+		[Test]
+		public void UpdateCustomerMarketplace() {
+			// var umi = 2166;
+			// UpdateCustomerMarketplace(umi);
 
-            /*var umis = new[] { 2408, 268, 2222 };
+			var umis = new[] {4190, 4192};
 
-            //umis.AsParallel().ForAll( UpdateCustomerMarketplace );
-		
-            foreach (var umi in umis)
-            {
-                UpdateCustomerMarketplace( umi );
-            }*/
-        }
+			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
+
+			foreach (var umi in umis)
+				UpdateCustomerMarketplace(umi);
+		}
 
         [Test]
         public void UpdatePayPalAcctountInfo()
