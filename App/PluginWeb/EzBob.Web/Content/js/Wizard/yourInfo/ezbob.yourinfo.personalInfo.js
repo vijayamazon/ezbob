@@ -16,7 +16,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'focus #OverallTurnOver': "overallTurnOverFocus",
             'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
             'change input': 'inputChanged',
-            'keyup input': 'inputChanged'
+            'keyup input': 'inputChanged',
+            'keyup select': 'inputChanged'
         });
 
         this.constructor.__super__.initialize.call(this);

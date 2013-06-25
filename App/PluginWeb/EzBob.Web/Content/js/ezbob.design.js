@@ -763,9 +763,26 @@ Date.prototype.getServerTime = function () {
 };
 
 //-----------  Validate  -----------  
+
+var validFunc = function(el) {
+    if ($(el).closest('.ezDateTime').length != 0) {
+        $(el).closest('.ezDateTime').find("input.hidden-field").valid();
+    } else if ($(el).hasClass('addAddressInput')) {
+        //do nothing
+    } else {
+        $(el).valid();
+    }
+};
 $.validator.setDefaults({
-    onkeyup: false,
-    onChangeFocus: true,
+    onclick: function (el) {
+        return false;
+    },
+    onfocusout: function (element) {
+        validFunc(element);
+    },
+    onkeyup: function (element) {
+        validFunc(element);
+    },
     ignore: []
 });
 
@@ -869,17 +886,6 @@ EzBob.validateRestorePasswordForm = function (el) {
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
     return e.validate({
-        onfocusout: function (element) {
-            if ($(element).closest('.ezDateTime').length != 0) {
-                $(element).closest('.ezDateTime').find("input.hidden-field").valid();
-            } 
-            else if ($(element).hasClass('addAddressInput')) {
-                //do nothing
-            }
-            else {
-                $(element).valid();
-            }
-        },
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
