@@ -138,7 +138,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     amount = amount.ToString(CultureInfo.InvariantCulture),
                     saved = res.Saved,
                     savedPounds = res.SavedPounds,
-                    card_no = customerContext.CreditCardNo,
+                    card_no = card_no,
                     email = customerContext.Name,
                     surname = customerContext.PersonalInfo.Surname,
                     name = customerContext.PersonalInfo.FirstName,
