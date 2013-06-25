@@ -33,11 +33,11 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		var bAddressOk = nAddressCount == nFilledAddressCount;
 
 		if (!this.validator.form() || !this.companyAddressValidator || !bAddressOk) {
-			if (!this.companyAddressValidator)
-				this.addAddressError("#NonLimitedCompanyAddress");
+			//if (!this.companyAddressValidator)
+			//	this.addAddressError("#NonLimitedCompanyAddress");
 
-			if (!bAddressOk || !this.validator.form())
-				EzBob.App.trigger("error", "You must fill in all of the fields.");
+			//if (!bAddressOk || !this.validator.form())
+			//	EzBob.App.trigger("error", "You must fill in all of the fields.");
 
 			return false;
 		} // if
