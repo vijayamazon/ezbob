@@ -686,8 +686,8 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Search = false,
-                    Sortable = false,
+                    Search = true,
+                    Sortable = true,
                     Width = 90,
                     DataType = TypeCode.String,
                     Data = x => x.LastStatus

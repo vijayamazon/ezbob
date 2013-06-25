@@ -456,7 +456,15 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual int NumApproves { get; set; }
         public virtual decimal SystemCalculatedSum { get; set; }
         public virtual decimal ManagerApprovedSum { get; set; }
-        public virtual string LastStatus { get; set; }
+        
+        private string _lastStatus = "N/A";
+
+        public virtual string LastStatus
+        {
+            get { return _lastStatus; }
+            set { _lastStatus = value; }
+        }
+
         public virtual decimal TotalPrincipalRepaid { get; set; }
 
 
