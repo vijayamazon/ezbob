@@ -20,7 +20,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 	
 	render: function () {
 		this.constructor.__super__.render.call(this);
-		var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress'), name: "LimitedCompanyAddress", max: 1 });
+		var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress').reset(), name: "LimitedCompanyAddress", max: 1 });
 		limitedAddressView.render().$el.appendTo(this.$el.find('#LimitedCompanyAddress'));
 		this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
 
@@ -63,7 +63,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		return false;
 	},
 	LimitedCompanyAddressChanged: function (evt, oModel) {
-	    this.companyAddressValidator = oModel.collection.length > 0;
+	    this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
 	    this.inputChanged();
 		this.clearAddressError("#LimitedCompanyAddress");
 	}
