@@ -8,6 +8,8 @@
     @BundleHelper.RenderProfileCss()
 }
 
+@{Html.RenderPartial("google_conversion");}
+
 <div class="row-fluid ">
         <div id="profile-content" style="padding-right: 20px; padding-top: 16px;">
             <div id="header-container"></div>
@@ -58,7 +60,12 @@
             <div class="row-fluid">
                 <div class="span12" style="padding-top: 30px;">
                     <a href="#" class="schedule-print-link pull-left print-link" style="margin-top: 8px;" onClick="window.print();return false;"> Print for your records</a>
-                    <a href='@Url.Action("Index", "Profile", new {Area="Customer"})'  class="btn-continue button orange pull-right btn-fix">Go to My Account</a>
+                    <a 
+                        href='@Url.Action("Index", "Profile", new {Area="Customer"})' 
+                        class="btn-continue button orange pull-right btn-fix"
+                        onClick="EzBob.App.GA.trackEvent('Loan Payment Complete', 'Back To Profile', 'View Loan');">
+                        Go to My Account
+                    </a>
                 </div>
             </div>
         </div>

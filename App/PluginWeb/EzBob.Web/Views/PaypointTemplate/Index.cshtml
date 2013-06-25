@@ -120,6 +120,8 @@
           <input type="hidden" name="error_list"></text>
 }
 
+@{Html.RenderPartial("_GoogleAnalytics");}
+
 <div style="padding: 0 30px;">
     <div class="row-fluid">
         <div class="pages">
@@ -196,7 +198,7 @@
                             </div>
 
                             <div>
-                                <input type="submit" name="accept" value="Confirm" class="submit pull-right button orange">
+                                <input type="submit" name="accept" value="Confirm" class="submit pull-right button orange" onClick="_gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);">
                                 <a href="#"class="button grey pull-right">Back</a>
                             </div>
 

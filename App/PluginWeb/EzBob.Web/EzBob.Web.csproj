@@ -1038,7 +1038,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ApprovalSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_AutomationSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_RejectionSettings.cshtml" />
-    <Content Include="Areas\Customer\Views\Profile\google_conversion.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\google_conversion.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
