@@ -134,7 +134,7 @@ namespace EzBob.Web.Code.Agreements
                 StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
                 InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100),
                 Iterration = i + 1,
-                AprMonthRate = string.Format("{0:0.0}", _aprCalc.CalculateMonthly(loanAmount, schedule, i, setupFee, loanDate))
+				//AprMonthRate = string.Format("{0:0.0}", _aprCalc.CalculateMonthly(loanAmount, schedule, i, setupFee, loanDate))
             }).ToList();
         }
 

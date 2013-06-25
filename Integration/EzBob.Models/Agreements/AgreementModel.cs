@@ -16,7 +16,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public string StringNumber { get; set; }
         public int Iterration { get; set; }
         public string InterestRate { get; set; }
-        public string AprMonthRate { get; set; }
+		//public string AprMonthRate { get; set; }
 
     }
 
