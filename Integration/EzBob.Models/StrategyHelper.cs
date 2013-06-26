@@ -67,9 +67,14 @@ namespace EzBob.Models
         {
             var customer = _customers.Get(customerId);
             var cr = customer.LastCashRequest;
+
             cr.UnderwriterDecision = CreditResultStatus.Rejected;
             cr.UnderwriterDecisionDate = DateTime.UtcNow;
             cr.UnderwriterComment = comment;
+
+            customer.DateRejected = DateTime.UtcNow;
+            customer.RejectedReason = comment;
+
             _decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
         }
 
@@ -77,7 +82,12 @@ namespace EzBob.Models
         {
             var customer = _customers.Get(customerId);
             var cr = customer.LastCashRequest;
+
             cr.UnderwriterComment = comment;
+
+            customer.DateApproved = DateTime.UtcNow;
+            customer.ApprovedReason = comment;
+
             _decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
         }
 
