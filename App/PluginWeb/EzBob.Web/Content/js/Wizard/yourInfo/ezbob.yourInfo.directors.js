@@ -26,23 +26,38 @@ EzBob.DirectorMainView = Backbone.View.extend({
         var oFieldStatusIcons = this.$el.find('IMG.field_status');
         oFieldStatusIcons.filter('.required').field_status({ required: true });
         oFieldStatusIcons.not('.required').field_status({ required: false });
-        
-		$.each(this.model.models, function (i, val) {
-			var addressElem = that.preffix + 'Address' + i,
-				name = that.preffix + "[" + i + "]." + that.name,
-				addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
-				dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth';
 
-			addressView.render().$el.appendTo(that.directorArea.find("#" + addressElem));
-			SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
-		});
+        $.each(this.model.models, function(i, val) {
+            var addressElem = that.preffix + 'Address' + i,
+                name = that.preffix + "[" + i + "]." + that.name,
+                addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
+                dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth';
+
+            val.get('Address').on("all", function() {
+                that.trigger("director:addressChanged");
+            });
+
+            addressView.render().$el.appendTo(that.directorArea.find("#" + addressElem));
+            SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
+        });
         this.$el.attardi_labels('toggle_all');
+        this.trigger("director:change");
     },
+
+    validateAddresses: function() {
+        var result = true;
+        $.each(this.model.models, function(i, val) {
+            if (val.get('Address').length == 0) {
+                result = false;
+            }
+        });
+        return result;
+    },
+
     addDirector: function() {
         this.model.add(new EzBob.DirectorsModel({ Address: new EzBob.AddressModels() }));
         this.updateModel();
         this.renderDirector();
-
         return false;
     },
     removeDirector: function(el) {

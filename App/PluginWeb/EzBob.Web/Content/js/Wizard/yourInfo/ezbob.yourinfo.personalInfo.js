@@ -30,7 +30,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     },
     
     inputChanged: function () {
-        console.log(EzBob.Validation.checkForm(this.validator));
         var enabled = EzBob.Validation.checkForm(this.validator) && this.PrevAddressValidator && this.AddressValidator;
         $('.continue').toggleClass('disabled', !enabled);
     },
