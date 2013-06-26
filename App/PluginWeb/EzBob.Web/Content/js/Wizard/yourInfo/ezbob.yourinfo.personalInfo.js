@@ -15,15 +15,22 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'click label[for="ConsentToSearch"] a': 'showConsent',
             'focus #OverallTurnOver': "overallTurnOverFocus",
             'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
+
             'change input': 'inputChanged',
+            'focusout input': 'inputChanged',
             'keyup input': 'inputChanged',
-            'keyup select': 'inputChanged'
+            
+            'focus select': 'inputChanged',
+            'focusout select': 'inputChanged',
+            'keyup select': 'inputChanged',
+            'click select': 'inputChanged'
         });
 
         this.constructor.__super__.initialize.call(this);
     },
     
     inputChanged: function () {
+        console.log(EzBob.Validation.checkForm(this.validator));
         var enabled = EzBob.Validation.checkForm(this.validator) && this.PrevAddressValidator && this.AddressValidator;
         $('.continue').toggleClass('disabled', !enabled);
     },
