@@ -53,7 +53,7 @@ namespace EzBob.Models
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
 
-            return new LoanModel()
+            var loanModel = new LoanModel
                 {
                     Date = loan.Date,
                     Id = loan.Id,
@@ -84,9 +84,14 @@ namespace EzBob.Models
                     LastReportedCaisStatusDate = loan.LastReportedCaisStatusDate,
                     LoanType = loan.LoanType.Name,
                     Modified = loan.Modified || (loan.CashRequest != null && !string.IsNullOrEmpty(loan.CashRequest.LoanTemplate)),
-                    DiscountPlan = loan.CashRequest.DiscountPlan.Name,
                     InterestDue = loan.InterestDue
                 };
+
+            if (loan.CashRequest!= null)
+            {
+                loanModel.DiscountPlan = loan.CashRequest.DiscountPlan.Name;
+            }
+            return loanModel;
         }
     }
 }

@@ -297,16 +297,11 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 						}
 				};
 			
-			EnvironmentConfigurationLoader.AppPathDummy = "test";
-
-			var configuration = ConfigurationRoot.GetConfiguration();
-			log4net.Config.XmlConfigurator.Configure(configuration.Log4Net.InnerXml);
-         
 			for (int i = 0; i < loanSchedule.Count; i++)
 			{
 				var aprMonthRate = calc.CalculateMonthly(40000, loanSchedule, i, 0, new DateTime(2013, 5, 7));
 				string f = string.Format("month: {0}, APR: {1}", i + 1, aprMonthRate);
-				Log.DebugFormat("month: {0}, APR: {1}", i + 1, aprMonthRate);
+				Console.WriteLine("month: {0}, APR: {1}", i + 1, aprMonthRate);
 			}
 
 			//Assert.That(aprMonthRate, Is.InRange(42.1,42.2));
