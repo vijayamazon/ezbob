@@ -63,8 +63,12 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
                 BlockUi "on"
                 xhr = $.post "#{window.gRootPath}Customer/GetCash/Now", {cardId: cardId, amount: @applyForLoanViewModel.get("neededCash")}
                 xhr.done (data) =>
-                    document.location.href = data.url;
-      
+                    if data.error != undefined
+                        EzBob.ShowMessage data.error, "Error occured"
+                    else 
+                        document.location.href = data.url;
+                xhr.complete ->
+                    BlockUi "off"
             view.on 'existing', => @_submit()
             view.on 'cancel', => @model.set("state", "apply")
             EzBob.App.modal.show view
