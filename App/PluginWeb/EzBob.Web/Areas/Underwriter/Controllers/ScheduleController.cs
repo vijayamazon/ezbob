@@ -54,7 +54,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var calc = new PayEarlyCalculator2(loan, loan.Date);
             calc.GetState();
  
-            var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee);
+            var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 
             var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 

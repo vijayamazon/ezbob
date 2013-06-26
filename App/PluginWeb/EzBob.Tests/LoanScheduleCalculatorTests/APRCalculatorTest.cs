@@ -248,6 +248,100 @@ namespace EzBob.Tests.LoanScheduleCalculatorTests
 		}
 
 		[Test]
+		public void calculateAprYoung()
+		{
+			var calc = new APRCalculator();
+			var loanSchedule = new List<LoanScheduleItem>
+				{
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 7, 18),
+							AmountDue = 2219
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 8, 18),
+							AmountDue = 2169.96M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 9, 18),
+							AmountDue = 2124.16M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 10, 18),
+							AmountDue = 2037.85M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 11, 18),
+							AmountDue = 1996.53M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2013, 12, 18),
+							AmountDue = 1955.22M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 1, 18),
+							AmountDue = 1913.9M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 2, 18),
+							AmountDue = 1872.58M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 3, 18),
+							AmountDue = 1814.61M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 4, 18),
+							AmountDue = 1777.46M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 5, 18),
+							AmountDue = 1740.3M
+
+
+						},
+					new LoanScheduleItem
+						{
+							Date = new DateTime(2014, 5, 18),
+							AmountDue = 1703.15M
+
+
+						},
+				};
+			var apr = calc.Calculate(20000, loanSchedule, 0, new DateTime(2013, 6, 18));
+		//	Assert.That(apr, Is.EqualTo(35.55));
+		}
+
+		[Test]
 		public void CalculateAprMonthly()
 		{
 			var calc = new APRCalculator();

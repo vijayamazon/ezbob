@@ -99,7 +99,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 
 			var schedule = loan.Schedule;
-			var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee);
+			var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
 
 			var b = new AgreementsModelBuilder(_customerModelBuilder);
 			var agreement = b.Build(_customer, amount, loan);

@@ -49,7 +49,7 @@ namespace EzBob.Web.Code.Agreements
                 fee = feeCalculator.Calculate(amount);
             }
 
-            var apr = _aprCalc.Calculate(amount, loan.Schedule, fee);
+            var apr = _aprCalc.Calculate(amount, loan.Schedule, fee, loan.Date);
             return GenerateAgreementModel(customer, loan, useSetupFee, now, apr);
         }
 
