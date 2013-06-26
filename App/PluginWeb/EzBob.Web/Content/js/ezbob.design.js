@@ -777,15 +777,30 @@ var validFunc = function(el) {
         $(el).valid();
     }
 };
+
+var isEmptyFunc = function(el) {
+    if ($(el).closest('.ezDateTime').length != 0) {
+        return el.value != "-";
+    }
+    if (el.classList.contains('cashInput')) {
+        return el.value != "£ " && el.value != "";
+    }
+    return el.value != "";
+};
+
 $.validator.setDefaults({
     onclick: function (el) {
         return false;
     },
     onfocusout: function (element) {
-        validFunc(element);
+        if (isEmptyFunc(element)) {
+            validFunc(element);
+        }
     },
     onkeyup: function (element) {
-        validFunc(element);
+        if (isEmptyFunc(element)) {
+            validFunc(element);
+        }
     },
     ignore: []
 });
@@ -876,10 +891,12 @@ EzBob.validateRestorePasswordForm = function (el) {
         rules: {
             email: { required: true, email: true },
             Answer: { required: true, maxlength: 199 },
+            //CaptchaInputText: { required: true, minlength: 6, maxlength: 6 }
         },
         messages: {
             "email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
             "Answer": { maxlength: "Maximum answer length is 199 characters" }
+            //,"CaptchaInputText": { required: "This field is required" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
