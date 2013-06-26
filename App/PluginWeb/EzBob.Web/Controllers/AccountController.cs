@@ -349,7 +349,6 @@ namespace EzBob.Web.Controllers
 
         //------------------------------------------------------------------------        
         [Transactional]
-        [CaptchaValidationFilter]
         public JsonNetResult RestorePassword(string email = "", string answer = "")
         {
             if (!ModelState.IsValid)

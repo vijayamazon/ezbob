@@ -6,10 +6,10 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
 
   initialize: ->
     @mail = undefined
-
-  focus:
-    null
-
+    @answerEnabled = true
+    @emailEnabled = false
+    @captchaEnabled = false
+    
   ui:
     "questionArea": "#questionArea"
     "questionField": "#questionField"
@@ -28,7 +28,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @ui.email.data "changed", true
     @validator = EzBob.validateRestorePasswordForm(@ui.form)
     @initStatusIcons()
-    @ui.email.focus()
+    $('#email').focus()
     @
 
   events:
@@ -39,21 +39,20 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     "change #email": "inputEmailChanged"
     "keyup #Answer": "inputAnswerChanged"
     "change #Answer": "inputAnswerChanged"
+    "keyup #CaptchaInputText": "inputCaptchaChanged"
+    "change #CaptchaInputText": "inputCaptchaChanged"
 
   restoreClicked: (e) ->
     return false if @ui.restoreBtn.hasClass("disabled")
     $el = $(e.currentTarget)
     return false if $el.hasClass("disabled")
     $el.addClass "disabled"
-
-    @focus = null
-
+        
     $.post("RestorePassword", @ui.form.serializeArray())
         .done (data) =>
             if not EzBob.isNullOrEmpty(data.errorMessage) or not EzBob.isNullOrEmpty(data.error)
                 EzBob.App.trigger "error", data.errorMessage or data.error
                 @ui.questionArea.hide()
-                @focus = @focusCaptcha
                 return false
 
             @ui.passwordRestoredArea.show()
@@ -63,26 +62,26 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
         .fail (data) =>
             EzBob.App.trigger "error", data.responceText
             @initStatusIcons()
-            @focus = @focusCaptcha
 
         .always (data) =>
+            @ui.email.closest('div').hide()
             $el.removeClass "disabled"
             @ui.email.data "changed", false
             @emailKeyuped()
-            @captcha.reload @focus
-
-  focusEmail: => $('#email').focus()
-
-  focusAnswer: => $('#Answer').focus()
-
-  focusCaptcha: => $('#CaptchaInputText').focus()
+            
+  inputCaptchaChanged: ->
+    @captchaEnabled = EzBob.Validation.element(@validator, $(@ui.captcha.selector))
+    enabled = @answerEnabled && @emailEnabled && @captchaEnabled
+    @ui.getQuestionBtn.toggleClass('disabled', !enabled)
 
   inputEmailChanged: ->
-    enabled = EzBob.Validation.element(@validator,@ui.email)
+    @emailEnabled = EzBob.Validation.element(@validator,@ui.email)
+    enabled = @answerEnabled && @emailEnabled && @captchaEnabled
     @ui.getQuestionBtn.toggleClass('disabled', !enabled)
 
   inputAnswerChanged: ->
-    enabled = EzBob.Validation.element(@validator,@ui.answer)
+    @answerEnabled = EzBob.Validation.element(@validator,@ui.answer)
+    enabled = @answerEnabled && @emailEnabled && @captchaEnabled
     @ui.restoreBtn.toggleClass('disabled', !enabled) 
 
   emailKeyuped: ->
@@ -97,21 +96,17 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @mail = @ui.email.val()
     EzBob.App.trigger 'clear'
     @ui.questionArea.hide()
-
-    @focus = null
-
+    
     $.post("QuestionForEmail", @ui.form.serialize())
         .done (response)=>
             if not EzBob.isNullOrEmpty(response.errorMessage) or not EzBob.isNullOrEmpty(response.error)
                 EzBob.App.trigger 'error', response.errorMessage or response.error
                 @ui.questionArea.hide()
-                @focus = @focusCaptcha
                 return true
 
             if EzBob.isNullOrEmpty(response.question)
                 EzBob.App.trigger "warning", "To recover your password security question fields must be completely filled in the account settings"
                 @ui.questionArea.hide()
-                @focus = @focusEmail
                 return true
 
             @ui.questionField.text response.question
@@ -120,10 +115,10 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
             @ui.getQuestionBtn.hide()
             @captcha.$el.closest('.control-group').insertAfter(@ui.answer.closest('.control-group'))
             @ui.email.data "changed", false
-            @focus = @focusAnswer
-
-        .always =>
-            @captcha.reload @focus
+            @answerEnabled=false
+            @ui.email.closest('div').hide()
+            $('#captcha').hide()
+            $('#Answer').focus()
 
   initStatusIcons: (e) ->
     oFieldStatusIcons = this.$el.find('IMG.field_status')

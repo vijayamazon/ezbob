@@ -891,12 +891,12 @@ EzBob.validateRestorePasswordForm = function (el) {
         rules: {
             email: { required: true, email: true },
             Answer: { required: true, maxlength: 199 },
-            //CaptchaInputText: { required: true, minlength: 6, maxlength: 6 }
+            CaptchaInputText: { required: true, minlength: 6, maxlength: 6 }
         },
         messages: {
             "email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
-            "Answer": { maxlength: "Maximum answer length is 199 characters" }
-            //,"CaptchaInputText": { required: "This field is required" }
+            "Answer": { maxlength: "Maximum answer length is 199 characters" },
+            "CaptchaInputText": { required: "This field is required" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

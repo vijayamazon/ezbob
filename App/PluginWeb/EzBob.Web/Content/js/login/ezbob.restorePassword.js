@@ -1,6 +1,5 @@
 (function() {
   var root, _ref,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -12,19 +11,18 @@
     __extends(ResetPasswordView, _super);
 
     function ResetPasswordView() {
-      this.focusCaptcha = __bind(this.focusCaptcha, this);
-      this.focusAnswer = __bind(this.focusAnswer, this);
-      this.focusEmail = __bind(this.focusEmail, this);      _ref = ResetPasswordView.__super__.constructor.apply(this, arguments);
+      _ref = ResetPasswordView.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
     ResetPasswordView.prototype.template = "#restore-pass-template";
 
     ResetPasswordView.prototype.initialize = function() {
-      return this.mail = void 0;
+      this.mail = void 0;
+      this.answerEnabled = true;
+      this.emailEnabled = false;
+      return this.captchaEnabled = false;
     };
-
-    ResetPasswordView.prototype.focus = null;
 
     ResetPasswordView.prototype.ui = {
       "questionArea": "#questionArea",
@@ -48,7 +46,7 @@
       this.ui.email.data("changed", true);
       this.validator = EzBob.validateRestorePasswordForm(this.ui.form);
       this.initStatusIcons();
-      this.ui.email.focus();
+      $('#email').focus();
       return this;
     };
 
@@ -59,7 +57,9 @@
       "keyup #email": "inputEmailChanged",
       "change #email": "inputEmailChanged",
       "keyup #Answer": "inputAnswerChanged",
-      "change #Answer": "inputAnswerChanged"
+      "change #Answer": "inputAnswerChanged",
+      "keyup #CaptchaInputText": "inputCaptchaChanged",
+      "change #CaptchaInputText": "inputCaptchaChanged"
     };
 
     ResetPasswordView.prototype.restoreClicked = function(e) {
@@ -74,12 +74,10 @@
         return false;
       }
       $el.addClass("disabled");
-      this.focus = null;
       return $.post("RestorePassword", this.ui.form.serializeArray()).done(function(data) {
         if (!EzBob.isNullOrEmpty(data.errorMessage) || !EzBob.isNullOrEmpty(data.error)) {
           EzBob.App.trigger("error", data.errorMessage || data.error);
           _this.ui.questionArea.hide();
-          _this.focus = _this.focusCaptcha;
           return false;
         }
         _this.ui.passwordRestoredArea.show();
@@ -87,39 +85,36 @@
         return scrollTop();
       }).fail(function(data) {
         EzBob.App.trigger("error", data.responceText);
-        _this.initStatusIcons();
-        return _this.focus = _this.focusCaptcha;
+        return _this.initStatusIcons();
       }).always(function(data) {
+        _this.ui.email.closest('div').hide();
         $el.removeClass("disabled");
         _this.ui.email.data("changed", false);
-        _this.emailKeyuped();
-        return _this.captcha.reload(_this.focus);
+        return _this.emailKeyuped();
       });
     };
 
-    ResetPasswordView.prototype.focusEmail = function() {
-      return $('#email').focus();
-    };
+    ResetPasswordView.prototype.inputCaptchaChanged = function() {
+      var enabled;
 
-    ResetPasswordView.prototype.focusAnswer = function() {
-      return $('#Answer').focus();
-    };
-
-    ResetPasswordView.prototype.focusCaptcha = function() {
-      return $('#CaptchaInputText').focus();
+      this.captchaEnabled = EzBob.Validation.element(this.validator, $(this.ui.captcha.selector));
+      enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
+      return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
     };
 
     ResetPasswordView.prototype.inputEmailChanged = function() {
       var enabled;
 
-      enabled = EzBob.Validation.element(this.validator, this.ui.email);
+      this.emailEnabled = EzBob.Validation.element(this.validator, this.ui.email);
+      enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
     };
 
     ResetPasswordView.prototype.inputAnswerChanged = function() {
       var enabled;
 
-      enabled = EzBob.Validation.element(this.validator, this.ui.answer);
+      this.answerEnabled = EzBob.Validation.element(this.validator, this.ui.answer);
+      enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.restoreBtn.toggleClass('disabled', !enabled);
     };
 
@@ -142,18 +137,15 @@
       this.mail = this.ui.email.val();
       EzBob.App.trigger('clear');
       this.ui.questionArea.hide();
-      this.focus = null;
       return $.post("QuestionForEmail", this.ui.form.serialize()).done(function(response) {
         if (!EzBob.isNullOrEmpty(response.errorMessage) || !EzBob.isNullOrEmpty(response.error)) {
           EzBob.App.trigger('error', response.errorMessage || response.error);
           _this.ui.questionArea.hide();
-          _this.focus = _this.focusCaptcha;
           return true;
         }
         if (EzBob.isNullOrEmpty(response.question)) {
           EzBob.App.trigger("warning", "To recover your password security question fields must be completely filled in the account settings");
           _this.ui.questionArea.hide();
-          _this.focus = _this.focusEmail;
           return true;
         }
         _this.ui.questionField.text(response.question);
@@ -162,9 +154,10 @@
         _this.ui.getQuestionBtn.hide();
         _this.captcha.$el.closest('.control-group').insertAfter(_this.ui.answer.closest('.control-group'));
         _this.ui.email.data("changed", false);
-        return _this.focus = _this.focusAnswer;
-      }).always(function() {
-        return _this.captcha.reload(_this.focus);
+        _this.answerEnabled = false;
+        _this.ui.email.closest('div').hide();
+        $('#captcha').hide();
+        return $('#Answer').focus();
       });
     };
 
