@@ -386,5 +386,18 @@ namespace EzBob.Web.Code.ApplicationCreator
                 };
             CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
         }
+
+        public void RequestCashWithoutTakenLoan(Customer customer, string dashboard)
+        {
+            var strategyParameters = new[]
+                {
+                    new StrategyParameter("userId", customer.Id),
+                    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+                    new StrategyParameter("DashboardPage", dashboard),
+                    new StrategyParameter("email", customer.Name)
+                };
+            var user = _users.Get(customer.Id);
+            CreateApplication(user, strategyParameters, "Email Didnt take offer and reapplies");
+        }
     }
 }

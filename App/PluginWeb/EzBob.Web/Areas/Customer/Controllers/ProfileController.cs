@@ -88,6 +88,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             customer.ApplyCount = customer.ApplyCount + 1;
 
+            var oldOffer = customer.LastCashRequest;
+            if (oldOffer != null && oldOffer.HasLoans)
+            {
+                _creator.RequestCashWithoutTakenLoan(customer, Url.Action("Index", "Profile", new{Area="Customer"}));
+            }
+
             var cashRequest = _crBuilder.CreateCashRequest(customer);
 
             _crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);

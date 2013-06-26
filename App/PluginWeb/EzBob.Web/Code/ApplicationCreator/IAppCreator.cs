@@ -33,6 +33,7 @@ namespace EzBob.Web.ApplicationCreator
         void CAISGenerate(User user);
         void CAISUpdate(User user, int caisId);
         void EmailUnderReview(User user, string firstName, string email);
+        void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
     }
 
     public enum NewCreditLineOption

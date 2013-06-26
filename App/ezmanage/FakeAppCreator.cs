@@ -136,7 +136,10 @@ namespace ezmanage
 
         public void EmailUnderReview(User user, string firstName, string email)
         {
-            
+        }
+
+        public void RequestCashWithoutTakenLoan(Customer customer, string dashboard)
+        {
         }
     }
 }
