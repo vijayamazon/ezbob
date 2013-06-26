@@ -183,6 +183,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
 
                 var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "payment from customer", paymentType);
+                payFastModel.CardNo = card.CardNo;
 
                 _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName, customer.GetLoan(loanId).RefNumber);
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");

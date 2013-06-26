@@ -98,7 +98,7 @@ class EzBob.Profile.MakeEarlyPayment extends Backbone.Marionette.ItemView
 
         @$el.html @infoPage(
           amount: res.PaymentAmount
-          card_no: @customerModel.get("CreditCardNo")
+          card_no: res.CardNo
           email: @customerModel.get("Email")
           name: @customerModel.get("CustomerPersonalInfo").FirstName
           surname: @customerModel.get("CustomerPersonalInfo").Surname
