@@ -17,6 +17,7 @@ robocopy Integration\PaymentServices\bin\Debug\ c:\ezbobSrv\ /e
 robocopy App\ScheduledServices\bin\Debug\ c:\ezbobSrv\ /e
 
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
+copy Integration\ChannelGrabberConfig\channelgrabber.json "c:\Program Files (x86)\Common Files\Ezbob\"
 
 net start ScortoService
 
