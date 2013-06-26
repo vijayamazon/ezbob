@@ -37,6 +37,11 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Console.WriteLine(_loan);
         }
 
+        protected LoanScheduleItem GetStateAt(Loan loan, DateTime date)
+        {
+            return _facade.GetStateAt(loan, date);
+        }
+
         protected static DateTime Parse(string date)
         {
             return DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss.000", CultureInfo.InvariantCulture);

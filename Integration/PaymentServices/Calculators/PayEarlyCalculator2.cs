@@ -305,15 +305,17 @@ namespace PaymentServices.Calculators
             _lastActionDate = date;
 
             //помечяем устаревшие rollovers и удаляем их из списка
-            foreach (var rollover in _currentRollover)
+            var expired = new List<PaymentRollover>();
+            foreach (var rollover in _currentRollover.Where(r => r != null))
             {
-                if (rollover != null && rollover.ExpiryDate.Value.Date <= date.Date && date.Date <= _term)
+                if (rollover.ExpiryDate.Value.Date <= date.Date && date.Date <= _term)
                 {
                     _totalRollOversToPay -= rollover.Payment - rollover.PaidPaymentAmount;
                     rollover.Status = RolloverStatus.Expired;
+                    expired.Add(rollover);
                 }
             }
-            _currentRollover = _currentRollover.Where(r => r.Status != RolloverStatus.Expired).ToList();
+            _currentRollover.RemoveAll(r => expired.Contains(r));
         }
 
         /// <summary>

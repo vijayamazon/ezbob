@@ -343,5 +343,33 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Assert.That(payment, Is.EqualTo(1050));
         }
+
+        [Test]
+        public void loan_732_prod()
+        {
+            var calculator = new LoanScheduleCalculator();
+            calculator.Term = 6;
+            calculator.Interest = 0.06m;
+            calculator.Calculate(5000, _loan, Parse("2013-04-18 09:26:54.000"));
+
+            var rollover = new PaymentRollover
+            {
+                LoanSchedule = _loan.Schedule[0],
+                Created = Parse("2013-05-18 15:46:54.000"),
+                ExpiryDate = Parse("2013-05-21 00:00:00.000"),
+                Payment = 50,
+                Status = RolloverStatus.New
+            };
+            _loan.Schedule[0].Rollovers.Add(rollover);
+
+            MakePayment(1262.42m, Parse("2013-05-30 00:00:00.000"));
+            MakePayment(1088.77m, Parse("2013-06-26 07:04:11.000"));
+
+            var state = GetStateAt(_loan, Parse("2013-06-26 07:04:11.000"));
+
+            Assert.That(state.LoanRepayment, Is.EqualTo(0));
+
+            Console.WriteLine(_loan);
+        }
     }
 }
