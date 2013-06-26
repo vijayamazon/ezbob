@@ -376,5 +376,15 @@ namespace EzBob.Web.Code.ApplicationCreator
                 };
             CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
         }
+
+        public void EmailUnderReview(User user, string firstName, string email)
+        {
+            var strategyParameters = new[]
+                {
+                    new StrategyParameter("FirstName", firstName),
+                    new StrategyParameter("email", email)
+                };
+            CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
+        }
     }
 }

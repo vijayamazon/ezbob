@@ -414,6 +414,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="CustomerEscalatedStrategyName" value="CustomerEscalated" />
         <property name="ReneweBayTokenStrategyName" value="ReneweBayToken" />
 		<property name="CAISNoUploadStrategyName" value="CAIS_NO_Upload" />
+        <property name="EmailUnderReviewStrategyName" value="Email Under review" />
         <property name="CheckStoreUniqueness" value="True" />
         <property name="WizardTopNaviagtionEnabled" value="False" />
         <property name="LandingPageEnabled" value="False" />

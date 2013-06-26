@@ -32,6 +32,7 @@ namespace EzBob.Web.ApplicationCreator
         void Escalated(Customer customer);
         void CAISGenerate(User user);
         void CAISUpdate(User user, int caisId);
+        void EmailUnderReview(User user, string firstName, string email);
     }
 
     public enum NewCreditLineOption

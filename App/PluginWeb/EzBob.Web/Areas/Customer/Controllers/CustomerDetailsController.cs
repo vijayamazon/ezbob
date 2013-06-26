@@ -89,6 +89,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.WizardStep = WizardStepType.AllStep;
 
             _session.Flush();
+            _creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
             _creator.Evaluate(_context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules);
             _mail.SendMessageFinishWizard(customer.Name, customer.PersonalInfo.Fullname);
             _concentAgreementHelper.Save(customer, DateTime.UtcNow);

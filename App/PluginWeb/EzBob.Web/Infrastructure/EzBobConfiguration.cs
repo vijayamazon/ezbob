@@ -50,6 +50,7 @@ namespace EzBob.Web.Infrastructure
         string CAISNoUploadStrategyName { get; }
 		string DummyPostcodeSearchResult { get; }
 		string DummyAddressSearchResult { get; }
+        string EmailUnderReviewStrategyName { get; }
 		// string ChannelGrabberConfigPath { get; }
     }
 
@@ -113,6 +114,7 @@ namespace EzBob.Web.Infrastructure
 
         public string DummyPostcodeSearchResult { get { return this.GetValueWithDefault<string>("DummyPostcodeSearchResult", ""); } }
         public string DummyAddressSearchResult { get { return this.GetValueWithDefault<string>("DummyAddressSearchResult", ""); } }
+        public string EmailUnderReviewStrategyName { get { return GetValueWithDefault<string>("EmailUnderReviewStrategyName", "Email Under review"); } }
 
         // public string ChannelGrabberConfigPath { get { return this.GetValueWithDefault<string>("ChannelGrabberConfigPath", ""); } }
 
