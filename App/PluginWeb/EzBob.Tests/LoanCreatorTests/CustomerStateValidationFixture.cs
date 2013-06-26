@@ -37,17 +37,5 @@ namespace EzBob.Tests.LoanCreatorTests
                 _lc.ValidateCustomer(_customer);
             });
         }
-
-        [Test]
-        public void customer_should_have_bank_account()
-        {
-            
-            _customer.PersonalInfo = new PersonalInfo(){FirstName = "John", Surname = "Tigers"};
-            _customer.BankAccount = null;
-            Assert.Throws<CustomerIsNotFullyRegisteredException>(() =>
-            {
-                _lc.ValidateCustomer(_customer);
-            });
-        }
     }
 }
