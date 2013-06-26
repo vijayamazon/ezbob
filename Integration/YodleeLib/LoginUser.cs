@@ -1,18 +1,17 @@
-using System;
-using System.Configuration;
-using System.Web.Services.Protocols;
-
 namespace YodleeLib
 {
     using StructureMap;
     using config;
+	using System;
+    using log4net;
 
-    /// <summary>
+	/// <summary>
     /// Contains methods related to logging in and logging out
     /// a user to the Yodlee platform.
     /// </summary>
     public class LoginUser : ApplicationSuper
-    {
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(LoginUser));
         readonly LoginService loginService;
         OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService;
         private static IYodleeMarketPlaceConfig _config;
@@ -54,9 +53,7 @@ namespace YodleeLib
         public void getUserInfo(UserContext userContext)
         {
             UserInfo1 userInfo1 = loginService.getUserInfo(userContext);
-            Console.WriteLine("\tUser Name: {0}", userInfo1.loginName);
-            Console.WriteLine("\tLogin Count: {0}", userInfo1.loginCount);
-            Console.WriteLine("\tEmail Address: {0}", userInfo1.emailAddress);
+			log.InfoFormat("User Name: {0}. Login Count: {1}. Email Address: {2}", userInfo1.loginName, userInfo1.loginCount, userInfo1.emailAddress);
         }
 
         /// <summary>
@@ -71,11 +68,11 @@ namespace YodleeLib
                                    String password,
                                    String changePassword)
         {
-            PasswordCredentials oldCredentials = new PasswordCredentials();
+            var oldCredentials = new PasswordCredentials();
             oldCredentials.loginName = userName;
             oldCredentials.password = password;
 
-            PasswordCredentials newCredentials = new PasswordCredentials();
+            var newCredentials = new PasswordCredentials();
             newCredentials.loginName = userName;
             newCredentials.password = changePassword;
             loginService.changeCredentials(userContext,
@@ -83,34 +80,30 @@ namespace YodleeLib
                                            newCredentials);
         }
 
-        //oauth
         public OAuthAccessToken getAccessTokens(UserContext userContext)
         {
-
             oAuthAccessTokenManagementService = new OAuthAccessTokenManagementServiceService();
-            //oAuthAccessTokenManagementService.Url = System.Configuration.ConfigurationSettings.AppSettings.Get("soapServer") + "/" + oAuthAccessTokenManagementService.GetType().FullName + "_11_1";
-            oAuthAccessTokenManagementService.Url = _config.soapServer + "/" + "OAuthAccessTokenManagementService_11_1";
-            OAuthAccessToken authAccessToken = null;
-            long? applicationId = 10003200;
+            oAuthAccessTokenManagementService.Url = _config.soapServer + "/OAuthAccessTokenManagementService_11_1";
+	        long? applicationId = 10003200;
 
             try
             {
-
-                authAccessToken = oAuthAccessTokenManagementService.getOAuthAccessToken(userContext, applicationId, true);
-                if (authAccessToken != null && authAccessToken.token != null && authAccessToken.tokenSecret != null)
+	            OAuthAccessToken authAccessToken = oAuthAccessTokenManagementService.getOAuthAccessToken(userContext, applicationId, true);
+	            if (authAccessToken != null && authAccessToken.token != null && authAccessToken.tokenSecret != null)
                 {
-
-                    String message = "Access Tokens Retrieved Successfully..\n";
-                    message = message + "\n";
-                    message = message + "Access Token: " + authAccessToken.token + "\n";
-                    message = message + "Access Token Secret: " + authAccessToken.tokenSecret + "\n";
-                    message = message + "Token Creation Time: " + authAccessToken.tokenCreationTime + "\n";
+	                log.InfoFormat("Successfully received access token. Access Token:{0}. Access Token Secret:{1}. Token Creation Time:{2}",
+		                authAccessToken.token, authAccessToken.tokenSecret, authAccessToken.tokenCreationTime);
                     return authAccessToken;
                 }
+
+				log.ErrorFormat("Received null access token. authAccessToken:{0} authAccessToken.token:{1} authAccessToken.tokenSecret:{2}", 
+					authAccessToken == null ? "null" : authAccessToken.ToString(),
+					authAccessToken == null || authAccessToken.token == null ? "null" : authAccessToken.token,
+					authAccessToken == null || authAccessToken.tokenSecret == null ? "null" : authAccessToken.tokenSecret);
             }
-            catch (SoapException se)
+            catch (Exception e)
             {
-                System.Console.WriteLine("The given application id is invalid\nException:\n" + se.ToString());
+				log.ErrorFormat("Exception while getting access token. Maybe the application id is invalid. Application id:{0} Exception:{1}", applicationId, e);
             }
             return null;
         }
