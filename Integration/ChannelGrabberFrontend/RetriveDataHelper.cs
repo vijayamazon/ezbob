@@ -21,12 +21,15 @@ namespace Integration.ChannelGrabberFrontend {
 			VendorInfo oVendorInfo
 		) : base(helper, marketplace) {
 			m_oVendorInfo = oVendorInfo;
+			ms_oLog.DebugFormat("RetrieveDataHelper constructed for {0}", m_oVendorInfo.Name);
 		} // constructor
 
 		protected override void InternalUpdateInfo(
 			IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 			MP_CustomerMarketplaceUpdatingHistory historyRecord
 		) {
+			ms_oLog.DebugFormat("start {0}", m_oVendorInfo.Name);
+
 			AccountModel oSecInfo = null;
 
 			try {
@@ -86,22 +89,34 @@ namespace Integration.ChannelGrabberFrontend {
 				ElapsedDataMemberType.StoreAggregatedData,
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord)
 			);
+
+			ms_oLog.DebugFormat("end {0}", m_oVendorInfo.Name);
 		} // InternalUpdateInfo
 
 		protected override void AddAnalysisValues(
 			IDatabaseCustomerMarketPlace marketPlace,
 			AnalysisDataInfo data
-		) {} // AddAnalysisValues
+		) {
+			ms_oLog.DebugFormat("start and end {0}", m_oVendorInfo.Name);
+		} // AddAnalysisValues
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo(
 			int customerMarketPlaceId
 		) {
+			ms_oLog.DebugFormat("start {0}", m_oVendorInfo.Name);
+
 			var account = GetDatabaseCustomerMarketPlace(customerMarketPlaceId);
 
 			try {
-				return SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+				var am = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
+
+				ms_oLog.DebugFormat("end {0}", m_oVendorInfo.Name);
+
+				return am;
 			}
 			catch (Exception e) {
+				ms_oLog.DebugFormat("exception {0}", m_oVendorInfo.Name);
+
 				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})",
 					account.DisplayName, account.Id), e);
 			}
@@ -111,6 +126,8 @@ namespace Integration.ChannelGrabberFrontend {
 			ChannelGrabberOrdersList orders,
 			ICurrencyConvertor currencyConverter
 		) {
+			ms_oLog.DebugFormat("start {0}", m_oVendorInfo.Name);
+
 			var oFunctionTypes = new List<FunctionType>();
 			m_oVendorInfo.Aggregators.ForEach(a => oFunctionTypes.Add(a.FunctionType()));
 
@@ -132,17 +149,21 @@ namespace Integration.ChannelGrabberFrontend {
 
 			var factory = new OrdersAggregatorFactory();
 
-			return DataAggregatorHelper.AggregateData(
+			var aggData = DataAggregatorHelper.AggregateData(
 				factory,
 				timePeriodData,
 				oFunctionTypes.ToArray(),
 				updated,
 				currencyConverter
 			);
+
+			ms_oLog.DebugFormat("end {0}", m_oVendorInfo.Name);
+
+			return aggData;
 		} // CreateOrdersAggreationInfo
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(RetriveDataHelper));
 
-		private VendorInfo m_oVendorInfo;
+		private readonly VendorInfo m_oVendorInfo;
 	} // class RetrieveDataHelper
 } // namespace

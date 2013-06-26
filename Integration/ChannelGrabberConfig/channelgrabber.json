@@ -167,7 +167,7 @@
 			"Fields": [
 				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
 				{ "PropertyName": "URL",       "NodeName": "endpoint",  "UniqueIDPosition": -8                  },
-				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "-1" }
+				{ "PropertyName": "LimitDays", "NodeName": "limitDays", "UniqueIDPosition": -8, "Default": "30" }
 			],
 
 			"ToStringArguments": [

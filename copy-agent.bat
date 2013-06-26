@@ -1,25 +1,58 @@
 @echo off
 
-net stop ScortoService
+set PAUSE=%1
 
-robocopy App\service\agent\ c:\ezbobSrv\ /e
-robocopy Integration\NodeEzBobLib\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\CustomSchedulers\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\EzBob.Signals\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\EKM\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\ChannelGrabberAPI\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\ChannelGrabberConfig\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\ChannelGrabberFrontend\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\PayPoint\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\YodleeLib\bin\Debug\ c:\ezbobSrv\ /e
-robocopy App\service\Servicestarter\bin\Debug\ c:\ezbobSrv\ /e
-robocopy Integration\PaymentServices\bin\Debug\ c:\ezbobSrv\ /e
-robocopy App\ScheduledServices\bin\Debug\ c:\ezbobSrv\ /e
+set SERVICE_DIR=c:\ezbobSrv
 
-copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
-copy Integration\ChannelGrabberConfig\channelgrabber.json "c:\Program Files (x86)\Common Files\Ezbob\"
+call:do net stop ScortoService
 
-net start ScortoService
+for %%d in (
+	App\service\agent\
+	Integration\NodeEzBobLib\bin\Debug\
+	Integration\CustomSchedulers\bin\Debug\
+	Integration\EzBob.Signals\bin\Debug\
+	Integration\EKM\bin\Debug\
+	Integration\ChannelGrabberAPI\bin\Debug\
+	Integration\ChannelGrabberConfig\bin\Debug
+	Integration\ChannelGrabberFrontend\bin\Debug\
+	Integration\PayPoint\bin\Debug\
+	Integration\YodleeLib\bin\Debug\
+	App\service\Servicestarter\bin\Debug\
+	Integration\PaymentServices\bin\Debug\
+	App\ScheduledServices\bin\Debug\
+) do (
+	call:do robocopy %%d %SERVICE_DIR% /e
+)
 
-echo Alles in ordnung.
+call:do copy Lib\Scorto.Core\DBSQLServer.dll %SERVICE_DIR%
+
+call:do copy Integration\ChannelGrabberConfig\channelgrabber.json "%CommonProgramFiles(x86)%"
+
+call:do net start ScortoService
+
+call:say copy-agent is complete.
+
+goto:eof
+
+:say
+
+echo.
+echo ***
+echo *** %*
+echo ***
+echo.
+
+goto:eof
+
+:do
+
+call:say %*
+
+%*
+
+call:say Complete: %*
+
+if "%PAUSE%" == "--pause" pause
+
+goto:eof
 
