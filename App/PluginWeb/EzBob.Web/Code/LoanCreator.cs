@@ -143,7 +143,7 @@ namespace EzBob.Web.Code
             var diff = now.Subtract(lastLoan.Date);
             if (diff < period)
             {
-                var msg = string.Format("New loan requested within {0} seconds.", diff.TotalSeconds);
+                var msg = string.Format("Please try again in {0} seconds.", (int)(period.TotalSeconds - diff.TotalSeconds));
                 Log.Error(msg);
                 throw new LoanDelayViolationException(msg);
             }

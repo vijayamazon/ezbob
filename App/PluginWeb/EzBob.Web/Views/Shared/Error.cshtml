@@ -1,9 +1,16 @@
-﻿@model HandleErrorInfo
+﻿@using EzBob.Web.Areas.Customer.Controllers
+@model HandleErrorInfo
+
+
+@{
+    var exceptions = new[]{typeof(LoanDelayViolationException)};
+    var message = "Please reload the page.";
+}
 
 @if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
 {
     Layout = null;
-    if (Model!=null && Model.Exception != null)
+    if (Model!=null)
     {
         @Model.Exception.Message
     }
@@ -18,10 +25,12 @@
     <div class="span1">&nbsp;</div>
     <div class="span10">
         <div class="well" style="color: #565656">
-
-                <h2>Sorry, an error has occurred.</h2>
-                <b><i>Please reload the page.</i></b>
-
+            @if (exceptions.Contains(Model.Exception.GetType()))
+            {
+                message = Model.Exception.Message;
+            }
+            <h2>Sorry, an error has occurred.</h2>
+            <i>@message</i>
         </div>
     </div>
 </div>
