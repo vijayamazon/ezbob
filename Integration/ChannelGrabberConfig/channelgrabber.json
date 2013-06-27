@@ -27,7 +27,7 @@
 		"ClientSide": {
 			"StoreInfoStepModelShops": "volusionShops",
 			"SortPriority": 4,
-			"IsNew": false,
+			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -115,7 +115,7 @@
 		"ClientSide": {
 			"StoreInfoStepModelShops": "playShops",
 			"SortPriority": 6,
-			"IsNew": true,
+			"Ribbon": "new",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -184,7 +184,7 @@
 		"ClientSide": {
 			"StoreInfoStepModelShops": "shopifyShops",
 			"SortPriority": 11,
-			"IsNew": true,
+			"Ribbon": "beta",
 			"LinkForm": {
 				"Fields": [
 					{

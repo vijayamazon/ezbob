@@ -24,19 +24,19 @@
 										%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
 										break;
 									} // switch
-    
-									var bNew = shopClass == 'Yodlee';
-									var bBeta = shopClass == 'FreeAgent';
 
-									if (!bNew && oCG)
-											bNew = oCG.ClientSide.IsNew;
-    
-									if (bNew) {
-										%><div class="<%= sSourceLabels %> new-ribbon"></div><%
-									} // if
+									var sRibbon = '';
 
-									if (bBeta) {
-										%><div class="<%= sSourceLabels %> beta-ribbon"></div><%
+									if (shopClass == 'Yodlee')
+										sRibbon = 'new';
+									else if (shopClass == 'FreeAgent')
+										sRibbon = 'beta';
+									else if (oCG)
+										sRibbon = oCG.ClientSide.Ribbon.toLowerCase();
+
+									if (sRibbon != '') {
+										sRibbon += '-ribbon';
+										%><div class="<%= sSourceLabels %> <%= sRibbon %>"></div><%
 									} // if
 
 									%><div class="aligncenter <%= sSourceLabels %> <%- shopClass %>"><%- name %></div></a><%

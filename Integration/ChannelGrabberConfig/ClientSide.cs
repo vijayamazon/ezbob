@@ -12,7 +12,7 @@ namespace Integration.ChannelGrabberConfig {
 			StoreInfoStepModelShops = "";
 			LinkForm = new LinkForm();
 			SortPriority = 0;
-			IsNew = false;
+			Ribbon = string.Empty;
 		} // constructor
 
 		#endregion constructor
@@ -22,7 +22,7 @@ namespace Integration.ChannelGrabberConfig {
 		public string StoreInfoStepModelShops { get; set; }
 		public LinkForm LinkForm { get; set; }
 		public int SortPriority { get; set; }
-		public bool IsNew { get; set; }
+		public string Ribbon { get; set; }
 
 		#endregion properties
 
@@ -33,7 +33,7 @@ namespace Integration.ChannelGrabberConfig {
 				StoreInfoStepModelShops = (string)this.StoreInfoStepModelShops.Clone(),
 				LinkForm = (LinkForm)this.LinkForm.Clone(),
 				SortPriority = this.SortPriority,
-				IsNew = this.IsNew
+				Ribbon = (string)this.Ribbon.Clone()
 			};
 		} // Clone
 
