@@ -9,8 +9,8 @@
     <NodeElement Name="GetAppError" NodeId="DataSourceNodeScalar46896187" />
     <NodeElement Name="GreetingEmail" NodeId="DataSourceNodeScalar5645742" />
     <NodeElement Name="Mail Node" NodeId="MailNode19005214" />
-    <NodeElement Name="Mail Node" NodeId="MailNode493939" />
-    <NodeElement Name="Mail Node" NodeId="MailNode48624250" />
+    <NodeElement Name="Mail Node" NodeId="MailNode7106508" />
+    <NodeElement Name="Mail Node" NodeId="MailNode32311362" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct48906009" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment63122796" />
     <NodeElement Name="Start Node" NodeId="StartNode58187988" />
@@ -327,7 +327,7 @@
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode48624250</Name>
+      <Name>MailNode32311362</Name>
       <PointF>
         <X>92.67009</X>
         <Y>316</Y>
@@ -344,7 +344,7 @@
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode493939</Name>
+      <Name>MailNode7106508</Name>
       <PointF>
         <X>232.67009</X>
         <Y>416</Y>
@@ -884,7 +884,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <Name>Email_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</Name>
       <TypeName />
       <InitialValue />
@@ -896,7 +896,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <Name>ConfirmEmailAddress_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</Name>
       <TypeName />
       <InitialValue />
@@ -908,7 +908,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -920,7 +920,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -932,7 +932,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -944,7 +944,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <Name>Email_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</Name>
       <TypeName />
       <InitialValue />
@@ -956,7 +956,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <Name>ConfirmEmailAddress_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</Name>
       <TypeName />
       <InitialValue />
@@ -968,7 +968,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -980,7 +980,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -992,7 +992,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1025,7 +1025,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode48624250</SourceNodeName>
+      <SourceNodeName>MailNode32311362</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>CreditProduct48906009</TargetNodeName>
       <SuperNodeName />
@@ -1063,7 +1063,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>SuspendNode37795909</SourceNodeName>
       <SourceNodeOutletName>AutoExit</SourceNodeOutletName>
-      <TargetNodeName>MailNode48624250</TargetNodeName>
+      <TargetNodeName>MailNode32311362</TargetNodeName>
       <SuperNodeName />
       <Caption>AutoExit</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1080,7 +1080,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>SuspendNode37795909</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode48624250</TargetNodeName>
+      <TargetNodeName>MailNode32311362</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1121,7 +1121,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignment63122796</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode48624250</TargetNodeName>
+      <TargetNodeName>MailNode32311362</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1131,7 +1131,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode48624250</SourceNodeName>
+      <SourceNodeName>MailNode32311362</SourceNodeName>
       <SourceNodeOutletName>Exception</SourceNodeOutletName>
       <TargetNodeName>Assignment28327138</TargetNodeName>
       <SuperNodeName />
@@ -1212,7 +1212,7 @@
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode493939</SourceNodeName>
+      <SourceNodeName>MailNode7106508</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>Assignment18100201</TargetNodeName>
       <SuperNodeName />
@@ -1231,7 +1231,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct48906009</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode493939</TargetNodeName>
+      <TargetNodeName>MailNode7106508</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1329,31 +1329,31 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48624250</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32311362</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>EmailSubject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48624250</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32311362</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode493939</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode7106508</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode493939</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode7106508</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>EmailSubject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode493939</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode7106508</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -1413,31 +1413,31 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>emailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48624250</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32311362</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48624250</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32311362</TargetVariableOwnerName>
       <TargetVariableName>Email_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>ConfirmEmailAddress</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48624250</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32311362</TargetVariableOwnerName>
       <TargetVariableName>ConfirmEmailAddress_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode493939</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode7106508</TargetVariableOwnerName>
       <TargetVariableName>Email_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Greeting</SourceVariableOwnerName>
       <SourceVariableName>ConfirmEmailAddress</SourceVariableName>
-      <TargetVariableOwnerName>MailNode493939</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode7106508</TargetVariableOwnerName>
       <TargetVariableName>ConfirmEmailAddress_Thanks for joining us.docx+mdWirwcdQVOFckOjeaTpg==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
@@ -1531,7 +1531,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode48624250</OwnerName>
+      <OwnerName>MailNode32311362</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -1539,7 +1539,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode493939</OwnerName>
+      <OwnerName>MailNode7106508</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
