@@ -193,7 +193,7 @@ namespace PaymentServices.Calculators
             {
                 var payment = Math.Max(0, InterestToPay )+ FeesToPay + _loan.LoanAmount - _paidPrincipal;
                 var rollovers = _rollovers.Where(r => r.Status != RolloverStatus.Expired).Sum(r => r.Payment - r.PaidPaymentAmount);
-                amount = Math.Round(payment + rollovers + FeesToPay, 2);
+                amount = Math.Round(payment + rollovers, 2);
             };
             Recalculate();
             _eventDayEnd.Action = null;

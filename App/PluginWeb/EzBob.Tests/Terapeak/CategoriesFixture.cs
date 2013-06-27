@@ -21,6 +21,7 @@ namespace EzBob.Tests.Terapeak
         }
 
         [Test]
+        [Ignore]
         public void request_data()
         {
             //var requestInfo = CreateRequestInfoe("headboardsdirect");

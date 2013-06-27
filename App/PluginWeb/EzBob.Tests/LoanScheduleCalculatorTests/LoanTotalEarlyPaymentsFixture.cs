@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database.Loans;
+using EZBob.DatabaseLib.Model.Loans;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 
@@ -91,6 +92,21 @@ namespace EzBob.Tests
             var totalEarlyPayment = TotalEarlyPayment(loan, new DateTime(2012, 1, 1));
 
             Assert.That(totalEarlyPayment, Is.EqualTo(3000));
+        }
+
+        [Test]
+        public void loan_with_fee()
+        {
+            var loan = new Loan() {};
+
+            _calculator.Term = 6;
+            _calculator.Calculate(1000, loan, new DateTime(2013, 05, 10));
+
+            loan.Charges.Add(new LoanCharge() { Amount = 121, Loan = loan, Date = new DateTime(2013, 6, 27)});
+
+            var totalEarlyPayment = TotalEarlyPayment(loan, new DateTime(2013, 6, 27));
+
+            Assert.That(totalEarlyPayment, Is.EqualTo(1000+121+94m));
         }
     }
 }
