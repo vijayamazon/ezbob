@@ -795,8 +795,11 @@ var isNotEmptyFunc = function (el) {
 };
 
 $.validator.setDefaults({
-    onclick: function (element) {
-        validFunc(element);
+    onclick: function (el) {
+        if ($(el).is('input:radio')) {
+            return $(el).valid();
+        }
+        return false;
     },
     onfocusout: function (element) {
         validFunc(element);
