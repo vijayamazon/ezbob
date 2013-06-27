@@ -3,6 +3,8 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.StoreInfoBaseView extends Backbone.View
     initialize: ->
+        if typeof ordpi is 'undefined'
+            ordpi = Math.random() * 10000000000000000
         @storeList = $(_.template($("#store-info").html(), {ordpi : ordpi}))
         
         @isReady = false
