@@ -3,6 +3,10 @@ EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.ProfileView = Backbone.View.extend({
     initialize: function (options) {
+        if (typeof orddb == 'undefined') { orddb = Math.random() * 10000000000000000; }
+        var profileTemplate = $(_.template($("#profile-main-template").html(), { orddb: orddb }));
+        $('#profile-main-to-be-replaced').html(profileTemplate);
+        this.profileMain = $('#profile-main');
 
         this.customer = options;
         this.payEarly = new EzBob.Profile.PayEarlyView({ model: options });
@@ -21,11 +25,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         this.getCashRegion = new Backbone.Marionette.Region({
             el: "#get-cash"
         });
-
-        if (typeof orddb == 'undefined') { orddb = Math.random() * 10000000000000000; }
-        var profileTemplate = $(_.template($("#profile-main-template").html(), { orddb: orddb }));
-        $('#profile-main-to-be-replaced').html(profileTemplate);
-        this.profileMain = $('#profile-main');
 
         this.signContainer = $("#message-sign");
 
