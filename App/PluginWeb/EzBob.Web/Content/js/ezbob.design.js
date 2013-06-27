@@ -782,7 +782,7 @@ var isEmptyFunc = function(el) {
     if ($(el).closest('.ezDateTime').length != 0) {
         return el.value != "-";
     }
-    if (el.classList.contains('cashInput')) {
+    if ($(el).hasClass('cashInput')) {
         return el.value != "£ " && el.value != "";
     }
     return el.value != "";
