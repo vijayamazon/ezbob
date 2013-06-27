@@ -10,7 +10,7 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
 
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
-        @model.on "change reset", @render, @
+        @model.on "reset", @render, @
         @update()
         @
 
@@ -26,6 +26,7 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
         BlockUi "on"
         @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
         @model.save().complete -> BlockUi "off"
+        false
 
     update: ->
         xhr = @model.fetch()
@@ -33,6 +34,7 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
 
     cancelSettings: ->
         @update()
+        false
 
     onRender: ->
         @modelBinder.bind @model, @el, @bindings

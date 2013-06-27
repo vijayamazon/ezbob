@@ -10,7 +10,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
 
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
-        @model.on "change reset", @render, @
+        @model.on "reset", @render, @
         @update()
         @
 
@@ -24,8 +24,6 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         Reject_Defaults_Amount:     "input[name='reject_Defaults_Amount']"
         Reject_Defaults_MonthsNum:  "input[name='reject_Defaults_MonthsNum']"
 
-
-
     events:
         "click button[name='SaveRejectionSettings']":     "saveSettings"
         "click button[name='CancelRejectionSettings']":   "cancelSettings"
@@ -35,7 +33,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         BlockUi "on"
         @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
         @model.save().complete -> BlockUi "off"
-        return false
+        false
 
     update: ->
         xhr = @model.fetch()
@@ -43,6 +41,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
 
     cancelSettings: ->
         @update()
+        false
 
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
@@ -62,6 +61,9 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
 
      setValidator: ->
         @validator = @$el.find('form').validate
+            onfocusout: -> return true
+            onkeyup: -> return false
+            onclick: -> return false
             rules:
                 lowCreditScore:
                     required: true

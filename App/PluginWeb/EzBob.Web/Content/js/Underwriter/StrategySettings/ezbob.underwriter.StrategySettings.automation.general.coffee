@@ -10,7 +10,7 @@ class EzBob.Underwriter.SettingsAutomationView extends Backbone.Marionette.ItemV
 
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
-        @model.on "change reset", @render, @
+        @model.on "reset", @render, @
         @update()
         @
 
@@ -23,6 +23,7 @@ class EzBob.Underwriter.SettingsAutomationView extends Backbone.Marionette.ItemV
         @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
         @model.save().complete -> BlockUi "off"
         @model.save()
+        false
 
     update: ->
         xhr = @model.fetch()
@@ -30,6 +31,7 @@ class EzBob.Underwriter.SettingsAutomationView extends Backbone.Marionette.ItemV
 
     cancelSettings: ->
         @update()
+        false
 
     onRender: ->
         @modelBinder.bind @model, @el, @bindings

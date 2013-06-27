@@ -10,7 +10,7 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
 
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
-        @model.on "change reset", @render, @
+        @model.on "reset", @render, @
         @update()
         @
 
@@ -30,10 +30,11 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
         BlockUi "on"
         @model.save().done ->  EzBob.ShowMessage  "Saved successfully", "Successful"
         @model.save().complete -> BlockUi "off"
-        return false
+        false
 
     cancelSettings: ->
         @update()
+        false
     
     update: ->
         xhr = @model.fetch()
