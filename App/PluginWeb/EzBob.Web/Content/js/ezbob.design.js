@@ -768,7 +768,10 @@ Date.prototype.getServerTime = function () {
 
 //-----------  Validate  -----------  
 
-var validFunc = function(el) {
+var validFunc = function (el) {
+    if (!isNotEmptyFunc(el)) {
+        return;
+    }
     if ($(el).closest('.ezDateTime').length != 0) {
         $(el).closest('.ezDateTime').find("input.hidden-field").valid();
     } else if ($(el).hasClass('addAddressInput')) {
@@ -778,32 +781,28 @@ var validFunc = function(el) {
     }
 };
 
-var isEmptyFunc = function(el) {
+var isNotEmptyFunc = function (el) {
     if ($(el).closest('.ezDateTime').length != 0) {
         return el.value != "-";
     }
     if ($(el).hasClass('cashInput')) {
         return el.value != "£ " && el.value != "";
     }
+    if ($(el).prop("tagName").toLowerCase() == "select") {
+        return true;
+    }
     return el.value != "";
 };
 
 $.validator.setDefaults({
-    onclick: function (el) {
-        if ($(el).is('input:radio')) {
-            return $(el).valid();
-        }
-        return false;
+    onclick: function (element) {
+        validFunc(element);
     },
     onfocusout: function (element) {
-        if (isEmptyFunc(element)) {
-            validFunc(element);
-        }
+        validFunc(element);
     },
-    onkeyup: function (element) {
-        if (isEmptyFunc(element)) {
-            validFunc(element);
-        }
+    onkeyup: function (element) {   
+        validFunc(element);
     },
     ignore: []
 });
@@ -945,13 +944,6 @@ EzBob.validatePersonalDetailsForm = function (el) {
 EzBob.validateLimitedCompanyDetailForm = function (el) {
     var e = el || $(".LimitedCompanyDetailForm");
     return e.validate({
-        onfocusout: function (element) {
-            if (!$(element).hasClass('addAddressInput')) {
-                if (isEmptyFunc(element)) {
-                    $(element).valid();
-                }
-            }
-        },
         rules: {
             //limited company info
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
@@ -972,11 +964,6 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
 EzBob.validateNonLimitedCompanyDetailForm = function (el) {
     var e = el || $(".NonLimitedCompanyDetailForm");
     return e.validate({
-        onfocusout: function (element) {
-            if (!$(element).hasClass('addAddressInput')) {
-                $(element).valid();
-            }
-        },
         rules: {
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },
