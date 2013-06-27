@@ -3,7 +3,8 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.StoreInfoBaseView extends Backbone.View
     initialize: ->
-        @storeList = $($("#store-info").html())
+        @storeList = $(_.template($("#store-info").html(), {ordpi : ordpi}))
+        
         @isReady = false
 
         for name, store of @stores
@@ -83,18 +84,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
         @storeList.appendTo @$el
         #that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded") if @stores["bank-account"]?
-
-        
-        if (!@ImageInserted) 
-            #if (typeof ordla != 'undefined')
-            #    @temp = '<img class="hide" src="'
-            #    @temp += "https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobcp;ord='"
-            #    @temp += ordla
-            #    @temp += "'"
-            #    @temp += '?" width="1" height="1" border="0" alt=""/>'
-            #    $(@temp).insertAfter(@$el.find('#linkAccountsHeader'))
-            
-            @ImageInserted = true
 
         this
 

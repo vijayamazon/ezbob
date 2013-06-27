@@ -1,8 +1,22 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using StructureMap
+@model dynamic
+
 @helper StoreInfo() {
 	<div>
-		<h2 class="form_start" id="linkAccountsHeader">Link Accounts</h2>
-		<div class="full_width">You can link one account to be approved for a loan. However, the more you link, the more funds you can get</div>
+	    <h2 class="form_start">Link Accounts</h2>
+        
+	    @{
+            var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+            bool ebayPixelEnabled = config.EbayPixelEnabled;
+            var controller = (string)ViewContext.RouteData.Values["controller"];
+            if (ebayPixelEnabled && controller == "Wizard")
+	        {
+	            <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobcp;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />
+	        }
+	    }
+
+	    <div class="full_width">You can link one account to be approved for a loan. However, the more you link, the more funds you can get</div>
 		<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
 		<div class="YodleeRule hide">Please add more accounts in order to continue.</div>
 

@@ -44,6 +44,7 @@ namespace EzBob.Web.Infrastructure
         string EmailRolloverAddedStrategyName { get; }
         string RecheckEbayTokenStrategyName { get; }
         bool GetSatisfactionEnabled { get; }
+		bool EbayPixelEnabled { get; }
         string CustomerEscalatedStrategyName { get; }
         string ReneweBayTokenStrategyName { get; }
         string PasswordPolicyType { get; }
@@ -187,9 +188,14 @@ namespace EzBob.Web.Infrastructure
             get { return GetValueWithDefault<string>("RecheckEbayTokenStrategyName", "ReneweBayToken"); }
         }
 
-        public bool GetSatisfactionEnabled
-        {
-            get { return GetValueWithDefault<bool>("GetSatisfactionEnabled", "True"); }
-        }
+		public bool GetSatisfactionEnabled
+		{
+			get { return GetValueWithDefault<bool>("GetSatisfactionEnabled", "True"); }
+		}
+
+		public bool EbayPixelEnabled
+		{
+			get { return GetValueWithDefault<bool>("EbayPixelEnabled", "False"); }
+		}
     }
 }

@@ -3,14 +3,21 @@
 @using StructureMap
 @model dynamic
 @{
-	string captchamode = ObjectFactory.GetInstance<IEzBobConfiguration>().CaptchaMode;
-	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+    string captchamode = config.CaptchaMode;
+    bool ebayPixelEnabled = config.EbayPixelEnabled;
 }
+
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
 {
-	<h2 class="form_start">Create an Account</h2>
-    @*<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />*@
+    <h2 class="form_start">Create an Account</h2>
+    
+    if (ebayPixelEnabled)
+    {
+        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />
+    }
     
 	<div class="form_field_container">
 		<label class="attardi-input">

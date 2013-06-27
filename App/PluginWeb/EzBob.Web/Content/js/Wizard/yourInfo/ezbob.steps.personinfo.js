@@ -205,7 +205,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 //--------------------------------------------------------------------------------------
 EzBob.ThankYouWizardPage = Backbone.View.extend({
     initialize: function () {
-        this.template = $('#lastWizardThankYouPage').html();
+        this.template = $(_.template($("#lastWizardThankYouPage").html(), { ordty: ordty }))
     },
     render: function () {
         $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
