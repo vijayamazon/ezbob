@@ -336,8 +336,24 @@ div.shop-connected {
     margin-top: -1px;
 }
 
+.source_labels.beta-ribbon,
+.source-labels.beta-ribbon {
+    background: url(images/beta_ribbon.png) no-repeat 0 0;
+    height: 25px;
+    width: 25px;
+    display: block;
+    float: left;
+    margin-top: -1px;
+}
+
 .source_labels_on.new-ribbon,
 .source-labels_on.new-ribbon {
+    display: none;
+    visibility: hidden;
+}
+
+.source_labels_on.beta-ribbon,
+.source-labels_on.beta-ribbon {
     display: none;
     visibility: hidden;
 }

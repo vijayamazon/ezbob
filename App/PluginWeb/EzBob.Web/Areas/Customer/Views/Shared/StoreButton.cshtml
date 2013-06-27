@@ -24,15 +24,20 @@
 										%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
 										break;
 									} // switch
-
-									var bNew = (shopClass == 'Yodlee' || shopClass == 'FreeAgent');
+    
+									var bNew = shopClass == 'Yodlee';
+									var bBeta = shopClass == 'FreeAgent';
 
 									if (!bNew && oCG)
 											bNew = oCG.ClientSide.IsNew;
-
+    
 									if (bNew) {
 										%><div class="<%= sSourceLabels %> new-ribbon"></div><%
-									} // switch
+									} // if
+
+									if (bBeta) {
+										%><div class="<%= sSourceLabels %> beta-ribbon"></div><%
+									} // if
 
 									%><div class="aligncenter <%= sSourceLabels %> <%- shopClass %>"><%- name %></div></a><%
 								})(shopClass, shops.length);
