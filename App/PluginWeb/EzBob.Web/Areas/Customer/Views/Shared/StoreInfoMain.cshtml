@@ -6,6 +6,7 @@
 	<div>
 	    <h2 class="form_start">Link Accounts</h2>
         
+	    @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 	    @{
             var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
             bool ebayPixelEnabled = config.EbayPixelEnabled;
@@ -14,7 +15,7 @@
 	        {
 	            <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobcp;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />
 	        }
-	    }
+	    }*@
 
 	    <div class="full_width">You can link one account to be approved for a loan. However, the more you link, the more funds you can get</div>
 		<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>

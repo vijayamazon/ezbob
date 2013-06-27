@@ -11,6 +11,7 @@
 	<div class="row-fluid">
 	    <h2 class="form_start">Personal Information</h2>
         
+        @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 	    @{
             var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
             bool ebayPixelEnabled = config.EbayPixelEnabled;
@@ -18,7 +19,7 @@
 	        {
 	            <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobpersonaldetails;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />
 	        }
-	    }
+	    }*@
 
 	    <div>
 			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
@@ -437,12 +438,13 @@
 				<div style="margin: 0 0 20px 0;">
 					<h2 class="form_section">Well done! Application complete</h2>
     
+                    @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
                     @{
                         if (ebayPixelEnabled)
                         {
                             <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />
                         }
-                    }
+                    }*@
 					
                     <p>Your application is now being processed and you should be receiving an email with an offer in the next 30 minutes. In some cases the decision could be delayed up to 12 hours due to processing your shop data from the marketplace databases.</p>
 					<p>In case you don't receive a funding decision from us in the next 12 hours please check your spam/junk folder. If you still did not receive an email please contact our customer care service by phone: 0800 011 4787 or via email: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.</p>

@@ -22,7 +22,7 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         'click a.go-to-amazon': 'enableControls'
         'click a.connect-amazon': 'connect'
         'click a.back': 'back'
-        'click .screenshots': 'runTutorial'
+        'click .amazonscreenshot': 'runTutorial'
         'click a.print': 'print'
         'change input': 'inputChanged'
 

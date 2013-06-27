@@ -2,6 +2,7 @@
 @using Integration.ChannelGrabberConfig
 @using Integration.ChannelGrabberFrontend
 @using Newtonsoft.Json
+@using StructureMap
 @model EzBob.Web.Models.WizardModel
 
 @{
@@ -12,13 +13,23 @@
     @BundleHelper.RenderProfileCss()
 }
 
-<div id="profile-content">
+@helper ProfileMain()
+{
     <div id="profile-main">
         <div class="clearfix">
-            <div class="cart-logo @{ if(Model.Customer.Medal != null){ @Model.Customer.Medal.ToLower()}}-cart"></div>
+            <div class="cart-logo @{ if (Model.Customer.Medal != null)
+                                     { @Model.Customer.Medal.ToLower()}}-cart"></div>
             <div class="profile-headlines">
                 <div id="message-sign" class=""></div>
                 <h1 style="margin-top: -10px;">My Account</h1>
+                @{
+                    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+                    bool ebayPixelEnabled = config.EbayPixelEnabled;
+                    if (ebayPixelEnabled)
+                    {
+                        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
+                    }
+                }
                 <div class="proccessing-message"></div>
             </div>
             <div class="notifications"></div>
@@ -49,6 +60,14 @@
         <div class="profile-widgets">
         </div>
     </div>
+}
+
+<script id="profile-main-template" type="text/template">
+	@ProfileMain()
+</script>
+
+<div id="profile-content">
+    <div id="profile-main-to-be-replaced"></div>
 
     <div id="get-cash"></div>
     <div id="pay-early"></div>

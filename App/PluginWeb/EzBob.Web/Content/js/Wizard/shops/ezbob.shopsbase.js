@@ -16,8 +16,11 @@
     }
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var name, store, _ref1;
+      var name, ordpi, store, _ref1;
 
+      if (typeof ordpi === 'undefined') {
+        ordpi = Math.random() * 10000000000000000;
+      }
       this.storeList = $(_.template($("#store-info").html(), {
         ordpi: ordpi
       }));

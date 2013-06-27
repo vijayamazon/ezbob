@@ -22,7 +22,11 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
             el: "#get-cash"
         });
 
+        if (typeof orddb == 'undefined') { orddb = Math.random() * 10000000000000000; }
+        var profileTemplate = $(_.template($("#profile-main-template").html(), { orddb: orddb }));
+        $('#profile-main-to-be-replaced').html(profileTemplate);
         this.profileMain = $('#profile-main');
+
         this.signContainer = $("#message-sign");
 
         this.processingMessageView.on('getCash', this.getCash, this);
@@ -153,7 +157,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.widgets = {};
         this.menu = $('.profile-menu');
         this.profileWidgets = $('.profile-widgets');
-
+        
         var that = this;
 
         this.stores = new EzBob.Profile.StoresView({ model: options });

@@ -62,24 +62,6 @@
      right: 28px;
 }
 
-.screenshots-container a.amazonscreenshot {
-    height: 40px;
-    top: -70px;
-    right: -435px;
-    position: absolute;
-    -moz-box-shadow: 3px 3px 4px #000;
-    -webkit-box-shadow: 3px 3px 4px #000;
-     box-shadow: 3px 3px 4px #000;
-}
-
-.screenshots-container a.amazonscreenshot:hover {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-     box-shadow: none;
-     top: -65px;
-     right: -442px;
-}
-
 .screenshots-container .tutorial-arrow {
     background: url(../img/arrow-right.png);
     width: 40px;
@@ -117,19 +99,15 @@
 
 .store-connect-manual dt {
     float: left;
-    width: 170px;
+    width: 150px;
     padding-top: 20px;
     
     font-size: 12px;
     font-weight: bold;
     font-family: Arial;
     color: black;
-    text-align: left;
-}
-
-.amazon_view_tutorial_label {
-    margin-left: 342px;
-    margin-top: -30px;
+    text-align: right;
+    margin-left: -10px;
 }
 
 .store-connect-manual dd {
