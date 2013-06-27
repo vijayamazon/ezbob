@@ -23,36 +23,40 @@ namespace ScheduledServices.InterestCalculation
         {
             _log.Info("Starting updating loan interest");
 
-            var session = ObjectFactory.GetInstance<ISessionFactory>().OpenSession();
-            var loans = new LoanRepository(session);
-            var updater = new LoanUpdater();
-
-            var loanIds = loans.NotPaid().Select(l => l.Id);
-
-            Loan loan = null;
-
-            foreach (var loanId in loanIds)
+            using (var session = ObjectFactory.GetInstance<ISessionFactory>().OpenSession())
             {
-                loans.EnsureTransaction(() =>
-                    {
-                        loan = loans.GetAll()
-                                    .Where(l => l.Id == loanId)
-                                    .FetchMany(l => l.Transactions)
-                                    .First();
-                        try
+                var loans = new LoanRepository(session);
+                var updater = new LoanUpdater();
+
+                var loanIds = loans.NotPaid().Select(l => l.Id);
+
+                Loan loan = null;
+
+                foreach (var loanId in loanIds)
+                {
+                    loans.EnsureTransaction(() =>
                         {
-                            updater.UpdateLoan(loan);
-                            loans.SaveOrUpdate(loan);
-                            _log.InfoFormat("Loan #{0} updated.", loanId);
-                        }
-                        catch (Exception e)
-                        {
-                            _log.ErrorFormat("Failed to update loan #{0}", loanId);
-                            _log.Debug(e);
-                            session.Evict(loan);
-                        }
-                    });
-                if (loan != null) session.Evict(loan);
+                            loan = loans.GetAll()
+                                        .Where(l => l.Id == loanId)
+                                        .FetchMany(l => l.Transactions)
+                                        .First();
+                            try
+                            {
+                                updater.UpdateLoan(loan);
+                                loans.SaveOrUpdate(loan);
+                                _log.InfoFormat("Loan #{0} updated.", loanId);
+                            }
+                            catch (Exception e)
+                            {
+                                _log.ErrorFormat("Failed to update loan #{0}", loanId);
+                                _log.Debug(e);
+                                session.Evict(loan);
+                            }
+                        });
+                    if (loan != null) session.Evict(loan);
+                }
+
+                session.Close();
             }
         }
     }
