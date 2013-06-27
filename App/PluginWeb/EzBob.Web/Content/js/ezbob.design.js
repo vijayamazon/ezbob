@@ -945,7 +945,9 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
     return e.validate({
         onfocusout: function (element) {
             if (!$(element).hasClass('addAddressInput')) {
-                $(element).valid();
+                if (isEmptyFunc(element)) {
+                    $(element).valid();
+                }
             }
         },
         rules: {
