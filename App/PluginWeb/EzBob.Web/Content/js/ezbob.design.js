@@ -1098,7 +1098,8 @@ EzBob.validateEkmShopForm = function (el) {
 
     return e.validate({
         rules: {
-            ekm_login: { required: true, minlength: 2, maxlength: 30 }
+            ekm_login: { required: true, minlength: 2, maxlength: 30 },
+            ekm_password: { required: true, minlength: 2, maxlength: 30 }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
