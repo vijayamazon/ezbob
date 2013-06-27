@@ -2,37 +2,31 @@
 
 @helper AmazonInfo()
     {
-    <div class="amazon-instructions" style="padding-top: 1px;">            
-        <div class="instructions-header">
-            <h2>
-                <span class="exclamation">!</span>
-                <p>Please follow the instructions below to add your Amazon shop. We recommend <a href="#" class="yellow-link print">printing</a> the instructions below.</p>
-            </h2>
-        </div>
-
+    <div class="amazon-instructions" style="padding-top: 1px;">
+        <h2>Add Amazon Shop</h2>
         <div style="padding-top: 10px;">
                     
-            <div class="screenshots-container clearfix">
-                <h4>Click to view tutorial</h4>
-                <div class="tutorial-arrow"></div>
-                <a class="screenshots" rel="group" href="#"><img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" /></a>
-            </div>
+            <span class="screenshots-container clearfix">
+                <span><a class="amazonscreenshot" rel="group" href="#"><img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" /></a></span>
+                <label class="amazon_view_tutorial_label">View Tutorial</label>
+                
+            </span>
 
             <ol class='store-connect-manual'>
                 <li>
-                    <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link go-to-amazon" target="_blank">Click here</a> to be redirected to Amazon Services and login with your seller ID
+                    <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link-force go-to-amazon" target="_blank">Click here</a>   to be redirected to Amazon Services and login with your seller ID
                 </li>
                     
                 <hr class="dotted" />
                     
                 <li>
-                    Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option: <q>"I want to use an <b>application</b>..."</q>
-                    <br/>and enter the following in Amazon Services:
+                    Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option <q>"I want to use an <b>application</b>..."</q>
+                    and enter the following in Amazon Services:
                     <dl>
-                        <dt>Application name</dt>
+                        <dt>Application Name</dt>
                         <dd>EZBOB</dd>
 
-                        <dt>Developer number</dt>
+                        <dt>Developer Account Number</dt>
                         <dd>0145-5534-7663</dd>
                     </dl>
                 </li>
