@@ -4,8 +4,8 @@
   <Description />
   <Workspace Name="Email Didnt take offer and reapplies">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode17992783" />
     <NodeElement Name="Mail Node" NodeId="MailNode48996873" />
+    <NodeElement Name="Mail Node" NodeId="MailNode17992783" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
