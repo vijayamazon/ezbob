@@ -22,5 +22,8 @@ RETURN
 	FROM [ExperianDefaultAccount] eda
 	where eda.CustomerId = @CustomerId and
 	eda.date > dateadd(MM, -@Months, getdate()) and Balance > @Amount
+	and eda.[DateAdded] = (select max(eda1.DateAdded) as maxdate FROM [ExperianDefaultAccount] eda1
+								  where eda1.CustomerId = @CustomerId 
+					       )
 )
 GO
