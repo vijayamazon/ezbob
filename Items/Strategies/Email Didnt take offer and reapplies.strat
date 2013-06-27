@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Email Didnt take offer and reapplies</Name>
-  <Description>Email to customer – when he didnt take offer and re-applies. Trigger - Customer clicks request cash. </Description>
+  <Description />
   <Workspace Name="Email Didnt take offer and reapplies">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode64296059" />
-    <NodeElement Name="Mail Node" NodeId="MailNode7649021" />
+    <NodeElement Name="Mail Node" NodeId="MailNode17992783" />
+    <NodeElement Name="Mail Node" NodeId="MailNode48996873" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
@@ -74,7 +74,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Multi-Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := FirstName + " we are currently re-analysing your business in order to make you a new funding offer."&lt;/assignment&gt;&lt;assignment&gt;emailCC := ""&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := FirstName + ", we are currently re-analysing your business in order to make you a new funding offer."&lt;/assignment&gt;&lt;assignment&gt;emailCC := ""&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignment48918703</Name>
@@ -84,6 +84,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignment</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode17992783</Name>
+      <PointF>
+        <X>472.670074</X>
+        <Y>176</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -108,29 +125,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode64296059</Name>
+      <Name>MailNode48996873</Name>
       <PointF>
-        <X>472.670074</X>
-        <Y>176</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode7649021</Name>
-      <PointF>
-        <X>292.670074</X>
+        <X>312.670074</X>
         <Y>316</Y>
       </PointF>
       <SuperNodeName />
@@ -140,7 +140,7 @@
   </NodeDescriptors>
   <VariableDescriptors>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -152,7 +152,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>emailCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -164,7 +164,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>userId</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -176,7 +176,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>name</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -188,7 +188,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>CP_AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>a.kaydash@scorto.com.ua</InitialValue>
@@ -200,7 +200,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>CP_AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -212,7 +212,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>FirstName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -224,7 +224,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>Amount</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -236,7 +236,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>Date</Name>
       <TypeName>System.DateTime</TypeName>
       <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
@@ -248,7 +248,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>email</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -260,7 +260,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>RefNum</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -272,13 +272,25 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName />
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
       <Name>DashboardPage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Email Didnt take offer and reapplies</OwnerName>
+      <Name>Variable0</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -308,8 +320,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
-      <Name>FirstName_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</Name>
+      <OwnerName>MailNode17992783</OwnerName>
+      <Name>FirstName_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -320,8 +332,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
-      <Name>Dashboard_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</Name>
+      <OwnerName>MailNode17992783</OwnerName>
+      <Name>Dashboard_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -332,7 +344,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
+      <OwnerName>MailNode17992783</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -344,7 +356,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
+      <OwnerName>MailNode17992783</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -356,7 +368,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
+      <OwnerName>MailNode17992783</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -368,8 +380,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
-      <Name>FirstName_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</Name>
+      <OwnerName>MailNode48996873</OwnerName>
+      <Name>FirstName_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -380,8 +392,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
-      <Name>Dashboard_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</Name>
+      <OwnerName>MailNode48996873</OwnerName>
+      <Name>Dashboard_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -392,7 +404,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
+      <OwnerName>MailNode48996873</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -404,7 +416,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
+      <OwnerName>MailNode48996873</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -416,7 +428,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
+      <OwnerName>MailNode48996873</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -455,9 +467,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode64296059</SourceNodeName>
+      <SourceNodeName>ConditionalAssignment24812117</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct15478348</TargetNodeName>
+      <TargetNodeName>MailNode17992783</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -469,7 +481,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct15478348</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode7649021</TargetNodeName>
+      <TargetNodeName>MailNode48996873</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -479,7 +491,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode7649021</SourceNodeName>
+      <SourceNodeName>MailNode48996873</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode39323473</TargetNodeName>
       <SuperNodeName />
@@ -491,9 +503,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ConditionalAssignment24812117</SourceNodeName>
+      <SourceNodeName>MailNode17992783</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode64296059</TargetNodeName>
+      <TargetNodeName>CreditProduct15478348</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -505,75 +517,75 @@
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
       <TargetVariableOwnerName>CreditProduct15478348</TargetVariableOwnerName>
       <TargetVariableName>CP_AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
       <TargetVariableOwnerName>CreditProduct15478348</TargetVariableOwnerName>
       <TargetVariableName>CP_AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64296059</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode17992783</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
-      <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64296059</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode17992783</TargetVariableOwnerName>
+      <TargetVariableName>Dashboard_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
-      <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64296059</TargetVariableOwnerName>
-      <TargetVariableName>Subject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64296059</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode17992783</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
-      <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64296059</TargetVariableOwnerName>
-      <TargetVariableName>Dashboard_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
-      <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode7649021</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode7649021</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode17992783</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode7649021</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode17992783</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
-      <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode7649021</TargetVariableOwnerName>
-      <TargetVariableName>Dashboard_Didnt take offer and re-applies.docx/+8Mi+rKuq7qlDJmFTdD/Q==</TargetVariableName>
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode48996873</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
-      <SourceVariableOwnerName />
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode48996873</TargetVariableOwnerName>
+      <TargetVariableName>Dashboard_Didnt take offer and re-applies.docxcXeO5ep5/o/zmbqvTAySBQ==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode48996873</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode48996873</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Email Didnt take offer and reapplies</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode7649021</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode48996873</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
@@ -611,6 +623,14 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
+      <OwnerName>MailNode17992783</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
       <OwnerName>ConditionalAssignment24812117</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -619,15 +639,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode64296059</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>MailNode7649021</OwnerName>
+      <OwnerName>MailNode48996873</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
