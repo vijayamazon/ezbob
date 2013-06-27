@@ -5,7 +5,6 @@ using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
 using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
-using log4net;
 
 namespace Integration.ChannelGrabberFrontend {
 	/// <summary>
@@ -17,35 +16,23 @@ namespace Integration.ChannelGrabberFrontend {
 		#region method ToModel
 
 		public static AccountModel ToModel(MP_CustomerMarketPlace account) {
-			ms_oLog.Debug("start");
-
 			try {
 				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
 				m.id = account.Id;
-
-				ms_oLog.Debug("end");
-
 				return m;
 			}
 			catch (Exception e) {
-				ms_oLog.Debug("exception");
 				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
 			}
 		} // ToModel
 
 		public static AccountModel ToModel(IDatabaseCustomerMarketPlace account) {
-			ms_oLog.Debug("start");
-
 			try {
 				var m = SerializeDataHelper.DeserializeType<AccountModel>(account.SecurityData);
 				m.id = account.Id;
-
-				ms_oLog.Debug("end");
-
 				return m;
 			}
 			catch (Exception e) {
-				ms_oLog.Debug("exception");
 				throw new ApiException(string.Format("Failed to deserialise security data for marketplace {0} ({1})", account.DisplayName, account.Id), e);
 			}
 		} // ToModel
@@ -74,8 +61,6 @@ namespace Integration.ChannelGrabberFrontend {
 		#region method Fill
 
 		public AccountData Fill() {
-			ms_oLog.Debug("start");
-
 			var oData = new AccountData(Configuration.Instance.GetVendorInfo(accountTypeName));
 			oData.Login = login;
 			oData.Password = password;
@@ -85,14 +70,9 @@ namespace Integration.ChannelGrabberFrontend {
 			oData.AuxLogin = auxLogin;
 			oData.AuxPassword = auxPassword;
 			oData.RealmID = realmId;
-
-			ms_oLog.Debug("end");
-
 			return oData;
 		} // FillIn
 
 		#endregion method Fill
-
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(RetriveDataHelper));
 	} // class AccountModel
 } //aadd namespace Integration.ChannelGrabberFrontend
