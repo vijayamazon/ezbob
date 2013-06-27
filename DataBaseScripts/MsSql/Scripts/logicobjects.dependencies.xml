@@ -2257,12 +2257,6 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
-    <oName>RptCustAllData</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\RptCustAllData.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>RptCustAnualSales</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptCustAnualSales.sql</oFileName>
@@ -3196,6 +3190,12 @@
     <oName>GetNotPaid</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\GetNotPaid.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>GetNumOfDefaultAccounts</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\GetNumOfDefaultAccounts.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
