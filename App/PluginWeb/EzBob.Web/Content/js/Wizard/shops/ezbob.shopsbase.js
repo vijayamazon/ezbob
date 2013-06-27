@@ -79,7 +79,7 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasEbay, hasFilledShops, hasOnlyYodlee, hasOtherThanYodlee, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
+      var accountsList, hasEbay, hasFilledShops, hasOnlyYodleeAndFreeAgent, hasOtherThanYodleeAndFreeAgent, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
 
       $.colorbox.close();
       that = this;
@@ -93,22 +93,22 @@
       hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
       hasEbay = this.stores.eBay.button.model.length > 0;
       hasPaypal = this.stores.paypal.button.model.length > 0;
-      hasOtherThanYodlee = false;
+      hasOtherThanYodleeAndFreeAgent = false;
       _ref1 = this.stores;
       for (shopName in _ref1) {
         shopInfo = _ref1[shopName];
-        if (shopName === 'Yodlee') {
+        if (shopName === 'Yodlee' || shopName === 'FreeAgent') {
           continue;
         }
         if (shopInfo.button.model.length > 0) {
-          hasOtherThanYodlee = true;
+          hasOtherThanYodleeAndFreeAgent = true;
           break;
         }
       }
-      hasOnlyYodlee = this.stores.Yodlee.button.model.length > 0 && !hasOtherThanYodlee;
+      hasOnlyYodleeAndFreeAgent = (this.stores.Yodlee.button.model.length > 0 || this.stores.FreeAgent.button.model.length > 0) && !hasOtherThanYodleeAndFreeAgent;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
-      this.$el.find(".YodleeRule").toggleClass("hide", !hasOnlyYodlee);
-      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodlee || (hasEbay && !hasPaypal));
+      this.$el.find(".YodleeAndFreeAgentRule").toggleClass("hide", !hasOnlyYodleeAndFreeAgent);
+      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodleeAndFreeAgent || (hasEbay && !hasPaypal));
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
         if (!shop.active) {
