@@ -920,8 +920,10 @@ EzBob.validatePersonalDetailsForm = function (el) {
             ResidentialStatus: { required: true },
             Gender: { required: true },
             MartialStatus: { required: true },
-            OverallTurnOver: { required: true, regex: "^£ ([0-9]{0,3},)*([0-9]{0,3})\.[0-9]{2}" },
-            WebSiteTurnOver: { required: true, regex: "^£ ([0-9]{0,3},)*([0-9]{0,3})\.[0-9]{2}" },
+            OverallTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
+            WebSiteTurnOver: { required: true, regex: "^(?!£ 0.00$)" },
+            //OverallTurnOver: { required: true, regex: "^£ ([0-9]{0,3},)*([0-9]{0,3})\.[0-9]{2}" },
+            //WebSiteTurnOver: { required: true, regex: "^£ ([0-9]{0,3},)*([0-9]{0,3})\.[0-9]{2}" },
             TimeAtAddress: { required: true },
             ConsentToSearch: { required: true }
         },
