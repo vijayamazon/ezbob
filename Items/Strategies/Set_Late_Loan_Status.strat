@@ -5,19 +5,19 @@
   <Workspace Name="Set_Late_Loan_Status">
     <NodeElement Name="Admin charge?" NodeId="Comparison5094752" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
-    <NodeElement Name="Comparison" NodeId="Comparison24633528" />
     <NodeElement Name="Comparison" NodeId="Comparison66996147" />
+    <NodeElement Name="Comparison" NodeId="Comparison24633528" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar41934404" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
     <NodeElement Name="GetAllLateLoanSchedules" NodeId="DataSourceBehavioral44149718" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral59883787" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral31423475" />
@@ -25,24 +25,24 @@
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Lete" NodeId="AssignmentB33513147" />
     <NodeElement Name="LoanStatus = Late" NodeId="AssignmentB31830735" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail Node" NodeId="MailNode15382187" />
-    <NodeElement Name="Mail Node" NodeId="MailNode9817753" />
-    <NodeElement Name="Mail Node" NodeId="MailNode66642209" />
     <NodeElement Name="Mail Node" NodeId="MailNode40381130" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode66642209" />
+    <NodeElement Name="Mail Node" NodeId="MailNode9817753" />
+    <NodeElement Name="Mail Node" NodeId="MailNode15382187" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
     <NodeElement Name="Script" NodeId="ScriptNode46765253" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
+    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar42176961" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar11203194" />
     <NodeElement Name="UpdateLoanStatus" NodeId="DataSourceNodeScalar66523870" />
@@ -4477,7 +4477,7 @@
       <OwnerName>AssignmentB31129877</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Subject:="Dear " +FirstNameScalar + " Your payment of " + AmountDueScalar  + " is "+ DaysBetween +  " days past due. You will be charged a late fee"</InitialValue>
+      <InitialValue>Subject:="Dear " +FirstNameScalar + ", your payment of £" + AmountDueScalar  + " is "+ DaysBetween +  " days past due. You will be charged a late fee"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -4753,7 +4753,7 @@
       <OwnerName>AssignmentB41900654</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Subject:="Dear " +FirstNameScalar + ", You are over "+ DaysBetween +  " days late on your loan repayments"</InitialValue>
+      <InitialValue>Subject:="Dear " +FirstNameScalar + ", you are over "+ DaysBetween +  " days late on your loan repayments"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
