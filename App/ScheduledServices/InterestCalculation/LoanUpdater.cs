@@ -8,9 +8,11 @@ namespace ScheduledServices.InterestCalculation
     {
         public void UpdateLoan(Loan loan)
         {
-            var calc = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            var date = DateTime.UtcNow;
+            var calc = new PayEarlyCalculator2(loan, date);
             calc.GetState();
             loan.InterestDue = calc.InterestToPay;
+            loan.LastRecalculation = date;
         }
     }
 }

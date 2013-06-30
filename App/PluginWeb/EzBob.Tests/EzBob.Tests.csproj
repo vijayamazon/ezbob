@@ -54,6 +54,9 @@
     <Reference Include="NHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.Caches.SysCache2">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
@@ -65,6 +68,18 @@
     </Reference>
     <Reference Include="Scorto.NHibernate">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Service.Scheduler, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Service.Scheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -99,6 +114,7 @@
     <Compile Include="DiscountPlanFixture.cs" />
     <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
+    <Compile Include="InterestUpdater\LoanUpdaterFixture.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixtureBase.cs" />
@@ -175,6 +191,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
@@ -183,6 +203,10 @@
       <Project>{2AD52941-1F8A-3ED6-9F00-69F6F6AB2803}</Project>
       <Name>MarketplaceWebServiceOrders</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
+      <Project>{EB0E1F2B-36AF-4EC4-B4CE-79BC52F8252B}</Project>
+      <Name>ChannelGrabberFrontend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
@@ -190,6 +214,10 @@
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\eBay\eBayLib\eBayLib.csproj">
+      <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>
+      <Name>eBayLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EKM\EKM.csproj">
       <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
@@ -207,13 +235,29 @@
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
+      <Project>{EE7F496F-963F-4383-B0C2-3BCF9FC15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
       <Name>PaymentServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{4E55DFA2-822F-4B94-9105-E77F6AC568DB}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
       <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
       <Name>TeraPeakServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
+      <Project>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</Project>
+      <Name>YodleeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
@@ -222,6 +266,10 @@
     <ProjectReference Include="..\..\ezmanage\ezmanage.csproj">
       <Project>{9A926BC9-4D44-4F9F-9C00-4DB8C5E175D1}</Project>
       <Name>ezmanage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ScheduledServices\ScheduledServices.csproj">
+      <Project>{4284AAB9-C033-4F22-B3F3-D4AD74A121C2}</Project>
+      <Name>ScheduledServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.Web\EzBob.Web.csproj">
       <Project>{829AA60E-CC9F-4BE6-95E1-BC7990147D15}</Project>

@@ -36,10 +36,7 @@ namespace ScheduledServices.InterestCalculation
                 {
                     loans.EnsureTransaction(() =>
                         {
-                            loan = loans.GetAll()
-                                        .Where(l => l.Id == loanId)
-                                        .FetchMany(l => l.Transactions)
-                                        .First();
+                            loan = loans.GetAll().First(l => l.Id == loanId);
                             try
                             {
                                 updater.UpdateLoan(loan);
