@@ -147,7 +147,7 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Email Under review</OwnerName>
-      <Name>Email</Name>
+      <Name>email</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -386,12 +386,6 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Email Under review</SourceVariableOwnerName>
-      <SourceVariableName>Email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode9725523</TargetVariableOwnerName>
-      <TargetVariableName>AddressTo</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Email Under review</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
       <TargetVariableOwnerName>MailNode9725523</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
@@ -424,6 +418,12 @@
       <SourceVariableOwnerName>Email Under review</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
       <TargetVariableOwnerName>MailNode57771522</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Email Under review</SourceVariableOwnerName>
+      <SourceVariableName>email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode9725523</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
