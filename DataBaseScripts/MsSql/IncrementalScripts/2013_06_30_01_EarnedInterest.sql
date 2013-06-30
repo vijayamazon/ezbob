@@ -276,19 +276,15 @@ BEGIN
 	--------------------------------------------------------
 	
 	UPDATE #daily SET
-		Principal = #daily.Principal - t.LoanRepayment
-	FROM
-		LoanTransaction t
-	WHERE
-		#daily.LoanID = t.LoanId
-		AND
-		#daily.Date >= CONVERT(DATE, t.PostDate)
-		AND
-		t.LoanRepayment > 0
-		AND
-		t.Status = 'Done'
-		AND
-		t.Type = 'PaypointTransaction'
+		#daily.Principal = #daily.Principal - ISNULL((
+			SELECT SUM(t.LoanRepayment)
+			FROM LoanTransaction t
+			WHERE #daily.LoanID = t.LoanId
+			AND t.LoanRepayment > 0
+			AND t.Status = 'Done'
+			AND t.Type = 'PaypointTransaction'
+			AND #daily.Date >= CONVERT(DATE, t.PostDate)
+		), 0)
 	
 	DELETE FROM
 		#daily

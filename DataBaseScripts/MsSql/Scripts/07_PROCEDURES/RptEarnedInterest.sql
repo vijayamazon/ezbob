@@ -4,33 +4,42 @@ GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE RptEarnedInterest
 @DateStart DATETIME,
 @DateEnd DATETIME
 AS
 BEGIN
-						
-		CREATE TABLE #loans (
+	--------------------------------------------------------
+	--
+	-- Declarations.
+	--
+	--------------------------------------------------------
+	
+	-- Relevant loans only.
+	CREATE TABLE #loans (
 		LoanID INT NOT NULL,
 		CustomerID INT NULL,
 		IssueDate DATE NULL,
 		LoanAmount DECIMAL(18, 4) NULL
 	)
 	
-		CREATE TABLE #sched (
+	-- Loan schedule entries for relevant loans. Seqnum is always from 1 to N with step 1.
+	CREATE TABLE #sched (
 		Seqnum INT NOT NULL,
 		LoanID INT NOT NULL,
 		Date DATE NOT NULL,
 		Rate DECIMAL(18, 4) NOT NULL
 	)
 	
-			CREATE TABLE #last_sched (
+	-- Last scheduled payment for each loan. Used to calculate a rate for those who
+	-- didn't pay on time.
+	CREATE TABLE #last_sched (
 		Seqnum INT NOT NULL,
 		LoanID INT NOT NULL
 	)
 	
-		CREATE TABLE #rates (
+	-- Interest rate by period (from issuing a loan until the last payment date).
+	CREATE TABLE #rates (
 		SeqnumStart INT NOT NULL,
 		SeqnumEnd INT NOT NULL,
 		LoanID INT NOT NULL,
@@ -40,7 +49,10 @@ BEGIN
 		RateEnd DECIMAL(18, 4) NOT NULL
 	)
 	
-				CREATE TABLE #daily (
+	-- Principal and interest rate of specific loan on specific date.
+	-- Interest rate is divided by period length.
+	-- I.e. for every row: principal * rate / periodlen = interest we earn for that loan on that day.
+	CREATE TABLE #daily (
 		LoanID INT NOT NULL,
 		Date DATETIME NOT NULL,
 		Principal DECIMAL(18, 4) NOT NULL,
@@ -48,17 +60,20 @@ BEGIN
 		PeriodLen DECIMAL(18, 4) NULL
 	)
 	
-		CREATE TABLE #earned_interest (
+	-- Earned interest storage.
+	CREATE TABLE #earned_interest (
 		LoanID INT NOT NULL,
 		EarnedInterest DECIMAL(18, 4) NOT NULL
 	)
 	
-		CREATE TABLE #total_repaid  (
+	-- Total repaid storage.
+	CREATE TABLE #total_repaid  (
 		LoanID INT NOT NULL,
 		Repaid DECIMAL(18, 4) NOT NULL
 	)
 	
-		CREATE TABLE #principal_repaid  (
+	-- Principal repaid storage.
+	CREATE TABLE #principal_repaid  (
 		LoanID INT NOT NULL,
 		Repaid DECIMAL(18, 4) NOT NULL
 	)
@@ -76,8 +91,23 @@ BEGIN
 		RowLevel NVARCHAR(5) NOT NULL
 	)
 	
-											
-						
+	--------------------------------------------------------
+	--
+	-- Ok, let's go to work!
+	-- Who the fuck are you?!
+	-- The workaholic!
+	--
+	--                    2 unlimited
+	--                    Workaholic
+	--
+	--------------------------------------------------------
+	
+	--------------------------------------------------------
+	--
+	-- Retrieving relevant loans (id only).
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #loans(LoanID)
 	SELECT DISTINCT
 		Id
@@ -93,7 +123,12 @@ BEGIN
 	WHERE
 		Date BETWEEN @DateStart AND @DateEnd
 	
-						
+	--------------------------------------------------------
+	--
+	-- Loading loan amount for relevant loans.
+	--
+	--------------------------------------------------------
+	
 	UPDATE #loans SET
 		LoanAmount = Loan.LoanAmount,
 		IssueDate = CONVERT(DATE, Loan.Date),
@@ -113,7 +148,12 @@ BEGIN
 	WHERE
 		CustomerID IS NULL
 	
-						
+	--------------------------------------------------------
+	--
+	-- Normalising payment list: setting Seqnum to 1..N.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #sched
 	SELECT
 		RANK() OVER (PARTITION BY s.LoanId ORDER BY s.LoanId, s.Date),
@@ -124,7 +164,12 @@ BEGIN
 		LoanSchedule s
 		INNER JOIN #loans l ON s.LoanID = l.LoanId
 	
-						
+	--------------------------------------------------------
+	--
+	-- Filling last scheduled payment.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #last_sched
 	SELECT
 		MAX(Seqnum),
@@ -134,7 +179,13 @@ BEGIN
 	GROUP BY
 		LoanID
 	
-							
+	--------------------------------------------------------
+	--
+	-- Loading interest rates for period from the first
+	-- payment till the last payment.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #rates
 	SELECT
 		l1.Seqnum,
@@ -152,7 +203,13 @@ BEGIN
 	WHERE
 		l2.Date IS NOT NULL
 	
-							
+	--------------------------------------------------------
+	--
+	-- Loading interest rates for period from loan issue
+	-- till the first payment.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #rates
 	SELECT
 		0,
@@ -167,8 +224,34 @@ BEGIN
 		INNER JOIN Loan ol ON l.LoanID = ol.Id
 		INNER JOIN #rates r ON l.LoanID = r.LoanId AND r.SeqnumStart = 1
 	
-																						
-						
+	--------------------------------------------------------
+	--
+	-- At this point:
+	--
+	-- #loans
+	--    Contains relevant loans.
+	--
+	-- #sched
+	--    Contains normalised payment schedule for
+	--    relevant loans.
+	--
+	-- #rates
+	--    Each row contains interest rate of specific loan
+	--    during specific period (start date inclusive,
+	--    end date exclusive).
+	--
+	-- #daily
+	--    Not used so far.
+	--    Now it's time to use it.
+	--
+	--------------------------------------------------------
+	
+	--------------------------------------------------------
+	--
+	-- Filling initial daily data.
+	--
+	--------------------------------------------------------
+	
 	DECLARE @Date DATETIME
 	
 	SET @Date = CONVERT(Date, @DateStart)
@@ -188,28 +271,34 @@ BEGIN
 		SET @Date = DATEADD(day, 1, @Date)
 	END
 	
-						
+	--------------------------------------------------------
+	--
+	-- Updating principal with customer payments.
+	--
+	--------------------------------------------------------
+	
 	UPDATE #daily SET
-		Principal = #daily.Principal - t.LoanRepayment
-	FROM
-		LoanTransaction t
-	WHERE
-		#daily.LoanID = t.LoanId
-		AND
-		#daily.Date >= CONVERT(DATE, t.PostDate)
-		AND
-		t.LoanRepayment > 0
-		AND
-		t.Status = 'Done'
-		AND
-		t.Type = 'PaypointTransaction'
+		#daily.Principal = #daily.Principal - ISNULL((
+			SELECT SUM(t.LoanRepayment)
+			FROM LoanTransaction t
+			WHERE #daily.LoanID = t.LoanId
+			AND t.LoanRepayment > 0
+			AND t.Status = 'Done'
+			AND t.Type = 'PaypointTransaction'
+			AND #daily.Date >= CONVERT(DATE, t.PostDate)
+		), 0)
 	
 	DELETE FROM
 		#daily
 	WHERE
 		Principal = 0
 	
-						
+	--------------------------------------------------------
+	--
+	-- Setting daily interest rate.
+	--
+	--------------------------------------------------------
+	
 	UPDATE #daily SET
 		InterestRate = r.RateEnd,
 		PeriodLen = DATEDIFF(day, r.DateStart, r.DateEnd)
@@ -231,7 +320,12 @@ BEGIN
 		AND
 		#daily.LoanID = l.LoanID AND #daily.Date >= r.DateEnd
 	
-						
+	--------------------------------------------------------
+	--
+	-- Building result.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #earned_interest
 	SELECT
 		LoanID,
@@ -241,7 +335,12 @@ BEGIN
 	GROUP BY
 		LoanID
 	
-						
+	--------------------------------------------------------
+	--
+	-- Building total repaid.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #total_repaid
 	SELECT
 		t.LoanId,
@@ -256,7 +355,12 @@ BEGIN
 	GROUP BY
 		t.LoanId
 	
-						
+	--------------------------------------------------------
+	--
+	-- Building principal repaid.
+	--
+	--------------------------------------------------------
+	
 	INSERT INTO #principal_repaid
 	SELECT
 		t.LoanId,
@@ -271,7 +375,12 @@ BEGIN
 	GROUP BY
 		t.LoanId
 	
-					
+	--------------------------------------------------------
+	--
+	-- Building output.
+	--
+	--------------------------------------------------------
+
 	INSERT INTO #output
 	SELECT
 		l.IssueDate,
@@ -291,7 +400,8 @@ BEGIN
 		LEFT JOIN #total_repaid tr ON l.LoanID = tr.LoanID
 		LEFT JOIN #principal_repaid pr ON l.LoanID = pr.LoanID
 
-	
+	--------------------------------------------------------
+
 	INSERT INTO #output
 	SELECT
 		NULL,
@@ -309,7 +419,8 @@ BEGIN
 	WHERE
 		RowLevel = ''
 
-	
+	--------------------------------------------------------
+
 	SELECT
 		IssueDate,
 		ClientID,
@@ -328,7 +439,12 @@ BEGIN
 		IssueDate,
 		ClientName
 	
-					
+	--------------------------------------------------------
+	--
+	-- Cleanup.
+	--
+	--------------------------------------------------------
+
 	DROP TABLE #output
 	DROP TABLE #principal_repaid
 	DROP TABLE #total_repaid
