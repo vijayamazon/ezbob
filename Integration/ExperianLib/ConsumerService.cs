@@ -58,13 +58,12 @@ namespace ExperianLib
 
                 if (cachedResponse != null)
                 {
-                    if (CacheNotExpired(cachedResponse))
+                    if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
                     {
                         return ParseCache(cachedResponse);
                     }
                 }
-
-                if (checkInCacheOnly)
+                else if (checkInCacheOnly)
                 {
                     return null;
                 }
