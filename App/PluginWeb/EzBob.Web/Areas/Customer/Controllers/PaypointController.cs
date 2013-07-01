@@ -115,7 +115,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customerContext);
 
-            _appCreator.PayEarly(_context.User, DateTime.Now, amount, customerContext.PersonalInfo.FirstName, customerContext.GetLoan(loanId).RefNumber);
+            SendEmails(loanId, amount, customerContext);
+
             _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
             var refNumber = "";
@@ -185,7 +186,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "payment from customer", paymentType);
                 payFastModel.CardNo = card == null ? customer.CreditCardNo : card.CardNo;
 
-                _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName, customer.GetLoan(loanId).RefNumber);
+                SendEmails(loanId, realAmount, customer);
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");
                 _crm.UpdateLoans(_context.Customer);
 
@@ -200,6 +201,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Failed", e.ToString());
                 return this.JsonNet(new { error = e.Message });
+            }
+        }
+
+        private void SendEmails(int loanId, decimal realAmount, EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            var loan = customer.GetLoan(loanId);
+            
+            _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName, loan.RefNumber);
+            
+            if (loan.Status == LoanStatus.PaidOff)
+            {
+                _appCreator.LoanFullyPaid(loan);
             }
         }
 

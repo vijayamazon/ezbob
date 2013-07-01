@@ -1,6 +1,7 @@
 ﻿using System;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.ApplicationCreator;
 
 namespace ezmanage
@@ -139,6 +140,10 @@ namespace ezmanage
         }
 
         public void RequestCashWithoutTakenLoan(Customer customer, string dashboard)
+        {
+        }
+
+        public void LoanFullyPaid(Loan loan)
         {
         }
     }

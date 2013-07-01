@@ -5,6 +5,7 @@ using ApplicationMng;
 using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
 using NHibernate;
@@ -81,6 +82,12 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.ChangePasswordStrategyName);
         }
 
+        private Application CreateApplication(Customer customer, IEnumerable<StrategyParameter> strategyParameters, string strategyName)
+        {
+            var user = _users.Get(customer.Id);
+            return CreateApplication(user, strategyParameters, strategyName);
+        }
+
         private Application CreateApplication(User user, IEnumerable<StrategyParameter> strategyParameters, string strategyName)
         {
             try
@@ -117,8 +124,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("refNum", customer.RefNumber),
                                                  new StrategyParameter("userId", customer.Id)
                                              };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.CustomerMarketPlaceStrategyName);
+            CreateApplication(customer, strategyParameters, _config.CustomerMarketPlaceStrategyName);
         }
 
         public void Evaluate(User user, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced = false)
@@ -291,8 +297,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("customerId", customer.Id),
                                              new StrategyParameter("userId", customer.Id)
                                          };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.UpdateMarketplacesStrategyName);
+            CreateApplication(customer, strategyParameters, _config.UpdateMarketplacesStrategyName);
         }
 
         public void FeeAdded(Customer customer, decimal? feeAmount)
@@ -303,8 +308,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
                                              new StrategyParameter("FeeAmount", feeAmount)
                                          };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.FeeAddedStrategyName);
+            CreateApplication(customer, strategyParameters, _config.FeeAddedStrategyName);
         }
 
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
@@ -316,8 +320,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("Firstname", customer.PersonalInfo.FirstName),
                                              new StrategyParameter("ExpiryDate", expireDate)
                                          };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.EmailRolloverAddedStrategyName);
+            CreateApplication(customer, strategyParameters, _config.EmailRolloverAddedStrategyName);
         }
 
         public void RenewEbayToken(Customer customer, string marketplaceName, string url)
@@ -329,8 +332,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("eBayName", marketplaceName),
                                              new StrategyParameter("url", url)
                                          };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.ReneweBayTokenStrategyName);
+            CreateApplication(customer, strategyParameters, _config.ReneweBayTokenStrategyName);
         }
 
         public void Escalated(Customer customer)
@@ -347,8 +349,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("RegistrationDate", customer.GreetingMailSentDate),
                                              new StrategyParameter("EscalatedReason", customer.EscalationReason)
                                          };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, _config.CustomerEscalatedStrategyName);
+            CreateApplication(customer, strategyParameters, _config.CustomerEscalatedStrategyName);
         }
 
         public void CAISGenerate(User user)
@@ -396,8 +397,20 @@ namespace EzBob.Web.Code.ApplicationCreator
                     new StrategyParameter("DashboardPage", dashboard),
                     new StrategyParameter("email", customer.Name)
                 };
-            var user = _users.Get(customer.Id);
-            CreateApplication(user, strategyParameters, "Email Didnt take offer and reapplies");
+            CreateApplication(customer, strategyParameters, "Email Didnt take offer and reapplies");
+        }
+
+        public void LoanFullyPaid(Loan loan)
+        {
+            var customer = loan.Customer;
+            var strategyParameters = new[]
+                {
+                    new StrategyParameter("userId", customer.Id),
+                    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+                    new StrategyParameter("email", customer.Name),
+                    new StrategyParameter("RefNum", loan.RefNumber)
+                };
+            CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Loans;
 
 namespace EzBob.Web.ApplicationCreator
 {
@@ -34,6 +35,7 @@ namespace EzBob.Web.ApplicationCreator
         void CAISUpdate(User user, int caisId);
         void EmailUnderReview(User user, string firstName, string email);
         void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
+        void LoanFullyPaid(Loan loan);
     }
 
     public enum NewCreditLineOption
