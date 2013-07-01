@@ -68,6 +68,8 @@ namespace Ezbob.Database {
 
 		#endregion method ExecuteNonQuery
 
+		public abstract string DateToString(DateTime oDate);
+
 		#endregion IConnection implementation
 
 		#endregion public

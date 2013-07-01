@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace Ezbob.Database {
 	#region enum CommandSpecies
@@ -24,5 +25,7 @@ namespace Ezbob.Database {
 		T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
+
+		string DateToString(DateTime oDate);
 	} // IConnection
 } // namespace Ezbob.Database

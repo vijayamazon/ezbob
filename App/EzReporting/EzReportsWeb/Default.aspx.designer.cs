@@ -76,24 +76,6 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.WebControls.DropDownList ddlReportTypes;
         
         /// <summary>
-        /// btnShowReport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btnShowReport;
-        
-        /// <summary>
-        /// BtnGetExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton BtnGetExcel;
-        
-        /// <summary>
         /// rblFilter control.
         /// </summary>
         /// <remarks>
@@ -128,6 +110,24 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl toDate;
+        
+        /// <summary>
+        /// btnShowReport control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btnShowReport;
+        
+        /// <summary>
+        /// BtnGetExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton BtnGetExcel;
         
         /// <summary>
         /// divReportData control.

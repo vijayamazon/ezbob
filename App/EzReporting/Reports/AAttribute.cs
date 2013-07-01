@@ -6,21 +6,16 @@ namespace Html {
 	public abstract class AAttribute {
 		#region public
 
-		#region constructor
-
-		public AAttribute() {
-			Values = new List<string>();
-		} // constructor
-
-		#endregion constructor
-
 		#region method Append
 
 		public virtual AAttribute Append(string sValue) {
 			sValue = (sValue ?? "").Trim();
 
-			if (sValue != string.Empty)
+			if (sValue != string.Empty) {
 				Values.Add(System.Web.HttpUtility.HtmlEncode(sValue));
+
+				OnAppend(sValue);
+			} // if
 
 			return this;
 		} // Append
@@ -38,6 +33,22 @@ namespace Html {
 		#endregion public
 
 		#region protected
+
+		#region constructor
+
+		protected AAttribute() {
+			Values = new List<string>();
+		} // constructor
+
+		#endregion constructor
+
+		#region method OnAppend
+
+		protected virtual void OnAppend(string sValue) {
+			// nothing here, for children classes
+		} // OnAppend
+
+		#endregion method OnAppend
 
 		#region property Name
 

@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using Html;
+using Html.Tags;
+using Html.Attributes;
 using Reports;
 using Ezbob.Database;
 using Ezbob.Logger;
-using Aspose.Cells;
-
 
 namespace EzReportToEMail {
 	public class EmailReportHandler : BaseReportHandler {
@@ -23,51 +21,50 @@ namespace EzReportToEMail {
 		public void ExecuteReportHandler(DateTime dToday) {
 			IEnumerable<Report> reportList = GetReportsList();
 
-			string today = dToday.ToString("yyyy-MM-dd");
-			string tomorrow = dToday.AddDays(1).ToString("yyyy-MM-dd");
+			DateTime dTomorrow = dToday.AddDays(1);
 
-			Parallel.ForEach<Report> (reportList, (report) => {
+			Parallel.ForEach<Report>(reportList, (report) => {
 				Debug(report.Title);
 
 				switch (report.Type) {
 				case ReportType.RPT_NEW_CLIENT:
-                    SendReport(
-                                report.Title, 
-                                BuildNewClientReport(report, today, tomorrow), 
-                                report.ToEmail, 
-                                "Daily", 
-                                BuildNewClientXls(report, today, tomorrow)
-                                );
+					SendReport(
+						report.Title,
+						BuildNewClientReport(report, dToday),
+						report.ToEmail,
+						"Daily",
+						BuildNewClientXls(report, dToday)
+					);
 					break;
 
 				case ReportType.RPT_PLANNED_PAYTMENT:
 					SendReport(
-                                report.Title, 
-                                BuildPlainedPaymentReport(report, today, tomorrow), 
-                                report.ToEmail,
-                                "Daily",
-                                BuildPlainedPaymentXls(report, today, tomorrow)
-                                );
+						report.Title,
+						BuildPlainedPaymentReport(report, dToday),
+						report.ToEmail,
+						"Daily",
+						BuildPlainedPaymentXls(report, dToday)
+					);
 					break;
 
 				case ReportType.RPT_DAILY_STATS:
 					SendReport(
-                                report.Title, 
-                                BuildDailyStatsReportBody(report, today, tomorrow), 
-                                report.ToEmail,
-                                "Daily",
-                                BuildDailyStatsXls(report, today, tomorrow)
-                                );
+						report.Title,
+						BuildDailyStatsReportBody(report, dToday, dTomorrow),
+						report.ToEmail,
+						"Daily",
+						BuildDailyStatsXls(report, dToday, dTomorrow)
+					);
 					break;
 
 				case ReportType.RPT_IN_WIZARD:
 					SendReport(
-                                report.Title, 
-                                BuildInWizardReport(report, today, tomorrow), 
-                                report.ToEmail,
-                                "Daily",
-                                BuildInWizardXls(report, today, tomorrow)
-                                );
+						report.Title,
+						BuildInWizardReport(report, dToday, dTomorrow),
+						report.ToEmail,
+						"Daily",
+						BuildInWizardXls(report, dToday, dTomorrow)
+					);
 					break;
 
 				default:
@@ -78,31 +75,22 @@ namespace EzReportToEMail {
 		} // ExecuteReportHandler
 
 		private void HandleGenericReport(Report report, DateTime dToday) {
-			string today = dToday.ToString("yyyy-MM-dd");
+			if (report.IsDaily)
+				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod);
 
-			if (report.IsDaily) {
-				string tomorrow = dToday.AddDays(1).ToString("yyyy-MM-dd");
-				BuildReport(report, today, tomorrow, DailyPerdiod);
-			} // if daily
+			if (IsWeekly(report.IsWeekly, dToday))
+				BuildReport(report, dToday.AddDays(-7), dToday, WeeklyPerdiod);
 
-			if (IsWeekly(report.IsWeekly, dToday)) {
-				string weekAgo = dToday.AddDays(-7).ToString("yyyy-MM-dd");
-				BuildReport(report, weekAgo, today, WeeklyPerdiod);
-			} // if weekly
-
-			if (IsMonthly(report.IsMonthly, dToday)) {
-				string monthAgo = dToday.AddMonths(-1).ToString("yyyy-MM-dd");
-				BuildReport(report, monthAgo, today, MonthlyPerdiod);
-			} // if monthly
+			if (IsMonthly(report.IsMonthly, dToday))
+				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod);
 
 			if (report.IsMonthToDate) {
-				string monthStart = (new DateTime(dToday.Year, dToday.Month, 1)).ToString("yyyy-MM-dd");
-				string tomorrow = dToday.AddDays(1).ToString("yyyy-MM-dd");
-				BuildReport(report, monthStart, tomorrow, MonthToDatePerdiod);
+				DateTime monthStart = (new DateTime(dToday.Year, dToday.Month, 1));
+				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod);
 			} // if month to date
 		} // HandleGenericReport
 
-		private void BuildReport(Report report, string fromDate, string toDate, string period) {
+		private void BuildReport(Report report, DateTime fromDate, DateTime toDate, string period) {
 			var body = new Body().Add<Class>("Body");
 
 			var oTbl = new Table().Add<Class>("Header");
@@ -117,7 +105,7 @@ namespace EzReportToEMail {
 				.Add<Class>("logo_ezbob")
 				.Add<Class>("indent_text")
 				.Add<ID>("ezbob_logo")
-				.Add<Html.Title>("Fast business loans for Ebay and Amazon merchants")
+				.Add<Html.Attributes.Title>("Fast business loans for Ebay and Amazon merchants")
 				.Add<Alt>("Fast business loans for Ebay and Amazon merchants")
 				.Append(oImgLogo);
 
@@ -130,23 +118,21 @@ namespace EzReportToEMail {
 
 			oTr.Append(new Td().Append(oRptTitle));
 
-			string month = DateTime.Parse(fromDate).ToString("MMMMM yyyy", CultureInfo.GetCultureInfo("en-GB"));
-
 			switch (period) {
 			case DailyPerdiod:
-				oRptTitle.Append(new Text(period + " " + report.Title + " for " + fromDate));
+				oRptTitle.Append(new Text(period + " " + report.GetTitle(fromDate, " for ")));
 				break;
 
 			case WeeklyPerdiod:
-				oRptTitle.Append(new Text(period + " " + report.Title + " for " + fromDate + " - " + toDate));
+				oRptTitle.Append(new Text(period + " " + report.GetTitle(fromDate, " for ", toDate)));
 				break;
 
 			case MonthlyPerdiod:
-				oRptTitle.Append(new Text(period + " " + report.Title + " for " + month));
+				oRptTitle.Append(new Text(period + " " + report.GetMonthTitle(fromDate)));
 				break;
 
 			case MonthToDatePerdiod:
-				oRptTitle.Append(new Text(period + " " + report.Title + " for " + month + " Until " + toDate));
+				oRptTitle.Append(new Text(period + " " + report.GetMonthTitle(fromDate, toDate)));
 				break;
 			} // switch
 

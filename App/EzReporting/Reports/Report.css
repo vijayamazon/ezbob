@@ -1,4 +1,33 @@
-﻿.BODY {
+﻿/*
+	Do not use complicated selectors, like
+
+	BODY TABLE TD.HR { ... }
+
+	Do not attach styles to tags or element ids or something more complicated like
+
+	TD#someid { ... }
+	#someid { ... }
+	TD[name="somename"] { ... }
+
+	Use class names only.
+
+	Also do not combine definitions, i.e. instead of
+
+	.A, .B { width: 50px; }
+
+	.A { height: 111px; }
+	.B { height: 333px; }
+
+	use
+
+	.A { width: 50px; height: 111px; }
+	.B { width: 50px; height: 333px; }
+
+	Both forms are valid from CSS point of view but the parser in this project
+	is pretty KISS and therefore handles the second form only.
+*/
+
+.BODY {
 	background-color: rgb(238, 238, 238);
 	color: #333;
 	font-family: helvetica,arial,sans-serif;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Html.Attributes;
 
 namespace Html {
 	#region class ATag
@@ -58,6 +59,21 @@ namespace Html {
 
 		#endregion method Append
 
+		#region method MoveCssInline
+
+		public ATag MoveCssInline(Dictionary<string, string> oStyles) {
+			foreach (string sClass in this.Class.RawValues)
+				if (oStyles.ContainsKey(sClass))
+					this.Style.Append(oStyles[sClass]);
+
+			foreach (var child in Children)
+				child.MoveCssInline(oStyles);
+
+			return this;
+		} // MoveCssInline
+
+		#endregion method MoveCssInline
+
 		#region property ID
 
 		public virtual ID ID { get; private set; }
@@ -69,6 +85,12 @@ namespace Html {
 		public virtual Class Class { get; private set; }
 
 		#endregion property Class
+
+		#region property Style
+
+		public virtual Style Style { get; private set; }
+
+		#endregion property Style
 
 		#region method ToString
 
@@ -114,6 +136,7 @@ namespace Html {
 			Children = new List<ATag>();
 			ID = new ID();
 			Class = new Class();
+			Style = new Style();
 		} // constructor
 
 		#endregion constructor

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using Ezbob.Logger;
 
 namespace Ezbob.Database {
@@ -16,6 +17,14 @@ namespace Ezbob.Database {
 		} // constructor
 
 		#endregion constructor
+
+		#region method DateToString
+
+		public override string DateToString(DateTime oDate) {
+			return oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture);
+		} // DateToString
+
+		#endregion method DateToString
 
 		#endregion public
 

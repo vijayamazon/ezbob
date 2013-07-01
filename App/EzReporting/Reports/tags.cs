@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Text;
+using Html.Attributes;
 
-namespace Html {
+namespace Html.Tags {
 	public class Html : ATag { public override string Tag { get { return "html"; } } }
 	public class Head : ATag { public override string Tag { get { return "head"; } } }
 	public class Body : ATag { public override string Tag { get { return "body"; } } }
@@ -74,4 +75,4 @@ namespace Html {
 			return "<" + Tag + ">" + base.ToString() + "</" + Tag + ">";
 		} // ToString
 	} // Style
-} // namespace Html
+} // namespace Html.Tags

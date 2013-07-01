@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Net.Mime;
 using System.Web.UI;
 using Aspose.Cells;
-using Aspose.Words;
 using Ezbob.Logger;
 using Html;
 using Reports;
@@ -32,18 +31,61 @@ namespace EzReportsWeb {
 				ddlReportTypes.DataValueField = "Title";
 				ddlReportTypes.DataSource = reportsList;
 				ddlReportTypes.DataBind();
-
-				//  fromDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
-				//  toDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd"));
 			} // if
+
+			DateTime fDate, tDate;
+			bool isDaily;
+
+			GetDates(out fDate, out tDate, out isDaily);
+
+			fromDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+			toDate.Attributes.Add("max", DateTime.Today.AddDays(1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+			fromDate.Value = fDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+			toDate.Value   = tDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 		} // Page_Load
 
 		protected void btnShowReport_Click(object sender, EventArgs e) {
-			DateTime today = DateTime.Today;//.ToString("yyyy-MM-dd");
-			DateTime tomorrow = DateTime.Today.AddDays(1);//.ToString("yyyy-MM-dd");
-			DateTime fDate = today;
-			DateTime tDate = tomorrow;
-			bool isDaily = false;
+			DateTime fDate, tDate;
+			bool isDaily;
+
+			GetDates(out fDate, out tDate, out isDaily);
+
+			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate, tDate, isDaily);
+
+			var reportData = new LiteralControl(data.ToString());
+
+			divReportData.Controls.Add(reportData);
+		} // btnShowReport_Click
+
+		protected void BtnGetExcelClick(object sender, EventArgs e) {
+			DateTime fDate, tDate;
+			bool isDaily;
+
+			GetDates(out fDate, out tDate, out isDaily);
+
+			var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, fDate, tDate, isDaily);
+
+			var filename = (ddlReportTypes.SelectedItem + "_" + fDate.ToString("yyyy-MM-dd") + ".xlsx").Replace(" ", "_");
+			var ostream = new MemoryStream();
+			wb.Save(ostream, FileFormatType.Excel2007Xlsx);
+
+			Response.Clear();
+			Response.ContentType = "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+			Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
+			Response.BinaryWrite(ostream.ToArray());
+			// myMemoryStream.WriteTo(Response.OutputStream); //works too
+			Response.Flush();
+			Response.Close();
+			Response.End();
+			ostream.Close();
+		} // BtnGetExcelClick
+
+		private void GetDates(out DateTime fDate, out DateTime tDate, out bool isDaily) {
+			fDate = DateTime.Today;
+			tDate = DateTime.Today.AddDays(1);
+
+			isDaily = false;
 
 			switch (rblFilter.SelectedValue) {
 			case "Daily":
@@ -51,83 +93,33 @@ namespace EzReportsWeb {
 				break;
 
 			case "Weekly":
-				fDate = DateTime.Today.AddDays(-7);//.ToString("yyyy-MM-dd");
+				fDate = fDate.AddDays(-7);
 				break;
 
 			case "Monthly":
-				fDate = DateTime.Today.AddMonths(-1);//.ToString("yyyy-MM-dd");
+				fDate = fDate.AddMonths(-1);
+				break;
+
+			case "MonthToDate":
+				fDate = new DateTime(fDate.Year, fDate.Month, 1);
 				break;
 
 			case "Custom":
-				DateTime.TryParse(Request.Form["fromDate"], out fDate);
-				DateTime.TryParse(Request.Form["toDate"], out tDate);
+				if (!DateTime.TryParse(fromDate.Value, out fDate))
+					fDate = DateTime.Today;
+
+				if (!DateTime.TryParse(toDate.Value, out tDate))
+					tDate = fDate.AddDays(1);
+
 				if (tDate.DayOfYear - fDate.DayOfYear == 1)
 					isDaily = true;
 
 				break;
 			} // switch
-
-			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate.ToString("yyyy-MM-dd"), tDate.ToString("yyyy-MM-dd"), isDaily);
-
-			var reportData = new LiteralControl(data.ToString());
-
-			divReportData.Controls.Add(reportData);
-		} // btnShowReport_Click
-
-        protected void BtnGetExcelClick(object sender, EventArgs e)
-        {
-            DateTime today = DateTime.Today;//.ToString("yyyy-MM-dd");
-            DateTime tomorrow = DateTime.Today.AddDays(1);//.ToString("yyyy-MM-dd");
-            DateTime fDate = today;
-            DateTime tDate = tomorrow;
-            bool isDaily = false;
-
-            switch (rblFilter.SelectedValue)
-            {
-                case "Daily":
-                    isDaily = true;
-                    break;
-
-                case "Weekly":
-                    fDate = DateTime.Today.AddDays(-7);//.ToString("yyyy-MM-dd");
-                    break;
-
-                case "Monthly":
-                    fDate = DateTime.Today.AddMonths(-1);//.ToString("yyyy-MM-dd");
-                    break;
-
-                case "Custom":
-                    DateTime.TryParse(Request.Form["fromDate"], out fDate);
-                    DateTime.TryParse(Request.Form["toDate"], out tDate);
-                    if (tDate.DayOfYear - fDate.DayOfYear == 1)
-                        isDaily = true;
-
-                    break;
-            } // switch
-
-            var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, fDate.ToString("yyyy-MM-dd"), tDate.ToString("yyyy-MM-dd"), isDaily);
-
-            var filename = (ddlReportTypes.SelectedItem + "_"+ fDate.ToString("yyyy-MM-dd") + ".xlsx").Replace(" ","_");
-            var ostream = new MemoryStream();
-            wb.Save(ostream, FileFormatType.Excel2007Xlsx);
-
-            Response.Clear();
-            Response.ContentType = "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
-            Response.BinaryWrite(ostream.ToArray());
-            // myMemoryStream.WriteTo(Response.OutputStream); //works too
-            Response.Flush();
-            Response.Close();
-            Response.End();
-            ostream.Close();
-            } // BtnGetExcelClick
+		} // GetDates
 
 		protected void rblFilter_SelectedIndexChanged(object sender, EventArgs e) {
 			divCustomFilter.Visible = rblFilter.SelectedValue == "Custom";
 		} // rblFilter_SelectedIndexChanged
-
-		public string GetFormatedDate() {
-			return DateTime.Today.ToString("yyyy-MM-dd");
-		} // GetFormatedDate
 	} // class Default
 } // namespace EzReportsWeb
