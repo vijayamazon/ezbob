@@ -36,7 +36,9 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public MP_ExperianDataCache GetPersonFromCache(string firstName, string surname, DateTime? birthDate, string postcode)
         {
-            return GetAll().FirstOrDefault(c => c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode);
+            return GetAll()
+                .OrderByDescending(x=>x.LastUpdateDate)
+                .FirstOrDefault(c => c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode);
         }
     }
 
