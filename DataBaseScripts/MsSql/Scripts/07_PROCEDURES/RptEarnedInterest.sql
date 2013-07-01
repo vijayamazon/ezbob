@@ -4,6 +4,7 @@ GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptEarnedInterest
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -93,7 +94,9 @@ BEGIN
 	
 	--------------------------------------------------------
 	--
-	-- Ok, let's go to work!
+	-- Ok, let's
+go
+to work!
 	-- Who the fuck are you?!
 	-- The workaholic!
 	--

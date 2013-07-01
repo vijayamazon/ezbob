@@ -2281,6 +2281,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptEarnedInterest</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptFinancialStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptFinancialStats.sql</oFileName>
