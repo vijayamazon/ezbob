@@ -80,6 +80,546 @@ namespace EzBob.TeraPeakServiceLib
 		}
 
 		[Test]
+		public void TestParceString2()
+		{
+			var resultString =
+                @"<?xml version=""1.0"" encoding=""UTF-8""?><GetSellerResearchResults xmlns="""">
+	<Server>api05-tpeb.vic.aers.local</Server>
+	<Timestamp>2013-07-01 05:26:29</Timestamp>
+	<ProcessingTime>0.606</ProcessingTime>
+	<ImageURL>https://developer.terapeak.com/files/PoweredByTerapeak-logo.png</ImageURL>
+	<LinkURL>https://developer.terapeak.com</LinkURL>
+	<SearchResults>
+		<Statistics>
+			<Revenue>0.00</Revenue>
+			<Listings>4</Listings>
+			<Successful>0</Successful>
+			<Bids>0</Bids>
+			<ItemsOffered>4</ItemsOffered>
+			<ItemsSold>0</ItemsSold>
+			<AverageSellersPerDay>0</AverageSellersPerDay>
+			<SuccessRate></SuccessRate>
+			<Pricing>
+				<EndPrice>
+					<Highest>0</Highest>
+					<Average>0</Average>
+					<Median>0</Median>
+					<FrequentPrice>
+						<Price>0</Price>
+						<Occurrences>0</Occurrences>
+					</FrequentPrice>
+					<Lowest>0</Lowest>
+					<StandardDeviation>0</StandardDeviation>
+				</EndPrice>
+				<StartPrice>
+					<Highest>0</Highest>
+					<Average>0</Average>
+					<Median>0</Median>
+					<FrequentPrice>
+						<Price>0</Price>
+						<Occurrences>0</Occurrences>
+					</FrequentPrice>
+					<Lowest>0</Lowest>
+					<StandardDeviation>0</StandardDeviation>
+				</StartPrice>
+				<ShippingPrice>
+					<Highest>0</Highest>
+					<Average>0</Average>
+					<Median>0</Median>
+					<FrequentPrice>
+						<Price>0</Price>
+						<Occurrences>0</Occurrences>
+					</FrequentPrice>
+					<Lowest>0</Lowest>
+					<StandardDeviation>0</StandardDeviation>
+					<ApplicableListings></ApplicableListings>
+				</ShippingPrice>
+			</Pricing>
+			<HourlyData>
+				<Hour id=""0"" PST=""0"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""1"" PST=""1"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""2"" PST=""2"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""3"" PST=""3"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<Listings>1</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""4"" PST=""4"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""5"" PST=""5"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""6"" PST=""6"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>2</ItemsOffered>
+					<Listings>2</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""7"" PST=""7"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""8"" PST=""8"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""9"" PST=""9"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""10"" PST=""10"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""11"" PST=""11"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""12"" PST=""12"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""13"" PST=""13"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""14"" PST=""14"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<Listings>1</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""15"" PST=""15"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""16"" PST=""16"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""17"" PST=""17"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""18"" PST=""18"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""19"" PST=""19"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""20"" PST=""20"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""21"" PST=""21"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""22"" PST=""22"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+				<Hour id=""23"" PST=""23"">
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>0</ItemsOffered>
+					<Listings>0</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate>0</SuccessRate>
+				</Hour>
+			</HourlyData>
+			<Features>
+				<Feature name=""Buy It Now"">
+					<Listings>4</Listings>
+					<Successful>0</Successful>
+					<SuccessRate>0</SuccessRate>
+					<Revenue>0</Revenue>
+				</Feature>
+			</Features>
+			<ListingDurations>
+				<ListingDuration days=""1"">
+					<Listings>4</Listings>
+					<Successful>0</Successful>
+					<Revenue>0.00</Revenue>
+					<Bids>0</Bids>
+					<ItemsOffered>4</ItemsOffered>
+					<ItemsSold>0</ItemsSold>
+					<SuccessRate></SuccessRate>
+				</ListingDuration>
+			</ListingDurations>
+			<ListingTypes>
+				<ListingType type=""Second Chance"">
+					<Listings>4</Listings>
+					<Successful>0</Successful>
+					<Revenue>0.00</Revenue>
+					<SuccessRate>0.00</SuccessRate>
+				</ListingType>
+			</ListingTypes>
+			<DailyData>
+				<WeekDay id=""2"" name=""Tuesday"">
+					<Revenue>0.00</Revenue>
+					<Listings>1</Listings>
+					<Successful></Successful>
+					<Bids></Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold></ItemsSold>
+					<AverageSellers>0.2</AverageSellers>
+					<SuccessRate></SuccessRate>
+					<DayCount>5</DayCount>
+				</WeekDay>
+				<WeekDay id=""3"" name=""Wednesday"">
+					<Revenue>0.00</Revenue>
+					<Listings>1</Listings>
+					<Successful></Successful>
+					<Bids></Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold></ItemsSold>
+					<AverageSellers>0.2</AverageSellers>
+					<SuccessRate></SuccessRate>
+					<DayCount>5</DayCount>
+				</WeekDay>
+				<WeekDay id=""4"" name=""Thursday"">
+					<Revenue>0.00</Revenue>
+					<Listings>1</Listings>
+					<Successful></Successful>
+					<Bids></Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold></ItemsSold>
+					<AverageSellers>0.2</AverageSellers>
+					<SuccessRate></SuccessRate>
+					<DayCount>5</DayCount>
+				</WeekDay>
+				<WeekDay id=""6"" name=""Saturday"">
+					<Revenue>0.00</Revenue>
+					<Listings>1</Listings>
+					<Successful></Successful>
+					<Bids></Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold></ItemsSold>
+					<AverageSellers>0.25</AverageSellers>
+					<SuccessRate></SuccessRate>
+					<DayCount>4</DayCount>
+				</WeekDay>
+			</DailyData>
+		</Statistics>
+		<PopularKeywords>
+			<Keyword word=""bag"">
+				<Revenue>0.00</Revenue>
+				<Listings>4</Listings>
+				<Successful>0</Successful>
+				<Bids>0</Bids>
+				<ItemsSold>0</ItemsSold>
+				<ItemsOffered>4</ItemsOffered>
+				<AvgStartPrice>0</AvgStartPrice>
+				<SuccessRate>0</SuccessRate>
+			</Keyword>
+			<Keyword word=""hermes"">
+				<Revenue>0.00</Revenue>
+				<Listings>4</Listings>
+				<Successful>0</Successful>
+				<Bids>0</Bids>
+				<ItemsSold>0</ItemsSold>
+				<ItemsOffered>4</ItemsOffered>
+				<AvgStartPrice>0</AvgStartPrice>
+				<SuccessRate>0</SuccessRate>
+			</Keyword>
+			<Keyword word=""birkin"">
+				<Revenue>0.00</Revenue>
+				<Listings>4</Listings>
+				<Successful>0</Successful>
+				<Bids>0</Bids>
+				<ItemsSold>0</ItemsSold>
+				<ItemsOffered>4</ItemsOffered>
+				<AvgStartPrice>0</AvgStartPrice>
+				<SuccessRate>0</SuccessRate>
+			</Keyword>
+		</PopularKeywords>
+		<Categories>
+			<Category id=""169291"">
+				<Name>Women&amp;#39;s Handbags</Name>
+				<FullName>Clothes, Shoes &amp; Accessories &gt; Women&amp;#39;s Handbags</FullName>
+				<Level>2</Level>
+				<ParentCategoryID>11450</ParentCategoryID>
+				<Statistics>
+					<Listings>4</Listings>
+					<Successful>0</Successful>
+					<ItemsSold>0</ItemsSold>
+					<Revenue>0.00</Revenue>
+					<SuccessRate>0</SuccessRate>
+				</Statistics>
+			</Category>
+		</Categories>
+		<Items>
+			<Item id=""181063919495"">
+				<Title>HERMES birkin bag</Title>
+				<Category>169291</Category>
+				<ListingDetails>
+					<StartTime>14:41:17</StartTime>
+					<StartDate>2013-01-16</StartDate>
+					<EndTime>14:41:17</EndTime>
+					<EndDate>2013-01-17</EndDate>
+					<ThumbnailURL>http://thumbs.ebaystatic.com/pict/1810639194958080_0.jpg</ThumbnailURL>
+					<ViewItemURL>http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&amp;category=169291&amp;item=181063919495</ViewItemURL>
+				</ListingDetails>
+				<Site>3</Site>
+				<SellerID>373330003</SellerID>
+				<AuctionType>8</AuctionType>
+				<Flags>
+					<Bold>0</Bold>
+					<BuyItNow>1</BuyItNow>
+					<BuyItNowSuccess>0</BuyItNowSuccess>
+					<CategoryFeatured>0</CategoryFeatured>
+					<Gallery>0</Gallery>
+					<Highlight>0</Highlight>
+					<Subtitle>0</Subtitle>
+					<Successful>0</Successful>
+					<Reserve>0</Reserve>
+				</Flags>
+				<ItemStatistics>
+					<StartPrice>792.00</StartPrice>
+					<EndPrice>792.00</EndPrice>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold>0</ItemsSold>
+				</ItemStatistics>
+			</Item>
+			<Item id=""181064777340"">
+				<Title>HERMES birkin bag</Title>
+				<Category>169291</Category>
+				<ListingDetails>
+					<StartTime>03:45:39</StartTime>
+					<StartDate>2013-01-18</StartDate>
+					<EndTime>03:45:39</EndTime>
+					<EndDate>2013-01-19</EndDate>
+					<ThumbnailURL>http://thumbs.ebaystatic.com/pict/1810647773408080_0.jpg</ThumbnailURL>
+					<ViewItemURL>http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&amp;category=169291&amp;item=181064777340</ViewItemURL>
+				</ListingDetails>
+				<Site>3</Site>
+				<SellerID>373330003</SellerID>
+				<AuctionType>8</AuctionType>
+				<Flags>
+					<Bold>0</Bold>
+					<BuyItNow>1</BuyItNow>
+					<BuyItNowSuccess>0</BuyItNowSuccess>
+					<CategoryFeatured>0</CategoryFeatured>
+					<Gallery>0</Gallery>
+					<Highlight>0</Highlight>
+					<Subtitle>0</Subtitle>
+					<Successful>0</Successful>
+					<Reserve>0</Reserve>
+				</Flags>
+				<ItemStatistics>
+					<StartPrice>750.00</StartPrice>
+					<EndPrice>750.00</EndPrice>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold>0</ItemsSold>
+				</ItemStatistics>
+			</Item>
+			<Item id=""181066851896"">
+				<Title>HERMES birkin bag</Title>
+				<Category>169291</Category>
+				<ListingDetails>
+					<StartTime>06:12:30</StartTime>
+					<StartDate>2013-01-21</StartDate>
+					<EndTime>06:12:30</EndTime>
+					<EndDate>2013-01-22</EndDate>
+					<ThumbnailURL>http://thumbs.ebaystatic.com/pict/1810668518968080_0.jpg</ThumbnailURL>
+					<ViewItemURL>http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&amp;category=169291&amp;item=181066851896</ViewItemURL>
+				</ListingDetails>
+				<Site>3</Site>
+				<SellerID>373330003</SellerID>
+				<AuctionType>8</AuctionType>
+				<Flags>
+					<Bold>0</Bold>
+					<BuyItNow>1</BuyItNow>
+					<BuyItNowSuccess>0</BuyItNowSuccess>
+					<CategoryFeatured>0</CategoryFeatured>
+					<Gallery>0</Gallery>
+					<Highlight>0</Highlight>
+					<Subtitle>0</Subtitle>
+					<Successful>0</Successful>
+					<Reserve>0</Reserve>
+				</Flags>
+				<ItemStatistics>
+					<StartPrice>495.00</StartPrice>
+					<EndPrice>495.00</EndPrice>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold>0</ItemsSold>
+				</ItemStatistics>
+			</Item>
+			<Item id=""181067467095"">
+				<Title>HERMES birkin bag</Title>
+				<Category>169291</Category>
+				<ListingDetails>
+					<StartTime>06:28:19</StartTime>
+					<StartDate>2013-01-22</StartDate>
+					<EndTime>06:28:19</EndTime>
+					<EndDate>2013-01-23</EndDate>
+					<ThumbnailURL>http://thumbs.ebaystatic.com/pict/1810674670958080_0.jpg</ThumbnailURL>
+					<ViewItemURL>http://cgi.ebay.co.uk/ws/eBayISAPI.dll?ViewItem&amp;category=169291&amp;item=181067467095</ViewItemURL>
+				</ListingDetails>
+				<Site>3</Site>
+				<SellerID>373330003</SellerID>
+				<AuctionType>8</AuctionType>
+				<Flags>
+					<Bold>0</Bold>
+					<BuyItNow>1</BuyItNow>
+					<BuyItNowSuccess>0</BuyItNowSuccess>
+					<CategoryFeatured>0</CategoryFeatured>
+					<Gallery>0</Gallery>
+					<Highlight>0</Highlight>
+					<Subtitle>0</Subtitle>
+					<Successful>0</Successful>
+					<Reserve>0</Reserve>
+				</Flags>
+				<ItemStatistics>
+					<StartPrice>450.00</StartPrice>
+					<EndPrice>450.00</EndPrice>
+					<Bids>0</Bids>
+					<ItemsOffered>1</ItemsOffered>
+					<ItemsSold>0</ItemsSold>
+				</ItemStatistics>
+			</Item>
+		</Items>
+	</SearchResults>
+</GetSellerResearchResults>
+";
+
+			var rez = SerializeDataHelper.DeserializeTypeFromString<GetSellerResearchResults>(resultString);
+
+			Assert.NotNull(rez);
+			Assert.NotNull(rez.SearchResults);
+
+		}
+
+		[Test]
 		public void TestSerializeEmptyData()
 		{
 			var dataEmpty = new GetSellerResearchResults
