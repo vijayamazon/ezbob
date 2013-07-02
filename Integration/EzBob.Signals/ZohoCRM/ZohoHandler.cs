@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading;
+using ApplicationMng.Repository;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using Scorto.Flow.Signal;
 using StructureMap;
@@ -13,15 +16,31 @@ namespace EzBob.Signals.ZohoCRM
 
         public override void Execute()
         {
-            Log.InfoFormat("Update customer Id={0}", Message.CustomerId);
-            var zohoFacade = ObjectFactory.GetInstance<IZohoFacade>();
             var customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
+            var zohoFacade = ObjectFactory.GetInstance<IZohoFacade>();
+
+            for (var i = 0; i < 5; i++ )
+            {
+                var customer = customerRepository.TryGet(Message.CustomerId);
+                if (customer != null)
+                {
+                    _Execute(customer, customerRepository, zohoFacade);
+                    Common.RemoveMessage(Signal.Id, Log);
+                    return;
+                }
+                Thread.Sleep(5000);
+            }
+            Log.ErrorFormat("Cannot  update customer Id={0}. Reason: customer was not found.", Message.CustomerId);
+        }
+
+        private void _Execute(Customer customer, IRepository<Customer> customerRepository, IZohoFacade zohoFacade)
+        {
+            Log.InfoFormat("Trying to update customer Id={0}", Message.CustomerId);
+
             try
             {
                 customerRepository.EnsureTransaction(() =>
                     {
-                        var customer = customerRepository.Get(Message.CustomerId);
-
                         switch (Message.MethodType)
                         {
                             case ZohoMethodType.UpdateOrCreate:
@@ -38,11 +57,7 @@ namespace EzBob.Signals.ZohoCRM
             }
             catch (Exception e)
             {
-                Log.Error(e);
-            }
-            finally
-            {
-                Common.RemoveMessage(Signal.Id, Log);
+                Log.Warn(e);
             }
         }
 
