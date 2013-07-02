@@ -2281,12 +2281,6 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
-    <oName>RptEarnedInterest</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\RptEarnedInterest.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>RptFinancialStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptFinancialStats.sql</oFileName>
@@ -2842,6 +2836,12 @@
     <oName>UpdateExportSigningId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\UpdateExportSigningId.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>UpdateFiveDaysDueMailSent</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\UpdateFiveDaysDueMailSent.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

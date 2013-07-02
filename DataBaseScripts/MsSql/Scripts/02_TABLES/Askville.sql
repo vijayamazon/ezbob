@@ -13,5 +13,5 @@ CREATE TABLE [dbo].[Askville](
 	[SendStatus] [nvarchar](50) NULL,
 	[MessageBody] [nvarchar](max) NULL,
 	[CreationDate] [datetime] NULL
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 GO
