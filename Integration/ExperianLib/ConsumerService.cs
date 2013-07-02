@@ -68,7 +68,7 @@ namespace ExperianLib
                     return null;
                 }
 
-                cachedResponse = new MP_ExperianDataCache
+                cachedResponse = cachedResponse ?? new MP_ExperianDataCache
                     {
                         Name = firstName,
                         Surname = surname,
