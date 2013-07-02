@@ -8,7 +8,9 @@
     @BundleHelper.RenderProfileCss()
 }
 
-@{Html.RenderPartial("google_conversion");}
+<div style="display:inline;">
+    <img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/985067256/?value=0&amp;label=zC-dCKDS8AQQ-N3b1QM&amp;guid=ON&amp;script=0"/>
+</div>
 
 <div class="row-fluid ">
         <div id="profile-content" style="padding-right: 20px; padding-top: 16px;">
@@ -61,9 +63,9 @@
                 <div class="span12" style="padding-top: 30px;">
                     <a href="#" class="schedule-print-link pull-left print-link" style="margin-top: 8px;" onClick="window.print();return false;"> Print for your records</a>
                     <a 
-                        href='@Url.Action("Index", "Profile", new {Area="Customer"})' 
+                        href='#' 
                         class="btn-continue button orange pull-right btn-fix"
-                        onClick="EzBob.App.GA.trackEvent('Loan Payment Complete', 'Back To Profile', 'View Loan');">
+                        onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new {Area="Customer"})','Loan Payment Complete', 'Back To Profile', 'View Loan');">
                         Go to My Account
                     </a>
                 </div>

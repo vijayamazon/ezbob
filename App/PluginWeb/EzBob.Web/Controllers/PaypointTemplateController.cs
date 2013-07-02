@@ -19,9 +19,17 @@ namespace EzBob.Web.Controllers
             return View();
         }
 
-        public ActionResult DownloadTemplate()
+        public ActionResult DownloadProdTemplate()
         {
-            var html = RenderRazorViewToString(@"Index", null);
+            var html = RenderRazorViewToString(@"Index", true);
+            var bytes = Encoding.UTF8.GetBytes(html);
+            return File(bytes, "text/plain", "ezbob-template.html");
+
+        }
+
+		public ActionResult DownloadTestTemplate()
+        {
+            var html = RenderRazorViewToString(@"Index", false);
             var bytes = Encoding.UTF8.GetBytes(html);
             return File(bytes, "text/plain", "ezbob-template-test.html");
 

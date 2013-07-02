@@ -455,11 +455,11 @@
 					<p>Thank You,<br>The EZBOB Team</p>
 				</div>
 				<a 
-                    href='@Url.Action("Index", "Profile", new { Area = "Customer" })'
+                    href='#'
                     class="btn-continue button orange pull-right"
-                    onClick="EzBob.App.GA.trackEvent('Wizard Complete', 'Go To Account', 'Awaiting Approval');">
+                    onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new { Area = "Customer" })', 'Wizard Complete', 'Go To Account', 'Awaiting Approval'); return false;">
                     Go to Account
-				</a>
+                </a>
 			</div>
 		</section>
 		<div class="clear"></div>

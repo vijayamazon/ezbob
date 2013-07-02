@@ -4,7 +4,7 @@
 }
 
 @using EzBob.Web.Infrastructure
-@model dynamic
+@model bool
 
 @section head{
     <base href="https://app.ezbob.com/" />
@@ -120,8 +120,6 @@
           <input type="hidden" name="error_list"></text>
 }
 
-@{Html.RenderPartial("_GoogleAnalytics");}
-
 <div style="padding: 0 30px;">
     <div class="row-fluid">
         <div class="pages">
@@ -198,7 +196,21 @@
                             </div>
 
                             <div>
-                                <input type="submit" name="accept" value="Confirm" class="submit pull-right button orange" onClick="_gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);">
+                                @if (Model){
+                                    <input 
+                                        type="submit"
+                                        name="accept" 
+                                        value="Confirm" 
+                                        class="submit pull-right button orange" 
+                                        onClick="_gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']); setTimeout(function () { $('form').submit(); }, 500); return false;" />
+                                }
+                                else{
+                                    <input 
+                                        type="submit"
+                                        name="accept" 
+                                        value="Confirm" 
+                                        class="submit pull-right button orange" />
+                                }
                                 <a href="#"class="button grey pull-right">Back</a>
                             </div>
 
