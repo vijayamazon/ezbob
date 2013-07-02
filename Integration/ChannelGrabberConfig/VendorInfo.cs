@@ -14,6 +14,7 @@ namespace Integration.ChannelGrabberConfig {
 			DisplayName = "";
 			Description = "";
 			InternalID = (new Guid()).ToString();
+			HasExpenses = false;
 			SecurityData = new SecurityData();
 			Aggregators = new List<AggregatorInfo>();
 			ClientSide = new ClientSide();
@@ -28,6 +29,7 @@ namespace Integration.ChannelGrabberConfig {
 		public string DisplayName { get; set; }
 		public string Description { get; set; }
 		public string InternalID { get; set; }
+		public bool HasExpenses { get; set; }
 
 		public SecurityData SecurityData { get; set; }
 

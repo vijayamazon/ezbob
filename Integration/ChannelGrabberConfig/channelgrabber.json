@@ -5,6 +5,8 @@
 		"Description": "Volusion",
 		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
 
+		"HasExpenses": false,
+
 		"SecurityData": {
 			"Fields": [
 				{ "PropertyName": "Name",     "NodeName": "name",     "UniqueIDPosition": -1 },
@@ -93,6 +95,8 @@
 		"Description": "Play.com",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 
+		"HasExpenses": false,
+
 		"SecurityData": {
 			"Fields": [
 				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
@@ -163,6 +167,8 @@
 		"Description": "Shopify.com",
 		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
 
+		"HasExpenses": false,
+
 		"SecurityData": {
 			"Fields": [
 				{ "PropertyName": "Name",      "NodeName": "name",      "UniqueIDPosition":  0                  },
@@ -217,6 +223,88 @@
 					{ "Property": "background", Value: "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "104px" }
+				]
+			}
+		}
+	},
+	
+	{
+		"Name":        "Xero",
+		"DisplayName": "Xero.com",
+		"Description": "Xero.com",
+		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
+
+		"HasExpenses": true,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+				{ "PropertyName": "Login",       "NodeName": "apikey",     "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Password",    "NodeName": "secret",     "UniqueIDPosition":  1                  },
+				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" },
+				{ "PropertyName": "AuxLogin",    "NodeName": "publicCert", "UniqueIDPosition": -8, "Default": "" },
+				{ "PropertyName": "AuxPassword", "NodeName": "privateKey", "UniqueIDPosition": -8, "Default": "" },
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Login", "Name"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BE5D278C-5337-4C25-8EBA-537E67EFD133}" },
+			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "xeroShops",
+			"SortPriority": 12,
+			"Ribbon": "beta",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The Consumer Key to access Xero API",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Password",
+						"Caption": "The Consumer Secret to access Xero API",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+				],
+				"Notes": [
+					"To retrieve your Consumer Key and Consumer Secret:",
+					"<ol>",
+					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\">this link to your Xero API area</a></li>",
+					"<li>Choose <strong>Private</strong></li>",
+					"<li>Enter application name: <strong>EZBOB</strong></li>",
+					"<li>Provide this Public Key:<blockquote>-----BEGIN CERTIFICATE-----
+0nRKKwOlO/WAuOs/x0/nODAfBgNVHSMEGDAWgBQysX7q0nRKKwOlO/WAuOs/x0/n
+ODAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAFOBJlsyp4Ditq+WOlqe
+h0PdFcUQ0yPnUe5iiPtQJkqWAQ3fwiOEpn6/fGhmgFq/6u3qC6+oR4TBIia3QtT/
+PJTxEzDCZl6zjLskRz2Xzb6moUTWBMM8xLfXfPfTtd5yc9/2pIcC8v3rk91t09og
+Y+CFV0/+qX1tcacscXbEmyIr 
+-----END CERTIFICATE-----</blockquote></li>",
+					"<li>Press <strong>Save</strong></li>",
+					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
+					"</ol>",
+				],
+				"OnBeforeLink": [
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", Value: "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "54px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", Value: "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "54px" }
 				]
 			}
 		}
