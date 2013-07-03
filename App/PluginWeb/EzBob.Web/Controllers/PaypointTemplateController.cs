@@ -11,7 +11,7 @@ namespace EzBob.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View(true);
         }
 
         public ViewResult DownloadPage()

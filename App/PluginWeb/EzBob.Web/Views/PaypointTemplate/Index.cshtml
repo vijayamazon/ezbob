@@ -196,21 +196,12 @@
                             </div>
 
                             <div>
-                                @if (Model){
-                                    <input 
-                                        type="submit"
-                                        name="accept" 
-                                        value="Confirm" 
-                                        class="submit pull-right button orange" 
-                                        onClick="_gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']); setTimeout(function () { $('form').submit(); }, 500); return false;" />
-                                }
-                                else{
-                                    <input 
-                                        type="submit"
-                                        name="accept" 
-                                        value="Confirm" 
-                                        class="submit pull-right button orange" />
-                                }
+                                <input 
+                                    type="submit"
+                                    name="accept" 
+                                    value="Confirm" 
+                                    class="submit pull-right button orange" />
+                                
                                 <a href="#"class="button grey pull-right">Back</a>
                             </div>
 
@@ -315,10 +306,10 @@
             var lastDateOfPayment;
 
             if (isPayEarly) {
-                lastDateOfPayment = moment().add('months', -1);
+                lastDateOfPayment = moment();
             } else {
                 var param = decodeURIComponent(getCallbackValue('lastDatePayment') || "");
-                lastDateOfPayment = moment(param, "DD/MM/YYYY");
+                lastDateOfPayment = moment(param || moment().add("months", 3), "DD/MM/YYYY");
             }
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
@@ -355,10 +346,14 @@
             contactUs.render();
 
             $('input[type="submit"]').click(function(e) {
-                if (!validator.form()) {
-                    return false;
-                }
-                submitPaypointForm();
+                if (validator.form()) {
+                    if (!isTest) {
+                        _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
+                        setTimeout(function() { submitPaypointForm(); }, 500);
+                    } else {
+                        submitPaypointForm();
+                    }
+                } 
                 return false;
             });
             var validator = $('.paypont-form').validate({
@@ -376,7 +371,7 @@
                 "validateLastDateOfPayment", function(value, element, date) {
                     date = $.browser.msie ? date._d : date;
                     var expirydate = moment(value, "MM/YY");
-                    var res = expirydate > date;
+                    var res = expirydate >= date;
                     return res;
                 }, "Debit card expires before the loan term. Please use another card."
             );
