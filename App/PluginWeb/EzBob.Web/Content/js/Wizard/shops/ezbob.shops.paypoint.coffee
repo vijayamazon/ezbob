@@ -24,11 +24,11 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         form: 'form'
 
     inputChanged: ->
-        enabled =  EzBob.Validation.checkForm(@validator) 
+        enabled =  EzBob.Validation.checkForm(@validator)
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->
-        return false if not @validator.form()            
+        return false if not EzBob.Validation.checkForm(@validator)
         return false if @$el.find('a.connect-payPoint').hasClass('disabled')
 
         acc = new EzBob.PayPointAccountModel({mid: @ui.mid.val(), vpnPassword: @ui.vpnPassword.val(), remotePassword: @ui.remotePassword.val()})

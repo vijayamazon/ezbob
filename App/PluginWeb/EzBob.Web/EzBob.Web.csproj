@@ -1535,7 +1535,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.play.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.coffee" />
