@@ -27,10 +27,10 @@ class EzBob.CustomerLoginView extends Backbone.View
 
   submit: ->
     return false if @$el.find(":submit").hasClass("disabled")
-    return false if not @validator.form()
+    return false if not EzBob.Validation.checkForm(@validator)
     @blockBtn true
 
-    unless EzBob.Validation.validateAndNotify(@validator) 
+    unless EzBob.Validation.checkForm(@validator) 
         @blockBtn false
         return false
 
