@@ -25,7 +25,7 @@
     <div class="span1">&nbsp;</div>
     <div class="span10">
         <div class="well" style="color: #565656">
-            @if (exceptions.Contains(Model.Exception.GetType()))
+            @if (Model != null && Model.Exception != null && exceptions.Contains(Model.Exception.GetType()))
             {
                 message = Model.Exception.Message;
             }
