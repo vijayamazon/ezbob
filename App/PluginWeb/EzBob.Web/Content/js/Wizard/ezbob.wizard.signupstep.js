@@ -59,12 +59,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.blockBtn(false);
             return false;
         };
-
-        if (!EzBob.Validation.validateAndNotify(that.validator)) {
-            that.blockBtn(false);
-            return false;
-        }
-
+        
         $.post(that.form.attr("action"), that.form.serialize(), function(result) {
             if (result.success) {
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');

@@ -110,10 +110,6 @@ ul.storelist li span {
 
 [name='addressInput'] { margin-top: 10px; }
 
-input.error, select.error, textarea.error, span.error {
-     border: 2px solid #B94A48;
-}
-
 /*jQuery dialogs*/
 
 .ui-dialog {

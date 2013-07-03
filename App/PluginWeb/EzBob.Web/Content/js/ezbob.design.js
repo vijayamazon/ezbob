@@ -769,11 +769,10 @@ Date.prototype.getServerTime = function () {
 //-----------  Validate  -----------  
 
 var validFunc = function (el) {
-    if (!isNotEmptyFunc(el)) {
-        return;
-    }
     if ($(el).closest('.ezDateTime').length != 0) {
         $(el).closest('.ezDateTime').find("input.hidden-field").valid();
+    } else if ($(el).closest('.ezSortCode').length != 0) {
+        $(el).closest('.ezSortCode').find("input.hidden-field").valid();
     } else if ($(el).hasClass('addAddressInput')) {
         //do nothing
     } else {
@@ -781,31 +780,33 @@ var validFunc = function (el) {
     }
 };
 
-var isNotEmptyFunc = function (el) {
-    if ($(el).closest('.ezDateTime').length != 0) {
-        return el.value != "-";
-    }
-    if ($(el).hasClass('cashInput')) {
-        return el.value != "£ " && el.value != "";
-    }
-    if ($(el).prop("tagName").toLowerCase() == "select") {
-        return true;
-    }
-    return el.value != "";
-};
-
 $.validator.setDefaults({
     onclick: function (el) {
         if ($(el).is('input:radio')) {
             return $(el).valid();
         }
+        
+        if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
+            return $(el).valid();
+        }
+        
+        
         return false;
     },
-    onfocusout: function (element) {
-        validFunc(element);
+    onfocusout: function (el) {
+        validFunc(el);
     },
-    onkeyup: function (element) {   
-        validFunc(element);
+    onkeyup: function (el) {
+        if ($(el).is('select')) {
+            validFunc(el);
+        }
+        
+        if ($(el).is('input') && $(el).val() == "") {
+            validFunc(el);
+        }
+        /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
+            validFunc(el);
+        }*/
     },
     ignore: []
 });
@@ -984,22 +985,19 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
     });
 };
 
-EzBob.validateSortCode = function (el) {
+EzBob.validateBankDetailsForm = function (el) {
     var e = el || $(".bankAccount");
     return e.validate({
-        onfocusout: false,
-        onfocusin: false,
-        onclick: false,
-        focusInvalid: false,
-        ignoreTitle: true,
         rules: {
-            SortCode1: { required: true, minlength: 2, maxlength: 2, digits: true },
-            SortCode2: { required: true, minlength: 2, maxlength: 2, digits: true },
-            SortCode3: { required: true, minlength: 2, maxlength: 2, digits: true },
+            SortCode: { required: true, minlength: 6, maxlength: 6, digits: true },
             AccountNumber: { required: true, minlength: 8, maxlength: 8, digits: true }
         },
+        messages: {
+            SortCode: { minlength: "Please enter a valid Sort Code", maxlength: "Please enter a valid SortCode" }
+        },
         errorPlacement: EzBob.Validation.errorPlacement,
-        //unhighlight: EzBob.Validation.unhighlight
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
     });
 };
 

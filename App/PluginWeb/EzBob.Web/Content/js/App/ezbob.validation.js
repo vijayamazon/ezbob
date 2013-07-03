@@ -21,6 +21,10 @@ EzBob.Validation.errorPlacement = function (error, element) {
                     element = element.closest('.ezDateTime').find("select[name='day'],select[name='month'],select[name='year']");
                 }
             }
+            //fix for SortCode
+            if ((element.closest('.ezSortCode').find("input:text")).length > 0) {
+                element = element.closest('.ezSortCode').find("input:text");
+            }
             //fix for number
             if (element.closest("div").find(".cashInput").length > 0) {
                 element = element.closest("div").find(".cashInput");
@@ -65,14 +69,26 @@ EzBob.Validation.unhighlightFS = function (element) {
         img = $el.closest('div').find('.field_status');
 
     if (img.hasClass("required") && !val) {
-        img.field_status('set', 'required');
+        img.field_status('set', 'required', 2);
     } else {
         img.field_status('set', 'ok');
     }
 };
 
 EzBob.Validation.highlightFS = function (element) {
-    $(element).closest('div').find('.field_status').field_status('set', 'fail');
+    var $el = $(element),
+        val = $el.val(),
+        img = $el.closest('div').find('.field_status');
+
+    if (img.hasClass("required") && !val) {
+        img.field_status('set', 'required', 2);
+    } else if ($el.hasClass('SortCodeSplit')) {
+        img.field_status('set', 'required', 2);
+    } else if ($el.hasClass('DateOfBirth') && $el.val().indexOf('-') !== -1) {
+        img.field_status('set', 'required', 2);
+    } else {
+    img.field_status('set', 'fail');
+    }
 };
 
 //Extends validator method 

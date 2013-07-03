@@ -688,8 +688,8 @@ select.SubBank::-webkit-scrollbar {
 
 input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
     background-color: #eee;
-    cursor: not-allowed;
     border: 1px #ccc solid;
+    cursor: default;
 }
 
 #gauge {
