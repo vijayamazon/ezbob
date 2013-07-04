@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.CommonLib;
 using EzBob.Configuration;
@@ -172,6 +173,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 
+                RebatePayment(amount, loan, trans_id, now);
+
                 cus.PayPointErrorsCount = 0;
                 cus.PayPointTransactionId = trans_id;
                 cus.CreditCardNo = card_no;
@@ -200,6 +203,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 return RedirectToAction("ErrorOfferDate", "Paypoint", new {Area = "Customer"});
             }
+        }
+
+        private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now)
+        {
+            if (amount == null || amount <= 0) return;
+            var f = new LoanPaymentFacade();
+            f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
         }
 
         [Transactional]
