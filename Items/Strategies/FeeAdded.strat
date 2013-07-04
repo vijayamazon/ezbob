@@ -4,8 +4,8 @@
   <Description>Email to customer with the default fee details. Trigger - Leftside table in the underwriter, customer status-&gt; Bankruptcy\default + check 'Add collection fee'</Description>
   <Workspace Name="FeeAdded">
     <NodeElement Name="Assignment" NodeId="Assignment35083115" />
-    <NodeElement Name="Mail Node" NodeId="MailNode48732484" />
-    <NodeElement Name="Mail Node" NodeId="MailNode5521893" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40886518" />
+    <NodeElement Name="Mail Node" NodeId="MailNode63249558" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct44958387" />
     <NodeElement Name="Start Node" NodeId="StartNode47631980" />
     <NodeElement Name="Stop Node" NodeId="StopNode26034638" />
@@ -73,13 +73,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode5521893</Name>
+      <Name>MailNode63249558</Name>
       <PointF>
-        <X>332.670074</X>
-        <Y>256</Y>
+        <X>512.6701</X>
+        <Y>56</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -107,13 +107,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode48732484</Name>
+      <Name>MailNode40886518</Name>
       <PointF>
-        <X>512.6701</X>
-        <Y>56</Y>
+        <X>332.670074</X>
+        <Y>256</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -206,8 +206,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
-      <Name>FirstName_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</Name>
+      <OwnerName>MailNode63249558</OwnerName>
+      <Name>FirstName_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -218,8 +218,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
-      <Name>FeeAmount_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</Name>
+      <OwnerName>MailNode63249558</OwnerName>
+      <Name>FeeAmount_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -230,7 +230,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
+      <OwnerName>MailNode63249558</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -242,7 +242,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
+      <OwnerName>MailNode63249558</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -254,7 +254,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
+      <OwnerName>MailNode63249558</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -290,8 +290,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
-      <Name>FirstName_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</Name>
+      <OwnerName>MailNode40886518</OwnerName>
+      <Name>FirstName_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -302,8 +302,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
-      <Name>FeeAmount_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</Name>
+      <OwnerName>MailNode40886518</OwnerName>
+      <Name>FeeAmount_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -314,7 +314,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
+      <OwnerName>MailNode40886518</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -326,7 +326,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
+      <OwnerName>MailNode40886518</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -338,7 +338,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
+      <OwnerName>MailNode40886518</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -365,9 +365,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Assignment35083115</SourceNodeName>
+      <SourceNodeName>MailNode63249558</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode48732484</TargetNodeName>
+      <TargetNodeName>CreditProduct44958387</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -377,19 +377,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct44958387</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode5521893</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode5521893</SourceNodeName>
+      <SourceNodeName>MailNode40886518</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode26034638</TargetNodeName>
       <SuperNodeName />
@@ -401,9 +389,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode48732484</SourceNodeName>
+      <SourceNodeName>CreditProduct44958387</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct44958387</TargetNodeName>
+      <TargetNodeName>MailNode40886518</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Assignment35083115</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode63249558</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -429,61 +429,61 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48732484</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode63249558</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48732484</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode63249558</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>Email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48732484</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode63249558</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48732484</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode63249558</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode48732484</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode63249558</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode5521893</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode40886518</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>FeeAmount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode5521893</TargetVariableOwnerName>
-      <TargetVariableName>FeeAmount_LateChargeAddCollection.docxlAEKVBKK/53OjVSRyGXiVw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode40886518</TargetVariableOwnerName>
+      <TargetVariableName>FeeAmount_LateChargeAddCollection.docxy3ZhewgOVUxAMdbr2rubHQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode5521893</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode40886518</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode5521893</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode40886518</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>FeeAdded</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode5521893</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode40886518</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
@@ -513,7 +513,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode5521893</OwnerName>
+      <OwnerName>MailNode63249558</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -529,7 +529,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode48732484</OwnerName>
+      <OwnerName>MailNode40886518</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
