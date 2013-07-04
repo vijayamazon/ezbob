@@ -128,11 +128,26 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public JsonNetResult AutomationApproval()
         {
             var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
+            var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
+            var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
+            var	autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
+            var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
+            var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
 
             var sa = new
                 {
                     EnableAutomaticApproval = enableAutomaticApproval.Value,
-                    EnableAutomaticApprovalDesc = enableAutomaticApproval.Description
+                    EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
+                    EnableAutomaticReRejection = enableAutomaticReRejection.Value,
+                    EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
+                    AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
+                    AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
+                    AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
+                    AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description,
+                    MaxCapHomeOwner = maxCapHomeOwner.Value,
+                    MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
+                    MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
+                    MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
                 };
             return this.JsonNet(sa);
         }
@@ -141,9 +156,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [ValidateJsonAntiForgeryToken]
         [HttpPost]
         [Transactional]
-        public JsonNetResult AutomationApproval(string EnableAutomaticApproval)
+        public JsonNetResult AutomationApproval(
+                                                string EnableAutomaticApproval,
+                                                string EnableAutomaticReRejection,
+                                                string AutoRejectionException_CreditScore,
+                                                string AutoRejectionException_AnualTurnover,
+                                                string MaxCapHomeOwner,
+                                                string MaxCapNotHomeOwner
+            )
         {
             _configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
+            _configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
+            _configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
+            _configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
+            _configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
+            _configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
             return AutomationApproval();
         }
 
