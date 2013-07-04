@@ -43,9 +43,14 @@
 
 <body>
     @RenderSection("afterHead", false)
-    @{Html.RenderPartial("_LivePerson");}
-    @Html.AntiForgeryTokenNoUserCheck()
 
+    @{
+        var isUnderwriter = (Url.Action(null) ?? "").Contains("AdminLogOn");
+        if (!isUnderwriter) { Html.RenderPartial("_LivePerson"); }
+    }
+
+    @Html.AntiForgeryTokenNoUserCheck()
+    
     <div id="wrapper">
         @{ Html.RenderPartial("_TopButtons"); }
         <header>
