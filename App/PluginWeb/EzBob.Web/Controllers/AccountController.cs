@@ -89,8 +89,7 @@ namespace EzBob.Web.Controllers
                 if (_membershipProvider.ValidateUser(model.UserName, model.Password))
                 {
                         user.LoginFailedCount = 0;
-                        if (model.ReturnUrl == null) model.ReturnUrl = "/Underwriter/Customers";
-                        return SetCookieAndRedirect(model);
+                    return SetCookieAndRedirectAdmin(model);
                 }
             }
             ModelState.AddModelError("", "User not found or incorrect password.");
@@ -223,6 +222,20 @@ namespace EzBob.Web.Controllers
             else
             {
                 return RedirectToAction("Index", "Profile", new { Area = "Customer" });
+            }
+        }
+        //------------------------------------------------------------------------
+        private ActionResult SetCookieAndRedirectAdmin(LogOnModel model)
+        {
+            FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+            if (Url.IsLocalUrl(model.ReturnUrl) && model.ReturnUrl.Length > 1 && model.ReturnUrl.StartsWith("/")
+                && !model.ReturnUrl.StartsWith("//") && !model.ReturnUrl.StartsWith("/\\"))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
             }
         }
         //------------------------------------------------------------------------
