@@ -87,11 +87,11 @@ namespace EzBob.Web.Controllers
                 var user = _users.GetUserByLogin(model.UserName);
 
                 if (_membershipProvider.ValidateUser(model.UserName, model.Password))
-                    {
+                {
                         user.LoginFailedCount = 0;
-                        model.ReturnUrl = "/Underwriter/Customers";
+                        if (model.ReturnUrl == null) model.ReturnUrl = "/Underwriter/Customers";
                         return SetCookieAndRedirect(model);
-                    }
+                }
             }
             ModelState.AddModelError("", "User not found or incorrect password.");
             return View(model);
