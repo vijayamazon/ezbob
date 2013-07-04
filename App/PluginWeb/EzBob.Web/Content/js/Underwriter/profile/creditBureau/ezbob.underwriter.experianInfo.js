@@ -38,18 +38,23 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         EzBob.ShowMessage("Are you sure?", "Confirmation",
             function () {
                 that.RunCustomerCheck();
+                return true;
             },
             "Yes", null, "No");
 
         return false;
     },
     RunCustomerCheck: function () {
+        BlockUi("on");
         $.post(window.gRootPath + "Underwriter/CreditBureau/RunCheck", { Id: this.model.get("Id") })
             .done(function (response) {
                 EzBob.ShowMessage(response.Message, "Information");
             }).
             fail(function (data) {
                 console.error(data.responseText);
+            })
+            .complete(function() {
+                BlockUi("off");
             });
         return false;
     },
