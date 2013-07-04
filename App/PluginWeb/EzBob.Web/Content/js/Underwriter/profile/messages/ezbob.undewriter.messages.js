@@ -39,7 +39,12 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
 
+                })
+                .complete(function () {
+                    BlockUi("off");
                 });
+                BlockUi("on");
+                return true;
             },
             "Yes", null, "No");         
          },
@@ -60,7 +65,12 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
 
+                })
+                .complete(function () {
+                    BlockUi("off");
                 });
+                BlockUi("on");
+                return true;
             },
             "Yes", null, "No"); 
          },
@@ -81,7 +91,12 @@ EzBob.Underwriter.Message = Backbone.View.extend({
                 .fail(function (data) {
                     EzBob.ShowMessage(data, "The marketplace recheck error. ", null, "OK");
 
+                })
+                .complete(function () {
+                    BlockUi("off");
                 });
+                BlockUi("on");
+                return true;
             },
             "Yes", null, "No");
          }
