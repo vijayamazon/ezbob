@@ -46,11 +46,13 @@
 }
 @section Js{
     <script type="text/javascript">
-        $(function() {
 
-            EzBob.Config.MinLoan = @Model.Config.MinLoan;
-            EzBob.Config.MaxLoan = @Model.MaxLoan;
-            EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
+        EzBob.Config.MinLoan = @Model.Config.MinLoan;
+        EzBob.Config.MaxLoan = @Model.MaxLoan;
+        EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
+        EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
+
+        $(function() {
 
             var customersOptions = {
                 el: $('#customers-view'),

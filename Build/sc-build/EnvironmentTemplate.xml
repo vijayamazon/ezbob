@@ -441,7 +441,9 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="PostcodeAnywhereConfig" value="PostcodeAnywhereConfigEzBob"/>
 		<property name="GetSatisfactionEnabled" value="True" />	
 		<!-- simple, hard -->
-		<property name="PasswordPolicyType" value="simple" />	
+		<property name="PasswordPolicyType" value="simple" />
+        <!-- web session timeout in minutes -->
+        <property name="SessionTimeout" value="45"/>
     </application>
 
     <module id="PostcodeAnywhereConfigEzBob">

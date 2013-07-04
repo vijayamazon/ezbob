@@ -32,12 +32,12 @@
     @{Html.RenderPartial("Shops/CGAccoutInfoTemplate");}
     @BundleHelper.RenderWizardJs()
     <script type="text/javascript">
-        $(function () {
-
-            EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
-            EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
-            SetCaptchaMode();
-            EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
+        
+        EzBob.Config.SessionTimeout = @config.SessionTimeout;
+        EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
+        EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
+        SetCaptchaMode();
+        EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
             EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)
                                           {
                                               @ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture)
@@ -46,9 +46,10 @@
                                           {
                                               <text>false</text>
                                           };
-            EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
-            EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
-        
+        EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
+        EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
+
+        $(function () {
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
             options.el = $('#wizard');
         

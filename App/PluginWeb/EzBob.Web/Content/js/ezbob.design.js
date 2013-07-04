@@ -283,7 +283,7 @@ function CheckForActivity() {
     }
 
     function timeout() {
-        Redirect(window.gRootPath + "Account/LogOff" + underwriterParam);
+        document.location = window.gRootPath + "Account/LogOff" + underwriterParam;
     }
 
     function reset() {

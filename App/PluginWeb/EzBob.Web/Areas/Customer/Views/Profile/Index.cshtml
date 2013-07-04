@@ -275,15 +275,17 @@
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/CGAccoutInfoTemplate.cshtml");}
 
     <script type="text/javascript">
+        
+        EzBob.Config.GetCashSliderStep = @Model.Config.GetCashSliderStep.ToString();
+        EzBob.Config.MinLoan = @Model.Config.MinLoan.ToString();
+        EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
+        EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
+        EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
+        EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
+        EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
+
         $(function () {
             var options = new EzBob.CustomerModel (@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer)));
-            EzBob.Config.GetCashSliderStep = @Model.Config.GetCashSliderStep.ToString();
-            EzBob.Config.MinLoan = @Model.Config.MinLoan.ToString();
-            EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
-            EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
-            EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
-            EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
-            
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();
             

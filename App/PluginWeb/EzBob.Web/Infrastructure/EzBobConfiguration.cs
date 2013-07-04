@@ -52,6 +52,7 @@ namespace EzBob.Web.Infrastructure
 		string DummyPostcodeSearchResult { get; }
 		string DummyAddressSearchResult { get; }
         string EmailUnderReviewStrategyName { get; }
+        int SessionTimeout { get; }
 		// string ChannelGrabberConfigPath { get; }
     }
 
@@ -193,9 +194,14 @@ namespace EzBob.Web.Infrastructure
 			get { return GetValueWithDefault<bool>("GetSatisfactionEnabled", "True"); }
 		}
 
-		public bool EbayPixelEnabled
+        public bool EbayPixelEnabled
+        {
+            get { return GetValueWithDefault<bool>("EbayPixelEnabled", "False"); }
+        }
+
+        public int SessionTimeout
 		{
-			get { return GetValueWithDefault<bool>("EbayPixelEnabled", "False"); }
+            get { return GetValueWithDefault<int>("SessionTimeout", "15"); }
 		}
     }
 }
