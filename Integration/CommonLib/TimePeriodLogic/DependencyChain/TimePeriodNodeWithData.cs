@@ -77,7 +77,7 @@ namespace EzBob.CommonLib.TimePeriodLogic.DependencyChain
 			DateTime toDate = GetToDate(TimePeriodType, date, fromDate);
 			
 			var data = GetThisTimePeriodData();
-			return data.Any( d => d.Include( fromDate, toDate ) );
+			return data.Any(d => d.InRange(fromDate, toDate));
 		}
 
 		private DateTime GetToDate(TimePeriodEnum timePeriodType, DateTime finalDate, DateTime fromDate)
