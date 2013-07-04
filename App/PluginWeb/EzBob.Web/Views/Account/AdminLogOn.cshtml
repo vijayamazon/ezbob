@@ -1,12 +1,28 @@
-﻿@model dynamic
-
-<div class="row">
-    <div class="offset3 span6">
-        <div class="well">
-            <div Style="width: 250px;">
-                @Html.Partial("_LoginSimple")
+﻿@using EzBob.Web.Infrastructure
+@model EzBob.Web.Models.LogOnModel
+@{
+    ViewBag.Title = "Login to EZBOB | Business loans UK | Money in your account in less than 30 minutes";
+}
+    <div class="row-fluid">
+        <div class="notifications"></div>
+        <div class="row">
+            <div class="offset3 span6">
+                <div class="well">
+                    <div Style="width: 250px;">
+                        @Html.Partial("_LoginSimple")
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+@section Js{
+
+    <script type="text/javascript">
+        $(function () {
+            //EzBob.validateSignUpForm();
+            var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+            EzBob.App.trigger('error', '@Html.ValidationMessage("")');
+        });
+    </script>
+}

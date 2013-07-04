@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-@using (Html.BeginForm("LogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
+@using (Html.BeginForm("AdminLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
 {
     <div style="padding-left: 11px;padding-top: 18px;" class="clearfix">
         @Html.TextBox("UserName", "", new {@class="simle-login-input", placeholder = "enter your email", tabindex = "11", autofocus="autofocus" })

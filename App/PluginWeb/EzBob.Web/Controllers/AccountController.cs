@@ -75,9 +75,29 @@ namespace EzBob.Web.Controllers
         public ActionResult AdminLogOn(string returnUrl)
         {
             ViewData["returnUrl"] = returnUrl;
-            return View();
+            return View(new LogOnModel { ReturnUrl = returnUrl });
         }
         //------------------------------------------------------------------------
+
+        [HttpPost]
+        public ActionResult AdminLogOn(LogOnModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _users.GetUserByLogin(model.UserName);
+
+                if (_membershipProvider.ValidateUser(model.UserName, model.Password))
+                    {
+                        user.LoginFailedCount = 0;
+                        model.ReturnUrl = "/Underwriter/Customers";
+                        return SetCookieAndRedirect(model);
+                    }
+            }
+            ModelState.AddModelError("", "User not found or incorrect password.");
+            return View(model);
+        }
+
+
         [HttpPost]
         public ActionResult LogOn(LogOnModel model)
         {
