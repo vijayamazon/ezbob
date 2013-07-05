@@ -75,8 +75,8 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
             BlockUi "on"
             xhr = @checkedModel.sendToServer()
             xhr.done (response)=>
-                if response and response.error != undefined
-                    EzBob.ShowMessage "<pre>{0}</pre>".f(response.error), "Error"
+                if response != null  and response != undefined
+                    EzBob.ShowMessage "<pre>{0}</pre>".f(response), "Error"
                     return
                 EzBob.ShowMessage "File(s) successfully sended ", "Successful"
                 @checkedModel.reset()

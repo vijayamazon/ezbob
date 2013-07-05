@@ -9,6 +9,7 @@ using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
 using EzBob.Web.Code;
 using Scorto.Web;
+using log4net;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
@@ -17,6 +18,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
         private readonly IAppCreator _appCreator;
         private readonly IWorkplaceContext _context;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(CAISController));
 
         public CAISController(CaisReportsHistoryRepository caisReportsHistoryRepository, IAppCreator appCreator, IWorkplaceContext context)
         {
@@ -88,7 +90,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 }
                 catch (Exception e)
                 {
-                    error.Add(e.Message);
+                    error.Add(e.Message + (e.InnerException != null ? " Inner exception: "+e.InnerException.Message : ""));
                 }
             }
             return error.Count > 0 ? this.JsonNet(string.Join(Environment.NewLine, error)) : null;
@@ -104,7 +106,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 sender.UploadData(ZipString.Unzip(file.FileData), file.FileName);
                 file.UploadStatus = CaisUploadStatus.Uploaded;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 file.UploadStatus = CaisUploadStatus.UploadError;
                 throw;
