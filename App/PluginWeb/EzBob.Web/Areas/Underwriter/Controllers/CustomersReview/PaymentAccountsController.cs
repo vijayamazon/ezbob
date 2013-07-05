@@ -211,7 +211,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             _appCreator.PayPointAddedByUnderwriter(_context.User, cus, card_no);
 
-            return View("PayPointAdded");
+            return View("PayPointAdded", amount ?? 0);
         }
 
         [Transactional]

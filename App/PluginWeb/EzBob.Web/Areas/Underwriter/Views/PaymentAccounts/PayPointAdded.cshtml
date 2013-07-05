@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model decimal
 
 PayPoint added
 
@@ -6,7 +6,7 @@ PayPoint added
 {
     <script type="text/javascript">
         $(function () {
-            window.opener.paypointAdded();
+            window.opener.paypointAdded(@Model);
             self.close();
         });
     </script>
