@@ -201,7 +201,7 @@ namespace EzBob.Web.Infrastructure
 
         public int SessionTimeout
 		{
-            get { return GetValueWithDefault<int>("SessionTimeout", "15"); }
+            get { return GetValueWithDefault<int>("SessionTimeoutWeb", "15"); }
 		}
     }
 }

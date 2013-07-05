@@ -443,7 +443,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<!-- simple, hard -->
 		<property name="PasswordPolicyType" value="simple" />
         <!-- web session timeout in minutes -->
-        <property name="SessionTimeout" value="45"/>
+        <property name="SessionTimeoutWeb" value="45"/>
     </application>
 
     <module id="PostcodeAnywhereConfigEzBob">
