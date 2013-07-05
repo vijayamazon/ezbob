@@ -111,6 +111,7 @@
             @RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
             @RawCell("User status", "<%- UserStatus %>")
             @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
+            @RawCellWithButtonNear("Avoid Automatic Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
             @RawCellWithButtonNearUpdate("CRM:", "<%= ZohoId ? 'Yes' : 'No' %>", "updateCRM")
             
         </tbody>

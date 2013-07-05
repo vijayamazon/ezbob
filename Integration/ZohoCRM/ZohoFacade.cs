@@ -371,6 +371,7 @@ namespace ZohoCRM
                                                   c.SetValue("Num of loans", customer.Loans.Count);
                                                   
                                                   c.SetValue("IsTest", customer.IsTest ? "1" : "0");
+                                                  c.SetValue("IsAvoid", customer.IsAvoid ? "1" : "0");
                                                   c.SetValue("Step", GetStep(customer));
 
                                                   if (customer.Medal.HasValue)

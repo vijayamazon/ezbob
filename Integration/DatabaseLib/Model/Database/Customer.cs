@@ -327,6 +327,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string ReferenceSource { get; set; }
         public virtual EmailConfirmationRequestState EmailState { get; set; }
         public virtual bool IsTest { get; set; }
+        public virtual bool IsAvoid { get; set; }
         public virtual CardInfo CurrentCard { get; set; }
 		public virtual string ABTesting { get; set; }
 

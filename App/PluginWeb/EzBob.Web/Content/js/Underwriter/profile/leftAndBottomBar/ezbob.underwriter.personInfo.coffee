@@ -16,6 +16,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
         "click button[name=\"editEmail\"]": "editEmail"
         "click [name=\"isTestEditButton\"]": "isTestEditButton"
+        "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"updateCRM\"]": "updateCRM"
 
     templateHelpers:
@@ -50,6 +51,21 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         )
         d.render()
         return
+
+    avoidAutomaticDecisionButton: ->
+        d = new EzBob.Dialogs.CheckBoxEdit(
+            model: @model
+            propertyName: "IsAvoid"
+            title: "Avoid Automatic Decision ?"
+            postValueName: "enbaled"
+            checkboxName: "Avoid"
+            url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision"
+            data:
+                id: @model.get("Id")
+        )
+        d.render()
+        return
+
 
     updateCRM: ->
         that = this

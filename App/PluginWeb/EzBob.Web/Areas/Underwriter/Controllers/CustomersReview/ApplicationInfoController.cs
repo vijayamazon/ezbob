@@ -183,6 +183,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [ValidateJsonAntiForgeryToken]
         [Ajax]
         [Permission(Name = "CreditLineFields")]
+        public void AvoidAutomaticDecision(int id, bool enbaled)
+        {
+            var cust = _customerRepository.Get(id);
+            cust.IsAvoid = enbaled;
+            _crm.UpdateCustomer(cust);
+            Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enbaled);
+        }
+
+        [HttpPost]
+        [Transactional]
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [Permission(Name = "CreditLineFields")]
         public void AllowSendingEmails(long id, bool enbaled)
         {
             var cr = _cashRequestsRepository.Get(id);

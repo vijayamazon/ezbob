@@ -47,6 +47,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
             Id = customer.Id;
             IsTest = customer.IsTest;
+            IsAvoid = customer.IsAvoid;
             ZohoId = customer.ZohoId;
 
             if (customer.PersonalInfo != null)
@@ -97,5 +98,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public string ZohoId { get; set; }
         public bool IsTest { get; set; }
+        public bool IsAvoid { get; set; }
     }
 }

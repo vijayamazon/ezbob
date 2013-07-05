@@ -51,6 +51,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
             model.CustomerId = customer.Id;
             model.IsTest = customer.IsTest;
+            model.IsAvoid = customer.IsAvoid;
             model.SystemDecision = customer.Status.ToString();
 
             if (cr.SystemCalculatedSum != null && cr.SystemCalculatedSum.Value != 0)
