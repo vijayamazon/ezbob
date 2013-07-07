@@ -2303,7 +2303,7 @@ namespace EZBob.DatabaseLib
 			MP_FreeAgentInvoice item = order.Invoices.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
 			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
 
-			DateTime later = DateTime.Today;
+			DateTime later = DateTime.UtcNow;
 			int monthDiff = 1;
 			while (later > latestExistingDate)
 			{
