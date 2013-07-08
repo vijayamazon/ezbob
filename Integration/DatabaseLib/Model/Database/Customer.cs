@@ -479,7 +479,13 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string AmazonStatus { get; set; }
 		public virtual string PayPalStatus { get; set; }
 		public virtual string EkmStatus { get; set; }
+		public virtual string VolusionStatus { get; set; }
+		public virtual string PayPointStatus { get; set; }
+		public virtual string PlayStatus { get; set; }
+		public virtual string YodleeStatus { get; set; }
 		public virtual string FreeAgentStatus { get; set; }
+		public virtual string ShopifyStatus { get; set; }
+		public virtual string XeroStatus { get; set; }
         public virtual string MPStatus { get; set; }
         public virtual string MpList { get; set; }
         public virtual decimal OutstandingBalance { get; set; }

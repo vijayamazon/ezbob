@@ -238,7 +238,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.AmazonStatus).Formula(@"dbo.GetMarketPlaceStatus (2, Id)").Not.Insert().Not.Update();
 			Map(x => x.PayPalStatus).Formula(@"dbo.GetMarketPlaceStatus (3, Id)").Not.Insert().Not.Update();
 			Map(x => x.EkmStatus).Formula(@"dbo.GetMarketPlaceStatus (4, Id)").Not.Insert().Not.Update();
-            Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
+			Map(x => x.VolusionStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Volusion', Id)").Not.Insert().Not.Update();
+			Map(x => x.PayPointStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('PayPoint', Id)").Not.Insert().Not.Update();
+			Map(x => x.PlayStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Play', Id)").Not.Insert().Not.Update();
+			Map(x => x.YodleeStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Yodlee', Id)").Not.Insert().Not.Update();
+			Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
+			Map(x => x.ShopifyStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Shopify', Id)").Not.Insert().Not.Update();
+			Map(x => x.XeroStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Xero', Id)").Not.Insert().Not.Update();
             Map(x => x.MPStatus)
                 .Formula(
                     @"CASE WHEN (SELECT COUNT(*) FROM [MP_CustomerMarketPlace] c where c.UpdatingEnd is null and c.CustomerId = Id) > 0 THEN 'not updated' ELSE 'updated' END")

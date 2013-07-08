@@ -532,7 +532,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Hidden = false,
                     Fixed = false,
                     Search = true,
-                    Width = 85,
+                    Width = 65,
                     DataType = TypeCode.String,
                     Data = x => x.EbayStatus
                 });
@@ -550,12 +550,31 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
-                    Width = 105,
+                    Width = 85,
                     Search = true,
                     DataType = TypeCode.String,
                     Data = x => x.AmazonStatus
                 });
         }
+
+		public static void CreatePayPalStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "PayPal Status",
+				Name = "PayPalStatus",
+				Index = "PayPalStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Search = true,
+				Width = 75,
+				DataType = TypeCode.String,
+				Data = x => x.PayPalStatus
+			});
+		}
 
 		public static void CreateEkmStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
 		{
@@ -569,10 +588,86 @@ namespace EzBob.Web.Areas.Underwriter
 				Title = false,
 				Hidden = false,
 				Fixed = false,
-				Width = 75,
+				Width = 65,
 				Search = true,
 				DataType = TypeCode.String,
 				Data = x => x.EkmStatus
+			});
+		}
+
+		public static void CreateVolusionStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Volusion Status",
+				Name = "VolusionStatus",
+				Index = "VolusionStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 90,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.VolusionStatus
+			});
+		}
+
+		public static void CreatePayPointStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "PayPoint Status",
+				Name = "PayPointStatus",
+				Index = "PayPointStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 85,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.PayPointStatus
+			});
+		}
+
+		public static void CreatePlayStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Play Status",
+				Name = "PlayStatus",
+				Index = "PlayStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 60,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.PlayStatus
+			});
+		}
+
+		public static void CreateYodleeStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Yodlee Status",
+				Name = "YodleeStatus",
+				Index = "YodleeStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 75,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.YodleeStatus
 			});
 		}
 
@@ -595,24 +690,43 @@ namespace EzBob.Web.Areas.Underwriter
 			});
 		}
 
-        public static void CreatePayPalStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-                {
-                    Caption = "PayPal Status",
-                    Name = "PayPalStatus",
-                    Index = "PayPalStatus",
-                    Resizable = false,
-                    Align = Align.Center,
-                    Title = false,
-                    Hidden = false,
-                    Fixed = false,
-                    Search = true,
-                    Width = 95,
-                    DataType = TypeCode.String,
-                    Data = x => x.PayPalStatus
-                });
-        }
+		public static void CreateShopifyStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Shopify Status",
+				Name = "ShopifyStatus",
+				Index = "ShopifyStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 80,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.ShopifyStatus
+			});
+		}
+
+		public static void CreateXeroStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Xero Status",
+				Name = "XeroStatus",
+				Index = "XeroStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 65,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.XeroStatus
+			});
+		}
 
         public static void CreateWizardStepColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
         {
