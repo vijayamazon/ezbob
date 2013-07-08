@@ -23,6 +23,10 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         Reject_Defaults_AccountsNum:"input[name='reject_Defaults_AccountsNum']"
         Reject_Defaults_Amount:     "input[name='reject_Defaults_Amount']"
         Reject_Defaults_MonthsNum:  "input[name='reject_Defaults_MonthsNum']"
+        EnableAutomaticReRejection:             "select[name='enableAutomaticReRejection']"
+        AutoRejectionException_CreditScore:     "input[name='autoRejectionException_CreditScore']"
+        AutoRejectionException_AnualTurnover:   "input[name='autoRejectionException_AnualTurnover']"
+
 
     events:
         "click button[name='SaveRejectionSettings']":     "saveSettings"
@@ -46,7 +50,17 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
-            @$el.find("select[name='enableAutomaticRejection'], input[name='lowCreditScore'], input[name='totalAnnualTurnover'], input[name='totalThreeMonthTurnover'], input[name='reject_Defaults_CreditScore'], input[name='reject_Defaults_AccountsNum'], input[name='reject_Defaults_Amount'], input[name='reject_Defaults_MonthsNum']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
+            @$el.find(" select[name='enableAutomaticRejection'], 
+                        input[name='lowCreditScore'], 
+                        input[name='totalAnnualTurnover'], 
+                        input[name='totalThreeMonthTurnover'], 
+                        input[name='reject_Defaults_CreditScore'], 
+                        input[name='reject_Defaults_AccountsNum'], 
+                        input[name='reject_Defaults_Amount'], 
+                        select[name='enableAutomaticReRejection'], 
+                        input[name='autoRejectionException_CreditScore'], 
+                        input[name='autoRejectionException_AnualTurnover'],
+                        input[name='reject_Defaults_MonthsNum']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveRejectionSettings'], button[name='CancelRejectionSettings']").hide();
         @setValidator()
 
@@ -84,5 +98,11 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
                     required: true
                     min: 0
                 reject_Defaults_MonthsNum:
+                    required: true
+                    min: 0
+                autoRejectionException_CreditScore:
+                    required: true
+                    min: 0
+                autoRejectionException_AnualTurnover:
                     required: true
                     min: 0

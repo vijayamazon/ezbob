@@ -128,9 +128,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         public JsonNetResult AutomationApproval()
         {
             var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
-            var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
-            var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
-            var	autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
             var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
             var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
 
@@ -138,12 +135,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 {
                     EnableAutomaticApproval = enableAutomaticApproval.Value,
                     EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
-                    EnableAutomaticReRejection = enableAutomaticReRejection.Value,
-                    EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
-                    AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
-                    AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
-                    AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
-                    AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description,
                     MaxCapHomeOwner = maxCapHomeOwner.Value,
                     MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
                     MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
@@ -158,17 +149,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public JsonNetResult AutomationApproval(
                                                 string EnableAutomaticApproval,
-                                                string EnableAutomaticReRejection,
-                                                string AutoRejectionException_CreditScore,
-                                                string AutoRejectionException_AnualTurnover,
                                                 string MaxCapHomeOwner,
                                                 string MaxCapNotHomeOwner
             )
         {
             _configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
-            _configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
-            _configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
-            _configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
             _configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
             _configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
             return AutomationApproval();
@@ -190,6 +175,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var reject_Defaults_Amount = _configurationVariablesRepository.GetByName("Reject_Defaults_Amount");
             var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_MonthsNum");
 
+            var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
+            var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
+            var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
+
+
             var sr = new
                 {
                     EnableAutomaticRejection = enableAutomaticRejection.Value,
@@ -207,8 +197,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     Reject_Defaults_Amount = reject_Defaults_Amount.Value,
                     Reject_Defaults_AmountDesc = reject_Defaults_Amount.Description,
                     Reject_Defaults_MonthsNum = reject_Defaults_MonthsNum.Value,
-                    Reject_Defaults_MonthsNumDesc = reject_Defaults_MonthsNum.Description
-                };
+                    Reject_Defaults_MonthsNumDesc = reject_Defaults_MonthsNum.Description,
+                    EnableAutomaticReRejection = enableAutomaticReRejection.Value,
+                    EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
+                    AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
+                    AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
+                    AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
+                    AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description
+                    };
             return this.JsonNet(sr);
         }
 
@@ -223,7 +219,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                                                  string Reject_Defaults_CreditScore,
                                                  string Reject_Defaults_MonthsNum,
                                                  string TotalAnnualTurnover,
-                                                 string TotalThreeMonthTurnover)
+                                                 string TotalThreeMonthTurnover,
+                                                 string EnableAutomaticReRejection,
+                                                 string AutoRejectionException_CreditScore,
+                                                 string AutoRejectionException_AnualTurnover)
         {
             _configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
             _configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
@@ -233,6 +232,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
             _configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
             _configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
+            _configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
+            _configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
+            _configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
+
             return AutomationRejection();
         }
     }

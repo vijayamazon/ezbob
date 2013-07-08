@@ -16,10 +16,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
 
     bindings:
         EnableAutomaticApproval:                "select[name='enableAutomaticApproval']"
-        EnableAutomaticReRejection:             "select[name='enableAutomaticReRejection']"
-        
-        AutoRejectionException_CreditScore:     "input[name='autoRejectionException_CreditScore']"
-        AutoRejectionException_AnualTurnover:   "input[name='autoRejectionException_AnualTurnover']"
         MaxCapHomeOwner:                        "input[name='maxCapHomeOwner']"
         MaxCapNotHomeOwner:                     "input[name='maxCapNotHomeOwner']"
 
@@ -48,9 +44,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
             @$el.find(" select[name='enableAutomaticApproval'], 
-                        select[name='enableAutomaticReRejection'], 
-                        input[name='autoRejectionException_CreditScore'], 
-                        input[name='autoRejectionException_AnualTurnover'],
                         input[name='maxCapHomeOwner'],
                         input[name='maxCapNotHomeOwner']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveApprovalSettings'], button[name='CancelApprovalSettings']").hide();
@@ -74,12 +67,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
             onkeyup: -> return false
             onclick: -> return false
             rules:
-                autoRejectionException_CreditScore:
-                    required: true
-                    min: 0
-                autoRejectionException_AnualTurnover:
-                    required: true
-                    min: 0
                 maxCapHomeOwner:
                     required: true
                     min: 0
