@@ -274,7 +274,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @$el.hide()
 
     changeDecisionButtonsState: (isHideAll)->
-        disabled = !!@personalInfoModel.get("Disabled")
+        disabled = @personalInfoModel.get("Disabled") is 1 #disabled
         creditResult = @personalInfoModel.get("CreditResult")
        
         @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass "disabled", disabled
