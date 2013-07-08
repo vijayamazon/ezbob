@@ -25,11 +25,6 @@ class EzBob.Underwriter.CAIS.SelectedFiles extends Backbone.Collection
     getModelById: (id)->
        @filter (val) -> return val.get("id") == id
 
-    url: "#{gRootPath}Underwriter/CAIS/SendFiles"
-
-    sendToServer: ->
-        Backbone.sync "create", @, url: @url
-
 class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
     template: _.template(if $("#cais-template").length>0 then $("#cais-template").html() else "")
 
@@ -48,7 +43,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                 false
     ui:
         count:".reports-count"
-        send: ".send"
+        download: ".download"
 
     onRender: ->
         @checkedFileModelChanged()
@@ -59,33 +54,20 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
 
     checkedFileModelChanged: ->
         if @checkedModel.length == 0
-            @ui.send.hide()
+            @ui.download.hide()
         else
-            @ui.send.show()
+            @ui.download.show()
             @ui.count.text  @checkedModel.length
 
     events:
         "click .generate": "generateClicked"
-        "click .send ": "sendFile"
+        "click .download ": "downloadFile"
         "dblclick [data-id]": "fileSelected"
         "click [data-id]": "fileChecked"
 
-    sendFile: ->
-        sendFn = =>
-            BlockUi "on"
-            xhr = @checkedModel.sendToServer()
-            xhr.done (response)=>
-                if response != null  and response != undefined
-                    EzBob.ShowMessage "<pre>{0}</pre>".f(response), "Error"
-                    return
-                EzBob.ShowMessage "File(s) successfully sended ", "Successful"
-                @checkedModel.reset()
-                @render()
-            xhr.fail ()->
-                EzBob.ShowMessage "Something went wrong", "Error occured"
-            xhr.always ->
-                BlockUi "off"
-        EzBob.ShowMessage "Are you sure you want to send selected files?", "Confirmation", sendFn, "Send", null, "Cancel"
+    downloadFile: ->
+        _.each @checkedModel.toJSON(), (val)->
+            window.open "#{gRootPath}Underwriter/CAIS/DownloadFile?Id=#{val.id}", "_blank"
     
     fileViewChanged: (e)->
         $el = $(e.currentTarget)

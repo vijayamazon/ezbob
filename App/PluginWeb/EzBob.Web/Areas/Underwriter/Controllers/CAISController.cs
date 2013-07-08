@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Repository;
@@ -9,7 +10,6 @@ using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
 using EzBob.Web.Code;
 using Scorto.Web;
-using log4net;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
@@ -18,7 +18,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
         private readonly IAppCreator _appCreator;
         private readonly IWorkplaceContext _context;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(CAISController));
 
         public CAISController(CaisReportsHistoryRepository caisReportsHistoryRepository, IAppCreator appCreator, IWorkplaceContext context)
         {
@@ -45,6 +44,18 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 return this.JsonNet(new {error = e});
             }
             return null;
+        }
+
+        [HttpGet]
+        public FileResult DownloadFile(int id)
+        {
+            var cais = _caisReportsHistoryRepository.Get(id);
+            var bytes = Encoding.UTF8.GetBytes(ZipString.Unzip(cais.FileData));
+            var result = new FileContentResult(bytes, "text/plain")
+                {
+                    FileDownloadName = cais.FileName
+                };
+            return result;
         }
 
         [Ajax]
@@ -106,7 +117,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 sender.UploadData(ZipString.Unzip(file.FileData), file.FileName);
                 file.UploadStatus = CaisUploadStatus.Uploaded;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 file.UploadStatus = CaisUploadStatus.UploadError;
                 throw;
