@@ -8,7 +8,8 @@ using YodleeLib.connector;
 
 namespace EzBob.Models
 {
-	using NHibernate;
+    using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+    using NHibernate;
 	using Scorto.NHibernate.Repository;
 
 	class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
@@ -82,7 +83,8 @@ namespace EzBob.Models
                                                          runningBalance = transaction.runningBalance.ToString(),
                                                          userDescription = transaction.userDescription,
                                                          memo = transaction.memo,
-                                                         category = transaction.category,
+                                                         categoryName = transaction.transactionCategory.Name,
+                                                         categoryType = transaction.transactionCategory.Type,
                                                          postDate = transaction.postDate.ToString(),
                                                          transactionAmount = transaction.transactionAmount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
                                                              transaction.transactionAmountCurrency,

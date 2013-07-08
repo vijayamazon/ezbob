@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
     using System;
 
@@ -39,7 +39,7 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual long? hasDetails { get; set; }
         public virtual bool hasDetailsSpecified { get; set; }
         public virtual string transactionId { get; set; }
-        public virtual string transactionCategoryId { get; set; }
+        public virtual MP_YodleeTransactionCategories transactionCategory { get; set; }
         public virtual string siteCategoryType { get; set; }
         public virtual string siteCategory { get; set; }
         public virtual string classUpdationSource { get; set; }

@@ -6,8 +6,10 @@ using Iesi.Collections.Generic;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
+    using Database;
+
     public class MP_YodleeOrder
     {
         public MP_YodleeOrder()

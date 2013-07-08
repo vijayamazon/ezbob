@@ -1,4 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
     using System;
     using Iesi.Collections.Generic;

@@ -14,7 +14,8 @@
             runningBalance = "-";
             userDescription = "-";
             memo = "-";
-            category = "-";
+            categoryName = "-";
+            categoryType = "-";
             postDate = "-";
             transactionAmount = "-";
             description = "-";
@@ -29,7 +30,8 @@
         public string runningBalance { get; set; }
         public string userDescription { get; set; }
         public string memo { get; set; }
-        public string category { get; set; }
+        public string categoryName { get; set; }
+        public string categoryType { get; set; }
         public string postDate { get; set; }
         public string transactionAmount { get; set; }
         public string description { get; set; }

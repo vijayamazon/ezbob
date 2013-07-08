@@ -44,6 +44,7 @@ namespace EzBobTest
         public void Init()
         {
             EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
+            //EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);

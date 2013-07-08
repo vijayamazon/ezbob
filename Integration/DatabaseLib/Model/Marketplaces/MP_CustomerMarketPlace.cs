@@ -3,8 +3,9 @@ using Iesi.Collections.Generic;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Yodlee;
 
-	public class MP_CustomerMarketPlace 
+    public class MP_CustomerMarketPlace 
 	{
         public MP_CustomerMarketPlace() 
 		{

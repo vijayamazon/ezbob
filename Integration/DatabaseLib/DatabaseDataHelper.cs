@@ -36,8 +36,9 @@ namespace EZBob.DatabaseLib
 {
 	using EzBob.CommonLib.Security;
 	using Model.Marketplaces.FreeAgent;
+	using Model.Marketplaces.Yodlee;
 
-	public enum CustomerMarketplaceUpdateActionType
+    public enum CustomerMarketplaceUpdateActionType
 	{
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
@@ -78,6 +79,7 @@ namespace EZBob.DatabaseLib
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private readonly IConfigurationVariablesRepository _ConfigurationVariables;
+	    private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -106,6 +108,7 @@ namespace EZBob.DatabaseLib
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
 			_ConfigurationVariables = new ConfigurationVariablesRepository(session);
+            _MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 		}
 
 		public IConfigurationVariablesRepository ConfigurationVariables { get { return _ConfigurationVariables; } }
@@ -1108,7 +1111,7 @@ namespace EZBob.DatabaseLib
 							hasDetails = bankTransaction.hasDetails,
 							hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
 							transactionId = bankTransaction.transactionId,
-							transactionCategoryId = bankTransaction.transactionCategoryId,
+							transactionCategory = _MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(bankTransaction.transactionCategoryId),
 							siteCategoryType = bankTransaction.siteCategoryType,
 							siteCategory = bankTransaction.siteCategory,
 							classUpdationSource = bankTransaction.classUpdationSource,

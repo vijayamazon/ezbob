@@ -113,6 +113,8 @@
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategory.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategoryStatistics.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\TeraPeackHelper.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeTransactionCategories.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeTransactionCategoriesMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeAccountsMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeBanksMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeAccounts.cs" />

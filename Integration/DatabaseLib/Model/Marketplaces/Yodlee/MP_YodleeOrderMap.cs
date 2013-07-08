@@ -1,7 +1,7 @@
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
     public class MP_YodleeOrderMap : ClassMap<MP_YodleeOrder>
     {

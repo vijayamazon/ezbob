@@ -57,7 +57,7 @@
                         <td><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) : "-"%></td>
                     </tr>
                     <tr>
-                        <td>AvailableBalance</td>
+                        <td>Available Balance</td>
                         <td><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
                         <td><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
                         <td><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
@@ -122,6 +122,7 @@
                                     <th>Transaction Date</th>
                                     <th>Transaction Id</th>
                                     <th>Category</th>
+                                    <th>Category Type</th>
                                     <th>Running Balance</th>
                                     <th>Description</th>
                                     <th>User Description</th>
@@ -140,7 +141,8 @@
                                     <td><%-transaction.transactionAmount!=undefined ? GBPValues(transaction.transactionAmount, true) : "-"%></td>
                                     <td><%-transaction.transactionDate!=undefined ? transaction.transactionDate : "-"%></td>
                                     <td><%-transaction.transactionId!=undefined ? transaction.transactionId : "-"%></td>
-                                    <td><%-transaction.category!=undefined ? transaction.category : "-"%></td>
+                                    <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
+                                    <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                                     <td><%-transaction.runningBalance!=undefined ? transaction.runningBalance : "-"%></td>
                                     <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
                                     <td><%-transaction.userDescription!=undefined ? transaction.userDescription : "-"%></td>

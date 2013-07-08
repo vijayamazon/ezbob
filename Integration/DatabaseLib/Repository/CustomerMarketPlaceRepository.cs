@@ -11,8 +11,9 @@ using NHibernate.Linq;
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Yodlee;
 
-	public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
+    public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
     {
         bool Exists(Customer customer, MP_MarketplaceType marketplaceType);
         IEnumerable<MP_CustomerMarketPlace> Get(Customer customer, MP_MarketplaceType marketplaceType);

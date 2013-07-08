@@ -1,7 +1,7 @@
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
     public class MP_YodleeOrderItemBankTransactionMap : ClassMap<MP_YodleeOrderItemBankTransaction>
     {
@@ -43,12 +43,12 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.hasDetails).Nullable();
             Map(x => x.hasDetailsSpecified);
             Map(x => x.transactionId).Length(300);
-            Map(x => x.transactionCategoryId).Length(300);
+            References(x => x.transactionCategory).Column("transactionCategoryId");
             Map(x => x.siteCategoryType).Length(300);
             Map(x => x.siteCategory).Length(300);
             Map(x => x.classUpdationSource).Length(300);
             Map(x => x.lastCategorised).Length(300);
-            Map(x => x.transactionDate).CustomType<UtcDateTimeType>().Nullable(); ;
+            Map(x => x.transactionDate).CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.isReimbursable).Nullable();
             Map(x => x.isReimbursableSpecified);
             Map(x => x.mcCode).Length(300);

@@ -6,8 +6,9 @@ using Iesi.Collections.Generic;
 namespace EZBob.DatabaseLib.Model.Database
 {
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Yodlee;
 
-	public class MP_CustomerMarketplaceUpdatingHistory
+    public class MP_CustomerMarketplaceUpdatingHistory
 	{
 		public MP_CustomerMarketplaceUpdatingHistory()
 		{
