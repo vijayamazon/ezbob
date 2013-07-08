@@ -107,7 +107,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @setInputReadOnly true
         @validator = EzBob.validateYourInfoEditForm(@ui.form)
         @.$el.find('.phonenumber').numericOnly(11);
-        @.$el.find('.cashInput').numericOnly(11);
+        @.$el.find('.cashInput').numericOnly(15);
     
     renderPersonal: ->
         personalInfoView = new EzBob.Profile.PersonalInfoView({ model: @model })
