@@ -132,9 +132,9 @@
             @RawCell("System calculated amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
             
             <%if(m.Editable){%>
-            @RawCellWithButtonNear("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
+            @RawCellWithButtonNear("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPoundsNoDecimals(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
             <%} else{%>
-            @RawCell("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
+            @RawCell("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPoundsNoDecimals(m.OfferedCreditLine) %>")
             <%}%>
     
             @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")

@@ -174,16 +174,16 @@ EzBob.Dialogs.PercentsEdit = EzBob.Dialogs.AutonumericEdit.extend({
     }
 });
 
-EzBob.Dialogs.PoundsEdit = EzBob.Dialogs.AutonumericEdit.extend({
-    autonumericFormat: EzBob.moneyFormat
+EzBob.Dialogs.PoundsNoDecimalsEdit = EzBob.Dialogs.AutonumericEdit.extend({
+    autonumericFormat: EzBob.moneyFormatNoDecimals
 });
 
-EzBob.Dialogs.OfferedCreditLineEdit = EzBob.Dialogs.PoundsEdit.extend({
+EzBob.Dialogs.OfferedCreditLineEdit = EzBob.Dialogs.PoundsNoDecimalsEdit.extend({
     rules: { simpleValueEdit: { required: true } },
     initialize: function (options) {
         this.rules.simpleValueEdit.autonumericMin = options.min;
         this.rules.simpleValueEdit.autonumericMax = options.max;
-        EzBob.Dialogs.PoundsEdit.prototype.initialize.call(this, arguments);
+        EzBob.Dialogs.PoundsNoDecimalsEdit.prototype.initialize.call(this, arguments);
     }
 });
 

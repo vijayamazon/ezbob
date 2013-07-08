@@ -72,6 +72,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     editOfferedCreditLine: ->
+        that = this
         d = new EzBob.Dialogs.OfferedCreditLineEdit(
             model: @model
             propertyName: "OfferedCreditLine"
@@ -85,6 +86,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             max: EzBob.Config.MaxLoan
         )
         d.render()
+        d.on "done", ->
+            that.model.fetch()
+
         return
 
     editInterestRate: ->

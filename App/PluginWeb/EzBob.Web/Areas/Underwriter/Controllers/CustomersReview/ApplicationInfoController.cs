@@ -15,7 +15,10 @@ using log4net;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class ApplicationInfoController : Controller
+	using System;
+	using StructureMap;
+
+	public class ApplicationInfoController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICashRequestsRepository _cashRequestsRepository;
@@ -26,7 +29,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly LoanLimit _limit;
         private readonly IDiscountPlanRepository _discounts;
         private readonly CashRequestBuilder _crBuilder;
-        private readonly ApplicationInfoModelBuilder _infoModelBuilder;
+		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -71,14 +74,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             _limit.Check(amount);
             var cr = _cashRequestsRepository.Get(id);
-            cr.ManagerApprovedSum = amount;
+	        int step = _config.GetCashSliderStep;
+			cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
             _crm.UpdateCashRequest(cr);
             cr.LoanTemplate = null;
             _cashRequestsRepository.SaveOrUpdate(cr);
 
             Log.DebugFormat("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
-            return this.JsonNet(true);
+	        return this.JsonNet(true);
         }
 
         [HttpPost]
