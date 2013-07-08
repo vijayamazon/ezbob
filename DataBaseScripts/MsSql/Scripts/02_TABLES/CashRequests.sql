@@ -15,8 +15,8 @@ CREATE TABLE [dbo].[CashRequests](
 	[SystemDecisionDate] [datetime] NULL,
 	[UnderwriterDecisionDate] [datetime] NULL,
 	[EscalatedDate] [datetime] NULL,
-	[SystemCalculatedSum] [decimal](18, 0) NULL,
-	[ManagerApprovedSum] [decimal](18, 0) NULL,
+	[SystemCalculatedSum] [int] NULL,
+	[ManagerApprovedSum] [int] NULL,
 	[MedalType] [nvarchar](50) NULL,
 	[EscalationReason] [nvarchar](200) NULL,
 	[APR] [decimal](18, 0) NULL,
@@ -47,8 +47,6 @@ CREATE NONCLUSTERED INDEX [IX_CashRequests_IDCust] ON [dbo].[CashRequests]
 	[Id] ASC,
 	[IdCustomer] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_RepaymentPeriod]  DEFAULT ((3)) FOR [RepaymentPeriod]
 GO
 ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_IsLoanType]  DEFAULT ((0)) FOR [IsLoanTypeSelectionAllowed]
 GO

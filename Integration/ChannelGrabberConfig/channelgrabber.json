@@ -76,12 +76,12 @@
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -3px" },
 					{ "Property": "width", "Value": "98px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -43px" },
 					{ "Property": "width", "Value": "98px" }
 				]
@@ -148,12 +148,12 @@
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px 0px" },
 					{ "Property": "width", "Value": "116px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "116px" }
 				]
@@ -198,7 +198,7 @@
 						"Type": "Text",
 						"Caption": "The URL to the shop",
 						"ValidationRules": { "required": true, "url": true, "minlength": 89, "maxlength": 300 }
-					}
+					},
 				],
 				"Notes": [
 					"<p>You should provide URL to a private application connected to your shop. ",
@@ -215,12 +215,12 @@
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px 0px" },
 					{ "Property": "width", "Value": "104px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "104px" }
 				]
@@ -242,8 +242,8 @@
 				{ "PropertyName": "Login",       "NodeName": "apikey",     "UniqueIDPosition":  0                  },
 				{ "PropertyName": "Password",    "NodeName": "secret",     "UniqueIDPosition":  1                  },
 				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" },
-				{ "PropertyName": "AuxLogin",    "NodeName": "publicCert", "UniqueIDPosition": -8, "Default": "-----BEGIN CERTIFICATE-----\nMIICWDCCAcGgAwIBAgIJAKo3mil8ODXFMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV\nBAYTAlVLMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX\naWRnaXRzIFB0eSBMdGQwHhcNMTMwNzA4MDgxNzQ0WhcNMTQwNzA4MDgxNzQ0WjBF\nMQswCQYDVQQGEwJVSzETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50\nZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKB\ngQCpOfXJC3UTjMbs8Hnrele81QLn1uXGHVOErlWzMy1thOTIuW5Xor1dfj3+85VT\nBXHJjL6UdRaGVhLkYBRQGZJWrNeLcOQCmO44zTVPwWw0sP+2awYmxYYzwA1orxBR\nByE9sifPCPDBMxNetzTQK+AZwgmklcCm3D+e3o/5ETRAywIDAQABo1AwTjAdBgNV\nHQ4EFgQUuu8sLgGsj2xj/TZHLJf9c1Br7e8wHwYDVR0jBBgwFoAUuu8sLgGsj2xj\n/TZHLJf9c1Br7e8wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOBgQBz8N+U\nFfbuoJjwXJccsAaTe4EH4o1UkwrEBGrIKEW55Ky/+CrlHuG6l1NmIACDsP5ymuIf\nujLLGg70Wo71YqBSyer/cppyliPyc3cu2C+uv9DJ7fLWsQGW8waU+Y9xHW0IY68f\n6JjtVv80SiZ+fL32goxFUWuWcM2KryeQEZ3fHw==\n-----END CERTIFICATE-----" },
-				{ "PropertyName": "AuxPassword", "NodeName": "privateKey", "UniqueIDPosition": -8, "Default": "-----BEGIN RSA PRIVATE KEY-----\nMIICXgIBAAKBgQCpOfXJC3UTjMbs8Hnrele81QLn1uXGHVOErlWzMy1thOTIuW5X\nor1dfj3+85VTBXHJjL6UdRaGVhLkYBRQGZJWrNeLcOQCmO44zTVPwWw0sP+2awYm\nxYYzwA1orxBRByE9sifPCPDBMxNetzTQK+AZwgmklcCm3D+e3o/5ETRAywIDAQAB\nAoGAY0yXZPlMIcShlbcmU37erPdxVQlMmwvqThjeQODu7yzj8sSccuATriC90DSu\nkqDHPDVSP1rVdM5dF5UpVjcrHqyO6Ke2KOxmGIts8Qgd2h97xg2rB52uPwnttLEn\nEbLK1UWmlYtEumMgLktgu4ZViP80vkrz223cnNoia6u428ECQQDafb76WMY/P1S1\n4wZX57AaCY64GyzEmWWHTVXdhW61QoA01xQlFV/qyv/ZvBvY5U4PpGhSIVehmJ+j\nhoMeoSPXAkEAxkcf3uEvqI+0GP01MdHUi1ADh1j3tXnZMPGBAxk3rR7AycPLVW+o\nzkHB5aBH2Trrgx6U79Y6Ez4r+UVjUggsLQJBAKAy2rhMJu9wy/egwaHqaqBsqYwr\nwKNVpa+S8IY/s3CLld0oZcja5z0MIpPO7MwXNSka7rJpaAtAEKyhj7oBhHkCQQCC\n1bntCzC0jKatep/YUPpsNw8tB4Lk6BNuHV4hGknH3awfNyh8JuL/vxpgGGRwrlVr\nvwlOPVEzE2pW4PeJ0MS9AkEAkXX5SkYz6Fhy/pwdvltCY5h0Xu6hWgNc4WzM5Sv8\nJmtC2H7zSnaiZfu5DkjD4+4kneKj5Vh8s760GzK8yCqrIg==\n-----END RSA PRIVATE KEY-----" }
+				{ "PropertyName": "AuxLogin",    "NodeName": "publicCert", "UniqueIDPosition": -8, "Default": "" },
+				{ "PropertyName": "AuxPassword", "NodeName": "privateKey", "UniqueIDPosition": -8, "Default": "" },
 			],
 
 			"ToStringArguments": [
@@ -264,12 +264,6 @@
 			"LinkForm": {
 				"Fields": [
 					{
-						"PropertyName": "Name",
-						"Type": "Text",
-						"Caption": "The name of Xero account",
-						"ValidationRules": { "required": true, "maxlength": 300 }
-					},
-					{
 						"PropertyName": "Login",
 						"Type": "Text",
 						"Caption": "The Consumer Key to access Xero API",
@@ -277,38 +271,38 @@
 					},
 					{
 						"PropertyName": "Password",
-						"Type": "Text",
+						"Type": "Password",
 						"Caption": "The Consumer Secret to access Xero API",
 						"ValidationRules": { "required": true, "maxlength": 300 }
-					}
+					},
 				],
 				"Notes": [
 					"To retrieve your Consumer Key and Consumer Secret:",
 					"<ol>",
-					"<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\">this key file</a> to your desktop.</li>",
 					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\">this link to your Xero API area</a></li>",
 					"<li>Choose <strong>Private</strong></li>",
 					"<li>Enter application name: <strong>EZBOB</strong></li>",
-					"<li>Click <strong>Choose File</strong> and select the file you downloaded on the step 1.</li>",
+					"<li>Provide this Public Key:<blockquote>-----BEGIN CERTIFICATE-----
+0nRKKwOlO/WAuOs/x0/nODAfBgNVHSMEGDAWgBQysX7q0nRKKwOlO/WAuOs/x0/n
+ODAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAFOBJlsyp4Ditq+WOlqe
+h0PdFcUQ0yPnUe5iiPtQJkqWAQ3fwiOEpn6/fGhmgFq/6u3qC6+oR4TBIia3QtT/
+PJTxEzDCZl6zjLskRz2Xzb6moUTWBMM8xLfXfPfTtd5yc9/2pIcC8v3rk91t09og
+Y+CFV0/+qX1tcacscXbEmyIr 
+-----END CERTIFICATE-----</blockquote></li>",
 					"<li>Press <strong>Save</strong></li>",
 					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
 					"</ol>",
-					"<img src=\"/Content/xero/instructions.jpg\">",
 				],
 				"OnBeforeLink": [
-					"accountModel.auxLogin = accountModel.publicCert;",
-					"accountModel.auxPassword = accountModel.privateKey;",
-					"delete accountModel.publicCert;",
-					"delete accountModel.privateKey;",
 					"return accountModel;"
 				],
 				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px 0px" },
 					{ "Property": "width", "Value": "54px" }
 				],
 				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
+					{ "Property": "background", Value: "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "54px" }
 				]
@@ -316,3 +310,4 @@
 		}
 	}
 ]
+

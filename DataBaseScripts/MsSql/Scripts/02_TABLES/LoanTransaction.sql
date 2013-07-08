@@ -25,6 +25,7 @@ CREATE TABLE [dbo].[LoanTransaction](
 	[LoanRepayment] [numeric](18, 4) NULL,
 	[Rollover] [numeric](18, 4) NULL,
 	[InterestOnly] [bit] NULL,
+	[Reconciliation] [varchar](10) NOT NULL,
  CONSTRAINT [PK_LoanTransaction] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -39,4 +40,6 @@ CREATE NONCLUSTERED INDEX [IX_LT_ID_TYPE] ON [dbo].[LoanTransaction]
 )
 INCLUDE ( [LoanId],
 [LoanRepayment]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[LoanTransaction] ADD  CONSTRAINT [DF_LoanTran_Recon]  DEFAULT ('not tested') FOR [Reconciliation]
 GO

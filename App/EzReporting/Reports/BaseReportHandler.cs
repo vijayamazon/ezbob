@@ -16,74 +16,102 @@ namespace Reports {
 	using Mailer;
 
 	public class BaseReportHandler : SafeLog {
-		public const string DefaultToEMail = "dailyreports@ezbob.com";
-		public const string DefaultFromEMailPassword = "ezbob2012";
-		public const string DefaultFromEMail = "ezbob@ezbob.com";
-		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
-	    public static string DefaultAttachment = "";
+		#region public
+
+		#region method InitAspose
+
+		public static void InitAspose() {
+			var license = new License();
+
+			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("Reports.Aspose.Total.lic")) {
+				s.Position = 0;
+				license.SetLicense(s);
+			} // using
+		} // InitAspose
+
+		#endregion method InitAspose
+
+		#region constructor
 
 		public BaseReportHandler(AConnection oDB, ASafeLog log = null) : base(log) {
 			DB = oDB;
 		} // constructor
 
-		protected AConnection DB { get; private set; }
+		#endregion constructor
 
-		public ATag BuildPlainedPaymentReport(Report report, DateTime today) {
-			return new Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today))))
-				.Append(PaymentReport(today));
-		} // BuildPlainedPaymentReport
+		#region method AddReportToList
 
 		public void AddReportToList(List<Report> reportList, DataRow row, string defaultToEmail) {
-			ReportType type;
-
-			if (!Enum.TryParse<ReportType>(row["Type"].ToString(), out type))
-				type = ReportType.RPT_GENERIC;
-
-			reportList.Add(new Report {
-				Type = type,
-				Title = row["Title"].ToString(),
-				StoredProcedure = row["StoredProcedure"].ToString(),
-				IsDaily = (bool)row["IsDaily"],
-				IsWeekly = (bool)row["IsWeekly"],
-				IsMonthly = (bool)row["IsMonthly"],
-				Columns = Report.ParseHeaderAndFields(row["Header"].ToString(), row["Fields"].ToString()),
-				ToEmail = (string.IsNullOrEmpty(row["ToEmail"].ToString()) ? defaultToEmail : row["ToEmail"].ToString()),
-				IsMonthToDate = (bool)row["IsMonthToDate"]
-			});
+			reportList.Add(new Report(row, defaultToEmail));
 		} // AddReportToList
 
-		public void SendReport(string subject, ATag mailBody, string toAddressStr = DefaultToEMail, string period = "Daily", Workbook wb = null) {
-			var email = new Html.Tags.Html();
+		#endregion method AddReportToList
 
-			email
-				.Append(new Head().Append(Report.GetStyle()))
-				.Append(mailBody);
+		#region report generators
 
-			email.MoveCssInline(Report.ParseStyle());
+		public ATag TableReport(string spName, DateTime startDate, DateTime endDate, ColumnInfo[] columns, bool isSharones = false, string RptTitle = "") {
+			var tbl = new Table().Add<Class>("Report");
 
-			lock (typeof(BaseReportHandler)) {
-				Mailer.SendMail(
-					DefaultFromEMail,
-					DefaultFromEMailPassword,
-					"EZBOB " + period + " " + subject + " Client Report",
-					email.ToString(),
-					toAddressStr,
-					wb
+			try {
+				DataTable dt = DB.ExecuteReader(spName,
+					new QueryParameter("@DateStart", DB.DateToString(startDate)),
+					new QueryParameter("@DateEnd", DB.DateToString(endDate))
 				);
-			} // lock
 
-			if (!String.IsNullOrEmpty(DefaultAttachment)) {
-				try {
-					File.Delete(DefaultAttachment);
-				}
-				catch (Exception e) {
-					Error(e.ToString());
-				}
-			} // if
+				if (!isSharones)
+					tbl.Add<ID>("tableReportData");
 
-			Debug("Mail {0} sent to: {1}", subject, toAddressStr);
-		} // SendReport
+				var tr = new Tr().Add<Class>("HR");
+
+				for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
+					if (columns[columnIndex].IsVisible)
+						tr.Append(new Th().Add<Class>("H").Append(new Text(columns[columnIndex].Caption)));
+
+				tbl.Append(new Thead().Append(tr));
+
+				var oTbody = new Tbody();
+				tbl.Append(oTbody);
+
+				int lineCounter = 0;
+
+				foreach (DataRow row in dt.Rows) {
+					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Even" : "Odd");
+					oTbody.Append(oTr);
+
+					List<string> oClassesToApply = new List<string>();
+
+					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++) {
+						ColumnInfo col = columns[columnIndex];
+						var oValue = row[col.FieldName];
+
+						if (col.IsVisible) {
+							var oTd = new Td();
+							oTr.Append(oTd);
+
+							if (IsNumber(oValue))
+								oTd.Add<Class>("R").Append(new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2))));
+							else
+								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
+						}
+						else {
+							if (col.ValueType == ValueType.CssClass)
+								oClassesToApply.Add(oValue.ToString());
+						} // if
+					} // for each column
+
+					if (oClassesToApply.Count > 0)
+						oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
+
+					lineCounter++;
+				} // for each data row
+
+				var wb = AddSheetToExcel(dt, spName, RptTitle);
+			}
+			catch (Exception e) {
+				Error(e.ToString());
+			}
+			return tbl;
+		} // TableReport
 
 		public ATag BuildNewClientReport(Report report, DateTime today) {
 			return new Body().Add<Class>("Body")
@@ -92,82 +120,60 @@ namespace Reports {
 				.Append(CustomerReport(today));
 		} // BuildNewClientReport
 
-		private ATag CustomerReport(DateTime today) {
-			Table tbl = new Table();
+		public ATag BuildDailyStatsReportBody(Report report, DateTime today, DateTime tomorrow) {
+			return new Body().Add<Class>("Body")
+				.Append( new H1().Append(new Text(report.GetTitle(today))) )
+				.Append( DailyStatsReport(today, tomorrow) );
+		} // BuildDailyStatsReportBody
 
-			try {
-				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", DB.DateToString(today)));
+		public ATag BuildInWizardReport(Report report, DateTime today, DateTime tomorrow) {
+			return new Html.Tags.Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today))))
+				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
 
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Email")))
-					.Append(new Th().Append(new Text("Status")))
-					.Append(new Th().Append(new Text("Wizard Finished")))
-					.Append(new Th().Append(new Text("Account #")))
-					.Append(new Th().Append(new Text("Credit Offer")))
-					.Append(new Th().Append(new Text("Source Ad")));
+				.Append(new P().Append(TableReport("RptNewClients", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)))
 
-				oTr.ApplyToChildren<Class>("H");
+				.Append(new P().Append(new Text("Clients that just enetered their email:")))
 
-				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
+				.Append(new P().Append(TableReport("RptNewClientsStep1", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)));
+		} // BuildInWizardReport
 
-				Tbody tbody = new Tbody();
-				tbl.Append(tbody);
+		public ATag BuildPlainedPaymentReport(Report report, DateTime today) {
+			return new Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today))))
+				.Append(PaymentReport(today));
+		} // BuildPlainedPaymentReport
 
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Status"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["IsSuccessfullyRegistered"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["AccountNumber"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["CreditSum"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())));
+		#endregion report generators
 
-					tbody.Append(oTr);
-				} // for each data row
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			}
+		#region Excel generators
 
-			return tbl;
-		} // CustomerReport
-
-		private ATag AdsReport(DateTime today) {
-			Table tbl = new Table();
+		public Workbook BuildNewClientXls(Report report, DateTime today) {
+			var title = report.GetTitle(today);
+			var wb = new Workbook();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
-
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Ad Name")))
-					.Append(new Th().Append(new Text("#")))
-					.Append(new Th().Append(new Text("Total Credit Approved")));
-
-				oTr.ApplyToChildren<Class>("H");
-
-				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
-
-				Tbody tbody = new Tbody();
-				tbl.Append(tbody);
-
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["TotalUsers"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["TotalCredit"].ToString())));
-
-					tbody.Append(oTr);
-				} // foreach data row
+				wb = AddSheetToExcel(dt, title, "RptAdsReport");
 			}
 			catch (Exception e) {
 				Error(e.ToString());
+			} // try
+
+			try {
+				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", DB.DateToString(today)));
+				wb = AddSheetToExcel(dt, title, "RptCustomerReport", String.Empty, wb);
 			}
+			catch (Exception e) {
+				Error(e.ToString());
+			} // try
 
-			return tbl;
-		} // AdsReport
+			return wb;
+		} // BuildNewClientXls
 
-		private ATag PaymentReport(DateTime today) {
-			Table tbl = new Table();
+		public Workbook BuildPlainedPaymentXls(Report report, DateTime today) {
+			var title = report.GetTitle(today);
+			var wb = new Workbook();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
@@ -175,43 +181,99 @@ namespace Reports {
 					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
 				);
 
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Id")))
-					.Append(new Th().Append(new Text("Name")))
-					.Append(new Th().Append(new Text("Email")))
-					.Append(new Th().Append(new Text("Date")))
-					.Append(new Th().Append(new Text("Amount")));
-
-				oTr.ApplyToChildren<Class>("H");
-
-				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append( new Thead().Append(oTr) );
-
-				var tbody = new Tbody();
-				tbl.Append(tbody);
-
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Id"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Firstname"] + " " + row["SurName"])))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["DATE"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["AmountDue"].ToString())));
-
-					tbody.Append(oTr);
-				} // foreach data row
+				wb = AddSheetToExcel(dt, title, "RptPaymentReport");
 			}
 			catch (Exception e) {
 				Error(e.ToString());
+			} // try
+
+			return wb;
+		} // BuildPlainedPaymentXls
+
+		public Workbook BuildDailyStatsXls(Report report, DateTime today, DateTime tomorrow) {
+			var title = report.GetTitle(today);
+			var wb = new Workbook();
+
+			try {
+				DataTable dt = DB.ExecuteReader("RptDailyStats",
+					new QueryParameter("@DateStart", DB.DateToString(today)),
+					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
+				);
+
+				wb = AddSheetToExcel(dt, title, "RptDailyStats");
 			}
+			catch (Exception e) {
+				Error(e.ToString());
+			} // try
 
-			return tbl;
-		} // PaymentReport
+			return wb;
+		} // BuildDailyStatsXls
 
-		public ATag BuildDailyStatsReportBody(Report report, DateTime today, DateTime tomorrow) {
-			return new Body().Add<Class>("Body")
-				.Append( new H1().Append(new Text(report.GetTitle(today))) )
-				.Append( DailyStatsReport(today, tomorrow) );
-		} // BuildDailyStatsReportBody
+		public Workbook BuildInWizardXls(Report report, DateTime today, DateTime tomorrow) {
+			var title = report.GetTitle(today);
+			var sometext = String.Empty;
+			var wb = new Workbook();
+
+			try {
+				DataTable dt = DB.ExecuteReader("RptNewClients",
+					new QueryParameter("@DateStart", DB.DateToString(today)),
+					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
+				);
+
+				sometext = "Clients that entered Shops but did not complete:";
+				wb = AddSheetToExcel(dt, title, "RptNewClients", sometext);
+			}
+			catch (Exception e) {
+				Error(e.ToString());
+			} // try
+
+			try {
+				DataTable dt = DB.ExecuteReader("RptNewClientsStep1",
+					new QueryParameter("@DateStart", DB.DateToString(today)),
+					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
+				);
+
+				sometext = "Clients that just entered their email:";
+				wb = AddSheetToExcel(dt, title, "RptNewClientsStep1", sometext, wb);
+			}
+			catch (Exception e) {
+				Error(e.ToString());
+			} // try
+
+			return wb;
+		} // BuildInWizardXls
+
+		public Workbook XlsReport(string spName, DateTime startDate, DateTime endDate, string rptTitle = "") {
+			var wb = new Workbook();
+
+			try {
+				DataTable dt = DB.ExecuteReader(spName,
+					new QueryParameter("@DateStart", DB.DateToString(startDate)),
+					new QueryParameter("@DateEnd", DB.DateToString(endDate))
+				);
+
+				wb = AddSheetToExcel(dt, rptTitle, spName, String.Empty);
+			}
+			catch (Exception e) {
+				Error(e.ToString());
+			} // try
+
+			return wb;
+		} // XlsReport
+
+		#endregion Excel generators
+
+		#endregion public
+
+		#region protected
+
+		protected AConnection DB { get; private set; }
+
+		#endregion protected
+
+		#region private
+
+		#region Is... methods
 
 		private bool IsApplicationHeader(string db, bool isNew) {
 			return db == "Applications" && isNew;
@@ -244,6 +306,28 @@ namespace Reports {
 		private bool IsRegisterLine(string db) {
 			return db == "Registers";
 		} // IsRegisterLine
+
+		#endregion Is... methods
+
+		#region method GetHeaderAndFields
+
+		private ColumnInfo[] GetHeaderAndFields(ReportType type) {
+			DataTable dt = DB.ExecuteReader("RptScheduler_GetHeaderAndFields", new QueryParameter("@Type", type.ToString()));
+
+			string sHeader = null;
+			string sFields = null;
+
+			foreach (DataRow row in dt.Rows) {
+				sHeader = row[0].ToString();
+				sFields = row[1].ToString();
+			} // for each
+
+			return Report.ParseHeaderAndFields(sHeader, sFields);
+		} // GetHeadersAndFields
+
+		#endregion method GetHeaderAndFields
+		
+		#region report generators
 
 		private ATag DailyStatsReport(DateTime today, DateTime tomorrow) {
 			Div oRpt = new Div();
@@ -379,44 +463,82 @@ namespace Reports {
 			return oRpt;
 		} // DailyStatsReport
 
-		public ATag BuildInWizardReport(Report report, DateTime today, DateTime tomorrow) {
-			return new Html.Tags.Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today))))
-				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
-
-				.Append(new P().Append(TableReport("RptNewClients", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)))
-
-				.Append(new P().Append(new Text("Clients that just enetered their email:")))
-
-				.Append(new P().Append(TableReport("RptNewClientsStep1", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)));
-		} // BuildInWizardReport
-
-		public Workbook BuildNewClientXls(Report report, DateTime today) {
-			var title = report.GetTitle(today);
-			var wb = new Workbook();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
-				wb = AddSheetToExcel(dt, title, "RptAdsReport");
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
+		private ATag CustomerReport(DateTime today) {
+			Table tbl = new Table();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", DB.DateToString(today)));
-				wb = AddSheetToExcel(dt, title, "RptCustomerReport", String.Empty, wb);
+
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Email")))
+					.Append(new Th().Append(new Text("Status")))
+					.Append(new Th().Append(new Text("Wizard Finished")))
+					.Append(new Th().Append(new Text("Account #")))
+					.Append(new Th().Append(new Text("Credit Offer")))
+					.Append(new Th().Append(new Text("Source Ad")));
+
+				oTr.ApplyToChildren<Class>("H");
+
+				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
+
+				Tbody tbody = new Tbody();
+				tbl.Append(tbody);
+
+				foreach (DataRow row in dt.Rows) {
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Status"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["IsSuccessfullyRegistered"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["AccountNumber"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["CreditSum"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())));
+
+					tbody.Append(oTr);
+				} // for each data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
-			} // try
+			}
 
-			return wb;
-		} // BuildNewClientXls
+			return tbl;
+		} // CustomerReport
 
-		public Workbook BuildPlainedPaymentXls(Report report, DateTime today) {
-			var title = report.GetTitle(today);
-			var wb = new Workbook();
+		private ATag AdsReport(DateTime today) {
+			Table tbl = new Table();
+
+			try {
+				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
+
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Ad Name")))
+					.Append(new Th().Append(new Text("#")))
+					.Append(new Th().Append(new Text("Total Credit Approved")));
+
+				oTr.ApplyToChildren<Class>("H");
+
+				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
+
+				Tbody tbody = new Tbody();
+				tbl.Append(tbody);
+
+				foreach (DataRow row in dt.Rows) {
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["TotalUsers"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["TotalCredit"].ToString())));
+
+					tbody.Append(oTr);
+				} // foreach data row
+			}
+			catch (Exception e) {
+				Error(e.ToString());
+			}
+
+			return tbl;
+		} // AdsReport
+
+		private ATag PaymentReport(DateTime today) {
+			Table tbl = new Table();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
@@ -424,172 +546,78 @@ namespace Reports {
 					new QueryParameter("@DateEnd", DB.DateToString(DateTime.Today.AddDays(3)))
 				);
 
-				wb = AddSheetToExcel(dt, title, "RptPaymentReport");
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
+				ATag oTr = new Tr().Add<Class>("HR")
+					.Append(new Th().Append(new Text("Id")))
+					.Append(new Th().Append(new Text("Name")))
+					.Append(new Th().Append(new Text("Email")))
+					.Append(new Th().Append(new Text("Date")))
+					.Append(new Th().Append(new Text("Amount")));
 
-			return wb;
-		} // BuildPlainedPaymentXls
+				oTr.ApplyToChildren<Class>("H");
 
-		public Workbook BuildDailyStatsXls(Report report, DateTime today, DateTime tomorrow) {
-			var title = report.GetTitle(today);
-			var wb = new Workbook();
+				tbl.Add<ID>("tableReportData").Add<Class>("Report").Append( new Thead().Append(oTr) );
 
-			try {
-				DataTable dt = DB.ExecuteReader("RptDailyStats",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
-				);
-
-				wb = AddSheetToExcel(dt, title, "RptDailyStats");
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			return wb;
-		} // BuildDailyStatsXls
-
-		public Workbook BuildInWizardXls(Report report, DateTime today, DateTime tomorrow) {
-			var title = report.GetTitle(today);
-			var sometext = String.Empty;
-			var wb = new Workbook();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptNewClients",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
-				);
-
-				sometext = "Clients that entered Shops but did not complete:";
-				wb = AddSheetToExcel(dt, title, "RptNewClients", sometext);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptNewClientsStep1",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
-				);
-
-				sometext = "Clients that just entered their email:";
-				wb = AddSheetToExcel(dt, title, "RptNewClientsStep1", sometext, wb);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			return wb;
-		} // BuildInWizardXls
-
-		public Workbook XlsReport(string spName, DateTime startDate, DateTime endDate, string rptTitle = "") {
-			var wb = new Workbook();
-
-			try {
-				DataTable dt = DB.ExecuteReader(spName,
-					new QueryParameter("@DateStart", DB.DateToString(startDate)),
-					new QueryParameter("@DateEnd", DB.DateToString(endDate))
-				);
-
-				wb = AddSheetToExcel(dt, rptTitle, spName, String.Empty);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			return wb;
-		} // XlsReport
-
-		private ColumnInfo[] GetHeaderAndFields(ReportType type) {
-			DataTable dt = DB.ExecuteReader("RptScheduler_GetHeaderAndFields", new QueryParameter("@Type", type.ToString()));
-
-			string sHeader = null;
-			string sFields = null;
-
-			foreach (DataRow row in dt.Rows) {
-				sHeader = row[0].ToString();
-				sFields = row[1].ToString();
-			} // for each
-
-			return Report.ParseHeaderAndFields(sHeader, sFields);
-		} // GetHeadersAndFields
-
-		public ATag TableReport(string spName, DateTime startDate, DateTime endDate, ColumnInfo[] columns, bool isSharones = false, String RptTitle = "") {
-			var tbl = new Table().Add<Class>("Report");
-
-			try {
-				DataTable dt = DB.ExecuteReader(spName,
-					new QueryParameter("@DateStart", DB.DateToString(startDate)),
-					new QueryParameter("@DateEnd", DB.DateToString(endDate))
-				);
-
-				if (!isSharones)
-					tbl.Add<ID>("tableReportData");
-
-				var tr = new Tr().Add<Class>("HR");
-
-				for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
-					if (columns[columnIndex].IsVisible)
-						tr.Append(new Th().Add<Class>("H").Append(new Text(columns[columnIndex].Caption)));
-
-				tbl.Append(new Thead().Append(tr));
-
-				var oTbody = new Tbody();
-				tbl.Append(oTbody);
-
-				int lineCounter = 0;
+				var tbody = new Tbody();
+				tbl.Append(tbody);
 
 				foreach (DataRow row in dt.Rows) {
-					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Even" : "Odd");
-					oTbody.Append(oTr);
+					oTr = new Tr()
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Id"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Firstname"] + " " + row["SurName"])))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
+						.Append(new Td().Add<Class>("L").Append(new Text(row["DATE"].ToString())))
+						.Append(new Td().Add<Class>("R").Append(new Text(row["AmountDue"].ToString())));
 
-					List<string> oClassesToApply = new List<string>();
-
-					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++) {
-						ColumnInfo col = columns[columnIndex];
-						var oValue = row[col.FieldName];
-
-						if (col.IsVisible) {
-							var oTd = new Td();
-							oTr.Append(oTd);
-
-							if (IsNumber(oValue))
-								oTd.Add<Class>("R").Append(new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2))));
-							else
-								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
-						}
-						else {
-							if (col.ValueType == ValueType.CssClass)
-								oClassesToApply.Add(oValue.ToString());
-						} // if
-					} // for each column
-
-					if (oClassesToApply.Count > 0)
-						oTr.ApplyToChildren<Class>(string.Join(" ", oClassesToApply.ToArray()));
-
-					lineCounter++;
-				} // for each data row
-
-				var wb = AddSheetToExcel(dt, spName, RptTitle);
+					tbody.Append(oTr);
+				} // foreach data row
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
+
 			return tbl;
-		} // TableReport
+		} // PaymentReport
 
-		public static void InitAspose() {
-			var license = new License();
+		#endregion report generators
 
-			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("Reports.Aspose.Total.lic")) {
-				s.Position = 0;
-				license.SetLicense(s);
-			} // using
-		} // InitAspose
+		#region private static
+
+		private static bool IsNumber(object value) {
+			return IsInt(value) || IsFloat(value);
+		} // IsNumber
+
+		private static bool IsInt(object value) {
+			return value is sbyte
+				|| value is byte
+				|| value is short
+				|| value is ushort
+				|| value is int
+				|| value is uint
+				|| value is long
+				|| value is ulong;
+		} // IsInt
+
+		private static bool IsFloat(object value) {
+			return value is float
+				|| value is double
+				|| value is decimal;
+		} // IsFloat
+
+		private static string NumStr(object oNumber, string sFormat) {
+			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, FormatInfo);
+			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, FormatInfo);
+
+			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
+		} // NumStr
 
 		private static Workbook AddSheetToExcel(DataTable dt, String title, String sheetName = "", String someText = "", Workbook wb = null) {
 			InitAspose();
@@ -695,41 +723,10 @@ namespace Reports {
 			return wb;
 		} // AddSheetToExcel
 
-		private static bool IsNumber(object value) {
-			return IsInt(value) || IsFloat(value);
-		} // IsNumber
+		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
 
-		private static bool IsInt(object value) {
-			return value is sbyte
-				|| value is byte
-				|| value is short
-				|| value is ushort
-				|| value is int
-				|| value is uint
-				|| value is long
-				|| value is ulong;
-		} // IsInt
+		#endregion private static
 
-		private static bool IsFloat(object value) {
-			return value is float
-				|| value is double
-				|| value is decimal;
-		} // IsFloat
-
-		private string NumStr(object oNumber, string sFormat) {
-			if (oNumber is sbyte  ) return ((sbyte  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is byte   ) return ((byte   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is short  ) return ((short  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is ushort ) return ((ushort )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is int    ) return ((int    )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is uint   ) return ((uint   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is long   ) return ((long   )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is ulong  ) return ((ulong  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is float  ) return ((float  )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is double ) return ((double )oNumber).ToString(sFormat, FormatInfo);
-			if (oNumber is decimal) return ((decimal)oNumber).ToString(sFormat, FormatInfo);
-
-			throw new Exception(string.Format("Unsupported type: {0}", oNumber.GetType()));
-		} // NumStr
+		#endregion private
 	} // class BaseReportHandler
 } // namespace Reports

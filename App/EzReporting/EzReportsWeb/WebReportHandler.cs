@@ -19,7 +19,7 @@ namespace EzReportsWeb {
 			reportList = new List<Report>();
 
 			foreach (DataRow row in dt.Rows)
-				AddReportToList(reportList, row, DefaultToEMail);
+				AddReportToList(reportList, row, BaseReportSender.DefaultToEMail);
 
 			return reportList;
 		} // GetReportsList

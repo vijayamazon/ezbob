@@ -523,6 +523,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -1660,6 +1666,12 @@
     <oName>PaymentRollover</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PaymentRollover.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>PayPointBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\PayPointBalance.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

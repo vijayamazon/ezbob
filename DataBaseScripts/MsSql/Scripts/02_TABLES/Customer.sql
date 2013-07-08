@@ -92,8 +92,9 @@ CREATE TABLE [dbo].[Customer](
 	[LastLoanDate] [datetime] NULL,
 	[AmountTaken] [decimal](18, 4) NOT NULL,
 	[LastLoanAmount] [decimal](18, 4) NOT NULL,
-	[LastStatus] [nvarchar](100) NOT NULL,
 	[TotalPrincipalRepaid] [decimal](18, 4) NOT NULL,
+	[LastStatus] [nvarchar](100) NULL,
+	[AvoidAutomaticDescison] [bit] NOT NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -147,7 +148,9 @@ ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_AmountTaken]  DEFAULT 
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_LastLoanAmount]  DEFAULT ((0)) FOR [LastLoanAmount]
 GO
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_TotalPrincipalRepaid]  DEFAULT ((0)) FOR [TotalPrincipalRepaid]
+GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_LastStatus]  DEFAULT ('N/A') FOR [LastStatus]
 GO
-ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_TotalPrincipalRepaid]  DEFAULT ((0)) FOR [TotalPrincipalRepaid]
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_AvoidAutomaticDescison]  DEFAULT ((0)) FOR [AvoidAutomaticDescison]
 GO

@@ -1495,6 +1495,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>DeleteOldPayPointBalanceData</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\DeleteOldPayPointBalanceData.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>DeleteSignalByAppId</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\DeleteSignalByAppId.sql</oFileName>
@@ -1993,6 +1999,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>InsertPayPointData</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertPayPointData.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>InsertSiteAnalytics</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\InsertSiteAnalytics.sql</oFileName>
@@ -2008,6 +2020,12 @@
     <oName>InsertStrategyMarketPlaceUpdateTime</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\InsertStrategyMarketPlaceUpdateTime.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoadPayPointBalanceColumns</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\LoadPayPointBalanceColumns.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2203,6 +2221,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>PaypointOneTypeReconciliation</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\PaypointOneTypeReconciliation.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>pPacnetBalance</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\pPacnetBalance.sql</oFileName>
@@ -2356,6 +2380,12 @@
     <oName>RptOverallStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptOverallStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptPacnetReconciliation</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptPacnetReconciliation.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2950,6 +2980,12 @@
     <oName>Application_UnLock</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\Rank_2\Application_UnLock.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptPaypointReconciliation</oName>
+    <oRank>2</oRank>
+    <oFileName>07_PROCEDURES\Rank_2\RptPaypointReconciliation.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

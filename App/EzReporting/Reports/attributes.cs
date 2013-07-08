@@ -8,6 +8,22 @@ namespace Html.Attributes {
 			RawValues = new SortedSet<string>();
 		} // constructor
 
+		public override AAttribute Append(string sValue) {
+			sValue = (sValue ?? "").Trim();
+
+			string[] ary = sValue.Split(' ');
+
+			foreach (string sOneValue in ary) {
+				if (sOneValue != string.Empty) {
+					Values.Add(System.Web.HttpUtility.HtmlEncode(sOneValue));
+
+					OnAppend(sOneValue);
+				} // if
+			} // foreach
+
+			return this;
+		} // Append
+
 		protected override void OnAppend(string sValue) {
 			RawValues.Add("." + sValue);
 		} // OnAppend

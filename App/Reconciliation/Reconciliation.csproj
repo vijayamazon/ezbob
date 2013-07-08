@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{6BD00C8A-71E0-477D-BAAD-5310E1563D84}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Reports</RootNamespace>
-    <AssemblyName>Reports</AssemblyName>
+    <RootNamespace>Reconciliation</RootNamespace>
+    <AssemblyName>Reconciliation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +25,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,42 +35,24 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Words">
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
-    </Reference>
-    <Reference Include="Fizzler">
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>
-    </Reference>
-    <Reference Include="Fizzler.Sandbox">
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Sandbox.dll</HintPath>
-    </Reference>
-    <Reference Include="Fizzler.Systems.HtmlAgilityPack">
-      <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\..\Lib\3rdparty\HtmlAgilityPack4.5\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+    <Reference Include="Aspose.Cells, Version=4.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Utils\Logger\lib\log4net.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="Logger">
-      <HintPath>..\..\..\Lib\Ezbob\Logger.dll</HintPath>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Mailer">
-      <HintPath>..\..\..\Lib\Ezbob\Mailer.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\..\Lib\Scorto.Core\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MailBee.NET">
+      <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPoint">
+      <HintPath>..\..\Integration\PayPoint\bin\Debug\PayPoint.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -76,31 +60,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AAttribute.cs" />
-    <Compile Include="ATag.cs" />
-    <Compile Include="attributes.cs" />
-    <Compile Include="BaseReportHandler.cs" />
-    <Compile Include="BaseReportSender.cs" />
-    <Compile Include="ColumnInfo.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="Conf.cs" />
+    <Compile Include="PacNetBalanceRow.cs" />
+    <Compile Include="PacNetBalance.cs" />
+    <Compile Include="ParsePacNetText.cs" />
+    <Compile Include="PacnetMailListener.cs" />
+    <Compile Include="PayPointBalance.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Report.cs" />
-    <Compile Include="tags.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Aspose.Total.lic" />
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Report.css" />
+    <Content Include="..\Scripts\SP\PacNetBalanceInsertStoredProcedure.sql">
+      <Link>Sql\PacNetBalanceInsertStoredProcedure.sql</Link>
+    </Content>
+    <Content Include="Sql\PacnetAgentConfigs.sql" />
+    <Content Include="Sql\PacNetBalanceTableCreate.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj">
+      <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
+      <Name>ConfigurationBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
-      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
-      <Name>EzEnvironment</Name>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\MailListener\MailListener.csproj">
+      <Project>{4e273ca0-9d0f-4fad-962f-8647a23e83d1}</Project>
+      <Name>MailListener</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzReporting\Reports\Reports.csproj">
+      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
+      <Name>Reports</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
