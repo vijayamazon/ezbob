@@ -56,9 +56,9 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         d = new EzBob.Dialogs.CheckBoxEdit(
             model: @model
             propertyName: "IsAvoid"
-            title: "Avoid Automatic Decision ?"
+            title: "Manual Decision"
             postValueName: "enbaled"
-            checkboxName: "Avoid"
+            checkboxName: "Enable Manual Decision"
             url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision"
             data:
                 id: @model.get("Id")
