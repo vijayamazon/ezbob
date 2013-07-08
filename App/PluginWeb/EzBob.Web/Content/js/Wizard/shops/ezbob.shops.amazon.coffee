@@ -16,7 +16,9 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         oFieldStatusIcons.filter('.required').field_status({ required: true })
         oFieldStatusIcons.not('.required').field_status({ required: false })
 
-        this
+        @marketplaceId.withoutSpaces()
+        @merchantId.withoutSpaces()
+        @
 
     events:
         'click a.go-to-amazon': 'enableControls'
