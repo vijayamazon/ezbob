@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <Workflow FormatID="0001" StrategyType="Application">
   <Name>Email Didnt take offer and reapplies</Name>
-  <Description />
+  <Description>Email to customer about his advantages in case he takes a loan. Trigger - Request Cash or New Credit Line button if not a first offer and no loan qwas taken from prev offer.</Description>
   <Workspace Name="Email Didnt take offer and reapplies">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode12366860" />
     <NodeElement Name="Mail Node" NodeId="MailNode23895134" />
+    <NodeElement Name="Mail Node" NodeId="MailNode12366860" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
