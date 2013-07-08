@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html.Tags;
@@ -9,7 +10,7 @@ using Reports;
 namespace Reconciliation {
 	public class Program {
 		public static void Main(string[] args) {
-			ms_oLog = new ConsoleLog(new LegacyLog());
+			ms_oLog = new LegacyLog();
 
 			PacNetBalance.Logger = ms_oLog;
 			ParsePacNetText.Logger = ms_oLog;
@@ -24,16 +25,11 @@ namespace Reconciliation {
 
 			ppb.Done();
 
-			SendReport();
-
-			/*
-
 			// ReSharper disable ObjectCreationAsStatement
-			new PacnetMailListener(SendReport, oLog);
+			new PacnetMailListener(SendReport, ms_oLog);
 			// ReSharper restore ObjectCreationAsStatement
 
 			Thread.Sleep(Timeout.Infinite);
-			*/
 		} // Main
 
 		public static void SendReport() {
