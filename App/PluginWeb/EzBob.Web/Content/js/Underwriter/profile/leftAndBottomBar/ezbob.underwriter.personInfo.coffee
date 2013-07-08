@@ -108,14 +108,17 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
     changeDisabled: ->
         disabledText = ""
         disabled = @get("Disabled")
-        if disabled is 1
-            disabledText = "Disabled"
-        else if disabled is 2
-            disabledText = "Fraud"
-        else if disabled is 3
-            disabledText = "Bankruptcy"
-        else if disabled is 4
-            disabledText = "Default"
-        else
-            disabledText = "Enabled"
+        switch disabled
+            when 1
+                disabledText = "Disabled"
+            when 2
+                disabledText = "Fraud"
+            when 3
+                disabledText = "Bankruptcy"
+            when 4
+                disabledText = "Default"
+            when 5
+                disabledText = "Fraud Suspect"
+            else
+                disabledText = "Enabled"
         @set "DisabledText", disabledText

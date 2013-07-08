@@ -71,7 +71,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public enum CollectionStatusType
     {
-        Enabled = 0, Disabled = 1, Fraud = 2, Bankruptcy = 3, Default = 4
+        Enabled = 0, Disabled = 1, Fraud = 2, Bankruptcy = 3, Default = 4, FraudSuspect = 5
     }
     
 

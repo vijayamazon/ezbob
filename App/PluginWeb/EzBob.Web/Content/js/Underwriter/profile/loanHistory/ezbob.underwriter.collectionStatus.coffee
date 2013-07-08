@@ -45,12 +45,16 @@ class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layou
         false
 
     save : =>
+        BlockUi "on"
         form = @$el.find('form')
         postData = form.serialize() 
         action = "#{window.gRootPath}Underwriter/CollectionStatus/Save/"
         $.post(action, postData )
-        @trigger('saved')
-        @close()
+        .done =>
+            @trigger('saved')
+            @close()
+        .complete ->
+            BlockUi "off"
         false
 
 

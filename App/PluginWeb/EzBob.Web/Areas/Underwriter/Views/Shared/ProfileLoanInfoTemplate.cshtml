@@ -44,7 +44,7 @@
         <td>@Html.Raw(title)
         </td>    
         <td>
-            @Html.Raw(val1) &nbsp;&nbsp;&nbsp;
+            <span>@Html.Raw(val1) </span>
             <button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-pencil"/></button>
         </td>
     </tr>
@@ -254,6 +254,7 @@
         <option value="2">Fraud</option>
         <option value="3">Bankruptcy</option>
         <option value="4">Default</option>
+        <option value="5">Fraud Suspect</option>
     </select>
 </script>
 
