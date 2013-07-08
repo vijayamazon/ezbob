@@ -1,16 +1,12 @@
 CREATE TABLE dbo.MP_YodleeTransactionCategories
 	(
-	  Id                              INT IDENTITY NOT NULL
-	, CategoryId                      NVARCHAR(300) NOT NULL 
+	 CategoryId                      NVARCHAR(3) NOT NULL 
 	, Name                            NVARCHAR(300) NOT NULL
 	, Type                            NVARCHAR(300) NOT NULL
 	, CONSTRAINT PK_MP_YodleeTransactionCategories PRIMARY KEY (CategoryId)
 	)
 GO
 
-CREATE INDEX IX_MP_YodleeTransactionCategory
-	ON dbo.MP_YodleeTransactionCategories (CategoryId)
-GO
 
 INSERT INTO MP_YodleeTransactionCategories VALUES (1,'Uncategorized','Uncategorized')
 INSERT INTO MP_YodleeTransactionCategories VALUES (100,'Advertising','Expenses')

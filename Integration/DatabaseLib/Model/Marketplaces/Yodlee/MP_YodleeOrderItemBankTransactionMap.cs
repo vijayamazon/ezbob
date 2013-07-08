@@ -43,7 +43,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
             Map(x => x.hasDetails).Nullable();
             Map(x => x.hasDetailsSpecified);
             Map(x => x.transactionId).Length(300);
-            References(x => x.transactionCategory).Column("transactionCategoryId");
+            References(x => x.transactionCategory).Column("transactionCategoryId").Fetch.Join();
             Map(x => x.siteCategoryType).Length(300);
             Map(x => x.siteCategory).Length(300);
             Map(x => x.classUpdationSource).Length(300);

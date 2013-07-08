@@ -7,8 +7,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public MP_YodleeTransactionCategoriesMap()
         {
             Table("MP_YodleeTransactionCategories");
-            Id(x => x.Id);
-            Map(x => x.CategoryId).Length(300);
+            Id(x => x.CategoryId).Length(3);
             Map(x => x.Name).Length(300);
             Map(x => x.Type).Length(300);
         }
