@@ -154,28 +154,36 @@
 
 				foreach (MailChimp.Types.Campaign.CampaignsDataItem campaign in campaigns.Data)
 				{
-					//todo: for unsubscribers and opens: var stats = Mc.CampaignStats(campaign.ID);
-					var clickStats = Mc.CampaignClickStats(campaign.ID);
-					//Logger.DebugFormat("campaign {0},num of stats {1}", campaign.Title, clickStats.Count);
-					foreach (string url in clickStats.Keys)
-					{
-						MailChimp.Types.Campaign.ReportData.ClickDetailAIM emails = Mc.CampaignClickDetailAIM(campaign.ID, url);
-						MailChimp.Types.Campaign.Stats.ClickStats clicks = clickStats[url];
-						if (emails.Data.Count == 0)
-						{
-							//	Logger.DebugFormat("campaign {0} with 0 clicks on url {1}", campaign.Title, url);
-							campaignClickStats.AddStat(campaign.Title, url, "", campaign.SendTime.Value.ToString("yyyy-MM-dd"),
-													   campaign.EmailsSent, clicks.Clicks);
-						}
-						foreach (var email in emails.Data)
-						{
-							//Logger.DebugFormat(
-							//	"{0} campaign: {1} sent mails: {2} num of clicks(stats): {3} num of clicks(email): {4} emails clicks: {5}",
-							//	url, campaign.Title, campaign.EmailsSent, clicks.Clicks, email.Clicks, email.Email);
-							campaignClickStats.AddStat(campaign.Title, url, email.Email, campaign.SendTime.Value.ToString("yyyy-MM-dd"),
-													   campaign.EmailsSent, clicks.Clicks);
-						}
-					}
+				    try
+				    {
+				        //todo: for unsubscribers and opens: var stats = Mc.CampaignStats(campaign.ID);
+				        var clickStats = Mc.CampaignClickStats(campaign.ID);
+				        //Logger.DebugFormat("campaign {0},num of stats {1}", campaign.Title, clickStats.Count);
+				        foreach (string url in clickStats.Keys)
+				        {
+				            MailChimp.Types.Campaign.ReportData.ClickDetailAIM emails = Mc.CampaignClickDetailAIM(campaign.ID, url);
+				            MailChimp.Types.Campaign.Stats.ClickStats clicks = clickStats[url];
+				            if (emails.Data.Count == 0)
+				            {
+				                //	Logger.DebugFormat("campaign {0} with 0 clicks on url {1}", campaign.Title, url);
+				                campaignClickStats.AddStat(campaign.Title, url, "", campaign.SendTime.Value.ToString("yyyy-MM-dd"),
+				                                           campaign.EmailsSent, clicks.Clicks);
+				            }
+				            foreach (var email in emails.Data)
+				            {
+				                //Logger.DebugFormat(
+				                //	"{0} campaign: {1} sent mails: {2} num of clicks(stats): {3} num of clicks(email): {4} emails clicks: {5}",
+				                //	url, campaign.Title, campaign.EmailsSent, clicks.Clicks, email.Clicks, email.Email);
+				                campaignClickStats.AddStat(campaign.Title, url, email.Email,
+				                                           campaign.SendTime.Value.ToString("yyyy-MM-dd"),
+				                                           campaign.EmailsSent, clicks.Clicks);
+				            }
+				        }
+				    }
+				    catch (Exception ex)
+				    {
+				        Logger.DebugFormat("can't load campaign stats for campaign {0} \n {1}", campaign.ID, ex);
+				    }
 				}
 				page++;
 			} while (campaigns.Data.Count > 0 && page < maxNumOfPages);
@@ -217,7 +225,25 @@
 			}
 		}
 
-		#region Old/Test Code
+	    public static void StoreStatsToDbFromXml()
+	    {
+            var serializer = new XmlSerializer(typeof(CampaignClickStats));
+
+            var path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\stats.xml";
+	        using (var reader = new StreamReader(path))
+	        {
+	            var stats = (CampaignClickStats) serializer.Deserialize(reader);
+
+	            DbCommands.DeleteCampaignClickStatsTable();
+	            var campaignClickStatsList = stats.GetCampaignClickStatsList();
+	            foreach (var campaignClickStat in campaignClickStatsList)
+	            {
+	                DbCommands.AddCampaignClickStat(campaignClickStat);
+	            }
+	        }
+	    }
+
+	    #region Old/Test Code
 		static public void GetCampaignAnalytics()
 		{
 			var page = 0;

@@ -11,6 +11,7 @@
 			try
 			{
 				MailChimpApiControler.LoadClickStatsToDb();
+			    //MailChimpApiControler.StoreStatsToDbFromXml();
 			}
 			catch (Exception ex)
 			{
@@ -18,7 +19,7 @@
 			}
 			finally
 			{
-				ExecuteAutomaticMailChimp();
+                ExecuteAutomaticMailChimp();
 			}
 			Environment.Exit(0);
 		}
