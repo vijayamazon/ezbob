@@ -45,7 +45,7 @@
                     <td><%-EzBob.formatDateTime(val.StartTime) || "-"%></td>
                     <td><%-EzBob.formatDateTime(val.EndTime) || "-"%></td>
                     <td>
-                        <% if (val.Type != "EKM"){%>
+                        <% if (val.Type != "Yodlee"){%>
                         <div  class="pull-right">
                             <button class="recheck-mp btn btn-warning <%-val.Status =='Updating' ? 'disabled' : '' %>" data-mp-id="<%-val.id%>"><i class="icon-repeat"></i> Recheck</button>
                         </div>
