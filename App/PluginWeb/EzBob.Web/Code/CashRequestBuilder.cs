@@ -73,7 +73,7 @@ namespace EzBob.Web.Code
                 }
                 _creator.UpdateAllMarketplaces(customer);
             }
-            _creator.Evaluate(_users.Get(customer.Id), newCreditLineOption, isUnderwriterForced);
+            _creator.Evaluate(_users.Get(customer.Id), newCreditLineOption, Convert.ToInt32(customer.IsAvoid), isUnderwriterForced);
         }
     }
 }

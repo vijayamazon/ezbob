@@ -40,7 +40,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
         false
 
     onRender: ->
-        console.log "Render is Set"
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
             @$el.find(" select[name='enableAutomaticApproval'], 
@@ -48,7 +47,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
                         input[name='maxCapNotHomeOwner']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveApprovalSettings'], button[name='CancelApprovalSettings']").hide();
         @setValidator()
-        console.log @validator.settings.rules
 
 
     show: (type) ->
@@ -61,7 +59,6 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
         @modelBinder.unbind()
 
      setValidator: ->
-        console.log "Validator is set"
         @validator = @$el.find('form').validate
             onfocusout: -> return true
             onkeyup: -> return false

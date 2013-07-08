@@ -111,7 +111,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             if (MainStrategyUpdatingStatus(mainStrat) == "Finished")
             {
-                _creator.Evaluate(_users.Get(customerId), NewCreditLineOption.UpdateEverythingAndApplyAutoRules);
+                _creator.Evaluate(_users.Get(customerId), NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
             }
             else
             {

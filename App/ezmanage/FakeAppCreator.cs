@@ -38,14 +38,14 @@ namespace ezmanage
             
         }
 
-        public void Evaluate(User user, NewCreditLineOption runNewCreditLine, bool isUnderwriterForced = false)
+        public void Evaluate(User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false)
         {
             
         }
 
         public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
                                                    string district, string town, string county, string postcode, string bankAccount,
-                                                   string sortCode)
+                                                   string sortCode, int avoidAutomaticDescison)
         {
             
         }

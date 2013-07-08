@@ -127,13 +127,14 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(customer, strategyParameters, _config.CustomerMarketPlaceStrategyName);
         }
 
-        public void Evaluate(User user, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced = false)
+        public void Evaluate(User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false)
         {
             var strategyParameters = new[]
                                              {
                                                  new StrategyParameter("userId", user.Id),
                                                  new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
-                                                 new StrategyParameter("NewCreditLineOption", (int)newCreditLineOption)
+                                                 new StrategyParameter("NewCreditLineOption", (int)newCreditLineOption),
+                                                 new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
                                              };
             var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
             var customer = _session.Get<Customer>(user.Id);
@@ -142,7 +143,7 @@ namespace EzBob.Web.Code.ApplicationCreator
         }
 
         public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
-                                            string district, string town, string county, string postcode, string bankAccount, string sortCode)
+                                            string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutomaticDescison)
         {
             var strategyParameters = new[]
                                          {
@@ -157,7 +158,8 @@ namespace EzBob.Web.Code.ApplicationCreator
                                              new StrategyParameter("idhubCounty", county),
                                              new StrategyParameter("idhubPostCode", postcode),
                                              new StrategyParameter("idhubAccountNumber", bankAccount),
-                                             new StrategyParameter("idhubBranchCode", sortCode)
+                                             new StrategyParameter("idhubBranchCode", sortCode),
+                                             new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
                                          };
             CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
         }

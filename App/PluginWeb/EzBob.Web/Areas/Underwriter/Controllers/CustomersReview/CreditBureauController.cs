@@ -45,11 +45,12 @@
         [Transactional]
         public JsonNetResult RunCheck(int Id)
         {
+            var customer = _customers.Get(Id);
             var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
-            _creator.Evaluate(_users.Get(Id), NewCreditLineOption.UpdateEverythingExceptMp, true);
+            _creator.Evaluate(_users.Get(Id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
@@ -940,13 +941,14 @@
         public JsonNetResult RunAMLBWACheck(int id, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {
+            var customer = _customers.Get(id);
             var isRunning = _applications.StratagyIsRunning(id, _config.ScoringResultStrategyName);
 
             if (isRunning)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
             _creator.EvaluateWithIdHubCustomAddress(_users.Get(id), checkType, houseNumber, houseName, street,
-                                            district, town, county, postcode, bankAccount, sortCode);
+                                            district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
