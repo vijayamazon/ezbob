@@ -121,8 +121,9 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
                 EzBob.ShowMessage response.error, "Something went wrong", ->
             else
                 EzBob.ShowMessage "Manual payment succesfully added", "", ->
-                that.model.fetch()
-                that.trigger "ManualPaymentAdded"
+                    that.model.fetch()
+                    that.trigger "ManualPaymentAdded"
+                    true
         ).done ->
             BlockUi "off"
 
