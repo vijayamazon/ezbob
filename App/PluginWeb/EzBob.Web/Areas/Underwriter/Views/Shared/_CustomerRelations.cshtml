@@ -1,0 +1,31 @@
+﻿<script id="customerRelationsTemplate" type="text/template">
+    @CustomerRelations()
+</script>
+
+@helper CustomerRelations()
+{
+    <table class="table table-bordered table-striped blue-header centered table-fixed">
+        <thead>
+            <tr>
+                <th class="customer-relations-date-column">Date</th>
+                <th class="customer-relations-user-column">User</th>
+                <th class="customer-relations-action-column">Action</th>
+                <th class="customer-relations-inout-column">In\Out</th>
+                <th class="customer-relations-status-column">Status</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(vals, function(val){%>
+            <tr>
+                <td><%-EzBob.formatDateTime(val.DateTime)%></td>
+                <td><%-val.User%></td>
+                <td><%-val.Action%></td>
+                <td><%-val.Incoming ? "Incoming" : "Outgoing"%></td>
+                <td><%-val.Status%></td>
+                <td><%-val.Comment%></td>
+            </tr>
+            <%})%>
+        </tbody>
+    </table>
+}

@@ -228,6 +228,12 @@ table.squeezed tbody tr td {
 
 .api-check-seccond-column { width: 200px; }
 
+.customer-relations-date-column { width: 140px; }
+.customer-relations-user-column { width: 65px; }
+.customer-relations-action-column { width: 65px; }
+.customer-relations-inout-column { width: 65px; }
+.customer-relations-status-column { width: 65px; }
+
 table.table { font-family: Tahoma; }
 
 .view-collection-status .control-label {

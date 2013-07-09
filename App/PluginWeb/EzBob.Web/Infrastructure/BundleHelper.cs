@@ -245,10 +245,8 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.coffee")
                          .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.coffee")
                          .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.coffee")
-                         .Add(
-                             "~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.coffee")
-                         .Add(
-                             "~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.coffee")
+                         .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.coffee")
+                         .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.coffee")
                          .Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
                          .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
                          .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.coffee")
@@ -261,20 +259,17 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
                          .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
                          .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
-                         .Add(
-                             "~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")
+                         .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")
                          .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.AddBankAccount.coffee")
-                         .Add(
-                             "~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.payPalAccountDetails.coffee")
-                         .Add(
-                             "~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.bankAccountDetails.coffee")
-                         .Add(
-                             "~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.paymentAccounts.coffee")
+                         .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.payPalAccountDetails.coffee")
+                         .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.bankAccountDetails.coffee")
+                         .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.paymentAccounts.coffee")
                          .Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.coffee")
                          .Add("~/Content/js/Underwriter/profile/medalCalculator/ezbob.underwriter.medalCalculations.js")
                          .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
-                         .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
-                         .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
+						 .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
+						 .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
+						 .Add("~/Content/js/Underwriter/profile/CustomerRelations/ezbob.underwriter.customerRelations.js")
 
                 //----
                          .Add("~/Content/js/Underwriter/editLoan/loanModel.coffee")
@@ -283,9 +278,6 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
                          .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
                          .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
-
-
-                         
 
                          .MvcRender("~/Content/js/min/underwriter_#.js");
         }

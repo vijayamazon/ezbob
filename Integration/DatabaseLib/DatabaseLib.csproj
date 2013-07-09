@@ -82,6 +82,12 @@
     <Compile Include="DatabaseWrapper\Order\FreeAgentInvoicesList.cs" />
     <Compile Include="DatabaseWrapper\Order\IChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
+    <Compile Include="Model\CustomerRelations\CRMStatuses.cs" />
+    <Compile Include="Model\CustomerRelations\CRMStatusesMap.cs" />
+    <Compile Include="Model\CustomerRelations\CRMActions.cs" />
+    <Compile Include="Model\CustomerRelations\CRMActionsMap.cs" />
+    <Compile Include="Model\CustomerRelations\CustomerRelations.cs" />
+    <Compile Include="Model\CustomerRelations\CustomerRelationsMap.cs" />
     <Compile Include="Model\Database\CustomerLoyaltyProgramPointsMap.cs" />
     <Compile Include="Model\Database\CustomerLoyaltyProgramPoints.cs" />
     <Compile Include="Model\Database\LoyaltyProgramActionMap.cs" />
