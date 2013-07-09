@@ -218,19 +218,9 @@ namespace EzBob.AmazonLib
 						{
 							foreach ( var orderItem2 in bestSaledOrderItemList )
 							{
-								var itemsRequestInfo = new AmazonOrdersItemsRequestInfo
-									{
-										MarketplaceId = securityInfo.MarketplaceId,
-										MerchantId = securityInfo.MerchantId,
-										OrderId = orderItem2.AmazonOrderId,
-										ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
-									};
+								var orderItems = GetOrderItems(securityInfo, access, orderItem2, elapsedTimeInfo, orders);
 
-								AmazonOrderItemDetailsList orderItems = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
-									ElapsedDataMemberType.RetrieveDataFromExternalService,
-									() => AmazonServiceHelper.GetListItemsOrdered( _ConnectionInfo, itemsRequestInfo, access, orders.RequestsCounter ) );
-
-								orderItem2.OrderedItemsList = orderItems;
+							    orderItem2.OrderedItemsList = orderItems;
 
 								if ( orderItems != null )
 								{
@@ -278,7 +268,30 @@ namespace EzBob.AmazonLib
 			);
 		}
 
-		private IEnumerable<AmazonOrderItem2> AnalyseOrder( AmazonOrdersList2 orders, int maxNumberOfItems = 20 )
+        private AmazonOrderItemDetailsList GetOrderItems(AmazonSecurityInfo securityInfo, ActionAccessType access,
+                                                         AmazonOrderItem2 orderItem2, ElapsedTimeInfo elapsedTimeInfo,
+                                                         AmazonOrdersList2 orders)
+        {
+            var itemsRequestInfo = new AmazonOrdersItemsRequestInfo
+                {
+                    MarketplaceId = securityInfo.MarketplaceId,
+                    MerchantId = securityInfo.MerchantId,
+                    OrderId = orderItem2.AmazonOrderId,
+                    ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
+                };
+
+            AmazonOrderItemDetailsList orderItems =
+                ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+                                                                               ElapsedDataMemberType
+                                                                                   .RetrieveDataFromExternalService,
+                                                                               () =>
+                                                                               AmazonServiceHelper.GetListItemsOrdered(
+                                                                                   _ConnectionInfo, itemsRequestInfo, access,
+                                                                                   orders.RequestsCounter));
+            return orderItems;
+        }
+
+        private IEnumerable<AmazonOrderItem2> AnalyseOrder( AmazonOrdersList2 orders, int maxNumberOfItems = 20 )
 		{
 			if ( orders == null )
 			{

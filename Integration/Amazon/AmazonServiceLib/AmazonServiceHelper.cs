@@ -19,7 +19,7 @@ namespace EzBob.AmazonServiceLib
 		public static AmazonOrdersList2 GetListOrders( AmazonServiceConnectionInfo connectionInfo, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
 		{
 			var configurator = AmazonServiceConfigurationFactory.CreateServiceOrdersConfigurator( connectionInfo );
-			return AmazonServiceOrders.GetListOrders( configurator, requestInfo, access );			
+			return AmazonServiceOrders.GetListOrders( configurator, requestInfo, access );
 		}
 
 		public static AmazonOrderItemDetailsList GetListItemsOrdered( AmazonServiceConnectionInfo connectionInfo, AmazonOrdersItemsRequestInfo requestInfo, ActionAccessType access, RequestsCounterData requestCounter )
