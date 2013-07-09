@@ -1,0 +1,2 @@
+delete from MP_EBayAmazonInventoryItem
+delete from MP_EBayAmazonInventory

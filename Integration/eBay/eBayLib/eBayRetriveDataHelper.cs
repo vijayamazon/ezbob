@@ -96,7 +96,7 @@ namespace EzBob.eBayLib
 				Helper.UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-				Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);								
+				//Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace EzBob.eBayLib
 				Helper.UpdateAccountInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateUserInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateFeedbackInfo(databaseCustomerMarketPlace, info, historyRecord);
-				Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);
+				//Helper.UpdateInventoryInfo(databaseCustomerMarketPlace, info, historyRecord);
 				Helper.UpdateTeraPeakOrdersThenEbayOrders(databaseCustomerMarketPlace, info, databaseCustomerMarketPlace.DisplayName, historyRecord);
 			}
 		}

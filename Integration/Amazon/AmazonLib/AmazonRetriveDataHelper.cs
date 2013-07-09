@@ -46,7 +46,7 @@ namespace EzBob.AmazonLib
             var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
 
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
-			UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord );
+			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord );
             UpdateClientFeedbackInfo(databaseCustomerMarketPlace, securityInfo, historyRecord);            
         }
 
@@ -55,7 +55,7 @@ namespace EzBob.AmazonLib
 			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( databaseCustomerMarketPlace );
 
 			UpdateClientOrdersInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
-			UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
+			//UpdateClientInventoryInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
 			UpdateClientFeedbackInfo( databaseCustomerMarketPlace, securityInfo, historyRecord );
         }
 
@@ -285,14 +285,24 @@ namespace EzBob.AmazonLib
 				return null;
 			}
 
-			var shippedOrders = orders.Where( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped );
+			var shippedOrders = orders.Where( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped ).ToList();
 
 			if ( shippedOrders.Count() <= maxNumberOfItems )
 			{
 				return orders;
 			}
 
-			var rez = shippedOrders.GroupBy( x => new { x.OrderTotal.Value, x.OrderTotal.CurrencyCode, x.NumberOfItemsShipped }, ( key, group ) => new { Price = key.Value, key.CurrencyCode, key.NumberOfItemsShipped, Counter = group.Count() } ).OrderByDescending( x => x.Counter ).Take( maxNumberOfItems );
+		    var rez =
+		        shippedOrders.GroupBy(x => new {x.OrderTotal.Value, x.OrderTotal.CurrencyCode, x.NumberOfItemsShipped},
+		                              (key, group) =>
+		                              new
+		                                  {
+		                                      Price = key.Value,
+		                                      key.CurrencyCode,
+		                                      key.NumberOfItemsShipped,
+		                                      Counter = group.Count()
+		                                  }).OrderByDescending(x => x.Counter).Take(maxNumberOfItems);
+                
 
 			return rez.Select( x => shippedOrders.First( oi => oi.OrderTotal.Value == x.Price &&
 														oi.NumberOfItemsShipped == x.NumberOfItemsShipped &&
