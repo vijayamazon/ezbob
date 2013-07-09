@@ -215,7 +215,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
     UpdateNewCreditLineState: ->
         waiting = @personalInfo.get("CreditResult") is "WaitingForDecision"
-        collection = @personalInfo.get("Disabled") != 0
+        collection = @personalInfo.get("Disabled") != 0 and @personalInfo.get("Disabled") != 5
         disabled =  waiting or collection
         @$el.find("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
 
