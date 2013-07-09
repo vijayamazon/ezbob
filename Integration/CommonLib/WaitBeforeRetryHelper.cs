@@ -23,7 +23,7 @@ namespace EzBob.CommonLib
 			     errorRetryingInfo.Info.Length == 0 ||
 			     CountIteration >= errorRetryingInfo.Info.Length )
 			{
-				WriteToLog( "No need wait" );
+				WriteToLog( "No need to wait" );
 				_Waiter.Reset();
 				return false;
 			}

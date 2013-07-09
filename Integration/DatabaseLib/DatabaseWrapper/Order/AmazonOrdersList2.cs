@@ -57,6 +57,11 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		{
 			get { return PurchaseDate.Value; }
 		}
+
+	    public override string ToString()
+	    {
+	        return string.Format("{0}, AmazonOrderId: {1}, OrderStatus: {2}, OrderTotal: {3}, PurchaseDate: {4}, NumberOfItemsShipped: {5}", base.ToString(), AmazonOrderId, OrderStatus, OrderTotal.Value, PurchaseDate, NumberOfItemsShipped);
+	    }
 	}
 
 	public class AmazonOrderItem2PaymentsInfoList : List<AmazonOrderItem2PaymentInfoListItem>

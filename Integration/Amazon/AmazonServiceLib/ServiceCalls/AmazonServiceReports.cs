@@ -21,7 +21,7 @@ using MarketplaceWebService.Model;
 
 namespace EzBob.AmazonServiceLib.ServiceCalls
 {
-	internal class AmazonServiceReports
+    public class AmazonServiceReports
 	{
 		private readonly IMarketplaceWebService _Service;
 		private static readonly ITrapForThrottling RequestGetReportTrapForThrottling;
