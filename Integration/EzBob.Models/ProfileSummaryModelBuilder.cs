@@ -164,7 +164,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
                     creditBureau.CreditCardBalances = result.CreditCardBalances;
                     creditBureau.BorrowerType = TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
-                    creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
+                    //creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
                 }
             }
             catch (Exception e)

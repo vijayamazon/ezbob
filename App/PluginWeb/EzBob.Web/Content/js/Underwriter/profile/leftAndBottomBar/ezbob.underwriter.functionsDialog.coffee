@@ -75,7 +75,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         BlockUi "on"
         req.done (res) ->
             if res.error
-                console.log res.error
+                EzBob.ShowMessage res.error,"Error occured"
                 that.$el.css "border", "1px solid red"
                 return
             that.$el.dialog "close"

@@ -22,7 +22,10 @@ namespace EzBob.Web.Code
         }
         public void Check(decimal amount)
         {
-            if (amount < 0 || amount < _config.XMinLoan || amount > GetMaxLimit()) throw new ArgumentException("amount");
+            if (amount < 0 || amount < _config.XMinLoan || amount > GetMaxLimit())
+            {
+                throw new ArgumentException(string.Format("Amount is more then {0} or less then {1}", GetMaxLimit(), _config.XMinLoan));
+            }
         }
 
         public int GetMaxLimit()

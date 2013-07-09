@@ -435,9 +435,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     customer.DateApproved = DateTime.UtcNow;
                     customer.Status = Status.Approved;
                     customer.ApprovedReason = reason;
+
                     var sum = request.ApprovedSum();
-                    customer.CreditSum = sum;
                     if (sum <= 0) throw new Exception("Credit sum cannot be zero or less");
+                    _limit.Check(sum);
+
+                    customer.CreditSum = sum;
                     customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
                     request.ManagerApprovedSum = (double?) sum;
                     customer.OfferStart = request.OfferStart;
