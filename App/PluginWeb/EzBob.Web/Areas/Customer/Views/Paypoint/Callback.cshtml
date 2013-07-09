@@ -1,9 +1,14 @@
 ﻿@using System.Globalization
+@using EzBob.Web.Infrastructure
 @model EzBob.Web.Models.PaymentConfirmationModel
 
 @{
     Html.RenderPartial("PayPointResult");
     ViewBag.Title = "Payment Confirm: Payment Confirmation | EZBOB";
+}
+
+@section css {
+    @BundleHelper.RenderProfileCss()
 }
 
 <div id="paypoint-message"></div>
