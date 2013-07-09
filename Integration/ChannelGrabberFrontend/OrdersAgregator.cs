@@ -29,10 +29,10 @@ namespace Integration.ChannelGrabberFrontend {
 		} // constructor
 
 		private int GetShipedOrdersCount(IEnumerable<ChannelGrabberOrderItem> orders) {
-			return orders.Count(o => o.OrderStatus == "Dispatched");
+			return orders.Count(o => (o.IsExpense == 0) && (o.OrderStatus == "Dispatched"));
 		} // GetShippedOrdersCount
 
-		private double GetAverageSumOfOrder(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private double GetAverageSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
 			int    count = GetShipedOrdersCount(orders);
 			double sum   = count == 0 ? 0 : GetTotalSumOfOrders(orders);
 
@@ -41,7 +41,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 		private double GetTotalSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
 			return orders
-				.Where(o => o.TotalCost.HasValue && o.OrderStatus == "Dispatched")
+				.Where(o => (o.IsExpense == 0) && o.TotalCost.HasValue && (o.OrderStatus == "Dispatched"))
 				.Sum(
 					o =>
 					CurrencyConverter.ConvertToBaseCurrency(
@@ -52,19 +52,52 @@ namespace Integration.ChannelGrabberFrontend {
 				);
 		} // GetTotalSumOfOrders
 
+		private int GetExpensesCount(IEnumerable<ChannelGrabberOrderItem> orders) {
+			return orders.Count(o => o.IsExpense == 1);
+		} // GetExpensesCount
+
+		private double GetAverageSumOfExpenses(IEnumerable<ChannelGrabberOrderItem> orders) {
+			int    count = GetExpensesCount(orders);
+			double sum   = count == 0 ? 0 : GetTotalSumOfExpenses(orders);
+
+			return count == 0 ? 0 : sum / count;
+		} // GetAverageSumOfExpenses
+
+		private double GetTotalSumOfExpenses(IEnumerable<ChannelGrabberOrderItem> orders) {
+			return orders
+				.Where(o => (o.IsExpense == 1) && o.TotalCost.HasValue)
+				.Sum(
+					o =>
+					CurrencyConverter.ConvertToBaseCurrency(
+						o.CurrencyCode,
+						(double)o.TotalCost,
+						o.PurchaseDate
+					).Value
+				);
+		} // GetTotalSumOfExpenses
+
 		protected override object InternalCalculateAggregatorValue(
 			FunctionType functionType,
 			IEnumerable<ChannelGrabberOrderItem> orders
 		) {
 			switch (functionType) {
-			case FunctionType.AverageSumOfOrders:
-				return GetAverageSumOfOrder(orders);
-
 			case FunctionType.NumOfOrders:
 				return GetShipedOrdersCount(orders);
 
+			case FunctionType.AverageSumOfOrders:
+				return GetAverageSumOfOrders(orders);
+
 			case FunctionType.TotalSumOfOrders:
 				return GetTotalSumOfOrders(orders);
+
+			case FunctionType.NumOfExpenses:
+				return GetExpensesCount(orders);
+			
+			case FunctionType.AverageSumOfExpenses:
+				return GetAverageSumOfExpenses(orders);
+			
+			case FunctionType.TotalSumOfExpenses:
+				return GetTotalSumOfExpenses(orders);
 			
 			default:
 				throw new NotImplementedException();

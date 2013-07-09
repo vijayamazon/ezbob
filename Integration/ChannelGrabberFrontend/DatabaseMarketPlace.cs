@@ -10,7 +10,7 @@ namespace Integration.ChannelGrabberFrontend {
 		} // constructor
 
 		public override IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper) {
-			return new RetriveDataHelper(helper, this, Configuration.Instance.GetVendorInfo(m_sAccountTypeName));
+			return new RetrieveDataHelper(helper, this, Configuration.Instance.GetVendorInfo(m_sAccountTypeName));
 		} // GetRetrieveDataHelper
 
 		public override IDatabaseFunctionFactory<FunctionType> FunctionFactory {

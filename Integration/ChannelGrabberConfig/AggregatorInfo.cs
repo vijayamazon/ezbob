@@ -7,7 +7,10 @@ namespace Integration.ChannelGrabberConfig {
 	public enum FunctionType {
 		NumOfOrders,
 		TotalSumOfOrders,
-		AverageSumOfOrders
+		AverageSumOfOrders,
+		NumOfExpenses,
+		TotalSumOfExpenses,
+		AverageSumOfExpenses
 	} // enum FunctionType
 
 	#endregion enum FunctionType

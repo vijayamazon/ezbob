@@ -80,7 +80,6 @@
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentExpensesList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentInvoicesList.cs" />
-    <Compile Include="DatabaseWrapper\Order\IChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />
     <Compile Include="Model\CustomerRelations\CRMStatuses.cs" />
     <Compile Include="Model\CustomerRelations\CRMStatusesMap.cs" />

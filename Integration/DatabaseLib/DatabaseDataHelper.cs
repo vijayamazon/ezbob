@@ -1221,6 +1221,7 @@ namespace EZBob.DatabaseLib
 					PaymentDate = dataItem.PaymentDate,
 					PurchaseDate = dataItem.PurchaseDate,
 					OrderStatus = dataItem.OrderStatus,
+					IsExpense = dataItem.IsExpense
 				};
 
 				mpOrder.OrderItems.Add(mpOrderItem);
@@ -2265,7 +2266,8 @@ namespace EZBob.DatabaseLib
 				NativeOrderId = o.NativeOrderId,
 				PaymentDate = o.PaymentDate,
 				PurchaseDate = o.PurchaseDate,
-				TotalCost = o.TotalCost
+				TotalCost = o.TotalCost,
+				IsExpense = o.IsExpense
 			}).Distinct(new ChannelGrabberOrderComparer()));
 
 			return orders;

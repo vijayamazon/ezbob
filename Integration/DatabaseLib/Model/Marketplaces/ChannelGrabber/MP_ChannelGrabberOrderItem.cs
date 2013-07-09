@@ -10,5 +10,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual DateTime PaymentDate { get; set; }
 		public virtual DateTime PurchaseDate { get; set; }
 		public virtual string OrderStatus { get; set; }
+		public virtual int IsExpense { get; set; }
 	} // class MP_ChannelGrabberOrderItem
 } // namespace

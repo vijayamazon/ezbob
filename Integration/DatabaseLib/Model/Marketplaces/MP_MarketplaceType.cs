@@ -1,4 +1,5 @@
 using FluentNHibernate.Mapping;
+using Integration.ChannelGrabberConfig;
 
 namespace EZBob.DatabaseLib.Model.Database {
     
@@ -131,7 +132,12 @@ namespace EZBob.DatabaseLib.Model.Database {
     }
 
 	public class ChannelGrabberMarketPlaceType : MP_MarketplaceType {
-		public override int UWPriority { get { return 4; } } // constructor
+		public override int UWPriority { get { return 4; } } // UWPriority
+
+		public override bool IsPaymentAccount { get {
+			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(this.Name);
+			return vi.Species == VendorSpecies.Accounting; 
+		} } // IsPaymentAccount
 	} // class ChannelGrabberMarketPlaceType
 
 	public class ChannelGrabberMarketPlaceTypeMap : SubclassMap<ChannelGrabberMarketPlaceType> {

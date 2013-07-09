@@ -14,8 +14,8 @@ using Integration.ChannelGrabberConfig;
 using log4net;
 
 namespace Integration.ChannelGrabberFrontend {
-	public class RetriveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
-		public RetriveDataHelper(
+	public class RetrieveDataHelper : MarketplaceRetrieveDataHelperBase<FunctionType> {
+		public RetrieveDataHelper(
 			DatabaseDataHelper helper,
 			DatabaseMarketplaceBase<FunctionType> marketplace,
 			VendorInfo oVendorInfo
@@ -50,7 +50,8 @@ namespace Integration.ChannelGrabberFrontend {
 					NativeOrderId = oRaw.NativeOrderId,
 					PaymentDate   = oRaw.PaymentDate,
 					PurchaseDate  = oRaw.PurchaseDate,
-					TotalCost     = oRaw.TotalCost
+					TotalCost     = oRaw.TotalCost,
+					IsExpense     = oRaw.IsExpense
 				});
 			} // foreach
 
@@ -144,7 +145,7 @@ namespace Integration.ChannelGrabberFrontend {
 			return aggData;
 		} // CreateOrdersAggreationInfo
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(RetriveDataHelper));
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(RetrieveDataHelper));
 		private readonly VendorInfo m_oVendorInfo;
 	} // class RetrieveDataHelper
 } // namespace

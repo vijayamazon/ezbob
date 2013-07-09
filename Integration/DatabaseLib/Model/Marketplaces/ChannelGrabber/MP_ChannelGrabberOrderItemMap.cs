@@ -13,6 +13,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.OrderStatus, "OrderStatus").Length(300);
 			Map(x => x.CurrencyCode, "CurrencyCode").Length(3);
 			Map(x => x.NativeOrderId, "NativeOrderId").Length(300);
+			Map(x => x.IsExpense, "IsExpense");
 		} // constructor
 	} // class MP_ChannelGrabberOrderItemMap
 } // namespace

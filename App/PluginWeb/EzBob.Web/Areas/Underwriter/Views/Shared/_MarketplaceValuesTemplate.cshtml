@@ -148,6 +148,11 @@
                 <%}%>
                 <% (function(aryCGAccounts) { _.each(marketplaces, function(m,i){
                 var sShopName = m.Name.replace(' ', '');
+
+				if (aryCGAccounts[sShopName])
+					if (aryCGAccounts[sShopName].Species != 0)
+						return;
+
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 %>
                 <tr data-id="<%- m.Id %>">
@@ -199,8 +204,13 @@
                 </tr>
             </thead>
             <tbody>
-                <% (function(aryCGAccounts) { _.each(accounts, function(m, i){
+                <% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
                 var sShopName = m.Name.replace(' ', '');
+
+				if (aryCGAccounts[sShopName])
+					if (aryCGAccounts[sShopName].Species != 1)
+						return;
+
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 %>
                 <tr data-id="<%- m.Id %>">

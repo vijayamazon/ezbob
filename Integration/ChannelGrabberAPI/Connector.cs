@@ -132,41 +132,46 @@ namespace Integration.ChannelGrabberAPI {
 			int nOrdRqID = SendGenerateOrdExpRq(GenerateOrdersRq, oCustomer, m_oAccountData);
 			int nExpRqID = m_oAccountData.VendorInfo.HasExpenses ? SendGenerateOrdExpRq(GenerateExpensesRq, oCustomer, m_oAccountData) : 0;
 
-			OrderFetchStatus nOrdRes = OrderFetchStatus.NotReady;
-			OrderFetchStatus nExpRes = m_oAccountData.VendorInfo.HasExpenses ? OrderFetchStatus.NotReady : OrderFetchStatus.Complete;
+			var oOrdRes = new OrdExpFetchResult {
+				Status = OrderFetchStatus.NotReady,
+				Data = null
+			};
+
+			var oExpRes = new OrdExpFetchResult {
+				Status = m_oAccountData.VendorInfo.HasExpenses ? OrderFetchStatus.NotReady : OrderFetchStatus.Complete,
+				Data = null
+			};
+
+			var oOrdExpList = new List<Order>();
 
 			for (ulong wcc = 0; wcc < m_nWaitCycleCount; wcc++) {
-				if (nOrdRes == OrderFetchStatus.NotReady)
-					nOrdRes = FetchOrdExpRq(OrdersGeneratedRq, oCustomer, m_oAccountData, nOrdRqID);
+				if (oOrdRes.Status == OrderFetchStatus.NotReady) {
+					oOrdRes = FetchOrdExpRq(OrdersGeneratedRq, oCustomer, m_oAccountData, nOrdRqID);
 
-				if (nExpRes == OrderFetchStatus.NotReady)
-					nExpRes = FetchOrdExpRq(ExpensesGeneratedRq, oCustomer, m_oAccountData, nExpRqID);
+					if (oOrdRes.Status == OrderFetchStatus.Complete)
+						LoadOrdExp(oOrdExpList, oOrdRes.Data, 0, m_oAccountData);
+				} // if
 
-				if ((nOrdRes != OrderFetchStatus.NotReady) && (nExpRes != OrderFetchStatus.NotReady))
+				if (oExpRes.Status == OrderFetchStatus.NotReady) {
+					oExpRes = FetchOrdExpRq(ExpensesGeneratedRq, oCustomer, m_oAccountData, nExpRqID);
+
+					if (oExpRes.Status == OrderFetchStatus.Complete)
+						LoadOrdExp(oOrdExpList, oExpRes.Data, 1, m_oAccountData);
+				} // if
+
+				if ((oOrdRes.Status != OrderFetchStatus.NotReady) && (oExpRes.Status != OrderFetchStatus.NotReady))
 					break;
 
-				Debug("Fetch orders status: {0}, fetch expenses status: {1}, sleeping...", nOrdRes, nExpRes);
+				Debug("Fetch orders status: {0}, fetch expenses status: {1}, sleeping...", oOrdRes.Status, oExpRes.Status);
 				Thread.Sleep(m_nSleepTime);
 			} // for
 
-			if (nOrdRes == OrderFetchStatus.Complete) {
-				List<Order> lst = LoadOrders(oCustomer, m_oAccountData);
-
-				// TODO Expenses List<Order> lst = LoadOrders(oCustomer, m_oAccountData);
-
-				Info("GetOrders for {0} customer {1} ({2}) complete, {3} order{4} received.",
-					ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
-					lst.Count, lst.Count == 1 ? "" : "s"
-				);
-
-				return lst;
-			} // if
-
-			Info("GetOrders for {0} customer {1} ({2}) completed with error, no orders received.",
-				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id
+			Info("GetOrders for {0} customer {1} ({2}) complete, {3} {4} received.",
+				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
+				oOrdExpList.Count, oOrdExpList.Count == 1 ? "entry" : "entries"
 			);
 
-			return new List<Order>();
+			return oOrdExpList;
 		} // GetOrders
 
 		#endregion method GetOrders
@@ -351,46 +356,63 @@ namespace Integration.ChannelGrabberAPI {
 
 		#endregion SendGenerateOrdExpRq
 
+		#region struct OrdExpFetchResult
+
+		private struct OrdExpFetchResult {
+			public OrderFetchStatus Status;
+			public XmlDocument Data;
+		} // OrdExpFetchResult
+
+		#endregion struct OrdExpFetchResult
+
 		#region FetchOrdExpRq
 
-		private OrderFetchStatus FetchOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
+		private OrdExpFetchResult FetchOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
 			Debug("Tesing whether request is complete...");
 
-			XmlDocument doc = ExecuteRequest(BuildOrdExpGeneratedRq(sRequest, oCustomer, oAccountData, nRqID));
+			var oRes = new OrdExpFetchResult {
+				Status = OrderFetchStatus.NotReady,
+				Data = ExecuteRequest(BuildOrdExpGeneratedRq(sRequest, oCustomer, oAccountData, nRqID))
+			};
 
-			if (XmlUtil.IsError(doc)) {
-				Error("Error while fetching request status: {0}", XmlUtil.GetError(doc));
-				return OrderFetchStatus.Error;
+			if (XmlUtil.IsError(oRes.Data)) {
+				oRes.Status = OrderFetchStatus.Error;
+
+				Error("Error while fetching request status: {0}", XmlUtil.GetError(oRes.Data));
 			} // if
+			else
+				oRes.Status = XmlUtil.IsComplete(oRes.Data) ? OrderFetchStatus.Complete : OrderFetchStatus.NotReady;
 
-			return XmlUtil.IsComplete(doc) ? OrderFetchStatus.Complete : OrderFetchStatus.NotReady;
+			return oRes;
 		} // FetchOrdExpRq
 
 		#endregion FetchOrdExpRq
 
-		#region LoadOrders
+		#region LoadOrdExp
 
-		private List<Order> LoadOrders(Customer oCustomer, AccountData oAccountData) {
-			Debug("Loading list of orders...");
-
-			var lst = new List<Order>();
-
-			XmlDocument doc = ExecuteRequest(BuildOrdersRq(oCustomer));
+		private void LoadOrdExp(List<Order> lst, XmlDocument oData, int nIsExpense, AccountData oAccountData) {
+			Debug("Loading list of {0}s...", nIsExpense == 0 ? "order": "expense");
 
 			string sShopTypeName = ShopTypeName.ToLower();
 
-			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
-				var o = Order.Create(oNode, sShopTypeName, oAccountData);
+			uint nCount = 0;
 
-				if (o != null)
+			foreach (XmlNode oNode in oData.DocumentElement.ChildNodes) {
+				if (oNode.Name != "resource")
+					continue;
+
+				var o = Order.Create(oNode, sShopTypeName, oAccountData, nIsExpense);
+
+				if (o != null) {
 					lst.Add(o);
+					nCount++;
+				} // if
 			} // foreach
 
-			Debug("Loading list of orders complete, {0} order{1} loaded.", lst.Count, lst.Count == 1 ? "" : "s");
-			return lst;
-		} // LoadOrders
+			Debug("Loading list of {2}s complete, {0} {2}{1} loaded.", nCount, nCount == 1 ? "" : "s", nIsExpense == 0 ? "order" : "expense");
+		} // LoadOrdExp
 
-		#endregion LoadOrders
+		#endregion LoadOrdExp
 
 		#endregion GetOrders related only
 
@@ -572,14 +594,6 @@ Data: {3}
 
 		#endregion method BuildOrdExpGeneratedRq
 
-		#region method BuildOrdersRq
-
-		private string BuildOrdersRq(Customer oCustomer) {
-			return string.Format(OrdersRq, oCustomer.Id);
-		} // BuildOrdersRq
-
-		#endregion method BuildOrdersRq
-
 		#region method LoadCfg
 
 		private T LoadCfg<T>(string sParamName, string sDisplayName) {
@@ -631,7 +645,6 @@ Data: {3}
 		private const string GenerateExpensesRq = CustomersRq + "/{0}/{1}/{2}/expenseReport";
 		private const string OrdersGeneratedRq = CustomersRq + "/{0}/{1}/{2}/orderReport/{3}";
 		private const string ExpensesGeneratedRq = CustomersRq + "/{0}/{1}/{2}/expenseReport/{3}";
-		private const string OrdersRq = CustomersRq + "/{0}/orders";
 
 		private const string CustomerXpath = "/resource/resource";
 		private const string ServiceValidateXpath = "/resource/link[@rel]";

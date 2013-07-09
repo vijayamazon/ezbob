@@ -3,6 +3,7 @@
 		"Name": "Volusion",
 		"DisplayName": "Volusion",
 		"Description": "Volusion",
+		"Species":     "Shop",
 		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
 
 		"HasExpenses": false,
@@ -21,9 +22,12 @@
 		},
 
 		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{e512f12d-207c-46f8-8d61-b1199bc34555}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}" },
-			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" }
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{e512f12d-207c-46f8-8d61-b1199bc34555}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{b28f5acb-7d54-48f9-a7ff-bb2861ad1900}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C93A575D-F536-456E-8F8F-4D4C745FD868}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C45298CD-CAFF-49B0-BEE6-6E8E3281F63C}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD2F52DA-8CDC-4302-B76F-562A44F3103A}" }
 		],
 
 		"ClientSide": {
@@ -93,6 +97,7 @@
 		"Name":        "Play",
 		"DisplayName": "Play.com",
 		"Description": "Play.com",
+		"Species":     "Shop",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 
 		"HasExpenses": false,
@@ -111,9 +116,12 @@
 		},
 
 		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BEA6E606-EA64-4903-BF10-82CF16D6220A}" },
-			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" }
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B85A8CCB-4CC0-4D93-A216-C2B4D06326D1}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BEA6E606-EA64-4903-BF10-82CF16D6220A}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C58BC831-5BDB-414A-9C1E-A1EBB31DAC27}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C1CFA9FD-AEC9-443E-B04D-3C69F416BA7C}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}" }
 		],
 
 		"ClientSide": {
@@ -165,6 +173,7 @@
 		"Name":        "Shopify",
 		"DisplayName": "Shopify.com",
 		"Description": "Shopify.com",
+		"Species":     "Shop",
 		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
 
 		"HasExpenses": false,
@@ -182,9 +191,12 @@
 		},
 
 		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}" },
-			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" }
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B547E0B7-0C29-4172-8D35-C8D0F2966FA9}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BAF770CD-1A53-49BD-A9BF-087B1BB82F4C}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C2764AC3-B368-454F-872E-FF2B97A61092}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3DBE341-1A0F-4076-B3F9-6C7460D82D37}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD649144-1638-423D-868A-0D7063EF8A7C}" }
 		],
 
 		"ClientSide": {
@@ -232,6 +244,7 @@
 		"Name":        "Xero",
 		"DisplayName": "Xero.com",
 		"Description": "Xero.com",
+		"Species":     "Accounting",
 		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
 
 		"HasExpenses": true,
@@ -252,9 +265,12 @@
 		},
 
 		"Aggregators": [
-			{ "FunctionTypeName": "NumOfOrders",        "ValueTypeName": "Integer", "ID": "{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}" },
-			{ "FunctionTypeName": "TotalSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BE5D278C-5337-4C25-8EBA-537E67EFD133}" },
-			{ "FunctionTypeName": "AverageSumOfOrders", "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" }
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B1676D81-160E-4AEA-BCDC-B5CD20812E3B}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BE5D278C-5337-4C25-8EBA-537E67EFD133}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CBC5655B-6CC2-4D86-ABB7-E37057A5F892}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CBA06EBD-E58E-4312-AF61-4AFD07A2C828}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CA17192B-8B1D-4C15-9157-78CBDD318897}" }
 		],
 
 		"ClientSide": {

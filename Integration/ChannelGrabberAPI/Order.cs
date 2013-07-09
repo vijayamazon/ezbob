@@ -10,7 +10,7 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Create
 
-		public static Order Create(XmlNode oNode, string sShopTypeName, AccountData oAccountData) {
+		public static Order Create(XmlNode oNode, string sShopTypeName, AccountData oAccountData, int nIsExpense) {
 			string sOrderShopTypeName = XmlUtil.GetString(oNode, "accountType");
 
 			if (sOrderShopTypeName.ToLower() != sShopTypeName)
@@ -21,7 +21,7 @@ namespace Integration.ChannelGrabberAPI {
 			if (nAccountID != oAccountData.Id())
 				return null;
 
-			return new Order(oNode);
+			return new Order(oNode, nIsExpense);
 		} // Create
 
 		#endregion method Create
@@ -34,6 +34,7 @@ namespace Integration.ChannelGrabberAPI {
 		public virtual DateTime PaymentDate   { get; set; }
 		public virtual DateTime PurchaseDate  { get; set; }
 		public virtual string   OrderStatus   { get; set; }
+		public virtual int      IsExpense     { get; set; }
 
 		#endregion public properties
 
@@ -43,13 +44,14 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region constructor
 
-		private Order(XmlNode oNode) {
+		private Order(XmlNode oNode, int nIsExpense) {
 			NativeOrderId = XmlUtil.GetString(oNode, XmlUtil.IdNode);
 			TotalCost     = XmlUtil.GetDouble(oNode, "total");
 			CurrencyCode  = XmlUtil.GetString(oNode, "currency");
 			PaymentDate   = XmlUtil.GetDate(oNode, "paymentDate");
 			PurchaseDate  = XmlUtil.GetDate(oNode, "purchaseDate");
 			OrderStatus   = XmlUtil.GetString(oNode, "status");
+			IsExpense     = nIsExpense;
 		} // constructor
 
 		#endregion constructor

@@ -72,7 +72,7 @@
     <Compile Include="DatabaseFunctionStorage.cs" />
     <Compile Include="DatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseMarketPlace.cs" />
-    <Compile Include="RetriveDataHelper.cs" />
+    <Compile Include="RetrieveDataHelper.cs" />
     <Compile Include="OrdersAgregator.cs" />
   </ItemGroup>
   <ItemGroup>

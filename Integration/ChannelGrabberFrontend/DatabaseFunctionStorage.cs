@@ -74,11 +74,23 @@ namespace Integration.ChannelGrabberFrontend {
 				break;
 
 			case FunctionType.AverageSumOfOrders:
-				displayName = "Average Sum of Order";
+				displayName = "Average Sum of Orders";
 				break;
 
 			case FunctionType.TotalSumOfOrders:
 				displayName = "Total Sum of Orders";
+				break;
+
+			case FunctionType.NumOfExpenses:
+				displayName = "Num of Expenses";
+				break;
+
+			case FunctionType.AverageSumOfExpenses:
+				displayName = "Averaget Sum of Expenses";
+				break;
+
+			case FunctionType.TotalSumOfExpenses:
+				displayName = "Total Sum of Expenses";
 				break;
 
 			default:
