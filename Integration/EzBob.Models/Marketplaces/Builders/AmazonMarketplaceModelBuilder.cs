@@ -62,7 +62,7 @@ namespace EzBob.Models
 
             model.AskvilleGuid = askvilleTmp != null ? askvilleTmp.Guid : "";
 
-            model.Categories = _ebayAmazonCategoryRepository.GetEbayCategories(mp);
+            model.Categories = _ebayAmazonCategoryRepository.GetAmazonCategories(mp);
         }
     }
 }
