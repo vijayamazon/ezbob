@@ -453,7 +453,7 @@
     <Content Include="Content\css\images\help\help_ekm.jpg" />
     <Content Include="Content\css\images\help\help_freeagent.jpg" />
     <Content Include="Content\css\images\help\help_paypal.jpg" />
-    <Content Include="Content\css\images\help\help_security.jpg" />
+    <Content Include="Content\css\images\help\help_security.png" />
     <Content Include="Content\css\images\help_ebay.jpg" />
     <Content Include="Content\css\images\live_help.jpg" />
     <Content Include="Content\css\images\lock_64.png" />
