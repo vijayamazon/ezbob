@@ -45,16 +45,19 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public virtual int Id { get; set; }
 
         /// <summary>
+        /// Ezbob Interest Income that is left to get 
         /// Доход банка, который осталось получить.
         /// </summary>
         public virtual decimal Interest { get; set; }
 
         /// <summary>
+        /// Ezbob Income that customer already paid 
         /// Доход банка, который клиент заплатил.
         /// </summary>
         public virtual decimal InterestPaid { get; set; }
 
         /// <summary>
+        /// Loan Amount that customer recieved 
         /// Сумма, которыю клиент получал
         /// </summary>
         public virtual decimal LoanAmount { get; set; }
@@ -80,11 +83,13 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         }
 
         /// <summary>
-        /// Сумма, которую клиенту необходимо выплатить, включая все дополнительные отчисления и проценты
+        ///  Sum that customer have to pay, including all fees and interesets
+        ///  Сумма, которую клиенту необходимо выплатить, включая все дополнительные отчисления и проценты
         /// </summary>
         public virtual decimal Balance { get; set; }
 
         /// <summary>
+        /// Loan Principal, the loan part without interest and fees
         /// Остаток по телу кредита, без учета дохода и процентов
         /// </summary>
         public virtual decimal Principal { get; set; }
@@ -111,72 +116,87 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         }
 
         /// <summary>
+        /// Loan end date of payments, close loan date
         /// Дата окончания выплат по кредиту, т.е. его закрытия.
         /// </summary>
         public virtual DateTime? DateClosed { get; set; }
 
         /// <summary>
+        /// Loan creation date
         /// Дата создания кредита.
         /// </summary>
         public virtual DateTime Date { get; set; }
 
         /// <summary>
+        /// Repayments, made by customer for the loan
         /// Выплаты, которые сделал клиент по заему.
         /// </summary>
         public virtual decimal Repayments { get; set; }
 
         /// <summary>
+        /// Number of loan repaiments
         /// Количество выплат по кредиту.
         /// </summary>
         public virtual int RepaymentsNum { get; set; }
 
         /// <summary>
+        /// Amount of payed on time repaiments
         /// Сумма вовремя уплаченных платежей
         /// </summary>
         public virtual decimal OnTime { get; set; }
 
         /// <summary>
+        /// Number of payed on time  repaiments
         /// Количество вовремя уплаченных платежей
         /// </summary>
         public virtual int OnTimeNum { get; set; }
         
         /// <summary>
+        /// Amount of payed less then 30 days late repaiments
         /// Платежи с задержкой до 30 дней
         /// </summary>
         public virtual decimal Late30 { get; set; }
         /// <summary>
+        /// Number of payed less then 30 days late repaiments
         /// Платежи с задержкой до 30 дней
         /// </summary>
         public virtual int Late30Num { get; set; }
 
         /// <summary>
+        /// Amount of payed less then 60 days late repaiments
         /// Платежи с задержкой более 60 дней
         /// </summary>
         public virtual decimal Late60 { get; set; }
         /// <summary>
+        /// Number of payed less then 30 days late repaiments
         /// Платежи с задержкой более 60 дней
         /// </summary>
         public virtual int Late60Num { get; set; }
 
         /// <summary>
+        /// Amount of payed less then 90 days late repaiments
         /// Платежи с задержкой до 90 дней
         /// </summary>
         public virtual decimal Late90 { get; set; }
         /// <summary>
+        /// Number of payed less then 30 days late repaiments
         /// Платежи с задержкой до 90 дней
         /// </summary>
         public virtual int Late90Num { get; set; }
 
         /// <summary>
+        /// Amount of payed more then 90 days late repaiments
         /// Платежи с задержкой более 90 дней
         /// </summary>
         public virtual decimal Late90Plus { get; set; }
         /// <summary>
+        /// Number of payed more then 90 days late repaiments
         /// Платежи с задержкой более 90 дней
         /// </summary>
         public virtual int Late90PlusNum { get; set; }
 
         /// <summary>
+        /// Max days of deliquency
         /// максимальное кол-во дней просрочки
         /// </summary>
         public virtual int MaxDelinquencyDays { get; set; }
@@ -190,25 +210,32 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public virtual bool IsDefaulted { get; set; }
 
         /// <summary>
+        /// Next repaiment amount
         /// Размер следующей выплаты
         /// </summary>
         public virtual decimal NextRepayment { get; set; }
 
         /// <summary>
+        /// Unique transaction number per customer's loan
         /// Номер транзакции, уникальный для одного клиента
         /// </summary>
         public virtual int Position { get; set; }
 
+        /// <summary>
+        /// Unique loan reference number
+        /// </summary>
         public virtual string RefNumber { get; set; }
 
         public virtual CashRequest CashRequest { get; set; }
 
         /// <summary>
+        /// Not repaid interest. Recalculated each day
         /// Неоплаченный interest. Пересчитывается каждый день.
         /// </summary>
         public virtual decimal? InterestDue { get; set; }
 
         /// <summary>
+        /// Date of last loan recalculation
         /// Дата и время послднего автоматического пересчета кредита.
         /// </summary>
         public virtual DateTime? LastRecalculation { get; set; }
@@ -242,11 +269,13 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         }
 
         /// <summary>
+        /// Loan interest rate
         /// Процент, под который был взят кредит
         /// </summary>
         public virtual decimal InterestRate { get; set; }
 
         /// <summary>
+        /// Anual Percent Rate
         /// Среднегодовой процент
         /// </summary>
         public virtual decimal APR { get; set; }
@@ -259,6 +288,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public virtual decimal Fees { get; set; }
         
         /// <summary>
+        /// Fees payed by customer for the loan
         /// Коммисия, которую заплатил клиент, за кредит
         /// </summary>
         public virtual decimal FeesPaid { get; set; }
@@ -278,6 +308,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         }
 
         /// <summary>
+        /// Zoho CRM Id for the loan
         /// Идентификатор кредита в Zoho CRM
         /// </summary>
         public virtual string ZohoId { get; set; }

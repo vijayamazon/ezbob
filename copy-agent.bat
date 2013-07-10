@@ -26,7 +26,7 @@ for %%d in (
 
 call:do copy Lib\Scorto.Core\DBSQLServer.dll %SERVICE_DIR%
 
-call:do copy Integration\ChannelGrabberConfig\channelgrabber.json "%CommonProgramFiles(x86)%"
+call:do copy Integration\ChannelGrabberConfig\channelgrabber.json "%CommonProgramFiles(x86)%\ezbob"
 
 call:do net start ScortoService
 
