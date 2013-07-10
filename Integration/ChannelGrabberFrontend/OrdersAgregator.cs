@@ -29,7 +29,7 @@ namespace Integration.ChannelGrabberFrontend {
 		} // constructor
 
 		private int GetShipedOrdersCount(IEnumerable<ChannelGrabberOrderItem> orders) {
-			return orders.Count(o => (o.IsExpense == 0) && (o.OrderStatus == "Dispatched"));
+			return orders.Count(o => (o.IsExpense == 0)); // && (o.OrderStatus == "Dispatched"));
 		} // GetShippedOrdersCount
 
 		private double GetAverageSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
@@ -41,7 +41,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 		private double GetTotalSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
 			return orders
-				.Where(o => (o.IsExpense == 0) && o.TotalCost.HasValue && (o.OrderStatus == "Dispatched"))
+				.Where(o => (o.IsExpense == 0) && o.TotalCost.HasValue) // && (o.OrderStatus == "Dispatched"))
 				.Sum(
 					o =>
 					CurrencyConverter.ConvertToBaseCurrency(

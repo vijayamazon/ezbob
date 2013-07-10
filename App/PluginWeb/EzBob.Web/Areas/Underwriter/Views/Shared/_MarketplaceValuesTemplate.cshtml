@@ -104,13 +104,13 @@
             <%}%>
 
            @* *** Channel Grabber *** *@
-           <% (function() {
-               var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+           <% (function(aryCGAccounts) {
+                  if (!aryCGAccounts[marketplaceType])
+                      return;
 
-               if (aryCGAccounts[marketplaceType]) {
-                   %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
-               } // if
-           })(); %>
+                  var bHasExpenses = aryCGAccounts[marketplaceType].HasExpenses;
+                  %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
+           })($.parseJSON($('div#cg-account-list').text())); %>
         </fieldset>
     </div>  
 }
@@ -150,7 +150,7 @@
                 var sShopName = m.Name.replace(' ', '');
 
 				if (aryCGAccounts[sShopName])
-					if (aryCGAccounts[sShopName].Species != 0)
+					if (aryCGAccounts[sShopName].HasExpenese)
 						return;
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
@@ -208,7 +208,7 @@
                 var sShopName = m.Name.replace(' ', '');
 
 				if (aryCGAccounts[sShopName])
-					if (aryCGAccounts[sShopName].Species != 1)
+					if (!aryCGAccounts[sShopName].HasExpenses)
 						return;
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';

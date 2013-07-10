@@ -86,7 +86,7 @@ namespace Integration.ChannelGrabberFrontend {
 				break;
 
 			case FunctionType.AverageSumOfExpenses:
-				displayName = "Averaget Sum of Expenses";
+				displayName = "Average Sum of Expenses";
 				break;
 
 			case FunctionType.TotalSumOfExpenses:

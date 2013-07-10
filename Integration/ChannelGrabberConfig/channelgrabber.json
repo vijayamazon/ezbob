@@ -3,7 +3,6 @@
 		"Name": "Volusion",
 		"DisplayName": "Volusion",
 		"Description": "Volusion",
-		"Species":     "Shop",
 		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
 
 		"HasExpenses": false,
@@ -97,7 +96,6 @@
 		"Name":        "Play",
 		"DisplayName": "Play.com",
 		"Description": "Play.com",
-		"Species":     "Shop",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
 
 		"HasExpenses": false,
@@ -173,7 +171,6 @@
 		"Name":        "Shopify",
 		"DisplayName": "Shopify.com",
 		"Description": "Shopify.com",
-		"Species":     "Shop",
 		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
 
 		"HasExpenses": false,
@@ -216,7 +213,7 @@
 					"<p>You should provide URL to a private application connected to your shop. ",
 					"<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank>Instructions on creating a private application.</a></p>",
 					"<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
-					"<blockquote>https://a5a18488246744828f621d0073eda6d8:b0ce472ffd5b4025af3ed570353c5d56@test-shop.myshopify.com/admin/orders.xml</blockquote>",
+					"<blockquote>https://a5a18488246744828f621d0073eda6d8a:b0ce472ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml</blockquote>",
 					"Enter your example URL in the above field.</p>"
 				],
 				"OnBeforeLink": [
@@ -244,7 +241,6 @@
 		"Name":        "Xero",
 		"DisplayName": "Xero.com",
 		"Description": "Xero.com",
-		"Species":     "Accounting",
 		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
 
 		"HasExpenses": true,

@@ -2,15 +2,6 @@
 using System.Collections.Generic;
 
 namespace Integration.ChannelGrabberConfig {
-	#region enum VendorSpecies
-
-	public enum VendorSpecies {
-		Shop       = 0,
-		Accounting = 1
-	} // VendorSpecies
-
-	#endregion enum VendorSpecies
-
 	#region class VendorInfo
 
 	public class VendorInfo {
@@ -37,7 +28,6 @@ namespace Integration.ChannelGrabberConfig {
 		public string Name { get; set; }
 		public string DisplayName { get; set; }
 		public string Description { get; set; }
-		public VendorSpecies Species { get; set; }
 		public string InternalID { get; set; }
 		public bool HasExpenses { get; set; }
 
@@ -93,10 +83,10 @@ namespace Integration.ChannelGrabberConfig {
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("Unique name: {0}\nDisplay name: {1}\nDescription: {2}\nSpecies: {6}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
+			return string.Format("Unique name: {0}\nDisplay name: {1}\nDescription: {2}\nHas expenses: {6}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
 				Name, DisplayName, Description, Guid(), SecurityData,
 				string.Join("\n\t", (object[])Aggregators.ToArray()),
-				Species
+				HasExpenses ? "yes" : "no"
 			);
 		} // ToString
 

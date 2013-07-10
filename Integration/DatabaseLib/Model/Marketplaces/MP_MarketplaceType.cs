@@ -136,7 +136,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public override bool IsPaymentAccount { get {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(this.Name);
-			return vi.Species == VendorSpecies.Accounting; 
+			return vi.HasExpenses;
 		} } // IsPaymentAccount
 	} // class ChannelGrabberMarketPlaceType
 
