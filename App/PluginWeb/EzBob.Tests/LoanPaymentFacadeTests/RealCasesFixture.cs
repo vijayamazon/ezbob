@@ -1006,5 +1006,23 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(1000.0m, Parse("2013-01-11 23:16:28.000"));
         }
+
+        [Test]
+        [Description("EZ-488. Incorrect total interest. LoanId 151 on UAT")]
+        public void ez488()
+        {
+            var calculator = new LoanScheduleCalculator() { Interest = 0.06M, Term = 12 };
+            calculator.Calculate(100, _loan, new DateTime(2013, 5, 8));
+
+            Console.WriteLine(_loan);
+
+            _loan.Charges.Add(new LoanCharge(){Amount = 75, Loan = _loan, Date = new DateTime(2013, 6, 25)});
+
+             var state = _facade.GetStateAt(_loan, new DateTime(2013, 7, 10));
+
+            Console.WriteLine("Interest: {0}", state.Interest);
+
+            Console.WriteLine(_loan);
+        }
     }
 }
