@@ -1012,7 +1012,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         public void ez488()
         {
             var calculator = new LoanScheduleCalculator() { Interest = 0.06M, Term = 12 };
-            calculator.Calculate(100, _loan, new DateTime(2013, 5, 8));
+            calculator.Calculate(1000, _loan, new DateTime(2013, 5, 8));
 
             Console.WriteLine(_loan);
 
