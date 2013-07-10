@@ -174,8 +174,8 @@ $(function () {
     $.fn.withoutSpaces = function () {
         this.each(function () {
             var el = $(this);
-            el.on('keyup change', function (event) {
-                el.val(el.val().replace(/\s/, ""));
+            el.on('keyup change keypress keydown focusin focusout', function (event) {
+                el.val(el.val().replace(/\s+/g, ""));
             });
         });
         return this;
