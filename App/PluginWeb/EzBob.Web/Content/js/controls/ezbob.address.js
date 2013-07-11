@@ -139,9 +139,12 @@ EzBob.AddressView = Backbone.View.extend({
 		this.name = options.name;
 		this.max = options.max || 5;
 		this.isShowClear = options.isShowClear;
+		this.directorId = options.directorId || 0;
+		this.customerId = options.customerId || 0;
 	},
 
 	render: function () {
+	    var _this = this;
 		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name }));
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
@@ -153,6 +156,18 @@ EzBob.AddressView = Backbone.View.extend({
 		this.$el.find('img.field_status').each(function () {
 			var bRequired = $(this).hasClass('required');
 			$(this).field_status({ required: bRequired, initial_status: sInitialStatus });
+		});
+
+		_.each(this.model.models, function(val) {
+		    val.set(
+		        {
+		            "director": _this.directorId,
+		            "customer": _this.customerId
+		        },
+		        {
+		            silent: true
+		        }
+		    );
 		});
 
 		return this;

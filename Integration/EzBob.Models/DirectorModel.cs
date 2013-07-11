@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
@@ -16,6 +17,7 @@ namespace EzBob.Web.Areas.Customer.Models {
 		public string Middle { get; set; }
 		public string Surname { get; set; }
 		public char Gender { get; set; }
+        public int Position { get; set; }
 
 		public string DateOfBirth { get; set; }
 		public CustomerAddress[] DirectorAddress { get; set; }
@@ -44,12 +46,13 @@ namespace EzBob.Web.Areas.Customer.Models {
 			return director;
 		} // FromModel
 
-		public static DirectorModel FromDirector(Director director) {
+		public static DirectorModel FromDirector(Director director, List<Director> directors) {
 			return new DirectorModel {
 				Id = director.Id,
 				Name = director.Name,
 				Middle = director.Middle,
 				Surname = director.Surname,
+                Position = directors.IndexOf(director),
 				DateOfBirth = FormattingUtils.FormatDateToString(director.DateOfBirth, "-/-/-"),
 			    DirectorAddress =
 			        director.DirectorAddressInfo.AllAddresses.Where(

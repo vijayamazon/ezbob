@@ -67,25 +67,28 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             EzBob.App.trigger("error", "You must fill in all of the fields.")
             return false;
 
+        typeOfBusinessName = @model.get('BusinessTypeReduced') + "Info"
+        if @model.get(typeOfBusinessName)?. then
+            directors = @model.get(typeOfBusinessName).Directors;
+            _.each directors, (val) ->
+                _.each val.DirectorAddress, (add)->
+                    add["DirectorId"] = val.Id
+
         data = @ui.form.serializeArray()
         action = @ui.form.attr('action')
-        that = @
-        request = $.post action, data;
+        request = $.post action, data
 
-        request.success => 
-            that.reload()
+        request.done => 
+            @reload()
             EzBob.App.trigger 'info', "Your information updated successfully"
 
         request.fail () =>
             EzBob.App.trigger 'error', "Business check service temporary unavaliable, please contact with system administrator", ""
       
     reload: -> 
-        xhr = this.model.fetch()
-        that = @
-        xhr.done => 
-            that.render()
-            scrollTop()
-            that.setInputReadOnly true
+        @render()
+        scrollTop()
+        @setInputReadOnly true
 
     regions:
         personal: '.personal-info'
@@ -108,6 +111,8 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @validator = EzBob.validateYourInfoEditForm(@ui.form)
         @.$el.find('.phonenumber').numericOnly(11);
         @.$el.find('.cashInput').numericOnly(15);
+        $("input.form_field_address_lookup").css "margin-left", "3px"
+
     
     renderPersonal: ->
         personalInfoView = new EzBob.Profile.PersonalInfoView({ model: @model })
@@ -181,7 +186,7 @@ class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
         directorAddress: '#DirectorAddress'
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress", max: 10, isShowClear:false })
+        address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress[#{@model.get('Position')}]", max: 10, isShowClear:false, directorId: @model.get('Id') })
         @directorAddress.show(address)
 
 class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeView

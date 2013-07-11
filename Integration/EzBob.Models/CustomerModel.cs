@@ -120,7 +120,7 @@ namespace EzBob.Web.Areas.Customer.Models
                            LimitedCompanyName = info.LimitedCompanyName,
                            LimitedTimeAtAddress = info.LimitedTimeAtAddress,
                            LimitedBusinessPhone = info.LimitedBusinessPhone,
-                           Directors = info.Directors.Select(d => DirectorModel.FromDirector(d)).ToArray()
+                           Directors = info.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(info.Directors))).ToArray()
                        };
         }
     }
@@ -145,7 +145,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 NonLimitedTimeAtAddress = info.NonLimitedTimeAtAddress,
                 NonLimitedConsentToSearch = info.NonLimitedConsentToSearch,
                 NonLimitedBusinessPhone = info.NonLimitedBusinessPhone,
-                Directors =info.Directors.Select(d => DirectorModel.FromDirector(d)).ToArray()
+                Directors = info.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(info.Directors))).ToArray()
             };
         }
     }

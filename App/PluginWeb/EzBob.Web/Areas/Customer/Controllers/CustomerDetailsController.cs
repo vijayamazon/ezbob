@@ -11,6 +11,7 @@ using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
+using FluentNHibernate.Conventions;
 using Iesi.Collections.Generic;
 using MailApi;
 using NHibernate;
@@ -228,11 +229,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
         }
 
-        [Transactional]
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult Edit(string dayTimePhone, string mobilePhone, string businessPhone, decimal? overallTurnOver, decimal? webSiteTurnOver, List<CustomerAddress> personalAddress, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<CustomerAddress> directorAddress)
+        [Transactional]
+        public JsonNetResult Edit(string dayTimePhone, string mobilePhone, string businessPhone, decimal? overallTurnOver, decimal? webSiteTurnOver, List<CustomerAddress> personalAddress, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<DirectorAddressModel>[] directorAddress)
         {
             var customer = _context.Customer;
 
@@ -250,13 +251,23 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 customer.LimitedInfo.LimitedBusinessPhone = businessPhone;
 
-                MakeAddress(limitedCompanyAddress, addressInfo.LimitedCompanyAddressPrev, CustomerAddressType.LimitedCompanyAddressPrev, addressInfo.LimitedCompanyAddress, CustomerAddressType.LimitedCompanyAddress);
+                MakeAddress(limitedCompanyAddress, addressInfo.LimitedCompanyAddressPrev,
+                            CustomerAddressType.LimitedCompanyAddressPrev, addressInfo.LimitedCompanyAddress,
+                            CustomerAddressType.LimitedCompanyAddress);
 
-                if (customer.LimitedInfo.Directors.Any())
+                var directors = customer.LimitedInfo.Directors;
+                if (directors.Any())
                 {
-                    foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
+                    foreach (var d in directors)
                     {
-                        MakeAddress(directorAddress, addrInfo.LimitedDirectorHomeAddressPrev, CustomerAddressType.LimitedDirectorHomeAddressPrev, addrInfo.LimitedDirectorHomeAddress, CustomerAddressType.LimitedDirectorHomeAddress);
+                        foreach (var da in directorAddress.Where(da => da.Any(x => x.DirectorId == d.Id)))
+                        {
+                            MakeAddress(da,
+                                        d.DirectorAddressInfo.LimitedDirectorHomeAddressPrev,
+                                        CustomerAddressType.LimitedDirectorHomeAddressPrev,
+                                        d.DirectorAddressInfo.LimitedDirectorHomeAddress,
+                                        CustomerAddressType.LimitedDirectorHomeAddress);
+                        }
                     }
                 }
             }
@@ -265,13 +276,23 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 customer.NonLimitedInfo.NonLimitedBusinessPhone = businessPhone;
 
-                MakeAddress(nonLimitedCompanyAddress, addressInfo.NonLimitedCompanyAddressPrev, CustomerAddressType.NonLimitedCompanyAddressPrev, addressInfo.NonLimitedCompanyAddress, CustomerAddressType.NonLimitedCompanyAddress);
+                MakeAddress(nonLimitedCompanyAddress, addressInfo.NonLimitedCompanyAddressPrev,
+                            CustomerAddressType.NonLimitedCompanyAddressPrev, addressInfo.NonLimitedCompanyAddress,
+                            CustomerAddressType.NonLimitedCompanyAddress);
 
-                if (customer.NonLimitedInfo.Directors.Any())
+                var directors = customer.NonLimitedInfo.Directors;
+                if (directors.Any())
                 {
-                    foreach (var addrInfo in customer.LimitedInfo.Directors.Select(item => item.DirectorAddressInfo))
+                    foreach (var d in directors)
                     {
-                        MakeAddress(directorAddress, addrInfo.NonLimitedDirectorHomeAddressPrev, CustomerAddressType.NonLimitedDirectorHomeAddressPrev, addrInfo.NonLimitedDirectorHomeAddress, CustomerAddressType.NonLimitedDirectorHomeAddress);
+                        foreach (var da in directorAddress.Where(da => da.Any(x => x.DirectorId == d.Id)))
+                        {
+                            MakeAddress(da,
+                                        d.DirectorAddressInfo.NonLimitedDirectorHomeAddressPrev,
+                                        CustomerAddressType.NonLimitedDirectorHomeAddressPrev,
+                                        d.DirectorAddressInfo.NonLimitedDirectorHomeAddress,
+                                        CustomerAddressType.NonLimitedDirectorHomeAddress);
+                        }
                     }
                 }
             }

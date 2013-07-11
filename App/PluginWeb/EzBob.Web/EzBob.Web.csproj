@@ -222,6 +222,7 @@
     <Compile Include="Areas\Customer\Controllers\PayPointMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\EkmMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\PacnetController.cs" />
+    <Compile Include="Areas\Customer\Models\DirectorAddressModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Admin.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
