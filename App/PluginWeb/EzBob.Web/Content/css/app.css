@@ -473,10 +473,26 @@ div.shop-connected {
     width: 580px;
 }
 
-.GenderCtrl input, 
+.FormRadioCtrl input, 
 .BankContainer input {
 	margin: -5px 0 0 15px;
 }
+
+.FormRadioCtrl label {
+	display: inline;
+	font-weight: normal;
+	margin-left: 5px;
+}
+
+.FormRadioCtrl > span {
+    width: 410px;
+    display: inline-block;
+}
+.FormRadioCtrl > span.error {
+    width: 408px;
+    display: inline-block;
+}
+
 .SubBank {
     width: 400px;
 }

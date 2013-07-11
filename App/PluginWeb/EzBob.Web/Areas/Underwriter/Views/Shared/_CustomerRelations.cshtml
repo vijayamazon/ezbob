@@ -1,4 +1,6 @@
-﻿<script id="customerRelationsTemplate" type="text/template">
+﻿@{Html.RenderPartial("CustomerRelations/AddCustomerRelationsEntry");}
+
+<script id="customerRelationsTemplate" type="text/template">
     @CustomerRelations()
 </script>
 
@@ -28,4 +30,5 @@
             <%})%>
         </tbody>
     </table>
+    <button class="btn addNewCustomerRelationsEntry">Add New Entry</button>
 }

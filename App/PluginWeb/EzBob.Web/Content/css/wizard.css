@@ -202,23 +202,6 @@ ul.list_none
 
 #wizard .notifications > div { margin-right: 18px;}
 
-.GenderCtrl label {
-	display: inline;
-	font-weight: normal;
-	margin-left: 5px;
-}
-
-.GenderCtrl > span {
-    width: 410px;
-    /*padding-left: 5px;*/
-    display: inline-block;
-}
-.GenderCtrl > span.error {
-    width: 408px;
-    /*padding-left: 5px;*/
-    display: inline-block;
-}
-
 h1.form_start,
 h2.form_start {
 	padding-left: 0!important;

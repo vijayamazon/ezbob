@@ -199,7 +199,7 @@ EzBob.Validation.checkDirectorName = function(value, elm) {
 jQuery.validator.addMethod("director_name_part", EzBob.Validation.checkDirectorName, 'Please check your input.');
 
 EzBob.Validation.checkDirectorGender = function(ignored, elm) {
-	return $(elm).closest('.GenderCtrl').find('.director_gender:checked').length == 1;
+    return $(elm).closest('.FormRadioCtrl').find('.director_gender:checked').length == 1;
 }; // EzBob.Validation.checkDirectorGender
 
 jQuery.validator.addMethod("director_gender", EzBob.Validation.checkDirectorGender, 'Please check your input.');

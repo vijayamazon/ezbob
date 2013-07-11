@@ -52,11 +52,11 @@
 				</div>
 				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
-			    <div class="form_field_container GenderCtrl">
+			    <div class="form_field_container FormRadioCtrl">
 			        <span>
 			            Gender
-			            <input type="radio" name="Gender" value="M" id="GenderCtrl_M" class="required"><label for="GenderCtrl_M">Male</label>
-			            <input type="radio" name="Gender" value="F" id="GenderCtrl_F"><label for="GenderCtrl_F">Female</label>
+			            <input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required"><label for="FormRadioCtrl_M">Male</label>
+			            <input type="radio" name="Gender" value="F" id="FormRadioCtrl_F"><label for="FormRadioCtrl_F">Female</label>
 			        </span>
                     <img id="GenderImage" class="field_status required" alt=""/>
 			    </div>
@@ -399,11 +399,11 @@
 				</div>
 			</div>
 
-			<div class="form_field_container GenderCtrl">
+			<div class="form_field_container FormRadioCtrl">
                 <span>
 				    Gender
-				    <input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].GenderCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
-				    <input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].GenderCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
+				    <input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
+				    <input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
                 </span>
                 <img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image"/>
 			</div>
