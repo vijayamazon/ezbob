@@ -1,11 +1,11 @@
 ﻿@using System.Globalization
 @using EzBob.Web.Infrastructure
 @using Integration.ChannelGrabberConfig
-@using Integration.ChannelGrabberFrontend
 @using Newtonsoft.Json
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Create an EZBOB account";
     var config = ViewData["Config"] as IEzBobConfiguration;
 }
 
