@@ -77,7 +77,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
                 //    this.navigate("PaymentAccounts", { trigger: true });
                 //    break;
             case 2:
-                $(document).attr("title", "Step 3: Fill Personal Details | EZBOB ");
+                $(document).attr("title", "Step 3: Fill Personal Details | EZBOB");
                 EzBob.App.GA.trackPage('/Customer/Wizard/PersonalDetails');
                 EzBob.App.trigger("wizard:progress", 70);
                 this.navigate("YourDetails", { trigger: true });

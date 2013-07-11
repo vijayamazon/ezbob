@@ -45,7 +45,7 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 					) // append to div
 						.append('<span>&nbsp;</span>')
 						.append(
-							$('<img />').addClass('field_status').attr('id', 'CaptchaInputTextImage')
+							$('<img />').addClass('field_status required').attr('id', 'CaptchaInputTextImage')
 						)
 				); // replaceWith
 
