@@ -60,7 +60,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
         }
         switch (i) {
             case 0:
-                $(document).attr("title", "Step 1: Sign Up | EZBOB");
+                $(document).attr("title", "Create an EZBOB Account: Step 1");
                 EzBob.App.GA.trackPage('/Customer/Wizard/SignUp');
                 EzBob.App.trigger("wizard:progress", 0);
                 this.navigate("SignUp", { trigger: true });
