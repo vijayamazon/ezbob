@@ -32,6 +32,12 @@
       return AddCustomerRelationsEntry.__super__.initialize.call(this);
     };
 
+    AddCustomerRelationsEntry.prototype.render = function() {
+      AddCustomerRelationsEntry.__super__.render.call(this);
+      this.$el.find('select')[1].selectedIndex = 1;
+      return this;
+    };
+
     AddCustomerRelationsEntry.prototype.commentKeyup = function(el) {
       return $(el.target).val($(el.target).val().replace(/\r\n|\r|\n/g, "\r\n").slice(0, 1000));
     };

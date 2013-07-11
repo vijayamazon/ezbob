@@ -11,7 +11,7 @@
 			    <span>
 			        In\Out
 			        <input type="radio" name="Incoming" value="I" id="Incoming_I" class="required"><label for="Incoming_I">Incoming</label>
-			        <input type="radio" name="Incoming" value="O" id="Incoming_O"><label for="Incoming_O">Outgoing</label>
+			        <input type="radio" name="Incoming" value="O" id="Incoming_O" checked="checked"><label for="Incoming_O">Outgoing</label>
 			    </span>
 			</div>
             <br/>
@@ -22,7 +22,7 @@
 						<select class="form_field selectheight" id="Status" name="Status">
 							<option></option>
                             <% for (var i in statuses) { %>
-	                           <option value="<%- i %>"><%- statuses[i] %></option>
+                                <option value="<%- i %>"><%- statuses[i] %></option>
                             <%}%>
 						</select>
 					</label>
@@ -32,14 +32,12 @@
     
             <div class="control-group form_field_container">
 				<div class="controls">
-					<label class="control-label attardi-input"><span>Action</span>
-						<select class="form_field selectheight" id="Action" name="Action">
-							<option></option>
-                            <% for (var i in actions) { %>
-	                           <option value="<%- i %>"><%- actions[i] %></option>
-                            <%}%>
-    					</select>
-					</label>
+					<select class="form_field selectheight" id="Action" name="Action">
+						<option></option>
+                        <% for (var i in actions) { %>
+	                        <option value="<%- i %>"><%- actions[i] %></option>
+                        <%}%>
+    				</select>
 				</div>
 			</div>
             <br/>    

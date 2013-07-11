@@ -18,14 +18,16 @@
             </tr>
         </thead>
         <tbody>
-            <%_.each(vals, function(val){%>
+            <%_.each(vals, function(val){ %>
             <tr>
                 <td><%-EzBob.formatDateTime(val.DateTime)%></td>
                 <td><%-val.User%></td>
                 <td><%-val.Action%></td>
                 <td><%-val.Incoming ? "Incoming" : "Outgoing"%></td>
                 <td><%-val.Status%></td>
-                <td><%-val.Comment%></td>
+                <td style="word-wrap: break-word"><%-val.Comment%></td>
+                @*The <br/> is being converted in the browser?
+                <td style="word-wrap: break-word"><%-val.Comment.replace(/\r\n/g,'<br/>')%></td>*@
             </tr>
             <%})%>
         </tbody>

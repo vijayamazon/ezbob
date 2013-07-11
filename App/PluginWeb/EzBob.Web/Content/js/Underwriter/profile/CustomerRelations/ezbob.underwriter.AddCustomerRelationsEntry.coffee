@@ -12,6 +12,11 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
         @model = new Backbone.Model(actions: options.actions, statuses: options.statuses)
         @mainTab = options.mainTab
         super()
+        
+    render: ->
+        super()
+        this.$el.find('select')[1].selectedIndex = 1
+        return @
 
     commentKeyup: (el) ->
         $(el.target).val($(el.target).val().replace(/\r\n|\r|\n/g, "\r\n").slice(0, 1000))
