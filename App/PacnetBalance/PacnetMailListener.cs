@@ -2,8 +2,9 @@
 using Ezbob.Logger;
 using MailBee.ImapMail;
 using MailBee.Mime;
+using PacnetBalance;
 
-namespace Reconciliation {
+namespace PacnetBalance {
 	public class PacnetMailListener : MailListener.MailListener {
 		public PacnetMailListener(Action onAfterSave, ASafeLog oLog = null)
 			: base(

@@ -1,25 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Ezbob.Database;
 using Ezbob.Logger;
 using PayPoint;
 
-namespace Reconciliation {
-	#region class PayPointBalance
+namespace PayPointBalance {
+	#region class Processor
 
-	class PayPointBalance : SafeLog {
+	public class Processor : SafeLog {
 		#region public
 
 		#region constructor
 
-		public PayPointBalance(DateTime oDate, string sMid, string sVpnPassword, string sRemotePassword, ASafeLog oLog = null) : base(oLog) {
+		public Processor(DateTime oDate, ASafeLog oLog = null)
+			: base(oLog) {
 			m_oDate = oDate;
-			m_sMid = sMid;
-			m_sVpnPassword = sVpnPassword;
-			m_sRemotePassword = sRemotePassword;
+			m_sMid = Conf.PayPointMid;
+			m_sVpnPassword = Conf.PayPointVpnPassword;
+			m_sRemotePassword = Conf.PayPointRemotePassword;
+			m_nRetryCount = Conf.PayPointRetryCount;
+			m_nSleepInterval = Conf.PayPointSleepInterval;
+
+			Debug("\n\n***\n*** PayPointBalance.Processor configuration\n***\n");
+
+			Debug("Date: {0}.", m_oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			Debug("Mid: {0}.", m_sMid);
+			Debug("VPN password: **************.");
+			Debug("Remote password: ++++++++++++++.");
+			Debug("Retry count: {0} time{1}.", m_nRetryCount, m_nRetryCount == 1 ? "" : "s");
+			Debug("Sleep interval between retries: {0} seconds.", m_nSleepInterval);
+
+			Debug("\n\n***\n*** End of PayPointBalance.Processor configuration\n***\n");
 		} // constructor
 
 		#endregion constructor
@@ -49,10 +64,14 @@ namespace Reconciliation {
 			try {
 				DeleteOldData(m_oDB, m_oDate);
 
-				FetchAndSave(m_oDB, m_sPaypointCondition, m_sMid, m_sVpnPassword, m_sRemotePassword);
+				Save(
+					m_oDB,
+					Fetch(m_sPaypointCondition, m_sMid, m_sVpnPassword, m_sRemotePassword),
+					LoadColumns(m_oDB)
+				);
 			}
 			catch (Exception e) {
-				Error("Failed to fetch PayPoint data: {0}", e);
+				Error("Something went terribly wrong: {0}", e);
 			} // try
 
 			Debug("PayPointBalance.Run() complete.");
@@ -92,18 +111,39 @@ namespace Reconciliation {
 
 		#endregion method DeleteOldData
 
-		#region method FetchAndSave
+		#region method Fetch
 
-		private void FetchAndSave(AConnection oDB, string sCondition, string sMid, string sVpnPassword, string sRemotePassword) {
-			Debug("PayPointBalance.FetchAndSave started...");
+		private PayPointDataSet.TransactionDataTable Fetch(string sCondition, string sMid, string sVpnPassword, string sRemotePassword) {
+			Debug("PayPointBalance.Fetch started...");
 
-			List<string> aryColumns = LoadColumns(oDB);
+			PayPointDataSet.TransactionDataTable tbl = null;
 
-			Debug("Fetching data from PayPoint...");
+			for (int r = 1; r <= m_nRetryCount; r++) {
+				Debug("Attempt {0}: fetching data from PayPoint...", r);
 
-			PayPointDataSet.TransactionDataTable tbl = PayPointConnector.GetOrders(sCondition, sMid, sVpnPassword, sRemotePassword);
+				try {
+					tbl = PayPointConnector.GetOrdersDragonStyle(sCondition, sMid, sVpnPassword, sRemotePassword);
+					Info("Attempt {2}: {0} row{1} fetched from PayPoint.", tbl.Rows.Count, tbl.Rows.Count == 1 ? "" : "s", r);
+					break;
+				}
+				catch (Exception e) {
+					string sMsg = (r == m_nRetryCount) ? string.Empty : string.Format("\n\nRetrying in {0} seconds...", m_nSleepInterval);
+					Error("Attempt {0}: failed to fetch data from PayPoint with exception {1}{2}", r, e, sMsg);
+					System.Threading.Thread.Sleep(m_nSleepInterval * 1000);
+				} // try
+			} // for
 
-			Info("{0} row{1} fetched from PayPoint.", tbl.Rows.Count, tbl.Rows.Count == 1 ? "" : "s");
+			Say(tbl == null ? Severity.Error : Severity.Debug, "PayPointBalance.Fetch {0}.", tbl == null ? "failed" : "complete");
+
+			return tbl;
+		} // Fetch
+
+		#endregion method Fetch
+
+		#region method Save
+
+		private void Save(AConnection oDB, PayPointDataSet.TransactionDataTable tbl, List<string> aryColumns) {
+			Debug("PayPointBalance.Save started...");
 
 			int nCurRowIdx = 0;
 
@@ -126,10 +166,10 @@ namespace Reconciliation {
 				nCurRowIdx++;
 			} // foreach
 
-			Debug("PayPointBalance.FetchAndSave complete.");
-		} // FetchAndSave
+			Debug("PayPointBalance.Save complete.");
+		} // Save
 
-		#endregion method DeleteOldData
+		#endregion method Save
 
 		#region method LoadColumns
 
@@ -184,9 +224,11 @@ namespace Reconciliation {
 		private DateTime m_oDate;
 		private AConnection m_oDB;
 
-		private string m_sMid;
-		private string m_sVpnPassword;
-		private string m_sRemotePassword;
+		private readonly string m_sMid;
+		private readonly string m_sVpnPassword;
+		private readonly string m_sRemotePassword;
+		private readonly int m_nRetryCount;
+		private readonly int m_nSleepInterval;
 
 		#endregion fields
 
@@ -197,7 +239,7 @@ namespace Reconciliation {
 		#endregion const
 
 		#endregion private
-	} // class PayPointBalance
+	} // class Processor
 
-	#endregion class PayPointBalance
-} // namespace Reconciliation
+	#endregion class Processor
+} // namespace PayPointBalance

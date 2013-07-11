@@ -5,6 +5,7 @@ using System.Threading;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html.Tags;
+using PacnetBalance;
 using Reports;
 
 namespace Reconciliation {
@@ -12,59 +13,85 @@ namespace Reconciliation {
 		public static void Main(string[] args) {
 			ms_oLog = new LegacyLog();
 
-			PacNetBalance.Logger = ms_oLog;
-			ParsePacNetText.Logger = ms_oLog;
-			PacNetBalance.Logger = ms_oLog;
+			if (IsNormalMode(args)) {
+				PacNetBalance.Logger = ms_oLog;
+				ParsePacNetText.Logger = ms_oLog;
 
+				// ReSharper disable ObjectCreationAsStatement
+				new PacnetMailListener(Run, ms_oLog);
+				// ReSharper restore ObjectCreationAsStatement
+
+				Thread.Sleep(Timeout.Infinite);
+			}
+			else {
+				ms_oLog = new ConsoleLog(ms_oLog);
+
+				ms_oLog.Debug("Date: {0}, rerun mode.", ms_oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+				Run();
+			} // if
+		} // Main
+
+		private static bool IsNormalMode(string[] args) {
+			if (args.Length > 1)
+				if (args[0] == "--rerunfor")
+					if (DateTime.TryParseExact(args[1], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out ms_oDate))
+						return false;
+			
 			ms_oDate = DateTime.Today.AddDays(-1);
 
-			var ppb = new PayPointBalance(ms_oDate, Conf.PayPointMid, Conf.PayPointVpnPassword, Conf.PayPointRemotePassword, ms_oLog);
+			ms_oLog.Debug("Date: {0}, normal working mode.", ms_oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			return true;
+		} // IsNormalMode
+
+		public static void Run() {
+			ProcessPayPoint(ms_oDate, ms_oLog);
+			SendReport(ms_oDate, ms_oLog);
+		} // Run
+
+		private static void ProcessPayPoint(DateTime oDate, ASafeLog oLog) {
+			var ppb = new PayPointBalance.Processor(oDate, oLog);
 
 			if (ppb.Init())
 				ppb.Run();
 
 			ppb.Done();
+		} // ProcessPayPoint
 
-			// ReSharper disable ObjectCreationAsStatement
-			new PacnetMailListener(SendReport, ms_oLog);
-			// ReSharper restore ObjectCreationAsStatement
-
-			Thread.Sleep(Timeout.Infinite);
-		} // Main
-
-		public static void SendReport() {
-			ms_oLog.Debug("Generating reconciliation report...");
+		private static void SendReport(DateTime oDate, ASafeLog oLog) {
+			oLog.Debug("Generating reconciliation report...");
 
 			var oDB = new SqlConnection();
 
-			ms_oLog.Debug("Loading Pacnet report metadata from db...");
+			oLog.Debug("Loading Pacnet report metadata from db...");
 
 			Report pacnet = new Report(oDB, "RPT_PACNET_RECONCILIATION");
 
-			ms_oLog.Debug("Loading Paypoint report metadata from db...");
+			oLog.Debug("Loading Paypoint report metadata from db...");
 
 			Report paypoint = new Report(oDB, "RPT_PAYPOINT_RECONCILIATION");
 
-			var rh = new BaseReportHandler(oDB, ms_oLog);
+			var rh = new BaseReportHandler(oDB, oLog);
 
-			var sender = new BaseReportSender(ms_oLog);
+			var sender = new BaseReportSender(oLog);
 
 			BaseReportSender.MailTemplate template = sender.CreateMailTemplate();
 
-			ms_oLog.Debug("Generating Pacnet report...");
+			oLog.Debug("Generating Pacnet report...");
 
-			template.ReportBody.Append(new H2().Append(new Text(pacnet.GetTitle(ms_oDate))));
+			template.ReportBody.Append(new H2().Append(new Text(pacnet.GetTitle(oDate))));
 
 			template.ReportBody.Append(
-				rh.TableReport(pacnet.StoredProcedure, ms_oDate, ms_oDate, pacnet.Columns)
+				rh.TableReport(pacnet.StoredProcedure, oDate, oDate, pacnet.Columns)
 			);
 
-			ms_oLog.Debug("Generating Paypoint report...");
+			oLog.Debug("Generating Paypoint report...");
 
-			template.ReportBody.Append(new H2().Append(new Text(paypoint.GetTitle(ms_oDate))));
+			template.ReportBody.Append(new H2().Append(new Text(paypoint.GetTitle(oDate))));
 
 			template.ReportBody.Append(
-				rh.TableReport(paypoint.StoredProcedure, ms_oDate, ms_oDate, paypoint.Columns)
+				rh.TableReport(paypoint.StoredProcedure, oDate, oDate, paypoint.Columns)
 			);
 
 			StringBuilder sTo = new StringBuilder();
@@ -76,15 +103,15 @@ namespace Reconciliation {
 
 			sTo.Append(paypoint.ToEmail);
 
-			ms_oLog.Debug("Sending report...");
+			oLog.Debug("Sending report...");
 
 			sender.Send(
-				"Reconciliation " + ms_oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture),
+				"Reconciliation " + oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture),
 				template.HtmlBody,
 				sTo.ToString()
 			);
 
-			ms_oLog.Debug("Reconciliation report generation complete.");
+			oLog.Debug("Reconciliation report generation complete.");
 		} // SendReport
 
 		private static ASafeLog ms_oLog;

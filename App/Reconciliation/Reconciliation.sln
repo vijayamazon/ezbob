@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports", "..\EzReporting\R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailer", "..\EzReporting\Mailer\Mailer.csproj", "{68180204-5112-43AF-9D83-E5CDD39F93A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacnetBalance", "..\PacnetBalance\PacnetBalance.csproj", "{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPointBalance", "..\PayPointBalance\PayPointBalance.csproj", "{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

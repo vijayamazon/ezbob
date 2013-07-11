@@ -6,6 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE RptScheduler_GetReportList
+@RptType NVARCHAR(200) = NULL
 AS
 BEGIN
 	SELECT
@@ -19,6 +20,11 @@ BEGIN
 		Header,
 		Fields,
 		ToEmail
-	FROM ReportScheduler
+	FROM
+		ReportScheduler
+	WHERE
+		@RptType IS NULL OR LTRIM(RTRIM(@RptType)) = ''
+		OR
+		Type = @RptType
 END
 GO

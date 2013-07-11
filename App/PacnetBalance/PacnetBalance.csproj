@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6BD00C8A-71E0-477D-BAAD-5310E1563D84}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Reconciliation</RootNamespace>
-    <AssemblyName>Reconciliation</AssemblyName>
+    <RootNamespace>PacnetBalance</RootNamespace>
+    <AssemblyName>PacnetBalance</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,7 +30,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=4.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -57,7 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Conf.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="PacNetBalance.cs" />
+    <Compile Include="PacNetBalanceRow.cs" />
+    <Compile Include="PacnetMailListener.cs" />
+    <Compile Include="ParsePacNetText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,18 +85,10 @@
       <Project>{4e273ca0-9d0f-4fad-962f-8647a23e83d1}</Project>
       <Name>MailListener</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EzReporting\Reports\Reports.csproj">
-      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
-      <Name>Reports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PacnetBalance\PacnetBalance.csproj">
-      <Project>{3a4074c4-0b4f-4b02-bba6-4d03933bf8c9}</Project>
-      <Name>PacnetBalance</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PayPointBalance\PayPointBalance.csproj">
-      <Project>{a42fa2f0-c0b5-4a87-87eb-66b13b02aa66}</Project>
-      <Name>PayPointBalance</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sql\PacnetAgentConfigs.sql" />
+    <Content Include="Sql\PacNetBalanceTableCreate.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

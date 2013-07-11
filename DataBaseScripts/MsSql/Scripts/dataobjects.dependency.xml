@@ -409,6 +409,18 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CRMActions</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CRMActions.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CRMStatuses</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CRMStatuses.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_Customer_CardInfo</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_Customer_CardInfo.sql</oFileName>
@@ -448,6 +460,24 @@
     <oName>CustomerLoyaltyProgram</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\CustomerLoyaltyProgram.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRelations_CRMActions</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMActions.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRelations_CRMStatuses</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMStatuses.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CustomerRelations</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\CustomerRelations.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1639,9 +1669,21 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_YodleeOrderItemBankTransaction</oName>
     <oRank>6</oRank>
     <oFileName>02_TABLES\MP_YodleeOrderItemBankTransaction.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_YodleeTransactionCategories</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_YodleeTransactionCategories.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

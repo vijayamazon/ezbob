@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Ezbob.Database;
 using System.Linq;
 
-namespace Reconciliation {
-	internal static class PacNetBalance {
+namespace PacnetBalance {
+	public static class PacNetBalance {
 		private static readonly List<PacNetBalanceRow> pacNetBalanceList = new List<PacNetBalanceRow>();
 
 		static PacNetBalance() {

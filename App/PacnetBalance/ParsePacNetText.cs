@@ -5,7 +5,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using Ezbob.Logger;
 
-namespace Reconciliation {
+namespace PacnetBalance {
 	public static class ParsePacNetText {
 		private static decimal openingBalance;
 		private static decimal closingBalance;

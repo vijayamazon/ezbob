@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6BD00C8A-71E0-477D-BAAD-5310E1563D84}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Reconciliation</RootNamespace>
-    <AssemblyName>Reconciliation</AssemblyName>
+    <RootNamespace>PayPointBalance</RootNamespace>
+    <AssemblyName>PayPointBalance</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,31 +20,18 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells, Version=4.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Lib\Scorto.Core\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MailBee.NET">
-      <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
+    <Reference Include="PayPoint">
+      <HintPath>..\..\Integration\PayPoint\bin\Debug\PayPoint.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,11 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Conf.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj">
@@ -75,22 +58,6 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Tools\EzbobUtils\MailListener\MailListener.csproj">
-      <Project>{4e273ca0-9d0f-4fad-962f-8647a23e83d1}</Project>
-      <Name>MailListener</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzReporting\Reports\Reports.csproj">
-      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
-      <Name>Reports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PacnetBalance\PacnetBalance.csproj">
-      <Project>{3a4074c4-0b4f-4b02-bba6-4d03933bf8c9}</Project>
-      <Name>PacnetBalance</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PayPointBalance\PayPointBalance.csproj">
-      <Project>{a42fa2f0-c0b5-4a87-87eb-66b13b02aa66}</Project>
-      <Name>PayPointBalance</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

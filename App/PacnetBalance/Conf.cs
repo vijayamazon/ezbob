@@ -1,6 +1,6 @@
 ﻿using ConfigurationBase;
 
-namespace Reconciliation {
+namespace PacnetBalance {
 	public class Conf : ConfigurationsBase {
 		static Conf() {
 			Init(typeof(Conf), Consts.GetConfigsSpName);
@@ -12,9 +12,5 @@ namespace Reconciliation {
 		public static string Server { get; private set; }
 		public static int Port { get; private set; }
 		public static int MailboxReconnectionIntervalSeconds { get; private set; }
-
-		public static string PayPointMid { get; private set; }
-		public static string PayPointVpnPassword { get; private set; }
-		public static string PayPointRemotePassword { get; private set; }
 	} // class Conf
 } // namespace

@@ -135,7 +135,11 @@ BEGIN
 		WHERE
 			CONVERT(DATE, t.PostDate) = @Date
 			AND
-			t.Status = 'Done'
+			(
+				(@SuccessOnly = 1 AND t.Status = 'Done')
+				OR
+				(@SuccessOnly = 0 AND t.Status != 'Done')
+			)
 			AND
 			t.Type = 'PaypointTransaction'
 			AND

@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[MP_ChannelGrabberOrderItem](
 	[PaymentDate] [datetime] NULL,
 	[PurchaseDate] [datetime] NULL,
 	[OrderStatus] [nvarchar](300) NULL,
+	[IsExpense] [int] NOT NULL,
  CONSTRAINT [PK_MP_ChannelGrabberOrderItem] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -24,4 +25,6 @@ CREATE NONCLUSTERED INDEX [IX_MP_ChannelGrabberOrderItemOrderId] ON [dbo].[MP_Ch
 (
 	[OrderId] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[MP_ChannelGrabberOrderItem] ADD  CONSTRAINT [DF_ChannelGrabberOrderItem_Expense]  DEFAULT ((0)) FOR [IsExpense]
 GO

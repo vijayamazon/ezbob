@@ -28,7 +28,7 @@ BEGIN
 	)
 
 	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'total2')
-	INSERT INTO #out (Caption) VALUES ('5-Amount Transactions: ' + (CASE @IncludeFive WHEN 1 THEN 'included' ELSE 'excluded' END))
+	INSERT INTO #out (Caption) VALUES ('5-Amount Transactions are ' + (CASE @IncludeFive WHEN 1 THEN 'included' ELSE 'excluded' END))
 	
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1
 	

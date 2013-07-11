@@ -205,6 +205,18 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CustomerRelations_CRMActions</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMActions.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRelations_CRMStatuses</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMStatuses.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_DSSTR_STRATEGY_STRATEGYID</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_DSSTR_STRATEGY_STRATEGYID.sql</oFileName>
@@ -712,6 +724,12 @@
     <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>

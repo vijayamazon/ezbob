@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Reconciliation {
+namespace PacnetBalance {
 	internal class Consts {
 		public static string InsertPacNetBalanceSpName = "InsertPacNetBalance";
 		public static string InsertPacNetBalanceSpParam1 = "@Date";
