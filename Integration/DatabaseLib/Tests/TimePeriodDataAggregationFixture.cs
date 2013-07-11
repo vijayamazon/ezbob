@@ -70,7 +70,7 @@ namespace EZBob.DatabaseLib.Tests
 
 			t.SetSourceData( list );
 
-			Assert.IsFalse( t.HasFullTimePeriodData( updateTime ) );
+			Assert.IsTrue(t.HasFullTimePeriodData(updateTime));
 
 
 		}
@@ -212,11 +212,11 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( dict.Count, 3 );
 			Assert.IsTrue( dict.ContainsKey( TimePeriodEnum.Month ) );
 			Assert.IsTrue( dict.ContainsKey( TimePeriodEnum.Month3 ) );
-			Assert.IsTrue( dict.ContainsKey( TimePeriodEnum.Lifetime ) );
+			Assert.IsTrue(dict.ContainsKey(TimePeriodEnum.Month6));
 
 			Assert.AreEqual( dict[TimePeriodEnum.Month].CountData, 1 );
 			Assert.AreEqual( dict[TimePeriodEnum.Month3].CountData, 3 );
-			Assert.AreEqual( dict[TimePeriodEnum.Lifetime].CountData, 4 );
+			Assert.AreEqual(dict[TimePeriodEnum.Month6].CountData, 4);
 			
 
 		}
@@ -242,15 +242,15 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( timePeriodData.Count, 3 );			
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountData, 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountData, 3 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountData, 4 );
+			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month6].CountData, 4 );
 			Assert.AreEqual( timePeriodData.Sum( td => td.Value.CountData ), 8 );
 			Assert.IsTrue( timePeriodData[TimePeriodEnum.Month].HasData );
 			Assert.IsTrue( timePeriodData[TimePeriodEnum.Month3].HasData );
-			Assert.IsTrue( timePeriodData[TimePeriodEnum.Lifetime].HasData );
+			Assert.IsTrue(timePeriodData[TimePeriodEnum.Month6].HasData);
 
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountMonthsFor( updateTime, _TimeBoundaryCalculationStrategyByEntire ), 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountMonthsFor( updateTime, _TimeBoundaryCalculationStrategyByEntire ), 3 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountMonthsFor( updateTime, _TimeBoundaryCalculationStrategyByEntire ), 4 );
+			Assert.AreEqual(timePeriodData[TimePeriodEnum.Month6].CountMonthsFor(updateTime, _TimeBoundaryCalculationStrategyByEntire), 4);
 			
 		}
 
@@ -283,7 +283,7 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountData, 2 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountData, 3 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month6].CountData, 6 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountData, 7 );
+			Assert.AreEqual( timePeriodData[TimePeriodEnum.Year].CountData, 7 );
 			
 			//--------------------------------
 			timeChain = TimePeriodChainContructor.CreateDataChain( new TimePeriodNodeWithDataFactory<TimeDependentDataTest>(), list,_FactoryByEntire );
@@ -295,7 +295,7 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountData, 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountData, 3 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month6].CountData, 6 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountData, 7 );
+			Assert.AreEqual(timePeriodData[TimePeriodEnum.Year].CountData, 7);
 
 			//--------------------------------
 			timeChain = TimePeriodChainContructor.CreateDataChain( new TimePeriodNodeWithDataFactory<TimeDependentDataTest>(), list, _FactoryByStep );
@@ -354,7 +354,7 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountData, 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountData, 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month6].CountData, 1 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountData, 2 );
+			Assert.AreEqual( timePeriodData[TimePeriodEnum.Year].CountData, 2 );
 
 			//--------------------------------			
 			list = new ReceivedDataListTest( updateTime )
@@ -374,7 +374,7 @@ namespace EZBob.DatabaseLib.Tests
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month].CountData, 0 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month3].CountData, 1 );
 			Assert.AreEqual( timePeriodData[TimePeriodEnum.Month6].CountData, 1 );
-			Assert.AreEqual( timePeriodData[TimePeriodEnum.Lifetime].CountData, 2 );
+			Assert.AreEqual(timePeriodData[TimePeriodEnum.Year].CountData, 2);
 			
 		}
 	}
