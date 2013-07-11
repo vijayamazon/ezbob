@@ -118,7 +118,7 @@ namespace Integration.ChannelGrabberConfig {
 				throw new ConfigException("Validation is not complete.");
 
 			if (!XmlUtil.IsEqual(doc, "validity", "true"))
-				throw new ConfigException("Cannot validate: invalid credentials or not authorized.");
+				throw new ConfigException(VendorInfo.ClientSide.ErrorMessage(ClientSide.SupportedErrorMessages.CannotValidate));
 		} // Validate
 
 		#endregion method Validate

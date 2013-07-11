@@ -68,6 +68,8 @@ namespace Integration.ChannelGrabberConfig {
 				throw new ConfigException("Aggregators not specified.");
 
 			Aggregators.ForEach(a => a.Parse());
+
+			ClientSide.Parse();
 		} // Parse
 
 		#endregion method Parse

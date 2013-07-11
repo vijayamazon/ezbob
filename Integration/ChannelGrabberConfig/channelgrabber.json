@@ -88,7 +88,8 @@
 					{ "Property": "background-position", "Value": "0px -43px" },
 					{ "Property": "width", "Value": "98px" }
 				]
-			}
+			},
+			"ErrorMessages": []
 		}
 	},
 
@@ -163,7 +164,10 @@
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "116px" }
 				]
-			}
+			},
+			"ErrorMessages": [
+				{ "ID": "CannotValidate", "Text": "Cannot validate: invalid credentials or not authorized." }
+			]
 		}
 	},
 
@@ -233,7 +237,8 @@
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "104px" }
 				]
-			}
+			},
+			"ErrorMessages": []
 		}
 	},
 	
@@ -324,7 +329,8 @@
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "54px" }
 				]
-			}
+			},
+			"ErrorMessages": []
 		}
 	}
 ]

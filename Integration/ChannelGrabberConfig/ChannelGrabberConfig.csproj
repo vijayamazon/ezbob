@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AccountData.cs" />
     <Compile Include="AggregatorInfo.cs" />
+    <Compile Include="ErrorMessage.cs" />
     <Compile Include="Stylesheet.cs" />
     <Compile Include="LinkForm.cs" />
     <Compile Include="ValidationMessage.cs" />

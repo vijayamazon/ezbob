@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Integration.ChannelGrabberConfig {
 	#region class ClientSide
 
 	public class ClientSide : ICloneable {
 		#region public
+
+		#region enum SupportedErrorMessages
+
+		public enum SupportedErrorMessages {
+			CannotValidate
+		} // enum SupportedErrorMessages
+
+		#endregion enum SupportedErrorMessages
 
 		#region constructor
 
@@ -13,6 +22,7 @@ namespace Integration.ChannelGrabberConfig {
 			LinkForm = new LinkForm();
 			SortPriority = 0;
 			Ribbon = string.Empty;
+			m_oErrorMessages = new SortedDictionary<string, string>();
 		} // constructor
 
 		#endregion constructor
@@ -23,23 +33,67 @@ namespace Integration.ChannelGrabberConfig {
 		public LinkForm LinkForm { get; set; }
 		public int SortPriority { get; set; }
 		public string Ribbon { get; set; }
+		public List<ErrorMessage> ErrorMessages { get; set; }
 
 		#endregion properties
+
+		#region method Parse
+
+		public void Parse() {
+			m_oErrorMessages.Clear();
+
+			foreach (ErrorMessage msg in ErrorMessages)
+				m_oErrorMessages[msg.ID] = msg.Text;
+
+			ErrorMessages.Clear();
+		} // Parse
+
+		#endregion method Parse
 
 		#region method Clone
 
 		public object Clone() {
-			return new ClientSide {
+			var x = new ClientSide {
 				StoreInfoStepModelShops = (string)this.StoreInfoStepModelShops.Clone(),
 				LinkForm = (LinkForm)this.LinkForm.Clone(),
 				SortPriority = this.SortPriority,
 				Ribbon = (string)this.Ribbon.Clone()
 			};
+
+			foreach (KeyValuePair<string, string> pair in m_oErrorMessages)
+				x.m_oErrorMessages[pair.Key] = pair.Value;
+
+			return x;
 		} // Clone
 
 		#endregion method Clone
 
+		#region method ErrorMessage
+
+		public string ErrorMessage(SupportedErrorMessages nMsgID) {
+			string sMsgID = nMsgID.ToString();
+
+			if (m_oErrorMessages.ContainsKey(sMsgID))
+				return m_oErrorMessages[sMsgID];
+
+			switch (nMsgID) {
+			case SupportedErrorMessages.CannotValidate:
+				return "Cannot validate: invalid credentials.";
+
+			default:
+				throw new ConfigException(string.Format("Unsupported error message requested: {0}", sMsgID));
+			} // switch
+		} // ErrorMessage
+
+		#endregion method ErrorMessage
+
 		#endregion public
+
+		#region private
+
+		private SortedDictionary<string, string> m_oErrorMessages;
+
+		#endregion private
 	} // class ClientSide
 
 	#endregion class ClientSide

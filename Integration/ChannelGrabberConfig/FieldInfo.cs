@@ -77,7 +77,15 @@ namespace Integration.ChannelGrabberConfig {
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("{0} <-> {1} = {2}unique", PropertyName, NodeName, UniqueIDPosition >= 0 ? "" : "not ");
+			return string.Format(
+				"{0} <-> {1} = {2}\n\t\tDisplay as {4} with caption{5}\n\t\tDefault: {3}",
+				PropertyName,
+				NodeName,
+				UniqueIDPosition >= 0 ? "unique key position " + UniqueIDPosition.ToString() : "not unique",
+				Default ?? "--null--",
+				Type,
+				Caption
+			);
 		} // ToString
 
 		#endregion method ToString
