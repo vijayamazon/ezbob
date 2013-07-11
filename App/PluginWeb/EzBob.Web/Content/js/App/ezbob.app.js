@@ -19,7 +19,7 @@ EzBob.Config = {
     TargetsEnabled : false,
     GetCashSliderStep: 50,
     ShowChangePasswordPage: false,
-    SessionTimeout: 15,
+    SessionTimeout: 6000,
     HeartBeatEnabled: true,
     MinLoan: 1000,
     XMinLoan: 100,
