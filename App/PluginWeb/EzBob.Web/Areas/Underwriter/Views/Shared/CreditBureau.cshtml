@@ -4,13 +4,6 @@
 {
     var icon = "<i class=\"" + checkIcon + "\"></i>";
     var btn = "<a class=\"btn " + btnStyle + " disabled\">" + icon + "&nbsp;" + checkStatus + "</a>";
-    
-    <div class="control-group">
-        <label class="control-label">Credit bureau check</label>
-        <div class="controls">
-            @Html.Raw(btn)
-        </div>
-    </div>
 }
 
 @helper RawHeaderCell(params string[] arguments)
@@ -997,7 +990,7 @@
                         @RawCell("Worst Current status", "<%- experianInfo.Summary.WorstCurrentstatus  %>")
                         @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
                         @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
-                        @RawCell("Accounts", "<%- experianInfo.Summary.Accounts  %>")
+                        @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
                         @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
                         @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
                         @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")
