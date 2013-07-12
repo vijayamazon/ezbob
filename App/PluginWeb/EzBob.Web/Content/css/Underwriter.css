@@ -557,3 +557,7 @@ span.active {
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#62c462), to(#51a351)) !important;
     background-repeat: repeat-x;
 }
+
+#collapseSummary .accordion-inner {
+    padding-top: 35px;
+}
