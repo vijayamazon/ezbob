@@ -206,8 +206,22 @@
             <tbody>
                 <% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
                 var sShopName = m.Name.replace(' ', '');
+                if (m.Name.toLowerCase() === 'paypoint'){
+                    m.PaymentAccountBasic.TransactionsNumber = m.AnalysisDataInfo.NumofOrdersLifetime;
+                    m.PaymentAccountBasic.TotalNetInPayments = m.AnalysisDataInfo.TotalSumofOrdersLifetime;
+                }
+                if (m.Name.toLowerCase() === 'yodlee'){
+                    m.PaymentAccountBasic.TransactionsNumber = 0;
+                    var amountOfTransactions = 0;
+                    for (var n=0; n < m.Yodlee.banks.length; n++)
+                        { m.PaymentAccountBasic.TransactionsNumber += (m.Yodlee.banks[n].transactions).length }
+                    m.PaymentAccountBasic.TotalNetInPayments = m.AnalysisDataInfo.TotalIncomeLifetime;
+                    m.PaymentAccountBasic.TotalNetOutPayments = m.AnalysisDataInfo.TotalExpenseLifetime;
+                }
 
-				if (aryCGAccounts[sShopName])
+                
+
+                if (aryCGAccounts[sShopName])
 					if (!aryCGAccounts[sShopName].HasExpenses)
 						return;
 
@@ -219,7 +233,7 @@
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
                     <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
-                    <td><%- GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
+                    <td><%- (m.Name.toLowerCase() === 'paypoint') ? "-":GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
                    
                     <td><%- m.UpdatingStatus %></td>
                     <td>
