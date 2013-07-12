@@ -291,7 +291,7 @@ namespace EzBob.AmazonLib
             return orderItems;
         }
 
-        private IEnumerable<AmazonOrderItem2> AnalyseOrder( AmazonOrdersList2 orders, int maxNumberOfItems = 20 )
+        private IEnumerable<AmazonOrderItem2> AnalyseOrder( AmazonOrdersList2 orders, int maxNumberOfItems = 10 )
 		{
 			if ( orders == null )
 			{
