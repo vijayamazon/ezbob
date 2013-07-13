@@ -215,6 +215,7 @@
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
     <Compile Include="Areas\Customer\Controllers\CGMPUniqChecker.cs" />
+    <Compile Include="Areas\Customer\Controllers\SageMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\FreeAgentMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMPUniqChecker.cs" />
     <Compile Include="Areas\Customer\Controllers\YodleeMarketPlacesController.cs" />
@@ -454,6 +455,7 @@
     <Content Include="Content\css\images\help\help_ekm.jpg" />
     <Content Include="Content\css\images\help\help_freeagent.jpg" />
     <Content Include="Content\css\images\help\help_paypal.jpg" />
+    <Content Include="Content\css\images\help\help_sage.jpg" />
     <Content Include="Content\css\images\help\help_security.png" />
     <Content Include="Content\css\images\help_ebay.jpg" />
     <Content Include="Content\css\images\live_help.jpg" />
@@ -471,6 +473,8 @@
     <Content Include="Content\css\images\pound.png" />
     <Content Include="Content\css\images\progress_tip.png" />
     <Content Include="Content\css\images\rotate.gif" />
+    <Content Include="Content\css\images\sage_off.png" />
+    <Content Include="Content\css\images\sage_on.png" />
     <Content Include="Content\css\images\secure.png" />
     <Content Include="Content\css\images\source_small_sprite.png" />
     <Content Include="Content\css\images\source_sprite.png" />
@@ -1018,6 +1022,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js">
+      <DependentUpon>ezbob.shops.sage.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
       <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
     </Content>
@@ -1058,6 +1065,8 @@
     <Content Include="Areas\Customer\Views\Shared\google_conversion.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CustomerRelations.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\AddCustomerRelationsEntry.cshtml" />
+    <Content Include="Areas\Customer\Views\SageMarketPlaces\SageCallback.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Sage.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1401,6 +1410,10 @@
       <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
       <Name>PayPoint</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Sage\Sage.csproj">
+      <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
+      <Name>Sage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>
@@ -1551,8 +1564,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.charges.coffee" />
@@ -1560,6 +1571,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

@@ -11,6 +11,7 @@
 	using Scorto.Configuration;
 	using StructureMap.Configuration.DSL;
 	using FreeAgent.Config;
+	using Sage.Config;
 	using YodleeLib.config;
 
     public class EzBobRegistry : Registry
@@ -28,6 +29,7 @@
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
 				For<IYodleeMarketPlaceConfig>().Singleton().Use(ezBobConfigRoot.YodleeConfig);
 				For<IFreeAgentConfig>().Singleton().Use(ezBobConfigRoot.FreeAgentConfig);
+				For<ISageConfig>().Singleton().Use(ezBobConfigRoot.SageConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Iesi.Collections.Generic;
-
-namespace EZBob.DatabaseLib.Model.Database
+﻿namespace EZBob.DatabaseLib.Model.Database
 {
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
+	using System;
+	using Iesi.Collections.Generic;
 
     public class MP_CustomerMarketplaceUpdatingHistory
 	{
@@ -35,6 +33,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public virtual MP_EkmOrder EkmOrder { get; set; }
 		public virtual MP_FreeAgentRequest FreeAgentRequest { get; set; }
+		public virtual MP_SageRequest SageRequest { get; set; }
         public virtual MP_ChannelGrabberOrder ChannelGrabberOrder { get; set; }
         public virtual MP_PayPointOrder PayPointOrder { get; set; }
         public virtual MP_YodleeOrder YodleeOrder { get; set; }

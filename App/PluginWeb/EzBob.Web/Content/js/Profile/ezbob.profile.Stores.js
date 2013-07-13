@@ -10,6 +10,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 			amazonMarketPlaces: this.model.get('amazonMarketPlaces'),
 			ekmShops: this.model.get('ekmShops'),
 			freeAgentAccounts: this.model.get('freeAgentAccounts'),
+			sageAccounts: this.model.get('sageAccounts'),
 			payPointAccounts: this.model.get('payPointAccounts'),
 			yodleeAccounts: this.model.get('yodleeAccounts'),
 			paypalAccounts: this.model.get('paypalAccounts')
@@ -40,7 +41,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 
         this.storeInfoView = new EzBob.StoreInfoView({ model: this.storeInfoStepModel });
 
-		this.model.on('change:ebayMarketPlaces change:amazonMarketPlaces change:ekmShops change:freeAgentAccounts change:payPointAccounts change:paypalAccounts change:yodleeAccounts' + sCgOnChange, this.render, this);
+        this.model.on('change:ebayMarketPlaces change:amazonMarketPlaces change:ekmShops change:freeAgentAccounts change:sageAccounts change:payPointAccounts change:paypalAccounts change:yodleeAccounts' + sCgOnChange, this.render, this);
 
         this.storeInfoView.on('previous', this.render, this);
         this.storeInfoView.on('completed', this.completed, this);
@@ -84,6 +85,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
                 amazonMarketPlaces: that.model.get('amazonMarketPlaces'),
                 ekmShops: that.model.get('ekmShops'),
                 freeAgentAccounts: that.model.get('freeAgentAccounts'),
+                sageAccounts: that.model.get('sageAccounts'),
                 cgShops: that.model.get('cgShops'),
                 yodleeAccounts: that.model.get('yodleeAccounts'),
                 payPointAccounts: that.model.get('payPointAccounts'),

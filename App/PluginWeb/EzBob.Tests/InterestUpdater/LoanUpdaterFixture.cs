@@ -1,27 +1,18 @@
-﻿using System.Xml;
-using EKM;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.AmazonLib;
-using EzBob.PayPal;
-using EzBob.eBayLib;
-using FreeAgent;
-using Integration.ChannelGrabberFrontend;
-using NHibernate;
-using NUnit.Framework;
-using PayPoint;
-using ScheduledServices.InterestCalculation;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
-using Scorto.NHibernate;
-using Scorto.RegistryScanner;
-using StructureMap;
-using StructureMap.Pipeline;
-using YodleeLib.connector;
-using log4net.Config;
-
-namespace EzBob.Tests.InterestUpdater
+﻿namespace EzBob.Tests.InterestUpdater
 {
+	using System.Xml;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using NHibernate;
+	using NUnit.Framework;
+	using ScheduledServices.InterestCalculation;
+	using Scorto.Configuration;
+	using Scorto.Configuration.Loader;
+	using Scorto.NHibernate;
+	using StructureMap;
+	using StructureMap.Pipeline;
+	using log4net.Config;
+
     public class LoanUpdaterFixture
     {
         private ISession _session;

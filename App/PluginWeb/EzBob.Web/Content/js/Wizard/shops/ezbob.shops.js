@@ -57,6 +57,16 @@
       this.FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView({
         model: this.freeAgentAccounts
       });
+      this.sageAccounts = new EzBob.SageAccounts();
+      this.sageAccounts.fetch().done(function() {
+        return _this.render();
+      });
+      this.sageButtonView = new EzBob.SageAccountButtonView({
+        model: this.sageAccounts
+      });
+      this.sageAccountInfoView = new EzBob.SageAccountInfoView({
+        model: this.sageAccounts
+      });
       this.PayPointAccounts = new EzBob.PayPointAccounts();
       this.PayPointAccounts.fetch().done(function() {
         return _this.render();
@@ -149,6 +159,12 @@
           button: this.freeAgentButtonView,
           active: 0,
           priority: 8
+        },
+        "Sage": {
+          view: this.sageAccountInfoView,
+          button: this.sageButtonView,
+          active: 0,
+          priority: 9
         }
       };
       for (accountTypeName in aryCGAccounts) {

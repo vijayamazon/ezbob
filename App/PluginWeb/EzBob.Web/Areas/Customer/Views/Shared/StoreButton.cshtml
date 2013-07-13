@@ -18,6 +18,7 @@
 									case 'eBay':
 									case 'paypal':
 									case 'FreeAgent':
+									case 'Sage':
 										%><a href="#<%- shopClass %>_help" class="source_help"><%
 										break;
 									default:
@@ -29,7 +30,7 @@
 
 									if (shopClass == 'Yodlee')
 										sRibbon = 'new';
-									else if (shopClass == 'FreeAgent')
+									else if (shopClass == 'FreeAgent' || shopClass == 'Sage')
 										sRibbon = 'beta';
 									else if (oCG)
 										sRibbon = oCG.ClientSide.Ribbon.toLowerCase();
@@ -64,6 +65,7 @@
 					case 'eBay':
 					case 'paypal':
 					case 'FreeAgent':
+					case 'Sage':
 						%><a href="#<%- shopClass %>_help" class="btn green button source_help">Add Account</a><%
 						break;
 					default:
@@ -90,6 +92,9 @@
 						break;
 					case 'FreeAgent':
 						%><a href="@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new">Continue</a><%
+						break;
+					case 'Sage':
+						%><a href="@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new">Continue</a><%
 						break;
 					default:
 						%><input class="btn orange button addAccount" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")' type="button" value="Continue" /><%

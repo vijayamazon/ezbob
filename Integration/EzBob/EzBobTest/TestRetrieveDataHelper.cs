@@ -9,6 +9,7 @@ namespace EzBobTest
 	using System.Xml;
 	using EKM;
 	using FreeAgent;
+	using Sage;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -43,8 +44,8 @@ namespace EzBobTest
         [SetUp]
         public void Init()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
-            //EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
+            //EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
+            EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
@@ -55,6 +56,7 @@ namespace EzBobTest
 			NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
             Scanner.Register();
             ObjectFactory.Configure(x =>
             {
@@ -102,7 +104,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] {6194};
+			var umis = new[] { 8635 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

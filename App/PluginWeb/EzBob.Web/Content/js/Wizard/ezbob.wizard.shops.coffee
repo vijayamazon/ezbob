@@ -14,6 +14,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     amazons = @get("amazonMarketplaces").toJSON()
     ekms = @get("ekmShops")
     freeagents = @get("freeAgentAccounts")
+    sageAccounts = @get("sageAccounts")
     payPoints = @get("payPointAccounts")
     yodlees = @get("yodleeAccounts")
     paypals = @get("paypalAccounts")
@@ -35,9 +36,12 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     for shop in paypals
         stores.push {displayName: shop.displayName, type: "paypal"}
-
+        
     for shop in freeagents
         stores.push {displayName: shop.displayName, type: "FreeAgent"}
+
+    for shop in sageAccounts
+        stores.push {displayName: shop.displayName, type: "Sage"}
 
     aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
 

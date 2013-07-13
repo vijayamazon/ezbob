@@ -86,6 +86,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			case "eBay":
 			case "EKM":
 			case "FreeAgent":
+			case "Sage":
 			case "Yodlee":
 			case "PayPoint":
 			case "Pay Pal":

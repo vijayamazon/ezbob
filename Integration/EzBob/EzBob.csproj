@@ -138,6 +138,10 @@
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sage\Sage.csproj">
+      <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
+      <Name>Sage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TeraPeak\TeraPeakServiceLib\TeraPeakServiceLib.csproj">
       <Project>{6CD378FB-00A9-4644-965B-21A16956DED0}</Project>
       <Name>TeraPeakServiceLib</Name>

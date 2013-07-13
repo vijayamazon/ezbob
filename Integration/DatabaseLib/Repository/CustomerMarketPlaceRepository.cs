@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-using NHibernate;
-using NHibernate.Linq;
-
-
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using DatabaseWrapper;
+	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
+	using NHibernate;
+	using NHibernate.Linq;
 
     public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
     {
@@ -202,10 +201,36 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			case "FreeAgent":
 				{
-					var s = _session.Query<MP_FreeAgentInvoice>()
+					var invoices = _session.Query<MP_FreeAgentInvoice>()
 						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.dated_on != null)
-						.Select(oi => oi.dated_on);
+						.Select(oi => oi.dated_on); 
+					
+					var expenses = _session.Query<MP_FreeAgentInvoice>()
+						 .Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
+						 .Where(oi => oi.dated_on != null)
+						 .Select(oi => oi.dated_on);
+
+					DateTime? earliest = null;
+					if (invoices.Any())
+					{
+						earliest = invoices.Min();
+					}
+					if (expenses.Any() && expenses.Min() < earliest)
+					{
+						earliest = expenses.Min();
+					}
+
+					return earliest;
+				}
+
+
+			case "Sage":
+				{
+					var s = _session.Query<MP_SageInvoice>()
+						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.date != null)
+						.Select(oi => oi.date);
 					return !s.Any() ? (DateTime?)null : s.Min();
 				}
 

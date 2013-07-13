@@ -90,6 +90,10 @@
             <%if(marketplaceType == "FreeAgent"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/FreeAgent");}
             <%}%>
+             @* *** Sage *** *@
+            <%if(marketplaceType == "Sage"){%>
+                @{ Html.RenderPartial("MarketPlaceDetails/Sage");}
+            <%}%>
             @* *** PayPoint   *** *@
             <%if(marketplaceType == "PayPoint"){%>
                 @{ Html.RenderPartial("MarketPlaceDetails/PayPoint");}

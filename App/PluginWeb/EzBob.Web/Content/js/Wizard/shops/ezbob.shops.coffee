@@ -28,6 +28,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @freeAgentButtonView = new EzBob.FreeAgentAccountButtonView(model: @freeAgentAccounts)
         @FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView(model: @freeAgentAccounts)
 
+        @sageAccounts = new EzBob.SageAccounts()
+        @sageAccounts.fetch().done => @render()
+        @sageButtonView = new EzBob.SageAccountButtonView(model: @sageAccounts)
+        @sageAccountInfoView = new EzBob.SageAccountInfoView(model: @sageAccounts)
+
         @PayPointAccounts = new EzBob.PayPointAccounts()
         @PayPointAccounts.fetch().done => @render()
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
@@ -91,6 +96,11 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 button: @freeAgentButtonView
                 active: 0
                 priority: 8
+            "Sage":
+                view: @sageAccountInfoView
+                button: @sageButtonView
+                active: 0
+                priority: 9
 
         for accountTypeName, vendorInfo of aryCGAccounts
             lc = accountTypeName.toLowerCase()

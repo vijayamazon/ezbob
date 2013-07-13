@@ -1,9 +1,10 @@
-using System;
-using Iesi.Collections.Generic;
-
-namespace EZBob.DatabaseLib.Model.Database {
+namespace EZBob.DatabaseLib.Model.Database
+{
 	using Marketplaces.FreeAgent;
+	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
+	using System;
+	using Iesi.Collections.Generic;
 
     public class MP_CustomerMarketPlace 
 	{
@@ -22,6 +23,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			AnalysysFunctionValues = new HashedSet<MP_AnalyisisFunctionValue>();
 			EkmOrders = new HashedSet<MP_EkmOrder>();
 			FreeAgentRequests = new HashedSet<MP_FreeAgentRequest>();
+			SageRequests = new HashedSet<MP_SageRequest>();
 			ChannelGrabberOrders = new HashedSet<MP_ChannelGrabberOrder>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
             YodleeOrders = new HashedSet<MP_YodleeOrder>();
@@ -55,6 +57,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
 		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
+		public virtual ISet<MP_SageRequest> SageRequests { get; set; }
         public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
         public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }

@@ -2,6 +2,7 @@
 	using System.Collections.Generic;
 	using DatabaseWrapper.Order;
 	using Model.Marketplaces.FreeAgent;
+	using Model.Marketplaces.Sage;
 
 	#region class AOrderComparer
 
@@ -41,18 +42,38 @@
 	#endregion class EkmOrderComparer
 
 	#region class FreeAgentInvoiceComparer
-	
-	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice> {
-		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b) {
+
+	public class FreeAgentInvoiceComparer : AOrderComparer<MP_FreeAgentInvoice>
+	{
+		public override bool AreEqual(MP_FreeAgentInvoice a, MP_FreeAgentInvoice b)
+		{
 			return a.url == b.url;
 		} // AreEqual
 
-		public override int HashCode(MP_FreeAgentInvoice a) {
+		public override int HashCode(MP_FreeAgentInvoice a)
+		{
 			return a.url.GetHashCode();
 		} // HashCode
 	} // class FreeAgentInvoiceComparer
 
 	#endregion class FreeAgentInvoiceComparer
+
+	#region class SageInvoiceComparer
+
+	public class SageInvoiceComparer : AOrderComparer<MP_SageInvoice>
+	{
+		public override bool AreEqual(MP_SageInvoice a, MP_SageInvoice b)
+		{
+			return a.SageId == b.SageId;
+		} // AreEqual
+
+		public override int HashCode(MP_SageInvoice a)
+		{
+			return a.SageId.GetHashCode();
+		} // HashCode
+	} // class SageInvoiceComparer
+
+	#endregion class SageInvoiceComparer
 
 	#region class FreeAgentExpenseComparer
 

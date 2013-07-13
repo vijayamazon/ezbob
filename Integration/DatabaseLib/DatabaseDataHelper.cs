@@ -1,41 +1,42 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
-using EZBob.DatabaseLib.DatabaseWrapper.AmazonFeedbackData;
-using EZBob.DatabaseLib.DatabaseWrapper.EbayFeedbackData;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Functions;
-using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
-using EZBob.DatabaseLib.DatabaseWrapper.UsersData;
-using EZBob.DatabaseLib.Exceptions;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.CommonLib;
-using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-using EzBob.CommonLib.ReceivedDataListLogic;
-using EzBob.CommonLib.TimePeriodLogic;
-using NHibernate;
-using NHibernate.Linq;
-using Scorto.NHibernate.Repository;
-using StructureMap;
-using log4net;
-using Iesi.Collections.Generic;
-
 namespace EZBob.DatabaseLib
 {
+	using System;
+	using System.Collections.Concurrent;
+	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Net;
+	using Common;
+	using DatabaseWrapper;
+	using DatabaseWrapper.AccountInfo;
+	using DatabaseWrapper.AmazonFeedbackData;
+	using DatabaseWrapper.EbayFeedbackData;
+	using DatabaseWrapper.FunctionValues;
+	using DatabaseWrapper.Functions;
+	using DatabaseWrapper.Inventory;
+	using DatabaseWrapper.Order;
+	using DatabaseWrapper.Products;
+	using DatabaseWrapper.Transactions;
+	using DatabaseWrapper.UsersData;
+	using Exceptions;
+	using Model;
+	using Model.Database;
+	using Model.Database.Repository;
+	using Model.Loans;
+	using EzBob.CommonLib;
+	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
+	using EzBob.CommonLib.ReceivedDataListLogic;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using NHibernate;
+	using NHibernate.Linq;
+	using Scorto.NHibernate.Repository;
+	using StructureMap;
+	using log4net;
+	using Iesi.Collections.Generic;
+	using System.Globalization;
 	using EzBob.CommonLib.Security;
 	using Model.Marketplaces.FreeAgent;
+	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
 
     public enum CustomerMarketplaceUpdateActionType
@@ -877,7 +878,7 @@ namespace EZBob.DatabaseLib
 						manual_sales_tax_amount = dataItem.manual_sales_tax_amount,
 						updated_at = dataItem.updated_at,
 						created_at = dataItem.created_at,
-						
+
 					};
 					if (dataItem.attachment != null)
 					{
@@ -894,6 +895,82 @@ namespace EZBob.DatabaseLib
 				});
 
 			customerMarketPlace.FreeAgentRequests.Add(mpRequest);
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+
+			return mpRequest;
+		}
+
+		public MP_SageRequest StoreSageRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageInvoicesList invoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			LogData("Invoices Data", customerMarketPlace, invoices);
+
+			DateTime submittedDate = DateTime.UtcNow;
+			var mpRequest = new MP_SageRequest
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = submittedDate,
+				HistoryRecord = historyRecord
+			};
+
+			invoices.ForEach(
+				dataItem =>
+				{
+					var invoice = new MP_SageInvoice
+					{
+						Request = mpRequest,
+						SageId = dataItem.SageId,
+						invoice_number = dataItem.invoice_number,
+						StatusId = dataItem.status,
+						due_date = dataItem.due_date,
+						date = dataItem.date,
+						void_reason = dataItem.void_reason,
+						outstanding_amount = dataItem.outstanding_amount,
+						total_net_amount = dataItem.total_net_amount,
+						total_tax_amount = dataItem.total_tax_amount,
+						tax_scheme_period_id = dataItem.tax_scheme_period_id,
+						carriage = dataItem.carriage,
+						CarriageTaxCodeId = dataItem.carriage_tax_code,
+						carriage_tax_rate_percentage = dataItem.carriage_tax_rate_percentage,
+						ContactId = dataItem.contact,
+						contact_name = dataItem.contact_name,
+						main_address = dataItem.main_address,
+						delivery_address = dataItem.delivery_address,
+						delivery_address_same_as_main = dataItem.delivery_address_same_as_main,
+						reference = dataItem.reference,
+						notes = dataItem.notes,
+						terms_and_conditions = dataItem.terms_and_conditions,
+						lock_version = dataItem.lock_version
+					};
+
+					invoice.Items = new HashedSet<MP_SageInvoiceItem>();
+					foreach (var item in dataItem.line_items)
+					{
+						var mpItem = new MP_SageInvoiceItem
+							{
+								Invoice = invoice,
+								description = item.description,
+								quantity = item.quantity,
+								unit_price = item.unit_price,
+								net_amount = item.net_amount,
+								tax_amount = item.tax_amount,
+								TaxCodeId = item.tax_code,
+								tax_rate_percentage = item.tax_rate_percentage,
+								unit_price_includes_tax = item.unit_price_includes_tax,
+								LedgerAccountId = item.ledger_account,
+								product_code = item.product_code,
+								ProductId = item.product,
+								ServiceKey = item.service,
+								lock_version = item.lock_version
+							};
+						invoice.Items.Add(mpItem);
+					}
+
+					mpRequest.Invoices.Add(invoice);
+				});
+
+			customerMarketPlace.SageRequests.Add(mpRequest);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 
 			return mpRequest;
@@ -2254,6 +2331,19 @@ namespace EZBob.DatabaseLib
 			return expenses;
 		}
 
+		public SageInvoicesList GetAllSageInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var invoices = new SageInvoicesList(submittedDate);
+
+			var dbInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(invoice => invoice.date);
+
+			invoices.AddRange(SageInvoicesConverter.GetSageInvoices(dbInvoices));
+
+			return invoices;
+		}
+		
 		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
@@ -2323,6 +2413,21 @@ namespace EZBob.DatabaseLib
 
 			return monthDiff;
 		} // GetFreeAgentInvoiceDeltaPeriod
+
+		public DateTime? GetSageInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			MP_SageRequest order = customerMarketPlace.SageRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
+			if (order == null)
+			{
+				return null;
+			}
+
+			MP_SageInvoice item = order.Invoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			DateTime latestExistingDate = item != null ? item.date : order.Created;
+			return latestExistingDate.AddMonths(-1);
+		} // GetSageInvoiceDeltaPeriod
 
 		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{

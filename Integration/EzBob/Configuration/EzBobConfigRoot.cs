@@ -1,6 +1,7 @@
 namespace EzBob.Configuration
 {
 	using FreeAgent.Config;
+	using Sage.Config;
 	using YodleeLib.config;
 	using AmazonServiceLib.Config;
 	using PayPalServiceLib;
@@ -48,6 +49,11 @@ namespace EzBob.Configuration
 		public IFreeAgentConfig FreeAgentConfig
 		{
 			get { return GetConfiguration<FreeAgentEnvConnectionConfig>("FreeAgentConfig"); }
+		}
+
+		public ISageConfig SageConfig
+		{
+			get { return GetConfiguration<SageEnvConnectionConfig>("SageConfig"); }
 		}
     }
 }

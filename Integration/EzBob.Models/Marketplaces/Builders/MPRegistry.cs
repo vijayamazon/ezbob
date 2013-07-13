@@ -12,6 +12,7 @@ namespace EzBob.Models.Marketplaces {
 			For<IMarketplaceModelBuilder>().Use<PayPointMarketplaceModelBuilder>().Named(typeof(PayPointMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<YodleeMarketplaceModelBuilder>().Named(typeof(YodleeMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<FreeAgentMarketplaceModelBuilder>().Named(typeof(FreeAgentMarketPlaceType).ToString());
+			For<IMarketplaceModelBuilder>().Use<SageMarketplaceModelBuilder>().Named(typeof(SageMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<ChannelGrabberMarketplaceModelBuilder>().Named(typeof(ChannelGrabberMarketPlaceType).ToString());
 		} // constructor
 	} // class MPRegistry

@@ -1,0 +1,16 @@
+﻿@using Newtonsoft.Json
+@model dynamic
+@{
+}
+<h2>Trying to add SageOne account. Please wait a minute.</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(function () {
+            window.opener.SageAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+            self.close();
+        });
+    </script>
+}
+

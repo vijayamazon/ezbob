@@ -75,6 +75,10 @@ namespace EZBob.DatabaseLib.Model.Database
 				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();
 
+			HasMany(x => x.SageRequests).
+				KeyColumn("CustomerMarketPlaceId")
+				.Cascade.All();
+
             HasMany(x => x.PayPointOrders).
                 KeyColumn("CustomerMarketPlaceId")
                 .Cascade.All();

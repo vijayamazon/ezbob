@@ -243,6 +243,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.PlayStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Play', Id)").Not.Insert().Not.Update();
 			Map(x => x.YodleeStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Yodlee', Id)").Not.Insert().Not.Update();
 			Map(x => x.FreeAgentStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('FreeAgent', Id)").Not.Insert().Not.Update();
+			Map(x => x.SageStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Sage', Id)").Not.Insert().Not.Update();
 			Map(x => x.ShopifyStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Shopify', Id)").Not.Insert().Not.Update();
 			Map(x => x.XeroStatus).Formula(@"dbo.GetMarketPlaceStatusByName ('Xero', Id)").Not.Insert().Not.Update();
             Map(x => x.MPStatus)

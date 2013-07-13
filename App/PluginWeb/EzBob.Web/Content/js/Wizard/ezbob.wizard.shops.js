@@ -23,13 +23,14 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var accountTypeName, amazons, aryCGAccounts, atlc, ebays, ekms, freeagents, ignore, listOfShops, payPoints, paypals, shop, stores, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _m, _n, _o, _p;
+      var accountTypeName, amazons, aryCGAccounts, atlc, ebays, ekms, freeagents, ignore, listOfShops, payPoints, paypals, sageAccounts, shop, stores, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _q;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
       amazons = this.get("amazonMarketplaces").toJSON();
       ekms = this.get("ekmShops");
       freeagents = this.get("freeAgentAccounts");
+      sageAccounts = this.get("sageAccounts");
       payPoints = this.get("payPointAccounts");
       yodlees = this.get("yodleeAccounts");
       paypals = this.get("paypalAccounts");
@@ -82,17 +83,26 @@
           type: "FreeAgent"
         });
       }
+      for (_p = 0, _len7 = sageAccounts.length; _p < _len7; _p++) {
+        shop = sageAccounts[_p];
+        stores.push({
+          displayName: shop.displayName,
+          type: "Sage"
+        });
+      }
       aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
       for (accountTypeName in aryCGAccounts) {
         ignore = aryCGAccounts[accountTypeName];
         atlc = accountTypeName.toLowerCase();
         listOfShops = this.get(atlc + 'Shops');
-        for (_p = 0, _len7 = listOfShops.length; _p < _len7; _p++) {
-          shop = listOfShops[_p];
-          stores.push({
-            displayName: shop.displayName,
-            type: accountTypeName
-          });
+        if (listOfShops !== void 0) {
+          for (_q = 0, _len8 = listOfShops.length; _q < _len8; _q++) {
+            shop = listOfShops[_q];
+            stores.push({
+              displayName: shop.displayName,
+              type: accountTypeName
+            });
+          }
         }
       }
       return stores;

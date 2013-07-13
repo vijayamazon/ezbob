@@ -1,0 +1,77 @@
+﻿<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#freeagentinvoicestab" data-toggle="tab">Invoices</a>
+        </li>
+        <li>
+            <a href="#freeagentinvoicedetailstab" data-toggle="tab">Invoice Details</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="sageinvoicestab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of invoices</td>
+                        <td><%-ai.NumofOrders1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders1M) : "-"%></td>
+                        <td><%-ai.NumofOrders3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders3M) : "-"%></td>
+                        <td><%-ai.NumofOrders6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders6M) : "-"%></td>
+                        <td><%-ai.NumofOrders12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders12M) : "-"%></td>
+                        <td><%-ai.NumofOrders15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders15M) : "-"%></td>
+                        <td><%-ai.NumofOrders18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders18M) : "-"%></td>
+                        <td><%-ai.NumofOrders24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrders24M) : "-"%></td>
+                        <td><%-ai.NumofOrdersLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofOrdersLifetime) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Total invoices</td>
+                        <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders12M!=undefined ? GBPValues(ai.TotalSumofOrders12M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders15M!=undefined ? GBPValues(ai.TotalSumofOrders15M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true) : "-"%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="sageinvoicedetailstab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Net Value</th>
+                        <th>Paid Value</th>
+                        <th>Due Value</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(m.Sage.Invoices, function(invoice, i) {%>
+                    <tr>
+                        <td><%-invoice.dated_on!=undefined ? EzBob.formatDateTime(invoice.dated_on) : "-"%></td>
+                        <td><%-invoice.qqqqq!=undefined ? GBPValues(invoice.net_value, true) : "-"%></td>
+                        <td><%-invoice.paid_value!=undefined ? GBPValues(invoice.paid_value, true) : "-"%></td>
+                        <td><%-invoice.due_value!=undefined ? GBPValues(invoice.due_value, true) : "-"%></td>
+                        <td><%-invoice.status!=undefined ? invoice.status : "-"%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -690,6 +690,25 @@ namespace EzBob.Web.Areas.Underwriter
 			});
 		}
 
+		public static void CreateSageStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Sage Status",
+				Name = "SageStatus",
+				Index = "SageStatus",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Width = 95,
+				Search = true,
+				DataType = TypeCode.String,
+				Data = x => x.SageStatus
+			});
+		}
+
 		public static void CreateShopifyStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
 		{
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>

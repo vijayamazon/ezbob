@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Models
 {
 	using FreeAgent;
+	using Sage;
 	using PayPoint;
 	using EzBob.Models;
     using System.Collections.Generic;
@@ -62,6 +63,14 @@
 		public static IEnumerable<SimpleMarketPlaceModel> GetFreeAgentAccounts(this Customer customer)
 		{
 			var oEsi = new FreeAgentServiceInfo();
+			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
+			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+			return simpleMarketPlaceModels;
+		}
+
+		public static IEnumerable<SimpleMarketPlaceModel> GetSageAccounts(this Customer customer)
+		{
+			var oEsi = new SageServiceInfo();
 			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == oEsi.InternalId);
 			var simpleMarketPlaceModels = marketplaces.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
 			return simpleMarketPlaceModels;

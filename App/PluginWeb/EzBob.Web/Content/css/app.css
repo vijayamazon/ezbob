@@ -429,6 +429,16 @@ div.shop-connected {
         width: 161px;
     }
 
+    .source_labels.Sage, .source_labels_on.sage {
+        background: url(images/sage_off.png) no-repeat 0 0;
+        width: 156px;
+    }
+
+    .source_labels_on.Sage, .source_labels_on.sage {
+        background: url(images/sage_on.png) no-repeat 0 0;
+        width: 156px;
+    }
+
     .source_labels.paypal {
         background-position: -751px -2px;
         width: 111px;
@@ -757,39 +767,6 @@ table.dashboard_sources {
         border-bottom: 1px #e5e5e5 solid;
     }
 
-.source_label_small {
-    background: url(images/source_small_sprite.png) no-repeat 0 0;
-    height: 20px;
-    width: 40px;
-    display: block;
-    float: left;
-    text-indent: -9999px;
-}
-
-    .source_label_small.ebay {
-        background-position: 0 -20px;
-        width: 40px;
-    }
-
-    .source_label_small.amazon {
-        background-position: -40px -20px;
-        width: 58px;
-    }
-
-    .source_label_small.ekm {
-        background-position: -98px -20px;
-        width: 75px;
-    }
-
-    .source_label_small.freeagent {
-        background-position: -98px -20px;
-        width: 75px;
-    }
-
-    .source_label_small.paypal {
-        background-position: -195px -20px;
-        width: 100px;
-    }
 /*
     ColorBox Core Style:
     The following CSS is consistent between example themes and should not be altered.
@@ -1102,6 +1079,10 @@ input[type="color"],
     background: url(images/help/help_freeagent.jpg) no-repeat center center;
 }
 
+.help_Sage {
+    background: url(images/help/help_sage.jpg) no-repeat center center;
+}
+
 .help_eBay {
     background: url(images/help/help_ebay.jpg) no-repeat center center;
 }
@@ -1133,10 +1114,10 @@ input[type="color"],
 	margin-top: 20px;
 }
 
-.eBayPaypalRule, .YodleeAndFreeAgentRule { font-weight: bold; color: red; margin-top: 0.6em; }
+.eBayPaypalRule, .YodleeAndFreeAgentAndSageRule { font-weight: bold; color: red; margin-top: 0.6em; }
 
 .cont-button .eBayPaypalRule,
-.cont-button .YodleeAndFreeAgentRule { float: left; }
+.cont-button .YodleeAndFreeAgentAndSageRule { float: left; }
 
 div.full_width { width: 581px; }
 

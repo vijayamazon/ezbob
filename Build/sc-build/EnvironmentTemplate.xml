@@ -1,5 +1,31 @@
 ﻿<?xml version="1.0"?>
-<environment id="${environmentId}">
+<environment id="${environmentId}">	
+    <property name="SageConfig" value ="SageUat"/>		
+	<module id="SageDev">
+		<property name="OAuthIdentifier" value="IssYGGBRMb9f6cw7XJgpVaeiMbCNGcFAeyBysLvJ" />
+		<property name="OAuthSecret" value="lUuYVDVgr2LkN5whEVezncV3TwyXrYqXjgDaT49H" />
+		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
+		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
+		<property name="InvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
+		<property name="InvoicesRequestMonthPart" value="from_date={0}&amp;to_date={1}" />
+	</module>	
+	<module id="SageUat">
+		<property name="OAuthIdentifier" value="dGnYPJjRVyc9AYjYAGXCQEoAi3YgWv63Hb6sALX7" />
+		<property name="OAuthSecret" value="K5Z0avZgezlKuO2d3wLVlL6MyCpz8zzl4lg6ldUp" />
+		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
+		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
+		<property name="InvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
+		<property name="InvoicesRequestMonthPart" value="from_date={0}&amp;to_date={1}" />
+	</module>	
+	<module id="SageProd">
+		<property name="OAuthIdentifier" value="sMywhxrs34hZ8lwRREjVHJscPOXA4iqhzTOFhevy" />
+		<property name="OAuthSecret" value="yKWV1sn06eEPLrhN9Y6CPzfDdi3CQXP8yDiVQRVC" />
+		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
+		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
+		<property name="InvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
+		<property name="InvoicesRequestMonthPart" value="from_date={0}&amp;to_date={1}" />
+	</module>
+	
     <property name="EbayPixelEnabled" value="False" />	
     <property name="FreeAgentConfig" value ="FreeAgent"/>		
 	<module id="FreeAgent">
