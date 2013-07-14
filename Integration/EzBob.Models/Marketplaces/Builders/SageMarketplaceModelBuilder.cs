@@ -63,7 +63,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			
 			var model = new SageModel
 				{
-					Invoices = SageInvoicesConverter.GetSageInvoices(dbInvoices)
+					Invoices = SageSalesInvoicesConverter.GetSageInvoices(dbInvoices)
 				};
 
 			return model;

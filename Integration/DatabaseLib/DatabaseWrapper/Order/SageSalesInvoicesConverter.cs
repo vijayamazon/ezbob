@@ -4,11 +4,11 @@
 	using System.Linq;
 	using Model.Marketplaces.Sage;
 
-	public class SageInvoicesConverter
+	public class SageSalesInvoicesConverter
 	{
-		public static IEnumerable<SageInvoice> GetSageInvoices(IOrderedEnumerable<MP_SageInvoice> dbInvoices)
+		public static IEnumerable<SageSalesInvoice> GetSageInvoices(IOrderedEnumerable<MP_SageInvoice> dbInvoices)
 		{
-			var invoices = new List<SageInvoice>(dbInvoices.Select(o => new SageInvoice
+			var invoices = new List<SageSalesInvoice>(dbInvoices.Select(o => new SageSalesInvoice
 				{
 					SageId = o.SageId,
 					invoice_number = o.invoice_number,
@@ -38,12 +38,12 @@
 			return invoices;
 		}
 
-		private static List<SageInvoiceItem> GetSageInvoiceItems(IEnumerable<MP_SageInvoiceItem> items)
+		private static List<SageSalesInvoiceItem> GetSageInvoiceItems(IEnumerable<MP_SageInvoiceItem> items)
 		{
-			var result = new List<SageInvoiceItem>();
+			var result = new List<SageSalesInvoiceItem>();
 			foreach (MP_SageInvoiceItem item in items)
 			{
-				result.Add(new SageInvoiceItem
+				result.Add(new SageSalesInvoiceItem
 				{
 					SageId = item.SageId,
 					description = item.description,

@@ -104,13 +104,17 @@ namespace Sage
 		public string source { get; set; }
 	}
 
-	[Serializable]
-	public class SageInvoicesListHelper
+	public class PaginatedResultsBase
 	{
-		public List<SageInvoiceSerialization> resources { get; set; }
 		public int totalResults { get; set; }
 		public int startIndex { get; set; }
 		public int itemsPerPage { get; set; }
+	}
+
+	[Serializable]
+	public class SageInvoicesListHelper : PaginatedResultsBase
+	{
+		public List<SageInvoiceSerialization> resources { get; set; }
 		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 }

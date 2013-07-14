@@ -5,26 +5,26 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	using EzBob.CommonLib.ReceivedDataListLogic;
 	using EzBob.CommonLib.TimePeriodLogic;
 
-	public class SageInvoicesList : ReceivedDataListTimeMarketTimeDependentBase<SageInvoice>
+	public class SageSalesInvoicesList : ReceivedDataListTimeMarketTimeDependentBase<SageSalesInvoice>
 	{
-		public SageInvoicesList()
+		public SageSalesInvoicesList()
 			: base(DateTime.Now, null)
 		{
 		}
 
-		public SageInvoicesList(DateTime submittedDate, IEnumerable<SageInvoice> collection = null)
+		public SageSalesInvoicesList(DateTime submittedDate, IEnumerable<SageSalesInvoice> collection = null)
 			: base(submittedDate, collection)
 		{
 		}
 
-		public override ReceivedDataListTimeDependentBase<SageInvoice> Create(DateTime submittedDate,
-		                                                                      IEnumerable<SageInvoice> collection)
+		public override ReceivedDataListTimeDependentBase<SageSalesInvoice> Create(DateTime submittedDate,
+		                                                                      IEnumerable<SageSalesInvoice> collection)
 		{
-			return new SageInvoicesList(submittedDate, collection);
+			return new SageSalesInvoicesList(submittedDate, collection);
 		}
 	}
 	
-	public class SageInvoiceItem
+	public class SageSalesInvoiceItem
 	{
 		public int SageId { get; set; }
 		public string description { get; set; }
@@ -42,7 +42,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public int lock_version { get; set; }
 	}
 
-	public class SageInvoice : TimeDependentRangedDataBase
+	public class SageSalesInvoice : TimeDependentRangedDataBase
 	{
 		public int SageId { get; set; }
 		public string invoice_number { get; set; }
@@ -67,7 +67,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string terms_and_conditions { get; set; }
 		public int lock_version { get; set; }
 
-		public List<SageInvoiceItem> line_items { get; set; }
+		public List<SageSalesInvoiceItem> line_items { get; set; }
 
 		public override DateTime RecordTime
 		{

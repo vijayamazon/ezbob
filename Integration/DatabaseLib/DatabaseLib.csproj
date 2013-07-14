@@ -78,8 +78,8 @@
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />
-    <Compile Include="DatabaseWrapper\Order\SageInvoicesConverter.cs" />
-    <Compile Include="DatabaseWrapper\Order\SageInvoicesList.cs" />
+    <Compile Include="DatabaseWrapper\Order\SageSalesInvoicesConverter.cs" />
+    <Compile Include="DatabaseWrapper\Order\SageSalesInvoicesList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentExpensesList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentInvoicesList.cs" />
     <Compile Include="DatabaseWrapper\Order\YodleeOrdersList.cs" />

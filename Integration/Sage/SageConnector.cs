@@ -14,110 +14,132 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
-		public static SageInvoicesList GetInvoices(string accessToken, DateTime? fromDate)
+		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
-			string monthPart = !fromDate.HasValue ? string.Empty : string.Format("?{0}", string.Format(config.InvoicesRequestMonthPart, fromDate.Value.ToString("dd/MM/yyyy"), DateTime.UtcNow.ToString("dd/MM/yyyy")).Replace('-', '/'));
-			string timedInvoicesRequest = string.Format("{0}{1}", config.InvoicesRequest, monthPart);
-			var request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.InvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
+			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
+			return salesInvoicesList;
+		}
 
-			var client = new RestClient();
-
-			IRestResponse response = client.Execute(request);
-			var invoices = new List<SageInvoice>();
-			SageInvoicesListHelper deserializeInvoicesResponse = FillInvoicesFromResponse(response, invoices);
-			if (deserializeInvoicesResponse == null)
-			{
-				log.Error("Sage invoices were not fetched");
-				return new SageInvoicesList(DateTime.UtcNow, invoices);
-			}
-
-			string nextUrl = GetNextUrl(deserializeInvoicesResponse, timedInvoicesRequest);
-
-			while (nextUrl != null)
-			{
-				request = new RestRequest(Method.GET) { Resource = nextUrl };
-				request.AddHeader("Authorization", "Bearer " + accessToken);
-				response = client.Execute(request);
-
-				deserializeInvoicesResponse = FillInvoicesFromResponse(response, invoices);
-				if (deserializeInvoicesResponse == null)
-				{
-					log.Error("Sage invoices were not fetched");
-					return new SageInvoicesList(DateTime.UtcNow, new List<SageInvoice>());
-				}
-
-				nextUrl = GetNextUrl(deserializeInvoicesResponse, timedInvoicesRequest);
-			}
-
-			var sageInvoicesList = new SageInvoicesList(DateTime.UtcNow, invoices);
-			return sageInvoicesList;
-        }
-
-		private static SageInvoicesListHelper FillInvoicesFromResponse(IRestResponse response, List<SageInvoice> invoices)
+		private static SageInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
 		{
-			var js = new JavaScriptSerializer();
-			string cleanResponse = response.Content.Replace("\"$", "\"");
-			var deserializeInvoicesResponse = DeserializeInvoices(cleanResponse, js);
-			if (deserializeInvoicesResponse == null)
+			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
+			if (deserializedSalesInvoices == null)
 			{
-				log.Error("Error deserializing sage invoices");
+				log.Error("Error deserializing sage sales invoices");
 				return null;
 			}
-			if (deserializeInvoicesResponse.diagnoses != null)
+			if (deserializedSalesInvoices.diagnoses != null)
 			{
-				foreach (SageDiagnostic diagnostic in deserializeInvoicesResponse.diagnoses)
+				foreach (SageDiagnostic diagnostic in deserializedSalesInvoices.diagnoses)
 				{
-					log.ErrorFormat("Error occured during sage invoices request. Invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}", 
+					log.ErrorFormat("Error occured during sage sales invoices request. Sales invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
 						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
 				}
 				return null;
 			}
 
-			foreach (var serializaedInvoice in deserializeInvoicesResponse.resources)
-			{
-				TryDeserializeInvoice(invoices, serializaedInvoice);
-			}
-
-			return deserializeInvoicesResponse;
+			return deserializedSalesInvoices;
 		}
 
-		private static void TryDeserializeInvoice(List<SageInvoice> invoices, SageInvoiceSerialization serializaedInvoice)
+		private static SageInvoicesListHelper DeserializeSalesInvoices(string invoicesResponse)
 		{
 			try
 			{
-				invoices.Add(SageDesreializer.DeserializeInvoice(serializaedInvoice));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating invoice for SageId:{0}. Invoice won't be handled!", serializaedInvoice.SageId);
-			}
-		}
-
-		private static SageInvoicesListHelper DeserializeInvoices(string invoicesResponse, JavaScriptSerializer js)
-		{
-			try
-			{
+				var js = new JavaScriptSerializer();
 				return ((SageInvoicesListHelper)js.Deserialize(invoicesResponse, typeof(SageInvoicesListHelper)));
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Failed deserializing sage invoices response:{0}. The error was:{1}", invoicesResponse, e);
+				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", invoicesResponse, e);
 				return null;
 			}
 		}
 
-		private static string GetNextUrl(SageInvoicesListHelper serializedResponse, string timedInvoicesRequest)
+		private static bool FillSalesInvoicesFromDeserializedData(SageInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
 		{
-			int nextIndex = serializedResponse.startIndex + serializedResponse.itemsPerPage;
-			if (serializedResponse.totalResults <= nextIndex)
+			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
+			{
+				TryDeserializeSalesInvoice(salesInvoices, serializedSalesInvoice);
+			}
+
+			return true;
+		}
+
+		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageInvoiceSerialization serializaedSalesInvoice)
+		{
+			try
+			{
+				salesInvoices.Add(SageDesreializer.DeserializeSalesInvoice(serializaedSalesInvoice));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.SageId);
+			}
+		}
+		
+		private static TFinalOutput ExecuteRequestAndGetDeserializedResponse<TDeserialize, TFinalOutput>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, TDeserialize> deserializeFunction, Func<TDeserialize, TFinalOutput, bool> generateOutput)
+			where TDeserialize : PaginatedResultsBase
+			where TFinalOutput : class, new()
+		{
+			string authorizationHeader = string.Format("Bearer {0}", accessToken);
+			string monthPart = !fromDate.HasValue ? string.Empty : string.Format("?{0}", string.Format(config.InvoicesRequestMonthPart, fromDate.Value.ToString("dd/MM/yyyy"), DateTime.UtcNow.ToString("dd/MM/yyyy")).Replace('-', '/'));
+			string timedInvoicesRequest = string.Format("{0}{1}", requestUrl, monthPart);
+			var request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
+			request.AddHeader("Authorization", authorizationHeader);
+
+			var client = new RestClient();
+
+			IRestResponse response = client.Execute(request);
+			TDeserialize deserializedResponse = deserializeFunction(CleanResponse(response.Content));
+			if (deserializedResponse == null)
+			{
+				log.Error("Sage response deserialization failed");
+				return new TFinalOutput();
+			}
+
+			var results = new TFinalOutput();
+			generateOutput(deserializedResponse, results);
+
+			string nextUrl = GetNextUrl(deserializedResponse, timedInvoicesRequest);
+
+			while (nextUrl != null)
+			{
+				request = new RestRequest(Method.GET) { Resource = nextUrl };
+				request.AddHeader("Authorization", authorizationHeader);
+				response = client.Execute(request);
+
+				deserializedResponse = deserializeFunction(CleanResponse(response.Content));
+				if (deserializedResponse == null)
+				{
+					log.Error("Sage response deserialization failed");
+					return new TFinalOutput();
+				}
+
+				generateOutput(deserializedResponse, results);
+
+				nextUrl = GetNextUrl(deserializedResponse, timedInvoicesRequest);
+			}
+
+			return results;
+		}
+
+		private static string CleanResponse(string originalResponse)
+		{
+			return originalResponse.Replace("\"$", "\"");
+		}
+
+		private static string GetNextUrl(PaginatedResultsBase pagenatedResults, string request)
+		{
+			int nextIndex = pagenatedResults.startIndex + pagenatedResults.itemsPerPage;
+			if (pagenatedResults.totalResults <= nextIndex)
 			{
 				return null;
 			}
 
-			return string.Format("{0}{1}$startIndex={2}", timedInvoicesRequest, timedInvoicesRequest.Contains("?") ? "&" : "?", nextIndex);
+			return string.Format("{0}{1}$startIndex={2}", request, request.Contains("?") ? "&" : "?", nextIndex);
 		}
-		
+
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage)
 		{
 			string accessTokenRequest = string.Format("{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",

@@ -9,22 +9,16 @@
     using Infrastructure;
     using Sage;
     using Scorto.Web;
-	using Code.MpUniq;
 	using ZohoCRM;
 	using log4net;
 	using ApplicationCreator;
-	using NHibernate;
-    using AccessTokenContainer = Sage.AccessTokenContainer;
 
 	public class SageMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SageMarketPlacesController));
-        private readonly IEzbobWorkplaceContext _context;
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
-        private readonly IMPUniqChecker _mpChecker;
         private readonly IAppCreator _appCreator;
-        private readonly ISession _session;
         private readonly DatabaseDataHelper _helper;
         private readonly IZohoFacade _crm;
 
@@ -32,16 +26,12 @@
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
             IRepository<MP_MarketplaceType> mpTypes,
-            IMPUniqChecker mpChecker,
             IAppCreator appCreator,
-            ISession session, IZohoFacade crm)
+            IZohoFacade crm)
         {
-            _context = context;
             _mpTypes = mpTypes;
             _customer = context.Customer;
-            _mpChecker = mpChecker;
             _appCreator = appCreator;
-            _session = session;
             _crm = crm;
             _helper = helper;
         }
@@ -87,16 +77,12 @@
 				.First(a => a.InternalId == oEsi.InternalId)
 				.Id;
 
-			/*log.Info("Fetching company data...");
-			var freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
-			*/
 			var securityData = new SageSecurityInfo
 			{
 				ApprovalToken = approvalToken,
 				AccessToken = accessTokenContainer.access_token,
 				TokenType = accessTokenContainer.token_type,
-				MarketplaceId = marketPlaceId,
-				//Name = freeAgentCompany.name,
+				MarketplaceId = marketPlaceId
 			};
 
 			var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
@@ -108,7 +94,7 @@
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(_customer.Name/*qqq - get actual store name*/, sageDatabaseMarketPlace, securityData, _customer);
 
 			_crm.ConvertLead(_customer);
-			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
+			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
 			return View(SageAccountModel.ToModel(marketPlace));
 		}
     }

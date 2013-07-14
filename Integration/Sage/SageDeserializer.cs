@@ -9,7 +9,7 @@ namespace Sage
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageDesreializer));
 
-		public static SageInvoice DeserializeInvoice(SageInvoiceSerialization si)
+		public static SageSalesInvoice DeserializeSalesInvoice(SageInvoiceSerialization si)
 		{
 			DateTime due_date;
 			if (!DateTime.TryParse(si.due_date, out due_date))
@@ -57,7 +57,7 @@ namespace Sage
 				throw new Exception(msg);
 			}
 
-			var deserialized = new SageInvoice();
+			var deserialized = new SageSalesInvoice();
 
 			deserialized.SageId = si.id;
 			deserialized.invoice_number = si.invoice_number;
@@ -107,9 +107,9 @@ namespace Sage
 			return deserialized;
 		}
 
-		private static List<SageInvoiceItem> GetInvoiceItems(IEnumerable<SageInvoiceItemSerialization> items)
+		private static List<SageSalesInvoiceItem> GetInvoiceItems(IEnumerable<SageInvoiceItemSerialization> items)
 		{
-			var result = new List<SageInvoiceItem>();
+			var result = new List<SageSalesInvoiceItem>();
 			foreach (SageInvoiceItemSerialization si in items)
 			{
 				decimal quantity, unit_price, net_amount, tax_amount, tax_rate_percentage;
@@ -119,7 +119,7 @@ namespace Sage
 				if (!decimal.TryParse(si.tax_amount, out tax_amount)) return null;
 				if (!decimal.TryParse(si.tax_rate_percentage, out tax_rate_percentage)) return null;
 				
-				var deserialized = new SageInvoiceItem();
+				var deserialized = new SageSalesInvoiceItem();
 				deserialized.SageId = si.id;
 				deserialized.description = si.description;
 				deserialized.quantity = quantity;

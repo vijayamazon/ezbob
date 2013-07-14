@@ -69,7 +69,7 @@
     <Compile Include="SageDatabaseFunctionFactory.cs" />
     <Compile Include="SageDatabaseFunctionStorage.cs" />
     <Compile Include="SageDatabaseMarketPlace.cs" />
-    <Compile Include="SageInvoiceAggregator.cs" />
+    <Compile Include="SageSalesInvoiceAggregator.cs" />
     <Compile Include="SageDeserializeHelper.cs" />
     <Compile Include="SageRegistry.cs" />
     <Compile Include="SageRetrieveDataHelper.cs" />

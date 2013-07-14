@@ -900,11 +900,11 @@ namespace EZBob.DatabaseLib
 			return mpRequest;
 		}
 
-		public MP_SageRequest StoreSageRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageInvoicesList invoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public MP_SageRequest StoreSageRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			LogData("Invoices Data", customerMarketPlace, invoices);
+			LogData("Invoices Data", customerMarketPlace, salesInvoices);
 
 			DateTime submittedDate = DateTime.UtcNow;
 			var mpRequest = new MP_SageRequest
@@ -914,7 +914,7 @@ namespace EZBob.DatabaseLib
 				HistoryRecord = historyRecord
 			};
 
-			invoices.ForEach(
+			salesInvoices.ForEach(
 				dataItem =>
 				{
 					var invoice = new MP_SageInvoice
@@ -2331,15 +2331,15 @@ namespace EZBob.DatabaseLib
 			return expenses;
 		}
 
-		public SageInvoicesList GetAllSageInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public SageSalesInvoicesList GetAllSageInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var invoices = new SageInvoicesList(submittedDate);
+			var invoices = new SageSalesInvoicesList(submittedDate);
 
 			var dbInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(invoice => invoice.date);
 
-			invoices.AddRange(SageInvoicesConverter.GetSageInvoices(dbInvoices));
+			invoices.AddRange(SageSalesInvoicesConverter.GetSageInvoices(dbInvoices));
 
 			return invoices;
 		}
