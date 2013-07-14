@@ -1,14 +1,11 @@
 namespace EzBob.Models.Marketplaces.Builders
 {
-	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
-	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Sage;
 	using Scorto.NHibernate.Repository;
 	using Web.Areas.Customer.Models;
 	using Web.Areas.Underwriter.Models;
@@ -26,25 +23,29 @@ namespace EzBob.Models.Marketplaces.Builders
         public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
         {
 			var paymentAccountModel = new PaymentAccountsModel();
-			MP_AnalyisisFunctionValue earliestNumOfInvoices = GetEarliestValueFor(mp, "NumOfOrders");
-			MP_AnalyisisFunctionValue earliestSumOfInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
+			MP_AnalyisisFunctionValue earliestNumOfSalesInvoices = GetEarliestValueFor(mp, "NumOfOrders");
+			MP_AnalyisisFunctionValue earliestNumOfIncomes = GetEarliestValueFor(mp, "NumOfIncomes");
+			MP_AnalyisisFunctionValue earliestSumOfSalesInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
+			MP_AnalyisisFunctionValue earliestSumOfIncomes = GetEarliestValueFor(mp, "TotalSumOfIncomes");
 
-	        if (earliestNumOfInvoices != null && earliestNumOfInvoices.ValueInt.HasValue)
-	        {
-		        paymentAccountModel.TransactionsNumber = earliestNumOfInvoices.ValueInt.Value;
-	        }
-	        else
-	        {
-		        paymentAccountModel.TransactionsNumber = 0;
+			paymentAccountModel.TransactionsNumber = 0;
+			if (earliestNumOfSalesInvoices != null && earliestNumOfSalesInvoices.ValueInt.HasValue)
+			{
+				paymentAccountModel.TransactionsNumber += earliestNumOfSalesInvoices.ValueInt.Value;
+			}
+			if (earliestNumOfIncomes != null && earliestNumOfIncomes.ValueInt.HasValue)
+			{
+				paymentAccountModel.TransactionsNumber += earliestNumOfIncomes.ValueInt.Value;
 			}
 
-			if (earliestSumOfInvoices != null && earliestSumOfInvoices.ValueFloat.HasValue)
+			paymentAccountModel.TotalNetInPayments = 0;
+			if (earliestSumOfSalesInvoices != null && earliestSumOfSalesInvoices.ValueFloat.HasValue)
 			{
-				paymentAccountModel.TotalNetInPayments = earliestSumOfInvoices.ValueFloat.Value;
+				paymentAccountModel.TotalNetInPayments += earliestSumOfSalesInvoices.ValueFloat.Value;
 			}
-			else
+			if (earliestSumOfIncomes != null && earliestSumOfIncomes.ValueFloat.HasValue)
 			{
-				paymentAccountModel.TotalNetInPayments = 0;
+				paymentAccountModel.TotalNetInPayments += earliestSumOfIncomes.ValueFloat.Value;
 			}
 
 			paymentAccountModel.TotalNetOutPayments = 0;
