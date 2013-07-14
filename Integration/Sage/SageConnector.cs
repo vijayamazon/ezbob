@@ -24,46 +24,63 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
-			string cleanResponse = response.Content.Replace("\"$", "\"");
-			var serializedInvoices = DeserializeInvoices(cleanResponse, js);
-			if (serializedInvoices == null)
+			var invoices = new List<SageInvoice>();
+			SageInvoicesListHelper deserializeInvoicesResponse = FillInvoicesFromResponse(response, invoices);
+			if (deserializeInvoicesResponse == null)
 			{
 				log.Error("Sage invoices were not fetched");
-				return new SageInvoicesList();
+				return new SageInvoicesList(DateTime.UtcNow, invoices);
 			}
 
-			var invoices = new List<SageInvoice>();
-			foreach (var serializaedInvoice in serializedInvoices.resources)
-			{
-				TryDeserializeInvoice(invoices, serializaedInvoice);
-			}
-
-			string nextUrl = GetNextUrl(serializedInvoices, timedInvoicesRequest);
+			string nextUrl = GetNextUrl(deserializeInvoicesResponse, timedInvoicesRequest);
 
 			while (nextUrl != null)
 			{
 				request = new RestRequest(Method.GET) { Resource = nextUrl };
 				request.AddHeader("Authorization", "Bearer " + accessToken);
 				response = client.Execute(request);
-				cleanResponse = response.Content.Replace("\"$", "\"");
-				serializedInvoices = DeserializeInvoices(cleanResponse, js);
-				if (serializedInvoices == null)
+
+				deserializeInvoicesResponse = FillInvoicesFromResponse(response, invoices);
+				if (deserializeInvoicesResponse == null)
 				{
 					log.Error("Sage invoices were not fetched");
-					return new SageInvoicesList();
-				}
-				foreach (var serializaedInvoice in serializedInvoices.resources)
-				{ 
-					TryDeserializeInvoice(invoices, serializaedInvoice);
+					return new SageInvoicesList(DateTime.UtcNow, new List<SageInvoice>());
 				}
 
-				nextUrl = GetNextUrl(serializedInvoices, timedInvoicesRequest);
+				nextUrl = GetNextUrl(deserializeInvoicesResponse, timedInvoicesRequest);
 			}
 
 			var sageInvoicesList = new SageInvoicesList(DateTime.UtcNow, invoices);
 			return sageInvoicesList;
         }
+
+		private static SageInvoicesListHelper FillInvoicesFromResponse(IRestResponse response, List<SageInvoice> invoices)
+		{
+			var js = new JavaScriptSerializer();
+			string cleanResponse = response.Content.Replace("\"$", "\"");
+			var deserializeInvoicesResponse = DeserializeInvoices(cleanResponse, js);
+			if (deserializeInvoicesResponse == null)
+			{
+				log.Error("Error deserializing sage invoices");
+				return null;
+			}
+			if (deserializeInvoicesResponse.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializeInvoicesResponse.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage invoices request. Invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}", 
+						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			foreach (var serializaedInvoice in deserializeInvoicesResponse.resources)
+			{
+				TryDeserializeInvoice(invoices, serializaedInvoice);
+			}
+
+			return deserializeInvoicesResponse;
+		}
 
 		private static void TryDeserializeInvoice(List<SageInvoice> invoices, SageInvoiceSerialization serializaedInvoice)
 		{

@@ -96,11 +96,21 @@ namespace Sage
 	}
 
 	[Serializable]
+	public class SageDiagnostic
+	{
+		public string severity { get; set; }
+		public string dataCode { get; set; }
+		public string message { get; set; }
+		public string source { get; set; }
+	}
+
+	[Serializable]
 	public class SageInvoicesListHelper
 	{
 		public List<SageInvoiceSerialization> resources { get; set; }
 		public int totalResults { get; set; }
 		public int startIndex { get; set; }
 		public int itemsPerPage { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 }
