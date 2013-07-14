@@ -6,9 +6,11 @@
 	using System;
 
 	public enum SageDatabaseFunctionType
-    {
-        NumOfOrders, 
-		TotalSumOfOrders
+	{
+		NumOfOrders,
+		TotalSumOfOrders,
+        NumOfIncomes,
+		TotalSumOfIncomes
     }
 
 	internal class SageDatabaseFunctionStorage : DatabaseFunctionStorage<SageDatabaseFunctionType>
@@ -20,6 +22,8 @@
 		{
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.NumOfOrders, DatabaseValueTypeEnum.Integer, "{906D9705-4E2F-4AD8-9DBC-B73FB723B83E}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{2F80945F-025F-4B85-BF04-C940FF9E6629}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.NumOfIncomes, DatabaseValueTypeEnum.Integer, "{3C367949-00AA-4A7F-8658-D66CE24A4E52}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfIncomes, DatabaseValueTypeEnum.Double, "{391AFF11-CB8B-4DC9-A7B3-55D0FA92C3FC}");
         }
 
 		public static SageDatabaseFunctionStorage Instance
@@ -48,6 +52,14 @@
 
 				case SageDatabaseFunctionType.TotalSumOfOrders:
 					displayName = "Total Sum of Orders";
+					break;
+
+				case SageDatabaseFunctionType.NumOfIncomes:
+					displayName = "Num of Incomes";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfIncomes:
+					displayName = "Total Sum of Incomes";
 					break;
 				
                 default:

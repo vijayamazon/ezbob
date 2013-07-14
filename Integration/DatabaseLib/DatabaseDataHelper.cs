@@ -900,11 +900,12 @@ namespace EZBob.DatabaseLib
 			return mpRequest;
 		}
 
-		public MP_SageRequest StoreSageRequestAndInvoicesData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public void StoreSageData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, SageIncomesList incomes, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			LogData("Invoices Data", customerMarketPlace, salesInvoices);
+			LogData("SalesInvoices Data", customerMarketPlace, salesInvoices);
+			LogData("Incomes Data", customerMarketPlace, incomes);
 
 			DateTime submittedDate = DateTime.UtcNow;
 			var mpRequest = new MP_SageRequest
@@ -967,13 +968,38 @@ namespace EZBob.DatabaseLib
 						invoice.Items.Add(mpItem);
 					}
 
-					mpRequest.Invoices.Add(invoice);
+					mpRequest.SalesInvoices.Add(invoice);
+				});
+
+			incomes.ForEach(
+				dataItem =>
+				{
+					var income = new MP_SageIncome
+					{
+						Request = mpRequest,
+						SageId = dataItem.SageId,
+						date = dataItem.date,
+						invoice_date = dataItem.invoice_date,
+						amount = dataItem.amount,
+						tax_amount = dataItem.tax_amount,
+						gross_amount = dataItem.gross_amount,
+						tax_percentage_rate = dataItem.tax_percentage_rate,
+						TaxCodeId = dataItem.tax_code,
+						tax_scheme_period_id = dataItem.tax_scheme_period_id,
+						reference = dataItem.reference,
+						ContactId = dataItem.contact,
+						SourceId = dataItem.source,
+						DestinationId = dataItem.destination,
+						PaymentMethodId = dataItem.payment_method,
+						voided = dataItem.voided,
+						lock_version = dataItem.lock_version
+					};
+
+					mpRequest.Incomes.Add(income);
 				});
 
 			customerMarketPlace.SageRequests.Add(mpRequest);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-
-			return mpRequest;
 		}
 
 		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company)
@@ -2331,17 +2357,30 @@ namespace EZBob.DatabaseLib
 			return expenses;
 		}
 
-		public SageSalesInvoicesList GetAllSageInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public SageSalesInvoicesList GetAllSageSalesInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var invoices = new SageSalesInvoicesList(submittedDate);
+			var salesInvoices = new SageSalesInvoicesList(submittedDate);
 
-			var dbInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(invoice => invoice.date);
+			var dbSalesInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
 
-			invoices.AddRange(SageSalesInvoicesConverter.GetSageInvoices(dbInvoices));
+			salesInvoices.AddRange(SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices));
 
-			return invoices;
+			return salesInvoices;
+		}
+
+		public SageIncomesList GetAllSageIncomesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var incomes = new SageIncomesList(submittedDate);
+
+			var dbIncomes = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
+
+			incomes.AddRange(SageSalesInvoicesConverter.GetSageIncomes(dbIncomes));
+
+			return incomes;
 		}
 		
 		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -2414,7 +2453,7 @@ namespace EZBob.DatabaseLib
 			return monthDiff;
 		} // GetFreeAgentInvoiceDeltaPeriod
 
-		public DateTime? GetSageInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public DateTime? GetSageSalesInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
@@ -2424,10 +2463,10 @@ namespace EZBob.DatabaseLib
 				return null;
 			}
 
-			MP_SageSalesInvoice item = order.Invoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			MP_SageSalesInvoice item = order.SalesInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 			DateTime latestExistingDate = item != null ? item.date : order.Created;
 			return latestExistingDate.AddMonths(-1);
-		} // GetSageInvoiceDeltaPeriod
+		} // GetSageSalesInvoiceDeltaPeriod
 
 		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{

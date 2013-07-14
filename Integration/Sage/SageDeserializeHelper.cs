@@ -2,46 +2,9 @@ namespace Sage
 {
 	using System;
 	using System.Collections.Generic;
-	using EZBob.DatabaseLib.DatabaseWrapper.Order;
-
+	
 	[Serializable]
-	public class SageInvoiceStatus
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceCarriageTaxCode
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceContact
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceItemTaxCode
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceItemLedgerAccount
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceItemProduct
-	{
-		public int? key { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoiceItemService
+	public class SageReferenceKey
 	{
 		public int? key { get; set; }
 	}
@@ -55,23 +18,22 @@ namespace Sage
 		public string unit_price { get; set; }
 		public string net_amount { get; set; }
 		public string tax_amount { get; set; }
-		public SageInvoiceItemTaxCode tax_code { get; set; }
+		public SageReferenceKey tax_code { get; set; }
 		public string tax_rate_percentage { get; set; }
 		public bool unit_price_includes_tax { get; set; }
-		public SageInvoiceItemLedgerAccount ledger_account { get; set; }
+		public SageReferenceKey ledger_account { get; set; }
 		public string product_code { get; set; }
-		public SageInvoiceItemProduct product { get; set; }
-		public SageInvoiceItemService service { get; set; }
+		public SageReferenceKey product { get; set; }
+		public SageReferenceKey service { get; set; }
 		public int lock_version { get; set; }
 	}
 	
 	[Serializable]
-	public class SageInvoiceSerialization
+	public class SageSalesInvoiceSerialization
 	{
 		public int id { get; set; }
-		public int SageId { get; set; }
 		public string invoice_number { get; set; }
-		public SageInvoiceStatus status { get; set; }
+		public SageReferenceKey status { get; set; }
 		public string due_date { get; set; }
 		public string date { get; set; }
 		public string void_reason { get; set; }
@@ -80,9 +42,9 @@ namespace Sage
 		public string total_tax_amount { get; set; }
 		public int tax_scheme_period_id { get; set; }
 		public string carriage { get; set; }
-		public SageInvoiceCarriageTaxCode carriage_tax_code { get; set; }
+		public SageReferenceKey carriage_tax_code { get; set; }
 		public string carriage_tax_rate_percentage { get; set; }
-		public SageInvoiceContact contact { get; set; }
+		public SageReferenceKey contact { get; set; }
 		public string contact_name { get; set; }
 		public string main_address { get; set; }
 		public string delivery_address { get; set; }
@@ -104,17 +66,49 @@ namespace Sage
 		public string source { get; set; }
 	}
 
+	[Serializable]
+	public class SageSalesInvoicesListHelper : PaginatedResultsBase
+	{
+		public List<SageSalesInvoiceSerialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
+
+
+
+	[Serializable]
+	public class SageIncomeSerialization
+	{
+		public int id { get; set; }
+		public string date { get; set; }
+		public string invoice_date { get; set; }
+		public string amount { get; set; }
+		public string tax_amount { get; set; }
+		public string gross_amount { get; set; }
+		public string tax_percentage_rate { get; set; }
+		public SageReferenceKey tax_code { get; set; }
+		public int tax_scheme_period_id { get; set; }
+		public string reference { get; set; }
+		public SageReferenceKey contact { get; set; }
+		public SageReferenceKey source { get; set; }
+		public SageReferenceKey destination { get; set; }
+		public SageReferenceKey payment_method { get; set; }
+		public bool voided { get; set; }
+		public int lock_version { get; set; }
+	}
+
+	[Serializable]
+	public class SageIncomesListHelper : PaginatedResultsBase
+	{
+		public List<SageIncomeSerialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
+
+
+
 	public class PaginatedResultsBase
 	{
 		public int totalResults { get; set; }
 		public int startIndex { get; set; }
 		public int itemsPerPage { get; set; }
-	}
-
-	[Serializable]
-	public class SageInvoicesListHelper : PaginatedResultsBase
-	{
-		public List<SageInvoiceSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 }

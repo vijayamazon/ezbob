@@ -28,44 +28,73 @@
 			log.InfoFormat("Starting to update Sage marketplace. Id:{0} Name:{1}", databaseCustomerMarketPlace.Id, databaseCustomerMarketPlace.DisplayName);
 	        var sageSecurityInfo = (SerializeDataHelper.DeserializeType<SageSecurityInfo>(databaseCustomerMarketPlace.SecurityData));
 			string accessToken = sageSecurityInfo.AccessToken;
-			
+
 			log.Info("Getting sales invoices...");
 			var salesInvoices = SageConnector.GetSalesInvoices(
 				accessToken,
-				Helper.GetSageInvoiceDeltaPeriod(databaseCustomerMarketPlace));
+				Helper.GetSageSalesInvoiceDeltaPeriod(databaseCustomerMarketPlace));
+
+			log.Info("Getting incomes...");
+			var incomes = SageConnector.GetIncomes(
+				accessToken,
+				Helper.GetSageSalesInvoiceDeltaPeriod(databaseCustomerMarketPlace));
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
 
-			log.InfoFormat("Saving request, {0} sales invoices in DB...", salesInvoices.Count);
-			var mpRequest = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			log.InfoFormat("Saving request, {0} sales invoices, {1} incomes in DB...", salesInvoices.Count, incomes.Count);
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreSageRequestAndInvoicesData(databaseCustomerMarketPlace, salesInvoices, historyRecord));
-			
-			CalculateAndStoreAggregatedInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+				() => Helper.StoreSageData(databaseCustomerMarketPlace, salesInvoices, incomes, historyRecord));
+
+			CalculateAndStoreAggregatedSalesInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+			CalculateAndStoreAggregatedIncomeData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
         }
-		
-		private void CalculateAndStoreAggregatedInvoiceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-		                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord,
-		                                                    ElapsedTimeInfo elapsedTimeInfo)
+
+		private void CalculateAndStoreAggregatedSalesInvoiceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+															MP_CustomerMarketplaceUpdatingHistory historyRecord,
+															ElapsedTimeInfo elapsedTimeInfo)
 		{
 			log.Info("Fetching all distinct sales invoices");
-			var allInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			var allSalesInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
-				() => Helper.GetAllSageInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
-			
-			log.InfoFormat("Creating aggregated data for {0} sales invoices", allInvoices);
-			var invoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				() => Helper.GetAllSageSalesInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
+
+			log.InfoFormat("Creating aggregated data for {0} sales invoices", allSalesInvoices);
+			var salesInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateSalesInvoicesAggregationInfo(allInvoices, Helper.CurrencyConverter));
+				() => CreateSalesInvoicesAggregationInfo(allSalesInvoices, Helper.CurrencyConverter));
 
 			log.Info("Saving aggragated sales invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreAggregatedData,
-				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, invoicesAggregatedData, historyRecord));
+				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, salesInvoicesAggregatedData, historyRecord));
+		}
+
+		private void CalculateAndStoreAggregatedIncomeData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+															MP_CustomerMarketplaceUpdatingHistory historyRecord,
+															ElapsedTimeInfo elapsedTimeInfo)
+		{
+			log.Info("Fetching all distinct incomes");
+			var allIncomes = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.RetrieveDataFromDatabase,
+				() => Helper.GetAllSageIncomesData(DateTime.UtcNow, databaseCustomerMarketPlace));
+
+			log.InfoFormat("Creating aggregated data for {0} incomes", allIncomes);
+			var incomesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.AggregateData,
+				() => CreateIncomesAggregationInfo(allIncomes, Helper.CurrencyConverter));
+
+			log.Info("Saving aggragated incomes data");
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.StoreAggregatedData,
+				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, incomesAggregatedData, historyRecord));
 		}
 
 		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
@@ -97,6 +126,29 @@
 
 			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
 			var factory = new SageSalesInvoiceAggregatorFactory();
+			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
+		}
+
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateIncomesAggregationInfo(SageIncomesList incomes, ICurrencyConvertor currencyConverter)
+		{
+			var aggregateFunctionArray = new[]
+                {
+                    SageDatabaseFunctionType.NumOfIncomes,
+                    SageDatabaseFunctionType.TotalSumOfIncomes
+                };
+
+			var updated = incomes.SubmittedDate;
+
+			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
+			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SageIncome>(), incomes, nodesCreationFactory);
+
+			if (timeChain.HasNoData)
+			{
+				return null;
+			}
+
+			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var factory = new SageIncomeAggregatorFactory();
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
     }

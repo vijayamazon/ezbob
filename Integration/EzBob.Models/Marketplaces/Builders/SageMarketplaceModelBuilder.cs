@@ -59,12 +59,14 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		private SageModel BuildSage(MP_CustomerMarketPlace mp)
 		{
-			var dbInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(invoice => invoice.date);
-			
+			var dbSalesInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
+			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
+
 			var model = new SageModel
-				{
-					Invoices = SageSalesInvoicesConverter.GetSageInvoices(dbInvoices)
-				};
+			{
+				SalesInvoices = SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices),
+				Incomes = SageSalesInvoicesConverter.GetSageIncomes(dbIncomes)
+			};
 
 			return model;
 		}

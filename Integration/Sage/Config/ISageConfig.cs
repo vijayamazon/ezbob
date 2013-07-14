@@ -6,7 +6,8 @@
 		string OAuthSecret { get; }
 		string OAuthAuthorizationEndpoint { get; }
 		string OAuthTokenEndpoint { get; }
-		string InvoicesRequest { get; }
-		string InvoicesRequestMonthPart { get; }
+		string SalesInvoicesRequest { get; }
+		string RequestForDatesPart { get; }
+		string IncomesRequest { get; }
     }
 }

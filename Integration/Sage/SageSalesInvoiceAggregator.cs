@@ -37,15 +37,15 @@ namespace Sage
 			return salesInvoices.Sum(o => (double)o.total_net_amount);
 		}
 
-		protected override object InternalCalculateAggregatorValue(SageDatabaseFunctionType functionType, IEnumerable<SageSalesInvoice> invoices)
+		protected override object InternalCalculateAggregatorValue(SageDatabaseFunctionType functionType, IEnumerable<SageSalesInvoice> salesInvoices)
         {
             switch (functionType)
             {
                 case SageDatabaseFunctionType.NumOfOrders:
-					return GetSalesInvoicesCount(invoices);
+					return GetSalesInvoicesCount(salesInvoices);
 
 				case SageDatabaseFunctionType.TotalSumOfOrders:
-					return GetTotalSumOfSalesInvoices(invoices);
+					return GetTotalSumOfSalesInvoices(salesInvoices);
 
                 default:
                     throw new NotImplementedException();

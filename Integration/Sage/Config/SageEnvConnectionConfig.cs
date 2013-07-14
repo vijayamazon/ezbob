@@ -24,14 +24,19 @@ namespace Sage.Config
 			get { return GetValue<string>("OAuthTokenEndpoint"); }
         }
 
-        public string InvoicesRequest
+		public string SalesInvoicesRequest
         {
-            get { return GetValue<string>("InvoicesRequest"); }
+			get { return GetValue<string>("SalesInvoicesRequest"); }
         }
 
-        public string InvoicesRequestMonthPart
-        {
-            get { return GetValue<string>("InvoicesRequestMonthPart"); }
-        }
+		public string RequestForDatesPart
+		{
+			get { return GetValue<string>("RequestForDatesPart"); }
+		}
+
+		public string IncomesRequest
+		{
+			get { return GetValue<string>("IncomesRequest"); }
+		}
     }
 }

@@ -64,6 +64,7 @@
     <Compile Include="Config\SageConfigRoot.cs" />
     <Compile Include="Config\SageEnvConnectionConfig.cs" />
     <Compile Include="Config\ISageConfig.cs" />
+    <Compile Include="SageIncomeAggregator.cs" />
     <Compile Include="SageDeserializer.cs" />
     <Compile Include="SageConnector.cs" />
     <Compile Include="SageDatabaseFunctionFactory.cs" />

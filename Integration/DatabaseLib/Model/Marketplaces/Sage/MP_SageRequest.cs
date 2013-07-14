@@ -13,14 +13,16 @@
 	{
 		public MP_SageRequest()
 		{
-			Invoices = new HashedSet<MP_SageSalesInvoice>();
+			SalesInvoices = new HashedSet<MP_SageSalesInvoice>();
+			Incomes = new HashedSet<MP_SageIncome>();
 		}
 
 		public virtual int Id { get; set; }
 		public virtual MP_CustomerMarketPlace CustomerMarketPlace { get; set; }
 		public virtual DateTime Created { get; set; }
 
-		public virtual Iesi.Collections.Generic.ISet<MP_SageSalesInvoice> Invoices { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<MP_SageSalesInvoice> SalesInvoices { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<MP_SageIncome> Incomes { get; set; }
 
 		public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
 	}

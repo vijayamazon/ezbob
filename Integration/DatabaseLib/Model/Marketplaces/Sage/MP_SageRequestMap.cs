@@ -11,7 +11,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 			Id( x => x.Id );
 			Map( x => x.Created ).CustomType<UtcDateTimeType>().Not.Nullable();
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
-			HasMany(x => x.Invoices).KeyColumn("RequestId").Cascade.All();
+			HasMany(x => x.SalesInvoices).KeyColumn("RequestId").Cascade.All();
+			HasMany(x => x.Incomes).KeyColumn("RequestId").Cascade.All();
 			References( x => x.HistoryRecord )
 				.Column( "CustomerMarketPlaceUpdatingHistoryRecordId" )
 				.Unique()

@@ -78,6 +78,7 @@
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />
+    <Compile Include="DatabaseWrapper\Order\SageIncomesList.cs" />
     <Compile Include="DatabaseWrapper\Order\SageSalesInvoicesConverter.cs" />
     <Compile Include="DatabaseWrapper\Order\SageSalesInvoicesList.cs" />
     <Compile Include="DatabaseWrapper\Order\FreeAgentExpensesList.cs" />
@@ -117,6 +118,8 @@
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequestMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormula.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormulaMap.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageIncomeMap.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageIncome.cs" />
     <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoiceItem.cs" />
     <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoiceItemMap.cs" />
     <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoice.cs" />

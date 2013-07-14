@@ -14,21 +14,78 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
-		/*public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
+		public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
 		{
 			List<SageIncome> salesIncomes = ExecuteRequestAndGetDeserializedResponse<SageIncomesListHelper, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
 			var incomesList = new SageIncomesList(DateTime.UtcNow, salesIncomes);
 			return incomesList;
-		}*/
+		}
+
+		private static SageIncomesListHelper CreateDeserializedIncomes(string cleanResponse)
+		{
+			var deserializeIncomes = DeserializeIncomes(cleanResponse);
+			if (deserializeIncomes == null)
+			{
+				log.Error("Error deserializing sage incomes");
+				return null;
+			}
+			if (deserializeIncomes.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializeIncomes.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage incomes request. Incomes were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
+						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			return deserializeIncomes;
+		}
+
+		private static SageIncomesListHelper DeserializeIncomes(string cleanResponse)
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				return ((SageIncomesListHelper)js.Deserialize(cleanResponse, typeof(SageIncomesListHelper)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed deserializing sage incomes response:{0}. The error was:{1}", cleanResponse, e);
+				return null;
+			}
+		}
+
+		private static bool FillIncomesFromDeserializedData(SageIncomesListHelper deserializeIncomesResponse, List<SageIncome> incomes)
+		{
+			foreach (var serializedIncome in deserializeIncomesResponse.resources)
+			{
+				TryDeserializeIncome(incomes, serializedIncome);
+			}
+
+			return true;
+		}
+
+		private static void TryDeserializeIncome(List<SageIncome> incomes, SageIncomeSerialization serializedIncome)
+		{
+			try
+			{
+				incomes.Add(SageDesreializer.DeserializeIncome(serializedIncome));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating income for SageId:{0}. Income won't be handled!", serializedIncome.id);
+			}
+		}
 
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.InvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
 			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
 			return salesInvoicesList;
 		}
 
-		private static SageInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
+		private static SageSalesInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
 		{
 			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
 			if (deserializedSalesInvoices == null)
@@ -49,21 +106,21 @@
 			return deserializedSalesInvoices;
 		}
 
-		private static SageInvoicesListHelper DeserializeSalesInvoices(string invoicesResponse)
+		private static SageSalesInvoicesListHelper DeserializeSalesInvoices(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SageInvoicesListHelper)js.Deserialize(invoicesResponse, typeof(SageInvoicesListHelper)));
+				return ((SageSalesInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SageSalesInvoicesListHelper)));
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", invoicesResponse, e);
+				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", cleanResponse, e);
 				return null;
 			}
 		}
 
-		private static bool FillSalesInvoicesFromDeserializedData(SageInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
+		private static bool FillSalesInvoicesFromDeserializedData(SageSalesInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
 		{
 			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
 			{
@@ -73,7 +130,7 @@
 			return true;
 		}
 
-		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageInvoiceSerialization serializaedSalesInvoice)
+		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageSalesInvoiceSerialization serializaedSalesInvoice)
 		{
 			try
 			{
@@ -81,7 +138,7 @@
 			}
 			catch (Exception)
 			{
-				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.SageId);
+				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.id);
 			}
 		}
 		
@@ -90,9 +147,9 @@
 			where TFinalOutput : class, new()
 		{
 			string authorizationHeader = string.Format("Bearer {0}", accessToken);
-			string monthPart = !fromDate.HasValue ? string.Empty : string.Format("?{0}", string.Format(config.InvoicesRequestMonthPart, fromDate.Value.ToString("dd/MM/yyyy"), DateTime.UtcNow.ToString("dd/MM/yyyy")).Replace('-', '/'));
-			string timedInvoicesRequest = string.Format("{0}{1}", requestUrl, monthPart);
-			var request = new RestRequest(Method.GET) { Resource = timedInvoicesRequest };
+			string monthPart = !fromDate.HasValue ? string.Empty : string.Format("?{0}", string.Format(config.RequestForDatesPart, fromDate.Value.ToString("dd/MM/yyyy"), DateTime.UtcNow.ToString("dd/MM/yyyy")).Replace('-', '/'));
+			string fullRequest = string.Format("{0}{1}", requestUrl, monthPart);
+			var request = new RestRequest(Method.GET) { Resource = fullRequest };
 			request.AddHeader("Authorization", authorizationHeader);
 
 			var client = new RestClient();
@@ -108,7 +165,7 @@
 			var results = new TFinalOutput();
 			generateOutput(deserializedResponse, results);
 
-			string nextUrl = GetNextUrl(deserializedResponse, timedInvoicesRequest);
+			string nextUrl = GetNextUrl(deserializedResponse, fullRequest);
 
 			while (nextUrl != null)
 			{
@@ -125,7 +182,7 @@
 
 				generateOutput(deserializedResponse, results);
 
-				nextUrl = GetNextUrl(deserializedResponse, timedInvoicesRequest);
+				nextUrl = GetNextUrl(deserializedResponse, fullRequest);
 			}
 
 			return results;
