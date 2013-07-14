@@ -1,10 +1,10 @@
 namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 {
-	public class MP_SageInvoiceItem
+	public class MP_SageSalesInvoiceItem
 	{
 		public virtual int Id { get; set; }
 
-		public virtual MP_SageInvoice Invoice { get; set; }
+		public virtual MP_SageSalesInvoice Invoice { get; set; }
 		
 		public virtual int SageId { get; set; }
 		public virtual string description { get; set; }

@@ -60,14 +60,14 @@
 
 	#region class SageInvoiceComparer
 
-	public class SageInvoiceComparer : AOrderComparer<MP_SageInvoice>
+	public class SageInvoiceComparer : AOrderComparer<MP_SageSalesInvoice>
 	{
-		public override bool AreEqual(MP_SageInvoice a, MP_SageInvoice b)
+		public override bool AreEqual(MP_SageSalesInvoice a, MP_SageSalesInvoice b)
 		{
 			return a.SageId == b.SageId;
 		} // AreEqual
 
-		public override int HashCode(MP_SageInvoice a)
+		public override int HashCode(MP_SageSalesInvoice a)
 		{
 			return a.SageId.GetHashCode();
 		} // HashCode

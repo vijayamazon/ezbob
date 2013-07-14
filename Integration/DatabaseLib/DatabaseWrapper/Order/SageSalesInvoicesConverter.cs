@@ -6,7 +6,7 @@
 
 	public class SageSalesInvoicesConverter
 	{
-		public static IEnumerable<SageSalesInvoice> GetSageInvoices(IOrderedEnumerable<MP_SageInvoice> dbInvoices)
+		public static IEnumerable<SageSalesInvoice> GetSageInvoices(IOrderedEnumerable<MP_SageSalesInvoice> dbInvoices)
 		{
 			var invoices = new List<SageSalesInvoice>(dbInvoices.Select(o => new SageSalesInvoice
 				{
@@ -38,10 +38,10 @@
 			return invoices;
 		}
 
-		private static List<SageSalesInvoiceItem> GetSageInvoiceItems(IEnumerable<MP_SageInvoiceItem> items)
+		private static List<SageSalesInvoiceItem> GetSageInvoiceItems(IEnumerable<MP_SageSalesInvoiceItem> items)
 		{
 			var result = new List<SageSalesInvoiceItem>();
-			foreach (MP_SageInvoiceItem item in items)
+			foreach (MP_SageSalesInvoiceItem item in items)
 			{
 				result.Add(new SageSalesInvoiceItem
 				{

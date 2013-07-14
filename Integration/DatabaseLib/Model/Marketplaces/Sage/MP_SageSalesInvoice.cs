@@ -3,13 +3,13 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 	using System;
 	using Iesi.Collections.Generic;
 
-	public class MP_SageInvoice
+	public class MP_SageSalesInvoice
 	{
 		public virtual int Id { get; set; }
 
 		public virtual MP_SageRequest Request { get; set; }
 
-		public virtual ISet<MP_SageInvoiceItem> Items { get; set; }
+		public virtual ISet<MP_SageSalesInvoiceItem> Items { get; set; }
 		
 		public virtual int SageId { get; set; }
 		public virtual string invoice_number { get; set; }

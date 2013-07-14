@@ -227,7 +227,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			case "Sage":
 				{
-					var s = _session.Query<MP_SageInvoice>()
+					var s = _session.Query<MP_SageSalesInvoice>()
 						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.date != null)
 						.Select(oi => oi.date);

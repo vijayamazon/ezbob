@@ -14,6 +14,13 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
+		/*public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
+		{
+			List<SageIncome> salesIncomes = ExecuteRequestAndGetDeserializedResponse<SageIncomesListHelper, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
+			var incomesList = new SageIncomesList(DateTime.UtcNow, salesIncomes);
+			return incomesList;
+		}*/
+
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
 			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.InvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);

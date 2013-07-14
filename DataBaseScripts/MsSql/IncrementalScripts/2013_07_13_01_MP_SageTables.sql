@@ -1,9 +1,9 @@
-IF OBJECT_ID ('dbo.MP_SageInvoiceItem') IS NOT NULL
-	DROP TABLE dbo.MP_SageInvoiceItem
+IF OBJECT_ID ('dbo.MP_SageSalesInvoiceItem') IS NOT NULL
+	DROP TABLE dbo.MP_SageSalesInvoiceItem
 GO
 
-IF OBJECT_ID ('dbo.MP_SageInvoice') IS NOT NULL
-	DROP TABLE dbo.MP_SageInvoice
+IF OBJECT_ID ('dbo.MP_SageSalesInvoice') IS NOT NULL
+	DROP TABLE dbo.MP_SageSalesInvoice
 GO
 
 IF OBJECT_ID ('dbo.MP_SageRequest') IS NOT NULL
@@ -25,7 +25,7 @@ CREATE INDEX IX_MP_SageRequestCustomerMarketPlaceId
 	ON dbo.MP_SageRequest (CustomerMarketPlaceId)
 GO
 
-CREATE TABLE dbo.MP_SageInvoice
+CREATE TABLE dbo.MP_SageSalesInvoice
 	(
      Id INT IDENTITY NOT NULL
     ,RequestId INT NOT NULL
@@ -52,17 +52,17 @@ CREATE TABLE dbo.MP_SageInvoice
     ,terms_and_conditions NVARCHAR(250)
     ,lock_version INT
 	
-    ,CONSTRAINT PK_MP_SageInvoice PRIMARY KEY (Id)
-   	,CONSTRAINT FK_MP_SageInvoice_MP_SageRequest FOREIGN KEY (RequestId) REFERENCES dbo.MP_SageRequest (Id)
+    ,CONSTRAINT PK_MP_SageSalesInvoice PRIMARY KEY (Id)
+   	,CONSTRAINT FK_MP_SageSalesInvoice_MP_SageRequest FOREIGN KEY (RequestId) REFERENCES dbo.MP_SageRequest (Id)
 	)
 GO
 
-CREATE INDEX IX_MP_SageInvoiceRequestId
-	ON dbo.MP_SageInvoice (RequestId)
+CREATE INDEX IX_MP_SageSalesInvoiceRequestId
+	ON dbo.MP_SageSalesInvoice (RequestId)
 GO
 
 
-CREATE TABLE dbo.MP_SageInvoiceItem
+CREATE TABLE dbo.MP_SageSalesInvoiceItem
 	(
      Id INT IDENTITY NOT NULL
     ,InvoiceId INT NOT NULL
@@ -81,13 +81,13 @@ CREATE TABLE dbo.MP_SageInvoiceItem
     ,ServiceKey INT
     ,lock_version INT
 	
-    ,CONSTRAINT PK_MP_SageInvoiceItem PRIMARY KEY (Id)
-   	,CONSTRAINT FK_MP_SageInvoiceItem_MP_SageInvoice FOREIGN KEY (InvoiceId) REFERENCES dbo.MP_SageInvoice (Id)
+    ,CONSTRAINT PK_MP_SageSalesInvoiceItem PRIMARY KEY (Id)
+   	,CONSTRAINT FK_MP_SageSalesInvoiceItem_MP_SageInvoice FOREIGN KEY (InvoiceId) REFERENCES dbo.MP_SageSalesInvoice (Id)
 	)
 GO
 
-CREATE INDEX IX_MP_SageInvoiceItemInvoiceId
-	ON dbo.MP_SageInvoiceItem (InvoiceId)
+CREATE INDEX IX_MP_SageSalesInvoiceItemInvoiceId
+	ON dbo.MP_SageSalesInvoiceItem (InvoiceId)
 GO
 IF NOT EXISTS (SELECT 1 FROM MP_MarketplaceType WHERE MP_MarketplaceType.Name='Sage')
 	INSERT INTO MP_MarketplaceType VALUES ('Sage', '4966BB57-0146-4E3D-AA24-F092D90B7923', 'Sage', 1)

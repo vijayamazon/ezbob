@@ -917,7 +917,7 @@ namespace EZBob.DatabaseLib
 			salesInvoices.ForEach(
 				dataItem =>
 				{
-					var invoice = new MP_SageInvoice
+					var invoice = new MP_SageSalesInvoice
 					{
 						Request = mpRequest,
 						SageId = dataItem.SageId,
@@ -944,10 +944,10 @@ namespace EZBob.DatabaseLib
 						lock_version = dataItem.lock_version
 					};
 
-					invoice.Items = new HashedSet<MP_SageInvoiceItem>();
+					invoice.Items = new HashedSet<MP_SageSalesInvoiceItem>();
 					foreach (var item in dataItem.line_items)
 					{
-						var mpItem = new MP_SageInvoiceItem
+						var mpItem = new MP_SageSalesInvoiceItem
 							{
 								Invoice = invoice,
 								description = item.description,
@@ -2424,7 +2424,7 @@ namespace EZBob.DatabaseLib
 				return null;
 			}
 
-			MP_SageInvoice item = order.Invoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			MP_SageSalesInvoice item = order.Invoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 			DateTime latestExistingDate = item != null ? item.date : order.Created;
 			return latestExistingDate.AddMonths(-1);
 		} // GetSageInvoiceDeltaPeriod

@@ -117,10 +117,10 @@
     <Compile Include="Model\Marketplaces\FreeAgent\MP_FreeAgentRequestMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormula.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalAggregationFormulaMap.cs" />
-    <Compile Include="Model\Marketplaces\Sage\MP_SageInvoiceItem.cs" />
-    <Compile Include="Model\Marketplaces\Sage\MP_SageInvoiceItemMap.cs" />
-    <Compile Include="Model\Marketplaces\Sage\MP_SageInvoice.cs" />
-    <Compile Include="Model\Marketplaces\Sage\MP_SageInvoiceMap.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoiceItem.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoiceItemMap.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoice.cs" />
+    <Compile Include="Model\Marketplaces\Sage\MP_SageSalesInvoiceMap.cs" />
     <Compile Include="Model\Marketplaces\Sage\MP_SageRequest.cs" />
     <Compile Include="Model\Marketplaces\Sage\MP_SageRequestMap.cs" />
     <Compile Include="Model\Marketplaces\Terapeak\MP_TeraPeakCategory.cs" />

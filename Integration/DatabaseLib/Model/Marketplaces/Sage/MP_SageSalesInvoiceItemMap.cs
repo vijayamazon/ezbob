@@ -2,11 +2,11 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 {
 	using FluentNHibernate.Mapping;
 
-	public class MP_SageInvoiceItemMap : ClassMap<MP_SageInvoiceItem>
+	public class MP_SageSalesInvoiceItemMap : ClassMap<MP_SageSalesInvoiceItem>
 	{
-		public MP_SageInvoiceItemMap()
+		public MP_SageSalesInvoiceItemMap()
 		{
-			Table("MP_SageInvoiceItem");
+			Table("MP_SageSalesInvoiceItem");
 			Id(x => x.Id);
 			References(x => x.Invoice, "InvoiceId");
 
