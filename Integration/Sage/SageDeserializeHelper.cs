@@ -58,22 +58,11 @@ namespace Sage
 	}
 
 	[Serializable]
-	public class SageDiagnostic
-	{
-		public string severity { get; set; }
-		public string dataCode { get; set; }
-		public string message { get; set; }
-		public string source { get; set; }
-	}
-
-	[Serializable]
 	public class SageSalesInvoicesListHelper : PaginatedResultsBase
 	{
 		public List<SageSalesInvoiceSerialization> resources { get; set; }
 		public List<SageDiagnostic> diagnoses { get; set; }
 	}
-
-
 
 	[Serializable]
 	public class SageIncomeSerialization
@@ -103,7 +92,46 @@ namespace Sage
 		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 
+	[Serializable]
+	public class SagePurchaseInvoiceSerialization
+	{
+		public int id { get; set; }
+		public SageReferenceKey status { get; set; }
+		public string due_date { get; set; }
+		public string date { get; set; }
+		public string void_reason { get; set; }
+		public string outstanding_amount { get; set; }
+		public string total_net_amount { get; set; }
+		public string total_tax_amount { get; set; }
+		public int tax_scheme_period_id { get; set; }
+		public SageReferenceKey contact { get; set; }
+		public string contact_name { get; set; }
+		public string main_address { get; set; }
+		public string delivery_address { get; set; }
+		public bool delivery_address_same_as_main { get; set; }
+		public string reference { get; set; }
+		public string notes { get; set; }
+		public string terms_and_conditions { get; set; }
+		public int lock_version { get; set; }
 
+		public List<SageInvoiceItemSerialization> line_items { get; set; }
+	}
+
+	[Serializable]
+	public class SagePurchaseInvoicesListHelper : PaginatedResultsBase
+	{
+		public List<SagePurchaseInvoiceSerialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
+
+	[Serializable]
+	public class SageDiagnostic
+	{
+		public string severity { get; set; }
+		public string dataCode { get; set; }
+		public string message { get; set; }
+		public string source { get; set; }
+	}
 
 	public class PaginatedResultsBase
 	{

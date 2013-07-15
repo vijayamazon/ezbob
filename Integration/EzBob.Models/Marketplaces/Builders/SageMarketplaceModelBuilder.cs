@@ -25,8 +25,10 @@ namespace EzBob.Models.Marketplaces.Builders
 			var paymentAccountModel = new PaymentAccountsModel();
 			MP_AnalyisisFunctionValue earliestNumOfSalesInvoices = GetEarliestValueFor(mp, "NumOfOrders");
 			MP_AnalyisisFunctionValue earliestNumOfIncomes = GetEarliestValueFor(mp, "NumOfIncomes");
+			MP_AnalyisisFunctionValue earliestNumOfPurchaseInvoices = GetEarliestValueFor(mp, "NumOfPurchaseInvoices");
 			MP_AnalyisisFunctionValue earliestSumOfSalesInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
 			MP_AnalyisisFunctionValue earliestSumOfIncomes = GetEarliestValueFor(mp, "TotalSumOfIncomes");
+			MP_AnalyisisFunctionValue earliestSumOfPurchaseInvoices = GetEarliestValueFor(mp, "TotalSumOfPurchaseInvoices");
 
 			paymentAccountModel.TransactionsNumber = 0;
 			if (earliestNumOfSalesInvoices != null && earliestNumOfSalesInvoices.ValueInt.HasValue)
@@ -36,6 +38,10 @@ namespace EzBob.Models.Marketplaces.Builders
 			if (earliestNumOfIncomes != null && earliestNumOfIncomes.ValueInt.HasValue)
 			{
 				paymentAccountModel.TransactionsNumber += earliestNumOfIncomes.ValueInt.Value;
+			}
+			if (earliestNumOfPurchaseInvoices != null && earliestNumOfPurchaseInvoices.ValueInt.HasValue)
+			{
+				paymentAccountModel.TransactionsNumber += earliestNumOfPurchaseInvoices.ValueInt.Value;
 			}
 
 			paymentAccountModel.TotalNetInPayments = 0;
@@ -49,6 +55,10 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
 
 			paymentAccountModel.TotalNetOutPayments = 0;
+			if (earliestSumOfPurchaseInvoices != null && earliestSumOfPurchaseInvoices.ValueFloat.HasValue)
+			{
+				paymentAccountModel.TotalNetOutPayments += earliestSumOfPurchaseInvoices.ValueFloat.Value;
+			}
 				
 	        return paymentAccountModel;
         }
@@ -62,11 +72,13 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			var dbSalesInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
 			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
-
+			var dbPurchaseInvoices = mp.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
+			
 			var model = new SageModel
 			{
 				SalesInvoices = SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices),
-				Incomes = SageSalesInvoicesConverter.GetSageIncomes(dbIncomes)
+				Incomes = SageIncomesConverter.GetSageIncomes(dbIncomes),
+				PurchaseInvoices = SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices)
 			};
 
 			return model;

@@ -14,10 +14,74 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
+		public static SagePurchaseInvoicesList GetPurchaseInvoices(string accessToken, DateTime? fromDate)
+		{
+			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoicesListHelper, List<SagePurchaseInvoice>>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, FillPurchaseInvoicesFromDeserializedData);
+			var purchaseInvoicesList = new SagePurchaseInvoicesList(DateTime.UtcNow, purchaseInvoices);
+			return purchaseInvoicesList;
+		}
+
+		private static SagePurchaseInvoicesListHelper CreateDeserializedPurchaseInvoices(string cleanResponse)
+		{
+			var deserializedPurchaseInvoices = DeserializePurchaseInvoices(cleanResponse);
+			if (deserializedPurchaseInvoices == null)
+			{
+				log.Error("Error deserializing sage purchase invoices");
+				return null;
+			}
+			if (deserializedPurchaseInvoices.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializedPurchaseInvoices.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage purchase invoices request. Purchase invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
+						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			return deserializedPurchaseInvoices;
+		}
+
+		private static SagePurchaseInvoicesListHelper DeserializePurchaseInvoices(string cleanResponse)
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				return ((SagePurchaseInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SagePurchaseInvoicesListHelper)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed deserializing sage purchase invoices response:{0}. The error was:{1}", cleanResponse, e);
+				return null;
+			}
+		}
+
+		private static bool FillPurchaseInvoicesFromDeserializedData(SagePurchaseInvoicesListHelper deserializePurchaseInvoicesResponse, List<SagePurchaseInvoice> purchaseInvoices)
+		{
+			foreach (var serializedPurchaseInvoice in deserializePurchaseInvoicesResponse.resources)
+			{
+				TryDeserializePurchaseInvoice(purchaseInvoices, serializedPurchaseInvoice);
+			}
+
+			return true;
+		}
+
+		private static void TryDeserializePurchaseInvoice(List<SagePurchaseInvoice> purchaseInvoices, SagePurchaseInvoiceSerialization serializaedPurchaseInvoice)
+		{
+			try
+			{
+				purchaseInvoices.Add(SageDesreializer.DeserializePurchaseInvoice(serializaedPurchaseInvoice));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating purchase invoice for SageId:{0}. Purchase invoice won't be handled!", serializaedPurchaseInvoice.id);
+			}
+		}
+
 		public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
 		{
-			List<SageIncome> salesIncomes = ExecuteRequestAndGetDeserializedResponse<SageIncomesListHelper, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
-			var incomesList = new SageIncomesList(DateTime.UtcNow, salesIncomes);
+			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomesListHelper, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
+			var incomesList = new SageIncomesList(DateTime.UtcNow, incomes);
 			return incomesList;
 		}
 

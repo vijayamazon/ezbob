@@ -9,5 +9,6 @@
 		string SalesInvoicesRequest { get; }
 		string RequestForDatesPart { get; }
 		string IncomesRequest { get; }
+		string PurchaseInvoicesRequest { get; }
     }
 }

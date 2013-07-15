@@ -38,5 +38,10 @@ namespace Sage.Config
 		{
 			get { return GetValue<string>("IncomesRequest"); }
 		}
+
+		public string PurchaseInvoicesRequest
+		{
+			get { return GetValue<string>("PurchaseInvoicesRequest"); }
+		}
     }
 }

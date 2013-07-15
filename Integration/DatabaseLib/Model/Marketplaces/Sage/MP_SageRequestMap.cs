@@ -13,6 +13,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
 			HasMany(x => x.SalesInvoices).KeyColumn("RequestId").Cascade.All();
 			HasMany(x => x.Incomes).KeyColumn("RequestId").Cascade.All();
+			HasMany(x => x.PurchaseInvoices).KeyColumn("RequestId").Cascade.All();
 			References( x => x.HistoryRecord )
 				.Column( "CustomerMarketPlaceUpdatingHistoryRecordId" )
 				.Unique()

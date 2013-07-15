@@ -92,6 +92,23 @@
 
 	#endregion class SageIncomeComparer
 
+	#region class SagePurchaseInvoiceComparer
+
+	public class SagePurchaseInvoiceComparer : AOrderComparer<MP_SagePurchaseInvoice>
+	{
+		public override bool AreEqual(MP_SagePurchaseInvoice a, MP_SagePurchaseInvoice b)
+		{
+			return a.SageId == b.SageId;
+		} // AreEqual
+
+		public override int HashCode(MP_SagePurchaseInvoice a)
+		{
+			return a.SageId.GetHashCode();
+		} // HashCode
+	} // class SagePurchaseInvoiceComparer
+
+	#endregion class SagePurchaseInvoiceComparer
+
 	#region class FreeAgentExpenseComparer
 
 	public class FreeAgentExpenseComparer : AOrderComparer<MP_FreeAgentExpense> {
