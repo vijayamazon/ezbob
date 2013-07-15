@@ -11,9 +11,7 @@ using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
-using FluentNHibernate.Conventions;
 using Iesi.Collections.Generic;
-using MailApi;
 using NHibernate;
 using Scorto.Web;
 using ZohoCRM;
@@ -32,7 +30,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ISession _session;
         private readonly CashRequestBuilder _crBuilder;
         private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
-        private readonly IMail _mail;
 
         public CustomerDetailsController(
                                             IEzbobWorkplaceContext context, 
@@ -40,7 +37,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                             IZohoFacade crm, 
                                             IAppCreator creator, 
                                             ISession session,
-                                            CashRequestBuilder crBuilder, IMail mail)
+                                            CashRequestBuilder crBuilder)
         {
             _context = context;
             _personalInfoHistoryRepository = personalInfoHistoryRepository;
@@ -48,7 +45,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _creator = creator;
             _session = session;
             _crBuilder = crBuilder;
-            _mail = mail;
         }
         //---------------------------------------------------------------------------------------------------------------------------
         [Transactional]
@@ -85,14 +81,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             customer.IsSuccessfullyRegistered = true;
 
-            var cashRequest = _crBuilder.CreateCashRequest(customer);
+            _crBuilder.CreateCashRequest(customer);
 
             customer.WizardStep = WizardStepType.AllStep;
 
             _session.Flush();
             _creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
             _creator.Evaluate(_context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
-            _mail.SendMessageFinishWizard(customer.Name, customer.PersonalInfo.Fullname);
+
             _concentAgreementHelper.Save(customer, DateTime.UtcNow);
 
             try
