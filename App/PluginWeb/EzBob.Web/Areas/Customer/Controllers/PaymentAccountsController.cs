@@ -79,6 +79,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
             catch (PayPalException e)
             {
+                Log.Warn(e);
                 return View("Error", (object)string.Join("<br />", e.ErrorDetails.Select(x => x.message).ToList()));
             }
             catch (MarketPlaceAddedByThisCustomerException)

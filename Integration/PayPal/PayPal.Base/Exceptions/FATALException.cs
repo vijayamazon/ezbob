@@ -69,7 +69,15 @@ namespace PayPal.Platform.SDK
 			}
 		}
 
-		#endregion
+	    public override string ToString()
+	    {
+            return string.Format("FATALExceptionMessage: {1}, FATALExceptionLongMessage: {2}{3}{0}", base.ToString(), FATALExceptionMessage, FATALExceptionLongMessage, Environment.NewLine);
+	    }
+
+	    #endregion
+
+
+
 	}
 
 }

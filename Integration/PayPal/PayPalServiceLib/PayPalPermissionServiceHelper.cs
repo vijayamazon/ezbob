@@ -5,6 +5,7 @@ using System.Linq;
 using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 using EzBob.PayPalDbLib.Models;
 using EzBob.PayPalServiceLib.Common;
+using PayPal.Platform.SDK;
 using PayPal.Services.Private.Permissions;
 using log4net;
 using Permissions = PayPal.Platform.SDK.Permissions;
@@ -46,7 +47,7 @@ namespace EzBob.PayPalServiceLib
 
 			if ( per.isSuccess.ToUpper() == "FAILURE" )
 			{
-				throw new Exception( "Get access token failed" );
+                throw new PayPalException(new []{ new FaultDetailFaultMessageError{message = "Get access token failed"}});
 			}
 
 			return new PayPalRermissionsGranted
