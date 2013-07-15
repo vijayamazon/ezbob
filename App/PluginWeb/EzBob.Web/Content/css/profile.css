@@ -922,6 +922,6 @@ select.selectheight { height: 30px; }
 
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
 
-.editYourInfoForm .form_field_address_lookup:visible{
+.editYourInfoForm .form_field_address_lookup{
     margin-left: 10px;
 }
