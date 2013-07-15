@@ -227,11 +227,54 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 			case "Sage":
 				{
-					var s = _session.Query<MP_SageSalesInvoice>()
+					var salesInvoices = _session.Query<MP_SageSalesInvoice>()
 						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
 						.Where(oi => oi.date != null)
 						.Select(oi => oi.date);
-					return !s.Any() ? (DateTime?)null : s.Min();
+					var purchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
+						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.date != null)
+						.Select(oi => oi.date);
+					var incomes = _session.Query<MP_SageIncome>()
+						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.date != null)
+						.Select(oi => oi.date);
+					var expenditures = _session.Query<MP_SageExpenditure>()
+						.Where(oi => oi.Request.CustomerMarketPlace.Id == marketplaceId)
+						.Where(oi => oi.date != null)
+						.Select(oi => oi.date);
+
+					DateTime? result = null;
+					if (salesInvoices.Any())
+					{
+						result = salesInvoices.Min();
+					}
+					if (purchaseInvoices.Any())
+					{
+						DateTime tmp = purchaseInvoices.Min();
+						if (result == null || result > tmp)
+						{
+							result = tmp;
+						}
+					}
+					if (incomes.Any())
+					{
+						DateTime tmp = incomes.Min();
+						if (result == null || result > tmp)
+						{
+							result = tmp;
+						}
+					}
+					if (expenditures.Any())
+					{
+						DateTime tmp = expenditures.Min();
+						if (result == null || result > tmp)
+						{
+							result = tmp;
+						}
+					}
+
+					return result;
 				}
 
 
