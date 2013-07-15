@@ -54,7 +54,7 @@ namespace EzBob.PayPal
 		private void UpdateAccountInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			var securityInfo = RetrieveCustomerSecurityInfo<PayPalSecurityData>(databaseCustomerMarketPlace);
-			PayPalPersonalData personalData = GetAccountInfo(securityInfo.RermissionsGranted);
+			PayPalPersonalData personalData = GetAccountInfo(securityInfo.PermissionsGranted);
 			SaveOrUpdateAcctountInfo(databaseCustomerMarketPlace, personalData);
 		}
 

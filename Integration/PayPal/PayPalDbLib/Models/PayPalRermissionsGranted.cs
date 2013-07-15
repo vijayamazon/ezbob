@@ -5,7 +5,7 @@ namespace EzBob.PayPalDbLib.Models
 {
 	public class PayPalSecurityData : IMarketPlaceSecurityInfo
 	{
-		public PayPalRermissionsGranted RermissionsGranted { get; set; }
+		public PayPalRermissionsGranted PermissionsGranted { get; set; }
 		/// <summary>
 		/// user e-Mail
 		/// </summary>

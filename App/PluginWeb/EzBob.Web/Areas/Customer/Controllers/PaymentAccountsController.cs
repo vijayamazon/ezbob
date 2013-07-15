@@ -70,11 +70,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             
             var customer = _context.Customer;
 
-			PayPalRermissionsGranted rermissionsGranted = PayPalServiceHelper.GetAccessToken( _payPalConfig, request_token, verification_code );
+			PayPalRermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken( _payPalConfig, request_token, verification_code );
             PayPalPersonalData personalData;
             try
             {
-				personalData = PayPalServiceHelper.GetAccountInfo( _payPalConfig, rermissionsGranted );
+				personalData = PayPalServiceHelper.GetAccountInfo( _payPalConfig, permissionsGranted );
                 _mpChecker.Check(paypal.InternalId, customer, personalData.Email);
             }
             catch (PayPalException e)
@@ -93,7 +93,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
 			var securityData = new PayPalSecurityData
 				{
-					RermissionsGranted = rermissionsGranted,
+					PermissionsGranted = permissionsGranted,
 					UserId = personalData.Email
 				};
 
@@ -106,7 +106,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _crm.ConvertLead(customer);
             _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
-            return View(rermissionsGranted);
+            return View(permissionsGranted);
         }
 
 		[Transactional]
@@ -117,7 +117,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var data = customer.CustomerMarketPlaces.First(m => m.Marketplace.InternalId == paypal.InternalId).SecurityData;
 			var securityData = SerializeDataHelper.DeserializeType<PayPalSecurityData>( data );
-			var perm = securityData.RermissionsGranted;
+			var perm = securityData.PermissionsGranted;
 			throw new NotImplementedException();
             //var response = _paypalFacade.GetBasicPersonal(perm);
 

@@ -61,7 +61,7 @@ namespace EzBob.PayPal
 
 			var secData = new PayPalSecurityData
 				{
-					RermissionsGranted = payPalRermissionsGranted,
+					PermissionsGranted = payPalRermissionsGranted,
 					UserId = "cvitaly@ukr.net"
 				};
 

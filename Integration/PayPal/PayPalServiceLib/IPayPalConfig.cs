@@ -17,7 +17,7 @@ namespace EzBob.PayPalServiceLib
 		Certificate
 	}
 
-	public interface IPayPalTransactionSearchSerrings
+	public interface IPayPalTransactionSearchSettings
 	{
 		int MonthsBack { get; }
 		int MaxMonthsPerRequest { get; }
@@ -37,7 +37,7 @@ namespace EzBob.PayPalServiceLib
 		bool TrustAll { get; }	
     }
 
-	public interface IPayPalMarketplaceSettings : IPayPalTransactionSearchSerrings
+	public interface IPayPalMarketplaceSettings : IPayPalTransactionSearchSettings
 	{
 		ErrorRetryingInfo ErrorRetryingInfo { get; }
 		int OpenTimeOutInMinutes { get; }

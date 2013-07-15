@@ -20,11 +20,6 @@ namespace EzBob.PayPalServiceLib
 		{
 			var payPalServiceHelper = new PayPalServiceHelper(config);
 			var info = payPalServiceHelper.GetAccountInfoInternal(securityData);
-			// TODO: добавить AccountStatus и AccountType в соотв. таблицу, когда понадобятся эти поля
-			//var statusInfo = payPalServiceHelper.GetVerifiedStatus( info.FirstName, info.LastName, info.Email );
-			//info.AccountStatus = statusInfo.AccountStatus;
-			//info.AccountType = statusInfo.AccountType;
-
 			return info;
 		}
 

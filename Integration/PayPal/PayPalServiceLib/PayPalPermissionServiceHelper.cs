@@ -45,7 +45,7 @@ namespace EzBob.PayPalServiceLib
 
 			var response = per.getAccessToken( getAccessTokenRequest );
 
-			if ( per.isSuccess.ToUpper() == "FAILURE" )
+            if ( per.isSuccess.ToUpper() == "FAILURE" )
 			{
                 throw new PayPalException(new []{ new FaultDetailFaultMessageError{message = "Get access token failed"}});
 			}
