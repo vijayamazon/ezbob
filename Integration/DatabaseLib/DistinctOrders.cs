@@ -58,9 +58,9 @@
 
 	#endregion class FreeAgentInvoiceComparer
 
-	#region class SageInvoiceComparer
+	#region class SageSalesInvoiceComparer
 
-	public class SageInvoiceComparer : AOrderComparer<MP_SageSalesInvoice>
+	public class SageSalesInvoiceComparer : AOrderComparer<MP_SageSalesInvoice>
 	{
 		public override bool AreEqual(MP_SageSalesInvoice a, MP_SageSalesInvoice b)
 		{
@@ -71,9 +71,26 @@
 		{
 			return a.SageId.GetHashCode();
 		} // HashCode
-	} // class SageInvoiceComparer
+	} // class SageSalesInvoiceComparer
 
-	#endregion class SageInvoiceComparer
+	#endregion class SageSalesInvoiceComparer
+
+	#region class SagePurchaseInvoiceComparer
+
+	public class SagePurchaseInvoiceComparer : AOrderComparer<MP_SagePurchaseInvoice>
+	{
+		public override bool AreEqual(MP_SagePurchaseInvoice a, MP_SagePurchaseInvoice b)
+		{
+			return a.SageId == b.SageId;
+		} // AreEqual
+
+		public override int HashCode(MP_SagePurchaseInvoice a)
+		{
+			return a.SageId.GetHashCode();
+		} // HashCode
+	} // class SagePurchaseInvoiceComparer
+
+	#endregion class SagePurchaseInvoiceComparer
 
 	#region class SageIncomeComparer
 
@@ -92,22 +109,22 @@
 
 	#endregion class SageIncomeComparer
 
-	#region class SagePurchaseInvoiceComparer
+	#region class SageExpenditureComparer
 
-	public class SagePurchaseInvoiceComparer : AOrderComparer<MP_SagePurchaseInvoice>
+	public class SageExpenditureComparer : AOrderComparer<MP_SageExpenditure>
 	{
-		public override bool AreEqual(MP_SagePurchaseInvoice a, MP_SagePurchaseInvoice b)
+		public override bool AreEqual(MP_SageExpenditure a, MP_SageExpenditure b)
 		{
 			return a.SageId == b.SageId;
 		} // AreEqual
 
-		public override int HashCode(MP_SagePurchaseInvoice a)
+		public override int HashCode(MP_SageExpenditure a)
 		{
 			return a.SageId.GetHashCode();
 		} // HashCode
-	} // class SagePurchaseInvoiceComparer
+	} // class SageExpenditureComparer
 
-	#endregion class SagePurchaseInvoiceComparer
+	#endregion class SageExpenditureComparer
 
 	#region class FreeAgentExpenseComparer
 

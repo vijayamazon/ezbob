@@ -7,16 +7,22 @@
             <a href="#sagesalesinvoicedetailstab" data-toggle="tab">Sales Invoice Details</a>
         </li>
         <li>
+            <a href="#sagepurchaseinvoicestab" data-toggle="tab">Purchase Invoices</a>
+        </li>
+        <li>
+            <a href="#sagepurchaseinvoicedetailstab" data-toggle="tab">Purchase Invoice Details</a>
+        </li>
+        <li>
             <a href="#sageincomestab" data-toggle="tab">Incomes</a>
         </li>
         <li>
             <a href="#sageincomedetailstab" data-toggle="tab">Income Details</a>
         </li>
         <li>
-            <a href="#sagepurchaseinvoicestab" data-toggle="tab">Purchase Invoices</a>
+            <a href="#sageexpenditurestab" data-toggle="tab">Expenditures</a>
         </li>
         <li>
-            <a href="#sagepurchaseinvoicedetailstab" data-toggle="tab">Purchase Invoice Details</a>
+            <a href="#sageexpendituredetailstab" data-toggle="tab">Expenditure Details</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -85,66 +91,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane" id="sageincomestab">
-            <table class="table table-bordered table-striped blue-header centered">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>1M</th>
-                        <th>3M</th>
-                        <th>6M</th>
-                        <th>12M</th>
-                        <th>15M</th>
-                        <th>18M</th>
-                        <th>24M</th>
-                        <th>24M+</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Number of incomes</td>
-                        <td><%-ai.NumofIncomes1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes1M) : "-"%></td>
-                        <td><%-ai.NumofIncomes3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes3M) : "-"%></td>
-                        <td><%-ai.NumofIncomes6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes6M) : "-"%></td>
-                        <td><%-ai.NumofIncomes12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes12M) : "-"%></td>
-                        <td><%-ai.NumofIncomes15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes15M) : "-"%></td>
-                        <td><%-ai.NumofIncomes18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes18M) : "-"%></td>
-                        <td><%-ai.NumofIncomes24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes24M) : "-"%></td>
-                        <td><%-ai.NumofIncomesLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomesLifetime) : "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Total incomes</td>
-                        <td><%-ai.TotalSumofIncomes1M!=undefined ? GBPValues(ai.TotalSumofIncomes1M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes3M!=undefined ? GBPValues(ai.TotalSumofIncomes3M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes6M!=undefined ? GBPValues(ai.TotalSumofIncomes6M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes12M!=undefined ? GBPValues(ai.TotalSumofIncomes12M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes15M!=undefined ? GBPValues(ai.TotalSumofIncomes15M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes18M!=undefined ? GBPValues(ai.TotalSumofIncomes18M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomes24M!=undefined ? GBPValues(ai.TotalSumofIncomes24M, true) : "-"%></td>
-                        <td><%-ai.TotalSumofIncomesLifetime!=undefined ? GBPValues(ai.TotalSumofIncomesLifetime, true) : "-"%></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="sageincomedetailstab">
-            <table class="table table-bordered table-striped blue-header centered">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%_.each(m.Sage.Incomes, function(income, i) {%>
-                    <tr>
-                        <td><%-income.date!=undefined ? EzBob.formatDateTime(income.date) : "-"%></td>
-                        <td><%-income.amount!=undefined ? GBPValues(income.amount, true) : "-"%></td>
-                    </tr>
-                    <%});%>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane active" id="sagepurchaseinvoicestab">
+        <div class="tab-pane" id="sagepurchaseinvoicestab">
             <table class="table table-bordered table-striped blue-header centered">
                 <thead>
                     <tr>
@@ -204,6 +151,124 @@
                         <td><%-purchaseInvoice.total_net_amount!=undefined ? GBPValues(purchaseInvoice.total_net_amount, true) : "-"%></td>
                         <td><%-purchaseInvoice.outstanding_amount!=undefined ? GBPValues(purchaseInvoice.outstanding_amount, true) : "-"%></td>
                         <td><%-purchaseInvoice.status!=undefined ? purchaseInvoice.status : "-"%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="sageincomestab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of incomes</td>
+                        <td><%-ai.NumofIncomes1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes1M) : "-"%></td>
+                        <td><%-ai.NumofIncomes3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes3M) : "-"%></td>
+                        <td><%-ai.NumofIncomes6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes6M) : "-"%></td>
+                        <td><%-ai.NumofIncomes12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes12M) : "-"%></td>
+                        <td><%-ai.NumofIncomes15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes15M) : "-"%></td>
+                        <td><%-ai.NumofIncomes18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes18M) : "-"%></td>
+                        <td><%-ai.NumofIncomes24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomes24M) : "-"%></td>
+                        <td><%-ai.NumofIncomesLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofIncomesLifetime) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Total incomes</td>
+                        <td><%-ai.TotalSumofIncomes1M!=undefined ? GBPValues(ai.TotalSumofIncomes1M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes3M!=undefined ? GBPValues(ai.TotalSumofIncomes3M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes6M!=undefined ? GBPValues(ai.TotalSumofIncomes6M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes12M!=undefined ? GBPValues(ai.TotalSumofIncomes12M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes15M!=undefined ? GBPValues(ai.TotalSumofIncomes15M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes18M!=undefined ? GBPValues(ai.TotalSumofIncomes18M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomes24M!=undefined ? GBPValues(ai.TotalSumofIncomes24M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofIncomesLifetime!=undefined ? GBPValues(ai.TotalSumofIncomesLifetime, true) : "-"%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="sageincomedetailstab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(m.Sage.Incomes, function(income, i) {%>
+                    <tr>
+                        <td><%-income.date!=undefined ? EzBob.formatDateTime(income.date) : "-"%></td>
+                        <td><%-income.amount!=undefined ? GBPValues(income.amount, true) : "-"%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="sageexpenditurestab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>1M</th>
+                        <th>3M</th>
+                        <th>6M</th>
+                        <th>12M</th>
+                        <th>15M</th>
+                        <th>18M</th>
+                        <th>24M</th>
+                        <th>24M+</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number of expenditures</td>
+                        <td><%-ai.NumofExpenditures1M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures1M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures3M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures3M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures6M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures6M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures12M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures12M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures15M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures15M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures18M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures18M) : "-"%></td>
+                        <td><%-ai.NumofExpenditures24M!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpenditures24M) : "-"%></td>
+                        <td><%-ai.NumofExpendituresLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumofExpendituresLifetime) : "-"%></td>
+                    </tr>
+                    <tr>
+                        <td>Total expenditures</td>
+                        <td><%-ai.TotalSumofExpenditures1M!=undefined ? GBPValues(ai.TotalSumofExpenditures1M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures3M!=undefined ? GBPValues(ai.TotalSumofExpenditures3M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures6M!=undefined ? GBPValues(ai.TotalSumofExpenditures6M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures12M!=undefined ? GBPValues(ai.TotalSumofExpenditures12M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures15M!=undefined ? GBPValues(ai.TotalSumofExpenditures15M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures18M!=undefined ? GBPValues(ai.TotalSumofExpenditures18M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpenditures24M!=undefined ? GBPValues(ai.TotalSumofExpenditures24M, true) : "-"%></td>
+                        <td><%-ai.TotalSumofExpendituresLifetime!=undefined ? GBPValues(ai.TotalSumofExpendituresLifetime, true) : "-"%></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="sageexpendituredetailstab">
+            <table class="table table-bordered table-striped blue-header centered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(m.Sage.Expenditures, function(expenditure, i) {%>
+                    <tr>
+                        <td><%-expenditure.date!=undefined ? EzBob.formatDateTime(expenditure.date) : "-"%></td>
+                        <td><%-expenditure.amount!=undefined ? GBPValues(expenditure.amount, true) : "-"%></td>
                     </tr>
                     <%});%>
                 </tbody>

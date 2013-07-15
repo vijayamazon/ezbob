@@ -44,17 +44,23 @@
 				accessToken,
 				Helper.GetSageDeltaPeriod(databaseCustomerMarketPlace));
 
+			log.Info("Getting expenditures...");
+			var expenditures = SageConnector.GetExpenditures(
+				accessToken,
+				Helper.GetSageDeltaPeriod(databaseCustomerMarketPlace));
+
             var elapsedTimeInfo = new ElapsedTimeInfo();
 
-			log.InfoFormat("Saving request, {0} sales invoices, {1} incomes in DB...", salesInvoices.Count, incomes.Count);
+			log.InfoFormat("Saving request, {0} sales invoices, {1} purchase invoices, {2} incomes, {3} expenditures in DB...", salesInvoices.Count, purchaseInvoices.Count, incomes.Count, expenditures);
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreSageData(databaseCustomerMarketPlace, salesInvoices, incomes, purchaseInvoices, historyRecord));
+				() => Helper.StoreSageData(databaseCustomerMarketPlace, salesInvoices, purchaseInvoices, incomes, expenditures, historyRecord));
 
 			CalculateAndStoreAggregatedSalesInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
-			CalculateAndStoreAggregatedIncomeData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedPurchaseInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+			CalculateAndStoreAggregatedIncomeData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
+			CalculateAndStoreAggregatedExpenditureData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
         }
 
 		private void CalculateAndStoreAggregatedSalesInvoiceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -80,6 +86,29 @@
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, salesInvoicesAggregatedData, historyRecord));
 		}
 
+		private void CalculateAndStoreAggregatedPurchaseInvoiceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+															MP_CustomerMarketplaceUpdatingHistory historyRecord,
+															ElapsedTimeInfo elapsedTimeInfo)
+		{
+			log.Info("Fetching all distinct purchase invoices");
+			var allPurchaseInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.RetrieveDataFromDatabase,
+				() => Helper.GetAllSagePurchaseInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
+
+			log.InfoFormat("Creating aggregated data for {0} purchase invoices", allPurchaseInvoices);
+			var purchaseInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.AggregateData,
+				() => CreatePurchaseInvoicesAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter));
+
+			log.Info("Saving aggragated purchase invoices data");
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.StoreAggregatedData,
+				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, purchaseInvoicesAggregatedData, historyRecord));
+		}
+
 		private void CalculateAndStoreAggregatedIncomeData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 															MP_CustomerMarketplaceUpdatingHistory historyRecord,
 															ElapsedTimeInfo elapsedTimeInfo)
@@ -103,27 +132,27 @@
 				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, incomesAggregatedData, historyRecord));
 		}
 
-		private void CalculateAndStoreAggregatedPurchaseInvoiceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
+		private void CalculateAndStoreAggregatedExpenditureData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
 															MP_CustomerMarketplaceUpdatingHistory historyRecord,
 															ElapsedTimeInfo elapsedTimeInfo)
 		{
-			log.Info("Fetching all distinct purchase invoices");
-			var allPurchaseInvoices = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			log.Info("Fetching all distinct expenditure");
+			var allExpenditures = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
-				() => Helper.GetAllSagePurchaseInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
+				() => Helper.GetAllSageExpendituresData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
-			log.InfoFormat("Creating aggregated data for {0} purchase invoices", allPurchaseInvoices);
-			var purchaseInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			log.InfoFormat("Creating aggregated data for {0} expenditures", allExpenditures);
+			var expendituresAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreatePurchaseInvoicesAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter));
+				() => CreateExpendituresAggregationInfo(allExpenditures, Helper.CurrencyConverter));
 
-			log.Info("Saving aggragated purchase invoices data");
+			log.Info("Saving aggragated expenditures data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.StoreAggregatedData,
-				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, purchaseInvoicesAggregatedData, historyRecord));
+				() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, expendituresAggregatedData, historyRecord));
 		}
 
 		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
@@ -158,6 +187,29 @@
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
 
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreatePurchaseInvoicesAggregationInfo(SagePurchaseInvoicesList purchaseInvoices, ICurrencyConvertor currencyConverter)
+		{
+			var aggregateFunctionArray = new[]
+                {
+                    SageDatabaseFunctionType.NumOfPurchaseInvoices,
+                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices
+                };
+
+			var updated = purchaseInvoices.SubmittedDate;
+
+			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
+			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SagePurchaseInvoice>(), purchaseInvoices, nodesCreationFactory);
+
+			if (timeChain.HasNoData)
+			{
+				return null;
+			}
+
+			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var factory = new SagePurchaseInvoiceAggregatorFactory();
+			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
+		}
+
 		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateIncomesAggregationInfo(SageIncomesList incomes, ICurrencyConvertor currencyConverter)
 		{
 			var aggregateFunctionArray = new[]
@@ -181,18 +233,18 @@
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
 
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreatePurchaseInvoicesAggregationInfo(SagePurchaseInvoicesList purchaseInvoices, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateExpendituresAggregationInfo(SageExpendituresList expenditures, ICurrencyConvertor currencyConverter)
 		{
 			var aggregateFunctionArray = new[]
                 {
-                    SageDatabaseFunctionType.NumOfPurchaseInvoices,
-                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices
+                    SageDatabaseFunctionType.NumOfExpenditures,
+                    SageDatabaseFunctionType.TotalSumOfExpenditures
                 };
 
-			var updated = purchaseInvoices.SubmittedDate;
+			var updated = expenditures.SubmittedDate;
 
 			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SagePurchaseInvoice>(), purchaseInvoices, nodesCreationFactory);
+			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SageExpenditure>(), expenditures, nodesCreationFactory);
 
 			if (timeChain.HasNoData)
 			{
@@ -200,7 +252,7 @@
 			}
 
 			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SagePurchaseInvoiceAggregatorFactory();
+			var factory = new SageExpenditureAggregatorFactory();
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
     }

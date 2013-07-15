@@ -120,80 +120,6 @@ namespace Sage
 			return result;
 		}
 
-		public static SageIncome DeserializeIncome(SageIncomeSerialization si)
-		{
-			DateTime date;
-			if (!DateTime.TryParse(si.date, out date))
-			{
-				string msg = string.Format("Failed parsing date:{0}", si.date ?? string.Empty);
-				log.Error(msg);
-				throw new Exception(msg);
-			}
-			DateTime? invoice_date;
-			if (si.invoice_date == string.Empty)
-			{
-				invoice_date = null;
-			}
-			else
-			{
-				DateTime invoice_date_tmp;
-				if (!DateTime.TryParse(si.invoice_date, out invoice_date_tmp))
-				{
-					string msg = string.Format("Failed parsing invoice_date:{0}", si.invoice_date ?? string.Empty);
-					log.Error(msg);
-					throw new Exception(msg);
-				}
-
-				invoice_date = invoice_date_tmp;
-			}
-
-			decimal amount, tax_amount, gross_amount, tax_percentage_rate;
-			if (!decimal.TryParse(si.amount, out amount))
-			{
-				string msg = string.Format("Failed parsing amount:{0}", si.amount ?? string.Empty);
-				log.Error(msg);
-				throw new Exception(msg);
-			}
-			if (!decimal.TryParse(si.tax_amount, out tax_amount))
-			{
-				string msg = string.Format("Failed parsing tax_amount:{0}", si.tax_amount ?? string.Empty);
-				log.Error(msg);
-				throw new Exception(msg);
-			}
-			if (!decimal.TryParse(si.gross_amount, out gross_amount))
-			{
-				string msg = string.Format("Failed parsing gross_amount:{0}", si.gross_amount ?? string.Empty);
-				log.Error(msg);
-				throw new Exception(msg);
-			}
-			if (!decimal.TryParse(si.tax_percentage_rate, out tax_percentage_rate))
-			{
-				string msg = string.Format("Failed parsing tax_percentage_rate:{0}", si.tax_percentage_rate ?? string.Empty);
-				log.Error(msg);
-				throw new Exception(msg);
-			}
-
-			return new SageIncome
-				{
-					SageId = si.id,
-					date = date,
-					invoice_date = invoice_date,
-					amount = amount,
-					tax_amount = tax_amount,
-					gross_amount = gross_amount,
-					tax_percentage_rate = tax_percentage_rate,
-					tax_code = si.tax_code == null ? null : si.tax_code.key,
-					tax_scheme_period_id = si.tax_scheme_period_id,
-					reference = si.reference,
-					contact = si.contact == null ? null : si.contact.key,
-					source = si.source == null ? null : si.source.key,
-					destination = si.destination == null ? null : si.destination.key,
-					payment_method = si.payment_method == null ? null : si.payment_method.key,
-					voided = si.voided,
-					lock_version = si.lock_version
-				};
-		}
-
 		public static SagePurchaseInvoice DeserializePurchaseInvoice(SagePurchaseInvoiceSerialization si)
 		{
 			DateTime due_date;
@@ -287,6 +213,154 @@ namespace Sage
 			}
 
 			return result;
+		}
+
+		public static SageIncome DeserializeIncome(SageIncomeSerialization si)
+		{
+			DateTime date;
+			if (!DateTime.TryParse(si.date, out date))
+			{
+				string msg = string.Format("Failed parsing date:{0}", si.date ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			DateTime? invoice_date;
+			if (si.invoice_date == string.Empty)
+			{
+				invoice_date = null;
+			}
+			else
+			{
+				DateTime invoice_date_tmp;
+				if (!DateTime.TryParse(si.invoice_date, out invoice_date_tmp))
+				{
+					string msg = string.Format("Failed parsing invoice_date:{0}", si.invoice_date ?? string.Empty);
+					log.Error(msg);
+					throw new Exception(msg);
+				}
+
+				invoice_date = invoice_date_tmp;
+			}
+
+			decimal amount, tax_amount, gross_amount, tax_percentage_rate;
+			if (!decimal.TryParse(si.amount, out amount))
+			{
+				string msg = string.Format("Failed parsing amount:{0}", si.amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.tax_amount, out tax_amount))
+			{
+				string msg = string.Format("Failed parsing tax_amount:{0}", si.tax_amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.gross_amount, out gross_amount))
+			{
+				string msg = string.Format("Failed parsing gross_amount:{0}", si.gross_amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.tax_percentage_rate, out tax_percentage_rate))
+			{
+				string msg = string.Format("Failed parsing tax_percentage_rate:{0}", si.tax_percentage_rate ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+
+			return new SageIncome
+			{
+				SageId = si.id,
+				date = date,
+				invoice_date = invoice_date,
+				amount = amount,
+				tax_amount = tax_amount,
+				gross_amount = gross_amount,
+				tax_percentage_rate = tax_percentage_rate,
+				tax_code = si.tax_code == null ? null : si.tax_code.key,
+				tax_scheme_period_id = si.tax_scheme_period_id,
+				reference = si.reference,
+				contact = si.contact == null ? null : si.contact.key,
+				source = si.source == null ? null : si.source.key,
+				destination = si.destination == null ? null : si.destination.key,
+				payment_method = si.payment_method == null ? null : si.payment_method.key,
+				voided = si.voided,
+				lock_version = si.lock_version
+			};
+		}
+
+		public static SageExpenditure DeserializeExpenditure(SageExpenditureSerialization si)
+		{
+			DateTime date;
+			if (!DateTime.TryParse(si.date, out date))
+			{
+				string msg = string.Format("Failed parsing date:{0}", si.date ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			DateTime? invoice_date;
+			if (si.invoice_date == string.Empty)
+			{
+				invoice_date = null;
+			}
+			else
+			{
+				DateTime invoice_date_tmp;
+				if (!DateTime.TryParse(si.invoice_date, out invoice_date_tmp))
+				{
+					string msg = string.Format("Failed parsing invoice_date:{0}", si.invoice_date ?? string.Empty);
+					log.Error(msg);
+					throw new Exception(msg);
+				}
+
+				invoice_date = invoice_date_tmp;
+			}
+
+			decimal amount, tax_amount, gross_amount, tax_percentage_rate;
+			if (!decimal.TryParse(si.amount, out amount))
+			{
+				string msg = string.Format("Failed parsing amount:{0}", si.amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.tax_amount, out tax_amount))
+			{
+				string msg = string.Format("Failed parsing tax_amount:{0}", si.tax_amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.gross_amount, out gross_amount))
+			{
+				string msg = string.Format("Failed parsing gross_amount:{0}", si.gross_amount ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+			if (!decimal.TryParse(si.tax_percentage_rate, out tax_percentage_rate))
+			{
+				string msg = string.Format("Failed parsing tax_percentage_rate:{0}", si.tax_percentage_rate ?? string.Empty);
+				log.Error(msg);
+				throw new Exception(msg);
+			}
+
+			return new SageExpenditure
+			{
+				SageId = si.id,
+				date = date,
+				invoice_date = invoice_date,
+				amount = amount,
+				tax_amount = tax_amount,
+				gross_amount = gross_amount,
+				tax_percentage_rate = tax_percentage_rate,
+				tax_code = si.tax_code == null ? null : si.tax_code.key,
+				tax_scheme_period_id = si.tax_scheme_period_id,
+				reference = si.reference,
+				contact = si.contact == null ? null : si.contact.key,
+				source = si.source == null ? null : si.source.key,
+				destination = si.destination == null ? null : si.destination.key,
+				payment_method = si.payment_method == null ? null : si.payment_method.key,
+				voided = si.voided,
+				lock_version = si.lock_version
+			};
 		}
 	}
 }

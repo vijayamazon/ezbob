@@ -14,6 +14,70 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
+		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
+		{
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
+			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
+			return salesInvoicesList;
+		}
+
+		private static SageSalesInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
+		{
+			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
+			if (deserializedSalesInvoices == null)
+			{
+				log.Error("Error deserializing sage sales invoices");
+				return null;
+			}
+			if (deserializedSalesInvoices.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializedSalesInvoices.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage sales invoices request. Sales invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
+						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			return deserializedSalesInvoices;
+		}
+
+		private static SageSalesInvoicesListHelper DeserializeSalesInvoices(string cleanResponse)
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				return ((SageSalesInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SageSalesInvoicesListHelper)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", cleanResponse, e);
+				return null;
+			}
+		}
+
+		private static bool FillSalesInvoicesFromDeserializedData(SageSalesInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
+		{
+			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
+			{
+				TryDeserializeSalesInvoice(salesInvoices, serializedSalesInvoice);
+			}
+
+			return true;
+		}
+
+		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageSalesInvoiceSerialization serializaedSalesInvoice)
+		{
+			try
+			{
+				salesInvoices.Add(SageDesreializer.DeserializeSalesInvoice(serializaedSalesInvoice));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.id);
+			}
+		}
+
 		public static SagePurchaseInvoicesList GetPurchaseInvoices(string accessToken, DateTime? fromDate)
 		{
 			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoicesListHelper, List<SagePurchaseInvoice>>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, FillPurchaseInvoicesFromDeserializedData);
@@ -142,67 +206,67 @@
 			}
 		}
 
-		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
+		public static SageExpendituresList GetExpenditures(string accessToken, DateTime? fromDate)
 		{
-			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
-			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
-			return salesInvoicesList;
+			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpendituresListHelper, List<SageExpenditure>>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, FillExpendituresFromDeserializedData);
+			var expendituresList = new SageExpendituresList(DateTime.UtcNow, expenditures);
+			return expendituresList;
 		}
 
-		private static SageSalesInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
+		private static SageExpendituresListHelper CreateDeserializedExpenditures(string cleanResponse)
 		{
-			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
-			if (deserializedSalesInvoices == null)
+			var deserializeExpenditures = DeserializeExpenditures(cleanResponse);
+			if (deserializeExpenditures == null)
 			{
-				log.Error("Error deserializing sage sales invoices");
+				log.Error("Error deserializing sage expenditures");
 				return null;
 			}
-			if (deserializedSalesInvoices.diagnoses != null)
+			if (deserializeExpenditures.diagnoses != null)
 			{
-				foreach (SageDiagnostic diagnostic in deserializedSalesInvoices.diagnoses)
+				foreach (SageDiagnostic diagnostic in deserializeExpenditures.diagnoses)
 				{
-					log.ErrorFormat("Error occured during sage sales invoices request. Sales invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
+					log.ErrorFormat("Error occured during sage expenditures request. Expenditures were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
 						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
 				}
 				return null;
 			}
 
-			return deserializedSalesInvoices;
+			return deserializeExpenditures;
 		}
 
-		private static SageSalesInvoicesListHelper DeserializeSalesInvoices(string cleanResponse)
+		private static SageExpendituresListHelper DeserializeExpenditures(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SageSalesInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SageSalesInvoicesListHelper)));
+				return ((SageExpendituresListHelper)js.Deserialize(cleanResponse, typeof(SageExpendituresListHelper)));
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", cleanResponse, e);
+				log.ErrorFormat("Failed deserializing sage expenditures response:{0}. The error was:{1}", cleanResponse, e);
 				return null;
 			}
 		}
 
-		private static bool FillSalesInvoicesFromDeserializedData(SageSalesInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
+		private static bool FillExpendituresFromDeserializedData(SageExpendituresListHelper deserializeExpendituresResponse, List<SageExpenditure> expenditures)
 		{
-			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
+			foreach (var serializedExpenditure in deserializeExpendituresResponse.resources)
 			{
-				TryDeserializeSalesInvoice(salesInvoices, serializedSalesInvoice);
+				TryDeserializeExpenditure(expenditures, serializedExpenditure);
 			}
 
 			return true;
 		}
 
-		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageSalesInvoiceSerialization serializaedSalesInvoice)
+		private static void TryDeserializeExpenditure(List<SageExpenditure> expenditures, SageExpenditureSerialization serializedExpenditure)
 		{
 			try
 			{
-				salesInvoices.Add(SageDesreializer.DeserializeSalesInvoice(serializaedSalesInvoice));
+				expenditures.Add(SageDesreializer.DeserializeExpenditure(serializedExpenditure));
 			}
 			catch (Exception)
 			{
-				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.id);
+				log.ErrorFormat("Failed creating expenditure for SageId:{0}. Expenditure won't be handled!", serializedExpenditure.id);
 			}
 		}
 		

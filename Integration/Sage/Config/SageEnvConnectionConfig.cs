@@ -29,9 +29,9 @@ namespace Sage.Config
 			get { return GetValue<string>("SalesInvoicesRequest"); }
         }
 
-		public string RequestForDatesPart
+		public string PurchaseInvoicesRequest
 		{
-			get { return GetValue<string>("RequestForDatesPart"); }
+			get { return GetValue<string>("PurchaseInvoicesRequest"); }
 		}
 
 		public string IncomesRequest
@@ -39,9 +39,14 @@ namespace Sage.Config
 			get { return GetValue<string>("IncomesRequest"); }
 		}
 
-		public string PurchaseInvoicesRequest
+		public string ExpendituresRequest
 		{
-			get { return GetValue<string>("PurchaseInvoicesRequest"); }
+			get { return GetValue<string>("ExpendituresRequest"); }
+		}
+
+		public string RequestForDatesPart
+		{
+			get { return GetValue<string>("RequestForDatesPart"); }
 		}
     }
 }

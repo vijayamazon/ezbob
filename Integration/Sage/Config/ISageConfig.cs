@@ -7,8 +7,9 @@
 		string OAuthAuthorizationEndpoint { get; }
 		string OAuthTokenEndpoint { get; }
 		string SalesInvoicesRequest { get; }
-		string RequestForDatesPart { get; }
-		string IncomesRequest { get; }
 		string PurchaseInvoicesRequest { get; }
+		string IncomesRequest { get; }
+		string ExpendituresRequest { get; }
+		string RequestForDatesPart { get; }
     }
 }

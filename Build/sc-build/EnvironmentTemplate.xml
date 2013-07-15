@@ -7,9 +7,10 @@
 		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
 		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
-		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />
-		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />	
-		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />		
+		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
+		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
+		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />		
 	</module>
 	<module id="SageUat">
 		<property name="OAuthIdentifier" value="dGnYPJjRVyc9AYjYAGXCQEoAi3YgWv63Hb6sALX7" />
@@ -17,9 +18,10 @@
 		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
 		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
-		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />
-		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />
-		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />			
+		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
+		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
+		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />				
 	</module>
 	<module id="SageProd">
 		<property name="OAuthIdentifier" value="sMywhxrs34hZ8lwRREjVHJscPOXA4iqhzTOFhevy" />
@@ -27,9 +29,10 @@
 		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
 		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
-		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />
-		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />	
-		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />		
+		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
+		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
+		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />			
 	</module>
 	
     <property name="EbayPixelEnabled" value="False" />	

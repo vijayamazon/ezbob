@@ -6,7 +6,8 @@
 	public class SageModel
 	{
 		public IEnumerable<SageSalesInvoice> SalesInvoices { get; set; }
-		public IEnumerable<SageIncome> Incomes { get; set; }
 		public IEnumerable<SagePurchaseInvoice> PurchaseInvoices { get; set; }
+		public IEnumerable<SageIncome> Incomes { get; set; }
+		public IEnumerable<SageExpenditure> Expenditures { get; set; }
     }
 }

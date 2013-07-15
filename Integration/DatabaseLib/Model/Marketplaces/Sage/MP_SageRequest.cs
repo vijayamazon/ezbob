@@ -16,6 +16,7 @@
 			SalesInvoices = new HashedSet<MP_SageSalesInvoice>();
 			Incomes = new HashedSet<MP_SageIncome>();
 			PurchaseInvoices = new HashedSet<MP_SagePurchaseInvoice>();
+			Expenditures = new HashedSet<MP_SageExpenditure>();
 		}
 
 		public virtual int Id { get; set; }
@@ -25,6 +26,7 @@
 		public virtual Iesi.Collections.Generic.ISet<MP_SageSalesInvoice> SalesInvoices { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<MP_SageIncome> Incomes { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<MP_SagePurchaseInvoice> PurchaseInvoices { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<MP_SageExpenditure> Expenditures { get; set; }
 
 		public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
 	}

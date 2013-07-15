@@ -900,13 +900,14 @@ namespace EZBob.DatabaseLib
 			return mpRequest;
 		}
 
-		public void StoreSageData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, SageIncomesList incomes, SagePurchaseInvoicesList purchaseInvoices, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public void StoreSageData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, SageSalesInvoicesList salesInvoices, SagePurchaseInvoicesList purchaseInvoices, SageIncomesList incomes, SageExpendituresList expenditures, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("SalesInvoices Data", customerMarketPlace, salesInvoices);
-			LogData("Incomes Data", customerMarketPlace, incomes);
 			LogData("PurchaseInvoices Data", customerMarketPlace, purchaseInvoices);
+			LogData("Incomes Data", customerMarketPlace, incomes);
+			LogData("Expenditures Data", customerMarketPlace, expenditures);
 
 			DateTime submittedDate = DateTime.UtcNow;
 			var mpRequest = new MP_SageRequest
@@ -972,33 +973,6 @@ namespace EZBob.DatabaseLib
 					mpRequest.SalesInvoices.Add(salesInvoice);
 				});
 
-			incomes.ForEach(
-				dataItem =>
-				{
-					var income = new MP_SageIncome
-					{
-						Request = mpRequest,
-						SageId = dataItem.SageId,
-						date = dataItem.date,
-						invoice_date = dataItem.invoice_date,
-						amount = dataItem.amount,
-						tax_amount = dataItem.tax_amount,
-						gross_amount = dataItem.gross_amount,
-						tax_percentage_rate = dataItem.tax_percentage_rate,
-						TaxCodeId = dataItem.tax_code,
-						tax_scheme_period_id = dataItem.tax_scheme_period_id,
-						reference = dataItem.reference,
-						ContactId = dataItem.contact,
-						SourceId = dataItem.source,
-						DestinationId = dataItem.destination,
-						PaymentMethodId = dataItem.payment_method,
-						voided = dataItem.voided,
-						lock_version = dataItem.lock_version
-					};
-
-					mpRequest.Incomes.Add(income);
-				});
-
 			purchaseInvoices.ForEach(
 				dataItem =>
 				{
@@ -1049,6 +1023,60 @@ namespace EZBob.DatabaseLib
 					}
 
 					mpRequest.PurchaseInvoices.Add(purchaseInvoice);
+				});
+
+			incomes.ForEach(
+				dataItem =>
+				{
+					var income = new MP_SageIncome
+					{
+						Request = mpRequest,
+						SageId = dataItem.SageId,
+						date = dataItem.date,
+						invoice_date = dataItem.invoice_date,
+						amount = dataItem.amount,
+						tax_amount = dataItem.tax_amount,
+						gross_amount = dataItem.gross_amount,
+						tax_percentage_rate = dataItem.tax_percentage_rate,
+						TaxCodeId = dataItem.tax_code,
+						tax_scheme_period_id = dataItem.tax_scheme_period_id,
+						reference = dataItem.reference,
+						ContactId = dataItem.contact,
+						SourceId = dataItem.source,
+						DestinationId = dataItem.destination,
+						PaymentMethodId = dataItem.payment_method,
+						voided = dataItem.voided,
+						lock_version = dataItem.lock_version
+					};
+
+					mpRequest.Incomes.Add(income);
+				});
+
+			expenditures.ForEach(
+				dataItem =>
+				{
+					var expenditure = new MP_SageExpenditure
+					{
+						Request = mpRequest,
+						SageId = dataItem.SageId,
+						date = dataItem.date,
+						invoice_date = dataItem.invoice_date,
+						amount = dataItem.amount,
+						tax_amount = dataItem.tax_amount,
+						gross_amount = dataItem.gross_amount,
+						tax_percentage_rate = dataItem.tax_percentage_rate,
+						TaxCodeId = dataItem.tax_code,
+						tax_scheme_period_id = dataItem.tax_scheme_period_id,
+						reference = dataItem.reference,
+						ContactId = dataItem.contact,
+						SourceId = dataItem.source,
+						DestinationId = dataItem.destination,
+						PaymentMethodId = dataItem.payment_method,
+						voided = dataItem.voided,
+						lock_version = dataItem.lock_version
+					};
+
+					mpRequest.Expenditures.Add(expenditure);
 				});
 
 			customerMarketPlace.SageRequests.Add(mpRequest);
@@ -2416,11 +2444,24 @@ namespace EZBob.DatabaseLib
 
 			var salesInvoices = new SageSalesInvoicesList(submittedDate);
 
-			var dbSalesInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
+			var dbSalesInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.SalesInvoices).OrderByDescending(salesInvoice => salesInvoice.Request.Id).Distinct(new SageSalesInvoiceComparer()).OrderByDescending(salesInvoice => salesInvoice.date);
 
 			salesInvoices.AddRange(SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices));
 
 			return salesInvoices;
+		}
+
+		public SagePurchaseInvoicesList GetAllSagePurchaseInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var purchaseInvoices = new SagePurchaseInvoicesList(submittedDate);
+
+			var dbPurchaseInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
+
+			purchaseInvoices.AddRange(SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices));
+
+			return purchaseInvoices;
 		}
 
 		public SageIncomesList GetAllSageIncomesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -2436,17 +2477,17 @@ namespace EZBob.DatabaseLib
 			return incomes;
 		}
 
-		public SagePurchaseInvoicesList GetAllSagePurchaseInvoicesData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public SageExpendituresList GetAllSageExpendituresData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var purchaseInvoices = new SagePurchaseInvoicesList(submittedDate);
+			var expenditures = new SageExpendituresList(submittedDate);
 
-			var dbPurchaseInvoices = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.PurchaseInvoices).OrderByDescending(purchaseInvoice => purchaseInvoice.Request.Id).Distinct(new SagePurchaseInvoiceComparer()).OrderByDescending(purchaseInvoice => purchaseInvoice.date);
+			var dbExpenditure = customerMarketPlace.SageRequests.SelectMany(sageRequest => sageRequest.Expenditures).OrderByDescending(expenditure => expenditure.Request.Id).Distinct(new SageExpenditureComparer()).OrderByDescending(expenditure => expenditure.date);
 
-			purchaseInvoices.AddRange(SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices));
+			expenditures.AddRange(SageExpendituresConverter.GetSageExpenditures(dbExpenditure));
 
-			return purchaseInvoices;
+			return expenditures;
 		}
 		
 		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -2532,19 +2573,24 @@ namespace EZBob.DatabaseLib
 			MP_SageSalesInvoice lastSalesInvoice = request.SalesInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 			MP_SageIncome lastIncome = request.Incomes.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 			MP_SagePurchaseInvoice lastPurchaseInvoice = request.PurchaseInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			MP_SageExpenditure lastExpenditure = request.Expenditures.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 
 			DateTime latestDate = request.Created;
 			if (lastSalesInvoice != null && lastSalesInvoice.date > latestDate)
 			{
 				latestDate = lastSalesInvoice.date;
 			}
+			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date > latestDate)
+			{
+				latestDate = lastPurchaseInvoice.date;
+			}
 			if (lastIncome != null && lastIncome.date > latestDate)
 			{
 				latestDate = lastIncome.date;
 			}
-			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date > latestDate)
+			if (lastExpenditure != null && lastExpenditure.date > latestDate)
 			{
-				latestDate = lastPurchaseInvoice.date;
+				latestDate = lastExpenditure.date;
 			}
 
 			return latestDate.AddMonths(-1);

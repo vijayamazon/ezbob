@@ -12,7 +12,9 @@
         NumOfIncomes,
 		TotalSumOfIncomes,
 		NumOfPurchaseInvoices,
-		TotalSumOfPurchaseInvoices
+		TotalSumOfPurchaseInvoices,
+        NumOfExpenditures,
+		TotalSumOfExpenditures
     }
 
 	internal class SageDatabaseFunctionStorage : DatabaseFunctionStorage<SageDatabaseFunctionType>
@@ -28,6 +30,8 @@
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfIncomes, DatabaseValueTypeEnum.Double, "{391AFF11-CB8B-4DC9-A7B3-55D0FA92C3FC}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.NumOfPurchaseInvoices, DatabaseValueTypeEnum.Integer, "{BAE950C5-9D78-42E1-8A2E-23EBD2669472}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPurchaseInvoices, DatabaseValueTypeEnum.Double, "{315039AE-3366-4309-AEBA-A1DA20BBE3C3}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.NumOfExpenditures, DatabaseValueTypeEnum.Integer, "{28B6E7E4-537E-4502-92E2-61F8E0B6B1CA}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfExpenditures, DatabaseValueTypeEnum.Double, "{21D7AD60-2E2F-41B5-9666-6CCABC56343A}");
         }
 
 		public static SageDatabaseFunctionStorage Instance
@@ -72,6 +76,14 @@
 
 				case SageDatabaseFunctionType.TotalSumOfPurchaseInvoices:
 					displayName = "Total Sum of Purchase Invoices";
+					break;
+
+				case SageDatabaseFunctionType.NumOfExpenditures:
+					displayName = "Num of Expenditures";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfExpenditures:
+					displayName = "Total Sum of Expenditures";
 					break;
 				
                 default:

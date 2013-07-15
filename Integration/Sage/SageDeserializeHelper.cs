@@ -65,34 +65,6 @@ namespace Sage
 	}
 
 	[Serializable]
-	public class SageIncomeSerialization
-	{
-		public int id { get; set; }
-		public string date { get; set; }
-		public string invoice_date { get; set; }
-		public string amount { get; set; }
-		public string tax_amount { get; set; }
-		public string gross_amount { get; set; }
-		public string tax_percentage_rate { get; set; }
-		public SageReferenceKey tax_code { get; set; }
-		public int tax_scheme_period_id { get; set; }
-		public string reference { get; set; }
-		public SageReferenceKey contact { get; set; }
-		public SageReferenceKey source { get; set; }
-		public SageReferenceKey destination { get; set; }
-		public SageReferenceKey payment_method { get; set; }
-		public bool voided { get; set; }
-		public int lock_version { get; set; }
-	}
-
-	[Serializable]
-	public class SageIncomesListHelper : PaginatedResultsBase
-	{
-		public List<SageIncomeSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
-	}
-
-	[Serializable]
 	public class SagePurchaseInvoiceSerialization
 	{
 		public int id { get; set; }
@@ -121,6 +93,62 @@ namespace Sage
 	public class SagePurchaseInvoicesListHelper : PaginatedResultsBase
 	{
 		public List<SagePurchaseInvoiceSerialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
+
+	[Serializable]
+	public class SageIncomeSerialization
+	{
+		public int id { get; set; }
+		public string date { get; set; }
+		public string invoice_date { get; set; }
+		public string amount { get; set; }
+		public string tax_amount { get; set; }
+		public string gross_amount { get; set; }
+		public string tax_percentage_rate { get; set; }
+		public SageReferenceKey tax_code { get; set; }
+		public int tax_scheme_period_id { get; set; }
+		public string reference { get; set; }
+		public SageReferenceKey contact { get; set; }
+		public SageReferenceKey source { get; set; }
+		public SageReferenceKey destination { get; set; }
+		public SageReferenceKey payment_method { get; set; }
+		public bool voided { get; set; }
+		public int lock_version { get; set; }
+	}
+
+	[Serializable]
+	public class SageIncomesListHelper : PaginatedResultsBase
+	{
+		public List<SageIncomeSerialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
+
+	[Serializable]
+	public class SageExpenditureSerialization
+	{
+		public int id { get; set; }
+		public string date { get; set; }
+		public string invoice_date { get; set; }
+		public string amount { get; set; }
+		public string tax_amount { get; set; }
+		public string gross_amount { get; set; }
+		public string tax_percentage_rate { get; set; }
+		public SageReferenceKey tax_code { get; set; }
+		public int tax_scheme_period_id { get; set; }
+		public string reference { get; set; }
+		public SageReferenceKey contact { get; set; }
+		public SageReferenceKey source { get; set; }
+		public SageReferenceKey destination { get; set; }
+		public SageReferenceKey payment_method { get; set; }
+		public bool voided { get; set; }
+		public int lock_version { get; set; }
+	}
+
+	[Serializable]
+	public class SageExpendituresListHelper : PaginatedResultsBase
+	{
+		public List<SageExpenditureSerialization> resources { get; set; }
 		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 
