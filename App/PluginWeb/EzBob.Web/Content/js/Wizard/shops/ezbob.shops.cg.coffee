@@ -115,6 +115,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         false
 
     getDocumentTitle: ->
+        EzBob.App.trigger 'clear'
         'Link ' + @getVendorInfo().DisplayName + ' Account'
 
 class EzBob.CGAccountModel extends Backbone.Model
