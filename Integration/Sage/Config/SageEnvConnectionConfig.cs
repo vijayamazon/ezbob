@@ -44,6 +44,11 @@ namespace Sage.Config
 			get { return GetValue<string>("ExpendituresRequest"); }
 		}
 
+		public string PaymentStatusesRequest
+		{
+			get { return GetValue<string>("PaymentStatusesRequest"); }
+		}
+
 		public string RequestForDatesPart
 		{
 			get { return GetValue<string>("RequestForDatesPart"); }

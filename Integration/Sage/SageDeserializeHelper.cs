@@ -63,6 +63,20 @@ namespace Sage
 		public List<SageSalesInvoiceSerialization> resources { get; set; }
 		public List<SageDiagnostic> diagnoses { get; set; }
 	}
+	
+	[Serializable]
+	public class SagePaymentStatusDeserialization
+	{
+		public int id { get; set; }
+		public string name { get; set; }
+	}
+
+	[Serializable]
+	public class SagePaymentStatusesListHelper : PaginatedResultsBase
+	{
+		public List<SagePaymentStatusDeserialization> resources { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+	}
 
 	[Serializable]
 	public class SagePurchaseInvoiceSerialization

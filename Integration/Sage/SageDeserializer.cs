@@ -362,5 +362,14 @@ namespace Sage
 				lock_version = si.lock_version
 			};
 		}
+
+		public static SagePaymentStatus DeserializePaymentStatus(SagePaymentStatusDeserialization si)
+		{
+			return new SagePaymentStatus
+			{
+				SageId = si.id,
+				name = si.name
+			};
+		}
 	}
 }

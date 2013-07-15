@@ -14,6 +14,67 @@
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
+		public static List<SagePaymentStatus> GetPaymentStatuses(string accessToken)
+		{
+			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusesListHelper, List<SagePaymentStatus>>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, FillPaymentStatusesFromDeserializedData);
+		}
+
+		private static SagePaymentStatusesListHelper CreateDeserializedPaymentStatuses(string cleanResponse)
+		{
+			var deserializedPaymentStatuses = DeserializePaymentStatuses(cleanResponse);
+			if (deserializedPaymentStatuses == null)
+			{
+				log.Error("Error deserializing sage payment statuses");
+				return null;
+			}
+			if (deserializedPaymentStatuses.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializedPaymentStatuses.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage payment statuses request. Payment statuses were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
+						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			return deserializedPaymentStatuses;
+		}
+
+		private static SagePaymentStatusesListHelper DeserializePaymentStatuses(string cleanResponse)
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				return ((SagePaymentStatusesListHelper)js.Deserialize(cleanResponse, typeof(SagePaymentStatusesListHelper)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed deserializing sage payment statuses response:{0}. The error was:{1}", cleanResponse, e);
+				return null;
+			}
+		}
+
+		private static bool FillPaymentStatusesFromDeserializedData(SagePaymentStatusesListHelper deserializePaymentStatusesResponse, List<SagePaymentStatus> paymentStatuses)
+		{
+			foreach (var deserializePaymentStatus in deserializePaymentStatusesResponse.resources)
+			{
+				TryDeserializePaymentStatus(paymentStatuses, deserializePaymentStatus);
+			}
+			return true;
+		}
+
+		private static void TryDeserializePaymentStatus(List<SagePaymentStatus> salesInvoices, SagePaymentStatusDeserialization deserializaedPaymentStatus)
+		{
+			try
+			{
+				salesInvoices.Add(SageDesreializer.DeserializePaymentStatus(deserializaedPaymentStatus));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating payment status for SageId:{0}. Payment status won't be handled!", deserializaedPaymentStatus.id);
+			}
+		}
+
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
 			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);

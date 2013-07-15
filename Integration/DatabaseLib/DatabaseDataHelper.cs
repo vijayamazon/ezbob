@@ -33,7 +33,6 @@ namespace EZBob.DatabaseLib
 	using StructureMap;
 	using log4net;
 	using Iesi.Collections.Generic;
-	using System.Globalization;
 	using EzBob.CommonLib.Security;
 	using Model.Marketplaces.FreeAgent;
 	using Model.Marketplaces.Sage;
@@ -80,7 +79,8 @@ namespace EZBob.DatabaseLib
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
 		private readonly IConfigurationVariablesRepository _ConfigurationVariables;
-	    private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
+		private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
+		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -110,6 +110,7 @@ namespace EZBob.DatabaseLib
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
 			_ConfigurationVariables = new ConfigurationVariablesRepository(session);
             _MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
+			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 		}
 
 		public IConfigurationVariablesRepository ConfigurationVariables { get { return _ConfigurationVariables; } }
@@ -921,52 +922,52 @@ namespace EZBob.DatabaseLib
 				dataItem =>
 				{
 					var salesInvoice = new MP_SageSalesInvoice
-						{
-							Request = mpRequest,
-							SageId = dataItem.SageId,
-							invoice_number = dataItem.invoice_number,
-							StatusId = dataItem.status,
-							due_date = dataItem.due_date,
-							date = dataItem.date,
-							void_reason = dataItem.void_reason,
-							outstanding_amount = dataItem.outstanding_amount,
-							total_net_amount = dataItem.total_net_amount,
-							total_tax_amount = dataItem.total_tax_amount,
-							tax_scheme_period_id = dataItem.tax_scheme_period_id,
-							carriage = dataItem.carriage,
-							CarriageTaxCodeId = dataItem.carriage_tax_code,
-							carriage_tax_rate_percentage = dataItem.carriage_tax_rate_percentage,
-							ContactId = dataItem.contact,
-							contact_name = dataItem.contact_name,
-							main_address = dataItem.main_address,
-							delivery_address = dataItem.delivery_address,
-							delivery_address_same_as_main = dataItem.delivery_address_same_as_main,
-							reference = dataItem.reference,
-							notes = dataItem.notes,
-							terms_and_conditions = dataItem.terms_and_conditions,
-							lock_version = dataItem.lock_version,
-							Items = new HashedSet<MP_SageSalesInvoiceItem>()
-						};
+					{
+						Request = mpRequest,
+						SageId = dataItem.SageId,
+						invoice_number = dataItem.invoice_number,
+						StatusId = dataItem.status,
+						due_date = dataItem.due_date,
+						date = dataItem.date,
+						void_reason = dataItem.void_reason,
+						outstanding_amount = dataItem.outstanding_amount,
+						total_net_amount = dataItem.total_net_amount,
+						total_tax_amount = dataItem.total_tax_amount,
+						tax_scheme_period_id = dataItem.tax_scheme_period_id,
+						carriage = dataItem.carriage,
+						CarriageTaxCodeId = dataItem.carriage_tax_code,
+						carriage_tax_rate_percentage = dataItem.carriage_tax_rate_percentage,
+						ContactId = dataItem.contact,
+						contact_name = dataItem.contact_name,
+						main_address = dataItem.main_address,
+						delivery_address = dataItem.delivery_address,
+						delivery_address_same_as_main = dataItem.delivery_address_same_as_main,
+						reference = dataItem.reference,
+						notes = dataItem.notes,
+						terms_and_conditions = dataItem.terms_and_conditions,
+						lock_version = dataItem.lock_version,
+						Items = new HashedSet<MP_SageSalesInvoiceItem>()
+					};
 
 					foreach (var item in dataItem.line_items)
 					{
 						var mpItem = new MP_SageSalesInvoiceItem
-							{
-								Invoice = salesInvoice,
-								description = item.description,
-								quantity = item.quantity,
-								unit_price = item.unit_price,
-								net_amount = item.net_amount,
-								tax_amount = item.tax_amount,
-								TaxCodeId = item.tax_code,
-								tax_rate_percentage = item.tax_rate_percentage,
-								unit_price_includes_tax = item.unit_price_includes_tax,
-								LedgerAccountId = item.ledger_account,
-								product_code = item.product_code,
-								ProductId = item.product,
-								ServiceKey = item.service,
-								lock_version = item.lock_version
-							};
+						{
+							Invoice = salesInvoice,
+							description = item.description,
+							quantity = item.quantity,
+							unit_price = item.unit_price,
+							net_amount = item.net_amount,
+							tax_amount = item.tax_amount,
+							TaxCodeId = item.tax_code,
+							tax_rate_percentage = item.tax_rate_percentage,
+							unit_price_includes_tax = item.unit_price_includes_tax,
+							LedgerAccountId = item.ledger_account,
+							product_code = item.product_code,
+							ProductId = item.product,
+							ServiceKey = item.service,
+							lock_version = item.lock_version
+						};
 						salesInvoice.Items.Add(mpItem);
 					}
 
@@ -1081,6 +1082,22 @@ namespace EZBob.DatabaseLib
 
 			customerMarketPlace.SageRequests.Add(mpRequest);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		public void StoreSagePaymentStatuses(List<SagePaymentStatus> paymentStatuses)
+		{
+			foreach (SagePaymentStatus paymentStatus in paymentStatuses)
+			{
+				var dbPaymentStatus = new MP_SagePaymentStatus {SageId = paymentStatus.SageId, name = paymentStatus.name};
+				_SagePaymentStatusRepository.SaveOrUpdate(dbPaymentStatus);
+			}
+		}
+
+		public List<MP_SagePaymentStatus> GetSagePaymentStatuses()
+		{
+			var result = new List<MP_SagePaymentStatus>();
+			result.AddRange(_SagePaymentStatusRepository.GetAll());
+			return result;
 		}
 
 		public void StoreFreeAgentCompanyData(MP_FreeAgentCompany company)

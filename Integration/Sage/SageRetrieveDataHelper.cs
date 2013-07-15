@@ -1,5 +1,6 @@
 ﻿namespace Sage
 {
+	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using EzBob.CommonLib;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
@@ -19,8 +20,8 @@
 		
 		public SageRetrieveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<SageDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
-        {
-        }
+		{
+		}
 
         protected override void InternalUpdateInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
                                                    MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -57,6 +58,13 @@
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreSageData(databaseCustomerMarketPlace, salesInvoices, purchaseInvoices, incomes, expenditures, historyRecord));
 
+			log.Info("Getting payment statuses...");
+	        var paymentStatuses = SageConnector.GetPaymentStatuses(accessToken);
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+				elapsedTimeInfo,
+				ElapsedDataMemberType.StoreDataToDatabase,
+				() => Helper.StoreSagePaymentStatuses(paymentStatuses));
+
 			CalculateAndStoreAggregatedSalesInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedPurchaseInvoiceData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
 			CalculateAndStoreAggregatedIncomeData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo);
@@ -77,7 +85,7 @@
 			var salesInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateSalesInvoicesAggregationInfo(allSalesInvoices, Helper.CurrencyConverter));
+				() => CreateSalesInvoicesAggregationInfo(allSalesInvoices, Helper.CurrencyConverter, Helper.GetSagePaymentStatuses()));
 
 			log.Info("Saving aggragated sales invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -100,7 +108,7 @@
 			var purchaseInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreatePurchaseInvoicesAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter));
+				() => CreatePurchaseInvoicesAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter, Helper.GetSagePaymentStatuses()));
 
 			log.Info("Saving aggragated purchase invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -164,12 +172,15 @@
 	        return null;
         }
 
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateSalesInvoicesAggregationInfo(SageSalesInvoicesList salesInvoices, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateSalesInvoicesAggregationInfo(SageSalesInvoicesList salesInvoices, ICurrencyConvertor currencyConverter, List<MP_SagePaymentStatus> sagePaymentStatuses)
 		{
 			var aggregateFunctionArray = new[]
                 {
                     SageDatabaseFunctionType.NumOfOrders,
-                    SageDatabaseFunctionType.TotalSumOfOrders
+                    SageDatabaseFunctionType.TotalSumOfOrders,
+					SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices,
+					SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices,
+					SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices
                 };
 
 			var updated = salesInvoices.SubmittedDate;
@@ -183,16 +194,19 @@
 			}
 
 			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SageSalesInvoiceAggregatorFactory();
+			var factory = new SageSalesInvoiceAggregatorFactory { SagePaymentStatuses = sagePaymentStatuses };
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
 
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreatePurchaseInvoicesAggregationInfo(SagePurchaseInvoicesList purchaseInvoices, ICurrencyConvertor currencyConverter)
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreatePurchaseInvoicesAggregationInfo(SagePurchaseInvoicesList purchaseInvoices, ICurrencyConvertor currencyConverter, List<MP_SagePaymentStatus> sagePaymentStatuses)
 		{
 			var aggregateFunctionArray = new[]
                 {
                     SageDatabaseFunctionType.NumOfPurchaseInvoices,
-                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices
+                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices
                 };
 
 			var updated = purchaseInvoices.SubmittedDate;
@@ -206,7 +220,7 @@
 			}
 
 			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SagePurchaseInvoiceAggregatorFactory();
+			var factory = new SagePurchaseInvoiceAggregatorFactory { SagePaymentStatuses = sagePaymentStatuses };
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
 

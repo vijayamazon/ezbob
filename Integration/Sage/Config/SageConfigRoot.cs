@@ -10,6 +10,7 @@
 		public string PurchaseInvoicesRequest { get; set; }
 		public string IncomesRequest { get; set; }
 		public string ExpendituresRequest { get; set; }
+		public string PaymentStatusesRequest { get; set; }
 		public string RequestForDatesPart { get; set; }
     }
 }

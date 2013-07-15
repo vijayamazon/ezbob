@@ -10,6 +10,7 @@
 		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
 		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
 		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />	
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />		
 	</module>
 	<module id="SageUat">
@@ -20,7 +21,8 @@
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
 		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
 		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
-		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />
+		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />		
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />				
 	</module>
 	<module id="SageProd">
@@ -32,6 +34,7 @@
 		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
 		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
 		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />	
+		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />	
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />			
 	</module>
 	

@@ -14,7 +14,13 @@
 		NumOfPurchaseInvoices,
 		TotalSumOfPurchaseInvoices,
         NumOfExpenditures,
-		TotalSumOfExpenditures
+		TotalSumOfExpenditures,
+		TotalSumOfPaidSalesInvoices,
+		TotalSumOfUnpaidSalesInvoices,
+		TotalSumOfPartiallyPaidSalesInvoices,
+		TotalSumOfPaidPurchaseInvoices,
+		TotalSumOfUnpaidPurchaseInvoices,
+		TotalSumOfPartiallyPaidPurchaseInvoices
     }
 
 	internal class SageDatabaseFunctionStorage : DatabaseFunctionStorage<SageDatabaseFunctionType>
@@ -32,6 +38,12 @@
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPurchaseInvoices, DatabaseValueTypeEnum.Double, "{315039AE-3366-4309-AEBA-A1DA20BBE3C3}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.NumOfExpenditures, DatabaseValueTypeEnum.Integer, "{28B6E7E4-537E-4502-92E2-61F8E0B6B1CA}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfExpenditures, DatabaseValueTypeEnum.Double, "{21D7AD60-2E2F-41B5-9666-6CCABC56343A}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices, DatabaseValueTypeEnum.Double, "{EAFC6364-C34F-4209-BAC2-C8D8D0323EB9}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices, DatabaseValueTypeEnum.Double, "{92A81E0F-A2A0-42ED-9B70-B4167616032D}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices, DatabaseValueTypeEnum.Double, "{1198F887-E0CE-4968-9B5D-010DE4188EAD}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{B04965CF-BECC-46CC-8B26-7C97DFC330D4}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{EDE52DCF-3C08-478C-A7C6-4764501C27F7}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{E785E542-81D2-4B52-8C95-8AD10E1BC5C1}");
         }
 
 		public static SageDatabaseFunctionStorage Instance
@@ -84,6 +96,30 @@
 
 				case SageDatabaseFunctionType.TotalSumOfExpenditures:
 					displayName = "Total Sum of Expenditures";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices:
+					displayName = "Total Sum of Paid Sales Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices:
+					displayName = "Total Sum of Unpaid Sales Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices:
+					displayName = "Total Sum of Partially Paid Sales Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices:
+					displayName = "Total Sum of Paid Purchase Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices:
+					displayName = "Total Sum of Unpaid Purchase Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices:
+					displayName = "Total Sum of Partially Paid Purchase Invoices";
 					break;
 				
                 default:
