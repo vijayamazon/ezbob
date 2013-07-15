@@ -224,7 +224,7 @@ namespace EzBob.Tests
             Console.WriteLine("Making payment - Date: {0}, Amount: {1}", date.ToString("dd MM yyyy"), amount);
             loan.Transactions.Add(new PaypointTransaction() { Amount = amount, PostDate = date, Status = LoanTransactionStatus.Done });
             var c = new LoanRepaymentScheduleCalculator(loan, date);
-            var s = c.PayEarly(amount);
+            var s = c.RecalculateSchedule();
             Console.WriteLine(loan.ToString());
             return s;
         }

@@ -75,7 +75,6 @@
     <Compile Include="Calculators\LoanPaymentFacade.cs" />
     <Compile Include="Calculators\LoanScheduleCalculator.cs" />
     <Compile Include="Calculators\LoanRepaymentScheduleCalculator.cs" />
-    <Compile Include="Calculators\PayEarlyCalculator.cs" />
     <Compile Include="Calculators\LoanRepaymentScheduleCalculatorEvent.cs" />
     <Compile Include="Calculators\PaymentResult.cs" />
     <Compile Include="Calculators\SetupFeeCalculator.cs" />
@@ -86,6 +85,7 @@
     <Compile Include="PacNet\PacnetRegistry.cs" />
     <Compile Include="PacNet\PacnetService.cs" />
     <Compile Include="PacNet\PacnetReturnData.cs" />
+    <Compile Include="PayEarlyExtensions.cs" />
     <Compile Include="PayPoint\PayPointException.cs" />
     <Compile Include="PayPoint\PayPointReturnData.cs" />
     <Compile Include="PayPoint\PayPointStatusTranslator.cs" />

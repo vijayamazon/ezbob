@@ -2,11 +2,11 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
-    public interface IPayEarlyCalculator
+    public interface ILoanRepaymentScheduleCalculator
     {
         decimal NextEarlyPayment();
         decimal TotalEarlyPayment();
-        decimal PayEarly(decimal amount);
+        decimal RecalculateSchedule();
         LoanScheduleItem GetState();
     }
 }

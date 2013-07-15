@@ -109,7 +109,7 @@
     <Compile Include="Marketplaces\YodleeTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\AmazonMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\IMarketplaceModelBuilder.cs" />
-    <Compile Include="IPayEarlyCalculator.cs" />
+    <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
     <Compile Include="LoanAgreementModel.cs" />
     <Compile Include="LoanChargesModel.cs" />
     <Compile Include="LoanDetails.cs" />

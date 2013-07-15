@@ -6,6 +6,6 @@ namespace PaymentServices.Calculators
 {
     public interface IPayEarlyCalculatorFactory
     {
-        IPayEarlyCalculator Create(Loan loan, DateTime? term);
+        ILoanRepaymentScheduleCalculator Create(Loan loan, DateTime? term);
     }
 }

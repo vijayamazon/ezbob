@@ -7,7 +7,7 @@ using EzBob.Web.Areas.Customer.Models;
 
 namespace PaymentServices.Calculators
 {
-    public class LoanRepaymentScheduleCalculator : IPayEarlyCalculator
+    public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
     {
         private readonly Loan _loan;
         private DateTime _term;
@@ -200,7 +200,7 @@ namespace PaymentServices.Calculators
             return amount;
         }
 
-        public decimal PayEarly(decimal amount)
+        public decimal RecalculateSchedule()
         {
             do
             {

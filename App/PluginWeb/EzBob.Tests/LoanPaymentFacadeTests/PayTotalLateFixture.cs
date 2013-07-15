@@ -107,7 +107,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             _facade.PayLoan(loan1, "", 10000, "ip", now);
 
-            c1.PayEarly(10000);
+            c1.RecalculateSchedule();
 
             Console.WriteLine(loan1);
            

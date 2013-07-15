@@ -49,7 +49,7 @@ namespace EzBob.Models
 
         public decimal? InterestDue { get; set; }
 
-        public static LoanModel FromLoan(Loan loan, IPayEarlyCalculator calculator, IPayEarlyCalculator calculatorForNow = null)
+        public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null)
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
 

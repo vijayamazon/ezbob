@@ -51,8 +51,8 @@ namespace PaymentServices.Calculators
             
             loan.AddTransaction(transactionItem);
 
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentTime);
-            payEarlyCalc.PayEarly(amount);
+            var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
+            calculator.RecalculateSchedule();
 
             if (_historyRepository != null)
             {
@@ -238,7 +238,7 @@ namespace PaymentServices.Calculators
             loan.AddTransaction(transactionItem);
 
             var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, date);
-            payEarlyCalc.PayEarly(amount);
+            payEarlyCalc.RecalculateSchedule();
 
             loan.UpdateStatus(date);
             loan.UpdateBalance();
