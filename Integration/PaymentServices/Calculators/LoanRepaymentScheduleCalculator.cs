@@ -7,7 +7,7 @@ using EzBob.Web.Areas.Customer.Models;
 
 namespace PaymentServices.Calculators
 {
-    public class PayEarlyCalculator2 : IPayEarlyCalculator
+    public class LoanRepaymentScheduleCalculator : IPayEarlyCalculator
     {
         private readonly Loan _loan;
         private DateTime _term;
@@ -39,7 +39,7 @@ namespace PaymentServices.Calculators
         private List<LoanScheduleItem> _processed = new List<LoanScheduleItem>();
 
         //последовательность событий, относящихся к кредиту
-        private List<PayEarlyCalculator2Event> _events = new List<PayEarlyCalculator2Event>();
+        private List<LoanRepaymentScheduleCalculatorEvent> _events = new List<LoanRepaymentScheduleCalculatorEvent>();
 
         //Доход банка за все время заема
         private decimal _totalInterestToPay = 0;
@@ -57,8 +57,8 @@ namespace PaymentServices.Calculators
         private decimal _paidRollOvers = 0;
         private decimal _totalRollOversToPay = 0;
 
-        private PayEarlyCalculator2Event _eventDayStart;
-        private PayEarlyCalculator2Event _eventDayEnd;
+        private LoanRepaymentScheduleCalculatorEvent _eventDayStart;
+        private LoanRepaymentScheduleCalculatorEvent _eventDayEnd;
 
         //количество дней в месяце, в текущем периоде
         private int _daysInMonth;
@@ -76,7 +76,7 @@ namespace PaymentServices.Calculators
 
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
-        public PayEarlyCalculator2(Loan loan, DateTime? term)
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
         {
             _loan = loan;
             _schedule = loan.Schedule;
@@ -85,8 +85,8 @@ namespace PaymentServices.Calculators
 
             _term = (term ?? DateTime.Now).Date;
 
-            _eventDayStart = new PayEarlyCalculator2Event(_term);
-            _eventDayEnd = new PayEarlyCalculator2Event(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
+            _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
+            _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
 
             Init();
         }
@@ -130,11 +130,11 @@ namespace PaymentServices.Calculators
                 }
             }
 
-            var lateChargeEvents = _charges.Select(p => new PayEarlyCalculator2Event(new DateTime(p.Date.Year, p.Date.Month, p.Date.Day, 23, 59, 57), p)).ToList();
-            var paymentEvents = _payments.Select(p => new PayEarlyCalculator2Event(new DateTime(p.PostDate.Year, p.PostDate.Month, p.PostDate.Day, 23, 59, 58), p)).ToList();
-            var installmentEvents = _schedule.Select(i => new PayEarlyCalculator2Event(new DateTime(i.Date.Year, i.Date.Month, i.Date.Day, 23, 59, 59), i));
+            var lateChargeEvents = _charges.Select(p => new LoanRepaymentScheduleCalculatorEvent(new DateTime(p.Date.Year, p.Date.Month, p.Date.Day, 23, 59, 57), p)).ToList();
+            var paymentEvents = _payments.Select(p => new LoanRepaymentScheduleCalculatorEvent(new DateTime(p.PostDate.Year, p.PostDate.Month, p.PostDate.Day, 23, 59, 58), p)).ToList();
+            var installmentEvents = _schedule.Select(i => new LoanRepaymentScheduleCalculatorEvent(new DateTime(i.Date.Year, i.Date.Month, i.Date.Day, 23, 59, 59), i));
 
-            var rollOverEvents = _rollovers.Select(p => new PayEarlyCalculator2Event(p.Created.Date, p)).ToList();
+            var rollOverEvents = _rollovers.Select(p => new LoanRepaymentScheduleCalculatorEvent(p.Created.Date, p)).ToList();
 
             _events = installmentEvents
                                  .Union(paymentEvents)

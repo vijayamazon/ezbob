@@ -113,7 +113,7 @@ namespace EzBob.Tests
 
             Console.WriteLine(loan);
 
-            var pc = new PayEarlyCalculator2(loan, now);
+            var pc = new LoanRepaymentScheduleCalculator(loan, now);
 
             var model = LoanModel.FromLoan(loan, pc);
 
@@ -134,7 +134,7 @@ namespace EzBob.Tests
 
             Console.WriteLine(loan);
 
-            var pc = new PayEarlyCalculator2(loan, now);
+            var pc = new LoanRepaymentScheduleCalculator(loan, now);
 
             var ep = pc.NextEarlyPayment();
 
@@ -188,7 +188,7 @@ namespace EzBob.Tests
             var loan = new Loan() { LoanType = type, LoanAmount = 1000, Date = now };
             _calculator.Calculate(1000m, loan, now);
 
-            var pc = new PayEarlyCalculator2(loan, Parse("2013-01-16 00:00:00.000"));
+            var pc = new LoanRepaymentScheduleCalculator(loan, Parse("2013-01-16 00:00:00.000"));
             var ep = pc.NextEarlyPayment();
 
             Console.WriteLine(loan);

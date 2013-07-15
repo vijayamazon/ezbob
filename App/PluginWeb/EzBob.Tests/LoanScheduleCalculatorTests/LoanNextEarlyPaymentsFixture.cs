@@ -96,7 +96,7 @@ namespace EzBob.Tests
 
         private static decimal NextPayment(Loan loan , DateTime date)
         {
-            var calc = new PayEarlyCalculator2(loan, date);
+            var calc = new LoanRepaymentScheduleCalculator(loan, date);
             return calc.NextEarlyPayment();
         }
     }

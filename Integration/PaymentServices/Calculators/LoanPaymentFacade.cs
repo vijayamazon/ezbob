@@ -51,7 +51,7 @@ namespace PaymentServices.Calculators
             
             loan.AddTransaction(transactionItem);
 
-            var payEarlyCalc = new PayEarlyCalculator2(loan, paymentTime);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentTime);
             payEarlyCalc.PayEarly(amount);
 
             if (_historyRepository != null)
@@ -120,7 +120,7 @@ namespace PaymentServices.Calculators
             {
                 if (amount <= 0) break;
 
-                var c = new PayEarlyCalculator2(loan, term);
+                var c = new LoanRepaymentScheduleCalculator(loan, term);
                 var state = c.GetState();
                 var late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
                            state.Interest + state.Fees + state.LateCharges;
@@ -129,8 +129,21 @@ namespace PaymentServices.Calculators
                 amount = amount - money;
             }
         }
-
-        public PayFastResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null)
+        /// <summary>
+        /// Main method for making payments
+        /// </summary>
+        /// <param name="transId">pay point transaction id</param>
+        /// <param name="amount"></param>
+        /// <param name="ip"></param>
+        /// <param name="type"></param>
+        /// <param name="loanId"></param>
+        /// <param name="customer"></param>
+        /// <param name="date">payment date</param>
+        /// <param name="description"></param>
+        /// <param name="paymentType">If payment type is null - ordinary payment(reduces principal), if nextInterest then it is
+        /// for Interest Only loans, and reduces interest in the future.</param>
+        /// <returns></returns>
+        public PaymentResult MakePayment(string transId, decimal amount, string ip, string type, int loanId, Customer customer, DateTime? date = null, string description = "payment from customer", string paymentType = null)
         {
             decimal oldInterest;
             decimal newInterest;
@@ -189,7 +202,7 @@ namespace PaymentServices.Calculators
                                         where t.Id == 0
                                         select t.RefNumber;
 
-            var payFastModel = new PayFastResult
+            var payFastModel = new PaymentResult
                 {
                     PaymentAmount = amount,
                     Saved = oldInterest > 0 ? Math.Round(savedPounds / oldInterest * 100) : 0,
@@ -224,7 +237,7 @@ namespace PaymentServices.Calculators
 
             loan.AddTransaction(transactionItem);
 
-            var payEarlyCalc = new PayEarlyCalculator2(loan, date);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, date);
             payEarlyCalc.PayEarly(amount);
 
             loan.UpdateStatus(date);
@@ -239,13 +252,13 @@ namespace PaymentServices.Calculators
 
         public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new PayEarlyCalculator2(loan, dateTime);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
             return payEarlyCalc.GetState();
         }
 
         public void Recalculate(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new PayEarlyCalculator2(loan, dateTime);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
             payEarlyCalc.GetState();
         }
     }

@@ -74,10 +74,10 @@
     <Compile Include="Calculators\IPayEarlyCalculatorFactory.cs" />
     <Compile Include="Calculators\LoanPaymentFacade.cs" />
     <Compile Include="Calculators\LoanScheduleCalculator.cs" />
-    <Compile Include="Calculators\PayEarlyCalculator2.cs" />
+    <Compile Include="Calculators\LoanRepaymentScheduleCalculator.cs" />
     <Compile Include="Calculators\PayEarlyCalculator.cs" />
-    <Compile Include="Calculators\PayEarlyCalculator2Event.cs" />
-    <Compile Include="Calculators\PayFastResult.cs" />
+    <Compile Include="Calculators\LoanRepaymentScheduleCalculatorEvent.cs" />
+    <Compile Include="Calculators\PaymentResult.cs" />
     <Compile Include="Calculators\SetupFeeCalculator.cs" />
     <Compile Include="PacNet\IPacnetService.cs" />
     <Compile Include="PacNet\FakePacnetService.cs" />

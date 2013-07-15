@@ -50,7 +50,7 @@ namespace EzBob.Web.Code
             AdjustDates(now, loan);
             AdjustBalances(amount, loan);
 
-            var c = new PayEarlyCalculator2(loan, now);
+            var c = new LoanRepaymentScheduleCalculator(loan, now);
             c.GetState();
             return loan;
         }

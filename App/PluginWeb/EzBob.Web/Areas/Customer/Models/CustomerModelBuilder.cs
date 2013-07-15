@@ -83,7 +83,7 @@ namespace EzBob.Web.Areas.Customer.Models
             customerdModel.Loans = customer.Loans
                                                 .OrderBy(l => l.Status)
                                                 .ThenByDescending(l => l.Date)
-                                                .Select(l => LoanModel.FromLoan(l, new PayEarlyCalculator2(l, null), new PayEarlyCalculator2(l, DateTime.UtcNow)))
+                                                .Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null), new LoanRepaymentScheduleCalculator(l, DateTime.UtcNow)))
                                                 .ToList();
 
             customerdModel.TotalBalance = customerdModel.Loans.Sum(l => l.Balance);
@@ -183,7 +183,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
         private decimal GetRolloverPayValue(Loan loan)
         {
-            var payEarlyCalc = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
             var state = payEarlyCalc.GetState();
 
             return state.Fees + state.Interest;

@@ -4,7 +4,7 @@ using EZBob.DatabaseLib.Model.Loans;
 
 namespace PaymentServices.Calculators
 {
-    internal class PayEarlyCalculator2Event
+    internal class LoanRepaymentScheduleCalculatorEvent
     {
         private int _priority = 0;
 
@@ -34,36 +34,36 @@ namespace PaymentServices.Calculators
         }
 
         //installment всегда считается в конце дня
-        public PayEarlyCalculator2Event(DateTime date, LoanScheduleItem loanScheduleItem, int priority = 0)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, LoanScheduleItem loanScheduleItem, int priority = 0)
             : this(new DateTime(date.Year, date.Month, date.Day, 23, 59, 59), priority)
         {
             Installment = loanScheduleItem;
         }
 
-        public PayEarlyCalculator2Event(DateTime date, PaypointTransaction paypointTransaction, int priority = 0)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, PaypointTransaction paypointTransaction, int priority = 0)
             : this(date, priority)
         {
             Payment = paypointTransaction;
         }
 
-        public PayEarlyCalculator2Event(DateTime date, Action action, int priority = 0)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, Action action, int priority = 0)
             : this(date, priority)
         {
             Action = action;
         }
 
-        public PayEarlyCalculator2Event(DateTime date, int priority = 0)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, int priority = 0)
         {
             Date = date;
             _priority = priority;
         }
 
-        public PayEarlyCalculator2Event(DateTime date, LoanCharge loanCharge) :this(date)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, LoanCharge loanCharge) :this(date)
         {
             Charge = loanCharge;
         }
 
-        public PayEarlyCalculator2Event(DateTime date, PaymentRollover rollover) :this(date)
+        public LoanRepaymentScheduleCalculatorEvent(DateTime date, PaymentRollover rollover) :this(date)
         {
             Rollover = rollover;
         }

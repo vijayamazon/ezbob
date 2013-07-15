@@ -82,7 +82,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         [Test]
         public void saving_after_second_payment()
         {
-            PayFastResult result;
+            PaymentResult result;
 
             Console.WriteLine(_loan);
 
@@ -123,7 +123,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         [Test]
         public void pay_loan_from_one_time()
         {
-            PayFastResult result;
+            PaymentResult result;
 
             result = _facade.MakePayment("transaction", 3000, "", "loan", _loan.Id, _customer, _startDate);
 
@@ -149,7 +149,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         [Test]
         public void pay_loan_from_three_times()
         {
-            PayFastResult result;
+            PaymentResult result;
 
             result = _facade.MakePayment("transaction", 1000, "", "loan", _loan.Id, _customer, _startDate);            
             result = _facade.MakePayment("transaction", 1000, "", "loan", _loan.Id, _customer, _startDate);

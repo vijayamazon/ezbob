@@ -2,7 +2,7 @@
 
 namespace PaymentServices.Calculators
 {
-    public class PayFastResult
+    public class PaymentResult
     {
         public decimal Saved { get; set; }
         public decimal PaymentAmount { get; set; }

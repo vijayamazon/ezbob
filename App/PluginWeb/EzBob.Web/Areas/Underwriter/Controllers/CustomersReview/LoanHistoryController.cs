@@ -66,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             EZBob.DatabaseLib.Model.Database.Customer customer = _customerRepository.Get(id);
             List<LoanModel> loans =
-                customer.Loans.Select(l => LoanModel.FromLoan(l, new PayEarlyCalculator2(l, null))).ToList();
+                customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null))).ToList();
 
             List<CashRequestModel> offers = customer.CashRequests
                                                     .OrderBy(c => c.CreationDate)
@@ -234,7 +234,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             
             var hasRollover = _rolloverRepository.GetByLoanId(loanId).Any(x => x.Status == RolloverStatus.New);
 
-            var payEarlyCalc = new PayEarlyCalculator2(loan, paymentDate);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate);
             var state = payEarlyCalc.GetState();
 
             var model = new LoanPaymentDetails
@@ -266,7 +266,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var loan = _loanRepository.Get(loanId);
             var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
-            var payEarlyCalc = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
             var state = payEarlyCalc.GetState();
             
             var rolloverCharge = Convert.ToDecimal(_configurationVariablesRepository.GetByName("RolloverCharge").Value);

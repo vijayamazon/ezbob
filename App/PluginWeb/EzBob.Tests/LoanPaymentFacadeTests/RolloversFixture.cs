@@ -22,7 +22,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var calculator = new LoanScheduleCalculator { Interest = 0.06M };
             calculator.Calculate(1000, _loan, loanDate);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, rolloverCreateDate);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, rolloverCreateDate);
             var state = payEarlyCalc.GetState();
 
             var rolloverRemoved = new PaymentRollover
@@ -46,7 +46,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             
             MakePayment(394 + rolloverAmount, rolloverCreateDate);
 
-            payEarlyCalc = new PayEarlyCalculator2(_loan, rolloverCreateDate);
+            payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, rolloverCreateDate);
 
             Console.WriteLine(_loan.ToString());
 
@@ -72,7 +72,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             };
             _loan.Schedule[1].Rollovers.Add(rollover);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-26 10:10:10.000")); //state for expired rollover
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-26 10:10:10.000")); //state for expired rollover
             var state = payEarlyCalc.GetState();
 
             Assert.That(state.Fees, Is.EqualTo(0));
@@ -96,7 +96,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             };
             _loan.Schedule[0].Rollovers.Add(rollover);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-11 10:10:10.000")); //state for expired rollover
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-11 10:10:10.000")); //state for expired rollover
             var state1 = payEarlyCalc.GetState();
             var state = payEarlyCalc.GetState();
 
@@ -123,7 +123,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var calculator = new LoanScheduleCalculator { Interest = 0.06M };
             calculator.Calculate(1000, _loan, loanDate);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, stateDate);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, stateDate);
 
             var rollover = new PaymentRollover
             {

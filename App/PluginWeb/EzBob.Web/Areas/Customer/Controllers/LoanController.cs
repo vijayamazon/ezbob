@@ -48,7 +48,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             var customer = _context.Customer;
             var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 
-            IPayEarlyCalculator calculator = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            IPayEarlyCalculator calculator = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
 
             var loanModel = LoanModel.FromLoan(loan, calculator);
 

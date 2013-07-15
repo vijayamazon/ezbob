@@ -415,7 +415,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var calc = new PayEarlyCalculator2(_loan, Parse("2012-12-21 11:11:38.000"));
+            var calc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-21 11:11:38.000"));
 
             var payment = calc.TotalEarlyPayment();
             var next = calc.NextEarlyPayment();
@@ -443,7 +443,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(402804.00m, Parse("2012-11-25 06:00:48.000"));
             MakePayment(1409923.59m, Parse("2012-12-19 13:27:01.000"));
 
-            var calc = new PayEarlyCalculator2(_loan, Parse("2012-12-21 11:11:38.000"));
+            var calc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-21 11:11:38.000"));
 
             var payment = calc.TotalEarlyPayment();
             var next = calc.NextEarlyPayment();
@@ -460,7 +460,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-08 16:03:42.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-08 16:03:42.000"));
             var state = payEarlyCalc.GetState();
 
             var earlyPayment = payEarlyCalc.TotalEarlyPayment();
@@ -484,7 +484,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-09 00:00:00.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-09 00:00:00.000"));
 
             var earlyPayment = payEarlyCalc.NextEarlyPayment();
 
@@ -575,7 +575,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(170m, Parse("2012-12-26 16:03:42.000"));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2012-12-26 16:03:42.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-26 16:03:42.000"));
             var state = payEarlyCalc.GetState();
             
             Assert.That(rollover.PaidPaymentAmount, Is.EqualTo(50m));
@@ -605,7 +605,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2012-12-28 14:00:53.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-28 14:00:53.000"));
             var state = payEarlyCalc.GetState();
 
             Assert.That(state.Fees + state.Interest, Is.EqualTo(116m + 50m));
@@ -638,9 +638,9 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var now = Parse("2012-12-27 13:19:00.000");
             MakePayment(274.03m, now);
 
-            //var model = LoanModel.FromLoan(_loan, new PayEarlyCalculator2(_loan, now), new PayEarlyCalculator2(_loan, now));
+            //var model = LoanModel.FromLoan(_loan, new LoanRepaymentScheduleCalculator(_loan, now), new LoanRepaymentScheduleCalculator(_loan, now));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, now);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, now);
             var state = payEarlyCalc.GetState();
 
             Console.WriteLine(_loan);
@@ -676,7 +676,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2012-12-28 09:26:50.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-28 09:26:50.000"));
             var payment = payEarlyCalc.TotalEarlyPayment();
 
             Console.WriteLine(_loan);
@@ -709,7 +709,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(335.94m, Parse("2012-12-28 08:58:02.000"));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2012-12-28 09:26:50.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-28 09:26:50.000"));
             var payment = payEarlyCalc.TotalEarlyPayment();
 
             Assert.That(payment, Is.EqualTo(666m));
@@ -745,7 +745,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(170m, Parse("2012-12-27 08:58:02.000"));
 
-            //var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2012-12-27 08:58:02.000"));
+            //var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2012-12-27 08:58:02.000"));
             //var state = payEarlyCalc.GetState();
 
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.StillToPay));
@@ -824,7 +824,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, now);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, now);
             var state = payEarlyCalc.GetState();
 
             Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.Late));
@@ -845,7 +845,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, now);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, now);
             var state = payEarlyCalc.GetState();
 
             Assert.That(state.Interest, Is.EqualTo(120m));
@@ -869,7 +869,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(1003.87m, Parse("2012-12-24 14:56:16.000"));
 
-            var model = LoanModel.FromLoan(_loan, new PayEarlyCalculator2(_loan, now), new PayEarlyCalculator2(_loan, now));
+            var model = LoanModel.FromLoan(_loan, new LoanRepaymentScheduleCalculator(_loan, now), new LoanRepaymentScheduleCalculator(_loan, now));
 
             Assert.That(_loan.TotalEarlyPayment(now), Is.EqualTo(0));
             Assert.That(model.TotalEarlyPayment, Is.EqualTo(0));
@@ -893,7 +893,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-20 20:00:04.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-20 20:00:04.000"));
             var state = payEarlyCalc.GetState();
 
             Console.WriteLine(_loan);
@@ -912,7 +912,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             MakePayment(12625.0m, Parse("2013-01-03 09:13:21.000"));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-23 20:00:04.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-23 20:00:04.000"));
             var state = payEarlyCalc.GetState();
 
             //Assert.That(state.AmountDue, Is.EqualTo(0.04m));
@@ -937,7 +937,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(136.0m, Parse("2012-11-21 16:33:08.000"));
             MakePayment(0.13m, Parse("2013-01-22 20:00:11.000"));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-01-23 20:00:11.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-01-23 20:00:11.000"));
             var state = payEarlyCalc.GetState();
 
             Assert.That(state.AmountDue, Is.EqualTo(1.08m));
@@ -984,7 +984,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(100.00m, Parse("2013-03-06 00:00:00.000"));
             MakePayment(192.05m, Parse("2013-03-17 00:00:00.000"));
 
-            var payEarlyCalc = new PayEarlyCalculator2(_loan, Parse("2013-03-19 20:00:11.000"));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-03-19 20:00:11.000"));
             var state = payEarlyCalc.GetState();
 
             //Assert.That(state.AmountDue, Is.EqualTo(0m));

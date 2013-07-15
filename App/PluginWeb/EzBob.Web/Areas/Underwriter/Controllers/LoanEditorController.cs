@@ -41,7 +41,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var loan = _loans.Get(id);
 
-            var calc = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
             calc.GetState();
 
             var model = _builder.BuildModel(loan);
@@ -110,7 +110,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             _loanModelBuilder.UpdateLoan(model, loan);
 
-            var calc = new PayEarlyCalculator2(loan, DateTime.UtcNow);
+            var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
             calc.GetState();
 
             return this.JsonNet(_loanModelBuilder.BuildModel(loan));
@@ -128,7 +128,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             try
             {
-                var calc = new PayEarlyCalculator2(loan, now);
+                var calc = new LoanRepaymentScheduleCalculator(loan, now);
                 calc.GetState();
             }
             catch (Exception e)

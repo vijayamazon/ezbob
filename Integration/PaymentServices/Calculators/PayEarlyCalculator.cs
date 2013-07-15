@@ -240,13 +240,13 @@ namespace PaymentServices.Calculators
     {
         public static decimal NextEarlyPayment(this Loan loan, DateTime? term = null)
         {
-            var calc = new PayEarlyCalculator2(loan, term);
+            var calc = new LoanRepaymentScheduleCalculator(loan, term);
             return calc.NextEarlyPayment();
         }
 
         public static decimal TotalEarlyPayment(this Loan loan, DateTime? term = null)
         {
-            var calc = new PayEarlyCalculator2(loan, term);
+            var calc = new LoanRepaymentScheduleCalculator(loan, term);
             return calc.TotalEarlyPayment();
         }
 

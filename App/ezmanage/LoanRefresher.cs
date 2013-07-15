@@ -48,7 +48,7 @@ namespace ezmanage
 
                 using (var tx = _session.BeginTransaction())
                 {
-                    var calc = new PayEarlyCalculator2(loan, now);
+                    var calc = new LoanRepaymentScheduleCalculator(loan, now);
                     var state = calc.GetState();
 
                     if (loan.Schedule.Any(s => s.Status == LoanScheduleStatus.Late))
