@@ -22,7 +22,7 @@ namespace MailApi
             _client.AddHandler("application/json", new JsonDeserializer());
         }
 
-        private EmailModel PrepareEmail(string templateName, string to,  Dictionary<string,string> variables, string subject)
+        private EmailModel PrepareEmail(string templateName, string to,  Dictionary<string,string> variables, string subject, string cc="")
         {
             var message = new EmailModel
             {
@@ -31,8 +31,9 @@ namespace MailApi
                 message = new EmailMessageModel
                 {
                     to = new[] { new EmailAddressModel { email = to } },
-                    subject = subject
-                }
+                    subject = subject,
+                    bcc_address = cc
+                },
             };
 
             foreach (var var in variables)
@@ -47,7 +48,9 @@ namespace MailApi
         {
             if (!_config.Enable)
             {
-                return string.Empty;
+                const string retVal = "Mandrrill is disabled";
+                Log.Warn(retVal);
+                return retVal;
             }
             var request = new RestRequest(_config.SendTemplatePath, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(email);
@@ -90,6 +93,12 @@ namespace MailApi
                 };
             var message = PrepareEmail(_config.FinishWizardTemplateName, emailTo, vars, "Finish Application");
             Send(message);
+        }
+
+        public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "")
+        {
+            var message = PrepareEmail(templateName, to, parameters, subject, cc);
+            return Send(message);
         }
     }
 }

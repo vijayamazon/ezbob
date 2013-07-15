@@ -57,41 +57,13 @@
     <Compile Include="NodeMailEzbob.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Export\Scorto.Export.Templates\Scorto.Export.Templates.csproj">
-      <Project>{81E6A233-5A13-4AE5-953C-834271561141}</Project>
-      <Name>Scorto.Export.Templates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Nodes\MailNode\Scorto.MailNode.Core\Scorto.MailNode.Core.csproj">
-      <Project>{39BCA4B1-C564-43EA-8A37-EC9D09E27FEA}</Project>
-      <Name>Scorto.MailNode.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Nodes\MailNode\Scorto.MailNode.Runtime\Scorto.MailNode.Runtime.csproj">
-      <Project>{73384BB9-9363-4F5A-B42E-AB0FF4A094F2}</Project>
-      <Name>Scorto.MailNode.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Nodes\NodePrint\Scorto.NodePrint.Core\Scorto.PrintNode.Core.csproj">
-      <Project>{680F945F-3EF8-4BF5-B841-2BFEA267EB46}</Project>
-      <Name>Scorto.PrintNode.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Nodes\NodePrint\Scorto.PrintNode.Runtime\Scorto.PrintNode.Runtime.csproj">
-      <Project>{2DDED8F0-CC11-4CF1-9BA4-9A9E65EF52BC}</Project>
-      <Name>Scorto.PrintNode.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Scorto.Email\Scorto.Email.csproj">
-      <Project>{901F75B7-A92B-42B5-92AD-6381AEA39AA2}</Project>
-      <Name>Scorto.Email</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\Scorto.NHibernate\Scorto.NHibernate.csproj">
-      <Project>{8791667C-AAF4-4132-B140-3885C789D040}</Project>
-      <Name>Scorto.NHibernate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Lib\WorkflowLibrary\WorkflowLibrary.csproj">
-      <Project>{0D76ACC1-B717-446B-94A5-243D6F534010}</Project>
-      <Name>WorkflowLibrary</Name>
+    <ProjectReference Include="..\MailApi\MailApi.csproj">
+      <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
+      <Name>MailApi</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -119,12 +91,45 @@
   <ItemGroup>
     <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    <Reference Include="Scorto.Email, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Email.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Export.Templates, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Export.Templates.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.MailNode.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.MailNode.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.MailNode.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.MailNode.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.PrintNode.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.PrintNode.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.PrintNode.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.PrintNode.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="WorkflowLibrary, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\WorkflowLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
