@@ -32,17 +32,17 @@
 			log.Info("Getting sales invoices...");
 			var salesInvoices = SageConnector.GetSalesInvoices(
 				accessToken,
-				Helper.GetSageSalesInvoiceDeltaPeriod(databaseCustomerMarketPlace));
+				Helper.GetSageDeltaPeriod(databaseCustomerMarketPlace));
 
 			log.Info("Getting incomes...");
 			var incomes = SageConnector.GetIncomes(
 				accessToken,
-				Helper.GetSageSalesInvoiceDeltaPeriod(databaseCustomerMarketPlace));
+				Helper.GetSageDeltaPeriod(databaseCustomerMarketPlace));
 
 			log.Info("Getting purchase invoices...");
 			var purchaseInvoices = SageConnector.GetPurchaseInvoices(
 				accessToken,
-				Helper.GetSageSalesInvoiceDeltaPeriod(databaseCustomerMarketPlace));
+				Helper.GetSageDeltaPeriod(databaseCustomerMarketPlace));
 
             var elapsedTimeInfo = new ElapsedTimeInfo();
 

@@ -2519,33 +2519,49 @@ namespace EZBob.DatabaseLib
 			return monthDiff;
 		} // GetFreeAgentInvoiceDeltaPeriod
 
-		public DateTime? GetSageSalesInvoiceDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public DateTime? GetSageDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			MP_SageRequest order = customerMarketPlace.SageRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (order == null)
+			MP_SageRequest request = customerMarketPlace.SageRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
+			if (request == null)
 			{
 				return null;
 			}
 
-			MP_SageSalesInvoice item = order.SalesInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
-			DateTime latestExistingDate = item != null ? item.date : order.Created;
-			return latestExistingDate.AddMonths(-1);
-		} // GetSageSalesInvoiceDeltaPeriod
+			MP_SageSalesInvoice lastSalesInvoice = request.SalesInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			MP_SageIncome lastIncome = request.Incomes.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+			MP_SagePurchaseInvoice lastPurchaseInvoice = request.PurchaseInvoices.OrderBy(x => x.date).AsQueryable().LastOrDefault();
+
+			DateTime latestDate = request.Created;
+			if (lastSalesInvoice != null && lastSalesInvoice.date > latestDate)
+			{
+				latestDate = lastSalesInvoice.date;
+			}
+			if (lastIncome != null && lastIncome.date > latestDate)
+			{
+				latestDate = lastIncome.date;
+			}
+			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date > latestDate)
+			{
+				latestDate = lastPurchaseInvoice.date;
+			}
+
+			return latestDate.AddMonths(-1);
+		} // GetSageDeltaPeriod
 
 		public DateTime? GetFreeAgentExpenseDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			MP_FreeAgentRequest order = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
-			if (order == null)
+			MP_FreeAgentRequest request = customerMarketPlace.FreeAgentRequests.OrderBy(x => x.Id).AsQueryable().LastOrDefault();
+			if (request == null)
 			{
 				return null;
 			}
 
-			MP_FreeAgentExpense item = order.Expenses.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
-			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
+			MP_FreeAgentExpense item = request.Expenses.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
+			DateTime latestExistingDate = item != null ? item.dated_on : request.Created;
 			return latestExistingDate.AddMonths(-1);
 		} // GetFreeAgentExpenseDeltaPeriod
 
