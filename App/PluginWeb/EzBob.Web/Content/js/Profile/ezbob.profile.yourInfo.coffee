@@ -186,7 +186,7 @@ class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
         directorAddress: '#DirectorAddress'
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress[#{@model.get('Position')}]", max: 10, isShowClear:false, directorId: @model.get('Id') })
+        address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress[#{@model.get('Position')}]", max: 10, isShowClear:true, directorId: @model.get('Id') })
         @directorAddress.show(address)
 
 class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeView
