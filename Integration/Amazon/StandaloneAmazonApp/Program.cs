@@ -25,30 +25,36 @@ namespace StandaloneAmazonApp
     {
         static void Main(string[] args)
         {
-            if (args.Length != 3)
+            try
             {
-                Console.WriteLine("Usage: StandaloneAmazonApp.exe <umi> <days> <isReporting>");
-                return;
+                if (args.Length != 3)
+                {
+                    Console.WriteLine("Usage: StandaloneAmazonApp.exe <umi> <days> <isReporting>");
+                    return;
+                }
+
+                Init();
+
+                var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
+
+                var _ConnectionInfo = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
+                var amazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
+
+                int umi = int.Parse(args[0]);
+                int days = int.Parse(args[1]);
+                bool isReporting = int.Parse(args[2]) == 1;
+
+                var elapsedTimeInfo = new ElapsedTimeInfo();
+
+                var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, _ConnectionInfo, days, isReporting);
+
+                DisplayOrders(elapsedTimeInfo, orders);
             }
-
-            Init();
-
-            var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
-
-            var _ConnectionInfo = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
-            var amazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
-
-            int umi = int.Parse(args[0]);
-            int days = int.Parse(args[1]);
-            bool isReporting = int.Parse(args[2]) == 1;
-
-            var elapsedTimeInfo = new ElapsedTimeInfo();
-
-            var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, _ConnectionInfo, days, isReporting);
-
-            DisplayOrders(elapsedTimeInfo, orders);
-
-            Console.WriteLine("Finished at {0}", DateTime.Now);
+            finally
+            {
+                Console.WriteLine("Finished at {0}", DateTime.Now);
+                Console.ReadLine();
+            }
         }
 
         private static List<OrderItemTwo> GetOrders(int umi, IAmazonMarketplaceSettings amazonSettings,
