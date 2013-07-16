@@ -86,7 +86,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 		{
 			var requestInfo = reportRequestList.GetRequestByName(getFlatFileOrdersDataRequestStr);
 
-			AmazonOrdersList data = null;
+            AmazonOrdersList data = new AmazonOrdersList(reportRequestList.StartDate.Value);
 			if (requestInfo != null && requestInfo.IsDone)
 			{
 				var reportRequestInfo = requestInfo.ReportData;
