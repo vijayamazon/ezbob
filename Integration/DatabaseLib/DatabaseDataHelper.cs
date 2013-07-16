@@ -1088,8 +1088,12 @@ namespace EZBob.DatabaseLib
 		{
 			foreach (SagePaymentStatus paymentStatus in paymentStatuses)
 			{
-				var dbPaymentStatus = new MP_SagePaymentStatus {SageId = paymentStatus.SageId, name = paymentStatus.name};
-				_SagePaymentStatusRepository.SaveOrUpdate(dbPaymentStatus);
+				MP_SagePaymentStatus dbStatus = _SagePaymentStatusRepository.GetAll().FirstOrDefault(a => a.SageId == paymentStatus.SageId);
+				if (dbStatus == null)
+				{
+					dbStatus = new MP_SagePaymentStatus {SageId = paymentStatus.SageId, name = paymentStatus.name};
+				}
+				_SagePaymentStatusRepository.SaveOrUpdate(dbStatus);
 			}
 		}
 

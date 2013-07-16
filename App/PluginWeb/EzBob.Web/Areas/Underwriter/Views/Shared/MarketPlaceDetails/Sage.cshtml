@@ -112,14 +112,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%_.each(m.Sage.SalesInvoices, function(salesInvoice, i) {%>
+                    <%_.each(m.Sage.SalesInvoices, function(salesInvoice, i) { %>
                     <tr>
                         <td><%-salesInvoice.date!=undefined ? EzBob.formatDateTime(salesInvoice.date) : "-"%></td>
                         <td><%-salesInvoice.due_date!=undefined ? EzBob.formatDateTime(salesInvoice.due_date) : "-"%></td>
                         <td><%-salesInvoice.total_net_amount!=undefined ? GBPValues(salesInvoice.total_net_amount, true) : "-"%></td>
                         <td><%-salesInvoice.outstanding_amount!=undefined ? GBPValues(salesInvoice.outstanding_amount, true) : "-"%></td>
-                        <td><%-salesInvoice.status!=undefined ? salesInvoice.status : "-"%></td>
-                    </tr>
+                        <td><%-salesInvoice.status!=undefined && m.Sage.InvoicesStatuses[salesInvoice.status]!=undefined ? m.Sage.InvoicesStatuses[salesInvoice.status] : "-"%></td>
+                     </tr>
                     <%});%>
                 </tbody>
             </table>
@@ -216,7 +216,7 @@
                         <td><%-purchaseInvoice.due_date!=undefined ? EzBob.formatDateTime(purchaseInvoice.due_date) : "-"%></td>
                         <td><%-purchaseInvoice.total_net_amount!=undefined ? GBPValues(purchaseInvoice.total_net_amount, true) : "-"%></td>
                         <td><%-purchaseInvoice.outstanding_amount!=undefined ? GBPValues(purchaseInvoice.outstanding_amount, true) : "-"%></td>
-                        <td><%-purchaseInvoice.status!=undefined ? purchaseInvoice.status : "-"%></td>
+                        <td><%-purchaseInvoice.status!=undefined && m.Sage.InvoicesStatuses[purchaseInvoice.status]!=undefined ? m.Sage.InvoicesStatuses[purchaseInvoice.status] : "-"%></td>
                     </tr>
                     <%});%>
                 </tbody>

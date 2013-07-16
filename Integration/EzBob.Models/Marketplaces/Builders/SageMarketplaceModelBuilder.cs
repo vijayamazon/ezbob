@@ -1,7 +1,9 @@
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -13,11 +15,17 @@ namespace EzBob.Models.Marketplaces.Builders
 	class SageMarketplaceModelBuilder : MarketplaceModelBuilder
     {
 		private readonly ICurrencyConvertor currencyConverter;
+		readonly Dictionary<int, string> invoiceStatuses = new Dictionary<int, string>();
 
-		public SageMarketplaceModelBuilder(CustomerMarketPlaceRepository customerMarketplaces, CurrencyRateRepository currencyRateRepository)
+		public SageMarketplaceModelBuilder(MP_SagePaymentStatusRepository sagePaymentStatusRepository, CustomerMarketPlaceRepository customerMarketplaces, CurrencyRateRepository currencyRateRepository)
             : base(customerMarketplaces)
         {
 			currencyConverter = new CurrencyConvertor(currencyRateRepository);
+
+			foreach (var status in sagePaymentStatusRepository.GetAll())
+			{
+				invoiceStatuses.Add(status.SageId, status.name);
+			}
         }
 
         public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
@@ -85,12 +93,14 @@ namespace EzBob.Models.Marketplaces.Builders
 			var dbIncomes = mp.SageRequests.SelectMany(sageRequest => sageRequest.Incomes).OrderByDescending(income => income.Request.Id).Distinct(new SageIncomeComparer()).OrderByDescending(income => income.date);
 			var dbExpenditures = mp.SageRequests.SelectMany(sageRequest => sageRequest.Expenditures).OrderByDescending(expenditure => expenditure.Request.Id).Distinct(new SageExpenditureComparer()).OrderByDescending(expenditure => expenditure.date);
 			
+
 			var model = new SageModel
 			{
 				SalesInvoices = SageSalesInvoicesConverter.GetSageSalesInvoices(dbSalesInvoices),
 				PurchaseInvoices = SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices),
 				Incomes = SageIncomesConverter.GetSageIncomes(dbIncomes),
-				Expenditures = SageExpendituresConverter.GetSageExpenditures(dbExpenditures)
+				Expenditures = SageExpendituresConverter.GetSageExpenditures(dbExpenditures),
+				InvoicesStatuses = invoiceStatuses
 			};
 
 			return model;
