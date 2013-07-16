@@ -8,7 +8,7 @@
     using RestSharp;
 	using log4net;
 	using StructureMap;
-
+	
 	public class SageConnector
 	{
 		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
@@ -16,213 +16,38 @@
 
 		public static List<SagePaymentStatus> GetPaymentStatuses(string accessToken)
 		{
-			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusDeserialization, SagePaymentStatus>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, SageDesreializer.DeserializePaymentStatus);
-		}
-
-		private static PaginatedResults<SagePaymentStatusDeserialization> CreateDeserializedPaymentStatuses(string cleanResponse)
-		{
-			var deserializedPaymentStatuses = DeserializePaymentStatuses(cleanResponse);
-			if (deserializedPaymentStatuses == null)
-			{
-				log.Error("Error deserializing sage payment statuses");
-				return null;
-			}
-			if (deserializedPaymentStatuses.diagnoses != null)
-			{
-				foreach (SageDiagnostic diagnostic in deserializedPaymentStatuses.diagnoses)
-				{
-					log.ErrorFormat("Error occured during sage payment statuses request. Payment statuses were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
-						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
-				}
-				return null;
-			}
-
-			return deserializedPaymentStatuses;
-		}
-
-		private static PaginatedResults<SagePaymentStatusDeserialization> DeserializePaymentStatuses(string cleanResponse)
-		{
-			try
-			{
-				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<SagePaymentStatusDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SagePaymentStatusDeserialization>)));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed deserializing sage payment statuses response:{0}. The error was:{1}", cleanResponse, e);
-				return null;
-			}
+			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusDeserialization, SagePaymentStatus>(accessToken, config.PaymentStatusesRequest, null, SageDesreializer.DeserializePaymentStatus);
 		}
 
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoiceDeserialization, SageSalesInvoice>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, SageDesreializer.DeserializeSalesInvoice);
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoiceDeserialization, SageSalesInvoice>(accessToken, config.SalesInvoicesRequest, fromDate, SageDesreializer.DeserializeSalesInvoice);
 			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
 			return salesInvoicesList;
 		}
 
-		private static PaginatedResults<SageSalesInvoiceDeserialization> CreateDeserializedSalesInvoices(string cleanResponse)
-		{
-			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
-			if (deserializedSalesInvoices == null)
-			{
-				log.Error("Error deserializing sage sales invoices");
-				return null;
-			}
-			if (deserializedSalesInvoices.diagnoses != null)
-			{
-				foreach (SageDiagnostic diagnostic in deserializedSalesInvoices.diagnoses)
-				{
-					log.ErrorFormat("Error occured during sage sales invoices request. Sales invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
-						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
-				}
-				return null;
-			}
-
-			return deserializedSalesInvoices;
-		}
-
-		private static PaginatedResults<SageSalesInvoiceDeserialization> DeserializeSalesInvoices(string cleanResponse)
-		{
-			try
-			{
-				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<SageSalesInvoiceDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageSalesInvoiceDeserialization>)));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed deserializing sage sales invoices response:{0}. The error was:{1}", cleanResponse, e);
-				return null;
-			}
-		}
-
 		public static SagePurchaseInvoicesList GetPurchaseInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoiceDeserialization, SagePurchaseInvoice>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, SageDesreializer.DeserializePurchaseInvoice);
+			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoiceDeserialization, SagePurchaseInvoice>(accessToken, config.PurchaseInvoicesRequest, fromDate, SageDesreializer.DeserializePurchaseInvoice);
 			var purchaseInvoicesList = new SagePurchaseInvoicesList(DateTime.UtcNow, purchaseInvoices);
 			return purchaseInvoicesList;
 		}
 
-		private static PaginatedResults<SagePurchaseInvoiceDeserialization> CreateDeserializedPurchaseInvoices(string cleanResponse)
-		{
-			var deserializedPurchaseInvoices = DeserializePurchaseInvoices(cleanResponse);
-			if (deserializedPurchaseInvoices == null)
-			{
-				log.Error("Error deserializing sage purchase invoices");
-				return null;
-			}
-			if (deserializedPurchaseInvoices.diagnoses != null)
-			{
-				foreach (SageDiagnostic diagnostic in deserializedPurchaseInvoices.diagnoses)
-				{
-					log.ErrorFormat("Error occured during sage purchase invoices request. Purchase invoices were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
-						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
-				}
-				return null;
-			}
-
-			return deserializedPurchaseInvoices;
-		}
-
-		private static PaginatedResults<SagePurchaseInvoiceDeserialization> DeserializePurchaseInvoices(string cleanResponse)
-		{
-			try
-			{
-				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<SagePurchaseInvoiceDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SagePurchaseInvoiceDeserialization>)));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed deserializing sage purchase invoices response:{0}. The error was:{1}", cleanResponse, e);
-				return null;
-			}
-		}
-
 		public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
 		{
-			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomeDeserialization, SageIncome>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, SageDesreializer.DeserializeIncome);
+			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomeDeserialization, SageIncome>(accessToken, config.IncomesRequest, fromDate, SageDesreializer.DeserializeIncome);
 			var incomesList = new SageIncomesList(DateTime.UtcNow, incomes);
 			return incomesList;
 		}
 
-		private static PaginatedResults<SageIncomeDeserialization> CreateDeserializedIncomes(string cleanResponse)
-		{
-			var deserializeIncomes = DeserializeIncomes(cleanResponse);
-			if (deserializeIncomes == null)
-			{
-				log.Error("Error deserializing sage incomes");
-				return null;
-			}
-			if (deserializeIncomes.diagnoses != null)
-			{
-				foreach (SageDiagnostic diagnostic in deserializeIncomes.diagnoses)
-				{
-					log.ErrorFormat("Error occured during sage incomes request. Incomes were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
-						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
-				}
-				return null;
-			}
-
-			return deserializeIncomes;
-		}
-
-		private static PaginatedResults<SageIncomeDeserialization> DeserializeIncomes(string cleanResponse)
-		{
-			try
-			{
-				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<SageIncomeDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageIncomeDeserialization>)));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed deserializing sage incomes response:{0}. The error was:{1}", cleanResponse, e);
-				return null;
-			}
-		}
-
 		public static SageExpendituresList GetExpenditures(string accessToken, DateTime? fromDate)
 		{
-			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpenditureDeserialization, SageExpenditure>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, SageDesreializer.DeserializeExpenditure);
+			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpenditureDeserialization, SageExpenditure>(accessToken, config.ExpendituresRequest, fromDate, SageDesreializer.DeserializeExpenditure);
 			var expendituresList = new SageExpendituresList(DateTime.UtcNow, expenditures);
 			return expendituresList;
 		}
 
-		private static PaginatedResults<SageExpenditureDeserialization> CreateDeserializedExpenditures(string cleanResponse)
-		{
-			var deserializeExpenditures = DeserializeExpenditures(cleanResponse);
-			if (deserializeExpenditures == null)
-			{
-				log.Error("Error deserializing sage expenditures");
-				return null;
-			}
-			if (deserializeExpenditures.diagnoses != null)
-			{
-				foreach (SageDiagnostic diagnostic in deserializeExpenditures.diagnoses)
-				{
-					log.ErrorFormat("Error occured during sage expenditures request. Expenditures were not fetched. Message:{0} Source:{1} Severity:{2} DataCode:{3}",
-						diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
-				}
-				return null;
-			}
-
-			return deserializeExpenditures;
-		}
-
-		private static PaginatedResults<SageExpenditureDeserialization> DeserializeExpenditures(string cleanResponse)
-		{
-			try
-			{
-				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<SageExpenditureDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageExpenditureDeserialization>)));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed deserializing sage expenditures response:{0}. The error was:{1}", cleanResponse, e);
-				return null;
-			}
-		}
-
-		private static List<TConverted> ExecuteRequestAndGetDeserializedResponse<TDeserialize, TConverted>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, PaginatedResults<TDeserialize>> deserializeFunction, Func<TDeserialize, TConverted> conversionFunc)
+		private static List<TConverted> ExecuteRequestAndGetDeserializedResponse<TDeserialize, TConverted>(string accessToken, string requestUrl, DateTime? fromDate, Func<TDeserialize, TConverted> conversionFunc)
 			where TDeserialize : class
 		{
 			string authorizationHeader = string.Format("Bearer {0}", accessToken);
@@ -234,7 +59,7 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			PaginatedResults<TDeserialize> deserializedResponse = deserializeFunction(CleanResponse(response.Content));
+			PaginatedResults<TDeserialize> deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
 			if (deserializedResponse == null)
 			{
 				log.Error("Sage response deserialization failed");
@@ -252,7 +77,7 @@
 				request.AddHeader("Authorization", authorizationHeader);
 				response = client.Execute(request);
 
-				deserializedResponse = deserializeFunction(CleanResponse(response.Content));
+				deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
 				if (deserializedResponse == null)
 				{
 					log.Error("Sage response deserialization failed");
@@ -265,6 +90,41 @@
 			}
 
 			return results;
+		}
+
+		private static PaginatedResults<TDeserialized> CreateDeserializedItems<TDeserialized>(string cleanResponse)
+		{
+			var deserializedItems = DeserializeItems<TDeserialized>(cleanResponse);
+			if (deserializedItems == null)
+			{
+				log.ErrorFormat("Error deserializing sage {0}", typeof(TDeserialized));
+				return null;
+			}
+			if (deserializedItems.diagnoses != null)
+			{
+				foreach (SageDiagnostic diagnostic in deserializedItems.diagnoses)
+				{
+					log.ErrorFormat("Error occured during sage {0} request. Message:{1} Source:{2} Severity:{3} DataCode:{4}",
+						typeof(TDeserialized), diagnostic.message, diagnostic.source, diagnostic.severity, diagnostic.dataCode);
+				}
+				return null;
+			}
+
+			return deserializedItems;
+		}
+
+		private static PaginatedResults<TDeserialized> DeserializeItems<TDeserialized>(string cleanResponse)
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				return ((PaginatedResults<TDeserialized>)js.Deserialize(cleanResponse, typeof(PaginatedResults<TDeserialized>)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed deserializing sage {0} response:{1}. The error was:{2}", typeof(TDeserialized), cleanResponse, e);
+				return null;
+			}
 		}
 
 		private static void FillFromDeserializedData<TDeserialize, TConverted>(PaginatedResults<TDeserialize> deserializedResponse, List<TConverted> list, Func<TDeserialize, TConverted> conversionFunc)
