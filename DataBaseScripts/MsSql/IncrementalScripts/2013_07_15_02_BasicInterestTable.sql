@@ -2,7 +2,7 @@ CREATE TABLE dbo.BasicInterestRate
 	(
 	FromScore int NOT NULL,
 	ToScore int NOT NULL,
-	LoanIntrestBase float(53) NOT NULL
+	LoanIntrestBase decimal(18,4) NOT NULL
 	)  ON [PRIMARY]
 GO
 

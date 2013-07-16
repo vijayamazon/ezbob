@@ -12,7 +12,8 @@ CREATE PROCEDURE [dbo].[UpdateCashRequests]
  @MedalType varchar(50),
  @ScorePoints numeric(8,3),
  @ExpirianRating int,
- @AnualTurnover int)
+ @AnualTurnover int,
+ @InterestRate decimal(18,4))
 
 AS
 BEGIN
@@ -27,7 +28,8 @@ UPDATE [dbo].[CashRequests]
 		[MedalType]= @MedalType,
 		[ScorePoints]= @ScorePoints,
 		[ExpirianRating] = @ExpirianRating,
-		[AnualTurnover] = @AnualTurnover
+		[AnualTurnover] = @AnualTurnover,
+		[InterestRate] = @InterestRate
  WHERE Id = (select MAX(id) from CashRequests
 				where IdCustomer=@CustomerId)
 
