@@ -16,7 +16,7 @@
 
 		public static List<SagePaymentStatus> GetPaymentStatuses(string accessToken)
 		{
-			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusDeserialization, List<SagePaymentStatus>>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, FillPaymentStatusesFromDeserializedData);
+			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusDeserialization, SagePaymentStatus>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, SageDesreializer.DeserializePaymentStatus);
 		}
 
 		private static PaginatedResults<SagePaymentStatusDeserialization> CreateDeserializedPaymentStatuses(string cleanResponse)
@@ -54,18 +54,9 @@
 			}
 		}
 
-		private static bool FillPaymentStatusesFromDeserializedData(PaginatedResults<SagePaymentStatusDeserialization> deserializePaymentStatusesResponse, List<SagePaymentStatus> paymentStatuses)
-		{
-			foreach (var deserializePaymentStatus in deserializePaymentStatusesResponse.resources)
-			{
-				TryConvertDeserialized(paymentStatuses, deserializePaymentStatus, SageDesreializer.DeserializePaymentStatus);
-			}
-			return true;
-		}
-
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoiceDeserialization, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoiceDeserialization, SageSalesInvoice>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, SageDesreializer.DeserializeSalesInvoice);
 			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
 			return salesInvoicesList;
 		}
@@ -105,19 +96,9 @@
 			}
 		}
 
-		private static bool FillSalesInvoicesFromDeserializedData(PaginatedResults<SageSalesInvoiceDeserialization> deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
-		{
-			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
-			{
-				TryConvertDeserialized(salesInvoices, serializedSalesInvoice, SageDesreializer.DeserializeSalesInvoice);
-			}
-
-			return true;
-		}
-
 		public static SagePurchaseInvoicesList GetPurchaseInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoiceDeserialization, List<SagePurchaseInvoice>>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, FillPurchaseInvoicesFromDeserializedData);
+			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoiceDeserialization, SagePurchaseInvoice>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, SageDesreializer.DeserializePurchaseInvoice);
 			var purchaseInvoicesList = new SagePurchaseInvoicesList(DateTime.UtcNow, purchaseInvoices);
 			return purchaseInvoicesList;
 		}
@@ -157,19 +138,9 @@
 			}
 		}
 
-		private static bool FillPurchaseInvoicesFromDeserializedData(PaginatedResults<SagePurchaseInvoiceDeserialization> deserializePurchaseInvoicesResponse, List<SagePurchaseInvoice> purchaseInvoices)
-		{
-			foreach (var serializedPurchaseInvoice in deserializePurchaseInvoicesResponse.resources)
-			{
-				TryConvertDeserialized(purchaseInvoices, serializedPurchaseInvoice, SageDesreializer.DeserializePurchaseInvoice);
-			}
-
-			return true;
-		}
-
 		public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
 		{
-			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomeDeserialization, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
+			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomeDeserialization, SageIncome>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, SageDesreializer.DeserializeIncome);
 			var incomesList = new SageIncomesList(DateTime.UtcNow, incomes);
 			return incomesList;
 		}
@@ -209,19 +180,9 @@
 			}
 		}
 
-		private static bool FillIncomesFromDeserializedData(PaginatedResults<SageIncomeDeserialization> deserializeIncomesResponse, List<SageIncome> incomes)
-		{
-			foreach (var serializedIncome in deserializeIncomesResponse.resources)
-			{
-				TryConvertDeserialized(incomes, serializedIncome, SageDesreializer.DeserializeIncome);
-			}
-
-			return true;
-		}
-
 		public static SageExpendituresList GetExpenditures(string accessToken, DateTime? fromDate)
 		{
-			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpenditureDeserialization, List<SageExpenditure>>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, FillExpendituresFromDeserializedData);
+			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpenditureDeserialization, SageExpenditure>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, SageDesreializer.DeserializeExpenditure);
 			var expendituresList = new SageExpendituresList(DateTime.UtcNow, expenditures);
 			return expendituresList;
 		}
@@ -261,19 +222,8 @@
 			}
 		}
 
-		private static bool FillExpendituresFromDeserializedData(PaginatedResults<SageExpenditureDeserialization> deserializeExpendituresResponse, List<SageExpenditure> expenditures)
-		{
-			foreach (var serializedExpenditure in deserializeExpendituresResponse.resources)
-			{
-				TryConvertDeserialized(expenditures, serializedExpenditure, SageDesreializer.DeserializeExpenditure);
-			}
-
-			return true;
-		}
-		
-		private static TFinalOutput ExecuteRequestAndGetDeserializedResponse<TDeserialize, TFinalOutput>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, PaginatedResults<TDeserialize>> deserializeFunction, Func<PaginatedResults<TDeserialize>, TFinalOutput, bool> generateOutput)
+		private static List<TConverted> ExecuteRequestAndGetDeserializedResponse<TDeserialize, TConverted>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, PaginatedResults<TDeserialize>> deserializeFunction, Func<TDeserialize, TConverted> conversionFunc)
 			where TDeserialize : class
-			where TFinalOutput : class, new()
 		{
 			string authorizationHeader = string.Format("Bearer {0}", accessToken);
 			string monthPart = !fromDate.HasValue ? string.Empty : string.Format("?{0}", string.Format(config.RequestForDatesPart, fromDate.Value.ToString("dd/MM/yyyy"), DateTime.UtcNow.ToString("dd/MM/yyyy")).Replace('-', '/'));
@@ -288,11 +238,11 @@
 			if (deserializedResponse == null)
 			{
 				log.Error("Sage response deserialization failed");
-				return new TFinalOutput();
+				return new List<TConverted>();
 			}
 
-			var results = new TFinalOutput();
-			generateOutput(deserializedResponse, results);
+			var results = new List<TConverted>();
+			FillFromDeserializedData(deserializedResponse, results, conversionFunc);
 
 			string nextUrl = GetNextUrl(deserializedResponse, fullRequest);
 
@@ -306,15 +256,23 @@
 				if (deserializedResponse == null)
 				{
 					log.Error("Sage response deserialization failed");
-					return new TFinalOutput();
+					return new List<TConverted>();
 				}
 
-				generateOutput(deserializedResponse, results);
+				FillFromDeserializedData(deserializedResponse, results, conversionFunc);
 
 				nextUrl = GetNextUrl(deserializedResponse, fullRequest);
 			}
 
 			return results;
+		}
+
+		private static void FillFromDeserializedData<TDeserialize, TConverted>(PaginatedResults<TDeserialize> deserializedResponse, List<TConverted> list, Func<TDeserialize, TConverted> conversionFunc)
+		{
+			foreach (var deserializePaymentStatus in deserializedResponse.resources)
+			{
+				TryConvertDeserialized(list, deserializePaymentStatus, conversionFunc);
+			}
 		}
 
 		private static void TryConvertDeserialized<TConverted, TDeserialization>(List<TConverted> list, TDeserialization deserializaedObject, Func<TDeserialization, TConverted> convertDeserializedObjectFunc)
