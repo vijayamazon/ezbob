@@ -9,7 +9,7 @@ GO
 
 IF NOT EXISTS (SELECT * FROM BasicInterestRate WHERE LoanIntrestBase = '0.07')
 	INSERT INTO BasicInterestRate (FromScore, ToScore, LoanIntrestBase)
-		VALUES ('0', '649', '0.07')
+		VALUES ('550', '649', '0.07')
 GO
 
 IF NOT EXISTS (SELECT * FROM BasicInterestRate WHERE LoanIntrestBase = '0.06')
