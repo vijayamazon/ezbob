@@ -58,6 +58,7 @@
 
 			var client = new RestClient();
 
+			log.InfoFormat("Making sage request:{0}", fullRequest);
 			IRestResponse response = client.Execute(request);
 			PaginatedResults<TDeserialize> deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
 			if (deserializedResponse == null)
@@ -65,6 +66,8 @@
 				log.Error("Sage response deserialization failed");
 				return new List<TConverted>();
 			}
+			
+			log.Info("Successfully serialized sage response");
 
 			var results = new List<TConverted>();
 			FillFromDeserializedData(deserializedResponse, results, conversionFunc);
@@ -75,6 +78,7 @@
 			{
 				request = new RestRequest(Method.GET) { Resource = nextUrl };
 				request.AddHeader("Authorization", authorizationHeader);
+				log.InfoFormat("Making another sage request:{0}", nextUrl);
 				response = client.Execute(request);
 
 				deserializedResponse = CreateDeserializedItems<TDeserialize>(CleanResponse(response.Content));
@@ -88,6 +92,8 @@
 
 				nextUrl = GetNextUrl(deserializedResponse, fullRequest);
 			}
+
+			log.Info("Finished retreiving sage request");
 
 			return results;
 		}
