@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		public virtual int? LedgerAccountId { get; set; }
 		public virtual string product_code { get; set; }
 		public virtual int? ProductId { get; set; }
-		public virtual int? ServiceKey { get; set; }
+		public virtual int? ServiceId { get; set; }
 		public virtual int lock_version { get; set; }
 	}
 }

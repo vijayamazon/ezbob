@@ -57,7 +57,7 @@
 					ledger_account = item.LedgerAccountId,
 					product_code = item.product_code,
 					product = item.ProductId,
-					service = item.ServiceKey,
+					service = item.ServiceId,
 					lock_version = item.lock_version
 				});
 			}

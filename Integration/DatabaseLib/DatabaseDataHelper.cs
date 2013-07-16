@@ -965,7 +965,7 @@ namespace EZBob.DatabaseLib
 							LedgerAccountId = item.ledger_account,
 							product_code = item.product_code,
 							ProductId = item.product,
-							ServiceKey = item.service,
+							ServiceId = item.service,
 							lock_version = item.lock_version
 						};
 						salesInvoice.Items.Add(mpItem);

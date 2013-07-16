@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 			Map(x => x.LedgerAccountId);
 			Map(x => x.product_code).Length(250);
 			Map(x => x.ProductId);
-			Map(x => x.ServiceKey);
+			Map(x => x.ServiceId);
 			Map(x => x.lock_version);
 		}
 	}

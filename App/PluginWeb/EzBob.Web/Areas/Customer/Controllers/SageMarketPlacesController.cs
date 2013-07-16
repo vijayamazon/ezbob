@@ -54,7 +54,9 @@
 		{
 			log.Info("Attaching Sage");
 			string callback = Url.Action("SageCallback", "SageMarketPlaces", new { Area = "Customer" }, "https");
-			return Redirect(SageConnector.GetApprovalRequest(callback));
+			string url = SageConnector.GetApprovalRequest(callback);
+			log.InfoFormat("Redirecting to sage: {0}", url);
+			return Redirect(url);
 		}
 
 		[Transactional]
@@ -65,11 +67,11 @@
 			string errorMessage;
 			string callback = Url.Action("SageCallback", "SageMarketPlaces", new { Area = "Customer" }, "https");
 			AccessTokenContainer accessTokenContainer = SageConnector.GetToken(approvalToken, callback, out errorMessage);
-
 			if (accessTokenContainer == null)
 			{
 				return View(new { error = errorMessage ?? "Failure getting access token" });
 			}
+			log.Info("Successfully received access token");
 
 			var oEsi = new SageServiceInfo();
 			int marketPlaceId = _mpTypes
@@ -90,8 +92,9 @@
 			if (_customer.WizardStep != WizardStepType.PaymentAccounts && _customer.WizardStep != WizardStepType.AllStep)
 				_customer.WizardStep = WizardStepType.Marketplace;
 
-			log.Info("Saving marketplace data...");
+			log.Info("Saving sage marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(_customer.Name/*qqq - get actual store name*/, sageDatabaseMarketPlace, securityData, _customer);
+			log.Info("Saved sage marketplace data...");
 
 			_crm.ConvertLead(_customer);
 			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
