@@ -88,6 +88,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         false
 
     getDocumentTitle: ->
+        EzBob.App.trigger 'clear'
         "Link Yodlee Account"
         
 class EzBob.YodleeAccountModel extends Backbone.Model

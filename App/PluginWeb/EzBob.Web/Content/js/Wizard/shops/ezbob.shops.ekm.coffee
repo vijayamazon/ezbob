@@ -74,6 +74,7 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         false
 
     getDocumentTitle: ->
+        EzBob.App.trigger 'clear'
         "Link EKM Account"
 
 

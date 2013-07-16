@@ -77,6 +77,7 @@ class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
         false
 
     getDocumentTitle: ->
+        EzBob.App.trigger 'clear'
         "Link PayPoint Account"
 
 

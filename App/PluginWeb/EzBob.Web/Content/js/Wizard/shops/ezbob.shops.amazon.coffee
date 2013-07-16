@@ -117,6 +117,7 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         @$el.find('connect-amazon').toggleClass 'disabled', isBlock
 
     getDocumentTitle: ->
+        EzBob.App.trigger 'clear'
         'Link Amazon Account'
 
 class EzBob.AmazonStoreModel extends Backbone.Model
