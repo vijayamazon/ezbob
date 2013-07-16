@@ -2,6 +2,8 @@
 {
 	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using EzBob.CommonLib;
+	using EzBob.CommonLib.ReceivedDataListLogic;
+	using EzBob.CommonLib.TimePeriodLogic;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
 	using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 	using EZBob.DatabaseLib;
@@ -82,10 +84,18 @@
 				() => Helper.GetAllSageSalesInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
 			log.InfoFormat("Creating aggregated data for {0} sales invoices", allSalesInvoices);
+			var aggregateFunctions = new[]
+                {
+                    SageDatabaseFunctionType.NumOfOrders,
+                    SageDatabaseFunctionType.TotalSumOfOrders,
+					SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices,
+					SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices,
+					SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices
+                };
 			var salesInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateSalesInvoicesAggregationInfo(allSalesInvoices, Helper.CurrencyConverter, Helper.GetSagePaymentStatuses()));
+				() => CreateAggregationInfo(allSalesInvoices, Helper.CurrencyConverter, new SageSalesInvoiceAggregatorFactory { SagePaymentStatuses = Helper.GetSagePaymentStatuses() }, aggregateFunctions));
 
 			log.Info("Saving aggragated sales invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -104,11 +114,19 @@
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllSagePurchaseInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
-			log.InfoFormat("Creating aggregated data for {0} purchase invoices", allPurchaseInvoices);
+			log.InfoFormat("Creating aggregated data for {0} purchase invoices", allPurchaseInvoices); 
+			var aggregateFunctions = new[]
+                {
+                    SageDatabaseFunctionType.NumOfPurchaseInvoices,
+                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices,
+					SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices
+                };
 			var purchaseInvoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreatePurchaseInvoicesAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter, Helper.GetSagePaymentStatuses()));
+				() => CreateAggregationInfo(allPurchaseInvoices, Helper.CurrencyConverter, new SagePurchaseInvoiceAggregatorFactory { SagePaymentStatuses = Helper.GetSagePaymentStatuses() }, aggregateFunctions));
 
 			log.Info("Saving aggragated purchase invoices data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -128,10 +146,15 @@
 				() => Helper.GetAllSageIncomesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
 			log.InfoFormat("Creating aggregated data for {0} incomes", allIncomes);
+			var aggregateFunctions = new[]
+                {
+                    SageDatabaseFunctionType.NumOfIncomes,
+                    SageDatabaseFunctionType.TotalSumOfIncomes
+                };
 			var incomesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateIncomesAggregationInfo(allIncomes, Helper.CurrencyConverter));
+				() => CreateAggregationInfo(allIncomes, Helper.CurrencyConverter, new SageIncomeAggregatorFactory(), aggregateFunctions));
 
 			log.Info("Saving aggragated incomes data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -151,10 +174,15 @@
 				() => Helper.GetAllSageExpendituresData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
 			log.InfoFormat("Creating aggregated data for {0} expenditures", allExpenditures);
+			var aggregateFunctions = new[]
+                {
+                    SageDatabaseFunctionType.NumOfExpenditures,
+                    SageDatabaseFunctionType.TotalSumOfExpenditures
+                };
 			var expendituresAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateExpendituresAggregationInfo(allExpenditures, Helper.CurrencyConverter));
+				() => CreateAggregationInfo(allExpenditures, Helper.CurrencyConverter, new SageExpenditureAggregatorFactory(), aggregateFunctions));
 
 			log.Info("Saving aggragated expenditures data");
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -172,21 +200,13 @@
 	        return null;
         }
 
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateSalesInvoicesAggregationInfo(SageSalesInvoicesList salesInvoices, ICurrencyConvertor currencyConverter, List<MP_SagePaymentStatus> sagePaymentStatuses)
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateAggregationInfo<T>(ReceivedDataListTimeMarketTimeDependentBase<T> list, ICurrencyConvertor currencyConverter, DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<T>, T, SageDatabaseFunctionType> factory, SageDatabaseFunctionType[] aggregateFunctionArray)
+			where T : TimeDependentRangedDataBase
 		{
-			var aggregateFunctionArray = new[]
-                {
-                    SageDatabaseFunctionType.NumOfOrders,
-                    SageDatabaseFunctionType.TotalSumOfOrders,
-					SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices,
-					SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices,
-					SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices
-                };
-
-			var updated = salesInvoices.SubmittedDate;
+			var updated = list.SubmittedDate;
 
 			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SageSalesInvoice>(), salesInvoices, nodesCreationFactory);
+			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<T>(), list, nodesCreationFactory);
 
 			if (timeChain.HasNoData)
 			{
@@ -194,79 +214,6 @@
 			}
 
 			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SageSalesInvoiceAggregatorFactory { SagePaymentStatuses = sagePaymentStatuses };
-			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-		}
-
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreatePurchaseInvoicesAggregationInfo(SagePurchaseInvoicesList purchaseInvoices, ICurrencyConvertor currencyConverter, List<MP_SagePaymentStatus> sagePaymentStatuses)
-		{
-			var aggregateFunctionArray = new[]
-                {
-                    SageDatabaseFunctionType.NumOfPurchaseInvoices,
-                    SageDatabaseFunctionType.TotalSumOfPurchaseInvoices,
-					SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices,
-					SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices,
-					SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices
-                };
-
-			var updated = purchaseInvoices.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SagePurchaseInvoice>(), purchaseInvoices, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SagePurchaseInvoiceAggregatorFactory { SagePaymentStatuses = sagePaymentStatuses };
-			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-		}
-
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateIncomesAggregationInfo(SageIncomesList incomes, ICurrencyConvertor currencyConverter)
-		{
-			var aggregateFunctionArray = new[]
-                {
-                    SageDatabaseFunctionType.NumOfIncomes,
-                    SageDatabaseFunctionType.TotalSumOfIncomes
-                };
-
-			var updated = incomes.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SageIncome>(), incomes, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SageIncomeAggregatorFactory();
-			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
-		}
-
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateExpendituresAggregationInfo(SageExpendituresList expenditures, ICurrencyConvertor currencyConverter)
-		{
-			var aggregateFunctionArray = new[]
-                {
-                    SageDatabaseFunctionType.NumOfExpenditures,
-                    SageDatabaseFunctionType.TotalSumOfExpenditures
-                };
-
-			var updated = expenditures.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<SageExpenditure>(), expenditures, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-			var factory = new SageExpenditureAggregatorFactory();
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
     }
