@@ -92,8 +92,10 @@
 			if (_customer.WizardStep != WizardStepType.PaymentAccounts && _customer.WizardStep != WizardStepType.AllStep)
 				_customer.WizardStep = WizardStepType.Marketplace;
 
+			string accountName = string.Format("SageOne Account #{0}", _customer.CustomerMarketPlaces.Count(a => a.Marketplace.InternalId == oEsi.InternalId) + 1);
+
 			log.Info("Saving sage marketplace data...");
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(_customer.Name/*qqq - get actual store name*/, sageDatabaseMarketPlace, securityData, _customer);
+			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
 			log.Info("Saved sage marketplace data...");
 
 			_crm.ConvertLead(_customer);
