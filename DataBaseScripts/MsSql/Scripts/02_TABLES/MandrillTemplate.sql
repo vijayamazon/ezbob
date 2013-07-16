@@ -1,0 +1,16 @@
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MandrillTemplate]') AND type in (N'U'))
+DROP TABLE [dbo].[MandrillTemplate]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MandrillTemplate](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[NAME] [nvarchar](200) NULL,
+ CONSTRAINT [PK_MandrillTemplate] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO

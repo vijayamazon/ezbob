@@ -265,6 +265,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>BasicInterestRate</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\BasicInterestRate.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_BRep_STRATEGY_STRATEGYID</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_BRep_STRATEGY_STRATEGYID.sql</oFileName>
@@ -553,12 +559,6 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
-    <oName>EkmConnectorConfigs</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -802,6 +802,24 @@
     <oName>LoyaltyProgramActionTypes</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoyaltyProgramActionTypes.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MailTemplateRelation_MandrillTemplateId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MailTemplateRelation_MandrillTemplateId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MailTemplateRelation</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\MailTemplateRelation.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MandrillTemplate</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MandrillTemplate.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1549,6 +1567,96 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_SageExpenditure_MP_SageRequest</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageExpenditure_MP_SageRequest.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SageExpenditure</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_SageExpenditure.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SageIncome_MP_SageRequest</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageIncome_MP_SageRequest.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SageIncome</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_SageIncome.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SagePaymentStatus</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_SagePaymentStatus.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SagePurchaseInvoice_MP_SageRequest</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SagePurchaseInvoice_MP_SageRequest.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SagePurchaseInvoice</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_SagePurchaseInvoice.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SagePurchaseInvoiceItem_MP_SagePurchaseInvoice</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SagePurchaseInvoiceItem_MP_SagePurchaseInvoice.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SagePurchaseInvoiceItem</oName>
+    <oRank>6</oRank>
+    <oFileName>02_TABLES\MP_SagePurchaseInvoiceItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SageRequest_MP_CustomerMarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageRequest_MP_CustomerMarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SageRequest</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_SageRequest.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SageSalesInvoice_MP_SageRequest</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageSalesInvoice_MP_SageRequest.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SageSalesInvoice</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_SageSalesInvoice.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_SageSalesInvoiceItem_MP_SageInvoice</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageSalesInvoiceItem_MP_SageInvoice.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_SageSalesInvoiceItem</oName>
+    <oRank>6</oRank>
+    <oFileName>02_TABLES\MP_SageSalesInvoiceItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_ServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_ServiceLog.sql</oFileName>
@@ -1666,12 +1774,6 @@
     <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>

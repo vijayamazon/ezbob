@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[MP_YodleeTransactionCategories](
-	[CategoryId] [nvarchar](300) NOT NULL,
+	[CategoryId] [nvarchar](3) NOT NULL,
 	[Name] [nvarchar](300) NOT NULL,
 	[Type] [nvarchar](300) NOT NULL,
  CONSTRAINT [PK_MP_YodleeTransactionCategories] PRIMARY KEY CLUSTERED 
