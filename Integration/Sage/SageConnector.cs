@@ -16,10 +16,10 @@
 
 		public static List<SagePaymentStatus> GetPaymentStatuses(string accessToken)
 		{
-			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusesListHelper, List<SagePaymentStatus>>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, FillPaymentStatusesFromDeserializedData);
+			return ExecuteRequestAndGetDeserializedResponse<SagePaymentStatusDeserialization, List<SagePaymentStatus>>(accessToken, config.PaymentStatusesRequest, null, CreateDeserializedPaymentStatuses, FillPaymentStatusesFromDeserializedData);
 		}
 
-		private static SagePaymentStatusesListHelper CreateDeserializedPaymentStatuses(string cleanResponse)
+		private static PaginatedResults<SagePaymentStatusDeserialization> CreateDeserializedPaymentStatuses(string cleanResponse)
 		{
 			var deserializedPaymentStatuses = DeserializePaymentStatuses(cleanResponse);
 			if (deserializedPaymentStatuses == null)
@@ -40,12 +40,12 @@
 			return deserializedPaymentStatuses;
 		}
 
-		private static SagePaymentStatusesListHelper DeserializePaymentStatuses(string cleanResponse)
+		private static PaginatedResults<SagePaymentStatusDeserialization> DeserializePaymentStatuses(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SagePaymentStatusesListHelper)js.Deserialize(cleanResponse, typeof(SagePaymentStatusesListHelper)));
+				return ((PaginatedResults<SagePaymentStatusDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SagePaymentStatusDeserialization>)));
 			}
 			catch (Exception e)
 			{
@@ -54,35 +54,23 @@
 			}
 		}
 
-		private static bool FillPaymentStatusesFromDeserializedData(SagePaymentStatusesListHelper deserializePaymentStatusesResponse, List<SagePaymentStatus> paymentStatuses)
+		private static bool FillPaymentStatusesFromDeserializedData(PaginatedResults<SagePaymentStatusDeserialization> deserializePaymentStatusesResponse, List<SagePaymentStatus> paymentStatuses)
 		{
 			foreach (var deserializePaymentStatus in deserializePaymentStatusesResponse.resources)
 			{
-				TryDeserializePaymentStatus(paymentStatuses, deserializePaymentStatus);
+				TryConvertDeserialized(paymentStatuses, deserializePaymentStatus, SageDesreializer.DeserializePaymentStatus);
 			}
 			return true;
 		}
 
-		private static void TryDeserializePaymentStatus(List<SagePaymentStatus> salesInvoices, SagePaymentStatusDeserialization deserializaedPaymentStatus)
-		{
-			try
-			{
-				salesInvoices.Add(SageDesreializer.DeserializePaymentStatus(deserializaedPaymentStatus));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating payment status for SageId:{0}. Payment status won't be handled!", deserializaedPaymentStatus.id);
-			}
-		}
-
 		public static SageSalesInvoicesList GetSalesInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoicesListHelper, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
+			List<SageSalesInvoice> salesInvoices = ExecuteRequestAndGetDeserializedResponse<SageSalesInvoiceDeserialization, List<SageSalesInvoice>>(accessToken, config.SalesInvoicesRequest, fromDate, CreateDeserializedSalesInvoices, FillSalesInvoicesFromDeserializedData);
 			var salesInvoicesList = new SageSalesInvoicesList(DateTime.UtcNow, salesInvoices);
 			return salesInvoicesList;
 		}
 
-		private static SageSalesInvoicesListHelper CreateDeserializedSalesInvoices(string cleanResponse)
+		private static PaginatedResults<SageSalesInvoiceDeserialization> CreateDeserializedSalesInvoices(string cleanResponse)
 		{
 			var deserializedSalesInvoices = DeserializeSalesInvoices(cleanResponse);
 			if (deserializedSalesInvoices == null)
@@ -103,12 +91,12 @@
 			return deserializedSalesInvoices;
 		}
 
-		private static SageSalesInvoicesListHelper DeserializeSalesInvoices(string cleanResponse)
+		private static PaginatedResults<SageSalesInvoiceDeserialization> DeserializeSalesInvoices(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SageSalesInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SageSalesInvoicesListHelper)));
+				return ((PaginatedResults<SageSalesInvoiceDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageSalesInvoiceDeserialization>)));
 			}
 			catch (Exception e)
 			{
@@ -117,36 +105,24 @@
 			}
 		}
 
-		private static bool FillSalesInvoicesFromDeserializedData(SageSalesInvoicesListHelper deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
+		private static bool FillSalesInvoicesFromDeserializedData(PaginatedResults<SageSalesInvoiceDeserialization> deserializeSalesInvoicesResponse, List<SageSalesInvoice> salesInvoices)
 		{
 			foreach (var serializedSalesInvoice in deserializeSalesInvoicesResponse.resources)
 			{
-				TryDeserializeSalesInvoice(salesInvoices, serializedSalesInvoice);
+				TryConvertDeserialized(salesInvoices, serializedSalesInvoice, SageDesreializer.DeserializeSalesInvoice);
 			}
 
 			return true;
 		}
 
-		private static void TryDeserializeSalesInvoice(List<SageSalesInvoice> salesInvoices, SageSalesInvoiceSerialization serializaedSalesInvoice)
-		{
-			try
-			{
-				salesInvoices.Add(SageDesreializer.DeserializeSalesInvoice(serializaedSalesInvoice));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating sales invoice for SageId:{0}. Sales invoice won't be handled!", serializaedSalesInvoice.id);
-			}
-		}
-
 		public static SagePurchaseInvoicesList GetPurchaseInvoices(string accessToken, DateTime? fromDate)
 		{
-			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoicesListHelper, List<SagePurchaseInvoice>>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, FillPurchaseInvoicesFromDeserializedData);
+			List<SagePurchaseInvoice> purchaseInvoices = ExecuteRequestAndGetDeserializedResponse<SagePurchaseInvoiceDeserialization, List<SagePurchaseInvoice>>(accessToken, config.PurchaseInvoicesRequest, fromDate, CreateDeserializedPurchaseInvoices, FillPurchaseInvoicesFromDeserializedData);
 			var purchaseInvoicesList = new SagePurchaseInvoicesList(DateTime.UtcNow, purchaseInvoices);
 			return purchaseInvoicesList;
 		}
 
-		private static SagePurchaseInvoicesListHelper CreateDeserializedPurchaseInvoices(string cleanResponse)
+		private static PaginatedResults<SagePurchaseInvoiceDeserialization> CreateDeserializedPurchaseInvoices(string cleanResponse)
 		{
 			var deserializedPurchaseInvoices = DeserializePurchaseInvoices(cleanResponse);
 			if (deserializedPurchaseInvoices == null)
@@ -167,12 +143,12 @@
 			return deserializedPurchaseInvoices;
 		}
 
-		private static SagePurchaseInvoicesListHelper DeserializePurchaseInvoices(string cleanResponse)
+		private static PaginatedResults<SagePurchaseInvoiceDeserialization> DeserializePurchaseInvoices(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SagePurchaseInvoicesListHelper)js.Deserialize(cleanResponse, typeof(SagePurchaseInvoicesListHelper)));
+				return ((PaginatedResults<SagePurchaseInvoiceDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SagePurchaseInvoiceDeserialization>)));
 			}
 			catch (Exception e)
 			{
@@ -181,36 +157,24 @@
 			}
 		}
 
-		private static bool FillPurchaseInvoicesFromDeserializedData(SagePurchaseInvoicesListHelper deserializePurchaseInvoicesResponse, List<SagePurchaseInvoice> purchaseInvoices)
+		private static bool FillPurchaseInvoicesFromDeserializedData(PaginatedResults<SagePurchaseInvoiceDeserialization> deserializePurchaseInvoicesResponse, List<SagePurchaseInvoice> purchaseInvoices)
 		{
 			foreach (var serializedPurchaseInvoice in deserializePurchaseInvoicesResponse.resources)
 			{
-				TryDeserializePurchaseInvoice(purchaseInvoices, serializedPurchaseInvoice);
+				TryConvertDeserialized(purchaseInvoices, serializedPurchaseInvoice, SageDesreializer.DeserializePurchaseInvoice);
 			}
 
 			return true;
 		}
 
-		private static void TryDeserializePurchaseInvoice(List<SagePurchaseInvoice> purchaseInvoices, SagePurchaseInvoiceSerialization serializaedPurchaseInvoice)
-		{
-			try
-			{
-				purchaseInvoices.Add(SageDesreializer.DeserializePurchaseInvoice(serializaedPurchaseInvoice));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating purchase invoice for SageId:{0}. Purchase invoice won't be handled!", serializaedPurchaseInvoice.id);
-			}
-		}
-
 		public static SageIncomesList GetIncomes(string accessToken, DateTime? fromDate)
 		{
-			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomesListHelper, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
+			List<SageIncome> incomes = ExecuteRequestAndGetDeserializedResponse<SageIncomeDeserialization, List<SageIncome>>(accessToken, config.IncomesRequest, fromDate, CreateDeserializedIncomes, FillIncomesFromDeserializedData);
 			var incomesList = new SageIncomesList(DateTime.UtcNow, incomes);
 			return incomesList;
 		}
 
-		private static SageIncomesListHelper CreateDeserializedIncomes(string cleanResponse)
+		private static PaginatedResults<SageIncomeDeserialization> CreateDeserializedIncomes(string cleanResponse)
 		{
 			var deserializeIncomes = DeserializeIncomes(cleanResponse);
 			if (deserializeIncomes == null)
@@ -231,12 +195,12 @@
 			return deserializeIncomes;
 		}
 
-		private static SageIncomesListHelper DeserializeIncomes(string cleanResponse)
+		private static PaginatedResults<SageIncomeDeserialization> DeserializeIncomes(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SageIncomesListHelper)js.Deserialize(cleanResponse, typeof(SageIncomesListHelper)));
+				return ((PaginatedResults<SageIncomeDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageIncomeDeserialization>)));
 			}
 			catch (Exception e)
 			{
@@ -245,36 +209,24 @@
 			}
 		}
 
-		private static bool FillIncomesFromDeserializedData(SageIncomesListHelper deserializeIncomesResponse, List<SageIncome> incomes)
+		private static bool FillIncomesFromDeserializedData(PaginatedResults<SageIncomeDeserialization> deserializeIncomesResponse, List<SageIncome> incomes)
 		{
 			foreach (var serializedIncome in deserializeIncomesResponse.resources)
 			{
-				TryDeserializeIncome(incomes, serializedIncome);
+				TryConvertDeserialized(incomes, serializedIncome, SageDesreializer.DeserializeIncome);
 			}
 
 			return true;
 		}
 
-		private static void TryDeserializeIncome(List<SageIncome> incomes, SageIncomeSerialization serializedIncome)
-		{
-			try
-			{
-				incomes.Add(SageDesreializer.DeserializeIncome(serializedIncome));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating income for SageId:{0}. Income won't be handled!", serializedIncome.id);
-			}
-		}
-
 		public static SageExpendituresList GetExpenditures(string accessToken, DateTime? fromDate)
 		{
-			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpendituresListHelper, List<SageExpenditure>>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, FillExpendituresFromDeserializedData);
+			List<SageExpenditure> expenditures = ExecuteRequestAndGetDeserializedResponse<SageExpenditureDeserialization, List<SageExpenditure>>(accessToken, config.ExpendituresRequest, fromDate, CreateDeserializedExpenditures, FillExpendituresFromDeserializedData);
 			var expendituresList = new SageExpendituresList(DateTime.UtcNow, expenditures);
 			return expendituresList;
 		}
 
-		private static SageExpendituresListHelper CreateDeserializedExpenditures(string cleanResponse)
+		private static PaginatedResults<SageExpenditureDeserialization> CreateDeserializedExpenditures(string cleanResponse)
 		{
 			var deserializeExpenditures = DeserializeExpenditures(cleanResponse);
 			if (deserializeExpenditures == null)
@@ -295,12 +247,12 @@
 			return deserializeExpenditures;
 		}
 
-		private static SageExpendituresListHelper DeserializeExpenditures(string cleanResponse)
+		private static PaginatedResults<SageExpenditureDeserialization> DeserializeExpenditures(string cleanResponse)
 		{
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((SageExpendituresListHelper)js.Deserialize(cleanResponse, typeof(SageExpendituresListHelper)));
+				return ((PaginatedResults<SageExpenditureDeserialization>)js.Deserialize(cleanResponse, typeof(PaginatedResults<SageExpenditureDeserialization>)));
 			}
 			catch (Exception e)
 			{
@@ -309,30 +261,18 @@
 			}
 		}
 
-		private static bool FillExpendituresFromDeserializedData(SageExpendituresListHelper deserializeExpendituresResponse, List<SageExpenditure> expenditures)
+		private static bool FillExpendituresFromDeserializedData(PaginatedResults<SageExpenditureDeserialization> deserializeExpendituresResponse, List<SageExpenditure> expenditures)
 		{
 			foreach (var serializedExpenditure in deserializeExpendituresResponse.resources)
 			{
-				TryDeserializeExpenditure(expenditures, serializedExpenditure);
+				TryConvertDeserialized(expenditures, serializedExpenditure, SageDesreializer.DeserializeExpenditure);
 			}
 
 			return true;
 		}
-
-		private static void TryDeserializeExpenditure(List<SageExpenditure> expenditures, SageExpenditureSerialization serializedExpenditure)
-		{
-			try
-			{
-				expenditures.Add(SageDesreializer.DeserializeExpenditure(serializedExpenditure));
-			}
-			catch (Exception)
-			{
-				log.ErrorFormat("Failed creating expenditure for SageId:{0}. Expenditure won't be handled!", serializedExpenditure.id);
-			}
-		}
 		
-		private static TFinalOutput ExecuteRequestAndGetDeserializedResponse<TDeserialize, TFinalOutput>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, TDeserialize> deserializeFunction, Func<TDeserialize, TFinalOutput, bool> generateOutput)
-			where TDeserialize : PaginatedResultsBase
+		private static TFinalOutput ExecuteRequestAndGetDeserializedResponse<TDeserialize, TFinalOutput>(string accessToken, string requestUrl, DateTime? fromDate, Func<string, PaginatedResults<TDeserialize>> deserializeFunction, Func<PaginatedResults<TDeserialize>, TFinalOutput, bool> generateOutput)
+			where TDeserialize : class
 			where TFinalOutput : class, new()
 		{
 			string authorizationHeader = string.Format("Bearer {0}", accessToken);
@@ -344,7 +284,7 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			TDeserialize deserializedResponse = deserializeFunction(CleanResponse(response.Content));
+			PaginatedResults<TDeserialize> deserializedResponse = deserializeFunction(CleanResponse(response.Content));
 			if (deserializedResponse == null)
 			{
 				log.Error("Sage response deserialization failed");
@@ -377,12 +317,24 @@
 			return results;
 		}
 
+		private static void TryConvertDeserialized<TConverted, TDeserialization>(List<TConverted> list, TDeserialization deserializaedObject, Func<TDeserialization, TConverted> convertDeserializedObjectFunc)
+		{
+			try
+			{
+				list.Add(convertDeserializedObjectFunc(deserializaedObject));
+			}
+			catch (Exception)
+			{
+				log.ErrorFormat("Failed creating {0} for object:{1}. Object won't be handled!", typeof(TConverted), deserializaedObject);
+			}
+		}
+
 		private static string CleanResponse(string originalResponse)
 		{
 			return originalResponse.Replace("\"$", "\"");
 		}
 
-		private static string GetNextUrl(PaginatedResultsBase pagenatedResults, string request)
+		private static string GetNextUrl<T>(PaginatedResults<T> pagenatedResults, string request)
 		{
 			int nextIndex = pagenatedResults.startIndex + pagenatedResults.itemsPerPage;
 			if (pagenatedResults.totalResults <= nextIndex)

@@ -9,7 +9,7 @@ namespace Sage
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageDesreializer));
 
-		public static SageSalesInvoice DeserializeSalesInvoice(SageSalesInvoiceSerialization si)
+		public static SageSalesInvoice DeserializeSalesInvoice(SageSalesInvoiceDeserialization si)
 		{
 			DateTime due_date;
 			if (!DateTime.TryParse(si.due_date, out due_date))
@@ -85,10 +85,10 @@ namespace Sage
 				};
 		}
 
-		private static List<SageSalesInvoiceItem> GetSalesInvoiceItems(IEnumerable<SageInvoiceItemSerialization> items)
+		private static List<SageSalesInvoiceItem> GetSalesInvoiceItems(IEnumerable<SageInvoiceItemDeserialization> items)
 		{
 			var result = new List<SageSalesInvoiceItem>();
-			foreach (SageInvoiceItemSerialization si in items)
+			foreach (SageInvoiceItemDeserialization si in items)
 			{
 				decimal quantity, unit_price, net_amount, tax_amount, tax_rate_percentage;
 				if (!decimal.TryParse(si.quantity, out quantity)) return null;
@@ -120,7 +120,7 @@ namespace Sage
 			return result;
 		}
 
-		public static SagePurchaseInvoice DeserializePurchaseInvoice(SagePurchaseInvoiceSerialization si)
+		public static SagePurchaseInvoice DeserializePurchaseInvoice(SagePurchaseInvoiceDeserialization si)
 		{
 			DateTime due_date;
 			if (!DateTime.TryParse(si.due_date, out due_date))
@@ -180,10 +180,10 @@ namespace Sage
 			};
 		}
 
-		private static List<SagePurchaseInvoiceItem> GetPurchaseInvoiceItems(IEnumerable<SageInvoiceItemSerialization> items)
+		private static List<SagePurchaseInvoiceItem> GetPurchaseInvoiceItems(IEnumerable<SageInvoiceItemDeserialization> items)
 		{
 			var result = new List<SagePurchaseInvoiceItem>();
-			foreach (SageInvoiceItemSerialization si in items)
+			foreach (SageInvoiceItemDeserialization si in items)
 			{
 				decimal quantity, unit_price, net_amount, tax_amount, tax_rate_percentage;
 				if (!decimal.TryParse(si.quantity, out quantity)) return null;
@@ -215,7 +215,7 @@ namespace Sage
 			return result;
 		}
 
-		public static SageIncome DeserializeIncome(SageIncomeSerialization si)
+		public static SageIncome DeserializeIncome(SageIncomeDeserialization si)
 		{
 			DateTime date;
 			if (!DateTime.TryParse(si.date, out date))
@@ -289,7 +289,7 @@ namespace Sage
 			};
 		}
 
-		public static SageExpenditure DeserializeExpenditure(SageExpenditureSerialization si)
+		public static SageExpenditure DeserializeExpenditure(SageExpenditureDeserialization si)
 		{
 			DateTime date;
 			if (!DateTime.TryParse(si.date, out date))

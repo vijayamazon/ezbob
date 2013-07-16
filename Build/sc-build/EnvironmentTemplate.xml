@@ -26,8 +26,8 @@
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />				
 	</module>
 	<module id="SageProd">
-		<property name="OAuthIdentifier" value="sMywhxrs34hZ8lwRREjVHJscPOXA4iqhzTOFhevy" />
-		<property name="OAuthSecret" value="yKWV1sn06eEPLrhN9Y6CPzfDdi3CQXP8yDiVQRVC" />
+		<property name="OAuthIdentifier" value="wxke93qG1Y7qGlUbTWSGtUgwpNizRaqRz6Vl9ueu" />
+		<property name="OAuthSecret" value="C2iVv3vOtrwpLoWmfW33nluqkiCVXUNfgYLNmuOL" />
 		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
 		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />

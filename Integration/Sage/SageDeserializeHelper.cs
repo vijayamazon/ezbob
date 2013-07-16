@@ -10,7 +10,7 @@ namespace Sage
 	}
 
 	[Serializable]
-	public class SageInvoiceItemSerialization
+	public class SageInvoiceItemDeserialization
 	{
 		public int id { get; set; }
 		public string description { get; set; }
@@ -29,7 +29,7 @@ namespace Sage
 	}
 	
 	[Serializable]
-	public class SageSalesInvoiceSerialization
+	public class SageSalesInvoiceDeserialization
 	{
 		public int id { get; set; }
 		public string invoice_number { get; set; }
@@ -54,14 +54,7 @@ namespace Sage
 		public string terms_and_conditions { get; set; }
 		public int lock_version { get; set; }
 
-		public List<SageInvoiceItemSerialization> line_items { get; set; }
-	}
-
-	[Serializable]
-	public class SageSalesInvoicesListHelper : PaginatedResultsBase
-	{
-		public List<SageSalesInvoiceSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
+		public List<SageInvoiceItemDeserialization> line_items { get; set; }
 	}
 	
 	[Serializable]
@@ -72,14 +65,7 @@ namespace Sage
 	}
 
 	[Serializable]
-	public class SagePaymentStatusesListHelper : PaginatedResultsBase
-	{
-		public List<SagePaymentStatusDeserialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
-	}
-
-	[Serializable]
-	public class SagePurchaseInvoiceSerialization
+	public class SagePurchaseInvoiceDeserialization
 	{
 		public int id { get; set; }
 		public SageReferenceKey status { get; set; }
@@ -100,18 +86,12 @@ namespace Sage
 		public string terms_and_conditions { get; set; }
 		public int lock_version { get; set; }
 
-		public List<SageInvoiceItemSerialization> line_items { get; set; }
+		public List<SageInvoiceItemDeserialization> line_items { get; set; }
 	}
 
-	[Serializable]
-	public class SagePurchaseInvoicesListHelper : PaginatedResultsBase
-	{
-		public List<SagePurchaseInvoiceSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
-	}
 
 	[Serializable]
-	public class SageIncomeSerialization
+	public class SageIncomeDeserialization
 	{
 		public int id { get; set; }
 		public string date { get; set; }
@@ -132,14 +112,7 @@ namespace Sage
 	}
 
 	[Serializable]
-	public class SageIncomesListHelper : PaginatedResultsBase
-	{
-		public List<SageIncomeSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
-	}
-
-	[Serializable]
-	public class SageExpenditureSerialization
+	public class SageExpenditureDeserialization
 	{
 		public int id { get; set; }
 		public string date { get; set; }
@@ -157,13 +130,6 @@ namespace Sage
 		public SageReferenceKey payment_method { get; set; }
 		public bool voided { get; set; }
 		public int lock_version { get; set; }
-	}
-
-	[Serializable]
-	public class SageExpendituresListHelper : PaginatedResultsBase
-	{
-		public List<SageExpenditureSerialization> resources { get; set; }
-		public List<SageDiagnostic> diagnoses { get; set; }
 	}
 
 	[Serializable]
@@ -175,10 +141,13 @@ namespace Sage
 		public string source { get; set; }
 	}
 
-	public class PaginatedResultsBase
+	[Serializable]
+	public class PaginatedResults<TDeserializationObject>
 	{
 		public int totalResults { get; set; }
 		public int startIndex { get; set; }
 		public int itemsPerPage { get; set; }
+		public List<SageDiagnostic> diagnoses { get; set; }
+		public List<TDeserializationObject> resources { get; set; }
 	}
 }
