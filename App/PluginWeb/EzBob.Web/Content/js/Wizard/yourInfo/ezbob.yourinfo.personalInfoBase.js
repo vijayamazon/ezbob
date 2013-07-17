@@ -27,6 +27,22 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         "click .btn-continue": "next"
     },
 
+    addressErrorPlacement: function (el, model) {
+        var $el = $(el);
+        $el.on("focusout", function () {
+            if (model.length == 0) {
+                $el.tooltip({
+                    title: "This field is required"
+                }).tooltip("enable").tooltip('fixTitle');
+            }
+        });
+        
+        model.on("change", function () {
+            if (model.length > 0) {
+                $el.tooltip('destroy');
+            }
+        });
+    },
     addAddressError: function (el) {
         var error = $('<label class="error" generated="true">This field is required</label>');
         EzBob.Validation.errorPlacement(error, this.$el.find(el));
@@ -39,8 +55,13 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 
     PrevModelChange: function (el, model) {
         this.PrevAddressValidator = model.collection && model.collection.length > 0;
-        if (this.PrevAddressValidator)
+        if (this.PrevAddressValidator) {
             this.clearAddressError("#PrevPersonAddresses");
+            $("#PrevPersonAddresses .field_status").hide();
+        } else {
+            $("#PrevPersonAddresses .field_status").show();
+        }
+
     },
     clickBack: function () {
         this.trigger('back');
