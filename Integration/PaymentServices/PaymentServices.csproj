@@ -125,7 +125,7 @@
       <Name>EzBob.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
-      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
+      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\PayPoint\PayPoint.csproj">
