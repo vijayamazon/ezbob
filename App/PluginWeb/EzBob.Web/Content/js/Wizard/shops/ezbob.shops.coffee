@@ -100,7 +100,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 view: @sageAccountInfoView
                 button: @sageButtonView
                 active: 0
-                priority: 9
+                priority: 14
 
         for accountTypeName, vendorInfo of aryCGAccounts
             lc = accountTypeName.toLowerCase()

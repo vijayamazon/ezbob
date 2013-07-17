@@ -164,7 +164,7 @@
           view: this.sageAccountInfoView,
           button: this.sageButtonView,
           active: 0,
-          priority: 9
+          priority: 14
         }
       };
       for (accountTypeName in aryCGAccounts) {

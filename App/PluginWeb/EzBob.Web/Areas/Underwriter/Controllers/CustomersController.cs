@@ -303,8 +303,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			GridHelpers.CreatePayPointStatusColumn(gridModel);
 			GridHelpers.CreateYodleeStatusColumn(gridModel);
 			GridHelpers.CreateFreeAgentStatusColumn(gridModel);
-			GridHelpers.CreateSageStatusColumn(gridModel);
 			GridHelpers.CreateXeroStatusColumn(gridModel);
+			GridHelpers.CreateSageStatusColumn(gridModel);
             GridHelpers.CreateWizardStepColumn(gridModel);
             return gridModel;
         }

@@ -105,7 +105,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	public class SageMarketPlaceType : MP_MarketplaceType
 	{
 		public override bool IsPaymentAccount { get { return true; } }
-		public override int UWPriority { get { return 5; } }
+		public override int UWPriority { get { return 14; } }
 	}
 
 	public class SageMarketPlaceTypeMap : SubclassMap<SageMarketPlaceType>
