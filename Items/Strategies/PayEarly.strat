@@ -4,8 +4,8 @@
   <Description>Email to customer – early payment. Trigger - Customer makes an early payment via dashboard.</Description>
   <Workspace Name="PayEarly">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode46070087" />
     <NodeElement Name="Mail Node" NodeId="MailNode56700610" />
+    <NodeElement Name="Mail Node" NodeId="MailNode46070087" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
@@ -74,7 +74,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Multi-Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Dear " +FirstName+ ", your payment of £"+ Amount+ " has been credited to your EZBOB account."&lt;/assignment&gt;&lt;assignment&gt;emailCC := ""&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Dear " +FirstName+ ", your payment of £"+ Amount+ " has been credited to your EZBOB account."&lt;/assignment&gt;&lt;assignment&gt;emailCC := ""&lt;/assignment&gt;&lt;assignment&gt;Date := NOW()&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignment48918703</Name>
@@ -267,6 +267,18 @@
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>PayEarly</OwnerName>
+      <Name>DateStr</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -695,6 +707,23 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
   </SigningNodeDescriptors>
-  <ScriptDescriptors />
+  <ScriptDescriptors>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode53313577</OwnerName>
+      <Script>import System.IO
+import time
+
+localtime1   = time.localtime()
+timeString  = time.strftime("%Y-%m-%d-%H-%M-%S", localtime1)
+
+dir_path = path +"\\" +  timeString
+dir_path2 = path2+"\\" + timeString
+System.IO.Directory.CreateDirectory(dir_path)
+System.IO.Directory.CreateDirectory(dir_path2)
+localtime = localtime1
+ </Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+  </ScriptDescriptors>
   <RuleDescriptors />
 </Workflow>
