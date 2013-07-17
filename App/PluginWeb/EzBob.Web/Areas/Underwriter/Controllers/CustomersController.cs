@@ -610,7 +610,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                 e.Save(streamForDoc, FileFormatType.Excel2007Xlsx);
                 var fs = new FileContentResult(streamForDoc.ToArray(), "application/vnd.ms-excel")
                     {
-                        FileDownloadName = "AllMarketplaceIdExcel_" + DateTime.UtcNow.ToShortTimeString()
+                        FileDownloadName = "AllMarketplaceIdExcel_" + DateTime.UtcNow.ToShortTimeString() + ".xlsx"
                     };
                 return fs;
 
