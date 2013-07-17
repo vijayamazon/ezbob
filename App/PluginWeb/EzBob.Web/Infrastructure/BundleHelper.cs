@@ -128,6 +128,7 @@ namespace EzBob.Web.Infrastructure
                          .Add("~/Content/js/lib/backbone.js")
                          .Add("~/Content/js/contactUs/ezbo.contactUs.js")
                          .Add("~/Content/js/App/ezbob.validation.js")
+                         .Add("~/Content/js/lib/jquery.field_status.js")
                          .MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
         }
 

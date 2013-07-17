@@ -11,25 +11,41 @@
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
-        EzBob.GA = EzBob.GA || function() {
+        EzBob.GA = EzBob.GA || function () {
         };
     </script>
     <style>
-        .error { color: red; }
-
-        .error h3 {
-            font-size: 14px;
-            margin-bottom: 0px;
+        .error
+        {
             color: red;
         }
 
-        .paypont-form .control-label { font-weight: normal; }
+            .error h3
+            {
+                font-size: 14px;
+                margin-bottom: 0px;
+                color: red;
+            }
 
-        body header + .inner, .main-page { margin: 0 auto !important; }
+        .paypont-form .control-label
+        {
+            font-weight: normal;
+        }
 
-        select { height: 30px !important; }
+        body header + .inner, .main-page
+        {
+            margin: 0 auto !important;
+        }
 
-        .dashboard-steps { background-image: none !important; }
+        select
+        {
+            height: 30px !important;
+        }
+
+        .dashboard-steps
+        {
+            background-image: none !important;
+        }
     </style>
 }
 
@@ -58,68 +74,6 @@
     </div>
 } 
 
-@helper Hiddens()
-{
-    <text><input type="hidden" name="merchant" value="${merchant}">
-          <input type="hidden" name="trans_id" value="${trans_id}">
-          <input type="hidden" name="callback" value="${callback}">
-          <input type="hidden" name="backcallback" value="${backcallback}">
-          <input type="hidden" name="order" value="${order}">
-          <input type="hidden" name="shipping" value="${shipping}">
-          <input type="hidden" name="billing" value="${billing}">
-          <input type="hidden" name="template" value="${template}">
-          <input type="hidden" name="err_template" value="${err_template}">
-          <input type="hidden" name="options" value="${options}">
-          <input type="hidden" class="amount" name="amount" value="${amount}">
-          <input type="hidden" name="currency" value="${currency}">
-          <input type="hidden" name="cb_list" value="${cb_list}">
-          <input type="hidden" name="cb_flds" value="${cb_flds}">
-          <input type="hidden" name="map_flds" value="${map_flds}">
-          <input type="hidden" name="md_flds" value="${md_flds}">
-          <input type="hidden" name="background" value="${background}">
-          <input type="hidden" name="bgcolor" value="${bgcolor}">
-          <input type="hidden" name="font_face" value="${font_face}">
-          <input type="hidden" name="font_color" value="${font_color}">
-          <input type="hidden" name="font_size" value="${font_size}">
-          <input type="hidden" name="branding" value="${branding}">
-          <input type="hidden" name="mail_message" value="${mail_message}">
-          <input type="hidden" name="cb_message" value="${cb_message}">
-          <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
-          <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
-          <input type="hidden" name="customer_Text" value="${customer_Text}">
-          <input type="hidden" name="card_type_Text" value="${card_type_Text}">
-          <input type="hidden" name="card_no_Text" value="${card_no_Text}">
-          <input type="hidden" name="expiry_Text" value="${expiry_Text}">
-          <input type="hidden" name="issue_Text" value="${issue_Text}">
-          <input type="hidden" name="start_date_Text" value="${start_date_Text}">
-          <input type="hidden" name="authorise_Text" value="${authorise_Text}">
-          <input type="hidden" name="wait_Text" value="${wait_Text}">
-          <input type="hidden" name="error_table_Text" value="${error_table_Text}">
-          <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
-          <input type="hidden" name="Delta_Text" value="${Delta_Text}">
-          <input type="hidden" name="Visa_Text" value="${Visa_Text}">
-          <input type="hidden" name="JCB_Text" value="${JCB_Text}">
-          <input type="hidden" name="Solo_Text" value="${Solo_Text}">
-          <input type="hidden" name="Switch_Text" value="${Switch_Text}">
-          <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
-          <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
-          <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
-          <input type="hidden" name="cv2_Text" value="${cv2_Text}">
-          <input type="hidden" name="start_date_Error" value="${start_date_Error}">
-          <input type="hidden" name="card_no_Error" value="${card_no_Error}">
-          <input type="hidden" name="card_type_Error" value="${card_type_Error}">
-          <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
-          <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
-          <input type="hidden" name="issue_Error" value="${issue_Error}">
-          <input type="hidden" name="email_Error" value="${email_Error}">
-          <input type="hidden" name="cv2_Error" value="${cv2_Error}">
-          <input type="hidden" name="save_other_pay" value="${save_other_pay}">
-          <input type="hidden" name="usercallback" value="${usercallback}">
-          <input type="hidden" name="token" value="${token}">
-          <input type="hidden" name="error_table">
-          <input type="hidden" name="error_list"></text>
-}
-
 <div style="padding: 0 30px;">
     <div class="row-fluid">
         <div class="pages">
@@ -136,19 +90,14 @@
                             ${error_table}
                         </div>
                         <form class="form-horizontal paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
-                            <div class="control-group">
-                                <label class="control-label" for="customer">
-                                    ${customer_Text:=Name of Cardholder}<span class="mand">*</span></label>
-                                <div class="controls">
-                                    <input type="text" class="input-xlarge" id="customer" name="customer" value="${customer}"size="20"/>
-                                </div>
-                            </div>
+                            @EzForm.InputText("customer", "${customer_Text:=Name of Cardholder}", "${customer}", "text", "form_field", false, true, true, 1)
 
                             ${start_card_type}
-                            <div class="control-group">
-                                <label class="control-label" for="card_type">${card_type_Text:=Card Type}<span class="mand">*</span></label>
-                                <div class="controls">
-                                    <select name="card_type" style ="width: 280px" class="input-xlarge">
+                            <div class="form_field_container control-group controls">
+                                <label class="attardi-input">
+                                    <span>${card_type_Text:=Card Type}</span>
+                                    <select name="card_type" class="selectheight form_field" tabindex="2">
+                                        <option value></option>
                                         <option value="Visa" ${card_type="Visa"}>${Visa_Text:=Visa}</option>
                                         <option value="Debit Master Card" ${card_type="Debit" master="" card=""}>${Debit_Master_Card_Text:=Debit Master Card}</option>
                                         <option value="Delta" ${card_type="Delta"}>${Delta_Text:=Visa Debit Delta or Connect}</option>
@@ -158,29 +107,16 @@
                                         ${EndIssue}
                                         ${card_types} 
                                     </select>
-                                </div>
+                                </label>
+                                <img id="card_typeImage" class="field_status required" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label" for="card_no">
-                                    ${card_no_Text:=Card Number}<span class="mand">*</span></label>
-                                <div class="controls">
-                                    <input type="text" class="input-xlarge" id="card_no" autocomplete="off" name="card_no" value="${card_no}" maxlength="16" size="16"/>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="cv2">${cv2_Text:=CV2 (security code)}<span class="mand">*</span></label>
-                                <div class="controls">
-                                    <input type="password" style="width: 270px;" class="input-xlarge" id="cv2" autocomplete="off" name="cv2" value="${cv2}" maxlength="4" size="4"/>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="control-label" for="expiry">${expiry_Text:=Expiry Date (MM/YY)}<span class="mand">*</span></label>
-                                <div class="controls">
-                                    <input id="date" type="text" class="input-xlarge" id="expiry" autocomplete="off" name="expiry" value="${expiry}" maxlength="5" size="5"/>
-                                </div>
-                            </div>
+                            ${end_card_type}
+                            
+                            @EzForm.InputText("card_no", "${card_no_Text:=Card Number}", "${card_no}", "text", "form_field", false, true, true, 3, 16)
+                            
+                            @EzForm.InputText("cv2", "${cv2_Text:=CV2 (security code)}", "${cv2}", "password", "form_field", false, true, true, 4, 4)
+                            
+                            @EzForm.InputText("expiry", "${expiry_Text:=Expiry Date (MM/YY)}", "${expiry}", "text", "form_field", false, true, true, 5, 5)
 
                             <div id="amount-group" class="control-group" style="display: none">
                                 <label class="control-label" for="amount">Amount</label>
@@ -189,18 +125,18 @@
                                 </div>
                             </div>
 
-                            <div>
+@*                            <div>
                                 <div>
                                     <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
                                 </div>
-                            </div>
+                            </div>*@
 
                             <div>
                                 <input 
                                     type="submit"
                                     name="accept" 
                                     value="Confirm" 
-                                    class="submit pull-right button orange" />
+                                    class="submit pull-right button orange disabled" tabindex="6" />
                                 
                                 <a href="#"class="button grey pull-right">Back</a>
                             </div>
@@ -276,14 +212,66 @@
 
 @section Js{
     <script type="text/javascript">
-        $.validator.setDefaults({
-            onkeyup: false
+        $(document).ready(function() {
+            var oFieldStatusIcons = $('img.field_status');
+            oFieldStatusIcons.filter('.required').field_status({ required: true });
+            oFieldStatusIcons.not('.required').field_status({ required: false });
         });
+
+        $.validator.setDefaults({
+            onclick: function(el) {
+                if ($(el).is('input:radio')) {
+                    return $(el).valid();
+                }
+
+                if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
+                    return $(el).valid();
+                }
+
+
+                return false;
+            },
+            onfocusout: function(el) {
+                validFunc(el);
+            },
+            onkeyup: function(el) {
+                if ($(el).is('select')) {
+                    validFunc(el);
+                }
+
+                if ($(el).is('input') && $(el).val() == "") {
+                    validFunc(el);
+                }
+                /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
+                    validFunc(el);
+                }*/
+            },
+            ignore: []
+        });
+
+        var validFunc = function (el) {
+            if ($(el).attr('id') == 'card_no' && $(el).val().indexOf('_') !== -1) {
+                $(el).val("");
+            }
+            if ($(el).closest('.ezDateTime').length != 0) {
+                $(el).closest('.ezDateTime').find("input.hidden-field").valid();
+            } else if ($(el).closest('.ezSortCode').length != 0) {
+                if ($(el).attr("id") == "SortCode3") {
+                    $(el).closest('.ezSortCode').find("input.hidden-field").valid();
+                }
+            } else if ($(el).hasClass('addAddressInput')) {
+                //do nothing
+            } else {
+                $(el).valid();
+            }
+        };
+
 
         EzBob.Config.HeartBeatEnabled = false;
         EzBob.Config.SessionTimeout = -1;
 
         function submitPaypointForm() {
+            $('form').data("validator").cancelSubmit = true;
             $('form').submit();
         }
 
@@ -298,6 +286,13 @@
         }
 
         var uri = new Uri(decodeURIComponent(new Uri(document.location).getQueryParamValue('options')));
+
+        function inputChanged(validator) {
+            var isValid = EzBob.Validation.checkForm(validator);
+            return $('.submit').toggleClass('disabled', !isValid);
+        }
+
+        ;
 
         $(function() {
             $('form').attr('action', document.location.href);
@@ -326,7 +321,7 @@
             if (!isTest) {
                 $("select option[value='Visa']").remove();
             }
-            $("#date").mask("99/99");
+            $("#expiry").mask("99/99");
             $("#card_no").mask("9999999999999999");
 
             if (isPayEarly) {
@@ -346,35 +341,68 @@
             contactUs.render();
 
             $('input[type="submit"]').click(function(e) {
-                if (validator.form()) {
+                if ($(this).hasClass("disabled")) {
+                    return false;
+                }
+                if (EzBob.Validation.checkForm(validator)) {
                     if (!isTest) {
                         _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
                         setTimeout(function() { submitPaypointForm(); }, 500);
                     } else {
                         submitPaypointForm();
                     }
-                } 
+                }
                 return false;
             });
+
+            $('input[type="text"]').change(function(e) {
+                return inputChanged(validator);
+            });
+            $('input[type="text"]').keyup(function (e) {
+                return inputChanged(validator);
+            });
+            $('input[type="password"]').change(function (e) {
+                return inputChanged(validator);
+            });
+            $('input[type="password"]').keyup(function (e) {
+                return inputChanged(validator);
+            });
+            $('select').change(function(e) {
+                return inputChanged(validator);
+            });
+            $('select').keyup(function(e) {
+                return inputChanged(validator);
+            });
+            $('select').click(function(e) {
+                return inputChanged(validator);
+            });
+
             var validator = $('.paypont-form').validate({
                 rules: {
                     customer: { required: true, minlength: 2 },
-                    card_no: { required: true, maxlength: 16 },
+                    card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
                     cv2: { required: true, minlength: 3 },
-                    expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" }
+                    expiry: { required: true, validateLastDateOfPayment: lastDateOfPayment, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
+                    card_type: { required: true }
                 },
-                errorPlacement: EzBob.Validation.errorPlacement,
-                unhighlight: EzBob.Validation.unhighlight
-            });
+                messages: {
+                    card_no: {digits: "Please enter a valid credit card number"}
+                },
+            errorPlacement: EzBob.Validation.errorPlacement,
+            unhighlight:
+            EzBob.Validation.unhighlightFS,
+            highlight:
+            EzBob.Validation.highlightFS
+        });
 
-            $.validator.addMethod(
-                "validateLastDateOfPayment", function(value, element, date) {
-                    date = $.browser.msie ? date._d : date;
-                    var expirydate = moment(value, "MM/YY");
-                    var res = expirydate >= date;
-                    return res;
-                }, "Debit card expires before the loan term. Please use another card."
-            );
+        $.validator.addMethod(
+            "validateLastDateOfPayment", function(value, element, date) {
+                date = $.browser.msie ? date._d : date;
+                var expirydate = moment(value, "MM/YY");
+                var res = expirydate >= date;
+                return res;
+            }, "Debit card expires before the loan term. Please use another card."
+        );
         });
     </script>
     <script type="text/javascript">
@@ -398,6 +426,70 @@
         }());
     </script>
 }
+
+
+@helper Hiddens()
+{
+    <text><input type="hidden" name="merchant" value="${merchant}">
+          <input type="hidden" name="trans_id" value="${trans_id}">
+          <input type="hidden" name="callback" value="${callback}">
+          <input type="hidden" name="backcallback" value="${backcallback}">
+          <input type="hidden" name="order" value="${order}">
+          <input type="hidden" name="shipping" value="${shipping}">
+          <input type="hidden" name="billing" value="${billing}">
+          <input type="hidden" name="template" value="${template}">
+          <input type="hidden" name="err_template" value="${err_template}">
+          <input type="hidden" name="options" value="${options}">
+          <input type="hidden" class="amount" name="amount" value="${amount}">
+          <input type="hidden" name="currency" value="${currency}">
+          <input type="hidden" name="cb_list" value="${cb_list}">
+          <input type="hidden" name="cb_flds" value="${cb_flds}">
+          <input type="hidden" name="map_flds" value="${map_flds}">
+          <input type="hidden" name="md_flds" value="${md_flds}">
+          <input type="hidden" name="background" value="${background}">
+          <input type="hidden" name="bgcolor" value="${bgcolor}">
+          <input type="hidden" name="font_face" value="${font_face}">
+          <input type="hidden" name="font_color" value="${font_color}">
+          <input type="hidden" name="font_size" value="${font_size}">
+          <input type="hidden" name="branding" value="${branding}">
+          <input type="hidden" name="mail_message" value="${mail_message}">
+          <input type="hidden" name="cb_message" value="${cb_message}">
+          <input type="hidden" name="cb_fail_message" value="${cb_fail_message}">
+          <input type="hidden" name="mandatory_Text" value="${mandatory_Text}">
+          <input type="hidden" name="customer_Text" value="${customer_Text}">
+          <input type="hidden" name="card_type_Text" value="${card_type_Text}">
+          <input type="hidden" name="card_no_Text" value="${card_no_Text}">
+          <input type="hidden" name="expiry_Text" value="${expiry_Text}">
+          <input type="hidden" name="issue_Text" value="${issue_Text}">
+          <input type="hidden" name="start_date_Text" value="${start_date_Text}">
+          <input type="hidden" name="authorise_Text" value="${authorise_Text}">
+          <input type="hidden" name="wait_Text" value="${wait_Text}">
+          <input type="hidden" name="error_table_Text" value="${error_table_Text}">
+          <input type="hidden" name="Master_Card_Text" value="${Master_Card_Text}">
+          <input type="hidden" name="Delta_Text" value="${Delta_Text}">
+          <input type="hidden" name="Visa_Text" value="${Visa_Text}">
+          <input type="hidden" name="JCB_Text" value="${JCB_Text}">
+          <input type="hidden" name="Solo_Text" value="${Solo_Text}">
+          <input type="hidden" name="Switch_Text" value="${Switch_Text}">
+          <input type="hidden" name="Maestro_Text" value="${Maestro_Text}">
+          <input type="hidden" name="American_Express_Text" value="${American_Express_Text}">
+          <input type="hidden" name="Diners_Club_Text" value="${Diners_Club_Text}">
+          <input type="hidden" name="cv2_Text" value="${cv2_Text}">
+          <input type="hidden" name="start_date_Error" value="${start_date_Error}">
+          <input type="hidden" name="card_no_Error" value="${card_no_Error}">
+          <input type="hidden" name="card_type_Error" value="${card_type_Error}">
+          <input type="hidden" name="customer_name_Error" value="${customer_name_Error}">
+          <input type="hidden" name="expiry_date_Error" value="${expiry_date_Error}">
+          <input type="hidden" name="issue_Error" value="${issue_Error}">
+          <input type="hidden" name="email_Error" value="${email_Error}">
+          <input type="hidden" name="cv2_Error" value="${cv2_Error}">
+          <input type="hidden" name="save_other_pay" value="${save_other_pay}">
+          <input type="hidden" name="usercallback" value="${usercallback}">
+          <input type="hidden" name="token" value="${token}">
+          <input type="hidden" name="error_table">
+          <input type="hidden" name="error_list"></text>
+}
+
 
 @section customJs{
     @BundleHelper.RenderPaypointTemplateJs()
