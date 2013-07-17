@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonLib;
 using EzBob.AmazonServiceLib;
@@ -11,21 +10,22 @@ using EzBob.AmazonServiceLib.Orders.Model;
 using EzBob.AmazonServiceLib.ServiceCalls;
 using EzBob.CommonLib;
 using NHibernate;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
 using Scorto.NHibernate;
-using Scorto.RegistryScanner;
+using StandaloneInitializer;
 using StructureMap;
-using StructureMap.Pipeline;
-using log4net.Config;
 
-namespace StandaloneAmazonApp
+namespace AmazonStandaloneApp
 {
     class Program
     {
         static void Main(string[] args)
         {
-            try
+            StandaloneApp.Execute<App>(args);
+        }
+
+        public class App : StandaloneApp
+        {
+            public override void Run(string[] args)
             {
                 if (args.Length != 3)
                 {
@@ -36,8 +36,7 @@ namespace StandaloneAmazonApp
                 Init();
 
                 var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
-
-                var _ConnectionInfo = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
+                var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
                 var amazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
 
                 int umi = int.Parse(args[0]);
@@ -46,16 +45,12 @@ namespace StandaloneAmazonApp
 
                 var elapsedTimeInfo = new ElapsedTimeInfo();
 
-                var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, _ConnectionInfo, days, isReporting);
+                var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, connection, days, isReporting);
 
                 DisplayOrders(elapsedTimeInfo, orders);
             }
-            finally
-            {
-                Console.WriteLine("Finished at {0}", DateTime.Now);
-                Console.ReadLine();
-            }
         }
+
 
         private static List<OrderItemTwo> GetOrders(int umi, IAmazonMarketplaceSettings amazonSettings,
                                                    ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting)
@@ -116,27 +111,8 @@ namespace StandaloneAmazonApp
 
         public static void Init()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
-            //EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
-            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
+            Bootstrap.Init();
             NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);
-
-            Scanner.Register();
-
-            //ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
-
-            ObjectFactory.Configure(x =>
-            {
-                x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
-                x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-            });
-
-            var cfg = ConfigurationRoot.GetConfiguration();
-
-            XmlElement configurationElement = cfg.XmlElementLog;
-            XmlConfigurator.Configure(configurationElement);
-
         }
     }
 }

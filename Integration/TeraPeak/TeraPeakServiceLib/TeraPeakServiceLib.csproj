@@ -62,6 +62,9 @@
     <Compile Include="Requests\SellerResearch\SearchQueryParamCountDates.cs" />
     <Compile Include="Requests\SellerResearch\SearchQuerySeller.cs" />
     <Compile Include="Requests\SellerResearch\SellerInfo.cs" />
+    <Compile Include="Stub\ConnectionProviderStub.cs" />
+    <Compile Include="Stub\CredentialsProviderStub.cs" />
+    <Compile Include="Stub\TerapeakRequestInfoBuilder.cs" />
     <Compile Include="TeraPeakCredentionProviderProduction.cs" />
     <Compile Include="TeraPeakCredentionProviderSandbox.cs" />
     <Compile Include="GetSellerResearchResults.cs" />

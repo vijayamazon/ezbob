@@ -79,6 +79,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
+      <Project>{3B719D9D-7D14-4499-8EE9-5FDFD604453A}</Project>
+      <Name>StandaloneInitializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

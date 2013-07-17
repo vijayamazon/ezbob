@@ -1,7 +1,7 @@
 ﻿using System;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 
-namespace StandaloneAmazonApp
+namespace AmazonStandaloneApp
 {
     public class OrderItemTwo
     {
