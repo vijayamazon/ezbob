@@ -1,8 +1,9 @@
-CREATE TABLE dbo.BasicInterestRate
+IF OBJECT_ID ('dbo.BasicInterestRate') IS NULL
+	CREATE TABLE dbo.BasicInterestRate
 	(
-	FromScore int NOT NULL,
-	ToScore int NOT NULL,
-	LoanIntrestBase decimal(18,4) NOT NULL
+		FromScore int NOT NULL,
+		ToScore int NOT NULL,
+		LoanIntrestBase decimal(18,4) NOT NULL
 	)  ON [PRIMARY]
 GO
 
