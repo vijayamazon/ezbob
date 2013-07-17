@@ -140,6 +140,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
     ApproveBtnClick: (e) ->
         return false  if $(e.currentTarget).hasClass("disabled")
+        if @loanInfoModel.get('InterestRate') <= 0
+            EzBob.ShowMessage 'Wrong Interest Rate value (' + @loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error'
+            return false
         if @loanInfoModel.get('OfferedCreditLine') <= 0
             EzBob.ShowMessage 'Wrong Offered credit line value (' + @loanInfoModel.get('OfferedCreditLine') + '), please enter the valid value (above zero)', 'Error'
             return false
