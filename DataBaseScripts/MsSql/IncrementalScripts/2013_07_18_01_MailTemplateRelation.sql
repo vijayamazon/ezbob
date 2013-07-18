@@ -5,11 +5,13 @@ go
 DELETE FROM Export_Results WHERE FileType = 1
 GO
 
-ALTER TABLE MailTemplateRelation DROP CONSTRAINT UNIQUE_InternalTemplateName
+IF  EXISTS (SELECT * FROM sysindexes i  WHERE i.name ='UNIQUE_InternalTemplateName')
+ALTER TABLE [dbo].[MailTemplateRelation] DROP CONSTRAINT [UNIQUE_InternalTemplateName]
 GO
+
                   
 ALTER TABLE MailTemplateRelation 
-ADD CONSTRAINT UNIQUE_InternalTemplateName UNIQUE (InternalTemplateName);
+ADD CONSTRAINT UNIQUE_InternalTemplateName UNIQUE (InternalTemplateName)
 GO
 
 INSERT INTO MailTemplateRelation(InternalTemplateName,MandrillTemplateId)VALUES( 'Application completed Under review.docx', 1)
