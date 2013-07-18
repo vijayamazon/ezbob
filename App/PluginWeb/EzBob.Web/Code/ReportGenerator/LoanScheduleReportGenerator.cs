@@ -17,7 +17,7 @@ namespace EzBob.Web.Code.ReportGenerator
             _workbook = new Workbook();
         }
 
-        public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell, string header)
+        public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell, bool withErrors, string header)
         {
             int row = 6;
             var column = 1;
@@ -48,6 +48,8 @@ namespace EzBob.Web.Code.ReportGenerator
             filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/wizard-mark-completed.png");
             foreach (var transaction in loanDetails.Transactions)
             {
+                if (!withErrors && transaction.Status != "Done") continue;
+
                 row++;
                 worksheet.Pictures.Add(row, column, filePath, 102, 30);
 

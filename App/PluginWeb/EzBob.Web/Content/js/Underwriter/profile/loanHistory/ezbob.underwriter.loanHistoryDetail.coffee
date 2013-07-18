@@ -31,7 +31,6 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
         this
 
     renderContent: ->
-
         modelLoan = @options.loan
         model = @model.toJSON()
         details = model.details
@@ -146,9 +145,9 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
     exportToPdf: (e) ->
         customerId = @model.id
         $el = $(e.currentTarget);
-        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=false");
+        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=false" + "&wError=" + @$el.find('.filter-errors').is(':checked') );
     
     exportToExcel: (e) ->
         customerId = @model.id
         $el = $(e.currentTarget);
-        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=true");
+        $el.attr("href", window.gRootPath + "Underwriter/LoanHistory/ExportDetails?id="+customerId+"&loanid="+@options.loan.Id+"&isExcel=true" + "&wError=" + @$el.find('.filter-errors').is(':checked') );

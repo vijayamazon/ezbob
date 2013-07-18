@@ -45,6 +45,17 @@ namespace EzBob.Web.Code
             return string.Format("{0:0,0.00}", value);
         }
 
+        public static string FormatShort(decimal value)
+        {
+            return string.Format("{0:0.0}", Math.Truncate(value * 10) / 10);
+        }
+
+        public static string FormatMiddle(decimal value)
+        {
+            return string.Format("{0:N2}", value);
+        }
+
+
         public static string NumericFormats(decimal numeric)
         {
             return "£ "+numeric.ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));

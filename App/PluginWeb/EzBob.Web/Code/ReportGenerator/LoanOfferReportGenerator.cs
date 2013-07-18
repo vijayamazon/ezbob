@@ -35,15 +35,16 @@ namespace EzBob.Web.Code.ReportGenerator
                 row++;
                 i++;
                 worksheet.Cells[row, column].PutValue(item.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-                worksheet.Cells[row, column+1].PutValue(FormattingUtils.FormatPounds(item.LoanRepayment));
-                worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPounds(item.Interest));
+                worksheet.Cells[row, column+1].PutValue("£ " + FormattingUtils.FormatPounds(item.LoanRepayment));
+                worksheet.Cells[row, column + 2].PutValue("£ " + FormattingUtils.FormatShort(item.Interest));
+                worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatMiddle(item.InterestRate * 100));
                 var fee =loanOffer.SetupFee > 0 && i == 0 ? loanOffer.SetupFee : 0;
                 if (item.Fees>0) fee += item.Fees;
-                var res = fee != 0 ? FormattingUtils.FormatPounds(fee) : "-";
+                var res = fee != 0 ? "£ " + FormattingUtils.FormatPounds(fee) : "-";
                 var res1 = loanOffer.SetupFee>0 && i == 0 ? "*" : string.Empty;
-                worksheet.Cells[row, column + 3].PutValue(res + res1);
-                worksheet.Cells.Merge(row, column + 4, 1, 3);
-                worksheet.Cells[row, column + 4].PutValue(FormattingUtils.FormatPounds(item.AmountDue));
+                worksheet.Cells[row, column + 4].PutValue(res + res1);
+                //worksheet.Cells.Merge(row, column + 5, 1, 3);
+                worksheet.Cells[row, column + 5].PutValue("£ " + FormattingUtils.FormatPounds(item.AmountDue));
                 SetCellStyle(worksheet, row, column, false);
             }
 
@@ -68,7 +69,8 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             row += 2;
             worksheet.Cells[row, column].PutValue("Offered credit line: ");
-            worksheet.Cells[row, column+1].PutValue(FormattingUtils.FormatPounds(details.OfferedCreditLine));
+            worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatPounds(details.OfferedCreditLine));
+            worksheet.Cells[row, column + 1].Style.HorizontalAlignment = TextAlignmentType.Left;
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
             row++;
             worksheet.Cells[row, column ].PutValue("Repayment period: ");
@@ -77,11 +79,13 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
             row++;
             worksheet.Cells[row, column ].PutValue("Interest rate: ");
-            worksheet.Cells[row, column + 1].PutValue(string.Format("{0:0}%", details.InterestRate * 100));
+            worksheet.Cells[row, column + 1].PutValue( (details.InterestRate * 100 ) );
+            worksheet.Cells[row, column + 1].Style.HorizontalAlignment = TextAlignmentType.Left;
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
             row++;
             worksheet.Cells[row, column ].PutValue("Loan type: ");
             worksheet.Cells[row, column + 1].PutValue(details.LoanType);
+            worksheet.Cells[row, column + 1].Style.HorizontalAlignment = TextAlignmentType.Left;
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
         }
 
@@ -92,18 +96,18 @@ namespace EzBob.Web.Code.ReportGenerator
             row += 2;
             worksheet.Cells.Merge(row, column, 2, 1);
             worksheet.Cells[row, column + 1].PutValue("Loan");
-            worksheet.Cells[row + 1, column + 1].PutValue(FormattingUtils.FormatPounds(loanOffer.TotalPrincipal));
+            worksheet.Cells[row + 1, column + 1].PutValue("£ " + FormattingUtils.FormatPounds(loanOffer.TotalPrincipal));
 
             worksheet.Cells.Merge(row, column + 2, 2, 1);
             worksheet.Cells.Merge(row, column + 3, 2, 1);
 
             worksheet.Cells[row, column + 4].PutValue("Cost");
-            worksheet.Cells[row + 1, column + 4].PutValue(FormattingUtils.FormatPounds(loanOffer.TotalInterest));
+            worksheet.Cells[row + 1, column + 4].PutValue("£ " + FormattingUtils.FormatPounds(loanOffer.TotalInterest));
 
             worksheet.Cells.Merge(row, column + 5, 2, 1);
 
             worksheet.Cells[row, column + 6].PutValue("Total");
-            worksheet.Cells[row + 1, column + 6].PutValue(FormattingUtils.FormatPounds(loanOffer.Total));
+            worksheet.Cells[row + 1, column + 6].PutValue("£ " + FormattingUtils.FormatPounds(loanOffer.Total));
 
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/image-money64.png");
 
@@ -141,9 +145,10 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, column].PutValue("Due Date");
             worksheet.Cells[row, column + 1].PutValue("Principal");
             worksheet.Cells[row, column + 2].PutValue("Interest");
-            worksheet.Cells[row, column + 3].PutValue("Fees");
-            worksheet.Cells.Merge(row, column + 4, 1, 3);
-            worksheet.Cells[row, column + 4].PutValue("Total");
+            worksheet.Cells[row, column + 3].PutValue("Rate");
+            worksheet.Cells[row, column + 4].PutValue("Fees");
+            //worksheet.Cells.Merge(row, column + 5, 1, 3);
+            worksheet.Cells[row, column + 5].PutValue("Total");
 
             SetHeaderBackgroundColor(worksheet, row, column);
             worksheet.AutoFitRows();
@@ -151,7 +156,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
         private void SetHeaderBackgroundColor(Worksheet worksheet, int row, int column)
         {
-            for (int i = 0; i <= 6; i++)
+            for (int i = 0; i <= 7; i++)
             {
                 worksheet.Cells[row, column + i].Style.BackgroundColor = Color.Blue;
                 worksheet.Cells[row, column + i].Style.Font.Color = Color.Black;
@@ -160,7 +165,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
         private static void SetCellStyle(Worksheet worksheet, int row, int column, bool isBold)
         {
-            for (int i = 0; i <= 6; i++)
+            for (int i = 0; i <= 5; i++)
             {
                 worksheet.Cells.SetRowHeight(row, i);
                 worksheet.Cells[row, column + i].Style.Font.Size = 11;

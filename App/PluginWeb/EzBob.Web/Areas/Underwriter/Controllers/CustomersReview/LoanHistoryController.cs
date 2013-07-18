@@ -283,7 +283,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         }
 
         [HttpGet]
-        public ActionResult ExportDetails(int id, int loanid, bool isExcel)
+        public ActionResult ExportDetails(int id, int loanid, bool isExcel, bool wError)
         {
             var customer = _customerRepository.Get(id);
             var loan = customer.Loans.SingleOrDefault(l => l.Id == loanid);
@@ -292,7 +292,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
                 return this.JsonNet(new { error = "loan does not exists" });
             }
-            return new LoanScheduleReportResult(_rolloverRepository, loan, isExcel, customer);
+            return new LoanScheduleReportResult(_rolloverRepository, loan, isExcel, wError, customer);
         }
     }
 }

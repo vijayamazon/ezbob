@@ -11,15 +11,17 @@ namespace EzBob.Web.Code.ReportGenerator
     {
          private readonly LoanDetails _loanDetails;
          private readonly bool _isExcell;
+         private readonly bool _withErrors;
          private readonly Customer _customer;
          private readonly Loan _loan;
 
          //public LoanScheduleReportResult(LoanDetails loanDetails, bool isExcell, Customer customer)
-         public LoanScheduleReportResult(PaymentRolloverRepository rolloverRepository, Loan loan, bool isExcell, Customer customer)
+         public LoanScheduleReportResult(PaymentRolloverRepository rolloverRepository, Loan loan, bool isExcell, bool wError, Customer customer)
          {
              var loansDetailsBuilder = new LoansDetailsBuilder();
              _loanDetails = loansDetailsBuilder.Build(loan, rolloverRepository.GetByLoanId(loan.Id));
              _isExcell = isExcell;
+             _withErrors = wError;
              _customer = customer;
              _loan = loan;
          }
@@ -36,7 +38,7 @@ namespace EzBob.Web.Code.ReportGenerator
                             DateTime.Now.ToString("dd/MM/yyyy"));
 
             var generator = new LoanScheduleReportGenerator();
-            var content = generator.GenerateReport(_loanDetails, _isExcell, header);
+            var content = generator.GenerateReport(_loanDetails, _isExcell, _withErrors, header);
             var fileName = header + "." + fileFormat;
             var f = new FileContentResult(content, "application/"+fileFormat) { FileDownloadName = fileName };
             f.ExecuteResult(context);
