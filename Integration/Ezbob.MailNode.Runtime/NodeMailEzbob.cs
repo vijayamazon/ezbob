@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Aspose.Words;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
@@ -34,6 +38,11 @@ namespace WorkflowObjects
 
         public override int AddExportresult(ExportResult result)
         {
+            //skip saving if filetype is pdf
+            if (result.FileType == 1)
+            {
+                return 0;
+            }
             var exportresultId = base.AddExportresult(result);
 
             var model = new EzbobMailNodeAttachRelation
@@ -67,13 +76,40 @@ namespace WorkflowObjects
                     .Distinct()
                     .ToDictionary(k => k.Key, v => v.First());
                 var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
-                var subject = variables["EmailSubject"] ?? "Default Subject";
-                var to = variables["email"];
-                var cc = variables["emailCC"];
-
-                return Mail.Send(variables, to, templateName, subject, cc);
+                NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key == "Subject").Value ?? "Default Subject";
+                NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "email" || x.Key == "AddressTo").Value;
+                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "emailCC" || x.Key == "CP_AddressCC").Value;
+                var retVal = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
+                var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
+                //save mandrill rendered template into DB export result
+                var exportResult = new ExportResult
+                    {
+                        ApplicationID = iworkflow.ApplicationId,
+                        CreationDate = DateTime.UtcNow,
+                        FileName =
+                            string.Format("{0}({1}).docx", NodeMailParams.Subject,
+                                          DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)),
+                        FileType = 0,
+                        BinaryBody = HtmlToDocxBinnary(renderedHtml),
+                        NodeName = iworkflow.CurrentNodeName
+                    };
+                AddExportresult(exportResult);
+                return retVal;
             }
             return base.Execute(iworkflow);
+        }
+
+        private static byte[] HtmlToDocxBinnary(string html)
+        {
+            var doc = new Document();
+            var docBuilder = new DocumentBuilder(doc);
+            docBuilder.InsertHtml(html);
+
+            using (var streamForDoc = new MemoryStream())
+            {
+                doc.Save(streamForDoc, SaveFormat.Docx);
+                return streamForDoc.ToArray();
+            }
         }
     }
 }

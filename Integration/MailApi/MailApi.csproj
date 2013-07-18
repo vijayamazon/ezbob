@@ -66,6 +66,7 @@
     <Compile Include="Model\EmailResultModel.cs" />
     <Compile Include="Model\ErrorResponseModel.cs" />
     <Compile Include="Model\MandrillException.cs" />
+    <Compile Include="Model\RenderTemplateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
