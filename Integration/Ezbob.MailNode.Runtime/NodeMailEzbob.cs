@@ -68,19 +68,24 @@ namespace WorkflowObjects
         public override string Execute(IWorkflow iworkflow)
         {
             var isMandrillEnable = VariablesRepository.GetByName("MandrillEnable").Value == "Yes";
-            if (isMandrillEnable)
+            var isGreetingMailSendViaMandrill = VariablesRepository.GetByName("GreetingMailSendViaMandrill").Value == "Yes";
+
+            if (isMandrillEnable || (isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx"))
             {
                 var variables = (iworkflow.VariableConnectionDescriptors.Where(
                     vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
                     .ToLookup(k => k.SourceVariableName, k => _ec[k.SourceVariableName].ToString())
                     .Distinct()
                     .ToDictionary(k => k.Key, v => v.First());
-                var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
+
                 NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key == "Subject").Value ?? "Default Subject";
                 NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "email" || x.Key == "AddressTo").Value;
                 NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "emailCC" || x.Key == "CP_AddressCC").Value;
+
+                var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
                 var retVal = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
                 var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
+
                 //save mandrill rendered template into DB export result
                 var exportResult = new ExportResult
                     {
