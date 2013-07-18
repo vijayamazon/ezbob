@@ -99,6 +99,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         {
             var sid = _eBayServiceHelper.CreateSessionId();
             var url = _eBayServiceHelper.CreateUrl(sid);
+            Log.InfoFormat("Url: '{0}' was generated", url.Value);
             TempData["SID"] = sid;
             TempData["isUpdate"] = isUpdate;
             return Redirect(url.Value);

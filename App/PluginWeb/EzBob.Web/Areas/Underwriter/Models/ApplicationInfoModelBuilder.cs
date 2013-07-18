@@ -1,26 +1,32 @@
-﻿using System;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.Code;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class ApplicationInfoModelBuilder
-    {
-        private readonly IPacNetBalanceRepository _funds;
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models;
+	using Code;
+	using Infrastructure;
+	using StructureMap;
+
+	public class ApplicationInfoModelBuilder
+	{
+		private readonly IPacNetBalanceRepository _funds;
+		private readonly IPacNetManualBalanceRepository _manualFunds;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
         private readonly ILoanTypeRepository _loanTypes;
-        private readonly IDiscountPlanRepository _discounts;
+		private readonly IDiscountPlanRepository _discounts;
+		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 
-        public ApplicationInfoModelBuilder(
-            IPacNetBalanceRepository funds, 
+		public ApplicationInfoModelBuilder(
+			IPacNetBalanceRepository funds,
+			IPacNetManualBalanceRepository manualFunds, 
             IDiscountPlanRepository discounts, 
             ILoanTypeRepository loanTypes)
-        {
-            _funds = funds;
+		{
+			_funds = funds;
+			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
         }
@@ -59,7 +65,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
             }
 
-
             model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
             model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
             model.AvaliableAmount = customer.CreditSum ?? 0M;
@@ -68,10 +73,21 @@ namespace EzBob.Web.Areas.Underwriter.Models
             model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
             model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
 
-            var balance = _funds.GetBalance();
+			var balance = _funds.GetBalance();
+			var manualBalance = _manualFunds.GetBalance();
+	        var fundsAvailable = balance.Adjusted + manualBalance;
+			model.FundsAvaliable = FormattingUtils.FormatPounds(fundsAvailable);
 
-            model.FundsAvaliable = FormattingUtils.FormatPounds(balance.Adjusted);
-            model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
+	        DateTime today = DateTime.UtcNow;
+	        model.FundsAvailableUnderLimitClass = string.Empty;
+	        int relevantLimt = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
+	        if (fundsAvailable < relevantLimt)
+			{
+				model.FundsAvailableUnderLimitClass = "red_cell";
+				// qqq - trigger sending of mail
+			}
+
+	        model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
             //Status = "Active";
             model.Details = customer.Details;
             var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||

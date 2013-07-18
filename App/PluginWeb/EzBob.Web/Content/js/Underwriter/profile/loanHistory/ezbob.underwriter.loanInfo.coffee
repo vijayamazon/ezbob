@@ -20,6 +20,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='repaymentPeriodChangeButton']"        : "editRepaymentPeriod"
         "click [name='interestRateChangeButton']"           : "editInterestRate"
         "click [name='openCreditLineChangeButton']"         : "editOfferedCreditLine"
+        "click [name='openPacnetManualButton']"             : "openPacnetManual"
         "click [name='editDetails']"                        : "editDetails"
         "click [name='setupFeeEditButton']"                 : "editSetupFee"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
@@ -90,6 +91,11 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             that.model.fetch()
 
         return
+
+    openPacnetManual: ->
+        
+
+        return false
 
     editInterestRate: ->
         d = new EzBob.Dialogs.PercentsEdit(

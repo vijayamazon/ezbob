@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<environment id="${environmentId}">	
+<environment id="${environmentId}">		
     <property name="SageConfig" value ="SageUat"/>		
 	<module id="SageDev">
 		<property name="OAuthIdentifier" value="IssYGGBRMb9f6cw7XJgpVaeiMbCNGcFAeyBysLvJ" />
@@ -459,6 +459,10 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="MinLoan" value="1000" />
         <property name="XMinLoan" value="100" />
         <property name="PayPalEnabled" value="True" />
+		<property name="PacnetBalanceMaxManualChange" value="300000" />	
+		<property name="PacnetBalanceWeekendLimit" value="100000" />
+		<property name="PacnetBalanceWeekdayLimit" value="50000" />
+		
 		<!-- Days from last marketplace update end date (days) -->
 		<property name="UpdateOnReapplyLastDays" value="14" />
         <!-- Test -->

@@ -562,3 +562,12 @@ span.active {
 #collapseSummary .accordion-inner {
     padding-top: 35px;
 }
+
+.table td.red_cell {
+  color: red;
+  font-weight: bold;
+}
+
+.couple_buttons {
+    margin-left: 3px;
+}

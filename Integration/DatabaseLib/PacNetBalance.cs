@@ -35,8 +35,8 @@ namespace EZBob.DatabaseLib
 
     public interface IPacNetBalanceRepository : IRepository<PacNetBalance>
     {
-        decimal GetFunds();
-        PacNetBalance GetBalance();
+		decimal GetFunds();
+		PacNetBalance GetBalance();
     }
 
     public class PacNetBalanceRepository : NHibernateRepositoryBase<PacNetBalance>, IPacNetBalanceRepository
@@ -51,10 +51,10 @@ namespace EZBob.DatabaseLib
             return funds.Adjusted;
         }
 
-        public PacNetBalance GetBalance()
-        {
-            return _session.Query<PacNetBalance>().First();
-        }
+		public PacNetBalance GetBalance()
+		{
+			return _session.Query<PacNetBalance>().First();
+		}
     }
 
 }
