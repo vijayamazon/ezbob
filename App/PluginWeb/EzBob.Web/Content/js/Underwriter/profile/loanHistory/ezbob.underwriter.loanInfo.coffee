@@ -21,6 +21,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='interestRateChangeButton']"           : "editInterestRate"
         "click [name='openCreditLineChangeButton']"         : "editOfferedCreditLine"
         "click [name='openPacnetManualButton']"             : "openPacnetManual"
+        "click [name='clearPacnetManualButton']"             : "clearPacnetManual"
         "click [name='editDetails']"                        : "editDetails"
         "click [name='setupFeeEditButton']"                 : "editSetupFee"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
@@ -93,9 +94,39 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     openPacnetManual: ->
-        
+        that = this
+        d = new EzBob.Dialogs.PacentManual(
+            model: @model
+            title: "Pacnet Balance - Manual"
+            postValueName: "amount"
+            url: "Underwriter/ApplicationInfo/SavePacnetManual"
+            data:
+                limit: EzBob.Config.PacnetBalanceMaxManualChange
+        )
+        d.render()
+        d.on "done", ->
+            that.model.fetch()
 
-        return false
+        return
+
+    clearPacnetManual: ->
+        that = this
+
+        d = new EzBob.Dialogs.CheckBoxEdit(
+            model: @model
+            propertyName: "UseSetupFee"
+            title: "Clear Pacnet Manual"
+            checkboxName: "I am sure"
+            postValueName: "isSure"
+            url: "Underwriter/ApplicationInfo/DisableTodaysPacnetManual"
+            data:
+                isSure: @model.get("IsSure")
+        )
+
+        d.render()
+        d.on "done", ->
+            that.model.fetch()
+        return
 
     editInterestRate: ->
         d = new EzBob.Dialogs.PercentsEdit(

@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
@@ -32,9 +33,10 @@
     }
 
 	public interface IPacNetManualBalanceRepository : IRepository<PacNetManualBalance>
-    {
-        int GetBalance();
-    }
+	{
+		int GetBalance();
+		void DisableTodays();
+	}
 
     public class PacNetManualBalanceRepository : NHibernateRepositoryBase<PacNetManualBalance>, IPacNetManualBalanceRepository
     {
@@ -45,9 +47,24 @@
 
 		public int GetBalance()
 		{
+			return GetTodaysActive().Sum(row => row.Amount);
+		}
+
+		public void DisableTodays()
+		{
+			foreach (PacNetManualBalance manualBalance in GetTodaysActive())
+			{
+				Delete(manualBalance);
+				manualBalance.Enabled = false;
+				SaveOrUpdate(manualBalance);
+			}
+		}
+
+		private IEnumerable<PacNetManualBalance> GetTodaysActive()
+		{
 			DateTime today = DateTime.UtcNow;
-			return Enumerable.Sum(_session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date.Year == today.Year && a.Date.Month == today.Month && a.Date.Day == today.Day), row => row.Amount);
-        }
+			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date.Year == today.Year && a.Date.Month == today.Month && a.Date.Day == today.Day);
+		}
     }
 
 }

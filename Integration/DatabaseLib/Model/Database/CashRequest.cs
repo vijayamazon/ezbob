@@ -45,7 +45,9 @@ namespace EZBob.DatabaseLib.Model.Database
             set { _useSetupFee = value; }
         }
 
-        public virtual string ZohoId { get; set; }
+	    public virtual bool IsSure { get; set; }
+
+	    public virtual string ZohoId { get; set; }
 
         public virtual DateTime? OfferStart { get; set; }
 
