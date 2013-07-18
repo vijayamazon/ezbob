@@ -23,7 +23,7 @@
         {
             Not.LazyLoad();
 			Table("PacNetManualBalance");
-			ReadOnly(); // qqq - should it be readonly?
+			ReadOnly();
 			Id(x => x.Id);
 			Map(x => x.Username).Length(100);
 			Map(x => x.Amount);
@@ -66,5 +66,4 @@
 			return _session.Query<PacNetManualBalance>().Where(a => a.Enabled && a.Date.Year == today.Year && a.Date.Month == today.Month && a.Date.Day == today.Day);
 		}
     }
-
 }

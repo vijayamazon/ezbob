@@ -31,7 +31,7 @@
             _loanTypes = loanTypes;
         }
 
-        public void InitApplicationInfo(ApplicationInfoModel model, EZBob.DatabaseLib.Model.Database.Customer customer, CashRequest cr)
+        public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
         {
             if (customer == null) return;
 
@@ -84,7 +84,7 @@
 	        if (fundsAvailable < relevantLimt)
 			{
 				model.FundsAvailableUnderLimitClass = "red_cell";
-				// qqq - trigger sending of mail
+				// trigger sending of mail via mandrill
 			}
 
 	        model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
