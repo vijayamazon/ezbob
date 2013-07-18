@@ -187,6 +187,21 @@ EzBob.Dialogs.OfferedCreditLineEdit = EzBob.Dialogs.PoundsNoDecimalsEdit.extend(
     }
 });
 
+EzBob.Dialogs.PacentManual = EzBob.Dialogs.PoundsNoDecimalsEdit.extend({
+    rules: { simpleValueEdit: { required: true } },
+    onDialogOpened: function (event, ui) {
+        var d = $(event.target);
+        d.validator = d.validate({
+            rules: {}
+        });
+    },
+    initialize: function (options) {
+        this.rules.simpleValueEdit.autonumericMin = options.min;
+        this.rules.simpleValueEdit.autonumericMax = options.max;
+        EzBob.Dialogs.PoundsNoDecimalsEdit.prototype.initialize.call(this, arguments);
+    }
+});
+
 EzBob.Dialogs.TextEdit = EzBob.Dialogs.SimpleValueEdit.extend({
     onDialogOpened: function (event, ui) {
         var d = $(event.target);

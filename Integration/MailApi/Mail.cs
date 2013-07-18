@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using EzBob.Configuration;
 using MailApi.Model;
@@ -15,10 +16,15 @@ namespace MailApi
         private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
         private readonly IMandrillConfig _config;
 
+        //Api pathes
+        private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
+        private const string SendTemplatePath = "/messages/send-template.json";
+        private const string RenderTemplatePath = "/templates/render.json";
+
         public Mail(IMandrillConfig config = null)
         {
             _config = config ?? ConfigurationRootBob.GetConfiguration().MandrillConfig;
-            _client = new RestClient(_config.BaseSecureUrl);
+            _client = new RestClient(BaseSecureUrl);
             _client.AddHandler("application/json", new JsonDeserializer());
         }
 
@@ -44,7 +50,7 @@ namespace MailApi
             return message;
         }
 
-        private string Send(EmailModel email)
+        private string SendRequest(string path, object model)
         {
             if (!_config.Enable)
             {
@@ -52,53 +58,61 @@ namespace MailApi
                 Log.Warn(retVal);
                 return retVal;
             }
-            var request = new RestRequest(_config.SendTemplatePath, Method.POST) { RequestFormat = DataFormat.Json };
-            request.AddBody(email);
+            var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddBody(model);
             var response = _client.Post(request);
 
-            Log.InfoFormat("Sending mail. Request: \n {0} \n Response: \n {1}", request.Parameters[0], response.Content);
+            Log.InfoFormat("Mandrill service call.\n Request: \n {0} \n Response: \n {1}", request.Parameters[0], response.Content);
 
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-                Log.Error(new MandrillException(error, string.Format("Post failed {0}", _config.SendTemplatePath)));
-                return "InternalServerError";
+                throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}", SendTemplatePath));
             }
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                Log.Error(response.ErrorException);
-                return "HttpStatusCode not OK";
+                throw response.ErrorException;
             }
-            var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response.Content);
+
+            return response.Content;
+        }
+
+        private string Send(EmailModel email)
+        {
+            var response = SendRequest(SendTemplatePath, email);
+            var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response);
             if (responseDeserialized[0].status.ToLower() != "sent")
             {
                 Log.Warn(responseDeserialized[0].ToString());
                 return "status not 'sent'";
             }
-            Log.Info(responseDeserialized[0].ToString());
             return "OK";
         }
-        //----------------------------------------------------------------------------------
-        public string ForUnitTest(string emailTo, Dictionary<string, string> vars)
-        {
-            var message = PrepareEmail(_config.FinishWizardTemplateName, emailTo, vars, "Finish Application");
-            return Send(message);
-        }
 
-        public void SendMessageFinishWizard(string emailTo, string fullName)
+        private string RenderTemplate(Dictionary<string, string> parameters, string templateName)
         {
-            var vars = new Dictionary<string, string>
+            var templateModel = new RenderTemplateModel
                 {
-                    {"CUSTOMER_NAME", fullName}, 
+                    key = _config.Key,
+                    template_name = templateName,
+                    template_content = new template_content[] {},
+                    merge_vars = Utils.AddMergeVars(parameters)
                 };
-            var message = PrepareEmail(_config.FinishWizardTemplateName, emailTo, vars, "Finish Application");
-            Send(message);
+            var response = SendRequest(RenderTemplatePath, templateModel);
+            var retVal = JsonConvert.DeserializeObject<Dictionary<string, string>>(response); //response is { "html": "response text" }
+            return retVal["html"];
         }
-
+        //----------------------------------------------------------------------------------
         public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "")
         {
             var message = PrepareEmail(templateName, to, parameters, subject, cc);
             return Send(message);
+        }
+
+        public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName)
+        {
+            return RenderTemplate(parameters, templateName);
         }
     }
 }

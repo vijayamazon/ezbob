@@ -27,6 +27,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         var nonLimitedAddressView = new EzBob.AddressView({ model: this.model.get('NonLimitedCompanyAddress').reset(), name: "NonLimitedCompanyAddress", max: 1 });
         nonLimitedAddressView.render().$el.appendTo(this.$el.find('#NonLimitedCompanyAddress'));
         this.model.get('NonLimitedCompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
+        this.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
 
         this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", hidden: this.$el.find('.directorsData') });
         this.directorsView.on("director:change", this.inputChanged, this);

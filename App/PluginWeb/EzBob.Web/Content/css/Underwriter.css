@@ -306,6 +306,7 @@ table.table { font-family: Tahoma; }
 #btnAMLandBWAInformation,
 #btnBWAInformation,
 .edit-loan,
+.couple_buttons,
 a[data-bug-type],
 .addNewDebitCard,
 .setDefault,
@@ -349,6 +350,7 @@ a[data-bug-type],
 .permission-SendingMessagesToClients #btnAMLandBWAInformation,
 .permission-SendingMessagesToClients #btnBWAInformation,
 .permission-EditLoanDetails .edit-loan,
+.permission-EditLoanDetails .couple_buttons,
 .permission-OpenBug a[data-bug-type],
 .permission-AddBankAccount .addNewDebitCard,
 .permission-ChangeBankAccount .setDefault,
@@ -561,4 +563,13 @@ span.active {
 
 #collapseSummary .accordion-inner {
     padding-top: 35px;
+}
+
+.table td.red_cell {
+  color: red;
+  font-weight: bold;
+}
+
+.couple_buttons {
+    margin-left: 3px;
 }

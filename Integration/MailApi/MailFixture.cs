@@ -15,23 +15,39 @@ namespace MailApi
         public void StartUp()
         {
             var config = new Mock<IMandrillConfig>();
-            config.SetupGet(x => x.Key).Returns("ZpZX8rtjJMJYOCGFCA1uGg");
-            config.SetupGet(x => x.BaseSecureUrl).Returns("https://mandrillapp.com/api/1.0/");
-            config.SetupGet(x => x.SendTemplatePath).Returns("/messages/send-template.json");
-            config.SetupGet(x => x.FinishWizardTemplateName).Returns("finishwizardtemplate");
-
+            config.SetupGet(x => x.Key).Returns("Z95NpOsNNMy4LMLMH9mUjw");
+            config.SetupGet(x => x.Enable).Returns(true);
             _mail = new Mail(config.Object);
         }
 
         [Test]
-        public void TestSend()
+        public void SendMessage()
         {
             var vars = new Dictionary<string, string>
                 {
-                    {"CUSTOMER_NAME", "Test for Nimrod K"}, 
+                    {"email", "shubin_igor@ukr.net"}, 
+                    {"EmailSubject", "Thank you for registering with EZBOB!"}, 
+                    {"emailCC", ""}, 
+                    {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
-            var result = _mail.ForUnitTest("shubin_igor@ukr.net",vars);
+
+            var result = _mail.Send(vars, "shubin_igor@ukr.net", "Greeting", "Thank you for registering with EZBOB!");
             Assert.That(result == "OK");
+        }
+
+        [Ignore]
+        [Test]
+        public void RenderTemplate()
+        {
+            var vars = new Dictionary<string, string>
+                {
+                    {"email", "shubin_igor@ukr.net"}, 
+                    {"EmailSubject", "Thank you for registering with EZBOB!"}, 
+                    {"emailCC", ""}, 
+                    {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
+                };
+            var result = _mail.GetRenderedTemplate(vars, "Greeting");
+            System.Console.Out.Write(result);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<environment id="${environmentId}">	
+<environment id="${environmentId}">		
     <property name="SageConfig" value ="SageUat"/>		
 	<module id="SageDev">
 		<property name="OAuthIdentifier" value="IssYGGBRMb9f6cw7XJgpVaeiMbCNGcFAeyBysLvJ" />
@@ -91,17 +91,12 @@
 
     <module id="MandrillSpikeConfig">
         <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />
-        <property name="BaseSecureUrl" value="https://mandrillapp.com/api/1.0/" />
-        <property name="SendTemplatePath" value="/messages/send-template.json" />
-        <property name="FinishWizardTemplateName" value="finishwizardtemplate" />
+        <property name="Enable" value="False" />
     </module>
 	
 	<module id="MandrillUATConfig">
         <property name="Enable" value="False" />
         <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
-        <property name="BaseSecureUrl" value="https://mandrillapp.com/api/1.0/" />
-        <property name="SendTemplatePath" value="/messages/send-template.json" />
-        <property name="FinishWizardTemplateName" value="finishwizardtemplate" />
     </module>
 		
     <module id="ZohoCRM">
@@ -464,6 +459,10 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="MinLoan" value="1000" />
         <property name="XMinLoan" value="100" />
         <property name="PayPalEnabled" value="True" />
+		<property name="PacnetBalanceMaxManualChange" value="300000" />	
+		<property name="PacnetBalanceWeekendLimit" value="100000" />
+		<property name="PacnetBalanceWeekdayLimit" value="50000" />
+		
 		<!-- Days from last marketplace update end date (days) -->
 		<property name="UpdateOnReapplyLastDays" value="14" />
         <!-- Test -->

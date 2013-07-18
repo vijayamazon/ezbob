@@ -137,8 +137,9 @@ namespace EzBob.Web.Infrastructure
             For<IExperianConsentAgreementRepository>().Use<ExperianConsentAgreementRepository>();
             For<ICashRequestRepository>().Use<CashRequestRepository>();
             For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
-            For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
-            For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
+			For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
+			For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
+			For<IPacNetManualBalanceRepository>().Use<PacNetManualBalanceRepository>();
             For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
             For<IDiscountPlanRepository>().Use <DiscountPlanRepository>();
             For<ICurrencyConvertor>().Use<CurrencyConvertor>();

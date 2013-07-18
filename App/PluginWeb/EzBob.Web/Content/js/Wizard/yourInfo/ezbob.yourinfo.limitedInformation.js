@@ -23,6 +23,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress').reset(), name: "LimitedCompanyAddress", max: 1 });
         limitedAddressView.render().$el.appendTo(this.$el.find('#LimitedCompanyAddress'));
         this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
+        this.addressErrorPlacement(limitedAddressView.$el, limitedAddressView.model);
 
         this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('LimitedDirectors'), name: 'limitedDirectors', hidden: this.$el.find('.directorsData') });
         this.directorsView.on("director:change", this.inputChanged, this);

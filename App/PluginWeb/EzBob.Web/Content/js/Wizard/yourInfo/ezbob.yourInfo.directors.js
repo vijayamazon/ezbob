@@ -39,6 +39,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
             addressView.render().$el.appendTo(that.directorArea.find("#" + addressElem));
             SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
+
+            that.addressErrorPlacement(addressView.$el, addressView.model);
         });
         this.$el.attardi_labels('toggle_all');
         this.trigger("director:change");
@@ -52,6 +54,23 @@ EzBob.DirectorMainView = Backbone.View.extend({
             }
         });
         return result;
+    },
+
+    addressErrorPlacement: function (el, model) {
+        var $el = $(el);
+        $el.on("focusout", function () {
+            if (model.length == 0) {
+                $el.tooltip({
+                    title: "This field is required"
+                }).tooltip("enable").tooltip('fixTitle');
+            }
+        });
+
+        model.on("change", function () {
+            if (model.length > 0) {
+                $el.tooltip('destroy');
+            }
+        });
     },
 
     addDirector: function() {

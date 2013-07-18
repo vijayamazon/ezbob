@@ -51,10 +51,12 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         
         var personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: "PersonalAddress", max: 1 });
         personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
+        this.addressErrorPlacement(personalAddressView.$el, personalAddressView.model);
 
         var prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: "PrevPersonAddresses", max: 3 });
         prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
         this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter Previous Postcode');
+        this.addressErrorPlacement(prevPersonAddressesView.$el, prevPersonAddressesView.model);
 
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
@@ -62,7 +64,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.$el.find("#OverallTurnOver").moneyFormat();
         this.inputChanged();
     },
-    
+
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
             id: this.model.get('Id'),

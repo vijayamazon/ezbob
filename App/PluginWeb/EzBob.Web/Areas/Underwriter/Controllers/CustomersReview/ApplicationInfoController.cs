@@ -1,22 +1,19 @@
-﻿using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.Web;
-using ZohoCRM;
-using log4net;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
-	using StructureMap;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Scorto.Web;
+	using ZohoCRM;
+	using log4net;
 
 	public class ApplicationInfoController : Controller
     {
@@ -30,27 +27,36 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly IDiscountPlanRepository _discounts;
         private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
+		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
-        public ApplicationInfoController(ICustomerRepository customerRepository, ICashRequestsRepository cashRequestsRepository,
-                                         IApplicationRepository applications, IEzBobConfiguration config,
-                                         IZohoFacade crm, ILoanTypeRepository loanTypes, LoanLimit limit,
-                                            IDiscountPlanRepository discounts, CashRequestBuilder crBuilder,ApplicationInfoModelBuilder infoModelBuilder)
-        {
-            _customerRepository = customerRepository;
-            _cashRequestsRepository = cashRequestsRepository;
-            _applications = applications;
-            _config = config;
-            _crm = crm;
-            _loanTypes = loanTypes;
-            _limit = limit;
-            _discounts = discounts;
-            _crBuilder = crBuilder;
-            _infoModelBuilder = infoModelBuilder;
-        }
+		public ApplicationInfoController(ICustomerRepository customerRepository,
+		                                 ICashRequestsRepository cashRequestsRepository,
+		                                 IApplicationRepository applications,
+		                                 IEzBobConfiguration config,
+		                                 IZohoFacade crm,
+		                                 ILoanTypeRepository loanTypes,
+		                                 LoanLimit limit,
+		                                 IDiscountPlanRepository discounts,
+		                                 CashRequestBuilder crBuilder,
+		                                 ApplicationInfoModelBuilder infoModelBuilder,
+		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository)
+		{
+			_customerRepository = customerRepository;
+			_cashRequestsRepository = cashRequestsRepository;
+			_applications = applications;
+			_config = config;
+			_crm = crm;
+			_loanTypes = loanTypes;
+			_limit = limit;
+			_discounts = discounts;
+			_crBuilder = crBuilder;
+			_infoModelBuilder = infoModelBuilder;
+			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
+		}
 
-        [Ajax]
+		[Ajax]
         [ValidateJsonAntiForgeryToken]
         [HttpGet]
         [Transactional]
@@ -62,8 +68,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _infoModelBuilder.InitApplicationInfo(m, customer, cr);
             return this.JsonNet(m);
         }
-
-
 
         [HttpPost]
         [Transactional]
@@ -84,6 +88,44 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
 	        return this.JsonNet(true);
         }
+
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreditLineFields")]
+		public JsonNetResult SavePacnetManual(int amount, int limit)
+		{
+			if (amount > limit || amount < -1 * limit)
+			{
+				throw new ArgumentException(string.Format("Amount is more than {0}", limit));
+			}
+
+			var newEntry = new PacNetManualBalance
+			{
+				Date = DateTime.UtcNow,
+				Enabled = true,
+				Amount = amount,
+				Username = User.Identity.Name
+			};
+
+			_pacNetManualBalanceRepository.SaveOrUpdate(newEntry);
+			return this.JsonNet(true);
+		}
+
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreditLineFields")]
+		public JsonNetResult DisableTodaysPacnetManual(bool isSure)
+		{
+			if (isSure)
+			{
+				_pacNetManualBalanceRepository.DisableTodays();
+			}
+			return this.JsonNet(true);
+		}
 
         [HttpPost]
         [Ajax]
