@@ -54,6 +54,9 @@ namespace EzBob.Web.Infrastructure
         string EmailUnderReviewStrategyName { get; }
         int SessionTimeout { get; }
 		// string ChannelGrabberConfigPath { get; }
+		int PacnetBalanceMaxManualChange { get; }
+		int PacnetBalanceWeekendLimit { get; }
+		int PacnetBalanceWeekdayLimit { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -203,5 +206,20 @@ namespace EzBob.Web.Infrastructure
 		{
             get { return GetValueWithDefault<int>("SessionTimeoutWeb", "6000"); }
 		}
+
+		public int PacnetBalanceMaxManualChange
+		{
+			get { return GetValueWithDefault<int>("PacnetBalanceMaxManualChange", "300000"); }
+		}
+
+		public int PacnetBalanceWeekendLimit
+		{
+			get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "100000"); }
+		}
+
+	    public int PacnetBalanceWeekdayLimit
+	    {
+		    get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "50000"); }
+	    }
     }
 }
