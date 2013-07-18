@@ -7,7 +7,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[UpdateCashRequests] 
 (@CustomerId int,
- @SystemCalculatedAmount decimal(18, 0),
+ @SystemCalculatedAmount int,
+ @ManagerApprovedSum int,
  @SystemDecision varchar(50),
  @MedalType varchar(50),
  @ScorePoints numeric(8,3),
@@ -23,6 +24,7 @@ set @SystemDecisionDate = GETUTCDATE()
 UPDATE [dbo].[CashRequests]
    SET  [IdCustomer] = @CustomerId, 
 		[SystemCalculatedSum] = @SystemCalculatedAmount,
+		[ManagerApprovedSum] = @ManagerApprovedSum,
 		[SystemDecision] = @SystemDecision,
 		[SystemDecisionDate]= @SystemDecisionDate, 
 		[MedalType]= @MedalType,
