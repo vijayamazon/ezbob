@@ -7,6 +7,40 @@
 
 var EzBob = EzBob || {};
 
+function HeartOfActivity() {
+
+    var sessionTimeout = EzBob.Config.SessionTimeout;
+    if (sessionTimeout <= 0) return;
+
+    if (EzBob.Config.HeartBeatEnabled) var heartInterval = setInterval(heartBeat, 5000);
+    
+    var timer;
+    var timeoutValue = 1000 * 60 * sessionTimeout;
+
+    set();
+
+    function heartBeat() {
+        $.get(window.gRootPath + "HeartBeat");
+    }
+
+    function timeout() {
+        reset();
+        document.location = window.gRootPath + "Account/LogOff";
+    }
+
+    function reset() {
+        clearInterval(heartInterval);
+        clearTimeout(timer);
+    }
+
+    function set() {
+        timer = setTimeout(timeout, timeoutValue);
+    }
+}
+
+
+
+
 EzBob.SignUpWizard = EzBob.Wizard.extend({
 	initialize: function (options) {
 		this.customer = options.customer;
@@ -20,6 +54,10 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 			yodleeAccounts: options.yodleeAccounts,
 			paypointMarketPlaces: options.paypointMarketPlaces
 		};
+
+		if ((this.customer.get('Id')) != 0) {
+		    HeartOfActivity();
+		}
 
 		var cgShops = options.cgShops;
 
