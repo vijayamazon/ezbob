@@ -140,116 +140,120 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	}; // DelayMode
 
 	var oMethods = {
-		init: function(options) {
-			return this.each(function() {
-				var oSettings = $.extend({}, oDefaults, options);
+	    init: function(options) {
+	        return this.each(function() {
+	            var oSettings = $.extend({}, oDefaults, options);
 
-				var oContainer = $('div#' + MY_ID + '.' + MY_ID);
+	            var oContainer = $('div#' + MY_ID + '.' + MY_ID);
 
-				if (oContainer.length == 0) {
-					oContainer = $('<div />').attr('id', MY_ID).addClass(MY_ID);
-					$('body').append(oContainer);
-					oContainer.hide();
-				} // if
+	            if (oContainer.length == 0) {
+	                oContainer = $('<div />').attr('id', MY_ID).addClass(MY_ID);
+	                $('body').append(oContainer);
+	                oContainer.hide();
+	            } // if
 
-				for (var i in oSettings.status_list) {
-					var oData = oSettings.status_list[i];
+	            for (var i in oSettings.status_list) {
+	                var oData = oSettings.status_list[i];
 
-					var sImgID = oData.src || i;
+	                var sImgID = oData.src || i;
 
-					var oImg = null;
+	                var oImg = null;
 
-					oContainer.find('img').each(function() {
-						var oCurImg = $(this);
+	                oContainer.find('img').each(function() {
+	                    var oCurImg = $(this);
 
-						if (oCurImg.attr(MY_NAME + '_image_id') == sImgID) {
-							oImg = oCurImg;
-							return false;
-						} // if
+	                    if (oCurImg.attr(MY_NAME + '_image_id') == sImgID) {
+	                        oImg = oCurImg;
+	                        return false;
+	                    } // if
 
-						return true;
-					});
+	                    return true;
+	                });
 
-					if (oImg == null) {
-						var oAttr = {};
-						oAttr.src = oData.inline || oData.src;
-						oAttr[MY_NAME + '_image_id'] = sImgID;
+	                if (oImg == null) {
+	                    var oAttr = {};
+	                    oAttr.src = oData.inline || oData.src;
+	                    oAttr[MY_NAME + '_image_id'] = sImgID;
 
-						oData.img = $('<img />').attr(oAttr);
-						oContainer.append(oData.img);
-					}
-					else
-						oData.img = oImg;
+	                    oData.img = $('<img />').attr(oAttr);
+	                    oContainer.append(oData.img);
+	                } else
+	                    oData.img = oImg;
 
-					if (oData.is_wait)
-						oSettings.wait_status_name = i;
+	                if (oData.is_wait)
+	                    oSettings.wait_status_name = i;
 
-					if (oData.is_required)
-						oSettings.required_status_name = i;
+	                if (oData.is_required)
+	                    oSettings.required_status_name = i;
 
-					if (oData.is_empty)
-						oSettings.empty_status_name = i;
-				} // for
+	                if (oData.is_empty)
+	                    oSettings.empty_status_name = i;
+	            } // for
 
-				$(this).data(MY_NAME, oSettings);
+	            $(this).data(MY_NAME, oSettings);
 
-				if (oSettings.initial_status) {
-					OneStepTransition(this, oSettings.initial_status, oSettings);
-					return;
-				} // if
+	            if (oSettings.initial_status) {
+	                OneStepTransition(this, oSettings.initial_status, oSettings);
+	                return;
+	            } // if
 
-				if (oSettings.required)
-					OneStepTransition(this, oSettings.required_status_name, oSettings);
-				else
-					OneStepTransition(this, oSettings.empty_status_name, oSettings);
-			}); // each
-		}, // init
+	            if (oSettings.required)
+	                OneStepTransition(this, oSettings.required_status_name, oSettings);
+	            else
+	                OneStepTransition(this, oSettings.empty_status_name, oSettings);
+	        }); // each
+	    }, // init
 
-		clear: function(nDelayMode) {
-			return this.each(function() {
-				var oImg = this;
-				var oSettings = $(oImg).data(MY_NAME);
+	    clear: function(nDelayMode) {
+	        return this.each(function() {
+	            var oImg = this;
+	            var oSettings = $(oImg).data(MY_NAME);
 
-				if (!oSettings)
-					return true;
+	            if (!oSettings)
+	                return true;
 
-				var sStatusName = oSettings.required ? oSettings.required_status_name : oSettings.empty_status_name;
+	            var sStatusName = oSettings.required ? oSettings.required_status_name : oSettings.empty_status_name;
 
-				nDelayMode = DelayMode(nDelayMode);
-				if (2 == nDelayMode)
-					OneStepTransition(oImg, sStatusName, oSettings);
-				else
-					DoTransition(nDelayMode, oImg, sStatusName, oSettings);
+	            nDelayMode = DelayMode(nDelayMode);
+	            if (2 == nDelayMode)
+	                OneStepTransition(oImg, sStatusName, oSettings);
+	            else
+	                DoTransition(nDelayMode, oImg, sStatusName, oSettings);
 
-				return true;
-			}); // each
-		}, // clear
+	            return true;
+	        }); // each
+	    }, // clear
 
-		set: function(sStatusName, nDelayMode) {
-			if (!sStatusName)
-				return this;
+	    set: function(sStatusName, nDelayMode) {
+	        if (!sStatusName)
+	            return this;
 
-			return this.each(function() {
-				sStatusName = (new String(sStatusName)).valueOf().toLowerCase();
+	        return this.each(function() {
+	            sStatusName = (new String(sStatusName)).valueOf().toLowerCase();
 
-				var oImg = this;
-				var oSettings = $(oImg).data(MY_NAME);
+	            var oImg = this;
+	            var oSettings = $(oImg).data(MY_NAME);
 
-				if (!oSettings)
-					return true;
+	            if (!oSettings)
+	                return true;
 
-				if (!oSettings.status_list[sStatusName])
-					return true;
+	            if (!oSettings.status_list[sStatusName])
+	                return true;
 
-				nDelayMode = DelayMode(nDelayMode);
-				if (2 == nDelayMode)
-					OneStepTransition(oImg, sStatusName, oSettings);
-				else
-					DoTransition(nDelayMode, oImg, sStatusName, oSettings);
+	            nDelayMode = DelayMode(nDelayMode);
+	            if (2 == nDelayMode)
+	                OneStepTransition(oImg, sStatusName, oSettings);
+	            else
+	                DoTransition(nDelayMode, oImg, sStatusName, oSettings);
 
-				return true;
-			}); // each
-		} // set_status
+	            return true;
+	        }); // each
+	    }, // set_status
+		
+	    getStatus: function () {
+	        var oImg = this;
+	        return oImg.attr(MY_NAME + '_image_id');
+	    }
 	}; // methods
 
 	$.fn.field_status = function(method) {

@@ -67,11 +67,14 @@ EzBob.Validation.unhighlightFS = function (element) {
     var $el = $(element),
         val = $el.val(),
         img = $el.closest('div').find('.field_status');
-
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required', 2);
     } else {
-        img.field_status('set', 'ok');
+        if (img.field_status('getStatus') == 'ok') {
+            img.field_status('set', 'ok', 2);
+        } else {
+            img.field_status('set', 'ok');
+        }
     }
 };
 
@@ -87,7 +90,11 @@ EzBob.Validation.highlightFS = function (element) {
     } else if ($el.hasClass('DateOfBirth') && $el.val().indexOf('-') !== -1) {
         img.field_status('set', 'required', 2);
     } else {
-    img.field_status('set', 'fail');
+        if (img.field_status('getStatus') == 'fail') {
+            img.field_status('set', 'fail', 2);
+        } else {
+            img.field_status('set', 'fail');
+        }
     }
 };
 
