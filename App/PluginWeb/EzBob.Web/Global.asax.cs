@@ -35,7 +35,7 @@ namespace EzBob.Web
                 filters.Add(new WhiteListFilter(), 0);
             }
 
-            filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", "Underwriter, manager, crm", true), 1);
+            filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", "Underwriter, manager, crm, Collector", true), 1);
             filters.Add(new GlobalAreaAuthorizationFilter("Customer", "Web", false, true), 1);
             filters.Add(new EzBobHandleErrorAttribute());
             filters.Add(new LoggingContextFilter(), 1);
