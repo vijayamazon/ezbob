@@ -28,6 +28,7 @@
         private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
+		private static DateTime? timeOfLastAlert;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -65,7 +66,7 @@
             var customer = _customerRepository.Get(id);
             var m = new ApplicationInfoModel();
             var cr = customer.LastCashRequest;
-            _infoModelBuilder.InitApplicationInfo(m, customer, cr);
+			timeOfLastAlert = _infoModelBuilder.InitApplicationInfo(m, customer, cr, timeOfLastAlert);
             return this.JsonNet(m);
         }
 

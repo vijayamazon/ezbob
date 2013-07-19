@@ -58,6 +58,9 @@ namespace EzBob.Web.Infrastructure
 		int PacnetBalanceMaxManualChange { get; }
 		int PacnetBalanceWeekendLimit { get; }
 		int PacnetBalanceWeekdayLimit { get; }
+		int NotEnoughFundsInterval { get; }
+		string NotEnoughFundsToAddess { get; }
+		string NotEnoughFundsTemplateName { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -219,9 +222,24 @@ namespace EzBob.Web.Infrastructure
 			get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "100000"); }
 		}
 
-	    public int PacnetBalanceWeekdayLimit
-	    {
-		    get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "50000"); }
-	    }
+		public int PacnetBalanceWeekdayLimit
+		{
+			get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "50000"); }
+		}
+
+		public int NotEnoughFundsInterval
+		{
+			get { return GetValueWithDefault<int>("NotEnoughFundsInterval", "600"); }
+		}
+
+		public string NotEnoughFundsToAddess
+		{
+			get { return GetValueWithDefault<string>("NotEnoughFundsToAddess", "yulys@ezbob.com"); }
+		}
+
+		public string NotEnoughFundsTemplateName
+		{
+			get { return GetValueWithDefault<string>("NotEnoughFundsTemplateName", "NotEnoughFunds"); }
+		}
     }
 }
