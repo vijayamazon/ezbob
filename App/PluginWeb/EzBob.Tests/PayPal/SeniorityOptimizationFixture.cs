@@ -38,7 +38,9 @@ namespace EzBob.Tests.PayPal
             Measure(() =>
                 {
                     var model = PayPalModelBuilder.CreatePayPalAccountModelModel(mp);
+                    Assert.That(model.Seniority, Is.EqualTo("12.2"));
                 });
+
         }
 
 

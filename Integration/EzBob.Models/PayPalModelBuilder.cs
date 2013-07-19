@@ -6,6 +6,8 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.PayPal;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
+using NHibernate;
+using NHibernate.Linq;
 using StructureMap;
 
 namespace EzBob.Models
@@ -75,11 +77,13 @@ namespace EzBob.Models
                 if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
             }
 
-            var transactionsMinDate = m.PayPalTransactions.Any()
-                                          ? m.PayPalTransactions.Min(
-                                              x =>
-                                              x.TransactionItems.Any() ? x.TransactionItems.Min(y => y.Created) : DateTime.Now)
-                                          : DateTime.Now;
+            var session = ObjectFactory.GetInstance<ISession>();
+
+            var transactionsMinDate =
+                session.Query<MP_PayPalTransaction>()
+                       .Where(t => t.CustomerMarketPlace.Id == m.Id)
+                       .SelectMany(x => x.TransactionItems)
+                       .Min(x => x.Created);
 
             var seniority = DateTime.Now - transactionsMinDate;
 
@@ -92,7 +96,7 @@ namespace EzBob.Models
                 TotalNetOutPayments = tnop,
                 TransactionsNumber = tc,
                 id = m.Id,
-                Seniority = (seniority.Days * 1.0 / 30).ToString(CultureInfo.InvariantCulture),
+                Seniority = (seniority.Days / 30.0).ToString(CultureInfo.InvariantCulture),
                 Status = status
             };
             return payPalModel;
