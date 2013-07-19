@@ -89,16 +89,28 @@ namespace EZBob.DatabaseLib.PayPal
             var details = new PayPalDetailsModel();
 
             details.Marketplace = _session.Get<MP_CustomerMarketPlace>(id);
-            var totalIncome = TotalIncome(id);
-            var totalExpenses = TotalExpenses(id);
-            var totalTransactions = TotalTransactions(id);
 
-            details.DetailIncome = IncomeDetails(id);
-            details.DetailExpenses = ExpensesDetails(id);
+            details.TotalIncome = new PayPalGeneralDetailDataRow();
+            details.TotalExpenses = new PayPalGeneralDetailDataRow();
+            details.TotalTransactions = new PayPalGeneralDetailDataRow();
 
-            details.TotalIncome = totalIncome.FirstOrDefault();            
-            details.TotalExpenses = totalExpenses.FirstOrDefault();            
-            details.TotalTransactions = totalTransactions.FirstOrDefault();
+            details.DetailIncome = new List<PayPalGeneralDetailDataRow>();
+            details.DetailExpenses = new List<PayPalGeneralDetailDataRow>();
+
+            //move it to config
+            if (!true)
+            {
+                var totalIncome = TotalIncome(id);
+                var totalExpenses = TotalExpenses(id);
+                var totalTransactions = TotalTransactions(id);
+                
+                details.TotalIncome =  totalIncome.FirstOrDefault();
+                details.TotalExpenses = totalExpenses.FirstOrDefault();
+                details.TotalTransactions = totalTransactions.FirstOrDefault();
+
+                details.DetailIncome = IncomeDetails(id);
+                details.DetailExpenses = ExpensesDetails(id);
+            }
 
             return details;
         }

@@ -3,52 +3,17 @@
     var p = m.PayPal.Payments;
     var pdi = m.PayPal.DetailPayments.Income;
     var pde = m.PayPal.DetailPayments.Expenses;
-var gi = m.PayPal.GeneralInfo;
-console.log(ai);
+    var gi = m.PayPal.GeneralInfo;
 %>
 
 <div class="paypalDetail">
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#payments" data-toggle="tab">Payments info</a></li>
-            <li><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
+            <li><a href="#payPaldetails" class="active" data-toggle="tab">Account details</a></li>
             <li><a href="#categories" data-toggle="tab">Categories info</a></li>
             <li><a href="#paypal-aggregation" data-toggle="tab">Aggregation info</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="payments">
-                <table class="table table-bordered table-striped marketplace-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>1M</th>
-                            <th>3M</th>
-                            <th>6M</th>
-                            <th>12M</th>
-                            <th>15M</th>
-                            <th>18M</th>
-                            <th>24M</th>
-                            <th>24M+</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% _.each(p.Data, function(dataRow, i){ %>
-                        <tr>
-                            <td><%-dataRow.Type%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M1)  : dataRow.M1 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M3)  : dataRow.M3 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M6)  : dataRow.M6 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M12) : dataRow.M12 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M15) : dataRow.M15 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M18) : dataRow.M18 || '-'%></td>
-                            <td><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M24) : dataRow.M24 || '-'%></td>
-                            <td class="bold"><%-dataRow.Pounds ? EzBob.formatPounds(dataRow.M24Plus) : dataRow.M24Plus || '-'%></td>
-                        </tr>
-                        <%}) %>
-       
-                    </tbody>
-                </table>
-            </div>
             <div class="tab-pane" id="payPaldetails">
                 <table class="table table-bordered table-striped">
                     <thead>

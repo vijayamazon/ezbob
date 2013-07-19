@@ -17,6 +17,7 @@ namespace EzBob.Models
         public static PayPalAccountModel Create(MP_CustomerMarketPlace mp)
         {
             var _payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
+
             var details = _payPalDetails.GetDetails(mp.Id);
 
             var payments = new PayPalAccountGeneralPaymentsInfoModel();
