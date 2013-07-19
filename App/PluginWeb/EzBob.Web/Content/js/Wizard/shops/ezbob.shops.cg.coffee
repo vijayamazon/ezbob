@@ -33,7 +33,9 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         @vendorInfo
 
     connect: =>
-        return false if not EzBob.Validation.checkForm(@validator)
+        if not EzBob.Validation.checkForm(@validator)
+            @validator.form()
+            return false
         return false if @$el.find('a.connect-account').hasClass('disabled')
 
         accountModel = $.parseJSON $('div#cg-account-model-template').text()

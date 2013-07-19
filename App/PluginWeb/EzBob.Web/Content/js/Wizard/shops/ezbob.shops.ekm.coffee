@@ -29,7 +29,9 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         @ui.connect.toggleClass('disabled', !enabled)
 
     connect: ->
-        return false if not EzBob.Validation.checkForm(@validator)
+        if not EzBob.Validation.checkForm(@validator)
+            @validator.form()
+            return false
         return false if @$el.find('a.connect-ekm').hasClass('disabled')            
         acc = new EzBob.EKMAccountModel({login: @ui.login.val(), password: @ui.password.val()})
         xhr = acc.save()
