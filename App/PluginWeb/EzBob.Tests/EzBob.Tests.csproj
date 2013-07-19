@@ -114,6 +114,7 @@
     <Compile Include="DiscountPlanFixture.cs" />
     <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
+    <Compile Include="IntegrationTestBase.cs" />
     <Compile Include="InterestUpdater\LoanUpdaterFixture.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="MPUniqCheckerTests\MPUniqCheckerFixture.cs" />
     <Compile Include="OfferValidation\DateValidationFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\PayLoanFixture.cs" />
+    <Compile Include="PayPal\SeniorityOptimizationFixture.cs" />
     <Compile Include="PayPointApiTests\TryAddChargeFixture.cs" />
     <Compile Include="PayPointReturnDataFixture.cs" />
     <Compile Include="PostcodeAnywhereTests\CheckFixture.cs" />
@@ -235,6 +237,10 @@
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob\EzBob.csproj">
+      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{EE7F496F-963F-4383-B0C2-3BCF9FC15511}</Project>
       <Name>FreeAgent</Name>
@@ -246,6 +252,10 @@
     <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
       <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
+      <Name>PayPalServiceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
       <Project>{4E55DFA2-822F-4B94-9105-E77F6AC568DB}</Project>
@@ -262,10 +272,6 @@
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
       <Name>ZohoCRM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ezmanage\ezmanage.csproj">
-      <Project>{9A926BC9-4D44-4F9F-9C00-4DB8C5E175D1}</Project>
-      <Name>ezmanage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ScheduledServices\ScheduledServices.csproj">
       <Project>{4284AAB9-C033-4F22-B3F3-D4AD74A121C2}</Project>

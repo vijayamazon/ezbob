@@ -13,31 +13,8 @@
 	using StructureMap.Pipeline;
 	using log4net.Config;
 
-    public class LoanUpdaterFixture
+    public class LoanUpdaterFixture : IntegrationTestBase
     {
-        private ISession _session;
-
-        [SetUp]
-        public void SetUp()
-        {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\work\sss\app\maven\maven\bin\debug\maven.exe";
-            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
-            NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
-
-            ObjectFactory.Configure(x =>
-            {
-                x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
-                x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-            });
-
-	        var cfg = ConfigurationRoot.GetConfiguration();
-
-            XmlElement configurationElement = cfg.XmlElementLog;
-            XmlConfigurator.Configure(configurationElement);
-
-            _session = ObjectFactory.GetInstance<ISession>();
-        }
-
          [Test]
          [Ignore]
          public void update_real_loan()
