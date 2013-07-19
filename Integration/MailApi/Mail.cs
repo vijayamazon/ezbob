@@ -54,9 +54,8 @@ namespace MailApi
         {
             if (!_config.Enable)
             {
-                const string retVal = "Mandrrill is disabled";
-                Log.Warn(retVal);
-                return retVal;
+                Log.Warn("Mandrrill is disabled");
+                return null;
             }
             var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(model);
@@ -81,6 +80,11 @@ namespace MailApi
         private string Send(EmailModel email)
         {
             var response = SendRequest(SendTemplatePath, email);
+            if (response == null)
+            {
+                return null;
+            }
+
             var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response);
             if (responseDeserialized[0].status.ToLower() != "sent")
             {
@@ -100,6 +104,10 @@ namespace MailApi
                     merge_vars = Utils.AddMergeVars(parameters)
                 };
             var response = SendRequest(RenderTemplatePath, templateModel);
+            if (response == null)
+            {
+                return null;
+            }
             var retVal = JsonConvert.DeserializeObject<Dictionary<string, string>>(response); //response is { "html": "response text" }
             return retVal["html"];
         }

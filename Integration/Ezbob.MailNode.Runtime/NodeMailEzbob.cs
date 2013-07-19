@@ -85,7 +85,10 @@ namespace WorkflowObjects
                 var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
                 var retVal = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
                 var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
-
+                if (retVal == null || renderedHtml == null)
+                {
+                    return null;
+                }
                 //save mandrill rendered template into DB export result
                 var exportResult = new ExportResult
                     {
