@@ -175,7 +175,16 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.GetCashFailedStrategyName);
         }
 
-        
+        public void TransferCashFailed(User user, string firstName)
+        {
+            var strategyParameters = new[]
+                                             {
+                                                 new StrategyParameter("email", user.EMail),
+                                                 new StrategyParameter("FirstName", firstName)
+                                             };
+            CreateApplication(user, strategyParameters, _config.TransferCashFailedStrategyName);
+        }
+
 
         public void PayEarly(User user, DateTime date, decimal? amount, string firstName, string refNumber)
         {

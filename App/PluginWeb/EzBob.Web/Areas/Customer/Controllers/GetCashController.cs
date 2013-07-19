@@ -196,7 +196,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             }
             catch (PacnetException)
             {
-                _appCreator.GetCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+                _appCreator.TransferCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
                 return RedirectToAction("Error", "Pacnet", new {Area = "Customer"});
             }
             catch (TargetInvocationException)

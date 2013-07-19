@@ -9,6 +9,7 @@ namespace EzBob.Web.Infrastructure
         string FinishWizardStrategyName { get; }
         string CashTransferedStrategyName { get; }
         string GetCashFailedStrategyName { get; }
+        string TransferCashFailedStrategyName { get; }
         string PayEarlyStrategyName { get; }
         string PayPointNameValidationFailedStrategyName { get; }
         string RestorePasswordStrategyName { get; }
@@ -65,6 +66,7 @@ namespace EzBob.Web.Infrastructure
         public virtual string FinishWizardStrategyName { get { return GetValueWithDefault<string>("FinishWizardStrategyName", "FinishWizard"); } }
         public virtual string CashTransferedStrategyName { get { return GetValueWithDefault<string>("CashTransferedStrategyName", "CashTransfered"); } }
         public virtual string GetCashFailedStrategyName { get { return GetValueWithDefault<string>("GetCashFailed4TimesStrategyName", "Get_Cash_Failed"); } }
+        public virtual string TransferCashFailedStrategyName { get { return GetValueWithDefault<string>("TransferCashFailedStrategyName", "Transfer_Cash_Failed"); } }
         public virtual string PayEarlyStrategyName { get { return GetValueWithDefault<string>("PayEarlyStrategyName", "PayEarly"); } }
         public virtual string PayPointNameValidationFailedStrategyName { get { return GetValueWithDefault<string>("PayPointNameValidationFailedStrategyName", "PayPointNameValidationFailed"); } }
         public virtual string RestorePasswordStrategyName { get { return GetValueWithDefault<string>("RestorePasswordStrategyName", "RestorePassword"); } }
