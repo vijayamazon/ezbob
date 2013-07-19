@@ -16,5 +16,7 @@ namespace EZBob.DatabaseLib.PayPal
         public IEnumerable<PayPalGeneralDetailDataRow> DetailIncome { get; set; }
 
         public IEnumerable<PayPalGeneralDetailDataRow> DetailExpenses { get; set; }
+
+        public bool EnableCategories { get; set; }
     }
 }

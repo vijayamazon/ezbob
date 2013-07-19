@@ -40,7 +40,11 @@ namespace EzBob.PayPal
 		public int SendTimeoutInMinutes
 		{
 			get { return 1; }
-		}		
+		}
 
+	    public bool EnableCategories
+	    {
+	        get { return true; }
+	    }
 	}
 }

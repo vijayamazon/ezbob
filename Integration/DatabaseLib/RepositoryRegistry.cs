@@ -11,7 +11,6 @@ namespace EZBob.DatabaseLib
         public RepositoryRegistry()
         {
             For<ICustomerAddressRepository>().Use<CustomerAddressRepository>();
-            For<IPayPalDetailsRepository>().Use<PayPalDetailsRepository>();
             For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
             For<IMailTemplateRelationRepository>().Use<MailTemplateRelationRepository>();
             For<IMandrillTemplateRepository>().Use<MandrillTemplateRepository>();

@@ -136,10 +136,6 @@
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PayPal\PayPalDbLib\PayPalDbLib.csproj">
-      <Project>{F80EB367-9E8A-4317-A6BC-C3FC2FD9770E}</Project>
-      <Name>PayPalDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
       <Name>PayPalLib</Name>

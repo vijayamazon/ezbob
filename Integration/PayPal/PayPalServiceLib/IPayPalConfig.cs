@@ -1,4 +1,3 @@
-using EzBob.CommonLib;
 using EzBob.PayPalServiceLib.Common;
 
 namespace EzBob.PayPalServiceLib
@@ -36,12 +35,4 @@ namespace EzBob.PayPalServiceLib
 		
 		bool TrustAll { get; }	
     }
-
-	public interface IPayPalMarketplaceSettings : IPayPalTransactionSearchSettings
-	{
-		ErrorRetryingInfo ErrorRetryingInfo { get; }
-		int OpenTimeOutInMinutes { get; }
-		int SendTimeoutInMinutes { get; }
-
-	}
 }

@@ -124,6 +124,10 @@
       <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
       <Name>PaymentServices</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{c519f59f-456a-4c7b-ade8-22ac96d572f3}</Project>
+      <Name>PayPalServiceLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
       <Name>ZohoCRM</Name>

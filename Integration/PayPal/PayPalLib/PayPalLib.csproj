@@ -74,10 +74,6 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PayPalDbLib\PayPalDbLib.csproj">
-      <Project>{F80EB367-9E8A-4317-A6BC-C3FC2FD9770E}</Project>
-      <Name>PayPalDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PayPalServiceLib\PayPalServiceLib.csproj">
       <Project>{C519F59F-456A-4C7B-ADE8-22AC96D572F3}</Project>
       <Name>PayPalServiceLib</Name>

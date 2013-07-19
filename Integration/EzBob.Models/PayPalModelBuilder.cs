@@ -18,7 +18,7 @@ namespace EzBob.Models
         {
             var _payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
 
-            var details = _payPalDetails.GetDetails(mp.Id);
+            var details = _payPalDetails.GetDetails(mp);
 
             var payments = new PayPalAccountGeneralPaymentsInfoModel();
             var total = new List<PayPalGeneralDataRowModel>();
@@ -32,12 +32,17 @@ namespace EzBob.Models
             total.Add(new PayPalGeneralDataRowModel(details.TotalTransactions) { Pounds = false });
 
             payments.Data = total;
+            
+            var detailPayments = new PayPalAccountDetailPaymentsInfoModel();
 
-            var detailPayments = new PayPalAccountDetailPaymentsInfoModel
+            if (details.EnableCategories)
             {
-                Income = ProcessPayments(detailIncome, details),
-                Expenses = ProcessPayments(detailExpenses, details)
-            };
+                detailPayments = new PayPalAccountDetailPaymentsInfoModel
+                    {
+                        Income = ProcessPayments(detailIncome, details),
+                        Expenses = ProcessPayments(detailExpenses, details),
+                    };
+            }
 
             var generalInfo = CreatePayPalAccountModelModel(mp);
 

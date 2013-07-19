@@ -1399,10 +1399,6 @@
       <Project>{96e238ae-ce18-4299-87c4-0924ebcefa80}</Project>
       <Name>PayPal.Permissions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalDbLib\PayPalDbLib.csproj">
-      <Project>{F80EB367-9E8A-4317-A6BC-C3FC2FD9770E}</Project>
-      <Name>PayPalDbLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
       <Name>PayPalLib</Name>

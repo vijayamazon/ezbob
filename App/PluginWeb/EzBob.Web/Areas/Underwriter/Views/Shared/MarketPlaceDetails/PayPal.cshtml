@@ -9,264 +9,280 @@
 <div class="paypalDetail">
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li><a href="#payPaldetails" class="active" data-toggle="tab">Account details</a></li>
-            <li><a href="#categories" data-toggle="tab">Categories info</a></li>
+            <li class="active"><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
+            <% if(pdi != null){ %>
+                <li><a href="#categories" data-toggle="tab">Categories info</a></li>
+            <%}%>
             <li><a href="#paypal-aggregation" data-toggle="tab">Aggregation info</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane" id="payPaldetails">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Parameter name</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Full Name</td>
-                            <td><%-pi.FullName || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Date of Birth</td>
-                            <td><%-pi.DateOfBirth || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Email</td>
-                            <td><%-pi.Email || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Phone</td>
-                            <td><%-pi.Phone || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Buisness Name</td>
-                            <td><%-pi.BuisnessName || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Street 1</td>
-                            <td><%-pi.Street1 || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Street 2</td>
-                            <td><%-pi.Street2 || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>City</td>
-                            <td><%-pi.City || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>State</td>
-                            <td><%-pi.State || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Postcode</td>
-                            <td><%-pi.Postcode || ''%></td>
-                        </tr> 
-                        <tr>
-                            <td>Country</td>
-                            <td><%-pi.Country || ''%></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>                            
-            <div class="tab-pane" id="categories">
-                <table class="table table-bordered table-striped marketplace-table">
-                    <thead>
-                        <tr>
-                            <th>Lifetime income split</th>
-                            <th>1M</th>
-                            <th>3M</th>
-                            <th>6M</th>
-                            <th>12M</th>
-                            <th>15M</th>
-                            <th>18M</th>
-                            <th>24M</th>
-                            <th>24M+</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% _.each(pdi, function(dataRowi, i){
-                        %>
-                        <tr>
-                            <td><%-dataRowi.Type%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M1)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M3)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M6)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M12)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M15)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M18)%></td>
-                            <td><%-EzBob.formatPounds(dataRowi.M24)%></td>
-                            <td class="bold"><%-EzBob.formatPounds(dataRowi.M24Plus)%></td>
-                        </tr>
-                        <%}) %>
-       
-                    </tbody>
-                </table>
-                <table class="table table-bordered table-striped marketplace-table">
-                    <thead>
-                        <tr>
-                            <th>Lifetime expenses split</th>
-                            <th>1M</th>
-                            <th>3M</th>
-                            <th>6M</th>
-                            <th>12M</th>
-                            <th>15M</th>
-                            <th>18M</th>
-                            <th>24M</th>
-                            <th>24M+</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% _.each(pde, function(dataRowe, i){
-                        %>
-                        <tr>
-                            <td><%-dataRowe.Type%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M1)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M3)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M6)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M12)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M15)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M18)%></td>
-                            <td><%-EzBob.formatPounds(dataRowe.M24)%></td>
-                            <td class="bold"><%-EzBob.formatPounds(dataRowe.M24Plus)%></td>
-                        </tr>
-                        <%}) %>
-       
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="paypal-aggregation">
-            <table class="table table-bordered table-striped  blue-header centered rright">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>1M</th>
-                        <th>3M</th>
-                        <th>6M</th>
-                        <th>12M</th>
-                        <th>15M</th>
-                        <th>18M</th>
-                        <th>24M</th>
-                        <th>24M+</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Total Net In Payments</td>
-                        <td><%-ai.TotalNetInPayments1M!=undefined ? GBPValues(ai.TotalNetInPayments1M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments3M!=undefined ? GBPValues(ai.TotalNetInPayments3M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments6M!=undefined ? GBPValues(ai.TotalNetInPayments6M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments12M!=undefined ? GBPValues(ai.TotalNetInPayments12M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments15M!=undefined ? GBPValues(ai.TotalNetInPayments15M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments18M!=undefined ? GBPValues(ai.TotalNetInPayments18M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPayments24M!=undefined ? GBPValues(ai.TotalNetInPayments24M, true): "-"%></td>
-                        <td><%-ai.TotalNetInPaymentsLifetime!=undefined ? GBPValues(ai.TotalNetInPaymentsLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Total Net Out Payments</td>
-                        <td><%-ai.TotalNetOutPayments1M!=undefined ? GBPValues(ai.TotalNetOutPayments1M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments3M!=undefined ? GBPValues(ai.TotalNetOutPayments3M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments6M!=undefined ? GBPValues(ai.TotalNetOutPayments6M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments12M!=undefined ? GBPValues(ai.TotalNetOutPayments12M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments15M!=undefined ? GBPValues(ai.TotalNetOutPayments15M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments18M!=undefined ? GBPValues(ai.TotalNetOutPayments18M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPayments24M!=undefined ? GBPValues(ai.TotalNetOutPayments24M, true): "-"%></td>
-                        <td><%-ai.TotalNetOutPaymentsLifetime!=undefined ? GBPValues(ai.TotalNetOutPaymentsLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Transactions Number</td>
-                        <td><%-ai.TransactionsNumber1M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber1M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber3M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber3M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber6M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber6M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber12M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber12M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber15M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber15M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber18M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber18M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumber24M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber24M, true): "-"%></td>
-                        <td><%-ai.TransactionsNumberLifetime!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumberLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Total Net Revenues (Formula 1)</td>
-                        <td><%-ai.TotalNetRevenues1M!=undefined ? GBPValues(ai.TotalNetRevenues1M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues3M!=undefined ? GBPValues(ai.TotalNetRevenues3M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues6M!=undefined ? GBPValues(ai.TotalNetRevenues6M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues12M!=undefined ? GBPValues(ai.TotalNetRevenues12M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues15M!=undefined ? GBPValues(ai.TotalNetRevenues15M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues18M!=undefined ? GBPValues(ai.TotalNetRevenues18M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenues24M!=undefined ? GBPValues(ai.TotalNetRevenues24M, true): "-"%></td>
-                        <td><%-ai.TotalNetRevenuesLifetime!=undefined ? GBPValues(ai.TotalNetRevenuesLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Total Net Expenses (Formula 2)</td>
-                        <td><%-ai.TotalNetExpenses1M!=undefined ? GBPValues(ai.TotalNetExpenses1M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses3M!=undefined ? GBPValues(ai.TotalNetExpenses3M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses6M!=undefined ? GBPValues(ai.TotalNetExpenses6M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses12M!=undefined ? GBPValues(ai.TotalNetExpenses12M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses15M!=undefined ? GBPValues(ai.TotalNetExpenses15M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses18M!=undefined ? GBPValues(ai.TotalNetExpenses18M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpenses24M!=undefined ? GBPValues(ai.TotalNetExpenses24M, true): "-"%></td>
-                        <td><%-ai.TotalNetExpensesLifetime!=undefined ? GBPValues(ai.TotalNetExpensesLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Num of Total Transactions (Formula 3)</td>
-                        <td><%-ai.NumOfTotalTransactions1M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions1M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions3M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions3M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions6M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions6M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions12M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions12M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions15M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions15M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions18M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions18M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactions24M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions24M, true): "-"%></td>
-                        <td><%-ai.NumOfTotalTransactionsLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactionsLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Revenues For Transactions (Formula 4)</td>
-                        <td><%-ai.RevenuesForTransactions1M!=undefined ? GBPValues(ai.RevenuesForTransactions1M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions3M!=undefined ? GBPValues(ai.RevenuesForTransactions3M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions6M!=undefined ? GBPValues(ai.RevenuesForTransactions6M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions12M!=undefined ? GBPValues(ai.RevenuesForTransactions12M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions15M!=undefined ? GBPValues(ai.RevenuesForTransactions15M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions18M!=undefined ? GBPValues(ai.RevenuesForTransactions18M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactions24M!=undefined ? GBPValues(ai.RevenuesForTransactions24M, true): "-"%></td>
-                        <td><%-ai.RevenuesForTransactionsLifetime!=undefined ? GBPValues(ai.RevenuesForTransactionsLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Net Num of Refunds And Returns (Formula 5)</td>
-                        <td><%-ai.NetNumOfRefundsAndReturns1M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns1M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns3M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns3M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns6M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns6M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns12M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns12M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns15M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns15M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns18M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns18M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturns24M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns24M, true): "-"%></td>
-                        <td><%-ai.NetNumOfRefundsAndReturnsLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturnsLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Transfer And Wire Out (Formula 6)</td>
-                        <td><%-ai.TransferAndWireOut1M!=undefined ? GBPValues(ai.TransferAndWireOut1M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut3M!=undefined ? GBPValues(ai.TransferAndWireOut3M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut6M!=undefined ? GBPValues(ai.TransferAndWireOut6M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut12M!=undefined ? GBPValues(ai.TransferAndWireOut12M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut15M!=undefined ? GBPValues(ai.TransferAndWireOut15M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut18M!=undefined ? GBPValues(ai.TransferAndWireOut18M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOut24M!=undefined ? GBPValues(ai.TransferAndWireOut24M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireOutLifetime!=undefined ? GBPValues(ai.TransferAndWireOutLifetime, true): "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Transfer And Wire In (Formula 7)</td>
-                        <td><%-ai.TransferAndWireIn1M!=undefined ? GBPValues(ai.TransferAndWireIn1M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn3M!=undefined ? GBPValues(ai.TransferAndWireIn3M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn6M!=undefined ? GBPValues(ai.TransferAndWireIn6M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn12M!=undefined ? GBPValues(ai.TransferAndWireIn12M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn15M!=undefined ? GBPValues(ai.TransferAndWireIn15M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn18M!=undefined ? GBPValues(ai.TransferAndWireIn18M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireIn24M!=undefined ? GBPValues(ai.TransferAndWireIn24M, true): "-"%></td>
-                        <td><%-ai.TransferAndWireInLifetime!=undefined ? GBPValues(ai.TransferAndWireInLifetime, true): "-"%></td>
-                    </tr>
-                    
-                    
-                </tbody>
-            </table>
-        </div>
+            @PersonalInfo()
+            <% if(pdi != null){%>
+                @Categories()
+            <%}%>
+            @Aggregates()
         </div>
     </div>
 </div>
+
+@helper PersonalInfo(){
+<div class="tab-pane active" id="payPaldetails">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Parameter name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Full Name</td>
+                <td><%-pi.FullName || ''%></td>
+            </tr> 
+            <tr>
+                <td>Date of Birth</td>
+                <td><%-pi.DateOfBirth || ''%></td>
+            </tr> 
+            <tr>
+                <td>Email</td>
+                <td><%-pi.Email || ''%></td>
+            </tr> 
+            <tr>
+                <td>Phone</td>
+                <td><%-pi.Phone || ''%></td>
+            </tr> 
+            <tr>
+                <td>Buisness Name</td>
+                <td><%-pi.BuisnessName || ''%></td>
+            </tr> 
+            <tr>
+                <td>Street 1</td>
+                <td><%-pi.Street1 || ''%></td>
+            </tr> 
+            <tr>
+                <td>Street 2</td>
+                <td><%-pi.Street2 || ''%></td>
+            </tr> 
+            <tr>
+                <td>City</td>
+                <td><%-pi.City || ''%></td>
+            </tr> 
+            <tr>
+                <td>State</td>
+                <td><%-pi.State || ''%></td>
+            </tr> 
+            <tr>
+                <td>Postcode</td>
+                <td><%-pi.Postcode || ''%></td>
+            </tr> 
+            <tr>
+                <td>Country</td>
+                <td><%-pi.Country || ''%></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+}
+
+@helper Categories(){
+<div class="tab-pane" id="categories">
+    <table class="table table-bordered table-striped marketplace-table">
+        <thead>
+            <tr>
+                <th>Lifetime income split</th>
+                <th>1M</th>
+                <th>3M</th>
+                <th>6M</th>
+                <th>12M</th>
+                <th>15M</th>
+                <th>18M</th>
+                <th>24M</th>
+                <th>24M+</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(pdi, function(dataRowi, i){
+            %>
+            <tr>
+                <td><%-dataRowi.Type%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M1)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M3)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M6)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M12)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M15)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M18)%></td>
+                <td><%-EzBob.formatPounds(dataRowi.M24)%></td>
+                <td class="bold"><%-EzBob.formatPounds(dataRowi.M24Plus)%></td>
+            </tr>
+            <%}) %>
+       
+        </tbody>
+    </table>
+    <table class="table table-bordered table-striped marketplace-table">
+        <thead>
+            <tr>
+                <th>Lifetime expenses split</th>
+                <th>1M</th>
+                <th>3M</th>
+                <th>6M</th>
+                <th>12M</th>
+                <th>15M</th>
+                <th>18M</th>
+                <th>24M</th>
+                <th>24M+</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(pde, function(dataRowe, i){
+            %>
+            <tr>
+                <td><%-dataRowe.Type%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M1)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M3)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M6)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M12)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M15)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M18)%></td>
+                <td><%-EzBob.formatPounds(dataRowe.M24)%></td>
+                <td class="bold"><%-EzBob.formatPounds(dataRowe.M24Plus)%></td>
+            </tr>
+            <%}) %>
+       
+        </tbody>
+    </table>
+</div>
+}
+
+@helper Aggregates(){
+<div class="tab-pane" id="paypal-aggregation">
+<table class="table table-bordered table-striped  blue-header centered rright">
+    <thead>
+        <tr>
+            <th></th>
+            <th>1M</th>
+            <th>3M</th>
+            <th>6M</th>
+            <th>12M</th>
+            <th>15M</th>
+            <th>18M</th>
+            <th>24M</th>
+            <th>24M+</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Total Net In Payments</td>
+            <td><%-ai.TotalNetInPayments1M!=undefined ? GBPValues(ai.TotalNetInPayments1M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments3M!=undefined ? GBPValues(ai.TotalNetInPayments3M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments6M!=undefined ? GBPValues(ai.TotalNetInPayments6M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments12M!=undefined ? GBPValues(ai.TotalNetInPayments12M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments15M!=undefined ? GBPValues(ai.TotalNetInPayments15M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments18M!=undefined ? GBPValues(ai.TotalNetInPayments18M, true): "-"%></td>
+            <td><%-ai.TotalNetInPayments24M!=undefined ? GBPValues(ai.TotalNetInPayments24M, true): "-"%></td>
+            <td><%-ai.TotalNetInPaymentsLifetime!=undefined ? GBPValues(ai.TotalNetInPaymentsLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Total Net Out Payments</td>
+            <td><%-ai.TotalNetOutPayments1M!=undefined ? GBPValues(ai.TotalNetOutPayments1M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments3M!=undefined ? GBPValues(ai.TotalNetOutPayments3M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments6M!=undefined ? GBPValues(ai.TotalNetOutPayments6M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments12M!=undefined ? GBPValues(ai.TotalNetOutPayments12M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments15M!=undefined ? GBPValues(ai.TotalNetOutPayments15M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments18M!=undefined ? GBPValues(ai.TotalNetOutPayments18M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPayments24M!=undefined ? GBPValues(ai.TotalNetOutPayments24M, true): "-"%></td>
+            <td><%-ai.TotalNetOutPaymentsLifetime!=undefined ? GBPValues(ai.TotalNetOutPaymentsLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Transactions Number</td>
+            <td><%-ai.TransactionsNumber1M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber1M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber3M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber3M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber6M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber6M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber12M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber12M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber15M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber15M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber18M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber18M, true): "-"%></td>
+            <td><%-ai.TransactionsNumber24M!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumber24M, true): "-"%></td>
+            <td><%-ai.TransactionsNumberLifetime!=undefined ? EzBob.formatIntWithCommas(ai.TransactionsNumberLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Total Net Revenues (Formula 1)</td>
+            <td><%-ai.TotalNetRevenues1M!=undefined ? GBPValues(ai.TotalNetRevenues1M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues3M!=undefined ? GBPValues(ai.TotalNetRevenues3M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues6M!=undefined ? GBPValues(ai.TotalNetRevenues6M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues12M!=undefined ? GBPValues(ai.TotalNetRevenues12M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues15M!=undefined ? GBPValues(ai.TotalNetRevenues15M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues18M!=undefined ? GBPValues(ai.TotalNetRevenues18M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenues24M!=undefined ? GBPValues(ai.TotalNetRevenues24M, true): "-"%></td>
+            <td><%-ai.TotalNetRevenuesLifetime!=undefined ? GBPValues(ai.TotalNetRevenuesLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Total Net Expenses (Formula 2)</td>
+            <td><%-ai.TotalNetExpenses1M!=undefined ? GBPValues(ai.TotalNetExpenses1M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses3M!=undefined ? GBPValues(ai.TotalNetExpenses3M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses6M!=undefined ? GBPValues(ai.TotalNetExpenses6M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses12M!=undefined ? GBPValues(ai.TotalNetExpenses12M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses15M!=undefined ? GBPValues(ai.TotalNetExpenses15M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses18M!=undefined ? GBPValues(ai.TotalNetExpenses18M, true): "-"%></td>
+            <td><%-ai.TotalNetExpenses24M!=undefined ? GBPValues(ai.TotalNetExpenses24M, true): "-"%></td>
+            <td><%-ai.TotalNetExpensesLifetime!=undefined ? GBPValues(ai.TotalNetExpensesLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Num of Total Transactions (Formula 3)</td>
+            <td><%-ai.NumOfTotalTransactions1M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions1M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions3M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions3M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions6M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions6M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions12M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions12M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions15M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions15M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions18M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions18M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactions24M!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactions24M, true): "-"%></td>
+            <td><%-ai.NumOfTotalTransactionsLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumOfTotalTransactionsLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Revenues For Transactions (Formula 4)</td>
+            <td><%-ai.RevenuesForTransactions1M!=undefined ? GBPValues(ai.RevenuesForTransactions1M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions3M!=undefined ? GBPValues(ai.RevenuesForTransactions3M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions6M!=undefined ? GBPValues(ai.RevenuesForTransactions6M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions12M!=undefined ? GBPValues(ai.RevenuesForTransactions12M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions15M!=undefined ? GBPValues(ai.RevenuesForTransactions15M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions18M!=undefined ? GBPValues(ai.RevenuesForTransactions18M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactions24M!=undefined ? GBPValues(ai.RevenuesForTransactions24M, true): "-"%></td>
+            <td><%-ai.RevenuesForTransactionsLifetime!=undefined ? GBPValues(ai.RevenuesForTransactionsLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Net Num of Refunds And Returns (Formula 5)</td>
+            <td><%-ai.NetNumOfRefundsAndReturns1M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns1M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns3M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns3M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns6M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns6M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns12M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns12M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns15M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns15M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns18M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns18M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturns24M!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturns24M, true): "-"%></td>
+            <td><%-ai.NetNumOfRefundsAndReturnsLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NetNumOfRefundsAndReturnsLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Transfer And Wire Out (Formula 6)</td>
+            <td><%-ai.TransferAndWireOut1M!=undefined ? GBPValues(ai.TransferAndWireOut1M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut3M!=undefined ? GBPValues(ai.TransferAndWireOut3M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut6M!=undefined ? GBPValues(ai.TransferAndWireOut6M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut12M!=undefined ? GBPValues(ai.TransferAndWireOut12M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut15M!=undefined ? GBPValues(ai.TransferAndWireOut15M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut18M!=undefined ? GBPValues(ai.TransferAndWireOut18M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOut24M!=undefined ? GBPValues(ai.TransferAndWireOut24M, true): "-"%></td>
+            <td><%-ai.TransferAndWireOutLifetime!=undefined ? GBPValues(ai.TransferAndWireOutLifetime, true): "-"%></td>
+        </tr>
+        <tr>
+            <td>Transfer And Wire In (Formula 7)</td>
+            <td><%-ai.TransferAndWireIn1M!=undefined ? GBPValues(ai.TransferAndWireIn1M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn3M!=undefined ? GBPValues(ai.TransferAndWireIn3M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn6M!=undefined ? GBPValues(ai.TransferAndWireIn6M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn12M!=undefined ? GBPValues(ai.TransferAndWireIn12M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn15M!=undefined ? GBPValues(ai.TransferAndWireIn15M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn18M!=undefined ? GBPValues(ai.TransferAndWireIn18M, true): "-"%></td>
+            <td><%-ai.TransferAndWireIn24M!=undefined ? GBPValues(ai.TransferAndWireIn24M, true): "-"%></td>
+            <td><%-ai.TransferAndWireInLifetime!=undefined ? GBPValues(ai.TransferAndWireInLifetime, true): "-"%></td>
+        </tr>
+                    
+                    
+    </tbody>
+</table>
+</div>
+}

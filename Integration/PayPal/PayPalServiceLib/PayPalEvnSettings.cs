@@ -62,5 +62,10 @@ namespace EzBob.PayPalServiceLib
 		{
 			get { return GetValueWithDefault<int>( "SendTimeoutInMinutes", "1" ); }
 		}
+
+	    public bool EnableCategories
+	    {
+            get { return GetValueWithDefault<bool>("EnableCategories", "false"); }
+	    }
 	}
 }
