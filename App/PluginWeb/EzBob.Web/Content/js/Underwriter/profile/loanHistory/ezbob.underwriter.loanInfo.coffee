@@ -102,6 +102,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             url: "Underwriter/ApplicationInfo/SavePacnetManual"
             data:
                 limit: EzBob.Config.PacnetBalanceMaxManualChange
+
+            min: EzBob.Config.PacnetBalanceMaxManualChange * -1
+            max: EzBob.Config.PacnetBalanceMaxManualChange
         )
         d.render()
         d.on "done", ->

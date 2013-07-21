@@ -114,7 +114,7 @@ $.validator.addMethod(
             var amount = parseFloat($(element).autoNumericGet());
             return amount >= minVal;
         },
-        "Loan amount is below limit."
+        "Amount is below limit."
 );
 
 $.validator.addMethod(
@@ -123,7 +123,7 @@ $.validator.addMethod(
             var amount = parseFloat($(element).autoNumericGet());
             return amount <= maxVal;
         },
-        "Loan amount is above limit."
+        "Amount is above limit."
 );
 
 

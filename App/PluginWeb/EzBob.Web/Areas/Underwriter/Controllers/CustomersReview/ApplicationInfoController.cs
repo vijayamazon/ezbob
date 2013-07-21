@@ -97,11 +97,6 @@
 		[Permission(Name = "PacnetManualButton")]
 		public JsonNetResult SavePacnetManual(int amount, int limit)
 		{
-			if (amount > limit || amount < -1 * limit)
-			{
-				throw new ArgumentException(string.Format("Amount is more than {0}", limit));
-			}
-
 			var newEntry = new PacNetManualBalance
 			{
 				Date = DateTime.UtcNow,
