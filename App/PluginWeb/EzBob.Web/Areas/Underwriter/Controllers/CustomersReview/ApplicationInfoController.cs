@@ -94,7 +94,7 @@
 		[Transactional]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "CreditLineFields")]
+		[Permission(Name = "PacnetManualButton")]
 		public JsonNetResult SavePacnetManual(int amount, int limit)
 		{
 			if (amount > limit || amount < -1 * limit)
@@ -118,7 +118,7 @@
 		[Transactional]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		[Permission(Name = "CreditLineFields")]
+		[Permission(Name = "PacnetManualButton")]
 		public JsonNetResult DisableTodaysPacnetManual(bool isSure)
 		{
 			if (isSure)
