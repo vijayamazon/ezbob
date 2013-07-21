@@ -13,11 +13,11 @@ namespace EzBob.Configuration
         public bool Enable
         {
 			get
-			{ return true;  GetValueWithDefault<bool>("Enable", "False"); }
+			{ GetValueWithDefault<bool>("Enable", "False"); }
         }
 		public virtual string Key
 		{
-			get { return "Z95NpOsNNMy4LMLMH9mUjw"; return GetValue<string>("Key"); }
+			get { return GetValue<string>("Key"); }
 		}
     }
 }
