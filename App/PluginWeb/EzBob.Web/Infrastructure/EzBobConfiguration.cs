@@ -58,7 +58,6 @@ namespace EzBob.Web.Infrastructure
 		int PacnetBalanceMaxManualChange { get; }
 		int PacnetBalanceWeekendLimit { get; }
 		int PacnetBalanceWeekdayLimit { get; }
-		int NotEnoughFundsInterval { get; }
 		string NotEnoughFundsToAddess { get; }
 		string NotEnoughFundsTemplateName { get; }
     }
@@ -224,12 +223,7 @@ namespace EzBob.Web.Infrastructure
 
 		public int PacnetBalanceWeekdayLimit
 		{
-			get { return GetValueWithDefault<int>("PacnetBalanceWeekendLimit", "50000"); }
-		}
-
-		public int NotEnoughFundsInterval
-		{
-			get { return GetValueWithDefault<int>("NotEnoughFundsInterval", "600"); }
+			get { return GetValueWithDefault<int>("PacnetBalanceWeekdayLimit", "50000"); }
 		}
 
 		public string NotEnoughFundsToAddess

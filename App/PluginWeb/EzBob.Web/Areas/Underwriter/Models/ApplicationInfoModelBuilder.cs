@@ -23,8 +23,6 @@
         private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		private Mail _mail;
-		private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationInfoModelBuilder));
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
@@ -36,14 +34,11 @@
 			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
-
-			var config = new MandrillConfig();
-			_mail = new Mail(config);
 		}
 
-		public DateTime? InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr, DateTime? timeOfLastAlert)
+		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
         {
-            if (customer == null) return null;
+            if (customer == null) return;
 
             model.Id = customer.Id;
 
@@ -94,7 +89,6 @@
 	        if (fundsAvailable < relevantLimit)
 			{
 				model.FundsAvailableUnderLimitClass = "red_cell";
-				timeOfLastAlert = SendMail(fundsAvailable, relevantLimit, timeOfLastAlert);
 			}
 
 	        model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
@@ -119,34 +113,6 @@
             model.Reason = cr.UnderwriterComment;
 
             model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
-
-			return timeOfLastAlert;
         }
-
-		private DateTime? SendMail(decimal currentFunds, int requiredFunds, DateTime? timeOfLastAlert)
-		{
-			if (timeOfLastAlert.HasValue && timeOfLastAlert.Value.AddSeconds(config.NotEnoughFundsInterval) > DateTime.UtcNow)
-			{
-				return timeOfLastAlert;
-			}
-
-			var vars = new Dictionary<string, string>
-                {
-                    {"CurrentFunds", currentFunds.ToString("N2", CultureInfo.InvariantCulture)},
-                    {"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} 
-                };
-
-			var result = _mail.Send(vars, config.NotEnoughFundsToAddess, config.NotEnoughFundsTemplateName);
-			if (result == "OK")
-			{
-				timeOfLastAlert = DateTime.UtcNow;
-			}
-			else
-			{
-				log.ErrorFormat("Failed sending alert mail");
-			}
-
-			return timeOfLastAlert;
-		}
 	}
 }
