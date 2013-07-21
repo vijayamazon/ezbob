@@ -12,13 +12,16 @@ using StructureMap;
 
 namespace EzBob.Models
 {
-    public class PayPalModelBuilder
+	using CommonLib.TimePeriodLogic;
+	using EZBob.DatabaseLib;
+
+	public class PayPalModelBuilder
     {
         public static PayPalAccountModel Create(MP_CustomerMarketPlace mp)
         {
-            var _payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
+            var payPalDetails = ObjectFactory.GetInstance<IPayPalDetailsRepository>();
 
-            var details = _payPalDetails.GetDetails(mp);
+            var details = payPalDetails.GetDetails(mp);
 
             var payments = new PayPalAccountGeneralPaymentsInfoModel();
             var total = new List<PayPalGeneralDataRowModel>();
@@ -68,15 +71,9 @@ namespace EzBob.Models
             var tc = 0;
             if (av != null)
             {
-                var tnipN =
-                    av.FirstOrDefault(
-                        x => x.ParameterName == "Total Net In Payments" && x.CountMonths == av.Max(i => i.CountMonths));
-                var tnopN =
-                    av.FirstOrDefault(
-                        x => x.ParameterName == "Total Net Out Payments" && x.CountMonths == av.Max(i => i.CountMonths));
-                var tcN =
-                    av.FirstOrDefault(
-                        x => x.ParameterName == "Transactions Number" && x.CountMonths == av.Max(i => i.CountMonths));
+	            var tnipN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Net In Payments"));
+	            var tnopN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Net Out Payments"));
+				var tcN = GetClosestToYear(av.Where(x => x.ParameterName == "Transactions Number"));
 
                 if (tnipN != null) tnip = Math.Abs(Convert.ToDouble(tnipN.Value, CultureInfo.InvariantCulture));
                 if (tnopN != null) tnop = Math.Abs(Convert.ToDouble(tnopN.Value, CultureInfo.InvariantCulture));
@@ -84,12 +81,13 @@ namespace EzBob.Models
             }
 
             var session = ObjectFactory.GetInstance<ISession>();
+			
+	        var payPalTransactions =
+		        session.Query<MP_PayPalTransaction>()
+		               .Where(t => t.CustomerMarketPlace.Id == m.Id)
+		               .SelectMany(x => x.TransactionItems);
 
-            var transactionsMinDate =
-                session.Query<MP_PayPalTransaction>()
-                       .Where(t => t.CustomerMarketPlace.Id == m.Id)
-                       .SelectMany(x => x.TransactionItems)
-                       .Min(x => x.Created);
+	        var transactionsMinDate = payPalTransactions.Any() ? payPalTransactions.Min(f => f.Created) : DateTime.UtcNow;
 
             var seniority = DateTime.Now - transactionsMinDate;
 
@@ -108,8 +106,41 @@ namespace EzBob.Models
             return payPalModel;
         }
 
+		private static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
+		{
+			int closestTime = 0;
+			IAnalysisDataParameterInfo closestSoFar = null;
+			foreach (var x in firstOrDefault)
+			{
+				switch (x.TimePeriod.TimePeriodType)
+				{
+					case TimePeriodEnum.Year:
+						return x;
+					case TimePeriodEnum.Month6:
+						closestSoFar = x;
+						closestTime = 6;
+						break;
+					case TimePeriodEnum.Month3:
+						if (closestTime < 6)
+						{
+							closestSoFar = x;
+							closestTime = 3;
+						}
+						break;
+					case TimePeriodEnum.Month:
+						if (closestTime < 3)
+						{
+							closestSoFar = x;
+							closestTime = 1;
+						}
+						break;
+				}
+			}
 
-        private static IEnumerable<PayPalGeneralDataRowModel> ProcessPayments(ICollection<PayPalGeneralDataRowModel> payments, PayPalDetailsModel details)
+			return closestSoFar;
+		}
+
+		private static IEnumerable<PayPalGeneralDataRowModel> ProcessPayments(ICollection<PayPalGeneralDataRowModel> payments, PayPalDetailsModel details)
         {
             var percents = new List<double?>();
             foreach (var payPalGeneralDataRowModel in payments)
