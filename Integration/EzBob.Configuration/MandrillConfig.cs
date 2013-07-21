@@ -12,8 +12,7 @@ namespace EzBob.Configuration
     {
         public bool Enable
         {
-			get
-			{ GetValueWithDefault<bool>("Enable", "False"); }
+			get { GetValueWithDefault<bool>("Enable", "False"); }
         }
 		public virtual string Key
 		{
