@@ -148,18 +148,18 @@
                                                cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
             _pacnetService.CloseFile(cus.Id, "ezbob");
 
-	        VerifyAvailableFunds();
+			VerifyAvailableFunds(transfered);
 
             return ret;
         }
 
-	    private void VerifyAvailableFunds()
+		private void VerifyAvailableFunds(decimal transfered)
 	    {
 		    try
 		    {
 				var balance = _funds.GetBalance();
 				var manualBalance = _manualFunds.GetBalance();
-				var fundsAvailable = balance.Adjusted + manualBalance;
+				var fundsAvailable = balance.Adjusted + manualBalance - transfered;
 
 				DateTime today = DateTime.UtcNow;
 				int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
