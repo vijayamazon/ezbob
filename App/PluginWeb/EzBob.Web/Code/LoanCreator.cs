@@ -147,23 +147,34 @@
             var ret = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
                                                cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
             _pacnetService.CloseFile(cus.Id, "ezbob");
-			
-			// Checkout avaialable funds
-			var balance = _funds.GetBalance();
-			var manualBalance = _manualFunds.GetBalance();
-			var fundsAvailable = balance.Adjusted + manualBalance;
 
-			DateTime today = DateTime.UtcNow;
-			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
-			if (fundsAvailable < relevantLimit)
-			{
-				SendMail(fundsAvailable, relevantLimit);
-			}
+	        VerifyAvailableFunds();
 
             return ret;
         }
 
-		private void SendMail(decimal currentFunds, int requiredFunds)
+	    private void VerifyAvailableFunds()
+	    {
+		    try
+		    {
+				var balance = _funds.GetBalance();
+				var manualBalance = _manualFunds.GetBalance();
+				var fundsAvailable = balance.Adjusted + manualBalance;
+
+				DateTime today = DateTime.UtcNow;
+				int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
+				if (fundsAvailable < relevantLimit)
+				{
+					SendMail(fundsAvailable, relevantLimit);
+				}
+		    }
+		    catch (Exception e)
+		    {
+				Log.ErrorFormat("Failed verifying available funds with error:{0}", e);
+		    }
+	    }
+
+	    private void SendMail(decimal currentFunds, int requiredFunds)
 		{
 			var vars = new Dictionary<string, string>
 				{
