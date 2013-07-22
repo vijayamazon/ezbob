@@ -721,6 +721,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_SageSalesInvoiceItem_MP_SageSalesInvoice</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageSalesInvoiceItem_MP_SageSalesInvoice.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_TeraPeakCategoryStatistics_MP_TeraPeakCategory</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_TeraPeakCategoryStatistics_MP_TeraPeakCategory.sql</oFileName>
@@ -772,6 +778,12 @@
     <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeOrderItem.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>

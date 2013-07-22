@@ -559,6 +559,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -1651,6 +1657,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_SageSalesInvoiceItem_MP_SageSalesInvoice</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_SageSalesInvoiceItem_MP_SageSalesInvoice.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_SageSalesInvoiceItem</oName>
     <oRank>6</oRank>
     <oFileName>02_TABLES\MP_SageSalesInvoiceItem.sql</oFileName>
@@ -1777,6 +1789,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_YodleeOrderItemBankTransaction</oName>
     <oRank>6</oRank>
     <oFileName>02_TABLES\MP_YodleeOrderItemBankTransaction.sql</oFileName>
@@ -1798,6 +1816,12 @@
     <oName>PacNetBalance</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PacNetBalance.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>PacNetManualBalance</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\PacNetManualBalance.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

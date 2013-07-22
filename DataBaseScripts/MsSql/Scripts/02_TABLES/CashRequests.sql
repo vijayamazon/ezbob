@@ -50,5 +50,9 @@ CREATE NONCLUSTERED INDEX [IX_CashRequests_IDCust] ON [dbo].[CashRequests]
 GO
 ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_RepaymentPeriod]  DEFAULT ((3)) FOR [RepaymentPeriod]
 GO
+ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_InterestRate]  DEFAULT ((0.06)) FOR [InterestRate]
+GO
+ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_UseSetupFee]  DEFAULT ((0)) FOR [UseSetupFee]
+GO
 ALTER TABLE [dbo].[CashRequests] ADD  CONSTRAINT [DF_CashRequests_IsLoanType]  DEFAULT ((0)) FOR [IsLoanTypeSelectionAllowed]
 GO

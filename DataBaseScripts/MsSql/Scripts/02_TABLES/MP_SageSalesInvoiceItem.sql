@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[MP_SageSalesInvoiceItem](
 	[LedgerAccountId] [int] NULL,
 	[product_code] [nvarchar](250) NULL,
 	[ProductId] [int] NULL,
-	[ServiceKey] [int] NULL,
+	[ServiceId] [int] NULL,
 	[lock_version] [int] NULL,
  CONSTRAINT [PK_MP_SageSalesInvoiceItem] PRIMARY KEY CLUSTERED 
 (
