@@ -23,7 +23,6 @@
         {
             Not.LazyLoad();
 			Table("PacNetManualBalance");
-			ReadOnly();
 			Id(x => x.Id);
 			Map(x => x.Username).Length(100);
 			Map(x => x.Amount);
@@ -53,8 +52,7 @@
 		public void DisableTodays()
 		{
 			foreach (PacNetManualBalance manualBalance in GetTodaysActive())
-			{
-				Delete(manualBalance);
+			{  
 				manualBalance.Enabled = false;
 				SaveOrUpdate(manualBalance);
 			}
