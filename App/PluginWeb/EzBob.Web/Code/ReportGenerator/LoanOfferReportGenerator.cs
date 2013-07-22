@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using Aspose.Cells;
@@ -134,8 +135,20 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             using (var streamForDoc = new MemoryStream())
             {
-                workbook.Save(streamForDoc, format);
-                return streamForDoc.ToArray();
+                //Start magic. After new build we get an exception 'Unsupported sfnt version' on first load
+                //On seccond request It works well. 
+                try
+                {
+                    workbook.Save(streamForDoc, format);
+                    return streamForDoc.ToArray();
+                }
+                catch (Exception)
+                {
+                    workbook.Save(streamForDoc, format);
+                    return streamForDoc.ToArray();
+                }
+                //End magic
+                
             }
         }
 
