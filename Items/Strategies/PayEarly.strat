@@ -4,10 +4,11 @@
   <Description>Email to customer – early payment. Trigger - Customer makes an early payment via dashboard.</Description>
   <Workspace Name="PayEarly">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode56700610" />
     <NodeElement Name="Mail Node" NodeId="MailNode46070087" />
+    <NodeElement Name="Mail Node" NodeId="MailNode56700610" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
+    <NodeElement Name="Script" NodeId="ScriptNode4346952" />
     <NodeElement Name="Start Node" NodeId="StartNode56565057" />
     <NodeElement Name="Stop Node" NodeId="StopNode39323473" />
   </Workspace>
@@ -79,7 +80,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignment48918703</Name>
       <PointF>
-        <X>294.6259</X>
+        <X>254.625885</X>
         <Y>56</Y>
       </PointF>
       <SuperNodeName />
@@ -130,11 +131,28 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode46070087</Name>
       <PointF>
-        <X>312.670074</X>
+        <X>292.670074</X>
         <Y>316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Script</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode4346952</Name>
+      <PointF>
+        <X>376</X>
+        <Y>56</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -493,7 +511,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignment48918703</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ConditionalAssignment24812117</TargetNodeName>
+      <TargetNodeName>ScriptNode4346952</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -550,6 +568,18 @@
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode4346952</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment24812117</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
     <VariableConnectionDescriptor>
@@ -575,12 +605,6 @@
       <SourceVariableName>Amount</SourceVariableName>
       <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
       <TargetVariableName>Amount_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
-      <SourceVariableName>Date</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
-      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
@@ -614,12 +638,6 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
-      <SourceVariableName>Date</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
-      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
       <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
@@ -647,6 +665,18 @@
       <SourceVariableName>RefNum</SourceVariableName>
       <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
       <TargetVariableName>RefNum_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
+      <SourceVariableName>DateStr</SourceVariableName>
+      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
+      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
+      <SourceVariableName>DateStr</SourceVariableName>
+      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
+      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -706,6 +736,14 @@
       <SigningOutlets />
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ScriptNode4346952</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
   </SigningNodeDescriptors>
   <ScriptDescriptors>
     <ScriptDescriptor>
@@ -722,6 +760,16 @@ System.IO.Directory.CreateDirectory(dir_path)
 System.IO.Directory.CreateDirectory(dir_path2)
 localtime = localtime1
  </Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode4346952</OwnerName>
+      <Script>import System.IO
+import time
+
+Date   = time.localtime()
+DateStr  = time.strftime("%d/%m/%Y %H:%M:%S", Date)
+</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
   </ScriptDescriptors>
