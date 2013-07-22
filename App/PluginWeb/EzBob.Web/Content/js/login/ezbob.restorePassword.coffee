@@ -61,6 +61,8 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
                 @ui.email.closest('div').show()
                 $('#captcha').show()
                 @focus = @focusCaptcha
+                @ui.answer.val('')
+                @ui.restoreBtn.addClass('disabled')
                 return false
 
             @ui.passwordRestoredArea.show()
@@ -73,7 +75,6 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
             @focus = @focusCaptcha
 
         .always (data) =>
-            $el.removeClass "disabled"
             @ui.email.data "changed", false
             @emailKeyuped()
             @captcha.reload @focus
@@ -85,17 +86,17 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
   focusCaptcha: => $('#CaptchaInputText').focus()
             
   inputCaptchaChanged: ->
-    @captchaEnabled = EzBob.Validation.element(@validator, $(@ui.captcha.selector))
+    @captchaEnabled = @validator.check($(@ui.captcha.selector))
     enabled = @answerEnabled && @emailEnabled && @captchaEnabled
     @ui.getQuestionBtn.toggleClass('disabled', !enabled)
 
   inputEmailChanged: ->
-    @emailEnabled = EzBob.Validation.element(@validator,@ui.email)
+    @emailEnabled = @validator.check(@ui.email)
     enabled = @answerEnabled && @emailEnabled && @captchaEnabled
     @ui.getQuestionBtn.toggleClass('disabled', !enabled)
 
   inputAnswerChanged: ->
-    @answerEnabled = EzBob.Validation.element(@validator,@ui.answer)
+    @answerEnabled = @validator.check(@ui.answer)
     enabled = @answerEnabled && @emailEnabled && @captchaEnabled
     @ui.restoreBtn.toggleClass('disabled', !enabled) 
 
@@ -120,6 +121,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', response.errorMessage or response.error
                 @ui.questionArea.hide()
                 @focus = @focusCaptcha
+                @ui.getQuestionBtn.addClass('disabled')
                 return true
 
             if EzBob.isNullOrEmpty(response.question)
