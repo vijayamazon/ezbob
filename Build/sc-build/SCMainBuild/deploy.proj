@@ -189,6 +189,7 @@
 						<ToolsFolder>$(ServerBaseFolder)\$(ToolsFolder)</ToolsFolder>
 						<DatabaseDir>$(ServerBaseFolder)\$(Database)</DatabaseDir>
 						<MailSubject>$(MailSubject)</MailSubject>
+						<MandrillConfig>$(MandrillConfig)</MandrillConfig>
 				</data>]]></EnvConfigXml>
 		</PropertyGroup>
 		<TemplateTask TemplatePath = "$(ServerBaseFolder)\EnvironmentTemplate.xml" OutPath = "$(EnvFilePath)"

@@ -87,7 +87,7 @@
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
 	<property name="YodleeConfig" value ="YodleeTrunk"/>
     <property name="ZohoCRM" value="ZohoCRM"/>
-	<property name="MandrillConfig" value="MandrillUATConfig"/>
+	<property name="MandrillConfig" value="${MandrillConfig}"/>
 
     <module id="MandrillSpikeConfig">
         <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />

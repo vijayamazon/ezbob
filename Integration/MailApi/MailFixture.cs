@@ -35,7 +35,6 @@ namespace MailApi
             Assert.That(result == "OK");
         }
 
-        [Ignore]
         [Test]
         public void RenderTemplate()
         {
@@ -47,6 +46,7 @@ namespace MailApi
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
             var result = _mail.GetRenderedTemplate(vars, "Greeting");
+            Assert.That(result != null);
             System.Console.Out.Write(result);
         }
     }
