@@ -39,7 +39,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         this.$el.find('img[rel]').setPopover("left");
         this.$el.find('li[rel]').setPopover("left");
-        
+
+        this.inputChanged();
+
         return this;
     },
     inputChanged: function () {
@@ -48,6 +50,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {
+            this.validator.form();
             return false;
         }
 
@@ -80,6 +83,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             } else {
                 if (result.errorMessage) EzBob.App.trigger("error", result.errorMessage);
                 that.captcha.reload();
+                that.$el.find(':submit').addClass("disabled");
             }
             that.blockBtn(false);
         }, "json");
@@ -99,6 +103,5 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
     blockBtn: function (isBlock) {
         BlockUi(isBlock ? "on": "off");
-        this.$el.find(':submit').toggleClass("disabled", isBlock);
     }
 });
