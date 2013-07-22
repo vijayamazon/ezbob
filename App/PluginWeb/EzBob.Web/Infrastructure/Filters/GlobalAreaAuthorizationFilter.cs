@@ -55,6 +55,14 @@ namespace EzBob.Web.Infrastructure.Filters
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
+
+            if (filterContext.HttpContext.Request.IsAjaxRequest())
+            {
+                //use code 423 for ajax request to avoid rederection by forms auth module
+                filterContext.Result = new HttpStatusCodeResult(423);
+                return;
+            }
+
             if (_isAdminPageRedirect && _areaName == filterContext.RouteData.DataTokens["area"].ToString())
             {
                 var redirectRouteDict = new RouteValueDictionary
@@ -67,7 +75,7 @@ namespace EzBob.Web.Infrastructure.Filters
                 filterContext.Result = new RedirectToRouteResult(redirectRouteDict);
             } else
             {
-                base.HandleUnauthorizedRequest(filterContext);                
+                base.HandleUnauthorizedRequest(filterContext);
             }
         }
     }
