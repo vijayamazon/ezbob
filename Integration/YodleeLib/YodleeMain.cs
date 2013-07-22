@@ -185,7 +185,7 @@
 
 		public string GenerateRandomPassword()
 		{
-			return YodleePasswrodGenerator.GenerateRandomPassword();
+			return YodleePasswordGenerator.GenerateRandomPassword();
 		}
 	}
 }

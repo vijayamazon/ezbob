@@ -1,10 +1,13 @@
 ﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using Database;
+	using EzBob.CommonLib.Security;
 	using NHibernate;
+	using StructureMap;
 
 	public class YodleeAccounts
 	{
@@ -37,6 +40,27 @@
 		public YodleeAccounts Search(int customerId)
 		{
 			return GetAll().FirstOrDefault(b => b.Customer.Id == customerId);
+		}
+
+		public List<YodleeAccounts> SearchNotAllocated()
+		{
+			return GetAll().OrderBy(b => b.Id).Where(b => b.Customer == null).ToList();
+		}
+
+		public YodleeAccounts CreateAccount(Func<string> generatePassword)
+		{
+			int maxId = GetAll().Max(a => a.Id);
+			var account = new YodleeAccounts
+			{
+				CreationDate = DateTime.UtcNow,
+				Customer = null,
+				Username = string.Format("EZBOB+{0}@ezbob.com", maxId + 1),
+				Password = Encryptor.Encrypt(generatePassword()),
+				Bank = null
+			};
+
+			SaveOrUpdate(account);
+			return account;
 		}
 	}
 }

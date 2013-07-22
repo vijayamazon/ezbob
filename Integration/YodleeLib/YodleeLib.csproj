@@ -40,6 +40,10 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
+    <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\EzBob.Models\bin\Debug\Scorto.NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\Scorto.Core\StructureMap.dll</HintPath>
     </Reference>
@@ -71,7 +75,6 @@
     <Compile Include="connector\YodleeRetriveDataHelper.cs" />
     <Compile Include="connector\YodleeSecurityInfo.cs" />
     <Compile Include="connector\YodleeServiceInfo.cs" />
-    <Compile Include="YodleePasswrodGenerator.cs" />
     <Compile Include="datatypes\AccountType.cs" />
     <Compile Include="AddItem.cs" />
     <Compile Include="ApplicationSuper.cs" />
@@ -91,7 +94,9 @@
     <Compile Include="OAuthBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringTokenizer.cs" />
+    <Compile Include="YodleeAccountPool.cs" />
     <Compile Include="YodleeMain.cs" />
+    <Compile Include="YodleePasswordGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">

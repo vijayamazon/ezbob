@@ -171,24 +171,7 @@
 			{
 				var banksRepository = new YodleeBanksRepository(_session);
 				YodleeBanks bank = banksRepository.Search(csId);
-
-				// Create new account
-				yodleeAccount = new YodleeAccounts
-					{
-						CreationDate = DateTime.UtcNow,
-						Customer = _customer,
-						Username = _customer.Name,
-						Password = Encryptor.Encrypt(yodleeMain.GenerateRandomPassword()),
-						Bank = bank
-					};
-				
-				Log.InfoFormat("Registering yodlee user: {0}", yodleeAccount.Username);
-				yodleeMain.RegisterUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password), _customer.Name);
-				
-				Log.Info("Creating yodlee account...");
-				var accountsRepository = new YodleeAccountsRepository(_session);
-				int accountId = (int)accountsRepository.Save(yodleeAccount);
-				Log.InfoFormat("Created yodlee account for user:{0} with id:{1}", yodleeAccount.Username, accountId);
+				yodleeAccount = YodleeAccountPool.GetAccount(_customer, bank);
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");

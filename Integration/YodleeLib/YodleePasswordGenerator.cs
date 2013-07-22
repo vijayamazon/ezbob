@@ -3,7 +3,7 @@
 	using System;
 	using System.Text;
 
-	public class YodleePasswrodGenerator
+	public class YodleePasswordGenerator
 	{
 		public static string GenerateRandomPassword()
 		{

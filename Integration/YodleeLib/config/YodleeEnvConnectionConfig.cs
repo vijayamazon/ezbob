@@ -54,9 +54,14 @@ namespace YodleeLib.config
             get { return GetValue<string>("AddAccountURL"); }
         }
 
-        public string EditAccountURL
-        {
-            get { return GetValue<string>("EditAccountURL"); }
-        }
+		public string EditAccountURL
+		{
+			get { return GetValue<string>("EditAccountURL"); }
+		}
+
+		public int AccountPoolSize
+		{
+			get { return GetValue<int>("AccountPoolSize"); }
+		}
     }
 }

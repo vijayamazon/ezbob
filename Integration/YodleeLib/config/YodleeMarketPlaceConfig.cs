@@ -13,5 +13,6 @@
         public string ApplicationToken { get; set; }
         public string AddAccountURL { get; set; }
         public string EditAccountURL { get; set; }
+		public int AccountPoolSize { get; set; }
     }
 }
