@@ -97,7 +97,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         that = this
         d = new EzBob.Dialogs.PacentManual(
             model: @model
-            title: "Pacnet Balance - Manual"
+            title: "Pacnet Balance - Add Manual Funds"
             postValueName: "amount"
             url: "Underwriter/ApplicationInfo/SavePacnetManual"
             data:
@@ -118,7 +118,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d = new EzBob.Dialogs.CheckBoxEdit(
             model: @model
             propertyName: "UseSetupFee"
-            title: "Clear Pacnet Manual"
+            title: "Pacnet Balance - Clear Manual Funds"
             checkboxName: "I am sure"
             postValueName: "isSure"
             url: "Underwriter/ApplicationInfo/DisableTodaysPacnetManual"
