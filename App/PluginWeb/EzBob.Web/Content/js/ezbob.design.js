@@ -2,6 +2,7 @@
 /// <reference path="~/Content/js/App/ezbob.app.js" />
 /// <reference path="~/Content/js/lib/underscore.js" />
 /// <reference path="~/Content/js/lib/jquery.validate.js"/>
+/// <reference path="~/Content/js/lib/jquery-1.8.3.js" />
 
 var EzBob = EzBob || {};
 
@@ -125,7 +126,6 @@ $(function () {
                     case "2":
                         day.val(((dayVal > 28) && !isLeapYear) || (((dayVal > 29) && isLeapYear)) ? 28 : dayVal);
                         break;
-                    case "1":
                     case "4":
                     case "6":
                     case "9":
