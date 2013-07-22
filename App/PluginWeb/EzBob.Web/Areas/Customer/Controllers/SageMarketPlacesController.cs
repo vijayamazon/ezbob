@@ -89,7 +89,7 @@
 
 			var sageDatabaseMarketPlace = new SageDatabaseMarketPlace();
 
-			if (_customer.WizardStep != WizardStepType.PaymentAccounts && _customer.WizardStep != WizardStepType.AllStep)
+			if (_customer.WizardStep != WizardStepType.AllStep)
 				_customer.WizardStep = WizardStepType.Marketplace;
 
 			string accountName = string.Format("SageOne Account #{0}", _customer.CustomerMarketPlaces.Count(a => a.Marketplace.InternalId == oEsi.InternalId) + 1);

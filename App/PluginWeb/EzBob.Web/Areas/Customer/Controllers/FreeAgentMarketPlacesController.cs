@@ -96,7 +96,7 @@
 
 			var freeAgentDatabaseMarketPlace = new FreeAgentDatabaseMarketPlace();
 
-			if (_customer.WizardStep != WizardStepType.PaymentAccounts && _customer.WizardStep != WizardStepType.AllStep)
+			if (_customer.WizardStep != WizardStepType.AllStep)
 				_customer.WizardStep = WizardStepType.Marketplace;
 
 			log.Info("Saving marketplace data...");

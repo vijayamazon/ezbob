@@ -89,7 +89,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
 
                 var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
-                if (_customer.WizardStep != WizardStepType.PaymentAccounts && _customer.WizardStep != WizardStepType.AllStep)
+                if (_customer.WizardStep != WizardStepType.AllStep)
                     _customer.WizardStep = WizardStepType.Marketplace;
 
                 _session.Flush();

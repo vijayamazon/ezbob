@@ -138,7 +138,7 @@
 
 			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
 
-			if (customer.WizardStep != WizardStepType.PaymentAccounts && customer.WizardStep != WizardStepType.AllStep)
+			if (customer.WizardStep != WizardStepType.AllStep)
 				customer.WizardStep = WizardStepType.Marketplace;
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace,
 				                                                        securityData, customer);

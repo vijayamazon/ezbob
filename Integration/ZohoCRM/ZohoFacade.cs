@@ -440,7 +440,6 @@ namespace ZohoCRM
         {
             if (customer.WizardStep == WizardStepType.SignUp) return 1;
             if (customer.WizardStep == WizardStepType.Marketplace) return 2;
-            if (customer.WizardStep == WizardStepType.PaymentAccounts) return 3;
             if (customer.WizardStep == WizardStepType.AllStep)
             {
                 if (customer.Loans.Any())

@@ -132,7 +132,6 @@ namespace EZBob.DatabaseLib.Model.Database {
     {   
         SignUp = 1,
         Marketplace = 2,
-        PaymentAccounts = 3,
         AllStep = 4
     }
 
