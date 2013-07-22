@@ -205,11 +205,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             }
 
             var cus = _customers.GetChecked(customerId);
-            if (string.IsNullOrEmpty(customer)) customer = cus.PersonalInfo.Fullname;
 
-            cus.TryAddPayPointCard(trans_id, card_no, expiry, customer);
-
-            _appCreator.PayPointAddedByUnderwriter(_context.User, cus, card_no);
+            AddPayPointCardToCustomer(trans_id, card_no, cus, expiry);
 
             return View("PayPointAdded", amount ?? 0);
         }
@@ -219,17 +216,25 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public JsonNetResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
         {
             var customer = _customers.GetChecked(customerId);
-            customer.TryAddPayPointCard(transactionid, cardno, expiredate.ToString("MMyy"), customer.PersonalInfo.Fullname);
+            var expiry = expiredate.ToString("MMyy");
+
+            AddPayPointCardToCustomer(transactionid, cardno, customer, expiry);
+
+            return this.JsonNet(new {});
+        }
+
+        private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry)
+        {
+            customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname);
 
             if (string.IsNullOrEmpty(customer.PayPointTransactionId))
             {
                 SetPaypointDefaultCard(transactionid, customer.Id, cardno);
             }
 
-            _appCreator.PayPointAddedByUnderwriter( _context.User, customer, cardno);
-
-            return this.JsonNet(new {});
+            _appCreator.PayPointAddedByUnderwriter(_context.User, customer, cardno);
         }
+
         [Ajax]
         [Transactional]
         [HttpPost]
