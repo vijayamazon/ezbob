@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
-using System.Threading;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html.Tags;
-using PacnetBalance;
 using Reports;
 
 namespace Reconciliation {
@@ -14,22 +12,35 @@ namespace Reconciliation {
 			ms_oLog = new LegacyLog();
 
 			if (IsNormalMode(args)) {
-				PacNetBalance.Logger = ms_oLog;
-				ParsePacNetText.Logger = ms_oLog;
+				PacnetBalance.PacNetBalance.Logger = ms_oLog;
+				PacnetBalance.ParsePacNetText.Logger = ms_oLog;
 
-				// ReSharper disable ObjectCreationAsStatement
-				new PacnetMailListener(Run, ms_oLog);
-				// ReSharper restore ObjectCreationAsStatement
+				var pacnetcfg = new PacnetBalance.Conf(ms_oLog);
+				pacnetcfg.Init();
 
-				Thread.Sleep(Timeout.Infinite);
+				var pacnet = new PacnetBalance.Processor(pacnetcfg, ms_oLog);
+
+				if (pacnet.Init())
+					pacnet.Run();
+
+				pacnet.Done();
 			}
 			else {
 				ms_oLog = new ConsoleLog(ms_oLog);
-
 				ms_oLog.Debug("Date: {0}, rerun mode.", ms_oDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
-
-				Run();
 			} // if
+
+			var paypointcfg = new PayPointBalance.Conf(ms_oLog);
+			paypointcfg.Init();
+
+			var ppb = new PayPointBalance.Processor(paypointcfg, ms_oDate, ms_oLog);
+
+			if (ppb.Init())
+				ppb.Run();
+
+			ppb.Done();
+
+			SendReport(ms_oDate, ms_oLog);
 		} // Main
 
 		private static bool IsNormalMode(string[] args) {
@@ -44,20 +55,6 @@ namespace Reconciliation {
 
 			return true;
 		} // IsNormalMode
-
-		public static void Run() {
-			ProcessPayPoint(ms_oDate, ms_oLog);
-			SendReport(ms_oDate, ms_oLog);
-		} // Run
-
-		private static void ProcessPayPoint(DateTime oDate, ASafeLog oLog) {
-			var ppb = new PayPointBalance.Processor(oDate, oLog);
-
-			if (ppb.Init())
-				ppb.Run();
-
-			ppb.Done();
-		} // ProcessPayPoint
 
 		private static void SendReport(DateTime oDate, ASafeLog oLog) {
 			oLog.Debug("Generating reconciliation report...");

@@ -44,7 +44,8 @@ namespace Reports {
 					"EZBOB " + period + " " + subject + " Client Report",
 					email.ToString(),
 					toAddressStr,
-					wb
+					wb,
+					this
 				);
 			} // lock
 

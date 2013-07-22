@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnection", "..\..\Tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\..\Tools\EzbobUtils\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailListener", "..\..\Tools\EzbobUtils\MailListener\MailListener.csproj", "{4E273CA0-9D0F-4FAD-962F-8647A23E83D1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzEnvironment", "..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj", "{B91EB116-94EB-416B-9422-D3BA97993163}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reports", "..\EzReporting\Reports\Reports.csproj", "{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}"
@@ -43,10 +41,6 @@ Global
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4E273CA0-9D0F-4FAD-962F-8647A23E83D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E273CA0-9D0F-4FAD-962F-8647A23E83D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E273CA0-9D0F-4FAD-962F-8647A23E83D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E273CA0-9D0F-4FAD-962F-8647A23E83D1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B91EB116-94EB-416B-9422-D3BA97993163}.Release|Any CPU.ActiveCfg = Release|Any CPU

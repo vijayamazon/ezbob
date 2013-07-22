@@ -1,16 +1,17 @@
 ﻿using ConfigurationBase;
+using Ezbob.Logger;
 
 namespace PacnetBalance {
-	public class Conf : ConfigurationsBase {
-		static Conf() {
-			Init(typeof(Conf), Consts.GetConfigsSpName);
-		} // static constructor
+	public class Conf : Configurations {
+		public Conf(ASafeLog oLog = null) : base(Consts.GetConfigsSpName, oLog) {
+		} // constructor
 
-		public static string MailBeeLicenseKey { get; private set; }
-		public static string LoginAddress { get; private set; }
-		public static string LoginPassword { get; private set; }
-		public static string Server { get; private set; }
-		public static int Port { get; private set; }
-		public static int MailboxReconnectionIntervalSeconds { get; private set; }
+		public virtual string MailBeeLicenseKey { get; protected set; }
+		public virtual string LoginAddress { get; protected set; }
+		public virtual string LoginPassword { get; protected set; }
+		public virtual string Server { get; protected set; }
+		public virtual int Port { get; protected set; }
+		public virtual int MailboxReconnectionIntervalSeconds { get; protected set; }
+		public virtual int TotalWaitingTime { get; protected set; }
 	} // class Conf
 } // namespace

@@ -10,19 +10,21 @@ namespace MailListener {
 		private Imap imp;                                          // Imap object reference
 		private bool exiting;                                      // Flag. If true, terminating the application is in progress and we should stop idle without attempt to download new messages
 		private DateTime startTime;                                // Time when idle started. Used for restarting idle by timeout
-		private readonly TimeSpan timeout = new TimeSpan(0, 5, 0); // 5 minutes timeout for idle
+		private readonly TimeSpan defaultTimeout = new TimeSpan(0, 5, 0); // 5 minutes timeout for idle
 
 		protected long LastId;
 		private readonly int mailboxReconnectionIntervalSeconds, port;
 		private readonly string server, loginAddress, loginPassword, mailBeeLicenseKey;
+		private TimeSpan timeout;
 
-		protected MailListener(int mailboxReconnectionIntervalSeconds, string server, int port, string loginAddress, string loginPassword, string mailBeeLicenseKey, ASafeLog oLog = null) : base(oLog) {
+		protected MailListener(int mailboxReconnectionIntervalSeconds, string server, int port, string loginAddress, string loginPassword, string mailBeeLicenseKey, int? sleepTimeout = null, ASafeLog oLog = null) : base(oLog) {
 			this.mailboxReconnectionIntervalSeconds = mailboxReconnectionIntervalSeconds;
 			this.server = server;
 			this.port = port;
 			this.loginAddress = loginAddress;
 			this.loginPassword = loginPassword;
 			this.mailBeeLicenseKey = mailBeeLicenseKey;
+			this.timeout = ((sleepTimeout == null) || ((int)sleepTimeout == 0)) ? defaultTimeout : TimeSpan.FromSeconds((int)sleepTimeout);
 			AppDomain.CurrentDomain.ProcessExit += (s, e) => exiting = true;
 			LicenseImap();
 			ConnectToMailboxLoop();
@@ -91,7 +93,7 @@ namespace MailListener {
 				Global.LicenseKey = mailBeeLicenseKey;
 			}
 			catch (MailBeeLicenseException e) {
-				Error("License key is invalid:{0}", e);
+				Error("License key is invalid: {0}", e);
 				Environment.Exit(-1);
 			} // try
 		} // LicenseImap
@@ -108,7 +110,7 @@ namespace MailListener {
 				}
 			}
 			catch (Exception ex) {
-				Error("Error occured while in imp_Idling:{0}", ex);
+				Error("Error occured while in imp_Idling: {0}", ex);
 				Info("Trying to reconnect to mailbox");
 				SafeDispose();
 				ConnectToMailboxLoop();

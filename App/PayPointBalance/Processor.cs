@@ -16,14 +16,13 @@ namespace PayPointBalance {
 
 		#region constructor
 
-		public Processor(DateTime oDate, ASafeLog oLog = null)
-			: base(oLog) {
+		public Processor(Conf cfg, DateTime oDate, ASafeLog oLog = null) : base(oLog) {
 			m_oDate = oDate;
-			m_sMid = Conf.PayPointMid;
-			m_sVpnPassword = Conf.PayPointVpnPassword;
-			m_sRemotePassword = Conf.PayPointRemotePassword;
-			m_nRetryCount = Conf.PayPointRetryCount;
-			m_nSleepInterval = Conf.PayPointSleepInterval;
+			m_sMid = cfg.PayPointMid;
+			m_sVpnPassword = cfg.PayPointVpnPassword;
+			m_sRemotePassword = cfg.PayPointRemotePassword;
+			m_nRetryCount = cfg.PayPointRetryCount;
+			m_nSleepInterval = cfg.PayPointSleepInterval;
 
 			Debug("\n\n***\n*** PayPointBalance.Processor configuration\n***\n");
 

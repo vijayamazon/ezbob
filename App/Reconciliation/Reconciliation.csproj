@@ -76,10 +76,6 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Tools\EzbobUtils\MailListener\MailListener.csproj">
-      <Project>{4e273ca0-9d0f-4fad-962f-8647a23e83d1}</Project>
-      <Name>MailListener</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EzReporting\Reports\Reports.csproj">
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>

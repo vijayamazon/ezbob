@@ -1,0 +1,148 @@
+﻿using Ezbob.Logger;
+using Ezbob.Database;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+
+namespace ConfigurationBase {
+	// How to use
+	// 1. Add reference to C:\DEV\Dlls\ConfigurationBase.dll
+	// 2. Create a class like:
+	//  namespace EzSupportAgent {
+	//      using ConfigurationBase;
+
+	//      public class ConfigurationSample : Configurations {
+	//          public ConfigurationSample(string storedProcName, ASafeLog logger = null) : base(storedProcName, logger)
+	//          {
+	//          }
+
+	//          public virtual string PropertySample1 { get; protected set; }
+	//          public virtual int PropertySample2 { get; protected set; }
+	//      } // class
+	//  }
+
+	public class Configurations : SafeLog {
+		private enum SupportedTypes {
+			Int32,
+			Int64,
+			String
+		} // enum SupportedTypes
+
+		private const string DefaultKeyFieldName = "CfgKey";
+		private const string DefaultValueFieldName = "CfgValue";
+
+		private readonly Dictionary<string, PropertyInfo> configPropertyInfos = new Dictionary<string, PropertyInfo>();
+		private string spName;
+
+		public string KeyFieldName;
+		public string ValueFieldName;
+
+		public Configurations(string spNameInput, ASafeLog oLog = null) : base(oLog) {
+			spName = spNameInput;
+			KeyFieldName = DefaultKeyFieldName;
+			ValueFieldName = DefaultValueFieldName;
+		} // constructor
+
+		public virtual void Init() {
+			PropertyInfo[] propertyInfos = GetType().GetProperties();
+
+			foreach (PropertyInfo pi in propertyInfos) {
+				SupportedTypes ignored;
+
+				bool bInclude =
+					pi.GetGetMethod().IsVirtual &&
+					pi.GetGetMethod().IsPublic &&
+					(pi.GetSetMethod(true) != null) &&
+					SupportedTypes.TryParse(pi.PropertyType.Name, out ignored);
+
+				if (bInclude) {
+					configPropertyInfos.Add(pi.Name, pi);
+					Debug("Configuration property to read from DB: {0}", pi.Name);
+				} // if
+			} // for each property
+
+			Info("Reading configurations");
+
+			try {
+				var oDB = new SqlConnection();
+				DataTable dt = oDB.ExecuteReader(spName);
+
+				foreach (DataRow row in dt.Rows)
+					AddSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
+			}
+			catch (Exception e) {
+				throw new ConfigurationBaseException("Error reading configurations.", e);
+			} // try
+		} // Init
+
+		public virtual void Refresh() {
+			Info("Refreshing configurations");
+
+			try {
+				var oDB = new SqlConnection();
+				DataTable dt = oDB.ExecuteReader(spName);
+
+				foreach (DataRow row in dt.Rows)
+					RefreshSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
+			}
+			catch (Exception e) {
+				Error("Error reading configurations: {0}", e);
+			} // try
+		} // Refresh
+
+		protected virtual void RefreshSingleConfiguration(string key, string value) {
+			if (configPropertyInfos.ContainsKey(key)) {
+				if (configPropertyInfos[key].GetValue(null).ToString() != value) {
+					SetProperty(key, value);
+					Info("Refreshed configuration '{0}': '{1}'", key, value);
+				} // if
+			}
+			else
+				Error("Unimplemented configuration was read: '{0}' with value '{1}'.", key, value);
+		} // RefreshSingleConfiguration
+
+		protected virtual void AddSingleConfiguration(string key, string value) {
+			if (configPropertyInfos.ContainsKey(key)) {
+				SetProperty(key, value);
+				Info("Added configuration '{0}': '{1}'", key, value);
+			}
+			else
+				Error("Unimplemented configuration was read: '{0}' with value '{1}'.", key, value);
+		} // AddSingleConfiguration
+
+		protected virtual void SetProperty(string key, string value) {
+			SupportedTypes st;
+
+			if (!SupportedTypes.TryParse(configPropertyInfos[key].PropertyType.Name, out st))
+				throw new ParseConfigurationBaseException("type is not implemented", key, value);
+
+			switch (st) {
+			case SupportedTypes.Int32:
+				int valueAsInt;
+
+				if (!int.TryParse(value, out valueAsInt))
+					throw new ParseConfigurationBaseException("as int", key, value);
+
+				configPropertyInfos[key].SetValue(this, valueAsInt);
+				break;
+
+			case SupportedTypes.Int64:
+				long valueAsLong;
+
+				if (!long.TryParse(value, out valueAsLong))
+					throw new ParseConfigurationBaseException("as long", key, value);
+
+				configPropertyInfos[key].SetValue(this, valueAsLong);
+				break;
+
+			case SupportedTypes.String:
+				configPropertyInfos[key].SetValue(this, value);
+				break;
+
+			default:
+				throw new ParseConfigurationBaseException("type is not implemented", key, value);
+			} // switch
+		} // SetProperty
+	} // class Configurations
+} // namespace

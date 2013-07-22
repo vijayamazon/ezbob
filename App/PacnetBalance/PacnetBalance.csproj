@@ -61,8 +61,8 @@
     <Compile Include="Consts.cs" />
     <Compile Include="PacNetBalance.cs" />
     <Compile Include="PacNetBalanceRow.cs" />
-    <Compile Include="PacnetMailListener.cs" />
     <Compile Include="ParsePacNetText.cs" />
+    <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,10 +80,6 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Tools\EzbobUtils\MailListener\MailListener.csproj">
-      <Project>{4e273ca0-9d0f-4fad-962f-8647a23e83d1}</Project>
-      <Name>MailListener</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

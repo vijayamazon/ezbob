@@ -1,15 +1,15 @@
 ﻿using ConfigurationBase;
+using Ezbob.Logger;
 
 namespace PayPointBalance {
-	public class Conf : ConfigurationsBase {
-		static Conf() {
-			Init(typeof(Conf), "GetPacnetAgentConfigs");
-		} // static constructor
+	public class Conf : Configurations {
+		public Conf(ASafeLog oLog = null) : base("GetPacnetAgentConfigs", oLog) {
+		} // constructor
 
-		public static string PayPointMid { get; private set; }
-		public static string PayPointVpnPassword { get; private set; }
-		public static string PayPointRemotePassword { get; private set; }
-		public static int PayPointRetryCount { get; private set; }
-		public static int PayPointSleepInterval { get; private set; }
+		public virtual string PayPointMid { get; protected set; }
+		public virtual string PayPointVpnPassword { get; protected set; }
+		public virtual string PayPointRemotePassword { get; protected set; }
+		public virtual int PayPointRetryCount { get; protected set; }
+		public virtual int PayPointSleepInterval { get; protected set; }
 	} // class Conf
 } // namespace
