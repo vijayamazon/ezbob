@@ -46,14 +46,14 @@ namespace ExperianLib
             try
             {
                 //debug mode
-                if (surname == "TestSurnameDebugMode" || surname == "TestSurnameFour" || surname == "TestSurnameFile")
+                if (surname == "TestSurnameDebugMode" || surname == "TestSurnameOne" || surname == "TestSurnameFile")
                 {
                     return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
                 }
 
                 Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
                 var postcode = GetPostcode(ukLocation, mlLocation);
-                ShifLocation(mlLocation);
+                mlLocation = ShifLocation(mlLocation);
                 var cachedResponse = _repo.GetPersonFromCache(firstName, surname, birthDate, postcode);
 
                 if (cachedResponse != null)
@@ -113,7 +113,7 @@ namespace ExperianLib
             return postcode;
         }
 
-        private static void ShifLocation(InputLocationDetailsMultiLineLocation mlLocation)
+        public static InputLocationDetailsMultiLineLocation ShifLocation(InputLocationDetailsMultiLineLocation mlLocation)
         {
             //shift of order location line
             if (mlLocation != null)
@@ -136,6 +136,7 @@ namespace ExperianLib
                 if (lines.Count > 4) mlLocation.LocationLine5 = lines[4];
                 if (lines.Count > 5) mlLocation.LocationLine6 = lines[5];
             }
+            return mlLocation;
         }
 
         private ConsumerServiceResult GetServiceOutput(string gender,

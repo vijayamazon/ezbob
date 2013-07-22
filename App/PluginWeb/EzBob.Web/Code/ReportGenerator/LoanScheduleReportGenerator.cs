@@ -20,7 +20,7 @@ namespace EzBob.Web.Code.ReportGenerator
         public byte[] GenerateReport(LoanDetails loanDetails, bool isExcell, bool withErrors, string header)
         {
             int row = 6;
-            var column = 1;
+            const int column = 1;
             var worksheet = _workbook.Worksheets[_workbook.Worksheets.ActiveSheetIndex];
             worksheet.Name = "Payment Schedule";
             HeaderReportGenerator.CreateHeader(worksheet, header, column, column, 9);
@@ -41,7 +41,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 5].PutValue("-");
                 worksheet.Cells[row, column + 6].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Amount));
                 worksheet.Cells[row, column + 7].PutValue(transaction.StatusDescription);
-                if (isExcell) worksheet.Cells[row, column + 8].PutValue(transaction.Description);
+                worksheet.Cells[row, column + 8].PutValue(transaction.Description);
                 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
@@ -60,7 +60,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 5].PutValue("-");
                 worksheet.Cells[row, column + 6].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Amount));
                 worksheet.Cells[row, column + 7].PutValue(transaction.StatusDescription);
-                if (isExcell) worksheet.Cells[row, column + 8].PutValue(transaction.Description);
+                worksheet.Cells[row, column + 8].PutValue(transaction.Description);
                 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
@@ -76,7 +76,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 5].PutValue("-");
                 worksheet.Cells[row, column + 6].PutValue("-");
                 worksheet.Cells[row, column + 7].PutValue("Roll over");
-                if (isExcell) worksheet.Cells[row, column + 8].PutValue("");
+                worksheet.Cells[row, column + 8].PutValue("");
                 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
@@ -92,7 +92,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 5].PutValue("-");
                 worksheet.Cells[row, column + 6].PutValue("-");
                 worksheet.Cells[row, column + 7].PutValue(transaction.State);
-                if (isExcell) worksheet.Cells[row, column + 8].PutValue(transaction.Description);
+                worksheet.Cells[row, column + 8].PutValue(transaction.Description);
 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
@@ -111,7 +111,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 5].PutValue("-");
                 worksheet.Cells[row, column + 6].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.AmountDue));
                 worksheet.Cells[row, column + 7].PutValue(transaction.StatusDescription);
-                if (isExcell) worksheet.Cells[row, column + 8].PutValue("");
+                worksheet.Cells[row, column + 8].PutValue("");
 
                 SetCellStyle(worksheet, row, column, false, isExcell);
             }
@@ -122,6 +122,7 @@ namespace EzBob.Web.Code.ReportGenerator
             for (var item = 3; item < (9 + Convert.ToInt16(isExcell)); ++item)
             {
                 worksheet.AutoFitColumn(item);
+                worksheet.AutoFitRow(item);
             }
 
             return ConvertFormat(_workbook, isExcell ? FileFormatType.Excel2003 : FileFormatType.Pdf);
@@ -131,8 +132,16 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             using (var streamForDoc = new MemoryStream())
             {
-                workbook.Save(streamForDoc, format);
-                return streamForDoc.ToArray();
+                try
+                {
+                    workbook.Save(streamForDoc, format);
+                    return streamForDoc.ToArray();
+                }
+                catch (Exception)
+                {
+                    workbook.Save(streamForDoc, format);
+                    return streamForDoc.ToArray();
+                }
             }
         }
 
@@ -148,7 +157,7 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells[row, column + 5].PutValue("Rebate");
             worksheet.Cells[row, column + 6].PutValue("Total");
             worksheet.Cells[row, column + 7].PutValue("Status");
-            if (isExcell) worksheet.Cells[row, column + 8].PutValue("Description");
+            worksheet.Cells[row, column + 8].PutValue("Description");
            
             SetHeaderBackgroundColor(worksheet, row, column, isExcell);
             worksheet.AutoFitRow(row);
@@ -158,7 +167,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
         private void SetHeaderBackgroundColor(Worksheet worksheet, int row, int column, bool isExcell)
         {
-            for (int i = 0; i < (8 + Convert.ToInt16(isExcell)); i++)
+            for (int i = 0; i < 9; i++)
             {
                 worksheet.Cells[row, column + i].Style.BackgroundColor = Color.Blue;
                 worksheet.Cells[row, column + i].Style.Font.Color = Color.Black;
@@ -168,7 +177,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
         private static void SetCellStyle(Worksheet worksheet, int row, int column, bool isBold, bool isExcell)
         {
-            for (int i = 0; i < (8 + Convert.ToInt16(isExcell)); i++)
+            for (int i = 0; i < 9; i++)
             {
                 worksheet.Cells.SetRowHeight(row, column + i);
                 worksheet.Cells[row, column + i].Style.Font.Size = 11;
@@ -189,6 +198,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + i].Style.Borders[BorderType.TopBorder].Color = Color.Black;
                 worksheet.Cells[row, column + i].Style.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
                 worksheet.Cells[row, column + i].Style.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
+                worksheet.Cells[row, column + i].Style.IsTextWrapped = true;
             }
             worksheet.Cells.SetRowHeight(row, 30);
 
