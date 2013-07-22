@@ -57,48 +57,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarketplaceWebServiceProducts\*.cs" />
-    <Compile Include="MarketplaceWebServiceProducts\Model\*.cs" />
-    <Compile Include="MarketplaceWebServiceProducts\Mock\*.cs" />
     <Compile Include="MarketplaceWebServiceProducts\Util\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMatchingProductResponse.xml">
-      <LogicalName>GetMatchingProductResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetLowestOfferListingsForASINResponse.xml">
-      <LogicalName>GetLowestOfferListingsForASINResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetServiceStatusResponse.xml">
-      <LogicalName>GetServiceStatusResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMatchingProductForIdResponse.xml">
-      <LogicalName>GetMatchingProductForIdResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMyPriceForSKUResponse.xml">
-      <LogicalName>GetMyPriceForSKUResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\ListMatchingProductsResponse.xml">
-      <LogicalName>ListMatchingProductsResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetCompetitivePricingForSKUResponse.xml">
-      <LogicalName>GetCompetitivePricingForSKUResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetCompetitivePricingForASINResponse.xml">
-      <LogicalName>GetCompetitivePricingForASINResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetProductCategoriesForSKUResponse.xml">
-      <LogicalName>GetProductCategoriesForSKUResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMyPriceForASINResponse.xml">
-      <LogicalName>GetMyPriceForASINResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetLowestOfferListingsForSKUResponse.xml">
-      <LogicalName>GetLowestOfferListingsForSKUResponse.xml</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetProductCategoriesForASINResponse.xml">
-      <LogicalName>GetProductCategoriesForASINResponse.xml</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
