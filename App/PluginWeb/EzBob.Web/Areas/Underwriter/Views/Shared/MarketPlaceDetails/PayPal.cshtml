@@ -9,11 +9,11 @@
 <div class="paypalDetail">
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
+            <li class="active" ><a href="#paypal-aggregation" data-toggle="tab">Payment info</a></li>
             <% if(pdi != null){ %>
                 <li><a href="#categories" data-toggle="tab">Categories info</a></li>
             <%}%>
-            <li><a href="#paypal-aggregation" data-toggle="tab">Aggregation info</a></li>
+            <li><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
         </ul>
         <div class="tab-content">
             @PersonalInfo()
@@ -26,7 +26,7 @@
 </div>
 
 @helper PersonalInfo(){
-<div class="tab-pane active" id="payPaldetails">
+<div class="tab-pane" id="payPaldetails">
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -154,7 +154,7 @@
 }
 
 @helper Aggregates(){
-<div class="tab-pane" id="paypal-aggregation">
+<div class="tab-pane active" id="paypal-aggregation">
 <table class="table table-bordered table-striped  blue-header centered rright">
     <thead>
         <tr>
