@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -8,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using ApplicationMng.Model;
+using ApplicationMng.Repository;
 using Aspose.Cells;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
@@ -29,13 +31,15 @@ namespace EzBob.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+            
+            var underwriterRoles = string.Join(", ", ObjectFactory.GetInstance<IRolesRepository>().GetAll().Where(x => x.Name != "Web").Select(x => x.Name));
 
             if(config.LandingPageEnabled)
             {
                 filters.Add(new WhiteListFilter(), 0);
             }
 
-            filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", "Underwriter, manager, crm, Collector", true), 1);
+            filters.Add(new GlobalAreaAuthorizationFilter("Underwriter", underwriterRoles, true), 1);
             filters.Add(new GlobalAreaAuthorizationFilter("Customer", "Web", false, true), 1);
             filters.Add(new EzBobHandleErrorAttribute());
             filters.Add(new LoggingContextFilter(), 1);
@@ -68,8 +72,6 @@ namespace EzBob.Web
             MvcHandler.DisableMvcResponseHeader = true;
 
             AreaRegistration.RegisterAllAreas();
-
-            RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             ModelBinders.Binders.Add(typeof(DayDate), new DayDateModelBinder());
@@ -90,6 +92,7 @@ namespace EzBob.Web
             bs.InitValueTypes();
             bs.InitDatabaseMarketPlaceTypes();
 
+            RegisterGlobalFilters(GlobalFilters.Filters);
         }
 
         private static void ConfigureSquishIt()

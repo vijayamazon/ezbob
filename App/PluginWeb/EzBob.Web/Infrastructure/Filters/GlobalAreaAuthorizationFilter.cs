@@ -20,7 +20,6 @@ namespace EzBob.Web.Infrastructure.Filters
             Roles = roleName;
             _isAdminPageRedirect = isAdminPageRedirect;
             _strict = strict;
-            Roles = roleName;
         }
         //---------------------------------------------------------------------------
         protected override bool AuthorizeCore(HttpContextBase httpContext)
