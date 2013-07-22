@@ -91,7 +91,7 @@ EzBob.Validation.highlightFS = function (element) {
         img.field_status('set', 'required', 2);
     } else if ($el.hasClass('SortCodeSplit')) {
         img.field_status('set', 'required', 2);
-    } else if ($el.hasClass('DateOfBirth') && $el.val().indexOf('-') !== -1) {
+    } else if ($el.hasClass('requiredDate') && $el.val().indexOf('-') !== -1) {
         img.field_status('set', 'required', 2);
     } else {
         if (img.field_status('getStatus') == 'fail') {
