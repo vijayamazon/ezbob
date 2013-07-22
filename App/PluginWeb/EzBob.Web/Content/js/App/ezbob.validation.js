@@ -82,7 +82,11 @@ EzBob.Validation.highlightFS = function (element) {
     var $el = $(element),
         val = $el.val(),
         img = $el.closest('div').find('.field_status');
-
+    
+    if ($el.hasClass('cashInput') && val == '£ ') {
+        img.field_status('set', 'required', 2);
+        return;
+    }
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required', 2);
     } else if ($el.hasClass('SortCodeSplit')) {
@@ -178,6 +182,10 @@ $.validator.addMethod(
         return res;
     }, "Please insert date in format DD/MM/YYYY, for example 21/06/2012"
 );
+
+$.validator.addMethod("defaultInvalidPounds", function(value, element) {
+    return !(element.value == '£ ');
+});
 
 $.validator.methods.number = function (value, element) {
     return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
