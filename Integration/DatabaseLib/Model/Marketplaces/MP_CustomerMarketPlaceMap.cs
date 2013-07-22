@@ -15,7 +15,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.Updated).CustomType<UtcDateTimeType>();
             Map(x => x.UpdatingStart).CustomType<UtcDateTimeType>();
             Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
-            Map(x => x.UpdateError).CustomType("StringClob").LazyLoad();
+            Map(x => x.UpdateError).CustomType("StringClob");
             References(x => x.Marketplace, "MarketPlaceId");
             References(x => x.Customer, "CustomerId");
             HasOne(x => x.PersonalInfo)
