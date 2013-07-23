@@ -51,9 +51,9 @@ EzBob.BankAccountInfoView = Backbone.View.extend({
         this.form = this.$el.find('form');
         this.validator = EzBob.validateBankDetailsForm(this.form);
 
-        this.$el.find("#SortCode #SortCode1").on("keyup change", function () { that.$el.find("#SortCode .SortCodeSplit").val(that.$el.find("#SortCode #SortCode1").val() + that.$el.find("#SortCode #SortCode2").val() + that.$el.find("#SortCode #SortCode3").val()); });
-        this.$el.find("#SortCode #SortCode2").on("keyup change", function () { that.$el.find("#SortCode #SortCode1").trigger("change"); });
-        this.$el.find("#SortCode #SortCode3").on("keyup change", function () { that.$el.find("#SortCode #SortCode1").trigger("change"); });
+        this.$el.find("#SortCode #SortCode1").on("keyup change focusout", function () { that.$el.find("#SortCode .SortCodeSplit").val(that.$el.find("#SortCode #SortCode1").val() + that.$el.find("#SortCode #SortCode2").val() + that.$el.find("#SortCode #SortCode3").val()); });
+        this.$el.find("#SortCode #SortCode2").on("keyup change focusout", function () { that.$el.find("#SortCode #SortCode1").trigger("change"); });
+        this.$el.find("#SortCode #SortCode3").on("keyup change focusout", function () { that.$el.find("#SortCode #SortCode1").trigger("change"); });
         
         this.$el.find('input[nextSerial]').serialFill();
 

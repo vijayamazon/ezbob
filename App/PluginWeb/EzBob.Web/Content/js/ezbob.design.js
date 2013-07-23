@@ -773,9 +773,7 @@ var validFunc = function (el) {
     if ($(el).closest('.ezDateTime').length != 0) {
         $(el).closest('.ezDateTime').find("input.hidden-field").valid();
     } else if ($(el).closest('.ezSortCode').length != 0) {
-        if ($(el).attr("id") == "SortCode3") {
-            $(el).closest('.ezSortCode').find("input.hidden-field").valid();
-        }
+        $(el).closest('.ezSortCode').find("input.hidden-field").valid();
     } else if ($(el).hasClass('addAddressInput')) {
         //do nothing
     } else {
@@ -809,6 +807,10 @@ $.validator.setDefaults({
         }
         
         if ($(el).hasClass('cashInput') && $(el).val() == "£ ") {
+            validFunc(el);
+        }
+        
+        if ($(el).closest('.ezSortCode').length != 0) {
             validFunc(el);
         }
         /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
