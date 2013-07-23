@@ -867,13 +867,10 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
                 <level value="ERROR" />
                 <appender-ref ref="MailAppenderWithSSLForAskville" />
             </logger>
-			<logger additivity="false" name=" Integration.ChannelGrabberConfig.Configuration ">                
-				<level value="ERROR" />
-            </logger>
             <logger name="Deveel.Web.Zoho">
                 <level value="ALL" />
             </logger>
-			<logger additivity="false" name=" Integration.ChannelGrabberConfig.Configuration ">                
+			<logger name="Integration.ChannelGrabberConfig.Configuration">                
 				<level value="ERROR" />
             </logger>
         </log4net>
