@@ -97,11 +97,11 @@
             %>
             <tr>
                 <td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-                <td><%-EzBob.formatPounds1(line.LoanRepayment)%></td>
-                <td><%-EzBob.formatPounds1(line.Interest)%></td>
-                <td><%-EzBob.formatPounds1(0)%></td>
+                <td><%-EzBob.formatPoundsNoDecimals(line.LoanRepayment)%></td>
+                <td><%-EzBob.formatPounds(line.Interest)%></td>
+                <td><%-EzBob.formatPounds(0)%></td>
                 <td>
-                    <b class="apply-loan-total" ><%-EzBob.formatPounds1(line.AmountDue)%></b>
+                    <b class="apply-loan-total" ><%-EzBob.formatPoundsNoDecimals(line.AmountDue)%></b>
                 </td>
             </tr>
             <%});%>
