@@ -12,7 +12,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             'focusout input': 'inputChanged'
         });
     },
-    inputChanged: function () {
+    inputChanged: function (event) {
         var el = event ? $(event.currentTarget) : null;
         if (el && el.hasClass('nonrequired') && el.val() == '') {
             var img = el.closest('div').find('.field_status');
