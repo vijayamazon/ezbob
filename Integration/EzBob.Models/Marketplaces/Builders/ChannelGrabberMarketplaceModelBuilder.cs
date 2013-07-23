@@ -1,12 +1,17 @@
+using System;
+using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using Integration.ChannelGrabberConfig;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders {
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
-		public ChannelGrabberMarketplaceModelBuilder(CustomerMarketPlaceRepository customerMarketplaces) : base(customerMarketplaces) {
+        public ChannelGrabberMarketplaceModelBuilder(ISession session)
+            : base(session)
+        {
 		} // constructor
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
@@ -41,5 +46,19 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			return paymentAccountModel;
 		} // GetPaymetAccountModel
+
+	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+	    {
+	        if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
+	        {
+	            return null;
+	        }
+	        
+            var s = _session.Query<MP_ChannelGrabberOrderItem>()
+	            .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+	            .Where(oi => oi.PaymentDate != null)
+	            .Select(oi => oi.PaymentDate);
+	        return !s.Any() ? (DateTime?) null : s.Min();
+	    }
 	} // class ChannelGrabberMarketplaceBuilder
 } // namespace

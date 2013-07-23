@@ -16,10 +16,10 @@
         public string RaitingPercent { get; set; }
         public string SellerInfoStoreURL { get; set; }
         public IEnumerable<string> Categories { get; set; }
+        public string AccountAge { get; set; }
 
         //Amazon
         public double AmazonSelerRating { get; set; }
-        public string AccountAge { get; set; }
         public string AskvilleStatus { get; set; }
         public string AskvilleGuid { get; set; }
 

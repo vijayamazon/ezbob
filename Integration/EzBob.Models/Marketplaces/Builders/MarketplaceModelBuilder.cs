@@ -4,21 +4,20 @@ using System.Linq;
 using System.Web;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
+using NHibernate;
 
 namespace EzBob.Models
 {
-    class MarketplaceModelBuilder : IMarketplaceModelBuilder
+    public class MarketplaceModelBuilder : IMarketplaceModelBuilder
     {
+        protected readonly ISession _session;
 
-        private readonly CustomerMarketPlaceRepository _customerMarketplaces;
-
-        public MarketplaceModelBuilder(CustomerMarketPlaceRepository customerMarketplaces)
+        public MarketplaceModelBuilder(ISession session)
         {
-            _customerMarketplaces = customerMarketplaces;
+            _session = session;
         }
 
         public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
@@ -62,13 +61,18 @@ namespace EzBob.Models
             return model;
         }
 
-        private string GetAccountAge(MP_CustomerMarketPlace mp)
+        public string GetAccountAge(MP_CustomerMarketPlace mp)
         {
-            var accountAge = _customerMarketplaces.Seniority(mp.Id);
+            var accountAge = GetSeniority(mp);
 
             return accountAge != null
-                       ? Convert.ToString((DateTime.Now - accountAge).Value.TotalDays / 30)
+                       ? Convert.ToString(Math.Round((DateTime.Now - accountAge).Value.TotalDays / 30.0, 1))
                        : "-";
+        }
+
+        public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+        {
+            return null;
         }
 
         private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)

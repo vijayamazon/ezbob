@@ -7,6 +7,7 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.CommonLib.TimePeriodLogic;
+using EzBob.Web.Areas.Underwriter;
 using EzBob.Web.Code;
 using NHibernate;
 using StructureMap;
@@ -20,6 +21,7 @@ namespace EzBob.Models
         private readonly DecisionHistoryRepository _decisionHistory;
         private readonly ISession _session;
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
+        private MarketPlacesFacade _mpFacade;
 
         public StrategyHelper()
         {
@@ -27,6 +29,7 @@ namespace EzBob.Models
             _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
             _customers = ObjectFactory.GetInstance<CustomerRepository>();
             _caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
+            _mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
         }
 
         public double GetAnualTurnOverByCustomer(int customerId)
@@ -93,9 +96,7 @@ namespace EzBob.Models
 
         public int MarketplaceSeniority(int customerId)
         {
-            var seniority = _customers.MarketplacesSeniority(customerId);
-            var senDate = seniority != null ? seniority.Value.Date : DateTime.UtcNow;
-            return Convert.ToInt32((DateTime.UtcNow - senDate).TotalDays);
+            return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customerId)).TotalDays);
         }
 
         public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)

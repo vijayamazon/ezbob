@@ -17,7 +17,6 @@ class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
 
         pp = @get("PayPal")
         if pp
-            accountAge = pp.GeneralInfo.Seniority
             anualSales = pp.GeneralInfo.TotalNetInPayments
 
         age = if (accountAge isnt "-" and accountAge isnt 'undefined') then EzBob.SeniorityFormat(accountAge, 0) else "-"

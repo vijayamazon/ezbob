@@ -16,7 +16,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         Customer GetChecked(int id);
         Customer GetAndInitialize(int id);
 	    Customer TryGetByEmail(string sEmail);
-        DateTime? MarketplacesSeniority(int id, bool onlyForEluminationPassed = false);
     }
 
 	public class CustomerRepository : NHibernateRepositoryBase<Customer>, ICustomerRepository
@@ -73,37 +72,5 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
                                 .SingleOrDefault<Customer>();
 	        return customer;
 	    }
-
-        public DateTime? MarketplacesSeniority(int id, bool onlyForEluminationPassed = false)
-        {
-            var amazonAccountSeniority = _session.Query<MP_AmazonOrderItem2>()
-                .Where(oi => oi.Order.CustomerMarketPlace.Marketplace.Name == "Amazon")
-                .Where(oi => oi.Order.CustomerMarketPlace.Customer.Id == id)
-                .Where(oi => oi.PurchaseDate != null)
-                .Where(oi => !onlyForEluminationPassed || oi.Order.CustomerMarketPlace.EliminationPassed)
-                .OrderBy(oi => oi.PurchaseDate)
-                .Select(oi => oi.PurchaseDate)
-                .Take(1)
-                .ToFutureValue();
-
-            var ebayAccountSeniority = _session.Query<MP_EbayUserData>()
-                .Where(eud => eud.CustomerMarketPlace.Marketplace.Name == "eBay")
-                .Where(eud => eud.CustomerMarketPlace.Customer.Id == id)
-                .Where(eud => eud.RegistrationDate != null)
-                .Where(eud => !onlyForEluminationPassed || eud.CustomerMarketPlace.EliminationPassed)
-                .OrderBy(eud => eud.RegistrationDate)
-                .Select(eud => eud.RegistrationDate)
-                .Take(1)
-                .ToFutureValue();
-
-            if (amazonAccountSeniority.Value == null || ebayAccountSeniority.Value == null)
-            {
-                return ebayAccountSeniority.Value ?? amazonAccountSeniority.Value;
-            }
-            return new DateTime(Math.Min(
-                ((DateTime)amazonAccountSeniority.Value).Ticks,
-                ((DateTime)ebayAccountSeniority.Value).Ticks
-                ));
-        }
 	}
 }

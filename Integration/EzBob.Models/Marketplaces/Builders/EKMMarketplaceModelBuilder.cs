@@ -8,9 +8,10 @@ using NHibernate.Linq;
 
 namespace EzBob.Models
 {
-    class PayPointMarketplaceModelBuilder : MarketplaceModelBuilder
+    class EkmMarketplaceModelBuilder : MarketplaceModelBuilder
     {
-        public PayPointMarketplaceModelBuilder(ISession session) : base(session)
+        public EkmMarketplaceModelBuilder(ISession session)
+            : base(session)
         {
         }
 
@@ -21,11 +22,11 @@ namespace EzBob.Models
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {
-            var s = _session.Query<MP_PayPointOrderItem>()
+            var s = _session.Query<MP_EkmOrderItem>()
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
-                .Where(oi => oi.date != null)
-                .Select(oi => oi.date);
-            return !s.Any() ? (DateTime?)null : s.Min();
+                .Where(oi => oi.OrderDate != null)
+                .Select(oi => oi.OrderDate);
+            return s.Any() ? s.Min() : (DateTime?)null;
         }
     }
 }

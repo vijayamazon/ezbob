@@ -6,7 +6,6 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using ExperianLib;
-using EzBob.CommonLib;
 using EzBob.CommonLib.TimePeriodLogic;
 using EzBob.PayPal;
 using EzBob.Web.Areas.Customer.Models;
@@ -18,11 +17,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
     {
         private readonly CustomerRepository _customerRepository;
         private readonly IDecisionHistoryRepository _decisions;
+        private readonly MarketPlacesFacade _mpFacade;
 
-        public ProfileSummaryModelBuilder(CustomerRepository customerRepository, IDecisionHistoryRepository decisions)
+        public ProfileSummaryModelBuilder(CustomerRepository customerRepository, IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade)
         {
             _customerRepository = customerRepository;
             _decisions = decisions;
+            _mpFacade = mpFacade;
         }
 
 
@@ -33,7 +34,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             var summary = new ProfileSummaryModel();
 
             summary.Id = customer.Id;
-            var marketplacesSeniority = _customerRepository.MarketplacesSeniority(customer.Id, false);
+            
             var paypalInternalId = new PayPalDatabaseMarketPlace().InternalId;
             var marketplacesAll = customer.CustomerMarketPlaces
                 .Where(mp => mp.Marketplace.InternalId != paypalInternalId).ToList();
@@ -92,8 +93,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : 0);
             }
 
-            var minAccountAge = DateTime.Now - marketplacesSeniority;
-            var minAccountAgeTotalMonth = minAccountAge != null ? minAccountAge.Value.TotalDays / 30 : 0;
+            var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer.Id, false);
+            var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
+            var minAccountAgeTotalMonth = minAccountAge.TotalDays  / 30;
 
             totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
 

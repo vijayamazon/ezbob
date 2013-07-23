@@ -80,17 +80,6 @@ namespace EzBob.Models
                 if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
             }
 
-            var session = ObjectFactory.GetInstance<ISession>();
-			
-	        var payPalTransactions =
-		        session.Query<MP_PayPalTransaction>()
-		               .Where(t => t.CustomerMarketPlace.Id == m.Id)
-		               .SelectMany(x => x.TransactionItems);
-
-	        var transactionsMinDate = payPalTransactions.Any() ? payPalTransactions.Min(f => f.Created) : DateTime.UtcNow;
-
-            var seniority = DateTime.Now - transactionsMinDate;
-
             var status = m.GetUpdatingStatus();
 
             var payPalModel = new PaymentAccountsModel
@@ -100,11 +89,12 @@ namespace EzBob.Models
                 TotalNetOutPayments = tnop,
                 TransactionsNumber = tc,
                 id = m.Id,
-                Seniority = (seniority.Days / 30.0).ToString(CultureInfo.InvariantCulture),
                 Status = status
             };
             return payPalModel;
         }
+
+
 
 		private static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
 		{

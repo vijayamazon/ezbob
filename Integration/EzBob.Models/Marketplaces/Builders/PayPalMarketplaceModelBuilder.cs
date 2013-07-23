@@ -1,15 +1,17 @@
+using System;
 using System.Linq;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace EzBob.Models
 {
-    class PayPalMarketplaceModelBuilder : MarketplaceModelBuilder
+    public class PayPalMarketplaceModelBuilder : MarketplaceModelBuilder
     {
-        public PayPalMarketplaceModelBuilder(CustomerMarketPlaceRepository customerMarketplaces) : base(customerMarketplaces)
+        public PayPalMarketplaceModelBuilder(ISession session) : base(session)
         {
         }
 
@@ -26,6 +28,18 @@ namespace EzBob.Models
             if (mpEbayUserData == null || mpEbayUserData.SellerInfo == null) return url;
             if (string.IsNullOrEmpty(mpEbayUserData.SellerInfo.SellerInfoStoreURL)) return url;
             return mpEbayUserData.SellerInfo.SellerInfoStoreURL;
+        }
+
+        public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+        {
+            var payPalTransactions =
+                _session.Query<MP_PayPalTransaction>()
+                       .Where(t => t.CustomerMarketPlace.Id == mp.Id)
+                       .SelectMany(x => x.TransactionItems);
+
+            var transactionsMinDate = payPalTransactions.Any() ? payPalTransactions.Min(f => f.Created) : DateTime.UtcNow;
+
+            return transactionsMinDate;
         }
 
         protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)

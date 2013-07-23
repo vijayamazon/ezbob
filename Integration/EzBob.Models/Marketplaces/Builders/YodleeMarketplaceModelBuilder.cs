@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
+using NHibernate.Linq;
 using YodleeLib.connector;
 
 namespace EzBob.Models
@@ -15,13 +17,11 @@ namespace EzBob.Models
 	class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
     {
         private readonly MP_YodleeOrderRepository _yodleeOrderRepository;
-        private readonly ISession _session;
 
-        public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, CustomerMarketPlaceRepository customerMarketplaces, ISession session)
-            : base(customerMarketplaces)
+        public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, ISession session)
+            : base(session)
         {
             _yodleeOrderRepository = yodleeOrderRepository;
-            _session = session;
         }
 
         public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
@@ -101,5 +101,13 @@ namespace EzBob.Models
             return model;
         }
 
+	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+	    {
+            var s = _session.Query<MP_YodleeOrderItem>()
+                .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.accountOpenDate != null)
+                .Select(oi => oi.accountOpenDate);
+            return !s.Any() ? (DateTime?)null : s.Min();
+	    }
     }
 }

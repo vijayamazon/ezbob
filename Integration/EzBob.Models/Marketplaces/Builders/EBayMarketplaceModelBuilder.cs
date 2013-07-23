@@ -5,6 +5,8 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace EzBob.Models
 {
@@ -12,7 +14,7 @@ namespace EzBob.Models
     {
         private readonly EbayAmazonCategoryRepository _ebayAmazonCategoryRepository;
 
-        public EBayMarketplaceModelBuilder(EbayAmazonCategoryRepository ebayAmazonCategoryRepository, CustomerMarketPlaceRepository customerMarketplaces) : base(customerMarketplaces)
+        public EBayMarketplaceModelBuilder(EbayAmazonCategoryRepository ebayAmazonCategoryRepository, ISession session) : base(session)
         {
             _ebayAmazonCategoryRepository = ebayAmazonCategoryRepository;
         }
@@ -137,5 +139,13 @@ namespace EzBob.Models
             model.SellerInfoTopRatedSeller = ebayUserData.SellerInfo.SellerInfoTopRatedSeller.ToString();
         }
 
+        public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+        {
+            var s = _session.Query<MP_EbayUserData>()
+                .Where(eud => eud.CustomerMarketPlace.Id == mp.Id)
+                .Where(eud => eud.RegistrationDate != null)
+                .Select(eud => eud.RegistrationDate);
+            return !s.Any() ? (DateTime?)null : s.Min();
+        }
     }
 }

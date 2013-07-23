@@ -1,3 +1,7 @@
+using System;
+using NHibernate;
+using NHibernate.Linq;
+
 namespace EzBob.Models.Marketplaces.Builders
 {
 	using System.Collections.Generic;
@@ -7,24 +11,19 @@ namespace EzBob.Models.Marketplaces.Builders
 	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Scorto.NHibernate.Repository;
 	using Web.Areas.Customer.Models;
 	using Web.Areas.Underwriter.Models;
 
 	class SageMarketplaceModelBuilder : MarketplaceModelBuilder
     {
-		private readonly ICurrencyConvertor currencyConverter;
-		readonly Dictionary<int, string> invoiceStatuses = new Dictionary<int, string>();
+		readonly Dictionary<int, string> _invoiceStatuses = new Dictionary<int, string>();
 
-		public SageMarketplaceModelBuilder(MP_SagePaymentStatusRepository sagePaymentStatusRepository, CustomerMarketPlaceRepository customerMarketplaces, CurrencyRateRepository currencyRateRepository)
-            : base(customerMarketplaces)
+		public SageMarketplaceModelBuilder(MP_SagePaymentStatusRepository sagePaymentStatusRepository, ISession session)
+            : base(session)
         {
-			currencyConverter = new CurrencyConvertor(currencyRateRepository);
-
 			foreach (var status in sagePaymentStatusRepository.GetAll())
 			{
-				invoiceStatuses.Add(status.SageId, status.name);
+				_invoiceStatuses.Add(status.SageId, status.name);
 			}
         }
 
@@ -100,10 +99,62 @@ namespace EzBob.Models.Marketplaces.Builders
 				PurchaseInvoices = SagePurchaseInvoicesConverter.GetSagePurchaseInvoices(dbPurchaseInvoices),
 				Incomes = SageIncomesConverter.GetSageIncomes(dbIncomes),
 				Expenditures = SageExpendituresConverter.GetSageExpenditures(dbExpenditures),
-				InvoicesStatuses = invoiceStatuses
+				InvoicesStatuses = _invoiceStatuses
 			};
 
 			return model;
 		}
+
+	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+	    {
+            var salesInvoices = _session.Query<MP_SageSalesInvoice>()
+                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.date != null)
+                .Select(oi => oi.date);
+            var purchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
+                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.date != null)
+                .Select(oi => oi.date);
+            var incomes = _session.Query<MP_SageIncome>()
+                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.date != null)
+                .Select(oi => oi.date);
+            var expenditures = _session.Query<MP_SageExpenditure>()
+                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.date != null)
+                .Select(oi => oi.date);
+
+            DateTime? result = null;
+            if (salesInvoices.Any())
+            {
+                result = salesInvoices.Min();
+            }
+            if (purchaseInvoices.Any())
+            {
+                DateTime tmp = purchaseInvoices.Min();
+                if (result == null || result > tmp)
+                {
+                    result = tmp;
+                }
+            }
+            if (incomes.Any())
+            {
+                DateTime tmp = incomes.Min();
+                if (result == null || result > tmp)
+                {
+                    result = tmp;
+                }
+            }
+            if (expenditures.Any())
+            {
+                DateTime tmp = expenditures.Min();
+                if (result == null || result > tmp)
+                {
+                    result = tmp;
+                }
+            }
+
+            return result;
+	    }
     }
 }

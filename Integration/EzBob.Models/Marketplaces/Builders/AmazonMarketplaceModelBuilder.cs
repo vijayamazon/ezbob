@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
@@ -5,6 +6,8 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.AmazonServiceLib;
 using EzBob.Web.Areas.Underwriter.Models;
+using NHibernate;
+using NHibernate.Linq;
 using StructureMap;
 
 namespace EzBob.Models
@@ -13,7 +16,7 @@ namespace EzBob.Models
     {
         private readonly EbayAmazonCategoryRepository _ebayAmazonCategoryRepository;
 
-        public AmazonMarketplaceModelBuilder(EbayAmazonCategoryRepository ebayAmazonCategoryRepository, CustomerMarketPlaceRepository customerMarketplaces) : base(customerMarketplaces)
+        public AmazonMarketplaceModelBuilder(EbayAmazonCategoryRepository ebayAmazonCategoryRepository, ISession session): base(session)
         {
             _ebayAmazonCategoryRepository = ebayAmazonCategoryRepository;
         }
@@ -63,6 +66,15 @@ namespace EzBob.Models
             model.AskvilleGuid = askvilleTmp != null ? askvilleTmp.Guid : "";
 
             model.Categories = _ebayAmazonCategoryRepository.GetAmazonCategories(mp);
+        }
+
+        public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+        {
+            var s = _session.Query<MP_AmazonOrderItem2>()
+                                           .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+                                           .Where(oi => oi.PurchaseDate != null)
+                                           .Select(oi => oi.PurchaseDate);
+            return !s.Any() ? (DateTime?)null : s.Min();
         }
     }
 }

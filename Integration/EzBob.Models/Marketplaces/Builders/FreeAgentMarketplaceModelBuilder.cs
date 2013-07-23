@@ -1,3 +1,7 @@
+using System;
+using NHibernate;
+using NHibernate.Linq;
+
 namespace EzBob.Models.Marketplaces.Builders
 {
 	using System.Collections.Generic;
@@ -7,21 +11,20 @@ namespace EzBob.Models.Marketplaces.Builders
 	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Scorto.NHibernate.Repository;
 	using Web.Areas.Customer.Models;
 	using Web.Areas.Underwriter.Models;
 
 	class FreeAgentMarketplaceModelBuilder : MarketplaceModelBuilder
     {
-		private readonly Dictionary<string, FreeAgentExpenseCategory> expenseCategories = new Dictionary<string, FreeAgentExpenseCategory>();
+		private readonly Dictionary<string, FreeAgentExpenseCategory> _expenseCategories = new Dictionary<string, FreeAgentExpenseCategory>();
 
-		private readonly ICurrencyConvertor currencyConverter;
+		private readonly ICurrencyConvertor _currencyConverter;
 
-		public FreeAgentMarketplaceModelBuilder(MP_FreeAgentExpenseCategoryRepository freeAgentExpenseCategoryRepository, CustomerMarketPlaceRepository customerMarketplaces, CurrencyRateRepository currencyRateRepository)
-            : base(customerMarketplaces)
+		public FreeAgentMarketplaceModelBuilder(MP_FreeAgentExpenseCategoryRepository freeAgentExpenseCategoryRepository, CurrencyRateRepository currencyRateRepository, ISession session)
+            : base(session)
         {
-			currencyConverter = new CurrencyConvertor(currencyRateRepository);
+			_currencyConverter = new CurrencyConvertor(currencyRateRepository);
 
 			foreach (MP_FreeAgentExpenseCategory dbCategory in freeAgentExpenseCategoryRepository.GetAll())
 			{
@@ -37,7 +40,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						auto_sales_tax_rate = dbCategory.auto_sales_tax_rate
 					};
 
-				expenseCategories.Add(category.url, category);
+				_expenseCategories.Add(category.url, category);
 			}
         }
 
@@ -99,7 +102,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						category = o.category,
 						dated_on = o.dated_on,
 						currency = o.currency,
-						gross_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value,
+						gross_value = (decimal)_currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.gross_value, o.dated_on).Value,
 						native_gross_value = o.native_gross_value,
 						sales_tax_rate = o.sales_tax_rate,
 						sales_tax_value = o.sales_tax_value,
@@ -117,7 +120,7 @@ namespace EzBob.Models.Marketplaces.Builders
 							file_size = o.attachment_file_size,
 							description = o.attachment_description
 						},
-						categoryItem = expenseCategories.ContainsKey(o.category) ? expenseCategories[o.category] :
+						categoryItem = _expenseCategories.ContainsKey(o.category) ? _expenseCategories[o.category] :
 							new FreeAgentExpenseCategory
 							{
 								allowable_for_tax = false,
@@ -139,9 +142,9 @@ namespace EzBob.Models.Marketplaces.Builders
 						reference = o.reference,
 						currency = o.currency,
 						exchange_rate = o.exchange_rate,
-						net_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value,
-						total_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.total_value, o.dated_on).Value,
-						paid_value = (decimal)currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.paid_value, o.dated_on).Value,
+						net_value = (decimal)_currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value,
+						total_value = (decimal)_currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.total_value, o.dated_on).Value,
+						paid_value = (decimal)_currencyConverter.ConvertToBaseCurrency(o.currency, (double)o.paid_value, o.dated_on).Value,
 						due_value = o.due_value,
 						status = o.status,
 						omit_header = o.omit_header,
@@ -152,5 +155,30 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			return model;
 		}
+
+	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+	    {
+            var invoices = _session.Query<MP_FreeAgentInvoice>()
+                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                .Where(oi => oi.dated_on != null)
+                .Select(oi => oi.dated_on);
+
+            var expenses = _session.Query<MP_FreeAgentInvoice>()
+                 .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+                 .Where(oi => oi.dated_on != null)
+                 .Select(oi => oi.dated_on);
+
+            DateTime? earliest = null;
+            if (invoices.Any())
+            {
+                earliest = invoices.Min();
+            }
+            if (expenses.Any() && expenses.Min() < earliest)
+            {
+                earliest = expenses.Min();
+            }
+
+            return earliest;
+	    }
     }
 }

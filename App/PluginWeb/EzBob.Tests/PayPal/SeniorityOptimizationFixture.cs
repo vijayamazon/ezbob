@@ -35,10 +35,11 @@ namespace EzBob.Tests.PayPal
             //get big paypal shop
             var mp = _session.Get<MP_CustomerMarketPlace>(1912);
             //just create model to see the speed
+            var builder = ObjectFactory.GetInstance<PayPalMarketplaceModelBuilder>();
             Measure(() =>
                 {
-                    var model = PayPalModelBuilder.CreatePayPalAccountModelModel(mp);
-                    Assert.That(model.Seniority, Is.EqualTo("12.2"));
+                    var seniority = builder.GetAccountAge(mp);
+                    Assert.That(seniority, Is.EqualTo("12.2"));
                 });
 
         }
