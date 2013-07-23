@@ -74,35 +74,37 @@ namespace WorkflowObjects
             {
                 var variables = (iworkflow.VariableConnectionDescriptors.Where(
                     vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
-                    .ToLookup(k => k.SourceVariableName, k => _ec[k.SourceVariableName].ToString())
+                    .ToLookup(k => k.SourceVariableName, k => Convert.ToString(_ec[k.SourceVariableName]))
                     .Distinct()
                     .ToDictionary(k => k.Key, v => v.First());
 
                 NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key == "Subject").Value ?? "Default Subject";
-                NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "email" || x.Key == "AddressTo").Value;
-                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "emailCC" || x.Key == "CP_AddressCC").Value;
+                NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" ||x.Key == "email" ).Value;
+                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key == "emailCC").Value;
 
                 var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
-                var retVal = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
+                var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
                 var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
-                if (retVal == null || renderedHtml == null)
+
+                if (sendStatus == null || renderedHtml == null)
                 {
-                    return null;
+                    return "Next";
                 }
+
                 //save mandrill rendered template into DB export result
                 var exportResult = new ExportResult
                     {
                         ApplicationID = iworkflow.ApplicationId,
                         CreationDate = DateTime.UtcNow,
-                        FileName =
-                            string.Format("{0}({1}).docx", NodeMailParams.Subject,
-                                          DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)),
+                        FileName = string.Format("{0}({1}).docx", 
+                        NodeMailParams.Subject,
+                        DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)),
                         FileType = 0,
                         BinaryBody = HtmlToDocxBinnary(renderedHtml),
                         NodeName = iworkflow.CurrentNodeName
                     };
                 AddExportresult(exportResult);
-                return retVal;
+                return "Next";
             }
             return base.Execute(iworkflow);
         }
