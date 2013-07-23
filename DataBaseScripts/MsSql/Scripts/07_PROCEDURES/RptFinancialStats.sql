@@ -14,6 +14,17 @@ BEGIN
 	DECLARE @TotalRepaidPrincipal NUMERIC(18, 2)
 	DECLARE @InterestReceived NUMERIC(18, 2)
 
+	DECLARE @PACNET NVARCHAR(32)
+	DECLARE @PAYPOINT NVARCHAR(32)
+	DECLARE @DONE NVARCHAR(4)
+
+	SELECT
+		@DateStart = CONVERT(DATE, @DateStart),
+		@DateEnd = CONVERT(DATE, @DateEnd),
+		@PACNET = 'PacnetTransaction',
+		@PAYPOINT = 'PaypointTransaction',
+		@DONE = 'Done'
+
 			
 	CREATE TABLE #output (
 		Caption NVARCHAR(128),
@@ -23,30 +34,26 @@ BEGIN
 
 			
 	SELECT
-		@TotalGivenLoanValue = ISNULL(SUM(t.Amount), 0)
+		@TotalGivenLoanValue = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.Type = 'PacnetTransaction'
+		t.Type = @PACNET AND t.Status = @DONE
 		AND
-		t.Status = 'Done'
-		AND
-		t.PostDate <= @DateStart
+		t.PostDate < @DateStart
 
 	SELECT
-		@TotalRepaidPrincipal = ISNULL(SUM(t.LoanRepayment), 0)
+		@TotalRepaidPrincipal = ISNULL( SUM(ISNULL(t.LoanRepayment, 0)), 0 )
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.Type = 'PaypointTransaction'
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
-		t.Status = 'Done'
-		AND
-		t.PostDate <= @DateStart
+		t.PostDate < @DateStart
 
 	INSERT INTO #output
 	SELECT
@@ -62,18 +69,21 @@ BEGIN
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
+		@DateStart <= l.Date AND l.Date < @DateEnd
 	
 				
 	INSERT INTO #output
 	SELECT
 		'Loans Issued Value',
-		ISNULL(SUM(l.LoanAmount), 0)
+		ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 	FROM
-		Loan l
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
+		t.Type = @PACNET AND t.Status = @DONE
+		AND
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 	
 				
 	INSERT INTO #output
@@ -85,11 +95,9 @@ BEGIN
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.PostDate BETWEEN @DateStart AND @DateEnd
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
-		t.Type = 'PaypointTransaction'
-		AND
-		t.Status = 'Done'
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 	
 				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
@@ -108,11 +116,9 @@ BEGIN
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('PaidEarly', 'StillToPay')
 		WHERE
-			t.PostDate BETWEEN @DateStart AND @DateEnd
+			t.Type = @PAYPOINT AND t.Status = @DONE
 			AND
-			t.Type = 'PaypointTransaction'
-			AND
-			t.Status = 'Done'
+			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
@@ -131,11 +137,9 @@ BEGIN
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('PaidOnTime')
 		WHERE
-			t.PostDate BETWEEN @DateStart AND @DateEnd
+			t.Type = @PAYPOINT AND t.Status = @DONE
 			AND
-			t.Type = 'PaypointTransaction'
-			AND
-			t.Status = 'Done'
+			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 	
 				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
@@ -154,11 +158,9 @@ BEGIN
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('Paid', 'Late')
 		WHERE
-			t.PostDate BETWEEN @DateStart AND @DateEnd
+			t.Type = @PAYPOINT AND t.Status = @DONE
 			AND
-			t.Type = 'PaypointTransaction'
-			AND
-			t.Status = 'Done'
+			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 				
 	INSERT INTO #output
@@ -190,11 +192,9 @@ BEGIN
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.PostDate BETWEEN @DateStart AND @DateEnd
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
-		t.Type = 'PaypointTransaction'
-		AND
-		t.Status = 'Done'
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 	INSERT INTO #output
 	SELECT
@@ -221,11 +221,9 @@ BEGIN
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.PostDate BETWEEN @DateStart AND @DateEnd
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
-		t.Type = 'PaypointTransaction'
-		AND
-		t.Status = 'Done'
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 	
 				
 	INSERT INTO #output
@@ -260,30 +258,26 @@ BEGIN
 	
 				
 	SELECT
-		@TotalGivenLoanValue = ISNULL(SUM(t.Amount), 0)
+		@TotalGivenLoanValue = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.Type = 'PacnetTransaction'
+		t.Type = @PACNET AND t.Status = @DONE
 		AND
-		t.Status = 'Done'
-		AND
-		t.PostDate <= @DateEnd
+		t.PostDate < @DateEnd
 
 	SELECT
-		@TotalRepaidPrincipal = ISNULL(SUM(t.LoanRepayment), 0)
+		@TotalRepaidPrincipal = ISNULL( SUM(ISNULL(t.LoanRepayment, 0)), 0 )
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.Type = 'PaypointTransaction'
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
-		t.Status = 'Done'
-		AND
-		t.PostDate <= @DateEnd
+		t.PostDate < @DateEnd
 
 	INSERT INTO #output
 	SELECT
