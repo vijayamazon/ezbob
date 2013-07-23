@@ -5,148 +5,156 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE RptSourceRef 
-	@DateStart    DATETIME,
-	@DateEnd      DATETIME
+CREATE PROCEDURE RptSourceRef
+@DateStart DATETIME,
+@DateEnd   DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON
+	
+	CREATE TABLE #out (
+		TypeID INT NOT NULL,
+		CustomerID INT NOT NULL,
+		CashRequestID INT NULL,
+		LoanID INT NULL,
+		Status NVARCHAR(3),
+		LoanCount INT NULL,
+		MarketPlaces NVARCHAR(4000) NOT NULL DEFAULT ''
+	)
 
-	if OBJECT_ID('tempdb..#temp1') is not NULL 
-	BEGIN
-		DROP TABLE #temp1
-	END
+					
+	INSERT INTO #out (TypeID, CustomerID, Status, LoanCount)
+	SELECT
+		1,
+		C.Id,
+		'New',
+		0
+	FROM
+		Customer C
+	WHERE
+		C.IsTest = 0
+		AND
+		@DateStart <= C.GreetingMailSentDate AND C.GreetingMailSentDate < @DateEnd
 
-	---- SignUp ----
-	CREATE TABLE #temp1
-	(	
-		Type NVARCHAR(50),
-		CustomerId INT, 
-		EmailAddress NVARCHAR(128), 
-		SignUpDate DATETIME, 
-		FullName NVARCHAR(250), 
-		SourceRef NVARCHAR(200), 
-		WizardStep INT,
-		LatestRequestDate DATETIME,
-		UnderwriterDecision NVARCHAR(50),
-		ApprovedSum DECIMAL(18,0),
-		AmountIssued NUMERIC(18,0),
-		InterestRate DECIMAL(18,4),
-		LoanDate DATETIME
-	 )
+					
+	INSERT INTO #out (TypeID, CustomerId, CashRequestID)
+	SELECT
+		2,
+		R.IdCustomer,
+		R.Id
+	FROM 
+		CashRequests R
+		INNER JOIN Customer C ON C.Id = R.IdCustomer AND C.IsTest = 0
+	WHERE
+		@DateStart <= R.CreationDate AND R.CreationDate < @DateEnd
 
-	INSERT INTO #temp1 (Type,
-		CustomerId, 
-		EmailAddress, 
-		SignUpDate, 
-		FullName, 
-		SourceRef, 
-		WizardStep)
-		
-	SELECT 'Register',C.Id,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep
-	FROM Customer C
-	WHERE 	C.Name NOT LIKE '%test%'
-		AND C.Name NOT LIKE '%@ezbob%'
-		AND C.Name NOT LIKE '%q@q%'
-		AND C.Name NOT LIKE '%w@w%'
-		AND C.IsTest=0
-		AND C.GreetingMailSentDate >= @DateStart
-		AND C.GreetingMailSentDate < @DateEnd
-	ORDER BY 1
+					
+	INSERT INTO #out (TypeID, CustomerId, CashRequestID)
+	SELECT
+		3,
+		R.IdCustomer,
+		R.Id
+	FROM 
+		CashRequests R
+		INNER JOIN Customer C ON C.Id = R.IdCustomer AND C.IsTest = 0
+	WHERE
+		@DateStart <= R.UnderwriterDecisionDate AND R.UnderwriterDecisionDate < @DateEnd
+		AND
+		R.UnderwriterDecision = 'Approved'
 
-	---- Cash Request ----
-	INSERT INTO #temp1 (Type,
-		CustomerId, 
-		EmailAddress, 
-		SignUpDate, 
-		FullName, 
-		SourceRef, 
-		WizardStep,
-		LatestRequestDate,
-		UnderwriterDecision,
-		ApprovedSum
-		)	
-		
-	SELECT 	'Applied',R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,max(R.CreationDate),
-		R.UnderwriterDecision,R.ManagerApprovedSum
-	FROM CashRequests R
-	JOIN Customer C ON C.Id = R.IdCustomer
-	WHERE 	C.Name NOT LIKE '%test%'
-		AND C.Name NOT LIKE '%@ezbob%'
-		AND C.Name NOT LIKE '%q@q%'
-		AND C.Name NOT LIKE '%w@w%'
-		AND C.IsTest=0
-		AND R.CreationDate >= @DateStart
-		AND R.CreationDate < @DateEnd
-	GROUP BY R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,R.UnderwriterDecision,R.ManagerApprovedSum
-	ORDER BY 1
-
-
-	---- Approved ----
-	INSERT INTO #temp1 (Type,
-		CustomerId, 
-		EmailAddress, 
-		SignUpDate, 
-		FullName, 
-		SourceRef, 
-		WizardStep,
-		LatestRequestDate,
-		UnderwriterDecision,
-		ApprovedSum,
-		InterestRate					
-		)	
-		
-	SELECT 'Approved',R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,max(R.CreationDate),
-			R.UnderwriterDecision,R.ManagerApprovedSum,R.InterestRate
-	FROM CashRequests R
-	JOIN Customer C ON C.Id = R.IdCustomer
-	WHERE 	C.Name NOT LIKE '%test%'
-		AND C.Name NOT LIKE '%@ezbob%'
-		AND C.Name NOT LIKE '%q@q%'
-		AND C.Name NOT LIKE '%w@w%'
-		AND C.IsTest=0
-		AND R.UnderwriterDecision = 'approved'
-		AND R.CreationDate >= @DateStart
-		AND R.CreationDate < @DateEnd	
-	GROUP BY R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,
-		R.UnderwriterDecision,R.ManagerApprovedSum,R.InterestRate
-	ORDER BY 1
-
-	----  Took Loans -----
-	INSERT INTO #temp1 (Type,
-		CustomerId, 
-		EmailAddress, 
-		SignUpDate, 
-		FullName, 
-		SourceRef, 
-		WizardStep,
-		LatestRequestDate,
-		UnderwriterDecision,
-		ApprovedSum,
-		InterestRate,
-		LoanDate,
-		AmountIssued
-		)	
-	SELECT 'TookLoan',R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,max(R.CreationDate),
-		R.UnderwriterDecision,R.ManagerApprovedSum,R.InterestRate,L.[Date],L.LoanAmount
-	FROM Customer C
-	JOIN Loan L ON L.CustomerId = C.Id
-	JOIN CashRequests R ON L.RequestCashId = R.Id
+					
+	INSERT INTO #out (TypeID, CustomerId, LoanID)
+	SELECT
+		4,
+		L.CustomerId,
+		L.Id
+	FROM
+		Loan L
+		INNER JOIN Customer C ON L.CustomerId = C.Id AND C.IsTest = 0
 	WHERE 
-		C.Name NOT LIKE '%test%'
-		AND C.Name NOT LIKE '%@ezbob%'
-		AND C.Name NOT LIKE '%q@q%'
-		AND C.Name NOT LIKE '%w@w%'
-		AND C.IsTest=0	
-		AND L.[Date] >= @DateStart
-		AND L.[Date] < @DateEnd
-	GROUP BY R.IdCustomer,C.Name,C.GreetingMailSentDate,C.Fullname,C.ReferenceSource,C.WizardStep,
-		R.UnderwriterDecision,R.ManagerApprovedSum,R.InterestRate,L.[Date],L.LoanAmount
-	ORDER BY 5
+		@DateStart <= L.[Date] AND L.[Date] < @DateEnd
 
-	SELECT * FROM #temp1
+					
+	UPDATE #out SET
+		CashRequestID = (
+			SELECT
+				MAX(R.Id)
+			FROM
+				CashRequests R
+				INNER JOIN Loan L
+					ON R.IdCustomer = L.CustomerId
+					AND R.UnderwriterDecisionDate <= L.Date
+			WHERE
+				#out.CustomerID = R.IdCustomer
+		)
+	WHERE
+		LoanID IS NOT NULL
+
+					
+	UPDATE #out SET
+		Status = (CASE
+			WHEN EXISTS (
+				SELECT
+					Id
+				FROM
+					CashRequests R
+				WHERE
+					R.IdCustomer = #out.CustomerID
+					AND
+					R.Id < #out.CashRequestID
+			) THEN 'Old'
+			ELSE 'New'
+		END)
+	WHERE
+		CashRequestID IS NOT NULL
+
+					
+	UPDATE #out SET
+		LoanCount = ISNULL((
+			SELECT COUNT (*)
+			FROM Loan L
+			WHERE L.CustomerId = #out.CustomerID
+		), 0)
+	WHERE
+		CashRequestID IS NOT NULL
+
+					
+	UPDATE #out SET
+		MarketPlaces = dbo.udfCustomerMarketPlaces(CustomerID)
+
+					
+	SELECT
+		(CASE o.TypeID
+			WHEN 1 THEN '1: Registered'
+			WHEN 2 THEN '2: Applied'
+			WHEN 3 THEN '3: Approved'
+			WHEN 4 THEN '4: Issued'
+		END) AS Type,
+		o.CustomerID,
+		c.GreetingMailSentDate,
+		c.ReferenceSource,
+		c.WizardStep,
+		r.CreationDate,
+		r.UnderwriterDecision,
+		r.ManagerApprovedSum,
+		l.LoanAmount,
+		o.Status,
+		o.LoanCount,
+		o.MarketPlaces,
+		r.InterestRate,
+		l.Date AS LoanDate,
+		c.FullName,
+		c.Name AS Email
+	FROM
+		#out o
+		INNER JOIN Customer c ON o.CustomerID = c.Id
+		LEFT JOIN CashRequests r ON o.CashRequestID = r.Id
+		LEFT JOIN Loan l ON o.LoanID = l.Id
+	ORDER BY
+		o.TypeID
+
+	DROP TABLE #out
 
 	SET NOCOUNT OFF
-
 END
 GO

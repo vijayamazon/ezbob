@@ -7,8 +7,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[YodleeAccounts](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[CustomerId] [int] NOT NULL,
-	[BankId] [int] NOT NULL,
+	[CustomerId] [int] NULL,
+	[BankId] [int] NULL,
 	[Username] [nvarchar](300) NULL,
 	[Password] [nvarchar](300) NULL,
 	[CreationDate] [datetime] NULL,

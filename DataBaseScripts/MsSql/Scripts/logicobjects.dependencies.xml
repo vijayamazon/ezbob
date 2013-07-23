@@ -3391,6 +3391,12 @@
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
+    <oName>udfCustomerMarketPlaces</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\udfCustomerMarketPlaces.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetExpensesPayPalTransactionsByPayer</oName>
     <oRank>2</oRank>
     <oFileName>08_FUNCTIONS\Rank_2\GetExpensesPayPalTransactionsByPayer.sql</oFileName>
