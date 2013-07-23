@@ -647,6 +647,7 @@
                                             <tr>
                                                 <th>Start Date</th>
                                                 <th>Account</th>
+                                                <th>Match To</th>
                                                 <th>Term &amp; Frequency</th>
                                                 <th>Limit</th>
                                                 <th>Balance</th>
@@ -655,7 +656,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.TermAndfreq %>",
+                                            @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
                                                      "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
                                         </tbody>    
                                     </table>
@@ -892,6 +893,7 @@
                                     <tr>
                                         <th>Start Date</th>
                                         <th>Account</th>
+                                        <th>Match To</th>
                                         <th>Term &amp; Frequency</th>
                                         <th>Limit</th>
                                         <th>Balance</th>
@@ -902,7 +904,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.TermAndfreq %>",
+                                    @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>","<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
                                              "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.AccountStatus %>", "<%- ai.SettlementDate %>",
                                              "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
                                 </tbody>    

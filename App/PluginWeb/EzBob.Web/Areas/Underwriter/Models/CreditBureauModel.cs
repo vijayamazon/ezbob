@@ -114,6 +114,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public AccountDisplayedQuarter[] Quarters { get; set; } // done
         public string[] MonthsDisplayed { get; set; } // done
         public AccountStatus[] LatestStatuses { get; set; } // colors
+        public string MatchTo { get; set; }
     }
 
     public class AccountDisplayedYear
@@ -201,5 +202,35 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string RiskLevel { get; set; }
         public string Existingbusinessloans { get; set; }
         public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
+    }
+
+    // ReSharper disable  InconsistentNaming
+    public enum MatchTo
+    {
+        FinancialAccounts_AliasOfJointApplicant = 6,
+        FinancialAccounts_AliasOfMainApplicant = 2,
+        FinancialAccounts_AssociationOfJointApplicant = 7,
+        FinancialAccounts_AssociationOfMainApplicant = 3,
+        FinancialAccounts_JointApplicant = 5,
+        FinancialAccounts_MainApplicant = 1,
+        FinancialAccounts_No_Match = 9
+    }
+
+    public class Helper
+    {
+        public static string MathToToHumanView(MatchTo input)
+        {
+            switch (input)
+            {
+                case MatchTo.FinancialAccounts_AliasOfJointApplicant: return "Alias Of Joint Applicant";
+                case MatchTo.FinancialAccounts_AliasOfMainApplicant: return "Alias Of Main Applicant";
+                case MatchTo.FinancialAccounts_AssociationOfJointApplicant: return "Association Of Joint Applicant";
+                case MatchTo.FinancialAccounts_AssociationOfMainApplicant: return "Association Of Main Applicant";
+                case MatchTo.FinancialAccounts_JointApplicant: return "Joint Applicant";
+                case MatchTo.FinancialAccounts_MainApplicant: return "Main Applicant";
+                case MatchTo.FinancialAccounts_No_Match: return "No Match";
+                default: return "-";
+            }
+        }
     }
 }

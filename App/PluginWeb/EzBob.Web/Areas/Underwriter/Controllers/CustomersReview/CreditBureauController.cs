@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
+﻿using EZBob.DatabaseLib.Model;
+
+namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 {
 	using System;
 	using System.Collections.Generic;
@@ -28,15 +30,17 @@
         private readonly IApplicationRepository _applications;
         private readonly IEzBobConfiguration _config;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
+        private readonly ConfigurationVariablesRepository _variablesRepository;
 
         public CreditBureauController(CustomerRepository customers, IAppCreator creator,
-                                        IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config)
+                                        IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config, ConfigurationVariablesRepository variablesRepository)
         {
             _customers = customers;
             _creator = creator;
             _users = users;
             _applications = applications;
             _config = config;
+            _variablesRepository = variablesRepository;
             _concentAgreementHelper = new ConcentAgreementHelper();
         }
 
@@ -510,6 +514,17 @@
                         foreach (var caisDetails in caisData.CAISDetails)
                         {
                             var accountInfo = new AccountInfo();
+
+                            //check which acccount type show
+                            MatchTo matchTo;
+                            Enum.TryParse(caisDetails.MatchDetails.MatchTo, out matchTo);
+                            var isShowThisFinancinalAccount = _variablesRepository.GetByName(matchTo.ToString()).Value;
+                            if (isShowThisFinancinalAccount == null || isShowThisFinancinalAccount == "0")
+                            {
+                                continue;
+                            }
+                            accountInfo.MatchTo = Helper.MathToToHumanView(matchTo);
+
                             DateTime? openDate;
                             try
                             {

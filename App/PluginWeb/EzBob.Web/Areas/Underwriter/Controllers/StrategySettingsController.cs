@@ -238,5 +238,54 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             return AutomationRejection();
         }
+
+        [Ajax]
+        [HttpGet]
+        public JsonNetResult SettingsExperian()
+        {
+            var mainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_MainApplicant").Value;
+            var aliasOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfMainApplicant").Value;
+            var associationOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfMainApplicant").Value;
+            var jointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_JointApplicant").Value;
+            var aliasOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfJointApplicant").Value;
+            var associationOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfJointApplicant").Value;
+            var noMatch = _configurationVariablesRepository.GetByName("FinancialAccounts_No_Match").Value;
+
+            var model = new
+            {
+                FinancialAccounts_MainApplicant = mainApplicant,
+                FinancialAccounts_AliasOfMainApplicant = aliasOfMainApplicant,
+                FinancialAccounts_AssociationOfMainApplicant = associationOfMainApplicant,
+                FinancialAccounts_JointApplicant = jointApplicant,
+                FinancialAccounts_AliasOfJointApplicant = aliasOfJointApplicant,
+                FinancialAccounts_AssociationOfJointApplicant = associationOfJointApplicant,
+                FinancialAccounts_No_Match = noMatch
+            };
+            return this.JsonNet(model);
+        }
+
+        // ReSharper disable  InconsistentNaming
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonNetResult SettingsExperian(
+
+            string FinancialAccounts_MainApplicant,
+            string FinancialAccounts_AliasOfMainApplicant,
+            string FinancialAccounts_AssociationOfMainApplicant,
+            string FinancialAccounts_JointApplicant,
+            string FinancialAccounts_AliasOfJointApplicant,
+            string FinancialAccounts_AssociationOfJointApplicant,
+            string FinancialAccounts_No_Match)
+        {
+            _configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant", FinancialAccounts_AliasOfMainApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant", FinancialAccounts_AssociationOfMainApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant", FinancialAccounts_AliasOfJointApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant", FinancialAccounts_AssociationOfJointApplicant);
+            _configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+            return SettingsGeneral();
+        }
     }
 }
