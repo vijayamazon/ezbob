@@ -44,9 +44,9 @@ class EzBob.Underwriter.Settings.ExperianView extends Backbone.Marionette.ItemVi
 
     onRender: -> 
         @modelBinder.bind @model, @el, @bindings
-        #if !$("body").hasClass("role-manager") 
-         #   @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
-          #  @$el.find("button").hide()
+        if !$("body").hasClass("role-manager") 
+            @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
+            @$el.find("button").hide()
 
     show: (type) ->
         this.$el.show()
