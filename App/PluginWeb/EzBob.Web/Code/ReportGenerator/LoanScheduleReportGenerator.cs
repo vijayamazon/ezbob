@@ -119,10 +119,9 @@ namespace EzBob.Web.Code.ReportGenerator
             worksheet.Cells.SetColumnWidth(column -1, 1);
             worksheet.Cells.SetColumnWidth(column, 6);
             worksheet.Cells.SetColumnWidth(column + 1, 16);
-            for (var item = 3; item < (9 + Convert.ToInt16(isExcell)); ++item)
+            for (var item = 3; item < 10; ++item)
             {
                 worksheet.AutoFitColumn(item);
-                worksheet.AutoFitRow(item);
             }
 
             return ConvertFormat(_workbook, isExcell ? FileFormatType.Excel2003 : FileFormatType.Pdf);
@@ -130,6 +129,11 @@ namespace EzBob.Web.Code.ReportGenerator
 
         public static byte[] ConvertFormat(Workbook workbook, FileFormatType format)
         {
+            if (format == FileFormatType.Pdf)
+            {
+                workbook.Worksheets[0].PageSetup.Orientation = PageOrientationType.Landscape;
+            }
+            
             using (var streamForDoc = new MemoryStream())
             {
                 try
