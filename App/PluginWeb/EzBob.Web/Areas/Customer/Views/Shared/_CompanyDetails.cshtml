@@ -383,9 +383,9 @@
 				<div class="controls">
 					<label class="control-label attardi-input">
 						<span>Middle Initial</span>
-						<input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+						<input class="form_field director_name_part nonrequired" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
 					</label>
-					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
+					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status"  />
 				</div>
 			</div>
 
@@ -405,7 +405,7 @@
 				    <input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
 				    <input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
                 </span>
-                <img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image"/>
+                <img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image" />
 			</div>
 
 			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
@@ -413,19 +413,16 @@
 			<div class="director_address">
 			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
 			</div>
+            
+            <input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].MiddleImage" value="<%- director.MiddleStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
 		</div>
 	<%
 	})
 	%>
-</script>
-
-<script id="director-hidden-template" type="text/template">
-	<%_.each(directors, function(director, i){%>
-		<input type="hidden" name="<%-preffix%>[<%=i%>].Name" value="<%- director.Name %>"/>
-		<input type="hidden" name="<%-preffix%>[<%=i%>].Middle" value="<%- director.Middle %>"/>
-		<input type="hidden" name="<%-preffix%>[<%=i%>].Surname" value="<%- director.Surname %>"/>
-		<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirth" value="<%- director.DateOfBirth %>"/>
-	<%});%>
 </script>
 
 <script id="lastWizardThankYouPage" type="text/template">

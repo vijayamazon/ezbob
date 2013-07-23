@@ -8,10 +8,17 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         this.companyAddressValidator = false;
         this.events = _.extend({}, this.events, {
             'change input': 'inputChanged',
-            'keyup input': 'inputChanged'
+            'keyup input': 'inputChanged',
+            'focusout input': 'inputChanged'
         });
     },
-    inputChanged: function() {
+    inputChanged: function () {
+        var el = event ? $(event.currentTarget) : null;
+        if (el && el.hasClass('nonrequired') && el.val() == '') {
+            var img = el.closest('div').find('.field_status');
+            img.field_status('set', 'empty', 2);
+        }
+
         var enabled = EzBob.Validation.checkForm(this.validator) && this.companyAddressValidator && this.directorsView.validateAddresses();
         $('.continue').toggleClass('disabled', !enabled);
     },
@@ -29,7 +36,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('NonLimitedCompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
         this.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
 
-        this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", hidden: this.$el.find('.directorsData') });
+        this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", hidden: this.$el.find('.directorsData'), validator: this.validator });
         this.directorsView.on("director:change", this.inputChanged, this);
         this.directorsView.on("director:addressChanged", this.inputChanged, this);
         this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
