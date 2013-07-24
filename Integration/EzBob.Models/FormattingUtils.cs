@@ -55,6 +55,10 @@ namespace EzBob.Web.Code
             return string.Format("{0:N2}", value);
         }
 
+		public static string FormatNoDecimals(decimal value)
+		{
+			return string.Format("{0:N0}", value);
+		}
 
         public static string NumericFormats(decimal numeric)
         {

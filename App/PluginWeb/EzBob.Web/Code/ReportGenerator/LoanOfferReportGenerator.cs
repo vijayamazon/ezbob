@@ -36,8 +36,8 @@ namespace EzBob.Web.Code.ReportGenerator
                 row++;
                 i++;
                 worksheet.Cells[row, column].PutValue(item.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-                worksheet.Cells[row, column + 1].PutValue("£ " + item.LoanRepayment);
-                worksheet.Cells[row, column + 2].PutValue("£ " + item.Interest);
+                worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatNoDecimals(item.LoanRepayment));
+                worksheet.Cells[row, column + 2].PutValue("£ " + FormattingUtils.FormatMiddle(item.Interest));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatMiddle(item.InterestRate * 100) + "%");
                 var fee =loanOffer.SetupFee > 0 && i == 0 ? loanOffer.SetupFee : 0;
                 if (item.Fees>0) fee += item.Fees;
@@ -45,7 +45,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 var res1 = loanOffer.SetupFee>0 && i == 0 ? "*" : string.Empty;
                 worksheet.Cells[row, column + 4].PutValue(res + res1);
                 //worksheet.Cells.Merge(row, column + 5, 1, 3);
-                worksheet.Cells[row, column + 5].PutValue("£ " + item.AmountDue);
+                worksheet.Cells[row, column + 5].PutValue("£ " + FormattingUtils.FormatMiddle(item.AmountDue));
                 SetCellStyle(worksheet, row, column, false);
             }
 
@@ -70,7 +70,7 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             row += 2;
             worksheet.Cells[row, column].PutValue("Offered credit line: ");
-            worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatPounds(details.OfferedCreditLine));
+            worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatNoDecimals(details.OfferedCreditLine));
             worksheet.Cells[row, column + 1].Style.HorizontalAlignment = TextAlignmentType.Left;
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
             row++;
@@ -97,18 +97,18 @@ namespace EzBob.Web.Code.ReportGenerator
             row += 2;
             worksheet.Cells.Merge(row, column, 2, 1);
             worksheet.Cells[row, column + 1].PutValue("Loan");
-            worksheet.Cells[row + 1, column + 1].PutValue("£ " + loanOffer.TotalPrincipal);
+            worksheet.Cells[row + 1, column + 1].PutValue("£ " +  FormattingUtils.FormatNoDecimals(loanOffer.TotalPrincipal));
 
             worksheet.Cells.Merge(row, column + 2, 2, 1);
             worksheet.Cells.Merge(row, column + 3, 2, 1);
 
             worksheet.Cells[row, column + 4].PutValue("Cost");
-            worksheet.Cells[row + 1, column + 4].PutValue("£ " + loanOffer.TotalInterest);
+            worksheet.Cells[row + 1, column + 4].PutValue("£ " +  FormattingUtils.FormatMiddle(loanOffer.TotalInterest));
 
             worksheet.Cells.Merge(row, column + 5, 2, 1);
 
             worksheet.Cells[row, column + 6].PutValue("Total");
-            worksheet.Cells[row + 1, column + 6].PutValue("£ " + loanOffer.Total);
+            worksheet.Cells[row + 1, column + 6].PutValue("£ " +  FormattingUtils.FormatMiddle(loanOffer.Total));
 
             var filePath = System.Web.HttpContext.Current.Server.MapPath("~/Content/img/image-money64.png");
 
