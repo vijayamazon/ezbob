@@ -27,12 +27,12 @@ BEGIN
 		Css NVARCHAR(128) NULL
 	)
 
-	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'total2')
-	INSERT INTO #out (Caption) VALUES ('5-Amount Transactions are ' + (CASE @IncludeFive WHEN 1 THEN 'included' ELSE 'excluded' END))
+	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'Successful')
+	INSERT INTO #out (Caption) VALUES ('Transactions of Amount 5 Are ' + (CASE @IncludeFive WHEN 1 THEN 'Included' ELSE 'Excluded' END))
 	
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1
 	
-	INSERT INTO #out (Caption, Css) VALUES ('Failed Transactions', 'total2')
+	INSERT INTO #out (Caption, Css) VALUES ('Failed Transactions', 'Failed')
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 0
 
 	SELECT
@@ -40,19 +40,20 @@ BEGIN
 		o.Caption,
 		o.EzbobAmount,
 		o.PaypointAmount,
-		t.Id,
-		t.PostDate,
-		t.LoanId,
-		c.Id AS ClientID,
-		c.Name AS ClientEmail,
-		c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname AS ClientName,
-		t.Description,
+		o.TransactionID AS Id,
+		(CASE o.Caption WHEN 'Paypoint' THEN b.date ELSE t.PostDate END) AS PostDate,
+		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE t.LoanId END) AS LoanId,
+		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE c.Id END) AS ClientID,
+		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE c.Name END) AS ClientEmail,
+		(CASE o.Caption WHEN 'Paypoint' THEN b.name ELSE c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname END) AS ClientName,
+		(CASE o.Caption WHEN 'Paypoint' THEN 'card ' + b.lastfive + ' from ' + b.ip ELSE t.Description END) AS Description,
 		o.Css
 	FROM
 		#out o
 		LEFT JOIN LoanTransaction t ON o.TransactionID = t.Id
 		LEFT JOIN Loan l ON t.LoanId = l.Id
 		LEFT JOIN Customer c ON l.CustomerId = c.Id
+		LEFT JOIN PayPointBalance b ON o.TransactionID = b.Id
 	ORDER BY
 		SortOrder
 

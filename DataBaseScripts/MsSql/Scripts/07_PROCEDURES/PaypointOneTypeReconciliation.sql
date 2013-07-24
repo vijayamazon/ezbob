@@ -123,12 +123,12 @@ BEGIN
 				'Unmatched debit ' + CONVERT(NVARCHAR, @Amount),
 				@EzbobCount,
 				@PaypointCount,
-				'unmatched'
+				''
 			)
 
 		INSERT INTO #out(Caption, TransactionID)
 		SELECT
-			'Transaction',
+			'Ezbob',
 			t.Id
 		FROM
 			LoanTransaction t
@@ -144,6 +144,25 @@ BEGIN
 			t.Type = 'PaypointTransaction'
 			AND
 			t.Amount = @Amount
+
+		INSERT INTO #out(Caption, TransactionID)
+		SELECT
+			'Paypoint',
+			b.Id
+		FROM
+			PayPointBalance b
+		WHERE
+			(
+				(@SuccessOnly = 1 AND b.auth_code != '')
+				OR
+				(@SuccessOnly = 0 AND b.auth_code = '')
+			)
+			AND
+			CONVERT(DATE, b.date) = @Date
+			AND
+			(@IncludeFive = 1 OR b.Amount != 5)
+			AND
+			b.amount = @Amount
 	
 		FETCH NEXT FROM cur INTO @Amount, @EzbobCount, @PaypointCount
 	END
