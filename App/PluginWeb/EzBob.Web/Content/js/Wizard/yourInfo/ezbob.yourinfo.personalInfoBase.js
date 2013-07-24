@@ -32,7 +32,7 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         $el.on("focusout", function () {
             if (model.length == 0) {
                 $el.tooltip({
-                    title: "This field is required"
+                    title: "Please Look-up your post code"
                 }).tooltip("enable").tooltip('fixTitle');
             }
         });
@@ -44,7 +44,7 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         });
     },
     addAddressError: function (el) {
-        var error = $('<label class="error" generated="true">This field is required</label>');
+        var error = $('<label class="error" generated="true">Please Look-up your post code</label>');
         EzBob.Validation.errorPlacement(error, this.$el.find(el));
         EzBob.Validation.highlightFS(this.$el.find(el));
     },
