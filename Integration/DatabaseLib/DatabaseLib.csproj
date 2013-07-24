@@ -76,6 +76,9 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="Model\Loans\InstallmentDelta.cs" />
+    <Compile Include="Model\Loans\LoanScheduleTransaction.cs" />
+    <Compile Include="Model\Loans\NumericDelta.cs" />
     <Compile Include="PacNetManualBalance.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />

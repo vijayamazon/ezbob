@@ -115,6 +115,12 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             set { _schedule = value; }
         }
 
+		private IList<LoanScheduleTransaction> _scheduleTransactions = new List<LoanScheduleTransaction>();
+		public virtual IList<LoanScheduleTransaction> ScheduleTransactions {
+			get { return _scheduleTransactions; }
+			set { _scheduleTransactions = value; }
+		} // ScheduleTransactions
+
         /// <summary>
         /// Loan end date of payments, close loan date
         /// Дата окончания выплат по кредиту, т.е. его закрытия.
@@ -612,6 +618,11 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             HasMany(x => x.Charges)
                 .AsBag()
                 .OrderBy("`Date`")
+                .KeyColumn("LoanId")
+                .Cascade.AllDeleteOrphan()
+                .Inverse();
+            HasMany(x => x.ScheduleTransactions)
+                .AsBag()
                 .KeyColumn("LoanId")
                 .Cascade.AllDeleteOrphan()
                 .Inverse();

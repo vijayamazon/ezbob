@@ -109,16 +109,15 @@ BEGIN
 		INSERT INTO #output
 		SELECT
 			'Principal Repaid Early',
-			ISNULL(SUM(t.LoanRepayment), 0)
+			ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
 		FROM
-			LoanTransaction t
-			INNER JOIN Loan l ON t.LoanId = l.Id
+			LoanScheduleTransaction lst
+			INNER JOIN Loan l ON lst.LoanId = l.Id
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
-			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('PaidEarly', 'StillToPay')
 		WHERE
-			t.Type = @PAYPOINT AND t.Status = @DONE
+			lst.StatusAfter IN ('PaidEarly', 'StillToPay')
 			AND
-			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+			@DateStart <= lst.Date AND lst.Date < @DateEnd
 
 				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
@@ -130,17 +129,16 @@ BEGIN
 		INSERT INTO #output
 		SELECT
 			'Principal Repaid On Time',
-			ISNULL(SUM(t.LoanRepayment), 0)
+			ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
 		FROM
-			LoanTransaction t
-			INNER JOIN Loan l ON t.LoanId = l.Id
+			LoanScheduleTransaction lst
+			INNER JOIN Loan l ON lst.LoanId = l.Id
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
-			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('PaidOnTime')
 		WHERE
-			t.Type = @PAYPOINT AND t.Status = @DONE
+			lst.StatusAfter IN ('PaidOnTime')
 			AND
-			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
-	
+			@DateStart <= lst.Date AND lst.Date < @DateEnd
+
 				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
 		INSERT INTO #output
@@ -151,16 +149,15 @@ BEGIN
 		INSERT INTO #output
 		SELECT
 			'Principal Repaid Late',
-			ISNULL(SUM(t.LoanRepayment), 0)
+			ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
 		FROM
-			LoanTransaction t
-			INNER JOIN Loan l ON t.LoanId = l.Id
+			LoanScheduleTransaction lst
+			INNER JOIN Loan l ON lst.LoanId = l.Id
 			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
-			INNER JOIN LoanScheduleTransaction lst ON t.Id = lst.TransactionID AND lst.StatusAfter IN ('Paid', 'Late')
 		WHERE
-			t.Type = @PAYPOINT AND t.Status = @DONE
+			lst.StatusAfter IN ('Paid', 'Late')
 			AND
-			@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+			@DateStart <= lst.Date AND lst.Date < @DateEnd
 
 				
 	INSERT INTO #output

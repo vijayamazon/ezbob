@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
+using EzBob.CommonLib;
+using StructureMap;
 
 namespace PaymentServices.Calculators
 {
@@ -51,6 +55,11 @@ namespace PaymentServices.Calculators
             
             loan.AddTransaction(transactionItem);
 
+			var deltas = new List<InstallmentDelta>();
+
+			foreach (LoanScheduleItem inst in loan.Schedule)
+				deltas.Add(new InstallmentDelta(inst));
+
             var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
             calculator.RecalculateSchedule();
 
@@ -66,6 +75,27 @@ namespace PaymentServices.Calculators
             {
                 loan.Customer.UpdateCreditResultStatus();
             }
+
+			if (loan.Id > 0) {
+				foreach (InstallmentDelta dlt in deltas) {
+					dlt.SetEndValues();
+
+					if (dlt.IsZero)
+						continue;
+
+					loan.ScheduleTransactions.Add(new LoanScheduleTransaction {
+						Date = DateTime.UtcNow,
+						FeesDelta = dlt.Fees.EndValue - dlt.Fees.StartValue,
+						InterestDelta = dlt.Interest.EndValue - dlt.Interest.StartValue,
+						Loan = loan,
+						PrincipalDelta = dlt.Principal.EndValue - dlt.Principal.StartValue,
+						Schedule = dlt.Installment,
+						StatusAfter = dlt.Status.EndValue,
+						StatusBefore = dlt.Status.StartValue,
+						Transaction = transactionItem
+					});
+				} // for each delta
+			} // if
 
             return amount;
         }
