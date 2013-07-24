@@ -795,27 +795,32 @@ $.validator.setDefaults({
         return false;
     },
     onfocusout: function (el) {
-        validFunc(el);
+        if ($(el).val()) {
+            validFunc(el);
+        }
     },
-    onkeyup: function (el) {
-        if ($(el).is('select')) {
-            validFunc(el);
+    onkeyup: function (el,ev) {
+        //not tab pressed
+        if (ev.keyCode != 9) {
+            if ($(el).is('select')) {
+                validFunc(el);
+            }
+            
+            if ($(el).is('input') && $(el).val() == "") {
+                validFunc(el);
+            }
+
+            if ($(el).hasClass('cashInput') && $(el).val() == "£ ") {
+                validFunc(el);
+            }
+
+            if ($(el).closest('.ezSortCode').length != 0) {
+                validFunc(el);
+            }
+            /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
+                validFunc(el);
+            }*/
         }
-        
-        if ($(el).is('input') && $(el).val() == "") {
-            validFunc(el);
-        }
-        
-        if ($(el).hasClass('cashInput') && $(el).val() == "£ ") {
-            validFunc(el);
-        }
-        
-        if ($(el).closest('.ezSortCode').length != 0) {
-            validFunc(el);
-        }
-        /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
-            validFunc(el);
-        }*/
     },
     ignore: []
 });
