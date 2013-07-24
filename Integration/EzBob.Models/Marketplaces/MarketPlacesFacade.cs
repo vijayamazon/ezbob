@@ -46,7 +46,8 @@ namespace EzBob.Web.Areas.Underwriter {
             var dates = marketplaces.Select(mp =>
             {
                 var builder = GetBuilder(mp);
-                return builder.GetSeniority(mp);
+                builder.UpdateOriginationDate(mp);
+                return mp.OriginationDate;
             }).Where(d => d != null).Select(d => d.Value).ToList();
 
             return dates.Any() ? dates.Min() : DateTime.UtcNow;

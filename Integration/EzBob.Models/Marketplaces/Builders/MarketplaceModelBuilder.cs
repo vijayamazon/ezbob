@@ -64,11 +64,15 @@ namespace EzBob.Models
 
         public string GetAccountAge(MP_CustomerMarketPlace mp)
         {
-            mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
-            _session.SaveOrUpdate(mp);
+            UpdateOriginationDate(mp);
             return mp.OriginationDate == null
                        ? "-"
                        : Convert.ToString(Math.Round((DateTime.UtcNow - mp.OriginationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
+        }
+
+        public void UpdateOriginationDate(MP_CustomerMarketPlace mp)
+        {
+            mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
         }
 
         public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)

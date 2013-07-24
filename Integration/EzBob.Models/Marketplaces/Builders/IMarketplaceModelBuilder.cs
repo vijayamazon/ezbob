@@ -11,6 +11,6 @@ namespace EzBob.Models
         PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model);
         string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo);
         MarketPlaceModel Create(MP_CustomerMarketPlace mp);
-        DateTime? GetSeniority(MP_CustomerMarketPlace mp);
+        void UpdateOriginationDate(MP_CustomerMarketPlace mp);
     }
 }
