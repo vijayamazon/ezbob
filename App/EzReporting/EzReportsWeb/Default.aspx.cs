@@ -88,8 +88,14 @@ namespace EzReportsWeb {
 			isDaily = false;
 
 			switch (rblFilter.SelectedValue) {
-			case "Daily":
+			case "Today":
 				isDaily = true;
+				break;
+
+			case "Yesterday":
+				isDaily = true;
+				fDate = fDate.AddDays(-1);
+				tDate = tDate.AddDays(-1);
 				break;
 
 			case "Weekly":

@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\App\EzReporting\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="DbException.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="AConnection.cs" />

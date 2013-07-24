@@ -184,6 +184,19 @@ namespace Reports {
 		} // ParseStyle
 
 		private static string ReadStyle() {
+			string sFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Report.css");
+
+			if (File.Exists(sFilePath)) {
+				try {
+					return File.ReadAllText(sFilePath);
+				}
+				// ReSharper disable EmptyGeneralCatchClause
+				catch (Exception) {
+					// quietly ignore any error
+				} // try
+				// ReSharper restore EmptyGeneralCatchClause
+			} // if
+
 			Assembly a = Assembly.GetExecutingAssembly();
 
 			Stream s = a.GetManifestResourceStream("Reports.Report.css");

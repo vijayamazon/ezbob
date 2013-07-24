@@ -114,8 +114,14 @@
 	border-collapse: collapse;
 }
 
+/* Styles common for mail and web application */
+
 .unmatched { color: red; }
 
 .total { font-weight: bold; color: white; background-color: navy!important; }
 
 .total2 { font-weight: bold; color: black; background-color: orange!important; }
+
+.Successful { font-weight: bold; color: black; background-color: #bfffcf!important; }
+
+.Failed { font-weight: bold; color: black; background-color: #ffbfbf!important; }

@@ -55,7 +55,8 @@
 
 							<asp:RadioButtonList ID="rblFilter" runat="server" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged"
 								CssClass="rbppcol" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="True">
-								<asp:ListItem Value="Daily" Text="Daily" Selected="True"></asp:ListItem>
+								<asp:ListItem Value="Today" Text="Today" Selected="True"></asp:ListItem>
+								<asp:ListItem Value="Yesterday" Text="Yesterday"></asp:ListItem>
 								<asp:ListItem Value="Weekly" Text="Weekly"></asp:ListItem>
 								<asp:ListItem Value="Monthly" Text="Monthly"></asp:ListItem>
 								<asp:ListItem Value="MonthToDate" Text="Month to Date"></asp:ListItem>

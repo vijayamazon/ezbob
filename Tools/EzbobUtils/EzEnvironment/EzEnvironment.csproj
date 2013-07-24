@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\App\EzReporting\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Enums.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="JsonEnvironmentName.cs" />

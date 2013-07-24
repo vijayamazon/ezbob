@@ -228,7 +228,12 @@ table.table {
 	vertical-align: bottom;
 }
 
-.table caption + thead tr:first-child th, .table caption + thead tr:first-child td, .table colgroup + thead tr:first-child th, .table colgroup + thead tr:first-child td, .table thead:first-child tr:first-child th, .table thead:first-child tr:first-child td {
+.table caption + thead tr:first-child th,
+.table caption + thead tr:first-child td,
+.table colgroup + thead tr:first-child th,
+.table colgroup + thead tr:first-child td,
+.table thead:first-child tr:first-child th,
+.table thead:first-child tr:first-child td {
 	border-top: 0;
 }
 
@@ -439,10 +444,16 @@ table.dataTable thead td:active {
 	background-color: #F9F9F9 !important;
 }
 
-.total {
-	font-weight: bold;
-	color: white;
-	background-color: navy!important;
-}
+/*
+ * Styles common for mail and web application
+ */
+
+.unmatched { color: red; }
+
+.total { font-weight: bold; color: white; background-color: navy!important; }
 
 .total2 { font-weight: bold; color: black; background-color: orange!important; }
+
+.Successful { font-weight: bold; color: black; background-color: #bfffcf!important; }
+
+.Failed { font-weight: bold; color: black; background-color: #ffbfbf!important; }
