@@ -714,6 +714,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
                 </filter>
                 <filter type="log4net.Filter.DenyAllFilter" />
                 <file value="${serverBaseFolder}\Logs\Auditing.log" />
+                <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
                 <appendToFile value="true" />
                 <maximumFileSize value="10000KB" />
                 <maxSizeRollBackups value="20" />
