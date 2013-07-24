@@ -149,7 +149,7 @@ $(function () {
                 day.trigger("change");
             });
 
-            hidden.on("change:silent", function() {
+            hidden.on("change:silent", function () {
                 hidden.val(day.val() + "/" + month.val() + "/" + year.val());
             });
         });
@@ -786,12 +786,12 @@ $.validator.setDefaults({
         if ($(el).is('input:radio')) {
             return $(el).valid();
         }
-        
+
         if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
             return $(el).valid();
         }
-        
-        
+
+
         return false;
     },
     onfocusout: function (el) {
@@ -799,13 +799,13 @@ $.validator.setDefaults({
             validFunc(el);
         }
     },
-    onkeyup: function (el,ev) {
+    onkeyup: function (el, ev) {
         //not tab pressed
         if (ev.keyCode != 9) {
             if ($(el).is('select')) {
                 validFunc(el);
             }
-            
+
             if ($(el).is('input') && $(el).val() == "") {
                 validFunc(el);
             }
@@ -930,7 +930,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
             Surname: { required: true },
-            DateOfBirth: {  requiredDate: true, yearLimit: 18 },
+            DateOfBirth: { requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
             TypeOfBusiness: { required: true },
@@ -951,6 +951,8 @@ EzBob.validatePersonalDetailsForm = function (el) {
             MartialStatus: { required: "This field is required" },
             MobilePhone: { regex: "Please enter a valid UK number" },
             DayTimePhone: { regex: "Please enter a valid UK number" },
+            OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+            WebSiteTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
@@ -1123,44 +1125,44 @@ EzBob.validatePayPointShopForm = function (el) {
     });
 };
 
-EzBob.validateCGShopForm = function(el, accountType) {
-	var v = {
-		rules: {},
-		messages: {},
-		errorPlacement: EzBob.Validation.errorPlacement,
-		unhighlight: EzBob.Validation.unhighlightFS,
-		highlight: EzBob.Validation.highlightFS
-	};
+EzBob.validateCGShopForm = function (el, accountType) {
+    var v = {
+        rules: {},
+        messages: {},
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    };
 
-	var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+    var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
-	var lf = aryCGAccounts[accountType].ClientSide.LinkForm;
+    var lf = aryCGAccounts[accountType].ClientSide.LinkForm;
 
-	var atlc = accountType.toLowerCase();
+    var atlc = accountType.toLowerCase();
 
-	for (var i in lf.Fields) {
-		if (!lf.Fields.hasOwnProperty(i))
-			continue;
+    for (var i in lf.Fields) {
+        if (!lf.Fields.hasOwnProperty(i))
+            continue;
 
-		var fi = lf.Fields[i];
+        var fi = lf.Fields[i];
 
-		var r = {};
-		var m = {};
+        var r = {};
+        var m = {};
 
-		for (var j in fi.ValidationRules)
-			if (fi.ValidationRules[j])
-				r[j] = fi.ValidationRules[j];
+        for (var j in fi.ValidationRules)
+            if (fi.ValidationRules[j])
+                r[j] = fi.ValidationRules[j];
 
-		for (var j in fi.ValidationMessages) {
-			var msg = fi.ValidationMessages[j];
-			m[msg.PropertyName] = msg.Message;
-		} // for
+        for (var j in fi.ValidationMessages) {
+            var msg = fi.ValidationMessages[j];
+            m[msg.PropertyName] = msg.Message;
+        } // for
 
-		var pn = atlc + '_' + fi.PropertyName.toLowerCase();
+        var pn = atlc + '_' + fi.PropertyName.toLowerCase();
 
-		v.rules[pn] = r;
-		v.messages[pn] = m;
-	} // for each field
+        v.rules[pn] = r;
+        v.messages[pn] = m;
+    } // for each field
 
-	return el.validate(v);
+    return el.validate(v);
 };
