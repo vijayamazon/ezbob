@@ -1,16 +1,12 @@
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
-	using Marketplaces.FreeAgent;
-	using Marketplaces.Sage;
-	using Marketplaces.Yodlee;
-	using System;
+    using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using DatabaseWrapper;
 	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using NHibernate;
-	using NHibernate.Linq;
 
     public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
     {
@@ -25,7 +21,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
         DateTime? GetLastEbayOrdersRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         DateTime? GetLastPayPalTransactionRequest(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
         MP_CustomerMarketPlace GetMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace);
-        string GetUpdatedStatus(int marketplacId);
         void ClearUpdatingEnd(int marketplaceId);
     }
 
@@ -156,14 +151,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 	        return Get(databaseCustomerMarketPlace.Id);
         }
 
-        public string GetUpdatedStatus(int marketplacId)
-        {
-            var mp = Get(marketplacId);
-            return 
-                (mp.UpdatingStart != null && mp.UpdatingEnd == null) ? "In progress" :
-                (!String.IsNullOrEmpty(mp.UpdateError)) ? "Error" : "Done";
-        }
-
         public void ClearUpdatingEnd(int marketplaceId)
         {
             var mp = Get(marketplaceId);
@@ -171,6 +158,4 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             Update(mp);
         }
     }
-
-
 }

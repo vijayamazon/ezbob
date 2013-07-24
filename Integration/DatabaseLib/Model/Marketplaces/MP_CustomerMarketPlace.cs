@@ -62,6 +62,11 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
         public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 
+        /// <summary>
+        /// Date of the first order/transaction for marketplace
+        /// </summary>
+        public virtual DateTime? OriginationDate { get; set; }
+
         public virtual string GetUpdatingStatus()
         {
             return (UpdatingStart != null && UpdatingEnd == null)

@@ -23,6 +23,7 @@ namespace EZBob.DatabaseLib.Model.Database
                 .Cascade.All()
                 .Fetch.Join();
             Map(x => x.DisplayName).Length(512);
+            Map(x => x.OriginationDate).CustomType<UtcDateTimeType>();
             HasMany(x => x.PayPalTransactions).
                 KeyColumn("CustomerMarketPlaceId")
                 .Cascade.All();

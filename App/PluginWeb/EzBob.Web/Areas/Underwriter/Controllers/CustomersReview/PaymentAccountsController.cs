@@ -165,7 +165,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [HttpGet]
         public JsonNetResult CheckForUpdatedStatus(int mpId)
         {
-            return this.JsonNet(new { status = _customerMarketplaces.GetUpdatedStatus(mpId) });
+            return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
         }
 
         [Transactional]

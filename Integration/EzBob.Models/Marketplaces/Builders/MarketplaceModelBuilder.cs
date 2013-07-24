@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using EZBob.DatabaseLib.Common;
@@ -63,11 +64,11 @@ namespace EzBob.Models
 
         public string GetAccountAge(MP_CustomerMarketPlace mp)
         {
-            var accountAge = GetSeniority(mp);
-
-            return accountAge != null
-                       ? Convert.ToString(Math.Round((DateTime.Now - accountAge).Value.TotalDays / 30.0, 1))
-                       : "-";
+            mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
+            _session.SaveOrUpdate(mp);
+            return mp.OriginationDate == null
+                       ? "-"
+                       : Convert.ToString(Math.Round((DateTime.UtcNow - mp.OriginationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
         }
 
         public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
