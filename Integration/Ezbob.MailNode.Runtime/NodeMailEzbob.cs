@@ -67,8 +67,8 @@ namespace WorkflowObjects
         /// <returns></returns>
         public override string Execute(IWorkflow iworkflow)
         {
-            var isMandrillEnable = VariablesRepository.GetByName("MandrillEnable").Value == "Yes";
-            var isGreetingMailSendViaMandrill = VariablesRepository.GetByName("GreetingMailSendViaMandrill").Value == "Yes";
+            var isMandrillEnable = VariablesRepository.GetByName("MandrillEnable").Value.ToLower() == "yes";
+            var isGreetingMailSendViaMandrill = VariablesRepository.GetByName("GreetingMailSendViaMandrill").Value.ToLower() == "yes";
 
             if (isMandrillEnable || (isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx"))
             {
