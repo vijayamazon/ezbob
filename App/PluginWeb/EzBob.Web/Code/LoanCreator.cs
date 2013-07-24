@@ -39,7 +39,7 @@
 		private readonly PacNetBalanceRepository _funds;
 		private readonly PacNetManualBalanceRepository _manualFunds;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		private Mail _mail;
+		private readonly Mail _mail;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (LoanCreator));
 
@@ -62,7 +62,7 @@
 
 			_funds = ObjectFactory.GetInstance<PacNetBalanceRepository>();
 			_manualFunds = ObjectFactory.GetInstance<PacNetManualBalanceRepository>();
-			_mail = new Mail(new MandrillConfig());
+			_mail = new Mail();
         }
 
         public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
