@@ -11,8 +11,10 @@ CREATE PROCEDURE RptPacnetReconciliation
 AS
 BEGIN
 	DECLARE @Date DATE
-	DECLARE @EzbobTotal DECIMAL(18, 2)
-	DECLARE @PacnetTotal DECIMAL(18, 2)
+	DECLARE @EzbobOut DECIMAL(18, 2)
+	DECLARE @PacnetOut DECIMAL(18, 2)
+	DECLARE @EzbobIn DECIMAL(18, 2)
+	DECLARE @PacnetIn DECIMAL(18, 2)
 
 	DECLARE @Amount DECIMAL(18, 2), @IsCredit BIT, @EzbobCount INT, @PacnetCount INT
 	
@@ -100,21 +102,87 @@ BEGIN
 	DELETE FROM #res WHERE EzbobCount = PacnetCount
 	
 	SELECT
-		@PacnetTotal = ISNULL(SUM(Amount * (1 - 2 * CAST(IsCredit AS INT))), 0)
+		@PacnetIn = ISNULL(SUM(ISNULL(Amount, 0)), 0)
 	FROM
 		#pacnet
+	WHERE
+		IsCredit = 1
 	
 	SELECT
-		@EzbobTotal = ISNULL(SUM(Amount * (1 - 2 * CAST(IsCredit AS INT))), 0)
+		@PacnetOut = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+	FROM
+		#pacnet
+	WHERE
+		IsCredit = 0
+
+	SELECT
+		@EzbobOut = ISNULL(SUM(ISNULL(Amount, 0)), 0)
 	FROM
 		#ezbob
+	WHERE
+		IsCredit = 0
+
+	SELECT
+		@EzbobIn = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+	FROM
+		#ezbob
+	WHERE
+		IsCredit = 1
 
 	INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
-		VALUES ('Total sum', @EzbobTotal, @PacnetTotal, 'total' + CASE WHEN @EzbobTotal = @PacnetTotal THEN '' ELSE ' unmatched' END)
+		VALUES ('Total In', @EzbobIn, @PacnetIn, 'total' + CASE WHEN @EzbobIn = @PacnetIn THEN '' ELSE ' unmatched' END)
 
 	DECLARE cur CURSOR FOR
 		SELECT Amount, IsCredit, EzbobCount, PacnetCount
 		FROM #res
+		WHERE IsCredit = 1
+		ORDER BY Amount, IsCredit
+
+	OPEN cur
+
+	FETCH NEXT FROM cur INTO @Amount, @IsCredit, @EzbobCount, @PacnetCount
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
+			VALUES (
+				'Unmatched ' + 
+				(CASE @IsCredit WHEN 1 THEN 'credit' ELSE 'debit' END) +
+				' ' + CONVERT(NVARCHAR, @Amount),
+				@EzbobCount,
+				@PacnetCount,
+				'unmatched'
+			)
+
+		INSERT INTO #out(Caption, TransactionID)
+		SELECT
+			'Transaction',
+			t.Id
+		FROM
+			LoanTransaction t
+		WHERE
+			CONVERT(DATE, t.PostDate) = @Date
+			AND
+			t.Status = 'Done'
+			AND
+			t.Type = 'PacnetTransaction'
+			AND
+			t.Amount = @Amount
+
+	
+		FETCH NEXT FROM cur INTO @Amount, @IsCredit, @EzbobCount, @PacnetCount
+	END
+
+	CLOSE cur
+	DEALLOCATE cur
+
+	INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
+		VALUES ('Total Out', @EzbobOut, @PacnetOut, 'total' + CASE WHEN @EzbobOut = @PacnetOut THEN '' ELSE ' unmatched' END)
+
+	DECLARE cur CURSOR FOR
+		SELECT Amount, IsCredit, EzbobCount, PacnetCount
+		FROM #res
+		WHERE IsCredit = 0
 		ORDER BY Amount, IsCredit
 
 	OPEN cur
