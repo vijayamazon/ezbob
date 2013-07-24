@@ -111,7 +111,23 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 throw new Exception("Invalid customer state");
             }
         }
-
+        /// <summary>
+        /// Callback from paypoint after trying to charge customer with 5 pounds on adding dabit card
+        /// </summary>
+        /// <param name="valid">is card valid</param>
+        /// <param name="trans_id">transaction id to charge customer via paypoint instead of using his card details</param>
+        /// <param name="code">A - success other is some error</param>
+        /// <param name="auth_code"></param>
+        /// <param name="amount">amount charged</param>
+        /// <param name="ip">customer's ip</param>
+        /// <param name="test_status">if fake test card was entered than true</param>
+        /// <param name="hash">hash of the request</param>
+        /// <param name="message">error description</param>
+        /// <param name="loan_amount">loan amount</param>
+        /// <param name="card_no">4 last digits of credit card</param>
+        /// <param name="customer">customer name</param>
+        /// <param name="expiry">card exipiry month/year</param>
+        /// <returns>redirects customer to confirmation page/error page</returns>
         [Transactional]
         [NoCache]
         public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry)
