@@ -62,7 +62,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
                 $('#captcha').show()
                 @focus = @focusCaptcha
                 @ui.answer.val('')
-                @ui.restoreBtn.addClass('disabled')
+                @ui.getQuestionBtn.addClass('disabled')
                 return false
 
             @ui.passwordRestoredArea.show()
