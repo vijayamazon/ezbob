@@ -1,0 +1,1 @@
+c:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild.exe Build/sc-build/SCMainBuild/Scenaries/BuildMain.proj /t:ProjectToBuildConfig;Build;RunUnitTests /p:Src="c:\work\ezbob" /p:NunitLogs="c:\temp\ezbob-nunit-logs"

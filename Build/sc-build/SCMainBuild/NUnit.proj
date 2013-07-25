@@ -5,4 +5,21 @@
 		<RemoveDir Directories="$(NunitLogs)" />
 		<ScortoNunit AsmDirectory="$(Src)" Command="$(Src)\Lib\3rdparty\NUnit\nunit-console-x86.exe /nologo " LogsDir="$(NunitLogs)" />
 	</Target>
+
+	<PropertyGroup>
+
+		<Configuration Condition=" '$(Configuration)' == '' ">
+			Debug
+		</Configuration>
+
+		<TestAssemblies>
+			$(Src)\App\pluginweb\EzBob.Tests\bin\$(Configuration)\EzBob.Tests.dll
+		</TestAssemblies>
+	</PropertyGroup>
+
+	<Target Name="RunUnitTests" >
+		<RemoveDir Directories="$(NunitLogs)" />
+		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe c:\work\ezbob\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll /xml=c:\temp\ezbob-nunit-logs\NUnitReport.xml"/>
+	</Target>
+
 </Project>
