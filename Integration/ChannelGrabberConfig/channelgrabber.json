@@ -310,7 +310,7 @@
 					"<li>Press <strong>Save</strong></li>",
 					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",
 					"</ol>",
-					"<img src=\"/Content/xero/instructions.jpg\">",
+					"<img src=\"/Content/xero/instructions.jpg\">"
 				],
 				"OnBeforeLink": [
 					"accountModel.auxLogin = accountModel.publicCert;",
@@ -332,5 +332,78 @@
 			},
 			"ErrorMessages": []
 		}
-	}
+	},
+	{
+		"Name":        "KashFlow",
+		"DisplayName": "KashFlow.com",
+		"Description": "KashFlow.com",
+		"InternalID":  "{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}",
+
+		"HasExpenses": true,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+				{ "PropertyName": "Login",       "NodeName": "username",     "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Password",    "NodeName": "password",     "UniqueIDPosition":  1                  },
+				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Login", "Name"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B727EF60-0FBB-48EE-90BE-D2E9BB3F2030}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BB11E959-F47B-4D05-80F6-C319BE19CB92}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BBF3F3E8-2317-45E2-9A21-2EFF620936B2}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CC16E1DF-B882-4FC4-BD8D-A533A6A98B78}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CF7DD5EB-1D6D-4D43-ABEF-FC074A19B0FC}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C80F2543-CF30-49B9-90D5-5BB77C608B42}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "kashflowShops",
+			"SortPriority": 13,
+			"Ribbon": "beta",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Name",
+						"Type": "Text",
+						"Caption": "The name of KashFlow account",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The username to access KashFlow account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Password",
+						"Caption": "The password to access KashFlow account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", "Value": "url(/Content/css/images/kashflow-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "145px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", "Value": "url(/Content/css/images/kashflow-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "145px" }
+				]
+			},
+			"ErrorMessages": []
+		}
+	}	
 ]
