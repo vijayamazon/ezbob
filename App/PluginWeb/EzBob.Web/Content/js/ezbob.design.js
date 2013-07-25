@@ -798,7 +798,13 @@ $.validator.setDefaults({
         }
 
         if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
-            return $(el).valid();
+            var img = $(el).closest('div').find('.field_status');
+            if (img.field_status('getStatus') != 'required' && !$(el).val()) {
+                return $(el).valid();
+            }
+            if (img.field_status('getStatus') == 'required' && $(el).val()) {
+                return $(el).valid();
+            }
         }
 
 
