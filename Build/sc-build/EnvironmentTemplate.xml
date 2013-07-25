@@ -89,16 +89,21 @@
     <property name="ZohoCRM" value="ZohoCRM"/>
 	<property name="MandrillConfig" value="${MandrillConfig}"/>
 
-    <module id="MandrillSpikeConfig">
+    <module id="MandrillTrunk">
         <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />
-        <property name="Enable" value="False" />
+        <property name="Enable" value="True" />
     </module>
 	
 	<module id="MandrillUATConfig">
-        <property name="Enable" value="False" />
         <property name="Key" value="jIfj1qsUFBbqK6kfMVR_Qg" />
+        <property name="Enable" value="True" />
     </module>
-		
+	
+    <module id="MandrillProduction">
+        <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
+        <property name="Enable" value="True" />
+    </module>
+
     <module id="ZohoCRM">
       <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
       <property name="Enabled" value="False"/>
