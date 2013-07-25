@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<Target Name="RunUnitTests" >
-		<RemoveDir Directories="$(NunitLogs)" />
+		<!-- <RemoveDir Directories="$(NunitLogs)" /> -->
 		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe c:\work\ezbob\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll /xml=c:\temp\ezbob-nunit-logs\NUnitReport.xml"/>
 	</Target>
 
