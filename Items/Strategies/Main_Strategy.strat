@@ -14073,7 +14073,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>Re_Reject_NewCustomer_ReReject &gt; 0 OR
-(Re_Reject_OldCustomer_ReReject &gt; 0 AND ( Re_Reject_LoanAmountTaken*0.5 &lt;= Re_Reject_PrincipalPaidAmount))</InitialValue>
+(Re_Reject_OldCustomer_ReReject &gt; 0 AND ( Re_Reject_LoanAmountTaken*0.5 &gt;= Re_Reject_PrincipalPaidAmount))</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -22796,30 +22796,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Re_Reject_NewCustomer_ReReject</SourceVariableName>
-      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
-      <TargetVariableName>Comparison36836846Re_Reject_NewCustomer_ReReject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Re_Reject_OldCustomer_ReReject</SourceVariableName>
-      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
-      <TargetVariableName>Comparison36836846Re_Reject_OldCustomer_ReReject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Re_Reject_PrincipalPaidAmount</SourceVariableName>
-      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
-      <TargetVariableName>Comparison36836846Re_Reject_PrincipalPaidAmount</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Re_Reject_LoanAmountTaken</SourceVariableName>
-      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
-      <TargetVariableName>Comparison36836846Re_Reject_LoanAmountTaken</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar48129059</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
@@ -23339,6 +23315,30 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
       <TargetVariableOwnerName>NestedStrategy25241715</TargetVariableOwnerName>
       <TargetVariableName>ExperianScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Re_Reject_NewCustomer_ReReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
+      <TargetVariableName>Comparison36836846Re_Reject_NewCustomer_ReReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Re_Reject_OldCustomer_ReReject</SourceVariableName>
+      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
+      <TargetVariableName>Comparison36836846Re_Reject_OldCustomer_ReReject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Re_Reject_PrincipalPaidAmount</SourceVariableName>
+      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
+      <TargetVariableName>Comparison36836846Re_Reject_PrincipalPaidAmount</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Re_Reject_LoanAmountTaken</SourceVariableName>
+      <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
+      <TargetVariableName>Comparison36836846Re_Reject_LoanAmountTaken</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
