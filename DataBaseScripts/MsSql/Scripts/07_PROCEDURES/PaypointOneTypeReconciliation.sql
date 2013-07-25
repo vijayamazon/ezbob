@@ -8,14 +8,16 @@ GO
 CREATE PROCEDURE PaypointOneTypeReconciliation
 @Date DATE,
 @IncludeFive BIT,
-@SuccessOnly BIT
+@SuccessOnly BIT,
+@Caption NVARCHAR(64)
 AS
 BEGIN
 	DECLARE @EzbobTotal DECIMAL(18, 2)
 	DECLARE @PaypointTotal DECIMAL(18, 2)
 
 	DECLARE @Amount DECIMAL(18, 2), @EzbobCount INT, @PaypointCount INT
-	
+
+				
 	CREATE TABLE #paypoint (
 		Amount DECIMAL(18, 2) NOT NULL,
 		Counter INT NOT NULL
@@ -32,6 +34,7 @@ BEGIN
 		PaypointCount INT NOT NULL
 	)
 
+			
 	INSERT INTO #paypoint
 	SELECT
 		amount,
@@ -51,6 +54,7 @@ BEGIN
 	GROUP BY
 		amount
 	
+			
 	INSERT INTO #ezbob
 	SELECT
 		Amount,
@@ -72,6 +76,7 @@ BEGIN
 	GROUP BY
 		Amount
 	
+			
 	INSERT INTO #res
 	SELECT
 		e.Amount,
@@ -80,6 +85,7 @@ BEGIN
 	FROM
 		#ezbob e
 		LEFT JOIN #paypoint p ON e.Amount = p.Amount
+	
 	
 	INSERT INTO #res
 	SELECT
@@ -92,21 +98,36 @@ BEGIN
 	WHERE
 		e.Amount IS NULL
 
-	DELETE FROM #res WHERE EzbobCount = PaypointCount
-	
+			
 	SELECT
 		@PaypointTotal = ISNULL(SUM(Amount), 0)
 	FROM
 		#paypoint
 	
+			
 	SELECT
 		@EzbobTotal = ISNULL(SUM(Amount), 0)
 	FROM
 		#ezbob
 
-	INSERT INTO #out (Caption, EzbobAmount, PaypointAmount, Css)
-		VALUES ('Total sum', @EzbobTotal, @PaypointTotal, 'total' + CASE WHEN @EzbobTotal = @PaypointTotal THEN '' ELSE ' unmatched' END)
+			
+	INSERT INTO #out (Caption, Amount, Css)
+		VALUES (
+			'Ezbob Total ' + @Caption + ' Transactions',
+			@EzbobTotal,
+			@Caption + CASE WHEN @EzbobTotal = @PaypointTotal THEN '' ELSE ' unmatched' END
+		)
 
+	INSERT INTO #out (Caption, Amount, Css)
+		VALUES ('Paypoint Total ' + @Caption + ' Transactions',
+			@PaypointTotal,
+			@Caption + CASE WHEN @EzbobTotal = @PaypointTotal THEN '' ELSE ' unmatched' END
+		)
+
+			
+	DELETE FROM #res WHERE EzbobCount = PaypointCount
+
+			
 	DECLARE cur CURSOR FOR
 		SELECT Amount, EzbobCount, PaypointCount
 		FROM #res
@@ -114,19 +135,12 @@ BEGIN
 
 	OPEN cur
 
+			
 	FETCH NEXT FROM cur INTO @Amount, @EzbobCount, @PaypointCount
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		INSERT INTO #out (Caption, EzbobAmount, PaypointAmount, Css)
-			VALUES (
-				'Unmatched debit ' + CONVERT(NVARCHAR, @Amount),
-				@EzbobCount,
-				@PaypointCount,
-				''
-			)
-
-		INSERT INTO #out(Caption, TransactionID)
+		INSERT INTO #out(Caption, TranID)
 		SELECT
 			'Ezbob',
 			t.Id
@@ -145,7 +159,8 @@ BEGIN
 			AND
 			t.Amount = @Amount
 
-		INSERT INTO #out(Caption, TransactionID)
+				
+		INSERT INTO #out(Caption, TranID)
 		SELECT
 			'Paypoint',
 			b.Id
@@ -164,12 +179,15 @@ BEGIN
 			AND
 			b.amount = @Amount
 	
+				
 		FETCH NEXT FROM cur INTO @Amount, @EzbobCount, @PaypointCount
 	END
 
+			
 	CLOSE cur
 	DEALLOCATE cur
 	
+			
 	DROP TABLE #res
 	DROP TABLE #ezbob
 	DROP TABLE #paypoint

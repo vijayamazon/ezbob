@@ -75,7 +75,7 @@ namespace Reports {
 				int lineCounter = 0;
 
 				foreach (DataRow row in dt.Rows) {
-					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Even" : "Odd");
+					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
 					oTbody.Append(oTr);
 
 					List<string> oClassesToApply = new List<string>();

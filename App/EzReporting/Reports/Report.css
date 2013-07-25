@@ -83,13 +83,9 @@
 	vertical-align: middle;
 }
 
-.Even {
-	background-color: #f9f9f9;
-}
+.Even { background-color: #f9f9f9; }
 
-.Odd {
-	background-color: white;
-}
+.Odd { background-color: white; }
 
 .Logo {
 	height: 70px;

@@ -18,42 +18,41 @@ BEGIN
 	IF EXISTS (SELECT * FROM ConfigurationVariables WHERE Name = 'Recon_Paypoint_Include_Five')
 		SET @IncludeFive = CASE (SELECT Value FROM ConfigurationVariables WHERE Name = 'Recon_Paypoint_Include_Five') WHEN 'yes' THEN 1 ELSE 0 END
 
+			
 	CREATE TABLE #out (
 		SortOrder INT IDENTITY(1, 1) NOT NULL,
-		Caption NVARCHAR(1000) NOT NULL,
-		EzbobAmount DECIMAL(18, 2) NULL,
-		PaypointAmount DECIMAL(18, 2) NULL,
-		TransactionID INT NULL,
+		Caption NVARCHAR(512) NULL,
+		Amount DECIMAL(18, 2) NULL,
+		TranID INT NULL,
 		Css NVARCHAR(128) NULL
 	)
 
+			
 	INSERT INTO #out (Caption) VALUES ('Transactions of Amount 5 Are ' + (CASE @IncludeFive WHEN 1 THEN 'Included' ELSE 'Excluded' END))
-	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'Successful')
-	
-	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1
-	
-	INSERT INTO #out (Caption, Css) VALUES ('Failed Transactions', 'Failed')
-	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 0
 
+			
+	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1, 'Successful'
+	
+			
+	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 0, 'Failed'
+
+			
 	SELECT
 		o.SortOrder,
 		o.Caption,
-		o.EzbobAmount,
-		o.PaypointAmount,
-		o.TransactionID AS Id,
-		(CASE o.Caption WHEN 'Paypoint' THEN b.date ELSE t.PostDate END) AS PostDate,
-		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE t.LoanId END) AS LoanId,
-		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE c.Id END) AS ClientID,
-		(CASE o.Caption WHEN 'Paypoint' THEN NULL ELSE c.Name END) AS ClientEmail,
-		(CASE o.Caption WHEN 'Paypoint' THEN b.name ELSE c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname END) AS ClientName,
-		(CASE o.Caption WHEN 'Paypoint' THEN 'card ' + b.lastfive + ' from ' + b.ip ELSE t.Description END) AS Description,
+		ISNULL(o.Amount, (CASE o.Caption WHEN 'Ezbob' THEN t.Amount ELSE b.amount END)) AS Amount,
+		o.TranID,
+		(CASE o.Caption WHEN 'Ezbob' THEN t.PostDate ELSE b.date END) AS Date,
+		c.Id AS ClientID,
+		(CASE o.Caption WHEN 'Ezbob' THEN c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname ELSE b.name END) AS ClientName,
+		(CASE o.Caption WHEN 'Ezbob' THEN t.Description ELSE b.trans_id END) AS Description,
 		o.Css
 	FROM
 		#out o
-		LEFT JOIN LoanTransaction t ON o.TransactionID = t.Id
+		LEFT JOIN LoanTransaction t ON o.TranID = t.Id
 		LEFT JOIN Loan l ON t.LoanId = l.Id
 		LEFT JOIN Customer c ON l.CustomerId = c.Id
-		LEFT JOIN PayPointBalance b ON o.TransactionID = b.Id
+		LEFT JOIN PayPointBalance b ON o.TranID = b.Id
 	ORDER BY
 		SortOrder
 

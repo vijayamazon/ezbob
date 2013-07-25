@@ -1,6 +1,7 @@
 ﻿body {
 	margin: 0;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: 
+		"Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	color: #333;
 	background-color: rgb(238, 238, 238);
@@ -298,10 +299,6 @@ table.table {
 	-moz-border-radius-topright: 4px;
 }
 
-.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
-	background-color: #f9f9f9;
-}
-
 /*
  * Pagination
  */
@@ -436,13 +433,13 @@ table.dataTable thead td:active {
 }
 
 
-#divReportData table tbody tr.odd {
-	background-color: white !important;
-}
+#divReportData table tbody tr.odd { background-color: white !important; }
 
-#divReportData table tbody tr.even {
-	background-color: #F9F9F9 !important;
-}
+#divReportData table tbody tr.odd:hover { background-color: #e3e3e3 !important; }
+
+#divReportData table tbody tr.even { background-color: #F9F9F9 !important; }
+
+#divReportData table tbody tr.even:hover { background-color: #e3e3e3 !important; }
 
 /*
  * Styles common for mail and web application
