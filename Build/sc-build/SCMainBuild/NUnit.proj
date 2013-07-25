@@ -19,7 +19,8 @@
 
 	<Target Name="RunUnitTests" >
 		<!-- <RemoveDir Directories="$(NunitLogs)" /> -->
-		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
+		
+		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll $(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
 	</Target>
 
 </Project>

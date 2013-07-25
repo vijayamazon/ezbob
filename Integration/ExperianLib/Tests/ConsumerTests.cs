@@ -7,8 +7,10 @@ namespace ExperianLib.Tests
     class ConsumerTests : BaseTest
     {
         [Test]
+        [Ignore]
         public void TestConsumer()
         {
+            //debug mode
             var service = new ConsumerService();
             var loc = new InputLocationDetailsMultiLineLocation
             {
