@@ -46,15 +46,13 @@ namespace EzBob.Web.Code
 
         private void SendMail(decimal currentFunds, int requiredFunds)
         {
-            var vars = new Dictionary<string, string>
-				{
-					{"CurrentFunds", currentFunds.ToString("N2", CultureInfo.InvariantCulture)},
-					{"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} 
-				};
-
+            var text = string
+                .Format("Not enough funds\nThere is currently £{0} out of required £{1}\nPlease make a transfer.",
+                currentFunds.ToString("N2", CultureInfo.InvariantCulture),
+                requiredFunds.ToString("N", CultureInfo.InvariantCulture)
+                );
             var mail = new Mail();
-            var result = mail.Send(vars, _config.NotEnoughFundsToAddess, _config.NotEnoughFundsTemplateName);
-
+            var result = mail.Send(_config.NotEnoughFundsToAddess, text, "There is not enough funds!");
             if (result == "OK")
             {
                 Log.InfoFormat("Sent mail - not enough funds");
@@ -63,6 +61,6 @@ namespace EzBob.Web.Code
             {
                 Log.ErrorFormat("Failed sending alert mail - not enough funds. Result:{0}", result);
             }
-        } 
+        }
     }
 }
