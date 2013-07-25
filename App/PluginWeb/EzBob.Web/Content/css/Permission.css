@@ -151,7 +151,7 @@ a[data-bug-type],
 
 /*Recheck MPs from Market Places Tab*/
 
-.permission-RecheckMarketplaces .reCheckMP:NOT(.paypal)
+.permission-RecheckMarketplaces .reCheckMP:NOT(.paypal),
 .permission-RecheckMarketplaces .renew-token,
 .permission-RecheckMarketplaces #recheck-askville 
 {
