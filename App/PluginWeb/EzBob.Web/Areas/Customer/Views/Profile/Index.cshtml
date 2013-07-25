@@ -83,7 +83,7 @@
                     Total Balance:
                 </dt>
                 <dd>
-                    <%-EzBob.formatPounds(TotalBalance)%>
+                    <%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
                 </dd>
                 <dt>
                     Next Payment:
@@ -101,7 +101,7 @@
                     Total Balance:
                 </dt>
                 <dd>
-                    <%-EzBob.formatPounds(TotalBalance)%>
+                    <%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
                 </dd>
                 <dt style="line-height: 14px;">
                     Amount Past Due:
@@ -120,7 +120,7 @@
                 Available Credit:
             </dt>
             <dd>
-                <span class="UpToTextBlock">Up to</span> <%-EzBob.formatPounds(availableCredit)%>
+                <span class="UpToTextBlock">Up to</span> <%-EzBob.formatPoundsNoDecimals(availableCredit)%>
             </dd>
             <dt>
                 Offer Valid for:

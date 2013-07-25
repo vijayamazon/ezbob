@@ -48,7 +48,7 @@
             <div class="span4">                
                 <dl>
                     <dt>Loan Amount:</dt>
-                    <dd><%-EzBob.formatPounds(loan.LoanAmount)%></dd>
+                    <dd><%-EzBob.formatPoundsNoDecimals(loan.LoanAmount)%></dd>
                     
                     <dt>Origination Date:</dt>
                     <dd> <%- moment.utc(loan.Date).local().format('MMM DD, YYYY') %> </dd>
@@ -138,11 +138,11 @@
             <tr style="height: 56px;">
                 <td><img style="width:24px" src='@Url.Content("~/Content/img/payment-to-customer.png")' /></td>
                 <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
-                <td class="bold left"><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
-                <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
-                <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
-                <td class='left'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                <td class='left bold'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                <td class="bold right"><%- EzBob.formatPoundsNoDecimals(transaction.Amount) %></td>
+                <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
+                <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Fees) %></td>
+                <td class='right'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                <td class='right bold'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
                 @*<td></td>*@
                 <td class="hm_black"><%- transaction.StatusDescription %></td>
                 <td><%-transaction.Description%></td>
@@ -158,11 +158,11 @@
                 <tr style="height: 56px;">
                     <td><img  height="31"  src='@Url.Content("~/Content/img/wizard-mark-completed.png")' /></td>
                     <td class="hm_black"><%- moment.utc(transaction.PostDate).local().format("MMM DD YYYY")  %></td>
-                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.LoanRepayment) %></td>
+                    <td class='right'><%- EzBob.formatPoundsNoDecimals(transaction.LoanRepayment) %></td>
                     <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Interest) %></td>
                     <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Fees + transaction.Rollover) %></td>
-                    <td class='left'><%- EzBob.formatPoundsWidhDash(0) %></td>
-                    <td class='left'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
+                    <td class='right'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td class='right'><%- EzBob.formatPoundsWidhDash(transaction.Amount) %></td>
                     @*<td><%- EzBob.formatPoundsWidhDash(transaction.Balance) %></td>*@
                     <td class="hm_black"><%- transaction.StatusDescription %></td>
                     <td><%-transaction.Description%></td>
@@ -220,10 +220,10 @@
                     <%var urlImage = item.Status === 'Late' ? "@Url.Content("~/Content/img/calendar-late.png")" : "@Url.Content("~/Content/img/calendarx32.png")"%>
                     <td><img src="<%-urlImage%>"></td>
                     <td class="hm_black"><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
-                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
+                    <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsNoDecimals(item.LoanRepayment)%></td>
                     <td class='right <%-styleForLate%> %>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
                     <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LateCharges)%></td>
-                    <td class='left <%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
+                    <td class='right <%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
                     <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
                     @*<td><%-EzBob.formatPoundsWidhDash(item.Balance)%></td>*@
                     <td class='<%-styleForLate%>'><%-item.StatusDescription%></td>
