@@ -481,7 +481,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="PacnetBalanceWeekdayLimit" value="50000" />
 		<property name="NotEnoughFundsInterval" value="600" />
 		<property name="NotEnoughFundsToAddess" value="eilaya@ezbob.com" />
-		<property name="NotEnoughFundsTemplateName" value="NotEnoughFunds" />
 		
 		<!-- Days from last marketplace update end date (days) -->
 		<property name="UpdateOnReapplyLastDays" value="14" />
