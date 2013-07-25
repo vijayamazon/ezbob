@@ -96,7 +96,7 @@
 	
 	<module id="MandrillUATConfig">
         <property name="Enable" value="False" />
-        <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
+        <property name="Key" value="jIfj1qsUFBbqK6kfMVR_Qg" />
     </module>
 		
     <module id="ZohoCRM">
