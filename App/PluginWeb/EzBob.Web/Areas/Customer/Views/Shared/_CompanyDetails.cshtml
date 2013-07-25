@@ -36,7 +36,7 @@
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="attardi-input"><span>Middle Name</span>
-							<input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field" />
+							<input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field alphaOnly" />
 						</label>
 						<img id="MiddleNameImage" class="field_status empty"/>
 					</div>
@@ -383,7 +383,7 @@
 				<div class="controls">
 					<label class="control-label attardi-input">
 						<span>Middle Initial</span>
-						<input class="form_field director_name_part nonrequired" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+						<input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
 					</label>
 					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status"  />
 				</div>

@@ -170,6 +170,16 @@ $(function () {
         });
     };
 
+    $.fn.alphaOnly = function () {
+        return this.each(function () {
+            $(this).bind('keyup blur', function () {
+                var regexp = /[^A-Za-z\.\s\-]/;
+                while (regexp.test(this.value)) {
+                    this.value = this.value.replace(regexp, '');
+                }
+            });
+        });
+    };
 
     $.fn.withoutSpaces = function () {
         this.each(function () {

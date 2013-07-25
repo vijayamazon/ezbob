@@ -47,6 +47,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
     render: function() {
         this.$el.html(this.template());
         this.directorArea = this.$el.find('.directorArea');
+        
         return this;
     },
     renderDirector: function() {
@@ -59,6 +60,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
         oFieldStatusIcons.filter('.required').field_status({ required: true });
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
+        this.$el.find('.alphaOnly').alphaOnly();
         /*
         var oFieldStatusIcons = this.$el.find('IMG.field_status');
         _.each(oFieldStatusIcons, function (img, i) {

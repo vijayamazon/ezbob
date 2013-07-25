@@ -27,6 +27,8 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         'click .amazonscreenshot': 'runTutorial'
         'click a.print': 'print'
         'change input': 'inputChanged'
+        'focusout input': 'inputChanged'
+        'keyup input': 'inputChanged'
 
     enableControls: ->
         @$el.find('#amazonMarketplaceId, #amazonMerchantId').removeAttr('disabled')
@@ -41,6 +43,7 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
 
     inputChanged: ->
         enabled =  EzBob.Validation.checkForm(@validator) 
+        #enabled =  @validator.check(@marketplaceId) and @merchantId.val().length > 10 and @merchantId.val().length < 15 && not @merchantId.hasClass('error')
         #enabled = EzBob.Validation.element(@validator, @marketplaceId) and @merchantId.val().length > 10 and @merchantId.val().length < 15
         @$el.find('a.connect-amazon').toggleClass('disabled', !enabled)
 
@@ -77,14 +80,15 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         false
 
     connect: (e) ->
-        unless @validator.form()
+        if not EzBob.Validation.checkForm(@validator)
+            @validator.form()
             EzBob.App.trigger 'error', 'Please enter a valid Merchant ID'
             return false
+        
+        return false if @$el.find('a.connect-amazon').hasClass('disabled')
 
         marketplaceId = @$el.find('#amazonMarketplaceId')
         merchantId = @$el.find('#amazonMerchantId')
-        
-        return false if @$el.find('a.connect-amazon').hasClass('disabled')
         
         @blockBtn true
 

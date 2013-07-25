@@ -13,7 +13,8 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 
         this.$el.find(".ezDateTime").splittedDateTime();
         this.$el.find('.phonenumber').numericOnly(11);
-
+        this.$el.find('.alphaOnly').alphaOnly();
+        
         this.$el.find('li[rel]').setPopover("left");
         
         var oFieldStatusIcons = this.$el.find('IMG.field_status');
