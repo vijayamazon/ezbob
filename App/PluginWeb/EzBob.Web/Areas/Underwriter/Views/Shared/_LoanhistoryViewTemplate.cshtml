@@ -56,7 +56,7 @@
                     <%}%>
                     <a href="#" class="btn btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="icon-pencil"></i></a>
                 </td>
-                <td><%- EzBob.formatPounds(loan.LoanAmount) %></td>
+                <td><%- EzBob.formatPoundsNoDecimals(loan.LoanAmount) %></td>
                 <td><%- EzBob.formatPounds(loan.Repayments) %></td>
                 <td><%- EzBob.formatDateHumanFull(loan.Date) %></td>
                 <td><%- EzBob.formatDateHumanFull(loan.DateClosed ) %></td>
@@ -129,7 +129,7 @@
         <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-mini show-schedule"><i class="icon-calendar"></i></button></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
         <td><%- EzBob.formatDateHumanFull(offer.EndDate) %></td>
-        <td><%- EzBob.formatPounds(offer.Amount) %></td>
+        <td><%- EzBob.formatPoundsNoDecimals(offer.Amount) %></td>
         <td><%- EzBob.formatPercents(offer.InterestRate) %></td>
         <td><%- offer.SetupFee %></td>
         <td><%- offer.DiscountPlan %></td>
