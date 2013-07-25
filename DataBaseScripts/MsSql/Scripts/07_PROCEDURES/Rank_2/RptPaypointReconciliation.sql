@@ -27,8 +27,8 @@ BEGIN
 		Css NVARCHAR(128) NULL
 	)
 
-	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'Successful')
 	INSERT INTO #out (Caption) VALUES ('Transactions of Amount 5 Are ' + (CASE @IncludeFive WHEN 1 THEN 'Included' ELSE 'Excluded' END))
+	INSERT INTO #out (Caption, Css) VALUES ('Successful Transactions', 'Successful')
 	
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1
 	

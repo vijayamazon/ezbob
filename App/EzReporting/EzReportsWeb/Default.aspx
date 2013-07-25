@@ -18,8 +18,9 @@
 		$(document).ready(function () {
 			$('#divReportData table').addClass('table table-bordered table-striped blue-header centered');
 			$('#tableReportData').dataTable({
-				"aLengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
-				"iDisplayLength": 100
+				aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
+				iDisplayLength: 100,
+				aaSorting: []
 			});
 
 			$("#tdEntries").append($("#tableReportData_length"));
