@@ -36,7 +36,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
         private readonly IZohoFacade _crm;
-        private readonly ISession _session;
 
         //-------------------------------------------------------------------------------
         public GetCashController(
@@ -47,8 +46,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IPacnetPaypointServiceLogRepository logRepository,
             ICustomerRepository customerRepository,
             ILoanCreator loanCreator,
-            IZohoFacade crm,
-            ISession session)
+            IZohoFacade crm)
         {
             _context = context;
             _payPointFacade = payPointFacade;
@@ -58,7 +56,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customerRepository = customerRepository;
             _loanCreator = loanCreator;
             _crm = crm;
-            _session = session;
             _config = ConfigurationRootBob.GetConfiguration().PayPoint;
         }
 

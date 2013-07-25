@@ -1,6 +1,7 @@
 ﻿using System;
 using ApplicationMng.Model;
 using ApplicationMng.Repository;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
@@ -21,8 +22,8 @@ namespace ezmanage
         public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService,
                                    IAppCreator appCreator, IZohoFacade crm, IAgreementsGenerator agreementsGenerator,
                                    EzContext context, ICustomerRepository customerRepository, IUsersRepository users,
-                                   LoanBuilder loanBuilder)
-            : base(loanHistoryRepository, pacnetService, appCreator, crm, agreementsGenerator, context, loanBuilder)
+                                   LoanBuilder loanBuilder, AvailableFundsValidator validator)
+            : base(loanHistoryRepository, pacnetService, appCreator, crm, agreementsGenerator, context, loanBuilder, validator)
         {
             _context = context;
             _customerRepository = customerRepository;

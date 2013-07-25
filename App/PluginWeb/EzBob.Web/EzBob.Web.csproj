@@ -253,6 +253,7 @@
     <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
     <Compile Include="Code\AgreementsGenerator.cs" />
     <Compile Include="Code\AgreementsModelBuilder.cs" />
+    <Compile Include="Code\AvailableFundsValidator.cs" />
     <Compile Include="Code\ConcentAgreementHelper.cs" />
     <Compile Include="Code\Email\EmailConfirmation.cs" />
     <Compile Include="Code\Email\EmailConfirmationRequestInvalidStateException.cs" />

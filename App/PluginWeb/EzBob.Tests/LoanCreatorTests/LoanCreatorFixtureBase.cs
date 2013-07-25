@@ -1,4 +1,5 @@
-﻿using EZBob.DatabaseLib.Model.Database;
+﻿using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
 using EzBob.Web.ApplicationCreator;
@@ -35,10 +36,22 @@ namespace EzBob.Tests.LoanCreatorTests
             var context = new Mock<IEzbobWorkplaceContext>();
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder);
+
+            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
             SetUp();
         }
 
         public virtual void SetUp(){}
+    }
+
+    public class AvailableFundsValidatorFake : AvailableFundsValidator
+    {
+        public AvailableFundsValidatorFake() : base(null, null, null)
+        {
+        }
+
+        public override void VerifyAvailableFunds(decimal transfered)
+        {
+        }
     }
 }

@@ -1,16 +1,11 @@
 ﻿namespace EzBob.Web.Code
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
-	using Configuration;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using MailApi;
-	using StructureMap;
 	using Web.ApplicationCreator;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
@@ -20,7 +15,6 @@
 	using PaymentServices.PacNet;
 	using ZohoCRM;
 	using log4net;
-	using EZBob.DatabaseLib;
 
 	public interface ILoanCreator
     {
@@ -36,10 +30,8 @@
         private readonly IAgreementsGenerator _agreementsGenerator;
         private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
-		private readonly PacNetBalanceRepository _funds;
-		private readonly PacNetManualBalanceRepository _manualFunds;
-		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		private readonly Mail _mail;
+        private readonly AvailableFundsValidator _availableFundsValidator;
+
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (LoanCreator));
 
@@ -50,7 +42,8 @@
             IZohoFacade crm, 
             IAgreementsGenerator agreementsGenerator, 
             IEzbobWorkplaceContext context, 
-            LoanBuilder loanBuilder)
+            LoanBuilder loanBuilder,
+            AvailableFundsValidator availableFundsValidator)
         {
             _loanHistoryRepository = loanHistoryRepository;
             _pacnetService = pacnetService;
@@ -59,10 +52,7 @@
             _agreementsGenerator = agreementsGenerator;
             _context = context;
             _loanBuilder = loanBuilder;
-
-			_funds = ObjectFactory.GetInstance<PacNetBalanceRepository>();
-			_manualFunds = ObjectFactory.GetInstance<PacNetManualBalanceRepository>();
-			_mail = new Mail();
+            _availableFundsValidator = availableFundsValidator;
         }
 
         public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
@@ -148,50 +138,10 @@
                                                cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
             _pacnetService.CloseFile(cus.Id, "ezbob");
 
-			VerifyAvailableFunds(transfered);
+            _availableFundsValidator.VerifyAvailableFunds(transfered);
 
             return ret;
         }
-
-		private void VerifyAvailableFunds(decimal transfered)
-	    {
-		    try
-		    {
-				var balance = _funds.GetBalance();
-				var manualBalance = _manualFunds.GetBalance();
-				var fundsAvailable = balance.Adjusted + manualBalance - transfered;
-
-				DateTime today = DateTime.UtcNow;
-				int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
-				if (fundsAvailable < relevantLimit)
-				{
-					SendMail(fundsAvailable, relevantLimit);
-				}
-		    }
-		    catch (Exception e)
-		    {
-				Log.ErrorFormat("Failed verifying available funds with error:{0}", e);
-		    }
-	    }
-
-	    private void SendMail(decimal currentFunds, int requiredFunds)
-		{
-            var text = string
-                .Format("Not enough funds\nThere is currently £{0} out of required £{1}\nPlease make a transfer.",
-                currentFunds.ToString("N2", CultureInfo.InvariantCulture),
-                requiredFunds.ToString("N", CultureInfo.InvariantCulture)
-                );
-
-            var result = _mail.Send(config.NotEnoughFundsToAddess, text, "There is not enough funds!");
-			if (result == "OK")
-			{
-				Log.InfoFormat("Sent mail - not enough funds");
-			}
-			else
-			{
-				Log.ErrorFormat("Failed sending alert mail - not enough funds. Result:{0}", result);
-			}
-		}
 
         public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period)
         {
