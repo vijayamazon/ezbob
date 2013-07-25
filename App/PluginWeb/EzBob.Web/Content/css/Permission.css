@@ -1,0 +1,254 @@
+﻿/* Permissions */
+[name="editEmail"],
+[name="changeDisabledState"],
+[name="isTestEditButton"],
+[name="updateCRM"],
+[name="newCreditLineBtn"],
+[name="loanType"],
+[name="allowSendingEmail"],
+[name="openCreditLineChangeButton"],
+[name="repaymentPeriodChangeButton"],
+[name="startingDateChangeButton"],
+[name="isLoanTypeSelectionAllowed"],
+[name="offerValidUntilDateChangeButton"],
+[name="interestRateChangeButton"],
+[name="setupFeeEditButton"],
+#ApproveBtn,
+#RejectBtn,
+#EscalateBtn,
+.reCheck-amazon,
+.checkeBankAccount,
+.reCheck-paypal,
+#RunCheckBtn,
+#btnAMLInformation,
+#btnAMLandBWAInformation,
+#btnBWAInformation,
+.edit-loan,
+.couple_buttons,
+a[data-bug-type],
+.addNewDebitCard,
+.setDefault,
+.payment-cards-buttons > *,
+.rollover,
+.make-payment,
+#btn-options,
+#addNewDoc,
+#deleteDocs,
+#RunBWAReCheckBtn,
+#RunAMLReCheckBtn,
+#RunReCheckBtn,
+#RunAMLCheckBtn,
+#RunAMLBWACheckBtn,
+#RunBWACheckBtn,
+.recheck-mp,
+.reCheckMP,
+[name="discountPlan"],
+[name="avoidAutomaticDecisionButton"],
+#recheck-main-strat,
+.renew-token,
+.set-paypoint-default,
+#recheck-askville,
+#SuspendBtn
+{
+    display: none;
+    visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
+}
+
+/* Other function for Roles, which not existing in Permission Table but needed */
+.role-manager .rollover,
+.role-Underwriter .rollover,
+
+.role-manager .make-payment,
+.role-Underwriter .make-payment,
+
+.role-manager #btn-options,
+.role-Underwriter #btn-options,
+
+.role-manager #addNewDoc,
+.role-Underwriter #addNewDoc,
+
+.role-manager #deleteDocs,
+.role-Underwriter #deleteDocs
+
+.role-Underwriter [name="avoidAutomaticDecisionButton"],
+.role-manager [name="avoidAutomaticDecisionButton"],
+
+.role-manager #SuspendBtn,
+.role-Underwriter #SuspendBtn
+
+/*
+.role-manager
+.role-Underwriter
+*/
+{
+     display: inline-block;
+     visibility: visible;
+}
+
+/*Email confirmation button*/
+
+.permission-EmailConfirmationButton [name="editEmail"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Customer Status*/
+
+.permission-CustomerStatus [name="changeDisabledState"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Test User*/
+
+.permission-TestUser [name="isTestEditButton"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*CRM*/
+
+.permission-CRM [name="updateCRM"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*New Credit line button*/
+
+.permission-NewCreditLineButton [name="newCreditLineBtn"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Credit line fields*/
+
+.permission-CreditLineFields [name="loanType"],
+.permission-CreditLineFields [name="allowSendingEmail"],
+.permission-CreditLineFields [name="openCreditLineChangeButton"],
+.permission-CreditLineFields [name="repaymentPeriodChangeButton"],
+.permission-CreditLineFields [name="startingDateChangeButton"],
+.permission-CreditLineFields [name="offerValidUntilDateChangeButton"],
+.permission-CreditLineFields [name="interestRateChangeButton"],
+.permission-CreditLineFields [name="setupFeeEditButton"],
+.permission-CreditLineFields [name="isLoanTypeSelectionAllowed"] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Approve, Reject*/
+
+.permission-ApproveReject #ApproveBtn, .permission-ApproveReject #RejectBtn {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Escalate*/
+
+.permission-Escalate #EscalateBtn {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Recheck MPs from Market Places Tab*/
+
+.permission-RecheckMarketplaces .reCheckMP:NOT(.paypal)
+.permission-RecheckMarketplaces .renew-token,
+.permission-RecheckMarketplaces #recheck-askville 
+{
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Check bank account*/
+
+.permission-CheckBankAccount .checkeBankAccount {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Recheck PayPal*/
+
+.permission-RecheckPayPal .reCheckMP.paypal {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Run credit bureau checks - Consumer+AML+BWA*/
+
+.permission-RunCreditBureauChecks #RunBWAReCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLReCheckBtn,
+.permission-RunCreditBureauChecks #RunReCheckBtn,
+.permission-RunCreditBureauChecks #RunReCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLCheckBtn,
+.permission-RunCreditBureauChecks #RunAMLBWACheckBtn,
+.permission-RunCreditBureauChecks #RunBWACheckBtn,
+.permission-RunCreditBureauChecks #RunCheckBtn {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Sending messages to clients*/
+
+.permission-SendingMessagesToClients #btnAMLInformation,
+.permission-SendingMessagesToClients #btnAMLandBWAInformation,
+.permission-SendingMessagesToClients #btnBWAInformation {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Edit loan details*/
+
+.permission-EditLoanDetails .edit-loan {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Rerunning MPs - Registered tab*/
+
+.permission-RerunningMarketplaces .recheck-mp {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Rerunning a Customer - Registered tab*/
+
+.permission-RerunningCreditCheck #recheck-main-strat {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Opening a bug*/
+
+.permission-OpenBug a[data-bug-type] {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Add bank account*/
+
+.permission-AddBankAccount .addNewDebitCard {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Change bank account (set default)*/
+
+.permission-ChangeBankAccount .setDefault,
+.permission-ChangeBankAccount .set-paypoint-default {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Add debit card*/
+
+.permission-AddDebitCard .payment-cards-buttons > * {
+    display: inline-block;
+    visibility: visible;
+}
+
+/*Pacnet manual*/
+
+.permission-PacnetManualButton .couple_buttons {
+    display: inline-block;
+    visibility: visible;
+}

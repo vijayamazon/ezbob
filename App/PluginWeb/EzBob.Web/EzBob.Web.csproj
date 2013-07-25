@@ -499,6 +499,7 @@
     <Content Include="Content\css\loanDetails.css">
       <DependentUpon>loanDetails.less</DependentUpon>
     </Content>
+    <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\popover.css" />
     <Content Include="Content\css\shops.css" />
     <Content Include="Content\css\sidebar.css" />

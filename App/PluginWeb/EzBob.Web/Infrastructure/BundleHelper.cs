@@ -28,6 +28,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/loanDetails.less")
                 .Add("~/Content/css/choosen/chosen.css")
                 .Add("~/Content/css/underwriter.css")
+                .Add("~/Content/css/Permission.css")
                 .Add("~/Content/css/alertify.css")
                 .Add("~/Content/css/editLoan.less")
                 .Add("~/Content/css/captcha.css")
