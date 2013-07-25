@@ -947,8 +947,8 @@ EzBob.validatePersonalDetailsForm = function (el) {
             ResidentialStatus: { required: true },
             Gender: { required: true },
             MartialStatus: { required: true },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^\£ ([0-9]{0,3},)*([0-9]{0,3})(\.[0-9]{2})?$" },
-            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: "^\£ ([0-9]{0,3},)*([0-9]{0,3})(\.[0-9]{2})?$" },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^\£ ([0-9]{0,3},)*([0-9]{0,3})(\.[0-9]{2})?$", min: 1 },
+            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: "^\£ ([0-9]{0,3},)*([0-9]{0,3})(\.[0-9]{2})?$", min: 1 },
             TimeAtAddress: { required: true },
             ConsentToSearch: { required: true }
         },
