@@ -1,123 +1,256 @@
-﻿namespace EzAnalyticsConsoleClient
-{
-	using System.Security.Cryptography.X509Certificates;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using Google.Apis.Analytics.v3;
-	using Google.Apis.Analytics.v3.Data;
-	using Google.Apis.Authentication.OAuth2;
-	using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
-	using System;
-	using DotNetOpenAuth.OAuth2;
-	using System.Collections.Generic;
-	using Logger;
-	using System.Globalization;
-	class Program
-	{
-		static void Main()
-		{
-			var objOAuth2 = new ClsGetOAuth2Authentication();
-			try
-			{
-				string strKeyFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\08a190d7e7b61e5cdfa63301e528134d3699f096-privatekey.p12";
-				string strKeyPassword = string.Empty;
-				const string serviceAccountUser = "660066936754-gcs16ckt4dhklhcqrktjispn0l3ddfhl@developer.gserviceaccount.com";
-				const string strScope = "analytics";
-				//const string strScope = "analytics.readonly";
-				var objAuth = objOAuth2.ObjGetOAuth2(strKeyFile, strKeyPassword, serviceAccountUser, strScope); //Authentication data returned
-				var initializer = new Google.Apis.Services.BaseClientService.Initializer { Authenticator = objAuth };
+﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using Ezbob.Context;
+using Ezbob.Database;
+using Ezbob.Logger;
+using Google.Apis.Analytics.v3;
+using Google.Apis.Analytics.v3.Data;
+using Google.Apis.Authentication.OAuth2;
+using Google.Apis.Authentication.OAuth2.DotNetOpenAuth;
+using System;
+using DotNetOpenAuth.OAuth2;
+using System.Collections.Generic;
+using System.Globalization;
+using EzEnv = Ezbob.Context.Environment;
 
-				var service = new AnalyticsService(initializer);
+namespace EzAnalyticsConsoleClient {
+	class Program {
+		#region method Main
 
-				const string profileId = "ga:60953365";
-				string startDate = DateTime.Today.ToString("yyyy-MM-dd");// "2013-03-23";
-				string endDate = DateTime.Today.ToString("yyyy-MM-dd"); // "2013-03-23";
-				
-				const string metrics = "ga:visits,ga:visitors";
-				DataResource.GaResource.GetRequest request = service.Data.Ga.Get(profileId, startDate, endDate, metrics);
-				
-				//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
-				//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
-				/*foreach (Profile profile in profiles.Items){Console.WriteLine("Profile Timezone: " + profile.Timezone);}*/
+		static void Main() {
+			var oLog = new LegacyLog();
 
-				request.Dimensions = "ga:date,ga:country";
-				GaData data = request.Fetch();
-				int all = 0;
-				int allunique = 0;
-				int ukraine = 0;
-				int ukraineUnique = 0;
-				int israel = 0;
-				int israelUnique = 0;
-				int uk = 0;
-				int ukUnique = 0;
-				string dateStr = null;
-				foreach (List<string> row in data.Rows)
-				{
-					if (row.Count == 4)
-					{
-						dateStr = row[0];
-						all += int.Parse(row[2]);
-						allunique += int.Parse(row[3]);
-						if (row[1].Equals("Ukraine"))
-						{
-							ukraine = int.Parse(row[2]);
-							ukraineUnique = int.Parse(row[3]);
-						}
+			var app = new Program(oLog);
 
-						if (row[1].Equals("Israel"))
-						{
-							israel = int.Parse(row[2]);
-							israelUnique = int.Parse(row[3]);
-						}
+			if (app.Environment.Name == Name.Dev) {
+				app.Log = new ConsoleLog(app.Log);
 
-						if (row[1].Equals("United Kingdom"))
-						{
-							uk = int.Parse(row[2]);
-							ukUnique = int.Parse(row[3]);
-						}
-					}
+				if (app.Init())
+					app.Run();
+
+				app.Done();
+			}
+			else {
+				try {
+					if (app.Init())
+						app.Run();
+
+					app.Done();
 				}
+				catch (Exception ex) {
+					app.Log.Error("Error Occured!\n\nStatement:- {0}\n\nDescription:-{1}", ex.Message, ex.ToString());
+					app.Log.Error("\nPress enter to exit");
+				} // try
+			} // if dev/non-dev env
+		} // Main
 
-				DateTime date = DateTime.ParseExact(dateStr, "yyyyMMdd", CultureInfo.InvariantCulture);
-				string dbDate = date.ToString("yyyy-MM-dd");
-				var log = new LegacyLog();
-				var conn = new SqlConnection(log);
+		#endregion method Main
 
-				conn.ExecuteNonQuery("InsertSiteAnalytics", 
-					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.UkVisits),
-					new QueryParameter("@Value", uk));
+		#region constructor
+
+		private Program(ASafeLog oLog = null) {
+			Log = new SafeLog(oLog);
+			Environment = new EzEnv(Log);
+		} // constructor
+
+		#endregion constructor
+
+		#region method Init
+
+		private bool Init() {
+			Log.Debug("Program.Init started...");
+
+			m_oReportDate = DateTime.Today;
+
+			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+
+			string strKeyFile = Path.Combine(
+				Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+				GoogleConsts.KeyFileName
+			);
+
+			Log.Debug("Creating authentication data...");
+
+			var objAuth = ObjGetOAuth2(strKeyFile, string.Empty, GoogleConsts.ServiceAccountUser, GoogleConsts.Scope); //Authentication data returned
+
+			Log.Debug("Creating initialser...");
+
+			var initializer = new Google.Apis.Services.BaseClientService.Initializer {
+				Authenticator = objAuth
+			};
+
+			Log.Debug("Creating service client...");
+
+			m_oService = new AnalyticsService(initializer);
+
+			Log.Debug("Program.Init complete.");
+
+			return true;
+		} // Init
+
+		#endregion method Init
+
+		#region method Run
+
+		private void Run() {
+			Log.Debug("Program.Run started...");
+
+			SortedDictionary<string, CountryData> oRawStats = FetchStats();
+
+			SortedDictionary<string, int> oStats = ProcessStats(oRawStats);
+
+			SaveStats(oStats);
+
+			Log.Debug("Program.Run complete.");
+		} // Run
+
+		#endregion method Run
+
+		#region method Done
+
+		private void Done() {
+			Log.Debug("Program.Done started...");
+			Log.Debug("Program.Done complete.");
+		} // Done
+
+		#endregion method Done
+
+		#region method ProcessStats
+
+		private SortedDictionary<string, int> ProcessStats(SortedDictionary<string, CountryData> oRawStats) {
+			var oRes = new SortedDictionary<string, int>();
+
+			int nAllVisits = 0;
+			int nAllVisitors = 0;
+
+			foreach (KeyValuePair<string, CountryData> oCtrData in oRawStats) {
+				nAllVisits += oCtrData.Value.Visits;
+				nAllVisitors += oCtrData.Value.Visitors;
+			} // for each country
+
+			Log.Debug("Total visits: {0}", nAllVisits);
+			Log.Debug("Total visitors: {0}", nAllVisitors);
+
+			oRes[DbConsts.UkVisits] = Visits(oRawStats, GoogleConsts.UK);
+			oRes[DbConsts.UkVisitors] = Visitors(oRawStats, GoogleConsts.UK);
+
+			oRes[DbConsts.WorldWideVisits] = nAllVisits - Visits(oRawStats, GoogleConsts.IL) - Visits(oRawStats, GoogleConsts.UA);
+			oRes[DbConsts.WorldWideVisitors] = nAllVisitors - Visitors(oRawStats, GoogleConsts.IL) - Visitors(oRawStats, GoogleConsts.UA);
+
+			return oRes;
+		} // ProcessStats
+
+		#endregion method ProcessStats
+
+		#region method Visits
+
+		private int Visits(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
+			if (oRawStats.ContainsKey(sCountry))
+				return oRawStats[sCountry].Visits;
+
+			return 0;
+		} // Visits
+
+		#endregion method Visits
+
+		#region method Visitors
+
+		private int Visitors(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
+			if (oRawStats.ContainsKey(sCountry))
+				return oRawStats[sCountry].Visitors;
+
+			return 0;
+		} // Visitors
+
+		#endregion method Visitors
+
+		#region method SaveStats
+
+		private void SaveStats(SortedDictionary<string, int> oStats) {
+			Log.Debug("Saving stats started...");
+
+			var conn = new SqlConnection(Log);
+
+			string dbDate = conn.DateToString(m_oReportDate);
+
+			foreach (KeyValuePair<string, int> pair in oStats) {
 				conn.ExecuteNonQuery("InsertSiteAnalytics",
 					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.UkVisitors),
-					new QueryParameter("@Value", ukUnique));
-				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.WorldWideVisits),
-					new QueryParameter("@Value", all - ukraine - israel));
-				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", Consts.WorldWideVisitors),
-					new QueryParameter("@Value", allunique - ukraineUnique - israelUnique));
+					new QueryParameter("@CodeName", pair.Key),
+					new QueryParameter("@Value", pair.Value)
+				);
+			} // for each stat to save
 
-				Logger.DebugFormat("all:{0},all unique:{1}, uk:{2}, uk unique:{3}, ukraine:{4}, ukraine unique:{5}, israel:{6}, israel unique:{7}",
-					all, allunique, uk, ukUnique, ukraine, ukraineUnique, israel, israelUnique);
-				Logger.DebugFormat("all(without ukraine,israel):{0},all unique(without ukraine,israel):{1}, uk:{2}, uk unique:{3}", all - ukraine - israel, allunique - ukraineUnique - israelUnique, uk, ukUnique);
+			Log.Debug("Saving stats complete.");
+		} // SaveStats
 
-			}
-			catch (Exception ex)
-			{
-				Logger.DebugFormat("Error Occured!\n\nStatement:- {0}\n\nDescription:-{1}", ex.Message, ex.ToString());
-				Logger.Debug("\nPress enter to exit");
-			}
-		}
+		#endregion method SaveStats
 
-	}
+		#region method FetchStats
 
-	internal class ClsGetOAuth2Authentication
-	{
-		public OAuth2Authenticator<AssertionFlowClient> ObjGetOAuth2(string strPrivateFilePath, string strPrivateFilePassword, string strServiceAccEmailId, string strScope)
-		{
+		private SortedDictionary<string, CountryData> FetchStats() {
+			Log.Debug("Fetching stats started...");
+
+			var oRes = new SortedDictionary<string, CountryData>();
+
+			string sDate = m_oReportDate.ToString(GoogleConsts.OAuthDateFormat, CultureInfo.InvariantCulture);
+
+			Log.Debug("Creating request...");
+
+			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(GoogleConsts.ProfileID, sDate, sDate, GoogleConsts.Metrics);
+
+			//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
+			//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
+			/*foreach (Profile profile in profiles.Items){Console.WriteLine("Profile Timezone: " + profile.Timezone);}*/
+
+			request.Dimensions = GoogleConsts.Dimensions;
+
+			Log.Debug("Fetching...");
+
+			GaData data = request.Fetch();
+
+			Log.Debug("Processing...");
+
+			foreach (List<string> pkg in data.Rows) {
+				if (pkg.Count != 4)
+					continue;
+
+				string sCountry = pkg[1];
+				int nVisits = int.Parse(pkg[2]);
+				int nVisitors = int.Parse(pkg[3]);
+
+				if (oRes.ContainsKey(sCountry)) {
+					oRes[sCountry].Add(nVisits, nVisitors);
+					Log.Debug("First time country: {0}, {1} visits, {2} visitors", sCountry, nVisits, nVisitors);
+				}
+				else {
+					oRes[sCountry] = new CountryData(nVisits, nVisitors);
+					Log.Debug("Repeating country: {0}, {1} visits, {2} visitors", sCountry, nVisits, nVisitors);
+				} // if
+			} // for each package
+
+			Log.Debug("Fetching stats complete.");
+
+			return oRes;
+		} // FetchStats
+
+		#endregion method FetchStats
+
+		#region property Environment
+
+		private Ezbob.Context.Environment Environment { get; set; }
+
+		#endregion property Environment
+
+		#region property Log
+
+		private ASafeLog Log { get; set; }
+
+		#endregion property Log
+
+		#region method ObjGetOAuth2
+
+		private OAuth2Authenticator<AssertionFlowClient> ObjGetOAuth2(string strPrivateFilePath, string strPrivateFilePassword, string strServiceAccEmailId, string strScope) {
 			string scopeUrl = "https://www.googleapis.com/auth/" + strScope;
 			string strSrvAccEmailId = strServiceAccEmailId;
 			string strKeyFile = strPrivateFilePath; //KeyFile: This is the physical path to the key file you downloaded when you created your Service Account.
@@ -128,6 +261,11 @@
 			var objClient = new AssertionFlowClient(objAuthServerDesc, objKey) { ServiceAccountId = strSrvAccEmailId, Scope = scopeUrl };
 			var objAuth = new OAuth2Authenticator<AssertionFlowClient>(objClient, AssertionFlowClient.GetState);
 			return objAuth;
-		}
-	}
-}
+		} // ObjGetOAuth2
+
+		#endregion method ObjGetOAuth2
+
+		private DateTime m_oReportDate;
+		private AnalyticsService m_oService;
+	} // class Program
+} // namespace EzAnalyticsConsoleClient
