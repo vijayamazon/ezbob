@@ -38,7 +38,6 @@ class EzBob.InstallmentEditor extends Backbone.Marionette.ItemView
     template: "#loan_editor_edit_installment_template"
 
     initialize: ->
-        console.log @model.toJSON()
         @oldValues = @model.toJSON()
         @modelBinder = new Backbone.ModelBinder()
 

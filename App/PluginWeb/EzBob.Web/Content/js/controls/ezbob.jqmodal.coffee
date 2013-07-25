@@ -20,30 +20,3 @@ class EzBob.JqModalRegion extends  Backbone.Marionette.Region
 
     hideModal: ->
         @dialog.dialog('destroy')
-###
-class EzBob.TestView extends Backbone.Marionette.View
-    constructor: ->
-        _.bindAll @
-        super()
-    render: ->
-        @$el.html('<h2>Hello!</h2>')
-
-    jqoptions: ->
-        buttons:
-            'Ok': @onOk
-            'Cancel': @onCancel
-        modal: true
-        title: 'A test modal window'
-
-    onOk: ->
-        console.log 'ok'
-        @.close()
-
-    onCancel: ->
-        console.log 'cancel'
-        @.close()
-
-    close: ->
-        console.log 'view closed'
-        super()
-###

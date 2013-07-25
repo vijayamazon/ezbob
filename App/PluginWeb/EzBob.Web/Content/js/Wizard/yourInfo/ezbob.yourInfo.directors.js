@@ -61,25 +61,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
         this.$el.find('.alphaOnly').alphaOnly();
-        /*
-        var oFieldStatusIcons = this.$el.find('IMG.field_status');
-        _.each(oFieldStatusIcons, function (img, i) {
-            var oImg = $(img);
-            if (oImg.val() == 'fail') {
-                oImg.field_status('set', 'fail', 2);
-            }
-            else if (oImg.val() == 'ok') {
-                oImg.field_status('set', 'ok', 2);
-            } else {
-                if (oImg.hasClass('required')) {
-                    oImg.field_status({ required: true });
-                } else {
-                    oImg.field_status({ required: false });
-                }
-            }
-        });
-       */
-        
+
         $.each(this.model.models, function(i, val) {
             var addressElem = that.preffix + 'Address' + i,
                 name = that.preffix + "[" + i + "]." + that.name,
@@ -94,7 +76,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
             SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
             that.updateStatuses(val, i);
             that.addressErrorPlacement(addressView.$el, addressView.model);
-            console.log(that.validator);
+
             that.validator.settings.rules[dateOfBirthValName] = { yearLimit: 18 };
             that.validator.settings.messages[dateOfBirthValName] = { yearLimit: "The number of full year should be more then 18 year" };
 
@@ -121,9 +103,6 @@ EzBob.DirectorMainView = Backbone.View.extend({
         if (nameStatus) $("[id='" + this.preffix + "[" + i + "].NameImage']").field_status('set', nameStatus, 2);
         if (middleStatus) $("[id='" + this.preffix + "[" + i + "].MiddleImage']").field_status('set', middleStatus, 2);
         if (surenameStasus) $("[id='" + this.preffix + "[" + i + "].SurnameImage']").field_status('set', surenameStasus, 2);
-
-
-        console.log(i, val);
     },
     validateAddresses: function() {
         var result = true;
