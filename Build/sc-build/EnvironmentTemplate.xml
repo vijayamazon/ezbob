@@ -92,16 +92,22 @@
     <module id="MandrillTrunk">
         <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />
         <property name="Enable" value="True" />
+        <!-- Used in sending messages without a template -->
+        <property name="From" value="ezbob@ezbob.com" />
     </module>
 	
 	<module id="MandrillUATConfig">
         <property name="Key" value="jIfj1qsUFBbqK6kfMVR_Qg" />
         <property name="Enable" value="True" />
+        <!-- Used in sending messages without a template -->
+        <property name="From" value="ezbob@ezbob.com" />
     </module>
 	
     <module id="MandrillProduction">
         <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
         <property name="Enable" value="True" />
+        <!-- Used in sending messages without a template -->
+        <property name="From" value="ezbob@ezbob.com" />
     </module>
 
     <module id="ZohoCRM">

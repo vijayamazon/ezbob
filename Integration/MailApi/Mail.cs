@@ -19,6 +19,7 @@ namespace MailApi
         private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
         private const string SendTemplatePath = "/messages/send-template.json";
         private const string RenderTemplatePath = "/templates/render.json";
+        private const string SendPath = "/messages/send.json";
 
         public Mail(IMandrillConfig config = null)
         {
@@ -27,7 +28,7 @@ namespace MailApi
             _client.AddHandler("application/json", new JsonDeserializer());
         }
 
-        private EmailModel PrepareEmail(string templateName, string to,  Dictionary<string,string> variables, string subject, string cc="")
+        private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "")
         {
             var message = new EmailModel
             {
@@ -49,6 +50,21 @@ namespace MailApi
             return message;
         }
 
+        private EmailModel PrepareEmail(string text, string subject, string to)
+        {
+            return new EmailModel
+            {
+                key = _config.Key,
+                message = new EmailMessageModel
+                {
+                    from_email = _config.From,
+                    to = new[] { new EmailAddressModel { email = to } },
+                    subject = subject,
+                    html = text
+                },
+            };
+        }
+
         private string SendRequest(string path, object model)
         {
             if (!_config.Enable)
@@ -65,7 +81,7 @@ namespace MailApi
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-                throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}", SendTemplatePath));
+                throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}", path));
             }
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -76,9 +92,9 @@ namespace MailApi
             return response.Content;
         }
 
-        private string Send(EmailModel email)
+        private string Send(EmailModel email, string path)
         {
-            var response = SendRequest(SendTemplatePath, email);
+            var response = SendRequest(path, email);
             if (response == null)
             {
                 return null;
@@ -114,12 +130,18 @@ namespace MailApi
         public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "")
         {
             var message = PrepareEmail(templateName, to, parameters, subject, cc);
-            return Send(message);
+            return Send(message, SendTemplatePath);
         }
 
         public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName)
         {
             return RenderTemplate(parameters, templateName);
+        }
+
+        public string Send(string to, string text, string subject)
+        {
+            var message = PrepareEmail(text, subject, to);
+            return Send(message, SendPath);
         }
     }
 }

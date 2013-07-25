@@ -6,6 +6,10 @@ namespace EzBob.Configuration
     {
         bool Enable { get; }
         string Key { get; }
+        /// <summary>
+        /// Used in sending messages without a template
+        /// </summary>
+        string From { get; }
     }
 
     public class MandrillConfig : ConfigurationRoot, IMandrillConfig
@@ -18,5 +22,9 @@ namespace EzBob.Configuration
 		{
 			get { return GetValue<string>("Key"); }
 		}
+        public virtual string From
+        {
+            get { return GetValue<string>("From"); }
+        }
     }
 }
