@@ -315,12 +315,27 @@ BEGIN
 		, 0
 		, 'Name, # Not finished wizard, Average turnover for not finished wizard, # Finished wizard, Average turnover for finished wizard, Average score, % of Men,	Average age, % Approved, Average amount approved'
 		, 'Name, NumOfShopsDidntFinish, AvgTurnoverDidntFinish, NumOfShopsFinish, AvgTurnoverFinish, AvgScore, PercentMen,	AvgAge,	PercentApproved, AvgAmountApproved'
-		, 'yulys@ezbob.com'
+		, 'yulys@ezbob.com,nimrodk@ezbob.com'
 		, 0
 	)
 	
-	INSERT INTO ReportsUsersMap VALUES (3, 20)
-	INSERT INTO ReportsUsersMap VALUES (9, 20)
+	DECLARE @id INT,
+			@reportId INT
+			
+	SELECT @reportId = Id FROM ReportScheduler WHERE Type = 'RPT_MARKETPLACES_STATS'
+	
+	DECLARE cur CURSOR FOR SELECT Id FROM ReportUsers WHERE Name IN ('yulys', 'nimrodk')
+	OPEN cur
+	FETCH NEXT FROM cur INTO @id
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		IF NOT EXISTS (SELECT 1 FROM ReportsUsersMap WHERE UserID = @id AND ReportID = @reportId)
+			INSERT INTO ReportsUsersMap VALUES (@id, @reportId)
+	
+		FETCH NEXT FROM cur INTO @id
+	END
+	CLOSE cur
+	DEALLOCATE cur
 END
 GO
 
