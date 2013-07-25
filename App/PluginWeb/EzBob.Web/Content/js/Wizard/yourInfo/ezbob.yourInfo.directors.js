@@ -79,6 +79,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
             }
         });
        */
+        
         $.each(this.model.models, function(i, val) {
             var addressElem = that.preffix + 'Address' + i,
                 name = that.preffix + "[" + i + "]." + that.name,
@@ -93,8 +94,10 @@ EzBob.DirectorMainView = Backbone.View.extend({
             SetDefaultDate(dateOfBirthValName, val.get("DateOfBirth"));
             that.updateStatuses(val, i);
             that.addressErrorPlacement(addressView.$el, addressView.model);
+            console.log(that.validator);
+            that.validator.settings.rules[dateOfBirthValName] = { yearLimit: 18 };
+            that.validator.settings.messages[dateOfBirthValName] = { yearLimit: "The number of full year should be more then 18 year" };
 
-            
         });
         this.$el.attardi_labels('toggle_all');
         this.trigger("director:change");
