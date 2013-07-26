@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnitTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">..\libs\</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="..\libs\MSBuild.Community.Tasks.Targets"/>
+
+
 	<!-- Use cmd line utility to run test for the list of assemblies --> 
 	<Target Name="UnitTest">
 		<RemoveDir Directories="$(NunitLogs)" />
@@ -12,15 +20,17 @@
 			Debug
 		</Configuration>
 
-		<TestAssemblies>
-			$(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll
-		</TestAssemblies>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<TestAssemblies Include="$(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll"/>
+		<TestAssemblies Include="$(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll"/>
+	</ItemGroup>
 
 	<Target Name="RunUnitTests" >
 		<!-- <RemoveDir Directories="$(NunitLogs)" /> -->
-		
-		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll $(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
+		<NUnit ToolPath="$(Src)\lib\3rdparty\NUnit\" DisableShadowCopy="true" Assemblies="@(TestAssemblies)" Force32Bit="True" OutputXmlFile="$(NunitLogs)/NUnitReport.xml" />
+		<!-- <Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(TestAssemblies) /xml=$(NunitLogs)/NUnitReport.xml"/> -->
 	</Target>
 
 </Project>
