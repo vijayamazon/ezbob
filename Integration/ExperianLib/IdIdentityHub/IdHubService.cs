@@ -24,6 +24,12 @@ namespace ExperianLib.IdIdentityHub
             _bankCacheRepository = ObjectFactory.GetInstance<ExperianBankCacheRepository>();
         }
 
+        public IdHubService(ExperianIntegrationParams config, ExperianBankCacheRepository bankCacheRepository)
+        {
+            _config = config;
+            _bankCacheRepository = bankCacheRepository;
+        }
+
         //-----------------------------------------------------------------------------------
         public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
         {

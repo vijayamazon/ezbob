@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Repository
 		}
 
 	    //-----------------------------------------------------------------------------------
-        public T Get<T>(string key, long? expirationPeriodSec) where T: class
+        public virtual T Get<T>(string key, long? expirationPeriodSec) where T: class
         {
             Log.InfoFormat("Getting data from MP_ExperianBankCache for key '{0}'...", key);
             var item = (from i in GetAll() where i.Key == key select i).FirstOrDefault();
@@ -31,7 +31,7 @@ namespace EZBob.DatabaseLib.Repository
         }
 
 	    //-----------------------------------------------------------------------------------
-        public void Set<T>(string key, T value, MP_ServiceLog serviceLog) where T : class
+        public virtual void Set<T>(string key, T value, MP_ServiceLog serviceLog) where T : class
         {
             Log.InfoFormat("Setting data to MP_ExperianBankCache for key '{0}', service log id={1}...", key, serviceLog.Id);
             var item = (from i in GetAll() where i.Key == key select i).FirstOrDefault() ?? new MP_ExperianBankCache();

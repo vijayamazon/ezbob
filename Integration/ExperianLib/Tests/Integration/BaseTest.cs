@@ -1,5 +1,7 @@
 ﻿using System.Xml;
 using EZBob.DatabaseLib.Model.Database;
+using log4net;
+using log4net.Config;
 using NHibernate;
 using NUnit.Framework;
 using Scorto.Configuration;
@@ -8,13 +10,15 @@ using Scorto.NHibernate;
 using Scorto.RegistryScanner;
 using StructureMap;
 using StructureMap.Pipeline;
-using log4net.Config;
 
-namespace ExperianLib.Tests
+namespace ExperianLib.Tests.Integration
 {
-    [SetUpFixture]
-    public class TestConfigure
+    [Ignore]
+    [TestFixture]
+    public class BaseTest
     {
+        protected static readonly ILog Log = LogManager.GetLogger(typeof(BaseTest));
+
         [SetUp]
         public void Start()
         {
@@ -32,11 +36,5 @@ namespace ExperianLib.Tests
             XmlConfigurator.Configure(configurationElement);
         }
 
-        [TearDown]
-        public void Stop()
-        {
-
-
-        }
     }
 }

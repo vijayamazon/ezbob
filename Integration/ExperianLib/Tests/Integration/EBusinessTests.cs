@@ -1,8 +1,8 @@
 ﻿using ExperianLib.Ebusiness;
-using NUnit.Framework;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace ExperianLib.Tests
+namespace ExperianLib.Tests.Integration
 {
     class EBusinessTests:BaseTest
     {

@@ -4,7 +4,8 @@ using NUnit.Framework;
 
 namespace ExperianLib.Tests
 {
-    class CaisTests : BaseTest
+    [TestFixture]
+    class CaisTests
     {
         [Test]
         public void CaisConsumerTest()
@@ -45,7 +46,7 @@ namespace ExperianLib.Tests
             f.Accounts.Add(account);
 
             var data = f.WriteToString();
-            Log.DebugFormat("Cais consumer data: {0}", data);
+            Console.WriteLine("Cais consumer data: {0}", data);
             Assert.That(!string.IsNullOrEmpty(data));
         }
 
@@ -157,7 +158,7 @@ namespace ExperianLib.Tests
 
             cais.Accounts.Add(record);
             var data = cais.WriteToString();
-            Log.DebugFormat("Cais business data: {0}", data);
+            Console.WriteLine("Cais business data: {0}", data);
             Assert.That(!string.IsNullOrEmpty(data));
             //cais.WriteToFile(@"f:\temp\PIF1160a.txt");
             
