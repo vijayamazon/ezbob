@@ -50,7 +50,7 @@ namespace ExperianLib.Tests
             Assert.That(!results.HasError);
         }
 
-        [Ignore]
+        [Test]
         public void TestBwaDebugMode2()
         {
             var service = new IdHubService();
