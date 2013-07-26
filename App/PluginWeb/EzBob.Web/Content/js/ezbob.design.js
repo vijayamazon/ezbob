@@ -810,9 +810,18 @@ $.validator.setDefaults({
 
         return false;
     },
+    onfocusin: function (el) {
+        var $el = $(el);
+        $el.data("initial-value", $el.val());
+    },
     onfocusout: function (el) {
-        if ($(el).val()) {
-            validFunc(el);
+        var $el = $(el);
+        if ($el.val()) {
+            var initialValue = $el.data("initial-value");
+            var currentValue = $el.val();
+            if (initialValue != currentValue) {
+                validFunc(el);
+            }
         }
     },
     onkeyup: function (el, ev) {

@@ -70,11 +70,7 @@ EzBob.Validation.unhighlightFS = function (element) {
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required', 2);
     } else {
-        if (img.field_status('getStatus') == 'ok') {
-            img.field_status('set', 'ok', 2);
-        } else {
-            img.field_status('set', 'ok');
-        }
+        img.field_status('set', 'ok');
     }
 };
 
@@ -94,11 +90,7 @@ EzBob.Validation.highlightFS = function (element) {
     } else if ($el.hasClass('requiredDate') && $el.val().indexOf('-') !== -1) {
         img.field_status('set', 'required', 2);
     } else {
-        if (img.field_status('getStatus') == 'fail') {
-            img.field_status('set', 'fail', 2);
-        } else {
-            img.field_status('set', 'fail');
-        }
+        img.field_status('set', 'fail');
     }
 };
 
