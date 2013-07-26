@@ -60,6 +60,11 @@ namespace EzBob.Web.Code
 			return string.Format("{0:N0}", value);
 		}
 
+		public static string FormatPoundsNoDecimals(decimal numeric)
+		{
+			return numeric == 0 ? "" : "£ " + numeric.ToString("N0", CultureInfo.CreateSpecificCulture("en-gb"));
+		}
+
         public static string NumericFormats(decimal numeric)
         {
             return "£ "+numeric.ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
