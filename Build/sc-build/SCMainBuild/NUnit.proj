@@ -31,7 +31,7 @@
 
 	<Target Name="RunUnitTests" >
 		<!-- <RemoveDir Directories="$(NunitLogs)" /> -->
-		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll $(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
+		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll $(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll $(Src)\Integration\MailApi\bin\debug\MailApi.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
 		<!-- 
 			<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(TestAssemblies) /xml=$(NunitLogs)/NUnitReport.xml"/> 
 			<NUnit ToolPath="$(Src)\lib\3rdparty\NUnit\" DisableShadowCopy="true" Assemblies="@(TestAssemblies)" Force32Bit="True" OutputXmlFile="$(NunitLogs)/NUnitReport.xml" />
