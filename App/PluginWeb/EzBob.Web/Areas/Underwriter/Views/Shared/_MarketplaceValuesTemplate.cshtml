@@ -239,7 +239,12 @@
                     <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
                     <td><%- (m.Name.toLowerCase() === 'paypoint') ? "-":GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
                    
-                    <td><%- m.UpdatingStatus %></td>
+                    <td><%- m.UpdatingStatus %>
+                        <% if(m.UpdateError){%>
+                        <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+                        <br />
+                        <%}%>
+                    </td>
                     <td>
                         <% if(m.Name.toLowerCase() === 'paypal') { %>
                         <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
