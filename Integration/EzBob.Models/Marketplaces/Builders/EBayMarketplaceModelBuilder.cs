@@ -141,10 +141,9 @@ namespace EzBob.Models
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {
-            var s = _session.Query<MP_EbayUserData>()
-                .Where(eud => eud.CustomerMarketPlace.Id == mp.Id)
-                .Where(eud => eud.RegistrationDate != null)
-                .Select(eud => eud.RegistrationDate);
+            var s = _session.Query<MP_TeraPeakOrderItem>()
+                .Where(tp => tp.Order.CustomerMarketPlace.Id == mp.Id)
+                .Select(tp => tp.StartDate);
             return !s.Any() ? (DateTime?)null : s.Min();
         }
     }
