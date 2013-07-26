@@ -257,6 +257,15 @@ $(function () {
 //-----------  Helper functions  -----------  
 Convert = {};
 
+//small fix for validation select in firefox
+var fixSelectValidate = function(el) {
+    if ($.browser.mozilla) {
+        $(el).on("change", function() {
+            $(el).trigger("click");
+        });
+    }
+};
+
 function ValueOrDefault(value, defaultValue) {
     return EzBob.isNullOrEmpty(value) ? defaultValue : value;
 }
@@ -792,22 +801,21 @@ var validFunc = function (el) {
 };
 
 $.validator.setDefaults({
-    onclick: function (el) {
+    onclick: function(el) {
         if ($(el).is('input:radio')) {
             return $(el).valid();
         }
 
         if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
-            var img = $(el).closest('div').find('.field_status');
-            if (img.field_status('getStatus') != 'required' && !$(el).val()) {
-                return $(el).valid();
+
+            var initialValue = $(el).data("initial-value");
+            var currentValue = $(el).val();
+            if (initialValue != currentValue) {
+                validFunc(el);
             }
-            if (img.field_status('getStatus') == 'required' && $(el).val()) {
-                return $(el).valid();
-            }
+
         }
-
-
+        $(el).data("initial-value", $(el).val());
         return false;
     },
     onfocusin: function (el) {
@@ -823,6 +831,7 @@ $.validator.setDefaults({
                 validFunc(el);
             }
         }
+        $el.data("initial-value", $el.val());
     },
     onkeyup: function (el, ev) {
         //not tab pressed

@@ -42,6 +42,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         this.inputChanged();
 
+        fixSelectValidate(this.$el.find('select'));
+        
         return this;
     },
     inputChanged: function () {

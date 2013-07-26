@@ -21,6 +21,8 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         oFieldStatusIcons.filter('.required').field_status({ required: true });
         oFieldStatusIcons.not('.required').field_status({ required: false });
         
+        fixSelectValidate(this.$el.find('select'));
+        
         return this;
     },
     events: {
