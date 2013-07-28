@@ -1,44 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzAnalyticsConsoleClient {
+﻿namespace EzAnalyticsConsoleClient {
 	#region class CountryData
 
-	class CountryData {
+	internal class CountryData {
 		#region public
 
 		#region constructor
 
-		public CountryData(int nVisits = 0, int nVisitors = 0) {
-			Visits = nVisits;
+		public CountryData(int nVisitors, int nNew) {
 			Visitors = nVisitors;
+			New = nNew;
 		} // constructor
 
 		#endregion constructor
 
 		#region method Add
 
-		public void Add(int nVisits, int nVisitors) {
-			Visits += nVisits;
+		public void Add(int nVisitors, int nNew) {
 			Visitors += nVisitors;
+			New += nNew;
 		} // Add
 
 		#endregion method Add
-
-		#region property Visits
-
-		public int Visits { get; private set; }
-
-		#endregion property Visits
 
 		#region property Visitors
 
 		public int Visitors { get; private set; }
 
 		#endregion property Visitors
+
+		#region property New
+
+		public int New { get; private set; }
+
+		#endregion property New
+
+		#region property Returning
+
+		public int Returning { get { return Visitors - New; } }
+
+		#endregion property Returning
 
 		#endregion public
 	} // class CountryData

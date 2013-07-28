@@ -2377,6 +2377,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptExecutive</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptExecutive.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptFinancialStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptFinancialStats.sql</oFileName>

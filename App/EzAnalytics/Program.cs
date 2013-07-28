@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Ezbob.Context;
 using Ezbob.Database;
@@ -95,9 +96,16 @@ namespace EzAnalyticsConsoleClient {
 		private void Run() {
 			Log.Debug("Program.Run started...");
 
-			SortedDictionary<string, CountryData> oRawStats = FetchStats();
+			var oRawByCountry = new SortedDictionary<string, CountryData>();
+			var oRawByPage = new SortedDictionary<PageID, int>();
+			
+			FetchStats(oRawByCountry, oRawByPage);
 
-			SortedDictionary<string, int> oStats = ProcessStats(oRawStats);
+			var oStats = new SortedDictionary<string, int>();
+			
+			ProcessByCountry(oRawByCountry, oStats);
+
+			ProcessByPage(oRawByPage, oStats);
 
 			SaveStats(oStats);
 
@@ -115,43 +123,38 @@ namespace EzAnalyticsConsoleClient {
 
 		#endregion method Done
 
-		#region method ProcessStats
+		#region method ProcessByCountry
 
-		private SortedDictionary<string, int> ProcessStats(SortedDictionary<string, CountryData> oRawStats) {
-			var oRes = new SortedDictionary<string, int>();
+		private void ProcessByCountry(SortedDictionary<string, CountryData> oRawByCountry, SortedDictionary<string, int> oRes) {
+			int nAllVisitors = oRawByCountry.Select(x => x.Value.Visitors).Sum();
 
-			int nAllVisits = 0;
-			int nAllVisitors = 0;
+			int nNewVisitors = oRawByCountry.Select(x => x.Value.New).Sum();
 
-			foreach (KeyValuePair<string, CountryData> oCtrData in oRawStats) {
-				nAllVisits += oCtrData.Value.Visits;
-				nAllVisitors += oCtrData.Value.Visitors;
-			} // for each country
+			int nReturningVisitors = oRawByCountry.Select(x => x.Value.Returning).Sum();
 
-			Log.Debug("Total visits: {0}", nAllVisits);
-			Log.Debug("Total visitors: {0}", nAllVisitors);
+			Log.Debug("Total unique visitors: {0}", nAllVisitors);
+			Log.Debug("Total new visitors: {0}", nNewVisitors);
+			Log.Debug("Total returning visitors: {0}", nReturningVisitors);
 
-			oRes[DbConsts.UkVisits] = Visits(oRawStats, GoogleConsts.UK);
-			oRes[DbConsts.UkVisitors] = Visitors(oRawStats, GoogleConsts.UK);
+			oRes[DbConsts.UkVisitors] = Visitors(oRawByCountry, GoogleConsts.UK);
 
-			oRes[DbConsts.WorldWideVisits] = nAllVisits - Visits(oRawStats, GoogleConsts.IL) - Visits(oRawStats, GoogleConsts.UA);
-			oRes[DbConsts.WorldWideVisitors] = nAllVisitors - Visitors(oRawStats, GoogleConsts.IL) - Visitors(oRawStats, GoogleConsts.UA);
+			oRes[DbConsts.WorldWideVisitors] = nAllVisitors - Visitors(oRawByCountry, GoogleConsts.IL) - Visitors(oRawByCountry, GoogleConsts.UA);
 
-			return oRes;
-		} // ProcessStats
+			oRes[DbConsts.NewVisitors] = nNewVisitors;
 
-		#endregion method ProcessStats
+			oRes[DbConsts.ReturningVisitors] = nReturningVisitors;
+		} // ProcessByCountry
 
-		#region method Visits
+		#endregion method ProcessByCountry
 
-		private int Visits(SortedDictionary<string, CountryData> oRawStats, string sCountry) {
-			if (oRawStats.ContainsKey(sCountry))
-				return oRawStats[sCountry].Visits;
+		#region method ProcessByPage
 
-			return 0;
-		} // Visits
+		private void ProcessByPage(SortedDictionary<PageID, int> oRawByPage, SortedDictionary<string, int> oRes) {
+			foreach (KeyValuePair<PageID, int> pair in oRawByPage)
+				oRes[DbConsts.Page + pair.Key.ToString()] = pair.Value;
+		} // ProcessByPage
 
-		#endregion method Visits
+		#endregion method ProcessByPage
 
 		#region method Visitors
 
@@ -174,10 +177,10 @@ namespace EzAnalyticsConsoleClient {
 			string dbDate = conn.DateToString(m_oReportDate);
 
 			foreach (KeyValuePair<string, int> pair in oStats) {
-				conn.ExecuteNonQuery("InsertSiteAnalytics",
-					new QueryParameter("@Date", dbDate),
-					new QueryParameter("@CodeName", pair.Key),
-					new QueryParameter("@Value", pair.Value)
+				conn.ExecuteNonQuery(DbConsts.InsertSiteAnalyticsSP,
+					new QueryParameter(DbConsts.IsaspDate, dbDate),
+					new QueryParameter(DbConsts.IsaspCodeName, pair.Key),
+					new QueryParameter(DbConsts.IsaspValue, pair.Value)
 				);
 			} // for each stat to save
 
@@ -188,53 +191,85 @@ namespace EzAnalyticsConsoleClient {
 
 		#region method FetchStats
 
-		private SortedDictionary<string, CountryData> FetchStats() {
+		private void FetchStats(SortedDictionary<string, CountryData> oByCountry, SortedDictionary<PageID, int> oByPage) {
 			Log.Debug("Fetching stats started...");
-
-			var oRes = new SortedDictionary<string, CountryData>();
 
 			string sDate = m_oReportDate.ToString(GoogleConsts.OAuthDateFormat, CultureInfo.InvariantCulture);
 
 			Log.Debug("Creating request...");
 
-			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(GoogleConsts.ProfileID, sDate, sDate, GoogleConsts.Metrics);
+			var oGoogleConsts = new GoogleConsts();
+
+			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(GoogleConsts.ProfileID, sDate, sDate, oGoogleConsts.Metrics);
 
 			//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
 			//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
 			/*foreach (Profile profile in profiles.Items){Console.WriteLine("Profile Timezone: " + profile.Timezone);}*/
 
-			request.Dimensions = GoogleConsts.Dimensions;
+			request.Dimensions = oGoogleConsts.Dimensions;
 
-			Log.Debug("Fetching...");
+			Log.Debug("Fetching with dimensions {0} and metrics {1}...", oGoogleConsts.Dimensions, oGoogleConsts.Metrics);
 
 			GaData data = request.Fetch();
 
 			Log.Debug("Processing...");
 
 			foreach (List<string> pkg in data.Rows) {
-				if (pkg.Count != 4)
+				if (pkg.Count != oGoogleConsts.DimMetCount)
 					continue;
 
-				string sCountry = pkg[1];
-				int nVisits = int.Parse(pkg[2]);
-				int nVisitors = int.Parse(pkg[3]);
+				// Log.Debug("\n\n\nBegin\n\n\n"); foreach (string s in pkg) Log.Debug("-- row: {0}", s); Log.Debug("\n\n\nEnd\n\n\n");
 
-				if (oRes.ContainsKey(sCountry)) {
-					oRes[sCountry].Add(nVisits, nVisitors);
-					Log.Debug("First time country: {0}, {1} visits, {2} visitors", sCountry, nVisits, nVisitors);
-				}
-				else {
-					oRes[sCountry] = new CountryData(nVisits, nVisitors);
-					Log.Debug("Repeating country: {0}, {1} visits, {2} visitors", sCountry, nVisits, nVisitors);
+				string sCountry = pkg[oGoogleConsts.Idx(GoogleReportDimensions.country)];
+				string sHostName = pkg[oGoogleConsts.Idx(GoogleReportDimensions.hostname)];
+				string sPagePath = pkg[oGoogleConsts.Idx(GoogleReportDimensions.pagePath)];
+				int nVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.visitors)]);
+				int nNewVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.newVisits)]);
+
+				if (oByCountry.ContainsKey(sCountry))
+					oByCountry[sCountry].Add(nVisitors, nNewVisitors);
+				else
+					oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
+
+				PageID nPageID = GetPageID(sHostName, sPagePath);
+
+				if (nPageID != PageID.Other) {
+					if (oByPage.ContainsKey(nPageID))
+						oByPage[nPageID] += nVisitors;
+					else
+						oByPage[nPageID] = nVisitors;
 				} // if
+
+				Log.Debug("Country: {0} visitors: {1} to {2}{3}", sCountry, nVisitors, sHostName, sPagePath);
 			} // for each package
 
 			Log.Debug("Fetching stats complete.");
-
-			return oRes;
 		} // FetchStats
 
 		#endregion method FetchStats
+
+		#region method GetPageID
+
+		private PageID GetPageID(string sHostName, string sPagePath) {
+			if (sHostName != "app.ezbob.com")
+				return PageID.Other;
+
+			if (sPagePath == "/Account/LogOn")
+				return PageID.Logon;
+
+			if (sPagePath == "/Customer/PacnetStatus")
+				return PageID.Pacnet;
+
+			if (sPagePath == "/Customer/Profile/GetCash")
+				return PageID.GetCash;
+
+			if (sPagePath.StartsWith("/Customer/Profile"))
+				return PageID.Dashboard;
+
+			return PageID.Other;
+		} // GetPageID
+
+		#endregion method GetPageID
 
 		#region property Environment
 

@@ -59,8 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="consts.cs" />
     <Compile Include="CountryData.cs" />
+    <Compile Include="GoogleReportMetrics.cs" />
+    <Compile Include="DbConsts.cs" />
+    <Compile Include="GoogleConsts.cs" />
+    <Compile Include="GoogleReportDimensions.cs" />
+    <Compile Include="PageID.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
