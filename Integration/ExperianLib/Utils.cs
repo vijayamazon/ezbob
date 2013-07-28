@@ -20,22 +20,28 @@ namespace ExperianLib
         //-----------------------------------------------------------------------------------
         public static MP_ServiceLog WriteLog(string input, string output, string type, int customerId)
         {
-            var repoLog = ObjectFactory.TryGetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
-            var customerRepo = ObjectFactory.TryGetInstance<NHibernateRepositoryBase<Customer>>();
-
-            if (repoLog == null || customerRepo == null) return null;
-
             var logEntry = new MP_ServiceLog
+                               {
+                                   InsertDate = DateTime.Now,
+                                   RequestData = input,
+                                   ResponseData = output,
+                                   ServiceType = type,
+                               };
+            try
             {
-                InsertDate = DateTime.Now,
-                RequestData = input,
-                ResponseData = output,
-                ServiceType = type,
-                Customer = customerRepo.Get(customerId)
-            };
-            Log.DebugFormat("Input data was: {0}", logEntry.RequestData);
-            Log.DebugFormat("Output data was: {0}", logEntry.ResponseData);
-            repoLog.SaveOrUpdate(logEntry);
+                var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+                var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+
+                logEntry.Customer = customerRepo.Get(customerId);
+
+                Log.DebugFormat("Input data was: {0}", logEntry.RequestData);
+                Log.DebugFormat("Output data was: {0}", logEntry.ResponseData);
+                repoLog.SaveOrUpdate(logEntry);
+            }
+            catch (Exception)
+            {
+            }
+
             return logEntry;
         }
         //-----------------------------------------------------------------------------------
