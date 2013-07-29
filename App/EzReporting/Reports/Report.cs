@@ -14,15 +14,11 @@ namespace Reports {
 	#region enum ReportType
 
 	public enum ReportType {
+		RPT_GENERIC,
 		RPT_NEW_CLIENT,
 		RPT_PLANNED_PAYTMENT,
 		RPT_DAILY_STATS,
-		RPT_DAILY_COLLECTION,
 		RPT_IN_WIZARD,
-		RPT_MARKETING,
-		RPT_LINGER_CLIENT,
-		RPT_BUGS,
-		RPT_GENERIC
 	} // enum ReportType
 
 	#endregion enum ReportType
