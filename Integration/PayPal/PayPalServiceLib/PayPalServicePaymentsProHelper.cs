@@ -149,44 +149,48 @@ namespace EzBob.PayPalServiceLib
 					Status = PaymentTransactionStatusCodeType.Success
 				}
 			};
-			var retryingController = new WaitBeforeRetryController( new ErrorRetryingWaiter(), reqInfo.ErrorRetryingInfo );
 			
 			var userId = reqInfo.SecurityInfo.UserId;
-			
-			return retryingController.Do( 
-				() =>
-					{						
-						TransactionSearchResponseType resp = null;
-						var cred = CreateCredentials( reqInfo.SecurityInfo );					
-						WriteLog( string.Format( "PayPalService TransactionSearch Starting ({0})", userId ) );
-						//-----------------
-						var service = CreateService( reqInfo );
-						resp = service.TransactionSearch( ref cred, request );
 
-                        WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
+			bool needToRetry = true;
+			Exception lastEx = null;
+			int counter = 0;
 
-						requestsCounter.IncrementRequests( "TransactionSearch" );
-						//-----------------
-						if ( resp.Ack == AckCodeType.Failure )
-						{
-							throw ServiceRequestExceptionFactory.Create( new PayPalServiceResponceExceptionWrapper( resp ) );
-						}
-						WriteLog( string.Format( "PayPalService TransactionSearch Ended ({0})", userId ) );
+			while (needToRetry && counter <= _Config.NumberOfRetries)
+			{
+				counter++;
+				try
+				{
+					TransactionSearchResponseType resp = null;
+					var cred = CreateCredentials(reqInfo.SecurityInfo);
+					WriteLog(string.Format("PayPalService TransactionSearch Starting ({0})", userId));
+					var service = CreateService(reqInfo);
+					resp = service.TransactionSearch(ref cred, request);
 
-						return resp;
-					},
-				ex =>
+					WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
+
+					requestsCounter.IncrementRequests("TransactionSearch");
+					if (resp.Ack == AckCodeType.Failure)
 					{
-						if ( ex is IServiceRequestException )
-						{
-							var exFail = ex as IServiceRequestException;
-							return _CommonInternalErrors.Any( exFail.HasErrorWithCode );
-						}
+						throw ServiceRequestExceptionFactory.Create(new PayPalServiceResponceExceptionWrapper(resp));
+					}
+					WriteLog(string.Format("PayPalService TransactionSearch Ended ({0})", userId));
 
-						WriteLog( string.Format( "PayPalService TransactionSearch Error ({0}): {1} ", userId, ex.Message ), ex );
-						return true;
-					} 
-				);						
+					return resp;
+				}
+				catch (Exception ex)
+				{
+					lastEx = ex;
+					if (ex is IServiceRequestException)
+					{
+						var exFail = ex as IServiceRequestException;
+						needToRetry = _CommonInternalErrors.Any(exFail.HasErrorWithCode);
+					}
+
+					WriteLog(string.Format("PayPalService TransactionSearch Error ({0}): {1} ", userId, ex.Message), ex);
+				}
+			}
+			throw lastEx;
 		}
 
 		private bool TryParseData(TransactionSearchResponseType resp, out List<PayPalTransactionItem> result )

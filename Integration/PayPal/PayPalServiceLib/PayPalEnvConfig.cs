@@ -45,9 +45,14 @@ namespace EzBob.PayPalServiceLib
 			get { return GetValue<PayPalDataFormat>( "ApiResponseformat" ); }
         }
 
-        public bool TrustAll
-        {
-            get { return GetValue<bool>("TrustAll"); }
-        }	
+		public bool TrustAll
+		{
+			get { return GetValue<bool>("TrustAll"); }
+		}
+
+		public int NumberOfRetries
+		{
+			get { return GetValue<int>("NumberOfRetries"); }
+		}	
     }
 }

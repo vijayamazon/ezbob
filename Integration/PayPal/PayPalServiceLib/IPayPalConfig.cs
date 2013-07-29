@@ -32,7 +32,8 @@ namespace EzBob.PayPalServiceLib
 		string ApiUsername { get; }
 		string ApiPassword { get; }
 		string ApiSignature { get; }
-		
-		bool TrustAll { get; }	
+
+		bool TrustAll { get; }
+		int NumberOfRetries { get; }
     }
 }

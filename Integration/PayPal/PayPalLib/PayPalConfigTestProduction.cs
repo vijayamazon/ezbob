@@ -28,5 +28,10 @@ namespace EzBob.PayPal
 		{
 			get { return ServiceEndPointType.Production; }
 		}
+
+		public override int NumberOfRetries
+		{
+			get { return 10; }
+		}
 	}
 }

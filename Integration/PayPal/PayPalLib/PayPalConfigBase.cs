@@ -31,5 +31,6 @@ namespace EzBob.PayPal
 		public abstract string ApiPassword { get; }
 		public abstract string ApiSignature { get; }
 		public abstract ServiceEndPointType ServiceType { get; }
+		public abstract int NumberOfRetries { get; }
 	}
 }

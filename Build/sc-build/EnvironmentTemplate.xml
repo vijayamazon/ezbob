@@ -249,6 +249,7 @@
         <property name="ApiResponseformat" value="SOAP11" />
         <property name="TrustAll" value="True" />
         <property name="ServiceType" value="Sandbox" />
+        <property name="NumberOfRetries" value="10" />
     </module>
     <module id="PayPalDevProduction">
         <property name="ApiAuthenticationMode" value="ThreeToken" />
@@ -260,6 +261,7 @@
         <property name="ApiResponseformat" value="SOAP11" />
         <property name="TrustAll" value="True" />
         <property name="ServiceType" value="Production" />
+        <property name="NumberOfRetries" value="10" />
 
     </module>
 	<module id="YodleeDev">

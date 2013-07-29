@@ -63,9 +63,14 @@ namespace EzBob.PayPalServiceLib
 			}
         }
 
-        public bool TrustAll
-        {
-            get { return Convert.ToBoolean(ConfigurationManager.AppSettings["TrustAll"], CultureInfo.InvariantCulture); }
-        }
+		public bool TrustAll
+		{
+			get { return Convert.ToBoolean(ConfigurationManager.AppSettings["TrustAll"], CultureInfo.InvariantCulture); }
+		}
+
+		public int NumberOfRetries
+		{
+			get { return int.Parse(ConfigurationManager.AppSettings["NumberOfRetries"], CultureInfo.InvariantCulture); }
+		}
     }
 }
