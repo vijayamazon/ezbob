@@ -83,6 +83,7 @@ EzBob.Validation.highlightFS = function (element) {
         img.field_status('set', 'required', 2);
         return;
     }
+    
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required', 2);
     } else if ($el.hasClass('SortCodeSplit')) {
@@ -246,3 +247,76 @@ $.validator.methods.yearLimit = function (value, element, yearCount) {
 
     return currentFullYear >= yearCount;
 };
+
+//-----------  Validate  -----------  
+
+var validFunc = function (el) {
+    if ($(el).closest('.ezDateTime').length != 0) {
+        $(el).closest('.ezDateTime').find("input.hidden-field").valid();
+    } else if ($(el).closest('.ezSortCode').length != 0) {
+        $(el).closest('.ezSortCode').find("input.hidden-field").valid();
+    } else if ($(el).hasClass('addAddressInput')) {
+        //do nothing
+    } else {
+        $(el).valid();
+    }
+};
+
+$.validator.setDefaults({
+    onclick: function (el) {
+        if ($(el).is('input:radio')) {
+            return $(el).valid();
+        }
+
+        if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
+
+            var initialValue = $(el).data("initial-value");
+            var currentValue = $(el).val();
+            if (initialValue != currentValue) {
+                validFunc(el);
+            }
+
+        }
+        $(el).data("initial-value", $(el).val());
+        return false;
+    },
+    onfocusin: function (el) {
+        var $el = $(el);
+        $el.data("initial-value", $el.val());
+    },
+    onfocusout: function (el) {
+        var $el = $(el);
+        if ($el.val()) {
+            var initialValue = $el.data("initial-value");
+            var currentValue = $el.val();
+            if (initialValue != currentValue) {
+                validFunc(el);
+            }
+        }
+        $el.data("initial-value", $el.val());
+    },
+    onkeyup: function (el, ev) {
+        //not tab pressed
+        if (ev.keyCode != 9) {
+            if ($(el).is('select')) {
+                validFunc(el);
+            }
+
+            if ($(el).is('input') && $(el).val() == "") {
+                validFunc(el);
+            }
+
+            if ($(el).hasClass('cashInput') && $(el).val() == "£ ") {
+                validFunc(el);
+            }
+
+            if ($(el).closest('.ezSortCode').length != 0) {
+                validFunc(el);
+            }
+            /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
+                validFunc(el);
+            }*/
+        }
+    },
+    ignore: []
+});

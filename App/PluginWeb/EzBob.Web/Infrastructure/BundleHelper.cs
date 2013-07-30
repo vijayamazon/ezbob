@@ -120,7 +120,7 @@ namespace EzBob.Web.Infrastructure
                 .AddString(GetDbStrings())
                 .Add("~/Content/js/lib/jquery-1.8.3.js")
                 .Add("~/Content/js/lib/jquery.blockUI.js")
-                .Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
+				.Add("~/Content/js/lib/jquery.mask.min.js")
                 .Add("~/Content/js/lib/jquery.validate.js")
                 .Add("~/Content/js/lib/moment.js")
                 .Add("~/Content/js/lib/jsuri-1.1.1.js")
@@ -130,6 +130,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/contactUs/ezbo.contactUs.js")
                 .Add("~/Content/js/App/ezbob.validation.js")
                 .Add("~/Content/js/lib/jquery.field_status.js")
+                .Add("~/Content/js/lib/attardi.labels.js")
                 .MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
         }
 

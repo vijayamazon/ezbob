@@ -15,11 +15,6 @@
         };
     </script>
     <style>
-        .error
-        {
-            color: red;
-        }
-
             .error h3
             {
                 font-size: 14px;
@@ -217,55 +212,6 @@
             oFieldStatusIcons.filter('.required').field_status({ required: true });
             oFieldStatusIcons.not('.required').field_status({ required: false });
         });
-
-        $.validator.setDefaults({
-            onclick: function(el) {
-                if ($(el).is('input:radio')) {
-                    return $(el).valid();
-                }
-
-                if ($(el).is('select') && $(el).closest('.ezDateTime').length == 0) {
-                    return $(el).valid();
-                }
-
-
-                return false;
-            },
-            onfocusout: function(el) {
-                validFunc(el);
-            },
-            onkeyup: function(el) {
-                if ($(el).is('select')) {
-                    validFunc(el);
-                }
-
-                if ($(el).is('input') && $(el).val() == "") {
-                    validFunc(el);
-                }
-                /*if ($(el).is('input:text') && !isNotEmptyFunc(el) && ) {
-                    validFunc(el);
-                }*/
-            },
-            ignore: []
-        });
-
-        var validFunc = function (el) {
-            if ($(el).attr('id') == 'card_no' && $(el).val().indexOf('_') !== -1) {
-                $(el).val("");
-            }
-            if ($(el).closest('.ezDateTime').length != 0) {
-                $(el).closest('.ezDateTime').find("input.hidden-field").valid();
-            } else if ($(el).closest('.ezSortCode').length != 0) {
-                if ($(el).attr("id") == "SortCode3") {
-                    $(el).closest('.ezSortCode').find("input.hidden-field").valid();
-                }
-            } else if ($(el).hasClass('addAddressInput')) {
-                //do nothing
-            } else {
-                $(el).valid();
-            }
-        };
-
 
         EzBob.Config.HeartBeatEnabled = false;
         EzBob.Config.SessionTimeout = -1;
