@@ -148,7 +148,7 @@ EzBob.AddressView = Backbone.View.extend({
 		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name }));
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
-		this.postcodeInput = this.$el.find(".addAddressInput");		
+		this.postcodeInput = this.$el.find(".addAddressInput");
 		this.showClear(this.isShowClear);
 
 		var sInitialStatus = (this.model && this.model.length) ? 'ok' : '';
