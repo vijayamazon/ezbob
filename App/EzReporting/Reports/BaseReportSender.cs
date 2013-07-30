@@ -1,4 +1,5 @@
-﻿using Aspose.Cells;
+﻿using System.Net.Mail;
+using Aspose.Cells;
 using Ezbob.Logger;
 using Html;
 using Html.Attributes;
@@ -19,8 +20,9 @@ namespace Reports {
 		#region const
 
 		public const string DefaultToEMail = "dailyreports@ezbob.com";
-		public const string DefaultFromEMailPassword = "ezbob2012";
-		public const string DefaultFromEMail = "ezbob@ezbob.com";
+		public const string DefaultFromEMailPassword = "EZ!reports2013";
+		public const string DefaultFromEMail = "reports@ezbob.com";
+		public const string DefaultFromName = "Report Daemon";
 
 		#endregion const
 
@@ -37,9 +39,11 @@ namespace Reports {
 
 			email.MoveCssInline(Report.ParseStyle());
 
+			var oSender = new MailAddress(DefaultFromEMail, DefaultFromName);
+
 			lock (typeof(BaseReportHandler)) {
 				Mailer.Mailer.SendMail(
-					DefaultFromEMail,
+					oSender,
 					DefaultFromEMailPassword,
 					"EZBOB " + period + " " + subject + " Client Report",
 					email.ToString(),

@@ -9,6 +9,10 @@ using Ezbob.Logger;
 namespace Mailer {
 	public class Mailer {
 		public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, Workbook wb = null, ASafeLog oLog = null, int retries = 5) {
+			SendMail(new MailAddress(fromAddress), fromPassword, subject, mailBody, toAddress, wb, oLog, retries);
+		} // SendMail
+
+		public static void SendMail(MailAddress oFrom, string fromPassword, string subject, string mailBody, string toAddress, Workbook wb = null, ASafeLog oLog = null, int retries = 5) {
 			string body = mailBody;
 			var ostream = new MemoryStream();
 
@@ -18,10 +22,10 @@ namespace Mailer {
 				EnableSsl = true,
 				DeliveryMethod = SmtpDeliveryMethod.Network,
 				UseDefaultCredentials = false,
-				Credentials = new NetworkCredential(fromAddress, fromPassword)
+				Credentials = new NetworkCredential(oFrom.Address, fromPassword)
 			};
 
-			using (var message = new MailMessage(fromAddress, toAddress) {
+			using (var message = new MailMessage(oFrom, new MailAddress(toAddress)) {
 				Subject = subject,
 				Body = body,
 				IsBodyHtml = true
