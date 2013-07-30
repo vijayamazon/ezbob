@@ -61,7 +61,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
         this.$el.find('.alphaOnly').alphaOnly();
-
+        this.$el.find(".addressCaption").hide();
         $.each(this.model.models, function(i, val) {
             var addressElem = that.preffix + 'Address' + i,
                 name = that.preffix + "[" + i + "]." + that.name,
