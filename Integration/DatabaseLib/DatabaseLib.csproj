@@ -175,7 +175,6 @@
     <Compile Include="DatabaseDataHelper.cs" />
     <Compile Include="DatabaseWrapper\AccountInfo\IDatabaseEbayAccountInfo.cs" />
     <Compile Include="DatabaseWrapper\AccountInfo\PayPalPersonalData.cs" />
-    <Compile Include="DatabaseWrapper\DatabaseCustomerMarketPlace.cs" />
     <Compile Include="DatabaseWrapper\DatabaseMarketPlaceBase.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackDataByPeriod.cs" />
     <Compile Include="DatabaseWrapper\AmazonFeedbackData\DatabaseAmazonFeedbackData.cs" />

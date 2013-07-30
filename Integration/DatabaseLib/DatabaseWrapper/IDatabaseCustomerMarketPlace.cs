@@ -10,5 +10,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 
 		Customer Customer {get; }
 		IMarketplaceType Marketplace { get; }
+        bool Disabled { get; }
 	}
 }

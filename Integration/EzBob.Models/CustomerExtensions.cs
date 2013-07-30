@@ -44,6 +44,14 @@
             return marketpalces.Select(m => PayPalModelBuilder.CreatePayPalAccountModelModel(m)).ToList();
         }
 
+        public static List<PaymentAccountsModel> GetPaymentAccounts(this Customer customer)
+        {
+            return
+                customer.CustomerMarketPlaces.Where(m => m.Marketplace.IsPaymentAccount)
+                    .Select(m => PayPalModelBuilder.CreatePayPalAccountModelModel(m))
+                    .ToList();
+        }
+
         public static IEnumerable<SimpleMarketPlaceModel> GetAmazonMarketPlaces(this Customer customer)
         {
             var marketplaces = GetAmazonMP(customer);

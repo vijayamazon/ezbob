@@ -91,6 +91,8 @@ namespace EZBob.DatabaseLib.Model.Database
             HasMany(x => x.YodleeOrders).
                 KeyColumn("CustomerMarketPlaceId")
                 .Cascade.All();
+
+            Map(x => x.Disabled);
         }
     }
 }

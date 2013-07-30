@@ -115,6 +115,14 @@
                             <%-pa!=undefined ? GBPValues(  pa.NetExpences, true ) : "-"%>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <b>Seniority:</b>   
+                        </td>
+                        <td>
+                            <%-mp!=null ? EzBob.SeniorityFormat(pa.Seniority) : "-"%>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

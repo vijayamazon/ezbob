@@ -131,7 +131,7 @@
                     <th>Annual Sales</th>
                     <th>Rating</th>
                     <th>Inventory</th>
-                    <th>Elimination</th>
+                    <th>Disabled</th>
                     <th>Updated</th>
                     <th></th>
                 </tr>
@@ -159,7 +159,7 @@
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 %>
-                <tr data-id="<%- m.Id %>">
+                <tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
                     <td>
                         <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
                     </td>
@@ -168,7 +168,7 @@
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
                     <td class="centered"><%- m.RaitingPercent%> %</td>
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
-                    <td><%- m.EluminatingStatus %></td>
+                    <td><% if(m.Disabled) print ("Disabled") %></td>
                     <td><%- m.UpdatingStatus %>
                         <% if(m.UpdateError){%>
                         <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
@@ -177,14 +177,18 @@
                     </td>
                     <td class="centered">
                         <div style="width: 100px;">
-
+                            <% if(!m.Disabled){ %>
                             <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-                            <% if(m.UpdateError && m.Name == 'eBay'){ %>
-                            <br/>
-                            <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
-                            <br />
+                            <a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>" ><i class="icon-ban-circle"></i>Disable</a>
+                                <% if(m.UpdateError && m.Name == 'eBay'){ %>
+                                    <br/>
+                                    <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
+                                    <br />
+                                <%}%>
                             <%}%>
-                                
+                            <%if(m.Disabled){%>
+                                <a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>" ><i class="icon-play"></i>Enable</a>
+                            <%}%>
                             <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
                         </div>
                     </td>
@@ -231,7 +235,7 @@
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 %>
-                <tr data-id="<%- m.Id %>">
+                <tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>" >
                     <td><div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div></td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
@@ -246,12 +250,22 @@
                         <%}%>
                     </td>
                     <td>
-                        <% if(m.Name.toLowerCase() === 'paypal') { %>
-                        <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
-                        <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
-                          <%} else if(m.Name.toLowerCase() !== 'yodlee') {%>
-                        <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-                        <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+
+                        <% if(!m.Disabled){ %>
+
+                            <% if(m.Name.toLowerCase() === 'paypal') { %>
+                                <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+                                <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
+                            <%} else if(m.Name.toLowerCase() !== 'yodlee') {%>
+                                <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+                            <%}%>
+                            <a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>" ><i class="icon-ban-circle"></i>Disable</a>
+                        <%}%>
+                        
+                        
+                        <%if(m.Disabled){%>
+                            <a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>" ><i class="icon-play"></i>Enable</a>
                         <%}%>
 
                     </td>

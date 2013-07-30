@@ -4,6 +4,7 @@ using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.Models;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
 using System.Linq;

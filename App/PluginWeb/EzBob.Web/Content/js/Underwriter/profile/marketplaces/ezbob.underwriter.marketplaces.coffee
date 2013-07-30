@@ -46,6 +46,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         "click tbody tr": "rowClick"
         "click .mp-error-description" : "showMPError"
         "click .renew-token": "renewTokenClicked"
+        "click .disable-shop": "disableShop"
         
     rowClick: (e) ->
         return if e.target.getAttribute('href')
@@ -93,6 +94,18 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         data.summary.rating = if total > 0 then data.summary.positive / total else 0
 
         return data
+
+    disableShop: (e) ->
+        $el = $(e.currentTarget)
+        umi = $el.attr "umi"
+        EzBob.ShowMessage "Disable shop", "Are you sure?", (=> @doEnableShop(umi, false)), "Yes", null, "No"
+        return false
+
+    doEnableShop: (umi, enabled) ->
+        url = if enabled then "#{window.gRootPath}Underwriter/MarketPlaces/Enable" else "#{window.gRootPath}Underwriter/MarketPlaces/Disable"
+        xhr = $.post url, umi: umi
+        xhr.done (response) =>
+            @model.fetch()
 
     reCheckmarketplaces: (e) ->
         $el = $(e.currentTarget)

@@ -54,7 +54,8 @@ namespace EzBob.Models
                 RaitingPercent = "-",
                 SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
                 IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-                UWPriority = mp.Marketplace.UWPriority
+                UWPriority = mp.Marketplace.UWPriority,
+                Disabled = mp.Disabled
             };
 
             InitializeSpecificData(mp, model);

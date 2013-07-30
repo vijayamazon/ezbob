@@ -37,12 +37,14 @@ namespace EZBob.DatabaseLib.Common
 
 		private void UpdateInfoFirst( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
 		{
+            if (databaseCustomerMarketPlace.Disabled) return;
 			Helper.UpdateCustomerMarketplaceData( databaseCustomerMarketPlace, 
 									historyRecord => InternalUpdateInfoFirst( databaseCustomerMarketPlace, historyRecord ));
 		}
 
 		private void UpdateInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace )
 		{
+		    if (databaseCustomerMarketPlace.Disabled) return;
 			Helper.UpdateCustomerMarketplaceData( databaseCustomerMarketPlace, 
 									historyRecord => InternalUpdateInfo( databaseCustomerMarketPlace, historyRecord ));
 		}

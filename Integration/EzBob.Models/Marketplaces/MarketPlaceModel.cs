@@ -48,5 +48,7 @@
 		public SageModel Sage { get; set; }
 
         public int UWPriority { get; set; }
+
+	    public bool Disabled { get; set; }
     }
 }

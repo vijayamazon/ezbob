@@ -5,6 +5,7 @@ using Deveel.Web.Zoho;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Configuration;
+using EzBob.Models;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter;
 using EzBob.Web.Areas.Underwriter.Models;

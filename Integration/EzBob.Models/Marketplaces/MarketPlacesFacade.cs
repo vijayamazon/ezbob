@@ -33,14 +33,18 @@ namespace EzBob.Web.Areas.Underwriter {
 		} // GetMarketPlaceModels
 
 
-        public DateTime MarketplacesSeniority(int id, bool onlyForEluminationPassed = false)
+        public DateTime MarketplacesSeniority(EZBob.DatabaseLib.Model.Database.Customer customer, bool onlyForEluminationPassed = false, bool? isPaymentAccount = null)
         {
-            var customer = _customers.Get(id);
-            var marketplaces = customer.CustomerMarketPlaces.ToList();
+            var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Disabled == false).ToList();
 
             if (onlyForEluminationPassed)
             {
                 marketplaces = marketplaces.Where(m => m.EliminationPassed).ToList();
+            }
+
+            if (isPaymentAccount != null)
+            {
+                marketplaces = marketplaces.Where(m => m.Marketplace.IsPaymentAccount == isPaymentAccount.Value).ToList();
             }
 
             var dates = marketplaces.Select(mp =>

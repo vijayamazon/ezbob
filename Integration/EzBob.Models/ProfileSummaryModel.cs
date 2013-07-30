@@ -23,6 +23,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public double NetIncome { get; set; }
         public string NetExpences { get; set; }
         public string Balance { get; set; }
+        public string Seniority { get; set; }
     }
 
     public class AmlBwa : BaseProfileSummaryModel

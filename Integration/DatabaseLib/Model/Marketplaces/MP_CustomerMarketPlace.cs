@@ -1,3 +1,5 @@
+using EZBob.DatabaseLib.DatabaseWrapper;
+
 namespace EZBob.DatabaseLib.Model.Database
 {
 	using Marketplaces.FreeAgent;
@@ -6,8 +8,10 @@ namespace EZBob.DatabaseLib.Model.Database
 	using System;
 	using Iesi.Collections.Generic;
 
-    public class MP_CustomerMarketPlace 
+    public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace
 	{
+        private IMarketplaceType _mpType;
+
         public MP_CustomerMarketPlace() 
 		{
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
@@ -29,7 +33,17 @@ namespace EZBob.DatabaseLib.Model.Database
             YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
         public virtual int Id { get; set; }
+        
         public virtual MP_MarketplaceType Marketplace { get; set; }
+
+        IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace
+        {
+            get
+            {
+                return _mpType;
+            }
+        }
+
         public virtual Customer Customer { get; set; }
         public virtual byte[] SecurityData { get; set; }
         public virtual string DisplayName { get; set; }
@@ -74,6 +88,17 @@ namespace EZBob.DatabaseLib.Model.Database
                        : (!String.IsNullOrEmpty(UpdateError))
                              ? "Error"
                              : "Done";
+        }
+
+        /// <summary>
+        /// True if marketplace is disabled. Do not show totals, seniority and other
+        /// stuff for such marketplaces.
+        /// </summary>
+        public virtual bool Disabled { get; set; }
+
+        public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType)
+        {
+            _mpType = marketplaceType;
         }
 	}
 }

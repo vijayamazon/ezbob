@@ -38,6 +38,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             var models = GetCustomerMarketplaces(customer);
             return this.JsonNet(models);
         }
+
         [Ajax]
         [HttpGet]
         [Transactional]
@@ -72,6 +73,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         }
 
 		[Ajax]
+        [Transactional]
 		public void ReCheckMarketplaces(int umi) {
 			var mp = _customerMarketplaces.Get(umi);
 
@@ -102,6 +104,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Ajax]
         [HttpGet]
+        [Transactional]
         public JsonNetResult CheckForUpdatedStatus(int mpId)
         {
             return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
@@ -109,11 +112,32 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Ajax]
         [HttpPost]
+        [Transactional]
         public void RenewEbayToken(int umi)
         {
             var mp = _customerMarketplaces.Get(umi);
             var url = string.Format("https://app.ezbob.com/Customer/Profile/RenewEbayToken/");
             _appCreator.RenewEbayToken(mp.Customer, mp.DisplayName, url);
+        }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonNetResult Disable(int umi)
+        {
+            var mp = _customerMarketplaces.Get(umi);
+            mp.Disabled = true;
+            return this.JsonNet(new {});
+        }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonNetResult Enable(int umi)
+        {
+            var mp = _customerMarketplaces.Get(umi);
+            mp.Disabled = false;
+            return this.JsonNet(new {});
         }
     }
 }

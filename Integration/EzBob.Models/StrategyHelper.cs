@@ -96,7 +96,8 @@ namespace EzBob.Models
 
         public int MarketplaceSeniority(int customerId)
         {
-            return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customerId)).TotalDays);
+            var customer = _customers.Get(customerId);
+            return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
         }
 
         public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
