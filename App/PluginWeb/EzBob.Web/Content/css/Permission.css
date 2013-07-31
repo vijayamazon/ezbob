@@ -42,7 +42,7 @@ a[data-bug-type],
 #RunBWACheckBtn,
 .recheck-mp,
 .reCheckMP,
-[name="workarounddiscountPlan"],
+[name="discountPlan"],
 [name="avoidAutomaticDecisionButton"],
 #recheck-main-strat,
 .renew-token,
@@ -74,7 +74,10 @@ a[data-bug-type],
 .role-manager [name="avoidAutomaticDecisionButton"],
 
 .role-manager #SuspendBtn,
-.role-Underwriter #SuspendBtn
+.role-Underwriter #SuspendBtn,
+
+.role-manager [name="discountPlan"],
+.role-Underwriter [name="discountPlan"]
 
 /*
 .role-manager
