@@ -86,9 +86,11 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             EzBob.App.trigger 'error', "Business check service temporary unavaliable, please contact with system administrator", ""
       
     reload: -> 
-        @render()
-        scrollTop()
-        @setInputReadOnly true
+        @model.fetch()
+        .done =>
+            @render()
+            scrollTop()
+            @setInputReadOnly true
 
     regions:
         personal: '.personal-info'

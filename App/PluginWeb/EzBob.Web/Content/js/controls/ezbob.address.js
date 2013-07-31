@@ -113,7 +113,7 @@ EzBob.Popup = Backbone.View.extend({
 		var request = $.getJSON(this.rootPath + "Postcode/GetAddressFromPostCode", { postCode: postCode });
 
 		request.done(function (data) {
-			if (!data.Success && data.Success != undefined) {
+		    if (data.Success != undefined && (!data.Success || data.Recordcount == 0)) {
 				that.textArea.append($('<li></li>').val(0).html("Not found"));
 				return;
 			}
