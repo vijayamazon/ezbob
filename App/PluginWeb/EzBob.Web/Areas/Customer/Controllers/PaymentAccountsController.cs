@@ -67,10 +67,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public ViewResult Success(string request_token, string verification_code)
         {
 			var paypal = ObjectFactory.GetInstance<PayPalDatabaseMarketPlace>();
-            
+
+            request_token = request_token ?? Session["PAYPALREQUESTTOKEN"].ToString();
+
             var customer = _context.Customer;
 
-			PayPalRermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken( _payPalConfig, request_token, verification_code );
+			PayPalPermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken( _payPalConfig, request_token, verification_code );
             PayPalPersonalData personalData;
             try
             {
@@ -147,8 +149,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             try
             {
                 var callback = Url.Action("Success", "PaymentAccounts", new { Area = "Customer" }, "https");
-                var url = PayPalServiceHelper.GetRequestPermissionsUrl(_payPalConfig, callback);
-                return Redirect(url);
+                var response = PayPalServiceHelper.GetRequestPermissionsUrl(_payPalConfig, callback);
+
+                Session["PAYPALREQUESTTOKEN"] = response.Token;
+
+                return Redirect(response.Url);
             }
             catch (Exception e)
             {

@@ -16,7 +16,7 @@ namespace EzBob.PayPalServiceLib
 			_Config = config;
 		}
 
-		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalRermissionsGranted securityData )
+		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalPermissionsGranted securityData )
 		{
 			var payPalServiceHelper = new PayPalServiceHelper(config);
 			var info = payPalServiceHelper.GetAccountInfoInternal(securityData);
@@ -28,7 +28,7 @@ namespace EzBob.PayPalServiceLib
 			return PayPalAdaptiveAccountsServiceHelper.GetVerifiedStatus(_Config, userFirstName, userLastName, userEMail);			
 		}
 
-		private PayPalPersonalData GetAccountInfoInternal( PayPalRermissionsGranted securityData )
+		private PayPalPersonalData GetAccountInfoInternal( PayPalPermissionsGranted securityData )
 		{
 			return PayPalPermissionServiceHelper.GetAccountInfo( _Config, securityData );				
 		}
@@ -38,12 +38,12 @@ namespace EzBob.PayPalServiceLib
 			return new PayPalServicePaymentsProHelper( config ).GetTransactionData( reqInfo );
 		}
 
-		public static string GetRequestPermissionsUrl( IPayPalConfig config, string callback )
+        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(IPayPalConfig config, string callback)
 		{
 			return PayPalPermissionServiceHelper.GetRequestPermissionsUrl(config, callback);
 		}
 
-		public static PayPalRermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
+		public static PayPalPermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
 		{
 			return PayPalPermissionServiceHelper.GetAccessToken(config, requestToken, verificationCode);
 		}

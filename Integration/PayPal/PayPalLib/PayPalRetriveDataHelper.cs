@@ -174,12 +174,12 @@ namespace EzBob.PayPal
 
 		}
 
-		public PayPalRermissionsGranted GetAccessToken(string requestToken, string verificationCode)
+	    public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode)
 		{
 			return PayPalServiceHelper.GetAccessToken(_Config, requestToken, verificationCode);
 		}
 
-		public PayPalPersonalData GetAccountInfo(PayPalRermissionsGranted securityInfo)
+		public PayPalPersonalData GetAccountInfo(PayPalPermissionsGranted securityInfo)
 		{
 			return PayPalServiceHelper.GetAccountInfo(_Config, securityInfo);
 		}

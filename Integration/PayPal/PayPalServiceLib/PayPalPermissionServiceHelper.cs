@@ -8,6 +8,7 @@ using EzBob.PayPalServiceLib.Common;
 using PayPal.Platform.SDK;
 using PayPal.Services.Private.Permissions;
 using log4net;
+using Remotion.Linq.Utilities;
 using Permissions = PayPal.Platform.SDK.Permissions;
 
 namespace EzBob.PayPalServiceLib
@@ -26,12 +27,17 @@ namespace EzBob.PayPalServiceLib
 			get { return Permissions.Endpoint; }
 		}
 
-		public static PayPalRermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
+		public static PayPalPermissionsGranted GetAccessToken( IPayPalConfig config, string requestToken, string verificationCode )
 		{
+            if (string.IsNullOrEmpty(requestToken))
+            {
+                throw new ArgumentEmptyException("requestToken was null or empty");
+            }
+
 			return new PayPalPermissionServiceHelper(config).GetAccessTokenInternal( requestToken, verificationCode );
 		}
 
-		private PayPalRermissionsGranted GetAccessTokenInternal( string requestToken, string verificationCode )
+		private PayPalPermissionsGranted GetAccessTokenInternal( string requestToken, string verificationCode )
 		{
 			var getAccessTokenRequest = new GetAccessTokenRequest
 			                            	{
@@ -50,7 +56,7 @@ namespace EzBob.PayPalServiceLib
                 throw new PayPalException(new []{ new FaultDetailFaultMessageError{message = "Get access token failed"}});
 			}
 
-			return new PayPalRermissionsGranted
+			return new PayPalPermissionsGranted
 			       	{
 			       		AccessToken = response.token,
 			       		TokenSecret = response.tokenSecret,
@@ -59,12 +65,12 @@ namespace EzBob.PayPalServiceLib
 			       	};
 		}
 
-		public static string GetRequestPermissionsUrl( IPayPalConfig config, string callback )
+        public static GetRequestPermissionsUrlResponse GetRequestPermissionsUrl(IPayPalConfig config, string callback)
 		{
 			return new PayPalPermissionServiceHelper(config).GetRequestPermissionsUrlInternal( callback );
 		}
 
-		private string GetRequestPermissionsUrlInternal( string callback )
+        private GetRequestPermissionsUrlResponse GetRequestPermissionsUrlInternal(string callback)
 		{
 			var per = InternalCreateService();
 
@@ -92,20 +98,21 @@ namespace EzBob.PayPalServiceLib
 				throw new PayPalException( per.LastError.ErrorDetails );
 			}
 
-			return ConnectionInfo.RedirectUrl + "_grant-permission&request_token=" + pResponse.token;
+		    var url = ConnectionInfo.RedirectUrl + "_grant-permission&request_token=" + pResponse.token;
+            return new GetRequestPermissionsUrlResponse(url, pResponse.token);
 		}
 
-		private Permissions InternalCreateService( PayPalRermissionsGranted securityData = null, string scriptName = null )
+		private Permissions InternalCreateService( PayPalPermissionsGranted securityData = null, string scriptName = null )
 		{
 			return new Permissions { APIProfile = GetProfile(securityData, scriptName) };
 		}
 
-		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalRermissionsGranted securityData)
+		public static PayPalPersonalData GetAccountInfo(IPayPalConfig config, PayPalPermissionsGranted securityData)
 		{
 			return new PayPalPermissionServiceHelper(config).InternalGetAccountInfo(securityData);
 		}
 
-		private PayPalPersonalData InternalGetAccountInfo( PayPalRermissionsGranted securityData )
+		private PayPalPersonalData InternalGetAccountInfo( PayPalPermissionsGranted securityData )
 		{
 			var per = InternalCreateService( securityData, "GetAdvancedPersonalData" );
 

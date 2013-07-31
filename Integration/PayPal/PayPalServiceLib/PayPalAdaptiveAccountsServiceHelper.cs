@@ -23,7 +23,7 @@ namespace EzBob.PayPalServiceLib
 			
 		}
 
-		private AdaptiveAccounts InternalCreateService( PayPalRermissionsGranted securityData = null, string scriptName = null )
+		private AdaptiveAccounts InternalCreateService( PayPalPermissionsGranted securityData = null, string scriptName = null )
 		{			
 			return new AdaptiveAccounts { APIProfile = GetProfile(securityData, scriptName) };
 		}

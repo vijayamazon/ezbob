@@ -5,7 +5,7 @@ namespace EzBob.PayPalDbLib.Models
 {
 	public class PayPalSecurityData : IMarketPlaceSecurityInfo
 	{
-		public PayPalRermissionsGranted PermissionsGranted { get; set; }
+		public PayPalPermissionsGranted PermissionsGranted { get; set; }
 		/// <summary>
 		/// user e-Mail
 		/// </summary>
@@ -13,13 +13,13 @@ namespace EzBob.PayPalDbLib.Models
 
 	}
 
-	public class PayPalRermissionsGranted
+	public class PayPalPermissionsGranted
 	{
-		public PayPalRermissionsGranted()
+		public PayPalPermissionsGranted()
 		{
 		}
 
-		public PayPalRermissionsGranted( string verificationCode, string requestToken, string accessToken, string tokenSecret )
+		public PayPalPermissionsGranted( string verificationCode, string requestToken, string accessToken, string tokenSecret )
 		{
 			VerificationCode = verificationCode;
 			RequestToken = requestToken;

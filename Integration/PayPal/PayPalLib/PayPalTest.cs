@@ -51,7 +51,7 @@ namespace EzBob.PayPal
 		{
 			// SandBox			
 			var customer = GetCustomerInfo( customerId );
-			var payPalRermissionsGranted = new PayPalRermissionsGranted
+			var payPalRermissionsGranted = new PayPalPermissionsGranted
 				{
 					RequestToken = "AAAAAAAVmrAQ76F.gMx3",
 					VerificationCode = "crvExLZKaxtirew2JyUTGg",

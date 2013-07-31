@@ -18,7 +18,7 @@ namespace EzBob.PayPalServiceLib
 			_Profile = ProfileProvider.CreateProfile( config );
 		}
 
-		protected BaseAPIProfile GetProfile( PayPalRermissionsGranted securityData = null, string scriptName = null )
+		protected BaseAPIProfile GetProfile( PayPalPermissionsGranted securityData = null, string scriptName = null )
 		{
 			if ( securityData != null )
 			{

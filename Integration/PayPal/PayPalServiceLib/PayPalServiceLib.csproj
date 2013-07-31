@@ -87,9 +87,10 @@
     <Compile Include="CerteficateConfigIsNotSupported.cs" />
     <Compile Include="Common\ServiceEndPointFactory.cs" />
     <Compile Include="Common\ServiceUrlsInfo.cs" />
+    <Compile Include="GetRequestPermissionsUrlResponse.cs" />
     <Compile Include="IPayPalConfig.cs" />
     <Compile Include="IPayPalMarketplaceSettings.cs" />
-    <Compile Include="Models\PayPalRermissionsGranted.cs" />
+    <Compile Include="Models\PayPalPermissionsGranted.cs" />
     <Compile Include="PayPalAdaptiveAccountsServiceHelper.cs" />
     <Compile Include="PayPalDatabaseFunctionFactory.cs" />
     <Compile Include="PayPalDatabaseFunctionStorage.cs" />
