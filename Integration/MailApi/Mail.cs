@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using EzBob.Configuration;
 using MailApi.Model;
 using Newtonsoft.Json;
@@ -31,7 +32,8 @@ namespace MailApi
 
         private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "")
         {
-            var toList = to.Split(';').Select(x => new EmailAddressModel { email = x });
+            
+            var toList = PrepareRecipients(to);
             var message = new EmailModel
             {
                 key = _config.Key,
@@ -52,15 +54,22 @@ namespace MailApi
             return message;
         }
 
+        private static IEnumerable<EmailAddressModel> PrepareRecipients(string to)
+        {
+            var spaces = new Regex(@"\s+", RegexOptions.Compiled);
+            return spaces.Replace(to,string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
+        }
+
         private EmailModel PrepareEmail(string text, string subject, string to)
         {
+            var toList = PrepareRecipients(to);
             return new EmailModel
             {
                 key = _config.Key,
                 message = new EmailMessageModel
                 {
                     from_email = _config.From,
-                    to = new[] { new EmailAddressModel { email = to } },
+                    to = toList,
                     subject = subject,
                     html = text
                 },
