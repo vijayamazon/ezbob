@@ -7,9 +7,9 @@ CREATE PROCEDURE RptSaleStats
 @DateEnd   DATETIME
 AS
 BEGIN
-	SET @DateEnd = CONVERT(DATE, @DateStart)
-	SET @DateStart = DATEADD(week, -1, @DateEnd)
-	
+	SET @DateStart = CONVERT(DATE, @DateStart)
+	SET @DateEnd = CONVERT(DATE, @DateEnd)
+
 	SELECT
 		max(CR.Id) CrmId,
 		CR.CustomerId
@@ -20,7 +20,7 @@ BEGIN
 		INNER JOIN CashRequests O
 			ON O.IdCustomer = CR.CustomerId
 			AND O.UnderwriterDecision = 'Approved'
-		INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
+			INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
 	WHERE
 		@DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
 	GROUP BY
@@ -37,14 +37,16 @@ BEGIN
 		CustomerRelations CR
 		INNER JOIN #CRMNotes N ON CR.Id = N.CrmId
 		INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
-
+	
 	SELECT 
 		C.Id,
 		C.Name AS Email,
 		C.FullName,
-		O.UnderwriterDecision,
+		C.DaytimePhone,
+		C.MobilePhone,
 		O.UnderwriterDecisionDate,
 		O.ManagerApprovedSum,
+		O.InterestRate,
 		O.UnderwriterComment,
 		L.LoanAmount,
 		CR.Name AS CRMStatus,
@@ -56,17 +58,12 @@ BEGIN
 			AND O.UnderwriterDecision = 'Approved'
 		LEFT JOIN Loan L
 			ON O.Id = L.RequestCashId
-			AND (
-				L.LoanAmount < O.ManagerApprovedSum
-				OR
-				L.LoanAmount IS NULL
-			)
 		LEFT JOIN #CRMFinal CR ON CR.CustomerId = O.IdCustomer
 	WHERE
 		@DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
 	ORDER BY
 		O.CreationDate DESC
-	
+
 	DROP TABLE #CRMNotes
 	DROP TABLE #CRMFinal
 END
@@ -76,8 +73,8 @@ IF EXISTS (SELECT * FROM ReportScheduler WHERE Type = 'RPT_SALE_STATS')
 	UPDATE ReportScheduler SET
 		Title = 'Sale Stats',
 		StoredProcedure = 'RptSaleStats',
-		Header = 'Id,Email,Full Name,Underwriter Decision,Underwriter Decision Date,Manager Approved Sum,Underwriter Comment,Loan Amount,CRM Status,Comment',
-		Fields = '!Id,Email,FullName,UnderwriterDecision,UnderwriterDecisionDate,ManagerApprovedSum,UnderwriterComment,LoanAmount,CRMStatus,Comment'
+		Header = 'Id,Email,Full Name,Daytime Phone,Mobile Phone,Underwriter Decision Date,Manager Approved Sum,Interest Rate,Underwriter Comment,Loan Amount,CRM Status,Comment',
+		Fields = '!Id,Email,FullName,DaytimePhone,MobilePhone,UnderwriterDecisionDate,ManagerApprovedSum,InterestRate,UnderwriterComment,LoanAmount,CRMStatus,Comment'
 	WHERE
 		Type = 'RPT_SALE_STATS'
 ELSE
@@ -89,8 +86,8 @@ ELSE
 	)
 	VALUES (
 		'RPT_SALE_STATS', 'Sale Stats', 'RptSaleStats', 0, 0, 0,
-		'Id,Email,Full Name,Underwriter Decision,Underwriter Decision Date,Manager Approved Sum,Underwriter Comment,Loan Amount,CRM Status,Comment',
-		'!Id,Email,FullName,UnderwriterDecision,UnderwriterDecisionDate,ManagerApprovedSum,UnderwriterComment,LoanAmount,CRMStatus,Comment',
+		'Id,Email,Full Name,Daytime Phone,Mobile Phone,Underwriter Decision Date,Manager Approved Sum,Interest Rate,Underwriter Comment,Loan Amount,CRM Status,Comment',
+		'!Id,Email,FullName,DaytimePhone,MobilePhone,UnderwriterDecisionDate,ManagerApprovedSum,InterestRate,UnderwriterComment,LoanAmount,CRMStatus,Comment',
 		'nimrodk@ezbob.com,alexbo+rpt@ezbob.com',
 		0
 	)
