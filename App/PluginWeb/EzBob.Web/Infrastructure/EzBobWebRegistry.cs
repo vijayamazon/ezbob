@@ -123,7 +123,7 @@ namespace EzBob.Web.Infrastructure
             {
                 /*For<IZohoFacade>().Use<ZohoFacade>();*/
                 /*For<IZohoFacade>().Use<ZohoFacadeSignaled>();*/
-                For<IZohoFacade>().Use<ZohoFacadeSignaled>();
+                For<IZohoFacade>().Use<EzBob.Web.Code.ZohoFacadeSignaled>();
             }
             else
             {
