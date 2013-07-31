@@ -20,7 +20,7 @@
                 <tr class="<%- last ? 'last' : '' %>">
                     <td class="first"><%- loan.RefNumber  %></td>
                     <td ><%- EzBob.formatDate(loan.Date) %></td>
-                    <td><%-EzBob.formatPoundsNoDecimals(loan.LoanAmount)%></td>
+                    <td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
                     <td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
                     <td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
                     <td class="last" width="100">

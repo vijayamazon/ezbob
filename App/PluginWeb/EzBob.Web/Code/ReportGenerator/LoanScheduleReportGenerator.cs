@@ -35,7 +35,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Pictures.Add(row, column, filePath, 65, 25);
 
                 worksheet.Cells[row, column + 1].PutValue(transaction.PostDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-				worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsNoDecimals(transaction.Amount));
+                worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Amount));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Interest));
                 worksheet.Cells[row, column + 4].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Fees));
                 worksheet.Cells[row, column + 5].PutValue("-");
@@ -54,7 +54,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Pictures.Add(row, column, filePath, 102, 30);
 
                 worksheet.Cells[row, column + 1].PutValue(transaction.PostDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-				worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsNoDecimals(transaction.LoanRepayment));
+                worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.LoanRepayment));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Interest));
                 worksheet.Cells[row, column + 4].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Fees + transaction.Rollover));
                 worksheet.Cells[row, column + 5].PutValue("-");
@@ -105,7 +105,7 @@ namespace EzBob.Web.Code.ReportGenerator
 
                 worksheet.Cells[row, column + 1].PutValue(transaction.Date.ToString("dd/MM/yyyy",
                                                                            CultureInfo.InvariantCulture));
-				worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsNoDecimals(transaction.LoanRepayment));
+                worksheet.Cells[row, column + 2].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.LoanRepayment));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.Interest));
                 worksheet.Cells[row, column + 4].PutValue(FormattingUtils.FormatPoundsWidhDash(transaction.LateCharges));
                 worksheet.Cells[row, column + 5].PutValue("-");

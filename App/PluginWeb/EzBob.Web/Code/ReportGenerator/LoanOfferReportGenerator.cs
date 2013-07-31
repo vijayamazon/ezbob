@@ -36,7 +36,7 @@ namespace EzBob.Web.Code.ReportGenerator
                 row++;
                 i++;
                 worksheet.Cells[row, column].PutValue(item.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture));
-                worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatNoDecimals(item.LoanRepayment));
+                worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatMiddle(item.LoanRepayment));
                 worksheet.Cells[row, column + 2].PutValue("£ " + FormattingUtils.FormatMiddle(item.Interest));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatMiddle(item.InterestRate * 100) + "%");
                 var fee =loanOffer.SetupFee > 0 && i == 0 ? loanOffer.SetupFee : 0;

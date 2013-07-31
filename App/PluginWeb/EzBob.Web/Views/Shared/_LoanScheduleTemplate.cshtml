@@ -2,7 +2,7 @@
 <script id="loan-schedule-template" type="text/template">
 	<div class="simple-well clearfix apply-for-loan-total-block">
 		<div class="formula">
-			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPoundsNoDecimals(totalPrincipal)%></span></div>
+			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
 			<div class="plus"></div>
 			<div class="cost">Cost: <span class="gelt"><%-EzBob.formatPounds(totalInterest)%></span></div>
 			<div class="eq"></div>
@@ -30,7 +30,7 @@
 			<%_.each(schedule, function(line, i){%>
 				<tr>
 					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-					<td><%-EzBob.formatPoundsNoDecimals(line.LoanRepayment)%></td>
+					<td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
 					<td><%-EzBob.formatPounds(line.Interest)%></td>
 					<td><%-EzBob.formatPercents1(line.InterestRate)%></td>
 
@@ -56,7 +56,7 @@
 	<p class="offer-status"></p>
 
 	<div class="underwriter-only">
-		Offered credit line: <b><%- EzBob.formatPoundsNoDecimals(OfferedCreditLine) %></b><% if (OfferedCreditLine < EzBob.Config.MinLoan) { %><span class="red">(Offered sum is less than min limit)</span><% } %><br />
+		Offered credit line: <b><%- EzBob.formatPounds(OfferedCreditLine) %></b><% if (OfferedCreditLine < EzBob.Config.MinLoan) { %><span class="red">(Offered sum is less than min limit)</span><% } %><br />
 		Repayment period: <b><%- RepaymentPerion %></b><br />
 		Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br />
 		Loan type: <b><%- LoanType %></b><br>
