@@ -3,7 +3,9 @@ using PaymentServices.PacNet;
 
 namespace PaymentServices.Tests
 {
-    //send money
+	using System;
+
+	//send money
     class PacnetTests:BaseTest
     {
         [Test]
@@ -33,6 +35,16 @@ namespace PaymentServices.Tests
         {
             var service = new PacnetService();
             var ret = service.CheckStatus(1,"860270115");
-        } 
+        }
+
+		[Test]
+		public void GetReport()
+		{
+			var service = new PacnetService();
+			// Default is past 30 days
+			var endTime = DateTime.Now;
+			var startTime = endTime.AddDays(-30);
+			var ret = service.GetReport(endTime, startTime);
+		} 
     }
 }

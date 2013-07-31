@@ -85,6 +85,7 @@
     <Compile Include="PacNet\PacnetRegistry.cs" />
     <Compile Include="PacNet\PacnetService.cs" />
     <Compile Include="PacNet\PacnetReturnData.cs" />
+    <Compile Include="PacNet\ReportGenerator.cs" />
     <Compile Include="PayEarlyExtensions.cs" />
     <Compile Include="PayPoint\PayPointException.cs" />
     <Compile Include="PayPoint\PayPointReturnData.cs" />

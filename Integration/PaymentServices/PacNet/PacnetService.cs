@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Raven.API;
 using log4net;
+using Raven.API.Support;
 
 namespace PaymentServices.PacNet
 {
@@ -130,5 +131,53 @@ namespace PaymentServices.PacNet
             return result;
         }
 
+		//-----------------------------------------------------------------------------------
+
+		public PacnetReturnData GetReport(DateTime endTime, DateTime startTime)
+		{
+			try
+			{
+				
+				var timestampProvider = new TimestampProvider();
+
+				var request = new RavenRequest("payments");
+				request.Set("ReportFormat", "RavenPaymentFile_v1.0");
+				request.Set("StartTime", timestampProvider.FormatTimestamp(startTime));
+				request.Set("EndTime", timestampProvider.FormatTimestamp(endTime));
+				request.Set("ResultFields", "PRN PymtType Amount Currency CardNumber Description FileName");
+				//request.Set("ResultFields", "All");
+				
+				RavenResponse response = request.Send();
+
+				OutputReport(response);
+
+				using (var wr = new StringWriter())
+				{
+					Serializer.Serialize(wr, response);
+					Log.DebugFormat("Result: " + wr);
+				}
+				Log.DebugFormat("GetReport completed successfully");
+				return new PacnetReturnData(response);
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+				return new PacnetReturnData { Error = ex.Message };
+			}
+		}
+
+		protected void OutputReport(RavenResponse response)
+		{
+			bool reportToConsole = true;
+			var reportGenerator = new ReportGenerator();
+			if (reportToConsole)
+			{
+				reportGenerator.PrintReport(response.Get("Report"));
+			}
+			else
+			{
+				reportGenerator.SaveReport(response.Get("Report"), "pacnetReport.txt");
+			}
+		}
     }
 }
