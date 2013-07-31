@@ -12,7 +12,6 @@
 	public static class YodleeAccountPool
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(YodleeAccountPool));
-		private static readonly YodleeAccountsRepository accountRepository = ObjectFactory.GetInstance<YodleeAccountsRepository>();
 		private static readonly List<YodleeAccounts> accounts;
 		private static readonly YodleeMain yodleeMain = new YodleeMain();
 		private static readonly IYodleeMarketPlaceConfig config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
@@ -20,7 +19,7 @@
 		
 		static YodleeAccountPool()
 		{
-			accounts = accountRepository.SearchNotAllocated();
+			accounts = AccountRepository.SearchNotAllocated();
 
 			while (accounts.Count < config.AccountPoolSize)
 			{
@@ -28,9 +27,14 @@
 			}
 		}
 
-		private static YodleeAccounts CreateUnallocatedAccount()
+	    public static YodleeAccountsRepository AccountRepository
+	    {
+            get { return ObjectFactory.GetInstance<YodleeAccountsRepository>(); }
+	    }
+
+	    private static YodleeAccounts CreateUnallocatedAccount()
 		{
-			YodleeAccounts account = accountRepository.CreateAccount(YodleePasswordGenerator.GenerateRandomPassword);
+			YodleeAccounts account = AccountRepository.CreateAccount(YodleePasswordGenerator.GenerateRandomPassword);
 			log.InfoFormat("Registering yodlee user: {0}", account.Username);
 			yodleeMain.RegisterUser(account.Username, Encryptor.Decrypt(account.Password), account.Username);
 
@@ -46,7 +50,7 @@
 				res.Customer = customer;
 				res.Bank = bank;
 				res.CreationDate = DateTime.UtcNow;
-				accountRepository.SaveOrUpdate(res);
+				AccountRepository.SaveOrUpdate(res);
 				log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
 				accounts.Add(CreateUnallocatedAccount());
 				return res;
