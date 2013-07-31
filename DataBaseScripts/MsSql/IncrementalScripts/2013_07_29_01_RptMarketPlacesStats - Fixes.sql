@@ -97,10 +97,7 @@ BEGIN
 				(SELECT DISTINCT CustomerId FROM MP_CustomerMarketPlace 
 				 WHERE MarketPlaceId=@mpId AND 
 				 CustomerId IN 
-				 (SELECT Id FROM Customer 
-				  WHERE GreetingMailSentDate >= @DateStart AND 
-				  GreetingMailSentDate < @DateEnd AND 
-				  WizardStep=4))
+				 (SELECT Id FROM #FinishedCustomers))
 		
 		SELECT @numOfFinishedCustomers = count(1) FROM #ExperianScores
 		SELECT @sumOfScore = sum(ExperianScore) FROM #ExperianScores
@@ -307,8 +304,7 @@ BEGIN
 		CASE WHEN PercentMen=0 THEN NULL ELSE CONVERT(INT, PercentMen) END AS PercentMen,	
 		CASE WHEN AvgAge=0 THEN NULL ELSE CONVERT(INT, AvgAge) END AS AvgAge,	
 		CASE WHEN NumOfShopsFinish IS NULL OR NumOfShopsFinish=0 THEN NULL ELSE CASE WHEN NumOfShopsApproved=0 THEN NULL ELSE CONVERT(INT, NumOfShopsApproved * 100.0 / NumOfShopsFinish) END END AS PercentApproved, 
-		CASE WHEN AvgAmountApproved=0 THEN NULL ELSE CONVERT(INT, AvgAmountApproved) END AS AvgAmountApproved,
-		NumOfShopsApproved
+		CASE WHEN AvgAmountApproved=0 THEN NULL ELSE CONVERT(INT, AvgAmountApproved) END AS AvgAmountApproved
 	FROM #tmp, MP_MarketplaceType WHERE MP_MarketplaceType.Id = #tmp.MarketPlaceId
 
 	DROP TABLE #tmp
