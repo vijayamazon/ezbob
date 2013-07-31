@@ -8,8 +8,10 @@ using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using ApplicationMng.Signal;
 using DB.Security;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
+using EZBob.DatabaseLib.Repository;
 using ExperianLib.Ebusiness;
 using EzBob.Signals.ZohoCRM;
 using EzBob.Web.ApplicationCreator;
@@ -41,6 +43,7 @@ namespace EzBob.Web.Controllers
         private readonly IEzbobWorkplaceContext _context;
         private readonly IEmailConfirmation _confirmation;
         private readonly IZohoFacade _zoho;
+        private readonly ICustomerSessionsRepository _sessionIpLog;
 
         //------------------------------------------------------------------------
         public AccountController(
@@ -52,7 +55,8 @@ namespace EzBob.Web.Controllers
                                     ISessionManager sessionManager,
                                     IEzbobWorkplaceContext context,
                                     IEmailConfirmation confirmation,
-                                    IZohoFacade zoho
+                                    IZohoFacade zoho,
+                                    ICustomerSessionsRepository sessionIpLog
             )
         {
             _membershipProvider = membershipProvider;
@@ -64,6 +68,7 @@ namespace EzBob.Web.Controllers
             _context = context;
             _confirmation = confirmation;
             _zoho = zoho;
+            _sessionIpLog = sessionIpLog;
         }
         //------------------------------------------------------------------------
         [IsSuccessfullyRegisteredFilter]
@@ -152,6 +157,10 @@ namespace EzBob.Web.Controllers
         [HttpPost]
         public JsonNetResult CustomerLogOn(LogOnModel model)
         {
+
+           var customerIp = Request.ServerVariables["REMOTE_ADDR"];
+
+
             string errorMessage = null;
             if (ModelState.IsValid)
             {
@@ -170,21 +179,59 @@ namespace EzBob.Web.Controllers
                         if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
                         {
 							errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
+                            _sessionIpLog.AddSessionIpLog(new CustomerSession()
+                            {
+                                CustomerId = user.Id,
+                                StartSession = DateTime.Now,
+                                Ip = customerIp,
+                                IsPasswdOk = false,
+                                ErrorMessage = errorMessage
+                            });
                             return this.JsonNet(new { success = false, errorMessage });
                         }
                     }
 
                     if (_membershipProvider.ValidateUser(model.UserName, model.Password))
                     {
+                        _sessionIpLog.AddSessionIpLog(new CustomerSession()
+                            {
+                                CustomerId = user.Id,
+                                StartSession = DateTime.Now,
+                                Ip = customerIp,
+                                IsPasswdOk = true
+                            });
+ 
                         user.LoginFailedCount = 0;
                         SetCookie(model);
                         return this.JsonNet(new { success = true, model });
                     }
+                    else
+                    {
+                        if (user.LoginFailedCount < 3){
+                            _sessionIpLog.AddSessionIpLog(new CustomerSession()
+                            {
+                                CustomerId = user.Id,
+                                StartSession = DateTime.Now,
+                                Ip = customerIp,
+                                IsPasswdOk = false
+                            });
+                            }
+                    }
 
                     if (user.LoginFailedCount >= 3)
                     {
-                        _log.InfoFormat(
-                            "More than 3 unsuccessful login attempts have been made. Resetting user password");
+                        errorMessage =
+                            "More than 3 unsuccessful login attempts have been made. Resetting user password";
+                        _sessionIpLog.AddSessionIpLog(new CustomerSession()
+                        {
+                            CustomerId = user.Id,
+                            StartSession = DateTime.Now,
+                            Ip = customerIp,
+                            IsPasswdOk = false,
+                            ErrorMessage = errorMessage
+                        });
+
+                        _log.InfoFormat(errorMessage);
                         //RestorePassword(user.EMail, user.SecurityAnswer);
 
                         var password = _membershipProvider.ResetPassword(user.EMail, "");

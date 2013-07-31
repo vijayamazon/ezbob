@@ -76,6 +76,7 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Loans\InstallmentDelta.cs" />
     <Compile Include="Model\Loans\LoanScheduleTransaction.cs" />
     <Compile Include="Model\Loans\NumericDelta.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="RepositoryRegistry.cs" />
     <Compile Include="Repository\CaisFlagRepository.cs" />
     <Compile Include="Repository\CaisReportsHistoryRepository.cs" />
+    <Compile Include="Repository\CustomerSessionRepository.cs" />
     <Compile Include="Repository\CustomerAddressRepository.cs" />
     <Compile Include="Repository\DailyReportRepository.cs" />
     <Compile Include="Repository\AskvilleRepository.cs" />
