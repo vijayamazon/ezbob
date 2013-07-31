@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using EzBob.Configuration;
 using MailApi.Model;
@@ -30,13 +31,14 @@ namespace MailApi
 
         private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "")
         {
+            var toList = to.Split(';').Select(x => new EmailAddressModel { email = x });
             var message = new EmailModel
             {
                 key = _config.Key,
                 template_name = templateName,
                 message = new EmailMessageModel
                 {
-                    to = new[] { new EmailAddressModel { email = to } },
+                    to = toList,
                     subject = subject,
                     bcc_address = cc
                 },
