@@ -1,10 +1,13 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptPacnetReconciliation]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptPacnetReconciliation]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptPacnetReconciliation
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -17,21 +20,21 @@ BEGIN
 	DECLARE @PacnetIn DECIMAL(18, 2)
 
 	DECLARE @Amount DECIMAL(18, 2), @IsCredit BIT, @EzbobCount INT, @PacnetCount INT
-	
+
 	SELECT @Date = CONVERT(DATE, @DateStart)
-	
+
 	CREATE TABLE #pacnet (
 		Amount DECIMAL(18, 2) NOT NULL,
 		IsCredit BIT NOT NULL,
 		Counter INT NOT NULL
 	)
-	
+
 	CREATE TABLE #ezbob (
 		Amount DECIMAL(18, 2) NOT NULL,
 		IsCredit BIT NOT NULL,
 		Counter INT NOT NULL
 	)
-	
+
 	CREATE TABLE #res (
 		Amount DECIMAL(18, 2) NOT NULL,
 		IsCredit BIT NOT NULL,
@@ -47,7 +50,7 @@ BEGIN
 		TransactionID INT NULL,
 		Css NVARCHAR(128) NULL
 	)
-	
+
 	INSERT INTO #pacnet
 	SELECT
 		Amount,
@@ -60,7 +63,7 @@ BEGIN
 	GROUP BY
 		Amount,
 		IsCredit
-	
+
 	INSERT INTO #ezbob
 	SELECT
 		Amount,
@@ -76,23 +79,23 @@ BEGIN
 		CONVERT(DATE, PostDate) = @Date
 	GROUP BY
 		Amount
-	
+
 	INSERT INTO #res
 	SELECT
 		e.Amount,
 		e.IsCredit,
 		ISNULL(e.Counter, 0),
-		ISNULL(p.Counter, 0)	
+		ISNULL(p.Counter, 0)
 	FROM
 		#ezbob e
 		LEFT JOIN #pacnet p ON e.Amount = p.Amount AND e.IsCredit = p.IsCredit
-	
+
 	INSERT INTO #res
 	SELECT
 		p.Amount,
 		p.IsCredit,
 		ISNULL(e.Counter, 0),
-		ISNULL(p.Counter, 0)	
+		ISNULL(p.Counter, 0)
 	FROM
 		#ezbob e
 		RIGHT JOIN #pacnet p ON e.Amount = p.Amount AND e.IsCredit = p.IsCredit
@@ -100,14 +103,14 @@ BEGIN
 		e.Amount IS NULL
 
 	DELETE FROM #res WHERE EzbobCount = PacnetCount
-	
+
 	SELECT
 		@PacnetIn = ISNULL(SUM(ISNULL(Amount, 0)), 0)
 	FROM
 		#pacnet
 	WHERE
 		IsCredit = 1
-	
+
 	SELECT
 		@PacnetOut = ISNULL(SUM(ISNULL(Amount, 0)), 0)
 	FROM
@@ -146,7 +149,7 @@ BEGIN
 	BEGIN
 		INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
 			VALUES (
-				'Unmatched ' + 
+				'Unmatched ' +
 				(CASE @IsCredit WHEN 1 THEN 'credit' ELSE 'debit' END) +
 				' ' + CONVERT(NVARCHAR, @Amount),
 				@EzbobCount,
@@ -169,7 +172,6 @@ BEGIN
 			AND
 			t.Amount = @Amount
 
-	
 		FETCH NEXT FROM cur INTO @Amount, @IsCredit, @EzbobCount, @PacnetCount
 	END
 
@@ -193,7 +195,7 @@ BEGIN
 	BEGIN
 		INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
 			VALUES (
-				'Unmatched ' + 
+				'Unmatched ' +
 				(CASE @IsCredit WHEN 1 THEN 'credit' ELSE 'debit' END) +
 				' ' + CONVERT(NVARCHAR, @Amount),
 				@EzbobCount,
@@ -216,13 +218,12 @@ BEGIN
 			AND
 			t.Amount = @Amount
 
-	
 		FETCH NEXT FROM cur INTO @Amount, @IsCredit, @EzbobCount, @PacnetCount
 	END
 
 	CLOSE cur
 	DEALLOCATE cur
-	
+
 	SELECT
 		o.SortOrder,
 		o.Caption,

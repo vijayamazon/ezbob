@@ -1,10 +1,11 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaypointReconciliation]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaypointReconciliation]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptPaypointReconciliation]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptPaypointReconciliation
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -18,7 +19,6 @@ BEGIN
 	IF EXISTS (SELECT * FROM ConfigurationVariables WHERE Name = 'Recon_Paypoint_Include_Five')
 		SET @IncludeFive = CASE (SELECT Value FROM ConfigurationVariables WHERE Name = 'Recon_Paypoint_Include_Five') WHEN 'yes' THEN 1 ELSE 0 END
 
-			
 	CREATE TABLE #out (
 		SortOrder INT IDENTITY(1, 1) NOT NULL,
 		Caption NVARCHAR(512) NULL,
@@ -27,16 +27,12 @@ BEGIN
 		Css NVARCHAR(128) NULL
 	)
 
-			
 	INSERT INTO #out (Caption) VALUES ('Transactions of Amount 5 Are ' + (CASE @IncludeFive WHEN 1 THEN 'Included' ELSE 'Excluded' END))
 
-			
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 1, 'Successful'
-	
-			
+
 	EXECUTE PaypointOneTypeReconciliation @Date, @IncludeFive, 0, 'Failed'
 
-			
 	SELECT
 		o.SortOrder,
 		o.Caption,

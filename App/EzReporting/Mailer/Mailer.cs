@@ -25,11 +25,15 @@ namespace Mailer {
 				Credentials = new NetworkCredential(oFrom.Address, fromPassword)
 			};
 
-			using (var message = new MailMessage(oFrom, new MailAddress(toAddress)) {
-				Subject = subject,
-				Body = body,
-				IsBodyHtml = true
-			}) {
+			using (var message = new MailMessage()) {
+				message.From = oFrom;
+				message.Subject = subject;
+				message.Body = body;
+				message.IsBodyHtml = true;
+
+				foreach (string sAddr in toAddress.Split(','))
+					message.To.Add(sAddr);
+
 				if (wb != null) {
 					message.Attachments.Clear();
 					wb.Save(ostream, FileFormatType.Excel2007Xlsx);

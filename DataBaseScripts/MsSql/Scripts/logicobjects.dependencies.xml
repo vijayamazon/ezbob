@@ -2419,6 +2419,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptMarketPlacesStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptMarketPlacesStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptNewClients</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptNewClients.sql</oFileName>

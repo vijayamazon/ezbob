@@ -1,131 +1,143 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsEKM]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptNewClientsEKM]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsEKM]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptNewClientsEKM]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptNewClientsEKM
-	@DateStart    DATETIME,
-	@DateEnd      DATETIME
+@DateStart DATETIME,
+@DateEnd   DATETIME
 AS
 BEGIN
- 
- 
-if OBJECT_ID('tempdb..#Shops') is not NULL
-BEGIN
-                DROP TABLE #Shops
-END
+	IF OBJECT_ID('tempdb..#Shops') is not NULL
+		DROP TABLE #Shops
 
-if OBJECT_ID('tempdb..#EKMCLients') is not NULL
-BEGIN
-                DROP TABLE #EKMCLients 
-END
+	IF OBJECT_ID('tempdb..#EKMCLients') is not NULL
+		DROP TABLE #EKMCLients
 
-if OBJECT_ID('tempdb..#EKMCLientsClean') is not NULL
-BEGIN
-                DROP TABLE #EKMCLientsClean 
-END
+	IF OBJECT_ID('tempdb..#MaxOffer') is not NULL
+		DROP TABLE #MaxOffer
 
-if OBJECT_ID('tempdb..#MaxOffer') is not NULL
-BEGIN
-                DROP TABLE #MaxOffer
-END
- 
-if OBJECT_ID('tempdb..#SumOfLoans') is not NULL
-BEGIN
-                DROP TABLE #SumOfLoans
-END
- 
-if OBJECT_ID('tempdb..#tmp1') is not NULL
-BEGIN
-                DROP TABLE #tmp1
-END
- 
-if OBJECT_ID('tempdb..#AnualTurnover') is not NULL
-BEGIN
-                DROP TABLE #AnualTurnover
-END
- 
----- # OF SHOPS PER CUSTOMER ----
- 
-SELECT CustomerId,count(MarketPlaceId) AS Shops
-INTO #Shops
-FROM MP_CustomerMarketPlace
-GROUP BY CustomerId
- 
----- MAX OFFER THAT WAS OFFERED TO CUSTOMER ----
- 
-SELECT IdCustomer AS CustomerId,max(ManagerApprovedSum) MaxApproved
-INTO #MaxOffer
-FROM CashRequests
-GROUP BY IdCustomer
-               
--- EKM CLients
-SELECT 
-	DISTINCT CustomerId 
-INTO #EKMCLients
-FROM 
-	MP_CustomerMarketPlace S,
-	MP_MarketplaceType T
-WHERE 
-	S.MarketPlaceId = T.Id AND
-	T.Name = 'EKM'
+	if OBJECT_ID('tempdb..#SumOfLoans') is not NULL
+		DROP TABLE #SumOfLoans
 
+	if OBJECT_ID('tempdb..#tmp1') is not NULL
+		DROP TABLE #tmp1
 
-INSERT INTO #EKMClients 
-SELECT Id CustomerId FROM Customer WHERE ReferenceSource LIKE 'EKM%'	
+	if OBJECT_ID('tempdb..#AnualTurnover') is not NULL
+		DROP TABLE #AnualTurnover
 
+	---- # OF SHOPS PER CUSTOMER ----
 
-SELECT DISTINCT CustomerId INTO #EKMCLientsClean FROM #EKMClients  
+	SELECT
+		CustomerId,
+		COUNT(MarketPlaceId) AS Shops
+	INTO
+		#Shops
+	FROM
+		MP_CustomerMarketPlace
+	GROUP BY
+		CustomerId
 
---SELECT Id FROM Customer WHERE Id IN (SELECT CustomerId FROM #EKMClientsClean)
---RETURN
+	---- MAX OFFER THAT WAS OFFERED TO CUSTOMER ----
 
---SELECT count(1) FROM #EKMClients
---SELECT count(1) FROM #EKMCLientsClean
+	SELECT
+		IdCustomer AS CustomerId,
+		MAX(ManagerApprovedSum) MaxApproved
+	INTO
+		#MaxOffer
+	FROM
+		CashRequests
+	GROUP BY
+		IdCustomer
 
----- SUM OF LOANS THAT CUST GOT -----
+	-- EKM CLients
 
-SELECT CustomerId,sum(LoanAmount) SumOfLoans
-INTO #SumOfLoans
-FROM Loan
-GROUP BY CustomerId
- 
------ CALC FOR ANUAL TURNOVER -----
-SELECT IdCustomer AS CustomerId,max(CreationDate)AS CreationDate
-INTO #tmp1
-FROM CashRequests
-GROUP BY IdCustomer
-ORDER BY 1
- 
-SELECT A.CustomerId,A.creationdate,R.MedalType,R.AnualTurnover,R.ExpirianRating
-INTO #AnualTurnover
-FROM #tmp1 A
-JOIN CashRequests R ON R.IdCustomer = A.CustomerId
-WHERE R.CreationDate = A.CreationDate
- 
---------------------------------------------------------------------------
-SELECT
-                   Customer.Id,
-                   Customer.GreetingMailSentDate AS DateRegister,
-                   #Shops.Shops,
-                   #MaxOffer.MaxApproved,
-                   #SumOfLoans.SumOfLoans,
-                   Customer.ReferenceSource
-FROM   
-	Customer
-LEFT JOIN #Shops ON #Shops.CustomerId = Customer.Id
-LEFT JOIN #MaxOffer ON #MaxOffer.CustomerId = Customer.Id
-LEFT JOIN #SumOfLoans ON #SumOfLoans.CustomerId = Customer.Id
-LEFT JOIN #AnualTurnover T ON T.CustomerId = Customer.Id
-WHERE
-    Customer.IsTest = 0
-    AND Name NOT like '%ezbob%'
-    AND Name NOT LIKE '%liatvanir%'
-    AND Customer.GreetingMailSentDate >= @DateStart AND Customer.GreetingMailSentDate < @DateEnd
-    AND Customer.Id IN (SELECT CustomerId FROM #EKMCLientsClean)
-ORDER BY SumOfLoans desc                            
-   
+	CREATE TABLE #EKMClients (CustomerId INT)
+
+	INSERT INTO #EKMClients
+	SELECT DISTINCT CustomerId
+	FROM MP_CustomerMarketPlace S
+		INNER JOIN MP_MarketplaceType T ON S.MarketPlaceId = T.Id AND T.Name = 'EKM'
+	UNION
+	SELECT Id
+	FROM Customer
+	WHERE ReferenceSource LIKE 'EKM%'
+
+	---- SUM OF LOANS THAT CUST GOT -----
+
+	SELECT
+		CustomerId,
+		SUM(LoanAmount) SumOfLoans
+	INTO
+		#SumOfLoans
+	FROM
+		Loan
+	GROUP BY
+		CustomerId
+
+	----- CALC FOR ANUAL TURNOVER -----
+
+	SELECT
+		IdCustomer AS CustomerId,
+		MAX(CreationDate) AS CreationDate
+	INTO
+		#tmp1
+	FROM
+		CashRequests
+	GROUP BY
+		IdCustomer
+	ORDER BY
+		1
+
+	SELECT
+		A.CustomerId,
+		A.creationdate,
+		R.MedalType,
+		R.AnualTurnover,
+		R.ExpirianRating
+	INTO
+		#AnualTurnover
+	FROM
+		#tmp1 A
+		JOIN CashRequests R
+			ON R.IdCustomer = A.CustomerId
+			AND R.CreationDate = A.CreationDate
+
+	SELECT
+		Customer.Id,
+		Customer.GreetingMailSentDate AS DateRegister,
+		#Shops.Shops,
+		#MaxOffer.MaxApproved,
+		#SumOfLoans.SumOfLoans,
+		Customer.ReferenceSource
+	FROM
+		Customer
+		INNER JOIN #EKMClients ek ON Customer.Id = ek.CustomerId
+		LEFT JOIN #Shops ON #Shops.CustomerId = Customer.Id
+		LEFT JOIN #MaxOffer ON #MaxOffer.CustomerId = Customer.Id
+		LEFT JOIN #SumOfLoans ON #SumOfLoans.CustomerId = Customer.Id
+		LEFT JOIN #AnualTurnover T ON T.CustomerId = Customer.Id
+	WHERE
+		Customer.IsTest = 0
+		AND
+		Name NOT like '%ezbob%'
+		AND
+		Name NOT LIKE '%liatvanir%'
+		AND
+		CONVERT(DATE, @DateStart) <= Customer.GreetingMailSentDate AND Customer.GreetingMailSentDate < CONVERT(DATE, @DateEnd)
+	ORDER BY
+		SumOfLoans desc
+
+	DROP TABLE #Shops
+	DROP TABLE #EKMCLients
+	DROP TABLE #MaxOffer
+	DROP TABLE #SumOfLoans
+	DROP TABLE #tmp1
+	DROP TABLE #AnualTurnover
 END
 GO

@@ -1,15 +1,22 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExecutive]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptExecutive]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExecutive]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptExecutive]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptExecutive
 @DateStart DATETIME,
 @DateEnd DATETIME
 AS
 BEGIN
+	SELECT
+		@DateStart = CONVERT(DATE, @DateStart),
+		@DateEnd = CONVERT(DATE, @DateEnd)
+
 	CREATE TABLE #out (
 		SortOrder INT IDENTITY(1, 1) NOT NULL,
 		Caption NVARCHAR(300) NOT NULL,
@@ -21,10 +28,8 @@ BEGIN
 		Css NVARCHAR(256) NULL
 	)
 
-			
 	INSERT INTO #out(Caption, Css) VALUES ('Visitors', 'total')
 
-			
 	SELECT
 		0 AS SortOrder,
 		Name
@@ -35,7 +40,6 @@ BEGIN
 	WHERE
 		1 = 0
 
-		
 	INSERT INTO #t (SortOrder, Name) VALUES (1, 'UKVisitors')
 	INSERT INTO #t (SortOrder, Name) VALUES (2, 'ReturningVisitors')
 	INSERT INTO #t (SortOrder, Name) VALUES (3, 'NewVisitors')
@@ -44,7 +48,6 @@ BEGIN
 	INSERT INTO #t (SortOrder, Name) VALUES (6, 'PagePacnet')
 	INSERT INTO #t (SortOrder, Name) VALUES (7, 'PageGetCash')
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		c.Description,
@@ -63,13 +66,10 @@ BEGIN
 	ORDER BY
 		#t.SortOrder
 
-	
 	DROP TABLE #t
 
-			
 	INSERT INTO #out(Caption, Css) VALUES ('Funnel', 'total')
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Registrations',
@@ -81,7 +81,6 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Entered data source',
@@ -94,7 +93,6 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Finished',
@@ -108,7 +106,6 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Approved',
@@ -123,7 +120,6 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Rejected',
@@ -145,7 +141,6 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Pending',
@@ -165,10 +160,8 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-			
 	INSERT INTO #out(Caption, Css) VALUES ('Issued Loans', 'total')
 
-	
 	CREATE TABLE #l (
 		LoanID INT,
 		CustomerID INT,
@@ -177,7 +170,6 @@ BEGIN
 		PaidOffLoansCount INT
 	)
 
-	
 	INSERT INTO #l (LoanID, CustomerID, LoanAmount, PreviousLoansCount, PaidOffLoansCount)
 	SELECT
 		l.Id,
@@ -193,7 +185,6 @@ BEGIN
 		AND
 		@DateStart <= l.Date AND l.Date < @DateEnd
 
-	
 	UPDATE #l SET
 		PreviousLoansCount = (
 			SELECT ISNULL(COUNT(*), 0)
@@ -202,7 +193,6 @@ BEGIN
 			AND #l.LoanID > l.Id
 		)
 
-	
 	UPDATE #l SET
 		PaidOffLoansCount = (
 			SELECT ISNULL(COUNT(*), 0)
@@ -212,7 +202,6 @@ BEGIN
 			AND l.Status = 'PaidOff'
 		)
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Total',
@@ -221,7 +210,6 @@ BEGIN
 	FROM
 		#l
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'New loans',
@@ -232,7 +220,6 @@ BEGIN
 	WHERE
 		PreviousLoansCount = 0
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Existing loans',
@@ -243,7 +230,6 @@ BEGIN
 	WHERE
 		PreviousLoansCount != 0
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Existing fully paid',
@@ -256,7 +242,6 @@ BEGIN
 		AND
 		PaidOffLoansCount = PreviousLoansCount
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Existing open loans',
@@ -269,13 +254,10 @@ BEGIN
 		AND
 		PaidOffLoansCount != PreviousLoansCount
 
-	
 	DROP TABLE #l
 
-			
 	INSERT INTO #out(Caption, Css) VALUES ('Repayments', 'total')
 
-	
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Total',
@@ -293,7 +275,6 @@ BEGIN
 		AND
 		@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Early payments',
@@ -313,7 +294,6 @@ BEGIN
 		AND
 		@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'On time payments',
@@ -333,7 +313,6 @@ BEGIN
 		AND
 		@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Late payments',
@@ -353,7 +332,6 @@ BEGIN
 		AND
 		@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Loans paid fully',
@@ -366,10 +344,8 @@ BEGIN
 		AND
 		@DateStart <= l.DateClosed AND l.DateClosed < @DateEnd
 
-			
 	INSERT INTO #out(Caption, Css) VALUES ('Total book', 'total')
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Total issued loans',
@@ -383,7 +359,6 @@ BEGIN
 		AND
 		l.Date < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Total repayments',
@@ -405,7 +380,6 @@ BEGIN
 		AND
 		t.PostDate < @DateEnd
 
-	
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Outstanding balance',
@@ -421,7 +395,6 @@ BEGIN
 		AND
 		l.Date < @DateEnd
 
-			
 	SELECT
 		Caption,
 		Number,
@@ -435,7 +408,6 @@ BEGIN
 	ORDER BY
 		SortOrder
 
-			
 	DROP TABLE #out
 END
 GO

@@ -1,13 +1,16 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaymentsReceived]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptPaymentsReceived]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPaymentsReceived]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptPaymentsReceived]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptPaymentsReceived
 @DateStart DATETIME,
-@DateEnd DATETIME
+@DateEnd   DATETIME
 AS
 BEGIN
 	CREATE TABLE #t (
@@ -52,7 +55,7 @@ BEGIN
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id
 	WHERE
-		t.PostDate BETWEEN @DateStart AND @DateEnd
+		CONVERT(DATE, @DateStart) <= t.PostDate AND t.PostDate < CONVERT(DATE, @DateEnd)
 		AND
 		t.Status = 'Done'
 		AND
@@ -60,7 +63,6 @@ BEGIN
 		AND
 		t.Type = 'PaypointTransaction'
 
-		
 	INSERT INTO #t
 	SELECT
 		NULL,

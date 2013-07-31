@@ -1,18 +1,23 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptScheduler_GetHeaderAndFields]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptScheduler_GetHeaderAndFields]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptScheduler_GetHeaderAndFields]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptScheduler_GetHeaderAndFields]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptScheduler_GetHeaderAndFields
-
-@Type    nvarchar(200)
-
+@Type NVARCHAR(200)
 AS
 BEGIN
-SELECT Header, Fields
-FROM ReportScheduler 
-WHERE Type = @Type	
+	SELECT
+		Header,
+		Fields
+	FROM
+		ReportScheduler
+	WHERE
+		Type = @Type
 END
 GO

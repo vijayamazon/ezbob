@@ -1,10 +1,13 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptFinancialStats]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptFinancialStats
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -25,14 +28,12 @@ BEGIN
 		@PAYPOINT = 'PaypointTransaction',
 		@DONE = 'Done'
 
-			
 	CREATE TABLE #output (
 		Caption NVARCHAR(128),
 		Value NUMERIC(18, 2),
 		SortOrder INT IDENTITY NOT NULL
 	)
 
-			
 	SELECT
 		@TotalGivenLoanValue = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 	FROM
@@ -60,7 +61,6 @@ BEGIN
 		'Opening Balance',
 		@TotalGivenLoanValue - @TotalRepaidPrincipal
 
-				
 	INSERT INTO #output
 	SELECT
 		'Loans Issued #',
@@ -70,8 +70,7 @@ BEGIN
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		@DateStart <= l.Date AND l.Date < @DateEnd
-	
-				
+
 	INSERT INTO #output
 	SELECT
 		'Loans Issued Value',
@@ -84,8 +83,7 @@ BEGIN
 		t.Type = @PACNET AND t.Status = @DONE
 		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
-	
-				
+
 	INSERT INTO #output
 	SELECT
 		'Principal Repaid',
@@ -98,8 +96,7 @@ BEGIN
 		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
-	
-				
+
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
 		INSERT INTO #output
 		SELECT
@@ -119,7 +116,6 @@ BEGIN
 			AND
 			@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
 		INSERT INTO #output
 		SELECT
@@ -139,7 +135,6 @@ BEGIN
 			AND
 			@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-				
 	IF OBJECT_ID('LoanScheduleTransaction') IS NULL
 		INSERT INTO #output
 		SELECT
@@ -159,7 +154,6 @@ BEGIN
 			AND
 			@DateStart <= lst.Date AND lst.Date < @DateEnd
 
-				
 	INSERT INTO #output
 	SELECT
 		'Defaults',
@@ -168,9 +162,8 @@ BEGIN
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 AND c.Status = 'Default'
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
-	
-				
+		@DateStart <= l.Date AND l.Date < @DateEnd
+
 	INSERT INTO #output
 	SELECT
 		'Average Loan Amount',
@@ -179,9 +172,8 @@ BEGIN
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
-	
-				
+		@DateStart <= l.Date AND l.Date < @DateEnd
+
 	SELECT
 		@InterestReceived = ISNULL(SUM(t.Interest), 0)
 	FROM
@@ -198,7 +190,7 @@ BEGIN
 		'Interest Received',
 		@InterestReceived
 
-			
+
 	INSERT INTO #output
 	SELECT
 		'Yield %; Interest received / Open balance',
@@ -206,9 +198,7 @@ BEGIN
 			WHEN 0 THEN 0
 			ELSE 100 * @InterestReceived / @TotalGivenLoanValue
 		END
-	
-				
-	
+
 	INSERT INTO #output
 	SELECT
 		'Fees Paid',
@@ -221,8 +211,7 @@ BEGIN
 		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
-	
-				
+
 	INSERT INTO #output
 	SELECT
 		'Setup Fee',
@@ -231,12 +220,12 @@ BEGIN
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
+		@DateStart <= l.Date AND l.Date < @DateEnd
 
 	INSERT INTO #output
 	SELECT
 		cv.Name,
-		ISNULL(SUM(CASE 
+		ISNULL(SUM(CASE
 			WHEN AmountPaid > 0 THEN
 				CASE WHEN AmountPaid < Amount THEN AmountPaid ELSE Amount END
 			ELSE 0
@@ -247,13 +236,12 @@ BEGIN
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 		INNER JOIN ConfigurationVariables cv ON ch.ConfigurationVariableId = cv.Id
 	WHERE
-		ch.Date BETWEEN @DateStart AND @DateEnd
+		@DateStart <= ch.Date AND ch.Date < @DateEnd
 	GROUP BY
 		cv.Name
 	ORDER BY
 		cv.Name
-	
-				
+
 	SELECT
 		@TotalGivenLoanValue = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
 	FROM
@@ -280,8 +268,7 @@ BEGIN
 	SELECT
 		'Closing Balance',
 		@TotalGivenLoanValue - @TotalRepaidPrincipal
-	
-				
+
 	SELECT
 		SortOrder AS ID,
 		Caption,
@@ -290,7 +277,7 @@ BEGIN
 		#output
 	ORDER BY
 		SortOrder
-	
+
 	DROP TABLE #output
 END
 GO

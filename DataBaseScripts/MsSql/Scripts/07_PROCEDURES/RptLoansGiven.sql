@@ -1,10 +1,13 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptLoansGiven]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptLoansGiven]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptLoansGiven
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -45,7 +48,7 @@ BEGIN
 		INNER JOIN LoanType lt ON l.LoanTypeId = lt.Id
 		INNER JOIN LoanSchedule s ON l.Id = s.LoanId
 	WHERE
-		l.Date BETWEEN @DateStart AND @DateEnd
+		CONVERT(DATE, @DateStart) <= l.Date AND l.Date < CONVERT(DATE, @DateEnd)
 		AND
 		c.IsTest = 0
 	GROUP BY

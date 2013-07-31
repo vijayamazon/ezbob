@@ -1,17 +1,23 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptSourceRef]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptSourceRef]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptSourceRef]') AND type in (N'P', N'PC'))
+	DROP PROCEDURE [dbo].[RptSourceRef]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptSourceRef
 @DateStart DATETIME,
 @DateEnd   DATETIME
 AS
 BEGIN
-	SET NOCOUNT ON
-	
+	SET NOCOUNT ON	
+
+	SET @DateStart = CONVERT(DATE, @DateStart)
+	SET @DateEnd = CONVERT(DATE, @DateEnd)
+
 	CREATE TABLE #out (
 		TypeID INT NOT NULL,
 		CustomerID INT NOT NULL,
@@ -22,7 +28,6 @@ BEGIN
 		MarketPlaces NVARCHAR(4000) NOT NULL DEFAULT ''
 	)
 
-					
 	INSERT INTO #out (TypeID, CustomerID, Status, LoanCount)
 	SELECT
 		1,
@@ -36,7 +41,6 @@ BEGIN
 		AND
 		@DateStart <= C.GreetingMailSentDate AND C.GreetingMailSentDate < @DateEnd
 
-					
 	INSERT INTO #out (TypeID, CustomerId, CashRequestID)
 	SELECT
 		2,
@@ -48,7 +52,6 @@ BEGIN
 	WHERE
 		@DateStart <= R.CreationDate AND R.CreationDate < @DateEnd
 
-					
 	INSERT INTO #out (TypeID, CustomerId, CashRequestID)
 	SELECT
 		3,
@@ -62,7 +65,6 @@ BEGIN
 		AND
 		R.UnderwriterDecision = 'Approved'
 
-					
 	INSERT INTO #out (TypeID, CustomerId, LoanID)
 	SELECT
 		4,
@@ -74,7 +76,6 @@ BEGIN
 	WHERE 
 		@DateStart <= L.[Date] AND L.[Date] < @DateEnd
 
-					
 	UPDATE #out SET
 		CashRequestID = (
 			SELECT
@@ -90,7 +91,6 @@ BEGIN
 	WHERE
 		LoanID IS NOT NULL
 
-					
 	UPDATE #out SET
 		Status = (CASE
 			WHEN EXISTS (
@@ -108,7 +108,6 @@ BEGIN
 	WHERE
 		CashRequestID IS NOT NULL
 
-					
 	UPDATE #out SET
 		LoanCount = ISNULL((
 			SELECT COUNT (*)
@@ -118,11 +117,9 @@ BEGIN
 	WHERE
 		CashRequestID IS NOT NULL
 
-					
 	UPDATE #out SET
 		MarketPlaces = dbo.udfCustomerMarketPlaces(CustomerID)
 
-					
 	SELECT
 		(CASE o.TypeID
 			WHEN 1 THEN '1: Registered'

@@ -20,6 +20,7 @@ CREATE TABLE [dbo].[MP_CustomerMarketPlace](
 	[UpdateError] [nvarchar](max) NULL,
 	[UpdatingTimePassInSeconds]  AS (datediff(second,[UpdatingStart],[UpdatingEnd])),
 	[TokenExpired] [int] NOT NULL,
+	[OriginationDate] [datetime] NULL,
  CONSTRAINT [PK_CustomerMarketPlace] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
