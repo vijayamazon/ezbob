@@ -1,29 +1,27 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptMarketPlacesStats]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptMarketPlacesStats]
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
+IF OBJECT_ID('RptMarketPlacesStats') IS NOT NULL
+	DROP PROCEDURE RptMarketPlacesStats
 GO
 
 CREATE PROCEDURE RptMarketPlacesStats
 @DateStart DATETIME,
-@DateEnd   DATETIME
+@DateEnd DATETIME
 AS
 BEGIN
+	SELECT
+		@DateStart = CONVERT(DATE, @DateStart),
+		@DateEnd = CONVERT(DATE, @DateEnd)
+
 	CREATE TABLE #tmp (
 		MarketPlaceId INT,
 		NumOfShopsDidntFinish INT,
-		AvgTurnoverDidntFinish NUMERIC(18, 2),
+		AvgTurnoverDidntFinish NUMERIC(18,2),
 		NumOfShopsFinish INT,
-		AvgTurnoverFinish NUMERIC(18, 2),
-		AvgScore NUMERIC(5, 2),
-		PercentMen NUMERIC(5, 2),
-		AvgAge NUMERIC(5, 2),
-		PercentApproved NUMERIC(5, 2),
-		AvgAmountApproved NUMERIC(10, 2),
+		AvgTurnoverFinish NUMERIC(18,2),
+		AvgScore NUMERIC(5,2),
+		PercentMen NUMERIC(5,2),
+		AvgAge NUMERIC(5,2),
+		PercentApproved NUMERIC(5,2),
+		AvgAmountApproved NUMERIC(10,2),
 		NumOfShopsApproved INT
 	)
 
@@ -37,36 +35,41 @@ BEGIN
 	)
 
 	DECLARE @mpId INT,
-			@mpName NVARCHAR(255),
-			@numOfNotFinishedMps INT,
-			@numOfFinishedMps INT,
-			@numOfFinishedCustomers INT,
-			@sumOfScore INT,
-			@avgScore NUMERIC(5, 2),
-			@currentMarketPlaceId INT,
-			@latestAggr DATETIME,
-			@analysisFuncId INT,
-			@AggrVal FLOAT,
-			@TotalTurnoverNotFinished NUMERIC(18, 2),
-			@TotalTurnoverNotFinishedCounter INT,
-			@avgTurnOverNotFinished NUMERIC(18, 2),
-			@TotalTurnoverFinished NUMERIC(18, 2),
-			@TotalTurnoverFinishedCounter INT,
-			@avgTurnOverFinished NUMERIC(18, 2),
-			@numOfMaleFinishedMps INT,
-			@malePercent NUMERIC(5, 2),
-			@avgAge NUMERIC(18, 2),
-			@CustomerId INT,
-			@TmpTotalTurnover NUMERIC(18, 2),
-			@loanAmount NUMERIC(18, 2),
-			@MarketPlaceTypeId INT,
-			@TotalTurnover NUMERIC(18, 2),
-			@ProratedLoan NUMERIC(18, 2),
-			@numOfShops INT
+		@mpName NVARCHAR(255),
+		@numOfNotFinishedMps INT,
+		@numOfFinishedMps INT,
+		@numOfFinishedCustomers INT,
+		@sumOfScore INT,
+		@avgScore NUMERIC(5, 2),
+		@currentMarketPlaceId INT,
+		@latestAggr DATETIME,
+		@analysisFuncId INT,
+		@AggrVal FLOAT,
+		@TotalTurnoverNotFinished NUMERIC(18,2),
+		@TotalTurnoverNotFinishedCounter INT,
+		@avgTurnOverNotFinished NUMERIC(18,2),
+		@TotalTurnoverFinished NUMERIC(18,2),
+		@TotalTurnoverFinishedCounter INT,
+		@avgTurnOverFinished NUMERIC(18,2),
+		@numOfMaleFinishedMps INT,
+		@malePercent NUMERIC(5,2),
+		@avgAge NUMERIC(18,2),
+		@CustomerId INT,
+		@TmpTotalTurnover NUMERIC(18,2),
+		@loanAmount NUMERIC(18,2),
+		@MarketPlaceTypeId INT,
+		@TotalTurnover NUMERIC(18,2),
+		@ProratedLoan NUMERIC(18,2),
+		@numOfShops INT
 
 	DECLARE cur CURSOR FOR
-		SELECT Id, Name
-		FROM MP_MarketplaceType
+		SELECT
+			Id,
+			Name
+		FROM
+			MP_MarketplaceType
+		WHERE
+			Name != 'PayPoint'
 
 	OPEN cur
 
@@ -81,44 +84,46 @@ BEGIN
 		FROM
 			Customer
 		WHERE
-			CONVERT(DATE, @DateStart) <= GreetingMailSentDate AND GreetingMailSentDate < CONVERT(DATE, @DateEnd)
-		AND
+			@DateStart <= GreetingMailSentDate AND GreetingMailSentDate < @DateEnd
+			AND
 			WizardStep != 4
+			AND
+			Customer.IsTest = 0
 
-		-- А что, отменили DATEDIFF(year, ....)? Или тут важна точность по юлианскому календарю?
 		SELECT
 			Id,
 			Gender,
-			DATEDIFF(hour, DateOfBirth, GETDATE()) / 8766.0 AS Age
+			DATEDIFF(year, DateOfBirth, GETDATE()) AS Age
 		INTO
 			#FinishedCustomers
 		FROM
 			Customer
 		WHERE
-			CONVERT(DATE, @DateStart) <= GreetingMailSentDate AND GreetingMailSentDate < CONVERT(DATE, @DateEnd)
-		AND
+			Customer.IsTest = 0
+			AND
+			@DateStart <= GreetingMailSentDate AND GreetingMailSentDate < @DateEnd
+			AND
 			WizardStep = 4
 
-		DELETE FROM #NotFinishedCustomers
+		DELETE FROM
+			#NotFinishedCustomers
 		WHERE
 			Id NOT IN (
 				SELECT DISTINCT CustomerId
 				FROM MP_CustomerMarketPlace
+				INNER JOIN #NotFinishedCustomers ON CustomerId = #NotFinishedCustomers.Id
 				WHERE MarketPlaceId = @mpId
-				AND CustomerId IN (
-					SELECT Id FROM #NotFinishedCustomers
-				)
 			)
 
-		DELETE FROM #FinishedCustomers
-		WHERE Id NOT IN (
-			SELECT DISTINCT CustomerId
-			FROM MP_CustomerMarketPlace
-			WHERE MarketPlaceId = @mpId
-			AND CustomerId IN (
-				SELECT Id FROM #FinishedCustomers
+		DELETE FROM
+			#FinishedCustomers
+		WHERE
+			Id NOT IN (
+				SELECT DISTINCT CustomerId
+				FROM MP_CustomerMarketPlace
+				INNER JOIN #FinishedCustomers ON CustomerId = #FinishedCustomers.Id
+				WHERE MarketPlaceId = @mpId
 			)
-		)
 
 		SET @numOfNotFinishedMps = 0
 		SET @numOfFinishedMps = 0
@@ -131,56 +136,48 @@ BEGIN
 			@numOfNotFinishedMps = COUNT(MarketPlaceId)
 		FROM
 			MP_CustomerMarketPlace
+			INNER JOIN #NotFinishedCustomers ON CustomerId = #NotFinishedCustomers.Id
 		WHERE
-			MarketPlaceId=@mpId
-			AND
-			CustomerId IN (SELECT Id FROM #NotFinishedCustomers)
+			MarketPlaceId = @mpId
 
 		SELECT
 			@numOfFinishedMps = COUNT(MarketPlaceId)
 		FROM
 			MP_CustomerMarketPlace
+			INNER JOIN #FinishedCustomers ON CustomerId = #FinishedCustomers.Id
 		WHERE
 			MarketPlaceId = @mpId
-			AND
-			CustomerId IN (SELECT Id FROM #FinishedCustomers)
 
 		SELECT
 			@numOfMaleFinishedMps = COUNT(MarketPlaceId)
 		FROM
 			MP_CustomerMarketPlace
+			INNER JOIN #FinishedCustomers ON CustomerId = #FinishedCustomers.Id AND Gender = 'M'
 		WHERE
 			MarketPlaceId = @mpId
-			AND
-			CustomerId IN (SELECT Id FROM #FinishedCustomers WHERE Gender = 'M')
 
 		SET @avgAge = 0
 
 		IF @numOfFinishedMps != 0
-		BEGIN
 			SELECT
-				@avgAge = SUM(Age)
+				@avgAge = AVG(Age)
 			FROM
 				#FinishedCustomers
-
-			SELECT
-				@avgAge = @avgAge / COUNT(1)
-			FROM
-				#FinishedCustomers
-		END
 
 		SELECT
 			CustomerId,
 			ExperianScore
 		INTO
 			#ExperianScores
-		FROM (
-			SELECT
-				CustomerId,
-				ExperianScore,
-				ROW_NUMBER() OVER(PARTITION BY CustomerId ORDER BY Id DESC) AS rn
-			FROM MP_ExperianDataCache
-		) as T
+		FROM
+			(
+				SELECT
+					CustomerId,
+					ExperianScore,
+					ROW_NUMBER() OVER(PARTITION BY CustomerId ORDER BY Id DESC) AS rn
+				FROM
+					MP_ExperianDataCache
+			) as T
 		WHERE
 			rn = 1
 			AND
@@ -191,13 +188,8 @@ BEGIN
 			CustomerId IN (
 				SELECT DISTINCT CustomerId
 				FROM MP_CustomerMarketPlace
-				WHERE MarketPlaceId=@mpId
-				AND CustomerId IN (
-					SELECT Id
-					FROM Customer
-					WHERE CONVERT(DATE, @DateStart) <= GreetingMailSentDate AND GreetingMailSentDate < CONVERT(DATE, @DateEnd)
-					AND WizardStep = 4
-				)
+				INNER JOIN #FinishedCustomers ON CustomerId = #FinishedCustomers.Id
+				WHERE MarketPlaceId = @mpId
 			)
 
 		SELECT
@@ -206,52 +198,58 @@ BEGIN
 			#ExperianScores
 
 		SELECT
-			@sumOfScore = SUM(ExperianScore) FROM #ExperianScores
+			@sumOfScore = SUM(ExperianScore)
+		FROM
+			#ExperianScores
 
 		DROP TABLE #ExperianScores
 
-		SET @avgScore = 0
-
-		IF @sumOfScore IS NOT NULL
-			SET @avgScore = (@sumOfScore * 1.0) / @numOfFinishedCustomers
+		IF @sumOfScore IS NULL
+			SET @avgScore = 0
+		ELSE
+			SET @avgScore = CONVERT(NUMERIC(5, 2), @sumOfScore) / CONVERT(NUMERIC(5, 2), @numOfFinishedCustomers)
 
 		SELECT
-			Id
+			MP_CustomerMarketPlace.Id
 		INTO
 			#NotFinishedMarketPlaces
 		FROM
 			MP_CustomerMarketPlace
+			INNER JOIN #NotFinishedCustomers ON CustomerId = #NotFinishedCustomers.Id
 		WHERE
 			MarketPlaceId = @mpId
-			AND
-			CustomerId IN (SELECT Id FROM #NotFinishedCustomers)
 
 		SELECT
-			Id,
+			MP_CustomerMarketPlace.Id,
 			CustomerId
 		INTO
 			#FinishedMarketPlaces
 		FROM
 			MP_CustomerMarketPlace
+			INNER JOIN #FinishedCustomers ON CustomerId = #FinishedCustomers.Id
+		WHERE
+			MarketPlaceId = @mpId
+
+		SELECT
+			@analysisFuncId = Id
+		FROM
+			MP_AnalyisisFunction
 		WHERE
 			MarketPlaceId = @mpId
 			AND
-			CustomerId IN (SELECT Id FROM #FinishedCustomers)
-
-		IF @mpName = 'PayPal'
-		BEGIN
-			SELECT @analysisFuncId = Id FROM MP_AnalyisisFunction WHERE MarketPlaceId = @mpId AND Name = 'TotalNetInPayments'
-		END
-		ELSE BEGIN
-			IF @mpName = 'PayPoint'
-				SELECT @analysisFuncId = Id FROM MP_AnalyisisFunction WHERE MarketPlaceId = @mpId AND Name='SumOfAuthorisedOrders'
-			ELSE
-				SELECT @analysisFuncId = Id FROM MP_AnalyisisFunction WHERE MarketPlaceId = @mpId AND Name='TotalSumOfOrders'
-		END
+			(
+				(@mpName = 'Pay pal' AND Name = 'TotalNetInPayments')
+				OR
+				(@mpName = 'PayPoint' AND Name = 'SumOfAuthorisedOrders')
+				OR
+				(@mpName NOT IN ('Pay pal', 'PayPoint') AND Name = 'TotalSumOfOrders')
+			)
 
 		IF @analysisFuncId IS NOT NULL
 		BEGIN
-			DECLARE marketCursor CURSOR FOR SELECT Id FROM #NotFinishedMarketPlaces
+			DECLARE marketCursor CURSOR FOR
+				SELECT Id FROM #NotFinishedMarketPlaces
+
 			OPEN marketCursor
 
 			FETCH NEXT FROM marketCursor INTO @currentMarketPlaceId
@@ -270,9 +268,7 @@ BEGIN
 				IF @latestAggr IS NOT NULL
 				BEGIN
 					SELECT TOP 1
-						ValueFloat
-					INTO
-						#MaxAggrValueNotFinished
+						@AggrVal = ValueFloat
 					FROM
 						MP_AnalyisisFunctionValues
 					WHERE
@@ -286,16 +282,9 @@ BEGIN
 					ORDER BY
 						AnalysisFunctionTimePeriodId DESC
 
-					SELECT
-						@AggrVal = ValueFloat
-					FROM
-						#MaxAggrValueNotFinished
-
 					SET @TotalTurnoverNotFinished = @TotalTurnoverNotFinished + @AggrVal
 
 					SET @TotalTurnoverNotFinishedCounter = @TotalTurnoverNotFinishedCounter + 1
-
-					DROP TABLE #MaxAggrValueNotFinished
 				END
 
 				FETCH NEXT FROM marketCursor INTO @currentMarketPlaceId
@@ -304,12 +293,13 @@ BEGIN
 			CLOSE marketCursor
 			DEALLOCATE marketCursor
 
-			DECLARE marketCursor CURSOR FOR SELECT Id, CustomerId FROM #FinishedMarketPlaces
+			DECLARE marketCursor CURSOR FOR
+				SELECT Id, CustomerId FROM #FinishedMarketPlaces
 
 			OPEN marketCursor
-			
+
 			FETCH NEXT FROM marketCursor INTO @currentMarketPlaceId, @CustomerId
-			
+
 			WHILE @@FETCH_STATUS = 0
 			BEGIN
 				SELECT
@@ -320,13 +310,11 @@ BEGIN
 					AnalyisisFunctionId = @analysisFuncId
 					AND
 					CustomerMarketPlaceId = @currentMarketPlaceId
-			
+
 				IF @latestAggr IS NOT NULL
 				BEGIN
 					SELECT TOP 1
-						ValueFloat
-					INTO
-						#MaxAggrValueFinished
+						@AggrVal = ValueFloat
 					FROM
 						MP_AnalyisisFunctionValues
 					WHERE
@@ -340,37 +328,27 @@ BEGIN
 					ORDER BY
 						AnalysisFunctionTimePeriodId DESC
 
-					SELECT
-						@AggrVal = ValueFloat
-					FROM
-						#MaxAggrValueFinished
-
 					SET @TotalTurnoverFinished = @TotalTurnoverFinished + @AggrVal
-					
+
 					SET @TotalTurnoverFinishedCounter = @TotalTurnoverFinishedCounter + 1
 
 					IF NOT EXISTS (SELECT 1 FROM #tmp2 WHERE CustomerId = @CustomerId)
-						INSERT INTO #tmp2 VALUES (@CustomerId, @mpId, 0, 0, 0, 0)
+						INSERT INTO #tmp2 VALUES (@CustomerId, @mpId, 1, 0, 0, 0)
 
 					IF NOT EXISTS (SELECT 1 FROM #tmp2 WHERE CustomerId = @CustomerId AND #tmp2.MarketPlaceTypeId = @mpId)
 					BEGIN
+						INSERT INTO #tmp2
 						SELECT TOP 1
-							TotalTurnover
-						INTO
-							#tmpTotalTurnover
+							@CustomerId,
+							@mpId,
+							1,
+							0,
+							TotalTurnover,
+							0
 						FROM
 							#tmp2
 						WHERE
 							CustomerId = @CustomerId
-
-						SELECT
-							@TmpTotalTurnover = TotalTurnover
-						FROM
-							#tmpTotalTurnover
-
-						INSERT INTO #tmp2 VALUES (@CustomerId, @mpId, 1, 0, @TmpTotalTurnover, 0)
-
-						DROP TABLE #tmpTotalTurnover
 					END
 
 					UPDATE #tmp2 SET
@@ -384,8 +362,6 @@ BEGIN
 						TotalTurnover = TotalTurnover + @AggrVal
 					WHERE
 						CustomerId = @CustomerId
-
-					DROP TABLE #MaxAggrValueFinished
 				END
 
 				FETCH NEXT FROM marketCursor INTO @currentMarketPlaceId, @CustomerId
@@ -396,12 +372,10 @@ BEGIN
 		END
 
 		SET @avgTurnOverNotFinished = 0
-
 		IF @TotalTurnoverNotFinishedCounter != 0
 			SET @avgTurnOverNotFinished = @TotalTurnoverNotFinished / @TotalTurnoverNotFinishedCounter
 
 		SET @avgTurnOverFinished = 0
-
 		IF @TotalTurnoverFinishedCounter != 0
 			SET @avgTurnOverFinished = @TotalTurnoverFinished / @TotalTurnoverFinishedCounter
 
@@ -411,9 +385,10 @@ BEGIN
 			SET @malePercent = 0
 
 		INSERT INTO #tmp VALUES (
-			@mpId, @numOfNotFinishedMps, @avgTurnOverNotFinished, @numOfFinishedMps, @avgTurnOverFinished,
-			@avgScore, @malePercent, @avgAge, 0.0, 0.0,
-			0
+			@mpId, @numOfNotFinishedMps, @avgTurnOverNotFinished,
+			@numOfFinishedMps, @avgTurnOverFinished, @avgScore,
+			@malePercent, @avgAge, 0.0,
+			0.0, 0
 		)
 
 		DROP TABLE #NotFinishedCustomers
@@ -423,10 +398,12 @@ BEGIN
 
 		FETCH NEXT FROM cur INTO @mpId, @mpName
 	END
+
 	CLOSE cur
 	DEALLOCATE cur
 
-	DECLARE cur CURSOR FOR SELECT DISTINCT CustomerId FROM #tmp2
+	DECLARE cur CURSOR FOR
+		SELECT DISTINCT CustomerId FROM #tmp2
 
 	OPEN cur
 
@@ -434,48 +411,57 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SELECT
-			@loanAmount = Sum(LoanAmount)
-		FROM
-			Loan
-		WHERE
-			CustomerId = @CustomerId
-
-		IF @loanAmount IS NULL
-			SET @loanAmount = 0
-		ELSE
+		IF EXISTS (SELECT 1 FROM DecisionHistory WHERE CustomerId = @CustomerId AND Action = 'Approve')
 		BEGIN
-			DECLARE numOfShopsCur CURSOR FOR
-				SELECT MarketPlaceId, count(MarketPlaceId)
-				FROM MP_CustomerMarketPlace
+			DECLARE typeCur CURSOR FOR
+				SELECT MarketPlaceTypeId
+				FROM #tmp2
 				WHERE CustomerId = @CustomerId
-				GROUP BY MarketPlaceId
 
-			OPEN numOfShopsCur
-			
-			FETCH NEXT FROM numOfShopsCur INTO @MarketPlaceTypeId, @numOfShops
-			
+			OPEN typeCur
+
+			FETCH NEXT FROM typeCur INTO @MarketPlaceTypeId
+
 			WHILE @@FETCH_STATUS = 0
 			BEGIN
 				UPDATE #tmp SET
-					NumOfShopsApproved = NumOfShopsApproved + @numOfShops
+					NumOfShopsApproved = NumOfShopsApproved + 1
 				WHERE
 					MarketPlaceId = @MarketPlaceTypeId
-			
-				FETCH NEXT FROM numOfShopsCur INTO @MarketPlaceTypeId, @numOfShops
+
+				FETCH NEXT FROM typeCur INTO @MarketPlaceTypeId
 			END
 
-			CLOSE numOfShopsCur
-			DEALLOCATE numOfShopsCur
+			CLOSE typeCur
+			DEALLOCATE typeCur
 		END
 
+		FETCH NEXT FROM cur INTO @CustomerId
+	END
+
+	CLOSE cur
+	DEALLOCATE cur
+
+	DECLARE cur CURSOR FOR
+		SELECT DISTINCT CustomerId FROM #tmp2
+
+	OPEN cur
+
+	FETCH NEXT FROM cur INTO @CustomerId
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SELECT @loanAmount = ISNULL(Sum(LoanAmount), 0) FROM Loan WHERE CustomerId=@CustomerId
+
 		DECLARE typeCur CURSOR FOR
-			SELECT MarketPlaceTypeId FROM #tmp2 WHERE CustomerId=@CustomerId
+			SELECT MarketPlaceTypeId
+			FROM #tmp2
+			WHERE CustomerId = @CustomerId
 
 		OPEN typeCur
 
 		FETCH NEXT FROM typeCur INTO @MarketPlaceTypeId
-		
+
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 			SELECT
@@ -497,6 +483,7 @@ BEGIN
 
 			FETCH NEXT FROM typeCur INTO @MarketPlaceTypeId
 		END
+
 		CLOSE typeCur
 		DEALLOCATE typeCur
 
@@ -507,7 +494,13 @@ BEGIN
 	DEALLOCATE cur
 
 	DECLARE cur CURSOR FOR
-		SELECT MarketPlaceTypeId, SUM(ProratedLoan) FROM #tmp2 GROUP BY MarketPlaceTypeId
+		SELECT
+			MarketPlaceTypeId,
+			SUM(ProratedLoan)
+		FROM
+			#tmp2
+		GROUP BY
+			MarketPlaceTypeId
 
 	OPEN cur
 
@@ -516,7 +509,10 @@ BEGIN
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
 		UPDATE #tmp SET
-			AvgAmountApproved = @ProratedLoan / NumOfShopsFinish
+			AvgAmountApproved = CASE NumOfShopsApproved
+				 WHEN 0 THEN 0
+				 ELSE @ProratedLoan / NumOfShopsApproved
+			END
 		WHERE
 			MarketPlaceId = @MarketPlaceTypeId
 
@@ -544,7 +540,7 @@ BEGIN
 		END AS NumOfShopsFinish,
 		CASE
 			WHEN AvgTurnoverFinish = 0 THEN NULL
-			ELSE CONVERT(INT, AvgTurnoverFinish) 
+			ELSE CONVERT(INT, AvgTurnoverFinish)
 		END AS AvgTurnoverFinish,
 		CASE
 			WHEN AvgScore = 0 THEN NULL
@@ -560,11 +556,10 @@ BEGIN
 		END AS AvgAge,
 		CASE
 			WHEN NumOfShopsFinish IS NULL OR NumOfShopsFinish = 0 THEN NULL
-			ELSE
-				CASE
-					WHEN NumOfShopsApproved = 0 THEN NULL
-					ELSE CONVERT(INT, NumOfShopsApproved * 100.0 / NumOfShopsFinish)
-				END
+			ELSE CASE
+				WHEN NumOfShopsApproved = 0 THEN NULL
+				ELSE CONVERT(INT, NumOfShopsApproved * 100.0 / NumOfShopsFinish)
+			END
 		END AS PercentApproved,
 		CASE
 			WHEN AvgAmountApproved = 0 THEN NULL
@@ -572,8 +567,14 @@ BEGIN
 		END AS AvgAmountApproved
 	FROM
 		#tmp
-		INNER JOIN MP_MarketplaceType ON #tmp.MarketPlaceId = MP_MarketplaceType.Id
+		INNER JOIN MP_MarketplaceType ON  #tmp.MarketPlaceId = MP_MarketplaceType.Id
 
 	DROP TABLE #tmp
 END
+GO
+
+UPDATE ReportScheduler SET
+	Header = 'Name,Incomplete #,Incomplete Avg Turnover,Completed #,Completed Avg Turnover,Avg Score,% of Men,Avg Age,% Approved,Avg Amount Approved'
+WHERE
+	Type = 'RPT_MARKETPLACES_STATS'
 GO
