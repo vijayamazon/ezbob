@@ -1,6 +1,7 @@
 ﻿using System;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using FluentNHibernate.Mapping;
+using Iesi.Collections.Generic;
 using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans
@@ -15,6 +16,12 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         public virtual LoanTransactionStatus Status { get; set; }
         public virtual decimal Fees { get; set; }
         public virtual string RefNumber { get; set; }
+
+		private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
+		public virtual ISet<LoanScheduleTransaction> ScheduleTransactions {
+			get { return _scheduleTransactions; }
+			set { _scheduleTransactions = value; }
+		} // ScheduleTransactions
     }
 
     public enum LoanTransactionStatus
@@ -63,6 +70,12 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.Status).CustomType<LoanTransactionStatusType>();
             Map(x => x.Fees);
             Map(x => x.RefNumber).Length(14);
+			HasMany(x => x.ScheduleTransactions)
+               .AsSet()
+               .KeyColumn("TransactionID")
+               .Cascade.AllDeleteOrphan()
+               .Inverse()
+               .Cache.ReadWrite().Region("LongTerm").ReadWrite();
         }
     }
 }

@@ -90,6 +90,12 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             }
         }
 
+		private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
+		public virtual ISet<LoanScheduleTransaction> ScheduleTransactions {
+			get { return _scheduleTransactions; }
+			set { _scheduleTransactions = value; }
+		} // ScheduleTransactions
+
         private ISet<PaymentRollover> _rollovers = new HashedSet<PaymentRollover>();
 
         public virtual ISet<PaymentRollover> Rollovers
@@ -203,6 +209,12 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             HasMany(x => x.Rollovers)
                .AsSet()
                .KeyColumn("LoanScheduleId")
+               .Cascade.AllDeleteOrphan()
+               .Inverse()
+               .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+			HasMany(x => x.ScheduleTransactions)
+               .AsSet()
+               .KeyColumn("ScheduleID")
                .Cascade.AllDeleteOrphan()
                .Inverse()
                .Cache.ReadWrite().Region("LongTerm").ReadWrite();
