@@ -316,7 +316,7 @@ END
 GO
 
 
-UPDATE ReportScheduler SET Headers='Name, Incomplete #, Incomplete Avg Turnover, Completed #, Completed Avg Turnover, Avg Score, % of Men, Avg Age, % Approved, Avg Amount Approved' WHERE Type = 'RPT_MARKETPLACES_STATS'
+UPDATE ReportScheduler SET Header='Name, Incomplete #, Incomplete Avg Turnover, Completed #, Completed Avg Turnover, Avg Score, % of Men, Avg Age, % Approved, Avg Amount Approved' WHERE Type = 'RPT_MARKETPLACES_STATS'
 GO
 
 
