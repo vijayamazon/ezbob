@@ -1,5 +1,4 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     Layout = null;
@@ -9,15 +8,15 @@
 
 <html>
     <head>
-        <title>Congratulations. PayPal account was added successfully.</title>
+        <title>Paypal adding was canceled</title>
     </head>
     <body>
         <div>
-            <h2>success</h2>
+            <h2>Canceled</h2>
             If this windows is not automatically closed, close it.
         </div>
         <script type="text/javascript">
-            window.opener.PayPalAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+            window.opener.PayPalAdded();
             self.close();
         </script>
     </body>

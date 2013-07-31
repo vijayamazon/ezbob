@@ -34,7 +34,9 @@ EzBob.PayPalInfoView = Backbone.View.extend({
         EzBob.CT.bindShopToCT(this, 'paypal');
 
         window.PayPalAdded = function (result) {
-            EzBob.App.trigger('info', 'Congratulations. PayPal account was added successfully.');
+            if (result) {
+                EzBob.App.trigger('info', 'Congratulations. PayPal account was added successfully.');
+            }
             that.trigger('completed');
             that.trigger('ready');
             that.trigger('back');

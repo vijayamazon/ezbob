@@ -66,9 +66,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [Transactional]
         public ViewResult Success(string request_token, string verification_code)
         {
-			var paypal = ObjectFactory.GetInstance<PayPalDatabaseMarketPlace>();
+            if (string.IsNullOrEmpty(verification_code) && string.IsNullOrEmpty(request_token))
+            {
+                Log.InfoFormat("PayPal addin was canceled by customer");
+                return View("PayPalCanceled");
+            }
 
-            request_token = request_token ?? Session["PAYPALREQUESTTOKEN"].ToString();
+			var paypal = ObjectFactory.GetInstance<PayPalDatabaseMarketPlace>();
 
             var customer = _context.Customer;
 
@@ -150,8 +154,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             {
                 var callback = Url.Action("Success", "PaymentAccounts", new { Area = "Customer" }, "https");
                 var response = PayPalServiceHelper.GetRequestPermissionsUrl(_payPalConfig, callback);
-
-                Session["PAYPALREQUESTTOKEN"] = response.Token;
 
                 return Redirect(response.Url);
             }
