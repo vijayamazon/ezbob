@@ -240,6 +240,7 @@
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\StrategySettingsController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\SupportController.cs" />
     <Compile Include="Areas\Underwriter\Models\ApplicationInfoModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Areas\Underwriter\Models\LoanTypesModel.cs" />
     <Compile Include="Areas\Underwriter\Models\ManualPaymentModel.cs" />
     <Compile Include="Areas\Underwriter\Models\RolloverModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\SupportModel.cs" />
     <Compile Include="Code\AgreementsGenerator.cs" />
     <Compile Include="Code\AgreementsModelBuilder.cs" />
     <Compile Include="Code\AvailableFundsValidator.cs" />
@@ -1077,6 +1079,7 @@
     <Content Include="Areas\Customer\Views\SageMarketPlaces\SageCallback.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Sage.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ExperianSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Support\_Support.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1579,6 +1582,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.coffee" />
+    <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.coffee" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_Start.cshtml" />

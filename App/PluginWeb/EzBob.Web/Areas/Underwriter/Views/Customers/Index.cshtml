@@ -37,12 +37,14 @@
 <div id="profile-view" style="display: none;"></div>
 <div id="settings-view" style="display: none;"></div>
 <div id="automation-view" style="display: none;"></div>
+<div id="support-area" style="display: none;"></div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
     Html.RenderPartial("_CustomersPopupTemplate");
     Html.RenderPartial("AutomationSettings/StrategySettings");
     Html.RenderPartial("AutomationSettings/StrategyAutomation");
+    Html.RenderPartial("Support/_Support");
 }
 @section Js{
     <script type="text/javascript">
@@ -65,7 +67,7 @@
                     ,
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
-                    },
+                    } ,
                     { el: '#pending', url: '@Url.Action(@Model.Pending.Action, new {Area = "Underwriter"})', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
                     { el: '#approved', url: '@Url.Action(@Model.Approved.Action, new {Area = "Underwriter"})', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
                     { el: '#late', url: '@Url.Action(@Model.Late.Action, new {Area = "Underwriter"})', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
@@ -78,11 +80,9 @@
 
             //count updater
             var counterTimer;
-            var timerOfActivity;
-            var heartInterval;
 
             function updateCounters() {
-                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters", {isTest: EzBob.Config.isTest});
+                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters", { isTest: EzBob.Config.isTest });
                 xhr.done(function(response) {
                     _.each(response, function(val) {
                         $("#" + val.Name + "-count").text(val.Count);
@@ -90,44 +90,11 @@
                 });
             }
 
-            function heartOfActivity() {
-
-                var sessionTimeout = EzBob.Config.SessionTimeout;
-                if (sessionTimeout <= 0) return;
-
-                if (EzBob.Config.HeartBeatEnabled) heartInterval = setInterval(heartBeat, 5000);
-    
-                var timeoutValue = 1000 * 60 * sessionTimeout;
-
-                set();
-
-                function heartBeat() {
-                    $.get(window.gRootPath + "HeartBeat");
-                }
-
-                function timeout() {
-                    reset();
-                    document.location = window.gRootPath + "Account/LogOff";
-                }
-
-                function reset() {
-                    clearInterval(heartInterval);
-                    clearTimeout(timerOfActivity);
-                }
-
-                function set() {
-                    timerOfActivity = setTimeout(timeout, timeoutValue);
-                }
-            }
-
-
-
-
             var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
             var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
             var strategyAutomationView = new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') });
-
+            var supportView = new EzBob.Underwriter.SupportView({ el: $("#support-area") });
 
             var underwriterRouter = Backbone.Router.extend({
                 initialize: function() {
@@ -135,7 +102,7 @@
                     this.isProfileRendered = false;
                     this.isSettingsRendered = false;
                     this.isAutomationRendered = false;
-
+                    this.isSupportRendered = false;
                 },
                 routes: {
                     "": "customers",
@@ -143,38 +110,33 @@
                     "profile/:id": "profile",
                     "profile/:id/:type": "profilePopup",
                     "settings": "settings",
-                    "automation": "automation"
+                    "automation": "automation",
+                    "support": "support"
                 },
                 customers: function(type) {
                     counterTimer = counterTimer || setInterval(updateCounters, 5000);
-                    clearInterval(heartInterval);
-                    clearTimeout(timerOfActivity);
                     if (!this.isCustomersRendered) {
                         this.isCustomersRendered = true;
                         customersView.render();
                     }
                     this.switchMenuTo("liApplications");
+                    this.hideAll();
+                    
                     customersView.show(type);
-                    profileView.hide();
                     EzBob.App.vent.trigger('uw:grids:refresh');
-                    profileView.showed = false;
-                    strategySettingsView.hide();
-                    strategyAutomationView.hide();
                 },
                 profile: function(id, type) {
                     clearInterval(counterTimer);
-                    heartOfActivity();
                     counterTimer = null;
                     this.switchMenuTo("liApplications");
                     if (!this.isProfileRendered) {
                         this.isProfileRendered = true;
                         profileView.render();
                     }
-                    customersView.hide();
+                    this.hideAll();
                     profileView.show(id, type);
                     profileView.showed = true;
-                    strategySettingsView.hide();
-                    strategyAutomationView.hide();
+                    
                 },
                 profilePopup: function(id, type) {
                     var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
@@ -190,29 +152,39 @@
                     this.switchMenuTo("liStrategySettings");
                     if (!this.isSettingsRendered) {
                         this.isSettingsRendered = true;
-                    strategySettingsView.render();
+                        strategySettingsView.render();
                     }
-                    customersView.hide();
-                    profileView.hide();
-                    profileView.showed = false;
-                    strategyAutomationView.hide();
+                    this.hideAll();
                     strategySettingsView.show();
                 },
                 automation: function() {
                     this.switchMenuTo("liAutomation");
                     if (!this.isAutomationRendered) {
                         this.isAutomationRendered = true;
-                    strategyAutomationView.render();
+                        strategyAutomationView.render();
                     }
-                    customersView.hide();
-                    profileView.hide();
-                    profileView.showed = false;
-                    strategySettingsView.hide();
+                    this.hideAll();
                     strategyAutomationView.show();
+                },
+                support: function() {
+                    this.switchMenuTo("liSupport");
+                    if (!this.isSupportRendered)
+                        this.isSupportRendered = true;
+                    this.hideAll();
+                    supportView.show();
+
                 },
                 switchMenuTo: function(name) {
                     $(".container-fluid > ul.nav > li[id]").removeClass("active");
                     $("#" + name).addClass("active");
+                },
+                hideAll: function() {
+                    customersView.hide();
+                    profileView.hide();
+                    profileView.showed = false;
+                    strategyAutomationView.hide();
+                    strategySettingsView.hide();
+                    supportView.hide();
                 }
             });
 
@@ -239,13 +211,13 @@
 
         });
 
-        @if (Model.Escalated != null)
-        {
-            <text>  var escalatedFlag = 1;  </text>
-        }
-        else
-        {
-            <text>  var escalatedFlag = 0;  </text>
-        }
+    @if (Model.Escalated != null)
+    {
+        <text>  var escalatedFlag = 1;  </text>
+    }
+    else
+    {
+        <text>  var escalatedFlag = 0;  </text>
+    }
     </script>
 }

@@ -277,7 +277,9 @@ function Redirect(url) {
 function CheckForActivity() {
 
     var minute = EzBob.Config.SessionTimeout;
-
+    var timer;
+    var timeoutValue = 1000 * 60 * minute;
+    
     if (minute <= 0) return;
 
     if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 1000 * 60 * EzBob.Config.SessionTimeout / 2);
@@ -288,9 +290,6 @@ function CheckForActivity() {
     if (document.location.href.indexOf("Customer/Start") != -1) {
         return;
     }
-
-    var timer;
-    var timeoutValue = 1000 * 60 * minute;
 
     set();
 

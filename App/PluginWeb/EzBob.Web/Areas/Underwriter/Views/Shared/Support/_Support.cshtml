@@ -1,0 +1,23 @@
+﻿<script type="text/template" id="support-template">
+    <table class="table table-bordered table-striped blue-header centered">
+        <thead>
+            @EzForm.RawHeaderCell("Marketplaces", "", "", "", "", "","")
+        </thead>
+        <tbody>
+            @EzForm.RawCellBold("#", "Marketplace Type", "Marketplace Name", "Update start date", "Error Message", "CustomerId", "")
+            
+            <%_.each(model, function(val, i){%>
+            
+            @EzForm.RawCell(
+                "<%-i+1%>",
+                "<b><%-val.Type%></b>",
+                "<%-val.Name%>",
+                "<%-val.UpdateStartDate%>",
+                "<pre><%-val.ErrorMessage%></pre>",
+                "<%-val.CustomerId%>",
+                "<a href='#' class='btn btn-mini btn-success reCheckMP <%- val.Name.toLowerCase() %>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='icon-refresh'></i>Recheck</a>")
+            <%});%>
+        </tbody>
+    </table>
+
+</script>

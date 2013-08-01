@@ -219,9 +219,13 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
                 .Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
                 .Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
+
                 //Underwriter
                 .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                 .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
+
+                .Add("~/Content/js/underwriter/support/ezbob.underwriter.support.coffee")
+
                 // Configuration Variables
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.coffee")
