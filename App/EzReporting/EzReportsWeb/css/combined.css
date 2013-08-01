@@ -441,6 +441,12 @@ table.dataTable thead td:active {
 
 #divReportData table tbody tr.even:hover { background-color: #e3e3e3 !important; }
 
+#divAdminArea { display: none; }
+
+#divAdminArea h3 { text-align: center; }
+
+#aToggleAdminArea { display: inline-block; margin-right: 5em; }
+
 /*
  * Styles common for mail and web application
  */

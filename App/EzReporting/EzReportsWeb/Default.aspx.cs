@@ -13,12 +13,17 @@ using Ezbob.Database;
 namespace EzReportsWeb {
 	public partial class Default : Page {
 		private static WebReportHandler reportHandler;
+		private static ASafeLog log;
+		private static AConnection oDB;
+		private static bool bIsAdmin;
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (!IsPostBack) {
-				var log = new LegacyLog();
+				log = new LegacyLog();
 
-				reportHandler = new WebReportHandler(new SqlConnection(log), log);
+				oDB = new SqlConnection(log);
+
+				reportHandler = new WebReportHandler(oDB, log);
 
 				List<Report> reportsList = reportHandler.GetReportsList(HttpContext.Current.User.Identity.Name);
 
@@ -32,6 +37,16 @@ namespace EzReportsWeb {
 				ddlReportTypes.DataSource = reportsList;
 				ddlReportTypes.DataBind();
 			} // if
+
+			divAdminMsg.InnerText = string.Empty;
+
+			bIsAdmin = oDB.ExecuteScalar<bool>(
+				"SELECT IsAdmin FROM ReportUsers WHERE UserName = @uname",
+				CommandSpecies.Text,
+				new QueryParameter("@uname", HttpContext.Current.User.Identity.Name)
+			);
+
+			chkIsAdmin.Checked = bIsAdmin;
 
 			DateTime fDate, tDate;
 			bool isDaily;
@@ -127,5 +142,43 @@ namespace EzReportsWeb {
 		protected void rblFilter_SelectedIndexChanged(object sender, EventArgs e) {
 			divCustomFilter.Visible = rblFilter.SelectedValue == "Custom";
 		} // rblFilter_SelectedIndexChanged
+
+		protected void btnAdminDo_Click(object sender, EventArgs e) {
+			divAdminMsg.InnerText = "Performing task...";
+
+			string sUserName = edtAdminUserName.Text.Trim();
+
+			if (sUserName.Length < 3) {
+				divAdminMsg.InnerText = "User name too short.";
+				return;
+			} // if
+
+			string sPassword = edtAdminPassword.Text.Trim();
+
+			if (sPassword.Length < 6) {
+				divAdminMsg.InnerText = "Password too short.";
+				return;
+			} // if
+
+			var rpta = new ReportAuthenticationLib.ReportAuthentication(oDB, log);
+
+			try {
+				switch (rblAdminAction.SelectedValue) {
+				case "Reset":
+					rpta.ResetPassword(sUserName, sPassword);
+					divAdminMsg.InnerText = "Password has been reset.";
+					break;
+
+				case "Create":
+					rpta.AddUserToDb(sUserName, sUserName);
+					rpta.ResetPassword(sUserName, sPassword);
+					divAdminMsg.InnerText = "User has been created.";
+					break;
+				} // switch
+			}
+			catch (Exception ex) {
+				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
+			}
+		} // btnAdminDo_Click
 	} // class Default
 } // namespace EzReportsWeb

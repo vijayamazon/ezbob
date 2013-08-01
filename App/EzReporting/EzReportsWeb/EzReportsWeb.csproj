@@ -103,6 +103,7 @@
     <Content Include="images\sort_desc.png" />
     <Content Include="images\sort_desc_disabled.png" />
     <Content Include="images\xls_icon.png" />
+    <Content Include="js\admin.js" />
     <Content Include="js\jquery.dataTables.min.js" />
     <Content Include="js\jquery.js" />
     <Content Include="Login.aspx" />
