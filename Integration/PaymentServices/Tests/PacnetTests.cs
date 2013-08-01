@@ -4,8 +4,10 @@ using PaymentServices.PacNet;
 namespace PaymentServices.Tests
 {
 	using System;
+	using System.Diagnostics;
 
 	//send money
+	[TestFixture]
     class PacnetTests:BaseTest
     {
         [Test]
@@ -40,6 +42,7 @@ namespace PaymentServices.Tests
 		[Test]
 		public void GetReport()
 		{
+			//Debugger.Launch();
 			var service = new PacnetService();
 			// Default is past 30 days
 			var endTime = DateTime.Now;

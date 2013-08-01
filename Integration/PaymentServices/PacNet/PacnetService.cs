@@ -144,8 +144,7 @@ namespace PaymentServices.PacNet
 				request.Set("ReportFormat", "RavenPaymentFile_v1.0");
 				request.Set("StartTime", timestampProvider.FormatTimestamp(startTime));
 				request.Set("EndTime", timestampProvider.FormatTimestamp(endTime));
-				request.Set("ResultFields", "PRN PymtType Amount Currency CardNumber Description FileName");
-				//request.Set("ResultFields", "All");
+				request.Set("ResultFields", "PRN PymtType Amount Currency CardNumber Description FileName Status");
 				
 				RavenResponse response = request.Send();
 
