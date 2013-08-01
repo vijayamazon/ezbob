@@ -91,6 +91,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBob.Configuration", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzBobTest", "Integration\EzBob\EzBobTest\EzBobTest.csproj", "{16A5A26A-EEC4-4A17-A40B-72A73429921F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fraud", "Fraud", "{DA2A1F57-4E6B-477E-91B1-0EBB047F05E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FraudChecker", "FraudChecker\FraudChecker.csproj", "{EDC99346-E59D-44B7-BDD0-A08CD3D56941}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPoint", "Integration\PayPoint\PayPoint.csproj", "{4E55DFA2-822F-4B94-9105-E77F6AC568DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelGrabberAPI", "Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj", "{189D7477-DEE3-4F7B-B703-D24C92352C0C}"
@@ -665,6 +669,16 @@ Global
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A}.Release|x86.ActiveCfg = Release|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -729,6 +743,7 @@ Global
 		{DE254378-4CF8-400C-BCC4-A9AF01550350} = {73FD87E5-395F-40CE-B222-0591D6F8D0D6}
 		{E8DE4E4E-1086-45A5-B374-9E48A271B209} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
+		{EDC99346-E59D-44B7-BDD0-A08CD3D56941} = {DA2A1F57-4E6B-477E-91B1-0EBB047F05E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

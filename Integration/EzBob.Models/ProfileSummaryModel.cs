@@ -30,7 +30,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
     {
         public string Bwa { get; set; }
         public string Aml { get; set; }
-        public string Fraud { get; set; }
     }
 
     public class LoanActivity : BaseProfileSummaryModel
@@ -65,6 +64,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public LoanActivity LoanActivity { get; set; }
         public AffordabilityAnalysis AffordabilityAnalysis { get; set; }
         public CreditBureau CreditBureau { get; set; }
+        public FraudCheck FraudCheck { get; set; }
 
         public string Comment { get; set; }
 
@@ -74,6 +74,14 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public decimal? OverallTurnOver { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
+    }
+
+    public class FraudCheck
+    {
+        public string Status { get; set; }
+        public string NumOfInternalDetection { get; set; }
+        public string NumOfExternalDetection { get; set; }
+        public string StatusComment { get; set; }
     }
 
     public enum LightsState

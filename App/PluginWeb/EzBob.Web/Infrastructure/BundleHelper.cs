@@ -224,7 +224,12 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                 .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 
+                //Support
                 .Add("~/Content/js/underwriter/support/ezbob.underwriter.support.coffee")
+
+                //Fraud
+                .Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.coffee")
+                .Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
 
                 // Configuration Variables
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")

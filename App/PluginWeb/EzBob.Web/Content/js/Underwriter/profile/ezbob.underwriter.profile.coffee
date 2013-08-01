@@ -21,6 +21,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         customerRelations = @$el.find("#customerRelations")
         alertPassed = @$el.find("#alerts-passed")
         controlButtons = @$el.find "#controlButtoons"
+        fraudDetection = @$el.find("#fraudDetection")
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
         @profileInfoView = new EzBob.Underwriter.PersonInfoView(
             el: profileInfo
@@ -85,6 +86,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView(
             el: customerRelations
             model: @CustomerRelationsData
+        )
+        @FraudDetectionLogs = new EzBob.Underwriter.FraudDetectionLogs()
+        @FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView(
+            el: fraudDetection
+            model: @FraudDetectionLogs
         )
         @showed = true
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
@@ -277,7 +283,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @CustomerRelationsData.customerId = id
         @CustomerRelationsView.idCustomer = id
         @CustomerRelationsData.fetch()
-
+        @FraudDetectionLogs.customerId = id
+        @FraudDetectionLogView.idCustomer = id
+        @FraudDetectionLogs.fetch()
         @controlButtons.model = new Backbone.Model(
             customerId: id
         )

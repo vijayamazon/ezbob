@@ -35,6 +35,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly IZohoFacade _crm;
         private readonly IWorkplaceContext _context;
         private readonly LoanLimit _limit;
+        private readonly MarketPlaceRepository _mpType;
 
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridWaiting;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridEscalated;
@@ -112,6 +113,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     };
             }
 
+            grids.MpTypes = _mpType.GetAll().ToList();
             return View(grids);
         }
 
@@ -123,7 +125,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             IDecisionHistoryRepository historyRepository,
             IZohoFacade crm,
             IWorkplaceContext context, LoanLimit limit, GridModel<EZBob.DatabaseLib.Model.Database.Customer> pending,
-            GridModel<EZBob.DatabaseLib.Model.Database.Customer> loans)
+            GridModel<EZBob.DatabaseLib.Model.Database.Customer> loans, MarketPlaceRepository mpType)
         {
             _session = session;
             _customers = customers;
@@ -135,6 +137,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _limit = limit;
             _gridPending = pending;
             _gridLoans = loans;
+            _mpType = mpType;
 
             _gridWaiting = CreateColumnsWaitingForDesicion();
             _gridEscalated = CreateColumnsEscalated();

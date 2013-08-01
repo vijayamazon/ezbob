@@ -38,6 +38,7 @@
 <div id="settings-view" style="display: none;"></div>
 <div id="automation-view" style="display: none;"></div>
 <div id="support-area" style="display: none;"></div>
+<div id="fraud-area" style="display: none;"></div>
 
 @{
     Html.RenderPartial("_ProfileTemplateMain");
@@ -45,6 +46,7 @@
     Html.RenderPartial("AutomationSettings/StrategySettings");
     Html.RenderPartial("AutomationSettings/StrategyAutomation");
     Html.RenderPartial("Support/_Support");
+    Html.RenderPartial("Fraud/Fraud");
 }
 @section Js{
     <script type="text/javascript">
@@ -95,6 +97,7 @@
             var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
             var strategyAutomationView = new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') });
             var supportView = new EzBob.Underwriter.SupportView({ el: $("#support-area") });
+            var fraudView = new EzBob.Underwriter.FraudView({ el: $("#fraud-area") });
 
             var underwriterRouter = Backbone.Router.extend({
                 initialize: function() {
@@ -103,6 +106,7 @@
                     this.isSettingsRendered = false;
                     this.isAutomationRendered = false;
                     this.isSupportRendered = false;
+                    this.isFraudRendered = false;
                 },
                 routes: {
                     "": "customers",
@@ -111,7 +115,8 @@
                     "profile/:id/:type": "profilePopup",
                     "settings": "settings",
                     "automation": "automation",
-                    "support": "support"
+                    "support": "support",
+                    "fraud": "fraud"
                 },
                 customers: function(type) {
                     counterTimer = counterTimer || setInterval(updateCounters, 5000);
@@ -121,7 +126,7 @@
                     }
                     this.switchMenuTo("liApplications");
                     this.hideAll();
-                    
+
                     customersView.show(type);
                     EzBob.App.vent.trigger('uw:grids:refresh');
                 },
@@ -136,7 +141,7 @@
                     this.hideAll();
                     profileView.show(id, type);
                     profileView.showed = true;
-                    
+
                 },
                 profilePopup: function(id, type) {
                     var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
@@ -174,6 +179,13 @@
                     supportView.show();
 
                 },
+                fraud: function() {
+                    this.switchMenuTo("liFraud");
+                    if (!this.isFraudRendered)
+                        this.isFraudRendered = true;
+                    this.hideAll();
+                    fraudView.$el.show();
+                },
                 switchMenuTo: function(name) {
                     $(".container-fluid > ul.nav > li[id]").removeClass("active");
                     $("#" + name).addClass("active");
@@ -185,6 +197,7 @@
                     strategyAutomationView.hide();
                     strategySettingsView.hide();
                     supportView.hide();
+                    fraudView.$el.hide();
                 }
             });
 

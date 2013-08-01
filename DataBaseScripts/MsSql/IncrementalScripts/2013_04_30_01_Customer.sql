@@ -1,0 +1,1 @@
+alter table Customer alter column Fraud int

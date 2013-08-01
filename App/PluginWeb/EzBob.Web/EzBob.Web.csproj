@@ -228,10 +228,12 @@
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CollectionStatusController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\FraudDetectionLogController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerRelationsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\LoanOptionsController.cs" />
     <Compile Include="Areas\Customer\Models\CashRequestModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EmailVerificationController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\FraudController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Helper.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanAmountPerDay.cs" />
@@ -244,6 +246,8 @@
     <Compile Include="Areas\Underwriter\Models\ApplicationInfoModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\CAIS\CaisModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CollectionStatusModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\FraudDetectionLogModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\Fraud\FraudModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomerRelationsModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomersModel.cs" />
     <Compile Include="Areas\Underwriter\Models\DiscountPlanModel.cs" />
@@ -935,6 +939,8 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Content\js\lib\log.coffee" />
+    <Content Include="Areas\Underwriter\Views\Shared\Fraud\Fraud.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
     <Content Include="Content\js\login\ezbob.restorePassword.js">
       <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
@@ -1101,6 +1107,7 @@
       <DependentUpon>loanModel.coffee</DependentUpon>
     </Content>
     <Content Include="Content\css\postcode.css" />
+    <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudDetectionLog.js" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.js">
       <DependentUpon>ezbob.underwriter.functionsDialog.coffee</DependentUpon>
     </Content>
@@ -1320,6 +1327,10 @@
     <Content Include="Views\Shared\_Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FraudChecker\FraudChecker.csproj">
+      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>
@@ -1560,6 +1571,7 @@
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.coffee" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.coffee" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.coffee" />
+    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />

@@ -29,11 +29,13 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             customerId : @model.get ('Id')
             currentStatus : @model.get('Disabled')
             )
+        BlockUi "on"
         xhr = collectionStatusModel.fetch();
         xhr.done =>
             collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout model: collectionStatusModel
             collectionStatusLayout.render()
             EzBob.App.jqmodal.show(collectionStatusLayout)
+            BlockUi "off"
             collectionStatusLayout.on 'saved', () =>
                 @model.set 'Disabled', collectionStatusModel.get ('currentStatus')
         

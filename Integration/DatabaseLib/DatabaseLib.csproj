@@ -218,6 +218,15 @@
     <Compile Include="Model\Email\EmailConfirmationRequest.cs" />
     <Compile Include="Model\Email\EmailConfirmationRequestRepository.cs" />
     <Compile Include="Model\Email\IEmailConfirmationRequestRepository.cs" />
+    <Compile Include="Model\Fraud\FraudAddress.cs" />
+    <Compile Include="Model\Fraud\FraudBankAccount.cs" />
+    <Compile Include="Model\Fraud\FraudCompany.cs" />
+    <Compile Include="Model\Fraud\FraudDetection.cs" />
+    <Compile Include="Model\Fraud\FraudEmail.cs" />
+    <Compile Include="Model\Fraud\FraudEmailDomain.cs" />
+    <Compile Include="Model\Fraud\FraudPhone.cs" />
+    <Compile Include="Model\Fraud\FraudShop.cs" />
+    <Compile Include="Model\Fraud\FraudUser.cs" />
     <Compile Include="Model\Loans\LoanAgreement.cs" />
     <Compile Include="Model\Loans\LoanChangesHistory.cs" />
     <Compile Include="Model\Loans\LoanCharge.cs" />
@@ -279,6 +288,8 @@
     <Compile Include="Repository\AmazonOrderItemDetailRepository.cs" />
     <Compile Include="Repository\EbayAmazonCategoryRepository.cs" />
     <Compile Include="Repository\EBayOrderItemInfoRepository.cs" />
+    <Compile Include="Repository\FraudDetectionRepository.cs" />
+    <Compile Include="Repository\FraudUserRepository.cs" />
     <Compile Include="Repository\IMP_WhiteListRepository.cs" />
     <Compile Include="Repository\LoanOptionsRepository.cs" />
     <Compile Include="Repository\PacnetPaypointServiceLogRepository.cs" />
