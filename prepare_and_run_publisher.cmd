@@ -32,5 +32,5 @@ RENAME _TestData.xls TestData.xls
 @echo:
 
 echo 6. Go to initial dir
-rem cd ../..
+cd ../..
 @echo:
