@@ -2,34 +2,35 @@ cls
 @echo off
 
 ::variables
-set tmpPath=_publisher.tmp
 set publisherPath=Tools\publisher
 set testDataXlsPath=Items\TestData.xls
 
 ::implementations
-echo 1. Create directory %tmpPath%
-@echo:
-md %tmpPath%
-
-echo 2. Copy all files from %publisherPath% into "%tmpPath%"
-xcopy "%publisherPath%" "%tmpPath%" /c /d /e /h /i /k /q /r /s /x /y
+echo 1. Rename TestData.xls into  _TestData.xls
+RENAME  "%publisherPath%\TestData.xls" "_TestData.xls"
 @echo:
 
-echo 3. Copy TestData.xls from %testDataXlsPath% into "%tmpPath%"
-xcopy "%testDataXlsPath%" "%tmpPath%" /c /d /e /h /i /k /q /r /s /x /y
+echo 2. Copy TestData.xls from %testDataXlsPath% into "%publisherPath%"
+xcopy "%testDataXlsPath%" "%publisherPath%" /c /d /e /h /i /k /q /r /s /x /y
 @echo:
-
 
 IF "%1%"=="" (
-	ECHO  4. Run publisher without parameters
+	ECHO  3. Run publisher without parameters
 ) ELSE (
-	ECHO 4. Run publisher with parameters %1%
+	ECHO 3. Run publisher with parameters %1%
 )
-cd %tmpPath%
-publisher %1%
-cd ..
+cd %publisherPath%
+publisher.exe %1%
 @echo:
 
-echo 5. Remove directory %tmpPath%
-rd %tmpPath% /S /Q
+echo 4. Delete TestData.xls
+DEL TestData.xls
+@echo:
+
+echo 5. Rename _TestData.xls to TestData.xls
+RENAME _TestData.xls TestData.xls
+@echo:
+
+echo 6. Go to initial dir
+rem cd ../..
 @echo:
