@@ -44,7 +44,7 @@ namespace StandaloneInitializer
     {
         public static void Init()
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\work\ezbob\app\pluginweb\EzBob.Web\";
+            EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 

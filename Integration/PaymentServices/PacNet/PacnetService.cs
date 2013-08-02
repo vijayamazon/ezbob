@@ -16,7 +16,7 @@ namespace PaymentServices.PacNet
         private const string RoutingNumber = "857151";
         private const string PaymentType = "fp_credit";
 
-        public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
+		public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = "ezbob", string currencyCode = "GBP", string description = "EZBOB")
         {
             try
             {
@@ -93,7 +93,7 @@ namespace PaymentServices.PacNet
         }
 
         //-----------------------------------------------------------------------------------
-        public PacnetReturnData CloseFile(int customerId, string fileName)
+        public PacnetReturnData CloseFile(int customerId = 0, string fileName = "ezbob")
         {
             Log.DebugFormat("CloseFile: trackingNumber={0}", fileName);
             try
