@@ -7,7 +7,10 @@
 @model bool
 
 @section head{
+    <!--prod-->
     <base href="https://app.ezbob.com/" />
+    <!--uat-->
+    <!--<base href="https://192.168.120.6:444" />-->
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
@@ -287,16 +290,15 @@
             contactUs.render();
 
             $('input[type="submit"]').click(function(e) {
-                if ($(this).hasClass("disabled")) {
-                    return false;
-                }
                 if (EzBob.Validation.checkForm(validator)) {
                     if (!isTest) {
                         _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
-                        setTimeout(function() { submitPaypointForm(); }, 500);
+                        setTimeout(function () { submitPaypointForm(); }, 500);
                     } else {
                         submitPaypointForm();
                     }
+                } else {
+                    validator.form();
                 }
                 return false;
             });
