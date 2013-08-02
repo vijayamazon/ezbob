@@ -8,5 +8,6 @@
         public string CompareField { get; set; }
         public string Value { get; set; }
         public string Concurrence { get; set; }
+        public string DateOfLastCheck { get; set; }
     }
 }

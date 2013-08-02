@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
@@ -24,10 +25,30 @@ namespace FraudChecker
             _fu = (ObjectFactory.GetInstance<FraudUserRepository>()).GetAll().ToList();
             _session = ObjectFactory.GetInstance<ISession>();
         }
-
-        public string ExternalSystemDecision(int customerId, bool isShowOnly = false)
+        /// <summary>
+        /// run fraud all checks
+        /// </summary>
+        /// <param name="customerId">Customer.Id for check</param>
+        /// <returns></returns>
+        public string Check(int customerId)
         {
-            var customer = _session.Get<Customer>(customerId);
+            var retVal = new StringBuilder();
+            var startDate = DateTime.UtcNow;
+            retVal.AppendLine(InternalSystemDecision(customerId, startDate));
+            retVal.AppendLine(ExternalSystemDecision(customerId, startDate));
+            retVal.AppendLine(SpecialBussinesRulesSystemDecision(customerId, startDate));
+            return retVal.ToString();
+        }
+
+        public string SpecialBussinesRulesSystemDecision(int customerId, DateTime startDate)
+        {
+            //TODO: not implemented now
+            return string.Empty;
+        }
+
+        public string ExternalSystemDecision(int customerId, DateTime startDate)
+        {
+            var customer = _session.Load<Customer>(customerId);
             if (!customer.IsSuccessfullyRegistered)
                 throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
 
@@ -42,20 +63,11 @@ namespace FraudChecker
             ExternalPhoneCheck(customer, fraudDetections);
             ExternalShopCheck(fraudDetections, customer);
 
-            if (!isShowOnly)
-            {
-                for (var i = 0; i < fraudDetections.Count; i++)
-                {
-                    _session.Save(fraudDetections[i]);
-                    if (i%20 != 0) continue;
-                    _session.Flush();
-                    _session.Clear();
-                }
-            }
+            SaveInDB(fraudDetections,startDate,customer);
             return PrepareResultForOutput(fraudDetections);
         }
 
-        public string InternalSystemDecision(int customerId, bool isShowOnly = false)
+        public string InternalSystemDecision(int customerId, DateTime startDate)
         {
             var customer = _session.Get<Customer>(customerId);
             if (!customer.IsSuccessfullyRegistered)
@@ -95,17 +107,32 @@ namespace FraudChecker
             InternalLastNamePostcodeCheck(fraudDetections, customer);
             InternalShopCheck(customer, fraudDetections);
 
-            if (!isShowOnly)
-            {
-                for (var i = 0; i < fraudDetections.Count; i++)
-                {
-                    _session.Save(fraudDetections[i]);
-                    if (i%20 != 0) continue;
-                    _session.Flush();
-                    _session.Clear();
-                }
-            }
+            SaveInDB(fraudDetections, startDate, customer);
             return PrepareResultForOutput(fraudDetections);
+        }
+
+        private void SaveInDB(IList<FraudDetection> fraudDetections, DateTime startDate, Customer customer)
+        {
+            var count = fraudDetections.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var fraud = fraudDetections[i];
+                fraud.DateOfCheck = startDate;
+
+                _session.Save(fraud);
+
+                //for disabling lock db
+                if (i % 20 != 0) continue;
+                _session.Flush();
+                _session.Clear();
+            }
+            if (count != 0)
+            {
+                //All other statuses will be set manually. See documentation
+                var currentCustomer = _session.Get<Customer>(customer.Id); //object customer is CustomerProxy so we need customer from DB to update him
+                currentCustomer.FraudStatus = FraudStatus.FraudSuspect;
+                _session.Save(currentCustomer);
+            }
         }
 
         #region external helpers
@@ -281,7 +308,7 @@ namespace FraudChecker
                         }
                         break;
                     case "Pay Pal":
-                        customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone);
+                        if (mp.PersonalInfo != null) customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone);
                         break;
                 }
             }

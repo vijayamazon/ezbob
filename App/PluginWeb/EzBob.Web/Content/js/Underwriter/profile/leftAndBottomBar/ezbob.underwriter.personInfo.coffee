@@ -18,6 +18,10 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"isTestEditButton\"]": "isTestEditButton"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"updateCRM\"]": "updateCRM"
+        "click [name=\"changeManualy\"]": "changeManualyClicked"
+
+    changeManualyClicked: ->
+        alert 'changeManualyClicked'
 
     templateHelpers:
         getIcon: ->

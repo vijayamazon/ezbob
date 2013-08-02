@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Web.Code;
 using EzBob.Web.Infrastructure.csrf;
 using Scorto.Web;
 
@@ -24,9 +25,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [ValidateJsonAntiForgeryToken]
         public JsonNetResult Index(int id)
         {
-            IEnumerable<FraudDetection> fraudDetectionHistory = _fraudDetectionLog.GetByCustomerId(id);
+            var dateOfLastCheck = _fraudDetectionLog.GetAll().Max(x => x.DateOfCheck);
+            var fraudDetectionHistory = _fraudDetectionLog.GetByCustomerId(id).Where(x=>x.DateOfCheck == dateOfLastCheck);
             var models = new List<FraudDetectionLogModel>();
-
+            
             models.AddRange(fraudDetectionHistory.Select(val => new FraudDetectionLogModel
                 {
                     Id = val.Id,
@@ -34,7 +36,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                     CurrentField = val.CurrentField,
                     Value = val.Value,
                     Concurrence = ConcurrencePrepare(val),
-                    Type = val.ExternalUser != null ? "External" : "Internal"
+                    Type = val.ExternalUser != null ? "External" : "Internal",
+                    DateOfLastCheck = FormattingUtils.FormatDateTimeToString(val.DateOfCheck)
                 }));
 
             models = new List<FraudDetectionLogModel>(models.OrderByDescending(x => x.Id));

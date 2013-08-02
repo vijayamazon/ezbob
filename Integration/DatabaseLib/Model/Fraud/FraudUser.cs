@@ -71,43 +71,43 @@ namespace EZBob.DatabaseLib.Model.Fraud
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.Addresses)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.Companies)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.Emails)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.EmailDomains)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.Phones)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
             HasMany(m => m.Shops)
                 .AsSet()
                 .KeyColumn("FraudUserId")
                 .OrderBy("Id")
                 .Inverse()
-                .Cascade.All();
+                .Cascade.All().Not.LazyLoad();
         }
     }
 }

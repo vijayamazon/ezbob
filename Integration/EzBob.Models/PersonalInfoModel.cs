@@ -34,6 +34,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string ABTesting { get; set; }
         public bool IsMainStratFinished { get; set; }
         public string StrategyError { get; set; }
+        public string FraudCheckStatus { get; set; }
 
         public PersonalInfoModel()
         {
@@ -49,6 +50,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             IsTest = customer.IsTest;
             IsAvoid = customer.IsAvoid;
             ZohoId = customer.ZohoId;
+            FraudCheckStatus = customer.FraudStatus.ToString();
 
             if (customer.PersonalInfo != null)
             {

@@ -1,5 +1,7 @@
-﻿using EZBob.DatabaseLib.Model.Database;
+﻿using System;
+using EZBob.DatabaseLib.Model.Database;
 using FluentNHibernate.Mapping;
+using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Fraud
 {
@@ -12,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
         public virtual string CurrentField { get; set; }
         public virtual string CompareField { get; set; }
         public virtual string Value { get; set; }
+        public virtual DateTime DateOfCheck { get; set; }
     }
 
     public sealed class FraudDetectionMap : ClassMap<FraudDetection>
@@ -25,6 +28,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
             Map(x => x.CurrentField).Length(200);
             Map(x => x.CompareField).Length(200);
             Map(x => x.Value).Length(500);
+            Map(x => x.DateOfCheck).CustomType<UtcDateTimeType>();
         }
     }
 }
