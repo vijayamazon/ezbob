@@ -35,7 +35,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public bool IsMainStratFinished { get; set; }
         public string StrategyError { get; set; }
         public string FraudCheckStatus { get; set; }
-
+		public string FraudHighlightCss { get; set; }
         public PersonalInfoModel()
         {
             IndustryFields = new List<string>();
@@ -51,7 +51,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
             IsAvoid = customer.IsAvoid;
             ZohoId = customer.ZohoId;
             FraudCheckStatus = customer.FraudStatus.ToString();
-
+			if (customer.FraudStatus == FraudStatus.FraudSuspect)
+			{
+				FraudHighlightCss = "red_cell";
+			}
             if (customer.PersonalInfo != null)
             {
                 Name = customer.PersonalInfo.Fullname;

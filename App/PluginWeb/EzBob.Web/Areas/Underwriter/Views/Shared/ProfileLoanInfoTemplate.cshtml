@@ -38,12 +38,11 @@
     </tr>
 }
 
-@helper RawCellWithButtonNear(string title, string val1, string val2)
+@helper RawCellWithButtonNear(string title, string val1, string val2, string css = "")
     {
     <tr>
-        <td>@Html.Raw(title)
-        </td>    
-        <td>
+        <td class="@Html.Raw(css)">@Html.Raw(title)</td>
+        <td class="@Html.Raw(css)">
             <span>@Html.Raw(val1) </span>
             <button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-pencil"/></button>
         </td>
@@ -113,7 +112,7 @@
             @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
             @RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
             @RawCellWithButtonNearUpdate("CRM:", "<%= ZohoId ? 'Yes' : 'No' %>", "updateCRM")
-            @RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeManualy")
+            @RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeManualy", "<%- FraudHighlightCss %>")
         </tbody>
     </table>
 
