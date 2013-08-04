@@ -36,13 +36,16 @@ BEGIN
 		t.LoanId,
 		c.Id AS ClientID,
 		c.Name AS ClientEmail,
-		c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname AS ClientName,
+		c.Fullname AS ClientName,
 		ISNULL(t.Amount, 0),
 		ISNULL(t.LoanRepayment, 0),
 		ISNULL(t.Interest, 0),
 		ISNULL(t.Fees, 0),
 		ISNULL(t.Rollover, 0),
-		CASE PaypointId WHEN '--- manual ---' THEN 'Manual' ELSE 'Paypoint' END AS TransactionType,
+		CASE PaypointId
+			WHEN '--- manual ---' THEN 'Manual'
+			ELSE 'Paypoint'
+		END AS TransactionType,
 		t.Description,
 		CASE
 			WHEN t.LoanRepayment + t.Interest + t.Fees + t.Rollover = t.Amount
