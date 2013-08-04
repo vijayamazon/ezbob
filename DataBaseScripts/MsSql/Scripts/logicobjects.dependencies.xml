@@ -235,6 +235,66 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_FraudAddress_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudAddress_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudBankAccount_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudBankAccount_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudCompany_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudCompany_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_Customer1</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer1.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmail_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmail_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmailDomain_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmailDomain_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudPhone_FraudPhone</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudPhone_FraudPhone.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudShop_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudShop_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>TR_LoanTakenLoyalty</oName>
     <oRank>1</oRank>
     <oFileName>09_TRIGGERS\TR_LoanTakenLoyalty.sql</oFileName>
@@ -2377,6 +2437,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptEarnedInterest</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptExecutive</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptExecutive.sql</oFileName>
@@ -2416,6 +2482,12 @@
     <oName>RptLoansOverall</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptLoansOverall.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptMarketPlacesLoanStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptMarketPlacesLoanStats.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2485,6 +2557,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptSaleStats</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptSaleStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptScheduler_GetHeaderAndFields</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptScheduler_GetHeaderAndFields.sql</oFileName>
@@ -2506,6 +2584,12 @@
     <oName>RptSourceRef</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptSourceRef.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptStatsDaily</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptStatsDaily.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -3406,6 +3490,18 @@
     <oName>udfCustomerMarketPlaces</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\udfCustomerMarketPlaces.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>udfEarnedInterestForLoans</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\udfEarnedInterestForLoans.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>udfLoanFeesAndCharges</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\udfLoanFeesAndCharges.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>

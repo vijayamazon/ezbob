@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClients]') AND type in (N'P', N'PC'))
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClients]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptNewClients]
 GO
 SET ANSI_NULLS ON

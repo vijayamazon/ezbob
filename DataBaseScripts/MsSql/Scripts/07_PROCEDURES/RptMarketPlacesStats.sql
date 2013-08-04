@@ -1,7 +1,10 @@
-IF OBJECT_ID('RptMarketPlacesStats') IS NOT NULL
-	DROP PROCEDURE RptMarketPlacesStats
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptMarketPlacesStats]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptMarketPlacesStats]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptMarketPlacesStats
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -571,10 +574,4 @@ BEGIN
 
 	DROP TABLE #tmp
 END
-GO
-
-UPDATE ReportScheduler SET
-	Header = 'Name,Incomplete #,Incomplete Avg Turnover,Completed #,Completed Avg Turnover,Avg Score,% of Men,Avg Age,% Approved,Avg Amount Approved'
-WHERE
-	Type = 'RPT_MARKETPLACES_STATS'
 GO

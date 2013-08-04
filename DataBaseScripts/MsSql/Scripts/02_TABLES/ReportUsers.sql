@@ -11,9 +11,12 @@ CREATE TABLE [dbo].[ReportUsers](
 	[Name] [nvarchar](50) NOT NULL,
 	[Password] [varbinary](30) NULL,
 	[Salt] [varbinary](30) NULL,
+	[IsAdmin] [bit] NOT NULL,
  CONSTRAINT [PK_ReportUsers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[ReportUsers] ADD  CONSTRAINT [DF_ReportUsersPIsAdmin]  DEFAULT ((0)) FOR [IsAdmin]
 GO

@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].RptStatsDaily') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].RptStatsDaily
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptStatsDaily]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptStatsDaily]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptStatsDaily
 @DateStart DATETIME,
 @DateEnd   DATETIME

@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptOpenPayments]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptOpenPayments]
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptOpenPayments]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptOpenPayments]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptOpenPayments
 @DateStart DATETIME,
 @DateEnd   DATETIME

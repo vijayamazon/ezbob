@@ -1,15 +1,18 @@
-IF OBJECT_ID('RptSaleStats') IS NOT NULL
-	DROP PROCEDURE RptSaleStats
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptSaleStats]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptSaleStats]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptSaleStats
 @DateStart DATETIME,
 @DateEnd   DATETIME
 AS
 BEGIN
-	SET @DateStart = CONVERT(DATE, @DateStart)
-	SET @DateEnd = CONVERT(DATE, @DateEnd)
-
+	SET @DateEnd = CONVERT(DATE, @DateStart)
+	SET @DateStart = DATEADD(week, -1, @DateEnd)
+	
 	SELECT
 		max(CR.Id) CrmId,
 		CR.CustomerId
@@ -20,7 +23,7 @@ BEGIN
 		INNER JOIN CashRequests O
 			ON O.IdCustomer = CR.CustomerId
 			AND O.UnderwriterDecision = 'Approved'
-			INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
+		INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
 	WHERE
 		@DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
 	GROUP BY
@@ -37,16 +40,14 @@ BEGIN
 		CustomerRelations CR
 		INNER JOIN #CRMNotes N ON CR.Id = N.CrmId
 		INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
-	
+
 	SELECT 
 		C.Id,
 		C.Name AS Email,
 		C.FullName,
-		C.DaytimePhone,
-		C.MobilePhone,
+		O.UnderwriterDecision,
 		O.UnderwriterDecisionDate,
 		O.ManagerApprovedSum,
-		O.InterestRate,
 		O.UnderwriterComment,
 		L.LoanAmount,
 		CR.Name AS CRMStatus,
@@ -58,38 +59,18 @@ BEGIN
 			AND O.UnderwriterDecision = 'Approved'
 		LEFT JOIN Loan L
 			ON O.Id = L.RequestCashId
+			AND (
+				L.LoanAmount < O.ManagerApprovedSum
+				OR
+				L.LoanAmount IS NULL
+			)
 		LEFT JOIN #CRMFinal CR ON CR.CustomerId = O.IdCustomer
 	WHERE
 		@DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
 	ORDER BY
 		O.CreationDate DESC
-
+	
 	DROP TABLE #CRMNotes
 	DROP TABLE #CRMFinal
 END
 GO
-
-IF EXISTS (SELECT * FROM ReportScheduler WHERE Type = 'RPT_SALE_STATS')
-	UPDATE ReportScheduler SET
-		Title = 'Sale Stats',
-		StoredProcedure = 'RptSaleStats',
-		Header = 'Id,Email,Full Name,Daytime Phone,Mobile Phone,Underwriter Decision Date,Manager Approved Sum,Interest Rate,Underwriter Comment,Loan Amount,CRM Status,Comment',
-		Fields = '!Id,Email,FullName,DaytimePhone,MobilePhone,UnderwriterDecisionDate,ManagerApprovedSum,InterestRate,UnderwriterComment,LoanAmount,CRMStatus,Comment'
-	WHERE
-		Type = 'RPT_SALE_STATS'
-ELSE
-	INSERT INTO ReportScheduler (
-		Type, Title, StoredProcedure, IsDaily, IsWeekly, IsMonthly,
-		Header, Fields,
-		ToEmail,
-		IsMonthToDate
-	)
-	VALUES (
-		'RPT_SALE_STATS', 'Sale Stats', 'RptSaleStats', 0, 0, 0,
-		'Id,Email,Full Name,Daytime Phone,Mobile Phone,Underwriter Decision Date,Manager Approved Sum,Interest Rate,Underwriter Comment,Loan Amount,CRM Status,Comment',
-		'!Id,Email,FullName,DaytimePhone,MobilePhone,UnderwriterDecisionDate,ManagerApprovedSum,InterestRate,UnderwriterComment,LoanAmount,CRMStatus,Comment',
-		'nimrodk@ezbob.com,alexbo+rpt@ezbob.com',
-		0
-	)
-GO
-

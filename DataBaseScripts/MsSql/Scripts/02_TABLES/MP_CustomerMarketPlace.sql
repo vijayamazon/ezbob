@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[MP_CustomerMarketPlace](
 	[UpdatingTimePassInSeconds]  AS (datediff(second,[UpdatingStart],[UpdatingEnd])),
 	[TokenExpired] [int] NOT NULL,
 	[OriginationDate] [datetime] NULL,
+	[Disabled] [bit] NULL,
  CONSTRAINT [PK_CustomerMarketPlace] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

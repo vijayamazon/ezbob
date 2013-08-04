@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].RptEarnedInterest') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].RptEarnedInterest
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptEarnedInterest]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptEarnedInterest]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptEarnedInterest
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -106,5 +103,4 @@ BEGIN
 
 	DROP TABLE #output
 END
-
 GO

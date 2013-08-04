@@ -1,20 +1,10 @@
-IF OBJECT_ID(N'[dbo].udfEarnedInterestForLoans') IS NOT NULL
-	DROP FUNCTION [dbo].udfEarnedInterestForLoans
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterestForLoans]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[udfEarnedInterestForLoans]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
-IF TYPE_ID('LoanIdListTable') IS NOT NULL
-	DROP TYPE LoanIdListTable
-GO
-
-CREATE TYPE LoanIdListTable AS TABLE (LoanID INT NOT NULL)
-GO
-
 CREATE FUNCTION udfEarnedInterestForLoans(
 	@DateStart DATETIME,
 	@DateEnd DATETIME,
@@ -79,7 +69,9 @@ BEGIN
 
 	--------------------------------------------------------
 	--
-	-- Ok, let's go to work!
+	-- Ok, let's
+go
+to work!
 	-- Who the fuck are you?!
 	-- The workaholic!
 	--

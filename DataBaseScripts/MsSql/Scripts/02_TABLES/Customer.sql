@@ -95,6 +95,7 @@ CREATE TABLE [dbo].[Customer](
 	[TotalPrincipalRepaid] [decimal](18, 4) NOT NULL,
 	[LastStatus] [nvarchar](100) NULL,
 	[AvoidAutomaticDescison] [bit] NOT NULL,
+	[FraudStatus] [int] NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

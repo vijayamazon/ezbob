@@ -1,7 +1,10 @@
-IF OBJECT_ID('dbo.udfLoanFeesAndCharges') IS NOT NULL
-	DROP FUNCTION dbo.udfLoanFeesAndCharges
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfLoanFeesAndCharges]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[udfLoanFeesAndCharges]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE FUNCTION dbo.udfLoanFeesAndCharges(
 	@DateStart DATETIME,
 	@DateEnd DATETIME
@@ -113,5 +116,5 @@ BEGIN
 		ISNULL(c.Charges, 0) + ISNULL(s.SetupFee, 0) > 0
 	
 	RETURN
-END	
+END
 GO

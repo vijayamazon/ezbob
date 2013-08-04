@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptAdsReport]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptAdsReport]
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptAdsReport]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptAdsReport]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[RptAdsReport]
 @time DATETIME
 AS

@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansOverall]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptLoansOverall]
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansOverall]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptLoansOverall]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptLoansOverall
 @DateStart DATETIME,
 @DateEnd   DATETIME

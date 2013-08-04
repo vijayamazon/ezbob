@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptPacnetReconciliation]
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptPacnetReconciliation]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptPacnetReconciliation
 @DateStart DATETIME,
 @DateEnd DATETIME

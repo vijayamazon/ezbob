@@ -1,13 +1,10 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsFull]') AND type in (N'P', N'PC'))
-	DROP PROCEDURE [dbo].[RptNewClientsFull]
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptNewClientsFull]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptNewClientsFull]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE RptNewClientsFull
 @DateStart    DATETIME,
 @DateEnd      DATETIME

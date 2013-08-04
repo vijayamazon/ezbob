@@ -493,6 +493,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CustomerSession</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CustomerSession.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>DataSource_KeyData</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\DataSource_KeyData.sql</oFileName>
@@ -670,6 +676,120 @@
     <oName>Filter</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\Filter.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudAddress_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudAddress_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudAddress</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudAddress.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudBankAccount_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudBankAccount_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudBankAccount</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudBankAccount.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudCompany_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudCompany_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudCompany</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudCompany.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_Customer1</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_Customer1.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudDetection_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudDetection_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudDetection</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\FraudDetection.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmail_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmail_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudEmail</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudEmail.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudEmailDomain_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudEmailDomain_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudEmailDomain</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudEmailDomain.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudPhone_FraudPhone</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudPhone_FraudPhone.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudPhone</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudPhone.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_FraudShop_FraudUser</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_FraudShop_FraudUser.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudShop</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\FraudShop.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FraudUser</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\FraudUser.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
