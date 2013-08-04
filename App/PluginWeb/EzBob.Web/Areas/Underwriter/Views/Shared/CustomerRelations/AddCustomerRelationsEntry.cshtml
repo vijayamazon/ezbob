@@ -15,6 +15,18 @@
 			    </span>
 			</div>
             <br/>
+    
+            <div class="control-group form_field_container">
+				<div class="controls">
+					<select class="form_field selectheight" id="Action" name="Action">
+						<option></option>
+                        <% for (var i in actions) { %>
+	                        <option value="<%- i %>"><%- actions[i] %></option>
+                        <%}%>
+    				</select>
+				</div>
+			</div>
+            <br/>
 
             <div class="control-group form_field_container">
 				<div class="controls">
@@ -28,19 +40,7 @@
 					</label>
 				</div>
 			</div>
-            <br/>    
-    
-            <div class="control-group form_field_container">
-				<div class="controls">
-					<select class="form_field selectheight" id="Action" name="Action">
-						<option></option>
-                        <% for (var i in actions) { %>
-	                        <option value="<%- i %>"><%- actions[i] %></option>
-                        <%}%>
-    				</select>
-				</div>
-			</div>
-            <br/>    
+            <br/>
 
             <label>Comment</label>    
             <textarea id="Comment" class="add-customer-entry-comment-size"/>

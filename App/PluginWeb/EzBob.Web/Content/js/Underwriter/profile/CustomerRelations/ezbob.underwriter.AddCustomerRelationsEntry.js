@@ -34,7 +34,7 @@
 
     AddCustomerRelationsEntry.prototype.render = function() {
       AddCustomerRelationsEntry.__super__.render.call(this);
-      this.$el.find('select')[1].selectedIndex = 1;
+      this.$el.find('select')[0].selectedIndex = 1;
       return this;
     };
 
