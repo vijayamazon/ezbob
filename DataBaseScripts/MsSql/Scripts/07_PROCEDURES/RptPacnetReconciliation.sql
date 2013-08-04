@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptPacnetReconciliation]
 GO
 SET ANSI_NULLS ON
@@ -15,6 +15,11 @@ BEGIN
 	DECLARE @PacnetOut DECIMAL(18, 2)
 	DECLARE @EzbobIn DECIMAL(18, 2)
 	DECLARE @PacnetIn DECIMAL(18, 2)
+
+	DECLARE @EzbobOutCount INT
+	DECLARE @PacnetOutCount INT
+	DECLARE @EzbobInCount INT
+	DECLARE @PacnetInCount INT
 
 	DECLARE @Amount DECIMAL(18, 2), @IsCredit BIT, @EzbobCount INT, @PacnetCount INT
 
@@ -43,7 +48,9 @@ BEGIN
 		SortOrder INT IDENTITY(1, 1) NOT NULL,
 		Caption NVARCHAR(1000) NOT NULL,
 		EzbobAmount DECIMAL(18, 2) NULL,
+		EzbobCount INT NULL,
 		PacnetAmount DECIMAL(18, 2) NULL,
+		PacnetCount INT NULL,
 		TransactionID INT NULL,
 		Css NVARCHAR(128) NULL
 	)
@@ -102,35 +109,39 @@ BEGIN
 	DELETE FROM #res WHERE EzbobCount = PacnetCount
 
 	SELECT
-		@PacnetIn = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+		@PacnetIn = ISNULL(SUM(ISNULL(Amount, 0)), 0),
+		@PacnetInCount = ISNULL(COUNT(*), 0)
 	FROM
 		#pacnet
 	WHERE
 		IsCredit = 1
 
 	SELECT
-		@PacnetOut = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+		@PacnetOut = ISNULL(SUM(ISNULL(Amount, 0)), 0),
+		@PacnetOutCount = ISNULL(COUNT(*), 0)
 	FROM
 		#pacnet
 	WHERE
 		IsCredit = 0
 
 	SELECT
-		@EzbobOut = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+		@EzbobOut = ISNULL(SUM(ISNULL(Amount, 0)), 0),
+		@EzbobOutCount = ISNULL(COUNT(*), 0)
 	FROM
 		#ezbob
 	WHERE
 		IsCredit = 0
 
 	SELECT
-		@EzbobIn = ISNULL(SUM(ISNULL(Amount, 0)), 0)
+		@EzbobIn = ISNULL(SUM(ISNULL(Amount, 0)), 0),
+		@EzbobInCount = ISNULL(COUNT(*), 0)
 	FROM
 		#ezbob
 	WHERE
 		IsCredit = 1
 
-	INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
-		VALUES ('Total In', @EzbobIn, @PacnetIn, 'total' + CASE WHEN @EzbobIn = @PacnetIn THEN '' ELSE ' unmatched' END)
+	INSERT INTO #out (Caption, EzbobAmount, EzbobCount, PacnetAmount, PacnetCount, Css)
+		VALUES ('Total In', @EzbobIn, @EzbobInCount, @PacnetIn, @PacnetInCount, 'total' + CASE WHEN @EzbobIn = @PacnetIn THEN '' ELSE ' unmatched' END)
 
 	DECLARE cur CURSOR FOR
 		SELECT Amount, IsCredit, EzbobCount, PacnetCount
@@ -175,8 +186,8 @@ BEGIN
 	CLOSE cur
 	DEALLOCATE cur
 
-	INSERT INTO #out (Caption, EzbobAmount, PacnetAmount, Css)
-		VALUES ('Total Out', @EzbobOut, @PacnetOut, 'total' + CASE WHEN @EzbobOut = @PacnetOut THEN '' ELSE ' unmatched' END)
+	INSERT INTO #out (Caption, EzbobAmount, EzbobCount, PacnetAmount, PacnetCount, Css)
+		VALUES ('Total Out', @EzbobOut, @EzbobOutCount, @PacnetOut, @PacnetOutCount, 'total' + CASE WHEN @EzbobOut = @PacnetOut THEN '' ELSE ' unmatched' END)
 
 	DECLARE cur CURSOR FOR
 		SELECT Amount, IsCredit, EzbobCount, PacnetCount
@@ -225,7 +236,9 @@ BEGIN
 		o.SortOrder,
 		o.Caption,
 		o.EzbobAmount,
+		o.EzbobCount,
 		o.PacnetAmount,
+		o.PacnetCount,
 		t.Id,
 		t.PostDate,
 		t.LoanId,
