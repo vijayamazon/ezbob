@@ -24,24 +24,29 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Transactional]
         [ValidateJsonAntiForgeryToken]
         public JsonNetResult Index(int id)
-        {
-            var dateOfLastCheck = _fraudDetectionLog.GetAll().Max(x => x.DateOfCheck);
-            var fraudDetectionHistory = _fraudDetectionLog.GetByCustomerId(id).Where(x=>x.DateOfCheck == dateOfLastCheck);
-            var models = new List<FraudDetectionLogModel>();
-            
-            models.AddRange(fraudDetectionHistory.Select(val => new FraudDetectionLogModel
-                {
-                    Id = val.Id,
-                    CompareField = val.CompareField,
-                    CurrentField = val.CurrentField,
-                    Value = val.Value,
-                    Concurrence = ConcurrencePrepare(val),
-                    Type = val.ExternalUser != null ? "External" : "Internal",
-                    DateOfLastCheck = FormattingUtils.FormatDateTimeToString(val.DateOfCheck)
-                }));
+		{
+			var models = new List<FraudDetectionLogModel>();
+	        var dateOfAllLastChecks = _fraudDetectionLog.GetAll();
+			if (dateOfAllLastChecks.Count() != 0)
+	        {
+				var dateOfLastCheck = dateOfAllLastChecks.Max(x => x.DateOfCheck);
+		        var fraudDetectionHistory = _fraudDetectionLog.GetByCustomerId(id)
+		                                                      .Where(x => x.DateOfCheck == dateOfLastCheck);
 
-            models = new List<FraudDetectionLogModel>(models.OrderByDescending(x => x.Id));
-            return this.JsonNet(models);
+		        models.AddRange(fraudDetectionHistory.Select(val => new FraudDetectionLogModel
+			        {
+				        Id = val.Id,
+				        CompareField = val.CompareField,
+				        CurrentField = val.CurrentField,
+				        Value = val.Value,
+				        Concurrence = ConcurrencePrepare(val),
+				        Type = val.ExternalUser != null ? "External" : "Internal",
+				        DateOfLastCheck = FormattingUtils.FormatDateTimeToString(val.DateOfCheck)
+			        }));
+
+		        models = new List<FraudDetectionLogModel>(models.OrderByDescending(x => x.Id));
+	        }
+	        return this.JsonNet(models);
         }
 
         private static string ConcurrencePrepare(FraudDetection val)
