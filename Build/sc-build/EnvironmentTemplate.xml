@@ -125,7 +125,6 @@
     <module id="PayPalSettingsData">
 	  <property name="ErrorRetryingInfo" value ="PayPalRetryingInfo"/>
           <property name="TransactionSerchMonthsBack" value="12"/>
-          <property name="MaxMonthsPerRequest" value="1"/>
           <property name="OpenTimeOutInMinutes" value="2"/>
           <property name="SendTimeoutInMinutes" value="2"/>
           <property name="EnableCategories" value="False"/>

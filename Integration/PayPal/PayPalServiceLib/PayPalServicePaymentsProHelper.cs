@@ -64,18 +64,37 @@ namespace EzBob.PayPalServiceLib
 			return new PayPalAPIInterfaceClient( binding, addr );			
 		}
 
+		private List<Tuple<DateTime, DateTime>> GetDailyRanges(DateTime startDate, DateTime endDate)
+		{
+			var rez = new List<Tuple<DateTime, DateTime>>();
+
+			DateTime fromDate = startDate;
+			DateTime toDate = fromDate.AddDays(1);
+			while (true)
+			{
+				if (toDate >= endDate)
+				{
+					rez.Add(new Tuple<DateTime, DateTime>(fromDate, endDate));
+					break;
+				}
+
+				rez.Add(new Tuple<DateTime, DateTime>(fromDate, toDate));
+				fromDate = toDate;
+				toDate = toDate.AddDays(1);
+				fromDate = fromDate.AddSeconds(1);
+			}
+
+			return rez;
+		}
+
 		public PayPalTransactionsList GetTransactionData( PayPalRequestInfo reqInfo)
 		{
 			DateTime startDate = reqInfo.StartDate;
 			DateTime endDate = reqInfo.EndDate;
-			int maxMonthsPerRequest = reqInfo.MaxMonthsPerRequest;
-			TransactionSearchResponseType resp = null;
-			PayPalTransactionsList data = null;			
-			
-			
+			PayPalTransactionsList data = null;
 			var requestsCounter = new RequestsCounterData();
-			
-			var ranges = UsefulFunctions.SplitDateRanges(startDate, endDate, maxMonthsPerRequest);
+
+			var ranges = GetDailyRanges(startDate, endDate);
 			
 			int counter = 0;
 
@@ -89,7 +108,7 @@ namespace EzBob.PayPalServiceLib
 				do
 				{
 					WriteLog( string.Format( "Request Transactions {0} of {1} ({2}): [{3} - {4}]", counter, ranges.Count, reqInfo.SecurityInfo.UserId, fromDate, toDate ) );
-					resp = GetTransactions( fromDate, toDate, reqInfo, requestsCounter );
+					TransactionSearchResponseType resp = GetTransactions(fromDate, toDate, reqInfo, requestsCounter);
 					WriteLog( string.Format( "Result Request Transactions {0} of {1} ({2}): [{3} - {4}]: {5}", counter, ranges.Count, reqInfo.SecurityInfo.UserId, fromDate, toDate, resp == null || resp.PaymentTransactions == null ? 0 : resp.PaymentTransactions.Length ) );
 
 					if (resp == null)

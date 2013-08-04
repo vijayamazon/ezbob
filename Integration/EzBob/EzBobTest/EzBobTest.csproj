@@ -77,7 +77,6 @@
     <Compile Include="ErrorRetryingFixture.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
-    <Compile Include="SplitDateRangesFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Amazon\AmazonDbLib\AmazonDbLib.csproj">

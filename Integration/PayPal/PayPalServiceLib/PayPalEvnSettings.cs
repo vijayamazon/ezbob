@@ -48,11 +48,6 @@ namespace EzBob.PayPalServiceLib
 			get { return GetValueWithDefault<int>( "TransactionSerchMonthsBack", "12" ); }
 		}
 
-		public int MaxMonthsPerRequest
-		{
-			get { return GetValueWithDefault<int>( "MaxMonthsPerRequest", "3" ); }
-		}
-
 		public int OpenTimeOutInMinutes
 		{
 			get { return GetValueWithDefault<int>( "OpenTimeOutInMinutes", "1" ); }

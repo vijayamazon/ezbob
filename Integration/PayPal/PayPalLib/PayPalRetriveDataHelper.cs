@@ -93,7 +93,6 @@ namespace EzBob.PayPal
 						startDate = endDate.AddMonths(-_Settings.MonthsBack);
 					}
 
-					int maxMonthsPerRequest = _Settings.MaxMonthsPerRequest;
 					var errorRetryingInfo = _Settings.ErrorRetryingInfo;
 
 					var reqInfo = new PayPalRequestInfo
@@ -101,7 +100,6 @@ namespace EzBob.PayPal
 							SecurityInfo = securityInfo,
 							StartDate = startDate.Value,
 							EndDate = endDate,
-							MaxMonthsPerRequest = maxMonthsPerRequest,
 							ErrorRetryingInfo = errorRetryingInfo,
 							OpenTimeOutInMinutes = _Settings.OpenTimeOutInMinutes,
 							SendTimeoutInMinutes = _Settings.SendTimeoutInMinutes

@@ -27,11 +27,6 @@ namespace EzBob.PayPal
 			get { return 12; }
 		}
 
-		public int MaxMonthsPerRequest
-		{
-			get { return 3; }
-		}
-
 		public int OpenTimeOutInMinutes
 		{
 			get { return 1; }

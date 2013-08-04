@@ -108,7 +108,6 @@
     <Compile Include="TrapForThrottlingLogic\TrapForThrottlingController.cs" />
     <Compile Include="TrapForThrottlingLogic\TrapForThrottlingSettings.cs" />
     <Compile Include="TrapForThrottlingLogic\TrapForThrottlingSimpleWait.cs" />
-    <Compile Include="UsefulFunctions.cs" />
     <Compile Include="WaitBeforeRetryController.cs" />
     <Compile Include="WaitBeforeRetryHelper.cs" />
     <Compile Include="WriteLoggerHelper.cs" />

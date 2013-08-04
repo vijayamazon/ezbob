@@ -19,7 +19,6 @@ namespace EzBob.PayPalServiceLib
 	public interface IPayPalTransactionSearchSettings
 	{
 		int MonthsBack { get; }
-		int MaxMonthsPerRequest { get; }
 	}
 
 	public interface IPayPalConfig
