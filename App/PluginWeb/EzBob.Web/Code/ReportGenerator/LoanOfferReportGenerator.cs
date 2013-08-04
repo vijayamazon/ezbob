@@ -70,7 +70,7 @@ namespace EzBob.Web.Code.ReportGenerator
         {
             row += 2;
             worksheet.Cells[row, column].PutValue("Offered credit line: ");
-            worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatNoDecimals(details.OfferedCreditLine));
+            worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatPounds(details.OfferedCreditLine));
             worksheet.Cells[row, column + 1].Style.HorizontalAlignment = TextAlignmentType.Left;
             worksheet.Cells[row, column + 1].Style.Font.IsBold = true;
             row++;
@@ -97,7 +97,7 @@ namespace EzBob.Web.Code.ReportGenerator
             row += 2;
             worksheet.Cells.Merge(row, column, 2, 1);
             worksheet.Cells[row, column + 1].PutValue("Loan");
-            worksheet.Cells[row + 1, column + 1].PutValue("£ " +  FormattingUtils.FormatNoDecimals(loanOffer.TotalPrincipal));
+            worksheet.Cells[row + 1, column + 1].PutValue("£ " +  FormattingUtils.FormatMiddle(loanOffer.TotalPrincipal));
 
             worksheet.Cells.Merge(row, column + 2, 2, 1);
             worksheet.Cells.Merge(row, column + 3, 2, 1);
