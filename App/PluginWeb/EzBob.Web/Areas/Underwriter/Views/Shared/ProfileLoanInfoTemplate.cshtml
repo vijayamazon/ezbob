@@ -112,7 +112,7 @@
             @RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
             @RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
             @RawCellWithButtonNearUpdate("CRM:", "<%= ZohoId ? 'Yes' : 'No' %>", "updateCRM")
-            @RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeManualy", "<%- FraudHighlightCss %>")
+            @RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
         </tbody>
     </table>
 
@@ -261,6 +261,31 @@
         <option value="3">Bankruptcy</option>
         <option value="4">Default</option>
         <option value="5">Fraud Suspect</option>
+    </select>
+</script>
+
+<script id="fraud-status-layout-template" type="text/template">
+    <form id ="fraud-status-dialog" class="view-fraud-status" action="/" method="POST">
+        <input name="currentStatus" type="hidden"/>
+        <input name="currentStatusText" type="hidden"/>
+        <input name="customerId" type="hidden"/>
+        <div id ="list-fraud-items">
+
+        </div>
+        <div id ="fraud-view">
+
+        </div>
+    </form>
+</script>
+
+<script id="fraud-status-items-template" type="text/template">
+    <select id="fraud-status-items" class="selectheight">
+        <option value="0">OK</option>
+        <option value="1">Fishy</option>
+        <option value="2">Fraud suspect</option>
+        <option value="3">Under investigation</option>
+        <option value="4">Fraud Done</option>
+        <option value="5">Identity/details theft</option>
     </select>
 </script>
 

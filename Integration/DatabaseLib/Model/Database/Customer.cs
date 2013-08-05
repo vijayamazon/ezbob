@@ -12,6 +12,7 @@ using Scorto.NHibernate.Types;
 using StructureMap;
 
 namespace EZBob.DatabaseLib.Model.Database {
+	using System.ComponentModel;
 	using Marketplaces.Yodlee;
 
 	public enum PendingStatus
@@ -82,11 +83,17 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public enum FraudStatus
     {
+		[Description("Ok")]
         Ok = 0,
+		[Description("Fishy")]
         Fishy = 1,
+		[Description("Fraud Suspect")]
         FraudSuspect = 2,
+		[Description("Under Investigation")]
         UnderInvestigation = 3,
+		[Description("Fraud Done")]
         FraudDone = 4,
+		[Description("Identity/Details Theft")]
         IdentityOrDetailsTheft =5
     }
 

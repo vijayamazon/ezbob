@@ -230,6 +230,7 @@ namespace EzBob.Web.Infrastructure
                 //Fraud
                 .Add("~/Content/js/Underwriter/Fraud/ezbob.underwriter.fraud.coffee")
                 .Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudDetectionLog.js")
+                .Add("~/Content/js/Underwriter/profile/fraudDetection/ezbob.underwriter.fraudStatus.coffee")
 
                 // Configuration Variables
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.settings.coffee")
@@ -259,10 +260,10 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.coffee")
                 .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.coffee")
                 .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.coffee")
+                .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.coffee")
                 .Add("~/Content/js/underwriter/profile/loanHistory/ezbob.underwriter.loanInfo.coffee")
                 .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistorys.coffee")
                 .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.loanHistoryDetail.coffee")
-                .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.coffee")
                 .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.rollover.coffee")
                 .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.manualPayment.coffee")
                 .Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.LoanOptions.coffee")

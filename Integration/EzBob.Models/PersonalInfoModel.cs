@@ -10,7 +10,9 @@ using StructureMap;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class PersonalInfoModel
+	using CommonLib;
+
+	public class PersonalInfoModel
     {
         public int Id { get; set; }
         public string RefNumber { get; set; }
@@ -35,6 +37,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public bool IsMainStratFinished { get; set; }
         public string StrategyError { get; set; }
         public string FraudCheckStatus { get; set; }
+		public int FraudCheckStatusId { get; set; }
 		public string FraudHighlightCss { get; set; }
         public PersonalInfoModel()
         {
@@ -50,7 +53,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
             IsTest = customer.IsTest;
             IsAvoid = customer.IsAvoid;
             ZohoId = customer.ZohoId;
-            FraudCheckStatus = customer.FraudStatus.ToString();
+			FraudCheckStatus = customer.FraudStatus.Description();
+	        FraudCheckStatusId = (int) customer.FraudStatus;
 			if (customer.FraudStatus == FraudStatus.FraudSuspect)
 			{
 				FraudHighlightCss = "red_cell";

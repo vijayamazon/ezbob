@@ -18,10 +18,26 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"isTestEditButton\"]": "isTestEditButton"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"updateCRM\"]": "updateCRM"
-        "click [name=\"changeManualy\"]": "changeManualyClicked"
+        "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
 
-    changeManualyClicked: ->
-        alert 'changeManualyClicked'
+    changeFraudStatusManualyClicked: ->
+        console.log(@model)
+        fraudStatusModel = new EzBob.Underwriter.FraudStatusModel( 
+            customerId : @model.get ('Id')
+            currentStatus : @model.get('FraudCheckStatusId')
+            )
+        console.log(fraudStatusModel)
+        BlockUi "on"
+        xhr = fraudStatusModel.fetch();
+        xhr.done =>
+            fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout model: fraudStatusModel
+            fraudStatusLayout.render()
+            EzBob.App.jqmodal.show(fraudStatusLayout)
+            BlockUi "off"
+            fraudStatusLayout.on 'saved', () =>
+                console.log fraudStatusModel
+                @model.set 'FraudCheckStatusId', fraudStatusModel.get ('currentStatus')
+                @model.set 'FraudCheckStatus', fraudStatusModel.get ('currentStatusText')
 
     templateHelpers:
         getIcon: ->
@@ -109,7 +125,9 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
     urlRoot: window.gRootPath + "Underwriter/CustomerInfo/Index"
     initialize: ->
         @on "change:Disabled", @changeDisabled, this
+        @on "change:FraudCheckStatusId", @changeFraudCheckStatus, this
         @changeDisabled()
+        @changeFraudCheckStatus()
 
     changeDisabled: ->
         disabledText = ""
@@ -128,3 +146,15 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
             else
                 disabledText = "Enabled"
         @set "DisabledText", disabledText
+
+    changeFraudCheckStatus: ->
+        #fraudText = @get("FraudCheckStatus")
+        fraud = @get("FraudCheckStatusId")
+        fraudCss = ""
+        
+        switch fraud
+            when 2
+                fraudCss = "red_cell"
+        
+        #@set "FraudCheckStatus", fraudText
+        @set "FraudHighlightCss", fraudCss
