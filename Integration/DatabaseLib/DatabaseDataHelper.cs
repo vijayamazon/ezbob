@@ -1,3 +1,5 @@
+using EZBob.DatabaseLib.Model.Database.Loans;
+
 namespace EZBob.DatabaseLib
 {
 	using System;
@@ -81,6 +83,7 @@ namespace EZBob.DatabaseLib
 		private readonly IConfigurationVariablesRepository _ConfigurationVariables;
 		private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
+		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -109,9 +112,12 @@ namespace EZBob.DatabaseLib
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
 			_ConfigurationVariables = new ConfigurationVariablesRepository(session);
-            _MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
+			_MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
+			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 		}
+
+		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
 
 		public IConfigurationVariablesRepository ConfigurationVariables { get { return _ConfigurationVariables; } }
 
