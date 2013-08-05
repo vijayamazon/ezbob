@@ -11,7 +11,9 @@ namespace EzReportToEMail {
 
 			DateTime dNow = DateTime.Today;
 
-			if ((args.Length > 1) && (args[0] == "--date"))
+			if ((args.Length == 1) && (args[0] == "--std"))
+				dNow = dNow.AddDays(-1);
+			else if ((args.Length > 1) && (args[0] == "--date"))
 				DateTime.TryParseExact(args[1], "yyyy-MM-dd", new CultureInfo("en-GB"), DateTimeStyles.None, out dNow);
 
 			log.Info("Current environment is {0}", env.Context);
