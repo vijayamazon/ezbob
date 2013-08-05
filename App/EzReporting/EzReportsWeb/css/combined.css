@@ -432,6 +432,7 @@ table.dataTable thead td:active {
 	-webkit-overflow-scrolling: touch;
 }
 
+#divReportColumnTypes { display: none; }
 
 #divReportData table tbody tr.odd { background-color: white !important; }
 

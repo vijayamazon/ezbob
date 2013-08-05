@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.UI;
+
 using Aspose.Cells;
+using Ezbob.Database;
 using Ezbob.Logger;
 using Html;
+using Newtonsoft.Json;
 using Reports;
-using System.Web;
-using Ezbob.Database;
 
 namespace EzReportsWeb {
 	public partial class Default : Page {
@@ -54,10 +57,10 @@ namespace EzReportsWeb {
 			GetDates(out fDate, out tDate, out isDaily);
 
 			fromDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-			toDate.Attributes.Add("max", DateTime.Today.AddDays(1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+			toDate.Attributes.Add("max", DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
 			fromDate.Value = fDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-			toDate.Value   = tDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+			toDate.Value   = tDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 		} // Page_Load
 
 		protected void btnShowReport_Click(object sender, EventArgs e) {
@@ -66,7 +69,17 @@ namespace EzReportsWeb {
 
 			GetDates(out fDate, out tDate, out isDaily);
 
-			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate, tDate, isDaily);
+			var oColumnTypes = new List<string>();
+
+			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate, tDate, isDaily, oColumnTypes);
+
+			var aoColumnDefs = oColumnTypes.Select(
+				sType => string.Format("{{ \"sType\": \"{0}\" }}", sType)
+			).ToList();
+
+			divReportColumnTypes.Controls.Add(new LiteralControl(
+				"[" + string.Join(", ", aoColumnDefs) + "]"
+			));
 
 			var reportData = new LiteralControl(data.ToString());
 
@@ -98,7 +111,7 @@ namespace EzReportsWeb {
 
 		private void GetDates(out DateTime fDate, out DateTime tDate, out bool isDaily) {
 			fDate = DateTime.Today;
-			tDate = DateTime.Today.AddDays(1);
+			tDate = fDate.AddDays(1);
 
 			isDaily = false;
 
@@ -129,7 +142,16 @@ namespace EzReportsWeb {
 				if (!DateTime.TryParse(fromDate.Value, out fDate))
 					fDate = DateTime.Today;
 
-				if (!DateTime.TryParse(toDate.Value, out tDate))
+				if (DateTime.TryParse(toDate.Value, out tDate)) {
+					if (tDate < fDate) {
+						DateTime tmp = tDate;
+						tDate = fDate;
+						fDate = tmp;
+					} // if
+
+					tDate = tDate.AddDays(1); // custom end date selected in UI must be included
+				}
+				else
 					tDate = fDate.AddDays(1);
 
 				if (tDate.DayOfYear - fDate.DayOfYear == 1)

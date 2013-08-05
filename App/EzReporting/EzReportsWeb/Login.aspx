@@ -1,107 +1,17 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="EzReportsWeb.Login" %>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 	<title>Login</title>
-	<style>
-		.container {
-			margin-right: auto;
-			margin-left: auto;
-			width: 550px;
-		}
 
-		body {
-			margin: 50px 0px;
-			padding: 0px;
-			/*text-align: center;*/
-			vertical-align: middle;
-			text-anchor: middle;
-			background-color: rgb(238, 238, 238);
-		}
+	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 
-		label {
-			display: block;
-			width: 150px;
-			float: left;
-			text-align: left;
-		}
+	<link rel="stylesheet" href="css/login.css" />
+	<link rel="stylesheet" href="css/combined.css" />
 
-		input {
-			margin-left: 10px;
-			margin-right: 10px;
-			width: 120px;
-			background-color: #fff;
-			border: 1px solid #ccc;
-			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-			-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-			box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-			-webkit-transition: border linear .2s,box-shadow linear .2s;
-			-moz-transition: border linear .2s,box-shadow linear .2s;
-			-o-transition: border linear .2s,box-shadow linear .2s;
-			transition: border linear .2s,box-shadow linear .2s;
-			color: #555;
-			vertical-align: middle;
-			-webkit-border-radius: 4px;
-			border-radius: 4px;
-			/*font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;*/
-			display: inline-block;
-			/*height: 20px;*/
-			/*padding: 4px 6px;*/
-			/*font-size: 14px;*/
-			/*line-height: 20px;*/
-		}
-
-		#divLogin {
-			margin-top: 50px;
-			width: 350px;
-		}
-
-		#divChangePassword {
-			margin-top: 50px;
-			width: 550px;
-		}
-
-		.tableChangePassword td {
-			height: 20px;
-		}
-
-		table td {
-			/*height:30px; width:150px;*/
-			vertical-align: middle;
-			clear: both;
-		}
-
-		#btnShowChangePassword {
-			margin-top: 10px;
-			margin-left: 15px;
-			width: 150px;
-		}
-
-		#LoginControl_LoginButton {
-			width: 150px;
-		}
-
-		.topMargin {
-			margin-top: 15px !important;
-		}
-
-		br {
-			clear: left;
-		}
-	</style>
-	<style type="text/css" title="currentStyle">
-		@import "css/combined.css";
-	</style>
 	<script src="js/jquery.js"></script>
-	<script>
-		$(document).ready(function () {
-			$('#LoginControl_LoginButton').addClass('button orange');
-			$('#LoginControl_LoginButton').after($('#btnShowChangePassword'));
-		});
-	</script>
+	<script src="js/login.js"></script>
 </head>
 
 <body>

@@ -49,7 +49,7 @@ namespace Reports {
 
 		#region report generators
 
-		public ATag TableReport(string spName, DateTime startDate, DateTime endDate, ColumnInfo[] columns, bool isSharones = false, string RptTitle = "") {
+		public ATag TableReport(string spName, DateTime startDate, DateTime endDate, ColumnInfo[] columns, bool isSharones = false, string RptTitle = "", List<string> oColumnTypes = null) {
 			var tbl = new Table().Add<Class>("Report");
 
 			try {
@@ -74,6 +74,13 @@ namespace Reports {
 
 				int lineCounter = 0;
 
+				if (oColumnTypes != null) {
+					oColumnTypes.Clear();
+
+					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
+						oColumnTypes.Add("string");
+				} // if
+
 				foreach (DataRow row in dt.Rows) {
 					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
 					oTbody.Append(oTr);
@@ -88,10 +95,18 @@ namespace Reports {
 							var oTd = new Td();
 							oTr.Append(oTd);
 
-							if (IsNumber(oValue))
+							if (IsNumber(oValue)) {
 								oTd.Add<Class>("R").Append(new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2))));
-							else
+
+								if (oColumnTypes != null)
+									oColumnTypes[columnIndex] = "formatted-num";
+							}
+							else {
 								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
+
+								if ((oColumnTypes != null) && (oValue is DateTime))
+									oColumnTypes[columnIndex] = "date";
+							} // if
 						}
 						else {
 							if (col.ValueType == ValueType.CssClass)
@@ -110,6 +125,13 @@ namespace Reports {
 			catch (Exception e) {
 				Error(e.ToString());
 			}
+
+			if (oColumnTypes != null) {
+				for (int columnIndex = columns.Length - 1; columnIndex >= 0; columnIndex--)
+					if (!columns[columnIndex].IsVisible)
+						oColumnTypes.RemoveAt(columnIndex);
+			} // if
+
 			return tbl;
 		} // TableReport
 

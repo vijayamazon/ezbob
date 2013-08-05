@@ -24,7 +24,7 @@ namespace EzReportsWeb {
 			return reportList;
 		} // GetReportsList
 
-		internal ATag GetReportData(System.Web.UI.WebControls.ListItem selectedReport, DateTime fromDate, DateTime toDate, bool isDaily) {
+		internal ATag GetReportData(System.Web.UI.WebControls.ListItem selectedReport, DateTime fromDate, DateTime toDate, bool isDaily, List<string> oColumnTypes) {
 			Report report = GetReport(selectedReport.Text);
 
 			if (report == null)
@@ -46,7 +46,7 @@ namespace EzReportsWeb {
 				return BuildInWizardReport(report, fromDate, toDate);
 
 			default:
-				return BuildReport(report, fromDate, toDate, "");
+				return BuildReport(report, fromDate, toDate, "", oColumnTypes);
 			} // switch
 		} // GetReportData
 
@@ -88,7 +88,7 @@ namespace EzReportsWeb {
 			return null;
 		} // GetReport
 
-		private ATag BuildReport(Report report, DateTime fromDate, DateTime toDate, string period) {
+		private ATag BuildReport(Report report, DateTime fromDate, DateTime toDate, string period, List<string> oColumnTypes) {
 			var oRpt = new Div();
 
 			var h1 = new H1();
@@ -100,7 +100,7 @@ namespace EzReportsWeb {
 
 			oRpt.Append(h1.Append(oRptTitle));
 
-			oRpt.Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns));
+			oRpt.Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, oColumnTypes: oColumnTypes));
 
 			return oRpt;
 		} // BuildReport

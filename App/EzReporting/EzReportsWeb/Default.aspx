@@ -1,39 +1,21 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="EzReportsWeb.Default" %>
-
-<%@ Import Namespace="System" %>
-<%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="Reports" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 	<title>Ezbob Report Viewer</title>
-	<style type="text/css" title="currentStyle">
-		@import "css/combined.css";
-	</style>
+
+	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
+
+	<link rel="stylesheet" href="css/combined.css" />
+
+	<%= Report.GetStyle().ToString() %>
+
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.dataTables.min.js"></script>
 	<script src="js/admin.js"></script>
-	<script>
-		$(document).ready(function () {
-			InitAdminArea();
-
-			$('#divReportData table').addClass('table table-bordered table-striped blue-header centered');
-			$('#tableReportData').dataTable({
-				aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
-				iDisplayLength: 100,
-				aaSorting: []
-			});
-
-			$("#tdEntries").append($("#tableReportData_length"));
-			$("#tdSearch").append($("#tableReportData_filter"));
-			$("#tdShowing").append($("#tableReportData_info"));
-			$("#tdNavigation").append($("#tableReportData_paginate"));
-			$("tr").removeAttr("style");
-		});
-	</script>
-	<%= Report.GetStyle().ToString() %>
+	<script src="js/default.js"></script>
 </head>
 
 <body>
@@ -99,6 +81,7 @@
 			</div>
 		</header>
 		<div id="divReportData" runat="server"></div>
+		<div id="divReportColumnTypes" runat="server"></div>
 		<div id="divAdminArea" runat="server">
 			<h3>Administration</h3>
 			<table class="center">

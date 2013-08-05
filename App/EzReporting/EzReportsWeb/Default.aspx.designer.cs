@@ -148,6 +148,15 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divReportData;
         
         /// <summary>
+        /// divReportColumnTypes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divReportColumnTypes;
+        
+        /// <summary>
         /// divAdminArea control.
         /// </summary>
         /// <remarks>
