@@ -69,7 +69,7 @@
                     ,
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
-                    } ,
+                    },
                     { el: '#pending', url: '@Url.Action(@Model.Pending.Action, new {Area = "Underwriter"})', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
                     { el: '#approved', url: '@Url.Action(@Model.Approved.Action, new {Area = "Underwriter"})', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
                     { el: '#late', url: '@Url.Action(@Model.Late.Action, new {Area = "Underwriter"})', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
@@ -208,6 +208,33 @@
                 profileView.router.navigate("#profile/" + customerId + "/RegisteredCustomers", { trigger: true, replace: true });
             });
 
+            supportView.on("rechecked", function(options) {
+                console.log('op',options);
+                var umi = options.umi;
+                var el = $("[umi=" + umi +"]");
+                var model = new EzBob.Underwriter.SupportModels();
+                var status = el.parent().prev();
+                model.fetch().done(function() {
+                    var interval = setInterval(function() {
+                        console.log('interval');
+                        var req = $.get(window.gRootPath + "Underwriter/MarketPlaces/CheckForUpdatedStatus", {
+                            mpId: umi
+                        });
+                        return req.done(function(response) {
+                            console.log(response, el);
+                            status.text(response.status);
+                            if (response.status !== "In progress") {
+                                clearInterval(interval);
+                                model.fetch().done(function() {
+                                    el.removeClass("disabled");
+                                });
+                            }
+                        });
+                    }, 1000);
+                });
+                
+            });
+
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').tab('show');
             }
@@ -224,13 +251,13 @@
 
         });
 
-    @if (Model.Escalated != null)
-    {
-        <text>  var escalatedFlag = 1;  </text>
-    }
-    else
-    {
-        <text>  var escalatedFlag = 0;  </text>
-    }
+        @if (Model.Escalated != null)
+        {
+            <text>  var escalatedFlag = 1;  </text>
+        }
+        else
+        {
+            <text>  var escalatedFlag = 0;  </text>
+        }
     </script>
 }

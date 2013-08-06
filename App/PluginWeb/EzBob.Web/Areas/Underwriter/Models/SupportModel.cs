@@ -8,5 +8,6 @@
         public string UpdateStartDate { get; set; }
         public string ErrorMessage { get; set; }
         public int CustomerId { get; set; }
+        public string Status { get; set; }
     }
 }

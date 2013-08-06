@@ -18,10 +18,12 @@ class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
 
     recheckClicked: (e)->
         $el = $(e.currentTarget)
+        return false if $el.hasClass('disabled')
         umi = $el.attr "umi"
         mpType = $el.attr "marketplaceType"
         customerId = @model.customerId
         okFn = =>
+            $el.addClass('disabled')
             xhr = $.get "#{window.gRootPath}Underwriter/MarketPlaces/ReCheckMarketplaces",
                 customerId: customerId
                 umi: umi

@@ -31,7 +31,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     CustomerId = mp.Customer.Id,
                     ErrorMessage = mp.UpdateError,
                     Name = mp.DisplayName,
-                    UpdateStartDate = FormattingUtils.FormatDateTimeToString(mp.UpdatingStart,"")
+                    UpdateStartDate = FormattingUtils.FormatDateTimeToString(mp.UpdatingStart,""),
+                    Status = mp.GetUpdatingStatus()
                 }).ToList();
             return this.JsonNet(mpsWithError);
         }
