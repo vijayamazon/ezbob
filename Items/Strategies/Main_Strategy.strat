@@ -22694,21 +22694,9 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>UserEmail</SourceVariableName>
-      <TargetVariableOwnerName>MailNode34853908</TargetVariableOwnerName>
-      <TargetVariableName>AddressTo</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
       <TargetVariableOwnerName>MailNode34853908</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode34853908</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -22736,12 +22724,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
       <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
       <TargetVariableName>FirstName_Congratulations you are qualified.docx5ZwcpL2O6KY64LfoEmMgYA==</TargetVariableName>
@@ -22763,12 +22745,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>EMailCC</SourceVariableName>
       <TargetVariableOwnerName>CreditProduct57802713</TargetVariableOwnerName>
       <TargetVariableName>CP_AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
-      <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -23339,6 +23315,30 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>Re_Reject_LoanAmountTaken</SourceVariableName>
       <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
       <TargetVariableName>Comparison36836846Re_Reject_LoanAmountTaken</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode34853908</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode34853908</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
