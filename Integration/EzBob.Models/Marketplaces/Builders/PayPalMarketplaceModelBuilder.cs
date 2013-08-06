@@ -37,7 +37,7 @@ namespace EzBob.Models
                        .Where(t => t.CustomerMarketPlace.Id == mp.Id)
                        .SelectMany(x => x.TransactionItems);
 
-            var transactionsMinDate = payPalTransactions.Any() ? payPalTransactions.Min(f => f.Created) : DateTime.UtcNow;
+            var transactionsMinDate = payPalTransactions.Any() ? payPalTransactions.Min(f => f.Created) : (DateTime?) null;
 
             return transactionsMinDate;
         }
