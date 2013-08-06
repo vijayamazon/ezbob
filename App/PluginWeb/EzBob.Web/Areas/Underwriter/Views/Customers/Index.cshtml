@@ -173,8 +173,10 @@
                 },
                 support: function() {
                     this.switchMenuTo("liSupport");
-                    if (!this.isSupportRendered)
+                    if (!this.isSupportRendered) {
                         this.isSupportRendered = true;
+                        supportView.render();
+                    }
                     this.hideAll();
                     supportView.show();
 
@@ -209,30 +211,30 @@
             });
 
             supportView.on("rechecked", function(options) {
-                console.log('op',options);
                 var umi = options.umi;
-                var el = $("[umi=" + umi +"]");
-                var model = new EzBob.Underwriter.SupportModels();
+                var el = $("[umi=" + umi + "]");
                 var status = el.parent().prev();
-                model.fetch().done(function() {
+                supportView.model.fetch().done(function() {
                     var interval = setInterval(function() {
-                        console.log('interval');
                         var req = $.get(window.gRootPath + "Underwriter/MarketPlaces/CheckForUpdatedStatus", {
                             mpId: umi
                         });
                         return req.done(function(response) {
-                            console.log(response, el);
                             status.text(response.status);
                             if (response.status !== "In progress") {
                                 clearInterval(interval);
-                                model.fetch().done(function() {
+                                supportView.model.fetch().done(function() {
                                     el.removeClass("disabled");
+                                    if (response.status == 'Done') {
+                                        EzBob.ShowMessage("The MP " + umi + " rechecked successfully", "", null, "OK");
+                                    }
+                                    supportView.model.trigger('change');
                                 });
                             }
                         });
                     }, 1000);
                 });
-                
+
             });
 
             if (window.location.hash != "") {

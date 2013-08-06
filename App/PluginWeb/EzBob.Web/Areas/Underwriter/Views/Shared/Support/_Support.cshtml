@@ -5,7 +5,9 @@
         </thead>
         <tbody>
             @EzForm.RawCellBold("#", "Marketplace Type", "Marketplace Name", "Update start date", "Error Message", "CustomerId", "Status", "")
-            <%_.each(model, function(val, i){%>
+            <%_.each(model, function(val, i){
+             var disabled="";
+             if(val.Status=="In progress") { disabled = "disabled"; }%>
                 @EzForm.RawCell(
                          "<%-i+1%>",
                          "<b><%-val.Type%></b>",
@@ -14,7 +16,7 @@
                          "<pre><%-val.ErrorMessage%></pre>",
                          "<%-val.CustomerId%>",
                          "<%-val.Status%>",
-                         "<a href='#' class='btn btn-mini btn-success reCheckMP <%- val.Name.toLowerCase() %>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='icon-refresh'></i>Recheck</a>");
+                         "<a href='#' class='btn btn-mini btn-success reCheckMP <%- val.Name.toLowerCase() %> <%-disabled%>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='icon-refresh'></i>Recheck</a>")
             <%});%>
         </tbody>
     </table>
