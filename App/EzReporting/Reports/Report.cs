@@ -28,6 +28,9 @@ namespace Reports {
 	public class Report {
 		public const string ReportListStoredProc = "RptScheduler_GetReportList";
 
+		public const string DateRangeArg = "DateRange";
+		public const string ShowNonCashArg = "ShowNonCashTransactions";
+
 		public static DataTable LoadReportList(AConnection oDB, string sReportTypeName = "") {
 			return oDB.ExecuteReader(
 				ReportListStoredProc,
@@ -38,13 +41,15 @@ namespace Reports {
 
 		#region constructor
 
-		public Report() {} // construtor
+		public Report() {
+			Arguments = new SortedDictionary<string, string>();
+		} // construtor
 
-		public Report(DataRow row, string sDefaultToEmail) {
+		public Report(DataRow row, string sDefaultToEmail) : this() {
 			Init(row, sDefaultToEmail);
 		} // constructor
 
-		public Report(AConnection oDB, string sReportTypeName) {
+		public Report(AConnection oDB, string sReportTypeName) : this() {
 			DataTable tbl = LoadReportList(oDB, sReportTypeName);
 
 			if ((tbl == null) || (tbl.Rows.Count != 1))
@@ -58,7 +63,9 @@ namespace Reports {
 		private void Init(DataRow row, string sDefaultToEmail) {
 			ReportType type;
 
-			if (!Enum.TryParse<ReportType>(row["Type"].ToString(), out type))
+			TypeName = row["Type"].ToString();
+
+			if (!Enum.TryParse<ReportType>(TypeName, out type))
 				type = ReportType.RPT_GENERIC;
 
 			Type = type;
@@ -74,10 +81,20 @@ namespace Reports {
 
 		#endregion constructor
 
+		#region method AddArgument
+
+		public void AddArgument(string sArgument) {
+			sArgument = (sArgument ?? "").Trim();
+			Arguments[sArgument] = sArgument;
+		} // AddArgument
+
+		#endregion method AddArgument
+
 		#region properties
 
 		public string Title { get; set; }
 		public ReportType Type { get; set; }
+		public string TypeName { get; set; }
 		public string StoredProcedure { get; set; }
 		public bool IsWeekly { get; set; }
 		public bool IsMonthly { get; set; }
@@ -85,6 +102,8 @@ namespace Reports {
 		public ColumnInfo[] Columns { get; set; }
 		public string ToEmail { get; set; }
 		public bool IsMonthToDate { get; set; }
+
+		public SortedDictionary<string, string> Arguments { get; private set; }
 
 		#endregion properties
 

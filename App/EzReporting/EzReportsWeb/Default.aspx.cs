@@ -10,7 +10,6 @@ using Aspose.Cells;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html;
-using Newtonsoft.Json;
 using Reports;
 
 namespace EzReportsWeb {
@@ -28,7 +27,7 @@ namespace EzReportsWeb {
 
 				reportHandler = new WebReportHandler(oDB, log);
 
-				List<Report> reportsList = reportHandler.GetReportsList(HttpContext.Current.User.Identity.Name);
+				SortedDictionary<string, Report> reportsList = reportHandler.GetReportsList(HttpContext.Current.User.Identity.Name);
 
 				if (reportsList.Count == 0) {
 					divFilter.Visible = false;
@@ -37,7 +36,7 @@ namespace EzReportsWeb {
 
 				ddlReportTypes.DataTextField = "Title";
 				ddlReportTypes.DataValueField = "Title";
-				ddlReportTypes.DataSource = reportsList;
+				ddlReportTypes.DataSource = reportsList.Values;
 				ddlReportTypes.DataBind();
 			} // if
 
@@ -61,17 +60,29 @@ namespace EzReportsWeb {
 
 			fromDate.Value = fDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 			toDate.Value   = tDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+			ToggleShowNonCash();
 		} // Page_Load
 
+		protected void ddlReportTypes_OnSelectedIndexChanged(object sender, EventArgs e) {
+			ToggleShowNonCash();
+		} // ddlReportTypes_OnSelectedIndexChanged
+
+		private void ToggleShowNonCash() {
+			Report rpt = reportHandler.GetReport(ddlReportTypes.SelectedValue);
+
+			if (rpt != null)
+				chkShowNonCash.Visible = rpt.Arguments.ContainsKey(Report.ShowNonCashArg);
+		} // ToggleShowNonCash
+
 		protected void btnShowReport_Click(object sender, EventArgs e) {
-			DateTime fDate, tDate;
 			bool isDaily;
 
-			GetDates(out fDate, out tDate, out isDaily);
+			ReportQuery rptDef = GetReportDefinitions(out isDaily);
 
 			var oColumnTypes = new List<string>();
 
-			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, fDate, tDate, isDaily, oColumnTypes);
+			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, rptDef, isDaily, oColumnTypes);
 
 			var aoColumnDefs = oColumnTypes.Select(
 				sType => string.Format("{{ \"sType\": \"{0}\" }}", sType)
@@ -86,15 +97,26 @@ namespace EzReportsWeb {
 			divReportData.Controls.Add(reportData);
 		} // btnShowReport_Click
 
-		protected void BtnGetExcelClick(object sender, EventArgs e) {
+		private ReportQuery GetReportDefinitions(out bool isDaily) {
 			DateTime fDate, tDate;
-			bool isDaily;
 
 			GetDates(out fDate, out tDate, out isDaily);
 
-			var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, fDate, tDate, isDaily);
+			return new ReportQuery {
+				DateStart = fDate,
+				DateEnd = tDate,
+				ShowNonCashTransactions = chkShowNonCash.Checked ? 1 : 0
+			};
+		} // GetReportDefinitions
 
-			var filename = (ddlReportTypes.SelectedItem + "_" + fDate.ToString("yyyy-MM-dd") + ".xlsx").Replace(" ", "_");
+		protected void BtnGetExcelClick(object sender, EventArgs e) {
+			bool isDaily;
+
+			ReportQuery rptDef = GetReportDefinitions(out isDaily);
+
+			var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, rptDef, isDaily);
+
+			var filename = (ddlReportTypes.SelectedItem + "_" + ((DateTime)rptDef.DateStart).ToString("yyyy-MM-dd") + ".xlsx").Replace(" ", "_");
 			var ostream = new MemoryStream();
 			wb.Save(ostream, FileFormatType.Excel2007Xlsx);
 

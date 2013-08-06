@@ -85,6 +85,15 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.WebControls.DropDownList ddlReportTypes;
         
         /// <summary>
+        /// chkShowNonCash control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkShowNonCash;
+        
+        /// <summary>
         /// rblFilter control.
         /// </summary>
         /// <remarks>

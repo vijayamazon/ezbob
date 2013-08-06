@@ -37,7 +37,9 @@
 						<td rowspan="2">
 							<div>
 								<asp:Label ID="Label2" runat="server" Text="Label">Select a Report:</asp:Label>
-								<asp:DropDownList ID="ddlReportTypes" runat="server"></asp:DropDownList>
+								<asp:DropDownList ID="ddlReportTypes" runat="server" AutoPostBack="True" OnSelectedIndexChanged="ddlReportTypes_OnSelectedIndexChanged"></asp:DropDownList>
+
+								<asp:CheckBox runat="server" ID="chkShowNonCash" Text="Show Non-Cash Transactions" Checked="True"/>
 							</div>
 
 							<asp:RadioButtonList ID="rblFilter" runat="server" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged"

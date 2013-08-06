@@ -19,13 +19,15 @@ namespace EzReportToEMail {
 		} // constructor
 
 		public void ExecuteReportHandler(DateTime dToday) {
-			IEnumerable<Report> reportList = GetReportsList();
+			DataTable dt = Report.LoadReportList(DB);
+
+			SortedDictionary<string, Report> reportList = GetReportsList();
 
 			DateTime dTomorrow = dToday.AddDays(1);
 
 			var sender = new BaseReportSender(this);
 
-			Parallel.ForEach<Report>(reportList, (report) => {
+			Parallel.ForEach<Report>(reportList.Values, (report) => {
 				Debug(report.Title);
 
 				switch (report.Type) {
@@ -113,14 +115,20 @@ namespace EzReportToEMail {
 				break;
 			} // switch
 
-			email.ReportBody.Append(TableReport(report.StoredProcedure, fromDate, toDate, report.Columns, false, email.Title.ToString()));
+			var rptDef = new ReportQuery(report, fromDate, toDate);
+
+			email.ReportBody.Append(TableReport(
+				rptDef,
+				false,
+				email.Title.ToString()
+			));
 
 			sender.Send(
 				report.Title,
 				email.HtmlBody,
 				report.ToEmail,
 				period,
-				XlsReport(report.StoredProcedure, fromDate, toDate, email.Title.ToString())
+				XlsReport(rptDef, email.Title.ToString())
 			);
 		} // BuildReport
 
@@ -131,16 +139,5 @@ namespace EzReportToEMail {
 		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday) {
 			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Sunday;
 		} // IsWeekly
-
-		private IEnumerable<Report> GetReportsList() {
-			DataTable dt = Report.LoadReportList(DB);
-
-			var reportList = new List<Report>();
-
-			foreach (DataRow row in dt.Rows)
-				AddReportToList(reportList, row, BaseReportSender.DefaultToEMail);
-
-			return reportList;
-		} // GetReportList
 	} // class EmailReportHandler
 } // namespace EzReportToEMail

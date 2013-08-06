@@ -39,33 +39,68 @@ namespace Reports {
 
 		#endregion constructor
 
-		#region method AddReportToList
+		#region method GetReportList
 
-		public void AddReportToList(List<Report> reportList, DataRow row, string defaultToEmail) {
-			reportList.Add(new Report(row, defaultToEmail));
-		} // AddReportToList
+		public SortedDictionary<string, Report> GetReportsList(string userName = null) {
+			var users = new List<QueryParameter>();
 
-		#endregion method AddReportToList
+			userName = (userName ?? "").Trim();
+
+			if (userName != string.Empty)
+				users.Add(new QueryParameter("@UserName", userName));
+
+			DataTable dt = DB.ExecuteReader("RptGetUserReports", users.ToArray());
+
+			var reportList = new SortedDictionary<string, Report>();
+
+			foreach (DataRow row in dt.Rows) {
+				var rpt = new Report(row, BaseReportSender.DefaultToEMail);
+
+				reportList[rpt.TypeName] = rpt;
+			} // for each
+
+			DataTable args = DB.ExecuteReader("RptScheduler_GetReportArgs");
+
+			Report oLastReport = null;
+			string sLastType = null;
+
+			foreach (DataRow row in args.Rows) {
+				string sTypeName = row["ReportType"].ToString();
+				string sArgName = row["ArgumentName"].ToString();
+
+				if (sLastType != sTypeName) {
+					if (reportList.ContainsKey(sTypeName)) {
+						sLastType = sTypeName;
+						oLastReport = reportList[sLastType];
+					}
+					else
+						continue;
+				} // if
+
+				oLastReport.AddArgument(sArgName);
+			} // for each
+
+			return reportList;
+		} // GetReportsList
+
+		#endregion method GetReportList
 
 		#region report generators
 
-		public ATag TableReport(string spName, DateTime startDate, DateTime endDate, ColumnInfo[] columns, bool isSharones = false, string RptTitle = "", List<string> oColumnTypes = null) {
+		public ATag TableReport(ReportQuery rptDef, bool isSharones = false, string sRptTitle = "", List<string> oColumnTypes = null) {
 			var tbl = new Table().Add<Class>("Report");
 
 			try {
-				DataTable dt = DB.ExecuteReader(spName,
-					new QueryParameter("@DateStart", DB.DateToString(startDate)),
-					new QueryParameter("@DateEnd", DB.DateToString(endDate))
-				);
+				DataTable dt = rptDef.Execute(DB);
 
 				if (!isSharones)
 					tbl.Add<ID>("tableReportData");
 
 				var tr = new Tr().Add<Class>("HR");
 
-				for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
-					if (columns[columnIndex].IsVisible)
-						tr.Append(new Th().Add<Class>("H").Append(new Text(columns[columnIndex].Caption)));
+				for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++)
+					if (rptDef.Columns[columnIndex].IsVisible)
+						tr.Append(new Th().Add<Class>("H").Append(new Text(rptDef.Columns[columnIndex].Caption)));
 
 				tbl.Append(new Thead().Append(tr));
 
@@ -77,7 +112,7 @@ namespace Reports {
 				if (oColumnTypes != null) {
 					oColumnTypes.Clear();
 
-					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++)
+					for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++)
 						oColumnTypes.Add("string");
 				} // if
 
@@ -87,8 +122,8 @@ namespace Reports {
 
 					List<string> oClassesToApply = new List<string>();
 
-					for (int columnIndex = 0; columnIndex < columns.Length; columnIndex++) {
-						ColumnInfo col = columns[columnIndex];
+					for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++) {
+						ColumnInfo col = rptDef.Columns[columnIndex];
 						var oValue = row[col.FieldName];
 
 						if (col.IsVisible) {
@@ -120,15 +155,15 @@ namespace Reports {
 					lineCounter++;
 				} // for each data row
 
-				var wb = AddSheetToExcel(dt, spName, RptTitle);
+				AddSheetToExcel(dt, rptDef.StoredProcedure, sRptTitle);
 			}
 			catch (Exception e) {
 				Error(e.ToString());
 			}
 
 			if (oColumnTypes != null) {
-				for (int columnIndex = columns.Length - 1; columnIndex >= 0; columnIndex--)
-					if (!columns[columnIndex].IsVisible)
+				for (int columnIndex = rptDef.Columns.Length - 1; columnIndex >= 0; columnIndex--)
+					if (!rptDef.Columns[columnIndex].IsVisible)
 						oColumnTypes.RemoveAt(columnIndex);
 			} // if
 
@@ -149,15 +184,29 @@ namespace Reports {
 		} // BuildDailyStatsReportBody
 
 		public ATag BuildInWizardReport(Report report, DateTime today, DateTime tomorrow) {
+			var rptNewClients = new ReportQuery(report) {
+				StoredProcedure = "RptNewClients",
+				DateStart = today,
+				DateEnd = tomorrow,
+				Columns = GetHeaderAndFields(ReportType.RPT_IN_WIZARD)
+			};
+
+			var rptNewClientsStep1 = new ReportQuery(report) {
+				StoredProcedure = "RptNewClientsStep1",
+				DateStart = today,
+				DateEnd = tomorrow,
+				Columns = rptNewClients.Columns
+			};
+
 			return new Html.Tags.Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today))))
 				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
 
-				.Append(new P().Append(TableReport("RptNewClients", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)))
+				.Append(new P().Append(TableReport(rptNewClients, true)))
 
 				.Append(new P().Append(new Text("Clients that just enetered their email:")))
 
-				.Append(new P().Append(TableReport("RptNewClientsStep1", today, tomorrow, GetHeaderAndFields(ReportType.RPT_IN_WIZARD), true)));
+				.Append(new P().Append(TableReport(rptNewClientsStep1, true)));
 		} // BuildInWizardReport
 
 		public ATag BuildPlainedPaymentReport(Report report, DateTime today) {
@@ -265,16 +314,12 @@ namespace Reports {
 			return wb;
 		} // BuildInWizardXls
 
-		public Workbook XlsReport(string spName, DateTime startDate, DateTime endDate, string rptTitle = "") {
+		public Workbook XlsReport(ReportQuery rptDef, string sRptTitle = "") {
 			var wb = new Workbook();
 
 			try {
-				DataTable dt = DB.ExecuteReader(spName,
-					new QueryParameter("@DateStart", DB.DateToString(startDate)),
-					new QueryParameter("@DateEnd", DB.DateToString(endDate))
-				);
-
-				wb = AddSheetToExcel(dt, rptTitle, spName, String.Empty);
+				DataTable dt = rptDef.Execute(DB);
+				wb = AddSheetToExcel(dt, sRptTitle, rptDef.StoredProcedure, String.Empty);
 			}
 			catch (Exception e) {
 				Error(e.ToString());
