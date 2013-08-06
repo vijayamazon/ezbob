@@ -8,7 +8,7 @@
         string password { get; }
         string soapServer { get; }
         string tncVersion { get; }
-        string BridgetApplicationID { get; }
+        long BridgetApplicationID { get; }
         string ApplicationKey { get; }
         string ApplicationToken { get; }
         string AddAccountURL { get; }

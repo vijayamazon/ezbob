@@ -34,9 +34,9 @@ namespace YodleeLib.config
             get { return GetValue<string>("tncVersion"); }
         }
 
-        public string BridgetApplicationID
+        public long BridgetApplicationID
         {
-            get { return GetValue<string>("BridgetApplicationID"); }
+            get { return GetValue<long>("BridgetApplicationID"); }
         }
 
         public string ApplicationKey

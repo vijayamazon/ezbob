@@ -84,7 +84,7 @@ namespace YodleeLib
         {
             oAuthAccessTokenManagementService = new OAuthAccessTokenManagementServiceService();
             oAuthAccessTokenManagementService.Url = _config.soapServer + "/OAuthAccessTokenManagementService_11_1";
-	        long? applicationId = 10003200;
+	        long? applicationId = _config.BridgetApplicationID;
 
             try
             {
