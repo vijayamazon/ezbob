@@ -214,13 +214,13 @@ h2.form_section {
 
 div.form_buttons_container { position: relative; height: 30px; }
 
+div.form_buttons_container input.confirm { position: absolute; top: 0; left: 300px; }
 div.form_buttons_container input.continue,
-div.form_buttons_container a.continue
-{ position: absolute; top: 0; left: 293px; }
+div.form_buttons_container a.continue{ position: absolute; top: 0; left: 293px; }
 
 div.form_buttons_container input.back,
-div.form_buttons_container a.back
-{ position: absolute; top: 0; left: 190px; }
+div.form_buttons_container a.back{ position: absolute; top: 0; left: 190px; }
+
 
 div.form_read_and_accept input { margin-top: -5px; }
 

@@ -8,9 +8,11 @@
 
 @section head{
     <!--prod-->
-    <base href="https://app.ezbob.com/" />
+    <!--<base href="https://app.ezbob.com/" />-->
     <!--uat-->
     <!--<base href="https://192.168.120.6:444" />-->
+    <!--local-->
+    <base href="https://localhost:44300" />
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
@@ -77,7 +79,7 @@
         <div class="pages">
             <div>
                 <div class="row-fluid">
-                    <div class="span12" style="padding-top: 16px;">
+                    <div class="pages" style="padding-top: 16px;">
                         @DashboardHeader()
                         <div class="PayPointHeader">
                             <h2>Enter your debit card details</h2>
@@ -87,7 +89,7 @@
                         <div class="error">
                             ${error_table}
                         </div>
-                        <form class="form-horizontal paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
+                        <form class="paypont-form" action="https://www.secpay.com/java-bin/ValCard" method="POST" autocomplete="off" style="margin-top: 40px;">
                             @EzForm.InputText("customer", "${customer_Text:=Name of Cardholder}", "${customer}", "text", "form_field", false, true, true, 1)
 
                             ${start_card_type}
@@ -123,25 +125,26 @@
                                 </div>
                             </div>
 
-@*                            <div>
+                            @*                            <div>
                                 <div>
                                     <p id="mandatory_text">${mandatory_Text:=Mandatory fields} <span class="mand">*</span></p>
                                 </div>
                             </div>*@
 
-                            <div>
+                            <div class="form_buttons_container">
                                 <input 
                                     type="submit"
                                     name="accept" 
                                     value="Confirm" 
-                                    class="submit pull-right button orange disabled" tabindex="6" />
+                                    class="submit pull-right button orange disabled confirm" tabindex="6" />
                                 
-                                <a href="#"class="button grey pull-right">Back</a>
+                                <a href="#"class="button grey pull-right back">Back</a>
                             </div>
 
                             @Hiddens()
 
                         </form>
+
                         <div id="buttons" align="center" class="span7">
                             ${other_pay}<br>
                         </div>
