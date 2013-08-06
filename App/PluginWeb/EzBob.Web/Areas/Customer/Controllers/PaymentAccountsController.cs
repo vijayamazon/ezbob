@@ -68,7 +68,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         {
             if (string.IsNullOrEmpty(verification_code) && string.IsNullOrEmpty(request_token))
             {
-                Log.InfoFormat("PayPal addin was canceled by customer");
+                Log.InfoFormat("PayPal adding was canceled by customer");
                 return View("PayPalCanceled");
             }
 
