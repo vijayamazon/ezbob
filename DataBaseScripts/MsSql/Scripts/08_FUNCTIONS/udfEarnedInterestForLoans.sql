@@ -69,9 +69,7 @@ BEGIN
 
 	--------------------------------------------------------
 	--
-	-- Ok, let's
-go
-to work!
+	-- Ok, let's go to work!
 	-- Who the fuck are you?!
 	-- The workaholic!
 	--

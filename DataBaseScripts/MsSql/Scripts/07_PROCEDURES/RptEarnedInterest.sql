@@ -52,9 +52,9 @@ BEGIN
 			AND t.Type = 'PaypointTransaction'
 			AND t.Status = 'Done'
 	GROUP BY
-		l.IssueDate,
+		l.Date,
 		c.Id,
-		l.LoanID,
+		l.ID,
 		c.Fullname,
 		c.Name,
 		i.EarnedInterest,
