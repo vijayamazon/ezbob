@@ -313,9 +313,19 @@ namespace EzBob.Web.Controllers
             }
             try
             {
+                var customerIp = Request.ServerVariables["REMOTE_ADDR"];
                 SignUpInternal(model, signupPass1, signupPass2, securityQuestion);
                 FormsAuthentication.SetAuthCookie(model.EMail, false);
 
+                var user = _users.GetUserByLogin(model.EMail);
+                _sessionIpLog.AddSessionIpLog(new CustomerSession()
+                            {
+                                CustomerId = user.Id,
+                                StartSession = DateTime.Now,
+                                Ip = customerIp,
+                                IsPasswdOk = true,
+                                ErrorMessage = "Registration"
+                            });
                 return this.JsonNet(new { success = true });
             }
             catch (Exception e)
