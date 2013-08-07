@@ -33,7 +33,7 @@ namespace EzBob.Web.Controllers
     public class AccountController : Controller
     {
 
-        private static readonly ILog _log = log4net.LogManager.GetLogger(typeof(AccountController));
+        private static readonly ILog _log = LogManager.GetLogger(typeof(AccountController));
         private readonly MembershipProvider _membershipProvider;
         private readonly IUsersRepository _users;
         private readonly CustomerRepository _customers;
@@ -44,7 +44,8 @@ namespace EzBob.Web.Controllers
         private readonly IEmailConfirmation _confirmation;
         private readonly IZohoFacade _zoho;
         private readonly ICustomerSessionsRepository _sessionIpLog;
-
+		private readonly ITestCustomerRepository _testCustomers;
+		private readonly IConfigurationVariablesRepository _configurationVariables;
         //------------------------------------------------------------------------
         public AccountController(
                                     MembershipProvider membershipProvider,
@@ -56,7 +57,9 @@ namespace EzBob.Web.Controllers
                                     IEzbobWorkplaceContext context,
                                     IEmailConfirmation confirmation,
                                     IZohoFacade zoho,
-                                    ICustomerSessionsRepository sessionIpLog
+                                    ICustomerSessionsRepository sessionIpLog,
+                                    ITestCustomerRepository testCustomers,
+                                    IConfigurationVariablesRepository configurationVariables
             )
         {
             _membershipProvider = membershipProvider;
@@ -69,6 +72,8 @@ namespace EzBob.Web.Controllers
             _confirmation = confirmation;
             _zoho = zoho;
             _sessionIpLog = sessionIpLog;
+			_testCustomers = testCustomers;
+			_configurationVariables = configurationVariables;
         }
         //------------------------------------------------------------------------
         [IsSuccessfullyRegisteredFilter]
@@ -178,7 +183,7 @@ namespace EzBob.Web.Controllers
                         var customer = _customers.Get(user.Id);
                         if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Disabled)
                         {
-							errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
+                            errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
                             _sessionIpLog.AddSessionIpLog(new CustomerSession()
                             {
                                 CustomerId = user.Id,
@@ -372,13 +377,15 @@ namespace EzBob.Web.Controllers
             {
                 var user = _users.GetUserByLogin(model.EMail);
                 var g = new RefNumberGenerator(_customers);
+                var isAutomaticTest = IsAutomaticTest(model.EMail);
                 var customer = new Customer()
                 {
                     Name = model.EMail,
                     Id = user.Id,
                     Status = Status.Registered,
                     RefNumber = g.GenerateForCustomer(),
-                    WizardStep = WizardStepType.SignUp
+                    WizardStep = WizardStepType.SignUp,
+					IsTest = isAutomaticTest,
                 };
 
                 var sourceref = Request.Cookies["sourceref"];
@@ -414,6 +421,22 @@ namespace EzBob.Web.Controllers
                 throw new Exception("This email is already registered");
             }
         }
+
+		private bool IsAutomaticTest(string email)
+		{
+			bool isAutomaticTest = false;
+			var isAutomaticTestCustomerMark = _configurationVariables.GetByName("AutomaticTestCustomerMark");
+			if (isAutomaticTestCustomerMark.Value == "1")
+			{
+				var patterns = _testCustomers.GetAllPatterns();
+				if (patterns.Any(pattern => email.Contains(pattern)))
+				{
+					isAutomaticTest = true;
+				}
+			}
+
+			return isAutomaticTest;
+		}
 
         //------------------------------------------------------------------------        
         public ActionResult ForgotPassword()

@@ -146,6 +146,7 @@ namespace EzBob.Web.Infrastructure
             For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
             For<IMail>().Use<Mail>();
             For<ICustomerSessionsRepository>().Use<CustomerSessionsRepository>();
+			For<ITestCustomerRepository>().Use<TestCustomerRepository>();
         }
     }
 }
