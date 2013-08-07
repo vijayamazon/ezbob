@@ -1,10 +1,13 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExecutive]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptExecutive]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptExecutive]
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 CREATE PROCEDURE RptExecutive
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -14,18 +17,40 @@ BEGIN
 		@DateStart = CONVERT(DATE, @DateStart),
 		@DateEnd = CONVERT(DATE, @DateEnd)
 
+	------------------------------------------------------------------------------
+
+	DECLARE @TotalGivenLoanCountClose NUMERIC(18, 2)
+	DECLARE @TotalGivenLoanValueClose NUMERIC(18, 2)
+	DECLARE @TotalRepaidPrincipalClose NUMERIC(18, 2)
+
+	DECLARE @PACNET NVARCHAR(32) = 'PacnetTransaction'
+	DECLARE @PAYPOINT NVARCHAR(32) = 'PaypointTransaction'
+	DECLARE @DONE NVARCHAR(4) = 'Done'
+	DECLARE @Indent NVARCHAR(48) = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	CREATE TABLE #out (
 		SortOrder INT IDENTITY(1, 1) NOT NULL,
 		Caption NVARCHAR(300) NOT NULL,
-		Number INT NULL,
-		Amount DECIMAL(18, 2) NULL,
-		Principal DECIMAL(18, 2) NULL,
-		Interest DECIMAL(18, 2) NULL,
-		Fees DECIMAL(18, 2) NULL,
+		Number SQL_VARIANT,    -- INT
+		Amount SQL_VARIANT,    -- DECIMAL(18, 2)
+		Principal SQL_VARIANT, -- DECIMAL(18, 2)
+		Interest SQL_VARIANT,  -- DECIMAL(18, 2)
+		Fees SQL_VARIANT,      -- DECIMAL(18, 2)
 		Css NVARCHAR(256) NULL
 	)
 
-	INSERT INTO #out(Caption, Css) VALUES ('Visitors', 'total')
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Visitors', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		0 AS SortOrder,
@@ -37,6 +62,8 @@ BEGIN
 	WHERE
 		1 = 0
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #t (SortOrder, Name) VALUES (1, 'UKVisitors')
 	INSERT INTO #t (SortOrder, Name) VALUES (2, 'ReturningVisitors')
 	INSERT INTO #t (SortOrder, Name) VALUES (3, 'NewVisitors')
@@ -44,6 +71,8 @@ BEGIN
 	INSERT INTO #t (SortOrder, Name) VALUES (5, 'PageLogon')
 	INSERT INTO #t (SortOrder, Name) VALUES (6, 'PagePacnet')
 	INSERT INTO #t (SortOrder, Name) VALUES (7, 'PageGetCash')
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
@@ -65,7 +94,14 @@ BEGIN
 
 	DROP TABLE #t
 
-	INSERT INTO #out(Caption, Css) VALUES ('Funnel', 'total')
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Funnel', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
@@ -78,6 +114,8 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Entered data source',
@@ -89,6 +127,8 @@ BEGIN
 		c.IsTest = 0
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
@@ -103,6 +143,8 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Approved',
@@ -116,6 +158,8 @@ BEGIN
 		c.IsTest = 0
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number)
 	SELECT
@@ -138,6 +182,8 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number)
 	SELECT
 		'Pending',
@@ -157,7 +203,86 @@ BEGIN
 		AND
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 
-	INSERT INTO #out(Caption, Css) VALUES ('Issued Loans', 'total')
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Daily Approvals', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		r.IdCustomer AS CustomerID,
+		ISNULL(COUNT(DISTINCT r.Id), 0) AS RequestCount,
+		ISNULL(MAX(r.ManagerApprovedSum), 0) AS MaxApprovedSum,
+		CONVERT(INT, 0) AS OldRequestCount
+	INTO
+		#cr
+	FROM
+		CashRequests r
+		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+	WHERE
+		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
+	GROUP BY
+		r.IdCustomer
+
+	------------------------------------------------------------------------------
+
+	UPDATE #cr SET
+		OldRequestCount = ISNULL((
+			SELECT COUNT(DISTINCT Id)
+			FROM CashRequests old
+			WHERE old.IdCustomer = #cr.CustomerID
+			AND old.UnderwriterDecisionDate < @DateStart
+		), 0)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount)
+	SELECT
+		'Total',
+		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(MaxApprovedSum), 0)
+	FROM
+		#cr
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount)
+	SELECT
+		'New',
+		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(MaxApprovedSum), 0)
+	FROM
+		#cr
+	WHERE
+		OldRequestCount = 0
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount)
+	SELECT
+		'Old',
+		ISNULL(COUNT(DISTINCT CustomerID), 0),
+		ISNULL(SUM(MaxApprovedSum), 0)
+	FROM
+		#cr
+	WHERE
+		OldRequestCount != 0
+
+	------------------------------------------------------------------------------
+
+	DROP TABLE #cr
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Issued Loans', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
 
 	CREATE TABLE #l (
 		LoanID INT,
@@ -166,6 +291,8 @@ BEGIN
 		PreviousLoansCount INT,
 		PaidOffLoansCount INT
 	)
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #l (LoanID, CustomerID, LoanAmount, PreviousLoansCount, PaidOffLoansCount)
 	SELECT
@@ -182,6 +309,8 @@ BEGIN
 		AND
 		@DateStart <= l.Date AND l.Date < @DateEnd
 
+	------------------------------------------------------------------------------
+
 	UPDATE #l SET
 		PreviousLoansCount = (
 			SELECT ISNULL(COUNT(*), 0)
@@ -189,6 +318,8 @@ BEGIN
 			WHERE #l.CustomerID = l.CustomerId
 			AND #l.LoanID > l.Id
 		)
+
+	------------------------------------------------------------------------------
 
 	UPDATE #l SET
 		PaidOffLoansCount = (
@@ -199,6 +330,8 @@ BEGIN
 			AND l.Status = 'PaidOff'
 		)
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Total',
@@ -207,9 +340,11 @@ BEGIN
 	FROM
 		#l
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
-		'New loans',
+		@Indent + 'New loans',
 		ISNULL(COUNT(*), 0),
 		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
 	FROM
@@ -217,9 +352,11 @@ BEGIN
 	WHERE
 		PreviousLoansCount = 0
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
-		'Existing loans',
+		@Indent + 'Existing loans',
 		ISNULL(COUNT(*), 0),
 		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
 	FROM
@@ -227,9 +364,11 @@ BEGIN
 	WHERE
 		PreviousLoansCount != 0
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
-		'Existing fully paid',
+		@Indent + @Indent + 'Existing fully paid',
 		ISNULL(COUNT(*), 0),
 		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
 	FROM
@@ -239,9 +378,11 @@ BEGIN
 		AND
 		PaidOffLoansCount = PreviousLoansCount
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
-		'Existing open loans',
+		@Indent + @Indent + 'Existing open loans',
 		ISNULL(COUNT(*), 0),
 		ISNULL(SUM(ISNULL(LoanAmount, 0)), 0)
 	FROM
@@ -251,9 +392,18 @@ BEGIN
 		AND
 		PaidOffLoansCount != PreviousLoansCount
 
+	------------------------------------------------------------------------------
+
 	DROP TABLE #l
 
-	INSERT INTO #out(Caption, Css) VALUES ('Repayments', 'total')
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Repayments', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
@@ -265,12 +415,13 @@ BEGIN
 		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
 	FROM
 		LoanScheduleTransaction lst
+		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
 		INNER JOIN Loan l ON lst.LoanID = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		c.IsTest = 0
-		AND
-		@DateStart <= lst.Date AND lst.Date < @DateEnd
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
@@ -282,14 +433,15 @@ BEGIN
 		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
 	FROM
 		LoanScheduleTransaction lst
+		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
 		INNER JOIN Loan l ON lst.LoanID = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		lst.StatusAfter IN ('PaidEarly', 'StillToPay')
 		AND
-		c.IsTest = 0
-		AND
-		@DateStart <= lst.Date AND lst.Date < @DateEnd
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
@@ -301,14 +453,15 @@ BEGIN
 		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
 	FROM
 		LoanScheduleTransaction lst
+		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
 		INNER JOIN Loan l ON lst.LoanID = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		lst.StatusAfter IN ('PaidOnTime')
 		AND
-		c.IsTest = 0
-		AND
-		@DateStart <= lst.Date AND lst.Date < @DateEnd
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
@@ -320,19 +473,21 @@ BEGIN
 		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
 	FROM
 		LoanScheduleTransaction lst
+		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
 		INNER JOIN Loan l ON lst.LoanID = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		lst.StatusAfter IN ('Paid', 'Late')
 		AND
-		c.IsTest = 0
-		AND
-		@DateStart <= lst.Date AND lst.Date < @DateEnd
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
-	INSERT INTO #out (Caption, Number)
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Loans paid fully',
-		ISNULL(COUNT(DISTINCT l.Id), 0)
+		ISNULL(COUNT(DISTINCT l.Id), 0),
+		ISNULL(SUM(l.LoanAmount), 0)
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id
@@ -341,56 +496,78 @@ BEGIN
 		AND
 		@DateStart <= l.DateClosed AND l.DateClosed < @DateEnd
 
-	INSERT INTO #out(Caption, Css) VALUES ('Total book', 'total')
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #out(Caption, Number, Amount, Principal, Interest, Fees, Css)
+		VALUES ('Total Book', 'Number', 'Amount', 'Principal', 'Interest', 'Fees', 'total')
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@TotalGivenLoanCountClose = ISNULL( COUNT(DISTINCT t.LoanId), 0 ),
+		@TotalGivenLoanValueClose = ISNULL( SUM(ISNULL(t.Amount, 0)), 0 )
+	FROM
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+	WHERE
+		t.Type = @PACNET AND t.Status = @DONE
+		AND
+		t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@TotalRepaidPrincipalClose = ISNULL( SUM(ISNULL(t.LoanRepayment, 0)), 0 )
+	FROM
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+	WHERE
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Total issued loans',
-		ISNULL(COUNT(DISTINCT l.Id), 0),
-		ISNULL(SUM(ISNULL(l.LoanAmount, 0)), 0)
-	FROM
-		Customer c
-		INNER JOIN Loan l ON c.Id = l.CustomerId
-	WHERE
-		c.IsTest = 0
-		AND
-		l.Date < @DateEnd
+		@TotalGivenLoanCountClose,
+		@TotalGivenLoanValueClose
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Total repayments',
 		ISNULL(COUNT(DISTINCT t.Id), 0),
-		ISNULL(SUM(t.LoanRepayment + t.Interest + t.Fees), 0),
+		ISNULL(SUM(t.Amount), 0),
 		ISNULL(SUM(t.LoanRepayment), 0),
 		ISNULL(SUM(t.Interest), 0),
 		ISNULL(SUM(t.Fees), 0)
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id
+		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		c.IsTest = 0
-		AND
-		t.Type = 'PaypointTransaction'
-		AND
-		t.Status = 'Done'
+		t.Type = @PAYPOINT AND t.Status = @DONE
 		AND
 		t.PostDate < @DateEnd
+
+	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount)
 	SELECT
 		'Outstanding balance',
-		ISNULL(COUNT(DISTINCT l.Id), 0),
-		ISNULL(SUM(ISNULL(l.Balance, 0)), 0)
-	FROM
-		Customer c
-		INNER JOIN Loan l ON c.Id = l.CustomerId
-	WHERE
-		l.Status != 'PaidOff'
-		AND
-		c.IsTest = 0
-		AND
-		l.Date < @DateEnd
+		@TotalGivenLoanCountClose,
+		@TotalGivenLoanValueClose - @TotalRepaidPrincipalClose
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
 	SELECT
 		Caption,
@@ -404,6 +581,10 @@ BEGIN
 		#out
 	ORDER BY
 		SortOrder
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
 	DROP TABLE #out
 END

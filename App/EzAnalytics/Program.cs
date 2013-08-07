@@ -39,7 +39,7 @@ namespace EzAnalyticsConsoleClient {
 					app.Done();
 				}
 				catch (Exception ex) {
-					app.Log.Error("Error Occured!\n\nStatement:- {0}\n\nDescription:-{1}", ex.Message, ex.ToString());
+					app.Log.Error("Error Occured!\n\nStatement: {0}\n\nDescription: {1}", ex.Message, ex.ToString());
 					app.Log.Error("\nPress enter to exit");
 				} // try
 			} // if dev/non-dev env
@@ -226,10 +226,12 @@ namespace EzAnalyticsConsoleClient {
 				int nVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.visitors)]);
 				int nNewVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.newVisits)]);
 
-				if (oByCountry.ContainsKey(sCountry))
-					oByCountry[sCountry].Add(nVisitors, nNewVisitors);
-				else
-					oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
+				if (sHostName == "www.ezbob.com") {
+					if (oByCountry.ContainsKey(sCountry))
+						oByCountry[sCountry].Add(nVisitors, nNewVisitors);
+					else
+						oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
+				} // if www
 
 				PageID nPageID = GetPageID(sHostName, sPagePath);
 
@@ -238,7 +240,7 @@ namespace EzAnalyticsConsoleClient {
 						oByPage[nPageID] += nVisitors;
 					else
 						oByPage[nPageID] = nVisitors;
-				} // if
+				} // if page to follow
 
 				Log.Debug("Country: {0} visitors: {1} to {2}{3}", sCountry, nVisitors, sHostName, sPagePath);
 			} // for each package
@@ -263,7 +265,7 @@ namespace EzAnalyticsConsoleClient {
 			if (sPagePath == "/Customer/Profile/GetCash")
 				return PageID.GetCash;
 
-			if (sPagePath.StartsWith("/Customer/Profile"))
+			if (sPagePath == "/Customer/Profile")
 				return PageID.Dashboard;
 
 			return PageID.Other;

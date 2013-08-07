@@ -80,7 +80,7 @@ namespace Reconciliation {
 			template.ReportBody.Append(new H2().Append(new Text(pacnet.GetTitle(oDate))));
 
 			template.ReportBody.Append(
-				rh.TableReport(pacnet.StoredProcedure, oDate, oDate, pacnet.Columns)
+				rh.TableReport(new ReportQuery(pacnet, oDate, oDate))
 			);
 
 			oLog.Debug("Generating Paypoint report...");
@@ -88,7 +88,7 @@ namespace Reconciliation {
 			template.ReportBody.Append(new H2().Append(new Text(paypoint.GetTitle(oDate))));
 
 			template.ReportBody.Append(
-				rh.TableReport(paypoint.StoredProcedure, oDate, oDate, paypoint.Columns)
+				rh.TableReport(new ReportQuery(paypoint, oDate, oDate))
 			);
 
 			StringBuilder sTo = new StringBuilder();
