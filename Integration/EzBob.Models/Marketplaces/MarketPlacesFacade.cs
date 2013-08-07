@@ -47,7 +47,7 @@ namespace EzBob.Web.Areas.Underwriter {
                 marketplaces = marketplaces.Where(m => m.Marketplace.IsPaymentAccount == isPaymentAccount.Value).ToList();
             }
 
-            var dates = marketplaces.Select(mp =>
+            var dates = marketplaces.Where(mp => !mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal").Select(mp =>
             {
                 var builder = GetBuilder(mp);
                 builder.UpdateOriginationDate(mp);
