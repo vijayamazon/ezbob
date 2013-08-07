@@ -38,6 +38,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
+                    Width = 80,
                     DataType = TypeCode.String,
                     Data = x => x.PersonalInfo.MobilePhone
                 });
@@ -51,6 +52,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Title = false,
                     Hidden = false,
                     Fixed = false,
+                    Width = 80,
                     DataType = TypeCode.String,
                     Data = x => x.PersonalInfo.DaytimePhone
                 });
@@ -142,7 +144,7 @@ namespace EzBob.Web.Areas.Underwriter
         {
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
-                    Caption = "Approved Manually",
+                    Caption = "Approved Sum",
                     Name = "ManualAmount",
                     Index = "ManagerApprovedSum",
                     Search = true,
@@ -990,5 +992,70 @@ namespace EzBob.Web.Areas.Underwriter
                 Data = x => x.DateOfLate
             });
         }
+
+        public static void CreateManualyOfferDate(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Offer Date",
+                Name = "OfferDate",
+                Index = "OfferDate",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = true,
+                Sortable = true,
+                Width = 60,
+                DataType = TypeCode.DateTime,
+                Formatter = "dateNative",
+                Data = x => x.OfferDate
+            });
+        }
+
+        public static void CreateLatestCRMstatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "CRM status",
+                Name = "LatestCRMstatus",
+                Index = "LatestCRMstatus",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 85,
+                DataType = TypeCode.String,
+                Data = x => x.LatestCRMstatus??""
+                });
+        }
+
+        public static void CreateAmountOfInteractions(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Interactions",
+                Name = "AmountOfInteractions",
+                Index = "AmountOfInteractions",
+                Resizable = false,
+                Align = Align.Center,
+                Title = false,
+                Hidden = false,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 85,
+                DataType = TypeCode.Decimal,
+                Data = x => x.AmountOfInteractions
+            });
+        }        
+
+
+
+
     }
 }

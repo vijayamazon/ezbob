@@ -281,6 +281,25 @@ namespace EZBob.DatabaseLib.Model.Database {
                      where l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')")
                 .Not.Insert()
                 .Not.Update();
+            Map(x => x.OfferDate)
+                .Formula(
+                    @"(select MAX(l.[UnderwriterDecisionDate])from [CashRequests] l where l.IdCustomer = Id)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.LatestCRMstatus)
+                .Formula(
+                @"(SELECT ST.NAME FROM [CustomerRelations] AS CR 
+                    LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
+                    WHERE CR.CustomerId=Id)")
+                .Not.Insert()
+                .Not.Update();
+            Map(x => x.AmountOfInteractions)
+                .Formula(
+                    @"(SELECT COUNT(*) FROM [CashRequests] cr
+                    WHERE (GETUTCDATE() - CR.[CreationDate])<5
+                    and CR.IdCustomer=Id)")
+                .Not.Insert()
+                .Not.Update();
             Map(x=>x.LateAmount)
                 .Formula(@"(select ISNULL(SUM(s.[LoanRepayment]),0) from [LoanSchedule] s left join [Loan] l 
                         on l.[Id] = s.[LoanId]

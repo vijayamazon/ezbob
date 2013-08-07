@@ -46,6 +46,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRegisteredCustomers;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridPending;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
+        private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridSales;
 
         public ViewResult Index()
         {
@@ -99,6 +100,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                             ColModel = _gridLoans.RenderColModel(),
                             ColNames = _gridLoans.RenderColNames()
                         },
+                    Sales = new CustomerGridModel
+                    {
+                        Action = "Sales",
+                        ColModel = _gridSales.RenderColModel(),
+                        ColNames = _gridSales.RenderColNames()
+                    },
                     Config = _config,
                     MaxLoan = _limit.GetMaxLimit()
                 };
@@ -146,6 +153,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _gridAll = CreateColumnsAll();
             _gridLate = CreateColumnsLate();
             _gridLoans = CreateColumnsLoans();
+            _gridSales = CreateColumnsSales();
             _gridPending = CreateColumnsPending();
             _gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
             _gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
@@ -267,6 +275,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var result = new UnderwriterGridResult(_session, null, _gridLoans, settings)
             {
                 CustomizeFilter = crit => crit.Add(Restrictions.IsNotEmpty("Loans"))
+            };
+            return result;
+        }
+
+        [ValidateJsonAntiForgeryToken]
+        [Ajax]
+        [HttpGet]
+        [Transactional]
+        public UnderwriterGridResult Sales(GridSettings settings)
+        {
+            var result = new UnderwriterGridResult(_session, null, _gridSales, settings)
+            {
+                CustomizeFilter = crit => crit.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.ManagerApprovedSum > c.AmountTaken))
             };
             return result;
         }
@@ -414,6 +435,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             return gridModel;
         }
 
+        private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsSales()
+        {
+            var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+            GridHelpers.CreateIdColumn(gridModel);
+            GridHelpers.CreateEmailColumn(gridModel);
+            GridHelpers.CreateNameColumn(gridModel);
+            GridHelpers.CreatePhoneColumn(gridModel);
+            GridHelpers.CreateManualyApprovedSum(gridModel);
+            GridHelpers.CreateAmountTaken(gridModel);
+            GridHelpers.CreateManualyOfferDate(gridModel);
+            GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.CreateLatestCRMstatus(gridModel);
+            GridHelpers.CreateAmountOfInteractions(gridModel);
+            return gridModel;
+        }
         [Transactional]
         [HttpPost]
         [Ajax]

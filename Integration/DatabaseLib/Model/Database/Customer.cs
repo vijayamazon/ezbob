@@ -510,8 +510,11 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual int Delinquency { get; set; }
         public virtual DateTime? NextRepaymentDate { get; set; }
         public virtual DateTime? DateOfLate { get; set; }
+        public virtual DateTime? OfferDate { get; set; }
+        public virtual string LatestCRMstatus { get; set; }
         public virtual decimal LateAmount { get; set; }
         public virtual string  CustomerStatus { get; set; }
+        public virtual decimal AmountOfInteractions { get; set; }
 
         public virtual bool LoanForCurrentOfferIsTaken
         {
