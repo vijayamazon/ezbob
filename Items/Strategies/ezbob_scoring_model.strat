@@ -16,11 +16,11 @@
     <NodeElement Name="ezbob model" NodeId="ModelExecution31153498" />
     <NodeElement Name="EZBOB Seniority" NodeId="ConditionalAssignment60588421" />
     <NodeElement Name="Gender" NodeId="ConditionalAssignment2639534" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison51227795" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
     <NodeElement Name="has first repayment date been reached?" NodeId="ConditionalAssignment6635397" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison51227795" />
     <NodeElement Name="init new weights" NodeId="MultiAssignmentB59164922" />
     <NodeElement Name="Marital Status" NodeId="ConditionalAssignment38927140" />
     <NodeElement Name="Marketplace Seniority" NodeId="ConditionalAssignment20687433" />
@@ -34,11 +34,11 @@
     <NodeElement Name="Prev Late Payments" NodeId="DiscreteValue43878027" />
     <NodeElement Name="Recalculate weights" NodeId="MultiAssignment19990073" />
     <NodeElement Name="Script" NodeId="ScriptNode5045995" />
-    <NodeElement Name="set new weight" NodeId="Assignment3345069" />
-    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
     <NodeElement Name="set new weight" NodeId="AssignmentB32468313" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
+    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
+    <NodeElement Name="set new weight" NodeId="Assignment3345069" />
     <NodeElement Name="Start Node" NodeId="StartNode2792905" />
     <NodeElement Name="Stop Node" NodeId="StopNode25136147" />
     <NodeElement Name="update initial weights" NodeId="MultiAssignmentB18688628" />
@@ -3110,7 +3110,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>NumberOfStores</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;discreteValue&gt;&lt;expressionVariable&gt;NumberOfStores&lt;/expressionVariable&gt;&lt;expression&gt;NumberOfStores&lt;/expression&gt;&lt;cathegoryVariable&gt;ModelNumberOfStores&lt;/cathegoryVariable&gt;&lt;ranges&gt;&lt;range&gt;&lt;cathegory&gt;1-2&lt;/cathegory&gt;&lt;min&gt;1&lt;/min&gt;&lt;max&gt;2&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;range&gt;&lt;cathegory&gt;3-4&lt;/cathegory&gt;&lt;min&gt;3&lt;/min&gt;&lt;max&gt;4&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;range&gt;&lt;cathegory&gt;5+&lt;/cathegory&gt;&lt;min&gt;5&lt;/min&gt;&lt;max&gt;100500&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;/ranges&gt;&lt;/discreteValue&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;discreteValue&gt;&lt;expressionVariable&gt;NumberOfStores&lt;/expressionVariable&gt;&lt;expression&gt;NumberOfStores&lt;/expression&gt;&lt;cathegoryVariable&gt;ModelNumberOfStores&lt;/cathegoryVariable&gt;&lt;ranges&gt;&lt;range&gt;&lt;cathegory&gt;1-2&lt;/cathegory&gt;&lt;min&gt;0&lt;/min&gt;&lt;max&gt;2&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;range&gt;&lt;cathegory&gt;3-4&lt;/cathegory&gt;&lt;min&gt;3&lt;/min&gt;&lt;max&gt;4&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;range&gt;&lt;cathegory&gt;5+&lt;/cathegory&gt;&lt;min&gt;5&lt;/min&gt;&lt;max&gt;100500&lt;/max&gt;&lt;description /&gt;&lt;/range&gt;&lt;/ranges&gt;&lt;/discreteValue&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>DiscreteValue54014584</Name>
