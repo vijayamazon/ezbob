@@ -22,7 +22,7 @@ BEGIN
 		Interest NUMERIC(18, 2) NOT NULL,
 		Fees NUMERIC(18, 2) NOT NULL,
 		Rollover NUMERIC(18, 4) NOT NULL,
-		TransactionType NVARCHAR(8) NOT NULL,
+		TransactionType NVARCHAR(64) NOT NULL,
 		Description NTEXT,
 		SumMatch NVARCHAR(9) NOT NULL,
 		RowLevel NVARCHAR(5) NOT NULL
@@ -40,10 +40,7 @@ BEGIN
 		ISNULL(t.Interest, 0),
 		ISNULL(t.Fees, 0),
 		ISNULL(t.Rollover, 0),
-		CASE PaypointId
-			WHEN '--- manual ---' THEN 'Manual'
-			ELSE 'Paypoint'
-		END AS TransactionType,
+		m.Name AS TransactionType,
 		t.Description,
 		CASE
 			WHEN t.LoanRepayment + t.Interest + t.Fees + t.Rollover = t.Amount
@@ -66,9 +63,11 @@ BEGIN
 		t.Type = 'PaypointTransaction'
 		AND
 		(
+			@ShowNonCashTransactions IS NULL
+			OR
 			(@ShowNonCashTransactions = 0 AND m.Name != 'Non-Cash')
 			OR
-			@ShowNonCashTransactions != 0
+			@ShowNonCashTransactions = 1
 		)
 
 	INSERT INTO #t
