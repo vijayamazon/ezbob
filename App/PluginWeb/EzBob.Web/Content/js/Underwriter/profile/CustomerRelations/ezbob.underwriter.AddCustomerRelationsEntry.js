@@ -59,8 +59,8 @@
       that = this;
       xhr = $.post("" + window.gRootPath + "Underwriter/CustomerRelations/SaveEntry/", {
         isIncoming: $('#Incoming_I')[0].checked,
-        action: $('#Action')[0].selectedIndex,
-        status: $('#Status')[0].selectedIndex,
+        action: $('#Action')[0].value,
+        status: $('#Status')[0].value,
         comment: $('#Comment').val(),
         customerId: this.mainTab.model.customerId
       });
