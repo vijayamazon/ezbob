@@ -20,31 +20,49 @@
         };
     </script>
     <style>
-            .error h3
-            {
-                font-size: 14px;
-                margin-bottom: 0px;
-                color: red;
-            }
+        .error h3 {
+            font-size: 14px;
+            margin-bottom: 0px;
+            color: red;
+        }
 
-        .paypont-form .control-label
-        {
+        .paypont-form .control-label {
             font-weight: normal;
         }
 
-        body header + .inner, .main-page
-        {
+        body header + .inner, .main-page {
             margin: 0 auto !important;
         }
 
-        select
-        {
+        select {
             height: 30px !important;
         }
 
-        .dashboard-steps
-        {
+        .dashboard-steps {
             background-image: none !important;
+        }
+
+        #paypal {
+            margin: 5px auto;
+            clear: both;
+            text-align: left;
+        }
+
+        #container p {
+            float: left;
+            font-size: 12pt;
+        }
+
+        #paypal_table {
+            width: 50%;
+        }
+
+        #paypal_button {
+            text-align: right;
+        }
+
+        #paypal_link {
+            text-align: center;
         }
     </style>
 }
@@ -161,23 +179,20 @@
                 <div class="span12">
                     <hr>
                     ${paypal:=<table id="paypal_table">
-                                  <tbody>
-                                      <tr>
-                                          <td id="paypal_text">
-                                              <p>Pay with PayPal</p>
-                                          </td>
-                                          <td id="paypal_link">
-                                              <a href="javascript:PPHelp()">What is PayPal?</a>
-                                          </td>
-                                          <td id="paypal_button">
-                                              <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" 
-                                                     value="PayByPayPal" name="paypal_transaction"/>
-                                          </td>
-                                      </tr>
-                                  </tbody>
-                              </table>
-                    <hr id="paypal_line">
+                                  <tr>
+                                      <td id="paypal_text">
+                                          <p>Pay with PayPal</p>
+                                      </td>
+                                      <td id="paypal_link">
+                                          <a href="javascript:PPHelp()">What is PayPal?</a>
+                                      </td>
+                                      <td id="paypal_button">
+                                          <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_xpressCheckout_nosub.gif" value="PayByPayPal" name="paypal_transaction">
+                                      </td>
+                                  </tr>
+                              </table><hr id="paypal_line">
                     }
+
                     <div id="secure">
                         <table border="0" width="100%" class="secure_table">
                             <tbody>
@@ -213,7 +228,11 @@
 
 @section Js{
     <script type="text/javascript">
-        $(document).ready(function() {
+        function PPHelp() {
+            helpwindow = window.open('https://www.paypal.com/uk/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside', 'olcwhatispaypal', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=400, height=350');
+        }
+
+        $(document).ready(function () {
             var oFieldStatusIcons = $('img.field_status');
             oFieldStatusIcons.filter('.required').field_status({ required: true });
             oFieldStatusIcons.not('.required').field_status({ required: false });
@@ -246,7 +265,7 @@
 
         ;
 
-        $(function() {
+        $(function () {
             $('form').attr('action', document.location.href);
             var amount = $('.amount').val();
             var isPayEarly = amount != 5;
@@ -284,7 +303,7 @@
 
             $('li[rel]').popover({ placement: 'left' });
 
-            $('input[name="back"]').click(function() {
+            $('input[name="back"]').click(function () {
                 history.go(-1);
             });
 
@@ -292,7 +311,7 @@
             contactUs.template = $(".contactUs").html();
             contactUs.render();
 
-            $('input[type="submit"]').click(function(e) {
+            $('input[type="submit"]').click(function (e) {
                 if (EzBob.Validation.checkForm(validator)) {
                     if (!isTest) {
                         _gaq.push(['_trackEvent', 'Bank/Card Details', 'Process Loan', 'Get Cash']);
@@ -306,7 +325,7 @@
                 return false;
             });
 
-            $('input[type="text"]').change(function(e) {
+            $('input[type="text"]').change(function (e) {
                 return inputChanged(validator);
             });
             $('input[type="text"]').keyup(function (e) {
@@ -318,13 +337,13 @@
             $('input[type="password"]').keyup(function (e) {
                 return inputChanged(validator);
             });
-            $('select').change(function(e) {
+            $('select').change(function (e) {
                 return inputChanged(validator);
             });
-            $('select').keyup(function(e) {
+            $('select').keyup(function (e) {
                 return inputChanged(validator);
             });
-            $('select').click(function(e) {
+            $('select').click(function (e) {
                 return inputChanged(validator);
             });
 
@@ -337,31 +356,31 @@
                     card_type: { required: true }
                 },
                 messages: {
-                    card_no: {digits: "Please enter a valid credit card number"}
+                    card_no: { digits: "Please enter a valid credit card number" }
                 },
-            errorPlacement: EzBob.Validation.errorPlacement,
-            unhighlight:
-            EzBob.Validation.unhighlightFS,
-            highlight:
-            EzBob.Validation.highlightFS
-        });
+                errorPlacement: EzBob.Validation.errorPlacement,
+                unhighlight:
+                    EzBob.Validation.unhighlightFS,
+                highlight:
+                    EzBob.Validation.highlightFS
+            });
 
-        $.validator.addMethod(
-            "validateLastDateOfPayment", function(value, element, date) {
-                date = $.browser.msie ? date._d : date;
-                var expirydate = moment(value, "MM/YY");
-                var res = expirydate >= date;
-                return res;
-            }, "Debit card expires before the loan term. Please use another card."
-        );
+            $.validator.addMethod(
+                "validateLastDateOfPayment", function (value, element, date) {
+                    date = $.browser.msie ? date._d : date;
+                    var expirydate = moment(value, "MM/YY");
+                    var res = expirydate >= date;
+                    return res;
+                }, "Debit card expires before the loan term. Please use another card."
+            );
         });
     </script>
     <script type="text/javascript">
         adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
         adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
-        (function() {
+        (function () {
             var oldonload = window.onload;
-            window.onload = function() {
+            window.onload = function () {
                 __adroll_loaded = true;
                 var scr = document.createElement("script");
                 var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
@@ -438,7 +457,8 @@
           <input type="hidden" name="usercallback" value="${usercallback}">
           <input type="hidden" name="token" value="${token}">
           <input type="hidden" name="error_table">
-          <input type="hidden" name="error_list"></text>
+          <input type="hidden" name="error_list">
+          <input type="hidden" name="ssl_cb" value="true"></text>
 }
 
 
