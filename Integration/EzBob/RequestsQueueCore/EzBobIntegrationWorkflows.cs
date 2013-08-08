@@ -36,7 +36,7 @@ namespace EzBob.RequestsQueueCore
 
 			foreach (IMarketplaceType mp in mpList)
 			{
-				var list = helper.GetCustomerMarketPlaceList( customer, mp );
+				var list = helper.GetEnabledCustomerMarketPlaceList( customer, mp );
 
 				if ( list != null && list.Any() )
 				{

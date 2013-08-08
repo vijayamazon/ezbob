@@ -175,6 +175,18 @@ namespace EZBob.DatabaseLib
 			return data.Select(cm => CreateDatabaseCustomerMarketPlace(customer, databaseMarketplace, cm, cm.Id)).ToList();
 		}
 
+		public IEnumerable<IDatabaseCustomerMarketPlace> GetEnabledCustomerMarketPlaceList(Customer customer, IMarketplaceType databaseMarketplace)
+		{
+			MP_MarketplaceType marketplaceType = GetMarketPlace(databaseMarketplace);
+
+			var data = _CustomerMarketplaceRepository.Get(customer, marketplaceType);
+
+			return
+				data.Select(cm => CreateDatabaseCustomerMarketPlace(customer, databaseMarketplace, cm, cm.Id))
+				    .Where(mp => !mp.Disabled)
+				    .ToList();
+		}
+
 		public MP_CustomerMarketPlace GetCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			return GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -2761,6 +2773,8 @@ namespace EZBob.DatabaseLib
 				};
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
 		}
+
+		
 	}
 
 	public class eBayFindOrderItemInfoData
