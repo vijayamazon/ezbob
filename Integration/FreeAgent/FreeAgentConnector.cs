@@ -237,6 +237,7 @@
 							{
 								return deserializedResponse;
 							}
+							log.ErrorFormat("Failed parsing access token. Request:{0} Response:{1}", request.RequestUri, objText);
 							throw new Exception("Failed getting token but parsing didn't threw exception"); 
 						}
 					}
@@ -275,6 +276,7 @@
 								deserializedResponse.refresh_token = refreshToken;
 								return deserializedResponse;
 							}
+							log.ErrorFormat("Failed refreshing access token. Request:{0} Response:{1}", request.RequestUri, objText);
 							throw new Exception("Failed refreshing token but parsing didn't threw exception");
 						}
 					}
