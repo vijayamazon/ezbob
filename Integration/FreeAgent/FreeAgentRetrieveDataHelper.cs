@@ -38,6 +38,11 @@
 				log.Info("Starting to refresh access token");
 				var tokenContainer = FreeAgentConnector.RefreshToken(freeAgentSecurityInfo.RefreshToken);
 
+				if (tokenContainer == null)
+				{
+					throw new Exception("Failed refreshing the access token");
+				}
+
 				log.Info("Received new access token, will save it to DB");
 				var securityData = new FreeAgentSecurityInfo
 				{
@@ -77,7 +82,7 @@
 			FreeAgentCompany freeAgentCompany = FreeAgentConnector.GetCompany(accessToken);
 
 			log.Info("Getting users...");
-			FreeAgentUsersList freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
+			List<FreeAgentUsers> freeAgentUsers = FreeAgentConnector.GetUsers(accessToken);
 			
             var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -108,7 +113,10 @@
 					log.InfoFormat("Getting expenses category:{0}", expense.category);
 					expense.categoryItem = FreeAgentConnector.GetExpenseCategory(accessToken, expense.category);
 					expense.categoryItem.Id = Helper.AddExpenseCategory(expense.categoryItem);
-					expenseCategories.Add(expense.categoryItem.url, expense.categoryItem);
+					if (!expenseCategories.ContainsKey(expense.categoryItem.url))
+					{
+						expenseCategories.Add(expense.categoryItem.url, expense.categoryItem);
+					}
 				}
 			}
 		}
@@ -193,14 +201,14 @@
 				() => Helper.StoreFreeAgentCompanyData(mpFreeAgentCompany));
 		}
 
-		private void StoreUsersData(MP_FreeAgentRequest mpRequest, FreeAgentUsersList freeAgentUsers, ElapsedTimeInfo elapsedTimeInfo)
+		private void StoreUsersData(MP_FreeAgentRequest mpRequest, List<FreeAgentUsers> freeAgentUsers, ElapsedTimeInfo elapsedTimeInfo)
 		{
 			if (mpRequest == null) return;
 
-			log.InfoFormat("Saving {0} user(s) in DB...", freeAgentUsers.Users.Count);
+			log.InfoFormat("Saving {0} user(s) in DB...", freeAgentUsers.Count);
 
 			var mpFreeAgentUsersList = new List<MP_FreeAgentUsers>();
-			foreach (FreeAgentUsers user in freeAgentUsers.Users)
+			foreach (FreeAgentUsers user in freeAgentUsers)
 			{
 				var mpFreeAgentUsers = new MP_FreeAgentUsers
 					{

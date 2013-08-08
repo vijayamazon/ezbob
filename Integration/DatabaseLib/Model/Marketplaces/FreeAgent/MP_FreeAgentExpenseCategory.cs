@@ -1,6 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 {
 	using ApplicationMng.Repository;
+	using DatabaseWrapper.Order;
 	using NHibernate;
 
 	public class MP_FreeAgentExpenseCategory
@@ -25,6 +26,20 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 		public MP_FreeAgentExpenseCategoryRepository(ISession session)
 			: base(session)
 		{
+		}
+
+		public MP_FreeAgentExpenseCategory GetSimilarCategory(FreeAgentExpenseCategory category)
+		{
+			return _session
+					.QueryOver<MP_FreeAgentExpenseCategory>()
+					.Where(c => c.allowable_for_tax == category.allowable_for_tax &&
+							    c.auto_sales_tax_rate == category.auto_sales_tax_rate &&
+							    c.category_group == category.category_group &&
+							    c.description == category.description &&
+							    c.nominal_code == category.nominal_code &&
+							    c.tax_reporting_name == category.tax_reporting_name &&
+							    c.url == category.url)
+					.SingleOrDefault();
 		}
 	}
 }

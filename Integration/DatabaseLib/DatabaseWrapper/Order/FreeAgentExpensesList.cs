@@ -102,8 +102,13 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 					general_categories.category_group = "general_categories";
 					return general_categories;
 				}
-				cost_of_sales_categories.category_group = "cost_of_sales_categories";
-				return cost_of_sales_categories;
+				if (cost_of_sales_categories != null)
+				{
+					cost_of_sales_categories.category_group = "cost_of_sales_categories";
+					return cost_of_sales_categories;
+				}
+
+				return null;
 			}
 		}
 	}

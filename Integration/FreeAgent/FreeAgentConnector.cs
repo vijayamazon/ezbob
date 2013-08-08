@@ -28,7 +28,17 @@
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
 
-			var invoices = new List<FreeAgentInvoice>(((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper))).Invoices);
+			var invoices = new List<FreeAgentInvoice>();
+			var deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
+			if (deserializedResponse.Invoices != null)
+			{
+				invoices.AddRange(deserializedResponse.Invoices);
+			}
+			else
+			{
+				log.ErrorFormat("Failed parsing invoices. Request:{0} Response:{1}", request.Resource, response.Content);
+			}
+
 			string nextUrl = GetNextUrl(response);
 
 			while (nextUrl != null)
@@ -43,8 +53,15 @@
 				request.AddHeader("Authorization", "Bearer " + accessToken);
 				response = client.Execute(request);
 
-				var invoicesList = (InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper));
-				invoices.AddRange(invoicesList.Invoices);
+				deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
+				if (deserializedResponse.Invoices != null)
+				{
+					invoices.AddRange(deserializedResponse.Invoices);
+				}
+				else
+				{
+					log.ErrorFormat("Failed parsing invoices. Request:{0} Response:{1}", request.Resource, response.Content);
+				}
 
 				nextUrl = GetNextUrl(response);
 			}
@@ -62,11 +79,23 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var freeAgentCompany = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
-			return freeAgentCompany.Company;
+			var deserializedResponse = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
+			if (deserializedResponse.Company != null)
+			{
+				return deserializedResponse.Company;
+			}
+
+			log.ErrorFormat("Failed parsing company. Request:{0} Response:{1}", request.Resource, response.Content);
+			return new FreeAgentCompany
+				{
+					company_start_date = new DateTime(1900, 1, 1),
+					freeagent_start_date = new DateTime(1900, 1, 1),
+					first_accounting_year_end = new DateTime(1900, 1, 1),
+					name = "Can't get company's name"
+				};
 		}
 
-		public static FreeAgentUsersList GetUsers(string accessToken)
+		public static List<FreeAgentUsers> GetUsers(string accessToken)
 		{
 			var request = new RestRequest(Method.GET) { Resource = config.UsersRequest };
 			request.AddHeader("Authorization", "Bearer " + accessToken);
@@ -75,9 +104,15 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
+			
+			var deserializedResponse = (FreeAgentUsersList)js.Deserialize(response.Content, typeof(FreeAgentUsersList));
+			if (deserializedResponse.Users != null)
+			{
+				return deserializedResponse.Users;
+			}
 
-			var freeAgentUsers = (FreeAgentUsersList)js.Deserialize(response.Content, typeof(FreeAgentUsersList));
-			return freeAgentUsers;
+			log.ErrorFormat("Failed parsing users. Request:{0} Response:{1}", request.Resource, response.Content);
+			return new List<FreeAgentUsers>();
 		}
 
 		public static FreeAgentExpensesList GetExpenses(string accessToken, DateTime? fromDate)
@@ -91,7 +126,17 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var expenses = new List<FreeAgentExpense>(((ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper))).Expenses);
+			var expenses = new List<FreeAgentExpense>();
+			var deserializedResponse = (((ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper))));
+			if (deserializedResponse.Expenses != null)
+			{
+				expenses.AddRange(deserializedResponse.Expenses);
+			}
+			else
+			{
+				log.ErrorFormat("Failed parsing expenses. Request:{0} Response:{1}", request.Resource, response.Content);
+			}
+			
 			string nextUrl = GetNextUrl(response);
 			
 			while (nextUrl != null)
@@ -100,14 +145,41 @@
 				request.AddHeader("Authorization", "Bearer " + accessToken);
 				response = client.Execute(request);
 
-				var expensesList = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
-				expenses.AddRange(expensesList.Expenses);
+				deserializedResponse = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
+				if (deserializedResponse.Expenses != null)
+				{
+					expenses.AddRange(deserializedResponse.Expenses);
+				}
+				else
+				{
+					log.ErrorFormat("Failed parsing expenses. Request:{0} Response:{1}", request.Resource, response.Content);
+				}
 
 				nextUrl = GetNextUrl(response);
 			}
 
 			var freeAgentExpenesList = new FreeAgentExpensesList(DateTime.UtcNow, expenses);
 			return freeAgentExpenesList;
+		}
+
+		public static FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl)
+		{
+			var request = new RestRequest(Method.GET) { Resource = categoryUrl };
+			request.AddHeader("Authorization", "Bearer " + accessToken);
+
+			var client = new RestClient();
+
+			IRestResponse response = client.Execute(request);
+			var js = new JavaScriptSerializer();
+
+			var deserializedResponse = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
+			if (deserializedResponse.Category != null)
+			{
+				return deserializedResponse.Category;
+			}
+			
+			log.ErrorFormat("Failed parsing category. Request:{0} Response:{1}", request.Resource, response.Content);
+			return new FreeAgentExpenseCategory {url = string.Empty};
 		}
 
 		private static string GetNextUrl(IRestResponse response)
@@ -136,19 +208,6 @@
 			}
 			return null;
 		}
-
-		public static FreeAgentExpenseCategory GetExpenseCategory(string accessToken, string categoryUrl)
-		{
-			var request = new RestRequest(Method.GET) { Resource = categoryUrl };
-			request.AddHeader("Authorization", "Bearer " + accessToken);
-
-			var client = new RestClient();
-
-			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
-			var expenseCategories = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
-			return expenseCategories.Category;
-		}
 		
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage)
 		{
@@ -171,7 +230,14 @@
 						{
 							var js = new JavaScriptSerializer();
 							var objText = reader.ReadToEnd();
-							return (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
+
+							var deserializedResponse = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
+							deserializedResponse.access_token = null;
+							if (deserializedResponse.access_token != null)
+							{
+								return deserializedResponse;
+							}
+							throw new Exception("Failed getting token but parsing didn't threw exception"); 
 						}
 					}
 				}
@@ -202,9 +268,14 @@
 						{
 							var js = new JavaScriptSerializer();
 							var objText = reader.ReadToEnd();
-							var a = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
-							a.refresh_token = refreshToken;
-							return a;
+
+							var deserializedResponse = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
+							if (deserializedResponse.access_token != null)
+							{
+								deserializedResponse.refresh_token = refreshToken;
+								return deserializedResponse;
+							}
+							throw new Exception("Failed refreshing token but parsing didn't threw exception");
 						}
 					}
 				}

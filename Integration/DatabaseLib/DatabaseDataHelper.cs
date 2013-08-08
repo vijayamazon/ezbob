@@ -2742,7 +2742,14 @@ namespace EZBob.DatabaseLib
 
 		public int AddExpenseCategory(FreeAgentExpenseCategory category)
 		{
-			var dbCategory = new MP_FreeAgentExpenseCategory
+			MP_FreeAgentExpenseCategory dbCategory = _FreeAgentExpenseCategoryRepository.GetSimilarCategory(category);
+
+			if (dbCategory != null)
+			{
+				return dbCategory.Id;
+			}
+
+			dbCategory = new MP_FreeAgentExpenseCategory
 				{
 					category_group = category.category_group,
 					url = category.url,
