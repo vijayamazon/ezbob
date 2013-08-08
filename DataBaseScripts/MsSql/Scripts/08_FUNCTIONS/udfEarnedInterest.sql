@@ -24,14 +24,14 @@ BEGIN
 	FROM
 		Loan
 	WHERE
-		@DateStart <= Date AND Date < @DateEnd
+		Date < @DateEnd
 	UNION
 	SELECT DISTINCT
 		LoanId
 	FROM
 		LoanSchedule
 	WHERE
-		@DateStart <= Date AND Date < @DateEnd
+		@DateStart <= Date
 
 	INSERT INTO @earned_interest
 	SELECT

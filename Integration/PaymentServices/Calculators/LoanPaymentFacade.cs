@@ -55,12 +55,9 @@ namespace PaymentServices.Calculators
             
             loan.AddTransaction(transactionItem);
 
-			var deltas = new List<InstallmentDelta>();
+	        IEnumerable<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst));
 
-			foreach (LoanScheduleItem inst in loan.Schedule)
-				deltas.Add(new InstallmentDelta(inst));
-
-            var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
+	        var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
             calculator.RecalculateSchedule();
 
             if (_historyRepository != null)

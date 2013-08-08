@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptLoansGiven]
 GO
 SET ANSI_NULLS ON
@@ -22,6 +22,7 @@ BEGIN
 		Period INT NOT NULL,
 		PlannedInterest NUMERIC(38, 2) NOT NULL,
 		PlannedRepaid NUMERIC(38, 2) NOT NULL,
+		TotalPrincipalRepaid NUMERIC(38, 2) NOT NULL,
 		TotalInterestRepaid NUMERIC(38, 2) NOT NULL,
 		EarnedInterest NUMERIC(38, 2) NOT NULL,
 		ExpectedInterest NUMERIC(38, 2) NOT NULL,
@@ -52,6 +53,7 @@ BEGIN
 		s.Period,
 		s.PlannedInterest,
 		s.PlannedRepaid,
+		ISNULL(pay.TotalPrincipalRepaid, 0) AS TotalPrincipalRepaid,
 		ISNULL(pay.TotalInterestRepaid, 0) AS TotalInterestRepaid,
 		0 AS EarnedInterest,
 		ISNULL(exi.ExpectedInterest, 0) AS ExpectedInterest,
@@ -118,6 +120,7 @@ BEGIN
 		LEFT JOIN (
 			SELECT
 				t.LoanId,
+				SUM(t.LoanRepayment) AS TotalPrincipalRepaid,
 				SUM(t.Interest) AS TotalInterestRepaid
 			FROM
 				LoanTransaction t
@@ -203,6 +206,7 @@ BEGIN
 		ISNULL(AVG(Period), 0),
 		ISNULL(SUM(PlannedInterest), 0),
 		ISNULL(SUM(PlannedRepaid), 0),
+		ISNULL(SUM(TotalPrincipalRepaid), 0),
 		ISNULL(SUM(TotalInterestRepaid), 0),
 		ISNULL(SUM(EarnedInterest), 0),
 		ISNULL(SUM(ExpectedInterest), 0),
@@ -235,6 +239,7 @@ BEGIN
 		Period,
 		PlannedInterest,
 		PlannedRepaid,
+		TotalPrincipalRepaid,
 		TotalInterestRepaid,
 		EarnedInterest,
 		ExpectedInterest,

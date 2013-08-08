@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptFinancialStats]
 GO
 SET ANSI_NULLS ON
@@ -213,15 +213,15 @@ BEGIN
 	SELECT
 		3,
 		'Principal Repaid',
-		ISNULL(SUM(t.LoanRepayment), 0)
+		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
 	FROM
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		t.Type = @PAYPOINT AND t.Status = @DONE
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -231,16 +231,17 @@ BEGIN
 	SELECT
 		3.1,
 		@Indent + 'Principal Repaid Early',
-		ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
+		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanId = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('PaidEarly', 'StillToPay')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Early'
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -250,16 +251,17 @@ BEGIN
 	SELECT
 		3.2,
 		@Indent + 'Principal Repaid On Time',
-		ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
+		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanId = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('PaidOnTime')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'OnTime'
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -269,16 +271,17 @@ BEGIN
 	SELECT
 		3.3,
 		@Indent + 'Principal Repaid Late',
-		ISNULL( SUM(ISNULL(-PrincipalDelta, 0)), 0)
+		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanId = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('Paid', 'Late')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Late'
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------

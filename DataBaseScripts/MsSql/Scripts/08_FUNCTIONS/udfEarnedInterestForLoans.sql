@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterestForLoans]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterestForLoans]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[udfEarnedInterestForLoans]
 GO
 SET ANSI_NULLS ON
@@ -127,13 +127,13 @@ BEGIN
 		@loans
 	WHERE
 		CustomerID IS NULL
-	
+
 	--------------------------------------------------------
 	--
 	-- Normalising payment list: setting Seqnum to 1..N.
 	--
 	--------------------------------------------------------
-	
+
 	INSERT INTO @sched
 	SELECT
 		RANK() OVER (PARTITION BY s.LoanId ORDER BY s.LoanId, s.Date),
@@ -143,13 +143,13 @@ BEGIN
 	FROM
 		LoanSchedule s
 		INNER JOIN @loans l ON s.LoanID = l.LoanId
-	
+
 	--------------------------------------------------------
 	--
 	-- Filling last scheduled payment.
 	--
 	--------------------------------------------------------
-	
+
 	INSERT INTO @last_sched
 	SELECT
 		MAX(Seqnum),
@@ -158,14 +158,14 @@ BEGIN
 		@sched
 	GROUP BY
 		LoanID
-	
+
 	--------------------------------------------------------
 	--
 	-- Loading interest rates for period from the first
 	-- payment till the last payment.
 	--
 	--------------------------------------------------------
-	
+
 	INSERT INTO @rates
 	SELECT
 		l1.Seqnum,
@@ -182,14 +182,14 @@ BEGIN
 			AND l1.Seqnum = l2.Seqnum - 1
 	WHERE
 		l2.Date IS NOT NULL
-	
+
 	--------------------------------------------------------
 	--
 	-- Loading interest rates for period from loan issue
 	-- till the first payment.
 	--
 	--------------------------------------------------------
-	
+
 	INSERT INTO @rates
 	SELECT
 		0,
@@ -203,7 +203,7 @@ BEGIN
 		@loans l
 		INNER JOIN Loan ol ON l.LoanID = ol.Id
 		INNER JOIN @rates r ON l.LoanID = r.LoanId AND r.SeqnumStart = 1
-	
+
 	--------------------------------------------------------
 	--
 	-- At this point:
@@ -225,38 +225,47 @@ BEGIN
 	--    Now it's time to use it.
 	--
 	--------------------------------------------------------
-	
+
 	--------------------------------------------------------
 	--
 	-- Filling initial daily data.
 	--
 	--------------------------------------------------------
-	
-	DECLARE @Date DATETIME
-	
-	SET @Date = @DateStart
-	
-	WHILE @Date < @DateEnd
-	BEGIN
-		INSERT INTO @daily(LoanID, Date, Principal)
+
+	;
+	-- This semicolon is vital because otherwise the WITH statement
+	-- is considered as a part of the previous statement rather than
+	-- as a beginning of the new statement.
+
+	WITH days AS (
 		SELECT
-			LoanID,
-			@Date,
-			LoanAmount
+			CAST(@DateStart AS DATETIME) AS TheDate
+		
+		UNION ALL
+		
+		SELECT
+			TheDate + 1
 		FROM
-			@loans
+			Days
 		WHERE
-			@Date > IssueDate
-	
-		SET @Date = DATEADD(day, 1, @Date)
-	END
-	
+			TheDate + 1 < @DateEnd
+	) INSERT INTO @daily(LoanID, Date, Principal)
+	SELECT
+		l.LoanID,
+		CONVERT(DATE, d.TheDate),
+		l.LoanAmount
+	FROM
+		days d
+		INNER JOIN @loans l ON l.IssueDate < d.TheDate
+	OPTION
+		(MAXRECURSION 0)
+
 	--------------------------------------------------------
 	--
 	-- Updating principal with customer payments.
 	--
 	--------------------------------------------------------
-	
+
 	UPDATE @daily SET
 		Principal = d.Principal - ISNULL((
 			SELECT SUM(t.LoanRepayment)
@@ -274,13 +283,13 @@ BEGIN
 		@daily
 	WHERE
 		Principal = 0
-	
+
 	--------------------------------------------------------
 	--
 	-- Setting daily interest rate.
 	--
 	--------------------------------------------------------
-	
+
 	UPDATE @daily SET
 		InterestRate = r.RateEnd,
 		PeriodLen = DATEDIFF(day, r.DateStart, r.DateEnd)
@@ -291,7 +300,7 @@ BEGIN
 		r.DateStart <= d.Date AND d.Date < r.DateEnd
 
 	--------------------------------------------------------
-	
+
 	UPDATE @daily SET
 		InterestRate = r.RateEnd,
 		PeriodLen = DATEDIFF(day, r.DateStart, r.DateEnd)
@@ -303,7 +312,7 @@ BEGIN
 			AND l.Seqnum = r.SeqnumEnd
 	WHERE
 		 d.Date >= r.DateEnd
-	
+
 	--------------------------------------------------------
 	--
 	-- Building result.

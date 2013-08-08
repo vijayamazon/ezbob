@@ -224,6 +224,8 @@ BEGIN
 		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
 	WHERE
 		@DateStart <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < @DateEnd
+		AND
+		r.UnderwriterDecision = 'Approved'
 	GROUP BY
 		r.IdCustomer
 
@@ -408,78 +410,82 @@ BEGIN
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Total',
-		ISNULL(COUNT(lst.TransactionID), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta) + ABS(lst.InterestDelta) + ABS(lst.FeesDelta)), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta)), 0),
-		ISNULL(SUM(ABS(lst.InterestDelta)), 0),
-		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
+		ISNULL(COUNT(t.Id), 0),
+		ISNULL(SUM(t.Amount), 0),
+		ISNULL(SUM(t.LoanRepayment), 0),
+		ISNULL(SUM(t.Interest), 0),
+		ISNULL(SUM(t.Fees), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanID = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanID = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
 
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Early payments',
-		ISNULL(COUNT(lst.TransactionID), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta) + ABS(lst.InterestDelta) + ABS(lst.FeesDelta)), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta)), 0),
-		ISNULL(SUM(ABS(lst.InterestDelta)), 0),
-		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
+		ISNULL(COUNT(t.Id), 0),
+		ISNULL(SUM(t.Amount), 0),
+		ISNULL(SUM(t.LoanRepayment), 0),
+		ISNULL(SUM(t.Interest), 0),
+		ISNULL(SUM(t.Fees), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanID = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanID = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('PaidEarly', 'StillToPay')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Early'
 
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'On time payments',
-		ISNULL(COUNT(lst.TransactionID), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta) + ABS(lst.InterestDelta) + ABS(lst.FeesDelta)), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta)), 0),
-		ISNULL(SUM(ABS(lst.InterestDelta)), 0),
-		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
+		ISNULL(COUNT(t.Id), 0),
+		ISNULL(SUM(t.Amount), 0),
+		ISNULL(SUM(t.LoanRepayment), 0),
+		ISNULL(SUM(t.Interest), 0),
+		ISNULL(SUM(t.Fees), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanID = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanID = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('PaidOnTime')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'OnTime'
 
 	------------------------------------------------------------------------------
 
 	INSERT INTO #out (Caption, Number, Amount, Principal, Interest, Fees)
 	SELECT
 		'Late payments',
-		ISNULL(COUNT(lst.TransactionID), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta) + ABS(lst.InterestDelta) + ABS(lst.FeesDelta)), 0),
-		ISNULL(SUM(ABS(lst.PrincipalDelta)), 0),
-		ISNULL(SUM(ABS(lst.InterestDelta)), 0),
-		ISNULL(SUM(ABS(lst.FeesDelta)), 0)
+		ISNULL(COUNT(t.Id), 0),
+		ISNULL(SUM(t.Amount), 0),
+		ISNULL(SUM(t.LoanRepayment), 0),
+		ISNULL(SUM(t.Interest), 0),
+		ISNULL(SUM(t.Fees), 0)
 	FROM
-		LoanScheduleTransaction lst
-		INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-		INNER JOIN Loan l ON lst.LoanID = l.Id
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanID = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		lst.StatusAfter IN ('Paid', 'Late')
-		AND
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
+		AND
+		t.Type = @PAYPOINT AND t.Status = @DONE
+		AND
+		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Late'
 
 	------------------------------------------------------------------------------
 
