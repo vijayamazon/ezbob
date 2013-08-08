@@ -40,6 +40,19 @@
 
 		#endregion property Returning
 
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format(
+				"total: {0}, new: {1}, returning: {2}",
+				Visitors,
+				New,
+				Returning
+			);
+		} // ToString
+
+		#endregion method ToString
+
 		#endregion public
 	} // class CountryData
 

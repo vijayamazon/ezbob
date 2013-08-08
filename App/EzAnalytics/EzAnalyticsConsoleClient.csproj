@@ -60,9 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CountryData.cs" />
+    <Compile Include="GoogleDataItem.cs" />
     <Compile Include="GoogleReportMetrics.cs" />
     <Compile Include="DbConsts.cs" />
-    <Compile Include="GoogleConsts.cs" />
+    <Compile Include="GoogleDataFetcher.cs" />
     <Compile Include="GoogleReportDimensions.cs" />
     <Compile Include="PageID.cs" />
     <Compile Include="Program.cs" />

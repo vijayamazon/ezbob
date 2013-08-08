@@ -18,7 +18,7 @@ namespace EzAnalyticsConsoleClient {
 	class Program {
 		#region method Main
 
-		static void Main() {
+		static void Main(string[] args) {
 			var oLog = new LegacyLog();
 
 			var app = new Program(oLog);
@@ -26,14 +26,19 @@ namespace EzAnalyticsConsoleClient {
 			if (app.Environment.Name == Name.Dev) {
 				app.Log = new ConsoleLog(app.Log);
 
-				if (app.Init())
+				DateTime oDate = DateTime.Today;
+
+				if ((args.Length > 1) && (args[0] == "--date"))
+					DateTime.TryParseExact(args[1], "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out oDate);
+
+				if (app.Init(oDate))
 					app.Run();
 
 				app.Done();
 			}
 			else {
 				try {
-					if (app.Init())
+					if (app.Init(DateTime.Today))
 						app.Run();
 
 					app.Done();
@@ -58,21 +63,21 @@ namespace EzAnalyticsConsoleClient {
 
 		#region method Init
 
-		private bool Init() {
+		private bool Init(DateTime oDate) {
 			Log.Debug("Program.Init started...");
 
-			m_oReportDate = DateTime.Today;
+			m_oReportDate = oDate;
 
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			string strKeyFile = Path.Combine(
 				Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-				GoogleConsts.KeyFileName
+				GoogleDataFetcher.KeyFileName
 			);
 
 			Log.Debug("Creating authentication data...");
 
-			var objAuth = ObjGetOAuth2(strKeyFile, string.Empty, GoogleConsts.ServiceAccountUser, GoogleConsts.Scope); //Authentication data returned
+			var objAuth = ObjGetOAuth2(strKeyFile, string.Empty, GoogleDataFetcher.ServiceAccountUser, GoogleDataFetcher.Scope); //Authentication data returned
 
 			Log.Debug("Creating initialser...");
 
@@ -96,10 +101,8 @@ namespace EzAnalyticsConsoleClient {
 		private void Run() {
 			Log.Debug("Program.Run started...");
 
-			var oRawByCountry = new SortedDictionary<string, CountryData>();
-			var oRawByPage = new SortedDictionary<PageID, int>();
-			
-			FetchStats(oRawByCountry, oRawByPage);
+			var oRawByCountry = FetchByCountry();
+			var oRawByPage = FetchByPage();
 
 			var oStats = new SortedDictionary<string, int>();
 			
@@ -136,9 +139,11 @@ namespace EzAnalyticsConsoleClient {
 			Log.Debug("Total new visitors: {0}", nNewVisitors);
 			Log.Debug("Total returning visitors: {0}", nReturningVisitors);
 
-			oRes[DbConsts.UkVisitors] = Visitors(oRawByCountry, GoogleConsts.UK);
+			oRes[DbConsts.UkVisitors] = Visitors(oRawByCountry, GoogleDataFetcher.UK);
 
-			oRes[DbConsts.WorldWideVisitors] = nAllVisitors - Visitors(oRawByCountry, GoogleConsts.IL) - Visitors(oRawByCountry, GoogleConsts.UA);
+			oRes[DbConsts.WorldWideVisitors] = nAllVisitors -
+				Visitors(oRawByCountry, GoogleDataFetcher.IL) -
+				Visitors(oRawByCountry, GoogleDataFetcher.UA);
 
 			oRes[DbConsts.NewVisitors] = nNewVisitors;
 
@@ -189,73 +194,102 @@ namespace EzAnalyticsConsoleClient {
 
 		#endregion method SaveStats
 
-		#region method FetchStats
+		#region method FetchByCountry
 
-		private void FetchStats(SortedDictionary<string, CountryData> oByCountry, SortedDictionary<PageID, int> oByPage) {
-			Log.Debug("Fetching stats started...");
+		private SortedDictionary<string, CountryData> FetchByCountry() {
+			Log.Debug("Fetching by country started...");
 
-			string sDate = m_oReportDate.ToString(GoogleConsts.OAuthDateFormat, CultureInfo.InvariantCulture);
+			var oFetcher = new GoogleDataFetcher(
+				m_oService,
+				m_oReportDate,
+				m_oReportDate, 
+				new GoogleReportDimensions[] { GoogleReportDimensions.country, },
+				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
+				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==www.ezbob.com",
+				Log
+			);
 
-			Log.Debug("Creating request...");
+			List<GoogleDataItem> oFetchResult = oFetcher.Fetch();
 
-			var oGoogleConsts = new GoogleConsts();
+			var oByCountry = new SortedDictionary<string, CountryData>();
 
-			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(GoogleConsts.ProfileID, sDate, sDate, oGoogleConsts.Metrics);
+			foreach (GoogleDataItem oItem in oFetchResult) {
+				string sCountry = oItem[GoogleReportDimensions.country];
+				int nVisitors = oItem[GoogleReportMetrics.visitors];
+				int nNewVisitors = oItem[GoogleReportMetrics.newVisits];
 
-			//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
-			//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
-			/*foreach (Profile profile in profiles.Items){Console.WriteLine("Profile Timezone: " + profile.Timezone);}*/
+				if (oByCountry.ContainsKey(sCountry))
+					oByCountry[sCountry].Add(nVisitors, nNewVisitors);
+				else
+					oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
+			} // for each item
 
-			request.Dimensions = oGoogleConsts.Dimensions;
+			Log.Debug("Fetched by country - begin");
 
-			Log.Debug("Fetching with dimensions {0} and metrics {1}...", oGoogleConsts.Dimensions, oGoogleConsts.Metrics);
+			foreach (KeyValuePair<string, CountryData> pair in oByCountry)
+				Log.Debug("{0}: {1}", pair.Key, pair.Value);
 
-			GaData data = request.Fetch();
+			Log.Debug("Fetched by country - end");
 
-			Log.Debug("Processing...");
+			Log.Debug("Fetching by country complete.");
 
-			foreach (List<string> pkg in data.Rows) {
-				if (pkg.Count != oGoogleConsts.DimMetCount)
+			return oByCountry;
+		} // FetchByCountry
+
+		#endregion method FetchByCountry
+
+		#region method FetchByPage
+
+		private SortedDictionary<PageID, int> FetchByPage() {
+			Log.Debug("Fetching by page started...");
+
+			var oFetcher = new GoogleDataFetcher(
+				m_oService,
+				m_oReportDate,
+				m_oReportDate, 
+				new GoogleReportDimensions[] { GoogleReportDimensions.pagePath, },
+				new GoogleReportMetrics[] { GoogleReportMetrics.visitors },
+				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==app.ezbob.com",
+				Log
+			);
+
+			List<GoogleDataItem> oFetchResult = oFetcher.Fetch();
+
+			var oByPage = new SortedDictionary<PageID, int>();
+
+			foreach (GoogleDataItem oItem in oFetchResult) {
+				string sPagePath = oItem[GoogleReportDimensions.pagePath];
+
+				PageID nPageID = GetPageID(sPagePath);
+
+				if (nPageID == PageID.Other)
 					continue;
 
-				// Log.Debug("\n\n\nBegin\n\n\n"); foreach (string s in pkg) Log.Debug("-- row: {0}", s); Log.Debug("\n\n\nEnd\n\n\n");
+				int nVisitors = oItem[GoogleReportMetrics.visitors];
 
-				string sCountry = pkg[oGoogleConsts.Idx(GoogleReportDimensions.country)];
-				string sHostName = pkg[oGoogleConsts.Idx(GoogleReportDimensions.hostname)];
-				string sPagePath = pkg[oGoogleConsts.Idx(GoogleReportDimensions.pagePath)];
-				int nVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.visitors)]);
-				int nNewVisitors = int.Parse(pkg[oGoogleConsts.Idx(GoogleReportMetrics.newVisits)]);
+				if (oByPage.ContainsKey(nPageID))
+					oByPage[nPageID] += nVisitors;
+				else
+					oByPage[nPageID] = nVisitors;
+			} // for each item
 
-				if (sHostName == "www.ezbob.com") {
-					if (oByCountry.ContainsKey(sCountry))
-						oByCountry[sCountry].Add(nVisitors, nNewVisitors);
-					else
-						oByCountry[sCountry] = new CountryData(nVisitors, nNewVisitors);
-				} // if www
+			Log.Debug("By page - begin");
 
-				PageID nPageID = GetPageID(sHostName, sPagePath);
+			foreach (KeyValuePair<PageID, int> pair in oByPage)
+				Log.Debug("{1} to {0}", pair.Key, pair.Value);
 
-				if (nPageID != PageID.Other) {
-					if (oByPage.ContainsKey(nPageID))
-						oByPage[nPageID] += nVisitors;
-					else
-						oByPage[nPageID] = nVisitors;
-				} // if page to follow
+			Log.Debug("By page - end");
 
-				Log.Debug("Country: {0} visitors: {1} to {2}{3}", sCountry, nVisitors, sHostName, sPagePath);
-			} // for each package
+			Log.Debug("Fetching by page complete.");
 
-			Log.Debug("Fetching stats complete.");
-		} // FetchStats
+			return oByPage;
+		} // FetchByPage
 
-		#endregion method FetchStats
+		#endregion method FetchByPage
 
 		#region method GetPageID
 
-		private PageID GetPageID(string sHostName, string sPagePath) {
-			if (sHostName != "app.ezbob.com")
-				return PageID.Other;
-
+		private PageID GetPageID(string sPagePath) {
 			if (sPagePath == "/Account/LogOn")
 				return PageID.Logon;
 
