@@ -1027,7 +1027,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
+                Sortable = true,
                 Width = 85,
                 DataType = TypeCode.String,
                 Data = x => x.LatestCRMstatus??""
@@ -1047,7 +1047,7 @@ namespace EzBob.Web.Areas.Underwriter
                 Hidden = false,
                 Fixed = false,
                 Search = false,
-                Sortable = false,
+                Sortable = true,
                 Width = 85,
                 DataType = TypeCode.Decimal,
                 Data = x => x.AmountOfInteractions

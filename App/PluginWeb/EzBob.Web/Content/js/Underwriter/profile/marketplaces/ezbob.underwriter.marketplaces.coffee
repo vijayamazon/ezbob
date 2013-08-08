@@ -62,6 +62,8 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
 
         @detailView.on "reCheck", @reCheckmarketplaces, @
         @detailView.on "reCheck-PayPal", @reCheckPaypal, @
+        @detailView.on "disable-shop", @disableShop, @
+        @detailView.on "enable-shop", @enableShop, @
         @detailView.on("recheck-token", @renewToken)
         @detailView.customerId = @model.customerId
         @detailView.render()
@@ -84,8 +86,8 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
 
 
         for m in data.marketplaces
-            data.summary.anualSales += m.anualSales
-            data.summary.inventory += m.inventory
+            data.summary.anualSales += m.anualSales if m.Disabled == false
+            data.summary.inventory += m.inventory if m.Disabled == false
             data.summary.positive += m.PositiveFeedbacks
             data.summary.negative += m.NegativeFeedbacks
             data.summary.neutral += m.NeutralFeedbacks

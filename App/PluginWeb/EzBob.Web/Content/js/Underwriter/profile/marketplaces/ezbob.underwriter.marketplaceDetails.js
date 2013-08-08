@@ -32,7 +32,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     events: {
         "click .reCheckMP": "reCheck",
         "click .reCheck-paypal": "reCheckPayPal",
-        "click .renew-token": "renewTokenClicked"
+        "click .renew-token": "renewTokenClicked",
+        "click .disable-shop": "diShop",
+        "click .enable-shop": "enShop"
+
     },
     
     renewTokenClicked: function (e) {
@@ -45,6 +48,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     },
     reCheckPayPal: function (e) {
         this.trigger("reCheck-PayPal", e);
+        return false;
+    },
+    enShop: function (e) {
+        this.trigger("enable-shop", e);
+        return false;
+    },
+    diShop: function (e) {
+        this.trigger("disable-shop", e);
         return false;
     },
     recheckAskville: function(e) {
