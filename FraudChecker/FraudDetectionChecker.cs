@@ -592,7 +592,7 @@ namespace FraudChecker
                     InternalCustomer = internalCustomer,
                     CurrentField = currentField,
                     ExternalUser = externalUser,
-                    Value = value
+                    Value = value ?? String.Empty
                 };
         }
 
