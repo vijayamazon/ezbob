@@ -7,7 +7,7 @@ using EzBob.Web.Areas.Underwriter.Models;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace EzBob.Models
+namespace EzBob.Models.Marketplaces.Builders
 {
     public class PayPalMarketplaceModelBuilder : MarketplaceModelBuilder
     {

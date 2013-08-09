@@ -1,9 +1,8 @@
-using System;
-using NHibernate;
-using NHibernate.Linq;
-
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System;
+	using NHibernate;
+	using NHibernate.Linq;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;

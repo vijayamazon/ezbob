@@ -1,10 +1,9 @@
-﻿using System;
-using EZBob.DatabaseLib.Common;
+﻿using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 
-namespace EzBob.Models
+namespace EzBob.Models.Marketplaces.Builders
 {
     public interface IMarketplaceModelBuilder
     {

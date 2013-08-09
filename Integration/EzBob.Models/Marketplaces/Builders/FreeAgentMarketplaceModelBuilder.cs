@@ -1,9 +1,8 @@
-using System;
-using NHibernate;
-using NHibernate.Linq;
-
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System;
+	using NHibernate;
+	using NHibernate.Linq;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
@@ -16,14 +15,14 @@ namespace EzBob.Models.Marketplaces.Builders
 	using Web.Areas.Underwriter.Models;
 
 	class FreeAgentMarketplaceModelBuilder : MarketplaceModelBuilder
-    {
+	{
 		private readonly Dictionary<string, FreeAgentExpenseCategory> _expenseCategories = new Dictionary<string, FreeAgentExpenseCategory>();
 
 		private readonly ICurrencyConvertor _currencyConverter;
 
 		public FreeAgentMarketplaceModelBuilder(MP_FreeAgentExpenseCategoryRepository freeAgentExpenseCategoryRepository, CurrencyRateRepository currencyRateRepository, ISession session)
-            : base(session)
-        {
+			: base(session)
+		{
 			_currencyConverter = new CurrencyConvertor(currencyRateRepository);
 
 			foreach (MP_FreeAgentExpenseCategory dbCategory in freeAgentExpenseCategoryRepository.GetAll())
@@ -42,24 +41,24 @@ namespace EzBob.Models.Marketplaces.Builders
 
 				_expenseCategories.Add(category.url, category);
 			}
-        }
+		}
 
-        public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
-        {
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		{
 			var paymentAccountModel = new PaymentAccountsModel();
 			MP_AnalyisisFunctionValue earliestNumOfExpenses = GetEarliestValueFor(mp, "NumOfExpenses");
 			MP_AnalyisisFunctionValue earliestNumOfInvoices = GetEarliestValueFor(mp, "NumOfOrders");
 			MP_AnalyisisFunctionValue earliestSumOfExpenses = GetEarliestValueFor(mp, "TotalSumOfExpenses");
 			MP_AnalyisisFunctionValue earliestSumOfInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
 
-	        if (earliestNumOfExpenses != null && earliestNumOfExpenses.ValueInt.HasValue &&
-	            earliestNumOfInvoices != null && earliestNumOfInvoices.ValueInt.HasValue)
-	        {
-		        paymentAccountModel.TransactionsNumber = earliestNumOfExpenses.ValueInt.Value + earliestNumOfInvoices.ValueInt.Value;
-	        }
-	        else
-	        {
-		        paymentAccountModel.TransactionsNumber = 0;
+			if (earliestNumOfExpenses != null && earliestNumOfExpenses.ValueInt.HasValue &&
+				earliestNumOfInvoices != null && earliestNumOfInvoices.ValueInt.HasValue)
+			{
+				paymentAccountModel.TransactionsNumber = earliestNumOfExpenses.ValueInt.Value + earliestNumOfInvoices.ValueInt.Value;
+			}
+			else
+			{
+				paymentAccountModel.TransactionsNumber = 0;
 			}
 
 			if (earliestSumOfInvoices != null && earliestSumOfInvoices.ValueFloat.HasValue)
@@ -79,20 +78,20 @@ namespace EzBob.Models.Marketplaces.Builders
 			{
 				paymentAccountModel.TotalNetOutPayments = 0;
 			}
-				
-	        return paymentAccountModel;
-        }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
-        {
-            model.FreeAgent = BuildFreeAgent(mp);
-        }
+			return paymentAccountModel;
+		}
+
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		{
+			model.FreeAgent = BuildFreeAgent(mp);
+		}
 
 		private FreeAgentModel BuildFreeAgent(MP_CustomerMarketPlace mp)
 		{
 			var dbInvoices = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new FreeAgentInvoiceComparer()).OrderByDescending(invoice => invoice.dated_on);
 			var dbExpenses = mp.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Expenses).OrderByDescending(expense => expense.Request.Id).Distinct(new FreeAgentExpenseComparer()).OrderByDescending(expense => expense.dated_on);
-			
+
 			var model = new FreeAgentModel
 				{
 					Expenses = dbExpenses.Select(o => new FreeAgentExpense
@@ -156,29 +155,29 @@ namespace EzBob.Models.Marketplaces.Builders
 			return model;
 		}
 
-	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
-	    {
-            var invoices = _session.Query<MP_FreeAgentInvoice>()
-                .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-                .Where(oi => oi.dated_on != null)
-                .Select(oi => oi.dated_on);
+		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+		{
+			var invoices = _session.Query<MP_FreeAgentInvoice>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.dated_on != null)
+				.Select(oi => oi.dated_on);
 
-            var expenses = _session.Query<MP_FreeAgentInvoice>()
-                 .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-                 .Where(oi => oi.dated_on != null)
-                 .Select(oi => oi.dated_on);
+			var expenses = _session.Query<MP_FreeAgentInvoice>()
+				 .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				 .Where(oi => oi.dated_on != null)
+				 .Select(oi => oi.dated_on);
 
-            DateTime? earliest = null;
-            if (invoices.Any())
-            {
-                earliest = invoices.Min();
-            }
-            if (expenses.Any() && expenses.Min() < earliest)
-            {
-                earliest = expenses.Min();
-            }
+			DateTime? earliest = null;
+			if (invoices.Any())
+			{
+				earliest = invoices.Min();
+			}
+			if (expenses.Any() && expenses.Min() < earliest)
+			{
+				earliest = expenses.Min();
+			}
 
-            return earliest;
-	    }
-    }
+			return earliest;
+		}
+	}
 }

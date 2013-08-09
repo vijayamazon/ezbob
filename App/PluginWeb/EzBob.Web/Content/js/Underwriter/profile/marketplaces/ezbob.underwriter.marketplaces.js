@@ -25,20 +25,22 @@
     };
 
     MarketPlaceModel.prototype.recalculate = function() {
-      var accountAge, age, ai, anualSales, inventory, pp;
+      var accountAge, age, ai, anualSales, inventory, monthSales, pp;
 
       ai = this.get('AnalysisDataInfo');
       accountAge = this.get('AccountAge');
+      monthSales = ai ? (ai.TotalSumofOrders1M || 0) * 1 : 0;
       anualSales = ai ? (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1 : 0;
       inventory = ai && !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
       pp = this.get("PayPal");
       if (pp) {
-        accountAge = pp.GeneralInfo.Seniority;
+        monthSales = pp.GeneralInfo.MonthInPayments;
         anualSales = pp.GeneralInfo.TotalNetInPayments;
       }
       age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
       return this.set({
         age: age,
+        monthSales: monthSales,
         anualSales: anualSales,
         inventory: inventory
       }, {
@@ -100,7 +102,9 @@
       "click .reCheck-paypal": "reCheckPaypal",
       "click tbody tr": "rowClick",
       "click .mp-error-description": "showMPError",
-      "click .renew-token": "renewTokenClicked"
+      "click .renew-token": "renewTokenClicked",
+      "click .disable-shop": "disableShop",
+      "click .enable-shop": "enableShop"
     };
 
     MarketPlacesView.prototype.rowClick = function(e) {
@@ -125,6 +129,8 @@
       EzBob.App.jqmodal.show(this.detailView);
       this.detailView.on("reCheck", this.reCheckmarketplaces, this);
       this.detailView.on("reCheck-PayPal", this.reCheckPaypal, this);
+      this.detailView.on("disable-shop", this.disableShop, this);
+      this.detailView.on("enable-shop", this.enableShop, this);
       this.detailView.on("recheck-token", this.renewToken);
       this.detailView.customerId = this.model.customerId;
       return this.detailView.render();
@@ -148,6 +154,7 @@
         hideAccounts: false,
         hideMarketplaces: false,
         summary: {
+          monthSales: 0,
           anualSales: 0,
           inventory: 0,
           positive: 0,
@@ -158,8 +165,15 @@
       _ref3 = data.marketplaces;
       for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
         m = _ref3[_i];
-        data.summary.anualSales += m.anualSales;
-        data.summary.inventory += m.inventory;
+        if (m.Disabled === false) {
+          data.summary.monthSales += m.monthSales;
+        }
+        if (m.Disabled === false) {
+          data.summary.anualSales += m.anualSales;
+        }
+        if (m.Disabled === false) {
+          data.summary.inventory += m.inventory;
+        }
         data.summary.positive += m.PositiveFeedbacks;
         data.summary.negative += m.NegativeFeedbacks;
         data.summary.neutral += m.NeutralFeedbacks;
@@ -167,6 +181,43 @@
       total = data.summary.positive + data.summary.negative + data.summary.neutral;
       data.summary.rating = total > 0 ? data.summary.positive / total : 0;
       return data;
+    };
+
+    MarketPlacesView.prototype.disableShop = function(e) {
+      var $el, umi,
+        _this = this;
+
+      $el = $(e.currentTarget);
+      umi = $el.attr("umi");
+      EzBob.ShowMessage("Disable shop", "Are you sure?", (function() {
+        return _this.doEnableShop(umi, false);
+      }), "Yes", null, "No");
+      return false;
+    };
+
+    MarketPlacesView.prototype.doEnableShop = function(umi, enabled) {
+      var url, xhr,
+        _this = this;
+
+      url = enabled ? "" + window.gRootPath + "Underwriter/MarketPlaces/Enable" : "" + window.gRootPath + "Underwriter/MarketPlaces/Disable";
+      xhr = $.post(url, {
+        umi: umi
+      });
+      return xhr.done(function(response) {
+        return _this.model.fetch();
+      });
+    };
+
+    MarketPlacesView.prototype.enableShop = function(e) {
+      var $el, umi,
+        _this = this;
+
+      $el = $(e.currentTarget);
+      umi = $el.attr("umi");
+      EzBob.ShowMessage("Enable shop", "Are you sure?", (function() {
+        return _this.doEnableShop(umi, true);
+      }), "Yes", null, "No");
+      return false;
     };
 
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {

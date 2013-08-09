@@ -1,26 +1,25 @@
-﻿using System;
-using System.Diagnostics;
-using EKM;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonLib;
-using EzBob.Configuration;
-using EzBob.Models;
-using EzBob.PayPal;
-using EzBob.PayPalServiceLib;
-using EzBob.eBayLib;
-using FreeAgent;
-using Integration.ChannelGrabberFrontend;
-using NUnit.Framework;
-using PayPoint;
-using Scorto.Configuration;
-using Scorto.NHibernate;
-using Scorto.RegistryScanner;
-using StructureMap;
-using YodleeLib.connector;
-
-namespace EzBob.Tests.PayPal
+﻿namespace EzBob.Tests.PayPal
 {
-    [TestFixture]
+	using System;
+	using System.Diagnostics;
+	using EZBob.DatabaseLib.Model.Database;
+	using AmazonLib;
+	using Configuration;
+	using EzBob.PayPal;
+	using PayPalServiceLib;
+	using eBayLib;
+	using FreeAgent;
+	using Integration.ChannelGrabberFrontend;
+	using NUnit.Framework;
+	using PayPoint;
+	using Scorto.Configuration;
+	using Scorto.NHibernate;
+	using StructureMap;
+	using YodleeLib.connector;
+	using Models.Marketplaces.Builders;
+	using global::EKM;
+
+	[TestFixture]
     public class SeniorityOptimizationFixture : IntegrationTestBase
     {
         protected override void Init()

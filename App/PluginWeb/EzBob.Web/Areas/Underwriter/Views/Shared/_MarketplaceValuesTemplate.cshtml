@@ -128,6 +128,7 @@
                     <th></th>
                     <th>Shop Name</th>
                     <th>Seniority</th>
+                    <th>Month Sales</th>
                     <th>Annual Sales</th>
                     <th>Rating</th>
                     <th>Inventory</th>
@@ -142,6 +143,7 @@
                     <td>Total</td>
                     <td></td>
                     <td></td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.monthSales) %> </td>
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
                     <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
@@ -165,6 +167,7 @@
                     </td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td class="centered"><%- m.age %></td>
+                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %></td>
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
                     <td class="centered"><%- m.RaitingPercent%> %</td>
                     <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
@@ -205,6 +208,7 @@
                     <th>Name</th>
                     <th>Seniority</th>
                     <th>Number of Transactions</th>
+                    <th>Month In Payments</th>
                     <th>Total In Payments</th>
                     <th>Total Out Payments</th>
                     <th>Updated</th>
@@ -214,21 +218,7 @@
             <tbody>
                 <% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
                 var sShopName = m.Name.replace(' ', '');
-                if (m.Name.toLowerCase() === 'paypoint'){
-                    m.PaymentAccountBasic.TransactionsNumber = m.AnalysisDataInfo.NumofOrdersLifetime;
-                    m.PaymentAccountBasic.TotalNetInPayments = m.AnalysisDataInfo.TotalSumofOrdersLifetime;
-                }
-                if (m.Name.toLowerCase() === 'yodlee'){
-                    m.PaymentAccountBasic.TransactionsNumber = 0;
-                    var amountOfTransactions = 0;
-                    for (var n=0; n < m.Yodlee.banks.length; n++)
-                        { m.PaymentAccountBasic.TransactionsNumber += (m.Yodlee.banks[n].transactions).length }
-                    m.PaymentAccountBasic.TotalNetInPayments = m.AnalysisDataInfo.TotalIncomeLifetime;
-                    m.PaymentAccountBasic.TotalNetOutPayments = m.AnalysisDataInfo.TotalExpenseLifetime;
-                }
-
                 
-
                 if (aryCGAccounts[sShopName])
 					if (!aryCGAccounts[sShopName].HasExpenses)
 						return;
@@ -240,6 +230,7 @@
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
+                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.MonthInPayments) %></td>
                     <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
                     <td><%- (m.Name.toLowerCase() === 'paypoint') ? "-":GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
                    

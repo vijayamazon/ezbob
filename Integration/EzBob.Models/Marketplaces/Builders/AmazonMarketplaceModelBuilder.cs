@@ -10,7 +10,7 @@ using NHibernate;
 using NHibernate.Linq;
 using StructureMap;
 
-namespace EzBob.Models
+namespace EzBob.Models.Marketplaces.Builders
 {
     class AmazonMarketplaceModelBuilder : MarketplaceModelBuilder
     {

@@ -1,18 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using NHibernate;
-
-namespace EzBob.Models
+namespace EzBob.Models.Marketplaces.Builders
 {
-    public class MarketplaceModelBuilder : IMarketplaceModelBuilder
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using System.Web;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using NHibernate;
+	using CommonLib.TimePeriodLogic;
+	using EZBob.DatabaseLib;
+
+	public class MarketplaceModelBuilder : IMarketplaceModelBuilder
     {
         protected readonly ISession _session;
 
@@ -134,6 +136,55 @@ namespace EzBob.Models
 			}
 
 			return latest;
+		}
+
+		public IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
+		{
+			foreach (var x in firstOrDefault)
+			{
+				switch (x.TimePeriod.TimePeriodType)
+				{
+					case TimePeriodEnum.Month:
+						return x;
+				}
+			}
+			return null;
+		}
+
+
+
+		public IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
+		{
+			int closestTime = 0;
+			IAnalysisDataParameterInfo closestSoFar = null;
+			foreach (var x in firstOrDefault)
+			{
+				switch (x.TimePeriod.TimePeriodType)
+				{
+					case TimePeriodEnum.Year:
+						return x;
+					case TimePeriodEnum.Month6:
+						closestSoFar = x;
+						closestTime = 6;
+						break;
+					case TimePeriodEnum.Month3:
+						if (closestTime < 6)
+						{
+							closestSoFar = x;
+							closestTime = 3;
+						}
+						break;
+					case TimePeriodEnum.Month:
+						if (closestTime < 3)
+						{
+							closestSoFar = x;
+							closestTime = 1;
+						}
+						break;
+				}
+			}
+
+			return closestSoFar;
 		}
     }
 }

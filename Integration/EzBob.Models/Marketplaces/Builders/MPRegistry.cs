@@ -1,8 +1,7 @@
 ﻿using EZBob.DatabaseLib.Model.Database;
-using EzBob.Models.Marketplaces.Builders;
 using StructureMap.Configuration.DSL;
 
-namespace EzBob.Models.Marketplaces {
+namespace EzBob.Models.Marketplaces.Builders {
 	public class MPRegistry : Registry {
 		public MPRegistry() {
 			For<IMarketplaceModelBuilder>().Use<MarketplaceModelBuilder>().Named("DEFAULT");

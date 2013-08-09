@@ -8,7 +8,7 @@ using EzBob.Web.Code;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace EzBob.Models
+namespace EzBob.Models.Marketplaces.Builders
 {
     class EBayMarketplaceModelBuilder : MarketplaceModelBuilder
     {
