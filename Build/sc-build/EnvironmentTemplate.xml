@@ -457,6 +457,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="ChangePasswordStrategyName" value="Change_Password" />
         <property name="ThreeInvalidAttemptsStrategyName" value="Three_Invalid_Attempts_Password" />
         <property name="ScoringResultStrategyName" value="Main_Strategy" />
+		<property name="FraudCheсkerStrategyName" value="FraudCheсker" />
         <property name="CustomerMarketPlaceStrategyName" value="Update Customer Market Place Data" />
 		<property name="UpdateCustomerMarketplacesName" value="Update Customer Data" />
         <property name="ConfirmationEmailStrategyName" value="ConfirmationEmailStrategy" />

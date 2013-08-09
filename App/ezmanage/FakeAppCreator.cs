@@ -151,5 +151,11 @@ namespace ezmanage
         public void LoanFullyPaid(Loan loan)
         {
         }
-    }
+
+
+		public void FraudChecker(User user)
+		{
+			
+		}
+	}
 }

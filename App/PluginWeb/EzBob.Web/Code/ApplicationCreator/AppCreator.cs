@@ -389,15 +389,24 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
         }
 
-        public void EmailUnderReview(User user, string firstName, string email)
+        public void FraudChecker(User user)
         {
             var strategyParameters = new[]
+                {
+                    new StrategyParameter("CustomerId", user.Id),
+                };
+            CreateApplication(user, strategyParameters, _config.FraudCheсkerStrategyName);
+        }
+
+		public void EmailUnderReview(User user, string firstName, string email)
+		{
+			var strategyParameters = new[]
                 {
                     new StrategyParameter("FirstName", firstName),
                     new StrategyParameter("email", email)
                 };
-            CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
-        }
+			CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
+		}
 
         public void RequestCashWithoutTakenLoan(Customer customer, string dashboard)
         {

@@ -35,6 +35,7 @@ namespace EzBob.Web.ApplicationCreator
         void CAISGenerate(User user);
         void CAISUpdate(User user, int caisId);
         void EmailUnderReview(User user, string firstName, string email);
+	    void FraudChecker(User user);
         void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
         void LoanFullyPaid(Loan loan);
     }

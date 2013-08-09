@@ -88,7 +88,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _session.Flush();
             _creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
             _creator.Evaluate(_context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
-
+	        _creator.FraudChecker(_context.User);
             _concentAgreementHelper.Save(customer, DateTime.UtcNow);
 
             try
