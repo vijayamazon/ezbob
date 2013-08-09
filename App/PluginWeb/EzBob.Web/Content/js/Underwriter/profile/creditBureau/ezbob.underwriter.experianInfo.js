@@ -1,4 +1,8 @@
-﻿var EzBob = EzBob || {};
+﻿var ExperianAccounts;
+
+var EzBob = EzBob || {};
+
+
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.ExperianInfoModel = Backbone.Model.extend({

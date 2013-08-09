@@ -765,6 +765,7 @@
 
 <script id="experian-info-template" type="text/template">
     <%
+    ExperianAccounts=experianInfo.AccountsInformation;
     experianInfo.Summary = experianInfo.Summary || {};
     experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
     %>
@@ -993,6 +994,7 @@
                         @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
                         @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
                         @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
+                        @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
                         @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
                         @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
                         @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")
