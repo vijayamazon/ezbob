@@ -282,7 +282,7 @@ function CheckForActivity() {
     
     if (minute <= 0) return;
 
-    if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 1000 * 60 * EzBob.Config.SessionTimeout / 2);
+    if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 10000);
 
     var underwriterParam = document.location.href.indexOf("Underwriter") > -1 ? "?isUnderwriterPage=true" : "";
 
