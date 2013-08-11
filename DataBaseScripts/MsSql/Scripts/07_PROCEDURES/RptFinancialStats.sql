@@ -182,10 +182,13 @@ BEGIN
 		'Loans Issued #',
 		ISNULL(COUNT(*), 0)
 	FROM
-		Loan l
+		LoanTransaction t
+		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
-		@DateStart <= l.Date AND l.Date < @DateEnd
+		t.Type = @PACNET AND t.Status = @DONE
+		AND
+		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
