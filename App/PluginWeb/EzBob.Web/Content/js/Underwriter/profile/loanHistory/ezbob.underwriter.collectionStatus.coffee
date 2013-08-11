@@ -35,7 +35,7 @@ class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layou
 
     renderStatusValue: =>
         currentStatus = @model.get "currentStatus"
-        if currentStatus == 3 or currentStatus == 4
+        if currentStatus == 4
             @model.fetch()
             @$el.find('#collection-view').show()
             collectionStatusView = new EzBob.Underwriter.CollectionStatusView model:@model
@@ -112,16 +112,11 @@ class EzBob.Underwriter.CollectionStatusView extends Backbone.Marionette.Layout
 
     showDateOfDeclaration :=>
         currentStatus = @model.get "currentStatus"
-        if currentStatus == 3
-            @$el.find('#date').show()
-        if currentStatus == 4
-            @$el.find('#date').hide()
 
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         @$el.find('#collectionDateOfDeclaration').datepicker({ autoclose: true, format: 'dd/mm/yyyy' })
         @$el.parents('.ui-dialog').find("button").addClass 'btn-back'
         @$el.find('.collectionFee').autoNumeric({ 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F',  mDec: '2', vMax: '999999999999999' };)
-        @showDateOfDeclaration()
         @
 
