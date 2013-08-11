@@ -124,7 +124,14 @@
 			try
 			{
 				var js = new JavaScriptSerializer();
-				return ((PaginatedResults<TDeserialized>)js.Deserialize(cleanResponse, typeof(PaginatedResults<TDeserialized>)));
+				var deserializedObject = ((PaginatedResults<TDeserialized>)js.Deserialize(cleanResponse, typeof(PaginatedResults<TDeserialized>)));
+				if (deserializedObject.resources == null && deserializedObject.diagnoses == null)
+				{
+					string errorMessage = string.Format("Error deserializing response:{0}", cleanResponse);
+					log.ErrorFormat(errorMessage);
+					throw new Exception();
+				}
+				return deserializedObject;
 			}
 			catch (Exception e)
 			{
@@ -184,8 +191,13 @@
 				if (response != null)
 				{
 					var js = new JavaScriptSerializer();
-					var accessTokenContainer = (AccessTokenContainer)js.Deserialize(response.Content, typeof(AccessTokenContainer));
-					return accessTokenContainer;
+					var deserializedResponse = (AccessTokenContainer)js.Deserialize(response.Content, typeof(AccessTokenContainer));
+					if (deserializedResponse.access_token != null)
+					{
+						return deserializedResponse;
+					}
+					log.ErrorFormat("Failed parsing access token. Request:{0} Response:{1}", request.Resource, response.Content);
+					throw new Exception("Failed getting token but parsing didn't threw exception"); 
 				}
 			}
 			catch (Exception e)
