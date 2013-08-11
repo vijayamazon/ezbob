@@ -232,7 +232,6 @@
 							var objText = reader.ReadToEnd();
 
 							var deserializedResponse = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
-							deserializedResponse.access_token = null;
 							if (deserializedResponse.access_token != null)
 							{
 								return deserializedResponse;
