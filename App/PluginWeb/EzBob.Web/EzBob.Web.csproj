@@ -498,6 +498,7 @@
     <Content Include="Content\css\images\star.png" />
     <Content Include="Content\css\images\sticky_chat_bg.png" />
     <Content Include="Content\css\images\tick.png" />
+    <Content Include="Content\css\images\verisign_seal.gif" />
     <Content Include="Content\css\images\volusion-logo.png" />
     <Content Include="Content\css\images\xero-logo.png" />
     <Content Include="Content\css\images\yodlee.png" />
