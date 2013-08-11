@@ -218,7 +218,7 @@
           disabledText = "Fraud";
           break;
         case 3:
-          disabledText = "Bankruptcy";
+          disabledText = "Legal";
           break;
         case 4:
           disabledText = "Default";

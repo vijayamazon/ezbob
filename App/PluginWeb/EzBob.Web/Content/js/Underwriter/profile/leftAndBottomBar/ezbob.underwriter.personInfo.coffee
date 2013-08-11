@@ -138,7 +138,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
             when 2
                 disabledText = "Fraud"
             when 3
-                disabledText = "Bankruptcy"
+                disabledText = "Legal"
             when 4
                 disabledText = "Default"
             when 5
