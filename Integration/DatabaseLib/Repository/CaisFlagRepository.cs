@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Repository
 
             public List<CaisFlag> GetForStatusType(CollectionStatusType collectionStatusType)
             {
-                return collectionStatusType == CollectionStatusType.Bankruptcy ? new List<CaisFlag> {GetAll().FirstOrDefault(f => f.FlagSetting == "T")} : GetAll().Where(f=>f.FlagSetting!="T").ToList();
+	            return GetAll().Where(f => f.FlagSetting != "T").ToList();
             }
         }
 }

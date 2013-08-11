@@ -66,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var statParam = new CollectionStatus { CurrentStatus = currentStatus };
             statParam.CollectionDateOfDeclaration = DateTime.UtcNow;
 
-            if (currentStatus == CollectionStatusType.Default || currentStatus == CollectionStatusType.Bankruptcy)
+            if (currentStatus == CollectionStatusType.Default || currentStatus == CollectionStatusType.Legal)
             {
                 statParam.IsAddCollectionFee = true;
             }
@@ -82,9 +82,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var customer = _customerRepository.Get(customerId);
             customer.CollectionStatus.CurrentStatus = currentStatus;
             decimal sum = 0;
-            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Bankruptcy)
-                customer.CollectionStatus.CollectionDateOfDeclaration = FormattingUtils.ParseDateWithoutTime(collectionStatus.CollectionDateOfDeclaration); 
-            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default || customer.CollectionStatus.CurrentStatus == CollectionStatusType.Bankruptcy)
+            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default || customer.CollectionStatus.CurrentStatus == CollectionStatusType.Legal)
             {
                 customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
                 var configurationVariables = _configurationVariablesRepository.GetByName("CollectionsCharge");
