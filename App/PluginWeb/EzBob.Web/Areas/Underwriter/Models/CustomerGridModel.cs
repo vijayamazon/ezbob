@@ -22,8 +22,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public CustomerGridModel All { get; set; }
         public CustomerGridModel RegisteredCustomers { get; set; }
         public CustomerGridModel Late { get; set; }
-        public CustomerGridModel Loans { get; set; }
-        public CustomerGridModel Sales { get; set; }
+		public CustomerGridModel Loans { get; set; }
+		public CustomerGridModel Sales { get; set; }
+		public CustomerGridModel Collection { get; set; }
         public IEzBobConfiguration Config { get; set; }
         public decimal MaxLoan { get; set; }
         public IEnumerable<MP_MarketplaceType> MpTypes { get; set; }

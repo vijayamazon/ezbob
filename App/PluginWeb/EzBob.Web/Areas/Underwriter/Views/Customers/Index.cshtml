@@ -14,6 +14,7 @@
             <li><a href="#customers/approved" data-target="#approved" data-toggle="tab">Approved</a></li>
             <li><a href="#customers/loans" data-target="#loans" data-toggle="tab">Loans</a></li>
             <li><a href="#customers/sales" data-target="#sales" data-toggle="tab">Sales</a></li>
+            <li><a href="#customers/collection" data-target="#collection" data-toggle="tab">Collection</a></li>
             <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
             <li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
             <li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
@@ -33,6 +34,7 @@
             <div class="tab-pane" id="RegisteredCustomers"></div>
             <div class="tab-pane" id="loans"></div>
             <div class="tab-pane" id="sales"></div>
+            <div class="tab-pane" id="collection"></div>
         </div>
     </div>
 </div>
@@ -80,6 +82,7 @@
                     { el: '#RegisteredCustomers', url: '@Url.Action(@Model.RegisteredCustomers.Action, new {Area = "Underwriter"})', model: @Model.RegisteredCustomers.ColModel, names: @Model.RegisteredCustomers.ColNames },
                     { el: '#loans', url: '@Url.Action(@Model.Loans.Action, new {Area = "Underwriter"})', model: @Model.Loans.ColModel, names: @Model.Loans.ColNames },
                     { el: '#sales', url: '@Url.Action(@Model.Sales.Action, new {Area = "Underwriter"})', model: @Model.Sales.ColModel, names: @Model.Sales.ColNames },
+                    { el: '#collection', url: '@Url.Action(@Model.Collection.Action, new {Area = "Underwriter"})', model: @Model.Collection.ColModel, names: @Model.Collection.ColNames }
                 ]
             };
 

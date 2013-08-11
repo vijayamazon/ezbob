@@ -45,8 +45,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridAll;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRegisteredCustomers;
         private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridPending;
-        private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
-        private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridSales;
+		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
+		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridSales;
+		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridCollection;
 
         public ViewResult Index()
         {
@@ -99,13 +100,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                             Action = "Loans",
                             ColModel = _gridLoans.RenderColModel(),
                             ColNames = _gridLoans.RenderColNames()
-                        },
-                    Sales = new CustomerGridModel
-                    {
-                        Action = "Sales",
-                        ColModel = _gridSales.RenderColModel(),
-                        ColNames = _gridSales.RenderColNames()
-                    },
+						},
+					Sales = new CustomerGridModel
+					{
+						Action = "Sales",
+						ColModel = _gridSales.RenderColModel(),
+						ColNames = _gridSales.RenderColNames()
+					},
+					Collection = new CustomerGridModel
+					{
+						Action = "Collection",
+						ColModel = _gridCollection.RenderColModel(),
+						ColNames = _gridCollection.RenderColNames()
+					},
                     Config = _config,
                     MaxLoan = _limit.GetMaxLimit()
                 };
@@ -152,8 +159,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _gridRejected = CreateColumnsRejected();
             _gridAll = CreateColumnsAll();
             _gridLate = CreateColumnsLate();
-            _gridLoans = CreateColumnsLoans();
-            _gridSales = CreateColumnsSales();
+			_gridLoans = CreateColumnsLoans();
+			_gridSales = CreateColumnsSales();
+			_gridCollection = CreateColumnsCollection();
             _gridPending = CreateColumnsPending();
             _gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
             _gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
@@ -291,6 +299,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             };
             return result;
         }
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public UnderwriterGridResult Collection(GridSettings settings)
+		{
+			var result = new UnderwriterGridResult(_session, null, _gridCollection, settings)
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.CollectionStatus.CurrentStatus == CollectionStatusType.Default || c.CollectionStatus.CurrentStatus == CollectionStatusType.Legal))
+			};
+			return result;
+		}
 
         private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsAll()
         {
@@ -450,6 +471,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateAmountOfInteractions(gridModel);
             return gridModel;
         }
+
+		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsCollection()
+		{
+			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			GridHelpers.CreateIdColumn(gridModel);
+			GridHelpers.CreateEmailColumn(gridModel);
+			GridHelpers.CreateNameColumn(gridModel);
+			GridHelpers.CreatePhoneColumn(gridModel);
+			GridHelpers.CreateAmountTaken(gridModel);
+			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+			GridHelpers.CreateLatestCRMstatus(gridModel);
+			GridHelpers.CreateCollectionStatusColumn(gridModel);
+			return gridModel;
+		}
+
         [Transactional]
         [HttpPost]
         [Ajax]
