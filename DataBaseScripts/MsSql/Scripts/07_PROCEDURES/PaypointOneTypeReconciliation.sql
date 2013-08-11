@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaypointOneTypeReconciliation]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaypointOneTypeReconciliation]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[PaypointOneTypeReconciliation]
 GO
 SET ANSI_NULLS ON
@@ -17,24 +17,26 @@ BEGIN
 
 	DECLARE @Amount DECIMAL(18, 2), @EzbobCount INT, @PaypointCount INT
 
-				
+	------------------------------------------------------------------------------
+
 	CREATE TABLE #paypoint (
 		Amount DECIMAL(18, 2) NOT NULL,
 		Counter INT NOT NULL
 	)
-	
+
 	CREATE TABLE #ezbob (
 		Amount DECIMAL(18, 2) NOT NULL,
 		Counter INT NOT NULL
 	)
-	
+
 	CREATE TABLE #res (
 		Amount DECIMAL(18, 2) NOT NULL,
 		EzbobCount INT NOT NULL,
 		PaypointCount INT NOT NULL
 	)
 
-			
+	------------------------------------------------------------------------------
+
 	INSERT INTO #paypoint
 	SELECT
 		amount,
@@ -53,8 +55,9 @@ BEGIN
 		(@IncludeFive = 1 OR Amount != 5)
 	GROUP BY
 		amount
-	
-			
+
+	------------------------------------------------------------------------------
+
 	INSERT INTO #ezbob
 	SELECT
 		Amount,
@@ -75,8 +78,9 @@ BEGIN
 		(@IncludeFive = 1 OR Amount != 5)
 	GROUP BY
 		Amount
-	
-			
+
+	------------------------------------------------------------------------------
+
 	INSERT INTO #res
 	SELECT
 		e.Amount,
@@ -85,8 +89,9 @@ BEGIN
 	FROM
 		#ezbob e
 		LEFT JOIN #paypoint p ON e.Amount = p.Amount
-	
-	
+
+	------------------------------------------------------------------------------
+
 	INSERT INTO #res
 	SELECT
 		p.Amount,
@@ -98,19 +103,22 @@ BEGIN
 	WHERE
 		e.Amount IS NULL
 
-			
+	------------------------------------------------------------------------------
+
 	SELECT
-		@PaypointTotal = ISNULL(SUM(Amount), 0)
+		@PaypointTotal = ISNULL(SUM(Amount * Counter), 0)
 	FROM
 		#paypoint
-	
-			
+
+	------------------------------------------------------------------------------
+
 	SELECT
-		@EzbobTotal = ISNULL(SUM(Amount), 0)
+		@EzbobTotal = ISNULL(SUM(Amount * Counter), 0)
 	FROM
 		#ezbob
 
-			
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Amount, Css)
 		VALUES (
 			'Ezbob Total ' + @Caption + ' Transactions',
@@ -118,16 +126,20 @@ BEGIN
 			@Caption + CASE WHEN @EzbobTotal = @PaypointTotal THEN '' ELSE ' unmatched' END
 		)
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #out (Caption, Amount, Css)
 		VALUES ('Paypoint Total ' + @Caption + ' Transactions',
 			@PaypointTotal,
 			@Caption + CASE WHEN @EzbobTotal = @PaypointTotal THEN '' ELSE ' unmatched' END
 		)
 
-			
+	------------------------------------------------------------------------------
+
 	DELETE FROM #res WHERE EzbobCount = PaypointCount
 
-			
+	------------------------------------------------------------------------------
+
 	DECLARE cur CURSOR FOR
 		SELECT Amount, EzbobCount, PaypointCount
 		FROM #res
@@ -135,8 +147,11 @@ BEGIN
 
 	OPEN cur
 
-			
+	------------------------------------------------------------------------------
+
 	FETCH NEXT FROM cur INTO @Amount, @EzbobCount, @PaypointCount
+
+	------------------------------------------------------------------------------
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
@@ -159,7 +174,8 @@ BEGIN
 			AND
 			t.Amount = @Amount
 
-				
+		-----------------------------------------------------------------------------
+
 		INSERT INTO #out(Caption, TranID)
 		SELECT
 			'Paypoint',
@@ -178,16 +194,19 @@ BEGIN
 			(@IncludeFive = 1 OR b.Amount != 5)
 			AND
 			b.amount = @Amount
-	
-				
+
+		-------------------------------------------------------------------------
+
 		FETCH NEXT FROM cur INTO @Amount, @EzbobCount, @PaypointCount
 	END
 
-			
+	------------------------------------------------------------------------------
+
 	CLOSE cur
 	DEALLOCATE cur
-	
-			
+
+	------------------------------------------------------------------------------
+
 	DROP TABLE #res
 	DROP TABLE #ezbob
 	DROP TABLE #paypoint

@@ -1,10 +1,7 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptPacnetReconciliation]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RptPacnetReconciliation]
+IF OBJECT_ID('RptPacnetReconciliation') IS NOT NULL
+	DROP PROCEDURE RptPacnetReconciliation
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+
 CREATE PROCEDURE RptPacnetReconciliation
 @DateStart DATETIME,
 @DateEnd DATETIME
@@ -109,32 +106,32 @@ BEGIN
 	DELETE FROM #res WHERE EzbobCount = PacnetCount
 
 	SELECT
-		@PacnetIn = ISNULL(SUM(ISNULL(Amount, 0)), 0),
-		@PacnetInCount = ISNULL(COUNT(*), 0)
+		@PacnetIn = ISNULL(SUM(ISNULL(Amount * Counter, 0)), 0),
+		@PacnetInCount = ISNULL(SUM(Counter), 0)
 	FROM
 		#pacnet
 	WHERE
 		IsCredit = 1
 
 	SELECT
-		@PacnetOut = ISNULL(SUM(ISNULL(Amount, 0)), 0),
-		@PacnetOutCount = ISNULL(COUNT(*), 0)
+		@PacnetOut = ISNULL(SUM(ISNULL(Amount * Counter, 0)), 0),
+		@PacnetOutCount = ISNULL(SUM(Counter), 0)
 	FROM
 		#pacnet
 	WHERE
 		IsCredit = 0
 
 	SELECT
-		@EzbobOut = ISNULL(SUM(ISNULL(Amount, 0)), 0),
-		@EzbobOutCount = ISNULL(COUNT(*), 0)
+		@EzbobOut = ISNULL(SUM(ISNULL(Amount * Counter, 0)), 0),
+		@EzbobOutCount = ISNULL(SUM(Counter), 0)
 	FROM
 		#ezbob
 	WHERE
 		IsCredit = 0
 
 	SELECT
-		@EzbobIn = ISNULL(SUM(ISNULL(Amount, 0)), 0),
-		@EzbobInCount = ISNULL(COUNT(*), 0)
+		@EzbobIn = ISNULL(SUM(ISNULL(Amount * Counter, 0)), 0),
+		@EzbobInCount = ISNULL(SUM(Counter), 0)
 	FROM
 		#ezbob
 	WHERE

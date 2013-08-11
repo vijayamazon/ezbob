@@ -300,14 +300,15 @@ BEGIN
 	SELECT
 		l.Id,
 		l.CustomerId,
-		l.LoanAmount,
+		t.Amount,
 		0,
 		0
 	FROM
 		Customer c
-		INNER JOIN Loan l ON c.Id = l.CustomerId
+		INNER JOIN Loan l ON c.Id = l.CustomerId AND c.IsTest = 0
+		INNER JOIN LoanTransaction t ON l.Id = t.LoanId
 	WHERE
-		c.IsTest = 0
+		t.Status = @DONE AND t.Type = @PACNET
 		AND
 		@DateStart <= l.Date AND l.Date < @DateEnd
 
