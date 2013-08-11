@@ -21,12 +21,10 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
 
     changeFraudStatusManualyClicked: ->
-        console.log(@model)
         fraudStatusModel = new EzBob.Underwriter.FraudStatusModel( 
             customerId : @model.get ('Id')
             currentStatus : @model.get('FraudCheckStatusId')
             )
-        console.log(fraudStatusModel)
         BlockUi "on"
         xhr = fraudStatusModel.fetch();
         xhr.done =>
@@ -35,7 +33,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             EzBob.App.jqmodal.show(fraudStatusLayout)
             BlockUi "off"
             fraudStatusLayout.on 'saved', () =>
-                console.log fraudStatusModel
                 @model.set 'FraudCheckStatusId', fraudStatusModel.get ('currentStatus')
                 @model.set 'FraudCheckStatus', fraudStatusModel.get ('currentStatusText')
 

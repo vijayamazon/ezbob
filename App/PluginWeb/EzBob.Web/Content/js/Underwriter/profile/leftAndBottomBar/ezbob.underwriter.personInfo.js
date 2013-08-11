@@ -43,12 +43,10 @@
       var fraudStatusModel, xhr,
         _this = this;
 
-      console.log(this.model);
       fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('FraudCheckStatusId')
       });
-      console.log(fraudStatusModel);
       BlockUi("on");
       xhr = fraudStatusModel.fetch();
       return xhr.done(function() {
@@ -61,7 +59,6 @@
         EzBob.App.jqmodal.show(fraudStatusLayout);
         BlockUi("off");
         return fraudStatusLayout.on('saved', function() {
-          console.log(fraudStatusModel);
           _this.model.set('FraudCheckStatusId', fraudStatusModel.get('currentStatus'));
           return _this.model.set('FraudCheckStatus', fraudStatusModel.get('currentStatusText'));
         });
