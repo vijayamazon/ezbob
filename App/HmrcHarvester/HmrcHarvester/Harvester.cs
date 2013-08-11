@@ -1,43 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Ezbob.Logger;
 using HtmlAgilityPack;
 
-namespace Ezbob.HmrcCrawler {
-	#region class Crawler
+namespace Ezbob.HmrcHarvester {
+	#region class Harvester
 
-	public class Crawler : SafeLog {
+	/// <summary>
+	/// A Harvester harvests from the Field (http://hmrc.gov.uk) and stores the harvest (VAT return etc) in the Hopper.
+	/// Uses UserName and Password to gain access the Field.
+	///
+	/// <example>
+	/// Harvester harvester = new Harvester();
+	///
+	/// if (harvester.Init()) {
+	///     harvester.Run();
+	///
+	///     // do something with harvester.Hopper
+	///
+	/// } // if
+	///
+	/// harvester.Done();
+	///
+	/// </example>
+	/// </summary>
+	public class Harvester : SafeLog {
 		#region public
 
 		#region constructor
 
-		public Crawler(string sUserName, string sPassword, ASafeLog oLog = null)
-			: base(oLog) {
+		/// <summary>
+		/// Constructs the Harvester object. The object is not ready to harvest. Call to Init() first.
+		/// </summary>
+		/// <param name="sUserName">User name for hmrc.gov.uk.</param>
+		/// <param name="sPassword">Password for hmrc.gov.uk.</param>
+		/// <param name="oLog">Log destination. If null nothing is logged.</param>
+		public Harvester(string sUserName, string sPassword, ASafeLog oLog = null) : base(oLog) {
 			UserName = sUserName;
 			Password = sPassword;
+			Hopper = new Hopper();
 		} // constructor
 
 		#endregion constructor
 
 		#region property UserName
 
+		/// <summary>
+		/// User name for hmrc.gov.uk
+		/// </summary>
 		public string UserName { get; set; }
 
 		#endregion property UserName
 
 		#region property Password
 
+		/// <summary>
+		/// Password for hmrc.gov.uk
+		/// </summary>
 		public string Password { get; set; }
 
 		#endregion property Password
 
+		#region property Hopper
+
+		/// <summary>
+		/// Output storage.
+		/// </summary>
+		public Hopper Hopper { get; private set; } // Hopper
+
+		#endregion property Hopper
+
 		#region method Init
 
+		/// <summary>
+		/// Initialises the Harvester.
+		/// </summary>
+		/// <returns>true, if initialisation was successful; false, otherwise.</returns>
 		public bool Init() {
 			Session = new HttpClient {
 				BaseAddress = new Uri("https://online.hmrc.gov.uk")
@@ -50,11 +91,96 @@ namespace Ezbob.HmrcCrawler {
 
 		#region method Run
 
+		/// <summary>
+		/// Main harvest function. Logs in to hmrc.gov.uk and fetches data.
+		/// </summary>
 		public void Run() {
-			LoginRequestDetails lrd = GetLoginRequestDetails(GetPage(""));
+			Login(GetLoginRequestDetails(GetPage("")));
 
-			Login(lrd);
+			VatReturns();
+		} // Run
 
+		#endregion method Run
+
+		#region method Done
+
+		/// <summary>
+		/// Performs cleanup.
+		/// </summary>
+		public void Done() {
+			Session.Dispose();
+		} // Done
+
+		#endregion method Done
+
+		#endregion public
+
+		#region private
+
+		#region struct LoginRequestDetails
+
+		/// <summary>
+		/// Stores login request details (method, URL, form field names).
+		/// </summary>
+		private struct LoginRequestDetails {
+			/// <summary>
+			/// Login method (GET, POST, etc).
+			/// </summary>
+			public string Method;
+
+			/// <summary>
+			/// Login page URL.
+			/// </summary>
+			public string Url;
+
+			/// <summary>
+			/// Form field name for user name.
+			/// </summary>
+			public string UserNameField;
+
+			/// <summary>
+			/// Form field name for password.
+			/// </summary>
+			public string PasswordField;
+
+			/// <summary>
+			/// Validates all the details. Quietly completes on success. Throws HarvesterException on error.
+			/// </summary>
+			public void Validate() {
+				if (string.IsNullOrWhiteSpace(Method))
+					throw new HarvesterException("Login method is empty.");
+
+				if (string.IsNullOrWhiteSpace(Url))
+					throw new HarvesterException("Login URL is empty.");
+
+				if (string.IsNullOrWhiteSpace(UserNameField))
+					throw new HarvesterException("Login user name field is empty.");
+
+				if (string.IsNullOrWhiteSpace(PasswordField))
+					throw new HarvesterException("Login password is empty.");
+			} // Validate
+
+			/// <summary>
+			/// Converts this structure to string.
+			/// </summary>
+			/// <returns>String representation of the structure (mainly for logging).</returns>
+			public override string ToString() {
+				return string.Format(
+					"Login method: {0} {1}\nUser name field: {2}\nPassword field: {3}",
+					Method, Url, UserNameField, PasswordField
+				);
+			} // ToString
+		} // LoginRequestDetails
+
+		#endregion struct LoginRequestDetails
+
+		#region method VatReturns
+
+		/// <summary>
+		/// Fetches "VAT return" data and stores it in the Hopper.
+		/// Separate files are fetched in parallel.
+		/// </summary>
+		private void VatReturns() {
 			string sUserVatID = GetUserVatID();
 
 			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
@@ -74,54 +200,59 @@ namespace Ezbob.HmrcCrawler {
 
 					string sBaseFileName = sr.Value.Replace(' ', '_');
 
-					Info("Downloading {0}.html <- {1}", sBaseFileName, sHtmlUrl);
+					Info("Requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
 
 					oTasks.Add(
-						Session.GetAsync(sHtmlUrl).ContinueWith(SaveFile, sBaseFileName + ".html")
+						Session.GetAsync(sHtmlUrl).ContinueWith(GetFile, new Hopper.FileIdentifier {
+							DataType = Hopper.DataType.VatReturn,
+							FileType = Hopper.FileType.Html,
+							BaseFileName = sBaseFileName
+						})
 					);
 
-					Info("Downloading {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
+					Info("Requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
 
 					oTasks.Add(
-						Session.GetAsync(sPdfUrl).ContinueWith(SaveFile, sBaseFileName + ".pdf")
+						Session.GetAsync(sPdfUrl).ContinueWith(GetFile, new Hopper.FileIdentifier {
+							DataType = Hopper.DataType.VatReturn,
+							FileType = Hopper.FileType.Pdf,
+							BaseFileName = sBaseFileName
+						})
 					);
 				} // for each file
 
 				Task.WaitAll(oTasks.ToArray());
 			} // if
-		} // Run
+		} // VatReturns
 
-		#endregion method Run
+		#endregion method VatReturns
 
-		#region method Done
+		#region method GetFile
 
-		public void Done() {
-			Session.Dispose();
-		} // Done
-
-		#endregion method Done
-
-		#endregion public
-
-		#region private
-
-		#region method SaveFile
-
-		private void SaveFile(Task<HttpResponseMessage> task, object oBaseFileName) {
-			string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "files", oBaseFileName.ToString());
+		/// <summary>
+		/// Fetches one file from the Field and stores it in the Hopper as byte[].
+		/// Adds HarvesterError to the Hopper in case of error.
+		/// </summary>
+		/// <param name="task">HTTP request result.</param>
+		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
+		private void GetFile(Task<HttpResponseMessage> task, object oFileIdentifier) {
+			var fi = (Hopper.FileIdentifier)oFileIdentifier;
 
 			HttpResponseMessage response = task.Result;
 
-			Info("Saving {0} <- {1}", sFileName, response.RequestMessage);
+			Info("Retrieving {0}", response.RequestMessage);
 
 			if (!response.IsSuccessStatusCode) {
 				Error("Not saving because of error. Status code {0}: {1}", response.StatusCode.ToString(), response.ReasonPhrase);
+				Hopper.Add(fi, response);
 				return;
 			} // if
 
 			Stream oInputStream = response.Content.ReadAsStreamAsync().Result;
 
-			var outputFile = new BinaryWriter(File.Open(sFileName, FileMode.Create));
+			var oOutput = new MemoryStream();
+
+			var outputFile = new BinaryWriter(oOutput);
 
 			const int nBufSize = 8192;
 			var buf = new byte[nBufSize];
@@ -135,9 +266,11 @@ namespace Ezbob.HmrcCrawler {
 			} // while
 
 			outputFile.Close();
-		} // SaveFile
 
-		#endregion method SaveFile
+			Hopper.Add(fi, oOutput.ToArray());
+		} // GetFile
+
+		#endregion method GetFile
 
 		#region method LoadSubmittedReturnsList
 
@@ -149,7 +282,7 @@ namespace Ezbob.HmrcCrawler {
 			HtmlNode oListTable = doc.DocumentNode.SelectSingleNode("//*[@id=\"VAT0011\"]/div[2]/table/tbody");
 
 			if (oListTable == null)
-				throw new CrawlerException("Failed to find list of returns.");
+				throw new HarvesterException("Failed to find list of returns.");
 
 			if (oListTable.ChildNodes == null) {
 				Info("Loading list of submitted VAT returns complete, no files found.");
@@ -203,15 +336,15 @@ namespace Ezbob.HmrcCrawler {
 			HtmlNode oLink = doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]");
 
 			if (oLink == null)
-				throw new CrawlerException("Access VAT services link not found.");
+				throw new HarvesterException("Access VAT services link not found.");
 
 			if (!oLink.Attributes.Contains("href"))
-				throw new CrawlerException("Access VAT services link has not HREF attrbute.");
+				throw new HarvesterException("Access VAT services link has not HREF attrbute.");
 
 			string sHref = oLink.Attributes["href"].Value;
 
 			if (!sHref.StartsWith("/vat/trader/"))
-				throw new CrawlerException("Failed to parse Access VAT services link.");
+				throw new HarvesterException("Failed to parse Access VAT services link.");
 
 			string sID = sHref.Substring(sHref.LastIndexOf('/') + 1);
 
@@ -224,11 +357,15 @@ namespace Ezbob.HmrcCrawler {
 
 		#region method Login
 
+		/// <summary>
+		/// Logs in to the Field.
+		/// </summary>
+		/// <param name="lrd">Login form details.</param>
 		private void Login(LoginRequestDetails lrd) {
 			Info("Logging in as {0}...", UserName);
 
 			if (lrd.Method.ToUpper() != "POST")
-				throw new CrawlerException("Unsupported login method: " + lrd.Method);
+				throw new HarvesterException("Unsupported login method: " + lrd.Method);
 
 			var oData = new Dictionary<string, string>();
 			oData[lrd.UserNameField] = UserName;
@@ -247,11 +384,16 @@ namespace Ezbob.HmrcCrawler {
 
 		#region method GetLoginRequestDetails
 
+		/// <summary>
+		/// Extracts login form details from the login page.
+		/// </summary>
+		/// <param name="oLoginPage">Login page.</param>
+		/// <returns>Login form details.</returns>
 		private LoginRequestDetails GetLoginRequestDetails(HtmlDocument oLoginPage) {
 			HtmlNodeCollection oForms = oLoginPage.DocumentNode.SelectNodes("//form[contains(@action,'login')]");
 
 			if ((oForms == null) || (oForms.Count != 1))
-				throw new CrawlerException("Login form not found or too many forms on the page.");
+				throw new HarvesterException("Login form not found or too many forms on the page.");
 
 			HtmlNode oLoginForm = oForms[0];
 
@@ -262,18 +404,18 @@ namespace Ezbob.HmrcCrawler {
 			HtmlNode oUserName = oLoginForm.SelectSingleNode("//input[@id=\"FieldUserID\"]");
 
 			if (oUserName == null)
-				throw new CrawlerException("User name field not found.");
+				throw new HarvesterException("User name field not found.");
 
 			if (!oUserName.Attributes.Contains("name"))
-				throw new CrawlerException("User name field's NAME attribute not specified.");
+				throw new HarvesterException("User name field's NAME attribute not specified.");
 
 			HtmlNode oPassword = oLoginForm.SelectSingleNode("//input[@id=\"FieldPassword\"]");
 
 			if (oPassword == null)
-				throw new CrawlerException("Password field not found.");
+				throw new HarvesterException("Password field not found.");
 
 			if (!oPassword.Attributes.Contains("name"))
-				throw new CrawlerException("Password field's NAME attribute not specified.");
+				throw new HarvesterException("Password field's NAME attribute not specified.");
 
 			var oOutput = new LoginRequestDetails {
 				Method = sLoginMethod,
@@ -293,6 +435,12 @@ namespace Ezbob.HmrcCrawler {
 
 		#region method GetPage
 
+		/// <summary>
+		/// Fetches a page from the Field (https://online.hmrc.gov.uk).
+		/// Throws exception on error.
+		/// </summary>
+		/// <param name="sResource">Page address (without protocol and domain/port but with the leading slash).</param>
+		/// <returns>Fetched page.</returns>
 		private HtmlDocument GetPage(string sResource) {
 			Info("Requesting {0}{1}", Session.BaseAddress.AbsoluteUri, sResource);
 
@@ -323,44 +471,15 @@ namespace Ezbob.HmrcCrawler {
 
 		#region property Session
 
+		/// <summary>
+		/// HTTP session.
+		/// </summary>
 		private HttpClient Session { get; set; }
 
 		#endregion property Session
 
-		#region struct LoginRequestDetails
-
-		private struct LoginRequestDetails {
-			public string Method;
-			public string Url;
-			public string UserNameField;
-			public string PasswordField;
-
-			public void Validate() {
-				if (string.IsNullOrWhiteSpace(this.Method))
-					throw new CrawlerException("Login method is empty.");
-
-				if (string.IsNullOrWhiteSpace(this.Url))
-					throw new CrawlerException("Login URL is empty.");
-
-				if (string.IsNullOrWhiteSpace(this.UserNameField))
-					throw new CrawlerException("Login user name field is empty.");
-
-				if (string.IsNullOrWhiteSpace(this.PasswordField))
-					throw new CrawlerException("Login password is empty.");
-			} // Validate
-
-			public override string ToString() {
-				return string.Format(
-					"Login method: {0} {1}\nUser name field: {2}\nPassword field: {3}",
-					this.Method, this.Url, this.UserNameField, this.PasswordField
-				);
-			} // ToString
-		} // LoginRequestDetails
-
-		#endregion struct LoginRequestDetails
-
 		#endregion private
-	} // class Crawler
+	} // class Harvester
 
-	#endregion class Crawler
-} // namespace Ezbob.HmrcCrawler
+	#endregion class Harvester
+} // namespace Ezbob.HmrcHarvester
