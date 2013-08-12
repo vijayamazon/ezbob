@@ -43,13 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AThrasher.cs" />
+    <Compile Include="DLParser.cs" />
     <Compile Include="Harvester.cs" />
     <Compile Include="HarvesterError.cs" />
     <Compile Include="HarvesterException.cs" />
     <Compile Include="Hopper.cs" />
+    <Compile Include="ISeeds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SheafMetaData.cs" />
+    <Compile Include="VatReturnSeeds.cs" />
+    <Compile Include="VatReturnThrasher.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DL-parser.gv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +65,19 @@
       <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="DL-parser.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>@echo off
+
+for %25%25x in (dot.exe) do (set DOT_PATH=%25%25~$PATH:x)
+
+if defined DOT_PATH (
+"%25DOT_PATH%25" -T png -o "$(ProjectDir)\DL-parser.png" "$(ProjectDir)\DL-parser.gv"
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

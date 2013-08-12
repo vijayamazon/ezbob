@@ -203,20 +203,22 @@ namespace Ezbob.HmrcHarvester {
 					Info("Requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
 
 					oTasks.Add(
-						Session.GetAsync(sHtmlUrl).ContinueWith(GetFile, new Hopper.FileIdentifier {
-							DataType = Hopper.DataType.VatReturn,
-							FileType = Hopper.FileType.Html,
-							BaseFileName = sBaseFileName
+						Session.GetAsync(sHtmlUrl).ContinueWith(GetFile, new SheafMetaData {
+							DataType = DataType.VatReturn,
+							FileType = FileType.Html,
+							BaseFileName = sBaseFileName,
+							Thrasher = new VatReturnThrasher(this)
 						})
 					);
 
 					Info("Requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
 
 					oTasks.Add(
-						Session.GetAsync(sPdfUrl).ContinueWith(GetFile, new Hopper.FileIdentifier {
-							DataType = Hopper.DataType.VatReturn,
-							FileType = Hopper.FileType.Pdf,
-							BaseFileName = sBaseFileName
+						Session.GetAsync(sPdfUrl).ContinueWith(GetFile, new SheafMetaData {
+							DataType = DataType.VatReturn,
+							FileType = FileType.Pdf,
+							BaseFileName = sBaseFileName,
+							Thrasher = null
 						})
 					);
 				} // for each file
@@ -236,7 +238,7 @@ namespace Ezbob.HmrcHarvester {
 		/// <param name="task">HTTP request result.</param>
 		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
 		private void GetFile(Task<HttpResponseMessage> task, object oFileIdentifier) {
-			var fi = (Hopper.FileIdentifier)oFileIdentifier;
+			var fi = (SheafMetaData)oFileIdentifier;
 
 			HttpResponseMessage response = task.Result;
 
@@ -267,7 +269,12 @@ namespace Ezbob.HmrcHarvester {
 
 			outputFile.Close();
 
-			Hopper.Add(fi, oOutput.ToArray());
+			byte[] oFile = oOutput.ToArray();
+
+			Hopper.Add(fi, oFile);
+
+			if (fi.Thrasher != null)
+				Hopper.Add(fi, fi.Thrasher.Run(fi, oFile));
 		} // GetFile
 
 		#endregion method GetFile
