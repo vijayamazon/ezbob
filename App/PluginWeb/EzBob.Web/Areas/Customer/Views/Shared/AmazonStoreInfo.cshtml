@@ -1,24 +1,24 @@
 ﻿@model dynamic
-
 @helper AmazonInfo()
-    {
+{
     <div class="amazon-instructions" style="padding-top: 1px;">
-		<div class="amazon-instructions-title">
-			<h2>Add Amazon Shop</h2>
-			<a class="amazonscreenshot" rel="group" href="#"><img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" /></a>
-			<label class="amazon_view_tutorial_label">View Tutorial</label>
-		</div>
+        <div class="amazon-instructions-title">
+            <h2>Add Amazon Shop</h2>
+            <a class="amazonscreenshot" rel="group" href="#">
+                <img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" />
+            </a>
+            <label class="amazon_view_tutorial_label">View Tutorial</label>
+        </div>
 
         <div style="padding-top: 10px;">
             <ol class='store-connect-manual'>
                 <li>
                     <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link-force go-to-amazon" target="_blank">Click here</a>   to be redirected to Amazon Services and login with your seller ID
                 </li>
-                    
+
                 <hr class="dotted" />
-                    
-                <li>
-                    Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option <q>"I want to use an <b>application</b>..."</q>
+
+                <li>Once you are logged into your Amazon account, choose the 2<sup>nd</sup> option <q>"I want to use an <b>application</b>..."</q>
                     and enter the following in Amazon Services:
                     <dl>
                         <dt>Application Name</dt>
@@ -28,36 +28,19 @@
                         <dd>0145-5534-7663</dd>
                     </dl>
                 </li>
-                    
+
                 <hr class="dotted" />
 
-                <li>
-                    Read and accept Amazon Services terms and conditions.
+                <li>Read and accept Amazon Services terms and conditions.
                 </li>
-                    
+
                 <hr class="dotted" />
 
-                <li>
-                    Copy and Paste from Amazon Services:
+                <li>Copy and Paste from Amazon Services:
                     @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm", @style = "padding-top:20px;" }))
                     {
-                        @EzForm.InputText("amazonMerchantId", "Merchant ID", cls:"form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
-                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls:"form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
-                        @*<div class="control-group">
-                            <label for="amazonMerchantId" class="control-label">Merchant ID</label>
-                            <div class="controls">
-                                <input id="amazonMerchantId" name="amazonMerchantId" type="text" value="" class="input-medium" maxlength="15" disabled="disabled" />
-                                <img id="amazonMerchantIdImage" class="field_status required"/>
-                            </div>
-                        </div>
-                                
-                        <div class="control-group">
-                            <label for="amazonMarketplaceId" class="control-label">Marketplace ID</label>
-                            <div class="controls">
-                                <input id="amazonMarketplaceId" name="amazonMarketplaceId" type="text" value="" class="input-medium" maxlength="15"  disabled="disabled" />
-                                <img id="amazonMarketplaceIdImage" class="field_status required"/>
-                            </div>
-                        </div>*@
+                        @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
                     }
                 </li>
             </ol>
@@ -66,7 +49,6 @@
             <a href="#Connect/amazon" class="connect-amazon button orange pull-right disabled">Continue</a>
             <a href="#" class="back button grey pull-right">Back</a>
         </div>
-        @*@{Html.RenderPartial("_SecureDisclaimer");}*@
     </div>
 }
 
@@ -77,19 +59,19 @@
 <div id="amazon-gallery-container" class="hide">
     <div class="amazon-tutorial-slider">
         <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")'  alt="">
+            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' alt="" />
         </a>
 
         <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon2.jpg")'  alt="">
+            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon2.jpg")' alt="" />
         </a>
 
         <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon3.jpg")'  alt="">
+            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon3.jpg")' alt="" />
         </a>
 
         <a href='@Url.Content("~/Content/img/Tutorial/amazon1.jpg")' target="_blank">
-            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon4.jpg")'  alt="">
+            <img height="471" width="960" src='@Url.Content("~/Content/img/Tutorial/amazon4.jpg")' alt="" />
         </a>
     </div>
 </div>

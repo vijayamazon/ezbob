@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.AmazonStoreInfoView = (function(_super) {
+
     __extends(AmazonStoreInfoView, _super);
 
     function AmazonStoreInfoView() {
-      _ref = AmazonStoreInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return AmazonStoreInfoView.__super__.constructor.apply(this, arguments);
     }
 
     AmazonStoreInfoView.prototype.initialize = function() {
@@ -21,7 +21,6 @@
 
     AmazonStoreInfoView.prototype.render = function() {
       var oFieldStatusIcons;
-
       this.$el.html($('#amazon-store-info').html());
       this.form = this.$el.find('.AmazonForm');
       this.validator = EzBob.validateAmazonForm(this.form);
@@ -34,6 +33,8 @@
       oFieldStatusIcons.not('.required').field_status({
         required: false
       });
+      this.marketplaceId.withoutSpaces();
+      this.merchantId.withoutSpaces();
       return this;
     };
 
@@ -43,7 +44,9 @@
       'click a.back': 'back',
       'click .amazonscreenshot': 'runTutorial',
       'click a.print': 'print',
-      'change input': 'inputChanged'
+      'change input': 'inputChanged',
+      'focusout input': 'inputChanged',
+      'keyup input': 'inputChanged'
     };
 
     AmazonStoreInfoView.prototype.enableControls = function() {
@@ -59,14 +62,12 @@
 
     AmazonStoreInfoView.prototype.inputChanged = function() {
       var enabled;
-
       enabled = EzBob.Validation.checkForm(this.validator);
       return this.$el.find('a.connect-amazon').toggleClass('disabled', !enabled);
     };
 
     AmazonStoreInfoView.prototype.runTutorial = function() {
       var content, div;
-
       div = $('<div/>');
       content = $('#amazon-gallery-container');
       div.html(content.html());
@@ -103,16 +104,15 @@
     AmazonStoreInfoView.prototype.connect = function(e) {
       var marketplaceId, merchantId,
         _this = this;
-
-      if (!this.validator.form()) {
-        EzBob.App.trigger('error', 'Please enter a valid Merchant ID');
+      if (!EzBob.Validation.checkForm(this.validator)) {
+        this.validator.form();
+        return false;
+      }
+      if (this.$el.find('a.connect-amazon').hasClass('disabled')) {
         return false;
       }
       marketplaceId = this.$el.find('#amazonMarketplaceId');
       merchantId = this.$el.find('#amazonMerchantId');
-      if (this.$el.find('a.connect-amazon').hasClass('disabled')) {
-        return false;
-      }
       this.blockBtn(true);
       $.post(window.gRootPath + 'Customer/AmazonMarketplaces/ConnectAmazon', {
         marketplaceId: marketplaceId.val(),
@@ -146,6 +146,7 @@
     };
 
     AmazonStoreInfoView.prototype.getDocumentTitle = function() {
+      EzBob.App.trigger('clear');
       return 'Link Amazon Account';
     };
 
@@ -154,11 +155,11 @@
   })(Backbone.View);
 
   EzBob.AmazonStoreModel = (function(_super) {
+
     __extends(AmazonStoreModel, _super);
 
     function AmazonStoreModel() {
-      _ref1 = AmazonStoreModel.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return AmazonStoreModel.__super__.constructor.apply(this, arguments);
     }
 
     AmazonStoreModel.prototype.defaults = {
@@ -170,11 +171,11 @@
   })(Backbone.Model);
 
   EzBob.AmazonStoreModels = (function(_super) {
+
     __extends(AmazonStoreModels, _super);
 
     function AmazonStoreModels() {
-      _ref2 = AmazonStoreModels.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return AmazonStoreModels.__super__.constructor.apply(this, arguments);
     }
 
     AmazonStoreModels.prototype.model = EzBob.AmazonStoreModel;
@@ -186,11 +187,11 @@
   })(Backbone.Collection);
 
   EzBob.AmazonButtonView = (function(_super) {
+
     __extends(AmazonButtonView, _super);
 
     function AmazonButtonView() {
-      _ref3 = AmazonButtonView.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return AmazonButtonView.__super__.constructor.apply(this, arguments);
     }
 
     AmazonButtonView.prototype.initialize = function() {
@@ -204,7 +205,6 @@
     AmazonButtonView.prototype.update = function() {
       var xhr,
         _this = this;
-
       xhr = this.model.fetch();
       return xhr.done(function() {
         EzBob.App.trigger('ct:storebase.shop.connected');

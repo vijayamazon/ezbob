@@ -82,7 +82,6 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
     connect: (e) ->
         if not EzBob.Validation.checkForm(@validator)
             @validator.form()
-            EzBob.App.trigger 'error', 'Please enter a valid Merchant ID'
             return false
         
         return false if @$el.find('a.connect-amazon').hasClass('disabled')
