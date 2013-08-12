@@ -544,6 +544,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             //accountInfo.TermAndfreq =
                             //    PaymentFrequencyDictionary.GetPaymentFrequency(caisDetails.PaymentFrequency ?? string.Empty);
                             var accStatus = caisDetails.AccountStatus;
+	                        
                             string dateType;
                             accountInfo.AccountStatus = GetAccountStatusString(accStatus, out dateType);
                             accountInfo.DateType = dateType;
@@ -554,7 +555,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             if (accType < 0)
                                 continue;
 
-                            if ((accStatus == "D") || (accStatus == "A"))
+							var jointAcc = caisDetails.JointAccount;
+                            if (((accStatus == "D") || (accStatus == "A")) && jointAcc != "J")
                             {
                                 accounts[accType]++;
                                 var ws = caisDetails.WorstStatus;
