@@ -16,11 +16,12 @@
     <NodeElement Name="ezbob model" NodeId="ModelExecution31153498" />
     <NodeElement Name="EZBOB Seniority" NodeId="ConditionalAssignment60588421" />
     <NodeElement Name="Gender" NodeId="ConditionalAssignment2639534" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="ConditionalAssignment6635397" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
-    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
+    <NodeElement Name="GetLoanOfferMultiplier" NodeId="DataSourceNodeScalar39124268" />
     <NodeElement Name="has first repayment date been reached?" NodeId="Comparison51227795" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison36352712" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison8392322" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="Comparison41035000" />
+    <NodeElement Name="has first repayment date been reached?" NodeId="ConditionalAssignment6635397" />
     <NodeElement Name="init new weights" NodeId="MultiAssignmentB59164922" />
     <NodeElement Name="Marital Status" NodeId="ConditionalAssignment38927140" />
     <NodeElement Name="Marketplace Seniority" NodeId="ConditionalAssignment20687433" />
@@ -34,11 +35,11 @@
     <NodeElement Name="Prev Late Payments" NodeId="DiscreteValue43878027" />
     <NodeElement Name="Recalculate weights" NodeId="MultiAssignment19990073" />
     <NodeElement Name="Script" NodeId="ScriptNode5045995" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB32468313" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
-    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
-    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
     <NodeElement Name="set new weight" NodeId="Assignment3345069" />
+    <NodeElement Name="set new weight" NodeId="Assignment33859762" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB7671360" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB29449405" />
+    <NodeElement Name="set new weight" NodeId="AssignmentB32468313" />
     <NodeElement Name="Start Node" NodeId="StartNode2792905" />
     <NodeElement Name="Stop Node" NodeId="StopNode25136147" />
     <NodeElement Name="update initial weights" NodeId="MultiAssignmentB18688628" />
@@ -3064,7 +3065,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode5045995</Name>
       <PointF>
-        <X>656</X>
+        <X>776</X>
         <Y>1376</Y>
       </PointF>
       <SuperNodeName />
@@ -3720,6 +3721,63 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignment</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>GetLoanOfferMultiplier</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;GetLoanOfferMultiplierhgRXZRHzeeMEiNhe+oyawA==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;Multiplier&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;ExperianScore&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar39124268</Name>
+      <PointF>
+        <X>601.0505</X>
+        <Y>1376</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -5069,6 +5127,18 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>ezbob_scoring_model</OwnerName>
+      <Name>Multiplier</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>ModelExecution61664903</OwnerName>
       <Name>ExperianScore</Name>
       <TypeName>WorkflowObjects.VariableConstrained</TypeName>
@@ -5800,6 +5870,54 @@
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar39124268</OwnerName>
+      <Name>Multiplier</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar39124268</OwnerName>
+      <Name>ExperianScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar39124268</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar39124268</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors>
     <VariableConstraintDescriptor>
@@ -5983,7 +6101,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment59131099</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode5045995</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar39124268</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -6449,6 +6567,18 @@
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar39124268</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode5045995</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
     <VariableConnectionDescriptor>
@@ -6672,6 +6802,30 @@
       <SourceVariableName>AC_Descriptors</SourceVariableName>
       <TargetVariableOwnerName>AdverseCode18607670</TargetVariableOwnerName>
       <TargetVariableName>Descriptors</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>ezbob_scoring_model</SourceVariableOwnerName>
+      <SourceVariableName>ExperianScore</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar39124268</TargetVariableOwnerName>
+      <TargetVariableName>ExperianScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>ezbob_scoring_model</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar39124268</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>ezbob_scoring_model</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar39124268</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>ezbob_scoring_model</SourceVariableOwnerName>
+      <SourceVariableName>Multiplier</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar39124268</TargetVariableOwnerName>
+      <TargetVariableName>Multiplier</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -6987,6 +7141,14 @@
       <SigningOutlets />
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar39124268</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
   </SigningNodeDescriptors>
   <ScriptDescriptors>
     <ScriptDescriptor>
@@ -7038,6 +7200,7 @@ from System import *
 
 round (ScorePoints);
 if LoanOffer &lt;&gt; None:
+  LoanOffer = LoanOffer * Multiplier
   LoanOffer = LoanOffer - (LoanOffer % 100)
 else:
   LoanOffer = 0</Script>
