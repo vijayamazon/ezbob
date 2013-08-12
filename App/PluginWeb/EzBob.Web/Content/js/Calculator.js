@@ -1,6 +1,6 @@
 ﻿var EzBob = EzBob || {};
 
-EzBob.СalculatorModel = Backbone.Model.extend({
+EzBob.CalculatorModel = Backbone.Model.extend({
 
     initialize: function () {
         this.on("error", function () {
