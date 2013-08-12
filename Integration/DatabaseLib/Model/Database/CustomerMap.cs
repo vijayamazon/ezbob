@@ -290,7 +290,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Formula(
                 @"(SELECT TOP 1 ST.NAME FROM [CustomerRelations] AS CR 
                     LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
-                    WHERE CR.CustomerId=Id ORDER BY CR.Timestamp DESC)")
+                    WHERE CR.CustomerId=Id AND ST.Id != 1 ORDER BY CR.Timestamp DESC)")
                 .Not.Insert()
                 .Not.Update();
             Map(x => x.AmountOfInteractions)

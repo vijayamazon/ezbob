@@ -270,7 +270,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 
         /// <summary>
-        /// Êîëè÷åñòî ïîïûòîê ïîëó÷èòü êýø. Ïî ñóòè êîëè÷åñòî íàæàòèé íà êíîïêó Request Cash.
+        /// Êîëè÷åñòî ïîïûòîê ïîëó÷èòü êýø. Ïî ñóòè êîëè÷åñòî íàæàòèé íà êíîïêó Request Cash.  // Strange language is detected.
         /// </summary>
         public virtual int ApplyCount { get; set; }
         public virtual DateTime? DateEscalated { get; set; }

@@ -21,7 +21,7 @@ EzBob.Underwriter.customerGrid = (settings) ->
         sortable: true
         datatype: "json"
         mtype: "GET"
-        sortname: "Id"
+        sortname: if settings.el == "#sales" then "OfferDate" else "Id" 
         sortorder: "desc"
         viewrecords: true
         hidegrid: false
