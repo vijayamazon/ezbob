@@ -204,6 +204,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual bool Fraud { get; set; }
         public virtual FraudStatus FraudStatus { get; set; }
         public virtual bool Eliminated { get; set; }
+        public virtual int FinancialAccounts { get; set; }
 
         public virtual bool IsSuccessfullyRegistered { get; set; }
 

@@ -102,6 +102,7 @@ namespace EzBob.Models
                     creditBureau.BorrowerType =
                         TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
                     //creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
+                    creditBureau.FinancialAccounts = customer.FinancialAccounts;
                 }
             }
             catch (Exception e)

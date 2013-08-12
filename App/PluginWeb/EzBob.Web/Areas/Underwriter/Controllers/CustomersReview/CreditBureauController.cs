@@ -86,6 +86,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                                                          customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
 
                 model = generateConsumerModel(customer.Id, result);
+                customer.FinancialAccounts = model.AccountsInformation.Length;
+                _customers.Update(customer);
 
                 model.Name = customer.PersonalInfo.FirstName;
                 model.MiddleName = customer.PersonalInfo.MiddleInitial;

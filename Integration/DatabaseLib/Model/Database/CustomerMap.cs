@@ -201,6 +201,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
             Map(x => x.Fraud);
             Map(x => x.FraudStatus).CustomType<FraudStatus>();
+            Map(x => x.FinancialAccounts);
             Map(x => x.Eliminated);
             Map(x => x.Comment, "Comments").CustomType("StringClob").LazyLoad();
             Map(x => x.SetupFee);

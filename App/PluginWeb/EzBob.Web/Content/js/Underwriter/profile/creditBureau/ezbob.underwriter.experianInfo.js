@@ -1,6 +1,4 @@
-﻿var ExperianAccounts;
-
-var EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 
 
 EzBob.Underwriter = EzBob.Underwriter || {};

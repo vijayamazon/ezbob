@@ -54,6 +54,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public double TotalDebt { get; set; }
         public double CreditCardBalances { get; set; }
         public string BorrowerType { get; set; }
+        public int FinancialAccounts { get; set; }
     }
 
     public class ProfileSummaryModel
