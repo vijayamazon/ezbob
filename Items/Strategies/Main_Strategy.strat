@@ -19,6 +19,7 @@
     <NodeElement Name="Assignment" NodeId="AssignmentB35373479" />
     <NodeElement Name="Assignment" NodeId="AssignmentB18516706" />
     <NodeElement Name="Assignment" NodeId="AssignmentB53063620" />
+    <NodeElement Name="AutoRejectReason" NodeId="AssignmentB55337852" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB15958447" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB56636209" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB50368676" />
@@ -75,7 +76,6 @@
     <NodeElement Name="Is Business" NodeId="Comparison39575399" />
     <NodeElement Name="is BWA Error" NodeId="Comparison20503483" />
     <NodeElement Name="is BWA Error" NodeId="Comparison42392236" />
-    <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison25377797" />
     <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison49253056" />
     <NodeElement Name="Is Re-Rejected" NodeId="Comparison1955303" />
     <NodeElement Name="IsAMLStartedFromWeb" NodeId="Comparison66744080" />
@@ -127,6 +127,8 @@
     <NodeElement Name="Re-Rejection" NodeId="Comparison36836846" />
     <NodeElement Name="Segmentation" NodeId="Segmentation55175005" />
     <NodeElement Name="Segmentation" NodeId="Segmentation42703783" />
+    <NodeElement Name="Seniority &lt; 300 days" NodeId="Comparison16797371" />
+    <NodeElement Name="Seniority &lt; 300 days" NodeId="Comparison25377797" />
     <NodeElement Name="Start Node" NodeId="StartNode7786314" />
     <NodeElement Name="Stop Node" NodeId="StopNode2967967" />
     <NodeElement Name="StopNode" NodeId="StopNode55449228" />
@@ -2767,8 +2769,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison25377797</Name>
       <PointF>
-        <X>1208.81433</X>
-        <Y>1856</Y>
+        <X>1368.81433</X>
+        <Y>1876</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -2835,8 +2837,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49253056</Name>
       <PointF>
-        <X>1331.336</X>
-        <Y>1756</Y>
+        <X>1391.336</X>
+        <Y>1776</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -3893,7 +3895,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison47544505</Name>
       <PointF>
-        <X>1444.40735</X>
+        <X>1484.40735</X>
         <Y>1756</Y>
       </PointF>
       <SuperNodeName />
@@ -3910,8 +3912,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison32263575</Name>
       <PointF>
-        <X>1340.88391</X>
-        <Y>1856</Y>
+        <X>1460.88391</X>
+        <Y>1836</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -4583,7 +4585,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49692243</Name>
       <PointF>
-        <X>1536.91736</X>
+        <X>1556.91736</X>
         <Y>1856</Y>
       </PointF>
       <SuperNodeName />
@@ -6472,7 +6474,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB50368676</Name>
       <PointF>
-        <X>1530.901</X>
+        <X>1550.901</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -6489,8 +6491,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB15958447</Name>
       <PointF>
-        <X>1190.901</X>
-        <Y>1776</Y>
+        <X>1290.901</X>
+        <Y>1756</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
@@ -6508,6 +6510,40 @@
       <PointF>
         <X>1430.901</X>
         <Y>1676</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Seniority &lt; 300 days</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison16797371</Name>
+      <PointF>
+        <X>1166.82434</X>
+        <Y>1836</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>AutoRejectReason</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>AssignmentB55337852</Name>
+      <PointF>
+        <X>1190.901</X>
+        <Y>1756</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
@@ -16683,6 +16719,54 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison16797371</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>MarketplaceSeniorityDays &lt; 300 AND ErrorMPsNum=0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison16797371</OwnerName>
+      <Name>Comparison16797371MarketplaceSeniorityDays</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison16797371</OwnerName>
+      <Name>Comparison16797371ErrorMPsNum</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>AssignmentB55337852</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>AutoRejectReason:="AutoReject: Seniority. Condition not met: (" + MarketplaceSeniorityDays + " &lt; 300)"</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors>
     <VariableConstraintDescriptor>
@@ -18450,7 +18534,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison49253056</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <TargetNodeName>Comparison16797371</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -19155,7 +19239,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison25377797</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <TargetNodeName>Comparison16797371</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -19914,6 +19998,10 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
+          <X>1700</X>
+          <Y>1940</Y>
+        </PointF>
+        <PointF>
           <X>1680</X>
           <Y>1940</Y>
         </PointF>
@@ -20074,6 +20162,10 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
+          <X>1600</X>
+          <Y>1640</Y>
+        </PointF>
+        <PointF>
           <X>1580</X>
           <Y>1640</Y>
         </PointF>
@@ -20115,6 +20207,42 @@ CompanyType = "SoleTrader"</InitialValue>
           <Y>1640</Y>
         </PointF>
       </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison16797371</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB55337852</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>AssignmentB55337852</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison46140787</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison16797371</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
@@ -23496,6 +23624,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <TargetVariableOwnerName>MailNode27225255</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
+      <TargetVariableOwnerName>Comparison16797371</TargetVariableOwnerName>
+      <TargetVariableName>Comparison16797371MarketplaceSeniorityDays</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ErrorMPsNum</SourceVariableName>
+      <TargetVariableOwnerName>Comparison16797371</TargetVariableOwnerName>
+      <TargetVariableName>Comparison16797371ErrorMPsNum</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -24676,6 +24816,22 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>AssignmentB7164506</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison16797371</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>AssignmentB55337852</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
