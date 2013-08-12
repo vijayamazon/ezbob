@@ -395,7 +395,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                 {
                     new StrategyParameter("CustomerId", user.Id),
                 };
-            CreateApplication(user, strategyParameters, _config.FraudCheсkerStrategyName);
+            CreateApplication(user, strategyParameters, _config.FraudCheckerStrategyName);
         }
 
 		public void EmailUnderReview(User user, string firstName, string email)

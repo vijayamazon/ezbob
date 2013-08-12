@@ -16,7 +16,7 @@ namespace EzBob.Web.Infrastructure
         string ChangePasswordStrategyName { get; }
         string ThreeInvalidAttemptsStrategyName { get; }
         string ScoringResultStrategyName { get; }
-		string FraudCheсkerStrategyName { get; }
+		string FraudCheckerStrategyName { get; }
         string CustomerMarketPlaceStrategyName { get; }
         string PayPalStrategyName { get; }
         bool CheckStoreUniqueness { get; }
@@ -100,9 +100,9 @@ namespace EzBob.Web.Infrastructure
             get { return GetValueWithDefault<string>("ScoringResultStrategyName", "ScoringResult"); }
         }
 
-		public string FraudCheсkerStrategyName
+		public string FraudCheckerStrategyName
 		{
-			get { return GetValueWithDefault<string>("FraudCheсkerStrategyName", "FraudCheсker"); }
+			get { return GetValueWithDefault<string>("FraudCheckerStrategyName", "FraudChecker"); }
 		}
 
         public string CustomerMarketPlaceStrategyName
