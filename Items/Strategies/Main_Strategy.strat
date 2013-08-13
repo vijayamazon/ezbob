@@ -9312,6 +9312,18 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>TotalSumOfOrdersForLoanOffer</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>AssignmentB38325791</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -21412,12 +21424,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy54608514</TargetVariableOwnerName>
-      <TargetVariableName>AnnualTurnover</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
       <TargetVariableOwnerName>NestedStrategy54608514</TargetVariableOwnerName>
       <TargetVariableName>MarketplaceSeniority</TargetVariableName>
@@ -23636,6 +23642,12 @@ CompanyType = "SoleTrader"</InitialValue>
       <TargetVariableOwnerName>Comparison16797371</TargetVariableOwnerName>
       <TargetVariableName>Comparison16797371ErrorMPsNum</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>TotalSumOfOrdersForLoanOffer</SourceVariableName>
+      <TargetVariableOwnerName>NestedStrategy54608514</TargetVariableOwnerName>
+      <TargetVariableName>AnnualTurnover</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -25271,6 +25283,7 @@ api = StrategyHelper()
 TotalSumOfOrders1YTotal = api.GetAnualTurnOverByCustomer(CustomerId)
 TotalSumOfOrders3MTotal = api.GetTotalSumOfOrders3M(CustomerId)
 MarketplaceSeniorityDays = api.MarketplaceSeniority(CustomerId)
+TotalSumOfOrdersForLoanOffer = api.GetTotalSumOfOrdersForLoanOffer(CustomerId)
 </Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>

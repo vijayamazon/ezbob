@@ -1,20 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.CommonLib.TimePeriodLogic;
-using EzBob.Web.Areas.Underwriter;
-using EzBob.Web.Code;
-using NHibernate;
-using StructureMap;
-using System.IO.Compression;
-
-namespace EzBob.Models
+﻿namespace EzBob.Models
 {
+	using System;
+	using System.Linq;
+	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using CommonLib.TimePeriodLogic;
+	using Web.Areas.Underwriter;
+	using Web.Code;
+	using NHibernate;
+	using StructureMap;
+
     public class StrategyHelper
     {
         private readonly CustomerRepository _customers;
@@ -32,39 +29,57 @@ namespace EzBob.Models
             _mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
         }
 
+		public double GetTurnoverForPeroid(int customerId, TimePeriodEnum peroid)
+		{
+			var customer = _customers.Get(customerId);
+			double sum = 0;
+			double payPalSum = 0;
+			double ebaySum = 0;
+			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal"))
+			{
+				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+				if (av != null)
+				{
+					string parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= peroid);
+
+					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
+					if (mp.Marketplace.Name == "Pay Pal")
+					{
+						payPalSum += currentTurnover;
+					}
+					else if (mp.Marketplace.Name == "eBay")
+					{
+						ebaySum += currentTurnover;
+					}
+					else
+					{
+						sum += currentTurnover;
+					}
+				}
+			}
+			return sum + Math.Max(payPalSum, ebaySum);
+		}
+
         public double GetAnualTurnOverByCustomer(int customerId)
         {
-            var customer = _customers.Get(customerId);
-            double sum = 0;
-            foreach (var mp in customer.CustomerMarketPlaces)
-            {
-                var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-                var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-                if (av != null)
-                {
-                    var lastAnualTurnover = av.LastOrDefault(x => x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Year);
-                    sum += Convert.ToDouble(lastAnualTurnover!=null ? lastAnualTurnover.Value : 0);
-                }
-            }
-            return sum;
+	        return GetTurnoverForPeroid(customerId, TimePeriodEnum.Year);
         }
 
-        public double GetTotalSumOfOrders3M(int customerId)
-        {
-            var customer = _customers.Get(customerId);
-            double sum = 0;
-            foreach (var mp in customer.CustomerMarketPlaces)
-            {
-                var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-                var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-                if (av != null)
-                {
-                    var lastAnualTurnover = av.LastOrDefault(x => x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Month3);
-                    sum += Convert.ToDouble(lastAnualTurnover != null ? lastAnualTurnover.Value : 0);
-                }
-            }
-            return sum;
-        }
+		public double GetTotalSumOfOrders3M(int customerId)
+		{
+			return GetTurnoverForPeroid(customerId, TimePeriodEnum.Month3);
+		}
+
+		public double GetTotalSumOfOrdersForLoanOffer(int customerId)
+		{
+			double year = GetTurnoverForPeroid(customerId, TimePeriodEnum.Year);
+			double month3 = GetTurnoverForPeroid(customerId, TimePeriodEnum.Month3);
+			double month = GetTurnoverForPeroid(customerId, TimePeriodEnum.Month);
+
+			return Math.Min(year, Math.Min(4 * month3, 12 * month));
+		}
 
         public void AddRejectIntoDecisionHistory(int customerId, string comment)
         {
