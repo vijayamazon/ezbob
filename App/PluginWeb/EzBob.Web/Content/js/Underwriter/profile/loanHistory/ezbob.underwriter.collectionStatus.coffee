@@ -64,7 +64,6 @@ class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layou
         @list.show(common)
         @$el.find("#collection-status-items [value='#{@model.get('CurrentStatus')}']").attr("selected", "selected")
         @renderStatusValue()
-        
         @
 
     jqoptions: ->
@@ -94,9 +93,6 @@ class EzBob.Underwriter.CollectionStatusView extends Backbone.Marionette.Layout
         "click .uploadFiles" : "upload"
 
     bindings:
-        CollectionDateOfDeclaration:
-            selector: "input[name='collectionDateOfDeclaration']"
-            converter: EzBob.BindingConverters.dateTime
         CollectionDescription:
             selector: "#collectionDescription"
      
@@ -110,12 +106,8 @@ class EzBob.Underwriter.CollectionStatusView extends Backbone.Marionette.Layout
         $("#addNewDoc").click()
         false
 
-    showDateOfDeclaration :=>
-        currentStatus = @model.get "currentStatus"
-
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
-        @$el.find('#collectionDateOfDeclaration').datepicker({ autoclose: true, format: 'dd/mm/yyyy' })
         @$el.parents('.ui-dialog').find("button").addClass 'btn-back'
         @$el.find('.collectionFee').autoNumeric({ 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F',  mDec: '2', vMax: '999999999999999' };)
         @

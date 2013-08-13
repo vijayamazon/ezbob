@@ -161,7 +161,7 @@
     __extends(CollectionStatusView, _super);
 
     function CollectionStatusView() {
-      this.showDateOfDeclaration = __bind(this.showDateOfDeclaration, this);      _ref3 = CollectionStatusView.__super__.constructor.apply(this, arguments);
+      _ref3 = CollectionStatusView.__super__.constructor.apply(this, arguments);
       return _ref3;
     }
 
@@ -177,10 +177,6 @@
     };
 
     CollectionStatusView.prototype.bindings = {
-      CollectionDateOfDeclaration: {
-        selector: "input[name='collectionDateOfDeclaration']",
-        converter: EzBob.BindingConverters.dateTime
-      },
       CollectionDescription: {
         selector: "#collectionDescription"
       }
@@ -200,18 +196,8 @@
       return false;
     };
 
-    CollectionStatusView.prototype.showDateOfDeclaration = function() {
-      var currentStatus;
-
-      return currentStatus = this.model.get("currentStatus");
-    };
-
     CollectionStatusView.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
-      this.$el.find('#collectionDateOfDeclaration').datepicker({
-        autoclose: true,
-        format: 'dd/mm/yyyy'
-      });
       this.$el.parents('.ui-dialog').find("button").addClass('btn-back');
       this.$el.find('.collectionFee').autoNumeric({
         'aSep': ',',
