@@ -132,16 +132,7 @@
                 };
 
             var updated = orders.SubmittedDate;
-
-            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-            TimePeriodChainWithData<PayPointOrderItem> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<PayPointOrderItem>(), orders, nodesCreationFactory);
-
-            if (timeChain.HasNoData)
-            {
-                return null;
-            }
-
-            var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new PayPointOrdersList(submittedDate, o));
 
             var factory = new PayPointOrdersAggregatorFactory();
 

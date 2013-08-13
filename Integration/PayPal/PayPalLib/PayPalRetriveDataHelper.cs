@@ -155,16 +155,7 @@ namespace EzBob.PayPal
 				};
 
 			var updated = data.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<PayPalTransactionItem>(), data, nodesCreationFactory);
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(data, (submittedDate, o) => new PayPalTransactionsList(submittedDate, o));
 
 			var factory = new PayPalTransactionAgregatorFactory();
 

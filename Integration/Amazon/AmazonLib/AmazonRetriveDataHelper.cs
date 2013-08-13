@@ -439,26 +439,12 @@ namespace EzBob.AmazonLib
 					};
 
 			var updated = orders.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-        	TimePeriodChainWithData<AmazonOrderItem2> timeChain = TimePeriodChainContructor.CreateDataChain( new TimePeriodNodeWithDataFactory<AmazonOrderItem2>(), orders, nodesCreationFactory );
-
-			if ( timeChain.HasNoData )
-			{
-				return null;
-			}
-
-        	var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod( timeChain, updated );
-
+			
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new AmazonOrdersList2(submittedDate, o));
 			var factory = new AmazonOrdersAgregatorFactory();
 
 			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );
-            
         }
-        /*private void ParceAndSaveOrdersInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonOrdersList orders )
-        {
-            AddAmazonOrdersData( databaseCustomerMarketPlace, orders );
-        }*/
 
         private void ParceAndSaveInventoryInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonInventoryData data, MP_CustomerMarketplaceUpdatingHistory historyRecord, ElapsedTimeInfo elapsedTimeInfo)
         {            

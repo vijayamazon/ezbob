@@ -92,21 +92,11 @@
                 };
 
             var updated = DateTime.UtcNow;//todo:use time from server
-            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-
-            ReceivedDataListTimeDependentBase<YodleeTransactionItem> yodleeTransactionList = YodleeTransactionList.Create(updated, orders);
-            var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<YodleeTransactionItem>(), yodleeTransactionList, nodesCreationFactory);
-
-            if (timeChain.HasNoData)
-            {
-                return null;
-            }
-
-            var timePeriodChain = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeTransactionList.Create(updated, orders), (submittedDate, o) => new YodleeTransactionList(submittedDate, o));
 
             var transactionsFactory = new YodleeTransactionsAggregatorFactory();
 
-            return DataAggregatorHelper.AggregateData(transactionsFactory, timePeriodChain, aggregateTransactionsArray, updated, currencyConverter);
+			return DataAggregatorHelper.AggregateData(transactionsFactory, timePeriodData, aggregateTransactionsArray, updated, currencyConverter);
         }
 
         private IEnumerable<IWriteDataInfo<YodleeDatabaseFunctionType>> CreateAccountsAggregationInfo(YodleeOrderDictionary orders, ICurrencyConvertor currencyConverter)
@@ -118,19 +108,10 @@
                 };
 
             var updated = DateTime.UtcNow;//todo:use time from server
-            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
+            var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(YodleeAccountList.Create(updated, orders), (submittedDate, o) => new YodleeAccountList(submittedDate, o));
 
-            ReceivedDataListTimeDependentBase<YodleeAccountItem> yodleeAccountsList = YodleeAccountList.Create(updated, orders);
-            var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<YodleeAccountItem>(), yodleeAccountsList, nodesCreationFactory);
-
-            if (timeChain.HasNoData)
-            {
-                return null;
-            }
-
-            var timePeriodChain = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
             var accountsFactory = new YodleeAccountsAggregatorFactory();
-            return DataAggregatorHelper.AggregateData(accountsFactory, timePeriodChain, aggregateAccountsArray, updated, currencyConverter);
+			return DataAggregatorHelper.AggregateData(accountsFactory, timePeriodData, aggregateAccountsArray, updated, currencyConverter);
         }
     }
 }

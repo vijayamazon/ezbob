@@ -1,5 +1,6 @@
 ﻿namespace Sage
 {
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EzBob.CommonLib;
 	using EzBob.CommonLib.ReceivedDataListLogic;
 	using EzBob.CommonLib.TimePeriodLogic;
@@ -82,7 +83,8 @@
                 };
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, "sales invoices",
 											Helper.GetAllSageSalesInvoicesData, new SageSalesInvoiceAggregatorFactory { SagePaymentStatuses = Helper.GetSagePaymentStatuses() },
-											salesInvoicesAggregateFunctions);
+											salesInvoicesAggregateFunctions,
+											(submittedDate, o) => new SageSalesInvoicesList(submittedDate, o));
 
 			var purchaseInvoicesAggregateFunctions = new[]
 				{
@@ -94,7 +96,8 @@
 				};
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, "purchase invoices",
 											Helper.GetAllSagePurchaseInvoicesData, new SagePurchaseInvoiceAggregatorFactory { SagePaymentStatuses = Helper.GetSagePaymentStatuses() },
-											purchaseInvoicesAggregateFunctions);
+											purchaseInvoicesAggregateFunctions,
+											(submittedDate, o) => new SagePurchaseInvoicesList(submittedDate, o));
 
 			var incomeAggregateFunctions = new[]
                 {
@@ -103,7 +106,8 @@
                 };
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, "incomes",
 											Helper.GetAllSageIncomesData, new SageIncomeAggregatorFactory(),
-											incomeAggregateFunctions);
+											incomeAggregateFunctions,
+											(submittedDate, o) => new SageIncomesList(submittedDate, o));
 
 			var expendituresAggregateFunctions = new[]
                 {
@@ -112,7 +116,8 @@
                 };
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, "expenditures",
 											Helper.GetAllSageExpendituresData, new SageExpenditureAggregatorFactory(),
-											expendituresAggregateFunctions);
+											expendituresAggregateFunctions,
+											(submittedDate, o) => new SageExpendituresList(submittedDate, o));
 		}
 		
 		private void CalculateAndStoreAggregatedData<T>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
@@ -121,7 +126,8 @@
 														string typeName,
 		                                                Func<DateTime, IDatabaseCustomerMarketPlace, ReceivedDataListTimeMarketTimeDependentBase<T>> getAllFunc,
 		                                                DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<T>, T, SageDatabaseFunctionType> factory, 
-														SageDatabaseFunctionType[] aggregateFunctions)
+														SageDatabaseFunctionType[] aggregateFunctions,
+														Func<DateTime, List<T>, ReceivedDataListTimeMarketTimeDependentBase<T>> createListFunc)
 			where T : TimeDependentRangedDataBase
 		{
 			log.InfoFormat("Fetching all distinct {0}", typeName);
@@ -134,7 +140,7 @@
 			var aggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.AggregateData,
-				() => CreateAggregationInfo(allItems, Helper.CurrencyConverter, factory, aggregateFunctions));
+				() => CreateAggregationInfo(allItems, Helper.CurrencyConverter, factory, aggregateFunctions, createListFunc));
 
 			log.InfoFormat("Saving aggragated {0} data", typeName);
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
@@ -152,20 +158,11 @@
 	        return null;
         }
 
-		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateAggregationInfo<T>(ReceivedDataListTimeMarketTimeDependentBase<T> list, ICurrencyConvertor currencyConverter, DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<T>, T, SageDatabaseFunctionType> factory, SageDatabaseFunctionType[] aggregateFunctions)
+		private IEnumerable<IWriteDataInfo<SageDatabaseFunctionType>> CreateAggregationInfo<T>(ReceivedDataListTimeMarketTimeDependentBase<T> list, ICurrencyConvertor currencyConverter, DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<T>, T, SageDatabaseFunctionType> factory, SageDatabaseFunctionType[] aggregateFunctions, Func<DateTime, List<T>, ReceivedDataListTimeMarketTimeDependentBase<T>> createListFunc)
 			where T : TimeDependentRangedDataBase
 		{
 			var updated = list.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<T>(), list, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(list, createListFunc);
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctions, updated, currencyConverter);
 		}
     }

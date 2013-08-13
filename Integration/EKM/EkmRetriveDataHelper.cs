@@ -101,15 +101,7 @@ namespace EKM
                 };
 
             var updated = orders.SubmittedDate;
-            var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-            TimePeriodChainWithData<EkmOrderItem> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<EkmOrderItem>(), orders, nodesCreationFactory);
-
-            if (timeChain.HasNoData)
-            {
-                return null;
-            }
-
-            var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new EkmOrdersList(submittedDate, o));
             var factory = new EkmOrdersAggregatorFactory();
             return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
         }

@@ -118,19 +118,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 			var updated = orders.SubmittedDate;
 
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-
-			TimePeriodChainWithData<ChannelGrabberOrderItem> timeChain =
-				TimePeriodChainContructor.CreateDataChain(
-					new TimePeriodNodeWithDataFactory<ChannelGrabberOrderItem>(),
-					orders,
-					nodesCreationFactory
-				);
-
-			if (timeChain.HasNoData)
-				return null;
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new ChannelGrabberOrdersList(submittedDate, o));
 
 			var factory = new OrdersAggregatorFactory();
 
