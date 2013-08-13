@@ -11,6 +11,7 @@ namespace Scorto.NHibernate.Repository
 	public interface ICurrencyRateRepository
 	{
 		double GetCurrencyHistoricalRate(DateTime? purchaseDate, string currencyCode);
+		CurrencyData GetCurrencyOrCreate(string currencyName);
 	}
 
 	public class CurrencyRateRepository : NHibernateRepositoryBase<CurrencyData>, ICurrencyRateRepository
