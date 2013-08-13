@@ -2,8 +2,6 @@
 {
 	using EZBob.DatabaseLib.Model.Marketplaces.FreeAgent;
 	using EzBob.CommonLib;
-	using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-	using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -256,15 +254,7 @@
 
 			var updated = invoices.SubmittedDate;
 
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<FreeAgentInvoice>(), invoices, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(invoices, (submittedDate, orders) => new FreeAgentInvoicesList(submittedDate, orders));
 			var factory = new FreeAgentInvoiceAggregatorFactory();
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}
@@ -281,15 +271,7 @@
 				};
 
 			var updated = expenses.SubmittedDate;
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			TimePeriodChainWithData<FreeAgentExpense> timeChain = TimePeriodChainContructor.CreateDataChain(new TimePeriodNodeWithDataFactory<FreeAgentExpense>(), expenses, nodesCreationFactory);
-
-			if (timeChain.HasNoData)
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod(timeChain, updated);
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(expenses, (submittedDate, orders) => new FreeAgentExpensesList(submittedDate, orders));
 			var factory = new FreeAgentExpenseAggregatorFactory();
 			return DataAggregatorHelper.AggregateData(factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter);
 		}

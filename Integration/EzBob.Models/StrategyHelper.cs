@@ -29,7 +29,7 @@
             _mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
         }
 
-		public double GetTurnoverForPeroid(int customerId, TimePeriodEnum peroid)
+		public double GetTurnoverForPeriod(int customerId, TimePeriodEnum period)
 		{
 			var customer = _customers.Get(customerId);
 			double sum = 0;
@@ -42,7 +42,7 @@
 				if (av != null)
 				{
 					string parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
-					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= peroid);
+					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= period);
 
 					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
 					if (mp.Marketplace.Name == "Pay Pal")
@@ -64,19 +64,19 @@
 
         public double GetAnualTurnOverByCustomer(int customerId)
         {
-	        return GetTurnoverForPeroid(customerId, TimePeriodEnum.Year);
+	        return GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
         }
 
 		public double GetTotalSumOfOrders3M(int customerId)
 		{
-			return GetTurnoverForPeroid(customerId, TimePeriodEnum.Month3);
+			return GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
 		}
 
 		public double GetTotalSumOfOrdersForLoanOffer(int customerId)
 		{
-			double year = GetTurnoverForPeroid(customerId, TimePeriodEnum.Year);
-			double month3 = GetTurnoverForPeroid(customerId, TimePeriodEnum.Month3);
-			double month = GetTurnoverForPeroid(customerId, TimePeriodEnum.Month);
+			double year = GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
+			double month3 = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
+			double month = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month);
 
 			return Math.Min(year, Math.Min(4 * month3, 12 * month));
 		}

@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic;
-
 namespace EZBob.DatabaseLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using DatabaseWrapper.FunctionValues;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using EzBob.CommonLib.ReceivedDataListLogic;
+
 	public static class DataAggregatorHelper
 	{
 		private static IWriteDataInfo<TEnum> CreateWriteDataValue<T, TItem, TEnum>( DataAggregatorBase<T, TItem, TEnum> aggregator, TEnum functionType, DateTime updatedDate )
@@ -41,6 +40,132 @@ namespace EZBob.DatabaseLib
 		    }
 		    
             return rez;
+		}
+
+		public static Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<T>> GetOrdersForPeriods<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders, Func<DateTime, List<T>, ReceivedDataListTimeMarketTimeDependentBase<T>> createListFunc)
+			where T : TimeDependentRangedDataBase
+		{
+			Dictionary<TimePeriodEnum, List<T>> ordersByTimePeriod = GetOrdersByTimePeriod(orders);
+			var res = new Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<T>>();
+			foreach (TimePeriodEnum period in ordersByTimePeriod.Keys)
+			{
+				if (ordersByTimePeriod[period].Count > 0)
+				{
+					res.Add(period, new ReceivedDataListTimeDependentInfo<T>(createListFunc(orders.SubmittedDate, ordersByTimePeriod[period]), period, 0));
+				}
+			}
+
+			return res;
+		}
+
+		private static Dictionary<TimePeriodEnum, List<T>> GetOrdersByTimePeriod<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders)
+			where T : TimeDependentRangedDataBase
+		{
+			var ordersByTimePeriod = new Dictionary<TimePeriodEnum, List<T>>
+				{
+					{TimePeriodEnum.Month, new List<T>()},
+					{TimePeriodEnum.Month3, new List<T>()},
+					{TimePeriodEnum.Month6, new List<T>()},
+					{TimePeriodEnum.Year, new List<T>()},
+					{TimePeriodEnum.Month15, new List<T>()},
+					{TimePeriodEnum.Month18, new List<T>()},
+					{TimePeriodEnum.Year2, new List<T>()},
+					{TimePeriodEnum.Lifetime, new List<T>()}
+				};
+
+			DateTime monthAgo = orders.SubmittedDate.AddMonths(-1);
+			var monthEdge = new DateTime(monthAgo.Year, monthAgo.Month, monthAgo.Day);
+			DateTime month3Edge = GetStartOfMonth(orders.SubmittedDate, 3);
+			DateTime month6Edge = GetStartOfMonth(orders.SubmittedDate, 6);
+			DateTime month12Edge = GetStartOfMonth(orders.SubmittedDate, 12);
+			DateTime month15Edge = GetStartOfMonth(orders.SubmittedDate, 15);
+			DateTime month18Edge = GetStartOfMonth(orders.SubmittedDate, 18);
+			DateTime month24Edge = GetStartOfMonth(orders.SubmittedDate, 24);
+
+			foreach (T item in orders)
+			{
+				if (item.RecordTime >= monthEdge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Month].Add(item);
+				}
+				else if (item.RecordTime >= month3Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Month3].Add(item);
+				}
+				else if (item.RecordTime >= month6Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Month6].Add(item);
+				}
+				else if (item.RecordTime >= month12Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Year].Add(item);
+				}
+				else if (item.RecordTime >= month15Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Month15].Add(item);
+				}
+				else if (item.RecordTime >= month18Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Month18].Add(item);
+				}
+				else if (item.RecordTime >= month24Edge)
+				{
+					ordersByTimePeriod[TimePeriodEnum.Year2].Add(item);
+				}
+				else
+				{
+					ordersByTimePeriod[TimePeriodEnum.Lifetime].Add(item);
+				}
+			}
+
+			var earliestFilledTimePeriod = TimePeriodEnum.Month;
+			foreach (var period in ordersByTimePeriod.Keys)
+			{
+				if (ordersByTimePeriod[period].Count > 0)
+				{
+					earliestFilledTimePeriod = period;
+				}
+			}
+
+			List<T> sumSoFar = null;
+			foreach (var period in ordersByTimePeriod.Keys)
+			{
+				if (period <= earliestFilledTimePeriod)
+				{
+					if (sumSoFar != null)
+					{
+						ordersByTimePeriod[period].AddRange(sumSoFar);
+					}
+					sumSoFar = ordersByTimePeriod[period];
+				}
+			}
+
+			return ordersByTimePeriod;
+		}
+
+		private static DateTime GetStartOfMonth(DateTime relativeDate, int numOfMonth)
+		{
+			int newYear = relativeDate.Year;
+
+			while (numOfMonth > 11)
+			{
+				numOfMonth -= 12;
+				newYear--;
+			}
+
+			int newMonth = relativeDate.Month - numOfMonth + 1;
+			if (relativeDate.Day == 1)
+			{
+				newMonth--;
+			}
+
+			if (newMonth < 1)
+			{
+				newYear--;
+				newMonth = 12 + newMonth;
+			}
+
+			return new DateTime(newYear, newMonth, 1);
 		}
 	}
 }
