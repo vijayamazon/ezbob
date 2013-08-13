@@ -36,7 +36,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 var customer = _context.Customer;
                 if (customer != null && agreement.Loan.Customer != customer) return new HttpNotFoundResult();
             }
-            catch (InvalidCustomerException e)
+            catch (InvalidCustomerException )
             {
                 //if customer is not found, assume that it is underwriter
             }

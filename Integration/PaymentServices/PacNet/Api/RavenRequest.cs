@@ -44,7 +44,7 @@ namespace Raven.API
                 this.operationType = (RavenOperationType)Enum.Parse(typeof(RavenOperationType), operationName, true);
                 this.Set("RAPIInterface","DotNetVer2.3");
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 throw new RavenNoSuchOperationException(operationName);
             }

@@ -249,19 +249,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 return this.JsonNet(new {msg = "Well done! You've added your bank account!"});
             }
-            catch (SortCodeNotFoundException e)
+            catch (SortCodeNotFoundException )
             {
                 return this.JsonNet(new {error = "Sort code was not found"});
             }
-            catch (UnknownSortCodeException e)
+            catch (UnknownSortCodeException )
             {
                 return this.JsonNet(new {error = "Sort code was not found"});
             }
-            catch (InvalidAccountNumberException e)
+            catch (InvalidAccountNumberException )
             {
                 return this.JsonNet(new {error = "Account number is not valid"});
             }
-            catch (NotValidSortCodeException e)
+            catch (NotValidSortCodeException )
             {
                 return this.JsonNet(new {error = "Sort code is not valid"});
             }

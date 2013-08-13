@@ -201,7 +201,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 return RedirectToAction("Index", "PacnetStatus", new {Area = "Customer"});
             }
-            catch (OfferExpiredException e)
+            catch (OfferExpiredException )
             {
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
                                    "Invalid apply for a loan period");

@@ -82,10 +82,10 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 				_mpChecker.Check(mktPlace.InternalId, _context.Customer, ad.UniqueID());
 			}
-			catch (MarketPlaceAddedByThisCustomerException e) {
+			catch (MarketPlaceAddedByThisCustomerException ) {
 				return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
 			}
-			catch (MarketPlaceIsAlreadyAddedException e) {
+			catch (MarketPlaceIsAlreadyAddedException ) {
 				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
 			}
 			catch (Exception e) {

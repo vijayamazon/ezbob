@@ -3,7 +3,6 @@ using EZBob.DatabaseLib.Common;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-	[Obsolete]
 	public class MP_PayPalTransactionItem
 	{
 		public virtual int Id { get; set; }

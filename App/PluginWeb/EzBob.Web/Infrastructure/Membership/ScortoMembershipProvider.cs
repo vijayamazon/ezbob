@@ -57,7 +57,7 @@ namespace EzBob.Web.Infrastructure
                                           "", "", false, false, user.CreationDate, DateTime.MinValue, DateTime.MinValue,
                                           DateTime.MinValue, DateTime.MinValue);
             }
-            catch (UserAlreadyExistsException e)
+            catch (UserAlreadyExistsException )
             {
                 Log.WarnFormat("User with email {0} already exists", userName);
                 status = MembershipCreateStatus.DuplicateEmail;

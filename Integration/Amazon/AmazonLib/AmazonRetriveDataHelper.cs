@@ -338,7 +338,7 @@ namespace EzBob.AmazonLib
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetProductCategories( _ConnectionInfo, requestInfo, access, requestCounter ) );
 			}
-			catch ( MarketplaceWebServiceProductsException ex )
+			catch ( MarketplaceWebServiceProductsException )
 			{
 				// продукт не найдет либо невозможно получить
 			}

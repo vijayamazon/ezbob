@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ApplicationMng.Repository;
 using NHibernate;
-using System.Linq;
 using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository

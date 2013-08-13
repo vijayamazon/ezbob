@@ -7,8 +7,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public ActionResult Index(string returnUrl)
         {
             return RedirectToAction("Index", "Profile", new {Area = "Customer"});
-            ViewData["returnUrl"] = returnUrl;
-            return View("_Start");
+			//ViewData["returnUrl"] = returnUrl;
+			//return View("_Start");
         }
 
         public ActionResult TopButton()

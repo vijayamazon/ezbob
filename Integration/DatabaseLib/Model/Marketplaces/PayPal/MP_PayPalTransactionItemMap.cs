@@ -1,10 +1,8 @@
-using System;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-	[Obsolete]
 	public class MP_PayPalTransactionItemMap : ClassMap<MP_PayPalTransactionItem>
 	{
 		public MP_PayPalTransactionItemMap()

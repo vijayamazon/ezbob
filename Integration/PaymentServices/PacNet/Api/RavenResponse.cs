@@ -162,7 +162,7 @@ namespace Raven.API
 
             try {
                 return this.GetSignature().Equals(this.Get("Signature"));
-            } catch (RavenIncompleteSignatureException rise) {
+            } catch (RavenIncompleteSignatureException ) {
                 return false;
             }
         }

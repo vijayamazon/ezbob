@@ -22,9 +22,9 @@ namespace EzBob.PayPalServiceLib
         public static BaseAPIProfile CreateProfile(IPayPalConfig config)
         {
             BaseAPIProfile profile = null;
-            byte[] bCert = null;
-            string filePath = string.Empty;
-            FileStream fs = null;
+            //byte[] bCert = null;
+            //string filePath = string.Empty;
+            //FileStream fs = null;
 
 			var factory = ObjectFactory.GetInstance<IServiceEndPointFactory>();
 
@@ -75,11 +75,11 @@ namespace EzBob.PayPalServiceLib
                 }
 
             }
-            catch (FATALException FATALEx)
+            catch (FATALException )
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw;
             }

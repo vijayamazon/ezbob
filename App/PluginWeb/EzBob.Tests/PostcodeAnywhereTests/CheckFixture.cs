@@ -54,7 +54,7 @@ namespace EzBob.Tests.PostcodeAnywhereTests
             {
                 var card = _checker.Check(customer, "70189768", "203713", "personal");
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
             Assert.That(customer.BankAccountValidationInvalidAttempts, Is.EqualTo(1));

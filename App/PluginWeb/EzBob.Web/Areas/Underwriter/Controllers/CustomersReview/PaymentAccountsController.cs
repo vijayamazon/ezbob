@@ -100,15 +100,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
                 _sortCodeChecker.Check(card);
             }
-            catch (UnknownSortCodeException e)
+            catch (UnknownSortCodeException )
             {
                 error = "Sortcode was not found.";
             }
-            catch (SortCodeNotFoundException e)
+            catch (SortCodeNotFoundException )
             {
                 error = "Sortcode was not found.";
             }
-            catch (InvalidAccountNumberException e)
+            catch (InvalidAccountNumberException )
             {
                 error = "Invalid account number.";
             }
@@ -138,7 +138,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
                 _sortCodeChecker.Check(card);
             }
-            catch (Exception e)
+            catch (Exception )
             {
             }
             customer.BankAccounts.Add(card);

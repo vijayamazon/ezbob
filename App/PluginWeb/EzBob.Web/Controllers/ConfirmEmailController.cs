@@ -23,11 +23,11 @@ namespace EzBob.Web.Controllers
                 _confirmation.ConfirmEmail(guid);
                 return View();
             }
-            catch (EmailConfirmationRequestInvalidStateException e)
+            catch (EmailConfirmationRequestInvalidStateException )
             {
                 return View("ConfirmationError", new {Message = "Email is already confirmed"});
             }
-            catch (EmailConfirmationRequestNotFoundException e)
+            catch (EmailConfirmationRequestNotFoundException )
             {
                 return View("ConfirmationError", new {Message = "Confirmation request was not found"});
             }

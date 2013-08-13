@@ -106,12 +106,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Lib\DBCommonLibrary\DBOracle\DBOracle.csproj">
-      <Project>{DAE85055-F557-4E9C-9A60-744767E2077F}</Project>
-      <Name>DBOracle</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>

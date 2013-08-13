@@ -5,7 +5,7 @@ namespace EzBob.eBayLib.Config
 {
 	public class EbayEvnSettings : ConfigurationRoot, IEbayMarketplaceSettings
 	{
-		private bool _OrdersFromTeraPeakOnly;
+		//private bool _OrdersFromTeraPeakOnly;
 
 		public bool DownloadCategories
 		{

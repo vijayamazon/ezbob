@@ -61,7 +61,7 @@ namespace Raven.API.BDP
             {
                 return this.GetSignature().Equals(this.Get("Signature"));
             }
-            catch (RavenIncompleteSignatureException rise)
+            catch (RavenIncompleteSignatureException )
             {
                 return false;
             }
