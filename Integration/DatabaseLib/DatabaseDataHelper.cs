@@ -1545,18 +1545,17 @@ namespace EZBob.DatabaseLib
 				data.ForEach(
 					dataItem =>
 					{
-						var mpTransactionItem = new MP_PayPalTransactionItem
+						var mpTransactionItem = new MP_PayPalTransactionItem2
 							{
 								Transaction = mpTransaction,
 								Created = dataItem.Created,
-								FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.FeeAmount, dataItem.Created),
-								GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.GrossAmount, dataItem.Created),
-								NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.NetAmount, dataItem.Created),
+								Currency = _CurrencyRateRepository.GetCurrencyOrCreate(dataItem.FeeAmount.CurrencyCode ?? dataItem.GrossAmount.CurrencyCode ?? dataItem.NetAmount.CurrencyCode),
+								FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.FeeAmount, dataItem.Created).Value,
+								GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.GrossAmount, dataItem.Created).Value,
+								NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.NetAmount, dataItem.Created).Value,
 								TimeZone = dataItem.Timezone,
 								Status = dataItem.Status,
 								Type = dataItem.Type,
-								Payer = dataItem.Payer,
-								PayerDisplayName = dataItem.PayerDisplayName,
 								PayPalTransactionId = dataItem.TransactionId
 							};
 
@@ -2138,11 +2137,9 @@ namespace EZBob.DatabaseLib
 				{
 					Created = t.Created,
 					Type = t.Type,
-					FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.FeeAmount, t.Created),
-					GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.GrossAmount, t.Created),
-					NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.NetAmount, t.Created),
-					Payer = t.Payer,
-					PayerDisplayName = t.PayerDisplayName,
+					FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
+					GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name,t.GrossAmount, t.Created),
+					NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
 					Status = t.Status,
 					Timezone = t.TimeZone,
 					TransactionId = t.PayPalTransactionId

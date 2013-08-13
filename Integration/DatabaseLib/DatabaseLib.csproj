@@ -84,6 +84,8 @@
     <Compile Include="Model\Loans\LoanTransactionMethodMap.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethodRepository.cs" />
     <Compile Include="Model\Loans\NumericDelta.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="PacNetManualBalance.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrdersList.cs" />
