@@ -296,6 +296,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var result = new UnderwriterGridResult(_session, null, _gridSales, settings)
             {
                 CustomizeFilter = crit => crit.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.ManagerApprovedSum > c.AmountTaken))
+                    .Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.LatestCRMstatus != "NoSale" || c.LatestCRMstatus == null))
             };
             return result;
         }
