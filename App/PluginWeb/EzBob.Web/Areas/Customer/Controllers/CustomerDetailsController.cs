@@ -90,7 +90,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _creator.Evaluate(_context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
 			if(!customer.IsTest)
 	        {
-		        _creator.FraudChecker(_context.User);
+		        //_creator.FraudChecker(_context.User);
 	        }
 	        _concentAgreementHelper.Save(customer, DateTime.UtcNow);
 
