@@ -1,6 +1,7 @@
 namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
+	using System.Globalization;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Collections.Generic;
@@ -37,6 +38,19 @@ namespace EzBob.Models.Marketplaces.Builders
 			MP_AnalyisisFunctionValue earliestSumOfPurchaseInvoices = GetEarliestValueFor(mp, "TotalSumOfPurchaseInvoices");
 			MP_AnalyisisFunctionValue earliestSumOfIncomes = GetEarliestValueFor(mp, "TotalSumOfIncomes");
 			MP_AnalyisisFunctionValue earliestSumOfExpenditures = GetEarliestValueFor(mp, "TotalSumOfExpenditures");
+			MP_AnalyisisFunctionValue monthSumOfSalesInvoices = GetMonthValueFor(mp, "TotalSumOfOrders");
+			MP_AnalyisisFunctionValue monthSumOfIncomes = GetMonthValueFor(mp, "TotalSumOfIncomes");
+
+
+	        paymentAccountModel.MonthInPayments = 0;
+			if (monthSumOfSalesInvoices != null && monthSumOfSalesInvoices.ValueFloat.HasValue)
+			{
+				paymentAccountModel.MonthInPayments += monthSumOfSalesInvoices.ValueFloat.Value;
+			}
+			if (monthSumOfIncomes != null && monthSumOfIncomes.ValueFloat.HasValue)
+			{
+				paymentAccountModel.MonthInPayments += monthSumOfIncomes.ValueFloat.Value;
+			}
 
 			paymentAccountModel.TransactionsNumber = 0;
 			if (earliestNumOfSalesInvoices != null && earliestNumOfSalesInvoices.ValueInt.HasValue)
@@ -75,7 +89,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			{
 				paymentAccountModel.TotalNetOutPayments += earliestSumOfExpenditures.ValueFloat.Value;
 			}
-				
+			
 	        return paymentAccountModel;
         }
 

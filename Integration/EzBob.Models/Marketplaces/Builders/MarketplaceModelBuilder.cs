@@ -138,6 +138,23 @@ namespace EzBob.Models.Marketplaces.Builders
 			return latest;
 		}
 
+		public MP_AnalyisisFunctionValue GetMonthValueFor(MP_CustomerMarketPlace mp, string functionName)
+		{
+			var functionsMatchingName = mp.AnalysysFunctionValues.Where(v => v.AnalyisisFunction.Name == functionName).OrderByDescending(v => v.Updated);
+			MP_AnalyisisFunctionValue month = null;
+
+			foreach (var mpAnalyisisFunctionValue in functionsMatchingName)
+			{
+				if (mpAnalyisisFunctionValue.AnalysisFunctionTimePeriod.Name == "30")
+				{
+					month = mpAnalyisisFunctionValue;
+				}
+			}
+
+			return month;
+
+		}
+
 		public IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
 		{
 			foreach (var x in firstOrDefault)

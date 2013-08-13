@@ -23,7 +23,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 			var paymentAccountModel = new PaymentAccountsModel {
 				TotalNetInPayments = 0,
 				TotalNetOutPayments = 0,
-				TransactionsNumber = 0
+				TransactionsNumber = 0,
+				MonthInPayments = 0
 			};
 
 			MP_AnalyisisFunctionValue earliestNumOfExpenses = GetEarliestValueFor(mp, FunctionType.NumOfExpenses.ToString());
@@ -31,6 +32,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			MP_AnalyisisFunctionValue earliestNumOfInvoices = GetEarliestValueFor(mp, FunctionType.NumOfOrders.ToString());
 			MP_AnalyisisFunctionValue earliestSumOfInvoices = GetEarliestValueFor(mp, FunctionType.TotalSumOfOrders.ToString());
+
+			MP_AnalyisisFunctionValue monthSumOfInvoices = GetMonthValueFor(mp, FunctionType.TotalSumOfOrders.ToString());
 
 			if ((earliestNumOfExpenses != null) && earliestNumOfExpenses.ValueInt.HasValue)
 				paymentAccountModel.TransactionsNumber += earliestNumOfExpenses.ValueInt.Value;
@@ -43,6 +46,9 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			if (earliestSumOfExpenses != null && earliestSumOfExpenses.ValueFloat.HasValue)
 				paymentAccountModel.TotalNetOutPayments = earliestSumOfExpenses.ValueFloat.Value;
+
+			if (monthSumOfInvoices != null && monthSumOfInvoices.ValueFloat.HasValue)
+				paymentAccountModel.MonthInPayments = monthSumOfInvoices.ValueFloat.Value;
 
 			return paymentAccountModel;
 		} // GetPaymetAccountModel

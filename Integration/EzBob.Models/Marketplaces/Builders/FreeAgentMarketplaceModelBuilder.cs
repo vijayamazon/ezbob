@@ -50,6 +50,12 @@ namespace EzBob.Models.Marketplaces.Builders
 			MP_AnalyisisFunctionValue earliestNumOfInvoices = GetEarliestValueFor(mp, "NumOfOrders");
 			MP_AnalyisisFunctionValue earliestSumOfExpenses = GetEarliestValueFor(mp, "TotalSumOfExpenses");
 			MP_AnalyisisFunctionValue earliestSumOfInvoices = GetEarliestValueFor(mp, "TotalSumOfOrders");
+			MP_AnalyisisFunctionValue monthSumOfInvoices = GetMonthValueFor(mp, "TotalSumOfOrders");
+
+			if (monthSumOfInvoices != null && monthSumOfInvoices.ValueFloat.HasValue)
+			{
+				paymentAccountModel.MonthInPayments = monthSumOfInvoices.ValueFloat.Value;
+			}
 
 			if (earliestNumOfExpenses != null && earliestNumOfExpenses.ValueInt.HasValue &&
 				earliestNumOfInvoices != null && earliestNumOfInvoices.ValueInt.HasValue)
@@ -81,7 +87,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			return paymentAccountModel;
 		}
-
+		
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
 		{
 			model.FreeAgent = BuildFreeAgent(mp);
