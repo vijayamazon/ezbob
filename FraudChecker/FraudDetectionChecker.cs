@@ -546,7 +546,8 @@ namespace FraudChecker
             fraudDetections.AddRange(
                 from c in customerPortion
                 where c.IsSuccessfullyRegistered
-                where
+				where
+					c.PersonalInfo != null &&
                     c.PersonalInfo.Surname == lastName &&
                     c.PersonalInfo.DateOfBirth == customer.PersonalInfo.DateOfBirth
                 select
@@ -564,11 +565,12 @@ namespace FraudChecker
             var lastName = customer.PersonalInfo.Surname;
             var middleName = customer.PersonalInfo.MiddleInitial;
 
-            // First + Middle + Last
+			// First + Middle + Last
             fraudDetections.AddRange(
                 from c in customerPortion
                 where c.IsSuccessfullyRegistered
                 where
+					c.PersonalInfo != null &&
                     c.PersonalInfo.FirstName == firstName &&
                     c.PersonalInfo.MiddleInitial == middleName
                 where !isSkipLast && c.PersonalInfo.Surname == lastName
