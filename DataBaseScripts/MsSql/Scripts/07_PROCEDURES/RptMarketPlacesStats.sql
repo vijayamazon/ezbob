@@ -20,7 +20,7 @@ BEGIN
 		AvgTurnoverDidntFinish NUMERIC(18,2),
 		NumOfShopsFinish INT,
 		AvgTurnoverFinish NUMERIC(18,2),
-		AvgScore NUMERIC(5,2),
+		AvgScore NUMERIC(15,2),
 		PercentMen NUMERIC(5,2),
 		AvgAge NUMERIC(5,2),
 		PercentApproved NUMERIC(5,2),
@@ -43,7 +43,7 @@ BEGIN
 		@numOfFinishedMps INT,
 		@numOfFinishedCustomers INT,
 		@sumOfScore INT,
-		@avgScore NUMERIC(5, 2),
+		@avgScore NUMERIC(15, 2),
 		@currentMarketPlaceId INT,
 		@latestAggr DATETIME,
 		@analysisFuncId INT,
@@ -210,7 +210,7 @@ BEGIN
 		IF @sumOfScore IS NULL
 			SET @avgScore = 0
 		ELSE
-			SET @avgScore = CONVERT(NUMERIC(5, 2), @sumOfScore) / CONVERT(NUMERIC(5, 2), @numOfFinishedCustomers)
+			SET @avgScore = CONVERT(NUMERIC(15, 2), @sumOfScore) / CONVERT(NUMERIC(15, 2), @numOfFinishedCustomers)
 
 		SELECT
 			MP_CustomerMarketPlace.Id
