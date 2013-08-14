@@ -41,7 +41,7 @@ namespace EZBob.DatabaseLib
 	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
 
-    public enum CustomerMarketplaceUpdateActionType
+	public enum CustomerMarketplaceUpdateActionType
 	{
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
@@ -186,8 +186,8 @@ namespace EZBob.DatabaseLib
 
 			return
 				data.Select(cm => CreateDatabaseCustomerMarketPlace(customer, databaseMarketplace, cm, cm.Id))
-				    .Where(mp => !mp.Disabled)
-				    .ToList();
+					.Where(mp => !mp.Disabled)
+					.ToList();
 		}
 
 		public MP_CustomerMarketPlace GetCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -559,9 +559,9 @@ namespace EZBob.DatabaseLib
 
 		public IDatabaseCustomerMarketPlace CreateDatabaseCustomerMarketPlace(Customer databaseCustomer, IMarketplaceType databaseMarketplace, MP_CustomerMarketPlace cm, int customerMarketPlaceId)
 		{
-            cm.SetIMarketplaceType(databaseMarketplace);
-		    return cm;
-		    //return new DatabaseCustomerMarketPlace(customerMarketPlaceId, cm.DisplayName, cm.SecurityData, databaseCustomer, databaseMarketplace);
+			cm.SetIMarketplaceType(databaseMarketplace);
+			return cm;
+			//return new DatabaseCustomerMarketPlace(customerMarketPlaceId, cm.DisplayName, cm.SecurityData, databaseCustomer, databaseMarketplace);
 		}
 
 		public void StoreAmazonOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,/* AmazonOrdersList ordersData,*/ AmazonOrdersList2 ordersData2, MP_CustomerMarketplaceUpdatingHistory historyRecord)
@@ -644,24 +644,14 @@ namespace EZBob.DatabaseLib
 						var mpOrderItem2 = new MP_AmazonOrderItem2
 						{
 							Order = mpOrder,
-							//PaymentMethod = dataItem.PaymentMethod,
 							OrderId = dataItem.AmazonOrderId,
 							OrderStatus = dataItem.OrderStatus.ToString(),
-							//BuyerEmail = dataItem.BuyerEmail,
-							//BuyerName = dataItem.BuyerName,
 							PurchaseDate = dataItem.PurchaseDate,
-							//ShipServiceLevel = dataItem.ShipServiceLevel,
-							//FulfillmentChannel = dataItem.FulfillmentChannel,
 							LastUpdateDate = dataItem.LastUpdateDate,
-							//MarketplaceId = dataItem.MarketplaceId,
 							NumberOfItemsShipped = dataItem.NumberOfItemsShipped,
 							NumberOfItemsUnshipped = dataItem.NumberOfItemsUnshipped,
-							//OrderChannel = dataItem.OrderChannel,
 							OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.OrderTotal, dataItem.PurchaseDate),
-							//SalesChannel = dataItem.SalesChannel,
 							SellerOrderId = dataItem.SellerOrderId,
-							//ShipmentAddress = dataItem.ShipmentAddress,
-							//ShipmentServiceLevelCategory = dataItem.ShipmentServiceLevelCategory
 						};
 
 						if (dataItem.OrderedItemsList != null)
@@ -1115,7 +1105,7 @@ namespace EZBob.DatabaseLib
 				MP_SagePaymentStatus dbStatus = _SagePaymentStatusRepository.GetAll().FirstOrDefault(a => a.SageId == paymentStatus.SageId);
 				if (dbStatus == null)
 				{
-					dbStatus = new MP_SagePaymentStatus {SageId = paymentStatus.SageId, name = paymentStatus.name};
+					dbStatus = new MP_SagePaymentStatus { SageId = paymentStatus.SageId, name = paymentStatus.name };
 				}
 				_SagePaymentStatusRepository.SaveOrUpdate(dbStatus);
 			}
@@ -1426,7 +1416,8 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ChannelGrabberOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
+		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ChannelGrabberOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
@@ -1435,14 +1426,17 @@ namespace EZBob.DatabaseLib
 				return;
 
 			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_ChannelGrabberOrder {
+			var mpOrder = new MP_ChannelGrabberOrder
+			{
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
 
-			ordersData.ForEach(dataItem => {
-				var mpOrderItem = new MP_ChannelGrabberOrderItem {
+			ordersData.ForEach(dataItem =>
+			{
+				var mpOrderItem = new MP_ChannelGrabberOrderItem
+				{
 					Order = mpOrder,
 					NativeOrderId = dataItem.NativeOrderId,
 					TotalCost = dataItem.TotalCost,
@@ -1851,10 +1845,10 @@ namespace EZBob.DatabaseLib
 				return;
 			}
 
-            MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-		    var helper = new TeraPeackHelper();
-            helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
+			var helper = new TeraPeackHelper();
+			helper.StoretoDatabaseTeraPeakOrdersData(customerMarketPlace, data, historyRecord);
 
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
@@ -2002,31 +1996,22 @@ namespace EZBob.DatabaseLib
 					AmazonOrdersList2ItemStatusType orderStatus;
 					Enum.TryParse(o.OrderStatus, out orderStatus);
 					return new AmazonOrderItem2
-								{
-									AmazonOrderId = o.OrderId,
-									//BuyerEmail = o.BuyerEmail,
-									//PaymentMethod = o.PaymentMethod,
-									OrderStatus = orderStatus,
-									//BuyerName = o.BuyerName,
-									PurchaseDate = o.PurchaseDate,
-									//ShipServiceLevel = o.ShipServiceLevel,
-									//FulfillmentChannel = o.FulfillmentChannel,
-									LastUpdateDate = o.LastUpdateDate,
-									NumberOfItemsShipped = o.NumberOfItemsShipped,
-									NumberOfItemsUnshipped = o.NumberOfItemsUnshipped,
-									//OrderChannel = o.OrderChannel,
-									OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.OrderTotal, o.PurchaseDate),
-									PaymentsInfo = new AmazonOrderItem2PaymentsInfoList(o.PaymentsInfo.Select(pi => new AmazonOrderItem2PaymentInfoListItem
+						{
+							AmazonOrderId = o.OrderId,
+							OrderStatus = orderStatus,
+							PurchaseDate = o.PurchaseDate,
+							LastUpdateDate = o.LastUpdateDate,
+							NumberOfItemsShipped = o.NumberOfItemsShipped,
+							NumberOfItemsUnshipped = o.NumberOfItemsUnshipped,
+							OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.OrderTotal, o.PurchaseDate),
+							PaymentsInfo =
+								new AmazonOrderItem2PaymentsInfoList(o.PaymentsInfo.Select(pi => new AmazonOrderItem2PaymentInfoListItem
 									{
 										MoneyInfo = _CurrencyConvertor.ConvertToBaseCurrency(pi.MoneyInfo, o.PurchaseDate),
 										SubPaymentMethod = pi.SubPaymentMethod
 									})),
-									//SalesChannel = o.SalesChannel,
-									SellerOrderId = o.SellerOrderId,
-									//ShipmentAddress = o.ShipmentAddress,
-									//ShipmentServiceLevelCategory = o.ShipmentServiceLevelCategory
-
-								};
+							SellerOrderId = o.SellerOrderId,
+						};
 				}));
 
 			return orders;
@@ -2142,7 +2127,7 @@ namespace EZBob.DatabaseLib
 					Created = t.Created,
 					Type = t.Type,
 					FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
-					GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name,t.GrossAmount, t.Created),
+					GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
 					NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
 					Status = t.Status,
 					Timezone = t.TimeZone,
@@ -2419,7 +2404,7 @@ namespace EZBob.DatabaseLib
 			var invoices = new FreeAgentInvoicesList(submittedDate);
 
 			var dbInvoices = customerMarketPlace.FreeAgentRequests.SelectMany(freeAgentRequest => freeAgentRequest.Invoices).OrderByDescending(invoice => invoice.Request.Id).Distinct(new FreeAgentInvoiceComparer()).OrderByDescending(invoice => invoice.dated_on);
-			
+
 			invoices.AddRange(dbInvoices.Select(o => new FreeAgentInvoice
 			{
 				url = o.url,
@@ -2531,14 +2516,15 @@ namespace EZBob.DatabaseLib
 
 			return expenditures;
 		}
-		
+
 		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var orders = new ChannelGrabberOrdersList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem {
+			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem
+			{
 				CurrencyCode = o.CurrencyCode,
 				OrderStatus = o.OrderStatus,
 				NativeOrderId = o.NativeOrderId,
@@ -2729,7 +2715,7 @@ namespace EZBob.DatabaseLib
 
 			return orders;
 		} // GetAllPayPointOrdersData
-		
+
 		public Dictionary<string, FreeAgentExpenseCategory> GetExpenseCategories()
 		{
 			var categoriesMap = new Dictionary<string, FreeAgentExpenseCategory>();
@@ -2775,7 +2761,7 @@ namespace EZBob.DatabaseLib
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
 		}
 
-		
+
 	}
 
 	public class eBayFindOrderItemInfoData

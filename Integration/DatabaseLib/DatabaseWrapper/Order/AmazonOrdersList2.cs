@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
 using EzBob.CommonLib.ReceivedDataListLogic;
 using EzBob.CommonLib.TimePeriodLogic;
 
@@ -37,21 +36,11 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public DateTime? PurchaseDate { get; set; }
 		public DateTime? LastUpdateDate { get; set; }
 		public AmazonOrdersList2ItemStatusType OrderStatus { get; set; }
-		public string FulfillmentChannel { get; set; }
-		public string SalesChannel { get; set; }
-		public string OrderChannel { get; set; }
-		public string ShipServiceLevel { get; set; }
 		public AmountInfo OrderTotal { get; set; }
-		public string PaymentMethod { get; set; }
-		public string BuyerName { get; set; }
-		public string ShipmentServiceLevelCategory { get; set; }
-		public string BuyerEmail { get; set; }
 		public int? NumberOfItemsShipped { get; set; }
 		public int? NumberOfItemsUnshipped { get; set; }
-		public string MarketplaceId { get; set; }
 		public AmazonOrderItem2PaymentsInfoList PaymentsInfo { get; set; }
 		public AmazonOrderItemDetailsList OrderedItemsList { get; set; }
-		public AmazonOrderItem2Address ShipmentAddress { get; set; }
 
 		public override DateTime RecordTime
 		{
@@ -82,29 +71,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
 		public string SubPaymentMethod { get; set; }
 	}
-
-	public class AmazonOrderItem2Address
-	{
-		public string StateOrRegion { get; set; }
-
-		public string PostalCode { get; set; }
-
-		public string Phone { get; set; }
-
-		public string Name { get; set; }
-
-		public string District { get; set; }
-
-		public string County { get; set; }
-
-		public string CountryCode { get; set; }
-
-		public string City { get; set; }
-
-		public string AddressLine3 { get; set; }
-
-		public string AddressLine2 { get; set; }
-
-		public string AddressLine1 { get; set; }
-	}
+	
 }

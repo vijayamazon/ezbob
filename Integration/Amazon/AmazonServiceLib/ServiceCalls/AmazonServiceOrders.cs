@@ -165,23 +165,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			{
 				orderInfo.OrderStatus = ConvertOrderStatus(order.OrderStatus);
 			}
-			if ( order.IsSetFulfillmentChannel() )
-			{
-				orderInfo.FulfillmentChannel = order.FulfillmentChannel.ToString();
-			}
-			if ( order.IsSetSalesChannel() )
-			{
-				orderInfo.SalesChannel = order.SalesChannel;
-			}
-			if ( order.IsSetOrderChannel() )
-			{
-				orderInfo.OrderChannel = order.OrderChannel;
-			}
-			if ( order.IsSetShipServiceLevel() )
-			{
-				orderInfo.ShipServiceLevel = order.ShipServiceLevel;
-			}
-
+			
 			orderInfo.OrderTotal = ConvertToAmount( order.IsSetOrderTotal(), order.OrderTotal );
 
 			if ( order.IsSetNumberOfItemsShipped() )
@@ -192,10 +176,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			{
 				orderInfo.NumberOfItemsUnshipped = (int)order.NumberOfItemsUnshipped;
 			}
-			if ( order.IsSetMarketplaceId() )
-			{
-				orderInfo.MarketplaceId = order.MarketplaceId;
-			}
+			
 			if ( order.IsSetPaymentExecutionDetail() )
 			{
 				orderInfo.PaymentsInfo = new AmazonOrderItem2PaymentsInfoList();
@@ -213,53 +194,10 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 					orderInfo.PaymentsInfo.Add( orderPayment );
 				}
 			}
-			if ( order.IsSetPaymentMethod() )
-			{
-				orderInfo.PaymentMethod = order.PaymentMethod.ToString();
-			}
-			if ( order.IsSetBuyerEmail() )
-			{
-				orderInfo.BuyerEmail = order.BuyerEmail;
-			}
-			if ( order.IsSetBuyerName() )
-			{
-				orderInfo.BuyerName = order.BuyerName;
-			}
-			if ( order.IsSetShipmentServiceLevelCategory() )
-			{
-				orderInfo.ShipmentServiceLevelCategory = order.ShipmentServiceLevelCategory;
-			}
-
-			if ( order.IsSetShippingAddress() )
-			{
-				orderInfo.ShipmentAddress = ConvertAddress( order.ShippingAddress );
-			}
-
+			
 			return orderInfo;
 		}
-
-		private AmazonOrderItem2Address ConvertAddress(Address data)
-		{
-			var amazonAddress = new AmazonOrderItem2Address
-			    {
-			        AddressLine1 = data.AddressLine1,
-			        AddressLine2 = data.AddressLine2,
-			        AddressLine3 = data.AddressLine3,
-			        City = data.City,
-			        CountryCode = data.CountryCode,
-			        County = data.County,
-			        District = data.District,
-			        Name = data.Name,
-			        Phone = data.Phone,
-			        PostalCode = data.PostalCode,
-			        StateOrRegion = data.StateOrRegion
-			    };
-
-			return amazonAddress;
-
-
-		}
-
+		
 		private AmountInfo ConvertToAmount( bool needConvert, Money money )
 		{
 			var info = new AmountInfo
