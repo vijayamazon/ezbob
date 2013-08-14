@@ -10,37 +10,6 @@ CREATE PROCEDURE RptLoansGiven
 @DateEnd DATETIME
 AS
 BEGIN
-	CREATE TABLE #t (
-		LoanID INT NOT NULL,
-		Date DATETIME NULL,
-		ClientID INT NOT NULL,
-		ClientEmail NVARCHAR(128) NOT NULL,
-		ClientName NVARCHAR(752) NOT NULL,
-		LoanTypeName NVARCHAR(250) NOT NULL,
-		SetupFee DECIMAL(18, 4) NOT NULL,
-		LoanAmount NUMERIC(18, 0) NOT NULL,
-		Period INT NOT NULL,
-		PlannedInterest NUMERIC(38, 2) NOT NULL,
-		PlannedRepaid NUMERIC(38, 2) NOT NULL,
-		TotalPrincipalRepaid NUMERIC(38, 2) NOT NULL,
-		TotalInterestRepaid NUMERIC(38, 2) NOT NULL,
-		EarnedInterest NUMERIC(38, 2) NOT NULL,
-		ExpectedInterest NUMERIC(38, 2) NOT NULL,
-		AccruedInterest NUMERIC(38, 2) NOT NULL,
-		TotalInterest NUMERIC(38, 2) NOT NULL,
-		TotalFeesRepaid NUMERIC(38, 2) NOT NULL,
-		TotalCharges NUMERIC(38, 2) NOT NULL,
-		BaseInterest DECIMAL(18, 4) NULL,
-		DiscountPlan NVARCHAR(512) NOT NULL,
-		RowLevel NVARCHAR(32) NOT NULL,
-		SortOrder INT NOT NULL
-	)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	
-	INSERT INTO #t
 	SELECT
 		l.Id AS LoanID,
 		l.Date,
@@ -59,15 +28,14 @@ BEGIN
 		ISNULL(exi.ExpectedInterest, 0) AS ExpectedInterest,
 		0 AS AccruedInterest,
 		0 AS TotalInterest,
-		ISNULL(fc.Fees, 0) AS TotalFees,
+		ISNULL(fc.Fees, 0) AS TotalFeesRepaid,
 		ISNULL(fc.Charges, 0) AS TotalCharges,
 		l.InterestRate AS BaseInterest,
 		dp.Name AS DiscountPlan,
 		CASE ISNULL(out.Counter, 0)
 			WHEN 1 THEN ''
 			ELSE 'unmatched'
-		END,
-		0
+		END AS RowLevel
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
@@ -137,125 +105,7 @@ BEGIN
 		LEFT JOIN dbo.udfLoanFeesAndCharges(@DateStart, @DateEnd) fc ON l.Id = fc.LoanID
 	WHERE
 		CONVERT(DATE, @DateStart) <= l.Date AND l.Date < CONVERT(DATE, @DateEnd)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	DECLARE @LoanIDs LoanIdListTable
-
-	------------------------------------------------------------------------------
-
-	INSERT INTO @LoanIDs
-	SELECT DISTINCT
-		LoanID
-	FROM
-		#t
-
-	------------------------------------------------------------------------------
-
-	UPDATE #t SET
-		EarnedInterest = i.EarnedInterest
-	FROM
-		#t
-		INNER JOIN dbo.udfEarnedInterestForLoans(NULL, NULL, @LoanIDs) i
-			ON #t.LoanID = i.LoanID
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	-- A NOTE. UPDATE works in "batch mode" meaning that field
-	-- values are changed for entire row at the same time so that assignments in
-	-- this UPDATE operator does not affect follwing assignments in THE SAME
-	-- operator.
-
-	-- Accrued = Earned - Repaid
-	
-	-- Expected: until now the field ExpectedInterest only contains sum of planned
-	-- interest from LoanSchedule. Accrued should be subtructed from it. Because
-	-- of A NOTE it shows Expected - Earned + Repaid instead of Expected - Accrued.
-
-	-- Total = Earned + Expected. Because of A NOTE and some math:
-	-- Total = Earned + Expected =
-	--       = Earned + (Expected - Accrued) =
-	--       = Earned + (Expected - (Earned - Repaid)) =
-	--       = Earned + (Expected - Earned + Repaid) =
-	--       = Earned + Expected - Earned + Repaid =
-	--       = Expected + Repaid
-
-	UPDATE #t SET
-		AccruedInterest = EarnedInterest - TotalInterestRepaid,
-		ExpectedInterest = ExpectedInterest - EarnedInterest + TotalInterestRepaid,
-		TotalInterest = ExpectedInterest + TotalInterestRepaid
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	INSERT INTO #t
-	SELECT
-		COUNT(DISTINCT LoanID),
-		NULL,
-		COUNT(DISTINCT ClientID),
-		'' AS ClientEmail,
-		'Total' AS ClientName,
-		'' AS LoanTypeName,
-		ISNULL(SUM(SetupFee), 0),
-		ISNULL(SUM(LoanAmount), 0),
-		ISNULL(AVG(Period), 0),
-		ISNULL(SUM(PlannedInterest), 0),
-		ISNULL(SUM(PlannedRepaid), 0),
-		ISNULL(SUM(TotalPrincipalRepaid), 0),
-		ISNULL(SUM(TotalInterestRepaid), 0),
-		ISNULL(SUM(EarnedInterest), 0),
-		ISNULL(SUM(ExpectedInterest), 0),
-		ISNULL(SUM(AccruedInterest), 0),
-		ISNULL(SUM(TotalInterest), 0),
-		ISNULL(SUM(TotalFeesRepaid), 0),
-		ISNULL(SUM(TotalCharges), 0),
-		NULL AS BaseInterest,
-		'' AS DiscountPlan,
-		'total',
-		1
-	FROM
-		#t
-	WHERE
-		SortOrder = 0
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	SELECT
-		LoanID,
-		Date,
-		ClientID,
-		ClientEmail,
-		ClientName,
-		LoanTypeName,
-		SetupFee,
-		LoanAmount,
-		Period,
-		PlannedInterest,
-		PlannedRepaid,
-		TotalPrincipalRepaid,
-		TotalInterestRepaid,
-		EarnedInterest,
-		ExpectedInterest,
-		AccruedInterest,
-		TotalInterest,
-		TotalFeesRepaid,
-		TotalCharges,
-		BaseInterest,
-		DiscountPlan,
-		RowLevel
-	FROM
-		#t
 	ORDER BY
-		SortOrder DESC,
-		Date
-
-	DROP TABLE #t
+		l.Date
 END
 GO

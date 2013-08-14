@@ -51,16 +51,6 @@ namespace EzReportToEMail {
 					);
 					break;
 
-				case ReportType.RPT_DAILY_STATS:
-					sender.Send(
-						report.Title,
-						BuildDailyStatsReportBody(report, dToday, dTomorrow),
-						report.ToEmail,
-						"Daily",
-						BuildDailyStatsXls(report, dToday, dTomorrow)
-					);
-					break;
-
 				case ReportType.RPT_IN_WIZARD:
 					sender.Send(
 						report.Title,
@@ -68,6 +58,26 @@ namespace EzReportToEMail {
 						report.ToEmail,
 						"Daily",
 						BuildInWizardXls(report, dToday, dTomorrow)
+					);
+					break;
+
+				case ReportType.RPT_EARNED_INTEREST:
+					sender.Send(
+						report.Title,
+						BuildEarnedInterestReport(report, dToday, dTomorrow),
+						report.ToEmail,
+						"Daily",
+						BuildEarnedInterestXls(report, dToday, dTomorrow)
+					);
+					break;
+
+				case ReportType.RPT_LOANS_GIVEN:
+					sender.Send(
+						report.Title,
+						BuildLoansIssuedReport(report, dToday, dTomorrow),
+						report.ToEmail,
+						"Daily",
+						BuildLoansIssuedXls(report, dToday, dTomorrow)
 					);
 					break;
 

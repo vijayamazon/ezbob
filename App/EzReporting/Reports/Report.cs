@@ -17,8 +17,9 @@ namespace Reports {
 		RPT_GENERIC,
 		RPT_NEW_CLIENT,
 		RPT_PLANNED_PAYTMENT,
-		RPT_DAILY_STATS,
 		RPT_IN_WIZARD,
+		RPT_EARNED_INTEREST,
+		RPT_LOANS_GIVEN,
 	} // enum ReportType
 
 	#endregion enum ReportType

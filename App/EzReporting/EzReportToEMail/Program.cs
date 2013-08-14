@@ -8,23 +8,7 @@ namespace EzReportToEMail {
 		public static void Main(string[] args) {
 			var log = new LegacyLog();
 			var env = new Ezbob.Context.Environment(log);
-/*
-			var ea = new Reports.EarnedInterest(
-				new SqlConnection(log),
-				Reports.EarnedInterest.WorkingMode.ByIssuedLoans,
-				new DateTime(2012, 5, 1),
-				new DateTime(2013, 9, 1),
-				log
-			);
 
-			var eaint = ea.Run();
-
-			foreach (var d in eaint) {
-				log.Debug("{0}: {1}", d.Key, d.Value);
-			}
-
-			return;
-*/
 			DateTime dNow = DateTime.Today;
 
 			if ((args.Length == 1) && (args[0] == "--std"))

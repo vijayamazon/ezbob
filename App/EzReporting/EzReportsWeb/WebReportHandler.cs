@@ -33,11 +33,14 @@ namespace EzReportsWeb {
 			case ReportType.RPT_PLANNED_PAYTMENT:
 				return BuildPlainedPaymentReport(report, (DateTime)rptDef.DateStart);
 
-			case ReportType.RPT_DAILY_STATS:
-				return BuildDailyStatsReportBody(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
-
 			case ReportType.RPT_IN_WIZARD:
 				return BuildInWizardReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_EARNED_INTEREST:
+				return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_LOANS_GIVEN:
+				return BuildLoansIssuedReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
@@ -74,11 +77,14 @@ namespace EzReportsWeb {
 			case ReportType.RPT_PLANNED_PAYTMENT:
 				return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart);
 
-			case ReportType.RPT_DAILY_STATS:
-				return BuildDailyStatsXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
-
 			case ReportType.RPT_IN_WIZARD:
 				return BuildInWizardXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_EARNED_INTEREST:
+				return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_LOANS_GIVEN:
+				return BuildLoansIssuedXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);

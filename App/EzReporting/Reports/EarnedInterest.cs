@@ -54,7 +54,7 @@ namespace Reports {
 
 		#region method Run
 
-		public SortedDictionary<int, double> Run() {
+		public SortedDictionary<int, decimal> Run() {
 			switch (m_nMode) {
 			case WorkingMode.ByIssuedLoans:
 				FillIssuedLoans();
@@ -76,7 +76,7 @@ namespace Reports {
 
 		#region method ProcessLoans
 
-		public SortedDictionary<int, double> ProcessLoans() {
+		public SortedDictionary<int, decimal> ProcessLoans() {
 			DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_LoanDates");
 
 			foreach (DataRow row in tbl.Rows) {
@@ -87,199 +87,134 @@ namespace Reports {
 					continue;
 				} // if
 
-				DataItem nItem = DataItem.Unknown;
+				DateTime oDate = Convert.ToDateTime(row[2]);
+
+				decimal nValue = Convert.ToDecimal(row[3]);
 
 				switch (row[0].ToString()) {
 				case "0":
-					nItem = DataItem.Schedule;
+					m_oLoans[nLoanID].Schedule[oDate] = new InterestData(oDate, nValue);
+
 					break;
 
 				case "1":
-					nItem = DataItem.Transaction;
+					if (nValue > 0)
+						m_oLoans[nLoanID].Repayments[oDate] = new TransactionData(oDate, nValue);
+
 					break;
 				} // switch
-
-				DateTime oDate = Convert.ToDateTime(row[2]);
-
-				double nValue = Convert.ToDouble(row[3]);
-
-				m_oLoans[nLoanID].Add(new DayData(nItem, oDate, nValue));
 			} // for each row
 
-			var oRes = new SortedDictionary<int, double>();
+			var oRes = new SortedDictionary<int, decimal>();
 
-			foreach (KeyValuePair<int, LoanData> pair in m_oLoans)
-				oRes[pair.Key] = pair.Value.Calculate(m_oDateStart, m_oDateEnd);
+			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
+				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd);
+
+				if (nInterest > 0)
+					oRes[pair.Key] = nInterest;
+			} // foreach
 
 			return oRes;
 		} // ProcessLoans
 
 		#endregion method ProcessLoans
 
-		#region enum DataItem
-
-		private enum DataItem {
-			Unknown,
-			Schedule,
-			Transaction
-		} // DataItem
-
-		#endregion enum DataItem
-
 		#region class LoanData
 
 		private class LoanData {
 			public DateTime IssueDate;
-			public double Amount;
+			public decimal Amount;
+			public readonly SortedDictionary<DateTime, InterestData> Schedule;
+			public readonly SortedDictionary<DateTime, TransactionData> Repayments;
 
 			public LoanData(int nLoanID, ASafeLog oLog) {
 				LoanID = nLoanID;
 				Log = new SafeLog(oLog);
-				Dates = new SortedDictionary<DateTime, DayData>();
+
+				Schedule = new SortedDictionary<DateTime, InterestData>();
+				Repayments = new SortedDictionary<DateTime, TransactionData>();
 			} // constructor
-
-			#region method Add
-
-			public void Add(DayData oDay) {
-				if (Dates.ContainsKey(oDay.Date))
-					Dates[oDay.Date].Update(oDay);
-				else
-					Dates[oDay.Date] = oDay;
-			} // Add
-
-			#endregion method Add
 
 			#region class PrInterest
 
 			private class PrInterest {
 				public readonly DateTime Date;
-				public double Principal;
-				public double Interest;
+				public decimal Principal;
+				public decimal Interest;
 
-				public PrInterest(DateTime oDate, double nPrincipal) {
+				public PrInterest(DateTime oDate, decimal nPrincipal) {
 					Date = oDate;
 					Principal = nPrincipal;
 					Interest = 0;
 				} // constructor
 
 				public override string ToString() {
-					return string.Format("{0}: {1} -- {2}", Date, Principal, Interest);
+					return string.Format("{0}: {1} * {2} = {3}", Date, Principal, Interest, Principal * Interest);
 				} // ToString
 
-				public void DecPrincipal(DayData oDelta) {
-					if ((oDelta.Repayment > 0) && (Date > oDelta.Date))
+				public bool Update(InterestData oDelta) {
+					Interest = oDelta.Interest;
+
+					return Date == oDelta.Date;
+				} // Update
+
+				public void Update(TransactionData oDelta) {
+					if (Date > oDelta.Date)
 						Principal -= oDelta.Repayment;
-				} // DecPrincipal
+				} // Update
 			} // class PrInterest
 
 			#endregion class PrInterest
 
-			#region class PeriodLengthData
-
-			private class PeriodLengthData {
-				public DateTime Date;
-				public int Length;
-			} // class PeriodLengthData
-
-			#endregion class PeriodLengthData
-
 			#region method Calculate
 
-			public double Calculate(DateTime oDateStart, DateTime oDateEnd) {
-				if (Dates.Count == 0)
-					return 0;
-
+			/// <summary>
+			/// Earned interest is a SUM(Pj * Ij) where the sum is taken on all the days during
+			/// requested period when a loan could produce interest, Pj is a loan principal on
+			/// specific day, Ij is an interest on that day.
+			/// </summary>
+			/// <param name="oDateStart">Requested period start date, inclusive.</param>
+			/// <param name="oDateEnd">Requested period end date, exclusive.</param>
+			/// <returns>Earned interest for the period.</returns>
+			public decimal Calculate(DateTime oDateStart, DateTime oDateEnd) {
 				DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
-				DateTime d = (oDateStart < oFirstIncomeDay) ? oFirstIncomeDay : oDateStart;
+				// A loan starts to produce interest on the next day.
+				DateTime oDayOne = (oDateStart < oFirstIncomeDay) ? oFirstIncomeDay : oDateStart;
 
+				// List of all the dates during requested period when a loan could produce interest.
 				var oDaysList = new List<PrInterest>();
 
-				while (d < oDateEnd) {
+				for (DateTime d = oDayOne; d < oDateEnd; d = d.AddDays(1))
 					oDaysList.Add(new PrInterest(d, Amount));
-
-					d = d.AddDays(1);
-				} // while
 
 				if (oDaysList.Count == 0)
 					return 0;
 
-				DayData[] aryDates = Dates.Values.ToArray();
+				DateTime oPrevDate = IssueDate;
 
-				var oSchedules = new List<PeriodLengthData> {
-					new PeriodLengthData {
-						Date = IssueDate,
-						Length = 0
-					}
-				};
-
-				oSchedules.AddRange(
-					from dd in aryDates
-					where dd.Item == DataItem.Schedule
-					select new PeriodLengthData {
-						Date = dd.Date,
-						Length = 0
-					}
-				);
-
-				PeriodLengthData[] arySchedules = oSchedules.ToArray();
-
-				for (int i = arySchedules.Length - 1; i > 0; i--) {
-					PeriodLengthData cur = arySchedules[i];
-					PeriodLengthData prev = arySchedules[i - 1];
-
-					cur.Length = (cur.Date - prev.Date).Days;
-				} // for
-
-				int nSchedPtr = 1;
-				PeriodLengthData pld = arySchedules[nSchedPtr];
-
-				for (int i = 0; i < aryDates.Length; i++) {
-					DayData oCurDate = aryDates[i];
-
-					if (oCurDate.Date == pld.Date) {
-						oCurDate.OriginalInterest = oCurDate.Interest;
-						oCurDate.Interest /= pld.Length;
-
-						nSchedPtr++;
-
-						if (nSchedPtr >= arySchedules.Length)
-							break;
-						else
-							pld = arySchedules[nSchedPtr];
-					} // if
-				} // for
-
-				for (int i = aryDates.Length - 1; i > 0; i--) {
-					if ((aryDates[i].Interest >= 0) && (aryDates[i - 1].Interest < 0))
-						aryDates[i - 1].Interest = aryDates[i].Interest;
-				} // for
-
-				for (int i = 0; i < aryDates.Length - 1; i++) {
-					if ((aryDates[i].Interest >= 0) && (aryDates[i + 1].Interest < 0))
-						aryDates[i + 1].Interest = aryDates[i].Interest;
-				} // for
+				foreach (InterestData ida in Schedule.Values) {
+					ida.PeriodLength = (ida.Date - oPrevDate).Days;
+					oPrevDate = ida.Date;
+				} // for each schedule
 
 				oDaysList.ForEach(pri => {
-					foreach (DayData dd in aryDates)
-						pri.DecPrincipal(dd);
+					foreach (TransactionData t in Repayments.Values)
+						pri.Update(t);
 				}); // for each day
 
-				PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0.000001).ToArray();
+				PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0).ToArray();
 
 				if (days.Length == 0)
 					return 0;
 
+				InterestData[] aryDates = Schedule.Values.ToArray();
+
 				int nDayDataPtr = 0;
-				DayData oCurDayData = aryDates[nDayDataPtr];
+				InterestData oCurDayData = aryDates[nDayDataPtr];
 				
-				for (int nDayPtr = 0; nDayPtr < days.Length; nDayPtr++) {
-					PrInterest pri = days[nDayPtr];
-
-					if (pri.Date <= oCurDayData.Date)
-						pri.Interest = oCurDayData.Interest;
-
-					if (pri.Date == oCurDayData.Date) {
+				foreach (PrInterest pri in days) {
+					if (pri.Update(oCurDayData)) {
 						nDayDataPtr++;
 
 						if (nDayDataPtr < aryDates.Length)
@@ -287,16 +222,19 @@ namespace Reports {
 					} // if
 				} // for
 
-				var aryPriStr = days.Select(pri => pri.ToString()).ToArray();
+				decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
 
-				var aryDayStr = aryDates.Select(dd => dd.ToString()).ToArray();
+				// Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}\nSchedule ({7}):\n\t{3}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
+					// LoanID, Amount, IssueDate,
+					// string.Join(" ; ", Schedule.Values.Select(v => v.ToString()).ToArray()),
+					// string.Join(" ; ", Repayments.Values.Select(v => v.ToString()).ToArray()),
+					// string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray()),
+					// nEarnedInterest,
+					// Schedule.Count,
+					// Repayments.Count
+				// );
 
-				Log.Debug("\n\nLoanID: {0}, {1} issued on {2}\nSchedule & Transactions\n{3}\nPer day\n{4}\n\n", LoanID, Amount, IssueDate,
-					string.Join(" ; ", aryDayStr),
-					string.Join(" ; ", aryPriStr)
-				);
-
-				return days.Sum(pri => pri.Principal * pri.Interest);
+				return nEarnedInterest;
 			} // Calculate
 
 			#endregion method Calculate
@@ -304,7 +242,6 @@ namespace Reports {
 			#region private
 
 			private readonly int LoanID;
-			private readonly SortedDictionary<DateTime, DayData> Dates;
 			private readonly ASafeLog Log;
 
 			#endregion private
@@ -312,73 +249,75 @@ namespace Reports {
 
 		#endregion class LoanData
 
-		#region class DayData
+		#region class InterestData
 
-		private class DayData {
+		private class InterestData {
 			#region public
 
-			public DataItem Item;
 			public readonly DateTime Date;
-			public double Repayment;
-			public double Interest;
-			public double OriginalInterest;
+			public int PeriodLength;
+			public readonly decimal OriginalInterest;
 
 			#region constructor
 
-			public DayData(DataItem nItem, DateTime oDate, double nValue) {
-				Item = nItem;
+			public InterestData(DateTime oDate, decimal nInterest) {
+				PeriodLength = 0;
 				Date = oDate;
-
-				switch (nItem) {
-				case DataItem.Schedule:
-					Repayment = 0;
-					Interest = nValue;
-					break;
-
-				case DataItem.Transaction:
-					Repayment = nValue;
-					Interest = -1;
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException("nItem");
-				} // switch
+				OriginalInterest = nInterest;
 			} // constructor
 
 			#endregion constructor
 
-			#region method Update
+			#region property Interest
 
-			public void Update(DayData oData) {
-				switch (oData.Item) {
-				case DataItem.Schedule:
-					Interest = oData.Interest;
-					Item = DataItem.Schedule;
-					break;
+			public decimal Interest {
+				get { return PeriodLength == 0 ? OriginalInterest : OriginalInterest / PeriodLength; }
+			} // Interest
 
-				case DataItem.Transaction:
-					Repayment = oData.Repayment;
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException();
-				} // switch
-			} // Update
-
-			#endregion method Update
+			#endregion property Interest
 
 			#region method ToStirng
 
 			public override string ToString() {
-				return string.Format("{0} on {1}: {2} -- {3} ({4})", Item, Date, Repayment, Interest, OriginalInterest);
+				return string.Format("on {0}: {1} = {2} / {3}", Date, Interest, OriginalInterest, PeriodLength);
 			} // ToString
 
 			#endregion method ToStirng
 
 			#endregion public
-		} // DayData
+		} // class InterestData
 
-		#endregion class DayData
+		#endregion class InterestData
+
+		#region class TransactionData
+
+		private class TransactionData {
+			#region public
+
+			public readonly DateTime Date;
+			public decimal Repayment;
+
+			#region constructor
+
+			public TransactionData(DateTime oDate, decimal nRepayment) {
+				Date = oDate;
+				Repayment = nRepayment;
+			} // constructor
+
+			#endregion constructor
+
+			#region method ToStirng
+
+			public override string ToString() {
+				return string.Format("on {0}: {1}", Date, Repayment);
+			} // ToString
+
+			#endregion method ToStirng
+
+			#endregion public
+		} // class TransactionData
+
+		#endregion class TransactionData
 
 		#region method FillIssuedLoans
 
@@ -396,7 +335,7 @@ namespace Reports {
 			foreach (DataRow row in tbl.Rows) {
 				int nLoanID = Convert.ToInt32(row[0]);
 				DateTime oDate = Convert.ToDateTime(row[1]);
-				double nAmount = Convert.ToDouble(row[2]);
+				decimal nAmount = Convert.ToDecimal(row[2]);
 
 				if (oDate < m_oDateStart)
 					m_oDateStart = oDate;
@@ -425,7 +364,7 @@ namespace Reports {
 			foreach (DataRow row in tbl.Rows) {
 				int nLoanID = Convert.ToInt32(row[0]);
 				DateTime oDate = Convert.ToDateTime(row[1]);
-				double nAmount = Convert.ToDouble(row[2]);
+				decimal nAmount = Convert.ToDecimal(row[2]);
 
 				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
 					IssueDate = oDate,
