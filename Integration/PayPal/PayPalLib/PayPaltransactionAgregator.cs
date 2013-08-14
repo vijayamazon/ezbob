@@ -33,7 +33,7 @@ namespace EzBob.PayPal
 			: base(data, currencyConverter)
 		{
 			_period = data.TimePeriodType;
-			if (_period == TimePeriodEnum.Month || _period == TimePeriodEnum.Month3)
+			if (_period == TimePeriodEnum.Month || _period == TimePeriodEnum.Month3 || _period == TimePeriodEnum.Year)
 			{
 				//Serialize<List<PayPalTransactionItem>>(data.ToList(), "allData", _period.ToString());
 			}
