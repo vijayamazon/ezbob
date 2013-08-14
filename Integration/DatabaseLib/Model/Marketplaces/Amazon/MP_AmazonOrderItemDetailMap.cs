@@ -1,6 +1,6 @@
 using FluentNHibernate.Mapping;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
 	public class MP_AmazonOrderItemDetailMap : ClassMap<MP_AmazonOrderItemDetail>
 	{

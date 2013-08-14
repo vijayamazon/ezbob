@@ -1,5 +1,7 @@
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
+	using Database;
+
 	public class MP_AmazonFeedbackItem
 	{
 		public virtual int Id { get; set; }

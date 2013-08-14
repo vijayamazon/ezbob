@@ -1,7 +1,7 @@
-using EZBob.DatabaseLib.DatabaseWrapper;
-
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using DatabaseWrapper;
+	using Marketplaces.Amazon;
 	using Marketplaces.FreeAgent;
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
@@ -95,6 +95,8 @@ namespace EZBob.DatabaseLib.Model.Database
         /// stuff for such marketplaces.
         /// </summary>
         public virtual bool Disabled { get; set; }
+
+		public virtual MP_AmazonMarketplaceType AmazonMarketPlace { get; set; }
 
         public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType)
         {

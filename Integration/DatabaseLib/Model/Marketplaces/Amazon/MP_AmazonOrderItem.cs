@@ -1,6 +1,6 @@
 using System;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
 	public class MP_AmazonOrderItem
 	{

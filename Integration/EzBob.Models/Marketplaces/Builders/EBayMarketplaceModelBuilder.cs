@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using NHibernate;
@@ -10,7 +9,9 @@ using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders
 {
-    class EBayMarketplaceModelBuilder : MarketplaceModelBuilder
+	using EZBob.DatabaseLib.Repository;
+
+	class EBayMarketplaceModelBuilder : MarketplaceModelBuilder
     {
         private readonly EbayAmazonCategoryRepository _ebayAmazonCategoryRepository;
 

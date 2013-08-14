@@ -1,11 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Repository;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EZBob.DatabaseLib.Model.Database.Repository
+namespace EZBob.DatabaseLib.Repository
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using Model.Database;
+	using Model.Marketplaces.Amazon;
+	using NHibernate;
+	using NHibernate.Linq;
+	
+
 	public class EbayAmazonCategoryRepository : NHibernateRepositoryBase<MP_EbayAmazonCategory>
 	{
 		public EbayAmazonCategoryRepository( ISession session )

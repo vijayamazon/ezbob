@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.AmazonServiceLib;
 using EzBob.Web.Areas.Underwriter.Models;
@@ -12,7 +11,9 @@ using StructureMap;
 
 namespace EzBob.Models.Marketplaces.Builders
 {
-    class AmazonMarketplaceModelBuilder : MarketplaceModelBuilder
+	using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
+
+	class AmazonMarketplaceModelBuilder : MarketplaceModelBuilder
     {
         private readonly EbayAmazonCategoryRepository _ebayAmazonCategoryRepository;
 

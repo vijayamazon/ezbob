@@ -1,7 +1,7 @@
 using EZBob.DatabaseLib.Common;
 using Iesi.Collections.Generic;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
 	public class MP_AmazonOrderItemDetail
 	{

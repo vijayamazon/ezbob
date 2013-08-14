@@ -93,6 +93,8 @@ namespace EZBob.DatabaseLib.Model.Database
                 .Cascade.All();
 
             Map(x => x.Disabled);
+
+			References(x => x.AmazonMarketPlace, "AmazonMarketPlaceId");
         }
     }
 }

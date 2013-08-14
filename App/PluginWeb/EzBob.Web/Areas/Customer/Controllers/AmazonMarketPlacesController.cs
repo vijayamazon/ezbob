@@ -170,7 +170,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var amazonSecurityInfo = new AmazonSecurityInfo(merchantId);
                 amazonSecurityInfo.AddMarketplace(marketplaceId);
 
-                var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer);
+				var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);
 
                 _session.Flush();
                 _creator.CustomerMarketPlaceAdded(_context.Customer, marketplace.Id);

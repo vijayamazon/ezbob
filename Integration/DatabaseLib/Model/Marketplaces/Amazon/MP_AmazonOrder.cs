@@ -1,8 +1,9 @@
-using System;
-using Iesi.Collections.Generic;
-
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
+	using System;
+	using Iesi.Collections.Generic;
+	using Database;
+
 	public class MP_AmazonOrder
 	{
 		public MP_AmazonOrder()

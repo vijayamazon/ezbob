@@ -1,12 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using Iesi.Collections.Generic;
-using NHibernate;
-
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	using Marketplaces.Amazon;
+
 	public class AmazonOrderItemDetailRepository : NHibernateRepositoryBase<MP_AmazonOrderItemDetail>
 	{
 		public AmazonOrderItemDetailRepository(ISession session)

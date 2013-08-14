@@ -84,6 +84,8 @@
     <Compile Include="Model\Loans\LoanTransactionMethodMap.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethodRepository.cs" />
     <Compile Include="Model\Loans\NumericDelta.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceType.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceTypeMap.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="PacNetManualBalance.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="RepositoryRegistry.cs" />
     <Compile Include="Repository\CaisFlagRepository.cs" />
     <Compile Include="Repository\CaisReportsHistoryRepository.cs" />
+    <Compile Include="Repository\AmazonMarketPlaceTypeRepository.cs" />
     <Compile Include="Repository\CustomerSessionRepository.cs" />
     <Compile Include="Repository\CustomerAddressRepository.cs" />
     <Compile Include="Repository\DailyReportRepository.cs" />

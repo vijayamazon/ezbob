@@ -1,5 +1,3 @@
-using EZBob.DatabaseLib.Model.Database.Loans;
-
 namespace EZBob.DatabaseLib
 {
 	using System;
@@ -9,6 +7,7 @@ namespace EZBob.DatabaseLib
 	using System.Linq;
 	using System.Net;
 	using Common;
+	using Model.Database.Loans;
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
 	using DatabaseWrapper.AmazonFeedbackData;
@@ -29,8 +28,10 @@ namespace EZBob.DatabaseLib
 	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using EzBob.CommonLib.ReceivedDataListLogic;
 	using EzBob.CommonLib.TimePeriodLogic;
+	using Model.Marketplaces.Amazon;
 	using NHibernate;
 	using NHibernate.Linq;
+	using Repository;
 	using Scorto.NHibernate.Repository;
 	using StructureMap;
 	using log4net;
@@ -84,6 +85,7 @@ namespace EZBob.DatabaseLib
 		private readonly IMP_YodleeTransactionCategoriesRepository _MP_YodleeTransactionCategoriesRepository;
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
+		private readonly AmazonMarketPlaceTypeRepository _amazonMarketPlaceTypeRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -115,6 +117,7 @@ namespace EZBob.DatabaseLib
 			_MP_YodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(session);
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
+			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
 		}
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
@@ -482,10 +485,10 @@ namespace EZBob.DatabaseLib
 		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname,
 																			IMarketplaceType marketplaceType,
 																			IMarketPlaceSecurityInfo securityData,
-																			Customer customer)
+																			Customer customer, string amazonMarketPlaceId = null)
 		{
 			var serializedSecurityData = SerializeDataHelper.Serialize(securityData);
-			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer);
+			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer, amazonMarketPlaceId);
 		}
 
 
@@ -498,7 +501,7 @@ namespace EZBob.DatabaseLib
 			return SaveOrUpdateCustomerMarketplace(displayname, marketplaceType, serializedSecurityData, customer);
 		}
 
-		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IMarketplaceType marketplaceType, byte[] serializedSecurityData, Customer customer)
+		public IDatabaseCustomerMarketPlace SaveOrUpdateCustomerMarketplace(string displayname, IMarketplaceType marketplaceType, byte[] serializedSecurityData, Customer customer, string amazonMarketPlaceId = null)
 		{
 			int customerMarketPlaceId;
 			var now = DateTime.UtcNow;
@@ -520,6 +523,7 @@ namespace EZBob.DatabaseLib
 						Marketplace = _MarketPlaceRepository.Get(marketplaceType.InternalId),
 						DisplayName = displayname,
 						Created = now,
+						AmazonMarketPlace = amazonMarketPlaceId != null ? _amazonMarketPlaceTypeRepository.GetByMarketPlaceId(amazonMarketPlaceId) : null
 					};
 
 
@@ -640,24 +644,24 @@ namespace EZBob.DatabaseLib
 						var mpOrderItem2 = new MP_AmazonOrderItem2
 						{
 							Order = mpOrder,
-							PaymentMethod = dataItem.PaymentMethod,
+							//PaymentMethod = dataItem.PaymentMethod,
 							OrderId = dataItem.AmazonOrderId,
 							OrderStatus = dataItem.OrderStatus.ToString(),
-							BuyerEmail = dataItem.BuyerEmail,
-							BuyerName = dataItem.BuyerName,
+							//BuyerEmail = dataItem.BuyerEmail,
+							//BuyerName = dataItem.BuyerName,
 							PurchaseDate = dataItem.PurchaseDate,
-							ShipServiceLevel = dataItem.ShipServiceLevel,
-							FulfillmentChannel = dataItem.FulfillmentChannel,
+							//ShipServiceLevel = dataItem.ShipServiceLevel,
+							//FulfillmentChannel = dataItem.FulfillmentChannel,
 							LastUpdateDate = dataItem.LastUpdateDate,
-							MarketplaceId = dataItem.MarketplaceId,
+							//MarketplaceId = dataItem.MarketplaceId,
 							NumberOfItemsShipped = dataItem.NumberOfItemsShipped,
 							NumberOfItemsUnshipped = dataItem.NumberOfItemsUnshipped,
-							OrderChannel = dataItem.OrderChannel,
+							//OrderChannel = dataItem.OrderChannel,
 							OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.OrderTotal, dataItem.PurchaseDate),
-							SalesChannel = dataItem.SalesChannel,
+							//SalesChannel = dataItem.SalesChannel,
 							SellerOrderId = dataItem.SellerOrderId,
-							ShipmentAddress = dataItem.ShipmentAddress,
-							ShipmentServiceLevelCategory = dataItem.ShipmentServiceLevelCategory
+							//ShipmentAddress = dataItem.ShipmentAddress,
+							//ShipmentServiceLevelCategory = dataItem.ShipmentServiceLevelCategory
 						};
 
 						if (dataItem.OrderedItemsList != null)
@@ -2000,27 +2004,27 @@ namespace EZBob.DatabaseLib
 					return new AmazonOrderItem2
 								{
 									AmazonOrderId = o.OrderId,
-									BuyerEmail = o.BuyerEmail,
-									PaymentMethod = o.PaymentMethod,
+									//BuyerEmail = o.BuyerEmail,
+									//PaymentMethod = o.PaymentMethod,
 									OrderStatus = orderStatus,
-									BuyerName = o.BuyerName,
+									//BuyerName = o.BuyerName,
 									PurchaseDate = o.PurchaseDate,
-									ShipServiceLevel = o.ShipServiceLevel,
-									FulfillmentChannel = o.FulfillmentChannel,
+									//ShipServiceLevel = o.ShipServiceLevel,
+									//FulfillmentChannel = o.FulfillmentChannel,
 									LastUpdateDate = o.LastUpdateDate,
 									NumberOfItemsShipped = o.NumberOfItemsShipped,
 									NumberOfItemsUnshipped = o.NumberOfItemsUnshipped,
-									OrderChannel = o.OrderChannel,
+									//OrderChannel = o.OrderChannel,
 									OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.OrderTotal, o.PurchaseDate),
 									PaymentsInfo = new AmazonOrderItem2PaymentsInfoList(o.PaymentsInfo.Select(pi => new AmazonOrderItem2PaymentInfoListItem
 									{
 										MoneyInfo = _CurrencyConvertor.ConvertToBaseCurrency(pi.MoneyInfo, o.PurchaseDate),
 										SubPaymentMethod = pi.SubPaymentMethod
 									})),
-									SalesChannel = o.SalesChannel,
+									//SalesChannel = o.SalesChannel,
 									SellerOrderId = o.SellerOrderId,
-									ShipmentAddress = o.ShipmentAddress,
-									ShipmentServiceLevelCategory = o.ShipmentServiceLevelCategory
+									//ShipmentAddress = o.ShipmentAddress,
+									//ShipmentServiceLevelCategory = o.ShipmentServiceLevelCategory
 
 								};
 				}));

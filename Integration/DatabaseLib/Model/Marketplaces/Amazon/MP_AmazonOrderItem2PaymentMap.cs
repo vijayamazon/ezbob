@@ -2,7 +2,7 @@ using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
 	public class MP_AmazonOrderItem2PaymentMap : ClassMap<MP_AmazonOrderItem2Payment>
 	{

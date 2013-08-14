@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
+	using Marketplaces.Amazon;
 	using Marketplaces.FreeAgent;
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;

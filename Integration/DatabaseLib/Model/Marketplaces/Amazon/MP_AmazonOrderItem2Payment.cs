@@ -1,6 +1,6 @@
 using EZBob.DatabaseLib.Common;
 
-namespace EZBob.DatabaseLib.Model.Database
+namespace EZBob.DatabaseLib.Model.Marketplaces.Amazon
 {
 	public class MP_AmazonOrderItem2Payment
 	{
