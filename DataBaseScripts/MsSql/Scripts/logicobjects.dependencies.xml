@@ -331,6 +331,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_LoanTransaction_MethodId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanTransaction_MethodId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoyaltyProgramActionType</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoyaltyProgramActionType.sql</oFileName>
@@ -478,6 +484,12 @@
     <oName>FK_CustomerMarketPlace_MarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_CustomerMarketPlace_MarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_CustomerMarketPlace_MP_AmazonMarketplaceType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketPlace_MP_AmazonMarketplaceType.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -715,6 +727,18 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_TransactionItem2_MP_Currency</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_TransactionItem2_MP_Currency.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_TransactionItem2_MP_Transaction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_TransactionItem2_MP_Transaction.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_PayPointOrder_MP_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_PayPointOrder_MP_CustomerMarketPlace.sql</oFileName>
@@ -844,6 +868,18 @@
     <oName>FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_YodleeOrderItemBankTransaction_MP_YodleeTransactionCategories.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportArgument_Name</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportArgument_Name.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportArgument_Report</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportArgument_Report.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -1927,6 +1963,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetLastStepCustomers</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetLastStepCustomers.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetLinksForAppOnUserInput</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetLinksForAppOnUserInput.sql</oFileName>
@@ -2197,12 +2239,6 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
-    <oName>MP_GeAnnualSalesAmazon</oName>
-    <oRank>2</oRank>
-    <oFileName>07_PROCEDURES\MP_GeAnnualSalesAmazon.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>MP_GeAnnualSalesEBay</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\MP_GeAnnualSalesEBay.sql</oFileName>
@@ -2218,36 +2254,6 @@
     <oName>MP_GetAmazonFeedback</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\MP_GetAmazonFeedback.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetAmazonItemsOrdered</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\MP_GetAmazonItemsOrdered.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetAmazonOrdersCancellationRate</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersCancellationRate.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetAmazonOrdersCancelled</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersCancelled.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetAmazonOrdersNumber</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersNumber.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetAmazonOrdersTotalSum</oName>
-    <oRank>2</oRank>
-    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersTotalSum.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2302,12 +2308,6 @@
     <oName>MP_GetPayPalActivity</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\MP_GetPayPalActivity.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>MP_GetScoreCardData</oName>
-    <oRank>2</oRank>
-    <oFileName>07_PROCEDURES\MP_GetScoreCardData.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

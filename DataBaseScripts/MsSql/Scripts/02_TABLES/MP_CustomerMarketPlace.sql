@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[MP_CustomerMarketPlace](
 	[TokenExpired] [int] NOT NULL,
 	[OriginationDate] [datetime] NULL,
 	[Disabled] [bit] NULL,
+	[AmazonMarketPlaceId] [int] NULL,
  CONSTRAINT [PK_CustomerMarketPlace] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

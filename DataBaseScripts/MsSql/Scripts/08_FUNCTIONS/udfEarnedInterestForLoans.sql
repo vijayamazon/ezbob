@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterestForLoans]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterestForLoans]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[udfEarnedInterestForLoans]
 GO
 SET ANSI_NULLS ON
@@ -69,7 +69,9 @@ BEGIN
 
 	--------------------------------------------------------
 	--
-	-- Ok, let's go to work!
+	-- Ok, let's
+go
+to work!
 	-- Who the fuck are you?!
 	-- The workaholic!
 	--

@@ -835,6 +835,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>LoanOfferMultiplier</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\LoanOfferMultiplier.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoanOptions_Loan</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanOptions_Loan.sql</oFileName>
@@ -872,14 +878,26 @@
   </DependencyData>
   <DependencyData>
     <oName>LoanScheduleTransaction</oName>
-    <oRank>2</oRank>
+    <oRank>3</oRank>
     <oFileName>02_TABLES\LoanScheduleTransaction.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_LoanTransaction_MethodId</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanTransaction_MethodId.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>LoanTransaction</oName>
-    <oRank>1</oRank>
+    <oRank>2</oRank>
     <oFileName>02_TABLES\LoanTransaction.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoanTransactionMethod</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\LoanTransactionMethod.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1027,6 +1045,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>MP_AmazonMarketplaceType</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_AmazonMarketplaceType.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_AmazonOrder_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_AmazonOrder_CustomerMarketPlace.sql</oFileName>
@@ -1060,6 +1084,12 @@
     <oName>MP_AmazonOrderItem2</oName>
     <oRank>5</oRank>
     <oFileName>02_TABLES\MP_AmazonOrderItem2.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_AmazonOrderItem2Backup</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_AmazonOrderItem2Backup.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1204,6 +1234,12 @@
     <oName>FK_CustomerMarketPlace_MarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_CustomerMarketPlace_MarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_CustomerMarketPlace_MP_AmazonMarketplaceType</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_CustomerMarketPlace_MP_AmazonMarketplaceType.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -1645,6 +1681,24 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_MP_TransactionItem2_MP_Currency</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_TransactionItem2_MP_Currency.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_MP_TransactionItem2_MP_Transaction</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_MP_TransactionItem2_MP_Transaction.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_PayPalTransactionItem2</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_PayPalTransactionItem2.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_MP_PayPointOrder_MP_CustomerMarketPlace</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_PayPointOrder_MP_CustomerMarketPlace.sql</oFileName>
@@ -1978,6 +2032,30 @@
     <oName>PostcodeServiceLog</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\PostcodeServiceLog.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportArgumentNames</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ReportArgumentNames.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportArgument_Name</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportArgument_Name.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_ReportArgument_Report</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_ReportArgument_Report.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>ReportArguments</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\ReportArguments.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -2476,6 +2554,12 @@
     <oName>TaskedStrategyParams</oName>
     <oRank>4</oRank>
     <oFileName>02_TABLES\TaskedStrategyParams.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>TestCustomer</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\TestCustomer.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
