@@ -711,7 +711,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             }
             model.NOCs = nocList.ToArray();
 
-            if(!eInfo.IsExpirianError)
+            if(eInfo.IsExpirianError)
             {
                 model.ErrorList.AddRange(Errors);
             }
