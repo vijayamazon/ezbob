@@ -37,14 +37,26 @@ namespace Ezbob.HmrcHarvester {
 		/// </summary>
 		/// <param name="sUserName">User name for hmrc.gov.uk.</param>
 		/// <param name="sPassword">Password for hmrc.gov.uk.</param>
+		/// <param name="bVerboseLogging">Turn verbose logging on and off.</param>
 		/// <param name="oLog">Log destination. If null nothing is logged.</param>
-		public Harvester(string sUserName, string sPassword, ASafeLog oLog = null) : base(oLog) {
+		public Harvester(string sUserName, string sPassword, bool bVerboseLogging, ASafeLog oLog = null) : base(oLog) {
 			UserName = sUserName;
 			Password = sPassword;
+			VerboseLogging = bVerboseLogging;
 			Hopper = new Hopper();
+			IsLoggedIn = false;
 		} // constructor
 
 		#endregion constructor
+
+		#region property VerboseLogging
+
+		/// <summary>
+		/// Log verbose logging on (true) or off (false).
+		/// </summary>
+		public bool VerboseLogging { get; set; }
+
+		#endregion property VerboseLogging
 
 		#region property UserName
 
@@ -94,10 +106,37 @@ namespace Ezbob.HmrcHarvester {
 		/// <summary>
 		/// Main harvest function. Logs in to hmrc.gov.uk and fetches data.
 		/// </summary>
-		public void Run() {
-			Login(GetLoginRequestDetails(GetPage("")));
+		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
+		/// <returns>true, on success; false, otherwise.</returns>
+		public bool Run(bool bValidateCredentialsOnly) {
+			try {
+				Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
 
-			VatReturns();
+				if (!IsLoggedIn)
+					Login(GetLoginRequestDetails(GetPage("")));
+
+				string sUserVatID = GetUserVatID();
+
+				Debug("Harvester has validated login credentials.");
+
+				IsLoggedIn = true;
+
+				if (bValidateCredentialsOnly) {
+					Debug("Harvester running is complete.");
+					return true;
+				} // if
+
+				Debug("Harvester starts downloading data.");
+
+				VatReturns(sUserVatID);
+
+				Debug("Harvester running is complete.");
+				return true;
+			}
+			catch (Exception e) {
+				Error("Harvester.Run - exception caught: {0}", e);
+				return false;
+			} // try
 		} // Run
 
 		#endregion method Run
@@ -116,6 +155,12 @@ namespace Ezbob.HmrcHarvester {
 		#endregion public
 
 		#region private
+
+		#region property IsLoggedIn
+
+		private bool IsLoggedIn { get; set; }
+
+		#endregion property IsLoggedIn
 
 		#region struct LoginRequestDetails
 
@@ -180,9 +225,7 @@ namespace Ezbob.HmrcHarvester {
 		/// Fetches "VAT return" data and stores it in the Hopper.
 		/// Separate files are fetched in parallel.
 		/// </summary>
-		private void VatReturns() {
-			string sUserVatID = GetUserVatID();
-
+		private void VatReturns(string sUserVatID) {
 			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
 
 			if (oSubmittedReturns != null) {
@@ -207,7 +250,7 @@ namespace Ezbob.HmrcHarvester {
 							DataType = DataType.VatReturn,
 							FileType = FileType.Html,
 							BaseFileName = sBaseFileName,
-							Thrasher = new VatReturnThrasher(this)
+							Thrasher = new VatReturnThrasher(VerboseLogging, this)
 						})
 					);
 
@@ -461,7 +504,8 @@ namespace Ezbob.HmrcHarvester {
 
 			string sPage = response.Content.ReadAsStringAsync().Result;
 
-			Debug("--- Output:\n\n{0}\n\n --- End of output", sPage);
+			if (VerboseLogging)
+				Debug("--- Server response:\n\n{0}\n\n --- End of server response", sPage);
 
 			Info("Page loaded, parsing...");
 

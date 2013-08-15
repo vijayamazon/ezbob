@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Ezbob.HmrcHarvester;
 using Ezbob.Logger;
 
@@ -8,41 +10,42 @@ namespace TestHarvester {
 		static void Main(string[] args) {
 			var oLog = new ConsoleLog(new LegacyLog());
 
-			// TestDownload(oLog);
-
-			TestParse(oLog);
+			FullTest(oLog);
 		} // Main
 
-		#region method TestParse
+		#region method FullTest
 
-		private static void TestParse(ASafeLog oLog) {
-			string sFilePath = Path.Combine(Directory.GetCurrentDirectory(), "files", "vatreturn-05_12.html");
+		private static void FullTest(ASafeLog oLog) {
+			var harvester = new Harvester("829144784260", "18june1974", false, oLog);
 
-			byte[] oFileData = File.ReadAllBytes(sFilePath);
-
-			var vrt = new VatReturnThrasher(oLog);
-
-			ISeeds parsed = vrt.Run(new SheafMetaData {
-				DataType = DataType.VatReturn,
-				FileType = FileType.Html,
-				BaseFileName = "02 13",
-				Thrasher = null
-			}, oFileData);
-		} // TestParse
-
-		#endregion method TestParse
-
-		#region method TestDownload
-
-		private static void TestDownload(ASafeLog oLog) {
-			var harvester = new Harvester("829144784260", "18june1974", oLog);
-
-			if (harvester.Init()) {
-				harvester.Run();
-
+			if (harvester.Init() && harvester.Run(true) && harvester.Run(false)) {
 				string sBaseDir = Path.Combine(Directory.GetCurrentDirectory(), "files");
 
 				oLog.Info("{0} errors occured", harvester.Hopper.ErrorCount);
+
+				if (harvester.Hopper.ErrorCount > 0) {
+					oLog.Info("List of errors: begin");
+
+					foreach (var pair in harvester.Hopper.Errors) {
+						DataType nDataType = pair.Key;
+						SortedDictionary<FileType, SortedDictionary<string, HarvesterError>> oDataTypeList = pair.Value;
+
+						foreach (var ftPair in oDataTypeList) {
+							FileType nFileType = ftPair.Key;
+
+							foreach (KeyValuePair<string, HarvesterError> fileError in ftPair.Value) {
+								string sFileName = fileError.Key;
+								HarvesterError oError = fileError.Value;
+
+								oLog.Warn("Data type: {0} File type: {1} File name: {2} Error code: {3} Error message: {4}",
+									nDataType, nFileType, sFileName, oError.Code, oError.Message
+								);
+							} // for each file
+						} // for each file type
+					} // for each data type list
+
+					oLog.Info("List of errors: end");
+				} // if
 
 				foreach (DataType nDataType in Enum.GetValues(typeof (DataType))) {
 					foreach (FileType nFileType in Enum.GetValues(typeof (FileType))) {
@@ -62,12 +65,45 @@ namespace TestHarvester {
 							oLog.Info("Saving {0} complete.", sFilePath);
 						});
 					} // foreach file type
+
+					foreach (KeyValuePair<string, ISeeds> pair in harvester.Hopper.Seeds[nDataType]) {
+						string sFileName = pair.Key;
+						ISeeds oSeeds = pair.Value;
+
+						switch (nDataType) {
+						case DataType.VatReturn:
+							var oData = (VatReturnSeeds)oSeeds;
+
+							oLog.Debug("Fetched file: {0} -- file content begin", sFileName);
+
+							oLog.Debug("Registration #: {0}", oData.RegistrationNo);
+
+							oLog.Debug("Period:\n\tName: {0}\n\tFrom: {1}\n\tTo: {1}\n\tDue: {2}",
+								oData.Period, oData.DateFrom, oData.DateTo, oData.DateDue
+							);
+
+							oLog.Debug("Business name: {0}\nBusiness address:\n\t{1}",
+								oData.BusinessName, string.Join("\n\t", oData.BusinessAddress)
+							);
+
+							var sb = new StringBuilder();
+
+							foreach (KeyValuePair<string, decimal> rd in oData.ReturnDetails)
+								sb.AppendFormat("\n\t{0}: {1}", rd.Key, rd.Value);
+
+							oLog.Debug("Return details:{0}", sb.ToString());
+
+							oLog.Debug("Fetched file: {0} -- file content end", sFileName);
+
+							break;
+						} // switch
+					} // for each seeds
 				} // for each data type
-			} // if init
+			} // if init and run
 
 			harvester.Done();
-		} // TestDownload
+		} // FullTest
 
-		#endregion method TestDownload
+		#endregion method FullTest
 	} // class Program
 } // namespace TestHarvester

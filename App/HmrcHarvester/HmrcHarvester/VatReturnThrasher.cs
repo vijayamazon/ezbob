@@ -16,7 +16,8 @@ namespace Ezbob.HmrcHarvester {
 
 		#region constructor
 
-		public VatReturnThrasher(ASafeLog oLog = null) : base(oLog) {
+		public VatReturnThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(oLog) {
+			VerboseLogging = bVerboseLogging;
 		} // constructor
 
 		#endregion constructor
@@ -53,7 +54,7 @@ namespace Ezbob.HmrcHarvester {
 
 			Info("Parsing {0} complete.", oFileID);
 
-			return new VatReturnSeeds();
+			return seeds;
 		} // Run
 
 		#endregion method Run
@@ -61,6 +62,12 @@ namespace Ezbob.HmrcHarvester {
 		#endregion public
 
 		#region private
+
+		#region property VerboseLogging
+
+		private bool VerboseLogging { get; set; }
+
+		#endregion property VerboseLogging
 
 		#region method VatPeriod
 
@@ -72,7 +79,7 @@ namespace Ezbob.HmrcHarvester {
 				return false;
 			} // if
 
-			var dlp = new DLParser(oDL, true, this);
+			var dlp = new DLParser(oDL, true, VerboseLogging, this);
 
 			if (!dlp.Success) {
 				Info("DL parser failed, not setting VAT period fields.");
@@ -114,7 +121,7 @@ namespace Ezbob.HmrcHarvester {
 				return false;
 			} // if
 
-			var dlp = new DLParser(oDL, false, this);
+			var dlp = new DLParser(oDL, false, VerboseLogging, this);
 
 			if (!dlp.Success) {
 				Info("DL parser failed, not setting business details fields.");
@@ -156,7 +163,7 @@ namespace Ezbob.HmrcHarvester {
 				return false;
 			} // if
 
-			var dlp = new DLParser(oDL, true, this);
+			var dlp = new DLParser(oDL, true, VerboseLogging, this);
 
 			if (!dlp.Success) {
 				Info("DL parser failed, not setting return details fields.");
@@ -166,12 +173,13 @@ namespace Ezbob.HmrcHarvester {
 			var ci = new CultureInfo("en-GB", false);
 
 			foreach (KeyValuePair<string, string> pair in dlp.Data) {
-				double nAmount = 0;
+				decimal nAmount = 0;
 
+				// Convert unicode pound sign to ascii.
 				string sValue = pair.Value.Replace(Convert.ToChar(65533), Convert.ToChar(163));
 
-				if (double.TryParse(sValue, NumberStyles.Currency, ci, out nAmount)) {
-					seeds.ReturnDetails[pair.Key] = nAmount;
+				if ((pair.Key.Length > 1) && decimal.TryParse(sValue, NumberStyles.Currency, ci, out nAmount)) {
+					seeds.ReturnDetails[pair.Key.Substring(0, pair.Key.Length - 1)] = nAmount;
 					Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", pair.Key, nAmount);
 				} // if
 			} // foreach

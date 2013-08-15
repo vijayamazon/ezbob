@@ -17,13 +17,15 @@ namespace Ezbob.HmrcHarvester {
 
 		#region constructor
 
-		public DLParser(HtmlNode oDL, bool bFailOnEmptyDT = true, ASafeLog oLog = null) : base(oLog) {
+		public DLParser(HtmlNode oDL, bool bFailOnEmptyDT = true, bool bVerboseLogging = false, ASafeLog oLog = null) : base(oLog) {
 			Data = new SortedDictionary<string, string>();
 			Success = false;
 
 			m_nCurState = FsmState.A;
 			m_oCurChild = null;
 			m_sCurKey = null;
+
+			VerboseLogging = bVerboseLogging;
 
 			Parse(oDL, bFailOnEmptyDT);
 		} // constructor
@@ -46,18 +48,26 @@ namespace Ezbob.HmrcHarvester {
 
 		#region private
 
+		#region property VerboseLogging
+
+		private bool VerboseLogging { get; set; }
+
+		#endregion property VerboseLogging
+
 		#region method Parse
 
 		private void Parse(HtmlNode oDL, bool bFailOnEmptyDT) {
 			Debug("DL parser started, fail on empty DT: {0}", bFailOnEmptyDT ? "yes" : "no");
 
 			while (m_nCurState != FsmState.I) {
-				Debug(
-					"State: {0}, Current Key: {1}, Current Child Tag Name: {2}",
-					m_nCurState,
-					(m_sCurKey ?? "-- null --"),
-					m_oCurChild == null ? "-- null --" : m_oCurChild.Name
-				);
+				if (VerboseLogging) {
+					Debug(
+						"State: {0}, Current Key: {1}, Current Child Tag Name: {2}",
+						m_nCurState,
+						(m_sCurKey ?? "-- null --"),
+						m_oCurChild == null ? "-- null --" : m_oCurChild.Name
+					);
+				} // if
 
 				switch (m_nCurState) {
 				case FsmState.A:
