@@ -50,11 +50,14 @@ namespace Reports {
 		} // DateEnd
 
 		public DataTable Execute(AConnection oDB) {
-			return oDB.ExecuteReader(StoredProcedure, (
-				from pair in m_oValues
-				where Report.Arguments.ContainsKey(m_oArgMatch[pair.Key])
-				select new QueryParameter(pair.Key, pair.Value)
-			).ToArray());
+			var oParams = new List<QueryParameter>();
+
+			foreach (KeyValuePair<string, dynamic> pair in m_oValues) {
+				if (Report.Arguments.ContainsKey(m_oArgMatch[pair.Key]))
+					oParams.Add(new QueryParameter(pair.Key, pair.Value));
+			} // for each
+
+			return oDB.ExecuteReader(StoredProcedure, oParams.ToArray());
 		} // Execute
 
 		private dynamic this[string sArgName] {

@@ -28,6 +28,7 @@ namespace Reports {
 
 	public class Report {
 		public const string ReportListStoredProc = "RptScheduler_GetReportList";
+		public const string ReportArgsStoredProc = "RptScheduler_GetReportArgs";
 
 		public const string DateRangeArg = "DateRange";
 		public const string ShowNonCashArg = "ShowNonCashTransactions";
@@ -39,6 +40,19 @@ namespace Reports {
 				new QueryParameter("@RptType", sReportTypeName ?? "")
 			);
 		} // LoadReportList
+
+		public static DataTable LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
+			var oParams = new List<QueryParameter>();
+
+			if (!string.IsNullOrWhiteSpace(sReportTypeName))
+				oParams.Add(new QueryParameter("@RptType", sReportTypeName));
+
+			return oDB.ExecuteReader(
+				ReportArgsStoredProc,
+				CommandSpecies.StoredProcedure,
+				oParams.ToArray()
+			);
+		} // LoadReportArgs
 
 		#region constructor
 
@@ -59,6 +73,11 @@ namespace Reports {
 			Init(tbl.Rows[0], "");
 
 			tbl.Dispose();
+
+			DataTable args = LoadReportArgs(oDB, sReportTypeName);
+
+			foreach (DataRow row in args.Rows)
+				AddArgument(row["ArgumentName"].ToString());
 		} // constructor
 
 		private void Init(DataRow row, string sDefaultToEmail) {

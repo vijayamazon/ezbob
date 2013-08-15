@@ -56,7 +56,7 @@ namespace Reports {
 				reportList[rpt.TypeName] = rpt;
 			} // for each
 
-			DataTable args = DB.ExecuteReader("RptScheduler_GetReportArgs");
+			DataTable args = Report.LoadReportArgs(DB);
 
 			Report oLastReport = null;
 			string sLastType = null;

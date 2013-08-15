@@ -20,6 +20,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailer", "Mailer\Mailer.csproj", "{68180204-5112-43AF-9D83-E5CDD39F93A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationBase", "..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj", "{E31F233F-09AA-47C8-A2E0-8E33A87F868D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\..\Tools\EzbobUtils\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacnetBalance", "..\PacnetBalance\PacnetBalance.csproj", "{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPointBalance", "..\PayPointBalance\PayPointBalance.csproj", "{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reconciliation", "..\Reconciliation\Reconciliation.csproj", "{6BD00C8A-71E0-477D-BAAD-5310E1563D84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzAnalyticsConsoleClient", "..\EzAnalytics\EzAnalyticsConsoleClient.csproj", "{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +66,30 @@ Global
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68180204-5112-43AF-9D83-E5CDD39F93A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31F233F-09AA-47C8-A2E0-8E33A87F868D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31F233F-09AA-47C8-A2E0-8E33A87F868D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31F233F-09AA-47C8-A2E0-8E33A87F868D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31F233F-09AA-47C8-A2E0-8E33A87F868D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A4074C4-0B4F-4B02-BBA6-4D03933BF8C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A42FA2F0-C0B5-4A87-87EB-66B13B02AA66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD00C8A-71E0-477D-BAAD-5310E1563D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD00C8A-71E0-477D-BAAD-5310E1563D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD00C8A-71E0-477D-BAAD-5310E1563D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD00C8A-71E0-477D-BAAD-5310E1563D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
