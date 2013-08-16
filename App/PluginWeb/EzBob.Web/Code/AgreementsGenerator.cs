@@ -1,4 +1,5 @@
 ﻿using ApplicationMng.Signal;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
@@ -16,11 +17,14 @@ namespace EzBob.Web.Code.Agreements
     {
         private readonly AgreementsModelBuilder _builder;
         private readonly IAgreementsTemplatesProvider _templates;
+        private readonly DatabaseDataHelper _helper;
 
-        public AgreementsGenerator(AgreementsModelBuilder builder, IAgreementsTemplatesProvider templates)
+
+        public AgreementsGenerator(AgreementsModelBuilder builder, IAgreementsTemplatesProvider templates, DatabaseDataHelper helper)
         {
             _builder = builder;
             _templates = templates;
+            _helper = helper;
         }
 
         public void RenderAgreements(Loan loan, bool isRebuld)
@@ -36,24 +40,24 @@ namespace EzBob.Web.Code.Agreements
             if (isConsumer)
             {
                 var preContract = _templates.GetTemplateByName("Pre-Contract-Agreement");
-                var preContractAgreement = new LoanAgreement("precontract", preContract, loan);
+                var preContractAgreement = new LoanAgreement("precontract", loan, _helper.GetIdOrSaveLoanAgreementTemplate(preContract)) ;
                 loan.Agreements.Add(preContractAgreement);
                 client.AddAgreement("precontract", preContract, preContractAgreement.FilePath);
 
                 var contract = _templates.GetTemplateByName("CreditActAgreement");
-                var contractAgreement = new LoanAgreement("Contract", contract, loan);
+                var contractAgreement = new LoanAgreement("Contract", loan, _helper.GetIdOrSaveLoanAgreementTemplate(contract));
                 loan.Agreements.Add(contractAgreement);
                 client.AddAgreement("Contract", contract, contractAgreement.FilePath);
             }
             else
             {
                 var guarantee = _templates.GetTemplateByName("GuarantyAgreement");
-                var guaranteeAgreement = new LoanAgreement("guarantee", guarantee, loan);
+                var guaranteeAgreement = new LoanAgreement("guarantee", loan, _helper.GetIdOrSaveLoanAgreementTemplate(guarantee));
                 loan.Agreements.Add(guaranteeAgreement);
                 client.AddAgreement("guarantee", guarantee, guaranteeAgreement.FilePath);
 
                 var agreement = _templates.GetTemplateByName("PrivateCompanyLoanAgreement");
-                var agreementAgreement = new LoanAgreement("agreement", agreement, loan);
+                var agreementAgreement = new LoanAgreement("agreement", loan, _helper.GetIdOrSaveLoanAgreementTemplate(agreement));
                 loan.Agreements.Add(agreementAgreement);
                 client.AddAgreement("agreement", agreement, agreementAgreement.FilePath);
             }

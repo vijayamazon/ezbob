@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Exceptions;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.Areas.Customer.Models;
@@ -18,12 +19,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly IEzbobWorkplaceContext _context;
         private readonly ILoanAgreementRepository _agreements;
         private AgreementRenderer _agreementRenderer;
+        private readonly DatabaseDataHelper _helper;
 
-        public AgreementsController(IEzbobWorkplaceContext context, ILoanAgreementRepository agreements, AgreementRenderer agreementRenderer)
+        public AgreementsController(IEzbobWorkplaceContext context, ILoanAgreementRepository agreements, AgreementRenderer agreementRenderer, DatabaseDataHelper helper)
         {
             _agreementRenderer = agreementRenderer;
             _context = context;
             _agreements = agreements;
+            _helper = helper;
 
         }
 
@@ -40,8 +43,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             {
                 //if customer is not found, assume that it is underwriter
             }
-            
-            var pdf = _agreementRenderer.RenderAgreementToPdf(agreement.Template, JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel));
+
+            var pdf = _agreementRenderer.RenderAgreementToPdf(_helper.GetLoanAgreementTemplate(agreement.TemplateId), JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel));
             return File(pdf, "application/pdf", GenerateFileName(agreement));
         }
 

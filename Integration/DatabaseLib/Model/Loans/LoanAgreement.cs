@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using FluentNHibernate.Mapping;
@@ -14,20 +15,24 @@ namespace EZBob.DatabaseLib.Model.Loans
         {
         }
 
-        public LoanAgreement(string name, string template, Database.Loans.Loan loan)
+        //public LoanAgreement(string name, string template, Database.Loans.Loan loan, int templateId)
+        public LoanAgreement(string name, Database.Loans.Loan loan, int templateId)
         {
             Name = name;
-            Template = template;
+            Template = "OBSOLETE COLUMN!! This template can be found in LoanAgreementTemplate, id " + templateId.ToString() + "."; // Obsolete line, to be removed.
             Loan = loan;
             FilePath = LongFilenameWithDir();
+            TemplateId = templateId;
         }
 
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
-        public virtual string Template { get; set; }
+        public virtual string Template { get; set; } // Obsolete line, to be removed.
         public virtual Database.Loans.Loan Loan { get; set; }
         public virtual string FilePath { get; set; }
         public virtual string ZohoId { get; set; }
+        public virtual int TemplateId { get; set; }
+
 
         public virtual string ShortFilename()
         {
@@ -78,9 +83,47 @@ namespace EZBob.DatabaseLib.Model.Loans
             Id(x => x.Id).GeneratedBy.HiLo("100");
             Map(x => x.Name).Length(200);
             Map(x => x.FilePath).Length(400);
-            Map(x => x.Template).CustomType("StringClob");
+            Map(x => x.Template).CustomType("StringClob"); // Obsolete line, to be removed.
             References(x => x.Loan, "LoanId");
             Map(x => x.ZohoId).Length(100);
+            Map(x => x.TemplateId);
+        }
+    }
+
+    public class LoanAgreementTemplate
+    {
+        public LoanAgreementTemplate()
+        {
+        }
+
+        public LoanAgreementTemplate(string template)
+        {
+            Template = template;
+        }
+
+        public virtual int Id { get; set; }
+        public virtual string Template { get; set; }
+    }
+
+    public class LoanAgreementTemplateMap : ClassMap<LoanAgreementTemplate>
+    {
+        public LoanAgreementTemplateMap()
+        {
+            Table("LoanAgreementTemplate");
+            Id(x => x.Id).GeneratedBy.HiLo("100");
+            Map(x => x.Template).CustomType("StringClob");
+        }
+    }
+
+    public interface ILoanAgreementTemplateRepository : IRepository<LoanAgreementTemplate>
+    {
+    }
+
+    public class LoanAgreementTemplateRepository : NHibernateRepositoryBase<LoanAgreementTemplate>, ILoanAgreementTemplateRepository
+    {
+        public LoanAgreementTemplateRepository(ISession session)
+            : base(session)
+        {
         }
     }
 }

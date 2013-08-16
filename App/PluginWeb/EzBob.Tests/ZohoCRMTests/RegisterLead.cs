@@ -12,7 +12,7 @@ namespace EzBob.Tests.ZohoCRMTests
         [Ignore]
         public void can_register_lead_from_customer()
         {
-            var crm = new ZohoCRM.ZohoFacade(new ZohoConfigTest(), null, null, null);
+            var crm = new ZohoCRM.ZohoFacade(new ZohoConfigTest(), null, null, null, null);
             var customer = new Customer()
                                {
                                    Name = "EthanHall@teleworm.co.uk1"
@@ -24,7 +24,7 @@ namespace EzBob.Tests.ZohoCRMTests
         [Ignore]
         public void can_register_lead_and_convert_it()
         {
-            var crm = new ZohoFacade(new ZohoConfigTest(), null, null, null);
+            var crm = new ZohoFacade(new ZohoConfigTest(), null, null, null, null);
             var customer = new Customer()
                                {
                                    Name = "LucilleGBlair@dayrep.com3",

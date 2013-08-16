@@ -2,6 +2,7 @@
 using System.Linq;
 using ApplicationMng.Model;
 using Deveel.Web.Zoho;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Configuration;
@@ -23,11 +24,13 @@ namespace ZohoCRM
         private readonly ProfileSummaryModelBuilder _profileSummaryModelBuilder;
         private readonly AgreementRenderer _agreementRenderer;
         private readonly ZohoCrmClient _crm;
+        private readonly DatabaseDataHelper _helper;
 
         private static readonly ILog log = LogManager.GetLogger("ZohoCRM.ZohoFacade");
 
         public ZohoFacade(
-                            IZohoConfig config, 
+                            IZohoConfig config,
+                            DatabaseDataHelper helper, 
                             MarketPlacesFacade marketPlacesFacade,
                             ProfileSummaryModelBuilder profileSummaryModelBuilder,
                             AgreementRenderer agreementRenderer)
@@ -37,6 +40,7 @@ namespace ZohoCRM
             _profileSummaryModelBuilder = profileSummaryModelBuilder;
             _agreementRenderer = agreementRenderer;
             _crm = new ZohoCrmClient(_config.Token);
+            _helper = helper;
         }
 
         /// <summary>
@@ -502,7 +506,7 @@ namespace ZohoCRM
             var agreementModel = JsonConvert.DeserializeObject<AgreementModel>(loan.AgreementModel);
             foreach (var agreement in loan.Agreements.Where(a => string.IsNullOrEmpty(a.ZohoId)))
             {
-                var pdf = _agreementRenderer.RenderAgreementToPdf(agreement.Template, agreementModel);
+                var pdf = _agreementRenderer.RenderAgreementToPdf(_helper.GetLoanAgreementTemplate(agreement.TemplateId), agreementModel);
                 agreement.ZohoId = _crm.UploadFileToRecord<ZohoSalesOrder>(loan.ZohoId, agreement.LongFilename(), "pdf", pdf);
             }
         }

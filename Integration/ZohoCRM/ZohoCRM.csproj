@@ -80,6 +80,10 @@
       <Project>{9e536824-37ad-4cc7-b597-11b882091dbd}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
+      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>

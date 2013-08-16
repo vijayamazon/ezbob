@@ -82,6 +82,8 @@ namespace EzBob.Web.Infrastructure
             For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
             For<ILoanTransactionRepository>().Use<LoanTransactionRepository>();
             For<ILoanAgreementRepository>().Use<LoanAgreementRepository>();
+            For<ILoanAgreementTemplateRepository>().Use<LoanAgreementTemplateRepository>();
+
             For<ILoanRepository>().Use<LoanRepository>();
             For<IAgreementsGenerator>().Use<AgreementsGenerator>();
             For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();

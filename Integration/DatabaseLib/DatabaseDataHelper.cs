@@ -86,6 +86,7 @@ namespace EZBob.DatabaseLib
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly AmazonMarketPlaceTypeRepository _amazonMarketPlaceTypeRepository;
+	    private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
 		private ISession _session;
 
 		public DatabaseDataHelper(ISession session)
@@ -118,6 +119,7 @@ namespace EZBob.DatabaseLib
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
+		    _loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 		}
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
@@ -535,7 +537,23 @@ namespace EZBob.DatabaseLib
 			return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
 		}
 
-		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
+	    public int GetIdOrSaveLoanAgreementTemplate(string template)
+        {
+            var id = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template);
+            if (id == null)
+            {
+                id = (LoanAgreementTemplate)_loanAgreementTemplateRepository.Save(new LoanAgreementTemplate() { Template = template });
+                _session.Flush();
+            }
+            return id.Id;
+	    }
+
+        public string GetLoanAgreementTemplate(int templateid)
+        {
+            return _loanAgreementTemplateRepository.Get(templateid).Template;
+        }
+
+	    public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
 		{
 			return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);
 		}

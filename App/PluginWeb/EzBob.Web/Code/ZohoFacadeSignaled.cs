@@ -1,4 +1,5 @@
-﻿using EzBob.Configuration;
+﻿using EZBob.DatabaseLib;
+using EzBob.Configuration;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Models;
 using EzBob.Signals.ZohoCRM;
@@ -10,10 +11,10 @@ namespace EzBob.Web.Code
 {
     public class ZohoFacadeSignaled : ZohoFacade
     {
-        public ZohoFacadeSignaled(IZohoConfig config, MarketPlacesFacade marketPlacesFacade,
+        public ZohoFacadeSignaled(IZohoConfig config, DatabaseDataHelper helper, MarketPlacesFacade marketPlacesFacade,
                                   ProfileSummaryModelBuilder profileSummaryModelBuilder,
                                   AgreementRenderer agreementRenderer)
-            : base(config, marketPlacesFacade, profileSummaryModelBuilder, agreementRenderer)
+            : base(config, helper, marketPlacesFacade, profileSummaryModelBuilder, agreementRenderer)
         {
         }
 
