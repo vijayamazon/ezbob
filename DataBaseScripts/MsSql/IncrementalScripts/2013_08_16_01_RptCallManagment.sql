@@ -17,7 +17,7 @@ BEGIN
 ----------- GET Customer's Data and CRM Data---------
 IF OBJECT_ID('tempdb..#temp1') IS NOT NULL DROP TABLE #temp1
 
-SELECT c.Id cId, c.Name eMail, c.FirstName name, c.Status Status, c.ManagerApprovedSum OpenOffer,
+SELECT c.Id cId, c.Name eMail, c.Fullname name, c.Status Status, c.ManagerApprovedSum OpenOffer,
 c.LastStatus LoanStatus, (x.Comment) CRMComment, (x.Status) CRMStatus, (x.Action) CRMAction
 INTO #temp1
 FROM Customer c
