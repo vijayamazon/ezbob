@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.AddCustomerRelationsEntry = (function(_super) {
+
     __extends(AddCustomerRelationsEntry, _super);
 
     function AddCustomerRelationsEntry() {
-      _ref = AddCustomerRelationsEntry.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return AddCustomerRelationsEntry.__super__.constructor.apply(this, arguments);
     }
 
     AddCustomerRelationsEntry.prototype.template = '#add-customer-relations-entry-template';
@@ -34,7 +34,7 @@
 
     AddCustomerRelationsEntry.prototype.render = function() {
       AddCustomerRelationsEntry.__super__.render.call(this);
-      this.$el.find('select')[0].selectedIndex = 1;
+      this.$el.find('#Action').prop('selectedIndex', 1);
       return this;
     };
 
@@ -45,7 +45,6 @@
     AddCustomerRelationsEntry.prototype.onSave = function() {
       var that, xhr,
         _this = this;
-
       if (!$('#Incoming_I')[0].checked && !$('#Incoming_O')[0].checked) {
         return false;
       }

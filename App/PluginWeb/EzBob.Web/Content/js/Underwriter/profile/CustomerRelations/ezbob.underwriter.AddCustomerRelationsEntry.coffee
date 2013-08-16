@@ -15,7 +15,7 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
         
     render: ->
         super()
-        this.$el.find('select')[0].selectedIndex = 1
+        @$el.find('#Action').prop('selectedIndex',1)
         return @
 
     commentKeyup: (el) ->
