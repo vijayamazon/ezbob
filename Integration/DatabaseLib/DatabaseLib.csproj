@@ -312,10 +312,8 @@
     <Compile Include="ServiceRequestListException.cs" />
     <Compile Include="Tests\DatabaseDataHelperTest.cs" />
     <Compile Include="Tests\ReceivedDataListTest.cs" />
-    <Compile Include="Tests\ScannerTest.cs" />
     <Compile Include="Tests\TestRegistry.cs" />
     <Compile Include="Tests\TimeDependentDataTest.cs" />
-    <Compile Include="Tests\TimePeriodDataAggregationFixture.cs" />
     <Compile Include="DatabaseWrapper\UsersData\IDatabaseEbayUserData.cs" />
     <Compile Include="DatabaseWrapper\IDatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseWrapper\Inventory\DatabaseInvetory.cs" />

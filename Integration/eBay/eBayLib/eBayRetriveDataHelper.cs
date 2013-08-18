@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
@@ -15,8 +14,6 @@ using EzBob.CommonLib;
 using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 using EzBob.CommonLib.ReceivedDataListLogic;
 using EzBob.CommonLib.TimePeriodLogic;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 using EzBob.TeraPeakServiceLib;
 using EzBob.TeraPeakServiceLib.Requests.SellerResearch;
 using EzBob.eBayDbLib;
@@ -827,7 +824,7 @@ namespace EzBob.eBayLib
 
 			var rez = new MixedReceivedDataList( submitDate, allTeraPeakData.Select( t => new MixedReceivedDataItem( t ) ) );
 
-			var eOrders = allEBayOrders.OrderBy( eo => eo.RecordTime ).Where( eo => !allTeraPeakData.Any( t => t.Include( eo.RecordTime ) ) ).Select( d => d ).OrderBy( d => d.RecordTime );
+			var eOrders = allEBayOrders.OrderBy(eo => eo.RecordTime).Where(eo => !allTeraPeakData.Any(t => t.StartDate <= eo.RecordTime && t.EndDate >= eo.RecordTime)).Select(d => d).OrderBy(d => d.RecordTime);
 
 			rez.AddRange( eOrders.Select( eo => new MixedReceivedDataItem( eo ) ) );
 
@@ -1110,7 +1107,7 @@ namespace EzBob.eBayLib
 
 			return new DataProviderCreationInfo(serviceProvider)
 			{
-				ServiceTokenProvider = serviceTokenProvider,				
+				ServiceTokenProvider = serviceTokenProvider,
 				Settings = _Settings
 			};
 

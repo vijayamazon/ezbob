@@ -1,13 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using EzBob.CommonLib.ReceivedDataListLogic;
-using EzBob.CommonLib.TimePeriodLogic.BoundaryCalculation;
-
 namespace EzBob.CommonLib.TimePeriodLogic
 {
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using ReceivedDataListLogic;
+
 	public class ReceivedDataListTimeDependentInfo<T>: IEnumerable<T>
-		where T : class, ITimeRangedData
+		where T : class
 	{
 		public ReceivedDataListTimeDependentInfo( ReceivedDataListTimeDependentBase<T> data, TimePeriodEnum timePeriodType, int countMonths )
 		{
@@ -33,11 +32,6 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		public bool HasData
 		{
 			get { return Data != null && Data.HasData; }
-		}
-
-		public int CountMonthsFor( DateTime forDate, ITimeBoundaryCalculationStrategy timeBoundaryCalculateStrategy )
-		{
-			return Data != null ? Data.CountMonthFor( forDate, timeBoundaryCalculateStrategy ) : 0;
 		}
 
 		public IEnumerator<T> GetEnumerator()

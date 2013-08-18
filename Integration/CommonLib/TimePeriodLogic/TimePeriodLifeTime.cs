@@ -17,20 +17,5 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		{
 			get { return (int) (new DateTime(12, 12, 2012) - _LeftBoundary).TotalDays; }
 		}
-
-		public override DateTime GetLeftStep(DateTime toDate)
-		{
-			return _LeftBoundary;
-		}
-
-		public override DateTime GetLeftBoundary(DateTime toDate)
-		{
-			return _LeftBoundary;
-		}
-
-		public override DateTime GetRightBoundary(DateTime toDate)
-		{
-			return _RightBoundary;
-		}
 	}
 }

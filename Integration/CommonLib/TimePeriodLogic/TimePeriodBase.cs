@@ -58,13 +58,7 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		public string DisplayName { get; private set; }
 
 		public abstract int DaysInPeriod { get; }
-
-		public abstract DateTime GetLeftStep( DateTime toDate );
-
-		public abstract DateTime GetLeftBoundary( DateTime toDate );
-
-		public abstract DateTime GetRightBoundary( DateTime toDate );
-
+		
 		public static ITimePeriod GetById(Guid id)
 		{
 			return AllTimePeriods.FirstOrDefault( tp => tp.InternalId.Equals( id ) );

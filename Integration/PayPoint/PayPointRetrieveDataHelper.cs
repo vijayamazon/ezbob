@@ -1,8 +1,6 @@
 ﻿namespace PayPoint
 {
     using EzBob.CommonLib;
-    using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-    using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
     using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.Common;
     using EZBob.DatabaseLib.DatabaseWrapper;

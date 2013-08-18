@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic;
-
-namespace EZBob.DatabaseLib
+﻿namespace EZBob.DatabaseLib
 {
+	using System;
+	using System.Collections.Generic;
+	using DatabaseWrapper.FunctionValues;
+	using EzBob.CommonLib.TimePeriodLogic;
+
 	public abstract class DataAggregatorBase<T, TItem, TEnum>
 		where T : ReceivedDataListTimeDependentInfo<TItem>
-		where TItem : class, ITimeRangedData
+		where TItem : class
 	{
 		protected T Data { get; private set; }
 		protected ICurrencyConvertor CurrencyConverter { get; private set; }

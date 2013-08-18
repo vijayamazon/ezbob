@@ -10,8 +10,5 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		string Name { get; }
 		string DisplayName { get; }
 		int DaysInPeriod { get; }
-		DateTime GetLeftStep(DateTime toDate);
-		DateTime GetLeftBoundary( DateTime toDate );
-		DateTime GetRightBoundary( DateTime toDate );
 	}
 }

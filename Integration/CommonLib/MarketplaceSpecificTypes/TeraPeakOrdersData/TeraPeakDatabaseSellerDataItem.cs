@@ -28,7 +28,7 @@ namespace EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData
         public TeraPeakCategory Category { get; set; }
     }
 
-	public class TeraPeakDatabaseSellerDataItem : ITimeRangedData
+	public class TeraPeakDatabaseSellerDataItem
 	{
 		public TeraPeakDatabaseSellerDataItem( DateTime startDate, DateTime endDate )
 		{
@@ -52,31 +52,6 @@ namespace EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData
         public virtual List<CategoryStatistics> Categories { get; set; }
 
 		public RangeMarkerType RangeMarker { get; set; }
-
-		public bool InRange(DateTime fromDate, DateTime toDate)
-		{
-			return fromDate <= LeftBoundary && RightBoundary <= toDate;
-		}
-
-		public bool Include(DateTime fromDate, DateTime toDate)
-		{
-			return LeftBoundary <= fromDate && RightBoundary >= toDate;
-		}
-
-		public DateTime LeftBoundary
-		{
-			get { return StartDate; }
-		}
-
-		public DateTime RightBoundary
-		{
-			get { return EndDate; }
-		}		
-
-		public bool Include(DateTime recordTime)
-		{
-			return LeftBoundary <= recordTime && RightBoundary >= recordTime;
-		}
 
 		public override string ToString()
 		{

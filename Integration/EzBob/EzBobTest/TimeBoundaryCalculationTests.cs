@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic.BoundaryCalculation;
-using NUnit.Framework;
-
-namespace EzBobTest
+﻿namespace EzBobTest
 {
+	using System.Linq;
+	using NUnit.Framework;
+
 	[TestFixture]
 	public class TimeBoundaryCalculationTests
 	{
@@ -43,59 +40,6 @@ namespace EzBobTest
 
 			Assert.AreEqual( rez.Count(), 3 );
 		}
-
-		[Test]
-		public void TimeBoundaryCalculationStrategyByStep()
-		{
-			var strategy = TimeBoundaryCalculationStrategyFactory.Create( TimeBoundaryCalculationStrategyType.ByStep );
-
-			var toDate = new DateTime( 2012, 08, 05, 15, 30, 59 );
-
-			var i = strategy.GetCountIncludedMonths( toDate, toDate );
-			Assert.AreEqual( i, 1 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddSeconds(-1), toDate );
-			Assert.AreEqual( i, 1 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths(-1), toDate );
-			Assert.AreEqual( i, 2 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths(-1).AddSeconds(1), toDate );
-			Assert.AreEqual( i, 1 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths(-6), toDate );
-			Assert.AreEqual( i, 7 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths( -6 ).AddSeconds(1), toDate );
-			Assert.AreEqual( i, 6 );
-		}
-
-		[Test]
-		public void TimeBoundaryCalculationStrategyByEntire()
-		{
-			var strategy = TimeBoundaryCalculationStrategyFactory.Create( TimeBoundaryCalculationStrategyType.ByEntire );
-
-			var toDate = new DateTime( 2012, 08, 01, 0, 0, 0 );
-
-			var i = strategy.GetCountIncludedMonths( toDate, toDate );
-			Assert.AreEqual( i, 1 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddSeconds( -1 ), toDate );
-			Assert.AreEqual( i,2 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths( -1 ), toDate );
-			Assert.AreEqual( i, 2 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths( -1 ).AddSeconds( 1 ), toDate );
-			Assert.AreEqual( i, 2 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths( -6 ), toDate );
-			Assert.AreEqual( i, 7 );
-
-			i = strategy.GetCountIncludedMonths( toDate.AddMonths( -6 ).AddSeconds( 1 ), toDate );
-			Assert.AreEqual( i, 7 );
-		}
-		
 	}
 
 	internal class TestOrderItemDataCreator
@@ -122,9 +66,6 @@ namespace EzBobTest
 				new TestOrderItemData { Price = 67.30,Count = 1},
 				new TestOrderItemData { Price = 50.00,Count = 2},
 			};
-
-
 		}
 	}
-
 }

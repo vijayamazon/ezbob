@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib
 	{
 		private static IWriteDataInfo<TEnum> CreateWriteDataValue<T, TItem, TEnum>( DataAggregatorBase<T, TItem, TEnum> aggregator, TEnum functionType, DateTime updatedDate )
 			where T : ReceivedDataListTimeDependentInfo<TItem>
-			where TItem : class, ITimeRangedData
+			where TItem : class
 		{
 			return aggregator.GetData( functionType, updatedDate );
 		}
@@ -26,7 +26,7 @@ namespace EZBob.DatabaseLib
 			ICurrencyConvertor currencyConvertor
 			)
 			where T : ReceivedDataListTimeDependentInfo<TItem>
-			where TItem : class, ITimeRangedData
+			where TItem : class
 		{
 			var rez = new List<IWriteDataInfo<TEnum>>();
 

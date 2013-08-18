@@ -8,8 +8,6 @@ using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 using EzBob.PayPalDbLib;
 using EzBob.PayPalDbLib.Models;
 using EzBob.PayPalServiceLib;

@@ -21,8 +21,6 @@ using EzBob.AmazonServiceLib.Orders.Model;
 using EzBob.AmazonServiceLib.UserInfo;
 using EzBob.CommonLib;
 using EzBob.CommonLib.TimePeriodLogic;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain;
-using EzBob.CommonLib.TimePeriodLogic.DependencyChain.Factories;
 using MarketplaceWebServiceProducts;
 using StructureMap;
 using EZBob.DatabaseLib.Model.Database;
