@@ -228,6 +228,8 @@ namespace Ezbob.HmrcHarvester {
 		private void VatReturns(string sUserVatID) {
 			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
 
+			m_oVatReturnsMetaData = new SortedDictionary<string, SheafMetaData>();
+
 			if (oSubmittedReturns != null) {
 				var oTasks = new List<Task>();
 
@@ -243,27 +245,27 @@ namespace Ezbob.HmrcHarvester {
 
 					string sBaseFileName = sr.Value.Replace(' ', '_');
 
-					Info("Requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
+					Info("VatReturns: requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
 
-					oTasks.Add(
-						Session.GetAsync(sHtmlUrl).ContinueWith(GetFile, new SheafMetaData {
-							DataType = DataType.VatReturn,
-							FileType = FileType.Html,
-							BaseFileName = sBaseFileName,
-							Thrasher = new VatReturnThrasher(VerboseLogging, this)
-						})
-					);
+					m_oVatReturnsMetaData[sHtmlUrl] = new SheafMetaData {
+						DataType = DataType.VatReturn,
+						FileType = FileType.Html,
+						BaseFileName = sBaseFileName,
+						Thrasher = new VatReturnThrasher(VerboseLogging, this)
+					};
 
-					Info("Requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
+					oTasks.Add(Session.GetAsync(sHtmlUrl).ContinueWith(GetFile));
 
-					oTasks.Add(
-						Session.GetAsync(sPdfUrl).ContinueWith(GetFile, new SheafMetaData {
-							DataType = DataType.VatReturn,
-							FileType = FileType.Pdf,
-							BaseFileName = sBaseFileName,
-							Thrasher = null
-						})
-					);
+					Info("VatReturns: requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
+
+					m_oVatReturnsMetaData[sPdfUrl] = new SheafMetaData {
+						DataType = DataType.VatReturn,
+						FileType = FileType.Pdf,
+						BaseFileName = sBaseFileName,
+						Thrasher = null
+					};
+
+					oTasks.Add(Session.GetAsync(sPdfUrl).ContinueWith(GetFile));
 				} // for each file
 
 				Task.WaitAll(oTasks.ToArray());
@@ -280,12 +282,16 @@ namespace Ezbob.HmrcHarvester {
 		/// </summary>
 		/// <param name="task">HTTP request result.</param>
 		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
-		private void GetFile(Task<HttpResponseMessage> task, object oFileIdentifier) {
-			var fi = (SheafMetaData)oFileIdentifier;
+		private void GetFile(Task<HttpResponseMessage> task) {
+			SheafMetaData fi = null;
 
 			HttpResponseMessage response = task.Result;
 
-			Info("Retrieving {0}", response.RequestMessage);
+			lock (m_oVatReturnsMetaData) {
+				fi = m_oVatReturnsMetaData[response.RequestMessage.RequestUri.PathAndQuery];
+			} // lock
+
+			Info("GetFile: retrieving {0}", response.RequestMessage);
 
 			if (!response.IsSuccessStatusCode) {
 				Error("Not saving because of error. Status code {0}: {1}", response.StatusCode.ToString(), response.ReasonPhrase);
@@ -528,6 +534,12 @@ namespace Ezbob.HmrcHarvester {
 		private HttpClient Session { get; set; }
 
 		#endregion property Session
+
+		#region field VatReturnsMetaData
+
+		private SortedDictionary<string, SheafMetaData> m_oVatReturnsMetaData;
+
+		#endregion field VatReturnsMetaData
 
 		#endregion private
 	} // class Harvester
