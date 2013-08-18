@@ -4,6 +4,8 @@ namespace EZBob.DatabaseLib
 	using System.Collections.Generic;
 	using System.Linq;
 	using DatabaseWrapper.FunctionValues;
+	using DatabaseWrapper.Order;
+	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using EzBob.CommonLib.TimePeriodLogic;
 	using EzBob.CommonLib.ReceivedDataListLogic;
 
@@ -58,10 +60,108 @@ namespace EZBob.DatabaseLib
 			return res;
 		}
 
-		private static Dictionary<TimePeriodEnum, List<T>> GetOrdersByTimePeriod<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders)
-			where T : TimeDependentRangedDataBase
+		public static Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>> GetOrdersForPeriodsEbay(MixedReceivedDataList orders)
 		{
-			var ordersByTimePeriod = new Dictionary<TimePeriodEnum, List<T>>
+			Dictionary<TimePeriodEnum, List<MixedReceivedDataItem>> ordersByTimePeriod = GetOrdersByTimePeriodEbay(orders);
+			var res = new Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>>();
+			foreach (TimePeriodEnum period in ordersByTimePeriod.Keys)
+			{
+				if (ordersByTimePeriod[period].Count > 0)
+				{
+					var listForPeriod = new MixedReceivedDataList(orders.SubmittedDate, ordersByTimePeriod[period]);
+					res.Add(period, new ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>(listForPeriod, period, 0));
+				}
+			}
+
+			return res;
+		}
+
+		private static void PlaceOrderInRelevantPeriod<T>(DateTime timestamp, T item, Dictionary<TimePeriodEnum, DateTime> edges, Dictionary<TimePeriodEnum, List<T>> dict)
+		{
+			foreach (TimePeriodEnum period in edges.Keys)
+			{
+				if (timestamp >= edges[period])
+				{
+					dict[period].Add(item);
+					return;
+				}
+			}
+			
+			dict[TimePeriodEnum.Lifetime].Add(item);
+		}
+
+		private static Dictionary<TimePeriodEnum, List<MixedReceivedDataItem>> GetOrdersByTimePeriodEbay(MixedReceivedDataList orders)
+		{
+			var ordersByTimePeriod = GetEmptyDictionary<MixedReceivedDataItem>();
+			var edges = GetEdges(orders.SubmittedDate);
+
+			foreach (MixedReceivedDataItem item in orders)
+			{
+				if (item.Data is TeraPeakDatabaseSellerDataItem)
+				{
+					var teraPeakDatabaseSellerDataItem = item.Data as TeraPeakDatabaseSellerDataItem;
+					PlaceOrderInRelevantPeriod(teraPeakDatabaseSellerDataItem.StartDate, item, edges, ordersByTimePeriod);
+				}
+				else if (item.Data is EbayDatabaseOrderItem)
+				{
+					var ebayDatabaseOrderItem = item.Data as EbayDatabaseOrderItem;
+					PlaceOrderInRelevantPeriod(ebayDatabaseOrderItem.RecordTime, item, edges, ordersByTimePeriod);
+				}
+			}
+
+			var earliestFilledTimePeriod = TimePeriodEnum.Month;
+			foreach (var period in ordersByTimePeriod.Keys)
+			{
+				if (ordersByTimePeriod[period].Count > 0)
+				{
+					earliestFilledTimePeriod = period;
+				}
+			}
+
+			List<MixedReceivedDataItem> sumSoFar = null;
+			foreach (var period in ordersByTimePeriod.Keys)
+			{
+				if (period <= earliestFilledTimePeriod)
+				{
+					if (sumSoFar != null)
+					{
+						ordersByTimePeriod[period].AddRange(sumSoFar);
+					}
+					sumSoFar = ordersByTimePeriod[period];
+				}
+			}
+
+			return ordersByTimePeriod;
+		}
+
+		private static Dictionary<TimePeriodEnum, DateTime> GetEdges(DateTime timestamp)
+		{
+			DateTime monthAgo = timestamp.AddMonths(-1);
+			var monthEdge = new DateTime(monthAgo.Year, monthAgo.Month, monthAgo.Day);
+			DateTime month3Edge = GetStartOfMonth(timestamp, 3);
+			DateTime month6Edge = GetStartOfMonth(timestamp, 6);
+			DateTime month12Edge = GetStartOfMonth(timestamp, 12);
+			DateTime month15Edge = GetStartOfMonth(timestamp, 15);
+			DateTime month18Edge = GetStartOfMonth(timestamp, 18);
+			DateTime month24Edge = GetStartOfMonth(timestamp, 24);
+
+			var edges = new Dictionary<TimePeriodEnum, DateTime>
+				{
+					{TimePeriodEnum.Month, monthEdge},
+					{TimePeriodEnum.Month3, month3Edge},
+					{TimePeriodEnum.Month6, month6Edge},
+					{TimePeriodEnum.Year, month12Edge},
+					{TimePeriodEnum.Month15, month15Edge},
+					{TimePeriodEnum.Month18, month18Edge},
+					{TimePeriodEnum.Year2, month24Edge}
+				};
+
+			return edges;
+		}
+
+		private static Dictionary<TimePeriodEnum, List<T>> GetEmptyDictionary<T>()
+		{
+			return new Dictionary<TimePeriodEnum, List<T>>
 				{
 					{TimePeriodEnum.Month, new List<T>()},
 					{TimePeriodEnum.Month3, new List<T>()},
@@ -72,50 +172,17 @@ namespace EZBob.DatabaseLib
 					{TimePeriodEnum.Year2, new List<T>()},
 					{TimePeriodEnum.Lifetime, new List<T>()}
 				};
-
-			DateTime monthAgo = orders.SubmittedDate.AddMonths(-1);
-			var monthEdge = new DateTime(monthAgo.Year, monthAgo.Month, monthAgo.Day);
-			DateTime month3Edge = GetStartOfMonth(orders.SubmittedDate, 3);
-			DateTime month6Edge = GetStartOfMonth(orders.SubmittedDate, 6);
-			DateTime month12Edge = GetStartOfMonth(orders.SubmittedDate, 12);
-			DateTime month15Edge = GetStartOfMonth(orders.SubmittedDate, 15);
-			DateTime month18Edge = GetStartOfMonth(orders.SubmittedDate, 18);
-			DateTime month24Edge = GetStartOfMonth(orders.SubmittedDate, 24);
+		}
+		
+		private static Dictionary<TimePeriodEnum, List<T>> GetOrdersByTimePeriod<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders)
+			where T : TimeDependentRangedDataBase
+		{
+			var ordersByTimePeriod = GetEmptyDictionary<T>();
+			var edges = GetEdges(orders.SubmittedDate);
 
 			foreach (T item in orders)
 			{
-				if (item.RecordTime >= monthEdge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Month].Add(item);
-				}
-				else if (item.RecordTime >= month3Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Month3].Add(item);
-				}
-				else if (item.RecordTime >= month6Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Month6].Add(item);
-				}
-				else if (item.RecordTime >= month12Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Year].Add(item);
-				}
-				else if (item.RecordTime >= month15Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Month15].Add(item);
-				}
-				else if (item.RecordTime >= month18Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Month18].Add(item);
-				}
-				else if (item.RecordTime >= month24Edge)
-				{
-					ordersByTimePeriod[TimePeriodEnum.Year2].Add(item);
-				}
-				else
-				{
-					ordersByTimePeriod[TimePeriodEnum.Lifetime].Add(item);
-				}
+				PlaceOrderInRelevantPeriod(item.RecordTime, item, edges, ordersByTimePeriod);
 			}
 
 			var earliestFilledTimePeriod = TimePeriodEnum.Month;

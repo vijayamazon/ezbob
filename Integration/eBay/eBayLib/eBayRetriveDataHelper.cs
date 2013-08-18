@@ -799,53 +799,11 @@ namespace EzBob.eBayLib
 					};
 
 			var updated = orders.SubmittedDate;
-			ITimePeriodNodesCreationTreeFactory nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChainEbay = TimePeriodChainContructor.CreateDataChain( new TimePeriodNodeWithDataFactory<MixedReceivedDataItem>(), orders, nodesCreationFactory );
-			
-			if ( timeChainEbay.HasNoData )
-			{
-				return null;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod( timeChainEbay, updated );
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriodsEbay(orders);
 
 			var factory = new MixedOrdersAggregatorFactory();
 
-			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );					
-		}
-
-		private void ParceAndSaveOrdersAggregationInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EbayDatabaseOrdersList orders, ICurrencyConvertor currencyConverter, MP_CustomerMarketplaceUpdatingHistory historyRecord )
-		{
-			var aggregateFunctionArray = new[]
-					{
-						eBayDatabaseFunctionType.AverageItemsPerOrder,
-						eBayDatabaseFunctionType.AverageSumOfOrder, 
-						eBayDatabaseFunctionType.CancelledOrdersCount, 
-						eBayDatabaseFunctionType.NumOfOrders, 						
-						eBayDatabaseFunctionType.TotalItemsOrdered, 
-						eBayDatabaseFunctionType.TotalSumOfOrders, 
-						eBayDatabaseFunctionType.OrdersCancellationRate, 
-					};
-
-
-			var updated = orders.SubmittedDate;
-
-			var nodesCreationFactory = TimePeriodNodesCreationTreeFactoryFactory.CreateHardCodeTimeBoundaryCalculationStrategy();
-			var timeChainEbay = TimePeriodChainContructor.CreateDataChain( new TimePeriodNodeWithDataFactory<EbayDatabaseOrderItem>(), orders, nodesCreationFactory );
-
-			if ( timeChainEbay.HasNoData )
-			{
-				return;
-			}
-
-			var timePeriodData = TimePeriodChainContructor.ExtractDataWithCorrectTimePeriod( timeChainEbay, updated );
-
-			var factory = new EBayOrdersAgregatorFactory();
-
-			var writeDataList = DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );
-
-			// Save
-			Helper.StoreToDatabaseAggregatedData( databaseCustomerMarketPlace, writeDataList, historyRecord );
+			return DataAggregatorHelper.AggregateData( factory, timePeriodData, aggregateFunctionArray, updated, currencyConverter );
 		}
 
 		private MixedReceivedDataList CompositeData(TeraPeakDatabaseSellerData allTeraPeakData, EbayDatabaseOrdersList allEBayOrders)
