@@ -19,6 +19,7 @@
     <NodeElement Name="Assignment" NodeId="AssignmentB35373479" />
     <NodeElement Name="Assignment" NodeId="AssignmentB18516706" />
     <NodeElement Name="Assignment" NodeId="AssignmentB53063620" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB6027880" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB55337852" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB15958447" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB56636209" />
@@ -30,6 +31,7 @@
     <NodeElement Name="BWA Only" NodeId="Comparison3771332" />
     <NodeElement Name="BWA Prev" NodeId="ScriptNode17518665" />
     <NodeElement Name="Cap Limit" NodeId="ConditionalAssignment17190527" />
+    <NodeElement Name="Comparison" NodeId="Comparison11494874" />
     <NodeElement Name="Condition" NodeId="ConditionalAssignment30350780" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment44014924" />
     <NodeElement Name="ConfigurationVariables_MainStrat" NodeId="DataSourceNodeScalar48129059" />
@@ -51,7 +53,6 @@
     <NodeElement Name="Errors Assignment" NodeId="MultiAssignmentB27841924" />
     <NodeElement Name="Experian Def Acc Reject" NodeId="Comparison47544505" />
     <NodeElement Name="Experian Def Acc Reject" NodeId="Comparison49692243" />
-    <NodeElement Name="Experian Initial Score" NodeId="MultiAssignmentB46168505" />
     <NodeElement Name="ExperianConsumer" NodeId="ScriptNode49919476" />
     <NodeElement Name="ExperianConsumer" NodeId="ScriptNode36110264" />
     <NodeElement Name="ExperianConsumerDirector" NodeId="ScriptNode18736376" />
@@ -102,6 +103,7 @@
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB42815643" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB51271045" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB5612447" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB57681075" />
     <NodeElement Name="No Auto decision" NodeId="MultiAssignmentB33982084" />
     <NodeElement Name="No DOB" NodeId="Comparison63139101" />
     <NodeElement Name="No Error" NodeId="Comparison28429816" />
@@ -121,8 +123,8 @@
     <NodeElement Name="Reject" NodeId="MultiAssignmentB65352434" />
     <NodeElement Name="Reject" NodeId="MultiAssignmentB11465061" />
     <NodeElement Name="Reject" NodeId="MailNode23448739" />
-    <NodeElement Name="Reject" NodeId="MailNode27802884" />
-    <NodeElement Name="Reject" NodeId="MailNode49398620" />
+    <NodeElement Name="Reject" NodeId="MailNode61346438" />
+    <NodeElement Name="Reject" NodeId="MailNode34630730" />
     <NodeElement Name="rejection exception" NodeId="Comparison20625205" />
     <NodeElement Name="Re-Rejection" NodeId="Comparison36836846" />
     <NodeElement Name="Segmentation" NodeId="Segmentation55175005" />
@@ -1249,17 +1251,17 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Experian Initial Score</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Inintial_ExperianConsumerScore := ExperianConsumerScore&lt;/assignment&gt;&lt;assignment&gt;ExperianScoreConsumer := ExperianConsumerScore&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <DisplayName>Reject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MultiAssignmentB46168505</Name>
+      <Name>MailNode61346438</Name>
       <PointF>
-        <X>1044.649</X>
-        <Y>816</Y>
+        <X>616</X>
+        <Y>1956</Y>
       </PointF>
       <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -3821,6 +3823,23 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
+      <DisplayName>Assignment</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>AssignmentB6027880</Name>
+      <PointF>
+        <X>2248.537</X>
+        <Y>756</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
       <DisplayName>Reject</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Unfortunately you have been unable to qualify.docxp57+eEl6wmaXile6mv3oXA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Unfortunately you have been unable to qualify.docxp57+eEl6wmaXile6mv3oXA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
@@ -4932,13 +4951,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Reject</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode49398620</Name>
+      <Name>MailNode34630730</Name>
       <PointF>
-        <X>616</X>
-        <Y>1956</Y>
+        <X>336</X>
+        <Y>2056</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -6525,7 +6544,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>NestedStrategy57429961</Name>
       <PointF>
-        <X>422.726227</X>
+        <X>422.726257</X>
         <Y>1156</Y>
       </PointF>
       <SuperNodeName />
@@ -6536,17 +6555,34 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Reject</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <DisplayName>Multi-Assignment</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;MinExperianScore := ExperianConsumerScore&lt;/assignment&gt;&lt;assignment&gt;Inintial_ExperianConsumerScore := ExperianConsumerScore&lt;/assignment&gt;&lt;assignment&gt;ExperianScoreConsumer := ExperianConsumerScore&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode27802884</Name>
+      <Name>MultiAssignmentB57681075</Name>
       <PointF>
-        <X>336</X>
-        <Y>2056</Y>
+        <X>1054.62585</X>
+        <Y>816</Y>
       </PointF>
       <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Comparison</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison11494874</Name>
+      <PointF>
+        <X>2247.59717</X>
+        <Y>676</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -9336,6 +9372,18 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>MinExperianScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>AssignmentB38325791</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -10331,6 +10379,330 @@ CompanyType = "SoleTrader"</InitialValue>
       <Description />
       <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>RegistrationDate_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>UserID_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>Name_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>FirstName_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>Surname_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>MP_Counter_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>MedalType_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>SystemDecision_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>ExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>TotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVTotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>Total3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVTotal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>PayPalStoresNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>PayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVPayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>PayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVPayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>ExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>CVExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>Seniority_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode61346438</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -13374,6 +13746,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>AssignmentB6027880</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>MinExperianScore:=ExperianConsumerScore</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>MailNode23448739</OwnerName>
       <Name>FirstName_Unfortunately you have been unable to qualify.docxp57+eEl6wmaXile6mv3oXA==</Name>
       <TypeName />
@@ -14680,8 +15064,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>RegistrationDate_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>RegistrationDate_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14692,8 +15076,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>UserID_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>UserID_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14704,8 +15088,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>Name_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>Name_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14716,8 +15100,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>FirstName_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>FirstName_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14728,8 +15112,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>Surname_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>Surname_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14740,8 +15124,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>MP_Counter_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>MP_Counter_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14752,8 +15136,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>MedalType_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>MedalType_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14764,8 +15148,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>SystemDecision_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>SystemDecision_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14776,8 +15160,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>ExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>ExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14788,8 +15172,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14800,8 +15184,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>TotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>TotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14812,8 +15196,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVTotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVTotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14824,8 +15208,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>Total3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>Total3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14836,8 +15220,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVTotal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVTotal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14848,8 +15232,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>PayPalStoresNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>PayPalStoresNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14860,8 +15244,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>PayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>PayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14872,8 +15256,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVPayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVPayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14884,8 +15268,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>PayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>PayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14896,8 +15280,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVPayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVPayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14908,8 +15292,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14920,8 +15304,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>ExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>ExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14932,8 +15316,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>CVExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>CVExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14944,8 +15328,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>Seniority_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>Seniority_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14956,8 +15340,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
-      <Name>SeniorityThreshold_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
+      <OwnerName>MailNode34630730</OwnerName>
+      <Name>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -14968,7 +15352,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
+      <OwnerName>MailNode34630730</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -14980,7 +15364,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
+      <OwnerName>MailNode34630730</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -14992,7 +15376,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
+      <OwnerName>MailNode34630730</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -16516,326 +16900,38 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>RegistrationDate_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>UserID_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>Name_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>FirstName_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>Surname_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>MP_Counter_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>MedalType_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>SystemDecision_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>ExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>TotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVTotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>Total3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVTotal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>PayPalStoresNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>PayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVPayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>PayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVPayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>ExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>CVExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>Seniority_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>SeniorityThreshold_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>AddressTo</Name>
+      <OwnerName>Comparison11494874</OwnerName>
+      <Name>Expression</Name>
       <TypeName>System.String</TypeName>
+      <InitialValue>ExperianConsumerScore &gt; 0 AND ExperianConsumerScore &lt; MinExperianScore</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison11494874</OwnerName>
+      <Name>Comparison11494874ExperianConsumerScore</Name>
+      <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
+      <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>AddressCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
+      <OwnerName>Comparison11494874</OwnerName>
+      <Name>Comparison11494874MinExperianScore</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
-      <Name>Subject</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
+      <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
@@ -17482,9 +17578,21 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>AssignmentB18516706</SourceNodeName>
+      <SourceNodeName>Comparison11494874</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB6027880</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode18736376</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB46168505</TargetNodeName>
+      <TargetNodeName>Comparison11494874</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -17492,27 +17600,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison63139101</SourceNodeName>
-      <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB46168505</TargetNodeName>
-      <SuperNodeName />
-      <Caption>No</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-65536</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>800</X>
-          <Y>920</Y>
-        </PointF>
-        <PointF>
-          <X>1100</X>
-          <Y>920</Y>
-        </PointF>
-      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode7786836</SourceNodeName>
@@ -17527,14 +17614,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignmentB46168505</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar25562584</TargetNodeName>
+      <SourceNodeName>Comparison11494874</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar53400967</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -17698,7 +17785,7 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ScriptNode18736376</SourceNodeName>
+      <SourceNodeName>AssignmentB6027880</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>DataSourceNodeScalar53400967</TargetNodeName>
       <SuperNodeName />
@@ -18580,9 +18667,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignmentB45682816</SourceNodeName>
+      <SourceNodeName>MailNode61346438</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode49398620</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar58488964</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18640,9 +18727,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode49398620</SourceNodeName>
+      <SourceNodeName>MultiAssignmentB45682816</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar58488964</TargetNodeName>
+      <TargetNodeName>MailNode61346438</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -18825,7 +18912,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignmentB2167900</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode27802884</TargetNodeName>
+      <TargetNodeName>MailNode34630730</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -19285,7 +19372,7 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode27802884</SourceNodeName>
+      <SourceNodeName>MailNode34630730</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>MailNode16801866</TargetNodeName>
       <SuperNodeName />
@@ -20127,7 +20214,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>MultiAssignmentB15481484</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode49398620</TargetNodeName>
+      <TargetNodeName>MailNode61346438</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -20313,6 +20400,55 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison63139101</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB57681075</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>800</X>
+          <Y>920</Y>
+        </PointF>
+        <PointF>
+          <X>1080</X>
+          <Y>920</Y>
+        </PointF>
+        <PointF>
+          <X>1100</X>
+          <Y>920</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB57681075</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar25562584</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>AssignmentB18516706</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB57681075</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -21869,80 +22005,80 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_RegistrationDate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>RegistrationDate_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>RegistrationDate_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>UserID_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>UserID_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>Name_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>Name_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_Surname</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>Surname_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>Surname_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>TotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>TotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>Total3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>Total3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MedalType</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>MedalType_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>MedalType_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>SystemDecision</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>SystemDecision_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>SystemDecision_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>ExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>ExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -22475,20 +22611,20 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>PayPalStoresNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>PayPalStoresNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>PayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>PayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>PayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>PayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -22835,8 +22971,8 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>AllMPsNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>MP_Counter_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>MP_Counter_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -23303,200 +23439,200 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Reject_Defaults_CreditScoreNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>NumOfDefaultAccounts</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>ExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>ExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Reject_Defaults_AccountsNumNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalAnnualTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVTotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVTotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalThreeMonthTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVTotal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVTotal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalAnnualTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVPayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVPayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalThreeMonthTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVPayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVPayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowCreditScoreNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_RegistrationDate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>RegistrationDate_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>RegistrationDate_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>UserID_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>UserID_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>Name_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>Name_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>App_Surname</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>Surname_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>Surname_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders1YTotal</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>TotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>TotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>TotalSumOfOrders3MTotal</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>Total3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>Total3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MedalType</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>MedalType_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>MedalType_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>SystemDecision</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>SystemDecision_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>SystemDecision_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>ExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>ExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_NumberOfStores</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>PayPalStoresNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>PayPalStoresNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_TotalSumOfOrders1Y</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>PayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>PayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>PayPal_TotalSumOfOrders3M</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>PayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>PayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>AllMPsNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>MP_Counter_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>MP_Counter_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Reject_Defaults_CreditScoreNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianConsumerScoreDefAcc_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>NumOfDefaultAccounts</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>ExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>ExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Reject_Defaults_AccountsNumNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianDefAccNum_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianDefAccNum_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalAnnualTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVTotalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVTotalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalAnnualTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVPayPalAnnualTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVPayPalAnnualTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalThreeMonthTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVTotal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVTotal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowTotalThreeMonthTurnoverNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVPayPal3MTurnover_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVPayPal3MTurnover_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>LowCreditScoreNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>CVExperianConsumerScore_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>CVExperianConsumerScore_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -23638,12 +23774,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Inintial_ExperianConsumerScore</SourceVariableName>
-      <TargetVariableOwnerName>NestedStrategy57429961</TargetVariableOwnerName>
-      <TargetVariableName>ExperianScore</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>Re_Reject_NewCustomer_ReReject</SourceVariableName>
       <TargetVariableOwnerName>Comparison36836846</TargetVariableOwnerName>
       <TargetVariableName>Comparison36836846Re_Reject_NewCustomer_ReReject</TargetVariableName>
@@ -23711,26 +23841,44 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>Seniority_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>Seniority_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>SeniorityThreshold</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49398620</TargetVariableOwnerName>
-      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>SeniorityThreshold</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
-      <TargetVariableOwnerName>MailNode27802884</TargetVariableOwnerName>
-      <TargetVariableName>Seniority_User is rejected by the strategy.docxzApNbRcVWIqT93KHBoVrEw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>Seniority_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ExperianConsumerScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison11494874</TargetVariableOwnerName>
+      <TargetVariableName>Comparison11494874ExperianConsumerScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>MinExperianScore</SourceVariableName>
+      <TargetVariableOwnerName>Comparison11494874</TargetVariableOwnerName>
+      <TargetVariableName>Comparison11494874MinExperianScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>MinExperianScore</SourceVariableName>
+      <TargetVariableOwnerName>NestedStrategy57429961</TargetVariableOwnerName>
+      <TargetVariableName>ExperianScore</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -24007,7 +24155,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MultiAssignmentB46168505</OwnerName>
+      <OwnerName>MailNode61346438</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -24551,6 +24699,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
+      <OwnerName>AssignmentB6027880</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
       <OwnerName>MailNode23448739</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -24807,7 +24963,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode49398620</OwnerName>
+      <OwnerName>MailNode34630730</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -24927,7 +25083,15 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode27802884</OwnerName>
+      <OwnerName>MultiAssignmentB57681075</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison11494874</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
