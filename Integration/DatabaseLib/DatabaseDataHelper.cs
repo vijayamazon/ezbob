@@ -325,6 +325,11 @@ namespace EZBob.DatabaseLib
 			{
 				updatingHistoryRecord.Error = exception.Message;
 				statusText = "With error!";
+				customerMarketPlace.UpdateError = exception.Message;
+			}
+			else
+			{
+				customerMarketPlace.UpdateError = null;
 			}
 
 			WriteToLog(string.Format("End update data for umi: id: {0}, name: {1}. {2}", customerMarketPlace.Id, customerMarketPlace.DisplayName, statusText));
