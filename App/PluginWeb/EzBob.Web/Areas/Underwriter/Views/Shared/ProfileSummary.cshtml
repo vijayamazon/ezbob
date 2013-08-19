@@ -299,31 +299,34 @@
                             <%-la!=null ? GBPValues( la.LateInterest, true) : "-"%>
                         </td>
                     </tr>
-                    @*<tr>
+                    <tr>
                         <td>
-                            <b>Borrower Type:</b>
+                            <b>Payment demeanor:</b>
                         </td>
                         <td>
-                            <%-la!=null ? la.Collection : "-"%>
+                            <%-la!=null ? la.PaymentDemeanor : "-"%>
                         </td>
-                    </tr>*@
+                    <tr>
+                        <td>
+                            <b>Average late days:</b>
+                        </td>
+                        <td>
+                            <%-la!=null ? la.AverageLateDays : "-"%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Fees applied:</b>
+                        </td>
+                        <td>
+                            <%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees) : "-"%>)
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    @*
-    <div class="row-fluid">
-        <div class="span12">
-            <fieldset>
-                <legend>General comments</legend>
-                <textarea rows="5" style="width:98%; resize: none;" id="CommentArea"><%-m.Comment || ''%></textarea>
-                <a href="#" class="btn-back pull-right disabled" id="commentSave">Save</a>
-            </fieldset>
-        </div>
-    </div>
-    *@
     @ShowDecisionsHistory()    
-        
 }
 
 @helper ShowDecisionsHistory(){

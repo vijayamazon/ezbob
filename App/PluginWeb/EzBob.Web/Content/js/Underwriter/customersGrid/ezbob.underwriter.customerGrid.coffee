@@ -43,6 +43,9 @@ EzBob.Underwriter.customerGrid = (settings) ->
         gridComplete: ->
             ( settings.$el.find "[data-toggle='tooltip']" ).tooltip()
             BlockUi "off", $(list)
+            coloredCell = settings.$el.find(".coloredCell")
+            _.each coloredCell, (val)->
+                $(val).closest('tr').find('td').css("background-color", $(val).text())
         loadBeforeSend: ->
             BlockUi "on", $(list)
 
@@ -156,3 +159,7 @@ $.fn.fmatter.CheckDateWithNow = (cellval, opts, row) ->
 $.fn.fmatter.withScrollbar = (cellval) ->
     text = cellval.text or cellval
     "<div style='overflow: auto; width: auto'>#{text}</div>"
+
+$.fn.fmatter.ColorCell = (cellval) ->
+    color = cellval.text or cellval
+    "<span class='coloredCell'>#{color}</span>"

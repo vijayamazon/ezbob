@@ -160,6 +160,13 @@ namespace EZBob.DatabaseLib.Model.Database {
         Business
     }
 
+    public enum PaymentdemeanorType
+    {
+        Late,
+        WasLate,
+        Ok
+    }
+
     public class BankAccountTypeType : CaseInsensitiveEnumStringType<BankAccountType> { }
 
     public class BankAccount
@@ -190,6 +197,15 @@ namespace EZBob.DatabaseLib.Model.Database {
         }
 
         public virtual bool IsWasLate { get; set; }
+        public virtual PaymentdemeanorType PaymentDemenaor
+        {
+            get
+            {
+                return CreditResult == CreditResultStatus.Late
+                    ? PaymentdemeanorType.Late
+                    : (IsWasLate ? PaymentdemeanorType.WasLate : PaymentdemeanorType.Ok);
+            }
+        }
 
         public virtual Application LastStartedMainStrategy { get; set; }
         public virtual DateTime? LastStartedMainStrategyEndTime { get; set; }

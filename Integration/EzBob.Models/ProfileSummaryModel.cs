@@ -39,6 +39,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string LatePaymentsSum { get; set; }
         public string PreviousLoans { get; set; }
         public string LateInterest { get; set; }
+        public string PaymentDemeanor { get; set; }
+        public string AverageLateDays { get; set; }
+        public string TotalFees { get; set; }
+        public string FeesCount { get; set; }
     }
 
     public class AffordabilityAnalysis

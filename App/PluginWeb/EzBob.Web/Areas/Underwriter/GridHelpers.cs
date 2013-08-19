@@ -1073,5 +1073,23 @@ namespace EzBob.Web.Areas.Underwriter
 				Data = x => x.CollectionStatus.CurrentStatus.ToString()
 			});
 		}
+
+        public static void CreatePaymentDemeanor(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+        {
+            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+            {
+                Caption = "Payment Demeanor",
+                Name = "PaymentDemeanor",
+                Title = false,
+                Hidden = true,
+                Fixed = false,
+                Search = false,
+                Sortable = false,
+                Width = 95,
+                DataType = TypeCode.String,
+                Formatter = "ColorCell",
+                Data = x => x.PaymentDemenaor != PaymentdemeanorType.Ok ? "#ffdfdf" : ""
+            });
+        }
     }
 }

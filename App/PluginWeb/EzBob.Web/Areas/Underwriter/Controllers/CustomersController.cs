@@ -328,6 +328,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateSystemCalculatedSum(gridModel);
             GridHelpers.CreateManualyApprovedSum(gridModel);
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -352,6 +353,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			GridHelpers.CreateXeroStatusColumn(gridModel);
 			GridHelpers.CreateSageStatusColumn(gridModel);
             GridHelpers.CreateWizardStepColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -368,6 +370,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateLastStatusColumn(gridModel);
             GridHelpers.CreateSystemCalculatedSum(gridModel);
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -397,6 +400,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateOfferExpiryDate(gridModel);
             GridHelpers.CreateNumApprovals(gridModel);
             GridHelpers.CreateNumRejections(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -415,6 +419,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateNumRejections(gridModel);
             GridHelpers.CreateNumApprovals(gridModel);
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -454,6 +459,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             GridHelpers.CreateNextRepaymentDateColumn(gridModel);
             GridHelpers.CreateStatusColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -470,6 +476,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             GridHelpers.CreateOutstandingBalanceColumn(gridModel);
             GridHelpers.CreateLatestCRMstatus(gridModel);
             GridHelpers.CreateAmountOfInteractions(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
             return gridModel;
         }
 
@@ -484,6 +491,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreateLatestCRMstatus(gridModel);
 			GridHelpers.CreateCollectionStatusColumn(gridModel);
+            GridHelpers.CreatePaymentDemeanor(gridModel);
 			return gridModel;
 		}
 
