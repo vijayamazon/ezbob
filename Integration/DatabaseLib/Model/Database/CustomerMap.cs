@@ -21,6 +21,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Inverse()
                 .Cascade.All();
             References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
+            Map(x => x.IsWasLate);
             Map(x => x.PayPointTransactionId, "PayPointTransactionId").Length(250);
             References(x => x.LastStartedMainStrategy, "LastStartedMainStrategyId");
             Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();

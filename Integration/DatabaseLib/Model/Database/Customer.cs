@@ -189,6 +189,8 @@ namespace EZBob.DatabaseLib.Model.Database {
             set { _cashRequests = value; }
         }
 
+        public virtual bool IsWasLate { get; set; }
+
         public virtual Application LastStartedMainStrategy { get; set; }
         public virtual DateTime? LastStartedMainStrategyEndTime { get; set; }
         /// <summary>
