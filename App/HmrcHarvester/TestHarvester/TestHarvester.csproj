@@ -55,10 +55,6 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HmrcHarvester\HmrcHarvester.csproj">
-      <Project>{dfc5b190-afa4-40a7-8237-8404687b4513}</Project>
-      <Name>HmrcHarvester</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
