@@ -7,21 +7,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[UpdateLoanScheduleStatus] 
 (@Id int,
- @Status varchar(50),
- @RepaymentAmount numeric(18),
- @AmountDue numeric(18))
+ @Status varchar(50))
 
 AS
 BEGIN
 
 UPDATE [dbo].[LoanSchedule]
-   SET  [Status] = @Status,
-		RepaymentAmount = @RepaymentAmount,
-		AmountDue = @AmountDue
-		
-
+   SET  [Status] = @Status
  WHERE Id = @Id
-
 
 
  SET NOCOUNT ON;
