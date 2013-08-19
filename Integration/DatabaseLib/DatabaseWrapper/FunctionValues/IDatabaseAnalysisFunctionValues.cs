@@ -12,6 +12,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 		ITimePeriod TimePeriod { get; }
 		DatabaseValueTypeEnum ValueType { get; }
 		DateTime UpdatedDate { get; }
-		int CountMonthsFor { get; }
 	}
 }

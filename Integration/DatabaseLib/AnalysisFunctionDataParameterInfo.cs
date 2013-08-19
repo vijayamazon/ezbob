@@ -7,15 +7,13 @@ namespace EZBob.DatabaseLib
 	public class AnalysisFunctionDataParameterInfo : AnalysisDataParameterInfoBase
 	{
 		private readonly object _Value;
-		private readonly int _CountMonths;
 		private readonly ITimePeriod _TimePeriod;
 		private readonly IDatabaseFunction _Function;
 
-		public AnalysisFunctionDataParameterInfo( IDatabaseFunction function, ITimePeriod timePeriod, object value, int countMonths )
+		public AnalysisFunctionDataParameterInfo( IDatabaseFunction function, ITimePeriod timePeriod, object value)
 		{
 			_Function = function;
 			_Value = value;
-			_CountMonths = countMonths;
 			_TimePeriod = timePeriod;
 		}
 
@@ -40,11 +38,6 @@ namespace EZBob.DatabaseLib
 		{
 			get { return _Function.DisplayName; }
 			
-		}
-
-		public override int CountMonths
-		{
-			get { return _CountMonths; }
 		}
 	}
 }

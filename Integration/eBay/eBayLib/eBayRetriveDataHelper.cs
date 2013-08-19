@@ -453,8 +453,7 @@ namespace EzBob.eBayLib
 				UpdatedDate = submittedDate,
 				Value = databaseInvetoryList.Count,
 				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = eBayDatabaseFunctionType.InventoryTotalItems,
-				CountMonthsFor = 0
+				FunctionType = eBayDatabaseFunctionType.InventoryTotalItems
 			};
 
 			var totalValueOfInventory = new WriteDataInfo<eBayDatabaseFunctionType>
@@ -462,8 +461,7 @@ namespace EzBob.eBayLib
 				UpdatedDate = submittedDate,
 				TimePeriodType = TimePeriodEnum.Lifetime,
 				FunctionType = eBayDatabaseFunctionType.InventoryTotalValue,
-				Value = databaseInvetoryList.Sum( i => i.Amount.Value * i.Quantity ),
-				CountMonthsFor = 0
+				Value = databaseInvetoryList.Sum( i => i.Amount.Value * i.Quantity )
 			};
 
 			return new[] { totalItemInInventory, totalValueOfInventory };
@@ -620,7 +618,6 @@ namespace EzBob.eBayLib
 
 							countMonthsForRetrieveData = lastDate.GetCountMonthsToByEntire(now);
 						}
-
 						
 						var ranges = new SearchQueryDatesRangeListData();
 

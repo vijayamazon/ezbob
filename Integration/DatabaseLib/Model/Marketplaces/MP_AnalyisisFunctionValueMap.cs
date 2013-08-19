@@ -19,7 +19,6 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.ValueXml);
 			Map( x => x.ValueBoolean );
 			Map( x => x.Value );
-			Map( x => x.CountMonths );			
 			References( x => x.HistoryRecord, "CustomerMarketPlaceUpdatingHistoryRecordId" );
             Cache.ReadWrite().Region("LongTerm");
 		}

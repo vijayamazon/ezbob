@@ -1,5 +1,4 @@
 using System;
-using EzBob.CommonLib;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
@@ -8,7 +7,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 	{
 		object Value { get; }
 		TimePeriodEnum TimePeriodType { get; }
-		int CountMonthsFor { get; }
 		TEnum FunctionType { get; }
 		DateTime UpdatedDate { get; }
 	}
@@ -27,16 +25,14 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
         	TimePeriodType = timePeriodType;
         }
 
-		public int CountMonthsFor { get; set; }
 		public TEnum FunctionType { get; set; }
         public object Value { get; set; }
 		public DateTime UpdatedDate { get; set; }
     	public TimePeriodEnum TimePeriodType { get; set; }
 
-
 		public override string ToString()
 		{
-			return string.Format("{0} = {1} ({2} = {3})", FunctionType, Value, TimePeriodType, CountMonthsFor);
+			return string.Format("{0} = {1} ({2})", FunctionType, Value, TimePeriodType);
 		}
     }
 }

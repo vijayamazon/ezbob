@@ -19,7 +19,5 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual bool? ValueBoolean { get; set; }
 
     	public virtual MP_CustomerMarketplaceUpdatingHistory HistoryRecord { get; set; }
-
-    	public virtual int CountMonths { get; set; }
 	}
 }

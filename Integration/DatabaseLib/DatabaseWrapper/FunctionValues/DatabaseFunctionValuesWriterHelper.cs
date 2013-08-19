@@ -6,7 +6,6 @@ using EZBob.DatabaseLib.DatabaseWrapper.Functions;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.CommonLib;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
@@ -56,48 +55,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 			Write( databaseCustomerMarketPlace, dbFunctionValue, historyRecord );			
 		}
 
-		public IDatabaseAnalysisFunctionValues GetData<TEnum>( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TEnum functionType, TimePeriodEnum timePeriodType )
-		{
-			var databaseMarketPlaceBase = databaseCustomerMarketPlace.Marketplace as DatabaseMarketplaceBase<TEnum>;
-			Debug.Assert( databaseMarketPlaceBase != null );
-			IDatabaseFunctionFactory<TEnum> funcFactory = databaseMarketPlaceBase.FunctionFactory;
-			IDatabaseFunction func = funcFactory.Create( functionType );
-			var tp = TimePeriodFactory.Create( timePeriodType );
-
-			var a =  GetAnalyisisFunctionValue( databaseCustomerMarketPlace, func, tp );
-
-			return new DatabaseAnalysisFunctionValueInfo( func, tp, a.Value, a.CountMonths, a.Updated );
-		}
-
-		private MP_AnalyisisFunctionValue GetAnalyisisFunctionValue( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-																		IDatabaseFunction databaseFunction,
-																		ITimePeriod databaseTimePeriod )
-		{
-			MP_CustomerMarketPlace customerMarketPlace = _Helper.GetCustomerMarketPlace( databaseCustomerMarketPlace );
-			MP_AnalysisFunctionTimePeriod analysisFunctionTimePeriod = GetTimePeriod( databaseTimePeriod );
-			MP_AnalyisisFunction analyisisFunction = GetFunction( databaseFunction );
-
-			//return null;
-			return _AnalyisisFunctionValueRepository.Get( customerMarketPlace, analyisisFunction, analysisFunctionTimePeriod );
-		}
-
-		/*public IEnumerable<IDatabaseAnalysisFunctionValues> GetAllFunctionValues<TEnum>( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, DatabaseMarketplaceBase<TEnum> databaseMarketPlaceBase )
-		{
-			MP_CustomerMarketPlace customerMarketPlace = _Helper.GetCustomerMarketPlace( databaseCustomerMarketPlace );
-
-			return customerMarketPlace.AnalysysFunctionValues.Select( v =>
-				{
-					return new DatabaseAnalysisFunctionValueInfo
-					{
-						UpdatedDate = v.Updated,
-						Value = v.Value,
-						Function = databaseMarketPlaceBase.FunctionFactory.GetById(v.AnalyisisFunction.InternalId),
-						TimePeriod = DatabaseAnalysisFunctionTimePeriodFactory.CreateById( v.AnalysisFunctionTimePeriod.InternalId),						
-					};
-
-				} ).ToList();	
-		}*/
-
     	private IDatabaseAnalysisFunctionValues CreateWriteValues<TEnum>( DatabaseMarketplaceBase<TEnum> databaseMarketPlaceBase, 
 																			IWriteDataInfo<TEnum> dataInfo )
 		{
@@ -108,7 +65,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 					funcFactory.Create( dataInfo.FunctionType ),
 					TimePeriodFactory.Create( dataInfo.TimePeriodType ),
 					dataInfo.Value,
-					dataInfo.CountMonthsFor,
 					dataInfo.UpdatedDate					
 				);
 		}
@@ -168,8 +124,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
     		        AnalysisFunctionTimePeriod = analysisFunctionTimePeriod,
     		        Value = data.Value == null ? null : data.Value.ToString(),
     		        Updated = data.UpdatedDate,
-					HistoryRecord = historyRecord,
-					CountMonths = data.CountMonthsFor
+					HistoryRecord = historyRecord
     		    };
 
 

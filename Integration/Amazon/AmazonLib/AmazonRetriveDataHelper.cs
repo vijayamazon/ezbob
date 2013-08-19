@@ -475,8 +475,7 @@ namespace EzBob.AmazonLib
 				UpdatedDate = submittedDate,
 				Value = databaseInvetoryList.Count,
 				TimePeriodType = TimePeriodEnum.Lifetime,
-				FunctionType = AmazonDatabaseFunctionType.InventoryTotalItems,
-				CountMonthsFor = 0
+				FunctionType = AmazonDatabaseFunctionType.InventoryTotalItems
 			};
 
 			var sum = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
@@ -488,8 +487,7 @@ namespace EzBob.AmazonLib
 				UpdatedDate = submittedDate,
 				TimePeriodType = TimePeriodEnum.Lifetime,
 				FunctionType = AmazonDatabaseFunctionType.InventoryTotalValue,
-				Value = sum,
-				CountMonthsFor = 0
+				Value = sum
 			};
 
 			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,

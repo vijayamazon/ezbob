@@ -1534,11 +1534,6 @@ namespace EZBob.DatabaseLib
 			_FunctionValuesWriterHelper.SetData(databaseCustomerMarketPlace, data, historyRecord);
 		}
 
-		public IDatabaseAnalysisFunctionValues GetData<TEnum>(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, TEnum functionType, TimePeriodEnum timePeriodType)
-		{
-			return _FunctionValuesWriterHelper.GetData(databaseCustomerMarketPlace, functionType, timePeriodType);
-		}
-
 		public void SavePayPalTransactionInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, PayPalTransactionsList data, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);

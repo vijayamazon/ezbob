@@ -10,8 +10,6 @@ namespace EZBob.DatabaseLib
 		public abstract object Value { get; }
 		public abstract string ParameterName { get; }
 
-		public abstract int CountMonths { get; }
-
 		public override string ToString()
 		{
 			return string.Format("{0} - {1}: {2} ({3})", ParameterName, TimePeriod, Value, ValueType);

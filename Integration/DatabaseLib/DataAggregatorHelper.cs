@@ -53,7 +53,7 @@ namespace EZBob.DatabaseLib
 			{
 				if (ordersByTimePeriod[period].Count > 0)
 				{
-					res.Add(period, new ReceivedDataListTimeDependentInfo<T>(createListFunc(orders.SubmittedDate, ordersByTimePeriod[period]), period, 0));
+					res.Add(period, new ReceivedDataListTimeDependentInfo<T>(createListFunc(orders.SubmittedDate, ordersByTimePeriod[period]), period));
 				}
 			}
 
@@ -69,7 +69,7 @@ namespace EZBob.DatabaseLib
 				if (ordersByTimePeriod[period].Count > 0)
 				{
 					var listForPeriod = new MixedReceivedDataList(orders.SubmittedDate, ordersByTimePeriod[period]);
-					res.Add(period, new ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>(listForPeriod, period, 0));
+					res.Add(period, new ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>(listForPeriod, period));
 				}
 			}
 

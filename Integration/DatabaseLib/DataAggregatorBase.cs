@@ -27,8 +27,7 @@
 				UpdatedDate = updatedDate,
 				FunctionType = type,
 				TimePeriodType = Data.TimePeriodType,
-				Value = value,
-				CountMonthsFor = Data.CountMonths				
+				Value = value
 			};
 		}
 

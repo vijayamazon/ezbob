@@ -135,7 +135,6 @@ namespace EZBob.DatabaseLib.Common
 		                            fid = f.AnalyisisFunction.InternalId,
 		                            fpid = f.AnalysisFunctionTimePeriod.InternalId,
 		                            val = f.Value,
-		                            months = f.CountMonths,
 		                            date = f.HistoryRecord.UpdatingStart.Value
 		                        };
 
@@ -162,8 +161,7 @@ namespace EZBob.DatabaseLib.Common
 		                           (
 										databaseCustomerMarketPlace.Marketplace.GetDatabaseFunctionById(f.fid),
 		                                TimePeriodFactory.CreateById(f.fpid),
-		                                f.val,
-		                                f.months
+		                                f.val
 		                           )
 		            );
 		    }

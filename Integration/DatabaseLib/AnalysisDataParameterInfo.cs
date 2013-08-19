@@ -36,10 +36,5 @@ namespace EZBob.DatabaseLib
 		{
 			get { return _ParameterName; }			
 		}
-
-		public override int CountMonths
-		{
-			get { return 0; }
-		}
 	}
 }

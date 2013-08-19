@@ -9,6 +9,5 @@ namespace EZBob.DatabaseLib
 		IDatabaseValueType ValueType { get; }
 		object Value { get; }
 		string ParameterName { get; }
-		int CountMonths { get; }
 	}
 }

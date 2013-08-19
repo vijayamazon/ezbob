@@ -7,12 +7,11 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 {
 	class DatabaseAnalysisFunctionValueInfo : IDatabaseAnalysisFunctionValues
 	{
-		public DatabaseAnalysisFunctionValueInfo( IDatabaseFunction function, ITimePeriod timePeriod, object value, int countMonthsFor, DateTime updatedDate )
+		public DatabaseAnalysisFunctionValueInfo( IDatabaseFunction function, ITimePeriod timePeriod, object value, DateTime updatedDate )
 		{			
 			Function = function;
 			TimePeriod = timePeriod;
 			Value = value;
-			CountMonthsFor = countMonthsFor;
 			UpdatedDate = updatedDate;
 		}
 
@@ -20,8 +19,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 		public IDatabaseFunction Function { get; private set; }
 		public ITimePeriod TimePeriod { get; private set; }
 		public DateTime UpdatedDate { get; private set; }
-
-		public int CountMonthsFor { get; private set; }
 
 		public object Value { get; private set; }
 

@@ -8,15 +8,13 @@ namespace EzBob.CommonLib.TimePeriodLogic
 	public class ReceivedDataListTimeDependentInfo<T>: IEnumerable<T>
 		where T : class
 	{
-		public ReceivedDataListTimeDependentInfo( ReceivedDataListTimeDependentBase<T> data, TimePeriodEnum timePeriodType, int countMonths )
+		public ReceivedDataListTimeDependentInfo( ReceivedDataListTimeDependentBase<T> data, TimePeriodEnum timePeriodType)
 		{
 			Data = data;
-			CountMonths = countMonths;
 			TimePeriodType = timePeriodType;
 		}
 
 		public ReceivedDataListTimeDependentBase<T> Data { get; private set; }
-		public int CountMonths { get; private set; }
 		public TimePeriodEnum TimePeriodType { get; private set; }
 
 		public DateTime SubmittedDate 
