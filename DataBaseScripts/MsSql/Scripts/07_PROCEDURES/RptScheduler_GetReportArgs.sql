@@ -1,7 +1,10 @@
-IF OBJECT_ID('RptScheduler_GetReportArgs') IS NOT NULL
-	DROP PROC RptScheduler_GetReportArgs
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptScheduler_GetReportArgs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptScheduler_GetReportArgs]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptScheduler_GetReportArgs
 @RptType NVARCHAR(200) = NULL
 AS

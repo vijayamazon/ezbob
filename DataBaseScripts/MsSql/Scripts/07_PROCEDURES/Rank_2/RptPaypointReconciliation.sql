@@ -38,9 +38,11 @@ BEGIN
 		ISNULL(o.Amount, (CASE o.Caption WHEN 'Ezbob' THEN t.Amount ELSE b.amount END)) AS Amount,
 		o.TranID,
 		(CASE o.Caption WHEN 'Ezbob' THEN t.PostDate ELSE b.date END) AS Date,
-		c.Id AS ClientID,
-		(CASE o.Caption WHEN 'Ezbob' THEN c.FirstName + ' ' + c.MiddleInitial + ' ' + c.Surname ELSE b.name END) AS ClientName,
-		(CASE o.Caption WHEN 'Ezbob' THEN t.Description ELSE b.trans_id END) AS Description,
+		(CASE o.Caption WHEN 'Ezbob' THEN c.Id ELSE NULL END) AS ClientID,
+		(CASE o.Caption WHEN 'Ezbob' THEN NULL ELSE b.lastfive END) AS CardNo,
+		(CASE o.Caption WHEN 'Ezbob' THEN c.Fullname ELSE b.name END) AS ClientName,
+		(CASE o.Caption WHEN 'Ezbob' THEN t.Description ELSE b.message END) AS Description,
+		(CASE o.Caption WHEN 'Ezbob' THEN NULL ELSE b.trans_id END) AS NativePaypointID,
 		o.Css
 	FROM
 		#out o

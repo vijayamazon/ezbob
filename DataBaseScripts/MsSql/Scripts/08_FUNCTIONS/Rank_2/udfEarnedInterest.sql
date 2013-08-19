@@ -1,14 +1,11 @@
-IF OBJECT_ID(N'[dbo].udfEarnedInterest') IS NOT NULL
-	DROP FUNCTION [dbo].udfEarnedInterest
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfEarnedInterest]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[udfEarnedInterest]
 GO
-
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
-CREATE FUNCTION udfEarnedInterest(
+CREATE FUNCTION dbo.udfEarnedInterest(
 	@DateStart DATETIME,
 	@DateEnd DATETIME
 )
@@ -30,14 +27,14 @@ BEGIN
 	FROM
 		Loan
 	WHERE
-		@DateStart <= Date AND Date < @DateEnd
+		Date < @DateEnd
 	UNION
 	SELECT DISTINCT
 		LoanId
 	FROM
 		LoanSchedule
 	WHERE
-		@DateStart <= Date AND Date < @DateEnd
+		@DateStart <= Date
 
 	INSERT INTO @earned_interest
 	SELECT

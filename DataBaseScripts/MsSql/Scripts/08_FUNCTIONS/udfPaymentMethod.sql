@@ -1,7 +1,10 @@
-IF OBJECT_ID('dbo.udfPaymentMethod') IS NOT NULL
-	DROP FUNCTION dbo.udfPaymentMethod
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[udfPaymentMethod]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[udfPaymentMethod]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE FUNCTION dbo.udfPaymentMethod(
 	@Description NVARCHAR(64)
 )

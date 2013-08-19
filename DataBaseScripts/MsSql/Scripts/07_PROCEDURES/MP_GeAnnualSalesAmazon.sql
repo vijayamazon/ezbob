@@ -22,7 +22,7 @@ select SUM(TotalTable3.Price * TotalTable3.Quantity / TotalTable3.Rate)
     left join MP_CustomerMarketPlace cmp1 ON  ao8.CustomerMarketPlaceId = cmp1.Id
     where aoi8.OrderStatus LIKE 'Shipped' and
 		cmp1.Id= @iCustomerMarketPlaceId
-   AND aoi8.MarketplaceId LIKE 'A1F83G8C2ARO7P'           
+
           AND DATEADD(MONTH, 12, aoi8.PurchaseDate ) >= GETDATE()
   )as TotalTable3
 

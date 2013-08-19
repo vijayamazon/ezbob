@@ -79,8 +79,7 @@ SUM(TotalTable3.Price * TotalTable3.Quantity / TotalTable3.Rate) as Total
     left join Customer c on c.Id = cmp.CustomerId
     where aoi8.OrderStatus LIKE 'Shipped'   
    AND cmp.EliminationPassed = 1
-   AND aoi8.MarketplaceId LIKE 'A1F83G8C2ARO7P'           
-          AND DATEADD(MONTH, 12, aoi8.PurchaseDate ) >= GETDATE()
+            AND DATEADD(MONTH, 12, aoi8.PurchaseDate ) >= GETDATE()
   )as TotalTable3 
   group by customerId) as AnnualSalesAmazon on c.Id = AnnualSalesAmazon.CustomerId
 

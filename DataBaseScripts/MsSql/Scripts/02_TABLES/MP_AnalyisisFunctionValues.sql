@@ -19,7 +19,6 @@ CREATE TABLE [dbo].[MP_AnalyisisFunctionValues](
 	[ValueBoolean] [bit] NULL,
 	[ValueXml] [nvarchar](max) NULL,
 	[CustomerMarketPlaceUpdatingHistoryRecordId] [int] NULL,
-	[CountMonths] [int] NULL,
  CONSTRAINT [PK_AnalyisisFunctionValues] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

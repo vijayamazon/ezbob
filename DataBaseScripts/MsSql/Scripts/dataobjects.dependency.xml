@@ -289,6 +289,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>Business</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\Business.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>BusinessEntity</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\BusinessEntity.sql</oFileName>
@@ -814,6 +820,12 @@
     <oName>LoanAgreement</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoanAgreement.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoanAgreementTemplate</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\LoanAgreementTemplate.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -1900,6 +1912,36 @@
     <oName>MP_ValueType</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_ValueType.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_VatReturnEntries</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_VatReturnEntries.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_VatReturnEntryNames</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_VatReturnEntryNames.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_VatReturn_Business</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_VatReturn_Business.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_VatReturn_MarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_VatReturn_MarketPlace.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_VatReturnRecords</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_VatReturnRecords.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

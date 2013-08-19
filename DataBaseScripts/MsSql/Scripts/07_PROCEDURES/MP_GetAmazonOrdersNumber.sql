@@ -18,7 +18,7 @@ from MP_AmazonOrderItem2 i
 left join MP_AmazonOrder o on i.AmazonOrderId = o.Id
 where i.OrderStatus LIKE 'Shipped'
    AND o.CustomerMarketPlaceId = @iCustomerMarketPlaceId
-   AND i.MarketplaceId LIKE 'A1F83G8C2ARO7P'
+
    AND DATEADD(MONTH, @iMonthsShiftNumber, i.PurchaseDate ) >= GETDATE()
 
 return @iOrdersNumber;

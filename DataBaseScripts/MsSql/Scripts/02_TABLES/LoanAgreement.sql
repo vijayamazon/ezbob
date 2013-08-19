@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[LoanAgreement](
 	[LoanId] [int] NULL,
 	[FilePath] [nvarchar](400) NULL,
 	[ZohoId] [nvarchar](100) NULL,
+	[TemplateId] [int] NULL,
  CONSTRAINT [PK_LoanAgreement] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

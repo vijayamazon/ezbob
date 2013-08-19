@@ -337,6 +337,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>TR_LoanTransactionMethod</oName>
+    <oRank>1</oRank>
+    <oFileName>09_TRIGGERS\TR_LoanTransactionMethod.sql</oFileName>
+    <oType>Trigger</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_LoyaltyProgramActionType</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoyaltyProgramActionType.sql</oFileName>
@@ -832,6 +838,18 @@
     <oName>FK_MP_TeraPeakOrderItem_MP_TeraPeakOrder</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_TeraPeakOrderItem_MP_TeraPeakOrder.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_VatReturn_Business</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_VatReturn_Business.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_VatReturn_MarketPlace</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_VatReturn_MarketPlace.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -2239,6 +2257,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>MP_GeAnnualSalesAmazon</oName>
+    <oRank>2</oRank>
+    <oFileName>07_PROCEDURES\MP_GeAnnualSalesAmazon.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>MP_GeAnnualSalesEBay</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\MP_GeAnnualSalesEBay.sql</oFileName>
@@ -2254,6 +2278,36 @@
     <oName>MP_GetAmazonFeedback</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\MP_GetAmazonFeedback.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetAmazonItemsOrdered</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\MP_GetAmazonItemsOrdered.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetAmazonOrdersCancellationRate</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersCancellationRate.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetAmazonOrdersCancelled</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersCancelled.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetAmazonOrdersNumber</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersNumber.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetAmazonOrdersTotalSum</oName>
+    <oRank>2</oRank>
+    <oFileName>07_PROCEDURES\MP_GetAmazonOrdersTotalSum.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2308,6 +2362,12 @@
     <oName>MP_GetPayPalActivity</oName>
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\MP_GetPayPalActivity.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_GetScoreCardData</oName>
+    <oRank>2</oRank>
+    <oFileName>07_PROCEDURES\MP_GetScoreCardData.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2443,6 +2503,24 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptEarnedInterest_ForPeriod</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest_ForPeriod.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptEarnedInterest_IssuedLoans</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest_IssuedLoans.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptEarnedInterest_LoanDates</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest_LoanDates.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptExecutive</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptExecutive.sql</oFileName>
@@ -2452,6 +2530,12 @@
     <oName>RptFinancialStats</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptFinancialStats.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptFinishedLoans</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptFinishedLoans.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2566,6 +2650,12 @@
     <oName>RptScheduler_GetHeaderAndFields</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptScheduler_GetHeaderAndFields.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptScheduler_GetReportArgs</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptScheduler_GetReportArgs.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -3505,6 +3595,18 @@
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
+    <oName>udfLoanTransactionTimeStatus</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\udfLoanTransactionTimeStatus.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>udfPaymentMethod</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\udfPaymentMethod.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetExpensesPayPalTransactionsByPayer</oName>
     <oRank>2</oRank>
     <oFileName>08_FUNCTIONS\Rank_2\GetExpensesPayPalTransactionsByPayer.sql</oFileName>
@@ -3544,6 +3646,12 @@
     <oName>GetTotalTransactionsPayPalTransactions</oName>
     <oRank>2</oRank>
     <oFileName>08_FUNCTIONS\Rank_2\GetTotalTransactionsPayPalTransactions.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>udfEarnedInterest</oName>
+    <oRank>2</oRank>
+    <oFileName>08_FUNCTIONS\Rank_2\udfEarnedInterest.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
 </DocumentElement>

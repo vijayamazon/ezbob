@@ -15,9 +15,7 @@ BEGIN
 	SELECT
 		v.CustomerMarketPlaceId,
 		MAX(
-			(((((
-				CAST(v.CountMonths AS BIGINT) * 10000 + CAST(YEAR(v.Updated) AS BIGINT)
-			) * 100 + CAST(MONTH(v.Updated) AS BIGINT)
+			((((CAST(MONTH(v.Updated) AS BIGINT)
 			) * 100 + CAST(DAY(v.Updated) AS BIGINT)
 			) * 100 + CAST(DATEPART(hour, v.Updated) AS BIGINT)
 			) * 100 + CAST(DATEPART(minute, v.Updated) AS BIGINT)

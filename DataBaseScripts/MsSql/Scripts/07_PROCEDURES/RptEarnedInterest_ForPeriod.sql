@@ -1,7 +1,10 @@
-IF OBJECT_ID ('RptEarnedInterest_ForPeriod') IS NOT NULL
-	DROP PROCEDURE RptEarnedInterest_ForPeriod
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptEarnedInterest_ForPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptEarnedInterest_ForPeriod]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptEarnedInterest_ForPeriod
 @DateStart DATE,
 @DateEnd DATE

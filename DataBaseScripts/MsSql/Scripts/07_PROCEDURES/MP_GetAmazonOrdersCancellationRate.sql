@@ -19,7 +19,7 @@ BEGIN
 	left join MP_AmazonOrder o on i.AmazonOrderId = o.Id
 	where i.OrderStatus LIKE 'Canceled'
 		AND o.CustomerMarketPlaceId = @iCustomerMarketPlaceId
-		AND i.MarketplaceId LIKE 'A1F83G8C2ARO7P'
+		
 		AND DATEADD(MONTH, @iMonthsShiftNumber, i.PurchaseDate ) >= GETDATE()
 
 	select @iTotalItems = SUM(i.NumberOfItemsShipped)
@@ -28,7 +28,7 @@ BEGIN
 	where (i.OrderStatus LIKE 'Shipped'
 		OR i.OrderStatus LIKE 'Canceled')
 		AND o.CustomerMarketPlaceId = @iCustomerMarketPlaceId
-		AND i.MarketplaceId LIKE 'A1F83G8C2ARO7P'
+		
 	    AND DATEADD(MONTH, @iMonthsShiftNumber, i.PurchaseDate ) >= GETDATE()
                  
 	select @CancellationRate = @iCanceledItems/@iTotalItems; 
