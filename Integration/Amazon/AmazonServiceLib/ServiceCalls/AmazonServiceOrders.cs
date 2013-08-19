@@ -300,7 +300,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 				
 				return list;
 			}
-			catch ( MarketplaceWebServiceOrdersException ex )
+			catch ( MarketplaceWebServiceOrdersException  )
 			{
 				return null;
 			}

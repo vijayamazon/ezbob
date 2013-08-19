@@ -23,7 +23,7 @@ namespace EzBob.AmazonServiceLib.UserInfo
 
 				return true;
 			}
-			catch ( AggregateException ex )
+			catch ( AggregateException  )
 			{
 				return false;
 			}
@@ -97,7 +97,7 @@ namespace EzBob.AmazonServiceLib.UserInfo
 		{
             return sellerPage.ContinueWith( tdoc =>
                         {
-                            var stars = 0d;
+                            //var stars = 0d;
                             var doc = tdoc.Result;
 				            var header = doc.QuerySelectorAll( "#aag_header > h1" ).FirstOrDefault();
 					        if ( header == null )

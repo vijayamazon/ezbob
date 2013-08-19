@@ -380,7 +380,7 @@ namespace MarketplaceWebServiceProducts
 							errorResponse.ToXML(),
 							rhm );
 					}
-					catch ( MarketplaceWebServiceProductsException mwsErr )
+					catch ( MarketplaceWebServiceProductsException  )
 					{
 						throw;
 					}

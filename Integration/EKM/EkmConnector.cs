@@ -17,7 +17,7 @@
         private static string PartnerKey = "4kNLfm+jv37k0sWb8ojpxGSQ7yx169xz/nS3mmKGiCwUn7fJIl5UxAZthlm44iiEJynebcGHOG/9fJV2/cM4BQ==";
         private static string PartnerEndpointName = "PartnerAPISoap";
         private static string PartnerContractName = "API.PartnerAPISoap";
-        private static string NoErrorIndication = "No data returned";
+        //private static string NoErrorIndication = "No data returned";
         private static string LineBreak = "<br />";
 
         public bool Validate(string userName, string password, out string errMsg)

@@ -27,7 +27,7 @@ namespace PostcodeAnywhere
                 {
                     Check(card);
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     customer.BankAccountValidationInvalidAttempts++;
                     throw;

@@ -27,7 +27,7 @@ namespace EzBob.PayPal
 		[Test]
 		public void TestGetAccountInfo()
 		{
-			int customerId = 1;
+			//int customerId = 1;
 			//PayPalTest.UpdateAccountInfo( customerId );
 		}
 	}
