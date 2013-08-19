@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AThrasher.cs" />
+    <Compile Include="Coin.cs" />
     <Compile Include="DLParser.cs" />
     <Compile Include="Harvester.cs" />
     <Compile Include="HarvesterError.cs" />

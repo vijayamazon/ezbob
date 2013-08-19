@@ -29,6 +29,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			FreeAgentRequests = new HashedSet<MP_FreeAgentRequest>();
 			SageRequests = new HashedSet<MP_SageRequest>();
 			ChannelGrabberOrders = new HashedSet<MP_ChannelGrabberOrder>();
+			VatReturnRecords = new HashedSet<MP_VatReturnRecord>();
             PayPointOrders = new HashedSet<MP_PayPointOrder>();
             YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
@@ -73,6 +74,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
 		public virtual ISet<MP_SageRequest> SageRequests { get; set; }
         public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
+        public virtual ISet<MP_VatReturnRecord> VatReturnRecords { get; set; }
         public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
         public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 

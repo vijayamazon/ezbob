@@ -145,6 +145,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HMRC", "HMRC", "{861FB999-3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Tools\EzbobUtils\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HmrcHarvester", "App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj", "{DFC5B190-AFA4-40A7-8237-8404687B4513}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -707,6 +709,16 @@ Global
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DFC5B190-AFA4-40A7-8237-8404687B4513}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -776,6 +788,7 @@ Global
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{F851ADDC-B151-4CDE-8C83-AB0696B2E1EE} = {9DBFD4F9-06B0-4BAC-9836-AD0C686DF189}
 		{F92CA169-9532-4C4D-8D84-6F48ACE5719C} = {861FB999-3130-4075-808E-EF03BFE7611F}
+		{DFC5B190-AFA4-40A7-8237-8404687B4513} = {861FB999-3130-4075-808E-EF03BFE7611F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

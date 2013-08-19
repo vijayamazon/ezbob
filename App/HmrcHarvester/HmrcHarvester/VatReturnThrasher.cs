@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Ezbob.Logger;
 using HtmlAgilityPack;
 
@@ -179,7 +176,7 @@ namespace Ezbob.HmrcHarvester {
 				string sValue = pair.Value.Replace(Convert.ToChar(65533), Convert.ToChar(163));
 
 				if ((pair.Key.Length > 1) && decimal.TryParse(sValue, NumberStyles.Currency, ci, out nAmount)) {
-					seeds.ReturnDetails[pair.Key.Substring(0, pair.Key.Length - 1)] = nAmount;
+					seeds.ReturnDetails[pair.Key.Substring(0, pair.Key.Length - 1)] = new Coin(nAmount, "GBP");
 					Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", pair.Key, nAmount);
 				} // if
 			} // foreach

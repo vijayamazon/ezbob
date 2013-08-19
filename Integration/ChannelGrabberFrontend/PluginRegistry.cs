@@ -2,7 +2,6 @@ using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using Integration.ChannelGrabberConfig;
 using StructureMap.Configuration.DSL;
-using log4net;
 
 namespace Integration.ChannelGrabberFrontend {
 	public class PluginRegistry : Registry {

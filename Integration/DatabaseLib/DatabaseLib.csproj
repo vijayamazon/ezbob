@@ -86,6 +86,14 @@
     <Compile Include="Model\Loans\NumericDelta.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceType.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceTypeMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\Business.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnRecordMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnRecord.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntry.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryName.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="PacNetManualBalance.cs" />

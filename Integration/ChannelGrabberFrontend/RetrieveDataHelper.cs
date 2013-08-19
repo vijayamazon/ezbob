@@ -37,7 +37,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 			var ctr = new Connector(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
 
-			var oRawOrders = ctr.GetOrders();
+			List<Order> oRawOrders = ctr.GetOrders();
 
 			var oChaGraOrders = new List<ChannelGrabberOrderItem>();
 

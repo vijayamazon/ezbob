@@ -38,7 +38,7 @@ namespace Ezbob.HmrcHarvester {
 			BusinessName = null;
 			BusinessAddress = null;
 
-			ReturnDetails = new SortedDictionary<string, decimal>();
+			ReturnDetails = new SortedDictionary<string, Coin>();
 		} // constructor
 
 		#endregion constructor
@@ -140,7 +140,7 @@ namespace Ezbob.HmrcHarvester {
 
 		#region property ReturnDetails
 
-		public SortedDictionary<string, decimal> ReturnDetails {
+		public SortedDictionary<string, Coin> ReturnDetails {
 			get { return m_oProperties[Field.ReturnDetails]; }
 			private set { m_oProperties[Field.ReturnDetails] = value; }
 		} // ReturnDetails
