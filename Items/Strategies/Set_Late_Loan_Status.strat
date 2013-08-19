@@ -4,20 +4,21 @@
   <Description>Checks if there are delinquent customers. Tags the customer in database as 'late' (LoanSchedule.Status, Customer.CreditResult). Trigger - Once a day at night</Description>
   <Workspace Name="Set_Late_Loan_Status">
     <NodeElement Name="Admin charge?" NodeId="Comparison5094752" />
+    <NodeElement Name="AmountDue &gt;= Threshold" NodeId="Comparison66996147" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
     <NodeElement Name="Comparison" NodeId="Comparison24633528" />
-    <NodeElement Name="AmountDue &gt;= 0" NodeId="Comparison66996147" />
+    <NodeElement Name="Is Last Instalment" NodeId="Comparison32449728" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar15879623" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB50413755" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45830349" />
     <NodeElement Name="GetAllLateLoanSchedules" NodeId="DataSourceBehavioral44149718" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral46447333" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral30254983" />
@@ -25,25 +26,25 @@
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Late" NodeId="AssignmentB33513147" />
     <NodeElement Name="LoanStatus = Late" NodeId="AssignmentB31830735" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
-    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
     <NodeElement Name="Mail Node" NodeId="MailNode12193639" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
+    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
-    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode60677108" />
     <NodeElement Name="Script" NodeId="ScriptNode18492716" />
+    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
+    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar42176961" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar11203194" />
     <NodeElement Name="UpdateLoanStatus" NodeId="DataSourceNodeScalar66523870" />
@@ -99,8 +100,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode18492716</Name>
       <PointF>
-        <X>816</X>
-        <Y>156</Y>
+        <X>936</X>
+        <Y>276</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeScript</TypeName>
@@ -161,13 +162,13 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>AmountDue &gt;= 0</DisplayName>
+      <DisplayName>AmountDue &gt;= Threshold</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison66996147</Name>
       <PointF>
-        <X>795.4799</X>
+        <X>753.4074</X>
         <Y>276</Y>
       </PointF>
       <SuperNodeName />
@@ -1304,7 +1305,7 @@
       <Name>DataSourceBehavioral44149718</Name>
       <PointF>
         <X>372.561462</X>
-        <Y>156</Y>
+        <Y>316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSource</TypeName>
@@ -1815,6 +1816,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is Last Instalment</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison32449728</Name>
+      <PointF>
+        <X>933.879333</X>
+        <Y>56</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -2888,6 +2906,30 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>LastInstallment</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>LastInstallmentScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>AssignmentB39254496</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -3033,6 +3075,18 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode45306373</OwnerName>
+      <Name>LastInstallmentScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode45306373</OwnerName>
       <Name>LoanId</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3118,6 +3172,18 @@
     <VariableDescriptor>
       <OwnerName>GetRowDataNode45306373</OwnerName>
       <Name>RepaymentAmount</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode45306373</OwnerName>
+      <Name>LastInstallment</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
       <DefaultValue />
@@ -5299,6 +5365,30 @@
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison32449728</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>LastInstallmentScalar =1</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison32449728</OwnerName>
+      <Name>Comparison32449728LastInstallmentScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -5353,7 +5443,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>GetRowDataNode45306373</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode18492716</TargetNodeName>
+      <TargetNodeName>Comparison32449728</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5411,7 +5501,7 @@
       <IntermediatePoints>
         <PointF>
           <X>320</X>
-          <Y>160</Y>
+          <Y>320</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -5749,8 +5839,8 @@
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>660</X>
-          <Y>260</Y>
+          <X>320</X>
+          <Y>160</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -5764,7 +5854,12 @@
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>440</X>
+          <Y>180</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceBehavioral46447333</SourceNodeName>
@@ -6091,6 +6186,30 @@
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison32449728</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode18492716</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison32449728</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB33513147</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -6521,54 +6640,6 @@
       <SourceVariableName>AmountDue</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
       <TargetVariableName>AmountDueScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>PositionScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Position</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>StatusScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Status</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>DateScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>LoanIdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>LoanId</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>PaymentScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Payment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>IdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>id</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>RepaymentAmountScalalr</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>RepaymentAmount</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>AmountDue</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
@@ -7220,6 +7291,78 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LastInstallment</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral46447333</TargetVariableOwnerName>
+      <TargetVariableName>LastInstallment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LastInstallmentScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison32449728</TargetVariableOwnerName>
+      <TargetVariableName>Comparison32449728LastInstallmentScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LastInstallment</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>LastInstallmentScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>PositionScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Position</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>StatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Status</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>DateScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LoanIdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>LoanId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>PaymentScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Payment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>IdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>id</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>RepaymentAmountScalalr</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>RepaymentAmount</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>AmountDueScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>AmountDue</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LastInstallmentScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>LastInstallment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
       <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
       <TargetVariableName>Comparison66996147AmountDueScalar</TargetVariableName>
@@ -7578,6 +7721,14 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar15879623</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison32449728</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
