@@ -94,7 +94,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			} // try
 
 			try {
-				var ctr = new Connector(ad, Log, _context.Customer);
+				var ctr = new Harvester(ad, Log, _context.Customer);
 				ctr.Validate();
 			}
 			catch (ConnectionFailException cge) {

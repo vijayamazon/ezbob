@@ -1434,7 +1434,7 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, ChannelGrabberOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
@@ -2530,13 +2530,13 @@ namespace EZBob.DatabaseLib
 			return expenditures;
 		}
 
-		public ChannelGrabberOrdersList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			var orders = new ChannelGrabberOrdersList(submittedDate);
+			var orders = new InternalDataList(submittedDate);
 
-			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem
+			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new InternalOrderItem
 			{
 				CurrencyCode = o.CurrencyCode,
 				OrderStatus = o.OrderStatus,
@@ -2545,7 +2545,7 @@ namespace EZBob.DatabaseLib
 				PurchaseDate = o.PurchaseDate,
 				TotalCost = o.TotalCost,
 				IsExpense = o.IsExpense
-			}).Distinct(new ChannelGrabberOrderComparer()));
+			}).Distinct(new InternalOrderComparer()));
 
 			return orders;
 		} // GetAllChannelGrabberOrdersData

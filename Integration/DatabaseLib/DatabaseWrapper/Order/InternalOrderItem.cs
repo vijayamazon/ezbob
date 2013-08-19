@@ -2,7 +2,7 @@ using System;
 using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
-	public class ChannelGrabberOrderItem : TimeDependentRangedDataBase {
+	public class InternalOrderItem : TimeDependentRangedDataBase {
 		public virtual string NativeOrderId { get; set; }
 		public virtual double? TotalCost { get; set; }
 		public virtual string CurrencyCode { get; set; }
@@ -12,5 +12,5 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 		public virtual int IsExpense { get; set; }
 
 		public override DateTime RecordTime { get { return PurchaseDate; }} // RecordTime
-	} // class ChannelGrabberOrderItem
+	} // class InternalOrderItem
 } // namespace

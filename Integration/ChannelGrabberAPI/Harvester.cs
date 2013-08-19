@@ -24,19 +24,19 @@ namespace Integration.ChannelGrabberAPI {
 
 	#endregion enum LogMsgTypes
 
-	#region class Connector
+	#region class Harvester
 
-	public class Connector : ConfigurationRoot {
+	public class Harvester : ConfigurationRoot {
 		#region public
 
 		#region constructor
 
-		public Connector(AccountData oAccountData, ILog log, DBCustomer oCustomer) {
+		public Harvester(AccountData oAccountData, ILog log, DBCustomer oCustomer) {
 			m_oAccountData = oAccountData;
 
 			m_oLog = log;
 
-			Debug("Creating a ChannelGrabber API Connector class...");
+			Debug("Creating a ChannelGrabber API Harvester class...");
 
 			if (oCustomer == null)
 				throw new ApiException("Customer information not specified.");
@@ -62,7 +62,7 @@ namespace Integration.ChannelGrabberAPI {
 
 			Debug("When waiting for orders:\n\tsleep for {0:N} ms between poll attempts\n\tretry polling {1:N} times", m_nSleepTime, m_nWaitCycleCount);
 
-			Debug("Creating a ChannelGrabber API Connector class succeeded.");
+			Debug("Creating a ChannelGrabber API Harvester class succeeded.");
 		} // constructor
 
 		#endregion constructor
@@ -658,7 +658,7 @@ Data: {3}
 		#endregion infrastructure
 
 		#endregion private
-	} // class Connector
+	} // class Harvester
 
-	#endregion class Connector
+	#endregion class Harvester
 } // namespace ChannelGrabberAPI

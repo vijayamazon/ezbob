@@ -140,19 +140,19 @@
 
 	#endregion class FreeAgentExpenseComparer
 
-	#region class ChannelGrabberOrderComparer
+	#region class InternalOrderComparer
 
-	class ChannelGrabberOrderComparer : AOrderComparer<ChannelGrabberOrderItem> {
-		public override bool AreEqual(ChannelGrabberOrderItem a, ChannelGrabberOrderItem b) {
+	class InternalOrderComparer : AOrderComparer<InternalOrderItem> {
+		public override bool AreEqual(InternalOrderItem a, InternalOrderItem b) {
 			return a.NativeOrderId == b.NativeOrderId;
 		} // AreEqual
 
-		public override int HashCode(ChannelGrabberOrderItem a) {
+		public override int HashCode(InternalOrderItem a) {
 			return a.NativeOrderId.GetHashCode();
 		} // HashCode
-	} // class ChannelGrabberOrderComparer
+	} // class InternalOrderComparer
 
-	#endregion class ChannelGrabberOrderComparer
+	#endregion class InternalOrderComparer
 
 	#region class PayPointOrderComparer
 

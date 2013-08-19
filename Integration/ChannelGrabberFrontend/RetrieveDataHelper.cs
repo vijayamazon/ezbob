@@ -35,14 +35,14 @@ namespace Integration.ChannelGrabberFrontend {
 					databaseCustomerMarketPlace.DisplayName, databaseCustomerMarketPlace.Id), e);
 			}
 
-			var ctr = new Connector(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
+			var ctr = new Harvester(oSecInfo.Fill(), ms_oLog, databaseCustomerMarketPlace.Customer);
 
 			List<Order> oRawOrders = ctr.GetOrders();
 
-			var oChaGraOrders = new List<ChannelGrabberOrderItem>();
+			var oChaGraOrders = new List<InternalOrderItem>();
 
 			foreach (var oRaw in oRawOrders) {
-				oChaGraOrders.Add(new ChannelGrabberOrderItem {
+				oChaGraOrders.Add(new InternalOrderItem {
 					CurrencyCode  = oRaw.CurrencyCode,
 					OrderStatus   = oRaw.OrderStatus,
 					NativeOrderId = oRaw.NativeOrderId,
@@ -60,13 +60,13 @@ namespace Integration.ChannelGrabberFrontend {
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreChannelGrabberOrdersData(
 					databaseCustomerMarketPlace,
-					new ChannelGrabberOrdersList(DateTime.UtcNow, oChaGraOrders),
+					new InternalDataList(DateTime.UtcNow, oChaGraOrders),
 					historyRecord
 				)
 			);
 
 			// retrieve orders
-			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			InternalDataList allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllChannelGrabberOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace)
@@ -108,7 +108,7 @@ namespace Integration.ChannelGrabberFrontend {
 		} // RetrieveSecurityInfo
 
 		private IEnumerable<IWriteDataInfo<FunctionType>> CreateOrdersAggregationInfo(
-			ChannelGrabberOrdersList orders,
+			InternalDataList orders,
 			ICurrencyConvertor currencyConverter
 		) {
 			var oFunctionTypes = new List<FunctionType>();
@@ -116,7 +116,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 			var updated = orders.SubmittedDate;
 
-			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new ChannelGrabberOrdersList(submittedDate, o));
+			var timePeriodData = DataAggregatorHelper.GetOrdersForPeriods(orders, (submittedDate, o) => new InternalDataList(submittedDate, o));
 
 			var factory = new OrdersAggregatorFactory();
 

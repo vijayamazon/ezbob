@@ -8,12 +8,12 @@ using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
 	public class OrdersAggregatorFactory
-		: DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<ChannelGrabberOrderItem>, ChannelGrabberOrderItem, FunctionType>
+		: DataAggregatorFactoryBase<ReceivedDataListTimeDependentInfo<InternalOrderItem>, InternalOrderItem, FunctionType>
 	{
 		public override
-			DataAggregatorBase<ReceivedDataListTimeDependentInfo<ChannelGrabberOrderItem>, ChannelGrabberOrderItem, FunctionType>
+			DataAggregatorBase<ReceivedDataListTimeDependentInfo<InternalOrderItem>, InternalOrderItem, FunctionType>
 		CreateDataAggregator(
-			ReceivedDataListTimeDependentInfo<ChannelGrabberOrderItem> data,
+			ReceivedDataListTimeDependentInfo<InternalOrderItem> data,
 			ICurrencyConvertor currencyConverter
 		) {
 			return new OrdersAgregator(data, currencyConverter);
@@ -21,25 +21,25 @@ namespace Integration.ChannelGrabberFrontend {
 	} // class OrdersAggregatorFactory
 
 	internal class OrdersAgregator
-		: DataAggregatorBase<ReceivedDataListTimeDependentInfo<ChannelGrabberOrderItem>, ChannelGrabberOrderItem, FunctionType>
+		: DataAggregatorBase<ReceivedDataListTimeDependentInfo<InternalOrderItem>, InternalOrderItem, FunctionType>
 	{
 		public OrdersAgregator(
-			ReceivedDataListTimeDependentInfo<ChannelGrabberOrderItem> orders, ICurrencyConvertor currencyConvertor
+			ReceivedDataListTimeDependentInfo<InternalOrderItem> orders, ICurrencyConvertor currencyConvertor
 		) : base(orders, currencyConvertor) {
 		} // constructor
 
-		private int GetShipedOrdersCount(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private int GetShipedOrdersCount(IEnumerable<InternalOrderItem> orders) {
 			return orders.Count(o => (o.IsExpense == 0)); // && (o.OrderStatus == "Dispatched"));
 		} // GetShippedOrdersCount
 
-		private double GetAverageSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private double GetAverageSumOfOrders(IEnumerable<InternalOrderItem> orders) {
 			int    count = GetShipedOrdersCount(orders);
 			double sum   = count == 0 ? 0 : GetTotalSumOfOrders(orders);
 
 			return count == 0 ? 0 : sum / count;
 		} // GetAverageSumOfOrders
 
-		private double GetTotalSumOfOrders(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private double GetTotalSumOfOrders(IEnumerable<InternalOrderItem> orders) {
 			return orders
 				.Where(o => (o.IsExpense == 0) && o.TotalCost.HasValue) // && (o.OrderStatus == "Dispatched"))
 				.Sum(
@@ -52,18 +52,18 @@ namespace Integration.ChannelGrabberFrontend {
 				);
 		} // GetTotalSumOfOrders
 
-		private int GetExpensesCount(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private int GetExpensesCount(IEnumerable<InternalOrderItem> orders) {
 			return orders.Count(o => o.IsExpense == 1);
 		} // GetExpensesCount
 
-		private double GetAverageSumOfExpenses(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private double GetAverageSumOfExpenses(IEnumerable<InternalOrderItem> orders) {
 			int    count = GetExpensesCount(orders);
 			double sum   = count == 0 ? 0 : GetTotalSumOfExpenses(orders);
 
 			return count == 0 ? 0 : sum / count;
 		} // GetAverageSumOfExpenses
 
-		private double GetTotalSumOfExpenses(IEnumerable<ChannelGrabberOrderItem> orders) {
+		private double GetTotalSumOfExpenses(IEnumerable<InternalOrderItem> orders) {
 			return orders
 				.Where(o => (o.IsExpense == 1) && o.TotalCost.HasValue)
 				.Sum(
@@ -78,7 +78,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 		protected override object InternalCalculateAggregatorValue(
 			FunctionType functionType,
-			IEnumerable<ChannelGrabberOrderItem> orders
+			IEnumerable<InternalOrderItem> orders
 		) {
 			switch (functionType) {
 			case FunctionType.NumOfOrders:
