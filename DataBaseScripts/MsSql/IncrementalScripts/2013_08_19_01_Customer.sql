@@ -1,3 +1,9 @@
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'IsWasLate' and Object_ID = Object_ID(N'Customer'))    
+BEGIN
+	alter table Customer add IsWasLate bit null
+END
+go
+
 -- set is was late 
 UPDATE Customer SET IsWasLate = 1
 FROM  
