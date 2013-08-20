@@ -112,10 +112,11 @@ namespace MailApi
             }
 
             var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response);
-            if (responseDeserialized[0].status.ToLower() != "sent")
+            var status = responseDeserialized[0].status.ToLower();
+            if (status != "sent" && status != "queued")
             {
                 Log.Warn(responseDeserialized[0].ToString());
-                return "status not 'sent'";
+                return "status not 'sent' or 'queued'";
             }
             return "OK";
         }
