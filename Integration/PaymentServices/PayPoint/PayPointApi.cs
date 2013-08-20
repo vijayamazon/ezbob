@@ -24,11 +24,8 @@
         {
             _vars = vars;
             _loans = loans;
-            if (_config != null)
-            {
-                _config = config.PayPoint;
-                _service.Url = _config.ServiceUrl;
-            }
+            _config = config.PayPoint;
+            _service.Url = _config.ServiceUrl;
         }
 
         //-----------------------------------------------------------------------------------
