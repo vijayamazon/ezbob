@@ -57,7 +57,8 @@ namespace EzBob.Models.Marketplaces.Builders
                 SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
                 IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
                 UWPriority = mp.Marketplace.UWPriority,
-                Disabled = mp.Disabled
+                Disabled = mp.Disabled,
+                IsNew = mp.IsNew
             };
 
             InitializeSpecificData(mp, model);
