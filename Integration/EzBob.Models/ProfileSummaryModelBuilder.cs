@@ -25,7 +25,7 @@ namespace EzBob.Models
         }
 
 
-        private static readonly ILog _log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
 
         public ProfileSummaryModel CreateProfile(Customer customer)
         {
@@ -107,7 +107,7 @@ namespace EzBob.Models
             }
             catch (Exception e)
             {
-                _log.Error(e);
+                Log.Error(e);
             }
 
             summary.CreditBureau = creditBureau;
@@ -133,16 +133,12 @@ namespace EzBob.Models
             double? totalPositiveReviews = 0;
             double? totalNegativeReviews = 0;
             double? totalNeutralReviews = 0;
-            double? totalReviews = 0;
-
             var inventory = 0d;
-
             var marketplacesAll = customer.CustomerMarketPlaces
                 .Where(mp => mp.Marketplace.IsPaymentAccount == false).ToList();
-
-
             var marketplaces =
                 marketplacesAll.Where(mp => mp.Disabled == false && string.IsNullOrEmpty(mp.UpdateError)).ToList();
+            var isNewExist = marketplacesAll.Any(mp => mp.IsNew);
 
             foreach (var mp in marketplaces)
             {
@@ -189,7 +185,7 @@ namespace EzBob.Models
                     : (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : 0);
             }
 
-            totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
+            var totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
 
             summary.MarketPlaces =
                 new MarketPlaces
@@ -201,7 +197,8 @@ namespace EzBob.Models
                     TotalPositiveReviews =
                         String.Format("{0:0.#} ({1:0.#}%)", totalPositiveReviews,
                             (totalReviews != 0 ? totalPositiveReviews/totalReviews*100 : 0)),
-                    Lighter = new Lighter(ObtainMarketPlacesState(marketplaces))
+                    Lighter = new Lighter(ObtainMarketPlacesState(marketplaces)),
+                    IsNew = isNewExist 
                 };
         }
 
@@ -262,7 +259,7 @@ namespace EzBob.Models
                     CurrentBalance = Money(currentBalance),
                     LatePaymentsSum = Money(latePayments),
                     Collection = Money(collection),
-                    LateInterest = Money(interest ?? 0),
+                    LateInterest = Money((decimal) interest),
                     Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection)),
                     AverageLateDays = avarageLateDayes != null ? avarageLateDayes.ToString() : "-",
                     PaymentDemeanor = lateStatus,
@@ -291,24 +288,6 @@ namespace EzBob.Models
             summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
         }
 
-
-        private LightsState ObtainCreditBureauState(string experianResult)
-        {
-            if (experianResult == null)
-                return LightsState.Passed;
-            switch (experianResult)
-            {
-                case "Passed":
-                    return LightsState.Passed;
-                case "Referred":
-                case "Warning":
-                    return LightsState.Warning;
-                case "Rejected":
-                    return LightsState.Reject;
-                default :
-                    throw new Exception("Unknown Expirian Result");
-            }
-        }
 
         private LightsState ObtainLoanActivityState(decimal latePayments, decimal collection)
         {

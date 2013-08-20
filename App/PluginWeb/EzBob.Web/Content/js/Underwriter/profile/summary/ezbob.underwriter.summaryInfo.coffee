@@ -27,7 +27,6 @@ class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
         ).fail (data) ->
             that.CommentArea.css "border", "1px solid red"
             console.error data.responseText
-
         false
 
     serializeData: ->
@@ -37,6 +36,9 @@ class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
         @CommentSave = @$el.find("#commentSave")
         @CommentArea = @$el.find("#CommentArea")
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
+        #added new label into MPs tab
+        isNew = @model.get("MarketPlaces").IsNew
+        $("#new-ribbon-marketplaces").toggle Convert.toBool isNew
 
 class EzBob.Underwriter.SummaryInfoModel extends Backbone.Model
     idAttribute: "Id"

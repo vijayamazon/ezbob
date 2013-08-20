@@ -40,10 +40,10 @@
                 <tbody>
                     <tr>
                         <td>
-                            <b>Number of stores:</b>
+                            <b>Number of stores:</b> &nbsp; &nbsp;<span class="<%-Convert.toBool(mp.IsNew) ? '' : 'hidden-field'%> btn-success btn-small"><i class="icon-star-empty"></i>new</span>
                         </td>
                         <td width="40%">
-                            <%-mp!=null ? mp.NumberOfStores : "-"%>
+                            <%-mp!=null ? mp.NumberOfStores : "-"%> 
                         </td>
                     </tr>
                     <tr>

@@ -92,6 +92,14 @@ namespace EZBob.DatabaseLib.Model.Database
                              : "Done";
         }
 
+        public virtual bool IsNew
+        {
+            get
+            {
+                return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
+            }
+        }
+
         /// <summary>
         /// True if marketplace is disabled. Do not show totals, seniority and other
         /// stuff for such marketplaces.

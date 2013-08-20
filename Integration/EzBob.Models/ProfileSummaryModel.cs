@@ -15,6 +15,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string Inventory { get; set; }
         public string TotalPositiveReviews { get; set; }
         public string Seniority { get; set; }
+        public bool IsNew { get; set; }
     }
 
     public class PaymentAccounts : BaseProfileSummaryModel
