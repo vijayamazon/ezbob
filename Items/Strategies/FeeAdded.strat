@@ -4,8 +4,8 @@
   <Description>Email to customer with the default fee details. Trigger - Leftside table in the underwriter, customer status-&gt; Bankruptcy\default + check 'Add collection fee'</Description>
   <Workspace Name="FeeAdded">
     <NodeElement Name="Assignment" NodeId="Assignment35083115" />
-    <NodeElement Name="Mail Node" NodeId="MailNode40886518" />
     <NodeElement Name="Mail Node" NodeId="MailNode63249558" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40886518" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct44958387" />
     <NodeElement Name="Start Node" NodeId="StartNode47631980" />
     <NodeElement Name="Stop Node" NodeId="StopNode26034638" />
@@ -197,7 +197,7 @@
       <OwnerName>Assignment35083115</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>Subject:="Admin fee is added to your balance"</InitialValue>
+      <InitialValue>Subject:="Collection fee is added to your balance"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
