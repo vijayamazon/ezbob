@@ -45,10 +45,10 @@ namespace PaymentServices.PayPoint
             if (dict.ContainsKey("auth_code")) AuthCode = dict["auth_code"];
             if (dict.ContainsKey("trans_id")) NewTransId = dict["trans_id"];
 
-//            if (!(dict.ContainsKey("valid") && dict["valid"] == "true"))
-//            {
-//                Error = "OutStr string doesn`t contain valid=true, please versify OutStr for additional details";
-//            }
+            if ((dict.ContainsKey("valid") && dict["valid"] == "false"))
+            {
+                Error = dict["message"] ?? "OutStr string contain valid=false, please versify OutStr for additional details";
+            }
         }
 
         private Dictionary<string, string> ParseParams(string input)

@@ -48,7 +48,7 @@ namespace PaymentServices.Tests
 		[Test]
 		public void PayPointPayPal()
 		{
-			var papi = new PayPointApi(null,null,null);
+			var papi = new PayPointApi(null, null, _bobconfig);
 			papi.PayPointPayPal("www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
 		}
     }

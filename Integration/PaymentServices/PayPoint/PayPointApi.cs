@@ -38,7 +38,7 @@
 
 				var str = _service.
 					performTransactionViaAlternatePaymentMethod(_config.Mid, _config.VpnPassword, "PayPal",
-																			   "ExpressCheckout", "Initialize", "Transaction",
+																			   "ExpressCheckout", "Initialise", "Transaction",
 																			   transactionId,
 																			   amount.ToString(CultureInfo.InvariantCulture),
 																			   currency, options);
