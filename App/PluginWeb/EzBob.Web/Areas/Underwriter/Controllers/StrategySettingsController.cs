@@ -173,7 +173,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var reject_Defaults_CreditScore = _configurationVariablesRepository.GetByName("Reject_Defaults_CreditScore");
             var reject_Defaults_AccountsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_AccountsNum");
             var reject_Defaults_Amount = _configurationVariablesRepository.GetByName("Reject_Defaults_Amount");
-            var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_MonthsNum");
+			var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_MonthsNum");
+			var reject_Minimal_Seniority = _configurationVariablesRepository.GetByName("Reject_Minimal_Seniority");
 
             var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
             var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
@@ -198,6 +199,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     Reject_Defaults_AmountDesc = reject_Defaults_Amount.Description,
                     Reject_Defaults_MonthsNum = reject_Defaults_MonthsNum.Value,
                     Reject_Defaults_MonthsNumDesc = reject_Defaults_MonthsNum.Description,
+					Reject_Minimal_Seniority = reject_Minimal_Seniority.Value,
+					Reject_Minimal_SeniorityDesc = reject_Minimal_Seniority.Description,
                     EnableAutomaticReRejection = enableAutomaticReRejection.Value,
                     EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
                     AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
@@ -218,6 +221,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                                                  string Reject_Defaults_Amount,
                                                  string Reject_Defaults_CreditScore,
                                                  string Reject_Defaults_MonthsNum,
+												 string Reject_Minimal_Seniority,
                                                  string TotalAnnualTurnover,
                                                  string TotalThreeMonthTurnover,
                                                  string EnableAutomaticReRejection,
@@ -228,8 +232,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
             _configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
             _configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
-            _configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
-            _configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
+			_configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
+			_configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
+			_configurationVariablesRepository.SetByName("Reject_Minimal_Seniority", Reject_Minimal_Seniority);
             _configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
             _configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
             _configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);

@@ -1009,9 +1009,6 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.rejection.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.rejection.min.js">
-      <DependentUpon>ezbob.underwriter.StrategySettings.automation.rejection.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js">
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>

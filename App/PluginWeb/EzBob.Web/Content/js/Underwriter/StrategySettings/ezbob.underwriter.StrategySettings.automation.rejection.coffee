@@ -23,6 +23,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
         Reject_Defaults_AccountsNum:"input[name='reject_Defaults_AccountsNum']"
         Reject_Defaults_Amount:     "input[name='reject_Defaults_Amount']"
         Reject_Defaults_MonthsNum:  "input[name='reject_Defaults_MonthsNum']"
+        Reject_Minimal_Seniority:   "input[name='reject_Minimal_Seniority']"
         EnableAutomaticReRejection:             "select[name='enableAutomaticReRejection']"
         AutoRejectionException_CreditScore:     "input[name='autoRejectionException_CreditScore']"
         AutoRejectionException_AnualTurnover:   "input[name='autoRejectionException_AnualTurnover']"
@@ -57,6 +58,7 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
                         input[name='reject_Defaults_CreditScore'], 
                         input[name='reject_Defaults_AccountsNum'], 
                         input[name='reject_Defaults_Amount'], 
+                        input[name='reject_Minimal_Seniority'],
                         select[name='enableAutomaticReRejection'], 
                         input[name='autoRejectionException_CreditScore'], 
                         input[name='autoRejectionException_AnualTurnover'],
@@ -98,6 +100,9 @@ class EzBob.Underwriter.SettingsRejectionView extends Backbone.Marionette.ItemVi
                     required: true
                     min: 0
                 reject_Defaults_MonthsNum:
+                    required: true
+                    min: 0
+                reject_Minimal_Seniority:
                     required: true
                     min: 0
                 autoRejectionException_CreditScore:
