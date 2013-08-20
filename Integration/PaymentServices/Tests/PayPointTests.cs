@@ -44,5 +44,12 @@ namespace PaymentServices.Tests
             papi.RepeatTransaction("edf7951a-225b-4fd3-bd28-cde7c03f7df7", 100.99M);
             string repo = papi.GetReport("CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
         }
+
+		[Test]
+		public void PayPointPayPal()
+		{
+			var papi = new PayPointApi(null,null,null);
+			papi.PayPointPayPal("www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
+		}
     }
 }

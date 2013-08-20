@@ -28,6 +28,33 @@
             _service.Url = _config.ServiceUrl;
         }
 
+		public void PayPointPayPal(string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
+		{
+			try
+			{
+				string transactionId = "TRAN" + Guid.NewGuid();
+				string options = string.Format("notificationurl={0},returnurl={1},cancelurl={2}", notificationUrl, returnUrl, cancelUrl);
+				if (isTest) options += ",test_status=true";
+
+				var str = _service.
+					performTransactionViaAlternatePaymentMethod(_config.Mid, _config.VpnPassword, "PayPal",
+																			   "ExpressCheckout", "Initialize", "Transaction",
+																			   transactionId,
+																			   amount.ToString(CultureInfo.InvariantCulture),
+																			   currency, options);
+				Log.Debug(str);
+				var ret = new PayPointReturnData(str);
+
+				if (!ret.HasError)
+				{
+
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+			}
+		}
         //-----------------------------------------------------------------------------------
         public PayPointReturnData RefundCard(string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest)
         {
