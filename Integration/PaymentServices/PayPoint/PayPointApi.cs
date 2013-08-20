@@ -15,17 +15,20 @@
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 
-        readonly SECVPNService _service = new SECVPNService();
+        private readonly SECVPNService _service = new SECVPNService();
         private readonly PayPointConfiguration _config;
         private readonly ILoanRepository _loans;
         private readonly ConfigurationVariablesRepository _vars;
 
-        public PayPointApi()
+        public PayPointApi(ConfigurationVariablesRepository vars, ILoanRepository loans, ConfigurationRootBob config)
         {
-            _vars = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-            _loans = ObjectFactory.GetInstance<ILoanRepository>();
-            _config = ConfigurationRootBob.GetConfiguration().PayPoint;
-            _service.Url = _config.ServiceUrl;
+            _vars = vars;
+            _loans = loans;
+            if (_config != null)
+            {
+                _config = config.PayPoint;
+                _service.Url = _config.ServiceUrl;
+            }
         }
 
         //-----------------------------------------------------------------------------------

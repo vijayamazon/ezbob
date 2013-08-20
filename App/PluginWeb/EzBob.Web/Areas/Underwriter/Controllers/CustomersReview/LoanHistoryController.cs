@@ -36,15 +36,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly LoanScheduleRepository _loanScheduleRepository;
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly PaymentRolloverRepository _rolloverRepository;
-        private readonly LoanChargesRepository _chargesRepository;
         private readonly IUsersRepository _users;
+        private readonly PayPointApi _paypoint;
 
         public LoanHistoryController(CustomerRepository customersRepository,
                                      PaymentRolloverRepository rolloverRepository,
                                      LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
                                      LoanPaymentFacade loanRepaymentFacade, IAppCreator appCreator,
                                      IPacnetPaypointServiceLogRepository logRepository, LoanRepository loanRepository,
-                                     ConfigurationVariablesRepository configurationVariablesRepository, LoanChargesRepository chargesRepository, IUsersRepository users)
+                                     ConfigurationVariablesRepository configurationVariablesRepository,
+                                     IUsersRepository users,
+                                     PayPointApi paypoint)
         {
             _customerRepository = customersRepository;
             _rolloverRepository = rolloverRepository;
@@ -55,8 +57,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _logRepository = logRepository;
             _loanRepository = loanRepository;
             _configurationVariablesRepository = configurationVariablesRepository;
-            _chargesRepository = chargesRepository;
             _users = users;
+            _paypoint = paypoint;
         }
 
         [Ajax]
@@ -203,9 +205,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             if (model.ChargeClient)
             {
-                var paypoint = new PayPointApi();
                 payPointTransactionId = customer.PayPointTransactionId;
-                paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
+                _paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
             }
 
             string description = string.Format("Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod, model.Description, Environment.NewLine);

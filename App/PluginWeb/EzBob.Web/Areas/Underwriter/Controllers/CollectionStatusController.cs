@@ -25,11 +25,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
         private readonly IAppCreator _appCreator;
 
-        public CollectionStatusController(ICustomerRepository customerRepository, IAppCreator appCreator)
+        public CollectionStatusController(ICustomerRepository customerRepository, IAppCreator appCreator, PayPointApi paypoint)
         {
             _customerRepository = customerRepository;
             _appCreator = appCreator;
-            _payPointApi = new PayPointApi();
+            _payPointApi = paypoint;
             _configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
         }
 

@@ -27,8 +27,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly LoanPaymentFacade _loanRepaymentFacade;
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly IPaypointTransactionRepository _paypointTransactionRepository;
+        private readonly PayPointApi _paypoint;
 
-        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, IZohoFacade crm)
+        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, IZohoFacade crm, PayPointApi paypoint)
         {
             _context = context;
             _payPointFacade = payPointFacade;
@@ -37,6 +38,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _paypointTransactionRepository = paypointTransactionRepository;
             _crm = crm;
             _loanRepaymentFacade = loanPaymentFacade;
+            _paypoint = paypoint;
         }
 
         [NoCache]
@@ -175,13 +177,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     return this.JsonNet(new {error = "amount is too small"});
                 }
 
-                var paypoint = new PayPointApi();
-
                 var card = customer.PayPointCards.FirstOrDefault(c => c.Id == cardId);
 
                 var payPointTransactionId = card == null ? customer.PayPointTransactionId : card.TransactionId;
 
-                paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
+                _paypoint.RepeatTransactionEx(payPointTransactionId, realAmount);
 
                 var payFastModel = _loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "payment from customer", paymentType);
                 payFastModel.CardNo = card == null ? customer.CreditCardNo : card.CardNo;
