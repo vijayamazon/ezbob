@@ -413,7 +413,8 @@ namespace EzBob.Web.Areas.Underwriter
                 {
                     Caption = "Rejected reason",
                     Name = "RejectedReason",
-                    Index = "RejectedReason",
+					Index = "RejectedReason",
+					Formatter = "withScrollbar",
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
