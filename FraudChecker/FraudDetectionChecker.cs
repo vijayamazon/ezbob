@@ -525,7 +525,8 @@ namespace FraudChecker
             if (string.IsNullOrEmpty(companyName)) return;
             fraudDetections.AddRange(
                 from c in customerPortion
-                where c.IsSuccessfullyRegistered
+                where c.IsSuccessfullyRegistered &&
+					  c.PersonalInfo != null
                 where
                     ((c.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
                           ? c.LimitedInfo.LimitedCompanyName
