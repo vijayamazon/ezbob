@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Xml.Serialization;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Experian;
-using ExperianLib.Dictionaries;
-using EzBob.Configuration;
-using EzBobIntegration.Web_References.Consumer;
-using Newtonsoft.Json;
-using StructureMap;
-using log4net;
-
-namespace ExperianLib
+﻿namespace ExperianLib
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using System.Text.RegularExpressions;
+	using System.Xml.Serialization;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Experian;
+	using Dictionaries;
+	using EzBob.Configuration;
+	using EzBobIntegration.Web_References.Consumer;
+	using Newtonsoft.Json;
+	using StructureMap;
+	using log4net;
     using EZBob.DatabaseLib.Repository;
 
     public class ConsumerService
@@ -44,14 +42,14 @@ namespace ExperianLib
             )
         {
             try
-            {
+			{
                 //debug mode
-                if (surname == "TestSurnameDebugMode" || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+                if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
                 {
                     return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
                 }
 
-                Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
+				Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
                 var postcode = GetPostcode(ukLocation, mlLocation);
                 mlLocation = ShifLocation(mlLocation);
                 var cachedResponse = _repo.GetPersonFromCache(firstName, surname, birthDate, postcode);
@@ -273,33 +271,57 @@ namespace ExperianLib
         private ConsumerServiceResult ConsumerDebugResult(string surname, DateTime? birthDate, int customerId,
                                                           bool checkInCacheOnly)
         {
-            var customers = ObjectFactory.GetInstance<CustomerRepository>();
-            var customer = customers.Get(customerId);
             var content = string.Empty;
-            string middleName = null;
-            TryRead(() => middleName = customer.PersonalInfo.MiddleInitial);
-            int mpSeviceLogId;
-            int.TryParse(middleName, out mpSeviceLogId);
+	        string testPart = string.Empty;
 
-            if (!string.IsNullOrEmpty(middleName) && mpSeviceLogId > 0)
-            {
-                var log = ObjectFactory.GetInstance<ServiceLogRepository>();
-                TryRead(() => content = log.GetById(mpSeviceLogId).ResponseData);
-            }
-            else
-            {
-                try
-                {
-                    var filename = string.IsNullOrEmpty(middleName)? @"C:\Temp\Experian.xml": middleName;
-                    content = File.ReadAllText(filename);
-                }
-                catch (Exception e)
-                {
-                    Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", @"C:\Temp\Experian.xml", e);
-                }
-            }
+			string filename = string.Empty;
 
-            return CreateConsumerServiceResult(surname, birthDate, customerId, checkInCacheOnly, content);
+			if (surname != null && surname.Contains("_"))
+			{
+				string[] splitValues = surname.Split('_');
+				if (splitValues.Length > 1 && !string.IsNullOrEmpty(splitValues[1]))
+				{
+					testPart = splitValues[1];
+					if (!testPart.Contains(":"))
+					{
+						int mpSeviceLogId;
+						int.TryParse(testPart, out mpSeviceLogId);
+
+						if (mpSeviceLogId > 0)
+						{
+							var log = ObjectFactory.GetInstance<ServiceLogRepository>();
+							TryRead(() => content = log.GetById(mpSeviceLogId).ResponseData);
+						}
+					}
+					else
+					{
+						try
+						{
+							filename = testPart;
+							content = File.ReadAllText(filename);
+						}
+						catch (Exception e)
+						{
+							Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
+						}
+					}
+				}
+			}
+
+	        if (content == string.Empty)
+			{
+		        try
+		        {
+					filename = string.IsNullOrEmpty(testPart) ? @"C:\Temp\Experian.xml" : testPart;
+			        content = File.ReadAllText(filename);
+		        }
+		        catch (Exception e)
+		        {
+					Log.ErrorFormat("Can't read experian file:{0}. Exception:{1}", filename, e);
+		        }
+	        }
+
+	        return CreateConsumerServiceResult(surname, birthDate, customerId, checkInCacheOnly, content);
         }
 
         public void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog)
