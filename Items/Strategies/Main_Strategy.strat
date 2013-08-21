@@ -9697,18 +9697,6 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>Main_Strategy</OwnerName>
-      <Name>SeniorityThreshold</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>300</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>Main_Strategy</OwnerName>
       <Name>MinExperianScore</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -24500,18 +24488,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>SeniorityThreshold</SourceVariableName>
-      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
-      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>SeniorityThreshold</SourceVariableName>
-      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
-      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>MarketplaceSeniorityDays</SourceVariableName>
       <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
       <TargetVariableName>Seniority_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
@@ -24677,6 +24653,18 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>ExperianConsumerScore</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar53400967</TargetVariableOwnerName>
       <TargetVariableName>ExperianScore</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Reject_Minimal_Seniority</SourceVariableName>
+      <TargetVariableOwnerName>MailNode61346438</TargetVariableOwnerName>
+      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Reject_Minimal_Seniority</SourceVariableName>
+      <TargetVariableOwnerName>MailNode34630730</TargetVariableOwnerName>
+      <TargetVariableName>SeniorityThreshold_User is rejected by the strategy.docxUtV6keDTwlAus9VMBLmddg==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
