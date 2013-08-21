@@ -226,9 +226,13 @@
 						return;
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+                var showAsNew = !m.IsNew ? 'hidden-field' : '';
                 %>
                 <tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>" >
-                    <td><div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div></td>
+                    <td>
+                        <div class="source-labels new-ribbon  <%-showAsNew%>"></div>
+                        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
+                    </td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
                     <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>

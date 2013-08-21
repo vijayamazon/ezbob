@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.PayPal;
 using EzBob.Models;
 using EzBob.Web.ApplicationCreator;
 using PostcodeAnywhere;
@@ -10,8 +8,6 @@ using System.Linq;
 using System.Web.Mvc;
 using EzBob.Web.Areas.Underwriter.Models;
 using EZBob.DatabaseLib.Model.Database.Repository;
-
-
 using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview

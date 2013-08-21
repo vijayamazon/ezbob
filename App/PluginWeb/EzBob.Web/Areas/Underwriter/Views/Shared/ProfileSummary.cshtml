@@ -87,15 +87,15 @@
             <table class="table table-striped blue-header rright">
                 <thead>
                     <tr>
-                        <th colspan="2">Payment accounts @* @ButtonLights("<%- pa.Lighter.ButtonStyle %>", "<%- pa.Lighter.Icon %>", "<%- pa.Lighter.Caption %>")*@ </th>
+                        <th colspan="2">Payment accounts</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>
-                            <b>Number of PayPal accounts:</b>
+                            <b>Number of payment accounts:</b> <span class="<%-pa.IsNew ? '' : 'hidden-field'%> btn-success btn-small"><i class="icon-star-empty"></i>new</span>
                         </td>
-                        <td width="40%">
+                        <td width="35%">
                             <%-pa!=undefined ? pa.NumberOfPayPalAccounts : "-"%>
                         </td>
                     </tr>
@@ -141,7 +141,7 @@
                         }
                         %>
 
-                        <th colspan="3">Credit Bureau @ButtonLights("<%- cb.Lighter.ButtonStyle %>", "<%- cb.Lighter.Icon %>", "<%- cb.Lighter.Caption %>", "$('[href=\\'#credit-bureau\\']').tab('show')")</th>
+                        <th colspan="3">Credit Bureau </th>
                     </tr>
                 </thead>
                 <tbody>

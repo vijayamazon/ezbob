@@ -9,7 +9,6 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter;
 using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
 using log4net;
 
 namespace EzBob.Models
@@ -31,24 +30,17 @@ namespace EzBob.Models
         public ProfileSummaryModel CreateProfile(Customer customer)
         {
             var summary = new ProfileSummaryModel {Id = customer.Id};
-
             BuildMarketplaces(customer, summary);
-
             BuildCreditBureau(customer, summary);
-            
             BuildPaymentAccounts(customer, summary);
-
             AddDecisionHistory(summary, customer);
-
             summary.AffordabilityAnalysis =
                     new AffordabilityAnalysis
                     {
                         CashAvailabilityOrDeficits = "Not implemented now",
                         EzBobMonthlyRepayment = Money(GetRepaymentAmount(customer))
                     };
-
             summary.LoanActivity = CreateLoanActivity(customer);
-
             summary.AmlBwa =
                 new AmlBwa
                 {
@@ -56,18 +48,14 @@ namespace EzBob.Models
                     Bwa = customer.BWAResult,
                     Lighter = new Lighter(ObtainAmlState(customer))
                 };
-
             summary.FraudCheck = new FraudCheck
                 {
                     Status = customer.Fraud.ToString(),
                     
                 };
-
             summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
             summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
-
             summary.Comment = customer.Comment;
-
             return summary;
         }
 
@@ -214,7 +202,8 @@ namespace EzBob.Models
                     NetExpences = String.Format("{0}", paymentAccounts.Sum(x => x.TotalNetOutPayments)),
                     NetIncome = paymentAccounts.Sum(x => x.TotalNetInPayments),
                     Lighter = new Lighter(ObtainPaymentsAccountsState(customer)),
-                    Seniority = Money(GetSeniority(customer, true))
+                    Seniority = Money(GetSeniority(customer, true)),
+                    IsNew =  paymentAccounts.Any(x=>x.IsNew)
                 };
         }
 

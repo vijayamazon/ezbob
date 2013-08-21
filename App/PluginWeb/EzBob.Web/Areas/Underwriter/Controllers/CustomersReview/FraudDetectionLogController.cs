@@ -29,20 +29,23 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	        var dateOfAllLastChecks = _fraudDetectionLog.GetAll();
 			if (dateOfAllLastChecks.Count() != 0)
 	        {
-				var dateOfLastCheck = dateOfAllLastChecks.Max(x => x.DateOfCheck);
-		        var fraudDetectionHistory = _fraudDetectionLog.GetByCustomerId(id)
-		                                                      .Where(x => x.DateOfCheck == dateOfLastCheck);
+	            var dateOfLastCheck = dateOfAllLastChecks.Max(x => x.DateOfCheck);
+	            var fraudDetectionHistory =
+	                from f in _fraudDetectionLog.GetByCustomerId(id)
+	                where f.DateOfCheck != null
+	                where f.DateOfCheck == dateOfLastCheck
+	                select new FraudDetectionLogModel
+	                {
+	                    Id = f.Id,
+	                    CompareField = f.CompareField,
+	                    CurrentField = f.CurrentField,
+	                    Value = f.Value,
+	                    Concurrence = ConcurrencePrepare(f),
+	                    Type = f.ExternalUser != null ? "External" : "Internal",
+	                    DateOfLastCheck = FormattingUtils.FormatDateTimeToString(f.DateOfCheck)
+	                };
 
-		        models.AddRange(fraudDetectionHistory.Select(val => new FraudDetectionLogModel
-			        {
-				        Id = val.Id,
-				        CompareField = val.CompareField,
-				        CurrentField = val.CurrentField,
-				        Value = val.Value,
-				        Concurrence = ConcurrencePrepare(val),
-				        Type = val.ExternalUser != null ? "External" : "Internal",
-				        DateOfLastCheck = FormattingUtils.FormatDateTimeToString(val.DateOfCheck)
-			        }));
+	            models.AddRange(fraudDetectionHistory);
 
 		        models = new List<FraudDetectionLogModel>(models.OrderByDescending(x => x.Id));
 	        }

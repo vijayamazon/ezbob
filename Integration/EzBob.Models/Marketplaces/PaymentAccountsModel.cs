@@ -8,5 +8,6 @@
 		public double MonthInPayments { get; set; }
         public double TotalNetOutPayments { get; set; }
         public string Status { get; set; }
+        public bool IsNew { get; set; }
     }
 }

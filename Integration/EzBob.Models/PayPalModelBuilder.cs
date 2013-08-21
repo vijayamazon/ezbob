@@ -90,7 +90,8 @@
 				TotalNetOutPayments = tnop,
 				TransactionsNumber = tc,
 				id = m.Id,
-				Status = status
+				Status = status,
+                IsNew = m.IsNew
 			};
 			return payPalModel;
 		}

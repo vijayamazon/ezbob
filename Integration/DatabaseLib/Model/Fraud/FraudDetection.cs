@@ -14,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
         public virtual string CurrentField { get; set; }
         public virtual string CompareField { get; set; }
         public virtual string Value { get; set; }
-        public virtual DateTime DateOfCheck { get; set; }
+        public virtual DateTime? DateOfCheck { get; set; }
     }
 
     public sealed class FraudDetectionMap : ClassMap<FraudDetection>

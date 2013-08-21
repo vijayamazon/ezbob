@@ -25,6 +25,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string NetExpences { get; set; }
         public string Balance { get; set; }
         public string Seniority { get; set; }
+        public bool IsNew { get; set; }
     }
 
     public class AmlBwa : BaseProfileSummaryModel

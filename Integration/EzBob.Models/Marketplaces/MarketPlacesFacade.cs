@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Models.Marketplaces.Builders;
 using StructureMap;
@@ -11,13 +10,6 @@ namespace EzBob.Web.Areas.Underwriter {
 	
 
 	public class MarketPlacesFacade {
-	    private readonly ICustomerRepository _customers;
-
-	    public MarketPlacesFacade(ICustomerRepository customers)
-	    {
-	        _customers = customers;
-	    }
-
 	    public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(EZBob.DatabaseLib.Model.Database.Customer customer) {
 			var marketplaces = customer.CustomerMarketPlaces.ToList();
 
