@@ -319,7 +319,7 @@
                             <b>Fees applied:</b>
                         </td>
                         <td>
-                            <%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees) : "-"%>)
+                            <%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees, true) : "-"%>)
                         </td>
                     </tr>
                 </tbody>

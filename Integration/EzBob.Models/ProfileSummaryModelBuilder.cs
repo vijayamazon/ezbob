@@ -9,6 +9,7 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter;
 using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Web.Code;
 using log4net;
 
 namespace EzBob.Models
@@ -239,7 +240,7 @@ namespace EzBob.Models
                     from s in l.Schedule
                     where s.Delinquency > 0
                     select s.Delinquency)
-                    .Average(a=> new decimal?(a));
+                    .Average(a=> new decimal?(a)) ?? 0;
             var totalFees =
                 (from l in customer.Loans
                     from c in l.Charges
@@ -261,10 +262,10 @@ namespace EzBob.Models
                     Collection = Money(collection),
                     LateInterest = Money((decimal) interest),
                     Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection)),
-                    AverageLateDays = avarageLateDayes != null ? avarageLateDayes.ToString() : "-",
+                    AverageLateDays = Math.Round(avarageLateDayes, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture),
                     PaymentDemeanor = lateStatus,
-                    TotalFees =  totalFees > 0 ? totalFees.ToString(CultureInfo.InvariantCulture) : "-",
-                    FeesCount = feesCount.ToString(CultureInfo.InvariantCulture)
+                    TotalFees = Money(totalFees),
+                    FeesCount = Money(feesCount)
                 };
         }
 
