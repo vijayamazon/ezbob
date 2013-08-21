@@ -164,6 +164,7 @@
     <Compile Include="PostcodeAnywhereTests\CheckFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefNumberFixture.cs" />
+    <Compile Include="Serialization\DeserializeFixture.cs" />
     <Compile Include="SerializeDataHelperFixture.cs" />
     <Compile Include="Terapeak\CategoriesFixture.cs" />
     <Compile Include="TryGetInstanceFixture.cs" />
