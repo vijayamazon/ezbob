@@ -66,6 +66,10 @@
 		
 		
 		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
+
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\TeraPeakStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\eBay\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Payment\ManualPacnetApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Pacnet\"/>
 		
 		<WriteLinesToFile ContinueOnError="true" File="$(BuildBin)\%(Edition.Identity)\label=$(CCNetLabel).txt" Lines="Build label is $(CCNetLabel)" Overwrite="true"/>
 	</Target>
