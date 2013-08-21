@@ -2467,6 +2467,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptCallManagement</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptCallManagement.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptChangePassword</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptChangePassword.sql</oFileName>
