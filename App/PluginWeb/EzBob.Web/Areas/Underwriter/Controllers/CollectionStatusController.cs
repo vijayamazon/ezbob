@@ -82,7 +82,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var customer = _customerRepository.Get(customerId);
             customer.CollectionStatus.CurrentStatus = currentStatus;
             decimal sum = 0;
-            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default || customer.CollectionStatus.CurrentStatus == CollectionStatusType.Legal)
+            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default)
             {
                 customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
                 var configurationVariables = _configurationVariablesRepository.GetByName("CollectionsCharge");
@@ -98,7 +98,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         }
                     }
                 }
-            _appCreator.FeeAdded(customer, sum);
+				_appCreator.FeeAdded(customer, sum);
             }
             return this.JsonNet(new { });
         }
