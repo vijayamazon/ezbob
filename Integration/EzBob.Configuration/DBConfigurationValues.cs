@@ -1,5 +1,4 @@
 ﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model;
 using EzBob.CommonLib;
 using StructureMap;
 using log4net;
@@ -15,7 +14,6 @@ namespace EzBob.Configuration {
 		RolloverCharge,
 		PartialPaymentCharge,
 		AdministrationCharge,
-		CollectionsCharge,
 		BWABusinessCheck,
 		CAISPath,
 		CAISPath2,
@@ -76,7 +74,6 @@ namespace EzBob.Configuration {
 		public string RawRolloverCharge { get { return this[Variables.RolloverCharge]; } }
 		public string RawPartialPaymentCharge { get { return this[Variables.PartialPaymentCharge]; } }
 		public string RawAdministrationCharge { get { return this[Variables.AdministrationCharge]; } }
-		public string RawCollectionsCharge { get { return this[Variables.CollectionsCharge]; } }
 		public string RawBWABusinessCheck { get { return this[Variables.BWABusinessCheck]; } }
 		public string RawCAISPath { get { return this[Variables.CAISPath]; } }
 		public string RawCAISPath2 { get { return this[Variables.CAISPath2]; } }

@@ -39,7 +39,6 @@ namespace EzBob.Web.Infrastructure
         string MoreBWAInformationStrategyName { get;}
         string ConfirmationEmailStrategyName { get; }
         string UpdateMarketplacesStrategyName { get; }
-        string FeeAddedStrategyName { get; }
         bool ManagementPartEnabled { get; }
         int UpdateOnReapplyLastDays { get; }
         IPostcodeAnywhereConfig PostcodeAnywhereConfig { get; }
@@ -82,7 +81,6 @@ namespace EzBob.Web.Infrastructure
         public virtual string MoreBWAInformationStrategyName { get { return GetValueWithDefault<string>("MoreBWAInformationStrategyName", "More_BWA_Information"); } }
         public virtual string ConfirmationEmailStrategyName { get { return GetValueWithDefault<string>("ConfirmationEmailStrategyName", "ConfirmationEmailStrategy"); } }
         public virtual string UpdateMarketplacesStrategyName { get { return GetValueWithDefault<string>("UpdateCustomerMarketplacesName", "Update Customer Data"); } }
-        public virtual string FeeAddedStrategyName { get { return GetValueWithDefault<string>("FeeAddedStrategyName", "FeeAdded"); } }
         public virtual string CustomerEscalatedStrategyName { get { return GetValueWithDefault<string>("CustomerEscalatedStrategyName", "CustomerEscalated"); } }
         public virtual string ReneweBayTokenStrategyName { get { return GetValueWithDefault<string>("ReneweBayTokenStrategyName", "ReneweBayToken"); } }
         public string PasswordPolicyType { get { return GetValueWithDefault<string>("PasswordPolicyType", "simple"); }  }

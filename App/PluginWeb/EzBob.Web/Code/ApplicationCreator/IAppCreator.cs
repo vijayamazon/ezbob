@@ -28,7 +28,6 @@ namespace EzBob.Web.ApplicationCreator
         void SendEmailVerification(User user, Customer customer, string address);
         void PayPointAddedByUnderwriter(User user, Customer customer, string cardno);
         void UpdateAllMarketplaces(Customer customer);
-        void FeeAdded(Customer customer, decimal? feeAmount);
         void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate);
         void RenewEbayToken(Customer customer, string marketplaceName, string url);
         void Escalated(Customer customer);

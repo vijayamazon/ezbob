@@ -311,17 +311,6 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(customer, strategyParameters, _config.UpdateMarketplacesStrategyName);
         }
 
-        public void FeeAdded(Customer customer, decimal? feeAmount)
-        {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("Email", customer.Name),
-                                             new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                                             new StrategyParameter("FeeAmount", feeAmount)
-                                         };
-            CreateApplication(customer, strategyParameters, _config.FeeAddedStrategyName);
-        }
-
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
         {
             var strategyParameters = new[]

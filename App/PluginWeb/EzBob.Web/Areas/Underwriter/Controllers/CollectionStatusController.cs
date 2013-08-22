@@ -1,23 +1,21 @@
-﻿using System;
-using System.Linq;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using PaymentServices.Calculators;
-using PaymentServices.PayPoint;
-using Scorto.Web;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Areas.Underwriter.Models;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzBob.Models;
+	using ApplicationCreator;
+	using Infrastructure;
+	using PaymentServices.Calculators;
+	using PaymentServices.PayPoint;
+	using Scorto.Web;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Models;
+	using StructureMap;
+
     public class CollectionStatusController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
@@ -32,7 +30,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _payPointApi = paypoint;
             _configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
         }
-
 
         public JsonNetResult Index(int id, CollectionStatusType currentStatus)
         {
@@ -81,26 +78,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var customer = _customerRepository.Get(customerId);
             customer.CollectionStatus.CurrentStatus = currentStatus;
-            decimal sum = 0;
-            if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default)
-            {
-                customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
-                var configurationVariables = _configurationVariablesRepository.GetByName("CollectionsCharge");
-
-                if (collectionStatus.Items != null && configurationVariables != null)
-                {
-                    foreach (var item in collectionStatus.Items)
-                    {
-                        if (item.IsAddCollectionFee)
-                        {
-                            _payPointApi.ApplyLateCharge(item.CollectionFee, item.LoanId, configurationVariables.Id);
-                            sum = sum + item.CollectionFee;
-                        }
-                    }
-                }
-				_appCreator.FeeAdded(customer, sum);
-            }
-            return this.JsonNet(new { });
+	        if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default)
+	        {
+		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
+	        }
+	        return this.JsonNet(new { });
         }
     }
 }

@@ -463,7 +463,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="ConfirmationEmailStrategyName" value="ConfirmationEmailStrategy" />
 		<property name="EmailRolloverAddedStrategyName" value="Email Rollover Added" />
 		<property name="RecheckEbayTokenStrategyName" value="ReneweBayToken" />
-        <property name="FeeAddedStrategyName" value="FeeAdded" />
         <property name="CustomerEscalatedStrategyName" value="CustomerEscalated" />
         <property name="ReneweBayTokenStrategyName" value="ReneweBayToken" />
 		<property name="CAISNoUploadStrategyName" value="CAIS_NO_Upload" />

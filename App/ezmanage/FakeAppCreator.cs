@@ -110,11 +110,6 @@ namespace ezmanage
             
         }
 
-        public void FeeAdded(Customer customer, decimal? feeAmount)
-        {
-            
-        }
-
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
         {
             
