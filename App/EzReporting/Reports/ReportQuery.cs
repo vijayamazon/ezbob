@@ -18,8 +18,8 @@ namespace Reports {
 			m_oArgMatch[DateStartArg] = Report.DateRangeArg;
 			m_oArgMatch[DateEndArg] = Report.DateRangeArg;
 			m_oArgMatch[ShowNonCashArg] = Report.ShowNonCashArg;
-			m_oArgMatch[UserIDArg] = Report.CustomerArg;
-			m_oArgMatch[UserNameOrEmailArg] = Report.CustomerArg;
+			m_oArgMatch[CustomerIDArg] = Report.CustomerArg;
+			m_oArgMatch[CustomerNameOrEmailArg] = Report.CustomerArg;
 
 			if (rpt != null) {
 				StoredProcedure = rpt.StoredProcedure;
@@ -37,13 +37,13 @@ namespace Reports {
 		public ColumnInfo[] Columns { get; set; }
 
 		public int? UserID {
-			get { return this[UserIDArg]; }
-			set { this[UserIDArg] = value; }
+			get { return this[CustomerIDArg]; }
+			set { this[CustomerIDArg] = value; }
 		} // UserID
 
 		public string UserNameOrEmail {
-			get { return this[UserNameOrEmailArg]; }
-			set { this[UserNameOrEmailArg] = value; }
+			get { return this[CustomerNameOrEmailArg]; }
+			set { this[CustomerNameOrEmailArg] = value; }
 		} // UserNameOrEmail
 
 		public int? ShowNonCashTransactions {
@@ -97,7 +97,7 @@ namespace Reports {
 		private const string ShowNonCashArg = "@ShowNonCashTransactions";
 		private const string DateStartArg = "@DateStart";
 		private const string DateEndArg = "@DateEnd";
-		private const string UserNameOrEmailArg = "@UserNameOrEmail";
-		private const string UserIDArg = "@UserID";
+		private const string CustomerNameOrEmailArg = "@CustomerNameOrEmail";
+		private const string CustomerIDArg = "@CustomerID";
 	} // class ReportQuery
 } // namespace Reports
