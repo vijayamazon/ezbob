@@ -116,6 +116,7 @@ namespace PacnetBalance {
 				}
 				catch (Exception e) {
 					Error("Failed to fetch messages: {0}", e);
+					Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", e.ToString(), "dev@ezbob.com");
 				} // try
 
 				Debug("Sleeping...");

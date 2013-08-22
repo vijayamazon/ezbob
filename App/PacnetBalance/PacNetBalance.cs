@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using Ezbob.Database;
 using System.Linq;
 
-namespace PacnetBalance {
-	public static class PacNetBalance {
+namespace PacnetBalance
+{
+	public static class PacNetBalance
+	{
 		private static readonly List<PacNetBalanceRow> pacNetBalanceList = new List<PacNetBalanceRow>();
 
-		static PacNetBalance() {
+		static PacNetBalance()
+		{
 			Logger = new SafeLog();
 		} // static constructor
 
@@ -24,13 +27,15 @@ namespace PacnetBalance {
 		/// <param name="debits">Debits</param>
 		/// <param name="fasterPayment">FasterPayment</param>
 		/// <param name="fees">Fees</param>
-		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees) {
+		static public void PopulateList(DateTime date, decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		{
 			decimal currenBalance = openingBalance + credits;
 
 			if (credits > 0)
 				AddRowToList(currenBalance, date, fees, credits, true);
 
-			foreach (decimal payment in fasterPayment) {
+			foreach (decimal payment in fasterPayment)
+			{
 				currenBalance = currenBalance - (payment + fees);
 				AddRowToList(currenBalance, date, fees, payment);
 			} // foreach
@@ -38,25 +43,46 @@ namespace PacnetBalance {
 			VerifyCalculatedValues(openingBalance, closingBalance, credits, debits, fasterPayment, fees);
 		} // PopulateList
 
-		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees) {
+		private static void VerifyCalculatedValues(decimal openingBalance, decimal closingBalance, decimal credits, decimal debits, List<decimal> fasterPayment, decimal fees)
+		{
 			decimal sumOfFasterPayment = fasterPayment.Sum();
 			decimal calculatedBalance = openingBalance + credits - sumOfFasterPayment - fees * fasterPayment.Count;
-
+			var sb = new System.Text.StringBuilder();
 			if (calculatedBalance == closingBalance)
+			{
 				Logger.Info("Closing balance is equal to calculated balance and is:{0}", closingBalance);
+			}
 			else
-				Logger.Error("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}", closingBalance, calculatedBalance);
+			{
+				Logger.Error("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
+							 closingBalance, calculatedBalance);
+				sb.AppendLine(string.Format("Closing balance is not equal to calculated balance. ClosingBalance:{0} CalculatedClosingBalance:{1}",
+							 closingBalance, calculatedBalance));
+			}
 
 			decimal calculatedDebits = sumOfFasterPayment + fees * fasterPayment.Count;
 
 			if (calculatedDebits == debits)
+			{
 				Logger.Info("Debits is equal to calculated debits and is:{0}", debits);
+			}
 			else
+			{
 				Logger.Error("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits, calculatedDebits);
+				sb.AppendLine(string.Format("Debits is not equal to calculated debits. Debits:{0} CalculatedDebits:{1}", debits,
+										 calculatedDebits));
+			}
+
+			if (sb.Length > 0)
+			{
+				throw new Exception(sb.ToString());
+			}
 		} // VerifyCalculatedValues
 
-		private static void AddRowToList(decimal currenBalance, DateTime date, decimal fees, decimal amount, bool isCredit = false) {
-			pacNetBalanceList.Add(new PacNetBalanceRow {
+		private static void AddRowToList(decimal currenBalance, DateTime date, decimal fees, decimal amount, bool isCredit = false)
+		{
+			pacNetBalanceList.Add(new PacNetBalanceRow
+			{
 				CurrentBalance = currenBalance,
 				Date = date,
 				Fees = fees,
@@ -68,11 +94,14 @@ namespace PacnetBalance {
 		/// <summary>
 		/// Save the pacNetBalanceList to the DB
 		/// </summary>
-		public static void SavePacNetBalanceToDb() {
-			try {
+		public static void SavePacNetBalanceToDb()
+		{
+			try
+			{
 				var oDB = new SqlConnection();
 
-				foreach (PacNetBalanceRow row in pacNetBalanceList) {
+				foreach (PacNetBalanceRow row in pacNetBalanceList)
+				{
 					oDB.ExecuteNonQuery(
 						Consts.InsertPacNetBalanceSpName,
 						new QueryParameter(Consts.InsertPacNetBalanceSpParam1, row.Date.ToString(Consts.InsertPacNetBalanceSpDateFormat)),
@@ -84,8 +113,10 @@ namespace PacnetBalance {
 				}
 				Logger.Info("All rows updated");
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Logger.Error("Error inserting row. Error was:{0}", e);
+				throw new Exception(string.Format("Pacnet Error inserting row. Error was:{0}", e));
 			} // try
 		} // SavePacNetBalanceToDb
 	} // class PacNetBalance

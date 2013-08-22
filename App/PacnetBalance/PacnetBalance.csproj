@@ -48,6 +48,9 @@
     <Reference Include="MailBee.NET">
       <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\Reconciliation\bin\Debug\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,6 +64,7 @@
     <Compile Include="Consts.cs" />
     <Compile Include="PacNetBalance.cs" />
     <Compile Include="PacNetBalanceRow.cs" />
+    <Compile Include="PacNetTestFixture.cs" />
     <Compile Include="ParsePacNetText.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +84,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzReporting\Mailer\Mailer.csproj">
+      <Project>{68180204-5112-43af-9d83-e5cdd39f93a0}</Project>
+      <Name>Mailer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
