@@ -619,28 +619,11 @@ namespace EzBob.TeraPeakServiceLib
 
 		}
 
-		[Test]
-		public void TestSerializeEmptyData()
-		{
-			var dataEmpty = new GetSellerResearchResults
-			                	{
-			                		CallsRemaining = 100,
-			                		SearchResults = new SearchQueryResult
-			                		                	{
-			                		                		Statistics = new QueryResultStatistic
-			                		                		             	{
-			                		                		             	}
-			                		                	}
-			                	};
-			var xmlRezEmpty = SerializeDataHelper.SerializeToString( dataEmpty );
-
-		}
-
-		[Test]
+        [Test]
 		public void TestParceEmptyDataString()
 		{
 			var resultStringEmpty =
-				@"<?xml version=""1.0"" encoding=""UTF-8""?>
+                @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <GetSellerResearchResults>
 	<Timestamp>2012-04-13 04:38:20</Timestamp>
 	<ProcessingTime>0.087</ProcessingTime>
@@ -656,7 +639,6 @@ namespace EzBob.TeraPeakServiceLib
 	</ModifiedQuery>
 	<SearchResults>
 		<Statistics>
-			<Revenue/>
 			<Listings/>
 			<Successful/>
 			<Bids/>

@@ -53,6 +53,8 @@
     <Compile Include="Requests\ResearchResult\TeraPeakRequesterCredentials.cs" />
     <Compile Include="Requests\SellerResearch\Category.cs" />
     <Compile Include="Requests\SellerResearch\DateTimeCorrectionHelper.cs" />
+    <Compile Include="Requests\SellerResearch\NullableDouble.cs" />
+    <Compile Include="Requests\SellerResearch\NullableInt.cs" />
     <Compile Include="Requests\SellerResearch\QueryResultStatistic.cs" />
     <Compile Include="Requests\SellerResearch\ResultSellerInfo.cs" />
     <Compile Include="Requests\SellerResearch\SearchQueryDates.cs" />

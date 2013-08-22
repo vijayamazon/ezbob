@@ -89,24 +89,8 @@ namespace EzBob.CommonLib
 
 		public static T DeserializeType<T>( Stream stream )
 		{
-			var serializer = SerializerCache.GetSerializer( typeof( T ) );
-
-		    var reader = new StreamReader(stream);
-		    var xml = reader.ReadToEnd();
-
-            string cleanXml = Regex.Replace(xml, @"<[a-zA-Z].[^(><.)]+/>", new MatchEvaluator(RemoveText));
-            var memoryStream = new MemoryStream((new UTF8Encoding()).GetBytes(cleanXml));
-            var xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-
-            return (T)serializer.Deserialize(memoryStream);
-			/*using ( var strmReader = new StreamReader( stream ) )
-			{
-				
-				using ( var xmlReader = XmlReader.Create( strmReader ) )
-				{
-					return (T)serializer.Deserialize( xmlReader );
-				}
-			}*/
+            var serializer = SerializerCache.GetSerializer(typeof(T));
+            return (T)serializer.Deserialize(stream);
 		}
 
         static string RemoveText(Match m) { return ""; }
