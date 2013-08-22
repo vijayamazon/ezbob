@@ -11,9 +11,11 @@
 	using Web.Code;
 	using NHibernate;
 	using StructureMap;
+	using log4net;
 
-    public class StrategyHelper
-    {
+	public class StrategyHelper
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(StrategyHelper));
         private readonly CustomerRepository _customers;
         private readonly DecisionHistoryRepository _decisionHistory;
         private readonly ISession _session;
@@ -78,7 +80,30 @@
 			double month3 = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
 			double month = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month);
 
-			return Math.Min(year, Math.Min(4 * month3, 12 * month));
+			var relevantValueForMonth = new decimal(month * 12);
+			var relevantValueFor3Months = new decimal(month3 * 4);
+			var relevantValueForYear = new decimal(year);
+			string periodUsed;
+			decimal min;
+			if (relevantValueForYear <= relevantValueFor3Months && relevantValueForYear <= relevantValueForMonth)
+			{
+				periodUsed = "1 Year";
+				min = relevantValueForYear;
+			}
+			else if (relevantValueFor3Months <= relevantValueForYear && relevantValueFor3Months <= relevantValueForMonth)
+			{
+				periodUsed = "3 Months";
+				min = relevantValueFor3Months;
+			}
+			else
+			{
+				periodUsed = "1 Month";
+				min = relevantValueForMonth;
+			}
+
+			log.InfoFormat("Calculated total sum of orders for loan offer. Year:{0} 3M:{1}({2} * 4) 1M:{3}({4} * 12) Calculated min:{5} Chosen period:{6}", relevantValueForMonth, relevantValueFor3Months, month3, relevantValueForMonth, month, min, periodUsed);
+
+			return (double)min;
 		}
 
         public void AddRejectIntoDecisionHistory(int customerId, string comment)
