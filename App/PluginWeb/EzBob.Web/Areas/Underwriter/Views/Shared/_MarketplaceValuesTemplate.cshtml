@@ -1,299 +1,300 @@
 ﻿﻿@model dynamic
 <script id="marketplace-values-template" type="text/template">
-   @MarketplaceDetails()
-</script>
+	<div class="marketplaceDetail">
+		@MarketPlaces()
+		<%
+		var m = marketplaces[0] || accounts[0];
+		var ai = m.AnalysisDataInfo;
 
-@helper MarketplaceDetails()
-{
-   <div class="marketplaceDetail">
-        @MarketPlaces()
-        <%
-            var m = marketplaces[0] || accounts[0];
-            var ai = m.AnalysisDataInfo;
-            if(!ai) { ai = new Object();}
-            var y = m.Yodlee;
-            var marketplaceType = m.Name;
-            var 
-                sumReview1M = ai.NegativeFeedbackrate1M * 1.0 + ai.PositiveFeedbackRate1M * 1.0 + ai.NeutralFeedbackrate1M * 1.0,
-                sumReview3M = ai.NegativeFeedbackrate3M * 1.0 + ai.PositiveFeedbackRate3M * 1.0 + ai.NeutralFeedbackrate3M * 1.0,
-                sumReview6M = ai.NegativeFeedbackrate6M * 1.0 + ai.PositiveFeedbackRate6M * 1.0 + ai.NeutralFeedbackrate6M * 1.0,
-                sumReview12M = ai.NegativeFeedbackrate12M * 1.0 + ai.PositiveFeedbackRate12M * 1.0 + ai.NeutralFeedbackrate12M * 1.0,
-                sumReviewLifetime = ai.NegativeFeedbackrateLifetime * 1.0 + ai.PositiveFeedbackRateLifetime * 1.0 + ai.NeutralFeedbackrateLifetime * 1.0,
-                
-                positivePercent1M = (sumReview1M != 0 ? ai.PositiveFeedbackRate1M / sumReview1M * 100 : 0).toFixed(0), 
-                negativePercent1M = (sumReview1M != 0 ? ai.NegativeFeedbackrate1M / sumReview1M * 100 : 0).toFixed(0), 
-                neutralPercent1M  = (sumReview1M != 0 ? ai.NeutralFeedbackrate1M  / sumReview1M * 100 : 0).toFixed(0),  
+		if (!ai)
+			ai = new Object();
 
-                positivePercent3M = (sumReview3M != 0 ? ai.PositiveFeedbackRate3M / sumReview3M * 100 : 0).toFixed(0), 
-                negativePercent3M = (sumReview3M != 0 ? ai.NegativeFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
-                neutralPercent3M  = (sumReview3M != 0 ? ai.NeutralFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
-                
-                positivePercent6M = (sumReview6M != 0 ? ai.PositiveFeedbackRate6M / sumReview6M * 100 : 0).toFixed(0), 
-                negativePercent6M = (sumReview6M != 0 ? ai.NegativeFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
-                neutralPercent6M  = (sumReview6M != 0 ? ai.NeutralFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
+		var y = m.Yodlee;
+		var marketplaceType = m.Name;
 
-                positivePercent12M = (sumReview12M != 0 ? ai.PositiveFeedbackRate12M / sumReview12M * 100 : 0).toFixed(0),  
-                negativePercent12M = (sumReview12M != 0 ? ai.NegativeFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
-                neutralPercent12M  = (sumReview12M != 0 ? ai.NeutralFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
+		var
+			sumReview1M = ai.NegativeFeedbackrate1M * 1.0 + ai.PositiveFeedbackRate1M * 1.0 + ai.NeutralFeedbackrate1M * 1.0,
+			sumReview3M = ai.NegativeFeedbackrate3M * 1.0 + ai.PositiveFeedbackRate3M * 1.0 + ai.NeutralFeedbackrate3M * 1.0,
+			sumReview6M = ai.NegativeFeedbackrate6M * 1.0 + ai.PositiveFeedbackRate6M * 1.0 + ai.NeutralFeedbackrate6M * 1.0,
+			sumReview12M = ai.NegativeFeedbackrate12M * 1.0 + ai.PositiveFeedbackRate12M * 1.0 + ai.NeutralFeedbackrate12M * 1.0,
+			sumReviewLifetime = ai.NegativeFeedbackrateLifetime * 1.0 + ai.PositiveFeedbackRateLifetime * 1.0 + ai.NeutralFeedbackrateLifetime * 1.0,
+			
+			positivePercent1M = (sumReview1M != 0 ? ai.PositiveFeedbackRate1M / sumReview1M * 100 : 0).toFixed(0), 
+			negativePercent1M = (sumReview1M != 0 ? ai.NegativeFeedbackrate1M / sumReview1M * 100 : 0).toFixed(0), 
+			neutralPercent1M  = (sumReview1M != 0 ? ai.NeutralFeedbackrate1M  / sumReview1M * 100 : 0).toFixed(0),  
 
-                positivePercentLifetime = (sumReviewLifetime != 0 ? ai.PositiveFeedbackRateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
-                negativePercentLifetime = (sumReviewLifetime != 0 ? ai.NegativeFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
-                neutralPercentLifetime  = (sumReviewLifetime != 0 ? ai.NeutralFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0)
-            ;
-            
-            positivePercent1M = isNaN(positivePercent1M) ? " - " : positivePercent1M;
-            negativePercent1M = isNaN(negativePercent1M) ? " - " : negativePercent1M;
-            neutralPercent1M = isNaN(neutralPercent1M) ? " - " : neutralPercent1M;
+			positivePercent3M = (sumReview3M != 0 ? ai.PositiveFeedbackRate3M / sumReview3M * 100 : 0).toFixed(0), 
+			negativePercent3M = (sumReview3M != 0 ? ai.NegativeFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
+			neutralPercent3M  = (sumReview3M != 0 ? ai.NeutralFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
+			
+			positivePercent6M = (sumReview6M != 0 ? ai.PositiveFeedbackRate6M / sumReview6M * 100 : 0).toFixed(0), 
+			negativePercent6M = (sumReview6M != 0 ? ai.NegativeFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
+			neutralPercent6M  = (sumReview6M != 0 ? ai.NeutralFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
 
-            positivePercent3M = isNaN(positivePercent3M) ? " - " : positivePercent3M;
-            negativePercent3M = isNaN(negativePercent3M) ? " - " : negativePercent3M;
-            neutralPercent3M = isNaN(neutralPercent3M) ? " - " : neutralPercent3M;
+			positivePercent12M = (sumReview12M != 0 ? ai.PositiveFeedbackRate12M / sumReview12M * 100 : 0).toFixed(0),  
+			negativePercent12M = (sumReview12M != 0 ? ai.NegativeFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
+			neutralPercent12M  = (sumReview12M != 0 ? ai.NeutralFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
 
-            positivePercent6M = isNaN(positivePercent6M) ? " - " : positivePercent6M;
-            negativePercent6M = isNaN(negativePercent6M) ? " - " : negativePercent6M;
-            neutralPercent6M = isNaN(neutralPercent6M) ? " - " : neutralPercent6M;
+			positivePercentLifetime = (sumReviewLifetime != 0 ? ai.PositiveFeedbackRateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
+			negativePercentLifetime = (sumReviewLifetime != 0 ? ai.NegativeFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
+			neutralPercentLifetime  = (sumReviewLifetime != 0 ? ai.NeutralFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0)
+		;
 
-            positivePercent12M = isNaN(positivePercent12M) ? " - " : positivePercent12M;
-            negativePercent12M = isNaN(negativePercent12M) ? " - " : negativePercent12M;
-            neutralPercent12M = isNaN(neutralPercent12M) ? " - " : neutralPercent12M;
-        
-            positivePercentLifetime = isNaN(positivePercentLifetime) ? " - " : positivePercentLifetime;
-            negativePercentLifetime = isNaN(negativePercentLifetime) ? " - " : negativePercentLifetime;
-            neutralPercentLifetime = isNaN(neutralPercentLifetime) ? " - " : neutralPercentLifetime;
+		positivePercent1M = isNaN(positivePercent1M) ? " - " : positivePercent1M;
+		negativePercent1M = isNaN(negativePercent1M) ? " - " : negativePercent1M;
+		neutralPercent1M = isNaN(neutralPercent1M) ? " - " : neutralPercent1M;
 
-            sumReview1M = isNaN(sumReview1M) ? "-" : sumReview1M;
-            sumReview3M = isNaN(sumReview3M) ? "-" : sumReview3M;
-            sumReview6M = isNaN(sumReview6M) ? "-" : sumReview6M;
-            sumReview12M = isNaN(sumReview12M) ? "-" : sumReview12M;
-            sumReviewLifetime = isNaN(sumReview12M) ? "-" : sumReviewLifetime;
-            cancellationRateFactor = 100;
-            cancellationRateRound = 2;
-            cancellationValueFactor = 100;
-            cancellationValueRound = 1;
-        %>
-        
-        <fieldset>
-            <legend>Details</legend>
-            @* *** EBay *** *@
-            <%if(marketplaceType == "eBay"){%>  
-                @{ Html.RenderPartial("MarketPlaceDetails/Ebay");}
-            <%}%>
-             @* *** Amazon   *** *@
-            <%if(marketplaceType == "Amazon"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/Amazon");}
-            <%}%>
-             @* *** EKM   *** *@
-            <%if(marketplaceType == "EKM"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/EKM");}
-            <%}%>
-             @* *** FreeAgent *** *@
-            <%if(marketplaceType == "FreeAgent"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/FreeAgent");}
-            <%}%>
-             @* *** Sage *** *@
-            <%if(marketplaceType == "Sage"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/Sage");}
-            <%}%>
-            @* *** PayPoint   *** *@
-            <%if(marketplaceType == "PayPoint"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/PayPoint");}
-            <%}%>
-            @* *** Yodlee   *** *@
-            <%if(marketplaceType == "Yodlee"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/Yodlee");}
-            <%}%>
-            @* *** PayPal   *** *@
-            <%if(marketplaceType == "Pay Pal"){%>
-                @{ Html.RenderPartial("MarketPlaceDetails/PayPal");}
-            <%}%>
+		positivePercent3M = isNaN(positivePercent3M) ? " - " : positivePercent3M;
+		negativePercent3M = isNaN(negativePercent3M) ? " - " : negativePercent3M;
+		neutralPercent3M = isNaN(neutralPercent3M) ? " - " : neutralPercent3M;
 
-           @* *** Channel Grabber *** *@
-           <% (function(aryCGAccounts) {
-                  if (!aryCGAccounts[marketplaceType])
-                      return;
+		positivePercent6M = isNaN(positivePercent6M) ? " - " : positivePercent6M;
+		negativePercent6M = isNaN(negativePercent6M) ? " - " : negativePercent6M;
+		neutralPercent6M = isNaN(neutralPercent6M) ? " - " : neutralPercent6M;
 
-                  var bHasExpenses = aryCGAccounts[marketplaceType].HasExpenses;
-                  %>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
-           })($.parseJSON($('div#cg-account-list').text())); %>
-        </fieldset>
-    </div>  
-}
+		positivePercent12M = isNaN(positivePercent12M) ? " - " : positivePercent12M;
+		negativePercent12M = isNaN(negativePercent12M) ? " - " : negativePercent12M;
+		neutralPercent12M = isNaN(neutralPercent12M) ? " - " : neutralPercent12M;
+	
+		positivePercentLifetime = isNaN(positivePercentLifetime) ? " - " : positivePercentLifetime;
+		negativePercentLifetime = isNaN(negativePercentLifetime) ? " - " : negativePercentLifetime;
+		neutralPercentLifetime = isNaN(neutralPercentLifetime) ? " - " : neutralPercentLifetime;
 
-@helper MarketPlaces()
-{
-    <div style="overflow: auto">
-        <table class="table table-bordered table-striped marketplace-table blue-header centered <%if (hideMarketplaces) print('hide');%>">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Shop Name</th>
-                    <th>Seniority</th>
-                    <th>Month Sales</th>
-                    <th>Annual Sales</th>
-                    <th>Rating</th>
-                    <th>Inventory</th>
-                    <th>Disabled</th>
-                    <th>Updated</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if(summary){%>
-                <tr class="bold" style="font-size: 18px;">
-                    <td>Total</td>
-                    <td></td>
-                    <td></td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.monthSales) %> </td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( summary.anualSales) %> </td>
-                    <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <%}%>
-                <% (function(aryCGAccounts) { _.each(marketplaces, function(m,i){
-                var sShopName = m.Name.replace(' ', '');
+		sumReview1M = isNaN(sumReview1M) ? "-" : sumReview1M;
+		sumReview3M = isNaN(sumReview3M) ? "-" : sumReview3M;
+		sumReview6M = isNaN(sumReview6M) ? "-" : sumReview6M;
+		sumReview12M = isNaN(sumReview12M) ? "-" : sumReview12M;
+		sumReviewLifetime = isNaN(sumReview12M) ? "-" : sumReviewLifetime;
 
-				if (aryCGAccounts[sShopName])
-					if (aryCGAccounts[sShopName].HasExpeneses || (aryCGAccounts[sShopName].Behaviour != 0))
+		cancellationRateFactor = 100;
+		cancellationRateRound = 2;
+		cancellationValueFactor = 100;
+		cancellationValueRound = 1;
+		%>
+
+		<fieldset>
+			<legend>Details</legend>
+
+			<%
+			switch (marketplaceType) {
+			case "eBay":
+				%>@{ Html.RenderPartial("MarketPlaceDetails/Ebay"); }<%
+				break;
+
+			case "Amazon":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/Amazon"); }<%
+				break;
+
+			case "EKM":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/EKM"); }<%
+				break;
+
+			case "FreeAgent":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/FreeAgent"); }<%
+				break;
+
+			case "Sage":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/Sage"); }<%
+				break;
+
+			case "PayPoint":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/PayPoint"); }<%
+				break;
+
+			case "Yodlee":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/Yodlee"); }<%
+				break;
+
+			case "Pay Pal":
+				%> @{ Html.RenderPartial("MarketPlaceDetails/PayPal"); }<%
+				break;
+
+			default:
+				(function(aryCGAccounts) {
+					if (!aryCGAccounts[marketplaceType])
 						return;
 
-                var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
-                var showAsNew = !m.IsNew ? 'hidden-field' : '';
-                %>
-                <tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-                    <td>
-                        <div class="source-labels new-ribbon <%-showAsNew%>"></div>
-                        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
-                    </td>
-                    <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-                    <td class="centered"><%- m.age %></td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %></td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
-                    <td class="centered"><%- m.RaitingPercent%> %</td>
-                    <td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
-                    <td><% if(m.Disabled) print ("Disabled") %></td>
-                    <td><%- m.UpdatingStatus %>
-                        <% if(m.UpdateError){%>
-                        <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
-                        <br />
-                        <%}%>
-                    </td>
-                    <td class="centered">
-                        <div style="width: 100px;">
-                            <% if(!m.Disabled){ %>
-                            <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-                            <a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>" ><i class="icon-ban-circle"></i>Disable</a>
-                                <% if(m.UpdateError && m.Name == 'eBay'){ %>
-                                    <br/>
-                                    <button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
-                                    <br />
-                                <%}%>
-                            <%}%>
-                            <%if(m.Disabled){%>
-                                <a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>" ><i class="icon-play"></i>Enable</a>
-                            <%}%>
-                            <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                <% }); })($.parseJSON($('div#cg-account-list').text())); %>
-            </tbody>
-        </table>
-    </div>
-    <div>
-          <table class="table table-bordered table-striped marketplace-table paypalAccounts blue-header centered <%if (hideAccounts) print('hide');%>">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Seniority</th>
-                    <th>Number of Transactions</th>
-                    <th>Month In Payments</th>
-                    <th>Total In Payments</th>
-                    <th>Total Out Payments</th>
-                    <th>Updated</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
-                var sShopName = m.Name.replace(' ', '');
+					var bHasExpenses = aryCGAccounts[marketplaceType].HasExpenses;
+					%>@{ Html.RenderPartial("MarketPlaceDetails/CG"); }<%
+				})($.parseJSON($('div#cg-account-list').text()));
+				break;
+			} // switch
+			%>
+		</fieldset>
+	</div>
+</script>
 
-                if (aryCGAccounts[sShopName])
+@helper MarketPlaces() {
+	<div style="overflow: auto">
+		<table class="table table-bordered table-striped marketplace-table blue-header centered <%if (hideMarketplaces) print('hide');%>">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Shop Name</th>
+					<th>Seniority</th>
+					<th>Month Sales</th>
+					<th>Annual Sales</th>
+					<th>Rating</th>
+					<th>Inventory</th>
+					<th>Disabled</th>
+					<th>Updated</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% if (summary) { %>
+					<tr class="bold" style="font-size: 18px;">
+						<td>Total</td>
+						<td></td>
+						<td></td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.monthSales) %> </td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.anualSales) %> </td>
+						<td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				<% }
+
+				(function(aryCGAccounts) { _.each(marketplaces, function(m,i){
+					var sShopName = m.Name.replace(' ', '');
+
+					if (aryCGAccounts[sShopName])
+						if (aryCGAccounts[sShopName].HasExpeneses || (aryCGAccounts[sShopName].Behaviour != 0))
+							return;
+
+					var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+					var showAsNew = !m.IsNew ? 'hidden-field' : '';
+					%>
+					<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
+						<td>
+							<div class="source-labels new-ribbon <%-showAsNew%>"></div>
+							<div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
+						</td>
+						<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+						<td class="centered"><%- m.age %></td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %></td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
+						<td class="centered"><%- m.RaitingPercent%> %</td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
+						<td><% if(m.Disabled) print ("Disabled") %></td>
+						<td><%- m.UpdatingStatus %>
+							<% if (m.UpdateError) { %>
+								<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+								<br />
+							<% } %>
+						</td>
+						<td class="centered">
+							<div style="width: 100px;">
+								<% if (m.Disabled) { %>
+									<a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>"><i class="icon-play"></i>Enable</a>
+								<% }
+								else { %>
+									<a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+									<a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a>
+									<% if (m.UpdateError && m.Name == 'eBay') { %>
+										<br />
+										<button class="btn btn-mini renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
+										<br />
+									<% } %>
+								<% } %>
+								<a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+							</div>
+						</td>
+					</tr>
+				<% }); })($.parseJSON($('div#cg-account-list').text())); %>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<table class="table table-bordered table-striped marketplace-table paypalAccounts blue-header centered <%if (hideAccounts) print('hide');%>">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Name</th>
+					<th>Seniority</th>
+					<th>Number of Transactions</th>
+					<th>Month In Payments</th>
+					<th>Total In Payments</th>
+					<th>Total Out Payments</th>
+					<th>Updated</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
+				var sShopName = m.Name.replace(' ', '');
+
+				var nBehaviour = 0;
+
+				if (aryCGAccounts[sShopName]) {
 					if (!aryCGAccounts[sShopName].HasExpenses && (aryCGAccounts[sShopName].Behaviour == 0))
 						return;
 
-				var beh = aryCGAccounts[sShopName].Behaviour;
+					nBehaviour = aryCGAccounts[sShopName].Behaviour;
+				} // if
 
-				function ll(x, prop, beh) {
-					switch(prop) {
+				function ll(oModel, sPropertyName, nBehaviour) {
+					switch(sPropertyName) {
 					case 'TransactionsNumber':
-						return (beh == 1) ? '-' : x.PaymentAccountBasic[prop];
+						return (nBehaviour == 1) ? '-' : oModel.PaymentAccountBasic[sPropertyName];
 						break;
 
 					case 'MonthInPayments':
 					case 'TotalNetInPayments':
-						return (beh == 1) ? '-' : EzBob.formatPounds(x.PaymentAccountBasic[prop]);
+						return (nBehaviour == 1) ? '-' : EzBob.formatPounds(oModel.PaymentAccountBasic[sPropertyName]);
 						break;
 
 					case 'TotalNetOutPayments':
-						return (beh == 1) ? '-' : GBPValues(x.PaymentAccountBasic[prop], true);
+						return (nBehaviour == 1) ? '-' : GBPValues(oModel.PaymentAccountBasic[sPropertyName], true);
 						break;
 					} // switch
 				}; // function ll
 
-                var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
-                var showAsNew = !m.IsNew ? 'hidden-field' : '';
-                %>
-                <tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>" >
-                    <td>
-                        <div class="source-labels new-ribbon  <%-showAsNew%>"></div>
-                        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
-                    </td>
-                    <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-                    <td><%- m.age %></td>
-                    <td><%- ll(m, 'TransactionsNumber', beh) %></td>
-                    <td><%- ll(m, 'MonthInPayments', beh) %></td>
-                    <td><%- ll(m, 'TotalNetInPayments', beh) %></td>
-                    <td><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', beh) %></td>
-                   
-                    <td><%- m.UpdatingStatus %>
-                        <% if(m.UpdateError){%>
-                        <button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
-                        <br />
-                        <%}%>
-                    </td>
-                    <td>
+				var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+				var showAsNew = !m.IsNew ? 'hidden-field' : '';
+				%>
+				<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
+					<td>
+						<div class="source-labels new-ribbon  <%-showAsNew%>"></div>
+						<div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
+					</td>
+					<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
+					<td><%- m.age %></td>
+					<td><%- ll(m, 'TransactionsNumber', nBehaviour) %></td>
+					<td><%- ll(m, 'MonthInPayments', nBehaviour) %></td>
+					<td><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
+					<td><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
+					<td><%- m.UpdatingStatus %>
+						<% if(m.UpdateError){%>
+							<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+							<br />
+						<%}%>
+					</td>
+					<td>
+						<% if (m.Disabled) { %>
+							<a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>"><i class="icon-play"></i>Enable</a>
+						<% }
+						else {
+							if (m.Name.toLowerCase() === 'paypal') {
+								%><a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+								<a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="icon-tag"></i></a><%
+							} else if (m.Name.toLowerCase() !== 'yodlee') {
+								%><a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+								<a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a><%
+							}
+							%><a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a><%
+						} %>
+					</td>
+				</tr>
+				<%}); })($.parseJSON($('div#cg-account-list').text()));%>
+			</tbody>
+		</table>
+	</div>
 
-                        <% if(!m.Disabled){ %>
-
-                            <% if(m.Name.toLowerCase() === 'paypal') { %>
-                                <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
-                                <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>" ><i class="icon-tag"></i></a>
-                            <%} else if(m.Name.toLowerCase() !== 'yodlee') {%>
-                                <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplaceType="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
-                            <%}%>
-                            <a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>" ><i class="icon-ban-circle"></i>Disable</a>
-                        <%}%>
-                        
-                        
-                        <%if(m.Disabled){%>
-                            <a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>" ><i class="icon-play"></i>Enable</a>
-                        <%}%>
-
-                    </td>
-                </tr>
-                <%}); })($.parseJSON($('div#cg-account-list').text()));%>
-   
-            </tbody>
-        </table>
-    </div>
-
-    <div id="marketplace-details"></div>
+	<div id="marketplace-details"></div>
 }
 <script id="marketplace-template" type="text/template">
-    @MarketPlaces()
+	@MarketPlaces()
 </script>
