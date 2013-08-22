@@ -23,16 +23,15 @@ namespace ExperianLib.Ebusiness
             var node = root.XPathSelectElement("./REQUEST/DL76/RISKSCORE");
             if (node == null)
             {
-                Error += "Can`t read RISKSCORE section from response!";
+                Error += "There is no RISKSCORE in the experian response! ";
             }
             else BureauScore = Convert.ToDecimal(node.Value);
 
             node = root.XPathSelectElement("./REQUEST/DL95/NUMACTIVEACCS");
-            if (node == null)
+            if (node != null)
             {
-                Error += "Can`t read NUMACTIVEACCS section from response!";
+                ExistingBusinessLoans = Convert.ToDecimal(node.Value);
             }
-            else ExistingBusinessLoans = Convert.ToDecimal(node.Value);
         }
     }
 }
