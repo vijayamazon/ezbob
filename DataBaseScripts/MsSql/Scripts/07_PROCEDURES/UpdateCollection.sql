@@ -19,7 +19,8 @@ CREATE PROCEDURE [dbo].[UpdateCollection]
  @Late90Plus numeric(18),
  @Late90PlusNum numeric(18),
  @MaxDelinquencyDays int,
- @InstallmentDelinquencyDays int)
+ @InstallmentDelinquencyDays int,
+ @InstallmentId int)
  
 
 AS
@@ -42,7 +43,7 @@ UPDATE [dbo].[Loan]
 
 UPDATE [dbo].[LoanSchedule]
    SET  Delinquency = @MaxDelinquencyDays
- WHERE Id = @LoanId
+ WHERE Id = @InstallmentId
 
  SET NOCOUNT ON;
 SELECT @@IDENTITY;
