@@ -66,11 +66,16 @@
   <ItemGroup>
     <Compile Include="exceptions.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="IHarvester.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Harvester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
       <Project>{8AD07DAA-3F09-4279-A390-17ACDE79B44F}</Project>
       <Name>ChannelGrabberConfig</Name>

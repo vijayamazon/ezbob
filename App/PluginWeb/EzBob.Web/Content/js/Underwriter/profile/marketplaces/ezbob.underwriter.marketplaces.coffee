@@ -73,10 +73,18 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     showMPError: -> false
 
     serializeData: ->
+        aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
+
+        isMarketplace = (x) ->
+            unless (aryCGAccounts[x.get('Name')])
+                return not x.get 'IsPaymentAccount'
+            cg = aryCGAccounts[x.get('Name')]
+            (cg.Behaviour == 0) and not cg.HasExpenses
+
         data = 
             customerId: @model.customerId
-            marketplaces: _.sortBy _.pluck(@model.where(IsPaymentAccount: false), "attributes"), "UWPriority"
-            accounts: _.sortBy _.pluck(@model.where(IsPaymentAccount: true), "attributes"), "UWPriority"
+            marketplaces: _.sortBy _.pluck(_.filter(@model.models, (x) -> x and isMarketplace(x) ), "attributes"), "UWPriority"
+            accounts: _.sortBy _.pluck(_.filter(@model.models, (x) -> x and !isMarketplace(x) ), "attributes"), "UWPriority"
             hideAccounts: false
             hideMarketplaces: false
             summary:
@@ -86,7 +94,6 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 positive : 0
                 negative : 0
                 neutral : 0
-
 
         for m in data.marketplaces
             data.summary.monthSales += m.monthSales if m.Disabled == false

@@ -76,6 +76,9 @@
     <Compile Include="AnalysisDataParameterInfo.cs" />
     <Compile Include="AnalysisDataParameterInfoBase.cs" />
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
+    <Compile Include="Common\Coin.cs" />
+    <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
     <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethod.cs" />
@@ -88,6 +91,8 @@
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceTypeMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\Business.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessRepository.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameRepository.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnRecordMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnRecord.cs" />
@@ -97,7 +102,7 @@
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="PacNetManualBalance.cs" />
-    <Compile Include="DatabaseWrapper\Order\InternalOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\InternalDataList.cs" />
     <Compile Include="DatabaseWrapper\Order\SagePaymentStatusesList.cs" />
     <Compile Include="DatabaseWrapper\Order\SageExpendituresList.cs" />

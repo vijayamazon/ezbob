@@ -156,7 +156,7 @@
                 var sShopName = m.Name.replace(' ', '');
 
 				if (aryCGAccounts[sShopName])
-					if (aryCGAccounts[sShopName].HasExpenese)
+					if (aryCGAccounts[sShopName].HasExpeneses || (aryCGAccounts[sShopName].Behaviour != 0))
 						return;
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
@@ -220,10 +220,29 @@
             <tbody>
                 <% (function(aryCGAccounts) { _.each(accounts, function(m, i) {
                 var sShopName = m.Name.replace(' ', '');
-                
+
                 if (aryCGAccounts[sShopName])
-					if (!aryCGAccounts[sShopName].HasExpenses)
+					if (!aryCGAccounts[sShopName].HasExpenses && (aryCGAccounts[sShopName].Behaviour == 0))
 						return;
+
+				var beh = aryCGAccounts[sShopName].Behaviour;
+
+				function ll(x, prop, beh) {
+					switch(prop) {
+					case 'TransactionsNumber':
+						return (beh == 1) ? '-' : x.PaymentAccountBasic[prop];
+						break;
+
+					case 'MonthInPayments':
+					case 'TotalNetInPayments':
+						return (beh == 1) ? '-' : EzBob.formatPounds(x.PaymentAccountBasic[prop]);
+						break;
+
+					case 'TotalNetOutPayments':
+						return (beh == 1) ? '-' : GBPValues(x.PaymentAccountBasic[prop], true);
+						break;
+					} // switch
+				}; // function ll
 
                 var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
                 var showAsNew = !m.IsNew ? 'hidden-field' : '';
@@ -235,10 +254,10 @@
                     </td>
                     <td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td><%- m.age %></td>
-                    <td><%- m.PaymentAccountBasic.TransactionsNumber %></td>
-                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.MonthInPayments) %></td>
-                    <td><%- EzBob.formatPounds(m.PaymentAccountBasic.TotalNetInPayments) %></td>
-                    <td><%- (m.Name.toLowerCase() === 'paypoint') ? "-":GBPValues(m.PaymentAccountBasic.TotalNetOutPayments, true) %></td>
+                    <td><%- ll(m, 'TransactionsNumber', beh) %></td>
+                    <td><%- ll(m, 'MonthInPayments', beh) %></td>
+                    <td><%- ll(m, 'TotalNetInPayments', beh) %></td>
+                    <td><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', beh) %></td>
                    
                     <td><%- m.UpdatingStatus %>
                         <% if(m.UpdateError){%>

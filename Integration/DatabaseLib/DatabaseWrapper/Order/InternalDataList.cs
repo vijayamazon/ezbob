@@ -4,17 +4,17 @@ using EzBob.CommonLib.ReceivedDataListLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
 	public class InternalDataList
-		: ReceivedDataListTimeMarketTimeDependentBase<InternalOrderItem>
+		: ReceivedDataListTimeMarketTimeDependentBase<AInternalOrderItem>
 	{
 		public InternalDataList(
 			DateTime submittedDate,
-			IEnumerable<InternalOrderItem> collection = null
+			IEnumerable<AInternalOrderItem> collection = null
 		) : base(submittedDate, collection)
 		{} // constructor
 
-		public override ReceivedDataListTimeDependentBase<InternalOrderItem> Create(
+		public override ReceivedDataListTimeDependentBase<AInternalOrderItem> Create(
 			DateTime submittedDate,
-			IEnumerable<InternalOrderItem> collection
+			IEnumerable<AInternalOrderItem> collection
 		) {
 			return new InternalDataList(submittedDate, collection);
 		} // Create

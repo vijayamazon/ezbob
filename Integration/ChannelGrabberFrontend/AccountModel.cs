@@ -3,7 +3,6 @@ using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
-using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 
 namespace Integration.ChannelGrabberFrontend {
@@ -61,15 +60,17 @@ namespace Integration.ChannelGrabberFrontend {
 		#region method Fill
 
 		public AccountData Fill() {
-			var oData = new AccountData(Configuration.Instance.GetVendorInfo(accountTypeName));
-			oData.Login = login;
-			oData.Password = password;
-			oData.Name = name;
-			oData.URL = url;
-			oData.LimitDays = limitDays;
-			oData.AuxLogin = auxLogin;
-			oData.AuxPassword = auxPassword;
-			oData.RealmID = realmId;
+			var oData = new AccountData(Configuration.Instance.GetVendorInfo(accountTypeName)) {
+				Login = login,
+				Password = password,
+				Name = name,
+				URL = url,
+				LimitDays = limitDays,
+				AuxLogin = auxLogin,
+				AuxPassword = auxPassword,
+				RealmID = realmId
+			};
+
 			return oData;
 		} // FillIn
 

@@ -7,7 +7,6 @@ using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Configuration;
 using EzBob.Web.Infrastructure;
-using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using Integration.ChannelGrabberFrontend;
 using Scorto.Web;
@@ -94,8 +93,12 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			} // try
 
 			try {
-				var ctr = new Harvester(ad, Log, _context.Customer);
-				ctr.Validate();
+				var ctr = new Connector(ad, Log, _context.Customer);
+
+				if (ctr.Init()) {
+					ctr.Run(true);
+					ctr.Done();
+				} // if
 			}
 			catch (ConnectionFailException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {

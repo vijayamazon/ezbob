@@ -95,6 +95,8 @@
     <Compile Include="Marketplaces\Builders\SageMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\FreeAgentMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EBayMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\ChannelGrabberHmrcData.cs" />
+    <Compile Include="Marketplaces\IChannelGrabberData.cs" />
     <Compile Include="Marketplaces\SageModel.cs" />
     <Compile Include="Marketplaces\FreeAgentModel.cs" />
     <Compile Include="Marketplaces\EBayModel.cs" />

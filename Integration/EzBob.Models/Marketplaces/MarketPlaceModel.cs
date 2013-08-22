@@ -40,6 +40,8 @@
         //Yodlee
         public YodleeModel Yodlee { get; set; }
 
+		public IChannelGrabberData CGData { get; set; }
+
         public bool IsPaymentAccount { get; set; }
 
 		public PaymentAccountsModel PaymentAccountBasic { get; set; }

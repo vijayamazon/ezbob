@@ -9,8 +9,6 @@ namespace Integration.ChannelGrabberConfig {
 
 		#region constructor
 
-		public AccountData() : this(null) {} // constructor
-
 		public AccountData(VendorInfo oVendorInfo) {
 			VendorInfo = oVendorInfo;
 			m_nAccountID = 0;
@@ -149,7 +147,7 @@ namespace Integration.ChannelGrabberConfig {
 
 		#endregion method ToString
 
-		#region properties
+		#region properties - login fields
 
 		public string Name { get; set; }
 		public string URL { get; set; }
@@ -160,9 +158,13 @@ namespace Integration.ChannelGrabberConfig {
 		public string AuxPassword { get; set; }
 		public int RealmID { get; set; }
 
-		#endregion properties
+		#endregion properties - login fields
 
-		public VendorInfo VendorInfo { get; set; }
+		#region property VendorInfo
+
+		public VendorInfo VendorInfo { get; private set; }
+
+		#endregion property VendorInfo
 
 		#region method UniqueID
 

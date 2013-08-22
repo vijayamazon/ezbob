@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ezbob.Logger;
 using HtmlAgilityPack;
+using Integration.ChannelGrabberConfig;
+using log4net;
+using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 
 namespace Ezbob.HmrcHarvester {
 	#region class Harvester
@@ -27,7 +30,7 @@ namespace Ezbob.HmrcHarvester {
 	///
 	/// </example>
 	/// </summary>
-	public class Harvester : SafeLog {
+	public class Harvester : SafeILog, Integration.ChannelGrabberAPI.IHarvester {
 		#region public
 
 		#region constructor
@@ -35,53 +38,21 @@ namespace Ezbob.HmrcHarvester {
 		/// <summary>
 		/// Constructs the Harvester object. The object is not ready to harvest. Call to Init() first.
 		/// </summary>
-		/// <param name="sUserName">User name for hmrc.gov.uk.</param>
-		/// <param name="sPassword">Password for hmrc.gov.uk.</param>
-		/// <param name="bVerboseLogging">Turn verbose logging on and off.</param>
-		/// <param name="oLog">Log destination. If null nothing is logged.</param>
-		public Harvester(string sUserName, string sPassword, bool bVerboseLogging, ASafeLog oLog = null) : base(oLog) {
-			UserName = sUserName;
-			Password = sPassword;
-			VerboseLogging = bVerboseLogging;
+		public Harvester(AccountData oAccountData, ILog log) : base(log) {
+			AccountData = oAccountData;
+			VerboseLogging = false;
 			Hopper = new Hopper();
 			IsLoggedIn = false;
 		} // constructor
 
 		#endregion constructor
 
-		#region property VerboseLogging
-
-		/// <summary>
-		/// Log verbose logging on (true) or off (false).
-		/// </summary>
-		public bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
-		#region property UserName
-
-		/// <summary>
-		/// User name for hmrc.gov.uk
-		/// </summary>
-		public string UserName { get; set; }
-
-		#endregion property UserName
-
-		#region property Password
-
-		/// <summary>
-		/// Password for hmrc.gov.uk
-		/// </summary>
-		public string Password { get; set; }
-
-		#endregion property Password
-
 		#region property Hopper
 
 		/// <summary>
 		/// Output storage.
 		/// </summary>
-		public Hopper Hopper { get; private set; } // Hopper
+		public virtual Hopper Hopper { get; private set; } // Hopper
 
 		#endregion property Hopper
 
@@ -91,7 +62,7 @@ namespace Ezbob.HmrcHarvester {
 		/// Initialises the Harvester.
 		/// </summary>
 		/// <returns>true, if initialisation was successful; false, otherwise.</returns>
-		public bool Init() {
+		public virtual bool Init() {
 			Session = new HttpClient {
 				BaseAddress = new Uri("https://online.hmrc.gov.uk")
 			};
@@ -108,7 +79,7 @@ namespace Ezbob.HmrcHarvester {
 		/// </summary>
 		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
 		/// <returns>true, on success; false, otherwise.</returns>
-		public bool Run(bool bValidateCredentialsOnly) {
+		public virtual bool Run(bool bValidateCredentialsOnly) {
 			try {
 				Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
 
@@ -146,7 +117,7 @@ namespace Ezbob.HmrcHarvester {
 		/// <summary>
 		/// Performs cleanup.
 		/// </summary>
-		public void Done() {
+		public virtual void Done() {
 			Session.Dispose();
 		} // Done
 
@@ -155,6 +126,43 @@ namespace Ezbob.HmrcHarvester {
 		#endregion public
 
 		#region private
+
+		#region property AccountData
+
+		private AccountData AccountData { get; set; }
+
+		#endregion property AccountData
+
+		#region property VerboseLogging
+
+		/// <summary>
+		/// Log verbose logging on (true) or off (false).
+		/// </summary>
+		private bool VerboseLogging { get; set; }
+
+		#endregion property VerboseLogging
+
+		#region property UserName
+
+		/// <summary>
+		/// User name for hmrc.gov.uk
+		/// </summary>
+		private string UserName {
+			get { return (((AccountData == null) ? null : AccountData.Login) ?? "").Trim(); }
+		} // UserName
+
+		#endregion property UserName
+
+		#region property Password
+
+		/// <summary>
+		/// Password for hmrc.gov.uk
+		/// </summary>
+		private string Password {
+			get { return (((AccountData == null) ? null : AccountData.Password) ?? "").Trim(); }
+		} // Password
+
+		#endregion property Password
 
 		#region property IsLoggedIn
 
@@ -418,6 +426,9 @@ namespace Ezbob.HmrcHarvester {
 		/// </summary>
 		/// <param name="lrd">Login form details.</param>
 		private void Login(LoginRequestDetails lrd) {
+			if ((UserName == "") || (Password == ""))
+				throw new HarvesterException("Unspecified user name or password.");
+
 			Info("Logging in as {0}...", UserName);
 
 			if (lrd.Method.ToUpper() != "POST")

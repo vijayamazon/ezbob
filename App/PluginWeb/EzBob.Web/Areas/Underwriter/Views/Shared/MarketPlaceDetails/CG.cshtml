@@ -35,19 +35,66 @@
 		%></tbody></table><%
 	}; // DrawOneTable
 
-%>
-<div class="tabbable">
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#orders-tab1" data-toggle="tab"><% print(bHasExpenses ? 'Invoices' : 'Orders'); %></a></li>
-		<% if (bHasExpenses) { %>
-			<li><a href="#expenses-tab1" data-toggle="tab">Expenses</a></li>
-		<% } %>
-	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active" id="orders-tab1"><% DrawOneTable(aryOrdersTable) %></div>
-		<% if (bHasExpenses) { %>
-			<div class="tab-pane" id="expenses-tab1"><% DrawOneTable(aryExpensesTable) %></div>
-		<% } %>
-	</div>
-</div>
-<% })(); %>
+	switch (aryCGAccounts[marketplaceType].Behaviour) {
+	case 0: // Default behaviour
+		%><div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#orders-tab1" data-toggle="tab"><% print(bHasExpenses ? 'Invoices' : 'Orders'); %></a></li>
+			<% if (bHasExpenses) { %>
+				<li><a href="#expenses-tab1" data-toggle="tab">Expenses</a></li>
+			<% } %>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="orders-tab1"><% DrawOneTable(aryOrdersTable) %></div>
+			<% if (bHasExpenses) { %>
+				<div class="tab-pane" id="expenses-tab1"><% DrawOneTable(aryExpensesTable) %></div>
+			<% } %>
+		</div>
+		</div><%
+		break;
+
+	case 1: // HMRC behaviour
+		%><div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#hmrc-vat-return" data-toggle="tab">VAT Return</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active" id="hmrc-vat-return"><table class="table table-bordered table-striped  blue-header centered"><thead><tr>
+				<th>Business &amp; Period</th>
+				<th>Return Details</th></tr></thead><tbody><%
+				if (m.CGData && m.CGData.Entries) {
+					for (var nIdx = 0; nIdx < m.CGData.Entries.length; nIdx++) {
+					var oEntry = m.CGData.Entries[nIdx];
+						%><tr><td class="no-padding"><table class="internal-table">
+							<tr><td>Registration #:</td><td><%= oEntry.RegistrationNo %></td></tr>
+							<tr><td>Period:</td><td><%= oEntry.Period %></td></tr>
+							<tr><td>From:</td><td><%= EzBob.formatDate(oEntry.DateFrom) %></td></tr>
+							<tr><td>To:</td><td><%= EzBob.formatDate(oEntry.DateTo) %></td></tr>
+							<tr><td>Business Details:</td><td><%= oEntry.BusinessName %>
+							<% for (var nAddrIdx = 0; nAddrIdx < oEntry.BusinessAddress.length; nAddrIdx++) {
+								%><div><%= oEntry.BusinessAddress[nAddrIdx] %></div><%
+							} %></td></tr></table></td>
+							<td class="no-padding"><table class="internal-table"><%
+								var oSortable = [];
+								for (var oDetail in oEntry.Data)
+									oSortable.push({ caption: oDetail, amount: oEntry.Data[oDetail].Amount, currency_code: oEntry.Data[oDetail].CurrencyCode });
+
+								oSortable.sort(function(a, b) {
+									var re = /\(Box (\d+)\)$/;
+									var nA = parseInt(re.exec(a.caption)[1]);
+									var nB = parseInt(re.exec(b.caption)[1]);
+									return nA - nB;
+								});
+
+								for (var nRDIdx = 0; nRDIdx < oSortable.length; nRDIdx++) {
+									var oDetail = oSortable[nRDIdx];
+									%><tr><td><%= oDetail.caption %>:</td><td><%= (oDetail.currency_code == 'GBP') ? GBPValues(oDetail.amount, true) : oDetail.amount %></td></tr><%
+								} %></table></td>
+						</tr><%
+					} // for each entry
+				} // if
+				%></tbody></table>
+			</div></div><%
+		break;
+	} // switch
+})(); %>

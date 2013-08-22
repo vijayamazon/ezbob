@@ -142,12 +142,12 @@
 
 	#region class InternalOrderComparer
 
-	class InternalOrderComparer : AOrderComparer<InternalOrderItem> {
-		public override bool AreEqual(InternalOrderItem a, InternalOrderItem b) {
+	public class InternalOrderComparer : AOrderComparer<AInternalOrderItem> {
+		public override bool AreEqual(AInternalOrderItem a, AInternalOrderItem b) {
 			return a.NativeOrderId == b.NativeOrderId;
 		} // AreEqual
 
-		public override int HashCode(InternalOrderItem a) {
+		public override int HashCode(AInternalOrderItem a) {
 			return a.NativeOrderId.GetHashCode();
 		} // HashCode
 	} // class InternalOrderComparer

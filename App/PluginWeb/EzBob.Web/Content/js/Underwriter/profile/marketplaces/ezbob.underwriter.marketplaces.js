@@ -141,15 +141,25 @@
     };
 
     MarketPlacesView.prototype.serializeData = function() {
-      var data, m, total, _i, _len, _ref3;
+      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref3;
 
+      aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
+      isMarketplace = function(x) {
+        var cg;
+
+        if (!aryCGAccounts[x.get('Name')]) {
+          return !x.get('IsPaymentAccount');
+        }
+        cg = aryCGAccounts[x.get('Name')];
+        return (cg.Behaviour === 0) && !cg.HasExpenses;
+      };
       data = {
         customerId: this.model.customerId,
-        marketplaces: _.sortBy(_.pluck(this.model.where({
-          IsPaymentAccount: false
+        marketplaces: _.sortBy(_.pluck(_.filter(this.model.models, function(x) {
+          return x && isMarketplace(x);
         }), "attributes"), "UWPriority"),
-        accounts: _.sortBy(_.pluck(this.model.where({
-          IsPaymentAccount: true
+        accounts: _.sortBy(_.pluck(_.filter(this.model.models, function(x) {
+          return x && !isMarketplace(x);
         }), "attributes"), "UWPriority"),
         hideAccounts: false,
         hideMarketplaces: false,

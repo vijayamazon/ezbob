@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
@@ -9,15 +12,20 @@ using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders {
 	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
-        public ChannelGrabberMarketplaceModelBuilder(ISession session)
-            : base(session)
-        {
+		#region constructor
+
+		public ChannelGrabberMarketplaceModelBuilder(ISession session)
+			: base(session) {
 		} // constructor
+
+		#endregion constructor
+
+		#region method GetPaymentAccountModel
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
-			if (!vi.HasExpenses)
+			if (!vi.HasExpenses && (vi.Behaviour == Behaviour.Default))
 				return null;
 
 			var paymentAccountModel = new PaymentAccountsModel {
@@ -26,6 +34,9 @@ namespace EzBob.Models.Marketplaces.Builders {
 				TransactionsNumber = 0,
 				MonthInPayments = 0
 			};
+
+			if (!vi.HasExpenses)
+				return paymentAccountModel;
 
 			MP_AnalyisisFunctionValue earliestNumOfExpenses = GetEarliestValueFor(mp, FunctionType.NumOfExpenses.ToString());
 			MP_AnalyisisFunctionValue earliestSumOfExpenses = GetEarliestValueFor(mp, FunctionType.TotalSumOfExpenses.ToString());
@@ -51,20 +62,51 @@ namespace EzBob.Models.Marketplaces.Builders {
 				paymentAccountModel.MonthInPayments = monthSumOfInvoices.ValueFloat.Value;
 
 			return paymentAccountModel;
-		} // GetPaymetAccountModel
+		} // GetPaymentAccountModel
 
-	    public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
-	    {
-	        if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
-	        {
-	            return null;
-	        }
-	        
-            var s = _session.Query<MP_ChannelGrabberOrderItem>()
-	            .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
-	            .Where(oi => oi.PaymentDate != null)
-	            .Select(oi => oi.PaymentDate);
-	        return !s.Any() ? (DateTime?) null : s.Min();
-	    }
+		#endregion method GetPaymentAccountModel
+
+		#region method InitializeSpecificData
+
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
+			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
+
+			switch (vi.Behaviour) {
+			case Behaviour.Default: // nothing here
+				break;
+
+			case Behaviour.HMRC:
+				var lst = DatabaseDataHelper
+					.GetAllHmrcData(DateTime.UtcNow, mp)
+					.Distinct(new InternalOrderComparer())
+					.Select(x => (VatReturnEntry)x)
+					.ToList();
+
+				lst.Sort(VatReturnEntry.CompareForSort);
+
+				model.CGData = new ChannelGrabberHmrcData { Entries = lst };
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // InitializeSpecificData
+
+		#endregion method InitializeSpecificData
+
+		#region method GetSeniority
+
+		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
+			if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
+				return null;
+
+			var s = _session.Query<MP_ChannelGrabberOrderItem>()
+				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.PaymentDate != null)
+				.Select(oi => oi.PaymentDate);
+			return !s.Any() ? (DateTime?)null : s.Min();
+		} // GetSeniority
+
+		#endregion method GetSeniority
 	} // class ChannelGrabberMarketplaceBuilder
 } // namespace

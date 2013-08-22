@@ -1,4 +1,4 @@
-﻿namespace Ezbob.HmrcHarvester {
+﻿namespace EZBob.DatabaseLib.Common {
 	#region class Coin
 
 	public class Coin {
@@ -32,4 +32,4 @@
 	} // class Coin
 
 	#endregion class Coin
-} // namespace Ezbob.HmrcHarvester
+} // namespace EZBob.DatabaseLib.Common

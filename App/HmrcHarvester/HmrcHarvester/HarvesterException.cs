@@ -6,7 +6,7 @@ namespace Ezbob.HmrcHarvester {
 	/// <summary>
 	/// Exception thrown from the Harvester.
 	/// </summary>
-	class HarvesterException : Exception {
+	class HarvesterException : Integration.ChannelGrabberAPI.ApiException {
 		#region public
 
 		#region constructor

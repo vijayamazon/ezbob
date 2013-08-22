@@ -477,3 +477,13 @@ span.active {
 .couple_buttons {
     margin-left: 3px;
 }
+
+td.no-padding { padding: 0 !important; }
+
+table.internal-table { border-collapse: collapse; width: 100% !important; }
+
+table.internal-table td {
+	border: 1px solid #dddddd !important;
+	background-color: transparent !important;
+	white-space: nowrap !important;
+}

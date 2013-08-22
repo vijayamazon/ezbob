@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleLog.cs" />
+    <Compile Include="SafeILog.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ASafeLog.cs" />
     <Compile Include="LegacyLog.cs" />

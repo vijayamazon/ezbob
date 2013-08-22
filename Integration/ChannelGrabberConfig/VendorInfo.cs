@@ -10,6 +10,7 @@ namespace Integration.ChannelGrabberConfig {
 		#region constructor
 
 		public VendorInfo() {
+			Behaviour = Behaviour.Default;
 			Name = "";
 			DisplayName = "";
 			Description = "";
@@ -30,6 +31,8 @@ namespace Integration.ChannelGrabberConfig {
 		public string Description { get; set; }
 		public string InternalID { get; set; }
 		public bool HasExpenses { get; set; }
+
+		public Behaviour Behaviour { get; set; }
 
 		public SecurityData SecurityData { get; set; }
 
@@ -85,10 +88,11 @@ namespace Integration.ChannelGrabberConfig {
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("Unique name: {0}\nDisplay name: {1}\nDescription: {2}\nHas expenses: {6}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
+			return string.Format("Unique name: {0}\nBehaviour: {7}\nDisplay name: {1}\nDescription: {2}\nHas expenses: {6}\nInternal ID: {3}\n{4}\nAggregators:\n\t{5}",
 				Name, DisplayName, Description, Guid(), SecurityData,
 				string.Join("\n\t", (object[])Aggregators.ToArray()),
-				HasExpenses ? "yes" : "no"
+				HasExpenses ? "yes" : "no",
+				Behaviour
 			);
 		} // ToString
 

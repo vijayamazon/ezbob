@@ -45,9 +45,8 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
 
-    for accountTypeName, ignore of aryCGAccounts
-      atlc = accountTypeName.toLowerCase()
-      listOfShops = @get(atlc + 'Shops')
+    for accountTypeName, accountTypeData of aryCGAccounts
+      listOfShops = @get accountTypeData.ClientSide.StoreInfoStepModelShops
       if listOfShops != undefined
         for shop in listOfShops
           stores.push { displayName: shop.displayName, type: accountTypeName }

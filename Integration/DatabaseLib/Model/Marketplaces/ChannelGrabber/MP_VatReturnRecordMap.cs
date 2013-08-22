@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.DateTo).CustomType<UtcDateTimeType>().Not.Nullable();
 			Map(x => x.DateDue).CustomType<UtcDateTimeType>().Not.Nullable();
 
-			Map(x => x.RegistrationNo).Length(256);
+			Map(x => x.RegistrationNo);
 
 			References(x => x.Business, "BusinessId");
 

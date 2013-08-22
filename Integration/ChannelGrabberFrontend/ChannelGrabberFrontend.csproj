@@ -67,6 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountModel.cs" />
+    <Compile Include="Connector.cs" />
+    <Compile Include="exceptions.cs" />
+    <Compile Include="OrdersAggregatorFactory.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="ServiceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,9 +77,17 @@
     <Compile Include="DatabaseFunctionFactory.cs" />
     <Compile Include="DatabaseMarketPlace.cs" />
     <Compile Include="RetrieveDataHelper.cs" />
-    <Compile Include="OrdersAgregator.cs" />
+    <Compile Include="OrdersAggregator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">
+      <Project>{dfc5b190-afa4-40a7-8237-8404687b4513}</Project>
+      <Name>HmrcHarvester</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>

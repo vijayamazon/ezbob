@@ -1,5 +1,6 @@
-namespace EZBob.DatabaseLib
-{
+namespace EZBob.DatabaseLib {
+	#region using
+
 	using System;
 	using System.Collections.Concurrent;
 	using System.Collections.Generic;
@@ -41,8 +42,11 @@ namespace EZBob.DatabaseLib
 	using Model.Marketplaces.Sage;
 	using Model.Marketplaces.Yodlee;
 
-	public enum CustomerMarketplaceUpdateActionType
-	{
+	#endregion using
+
+	#region enum CustomerMarketplaceUpdateActionType
+
+	public enum CustomerMarketplaceUpdateActionType {
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
 		UpdateFeedbackInfo,
@@ -51,11 +55,18 @@ namespace EZBob.DatabaseLib
 		TeraPeakSearchBySeller,
 		EbayGetOrders,
 		UpdateTransactionInfo
-	}
+	} // enum CustomerMarketplaceUpdateActionType
 
-	public class DatabaseDataHelper : IDatabaseDataHelper
-	{
+	#endregion enum CustomerMarketplaceUpdateActionType
+
+	#region class DatabaseDataHelper
+
+	public class DatabaseDataHelper : IDatabaseDataHelper {
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(DatabaseDataHelper));
+
+		private ISession _session;
+
+		#region repositories
 
 		private readonly ValueTypeRepository _ValueTypeRepository;
 		private readonly CustomerRepository _CustomerRepository;
@@ -87,7 +98,10 @@ namespace EZBob.DatabaseLib
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly AmazonMarketPlaceTypeRepository _amazonMarketPlaceTypeRepository;
 	    private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
-		private ISession _session;
+		private readonly BusinessRepository _businessRepository;
+		private readonly MP_VatReturnEntryNameRepositry _vatReturnEntryNameRepositry;
+
+		#endregion repositories
 
 		public DatabaseDataHelper(ISession session)
 		{
@@ -120,6 +134,8 @@ namespace EZBob.DatabaseLib
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
 		    _loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
+			_businessRepository = new BusinessRepository(session);
+			_vatReturnEntryNameRepositry = new MP_VatReturnEntryNameRepositry(session);
 		}
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
@@ -130,33 +146,22 @@ namespace EZBob.DatabaseLib
 
 		public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { _session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
 
-		public ICurrencyConvertor CurrencyConverter
-		{
-			get { return _CurrencyConvertor; }
-		}
+		public ICurrencyConvertor CurrencyConverter { get { return _CurrencyConvertor; } }
 
-		public Customer GetCustomerInfo(int clientId)
-		{
-			return FindCustomer(clientId);
-		}
+		public Customer GetCustomerInfo(int clientId) { return FindCustomer(clientId); }
 
-		private Customer FindCustomer(int id)
-		{
+		private Customer FindCustomer(int id) {
 			var client = _CustomerRepository.Get(id);
+
 			if (client == null)
-			{
 				throw new InvalidCustomerException(id);
-			}
+
 			return client;
 		}
 
-		public Customer FindCustomerByEmail(string sEmail)
-		{
-			return _CustomerRepository.TryGetByEmail(sEmail);
-		} // FindCustomerByEmail
+		public Customer FindCustomerByEmail(string sEmail) { return _CustomerRepository.TryGetByEmail(sEmail); } // FindCustomerByEmail
 
-		public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
+		public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			var oldData = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var customer = databaseCustomerMarketPlace.Customer;
@@ -1434,44 +1439,6 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
-
-			if (ordersData == null)
-				return;
-
-			DateTime submittedDate = DateTime.UtcNow;
-			var mpOrder = new MP_ChannelGrabberOrder
-			{
-				CustomerMarketPlace = customerMarketPlace,
-				Created = submittedDate,
-				HistoryRecord = historyRecord
-			};
-
-			ordersData.ForEach(dataItem =>
-			{
-				var mpOrderItem = new MP_ChannelGrabberOrderItem
-				{
-					Order = mpOrder,
-					NativeOrderId = dataItem.NativeOrderId,
-					TotalCost = dataItem.TotalCost,
-					CurrencyCode = dataItem.CurrencyCode,
-					PaymentDate = dataItem.PaymentDate,
-					PurchaseDate = dataItem.PurchaseDate,
-					OrderStatus = dataItem.OrderStatus,
-					IsExpense = dataItem.IsExpense
-				};
-
-				mpOrder.OrderItems.Add(mpOrderItem);
-			});
-
-			customerMarketPlace.ChannelGrabberOrders.Add(mpOrder);
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		} // StoreChannelGrabberOrdersData
-
 		private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)
 		{
 			if (categories == null)
@@ -2530,26 +2497,6 @@ namespace EZBob.DatabaseLib
 			return expenditures;
 		}
 
-		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			var orders = new InternalDataList(submittedDate);
-
-			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new InternalOrderItem
-			{
-				CurrencyCode = o.CurrencyCode,
-				OrderStatus = o.OrderStatus,
-				NativeOrderId = o.NativeOrderId,
-				PaymentDate = o.PaymentDate,
-				PurchaseDate = o.PurchaseDate,
-				TotalCost = o.TotalCost,
-				IsExpense = o.IsExpense
-			}).Distinct(new InternalOrderComparer()));
-
-			return orders;
-		} // GetAllChannelGrabberOrdersData
-
 		public bool HasYodleeOrders(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
 			return !GetCustomerMarketPlace(databaseCustomerMarketPlace).YodleeOrders.IsEmpty;
@@ -2774,27 +2721,210 @@ namespace EZBob.DatabaseLib
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
 		}
 
+		#region Channel Grabber flavour
 
-	}
+		#region HMRC
 
-	public class eBayFindOrderItemInfoData
-	{
-		public eBayFindOrderItemInfoData(string itemId)
+		#region method GetAllHmrcData
+
+		public InternalDataList GetAllHmrcData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
+			return GetAllHmrcData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
+		} // GetAllHmrcData
+
+		public static InternalDataList GetAllHmrcData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+			var orders = new InternalDataList(submittedDate);
+
+			customerMarketPlace.VatReturnRecords.ForEach(rec => {
+				var vre = new VatReturnEntry {
+					BusinessAddress = rec.Business.Address.Split('\n'),
+					BusinessName = rec.Business.Name,
+					DateDue = rec.DateDue,
+					DateFrom = rec.DateFrom,
+					DateTo = rec.DateTo,
+					Period = rec.Period,
+					RegistrationNo = rec.RegistrationNo,
+				};
+
+				foreach (MP_VatReturnEntry entry in rec.Entries)
+					vre.Data[entry.Name.Name] = new Coin(entry.Amount, entry.CurrencyCode);
+
+				orders.Add(vre);
+			}); // for each record
+
+			return orders;
+		} // GetAllHmrcData
+
+		#endregion method GetAllHmrcData
+
+		#region method StoreHmrcData
+
+		public void StoreHmrcData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			LogData("HMRC Data", customerMarketPlace, ordersData);
+
+			if (ordersData == null)
+				return;
+
+			DateTime submittedDate = DateTime.UtcNow;
+
+			ordersData.ForEach(ve => {
+				var dataItem = (VatReturnEntry)ve;
+
+				string sBizAddr = string.Join("\n", dataItem.BusinessAddress);
+
+				Business biz = _businessRepository.GetAll().FirstOrDefault(b => (b.Name == dataItem.BusinessName) && (b.Address == sBizAddr));
+
+				if (biz == null) {
+					biz = new Business {
+						Name = dataItem.BusinessName,
+						Address = sBizAddr
+					};
+
+					_businessRepository.SaveOrUpdate(biz);
+				} // if
+
+				var oRecord = new MP_VatReturnRecord {
+					CustomerMarketPlace = customerMarketPlace,
+					Created = submittedDate,
+					HistoryRecord = historyRecord,
+					Business = biz,
+					DateDue = dataItem.DateDue,
+					DateFrom = dataItem.DateFrom,
+					DateTo = dataItem.DateTo,
+					Period = dataItem.Period,
+					RegistrationNo = dataItem.RegistrationNo
+				};
+
+				foreach (KeyValuePair<string, Coin> pair in dataItem.Data) {
+					string sName = pair.Key;
+
+					MP_VatReturnEntryName oVreName = _vatReturnEntryNameRepositry.GetAll().FirstOrDefault(n => n.Name == sName);
+
+					if (oVreName == null) {
+						oVreName = new MP_VatReturnEntryName {
+							Name = sName
+						};
+
+						_vatReturnEntryNameRepositry.SaveOrUpdate(oVreName);
+					} // if
+
+					oRecord.Entries.Add(new MP_VatReturnEntry {
+						Amount = pair.Value.Amount,
+						CurrencyCode = pair.Value.CurrencyCode,
+						Name = oVreName,
+						Record = oRecord
+					});
+				} // for each box
+
+				customerMarketPlace.VatReturnRecords.Add(oRecord);
+			});
+
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		} // StoreHmrcData
+
+		#endregion method StoreHmrcData
+
+		#endregion HMRC
+
+		#region Channel Grabber
+
+		#region method GetAllChannelGrabberOrdersData
+
+		public InternalDataList GetAllChannelGrabberOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new InternalDataList(submittedDate);
+
+			orders.AddRange(customerMarketPlace.ChannelGrabberOrders.SelectMany(anOrder => anOrder.OrderItems).Select(o => new ChannelGrabberOrderItem
+			{
+				CurrencyCode = o.CurrencyCode,
+				OrderStatus = o.OrderStatus,
+				NativeOrderId = o.NativeOrderId,
+				PaymentDate = o.PaymentDate,
+				PurchaseDate = o.PurchaseDate,
+				TotalCost = o.TotalCost,
+				IsExpense = o.IsExpense
+			}).Distinct(new InternalOrderComparer()));
+
+			return orders;
+		} // GetAllChannelGrabberOrdersData
+
+		#endregion method GetAllChannelGrabberOrdersData
+
+		#region method StoreChannelGrabberOrdersData
+
+		public void StoreChannelGrabberOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			LogData("ChannelGrabber Orders Data", customerMarketPlace, ordersData);
+
+			if (ordersData == null)
+				return;
+
+			DateTime submittedDate = DateTime.UtcNow;
+			var mpOrder = new MP_ChannelGrabberOrder
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = submittedDate,
+				HistoryRecord = historyRecord
+			};
+
+			ordersData.ForEach(di => {
+				var dataItem = (ChannelGrabberOrderItem)di;
+
+				var mpOrderItem = new MP_ChannelGrabberOrderItem {
+					Order = mpOrder,
+					NativeOrderId = dataItem.NativeOrderId,
+					TotalCost = dataItem.TotalCost,
+					CurrencyCode = dataItem.CurrencyCode,
+					PaymentDate = dataItem.PaymentDate,
+					PurchaseDate = dataItem.PurchaseDate,
+					OrderStatus = dataItem.OrderStatus,
+					IsExpense = dataItem.IsExpense
+				};
+
+				mpOrder.OrderItems.Add(mpOrderItem);
+			});
+
+			customerMarketPlace.ChannelGrabberOrders.Add(mpOrder);
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		} // StoreChannelGrabberOrdersData
+
+		#endregion method StoreChannelGrabberOrdersData
+
+		#endregion Channel Grabber
+
+		#endregion Channel Grabber flavour
+
+	} // class DatabaseDataHelper
+
+	#endregion class DatabaseDataHelper
+
+	#region class eBayFindOrderItemInfoData
+
+	public class eBayFindOrderItemInfoData {
+		public eBayFindOrderItemInfoData(string itemId) {
 			ItemId = itemId;
-		}
+		} // constructor
 
 		public string ItemId { get; private set; }
-	}
+	} // class eBayFindOrderItemInfoData
 
-	public class eBayCategoryInfo
-	{
+	#endregion class eBayFindOrderItemInfoData
+
+	#region class eBayCategoryInfo
+
+	public class eBayCategoryInfo {
 		public string CategoryId { get; set; }
-
 		public string Name { get; set; }
-
 		public bool? IsVirtual { get; set; }
-
 		//public string[] ParentIdList { get; set; }
-	}
-}
+	} // class eBayCategoryInfo
+
+	#endregion class eBayCategoryInfo
+} // namespace

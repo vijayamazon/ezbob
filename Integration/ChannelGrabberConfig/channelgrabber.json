@@ -1,9 +1,10 @@
 [
 	{
-		"Name": "Volusion",
+		"Name":        "Volusion",
 		"DisplayName": "Volusion",
 		"Description": "Volusion",
 		"InternalID":  "{afca0e18-05e3-400f-8af4-b1bcae09375c}",
+		"Behaviour":   "Default",
 
 		"HasExpenses": false,
 
@@ -98,6 +99,7 @@
 		"DisplayName": "Play.com",
 		"Description": "Play.com",
 		"InternalID":  "{A5E96D38-FD2E-4E54-9E0C-276493C950A6}",
+		"Behaviour":   "Default",
 
 		"HasExpenses": false,
 
@@ -176,6 +178,7 @@
 		"DisplayName": "Shopify.com",
 		"Description": "Shopify.com",
 		"InternalID":  "{A386F349-8E41-4BA9-B709-90332466D42D}",
+		"Behaviour":   "Default",
 
 		"HasExpenses": false,
 
@@ -247,6 +250,7 @@
 		"DisplayName": "Xero.com",
 		"Description": "Xero.com",
 		"InternalID":  "{AAFEBF1F-C4BD-4AFA-80ED-037AACFA392C}",
+		"Behaviour":   "Default",
 
 		"HasExpenses": true,
 
@@ -338,6 +342,7 @@
 		"DisplayName": "KashFlow.com",
 		"Description": "KashFlow.com",
 		"InternalID":  "{A755B4F6-D4EC-4D80-96A2-B2849BD800AC}",
+		"Behaviour":   "Default",
 
 		"HasExpenses": true,
 
@@ -399,6 +404,236 @@
 				],
 				"SourceLabelOn": [
 					{ "Property": "background", "Value": "url(/Content/css/images/kashflow-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "145px" }
+				]
+			},
+			"ErrorMessages": []
+		}
+	},
+	{
+		"Name":        "HMRC",
+		"DisplayName": "HMRC",
+		"Description": "HM Revenue and Customs",
+		"InternalID":  "{AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA}",
+		"Behaviour":   "HMRC",
+
+		"HasExpenses": false,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Login",    "NodeName": "username", "UniqueIDPosition":  0 },
+				{ "PropertyName": "Password", "NodeName": "password", "UniqueIDPosition": -1 }
+			],
+
+			"ToStringArguments": [
+				"{0}", "Login"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BC9E71F7-55C3-4F92-86A9-18EF000890F0}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B81B7727-BBCF-4731-9975-CE402F94B8B3}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCA489F8-847A-46EC-BE2D-35ABFEDD0D76}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C6847E6E-D4DF-4FD9-B0B4-0BC0235DB428}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CCF67CC1-18F5-4547-86A7-5B159C2462A0}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C206B422-CDB3-4361-89EC-673B5753FA06}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "hmrcAccounts",
+			"SortPriority": 14,
+			"Ribbon": "beta",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The username to access HMRC account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Password",
+						"Caption": "The password to access HMRC account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [
+					"accountModel.name = 'HMRC as ' + accountModel.login;",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", "Value": "url(/Content/css/images/hmrc-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "149px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", "Value": "url(/Content/css/images/hmrc-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "149px" }
+				]
+			},
+			"ErrorMessages": []
+		}
+	},
+	{
+		"Name":        "Magento",
+		"DisplayName": "Magento.com",
+		"Description": "Magento.com",
+		"InternalID":  "{A660B9CC-8BB1-4A37-9597-507622AEBF9E}",
+		"Behaviour":   "Default",
+
+		"HasExpenses": false,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Login",       "NodeName": "apiUser",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "Password",    "NodeName": "apiKey",     "UniqueIDPosition":  2                  },
+				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Login", "Name"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B712A57A-816C-46D6-9283-804390D715AC}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B85A6035-59D4-4155-9EE2-AF925A9893D7}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCD30FB2-7C1D-4D50-A0AC-D11FD8477ED0}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C8DF63FC-7DB3-4F75-AD40-97A556225042}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3669B1A-9B21-4C31-B535-C7E542DD8BCC}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "magentoShops",
+			"SortPriority": 15,
+			"Ribbon": "beta",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Name",
+						"Type": "Text",
+						"Caption": "The name of Magento Shop",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "URL",
+						"Type": "Text",
+						"Caption": "The URL to the shop",
+						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The API username to access Magento account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Password",
+						"Caption": "The API password to access Magento account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [
+					"var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
+					"if (!aryMatch) return null;",
+					"accountModel.name = aryMatch[3];",
+					"accountModel.url = aryMatch[1] + '/api/v2_soap?wsdl=1';",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", "Value": "url(/Content/css/images/magento-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "145px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", "Value": "url(/Content/css/images/magento-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "145px" }
+				]
+			},
+			"ErrorMessages": []
+		}
+	},
+	{
+		"Name":        "Prestashop",
+		"DisplayName": "Prestashop.com",
+		"Description": "Prestashop.com",
+		"InternalID":  "{AE0BC89A-9884-4025-9D96-2755A6CD10EE}",
+		"Behaviour":   "Default",
+
+		"HasExpenses": false,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Login",       "NodeName": "apikey",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Login", "Name"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{BA962184-7F24-4C05-81F9-B8E1C9067F6B}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{B3ED3FC2-38CF-443B-8EAF-794D7F0FC341}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCADB388-8C7A-47F6-B6D4-348A390635E8}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C64761DB-D075-40A1-ABF7-E07FD07ED11C}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C2D5B62B-43CF-4FA1-9128-3242007401FB}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CCA07C01-88F6-4A53-8CAB-361489DD2E14}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "prestashopShops",
+			"SortPriority": 16,
+			"Ribbon": "beta",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Name",
+						"Type": "Text",
+						"Caption": "The name of Prestashop Shop",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "URL",
+						"Type": "Text",
+						"Caption": "The URL to the shop",
+						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The API key to access Prestashop account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [
+					"var aryMatch = /^(http(s)?:\\/\\/([^\\.]+)\\.[^#\\?\\/]+(:\\d+)?)/.exec(accountModel.url);",
+					"if (!aryMatch) return null;",
+					"accountModel.name = aryMatch[3];",
+					"accountModel.url = aryMatch[1];",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", "Value": "url(/Content/css/images/prestashop-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "145px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", "Value": "url(/Content/css/images/prestashop-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "145px" }
 				]

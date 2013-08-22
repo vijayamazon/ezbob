@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Xml;
+using Ezbob.Logger;
 using Integration.ChannelGrabberConfig;
 using Newtonsoft.Json;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
@@ -12,36 +13,30 @@ using log4net;
 using Scorto.Configuration;
 
 namespace Integration.ChannelGrabberAPI {
-	#region enum LogMsgTypes
-
-	public enum LogMsgTypes {
-		Info,
-		Error,
-		Warn,
-		Fatal,
-		Debug
-	} // LogMsgTypes
-
-	#endregion enum LogMsgTypes
-
 	#region class Harvester
 
-	public class Harvester : ConfigurationRoot {
+	public class Harvester : SafeILog, IHarvester {
 		#region public
 
 		#region constructor
 
-		public Harvester(AccountData oAccountData, ILog log, DBCustomer oCustomer) {
+		public Harvester(AccountData oAccountData, ILog log, DBCustomer oCustomer) : base(log) {
 			m_oAccountData = oAccountData;
 
-			m_oLog = log;
-
-			Debug("Creating a ChannelGrabber API Harvester class...");
-
-			if (oCustomer == null)
+			if (m_oCustomer == null)
 				throw new ApiException("Customer information not specified.");
 
 			m_oCustomer = oCustomer;
+		} // constructor
+
+		#endregion constructor
+
+		#region method Init
+
+		public virtual bool Init() {
+			RetrievedOrders = null;
+
+			Debug("Creating a ChannelGrabber API Harvester class...");
 
 			m_oCfgRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
 
@@ -63,22 +58,49 @@ namespace Integration.ChannelGrabberAPI {
 			Debug("When waiting for orders:\n\tsleep for {0:N} ms between poll attempts\n\tretry polling {1:N} times", m_nSleepTime, m_nWaitCycleCount);
 
 			Debug("Creating a ChannelGrabber API Harvester class succeeded.");
-		} // constructor
 
-		#endregion constructor
+			return true;
+		} // Init
 
-		#region property ShopTypeName
+		#endregion method Init
 
-		public virtual string ShopTypeName {
-			get { return m_oAccountData.AccountTypeName(); }
-		} // ShopTypeName
+		#region method Run
 
-		#endregion property ShopTypeName
+		public virtual bool Run(bool bValidateCredentialsOnly) {
+			if (bValidateCredentialsOnly) {
+				Validate();
+				return true;
+			}
+			else {
+				RetrievedOrders = GetOrders();
+				return RetrievedOrders != null;
+			} // if
+		} // Run
+
+		#endregion method Run
+
+		#region method Done
+
+		public virtual void Done() {
+			// nothing here
+		} // Done
+
+		#endregion method Done
+
+		#region property RetrievedOrders
+
+		public virtual List<Order> RetrievedOrders { get; private set; }
+
+		#endregion property RetrievedOrders
+
+		#endregion public
+
+		#region private
 
 		#region method Validate
 
-		public virtual void Validate() {
-			Info("Validate {0} customer started with parameter [ {1} ]", ShopTypeName, m_oAccountData);
+		private void Validate() {
+			Info("Validate {0} customer started with parameter [ {1} ]", m_oAccountData.AccountTypeName(), m_oAccountData);
 
 			Dictionary<string, Customer> oCustomers = LoadCustomers();
 
@@ -100,17 +122,17 @@ namespace Integration.ChannelGrabberAPI {
 
 			ValidateShop(oCustomer, m_oAccountData);
 
-			Info("Validate {0} customer complete.", ShopTypeName);
+			Info("Validate {0} customer complete.", m_oAccountData.AccountTypeName());
 		} // Validate
 
 		#endregion method Validate
 
 		#region method GetOrders
 
-		public List<Order> GetOrders() {
+		private List<Order> GetOrders() {
 			Info(
 				"GetOrders for {0} customer {1} ({2}) started with parameters [ {3} ]",
-				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id, m_oAccountData
+				m_oAccountData.AccountTypeName(), m_oCustomer.Name, m_oCustomer.Id, m_oAccountData
 			);
 
 			Dictionary<string, Customer> oCustomers = LoadCustomers();
@@ -167,7 +189,7 @@ namespace Integration.ChannelGrabberAPI {
 			} // for
 
 			Info("GetOrders for {0} customer {1} ({2}) complete, {3} {4} received.",
-				ShopTypeName, m_oCustomer.Name, m_oCustomer.Id,
+				m_oAccountData.AccountTypeName(), m_oCustomer.Name, m_oCustomer.Id,
 				oOrdExpList.Count, oOrdExpList.Count == 1 ? "entry" : "entries"
 			);
 
@@ -175,97 +197,6 @@ namespace Integration.ChannelGrabberAPI {
 		} // GetOrders
 
 		#endregion method GetOrders
-
-		#endregion public
-
-		#region protected
-
-		#region method Say
-
-		protected void Say(LogMsgTypes nMsgType, string sFormat, params object[] args) {
-			Say(nMsgType, string.Format(sFormat, args));
-		} // Say
-
-		protected void Say(LogMsgTypes nMsgType, string sMsg) {
-			if ((m_oLog == null) || (sMsg == null))
-				return;
-
-			const string bol = "\n\n";
-			const string eol = "\n";
-
-			switch (nMsgType) {
-				case LogMsgTypes.Error:
-					if (m_oLog.IsErrorEnabled)
-						m_oLog.Error(bol + sMsg + eol);
-					break;
-
-				case LogMsgTypes.Warn:
-					if (m_oLog.IsWarnEnabled)
-						m_oLog.Warn(bol + sMsg + eol);
-					break;
-
-				case LogMsgTypes.Info:
-					if (m_oLog.IsInfoEnabled)
-						m_oLog.Info(bol + sMsg + eol);
-					break;
-
-				case LogMsgTypes.Debug:
-					if (m_oLog.IsDebugEnabled)
-						m_oLog.Debug(bol + sMsg + eol);
-					break;
-
-				case LogMsgTypes.Fatal:
-					if (m_oLog.IsFatalEnabled)
-						m_oLog.Fatal(bol + sMsg + eol);
-					break;
-			} // switch
-		} // Say
-
-		#endregion method Say
-
-		#region method Info
-
-		protected void Info(string sMsg) { Say(LogMsgTypes.Info, sMsg); } // Info
-
-		protected void Info(string sFormat, params object[] args) { Info(string.Format(sFormat, args)); } // Info
-
-		#endregion Info
-
-		#region method Error
-
-		protected void Error(string sMsg) { Say(LogMsgTypes.Error, sMsg); } // Error
-
-		protected void Error(string sFormat, params object[] args) { Error(string.Format(sFormat, args)); } // Error
-
-		#endregion Error
-
-		#region method Warn
-
-		protected void Warn(string sMsg) { Say(LogMsgTypes.Warn, sMsg); } // Warn
-
-		protected void Warn(string sFormat, params object[] args) { Warn(string.Format(sFormat, args)); } // Warn
-
-		#endregion Warn
-
-		#region method Fatal
-
-		protected void Fatal(string sMsg) { Say(LogMsgTypes.Fatal, sMsg); } // Msg
-
-		protected void Fatal(string sFormat, params object[] args) { Fatal(string.Format(sFormat, args)); } // Fatal
-
-		#endregion Fatal
-
-		#region method Debug
-
-		protected void Debug(string sMsg) { Say(LogMsgTypes.Debug, sMsg); } // Debug
-
-		protected void Debug(string sFormat, params object[] args) { Debug(string.Format(sFormat, args)); } // Debug
-
-		#endregion Debug
-
-		#endregion protected
-
-		#region private
 
 		#region method LoadCustomers
 
@@ -393,7 +324,7 @@ namespace Integration.ChannelGrabberAPI {
 		private void LoadOrdExp(List<Order> lst, XmlDocument oData, int nIsExpense, AccountData oAccountData) {
 			Debug("Loading list of {0}s...", nIsExpense == 0 ? "order": "expense");
 
-			string sShopTypeName = ShopTypeName.ToLower();
+			string sShopTypeName = m_oAccountData.AccountTypeName().ToLower();
 
 			uint nCount = 0;
 
@@ -548,7 +479,7 @@ Data: {3}
 
 		private string BuildRegisterShopRq(Customer oCustomer) {
 			return string.Format(
-				RegisterShopRq, oCustomer.Id, ShopTypeName.ToLower()
+				RegisterShopRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower()
 			);
 		} // BuildRegisterShopRq
 
@@ -568,7 +499,7 @@ Data: {3}
 
 		private string BuildValidityRq(Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
-				ValidityReportRq, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
+				ValidityReportRq, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id()
 			);
 		} // BuildValidityRq
 
@@ -578,7 +509,7 @@ Data: {3}
 
 		private string BuildGenerateOrdExpRq(string sRequest, Customer oCustomer, AccountData oAccountData) {
 			return string.Format(
-				sRequest, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id()
+				sRequest, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id()
 			);
 		} // BuildGenerateOrdExpRq
 
@@ -588,7 +519,7 @@ Data: {3}
 
 		private string BuildOrdExpGeneratedRq(string sRequest, Customer oCustomer, AccountData oAccountData, int nRqID) {
 			return string.Format(
-				sRequest, oCustomer.Id, ShopTypeName.ToLower(), oAccountData.Id(), nRqID
+				sRequest, oCustomer.Id, m_oAccountData.AccountTypeName().ToLower(), oAccountData.Id(), nRqID
 			);
 		} // BuildOrdExpGeneratedRq
 
@@ -622,10 +553,10 @@ Data: {3}
 
 		#region private fields
 
-		private ILog m_oLog;
-		private DBCustomer m_oCustomer;
+		private readonly DBCustomer m_oCustomer;
+		private readonly AccountData m_oAccountData;
+
 		private RestClient m_oRestClient;
-		private AccountData m_oAccountData;
 
 		private ConfigurationRoot m_oCfgRoot;
 

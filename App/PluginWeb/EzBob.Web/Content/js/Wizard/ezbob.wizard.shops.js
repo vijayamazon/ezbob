@@ -23,7 +23,7 @@
     };
 
     StoreInfoStepModel.prototype.getStores = function() {
-      var accountTypeName, amazons, aryCGAccounts, atlc, ebays, ekms, freeagents, ignore, listOfShops, payPoints, paypals, sageAccounts, shop, stores, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _q;
+      var accountTypeData, accountTypeName, amazons, aryCGAccounts, ebays, ekms, freeagents, listOfShops, payPoints, paypals, sageAccounts, shop, stores, yodlees, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _len6, _len7, _len8, _m, _n, _o, _p, _q;
 
       stores = [];
       ebays = this.get("ebayStores").toJSON();
@@ -92,9 +92,8 @@
       }
       aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
       for (accountTypeName in aryCGAccounts) {
-        ignore = aryCGAccounts[accountTypeName];
-        atlc = accountTypeName.toLowerCase();
-        listOfShops = this.get(atlc + 'Shops');
+        accountTypeData = aryCGAccounts[accountTypeName];
+        listOfShops = this.get(accountTypeData.ClientSide.StoreInfoStepModelShops);
         if (listOfShops !== void 0) {
           for (_q = 0, _len8 = listOfShops.length; _q < _len8; _q++) {
             shop = listOfShops[_q];

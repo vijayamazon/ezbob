@@ -1,10 +1,9 @@
 ﻿using FluentNHibernate.Mapping;
-using NHibernate.Type;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	#region class MP_VatReturnEntryMap
 
-	class MP_VatReturnEntryMap : ClassMap<MP_VatReturnEntry> {
+	public class MP_VatReturnEntryMap : ClassMap<MP_VatReturnEntry> {
 		#region public
 
 		#region constructor
@@ -15,7 +14,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.Record, "RecordId");
 			References(x => x.Name, "NameId");
 			Map(x => x.Amount);
-			Map(x => x.Currency).Length(3);
+			Map(x => x.CurrencyCode).Length(3);
 		} // constructor
 
 		#endregion constructor

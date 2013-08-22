@@ -16,7 +16,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual DateTime DateTo { get; set; }
 		public virtual DateTime DateDue { get; set; }
 
-		public virtual string RegistrationNo { get; set; }
+		public virtual long RegistrationNo { get; set; }
 
 		public virtual Business Business { get; set; }
 

@@ -8,7 +8,7 @@
 		public virtual MP_VatReturnRecord Record { get; set; }
 		public virtual MP_VatReturnEntryName Name { get; set; }
 		public virtual decimal Amount { get; set; }
-		public virtual string Currency { get; set; }
+		public virtual string CurrencyCode { get; set; }
 
 		#endregion public
 	} // class MP_VatReturnEntry
