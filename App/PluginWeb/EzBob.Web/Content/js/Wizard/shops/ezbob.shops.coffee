@@ -19,32 +19,32 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         @amazonMarketplaces.on "sync", @render, this
 
         @ekmAccounts = new EzBob.EKMAccounts()
-        @ekmAccounts.fetch().done => @render()
+        @ekmAccounts.safeFetch().done => @render()
         @ekmButtonView = new EzBob.EKMAccountButtonView(model: @ekmAccounts)
         @EKMAccountInfoView = new EzBob.EKMAccountInfoView(model: @ekmAccounts)
 
         @freeAgentAccounts = new EzBob.FreeAgentAccounts()
-        @freeAgentAccounts.fetch().done => @render()
+        @freeAgentAccounts.safeFetch().done => @render()
         @freeAgentButtonView = new EzBob.FreeAgentAccountButtonView(model: @freeAgentAccounts)
         @FreeAgentAccountInfoView = new EzBob.FreeAgentAccountInfoView(model: @freeAgentAccounts)
 
         @sageAccounts = new EzBob.SageAccounts()
-        @sageAccounts.fetch().done => @render()
+        @sageAccounts.safeFetch().done => @render()
         @sageButtonView = new EzBob.SageAccountButtonView(model: @sageAccounts)
         @sageAccountInfoView = new EzBob.SageAccountInfoView(model: @sageAccounts)
 
         @PayPointAccounts = new EzBob.PayPointAccounts()
-        @PayPointAccounts.fetch().done => @render()
+        @PayPointAccounts.safeFetch().done => @render()
         @PayPointButtonView = new EzBob.PayPointAccountButtonView(model: @PayPointAccounts)
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
         @YodleeAccounts = new EzBob.YodleeAccounts()
-        @YodleeAccounts.fetch().done => @render()
+        @YodleeAccounts.safeFetch().done => @render()
         @YodleeButtonView = new EzBob.YodleeAccountButtonView(model: @YodleeAccounts)
         @YodleeAccountInfoView = new EzBob.YodleeAccountInfoView(model: @YodleeAccounts)
 
         @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
-        @payPalAccounts.fetch().done => @render()
+        @payPalAccounts.safeFetch().done => @render()
         @PayPalButtonView = new EzBob.PayPalButtonView(model: @payPalAccounts)
         @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)
 
@@ -54,7 +54,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
             lc = accountTypeName.toLowerCase()
 
             acc = new EzBob.CGAccounts [], accountType: accountTypeName
-            acc.fetch().done => @render()
+            acc.safeFetch().done => @render()
 
             this[lc + 'Accounts'] = acc
             this[lc + 'ButtonView'] = new EzBob.CGAccountButtonView model: acc, accountType: accountTypeName

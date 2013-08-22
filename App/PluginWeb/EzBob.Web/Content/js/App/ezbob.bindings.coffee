@@ -45,3 +45,13 @@ EzBob.BindingConverters.percentsFormat = (direction, value) ->
             return result
 
 EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumerciFormat(EzBob.moneyFormat)
+
+Backbone.Collection::safeFetch = ->
+    
+    loggedIn = -> return $('body').hasClass('auth')
+    
+    if loggedIn()
+        return @fetch()
+    def = $.Deferred()
+    setTimeout (-> def.resolve().promise()), 1
+    return def

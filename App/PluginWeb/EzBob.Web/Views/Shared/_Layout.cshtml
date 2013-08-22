@@ -5,6 +5,7 @@
     var controller = (string)ViewContext.RouteData.Values["controller"];
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     var showGetSatisfaction = controller == "Wizard" && config.GetSatisfactionEnabled;
+    var authCookie = Request.IsAuthenticated ? "auth" : "";
 }
 <!DOCTYPE html>
 <html>
@@ -46,7 +47,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body>
+<body class="@authCookie">
     @RenderSection("afterHead", false)
 
     @{

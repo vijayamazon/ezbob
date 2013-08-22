@@ -19,7 +19,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'click #yodleeLinkAccountBtn': 'linkAccountClicked'
 
     loadBanks: () ->
-        @YodleeBanks.fetch().done =>
+        @YodleeBanks.safeFetch().done =>
             if @YodleeBanks.length > 0
                 @render
                 
