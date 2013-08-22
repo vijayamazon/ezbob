@@ -18,6 +18,8 @@ namespace Reports {
 			m_oArgMatch[DateStartArg] = Report.DateRangeArg;
 			m_oArgMatch[DateEndArg] = Report.DateRangeArg;
 			m_oArgMatch[ShowNonCashArg] = Report.ShowNonCashArg;
+			m_oArgMatch[UserIDArg] = Report.CustomerArg;
+			m_oArgMatch[UserNameOrEmailArg] = Report.CustomerArg;
 
 			if (rpt != null) {
 				StoredProcedure = rpt.StoredProcedure;
@@ -33,6 +35,16 @@ namespace Reports {
 		public string StoredProcedure { get; set; }
 
 		public ColumnInfo[] Columns { get; set; }
+
+		public int? UserID {
+			get { return this[UserIDArg]; }
+			set { this[UserIDArg] = value; }
+		} // UserID
+
+		public string UserNameOrEmail {
+			get { return this[UserNameOrEmailArg]; }
+			set { this[UserNameOrEmailArg] = value; }
+		} // UserNameOrEmail
 
 		public int? ShowNonCashTransactions {
 			get { return this[ShowNonCashArg]; }
@@ -54,7 +66,7 @@ namespace Reports {
 
 			foreach (KeyValuePair<string, dynamic> pair in m_oValues) {
 				if (Report.Arguments.ContainsKey(m_oArgMatch[pair.Key]))
-					oParams.Add(new QueryParameter(pair.Key, pair.Value));
+					oParams.Add(new QueryParameter(pair.Key, pair.Value ?? DBNull.Value));
 			} // for each
 
 			return oDB.ExecuteReader(StoredProcedure, oParams.ToArray());
@@ -80,10 +92,12 @@ namespace Reports {
 
 		public Report Report { get; set; }
 
-		private SortedDictionary<string, string> m_oArgMatch;
+		private readonly SortedDictionary<string, string> m_oArgMatch;
 
 		private const string ShowNonCashArg = "@ShowNonCashTransactions";
 		private const string DateStartArg = "@DateStart";
 		private const string DateEndArg = "@DateEnd";
+		private const string UserNameOrEmailArg = "@UserNameOrEmail";
+		private const string UserIDArg = "@UserID";
 	} // class ReportQuery
 } // namespace Reports

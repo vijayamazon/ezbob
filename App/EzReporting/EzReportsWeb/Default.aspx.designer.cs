@@ -94,6 +94,15 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.WebControls.CheckBox chkShowNonCash;
         
         /// <summary>
+        /// divDateFilter control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divDateFilter;
+        
+        /// <summary>
         /// rblFilter control.
         /// </summary>
         /// <remarks>
@@ -128,6 +137,24 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl toDate;
+        
+        /// <summary>
+        /// divUserKeyField control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divUserKeyField;
+        
+        /// <summary>
+        /// UserKey control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputText UserKey;
         
         /// <summary>
         /// btnShowReport control.

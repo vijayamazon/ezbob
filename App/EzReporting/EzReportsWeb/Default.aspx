@@ -42,21 +42,28 @@
 								<asp:CheckBox runat="server" ID="chkShowNonCash" Text="Show Non-Cash Transactions" Checked="True"/>
 							</div>
 
-							<asp:RadioButtonList ID="rblFilter" runat="server" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged"
-								CssClass="rbppcol" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="True">
-								<asp:ListItem Value="Today" Text="Today" Selected="True"></asp:ListItem>
-								<asp:ListItem Value="Yesterday" Text="Yesterday"></asp:ListItem>
-								<asp:ListItem Value="Weekly" Text="Weekly"></asp:ListItem>
-								<asp:ListItem Value="Monthly" Text="Monthly"></asp:ListItem>
-								<asp:ListItem Value="MonthToDate" Text="Month to Date"></asp:ListItem>
-								<asp:ListItem Value="Custom" Text="Custom"></asp:ListItem>
-							</asp:RadioButtonList>
+							<div id="divDateFilter" runat="server">
+								<asp:RadioButtonList ID="rblFilter" runat="server" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged"
+									CssClass="rbppcol" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="True">
+									<asp:ListItem Value="Today" Text="Today" Selected="True"></asp:ListItem>
+									<asp:ListItem Value="Yesterday" Text="Yesterday"></asp:ListItem>
+									<asp:ListItem Value="Weekly" Text="Weekly"></asp:ListItem>
+									<asp:ListItem Value="Monthly" Text="Monthly"></asp:ListItem>
+									<asp:ListItem Value="MonthToDate" Text="Month to Date"></asp:ListItem>
+									<asp:ListItem Value="Custom" Text="Custom"></asp:ListItem>
+								</asp:RadioButtonList>
 
-							<div id="divCustomFilter" runat="server" visible="false">
-								<label for="fromDate">From Date:</label>
-								<input type="date" runat="server" id="fromDate" required="required" min="2012-01-01" />&nbsp;
-								<label for="toDate">To Date:</label>
-								<input type="date" runat="server" id="toDate" required="required" min="2012-01-01" />&nbsp;
+								<div id="divCustomFilter" runat="server" visible="false">
+									<label for="fromDate">From Date:</label>
+									<input type="date" runat="server" id="fromDate" required="required" min="2012-01-01" />&nbsp;
+									<label for="toDate">To Date:</label>
+									<input type="date" runat="server" id="toDate" required="required" min="2012-01-01" />&nbsp;
+								</div>
+							</div>
+
+							<div id="divUserKeyField" runat="server" Visible="False">
+								<label for="UserKey">User name/id/email:</label>
+								<input type="text" id="UserKey" runat="server"/>
 							</div>
 						</td>
 

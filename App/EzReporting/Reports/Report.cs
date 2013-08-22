@@ -31,6 +31,7 @@ namespace Reports {
 		public const string ReportArgsStoredProc = "RptScheduler_GetReportArgs";
 
 		public const string DateRangeArg = "DateRange";
+		public const string CustomerArg = "Customer";
 		public const string ShowNonCashArg = "ShowNonCashTransactions";
 
 		public static DataTable LoadReportList(AConnection oDB, string sReportTypeName = "") {

@@ -61,24 +61,28 @@ namespace EzReportsWeb {
 			fromDate.Value = fDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 			toDate.Value   = tDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
-			ToggleShowNonCash();
+			AdjustUIFiltersForReport();
 		} // Page_Load
 
 		protected void ddlReportTypes_OnSelectedIndexChanged(object sender, EventArgs e) {
-			ToggleShowNonCash();
+			AdjustUIFiltersForReport();
 		} // ddlReportTypes_OnSelectedIndexChanged
 
-		private void ToggleShowNonCash() {
+		private void AdjustUIFiltersForReport() {
 			Report rpt = reportHandler.GetReport(ddlReportTypes.SelectedValue);
 
-			if (rpt != null)
-				chkShowNonCash.Visible = rpt.Arguments.ContainsKey(Report.ShowNonCashArg);
-		} // ToggleShowNonCash
+			if (rpt == null)
+				return;
+
+			chkShowNonCash.Visible = rpt.Arguments.ContainsKey(Report.ShowNonCashArg);
+			divDateFilter.Visible = rpt.Arguments.ContainsKey(Report.DateRangeArg);
+			divUserKeyField.Visible = rpt.Arguments.ContainsKey(Report.CustomerArg);
+		} // AdjustUIFiltersForReport
 
 		protected void btnShowReport_Click(object sender, EventArgs e) {
 			bool isDaily;
 
-			ReportQuery rptDef = GetReportDefinitions(out isDaily);
+			ReportQuery rptDef = CreateReportQuery(out isDaily);
 
 			var oColumnTypes = new List<string>();
 
@@ -97,22 +101,37 @@ namespace EzReportsWeb {
 			divReportData.Controls.Add(reportData);
 		} // btnShowReport_Click
 
-		private ReportQuery GetReportDefinitions(out bool isDaily) {
+		private ReportQuery CreateReportQuery(out bool isDaily) {
 			DateTime fDate, tDate;
 
 			GetDates(out fDate, out tDate, out isDaily);
 
-			return new ReportQuery {
+			var rq = new ReportQuery {
 				DateStart = fDate,
 				DateEnd = tDate,
 				ShowNonCashTransactions = chkShowNonCash.Checked ? 1 : 0
 			};
-		} // GetReportDefinitions
+
+			string sUserKey = UserKey.Value.Trim();
+
+			if (sUserKey != string.Empty) {
+				int nUserID = 0;
+
+				if (int.TryParse(sUserKey, out nUserID))
+					rq.UserID = nUserID;
+				else
+					rq.UserID = null;
+
+				rq.UserNameOrEmail = sUserKey;
+			} // if sUserKey is not empty
+
+			return rq;
+		} // CreateReportQuery
 
 		protected void BtnGetExcelClick(object sender, EventArgs e) {
 			bool isDaily;
 
-			ReportQuery rptDef = GetReportDefinitions(out isDaily);
+			ReportQuery rptDef = CreateReportQuery(out isDaily);
 
 			var wb = reportHandler.GetWorkBook(ddlReportTypes.SelectedItem, rptDef, isDaily);
 
