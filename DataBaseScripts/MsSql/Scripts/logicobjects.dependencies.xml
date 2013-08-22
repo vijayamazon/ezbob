@@ -1183,12 +1183,6 @@
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
-    <oName>RegisteredCustomers</oName>
-    <oRank>2</oRank>
-    <oFileName>04_VIEWS\RegisteredCustomers.sql</oFileName>
-    <oType>View</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>Security_vUser</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\Security_vUser.sql</oFileName>
