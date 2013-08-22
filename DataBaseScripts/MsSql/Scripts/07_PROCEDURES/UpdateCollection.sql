@@ -18,7 +18,8 @@ CREATE PROCEDURE [dbo].[UpdateCollection]
  @IsDefaulted int,
  @Late90Plus numeric(18),
  @Late90PlusNum numeric(18),
- @MaxDelinquencyDays int)
+ @MaxDelinquencyDays int,
+ @InstallmentDelinquencyDays int)
  
 
 AS
