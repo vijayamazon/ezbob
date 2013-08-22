@@ -37,7 +37,7 @@
 			double sum = 0;
 			double payPalSum = 0;
 			double ebaySum = 0;
-			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal"))
+			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled &&(!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal" )))
 			{
 				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
