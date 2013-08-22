@@ -61,7 +61,7 @@ BEGIN
 			WHEN Customer.ApplyForLoan IS NULL THEN 'NO'
 			WHEN Customer.ApplyForLoan IS NOT NULL THEN 'YES'
 		END,
-		Customer.IsSuccessfullyRegistered,
+		CASE WHEN Customer.WizardStep=4 THEN 1 ELSE 0 END AS IsSuccessfullyRegistered,
 		Customer.Status,
 		Customer.MedalType,
 		PARSENAME(CONVERT(VARCHAR, CONVERT(MONEY, CONVERT(DECIMAL(13, 0), #tmpOffer.MaxApproved)), 1), 2) MaxApproved,

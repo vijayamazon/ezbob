@@ -487,8 +487,8 @@ namespace EzBob.Web.Areas.Underwriter
             gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
                 {
                     Caption = "User Status",
-                    Name = "IsSuccessfullyRegistered",
-                    Index = "IsSuccessfullyRegistered",
+                    Name = "WizardStep",
+					Index = "WizardStep",
                     Resizable = false,
                     Align = Align.Center,
                     Title = false,
@@ -497,7 +497,7 @@ namespace EzBob.Web.Areas.Underwriter
                     Search = false,
                     Width = 87,
                     DataType = TypeCode.Boolean,
-                    Data = x => !x.IsSuccessfullyRegistered ? "registered" : "credit calculation"
+                    Data = x => x.WizardStep != WizardStepType.AllStep ? "registered" : "credit calculation"
                 });
         }
 

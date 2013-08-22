@@ -30,7 +30,6 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.IsLoanTypeSelectionAllowed);
             Map(x => x.Status).CustomType<StatusType>();
             Map(x => x.SystemDecision).CustomType<SystemDecisionType>();
-            Map(x => x.IsSuccessfullyRegistered, "IsSuccessfullyRegistered");
             Map(x => x.Medal, "MedalType").CustomType<MedalType>();
             Map(x => x.GreetingMailSentDate, "GreetingMailSentDate");
             Map(x => x.ApplyCount, "ApplyCount");

@@ -11,7 +11,7 @@ AS
 BEGIN
 	SELECT
 		Name,
-		IsSuccessfullyRegistered,
+		CASE WHEN WizardStep=4 THEN 1 ELSE 0 END AS IsSuccessfullyRegistered,
 		AccountNumber,
 		Status,
 		PARSENAME(CONVERT(VARCHAR, CONVERT(MONEY, CONVERT(DECIMAL(13, 0), CreditSum)), 1), 2) CreditSum,

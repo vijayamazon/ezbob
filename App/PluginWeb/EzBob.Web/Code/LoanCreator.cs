@@ -195,7 +195,7 @@
 				throw new CustomerIsNotApprovedException();
 			}
 
-			if (!cus.IsSuccessfullyRegistered)
+			if (cus.WizardStep != WizardStepType.AllStep)
 			{
 				throw new CustomerIsNotFullyRegisteredException();
 			}

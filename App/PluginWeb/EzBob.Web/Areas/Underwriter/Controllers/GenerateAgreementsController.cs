@@ -12,7 +12,9 @@ using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class GenerateAgreementsController : Controller
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class GenerateAgreementsController : Controller
     {
         private readonly AgreementsGenerator _agreementsGenerator;
         private readonly ILoanRepository _loanRepository;
@@ -68,7 +70,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [NoCache]
         public RedirectToRouteResult GenerateConsentAgreement()
         {
-            var customers = _customersRepository.GetAll().Where(x=>x.IsSuccessfullyRegistered).ToList() ;
+            var customers = _customersRepository.GetAll().Where(x=>x.WizardStep == WizardStepType.AllStep).ToList() ;
 
             foreach (var customer in customers.Where(customer => customer.PersonalInfo !=null))
             {

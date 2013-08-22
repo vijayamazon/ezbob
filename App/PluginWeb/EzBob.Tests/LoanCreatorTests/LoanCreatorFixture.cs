@@ -20,7 +20,7 @@ namespace EzBob.Tests.LoanCreatorTests
                 CreditSum = 10000,
                 OfferStart = DateTime.UtcNow.AddDays(-1),
                 OfferValidUntil = DateTime.UtcNow.AddDays(1),
-                IsSuccessfullyRegistered = true
+				WizardStep = WizardStepType.AllStep
             };
         }
 

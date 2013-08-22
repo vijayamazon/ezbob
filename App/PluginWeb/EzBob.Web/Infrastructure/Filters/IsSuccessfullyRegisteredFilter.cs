@@ -5,7 +5,9 @@ using StructureMap;
 
 namespace EzBob.Web.Infrastructure.Filters
 {
-    public class IsSuccessfullyRegisteredFilter : ActionFilterAttribute
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class IsSuccessfullyRegisteredFilter : ActionFilterAttribute
     {
         //-------------------------------------------------------------------------
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -34,7 +36,7 @@ namespace EzBob.Web.Infrastructure.Filters
 
                 var routeDictionary = new RouteValueDictionary {{"action", "Index"}, {"Area", "Customer"}};
 
-                if (!customer.IsSuccessfullyRegistered)
+                if (customer.WizardStep != WizardStepType.AllStep)
                 {
                     if (filterContext.RouteData.Values["controller"].ToString() == "Wizard") return;
                     routeDictionary.Add("controller", "Wizard");

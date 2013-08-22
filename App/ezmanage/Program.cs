@@ -15,7 +15,9 @@ using log4net.Config;
 
 namespace ezmanage
 {
-    internal class Program
+	using EZBob.DatabaseLib.Model.Database;
+
+	internal class Program
     {
 
         public static ILog _log = LogManager.GetLogger("ezmanage");
@@ -90,7 +92,7 @@ namespace ezmanage
             var customerIdsForUpdate =
                 ObjectFactory.GetInstance<CustomerRepository>()
                              .GetAll()
-                             .Where(x => x.IsSuccessfullyRegistered && !x.IsTest)
+                             .Where(x => x.WizardStep == WizardStepType.AllStep && !x.IsTest)
                              .Select(x=>x.Id);
 
             foreach (var customerId in customerIdsForUpdate)

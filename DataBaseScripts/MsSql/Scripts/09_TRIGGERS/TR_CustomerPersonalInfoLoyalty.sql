@@ -19,7 +19,7 @@ BEGIN
 		a.Cost
 	FROM
 		inserted c
-		INNER JOIN deleted d ON c.Id = d.Id AND c.IsSuccessfullyRegistered = 1 AND d.IsSuccessfullyRegistered = 0
+		INNER JOIN deleted d ON c.Id = d.Id AND c.WizardStep = 4 AND d.WizardStep != 4
 		INNER JOIN LoyaltyProgramActions a ON a.ActionName = 'PERSONALINFO'
 
 	SET NOCOUNT OFF

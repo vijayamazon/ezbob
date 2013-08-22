@@ -224,8 +224,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual bool Eliminated { get; set; }
         public virtual int FinancialAccounts { get; set; }
 
-        public virtual bool IsSuccessfullyRegistered { get; set; }
-
         public virtual LimitedInfo LimitedInfo { get; set; }
         public virtual NonLimitedInfo NonLimitedInfo { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }

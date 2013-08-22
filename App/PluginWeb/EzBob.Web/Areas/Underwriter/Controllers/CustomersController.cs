@@ -583,7 +583,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             var customer = _customers.TryGet(customerId);
             if (customer == null) return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
-            if (!customer.IsSuccessfullyRegistered) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
+            if (customer.WizardStep != WizardStepType.AllStep) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
             return this.JsonNet(new { State = CustomerState.Ok.ToString() });
         }
 
@@ -608,7 +608,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     new CustomersCountersModel
                         {
                             Count =
-                                _customers.GetAll().Count(x => x.CreditResult == null && x.IsSuccessfullyRegistered && (isTest || x.IsTest == false)),
+                                _customers.GetAll().Count(x => x.CreditResult == null && x.WizardStep == WizardStepType.AllStep && (isTest || x.IsTest == false)),
                             Name = "RegisteredCustomers"
                         },
                     new CustomersCountersModel
@@ -631,7 +631,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
             var findResult =
                 _session.Query<EZBob.DatabaseLib.Model.Database.Customer>()
-                        .Where(x => x.IsSuccessfullyRegistered)
+						.Where(x => x.WizardStep == WizardStepType.AllStep)
                         .Where(
                             c =>
                             c.Id == id || c.Name.Contains(term) ||

@@ -79,8 +79,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     break;
             }
 
-            customer.IsSuccessfullyRegistered = true;
-
             _crBuilder.CreateCashRequest(customer);
 
             customer.WizardStep = WizardStepType.AllStep;

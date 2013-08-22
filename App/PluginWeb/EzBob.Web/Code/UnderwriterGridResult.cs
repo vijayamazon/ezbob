@@ -32,7 +32,7 @@ namespace EzBob.Web.Code
                     );
             }
             criteria.Add(Restrictions.IsNotNull("PersonalInfo"));
-            criteria.Add(Restrictions.Eq("IsSuccessfullyRegistered", true));
+            criteria.Add(Restrictions.Eq("WizardStep", WizardStepType.AllStep));
             criteria.Add(Restrictions.IsNotEmpty("CashRequests"));
             base.OnCustomizeFilter(criteria);
         }
