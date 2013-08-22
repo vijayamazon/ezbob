@@ -56,5 +56,17 @@ namespace ExperianLib
                 errors.AppendLine("Can`t read value for: " + key);
             }
         }
+
+        public static void TryRead(Func<object> action)
+        {
+            try
+            {
+                action();
+            }
+            catch
+            {
+                
+            }
+        }
     }
 }

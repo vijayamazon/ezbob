@@ -92,7 +92,15 @@ namespace EzBob.Models
                         TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
                     //creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
                     creditBureau.FinancialAccounts = customer.FinancialAccounts;
+                    var isHasFinancialAccout = false;
+                    Utils.TryRead(() => isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x=>x.CAISDetails.Any()));
+                    creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
                 }
+                else
+                {
+                    creditBureau.ThinFile = "N/A";
+                }
+
             }
             catch (Exception e)
             {
