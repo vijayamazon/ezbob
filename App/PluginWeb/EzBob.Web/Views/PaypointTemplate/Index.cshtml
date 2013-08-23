@@ -7,12 +7,19 @@
 @model bool
 
 @section head{
-    <!--prod-->
-    <!--<base href="https://app.ezbob.com/" />-->
-    <!--uat-->
-    <!--<base href="https://192.168.120.6:444" />-->
-    <!--local-->
-    <base href="https://localhost:44300" />
+    @if (Model == true)
+    {
+        <!--prod-->
+        <base href="https://app.ezbob.com/" />
+    }
+    else
+    {
+        <!--uat-->
+        <base href="https://192.168.120.6:444" />
+        <!--local-->
+        <!--<base href="https://localhost:44300" />-->
+    }
+
     <script type="text/javascript">
         var EzBob = EzBob || {};
         EzBob.Config = EzBob.Config || {};
