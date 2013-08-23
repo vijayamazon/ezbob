@@ -7,13 +7,12 @@
 	[TestFixture]
 	class PacNetTestFixture
 	{
-		private static ASafeLog ms_oLog;
 		private Conf m_oConf;
 
 		[SetUp]
 		public void Init()
 		{
-			var pacnetcfg = new Conf(ms_oLog);
+			var pacnetcfg = new Conf();
 			pacnetcfg.Init();
 			m_oConf = pacnetcfg;
 		}
