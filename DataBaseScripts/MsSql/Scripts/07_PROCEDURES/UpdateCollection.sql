@@ -42,7 +42,7 @@ UPDATE [dbo].[Loan]
  WHERE Id = @LoanId
 
 UPDATE [dbo].[LoanSchedule]
-   SET  Delinquency = @MaxDelinquencyDays
+   SET  Delinquency = @InstallmentDelinquencyDays
  WHERE Id = @InstallmentId
 
  SET NOCOUNT ON;
