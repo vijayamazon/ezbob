@@ -13,13 +13,13 @@
             @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
         </thead>
         <tbody>
-            @EzForm.RawCellBold("Name", "Addresses", "Phones", "Emails", "Email Domains", "Bank Accounts", "Companies", "Shops")
+            @EzForm.RawCellBold("Name", "Addresses (Postcode, line1, Line2, Line3, Town, County)", "Phones", "Emails", "Email Domains", "Bank Accounts (Bank account, Sort code)", "Companies  (Company name, Registration Number)", "Shops (Shop name, Show type)")
             <%_.each(data, function(val){ %> 
             <%
             function PrepareOutput(data){
                 var retVal = "";
                 _.each(data, function(value, i){
-                    retVal+= i+1 + ') ' +_.values(value).clean(0).clean(null) + ' <br />'; 
+                    retVal+= i+1 + ') ' +_.values(value).clean(0).clean(null).toString().replace(/,/g,', ') + ' <br />'; 
                 });
                 return retVal.isNullOrEmpty() ? "-" : retVal;
             }
@@ -128,7 +128,7 @@
             <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
             <div class="controls">
                 <%if(_.keys(val).length>2){ %>
-                <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val).clean("").toString().replace(/,/g,'\n')%></textarea>
+                <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val).clean("")%></textarea>
                 <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
                 <%}else{%>
                 <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
