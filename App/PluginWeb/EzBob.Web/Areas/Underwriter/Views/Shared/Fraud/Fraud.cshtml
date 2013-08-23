@@ -47,8 +47,8 @@
     <div class="modal-body">
         <form class="form-horizontal" action="/" method="post">
             <h5>Fraud name</h5>
-            @EzForm.InputText("FirstName", "First Name", "")
-            @EzForm.InputText("LastName", "Last Name", "")
+            @EzForm.InputTextUnderwriter("FirstName", "First Name", "")
+            @EzForm.InputTextUnderwriter("LastName", "Last Name", "")
             <hr/>
 
             <h5>Fraud Addresses</h5>
@@ -128,9 +128,9 @@
             <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
             <div class="controls">
                 <%if(_.keys(val).length>1){%>
-                <textarea  disabled="disabled" style="resize: none"><%-$.param(val).replace(/&/g,'\n')%></textarea>
+                <textarea  disabled="disabled" style="resize: none"><%-_.values(val).clean("")%></textarea>
                 <%}else{%>
-                <input type="text"  disabled="disabled" value="<%-$.param(val)%>">
+                <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
                 <%}%>
                 <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
             </div>
