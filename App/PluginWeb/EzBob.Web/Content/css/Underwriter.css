@@ -487,3 +487,14 @@ table.internal-table td {
 	background-color: transparent !important;
 	white-space: nowrap !important;
 }
+
+.fraud-form .control-group {
+    margin-bottom: 5px;
+}
+.fraud-form hr {
+    margin: 5px 0 0 0;
+}
+
+.fraud-form-add-values .error,.fraud-form .error {
+    border: 1px solid red;
+}

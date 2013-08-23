@@ -156,8 +156,6 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
 
     addButtonClicked: ->
         model = new EzBob.Underwriter.FraudModel()
-        console.clear()
-        log model.toJSON()
         view = new EzBob.Underwriter.AddEditFraudView({model: model})
         view.modalOptions = 
             show: true

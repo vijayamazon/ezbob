@@ -45,13 +45,13 @@
         <h3 id="myModalLabel">Add new fraud user</h3>
     </div>
     <div class="modal-body">
-        <form class="form-horizontal" action="/" method="post">
+        <form class="form-horizontal fraud-form" action="/" method="post">
             <h5>Fraud name</h5>
             @EzForm.InputTextUnderwriter("FirstName", "First Name", "")
             @EzForm.InputTextUnderwriter("LastName", "Last Name", "")
             <hr/>
 
-            <h5>Fraud Addresses</h5>
+            <h5>Fraud Addresses (Postcode, line1, Line2, Line3, Town, County)</h5>
             <div class="Addresses"></div>
             <button class="btn-mini btn btn-success add" data-type="Addresses"><i class="icon-plus"></i></button>
             <hr/>
@@ -66,22 +66,22 @@
             <button class="btn-mini btn btn-success add" data-type="Emails"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Email Domains</h5>
+            <h5>Fraud Email Domains (like "gmail.com")</h5>
             <div class="EmailDomains"></div>
             <button class="btn-mini btn btn-success add" data-type="EmailDomains"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Bank Accounts</h5>
+            <h5>Fraud Bank Accounts (Bank account, Sort code)</h5>
             <div class="BankAccounts"></div>
             <button class="btn-mini btn btn-success add" data-type="BankAccounts"><i class="icon-plus"></i></button>
             <hr/>
             
-            <h5>Fraud Companies</h5>
+            <h5>Fraud Companies (Company name, Registration Number)</h5>
             <div class="Companies"></div>
             <button class="btn-mini btn btn-success add" data-type="Companies"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Shops</h5>
+            <h5>Fraud Shops (Shop name, Show type)</h5>
             <div class="Shops"></div>
             <button class="btn-mini btn btn-success add" data-type="Shops"><i class="icon-plus"></i></button>
             <hr/>
@@ -100,7 +100,7 @@
         <h3>@caption</h3>
     </div>
     <div class="modal-body">
-        <form class="form-horizontal">
+        <form class="form-horizontal fraud-form-add-values">
             @foreach (var val in values)
             {
                 if (val.IsCombobox)
@@ -109,7 +109,7 @@
                 }
                 else
                 {
-                    @EzForm.InputText(val.Id, val.Caption, val.Value)
+                    @EzForm.InputTextUnderwriter(val.Id, val.Caption, val.Value)
                 }
             }
         </form>
@@ -127,12 +127,14 @@
         <div class="control-group">
             <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
             <div class="controls">
-                <%if(_.keys(val).length>1){%>
-                <textarea  disabled="disabled" style="resize: none"><%-_.values(val).clean("")%></textarea>
+                <%if(_.keys(val).length>2){ %>
+                <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val).clean("").toString().replace(/,/g,'\n')%></textarea>
+                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
                 <%}else{%>
                 <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
+                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="icon-remove"></i></button>
                 <%}%>
-                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
+                
             </div>
         </div>
         <%});%>
@@ -143,7 +145,7 @@
 </script>
 
 <script type="text/template" id="Phones-template">
-    @SimpleValues("Phones", "Phones")
+    @SimpleValues("Phone", "Phones")
 </script>
 
 <script type="text/template" id="Emails-template">
