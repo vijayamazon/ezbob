@@ -16,5 +16,11 @@ namespace EZBob.DatabaseLib.Repository
         {
             return GetAll().Where(x => x.CurrentCustomer.Id == customerId);
         }
+
+        public IEnumerable<FraudDetection> GetLastDetections(int customerId)
+        {
+            var lastCheckDate = GetByCustomerId(customerId).Max(x => x.DateOfCheck);
+            return GetByCustomerId(customerId).Where(x => x.DateOfCheck == lastCheckDate);
+        }
     }
 }
