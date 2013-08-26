@@ -3,7 +3,7 @@
 
 	public interface IHarvester {
 		bool Init();
-		bool Run(bool bValidateCredentialsOnly);
+		void Run(bool bValidateCredentialsOnly);
 		void Done();
 	} // interface IHarvester
 

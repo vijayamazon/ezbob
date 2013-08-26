@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ezbob.Logger;
 using HtmlAgilityPack;
+using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using log4net;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
@@ -78,8 +79,7 @@ namespace Ezbob.HmrcHarvester {
 		/// Main harvest function. Logs in to hmrc.gov.uk and fetches data.
 		/// </summary>
 		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
-		/// <returns>true, on success; false, otherwise.</returns>
-		public virtual bool Run(bool bValidateCredentialsOnly) {
+		public virtual void Run(bool bValidateCredentialsOnly) {
 			try {
 				Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
 
@@ -94,7 +94,7 @@ namespace Ezbob.HmrcHarvester {
 
 				if (bValidateCredentialsOnly) {
 					Debug("Harvester running is complete.");
-					return true;
+					return;
 				} // if
 
 				Debug("Harvester starts downloading data.");
@@ -102,11 +102,9 @@ namespace Ezbob.HmrcHarvester {
 				VatReturns(sUserVatID);
 
 				Debug("Harvester running is complete.");
-				return true;
 			}
 			catch (Exception e) {
-				Error("Harvester.Run - exception caught: {0}", e);
-				return false;
+				throw new ApiException("HMRC Harvester.Run failed", e);
 			} // try
 		} // Run
 

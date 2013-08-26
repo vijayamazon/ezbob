@@ -73,7 +73,9 @@ namespace Integration.ChannelGrabberFrontend {
 			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
 
 			if (ctr.Init()) {
-				if (ctr.Run(false)) {
+				try {
+					ctr.Run(false);
+
 					switch (ad.VendorInfo.Behaviour) {
 					case Behaviour.Default:
 						ProcessRetrieved(
@@ -83,7 +85,7 @@ namespace Integration.ChannelGrabberFrontend {
 							DefaultConversion,
 							Helper.StoreChannelGrabberOrdersData,
 							Helper.GetAllChannelGrabberOrdersData
-						);
+							);
 						break;
 
 					case Behaviour.HMRC:
@@ -94,18 +96,20 @@ namespace Integration.ChannelGrabberFrontend {
 							HmrcConversion,
 							Helper.StoreHmrcData,
 							Helper.GetAllHmrcData
-						);
+							);
 						break;
 
 					default:
 						throw new ApiException("Unsupported behaviour for CG flavour: " + ad.VendorInfo.Behaviour.ToString());
 					} // switch
-
-				} // if Run succeeded
-
-				ctr.Done();
+				}
+				catch (ApiException) {
+					ctr.Done();
+					throw;
+				} // try
 			} // if Init succeeded
-
+			else
+				throw new ApiException("Failed to initialise CG connector.");
 		} // InternalUpdateInfo
 
 		#endregion method InternalUpdateInfo

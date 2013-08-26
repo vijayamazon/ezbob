@@ -50,9 +50,9 @@ namespace Integration.ChannelGrabberFrontend {
 
 		#region method Run
 
-		public virtual bool Run(bool bValidateCredentialsOnly) {
+		public virtual void Run(bool bValidateCredentialsOnly) {
 			try {
-				return DataHarvester.Run(bValidateCredentialsOnly);
+				DataHarvester.Run(bValidateCredentialsOnly);
 			}
 			catch (Integration.ChannelGrabberAPI.ConnectionFailException cfe) {
 				throw new ConnectionFailException(cfe.Message, cfe);

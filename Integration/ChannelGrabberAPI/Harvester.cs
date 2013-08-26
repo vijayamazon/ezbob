@@ -23,7 +23,7 @@ namespace Integration.ChannelGrabberAPI {
 		public Harvester(AccountData oAccountData, ILog log, DBCustomer oCustomer) : base(log) {
 			m_oAccountData = oAccountData;
 
-			if (m_oCustomer == null)
+			if (oCustomer == null)
 				throw new ApiException("Customer information not specified.");
 
 			m_oCustomer = oCustomer;
@@ -66,15 +66,11 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Run
 
-		public virtual bool Run(bool bValidateCredentialsOnly) {
-			if (bValidateCredentialsOnly) {
+		public virtual void Run(bool bValidateCredentialsOnly) {
+			if (bValidateCredentialsOnly)
 				Validate();
-				return true;
-			}
-			else {
+			else
 				RetrievedOrders = GetOrders();
-				return RetrievedOrders != null;
-			} // if
 		} // Run
 
 		#endregion method Run
