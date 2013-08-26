@@ -11,6 +11,7 @@ using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.DatabaseWrapper.Products;
 using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
 using EzBob.AmazonDbLib;
 using EzBob.AmazonServiceLib;
 using EzBob.AmazonServiceLib.Common;
@@ -57,56 +58,52 @@ namespace EzBob.AmazonLib
 			UpdateClientFeedbackInfo( databaseCustomerMarketPlace, securityInfo, historyRecord );
         }
 
-		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data)
-        {
-            #region FeedBack
-			var feedbacks = Helper.GetAmazonFeedback()
-				.Where(f => f.CustomerMarketPlace.Id == marketPlace.Id && f.HistoryRecord.UpdatingStart != null && f.HistoryRecord.UpdatingEnd != null).ToList();
+		protected override void AddAnalysisValues(IDatabaseCustomerMarketPlace marketPlace, AnalysisDataInfo data) {
+			List<MP_AmazonFeedback> feedbacks = Helper
+				.GetAmazonFeedback()
+				.Where(f =>
+					(f.CustomerMarketPlace.Id == marketPlace.Id) &&
+					(f.HistoryRecord != null) &&
+					(f.HistoryRecord.UpdatingStart != null) &&
+					(f.HistoryRecord.UpdatingEnd != null)
+				)
+				.OrderBy(x => x.Created)
+				.ToList();
 
-            if (feedbacks.Any())
-            {
-                var feedBackParams = new List<IAnalysisDataParameterInfo>();
+			if (!feedbacks.Any())
+				return;
 
-                feedbacks.ForEach(af =>
-                {
-                    {
-	                    if (af.HistoryRecord != null)
-	                    {
-		                    DateTime? afDate = af.HistoryRecord.UpdatingStart;
-		                    var f = af.FeedbackByPeriodItems.ToList();
-		                    if (f.Count > 0)
-		                    {
-			                    f.ForEach(afp =>
-				                    {
-					                    var timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
-					                    var c = new AnalysisDataParameterInfo ("Number of reviews", timePeriod, DatabaseValueType.Integer, afp.Count);
-					                    var g = new AnalysisDataParameterInfo("Negative Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Negative);
-					                    var n = new AnalysisDataParameterInfo("Neutral Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Neutral);
-					                    var p = new AnalysisDataParameterInfo("Positive Feedback Rate", timePeriod, DatabaseValueType.Integer, afp.Positive);
+			MP_AmazonFeedback oLatestFeedback = feedbacks.Last();
 
-					                    if (timePeriod.TimePeriodType == TimePeriodEnum.Year)
-					                    {
-						                    var sum = afp.Positive + afp.Neutral + afp.Neutral;
+			var feedBackParams = new List<IAnalysisDataParameterInfo>();
 
-						                    feedBackParams.Add(new AnalysisDataParameterInfo ("Positive %", timePeriod, DatabaseValueType.Double, sum == 0 ? 0 : (afp.Positive*100)/sum));
-					                    }
+			if (!oLatestFeedback.FeedbackByPeriodItems.IsEmpty) {
+				foreach (MP_AmazonFeedbackItem afp in oLatestFeedback.FeedbackByPeriodItems) {
+					var timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
 
-					                    feedBackParams.AddRange(new[] {c, n, g, p,});
-				                    });
+					var c = new AnalysisDataParameterInfo("Number of reviews", timePeriod, DatabaseValueType.Integer, afp.Count);
+					var g = new AnalysisDataParameterInfo("Negative Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Negative);
+					var n = new AnalysisDataParameterInfo("Neutral Feedback rate", timePeriod, DatabaseValueType.Integer, afp.Neutral);
+					var p = new AnalysisDataParameterInfo("Positive Feedback Rate", timePeriod, DatabaseValueType.Integer, afp.Positive);
 
-		                    }
+					if (timePeriod.TimePeriodType == TimePeriodEnum.Year) {
+						var sum = afp.Positive + afp.Neutral + afp.Neutral;
 
-		                    if (feedBackParams.Count > 0)
-		                    {
-			                    data.AddData(afDate.Value, feedBackParams);
-		                    }
-	                    }
-                    }
+						feedBackParams.Add(new AnalysisDataParameterInfo(
+							"Positive %",
+							timePeriod,
+							DatabaseValueType.Double,
+							sum == 0 ? 0 : (afp.Positive * 100) / sum
+						));
+					} // if
 
-                });
-            }
-            #endregion            
-        }
+					feedBackParams.AddRange(new[] { c, n, g, p, });
+				} // for each
+			} // if
+
+			if (feedBackParams.Count > 0)
+				data.AddData(oLatestFeedback.HistoryRecord.UpdatingStart.Value, feedBackParams);
+		} // AddAnalysisValues
 
 		public override IMarketPlaceSecurityInfo RetrieveCustomerSecurityInfo( int customerMarketPlaceId )
 		{

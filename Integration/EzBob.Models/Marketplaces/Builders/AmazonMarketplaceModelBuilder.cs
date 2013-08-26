@@ -27,9 +27,12 @@ namespace EzBob.Models.Marketplaces.Builders
             return string.Format("http://www.amazon.co.uk/gp/aag/main?ie=UTF8&seller={0}", ((AmazonSecurityInfo)securityInfo).MerchantId);
         }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
-        {
-            var amazonFeedback = mp.AmazonFeedback.LastOrDefault();
+        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
+			MP_AmazonFeedback amazonFeedback = null;
+
+			if ((mp.AmazonFeedback != null) && !mp.AmazonFeedback.IsEmpty)
+				amazonFeedback = mp.AmazonFeedback.OrderBy(x => x.Created).Last();
+
             var amazonSellerRating = amazonFeedback != null ? amazonFeedback.UserRaining : 0;
 
 

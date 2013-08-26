@@ -1,0 +1,2 @@
+UPDATE MP_MarketplaceType SET Active = 0 WHERE InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+GO

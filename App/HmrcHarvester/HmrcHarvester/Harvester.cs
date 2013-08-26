@@ -104,7 +104,7 @@ namespace Ezbob.HmrcHarvester {
 				Debug("Harvester running is complete.");
 			}
 			catch (Exception e) {
-				throw new ApiException("HMRC Harvester.Run failed", e);
+				throw new ApiException(e.Message, e);
 			} // try
 		} // Run
 
@@ -391,28 +391,33 @@ namespace Ezbob.HmrcHarvester {
 		#region method GetUserVatID
 
 		private string GetUserVatID() {
-			Info("Retrieving user VAT id...");
+			try {
+				Info("Retrieving user VAT id...");
 
-			HtmlDocument doc = GetPage("/home/services");
+				HtmlDocument doc = GetPage("/home/services");
 
-			HtmlNode oLink = doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]");
+				HtmlNode oLink = doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]");
 
-			if (oLink == null)
-				throw new HarvesterException("Access VAT services link not found.");
+				if (oLink == null)
+					throw new HarvesterException("Access VAT services link not found.");
 
-			if (!oLink.Attributes.Contains("href"))
-				throw new HarvesterException("Access VAT services link has not HREF attrbute.");
+				if (!oLink.Attributes.Contains("href"))
+					throw new HarvesterException("Access VAT services link has no HREF attrbute.");
 
-			string sHref = oLink.Attributes["href"].Value;
+				string sHref = oLink.Attributes["href"].Value;
 
-			if (!sHref.StartsWith("/vat/trader/"))
-				throw new HarvesterException("Failed to parse Access VAT services link.");
+				if (!sHref.StartsWith("/vat/trader/"))
+					throw new HarvesterException("Failed to parse Access VAT services link.");
 
-			string sID = sHref.Substring(sHref.LastIndexOf('/') + 1);
+				string sID = sHref.Substring(sHref.LastIndexOf('/') + 1);
 
-			Info("User VAT id is {0}.", sID);
+				Info("User VAT id is {0}.", sID);
 
-			return sID;
+				return sID;
+			}
+			catch (Exception e) {
+				throw new HarvesterException("Invalid credentials", e);
+			} // try
 		} // GetUserVatID
 
 		#endregion method GetUserVatID
