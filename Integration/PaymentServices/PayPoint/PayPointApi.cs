@@ -20,6 +20,14 @@
 		private readonly ILoanRepository _loans;
 		private readonly ConfigurationVariablesRepository _vars;
 
+		public PayPointApi()
+		{
+			_vars = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			_loans = ObjectFactory.GetInstance<ILoanRepository>();
+			_config = ConfigurationRootBob.GetConfiguration().PayPoint;
+			_service.Url = _config.ServiceUrl;
+		}
+
 		public PayPointApi(ConfigurationVariablesRepository vars, ILoanRepository loans, ConfigurationRootBob config)
 		{
 			_vars = vars;
