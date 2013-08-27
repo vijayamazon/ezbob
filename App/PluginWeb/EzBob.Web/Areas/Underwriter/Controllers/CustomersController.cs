@@ -240,19 +240,25 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		public GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer> RegisteredCustomers(GridSettings settings)
 		{
 			bool isTest = Request.Params["IsTest"] == "true";
-			var result = new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
-																						   _gridRegisteredCustomers,
-																						   settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
-				};
-
-			if (!isTest)
+			if (isTest)
 			{
-				result.CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
-																		  Restrictions.IsNull("IsTest")));
+				return new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
+																							   _gridRegisteredCustomers,
+																							   settings)
+					{
+						CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
+					};
+
 			}
-			return result;
+
+			return new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
+																							   _gridRegisteredCustomers,
+																							   settings)
+				{
+					CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
+													   Restrictions.IsNull("IsTest")))
+												  .Add(Restrictions.IsNull("CreditResult"))
+				};
 		}
 
 		[ValidateJsonAntiForgeryToken]
