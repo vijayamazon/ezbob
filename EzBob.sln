@@ -145,6 +145,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HmrcHarvester", "App\HmrcHa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FraudChecker", "Integration\FraudChecker\FraudChecker.csproj", "{EDC99346-E59D-44B7-BDD0-A08CD3D56941}"
 EndProject
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategySchedules", "Lib\Publisher\Plug-ins\StrategySchedules\StrategySchedules.csproj", "{24723844-85C8-4C68-8293-A007044AA041}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -717,6 +720,16 @@ Global
 		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EDC99346-E59D-44B7-BDD0-A08CD3D56941}.Release|x86.ActiveCfg = Release|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{24723844-85C8-4C68-8293-A007044AA041}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -784,6 +797,7 @@ Global
 		{DE254378-4CF8-400C-BCC4-A9AF01550350} = {73FD87E5-395F-40CE-B222-0591D6F8D0D6}
 		{E8DE4E4E-1086-45A5-B374-9E48A271B209} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
+		{24723844-85C8-4C68-8293-A007044AA041} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{F851ADDC-B151-4CDE-8C83-AB0696B2E1EE} = {9DBFD4F9-06B0-4BAC-9836-AD0C686DF189}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
