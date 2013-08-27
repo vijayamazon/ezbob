@@ -21,7 +21,8 @@ UPDATE [dbo].[Loan]
 WHERE Id = @LoanId
 
 UPDATE [dbo].Customer
-  SET  CreditResult = @LoanStatus
+  SET  CreditResult = @LoanStatus,
+		[IsWasLate] = 1	
 		
 WHERE Id = @CustomerId
 
