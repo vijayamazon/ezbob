@@ -7,7 +7,6 @@
 	using MailBee.ImapMail;
 	using MailBee.Mime;
 	using System.Diagnostics;
-	using System.Globalization;
 	using Ezbob.Logger;
 	using MailBee;
 
@@ -15,8 +14,8 @@
 	{
 		private readonly Conf _cfg;
 		private readonly ASafeLog _log;
-		private readonly Imap _imap;
-		private readonly EventLog _eventLog = new EventLog();
+		private Imap _imap;
+		private readonly EventLog _eventLog = new EventLog("AutoResponderLog");
 		private readonly TimeSpan _timeout = new TimeSpan(0, 0, 30); // 30 sec timeout for idle
 		private DateTime _startTime;
 		private bool _exiting; // Flag. If true, terminating the application is in progress and we should stop idle without attempt to download new messages
@@ -36,6 +35,11 @@
 			_eventLog.Source = "AutoResponderServiceSource";
 			_eventLog.Log = "AutoResponderServiceLog";
 
+			InitImap();
+		}
+
+		private void InitImap()
+		{
 			try
 			{
 				Global.LicenseKey = _cfg.MailBeeLicenseKey;
@@ -46,7 +50,7 @@
 				Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
-			_imap = new Imap { SslMode = MailBee.Security.SslStartupMode.OnConnect };
+			_imap = new Imap {SslMode = MailBee.Security.SslStartupMode.OnConnect};
 
 			// Connect to IMAP server
 			_imap.Connect(_cfg.Server, _cfg.Port);
@@ -155,10 +159,12 @@
 		private void HandleMassage(MailMessage msg)
 		{
 			//sending only for mails that where recieved between 19:00 and 06:00
+			//var test = "";//todo remove test remove commneted out returns
 			if (msg.DateReceived.TimeOfDay < new TimeSpan(Const.HourAfter, 0, 0) &&
 				msg.DateReceived.TimeOfDay > new TimeSpan(Const.HourBefore, 0, 0))
 			{
 				return;
+				//test += "Day Constraint (not sending);";
 			}
 
 			var oDb = new SqlConnection();
@@ -168,6 +174,7 @@
 				//sending autoresponse only once in three days 
 				if (time.HasValue && time.Value > msg.DateReceived.AddDays(Const.ThreeDays))
 				{
+					//test += "Count in three days Constraint (not sending);";
 					return;
 				}
 
@@ -175,18 +182,13 @@
 				                    new QueryParameter(Const.EmailSpParam, msg.From.Email),
 				                    new QueryParameter(Const.NameSpParam, msg.From.DisplayName));
 
-			var m = new Mandrill(_log);
+			var mandrill = new Mandrill(_log);
 			var vars = new Dictionary<string, string>
 				{
-					{"FNAME", msg.From.DisplayName},
+					{"FNAME", msg.From.DisplayName ?? msg.From.AsString},
 				};
 			//todo change to sender email (msg.From.Email)
-			m.Send(vars, "stasdes@gmail.com", Const.MandrillAutoResponseTemplate);
-				
-			/*Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder", "Message #" + msg.IndexOnServer.ToString(CultureInfo.InvariantCulture) +
-							" has subject: " + msg.Subject + "  from: " + msg.From.Email + " received on: " + msg.DateReceived +" should autorespond", "stasdes@gmail.com");*/
-				
-			
+			mandrill.Send(vars, msg.From.Email, Const.MandrillAutoResponseTemplate);
 		}
 
 		protected override void OnStart(string[] args)
@@ -197,6 +199,7 @@
 		protected override void OnStop()
 		{
 			_eventLog.WriteEntry("On Stop", EventLogEntryType.Information);
+			_eventLog.Dispose();
 			if (_imap != null)
 			{
 				// If we're still idling, stop it and close the connection
