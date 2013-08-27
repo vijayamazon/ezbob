@@ -32,6 +32,8 @@ namespace ezmanage
 
         private static void Main(string[] args)
         {
+            //for debug
+            //args = new[]{"-lc","-id=2318","-amount=1000","-date=27/07/2013"};
             try
             {
                 _log.Info("Starting ezmanage");

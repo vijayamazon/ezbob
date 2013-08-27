@@ -54,5 +54,9 @@ namespace ezmanage
         public override void ValidateOffer(Customer cus)
         {
         }
+
+        public override void VerifyAvailableFunds(decimal transfered)
+        {
+        }
     }
 }

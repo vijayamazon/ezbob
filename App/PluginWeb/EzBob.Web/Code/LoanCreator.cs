@@ -80,6 +80,7 @@
 			if (PacnetSafeGuard(cus, transfered))
 			{
 				ret = SendMoney(cus, transfered);
+			    VerifyAvailableFunds(transfered);
 			}
 			else
 			{
@@ -160,8 +161,6 @@
 											   cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
 			_pacnetService.CloseFile(cus.Id, "ezbob");
 
-			_availableFundsValidator.VerifyAvailableFunds(transfered);
-
 			return ret;
 		}
 
@@ -182,6 +181,11 @@
 		{
 			cus.ValidateOfferDate();
 		}
+
+        public virtual void VerifyAvailableFunds(decimal transfered)
+	    {
+            _availableFundsValidator.VerifyAvailableFunds(transfered);
+	    }
 
 		public virtual void ValidateCustomer(Customer cus)
 		{
