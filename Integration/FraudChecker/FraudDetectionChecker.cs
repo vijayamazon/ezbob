@@ -621,7 +621,10 @@ namespace FraudChecker
                 {
                     retVal.Add("LimitedBusinessPhone", customer.LimitedInfo.LimitedBusinessPhone);
                 }
-                retVal.Add("NonLimitedBusinessPhone", customer.NonLimitedInfo.NonLimitedBusinessPhone);
+                else
+                {
+                    retVal.Add("NonLimitedBusinessPhone", customer.NonLimitedInfo.NonLimitedBusinessPhone);
+                }
             }
             if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
                 retVal.Add("DaytimePhone", customer.PersonalInfo.DaytimePhone);
