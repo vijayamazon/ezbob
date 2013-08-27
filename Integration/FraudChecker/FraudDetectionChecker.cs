@@ -151,6 +151,8 @@ namespace FraudChecker
             fraudDetections.AddRange(from f in _fu
                                      from d in f.Shops
                                      from s in customer.CustomerMarketPlaces
+                                     where 
+                                        !string.IsNullOrEmpty(s.DisplayName)
                                      where
                                          d.Name == s.DisplayName && d.Type == s.Marketplace
                                      select
@@ -178,7 +180,7 @@ namespace FraudChecker
                     phone = customer.NonLimitedInfo.NonLimitedBusinessPhone;
                     phoneType = "NonLimitedBusinessPhone";
                 }
-
+            if (string.IsNullOrEmpty(phoneType)) return;
             fraudDetections.AddRange(_fu.SelectMany(f => f.Phones, (f, d) => new {f, d})
                                         .Where(@t => @t.d.PhoneNumber == customer.PersonalInfo.DaytimePhone ||
                                                      @t.d.PhoneNumber == customer.PersonalInfo.MobilePhone ||
@@ -227,7 +229,6 @@ namespace FraudChecker
         {
             //companys check
             var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
-            if (typeOfBussiness == TypeOfBusinessReduced.Personal) return;
 
             var companyName = typeOfBussiness == TypeOfBusinessReduced.Limited
                                   ? customer.LimitedInfo.LimitedCompanyName
@@ -235,8 +236,13 @@ namespace FraudChecker
             var companyRegNum = typeOfBussiness == TypeOfBusinessReduced.Limited
                                     ? customer.LimitedInfo.LimitedRefNum
                                     : customer.NonLimitedInfo.NonLimitedRefNum;
+
+            if (typeOfBussiness == TypeOfBusinessReduced.Personal || string.IsNullOrEmpty(companyName)) return;
+
             fraudDetections.AddRange(from f in _fu
                                      from c in f.Companies
+                                     where
+                                        !string.IsNullOrEmpty(c.CompanyName) && !string.IsNullOrEmpty(c.RegistrationNumber)
                                      where
                                          c.CompanyName == companyName && c.RegistrationNumber == companyRegNum
                                      select
@@ -250,8 +256,14 @@ namespace FraudChecker
             //bank accounts check
             var sortCode = customer.BankAccount.SortCode;
             var accountNumber = customer.BankAccount.AccountNumber;
+            if (string.IsNullOrEmpty(accountNumber))
+            {
+                return;
+            }
             fraudDetections.AddRange(from f in _fu
                                      from d in f.BankAccounts
+                                     where 
+                                        !string.IsNullOrEmpty(d.SortCode) && !string.IsNullOrEmpty(d.BankAccount)
                                      where
                                          d.SortCode == sortCode && d.BankAccount == accountNumber
                                      select
@@ -284,8 +296,8 @@ namespace FraudChecker
             fraudDetections.AddRange(
                 _fu.Where(
                     x =>
-                    x.FirstName.ToLower() == customer.PersonalInfo.FirstName.ToLower() &&
-                    x.LastName.ToLower() == customer.PersonalInfo.Surname.ToLower())
+                    String.Equals(x.FirstName, customer.PersonalInfo.FirstName, StringComparison.CurrentCultureIgnoreCase) &&
+                    String.Equals(x.LastName, customer.PersonalInfo.Surname, StringComparison.CurrentCultureIgnoreCase))
                    .Select(
                        x =>
                        CreateDetection("Customer FirstName, LastName", customer, null, "Fraud FirstName, LastName", x,
