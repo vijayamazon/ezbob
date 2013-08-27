@@ -97,6 +97,13 @@
       <DependentUpon>AutoResponderService.cs</DependentUpon>
     </Compile>
     <Compile Include="Mandrill.cs" />
+    <Compile Include="Model\EmailAddressModel.cs" />
+    <Compile Include="Model\EmailMessageModel.cs" />
+    <Compile Include="Model\EmailModel.cs" />
+    <Compile Include="Model\EmailResultModel.cs" />
+    <Compile Include="Model\ErrorResponseModel.cs" />
+    <Compile Include="Model\MandrillException.cs" />
+    <Compile Include="Model\RenderTemplateModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -122,10 +129,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
-      <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
-      <Name>MailApi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj">
       <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
       <Name>ConfigurationBase</Name>

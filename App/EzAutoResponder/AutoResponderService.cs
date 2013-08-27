@@ -46,7 +46,7 @@
 			}
 			catch (MailBeeLicenseException e)
 			{
-				_log.Error("License key is invalid: {0}", e);
+				_eventLog.WriteEntry(string.Format("License key is invalid: {0}", e), EventLogEntryType.Error);
 				Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
@@ -141,7 +141,7 @@
 					// Iterate througn the messages collection and display info about them
 					foreach (MailMessage msg in msgs)
 					{
-						HandleMassage(msg);
+						HandleMessage(msg);
 					}
 				}
 
@@ -156,8 +156,9 @@
 			}
 		}
 
-		private void HandleMassage(MailMessage msg)
+		private void HandleMessage(MailMessage msg)
 		{
+			_eventLog.WriteEntry("Handle Message begin", EventLogEntryType.Information);
 			var dateReceived = msg.DateReceived.ToUniversalTime();
 			var timeReceived = dateReceived.TimeOfDay;
 			//sending only for mails that where recieved between 19:00 and 06:00
@@ -165,6 +166,7 @@
 			if (timeReceived < new TimeSpan(Const.HourAfter, 0, 0) &&
 				timeReceived > new TimeSpan(Const.HourBefore, 0, 0))
 			{
+				_eventLog.WriteEntry("Time Constraint", EventLogEntryType.Information);
 				return;
 				//test += "Day Constraint (not sending);";
 			}
@@ -176,6 +178,7 @@
 				//sending autoresponse only once in three days 
 				if (time.HasValue && time.Value > dateReceived.AddDays(Const.ThreeDays))
 				{
+					_eventLog.WriteEntry("Count Constraint", EventLogEntryType.Information);
 					//test += "Count in three days Constraint (not sending);";
 					return;
 				}

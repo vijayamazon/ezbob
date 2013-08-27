@@ -94,8 +94,12 @@ namespace EzAutoResponder
 		[Ignore]
 		public void TestTime()
 		{
-			if (DateTime.UtcNow.TimeOfDay < new TimeSpan(Const.HourAfter, 0, 0) &&
-				DateTime.UtcNow.TimeOfDay > new TimeSpan(Const.HourBefore, 0, 0))
+			var dateReceived = (new DateTime(2013,8,27,21,58,00)).ToUniversalTime();
+			var timeReceived = dateReceived.TimeOfDay;
+			//sending only for mails that where recieved between 19:00 and 06:00
+			//var test = "";//todo remove test remove commneted out returns
+			if (timeReceived < new TimeSpan(Const.HourAfter, 0, 0) &&
+				timeReceived > new TimeSpan(Const.HourBefore, 0, 0))
 			{
 				Console.WriteLine("day {0}", DateTime.UtcNow.TimeOfDay);
 			}
