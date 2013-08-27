@@ -50,6 +50,7 @@
 									<asp:ListItem Value="Weekly" Text="Weekly"></asp:ListItem>
 									<asp:ListItem Value="Monthly" Text="Monthly"></asp:ListItem>
 									<asp:ListItem Value="MonthToDate" Text="Month to Date"></asp:ListItem>
+									<asp:ListItem Value="Lifetime" Text="Lifetime"></asp:ListItem>
 									<asp:ListItem Value="Custom" Text="Custom"></asp:ListItem>
 								</asp:RadioButtonList>
 

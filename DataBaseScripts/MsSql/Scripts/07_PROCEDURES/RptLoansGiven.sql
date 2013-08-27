@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoansGiven]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptLoansGiven]
 GO
 SET ANSI_NULLS ON
@@ -49,8 +49,6 @@ BEGIN
 			FROM
 				LoanSchedule s
 				INNER JOIN Loan l ON s.LoanId = l.Id
-			WHERE
-				@DateStart <= l.Date AND l.Date < @DateEnd
 			GROUP BY
 				s.LoanId
 		) s ON l.Id = s.LoanId
@@ -80,8 +78,6 @@ BEGIN
 		 		t.Status = 'Done'
 		 		AND
 		 		t.Type = 'PacnetTransaction'
-		 		AND
-				@DateStart <= l.Date AND l.Date < @DateEnd
 			GROUP BY
 				t.LoanId
 		) out ON l.Id = out.LoanId
@@ -97,8 +93,6 @@ BEGIN
 		 		t.Status = 'Done'
 		 		AND
 		 		t.Type = 'PaypointTransaction'
-		 		AND
-				@DateStart <= l.Date AND l.Date < @DateEnd
 			GROUP BY
 				t.LoanId
 		) pay ON l.Id = pay.LoanId

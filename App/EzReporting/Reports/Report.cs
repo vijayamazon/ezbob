@@ -158,7 +158,7 @@ namespace Reports {
 		#region date conversion
 
 		public static string DateToString(DateTime oDate) {
-			return oDate.ToString("MMMM d", CultureInfo.InvariantCulture);
+			return oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture);
 		} // DateToString
 
 		public static string DateToMonth(DateTime oDate) {

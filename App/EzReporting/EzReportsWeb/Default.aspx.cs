@@ -179,6 +179,10 @@ namespace EzReportsWeb {
 				fDate = new DateTime(fDate.Year, fDate.Month, 1);
 				break;
 
+			case "Lifetime":
+				fDate = new DateTime(2012, 5, 1);
+				break;
+
 			case "Custom":
 				if (!DateTime.TryParse(fromDate.Value, out fDate))
 					fDate = DateTime.Today;

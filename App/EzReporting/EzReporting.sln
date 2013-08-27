@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reconciliation", "..\Reconc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzAnalyticsConsoleClient", "..\EzAnalytics\EzAnalyticsConsoleClient.csproj", "{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{5E5E708C-7914-4567-8FF8-C759725B7927}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E5E708C-7914-4567-8FF8-C759725B7927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5E708C-7914-4567-8FF8-C759725B7927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5E708C-7914-4567-8FF8-C759725B7927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5E708C-7914-4567-8FF8-C759725B7927}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

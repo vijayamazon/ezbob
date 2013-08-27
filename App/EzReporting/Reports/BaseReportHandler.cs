@@ -218,24 +218,24 @@ namespace Reports {
 
 		#region method BuildEarnedInterestReport
 
-		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow) {
+		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
 
 			return new Html.Tags.Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
-				.Append(new P().Append(TableReport(oData.Key, oData.Value)));
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 		} // BuildEarnedInterestReport
 
 		#endregion method BuildEarnedInterestReport
 
 		#region method BuildLoansIssuedReport
 
-		public ATag BuildLoansIssuedReport(Report report, DateTime today, DateTime tomorrow) {
+		public ATag BuildLoansIssuedReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> pair = CreateLoansIssuedReport(report, today, tomorrow);
 
 			return new Html.Tags.Body().Add<Class>("Body")
 				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
-				.Append(new P().Append(TableReport(pair.Key, pair.Value)));
+				.Append(new P().Append(TableReport(pair.Key, pair.Value, oColumnTypes: oColumnTypes)));
 		} // BuildLoansIssuedReport
 
 		#endregion method BuildLoansIssuedReport
@@ -629,13 +629,20 @@ namespace Reports {
 				if (oEarnedInterest.ContainsKey(LoanID))
 					m_oData[FldEarnedInterest] = oEarnedInterest[LoanID];
 
-				m_oData[FldAccruedInterest] = m_oData[FldEarnedInterest] - m_oData[FldTotalInterestRepaid];
+				m_oData[FldAccruedInterest] = (decimal)m_oData[FldEarnedInterest] - (decimal)m_oData[FldTotalInterestRepaid];
 
 				// Until now the field ExpectedInterest only contains sum of planned
 				// interest from LoanSchedule. Accrued should be subtructed from it.
-				m_oData[FldExpectedInterest] = m_oData[FldExpectedInterest] - m_oData[FldAccruedInterest];
+				m_oData[FldExpectedInterest] = (decimal)m_oData[FldExpectedInterest] - (decimal)m_oData[FldAccruedInterest];
 
-				m_oData[FldTotalInterest] = m_oData[FldExpectedInterest] + m_oData[FldEarnedInterest];
+				m_oData[FldTotalInterest] = (decimal)m_oData[FldExpectedInterest] + (decimal)m_oData[FldEarnedInterest];
+
+				foreach (string sIdx in new string[] { FldAccruedInterest, FldExpectedInterest, FldTotalInterest}) {
+					decimal x = m_oData[sIdx];
+
+					if (Math.Abs(x) < 0.01M)
+						m_oData[sIdx] = 0M;
+				} // for each
 			} // SetInterests
  
 			#endregion method SetInterests
@@ -1177,13 +1184,13 @@ namespace Reports {
 
 		#endregion method AddSheetToExcel
 
-		#region method f - Extract double from data row
+		#region method f - Extract decimal from data row
 
 		private static decimal f(DataRow row, string sFieldName) {
 			return Convert.ToDecimal(row[sFieldName]);
 		} // f
 
-		#endregion method f - Extract double from data row
+		#endregion method f - Extract decimal from data row
 
 		private static readonly CultureInfo FormatInfo = new CultureInfo("en-GB");
 

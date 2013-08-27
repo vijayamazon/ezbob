@@ -37,10 +37,10 @@ namespace EzReportsWeb {
 				return BuildInWizardReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			case ReportType.RPT_EARNED_INTEREST:
-				return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+				return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
 			case ReportType.RPT_LOANS_GIVEN:
-				return BuildLoansIssuedReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+				return BuildLoansIssuedReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
