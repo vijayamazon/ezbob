@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using EZBob.DatabaseLib.Model;
+using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
+using Moq;
 using NUnit.Framework;
 using PaymentServices.Calculators;
 
@@ -15,12 +18,17 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         protected LoanPaymentFacade _facade;
         protected Loan _loan;
         private LoanScheduleCalculator _calculator;
+        private Customer _customer = new Customer();
 
         [SetUp]
         public void Init()
         {
+
+            var config = new Mock<IConfigurationVariablesRepository>();
+            config.Setup(x => x.GetByNameAsDecimal("AmountToChargeFrom")).Returns(10);
+
             _loan = new Loan();
-            _facade = new LoanPaymentFacade();
+            _facade = new LoanPaymentFacade(null, config.Object);
             _calculator = new LoanScheduleCalculator() { Interest = 0.06M };
             SetUp();
         }
@@ -54,9 +62,13 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             CreateLoan(startDate, amount);
         }
 
-        private void CreateLoan(DateTime startDate, int amount)
+        protected void CreateLoan(DateTime startDate, int amount)
         {
             _calculator.Calculate(amount, _loan, startDate);
+            _customer.Loans.Add(_loan);
+            var cr = new CashRequest();
+            _customer.CashRequests.Add(cr);
+            _loan.Customer = _customer;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
+using StructureMap;
 
 namespace PaymentServices.Calculators
 {
@@ -9,13 +11,15 @@ namespace PaymentServices.Calculators
     {
         public static decimal NextEarlyPayment(this Loan loan, DateTime? term = null)
         {
-            var calc = new LoanRepaymentScheduleCalculator(loan, term);
+            var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+            var calc = new LoanRepaymentScheduleCalculator(loan, term, configVariables);
             return calc.NextEarlyPayment();
         }
 
         public static decimal TotalEarlyPayment(this Loan loan, DateTime? term = null)
         {
-            var calc = new LoanRepaymentScheduleCalculator(loan, term);
+            var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+            var calc = new LoanRepaymentScheduleCalculator(loan, term, configVariables);
             return calc.TotalEarlyPayment();
         }
 

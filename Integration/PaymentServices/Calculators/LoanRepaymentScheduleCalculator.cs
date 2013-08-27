@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.Areas.Customer.Models;
+using StructureMap;
 
 namespace PaymentServices.Calculators
 {
@@ -76,7 +78,10 @@ namespace PaymentServices.Calculators
 
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
-        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
+        private decimal amountToChargeFrom = 0;
+        
+
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
         {
             _loan = loan;
             _schedule = loan.Schedule;
@@ -87,6 +92,16 @@ namespace PaymentServices.Calculators
 
             _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
             _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
+
+            if (configVariables == null)
+            {
+                configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+            }
+
+            if (configVariables != null)
+            {
+                amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
+            }
 
             Init();
         }
