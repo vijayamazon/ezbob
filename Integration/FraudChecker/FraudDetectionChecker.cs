@@ -229,16 +229,10 @@ namespace FraudChecker
         {
             //companys check
             var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
+            var companyName = customer.LimitedInfo.LimitedCompanyName;
 
-            var companyName = typeOfBussiness == TypeOfBusinessReduced.Limited
-                                  ? customer.LimitedInfo.LimitedCompanyName
-                                  : customer.NonLimitedInfo.NonLimitedCompanyName;
-            var companyRegNum = typeOfBussiness == TypeOfBusinessReduced.Limited
-                                    ? customer.LimitedInfo.LimitedRefNum
-                                    : customer.NonLimitedInfo.NonLimitedRefNum;
-
-            if (typeOfBussiness == TypeOfBusinessReduced.Personal || string.IsNullOrEmpty(companyName)) return;
-
+            if (typeOfBussiness != TypeOfBusinessReduced.Limited || string.IsNullOrEmpty(companyName)) return;
+            var companyRegNum = customer.LimitedInfo.LimitedCompanyNumber;
             fraudDetections.AddRange(from f in _fu
                                      from c in f.Companies
                                      where
