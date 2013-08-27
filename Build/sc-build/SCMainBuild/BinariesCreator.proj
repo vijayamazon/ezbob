@@ -29,6 +29,7 @@
 		<AppCopy CopyFrom="$(Src)\App\service\agent\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\agent\"/>
 		
 		<MultiCopy CopyFrom="$(Src)\Tools\Publisher\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
+		<MultiCopy CopyFrom="$(Src)\Lib\Publisher\Plug-ins\StrategySchedules\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
 		<MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/>
