@@ -290,35 +290,6 @@
 </script>
 
 <script id="collection-status-template" type="text/template">
-    <%  if (Items.length!=0) {%>
-    <div id="installments">
-       
-        <table style="width:100%;" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Collection fee</th>
-                    <th>Loan Ref</th>
-                </tr>
-            </thead>
-            <%var i = 0; _.each(Items, function(item) {%>
-            <tr>
-                <td style="width:50%;">
-                    <div class="controls">
-                        <label for="items[<%=i%>].isAddCollectionFee" class="checkbox">
-                            <input class="isAddCollectionFee" name="items[<%=i%>].isAddCollectionFee" data-items-num="<%=i%>" <%=item.IsAddCollectionFee ? 'checked="checked"' : ""%> type="checkbox" value="<%=item.IsAddCollectionFee%>"/>Add collection fee
-                        </label>
-                    </div>
-                </td>
-                <td style="width:30%;">
-                    <input class="collectionFee"  style="width:80px"name="items[<%=i%>].collectionFee" type="text"  <%=!item.IsAddCollectionFee ? 'readonly="readonly"' : ''%> value="<%=item.CollectionFee%>"/></td>
-                <td style="width:30%;"> "<%=item.LoanRefNumber%>"</td>
-                <input  name="items[<%=i%>].LoanId" type="hidden" value="<%=item.LoanId%>"/>
-            </tr>
-            <% i++; });%>
-        </table>
-    </div>
-    <%}%>
     <div class="control-group">
         <label class="control-label">Description:</label>
         <div class="controls">
