@@ -158,10 +158,12 @@
 
 		private void HandleMassage(MailMessage msg)
 		{
+			var dateReceived = msg.DateReceived.ToUniversalTime();
+			var timeReceived = dateReceived.TimeOfDay;
 			//sending only for mails that where recieved between 19:00 and 06:00
 			//var test = "";//todo remove test remove commneted out returns
-			if (msg.DateReceived.TimeOfDay < new TimeSpan(Const.HourAfter, 0, 0) &&
-				msg.DateReceived.TimeOfDay > new TimeSpan(Const.HourBefore, 0, 0))
+			if (timeReceived < new TimeSpan(Const.HourAfter, 0, 0) &&
+				timeReceived > new TimeSpan(Const.HourBefore, 0, 0))
 			{
 				return;
 				//test += "Day Constraint (not sending);";
@@ -172,7 +174,7 @@
 				                                        new QueryParameter(Const.EmailSpParam, msg.From.Email));
 
 				//sending autoresponse only once in three days 
-				if (time.HasValue && time.Value > msg.DateReceived.AddDays(Const.ThreeDays))
+				if (time.HasValue && time.Value > dateReceived.AddDays(Const.ThreeDays))
 				{
 					//test += "Count in three days Constraint (not sending);";
 					return;
