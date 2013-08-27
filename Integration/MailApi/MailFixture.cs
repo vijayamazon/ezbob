@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace MailApi
 {
-
     [TestFixture]
     public class MailFixture
     {
@@ -22,7 +21,7 @@ namespace MailApi
             config.SetupGet(x => x.Enable).Returns(true);
             config.SetupGet(x => x.From).Returns("ezbob-fixture@ezbob.com");
             _mail = new Mail(config.Object);
-            _to = "shubin_igor@ukr.net";
+            _to = "fgkzpwms@ukr.net"; //login 'fgkzpwms' password 'fgkzpwms'
             _subject = "Thank you for registering with EZBOB!";
         }
 
@@ -36,7 +35,7 @@ namespace MailApi
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
 
-            var result = _mail.Send(vars, "shubin_igor@ukr.net", "Greeting", "Thank you for registering with EZBOB!");
+            var result = _mail.Send(vars, _to, "Greeting", "Thank you for registering with EZBOB!");
             Assert.That(result == "OK");
         }
 
