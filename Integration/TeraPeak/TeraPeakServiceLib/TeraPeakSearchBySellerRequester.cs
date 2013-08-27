@@ -160,14 +160,19 @@ namespace EzBob.TeraPeakServiceLib
 
 	    private static List<CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics> CreateCategories(GetSellerResearchResults data)
 	    {
-	        return data.SearchResults.Categories.Select(c => CreateCategory(c)).ToList();
+		    if (data.SearchResults.Categories == null)
+		    {
+			    return new List<CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics>();
+		    }
+
+		    return data.SearchResults.Categories.Select(CreateCategory).ToList();
 	    }
 
         private static CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics CreateCategory(Category category)
         {
             var stat = category.Statistics;
 
-            var tpCategory = new TeraPeakCategory()
+            var tpCategory = new TeraPeakCategory
                 {
                     FullName = category.FullName,
                     Id = category.Id,
@@ -176,7 +181,7 @@ namespace EzBob.TeraPeakServiceLib
                     ParentCategoryID = category.ParentCategoryID
                 };
 
-            return new CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics()
+            return new CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData.CategoryStatistics
 	            {
 	                ItemsSold = stat.ItemsSold,
                     Listings = stat.Listings,
