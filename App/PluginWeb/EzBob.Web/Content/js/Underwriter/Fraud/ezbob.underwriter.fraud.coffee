@@ -84,7 +84,10 @@ class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
         false
 
     saveButtonClicked: ->
-        return unless @validator.form()
+        isValid = @validator.form()
+        if not isValid
+            @ui.form.closest('.modal-body').animate({ scrollTop: 0 }, 500)
+            return 
         formData = SerializeArrayToEasyObject(@ui.form.serializeArray())
         @model.set
             FirstName: formData.FirstName

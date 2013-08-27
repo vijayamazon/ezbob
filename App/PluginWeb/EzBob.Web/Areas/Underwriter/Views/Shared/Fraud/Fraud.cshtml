@@ -13,13 +13,23 @@
             @EzForm.RawHeaderCell("Fraud", "", "", "", "", "", "", "")
         </thead>
         <tbody>
-            @EzForm.RawCellBold("Name", "Addresses (Postcode, line1, Line2, Line3, Town, County)", "Phones", "Emails", "Email Domains", "Bank Accounts (Bank account, Sort code)", "Companies  (Company name, Registration Number)", "Shops (Shop name, Show type)")
+            @EzForm.RawCell("<b>Name</b>",
+                "<b>Addresses</b> (Postcode, line1, Line2, Line3, Town, County)",
+                "<b>Phones</b>",
+                "<b>Emails</b>",
+                "<b>Email Domains</b>",
+                "<b>Bank Accounts</b> (Bank account, Sort code)",
+                "<b>Companies</b> (Company name, Registration Number)",
+                "<b>Shops</b> (Shop name, Show type)")
             <%_.each(data, function(val){ %> 
             <%
             function PrepareOutput(data){
                 var retVal = "";
                 _.each(data, function(value, i){
-                    retVal+= i+1 + ') ' +_.values(value).clean(0).clean(null).toString().replace(/,/g,', ') + ' <br />'; 
+                    var copyValue = value;
+                    delete copyValue.Id;
+                    var elems = _.values(copyValue);
+                    retVal+= i+1 + ') ' + elems.toString().replace(/,/g,', ') + ' <br />'; 
                 });
                 return retVal.isNullOrEmpty() ? "-" : retVal;
             }
@@ -46,42 +56,42 @@
     </div>
     <div class="modal-body">
         <form class="form-horizontal fraud-form" action="/" method="post">
-            <h5>Fraud name</h5>
+            <b>Fraud name</b>
             @EzForm.InputTextUnderwriter("FirstName", "First Name", "")
             @EzForm.InputTextUnderwriter("LastName", "Last Name", "")
             <hr/>
 
-            <h5>Fraud Addresses (Postcode, line1, Line2, Line3, Town, County)</h5>
+            <b>Fraud Addresses </b><span>(Postcode, line1, Line2, Line3, Town, County)</span>
             <div class="Addresses"></div>
             <button class="btn-mini btn btn-success add" data-type="Addresses"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Phones</h5>
+            <b>Fraud Phones</b>
             <div class="Phones"></div>
             <button class="btn-mini btn btn-success add" data-type="Phones"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Emails</h5>
+            <b>Fraud Emails</b>
             <div class="Emails"></div>
             <button class="btn-mini btn btn-success add" data-type="Emails"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Email Domains (like "gmail.com")</h5>
+            <b>Fraud Email Domains </b><span>(like "gmail.com")</span>
             <div class="EmailDomains"></div>
             <button class="btn-mini btn btn-success add" data-type="EmailDomains"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Bank Accounts (Bank account, Sort code)</h5>
+            <b>Fraud Bank Accounts </b><span>(Bank account, Sort code)</span>
             <div class="BankAccounts"></div>
             <button class="btn-mini btn btn-success add" data-type="BankAccounts"><i class="icon-plus"></i></button>
             <hr/>
             
-            <h5>Fraud Companies (Company name, Registration Number)</h5>
+            <b>Fraud Companies </b><span>(Company name, Registration Number)</span>
             <div class="Companies"></div>
             <button class="btn-mini btn btn-success add" data-type="Companies"><i class="icon-plus"></i></button>
             <hr/>
 
-            <h5>Fraud Shops (Shop name, Show type)</h5>
+            <b>Fraud Shops </b><span>(Shop name, Show type)</span>
             <div class="Shops"></div>
             <button class="btn-mini btn btn-success add" data-type="Shops"><i class="icon-plus"></i></button>
             <hr/>
@@ -128,7 +138,7 @@
             <label class="control-label" for="@caption<%-i%>">@caption <%-i+1%></label>
             <div class="controls">
                 <%if(_.keys(val).length>2){ %>
-                <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val).clean("")%></textarea>
+                <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val)%></textarea>
                 <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
                 <%}else{%>
                 <input type="text"  disabled="disabled" value="<%-_.values(val)%>">

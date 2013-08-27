@@ -56,7 +56,6 @@ namespace EzBob.Web.Areas.Underwriter.Models.Fraud
                     Addresses = user.Addresses.Select(x => new FraudAddress
                         {
                             County = x.County,
-                            Id = x.Id,
                             Line1 = x.Line1,
                             Line2 = x.Line2,
                             Line3 = x.Line3,
@@ -99,6 +98,7 @@ namespace EzBob.Web.Areas.Underwriter.Models.Fraud
 
     public class FraudShopModel
     {
+        public virtual int Id { get; set; }
         public virtual string Name { get; set; }
         public virtual string Type { get; set; }
     }
