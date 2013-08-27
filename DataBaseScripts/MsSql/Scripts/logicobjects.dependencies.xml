@@ -1981,6 +1981,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>GetLastAutoresponderDate</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\GetLastAutoresponderDate.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>GetLastStepCustomers</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\GetLastStepCustomers.sql</oFileName>
@@ -2176,6 +2182,12 @@
     <oName>Insert_Security_Role</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\Insert_Security_Role.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>InsertAutoresponderLog</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\InsertAutoresponderLog.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

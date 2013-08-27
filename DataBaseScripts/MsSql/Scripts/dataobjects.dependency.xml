@@ -259,6 +259,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>AutoresponderLog</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\AutoresponderLog.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>AvailableFunds</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\AvailableFunds.sql</oFileName>

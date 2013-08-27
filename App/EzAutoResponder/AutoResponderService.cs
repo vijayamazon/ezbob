@@ -1,7 +1,9 @@
 ﻿namespace EzAutoResponder
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ServiceProcess;
+	using Ezbob.Database;
 	using MailBee.ImapMail;
 	using MailBee.Mime;
 	using System.Diagnostics;
@@ -14,10 +16,10 @@
 		private readonly Conf _cfg;
 		private readonly ASafeLog _log;
 		private readonly Imap _imap;
-		private readonly EventLog eventLog = new EventLog();
-		private TimeSpan _timeout = new TimeSpan(0, 0, 30); // 30 sec timeout for idle
+		private readonly EventLog _eventLog = new EventLog();
+		private readonly TimeSpan _timeout = new TimeSpan(0, 0, 30); // 30 sec timeout for idle
 		private DateTime _startTime;
-		private bool exiting; // Flag. If true, terminating the application is in progress and we should stop idle without attempt to download new messages
+		private bool _exiting; // Flag. If true, terminating the application is in progress and we should stop idle without attempt to download new messages
 
 		public AutoResponderService()
 		{
@@ -31,8 +33,8 @@
 				EventLog.CreateEventSource("AutoResponderServiceSource", "AutoResponderServiceLog");
 			}
 
-			eventLog.Source = "AutoResponderServiceSource";
-			eventLog.Log = "AutoResponderServiceLog";
+			_eventLog.Source = "AutoResponderServiceSource";
+			_eventLog.Log = "AutoResponderServiceLog";
 
 			try
 			{
@@ -120,7 +122,7 @@
 
 			// If not exiting, i.e. just stopping idle and we should try to download new messages
 			// Exiting means the application is being terminated and we shouldn't try downloading new messages
-			if (!exiting)
+			if (!_exiting)
 			{
 				TimerStop();
 
@@ -135,8 +137,7 @@
 					// Iterate througn the messages collection and display info about them
 					foreach (MailMessage msg in msgs)
 					{
-						Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder", "Message #" + msg.IndexOnServer.ToString(CultureInfo.InvariantCulture) +
-							" has subject: " + msg.Subject + "  from: " + msg.From.Email + " received on: " + msg.DateReceived, "stasdes@gmail.com");
+						HandleMassage(msg);
 					}
 				}
 
@@ -151,20 +152,57 @@
 			}
 		}
 
+		private void HandleMassage(MailMessage msg)
+		{
+			//sending only for mails that where recieved between 19:00 and 06:00
+			if (msg.DateReceived.TimeOfDay < new TimeSpan(Const.HourAfter, 0, 0) &&
+				msg.DateReceived.TimeOfDay > new TimeSpan(Const.HourBefore, 0, 0))
+			{
+				return;
+			}
+
+			var oDb = new SqlConnection();
+				var time = oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
+				                                        new QueryParameter(Const.EmailSpParam, msg.From.Email));
+
+				//sending autoresponse only once in three days 
+				if (time.HasValue && time.Value > msg.DateReceived.AddDays(Const.ThreeDays))
+				{
+					return;
+				}
+
+				oDb.ExecuteNonQuery(Const.InsertAutoresponderLogSpName,
+				                    new QueryParameter(Const.EmailSpParam, msg.From.Email),
+				                    new QueryParameter(Const.NameSpParam, msg.From.DisplayName));
+
+			var m = new Mandrill(_log);
+			var vars = new Dictionary<string, string>
+				{
+					{"FNAME", msg.From.DisplayName},
+				};
+			//todo change to sender email (msg.From.Email)
+			m.Send(vars, "stasdes@gmail.com", Const.MandrillAutoResponseTemplate);
+				
+			/*Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder", "Message #" + msg.IndexOnServer.ToString(CultureInfo.InvariantCulture) +
+							" has subject: " + msg.Subject + "  from: " + msg.From.Email + " received on: " + msg.DateReceived +" should autorespond", "stasdes@gmail.com");*/
+				
+			
+		}
+
 		protected override void OnStart(string[] args)
 		{
-			eventLog.WriteEntry("On Start", EventLogEntryType.Information);
+			_eventLog.WriteEntry("On Start", EventLogEntryType.Information);
 		}
 
 		protected override void OnStop()
 		{
-			eventLog.WriteEntry("On Stop", EventLogEntryType.Information);
+			_eventLog.WriteEntry("On Stop", EventLogEntryType.Information);
 			if (_imap != null)
 			{
 				// If we're still idling, stop it and close the connection
 				if (_imap.IsIdle)
 				{
-					exiting = true;
+					_exiting = true;
 					TimerStop();
 					_imap.StopIdle();
 				}

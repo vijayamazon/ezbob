@@ -3,8 +3,10 @@
 namespace EzAutoResponder
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.ServiceProcess;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailBee;
 	using MailBee.ImapMail;
@@ -19,14 +21,16 @@ namespace EzAutoResponder
 		private Imap _imap;
 
 		[Test]
-		public void confBaseTest()
+		[Ignore]
+		public void TestConfBase()
 		{
 			_cfg = new Conf(_log);
 			_cfg.Init();
 		}
 
 		[Test]
-		public void mailbeeTest()
+		[Ignore]
+		public void TestMailbee()
 		{
 			_cfg = new Conf(_log);
 			_cfg.Init();
@@ -70,6 +74,59 @@ namespace EzAutoResponder
 					                  msg.DateReceived);
 				}
 			}
+		}
+
+		[Test]
+		[Ignore]
+		public void TestDb()
+		{
+			var oDb = new SqlConnection();
+			var time = oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
+				new QueryParameter(Const.EmailSpParam, "stasdes@gmail.com"));
+
+			oDb.ExecuteNonQuery(Const.InsertAutoresponderLogSpName,
+								new QueryParameter(Const.EmailSpParam, "stasdes@gmail.com"),
+								new QueryParameter(Const.NameSpParam, "Stas Dulman"));
+
+		}
+
+		[Test]
+		[Ignore]
+		public void TestTime()
+		{
+			if (DateTime.UtcNow.TimeOfDay < new TimeSpan(Const.HourAfter, 0, 0) &&
+				DateTime.UtcNow.TimeOfDay > new TimeSpan(Const.HourBefore, 0, 0))
+			{
+				Console.WriteLine("day {0}", DateTime.UtcNow.TimeOfDay);
+			}
+			else
+			{
+				Console.WriteLine("night {0}", DateTime.UtcNow.TimeOfDay);
+			}
+
+			var oDb = new SqlConnection();
+			var time = oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
+				new QueryParameter(Const.EmailSpParam, "stasdes@gmail.com"));
+			if (time.HasValue && time.Value > DateTime.UtcNow.AddDays(Const.ThreeDays))
+			{
+				Console.WriteLine("less than 3 days");
+			}
+			else
+			{
+				Console.WriteLine("more than 3 days");
+			}
+		}
+
+		[Test]
+		[Ignore]
+		public void TestMandrill()
+		{
+			var m = new Mandrill(_log);
+			var vars = new Dictionary<string, string>
+				{
+					{"FNAME", "Stas Dulman"},
+				};
+			m.Send(vars, "stasdes@gmail.com", "AutoresponderTest", "Autoresponder Test");
 		}
 	}
 }
