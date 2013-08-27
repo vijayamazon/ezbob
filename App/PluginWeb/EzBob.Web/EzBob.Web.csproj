@@ -1333,10 +1333,6 @@
     <Content Include="Views\Shared\_Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FraudChecker\FraudChecker.csproj">
-      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
-      <Name>FraudChecker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>
@@ -1404,6 +1400,10 @@
     <ProjectReference Include="..\..\..\Integration\EzBob\EzBob.csproj">
       <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
       <Name>EzBob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
+      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
+      <Name>FraudChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>

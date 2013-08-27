@@ -9,6 +9,7 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Web.Code;
+using log4net;
 using NHibernate;
 using NHibernate.Linq;
 using StructureMap;
@@ -19,6 +20,7 @@ namespace FraudChecker
     {
         private readonly List<FraudUser> _fu;
         private readonly ISession _session;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FraudDetectionChecker));
 
         public FraudDetectionChecker()
         {
@@ -48,6 +50,7 @@ namespace FraudChecker
 
         public string ExternalSystemDecision(int customerId, DateTime startDate)
         {
+            Log.InfoFormat("Starting fraud external system check for customerId={0}", customerId);
             var customer = _session.Load<Customer>(customerId);
 			if (customer.WizardStep != WizardStepType.AllStep)
                 throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
@@ -64,11 +67,14 @@ namespace FraudChecker
             ExternalShopCheck(fraudDetections, customer);
 
             SaveInDB(fraudDetections,startDate,customer);
+
+            Log.InfoFormat("Finish fraud internal system check for customerId={0}", customerId);
             return PrepareResultForOutput(fraudDetections);
         }
 
         public string InternalSystemDecision(int customerId, DateTime startDate)
         {
+            Log.InfoFormat("Starting fraud internal system check for customerId={0}", customerId);
             var customer = _session.Get<Customer>(customerId);
             if (customer.WizardStep != WizardStepType.AllStep)
                 throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
@@ -108,6 +114,8 @@ namespace FraudChecker
             InternalShopCheck(customer, fraudDetections);
 
             SaveInDB(fraudDetections, startDate, customer);
+
+            Log.InfoFormat("Finish fraud internal system check for customerId={0}", customerId);
             return PrepareResultForOutput(fraudDetections);
         }
 
@@ -118,7 +126,7 @@ namespace FraudChecker
             {
                 var fraud = fraudDetections[i];
                 fraud.DateOfCheck = startDate;
-
+                fraud.Concurrence = ConcurrencePrepare(fraud);
                 _session.Save(fraud);
 
                 //for disabling lock db
@@ -634,6 +642,22 @@ namespace FraudChecker
                                                             x.Id + ",  " +
                                                             (x.InternalCustomer != null ? x.InternalCustomer.Id.ToString(CultureInfo.InvariantCulture) : "") + ",  " +
                                                             x.Value));
+        }
+
+        private static string ConcurrencePrepare(FraudDetection val)
+        {
+            if (val.ExternalUser != null)
+            {
+                return string.Format("{0} {1} (id={2})",
+                    val.ExternalUser.FirstName,
+                    val.ExternalUser.LastName,
+                    val.ExternalUser.Id);
+            }
+
+            var fullname = val.InternalCustomer.PersonalInfo != null ? val.InternalCustomer.PersonalInfo.Fullname : "-";
+            return string.Format("{0} (id={1})",
+                    fullname,
+                    val.InternalCustomer.Id);
         }
     }
 

@@ -38,6 +38,10 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
@@ -55,11 +59,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Integration\DatabaseLib\DatabaseLib.csproj">
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Integration\EzBob.Models\EzBob.Models.csproj">
+    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>

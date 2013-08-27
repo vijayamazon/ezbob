@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
         public virtual string CompareField { get; set; }
         public virtual string Value { get; set; }
         public virtual DateTime? DateOfCheck { get; set; }
+        public virtual string Concurrence { get; set; }
     }
 
     public sealed class FraudDetectionMap : ClassMap<FraudDetection>
@@ -29,6 +30,7 @@ namespace EZBob.DatabaseLib.Model.Fraud
             Map(x => x.CompareField).Length(200);
             Map(x => x.Value).Length(500);
             Map(x => x.DateOfCheck).CustomType<UtcDateTimeType>();
+            Map(x => x.Concurrence).Length(500);
         }
     }
 }
