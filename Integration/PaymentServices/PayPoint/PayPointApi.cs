@@ -36,14 +36,6 @@
 			_service.Url = _config.ServiceUrl;
 		}
 
-		public PayPointApi()
-		{
-            _vars = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-            _loans = ObjectFactory.GetInstance<ILoanRepository>();
-            _config = ConfigurationRootBob.GetConfiguration().PayPoint;
-            _service.Url = _config.ServiceUrl;
-		}
-
 		public void PayPointPayPal(string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
 		{
 			try
