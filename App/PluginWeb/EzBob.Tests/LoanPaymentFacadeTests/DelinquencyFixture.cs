@@ -5,7 +5,6 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
     public class DelinquencyFixture : LoanPaymentsTestBase
     {
         [Test]
-        [Ignore]
         public void delinquency_for_one_missed_installment()
         {
             CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);

@@ -17,7 +17,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
     {
         protected LoanPaymentFacade _facade;
         protected Loan _loan;
-        private LoanScheduleCalculator _calculator;
+        protected LoanScheduleCalculator _calculator;
         private Customer _customer;
 
         [SetUp]

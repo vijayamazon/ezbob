@@ -1024,5 +1024,26 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             Console.WriteLine(_loan);
         }
+
+        [Test]
+        [Description("3 pound less and get amount to pay")]
+        public void loanid_1196_trunk()
+        {
+            _calculator.Interest = 0.069m;
+            _calculator.Term = 6;
+
+            Console.WriteLine(_loan);
+
+            CreateLoan(Parse("2013-07-28 00:00:00.000"), 1000);
+
+            MakePayment(236.0m, Parse("2013-08-28 00:00:00.000"));
+
+            var state = GetStateAt(_loan, Parse("2013-08-28 00:00:00.000"));
+
+            Assert.That(state.AmountDue, Is.EqualTo(3));
+
+            Console.WriteLine(_loan);
+        }
+
     }
 }
