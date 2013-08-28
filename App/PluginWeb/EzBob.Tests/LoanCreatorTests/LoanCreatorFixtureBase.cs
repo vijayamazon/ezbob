@@ -38,7 +38,7 @@ namespace EzBob.Tests.LoanCreatorTests
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-			//_lc = new LoanCreator(loanHistoryRepository.Object, customerStatusesRepository, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
+			_lc = new LoanCreator(loanHistoryRepository.Object, customerStatusesRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
             SetUp();
         }
 

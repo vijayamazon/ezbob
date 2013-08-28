@@ -38,7 +38,7 @@
 
 		public LoanCreator(
 			ILoanHistoryRepository loanHistoryRepository,
-			CustomerStatusesRepository customerStatusesRepository,
+			ICustomerStatusesRepository customerStatusesRepository,
 			IPacnetService pacnetService,
 			IAppCreator appCreator,
 			IZohoFacade crm,
