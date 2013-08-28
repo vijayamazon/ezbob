@@ -23,15 +23,25 @@ namespace Reports {
 		#region property Interest
 
 		public decimal Interest {
-			get { return PeriodLength == 0 ? OriginalInterest : OriginalInterest / PeriodLength; }
+			get { return OriginalInterest / DaysInMonth; }
 		} // Interest
 
 		#endregion property Interest
 
+		#region property DaysInMonth
+
+		private int DaysInMonth {
+			get {
+				DateTime d = Date.AddMonths(-1);
+				return DateTime.DaysInMonth(d.Year, d.Month);
+			} // get
+		} // DaysInMonth
+		#endregion property DaysInMonth
+
 		#region method ToStirng
 
 		public override string ToString() {
-			return string.Format("on {0}: {1} = {2} / {3}", Date, Interest, OriginalInterest, PeriodLength);
+			return string.Format("on {0}: {1} = {2} / {3} - for {4} days", Date, Interest, OriginalInterest, DaysInMonth, PeriodLength);
 		} // ToString
 
 		#endregion method ToStirng

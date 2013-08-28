@@ -35,8 +35,6 @@ namespace Reports {
 		/// <param name="oDateEnd">Requested period end date, exclusive.</param>
 		/// <returns>Earned interest for the period.</returns>
 		public decimal Calculate(DateTime oDateStart, DateTime oDateEnd, bool bVerboseLogging) {
-			NormaliseSchedule();
-
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
@@ -102,31 +100,6 @@ namespace Reports {
 		#endregion method Calculate
 
 		#region private
-
-		#region method NormaliseSchedule
-
-		private void NormaliseSchedule() {
-			if (Schedule.Count < 1)
-				return;
-
-			DateTime oLastDate = Schedule.Last().Key;
-
-			for (DateTime oCurDate = IssueDate.AddMonths(1); oCurDate < oLastDate; oCurDate = oCurDate.AddMonths(1)) {
-				if (!Schedule.ContainsKey(oCurDate))
-					Schedule[oCurDate] = new InterestData(oCurDate, -1M);
-			} // for on dates
-
-			decimal nCurInterest = -1M;
-
-			foreach (KeyValuePair<DateTime, InterestData> pair in Schedule.Reverse()) {
-				if (pair.Value.OriginalInterest < 0)
-					pair.Value.OriginalInterest = nCurInterest;
-				else
-					nCurInterest = pair.Value.OriginalInterest;
-			} // foreach
-		} // NormaliseSchedule
-
-		#endregion method NormaliseSchedule
 
 		#region fields
 
