@@ -329,15 +329,15 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
         {
             if (Customer != null)
             {
-                var hasLateInstallments = Customer.Loans.All(l => l.Status != LoanStatus.Late);
+                var hasNoLateLoans = Customer.Loans.All(l => l.Status != LoanStatus.Late);
                 
-                if (Customer.CreditResult == CreditResultStatus.Late && hasLateInstallments)
+                if (Customer.CreditResult == CreditResultStatus.Late && hasNoLateLoans)
                 {
                     var underrwriterDecision = Customer.LastCashRequest.UnderwriterDecision;
                     Customer.CreditResult = underrwriterDecision ?? CreditResultStatus.WaitingForDecision;
                 }
 
-                if (!Customer.IsWasLate && hasLateInstallments)
+                if (!Customer.IsWasLate && !hasNoLateLoans)
                 {
                     Customer.IsWasLate = true;
                 }

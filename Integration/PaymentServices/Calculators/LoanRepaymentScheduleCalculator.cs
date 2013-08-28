@@ -78,7 +78,7 @@ namespace PaymentServices.Calculators
 
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
-        private decimal amountToChargeFrom = 0;
+        private readonly decimal _amountToChargeFrom = 0;
         
 
         public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
@@ -100,7 +100,7 @@ namespace PaymentServices.Calculators
 
             if (configVariables != null)
             {
-                amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
+                _amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
             }
 
             Init();
@@ -507,9 +507,22 @@ namespace PaymentServices.Calculators
 
         private void UpdateInstallmentsState()
         {
-            foreach (var installment in _processed.Where(i => i.Status == LoanScheduleStatus.Late && i.AmountDue == 0))
+            foreach (var installment in _processed)
             {
-                installment.Status = LoanScheduleStatus.Paid;
+                if (installment.AmountDue == 0)
+                {
+                    if (installment.Status == LoanScheduleStatus.Late)
+                    {
+                        installment.Status = LoanScheduleStatus.Paid;
+                    }
+                    else if (installment.Status == LoanScheduleStatus.StillToPay)
+                    {
+                        installment.Status = LoanScheduleStatus.PaidOnTime;
+                    }
+                } else if (installment.AmountDue <= _amountToChargeFrom)
+                {
+                    installment.Status = LoanScheduleStatus.StillToPay;
+                }
             }
         }
 
@@ -535,12 +548,15 @@ namespace PaymentServices.Calculators
             installment.Status = LoanScheduleStatus.StillToPay;
 
             //если на момент installment у клиента на руках было меньше денег, чем должно было остаться, то платеж считается оплаченным.
-            if (_principal <= _expectedPrincipal)
+
+            var diff = _principal - _expectedPrincipal;
+
+            if (diff <= 0)
             {
                 _loan.LoanType.BalanceReachedExpected(installment);
                 CloseInstallment(installment);
             }
-            if (installment.Date < _term && installment.Status == LoanScheduleStatus.StillToPay)
+            if (installment.Date < _term && installment.Status == LoanScheduleStatus.StillToPay && diff >= _amountToChargeFrom)
             {
                 installment.Status = LoanScheduleStatus.Late;
                 _rescentLate.Add(installment);

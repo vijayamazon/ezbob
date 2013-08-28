@@ -18,19 +18,27 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         protected LoanPaymentFacade _facade;
         protected Loan _loan;
         private LoanScheduleCalculator _calculator;
-        private Customer _customer = new Customer();
+        private Customer _customer;
 
         [SetUp]
         public void Init()
         {
 
             var config = new Mock<IConfigurationVariablesRepository>();
-            config.Setup(x => x.GetByNameAsDecimal("AmountToChargeFrom")).Returns(10);
+            config.Setup(x => x.GetByNameAsDecimal("AmountToChargeFrom")).Returns(GetAmountToChargeFrom());
 
             _loan = new Loan();
             _facade = new LoanPaymentFacade(null, config.Object);
             _calculator = new LoanScheduleCalculator() { Interest = 0.06M };
+
+            _customer =new Customer();
+
             SetUp();
+        }
+
+        protected virtual int GetAmountToChargeFrom()
+        {
+            return 0;
         }
 
         protected virtual void SetUp()
