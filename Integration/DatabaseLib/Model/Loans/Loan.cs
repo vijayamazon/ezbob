@@ -10,6 +10,7 @@ using Iesi.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Type;
+using NHibernate.Util;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans
 {
@@ -346,6 +347,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             if (Status == LoanStatus.WrittenOff || Status == LoanStatus.Legal || Status == LoanStatus.PaidOff) return;
 
             var date = term ?? DateTime.UtcNow;
+
             if (Schedule.All(
                 s => s.Status == LoanScheduleStatus.PaidOnTime ||
                      s.Status == LoanScheduleStatus.Paid ||
@@ -359,6 +361,18 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             else
             {
                 DateClosed = null;
+            }
+
+
+            var firstLateDate = Schedule.Where(x => x.Status == LoanScheduleStatus.Late).Select(x => x.Date).FirstOrDefault();
+
+            if (firstLateDate != null)
+            {
+                var delinquency = (date - firstLateDate).TotalDays;
+                if (delinquency > MaxDelinquencyDays)
+                {
+                    MaxDelinquencyDays = (int)delinquency;
+                }
             }
 
             if (Schedule.Any(s => s.Status == LoanScheduleStatus.Late))

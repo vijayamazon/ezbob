@@ -11,7 +11,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
             MakePayment(389, Parse("2012-02-15 12:00:00.000"));
 
-            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(15));
+            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(14));
         }
     }
 }
