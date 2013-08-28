@@ -13,7 +13,6 @@ using StructureMap;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
-	using Marketplaces.Yodlee;
 
 	public enum PendingStatus
     {
@@ -69,12 +68,6 @@ namespace EZBob.DatabaseLib.Model.Database {
         WrittenOff,
         Late
     }
-
-    public enum CollectionStatusType
-    {
-        Enabled = 0, Disabled = 1, Fraud = 2, Legal = 3, Default = 4, FraudSuspect = 5
-    }
-    
 
     public class CreditResultStatusType: EnumStringType<CreditResultStatus>
     {
@@ -724,7 +717,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class CollectionStatus
     {
-        public virtual CollectionStatusType CurrentStatus { get; set; }
+        public virtual int CurrentStatus { get; set; }
         public virtual DateTime? CollectionDateOfDeclaration { get; set; }
         public virtual bool IsAddCollectionFee { get; set; }
         public virtual double CollectionFee { get; set; }

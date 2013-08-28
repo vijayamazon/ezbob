@@ -8,7 +8,7 @@ namespace EZBob.DatabaseLib.Repository
 {
         public interface ICaisFlagRepository : IRepository<CaisFlag>
         {
-           List<CaisFlag> GetForStatusType(CollectionStatusType collectionStatusType);
+           List<CaisFlag> GetForStatusType();
         }
 
         public class CaisFlagRepository : NHibernateRepositoryBase<CaisFlag>, ICaisFlagRepository
@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Repository
             {
             }
 
-            public List<CaisFlag> GetForStatusType(CollectionStatusType collectionStatusType)
+            public List<CaisFlag> GetForStatusType()
             {
 	            return GetAll().Where(f => f.FlagSetting != "T").ToList();
             }

@@ -4,15 +4,27 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 
 class EzBob.Underwriter.CollectionStatusModel extends Backbone.Model
     urlRoot: -> "#{window.gRootPath}Underwriter/CollectionStatus/Index?Id=#{@get('customerId')}&currentStatus=#{@get('currentStatus')}"
-                 
+
+class EzBob.Underwriter.CollectionStatuses extends Backbone.Collection
+    url: -> "#{window.gRootPath}Underwriter/CollectionStatus/GetStatuses"
+
 class EzBob.CollectionStatusItemsView extends Backbone.Marionette.ItemView
     template: '#collection-status-items-template' 
+    
+    initialize: () ->
+        @statuses = new EzBob.Underwriter.CollectionStatuses()
+        @statuses.fetch({async:false})
+
+    serializeData: ->
+        statuses: @statuses.toJSON()        
 
 class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layout
     template: '#collection-status-layout-template'
     
     initialize: () ->
         @modelBinder = new Backbone.ModelBinder()
+        @statuses = new EzBob.Underwriter.CollectionStatuses()
+        @statuses.fetch({async:false})
 
     bindings:
         currentStatus:
@@ -32,10 +44,10 @@ class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layou
         @model.set "currentStatus": parseInt(currentStatus)
         @renderStatusValue()
         @
-
+        
     renderStatusValue: =>
         currentStatus = @model.get "currentStatus"
-        if currentStatus == 4
+        if @statuses != undefined && @statuses.models[currentStatus] != undefined && @statuses.models[currentStatus].get('Name') == 'Default'
             @model.fetch()
             @$el.find('#collection-view').show()
             collectionStatusView = new EzBob.Underwriter.CollectionStatusView model:@model

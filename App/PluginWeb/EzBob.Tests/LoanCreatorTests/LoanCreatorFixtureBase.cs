@@ -23,8 +23,9 @@ namespace EzBob.Tests.LoanCreatorTests
 
         [SetUp]
         public void Init()
-        {
-            var loanHistoryRepository = new Mock<ILoanHistoryRepository>();
+		{
+			var loanHistoryRepository = new Mock<ILoanHistoryRepository>();
+			var customerStatusesRepository = new Mock<ICustomerStatusesRepository>();
 
             var pacnetService = new Mock<IPacnetService>();
             pacnetService.Setup(x => x.SendMoney(It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -37,7 +38,7 @@ namespace EzBob.Tests.LoanCreatorTests
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
+			//_lc = new LoanCreator(loanHistoryRepository.Object, customerStatusesRepository, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
             SetUp();
         }
 

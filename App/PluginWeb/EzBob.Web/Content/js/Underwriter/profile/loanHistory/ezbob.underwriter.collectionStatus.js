@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+  var root, _ref, _ref1, _ref2, _ref3, _ref4,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -26,15 +26,44 @@
 
   })(Backbone.Model);
 
+  EzBob.Underwriter.CollectionStatuses = (function(_super) {
+    __extends(CollectionStatuses, _super);
+
+    function CollectionStatuses() {
+      _ref1 = CollectionStatuses.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    CollectionStatuses.prototype.url = function() {
+      return "" + window.gRootPath + "Underwriter/CollectionStatus/GetStatuses";
+    };
+
+    return CollectionStatuses;
+
+  })(Backbone.Collection);
+
   EzBob.CollectionStatusItemsView = (function(_super) {
     __extends(CollectionStatusItemsView, _super);
 
     function CollectionStatusItemsView() {
-      _ref1 = CollectionStatusItemsView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      _ref2 = CollectionStatusItemsView.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     CollectionStatusItemsView.prototype.template = '#collection-status-items-template';
+
+    CollectionStatusItemsView.prototype.initialize = function() {
+      this.statuses = new EzBob.Underwriter.CollectionStatuses();
+      return this.statuses.fetch({
+        async: false
+      });
+    };
+
+    CollectionStatusItemsView.prototype.serializeData = function() {
+      return {
+        statuses: this.statuses.toJSON()
+      };
+    };
 
     return CollectionStatusItemsView;
 
@@ -47,14 +76,18 @@
       this.onSave = __bind(this.onSave, this);
       this.onCancel = __bind(this.onCancel, this);
       this.save = __bind(this.save, this);
-      this.renderStatusValue = __bind(this.renderStatusValue, this);      _ref2 = CollectionStatusLayout.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      this.renderStatusValue = __bind(this.renderStatusValue, this);      _ref3 = CollectionStatusLayout.__super__.constructor.apply(this, arguments);
+      return _ref3;
     }
 
     CollectionStatusLayout.prototype.template = '#collection-status-layout-template';
 
     CollectionStatusLayout.prototype.initialize = function() {
-      return this.modelBinder = new Backbone.ModelBinder();
+      this.modelBinder = new Backbone.ModelBinder();
+      this.statuses = new EzBob.Underwriter.CollectionStatuses();
+      return this.statuses.fetch({
+        async: false
+      });
     };
 
     CollectionStatusLayout.prototype.bindings = {
@@ -90,7 +123,7 @@
       var collectionStatusView, currentStatus;
 
       currentStatus = this.model.get("currentStatus");
-      if (currentStatus === 4) {
+      if (this.statuses !== void 0 && this.statuses.models[currentStatus] !== void 0 && this.statuses.models[currentStatus].get('Name') === 'Default') {
         this.model.fetch();
         this.$el.find('#collection-view').show();
         collectionStatusView = new EzBob.Underwriter.CollectionStatusView({
@@ -161,8 +194,8 @@
     __extends(CollectionStatusView, _super);
 
     function CollectionStatusView() {
-      _ref3 = CollectionStatusView.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      _ref4 = CollectionStatusView.__super__.constructor.apply(this, arguments);
+      return _ref4;
     }
 
     CollectionStatusView.prototype.template = '#collection-status-template';

@@ -125,23 +125,24 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         @on "change:FraudCheckStatusId", @changeFraudCheckStatus, this
         @changeDisabled()
         @changeFraudCheckStatus()
+        if (@StatusesArr == undefined)
+            @statuses = new EzBob.Underwriter.CollectionStatuses()
+            @statuses.fetch({async:false})
+
+        @StatusesArr = {}
+        for status in @statuses.models
+            @StatusesArr[status.get('Id')] = status.get('Name')
 
     changeDisabled: ->
         disabledText = ""
         disabled = @get("Disabled")
-        switch disabled
-            when 1
-                disabledText = "Disabled"
-            when 2
-                disabledText = "Fraud"
-            when 3
-                disabledText = "Legal"
-            when 4
-                disabledText = "Default"
-            when 5
-                disabledText = "Fraud Suspect"
-            else
-                disabledText = "Enabled"
+        if (disabled == undefined)
+            return
+
+        disabledText = @StatusesArr[disabled]
+        if (disabledText == undefined)
+            disabledText = "Enabled"
+
         @set "DisabledText", disabledText
 
     changeFraudCheckStatus: ->

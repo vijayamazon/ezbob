@@ -24,6 +24,8 @@ using ZohoCRM;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System.Linq.Expressions;
+	using Customer = EZBob.DatabaseLib.Model.Database.Customer;
 
 	public class CustomersController : Controller
 	{
@@ -48,6 +50,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
 		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridSales;
 		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridCollection;
+
+		private static Dictionary<int, string> statusIndex2Name;
 
 		public ViewResult Index()
 		{
@@ -133,6 +137,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
 		public CustomersController(
 			ISession session,
+			CustomerStatusesRepository customerStatusesRepository,
 			CustomerRepository customers,
 			IAppCreator appCreator,
 			IEzBobConfiguration config,
@@ -165,6 +170,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			_gridPending = CreateColumnsPending();
 			_gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
 			_gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
+
+			if (statusIndex2Name == null)
+			{
+				statusIndex2Name = new Dictionary<int, string>();
+
+				foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
+				{
+					statusIndex2Name.Add(status.Id, status.Name);
+				}
+			}
 		}
 
 		[ValidateJsonAntiForgeryToken]
@@ -322,7 +337,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridCollection, settings)
 			{
-				CustomizeFilter = crit => crit.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.CollectionStatus.CurrentStatus == CollectionStatusType.Default || c.CollectionStatus.CurrentStatus == CollectionStatusType.Legal))
+				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.CollectionStatus.CurrentStatus == 3 || c.CollectionStatus.CurrentStatus == 4))
+					// The condition should be:
+					//statusIndex2Name.ContainsKey(c.CollectionStatus.CurrentStatus) && (statusIndex2Name[c.CollectionStatus.CurrentStatus] == "Default" || statusIndex2Name[c.CollectionStatus.CurrentStatus] == "Legal"
 			};
 			return result;
 		}

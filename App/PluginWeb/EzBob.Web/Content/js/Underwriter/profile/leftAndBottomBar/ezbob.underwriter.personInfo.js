@@ -196,10 +196,26 @@
     PersonalInfoModel.prototype.urlRoot = window.gRootPath + "Underwriter/CustomerInfo/Index";
 
     PersonalInfoModel.prototype.initialize = function() {
+      var status, _i, _len, _ref2, _results;
+
       this.on("change:Disabled", this.changeDisabled, this);
       this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
       this.changeDisabled();
-      return this.changeFraudCheckStatus();
+      this.changeFraudCheckStatus();
+      if (this.StatusesArr === void 0) {
+        this.statuses = new EzBob.Underwriter.CollectionStatuses();
+        this.statuses.fetch({
+          async: false
+        });
+      }
+      this.StatusesArr = {};
+      _ref2 = this.statuses.models;
+      _results = [];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        status = _ref2[_i];
+        _results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
+      }
+      return _results;
     };
 
     PersonalInfoModel.prototype.changeDisabled = function() {
@@ -207,24 +223,12 @@
 
       disabledText = "";
       disabled = this.get("Disabled");
-      switch (disabled) {
-        case 1:
-          disabledText = "Disabled";
-          break;
-        case 2:
-          disabledText = "Fraud";
-          break;
-        case 3:
-          disabledText = "Legal";
-          break;
-        case 4:
-          disabledText = "Default";
-          break;
-        case 5:
-          disabledText = "Fraud Suspect";
-          break;
-        default:
-          disabledText = "Enabled";
+      if (disabled === void 0) {
+        return;
+      }
+      disabledText = this.StatusesArr[disabled];
+      if (disabledText === void 0) {
+        disabledText = "Enabled";
       }
       return this.set("DisabledText", disabledText);
     };

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -22,16 +23,29 @@
         private readonly PayPointApi _payPointApi;
         private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
         private readonly IAppCreator _appCreator;
+	    private readonly List<CustomerStatuses> customerStatuses;
+		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
-        public CollectionStatusController(ICustomerRepository customerRepository, IAppCreator appCreator, PayPointApi paypoint)
+        public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, IAppCreator appCreator, PayPointApi paypoint)
         {
             _customerRepository = customerRepository;
             _appCreator = appCreator;
             _payPointApi = paypoint;
             _configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			customerStatuses = customerStatusesRepository.GetAll().ToList();
+			foreach (CustomerStatuses status in customerStatuses)
+			{
+				statusIndex2Name.Add(status.Id, status.Name);
+			}
         }
 
-        public JsonNetResult Index(int id, CollectionStatusType currentStatus)
+		[Ajax]
+		public JsonNetResult GetStatuses()
+		{
+			return this.JsonNet(customerStatuses);
+		}
+
+        public JsonNetResult Index(int id, int currentStatus)
         {
             var customer = _customerRepository.Get(id);
 
@@ -58,12 +72,12 @@
             return this.JsonNet(data);
         }
 
-        private CollectionStatus CreateDefoultCollectionStatusParametr(EZBob.DatabaseLib.Model.Database.Customer customer, CollectionStatusType currentStatus)
+        private CollectionStatus CreateDefoultCollectionStatusParametr(EZBob.DatabaseLib.Model.Database.Customer customer, int currentStatus)
         {
             var statParam = new CollectionStatus { CurrentStatus = currentStatus };
             statParam.CollectionDateOfDeclaration = DateTime.UtcNow;
 
-            if (currentStatus == CollectionStatusType.Default || currentStatus == CollectionStatusType.Legal)
+			if (statusIndex2Name.ContainsKey(currentStatus) && (statusIndex2Name[currentStatus] == "Default" || statusIndex2Name[currentStatus] == "Legal"))
             {
                 statParam.IsAddCollectionFee = true;
             }
@@ -74,11 +88,11 @@
         [Transactional]
         [Ajax]
         [Permission(Name = "CustomerStatus")]
-        public JsonNetResult Save(int customerId, CollectionStatusType currentStatus, CollectionStatusModel collectionStatus)
+        public JsonNetResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
         {
             var customer = _customerRepository.Get(customerId);
-            customer.CollectionStatus.CurrentStatus = currentStatus;
-	        if (customer.CollectionStatus.CurrentStatus == CollectionStatusType.Default)
+			customer.CollectionStatus.CurrentStatus = currentStatus;
+			if (statusIndex2Name.ContainsKey(currentStatus) && statusIndex2Name[currentStatus] == "Default")
 	        {
 		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
 	        }

@@ -30,7 +30,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
             var loan = _loanRepository.Get(loanId);
-            var flags = _caisFlagRepository.GetForStatusType(loan.Customer.CollectionStatus.CurrentStatus);
+            var flags = _caisFlagRepository.GetForStatusType();
             var model = new LoanOptionsViewModel(options, loan, flags);
             return this.JsonNet(model);
         }

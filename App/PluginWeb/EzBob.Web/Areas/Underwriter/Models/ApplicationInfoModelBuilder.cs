@@ -23,9 +23,11 @@
         private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
+			CustomerStatusesRepository customerStatusesRepository,
 			IPacNetManualBalanceRepository manualFunds, 
             IDiscountPlanRepository discounts, 
             ILoanTypeRepository loanTypes)
@@ -34,6 +36,10 @@
 			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
+			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
+			{
+				statusIndex2Name.Add(status.Id, status.Name);
+			}
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -97,7 +103,7 @@
             var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
                                        customer.CreditResult == CreditResultStatus.Escalated;
 
-            var isEnabled = customer.CollectionStatus.CurrentStatus == CollectionStatusType.Enabled;
+			var isEnabled = statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) && statusIndex2Name[customer.CollectionStatus.CurrentStatus] == "Enabled";
             model.Editable = isWaitingOrEscalated && cr != null && isEnabled;
 
             model.IsModified = !string.IsNullOrEmpty(cr.LoanTemplate);

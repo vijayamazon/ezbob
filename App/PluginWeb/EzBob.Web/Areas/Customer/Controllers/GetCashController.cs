@@ -23,7 +23,9 @@ using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class GetCashController : Controller
+	using System.Collections.Generic;
+
+	public class GetCashController : Controller
     {
         private readonly IAppCreator _appCreator;
         private readonly PayPointConfiguration _config;
@@ -35,12 +37,14 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
-        private readonly IZohoFacade _crm;
+		private readonly IZohoFacade _crm;
+		private static readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
         //-------------------------------------------------------------------------------
         public GetCashController(
-            IEzbobWorkplaceContext context, 
-            IPayPointFacade payPointFacade, 
+            IEzbobWorkplaceContext context,
+			CustomerStatusesRepository customerStatusesRepository, 
+			IPayPointFacade payPointFacade, 
             IAppCreator appCreator,
             ICustomerNameValidator validator,
             IPacnetPaypointServiceLogRepository logRepository,
@@ -56,7 +60,11 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customerRepository = customerRepository;
             _loanCreator = loanCreator;
             _crm = crm;
-            _config = ConfigurationRootBob.GetConfiguration().PayPoint;
+			_config = ConfigurationRootBob.GetConfiguration().PayPoint;
+			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
+			{
+				statusIndex2Name.Add(status.Id, status.Name);
+			}
         }
 
         [NoCache]
@@ -103,7 +111,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 !customer.CreditSum.HasValue ||
                 !customer.Status.HasValue ||
                 customer.Status.Value != Status.Approved ||
-                customer.CollectionStatus.CurrentStatus != CollectionStatusType.Enabled)
+				!statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) ||
+				statusIndex2Name[customer.CollectionStatus.CurrentStatus] != "Enabled")
             {
                 throw new Exception("Invalid customer state");
             }

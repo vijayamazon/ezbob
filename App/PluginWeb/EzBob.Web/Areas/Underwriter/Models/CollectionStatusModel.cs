@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib.Model.Database;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System.Collections.Generic;
+
     public class CollectionStatusItem
     {
         public int LoanId { get; set; }
@@ -14,8 +12,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
     public class CollectionStatusModel
     {
-        public CollectionStatusType CurrentStatus { get; set; }
-        
+        public int CurrentStatus { get; set; }
         public string CollectionDateOfDeclaration { get; set; }
         public string CollectionDescription { get; set; }
         public List<CollectionStatusItem> Items { get; set; }
