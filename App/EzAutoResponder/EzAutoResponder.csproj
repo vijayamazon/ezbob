@@ -96,6 +96,7 @@
     <Compile Include="AutoResponderService.Designer.cs">
       <DependentUpon>AutoResponderService.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImapIdler.cs" />
     <Compile Include="Mandrill.cs" />
     <Compile Include="Model\EmailAddressModel.cs" />
     <Compile Include="Model\EmailMessageModel.cs" />

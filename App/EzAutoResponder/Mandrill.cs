@@ -19,10 +19,11 @@
 		//Api pathes
 		private const string SendTemplatePath = "/messages/send-template.json";
 		private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
-
-		public Mandrill(ASafeLog log)
+		private readonly string _apiKey;
+		public Mandrill(ASafeLog log, string apiKey)
 		{
 			_log = log;
+			_apiKey = apiKey;
 			_client = new RestClient(BaseSecureUrl);
 			_client.AddHandler("application/json", new JsonDeserializer());
 		}
@@ -37,10 +38,9 @@
 		{
 
 			var toList = PrepareRecipients(to);
-			var env = ConfigurationManager.AppSettings.Get("CurrentEnv");
 			var message = new EmailModel
 			{
-				key = ConfigurationManager.AppSettings.Get(env),
+				key = _apiKey,
 				template_name = templateName,
 				message = new EmailMessageModel
 				{
