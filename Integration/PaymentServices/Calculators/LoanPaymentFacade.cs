@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EZBob.DatabaseLib;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
-using EzBob.CommonLib;
-using StructureMap;
 
 namespace PaymentServices.Calculators
 {
     public class LoanPaymentFacade
     {
         private readonly ILoanHistoryRepository _historyRepository;
+        private readonly IConfigurationVariablesRepository _configVariables;
 
         public LoanPaymentFacade()
         {
         }
 
-        public LoanPaymentFacade(ILoanHistoryRepository historyRepository)
+        public LoanPaymentFacade(ILoanHistoryRepository historyRepository, IConfigurationVariablesRepository configVariables)
         {
             _historyRepository = historyRepository;
+            _configVariables = configVariables;
         }
 
 
@@ -57,7 +57,7 @@ namespace PaymentServices.Calculators
 
 	        IEnumerable<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst));
 
-	        var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
+            var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, _configVariables);
             calculator.RecalculateSchedule();
 
             if (_historyRepository != null)
@@ -147,7 +147,7 @@ namespace PaymentServices.Calculators
             {
                 if (amount <= 0) break;
 
-                var c = new LoanRepaymentScheduleCalculator(loan, term);
+                var c = new LoanRepaymentScheduleCalculator(loan, term, _configVariables);
                 var state = c.GetState();
                 var late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
                            state.Interest + state.Fees + state.LateCharges;
@@ -264,7 +264,7 @@ namespace PaymentServices.Calculators
 
             loan.AddTransaction(transactionItem);
 
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, date);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, date, _configVariables);
             payEarlyCalc.RecalculateSchedule();
 
             loan.UpdateStatus(date);
@@ -279,13 +279,13 @@ namespace PaymentServices.Calculators
 
         public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, _configVariables);
             return payEarlyCalc.GetState();
         }
 
         public void Recalculate(Loan loan, DateTime dateTime)
         {
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, _configVariables);
             payEarlyCalc.GetState();
         }
     }

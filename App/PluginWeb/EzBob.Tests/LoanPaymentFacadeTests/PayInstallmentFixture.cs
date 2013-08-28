@@ -19,7 +19,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             {
                 historyItem = i;
             });
-            var facade = new LoanPaymentFacade(history.Object);
+            var facade = new LoanPaymentFacade(history.Object, null);
 
             var loan = new Loan() { Id = 1, Status = LoanStatus.Live };
             var calculator = new LoanScheduleCalculator();

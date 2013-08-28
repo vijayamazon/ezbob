@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.Areas.Customer.Models;
+using StructureMap;
 
 namespace PaymentServices.Calculators
 {
@@ -76,7 +78,10 @@ namespace PaymentServices.Calculators
 
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
-        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
+        private readonly decimal _amountToChargeFrom = 0;
+        
+
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
         {
             _loan = loan;
             _schedule = loan.Schedule;
@@ -87,6 +92,16 @@ namespace PaymentServices.Calculators
 
             _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
             _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
+
+            if (configVariables == null)
+            {
+                configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+            }
+
+            if (configVariables != null)
+            {
+                _amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
+            }
 
             Init();
         }
@@ -492,9 +507,22 @@ namespace PaymentServices.Calculators
 
         private void UpdateInstallmentsState()
         {
-            foreach (var installment in _processed.Where(i => i.Status == LoanScheduleStatus.Late && i.AmountDue == 0))
+            foreach (var installment in _processed)
             {
-                installment.Status = LoanScheduleStatus.Paid;
+                if (installment.AmountDue == 0)
+                {
+                    if (installment.Status == LoanScheduleStatus.Late)
+                    {
+                        installment.Status = LoanScheduleStatus.Paid;
+                    }
+                    else if (installment.Status == LoanScheduleStatus.StillToPay)
+                    {
+                        installment.Status = LoanScheduleStatus.PaidOnTime;
+                    }
+                } else if (installment.AmountDue <= _amountToChargeFrom)
+                {
+                    installment.Status = LoanScheduleStatus.StillToPay;
+                }
             }
         }
 
@@ -520,12 +548,15 @@ namespace PaymentServices.Calculators
             installment.Status = LoanScheduleStatus.StillToPay;
 
             //если на момент installment у клиента на руках было меньше денег, чем должно было остаться, то платеж считается оплаченным.
-            if (_principal <= _expectedPrincipal)
+
+            var diff = _principal - _expectedPrincipal;
+
+            if (diff <= 0)
             {
                 _loan.LoanType.BalanceReachedExpected(installment);
                 CloseInstallment(installment);
             }
-            if (installment.Date < _term && installment.Status == LoanScheduleStatus.StillToPay)
+            if (installment.Date < _term && installment.Status == LoanScheduleStatus.StillToPay && diff >= _amountToChargeFrom)
             {
                 installment.Status = LoanScheduleStatus.Late;
                 _rescentLate.Add(installment);

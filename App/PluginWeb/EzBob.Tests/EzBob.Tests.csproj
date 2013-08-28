@@ -121,9 +121,11 @@
     <Compile Include="LoanCreatorTests\LoanCreatorFixtureBase.cs" />
     <Compile Include="LoanCreatorTests\LoanDelayFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanWithDiscountFixture.cs" />
+    <Compile Include="LoanPaymentFacadeTests\AmountToChargeFromFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\FlexibleInerestRateFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\GetStateAtFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\InterestOnlyPaymentsFixture.cs" />
+    <Compile Include="LoanPaymentFacadeTests\IsWasLateFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\LateChargesFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\LoanPaymentsTestBase.cs" />
     <Compile Include="LoanPaymentFacadeTests\ManualPaymentAndRollover.cs" />

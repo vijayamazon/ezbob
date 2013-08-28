@@ -327,10 +327,20 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         public virtual void UpdateStatus(DateTime? term = null)
         {
-            if (Customer != null && Customer.CreditResult == CreditResultStatus.Late && Customer.Loans.All(l => l.Status != LoanStatus.Late))
+            if (Customer != null)
             {
-                var underrwriterDecision = Customer.LastCashRequest.UnderwriterDecision;
-                Customer.CreditResult = underrwriterDecision ?? CreditResultStatus.WaitingForDecision;
+                var hasNoLateLoans = Customer.Loans.All(l => l.Status != LoanStatus.Late);
+                
+                if (Customer.CreditResult == CreditResultStatus.Late && hasNoLateLoans)
+                {
+                    var underrwriterDecision = Customer.LastCashRequest.UnderwriterDecision;
+                    Customer.CreditResult = underrwriterDecision ?? CreditResultStatus.WaitingForDecision;
+                }
+
+                if (!Customer.IsWasLate && !hasNoLateLoans)
+                {
+                    Customer.IsWasLate = true;
+                }
             }
 
             if (Status == LoanStatus.WrittenOff || Status == LoanStatus.Legal || Status == LoanStatus.PaidOff) return;
