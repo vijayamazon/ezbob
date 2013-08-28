@@ -9,10 +9,6 @@ CREATE TABLE [dbo].[MailTemplateRelation](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[InternalTemplateName] [nvarchar](200) NOT NULL,
 	[MandrillTemplateId] [int] NOT NULL,
- CONSTRAINT [AK_InternalTemplateName] UNIQUE NONCLUSTERED 
-(
-	[InternalTemplateName] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
  CONSTRAINT [UNIQUE_InternalTemplateName] UNIQUE NONCLUSTERED 
 (
 	[InternalTemplateName] ASC
