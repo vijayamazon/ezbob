@@ -6,40 +6,40 @@
     <NodeElement Name="Admin charge?" NodeId="Comparison5094752" />
     <NodeElement Name="AmountDue &gt;= Threshold" NodeId="Comparison66996147" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
-    <NodeElement Name="If to use custom Date" NodeId="ConditionalAssignment45726372" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar15879623" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral55482101" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral1432296" />
+    <NodeElement Name="If to use custom Date" NodeId="ConditionalAssignment45726372" />
     <NodeElement Name="Is Fee Applied Successfully " NodeId="Comparison5782396" />
     <NodeElement Name="Is Last Instalment" NodeId="Comparison32449728" />
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Late" NodeId="AssignmentB33513147" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
-    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
     <NodeElement Name="Mail Node" NodeId="MailNode12193639" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
+    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
-    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Script" NodeId="ScriptNode18492716" />
+    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
+    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar48537699" />
     <NodeElement Name="UpdateLoanScheduleCustomDate" NodeId="DataSourceNodeScalar1727937" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar21129301" />
@@ -96,7 +96,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode18492716</Name>
       <PointF>
-        <X>1056</X>
+        <X>1096</X>
         <Y>276</Y>
       </PointF>
       <SuperNodeName />
@@ -164,7 +164,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison66996147</Name>
       <PointF>
-        <X>873.4074</X>
+        <X>913.4074</X>
         <Y>276</Y>
       </PointF>
       <SuperNodeName />
@@ -1231,7 +1231,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison32449728</Name>
       <PointF>
-        <X>1053.87939</X>
+        <X>1053.87927</X>
         <Y>56</Y>
       </PointF>
       <SuperNodeName />
@@ -5842,7 +5842,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison32449728</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>ScriptNode18492716</TargetNodeName>
+      <TargetNodeName>AssignmentB33513147</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5854,7 +5854,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison32449728</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB33513147</TargetNodeName>
+      <TargetNodeName>ScriptNode18492716</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -7302,7 +7302,9 @@ CollectionPeriod2Num = int(CollectionPeriod2);
 CollectionPeriod3Num = int(CollectionPeriod3);
 AdministrationChargeNum = int(AdministrationCharge);
 LatePaymentChargeNum = int(LatePaymentCharge);
-PartialPaymentChargeNum = int(PartialPaymentCharge);</Script>
+PartialPaymentChargeNum = int(PartialPaymentCharge);
+
+AmountToChargeFromNum = int(AmountToChargeFrom)</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
     <ScriptDescriptor>
