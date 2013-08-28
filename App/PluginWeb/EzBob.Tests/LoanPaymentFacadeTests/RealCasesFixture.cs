@@ -1041,6 +1041,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             var state = GetStateAt(_loan, Parse("2013-08-28 00:00:00.000"));
 
             Assert.That(state.AmountDue, Is.EqualTo(3));
+            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(0));
 
             Console.WriteLine(_loan);
         }

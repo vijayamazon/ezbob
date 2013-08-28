@@ -364,11 +364,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             }
 
 
-            var firstLateDate = Schedule.Where(x => x.Status == LoanScheduleStatus.Late).Select(x => x.Date).FirstOrDefault();
+            var firstLate = Schedule.Where(x => x.Status == LoanScheduleStatus.Late).FirstOrDefault();
 
-            if (firstLateDate != null)
+            if (firstLate != null)
             {
-                var delinquency = (date - firstLateDate).TotalDays;
+                var delinquency = (date - firstLate.Date).TotalDays;
                 if (delinquency > MaxDelinquencyDays)
                 {
                     MaxDelinquencyDays = (int)delinquency;
