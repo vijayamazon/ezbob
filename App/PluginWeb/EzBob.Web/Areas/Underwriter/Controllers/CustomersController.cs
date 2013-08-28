@@ -1,31 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web.Mvc;
-using Aspose.Cells;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.AmazonServiceLib;
-using EzBob.CommonLib;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Linq;
-using PluginWebApp.Code.jqGrid;
-using Scorto.PluginWeb.Core.jqGrid;
-using Scorto.Web;
-using StructureMap;
-using ZohoCRM;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System.Linq.Expressions;
-	using Customer = EZBob.DatabaseLib.Model.Database.Customer;
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using System.Web.Mvc;
+	using Aspose.Cells;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using AmazonServiceLib;
+	using CommonLib;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using NHibernate;
+	using NHibernate.Criterion;
+	using NHibernate.Linq;
+	using PluginWebApp.Code.jqGrid;
+	using Scorto.PluginWeb.Core.jqGrid;
+	using Scorto.Web;
+	using StructureMap;
+	using ZohoCRM;
 
 	public class CustomersController : Controller
 	{
@@ -39,19 +36,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		private readonly LoanLimit _limit;
 		private readonly MarketPlaceRepository _mpType;
 
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridWaiting;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridEscalated;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridApproved;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLate;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRejected;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridAll;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridRegisteredCustomers;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridPending;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridLoans;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridSales;
-		private readonly GridModel<EZBob.DatabaseLib.Model.Database.Customer> _gridCollection;
+		private readonly GridModel<Customer> _gridWaiting;
+		private readonly GridModel<Customer> _gridEscalated;
+		private readonly GridModel<Customer> _gridApproved;
+		private readonly GridModel<Customer> _gridLate;
+		private readonly GridModel<Customer> _gridRejected;
+		private readonly GridModel<Customer> _gridAll;
+		private readonly GridModel<Customer> _gridRegisteredCustomers;
+		private readonly GridModel<Customer> _gridPending;
+		private readonly GridModel<Customer> _gridLoans;
+		private readonly GridModel<Customer> _gridSales;
+		private readonly GridModel<Customer> _gridCollection;
 
-		private static Dictionary<int, string> statusIndex2Name;
+		private readonly Dictionary<int, string> statusIndex2Name;
+		private readonly int defaultIndex = -1;
+		private readonly int legalIndex = -1;
 
 		public ViewResult Index()
 		{
@@ -143,8 +142,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			IEzBobConfiguration config,
 			IDecisionHistoryRepository historyRepository,
 			IZohoFacade crm,
-			IWorkplaceContext context, LoanLimit limit, GridModel<EZBob.DatabaseLib.Model.Database.Customer> pending,
-			GridModel<EZBob.DatabaseLib.Model.Database.Customer> loans, MarketPlaceRepository mpType)
+			IWorkplaceContext context, LoanLimit limit, GridModel<Customer> pending,
+			GridModel<Customer> loans, MarketPlaceRepository mpType)
 		{
 			_session = session;
 			_customers = customers;
@@ -178,6 +177,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 				foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
 				{
 					statusIndex2Name.Add(status.Id, status.Name);
+					if (status.Name == "Default")
+					{
+						defaultIndex = status.Id;
+					}
+					else if (status.Name == "Legal")
+					{
+						legalIndex = status.Id;
+					}
 				}
 			}
 		}
@@ -252,23 +259,23 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer> RegisteredCustomers(GridSettings settings)
+		public GridCriteriaResult<Customer> RegisteredCustomers(GridSettings settings)
 		{
 			bool isTest = Request.Params["IsTest"] == "true";
 			if (isTest)
 			{
-				return new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
-																							   _gridRegisteredCustomers,
-																							   settings)
+				return new GridCriteriaResult<Customer>(_session, null,
+														_gridRegisteredCustomers,
+														settings)
 					{
 						CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
 					};
 
 			}
 
-			return new GridCriteriaResult<EZBob.DatabaseLib.Model.Database.Customer>(_session, null,
-																							   _gridRegisteredCustomers,
-																							   settings)
+			return new GridCriteriaResult<Customer>(_session, null,
+													_gridRegisteredCustomers,
+													settings)
 				{
 					CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
 													   Restrictions.IsNull("IsTest")))
@@ -323,8 +330,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridSales, settings)
 			{
-				CustomizeFilter = crit => crit.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.ManagerApprovedSum > c.AmountTaken))
-					.Add(Restrictions.Where<EZBob.DatabaseLib.Model.Database.Customer>(c => c.LatestCRMstatus != "NoSale" || c.LatestCRMstatus == null))
+				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.ManagerApprovedSum > c.AmountTaken))
+					.Add(Restrictions.Where<Customer>(c => c.LatestCRMstatus != "NoSale" || c.LatestCRMstatus == null))
 			};
 			return result;
 		}
@@ -337,16 +344,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridCollection, settings)
 			{
-				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.CollectionStatus.CurrentStatus == 3 || c.CollectionStatus.CurrentStatus == 4))
-					// The condition should be:
-					//statusIndex2Name.ContainsKey(c.CollectionStatus.CurrentStatus) && (statusIndex2Name[c.CollectionStatus.CurrentStatus] == "Default" || statusIndex2Name[c.CollectionStatus.CurrentStatus] == "Legal"
+				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.CollectionStatus.CurrentStatus == legalIndex || c.CollectionStatus.CurrentStatus == defaultIndex))
 			};
 			return result;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsAll()
+		private static GridModel<Customer> CreateColumnsAll()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateCartColumn(gridModel, true);
 			GridHelpers.CreateMpListColumn(gridModel);
@@ -362,9 +367,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRegisteredCustomers()
+		private static GridModel<Customer> CreateColumnsRegisteredCustomers()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateEmailColumn(gridModel);
 			GridHelpers.CreateUserStatusColumn(gridModel);
@@ -387,9 +392,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsWaitingForDesicion()
+		private static GridModel<Customer> CreateColumnsWaitingForDesicion()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateCartColumn(gridModel, true);
 			GridHelpers.CreateMpListColumn(gridModel);
@@ -404,7 +409,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsEscalated()
+		private static GridModel<Customer> CreateColumnsEscalated()
 		{
 			var gridModel = CreateColumnsWaitingForDesicion();
 			GridHelpers.CreateDateEscalatedColumn(gridModel);
@@ -413,9 +418,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsApproved()
+		private static GridModel<Customer> CreateColumnsApproved()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateCartColumn(gridModel, true);
 			GridHelpers.CreateMpListColumn(gridModel);
@@ -434,9 +439,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsRejected()
+		private static GridModel<Customer> CreateColumnsRejected()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateCartColumn(gridModel, true);
 			GridHelpers.CreateMpListColumn(gridModel);
@@ -453,7 +458,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLate()
+		private static GridModel<Customer> CreateColumnsLate()
 		{
 			var gridModel = CreateColumnsApproved();
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
@@ -464,16 +469,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsPending()
+		private static GridModel<Customer> CreateColumnsPending()
 		{
 			var gridModel = CreateColumnsWaitingForDesicion();
 			GridHelpers.CreatePendingStatusColumn(gridModel);
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsLoans()
+		private static GridModel<Customer> CreateColumnsLoans()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateCartColumn(gridModel, true);
 			GridHelpers.CreateMpListColumn(gridModel);
@@ -493,9 +498,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsSales()
+		private static GridModel<Customer> CreateColumnsSales()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateEmailColumn(gridModel);
 			GridHelpers.CreateNameColumn(gridModel);
@@ -510,9 +515,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			return gridModel;
 		}
 
-		private static GridModel<EZBob.DatabaseLib.Model.Database.Customer> CreateColumnsCollection()
+		private static GridModel<Customer> CreateColumnsCollection()
 		{
-			var gridModel = new GridModel<EZBob.DatabaseLib.Model.Database.Customer>();
+			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateEmailColumn(gridModel);
 			GridHelpers.CreateNameColumn(gridModel);
@@ -660,7 +665,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			int.TryParse(term, out id);
 
 			var findResult =
-				_session.Query<EZBob.DatabaseLib.Model.Database.Customer>()
+				_session.Query<Customer>()
 						.Where(x => x.WizardStep == WizardStepType.AllStep)
 						.Where(
 							c =>
