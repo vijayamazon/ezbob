@@ -511,6 +511,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CustomerStatuses</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CustomerStatuses.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>DataSource_KeyData</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\DataSource_KeyData.sql</oFileName>
@@ -574,12 +580,6 @@
     <oName>DiscountPlan</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\DiscountPlan.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>EkmConnectorConfigs</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -802,6 +802,12 @@
     <oName>FraudUser</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\FraudUser.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>gsm_numbers_1101_1307</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\gsm_numbers_1101_1307.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -2026,6 +2032,12 @@
     <oName>MP_YodleeTransactionCategories</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_YodleeTransactionCategories.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>needed_appId</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\needed_appId.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

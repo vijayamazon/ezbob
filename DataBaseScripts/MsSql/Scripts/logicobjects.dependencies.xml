@@ -3175,6 +3175,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>UpdateLoanScheduleCustomDate</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\UpdateLoanScheduleCustomDate.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>UpdateLoanScheduleStatus</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\UpdateLoanScheduleStatus.sql</oFileName>

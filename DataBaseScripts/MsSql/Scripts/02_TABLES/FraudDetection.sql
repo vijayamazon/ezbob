@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[FraudDetection](
 	[CompareField] [nvarchar](200) NOT NULL,
 	[Value] [nvarchar](500) NOT NULL,
 	[DateOfCheck] [datetime] NULL,
+	[Concurrence] [nvarchar](250) NULL,
  CONSTRAINT [PK_FraudDetection] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

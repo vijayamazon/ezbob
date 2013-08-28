@@ -26,6 +26,7 @@ CREATE TABLE [dbo].[LoanSchedule](
 	[FeesPaid] [decimal](18, 4) NULL,
 	[InterestRate] [decimal](18, 4) NULL,
 	[FiveDaysDueMailSent] [bit] NULL,
+	[CustomInstallmentDate] [date] NULL,
  CONSTRAINT [PK_LoanSchedule] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
