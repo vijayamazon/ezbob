@@ -1,4 +1,6 @@
-﻿using EZBob.DatabaseLib;
+﻿using System;
+using System.Linq;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Models;
@@ -8,6 +10,7 @@ using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Infrastructure;
 using Moq;
+using NHibernate;
 using NUnit.Framework;
 using PaymentServices.PacNet;
 using ZohoCRM;
@@ -25,7 +28,7 @@ namespace EzBob.Tests.LoanCreatorTests
         public void Init()
 		{
 			var loanHistoryRepository = new Mock<ILoanHistoryRepository>();
-			var customerStatusesRepository = new Mock<ICustomerStatusesRepository>();
+            var customerStatusesRepository = new CustomerStatusesRepositoryStub();
 
             var pacnetService = new Mock<IPacnetService>();
             pacnetService.Setup(x => x.SendMoney(It.IsAny<int>(), It.IsAny<decimal>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -38,7 +41,7 @@ namespace EzBob.Tests.LoanCreatorTests
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-			_lc = new LoanCreator(loanHistoryRepository.Object, customerStatusesRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
+            _lc = new LoanCreator(loanHistoryRepository.Object, customerStatusesRepository, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
             SetUp();
         }
 
@@ -55,4 +58,78 @@ namespace EzBob.Tests.LoanCreatorTests
         {
         }
     }
+
+    public class CustomerStatusesRepositoryStub : ICustomerStatusesRepository
+    {
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerStatuses Get(object id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<CustomerStatuses> GetAll()
+        {
+            return (new[] {new CustomerStatuses() {Id = 0, Name = "Enabled"}}).AsQueryable();
+        }
+
+        public object Save(CustomerStatuses val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveOrUpdate(CustomerStatuses val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(CustomerStatuses val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerStatuses Merge(CustomerStatuses val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(CustomerStatuses val)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BeginTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CommitTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnsureTransaction(Action<ITransaction> action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnsureTransaction(Action action)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerStatuses Load(object id)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }
