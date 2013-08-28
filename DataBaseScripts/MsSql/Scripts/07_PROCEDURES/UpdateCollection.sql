@@ -17,10 +17,9 @@ CREATE PROCEDURE [dbo].[UpdateCollection]
  @PastDuesNum int,
  @IsDefaulted int,
  @Late90Plus numeric(18),
- @Late90PlusNum numeric(18),
- @MaxDelinquencyDays int,
- @InstallmentDelinquencyDays int,
- @InstallmentId int)
+ @Late90PlusNum numeric(18)
+)
+
  
 
 AS
@@ -37,13 +36,9 @@ UPDATE [dbo].[Loan]
 		PastDuesNum = @PastDuesNum,
 		IsDefaulted = @IsDefaulted,
 		Late90Plus = @Late90Plus,
-		Late90PlusNum = @Late90PlusNum,
-		MaxDelinquencyDays = @MaxDelinquencyDays
+		Late90PlusNum = @Late90PlusNum
  WHERE Id = @LoanId
 
-UPDATE [dbo].[LoanSchedule]
-   SET  Delinquency = @InstallmentDelinquencyDays
- WHERE Id = @InstallmentId
 
  SET NOCOUNT ON;
 SELECT @@IDENTITY;
