@@ -364,7 +364,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             }
 
 
-            var firstLate = Schedule.Where(x => x.Status == LoanScheduleStatus.Late).FirstOrDefault();
+            var firstLate = Schedule.FirstOrDefault(x => x.Status == LoanScheduleStatus.Late);
 
             if (firstLate != null)
             {
@@ -378,6 +378,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             if (Schedule.Any(s => s.Status == LoanScheduleStatus.Late))
             {
                 Status = LoanStatus.Late;
+                if(Customer != null) Customer.CreditResult = CreditResultStatus.Late;
                 return;
             }
 
