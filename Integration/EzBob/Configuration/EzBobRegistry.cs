@@ -42,7 +42,8 @@
 			For<IServiceEndPointFactory>().Use( new ServiceEndPointFactory() );
 
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
-            For<IBugRepository>().Use<BugRepository>();
+			For<IBugRepository>().Use<BugRepository>();
+			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 		}
 	}
 }

@@ -42,7 +42,7 @@ namespace EzAutoResponder
 			catch (MailBeeLicenseException e)
 			{
 				_log.Error("License key is invalid: {0}", e);
-				Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
+				//Mailer.Mailer.SendMail(_cfg.TestAddress, _cfg.TestPassword, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
 
@@ -54,7 +54,7 @@ namespace EzAutoResponder
 
 
 			// Log into IMAP account
-			_imap.Login(_cfg.TestAddress, _cfg.TestPassword);
+			_imap.Login("","");//todo enter a login
 			_log.Info("Logged into the server");
 
 			// Select Inbox folder
@@ -98,8 +98,8 @@ namespace EzAutoResponder
 			var timeReceived = dateReceived.TimeOfDay;
 			//sending only for mails that where recieved between 19:00 and 06:00
 			//var test = "";//todo remove test remove commneted out returns
-			if (timeReceived < new TimeSpan(Const.HourAfter, 0, 0) &&
-				timeReceived > new TimeSpan(Const.HourBefore, 0, 0))
+			if (timeReceived < new TimeSpan(_cfg.AutoRespondAfterHour, 0, 0) &&
+				timeReceived > new TimeSpan(_cfg.AutoRespondBeforeHour, 0, 0))
 			{
 				Console.WriteLine("day {0}", DateTime.UtcNow.TimeOfDay);
 			}
@@ -111,7 +111,7 @@ namespace EzAutoResponder
 			var oDb = new SqlConnection();
 			var time = oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
 				new QueryParameter(Const.EmailSpParam, "stasdes@gmail.com"));
-			if (time.HasValue && time.Value > DateTime.UtcNow.AddDays(Const.ThreeDays))
+			if (time.HasValue && time.Value > DateTime.UtcNow.AddDays(_cfg.AutoRespondCountDays))
 			{
 				Console.WriteLine("less than 3 days");
 			}
@@ -125,12 +125,18 @@ namespace EzAutoResponder
 		[Ignore]
 		public void TestMandrill()
 		{
-			var m = new Mandrill(_log);
+			var m = new Mandrill(_log, _cfg.MandrillApiKey);
 			var vars = new Dictionary<string, string>
 				{
 					{"FNAME", "Stas Dulman"},
 				};
 			m.Send(vars, "stasdes@gmail.com", "AutoresponderTest", "Autoresponder Test");
+		}
+
+		[Test]
+		public void TestSplit()
+		{
+			string[] mails = "asd sdgf sdgs	dg$#S  DA".Split(' ');
 		}
 	}
 }

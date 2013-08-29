@@ -54,7 +54,7 @@ namespace EzBob.Web.Code
 					{"RequiredFunds", requiredFunds.ToString("N", CultureInfo.InvariantCulture)} 
 				};
 
-            var result = mail.Send(vars, _config.NotEnoughFundsToAddess, _config.NotEnoughFundsTemplateName);
+            var result = mail.Send(vars, _config.NotEnoughFundsToAddress, _config.NotEnoughFundsTemplateName);
             if (result == "OK")
             {
                 Log.InfoFormat("Sent mail - not enough funds");

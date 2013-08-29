@@ -313,8 +313,9 @@
 				Log.InfoFormat("Amount to charge is: {0}", state.AmountDue);
 				return state.AmountDue;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+                Log.Error(ex);
 				return 0;
 			}
 		}

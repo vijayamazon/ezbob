@@ -4,6 +4,7 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using ApplicationCreator;
@@ -28,10 +29,12 @@
         private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
+		private readonly ICustomerStatusesRepository customerStatusesRepository;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
 		public ApplicationInfoController(ICustomerRepository customerRepository,
+										 ICustomerStatusesRepository customerStatusesRepository,
 		                                 ICashRequestsRepository cashRequestsRepository,
 		                                 IApplicationRepository applications,
 		                                 IEzBobConfiguration config,
@@ -54,6 +57,7 @@
 			_crBuilder = crBuilder;
 			_infoModelBuilder = infoModelBuilder;
 			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
+			this.customerStatusesRepository = customerStatusesRepository;
 		}
 
 		[Ajax]
@@ -69,7 +73,14 @@
             return this.JsonNet(m);
         }
 
-        [HttpPost]
+		[Ajax]
+		public JsonNetResult GetIsStatusEnabled(int status)
+		{
+			bool res = customerStatusesRepository.GetIsEnabled(status);
+			return this.JsonNet(res);
+		}
+
+		[HttpPost]
         [Transactional]
         [Ajax]
         [ValidateJsonAntiForgeryToken]

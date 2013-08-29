@@ -11,7 +11,8 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestLoansIssuedReport(oDB, log);
+			// TestLoansIssuedReport(oDB, log);
+			TestEarnedInterest(oDB, log);
 		} // Main
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
