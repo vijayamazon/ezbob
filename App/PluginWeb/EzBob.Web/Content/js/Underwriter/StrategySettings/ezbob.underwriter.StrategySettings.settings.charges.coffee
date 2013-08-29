@@ -20,6 +20,7 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
         PartialPaymentCharge:   "input[name='partialPaymentCharge']"
         AdministrationCharge:   "input[name='administrationCharge']"
         OtherCharge:            "input[name='otherCharge']"
+        AmountToChargeFrom:     "input[name='amountToChargeFrom']"
 
     events:
         "click button[name='SaveChargesSettings']":     "saveSettings"
@@ -43,7 +44,7 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
     onRender: -> 
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
-            @$el.find("input[name='latePaymentCharge'], input[name='rolloverCharge'], input[name='partialPaymentCharge'], input[name='administrationCharge'], input[name='otherCharge']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
+            @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveChargesSettings'], button[name='CancelChargesSettings']").hide();
         @setValidator()
 
@@ -72,5 +73,8 @@ class EzBob.Underwriter.SettingsChargesView extends Backbone.Marionette.ItemView
                     required: true
                     min: 0
                 otherCharge:
+                    required: true
+                    min: 0
+                amountToChargeFrom:
                     required: true
                     min: 0

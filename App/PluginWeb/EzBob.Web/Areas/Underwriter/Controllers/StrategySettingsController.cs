@@ -67,6 +67,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var partialPaymentCharge = _configurationVariablesRepository.GetByName("PartialPaymentCharge");
             var administrationCharge = _configurationVariablesRepository.GetByName("AdministrationCharge");
             var otherCharge = _configurationVariablesRepository.GetByName("OtherCharge");
+            var amountToChargeFrom = _configurationVariablesRepository.GetByName("AmountToChargeFrom");
 
             var sc = new
                 {
@@ -79,7 +80,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                     AdministrationCharge = administrationCharge.Value,
                     AdministrationChargeDesc = administrationCharge.Description,
                     OtherCharge = otherCharge.Value,
-                    OtherChargeDesc = otherCharge.Description
+                    OtherChargeDesc = otherCharge.Description,
+                    AmountToChargeFrom = amountToChargeFrom.Value,
+                    AmountToChargeFromDesc = amountToChargeFrom.Description
                 };
             return this.JsonNet(sc);
         }
@@ -88,18 +91,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [ValidateJsonAntiForgeryToken]
         [HttpPost]
         [Transactional]
-        public JsonNetResult SettingsCharges(   string AdministrationCharge,
-                                                string LatePaymentCharge,
-                                                string OtherCharge,
-                                                string PartialPaymentCharge,
-                                                string RolloverCharge
+        public JsonNetResult SettingsCharges(string administrationCharge,
+            string latePaymentCharge,
+            string otherCharge,
+            string partialPaymentCharge,
+            string rolloverCharge,
+            string amountToChargeFrom
             )
         {
-            _configurationVariablesRepository.SetByName("AdministrationCharge", AdministrationCharge);
-            _configurationVariablesRepository.SetByName("LatePaymentCharge", LatePaymentCharge);
-            _configurationVariablesRepository.SetByName("OtherCharge", OtherCharge);
-            _configurationVariablesRepository.SetByName("PartialPaymentCharge", PartialPaymentCharge);
-            _configurationVariablesRepository.SetByName("RolloverCharge", RolloverCharge);
+            _configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
+            _configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
+            _configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
+            _configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
+            _configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
+            _configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
             return SettingsCharges();
         }
 
