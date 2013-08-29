@@ -8,8 +8,9 @@
         {
 			Table("CustomerStatuses");
             LazyLoad();
-            Id(x => x.Id);
-            Map(x => x.Name);
+			Id(x => x.Id);
+			Map(x => x.Name);
+			Map(x => x.IsEnabled);
         }
     }
 }
