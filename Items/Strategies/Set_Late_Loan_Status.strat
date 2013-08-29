@@ -7,39 +7,40 @@
     <NodeElement Name="AmountDue &gt;= Threshold" NodeId="Comparison66996147" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar15879623" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
-    <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral55482101" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral34977455" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral1432296" />
     <NodeElement Name="If to use custom Date" NodeId="ConditionalAssignment45726372" />
     <NodeElement Name="Is Fee Applied Successfully " NodeId="Comparison5782396" />
     <NodeElement Name="Is Last Instalment" NodeId="Comparison32449728" />
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Late" NodeId="AssignmentB33513147" />
-    <NodeElement Name="Mail Node" NodeId="MailNode12193639" />
-    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
-    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
     <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode58457186" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14650885" />
+    <NodeElement Name="Mail Node" NodeId="MailNode40399911" />
+    <NodeElement Name="Mail Node" NodeId="MailNode12193639" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB16157182" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
-    <NodeElement Name="Script" NodeId="ScriptNode18492716" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
     <NodeElement Name="Script" NodeId="ScriptNode46765253" />
+    <NodeElement Name="Script" NodeId="ScriptNode18492716" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
     <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
+    <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar61392767" />
     <NodeElement Name="UpdateLoanScheduleCustomDate" NodeId="DataSourceNodeScalar1727937" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar21129301" />
@@ -475,7 +476,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment17467873</Name>
       <PointF>
-        <X>1104.22937</X>
+        <X>1164.22937</X>
         <Y>476</Y>
       </PointF>
       <SuperNodeName />
@@ -1032,157 +1033,19 @@
     </NodeDescriptor>
     <NodeDescriptor Modification="">
       <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
+      <DefaultPinName />
       <Description />
-      <DisplayName>GetAllStillToPayLoanSchedules</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;GetAllStillToPayLoanSchedulesUKP6v4VIwAJIiMpjRvmpTw==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;id&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;LoanId&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;Date&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;DateTime&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.DateTime&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;DateTime&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;Status&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;RepaymentAmount&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;AmountDue&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;LastInstallment&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CustomerId&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
+      <DisplayName>Multi-Assignment</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;DaysBEtweeenCustomAndSchedule := DAYSBETWEEN(Prev_CustomInstallmentDateScalar,TODAY())&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceBehavioral55482101</Name>
+      <Name>MultiAssignmentB16157182</Name>
       <PointF>
-        <X>177.984314</X>
-        <Y>56</Y>
+        <X>1014.62585</X>
+        <Y>176</Y>
       </PointF>
       <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSource</TypeName>
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -1697,6 +1560,177 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>GetAllStillToPayLoanSchedules</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;GetAllStillToPayLoanSchedulesmVPlm9EDSCQ8sr7e/ItX9Q==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;id&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LoanId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;Date&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;DateTime&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.DateTime&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;DateTime&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;Status&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;RepaymentAmount&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;AmountDue&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Decimal&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Decimal&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LastInstallment&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomerId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomInstallmentDate&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;DateTime&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.DateTime&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Date&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceBehavioral34977455</Name>
+      <PointF>
+        <X>177.984314</X>
+        <Y>56</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSource</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -2854,6 +2888,42 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>Prev_CustomInstallmentDate</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>Prev_CustomInstallmentDateScalar</Name>
+      <TypeName>System.DateTime</TypeName>
+      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>DaysBEtweeenCustomAndSchedule</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>AssignmentB39254496</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -3023,6 +3093,18 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode45306373</OwnerName>
+      <Name>Prev_CustomInstallmentDateScalar</Name>
+      <TypeName>System.DateTime</TypeName>
+      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode45306373</OwnerName>
       <Name>LoanId</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3142,10 +3224,22 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>GetRowDataNode45306373</OwnerName>
+      <Name>Prev_CustomInstallmentDate</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>Comparison66996147</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>AmountDueScalar &gt;= AmountToChargeFromNum</InitialValue>
+      <InitialValue>AmountDueScalar &gt;= AmountToChargeFromNum AND DAYSBETWEEN(Prev_CustomInstallmentDateScalar,TODAY()) &gt; 1</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -3170,6 +3264,18 @@
       <Name>Comparison66996147AmountToChargeFromNum</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison66996147</OwnerName>
+      <Name>Comparison66996147Prev_CustomInstallmentDateScalar</Name>
+      <TypeName>System.DateTime</TypeName>
+      <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -4558,138 +4664,6 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>id</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>LoanId</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>Date</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>Status</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>RepaymentAmount</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>AmountDue</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>LastInstallment</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>CustomerId</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>@OutputDataLayerName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>DataSourceName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description>Variable for setting name of Data Source that will be used in current node</Description>
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
-      <Name>ScortoInternalErrorMessage</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
       <OwnerName>DataSourceNodeScalar1727937</OwnerName>
       <Name>RETURN_VALUE</Name>
       <TypeName>System.Double</TypeName>
@@ -5085,6 +5059,150 @@
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>id</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>LoanId</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>Date</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>Status</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>RepaymentAmount</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>AmountDue</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>LastInstallment</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>CustomerId</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>CustomInstallmentDate</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>@OutputDataLayerName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -5101,9 +5219,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ScriptNode2842423</SourceNodeName>
+      <SourceNodeName>DataSourceBehavioral34977455</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceBehavioral55482101</TargetNodeName>
+      <TargetNodeName>AssignmentB39254496</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5428,9 +5546,9 @@
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceBehavioral55482101</SourceNodeName>
+      <SourceNodeName>ScriptNode2842423</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB39254496</TargetNodeName>
+      <TargetNodeName>DataSourceBehavioral34977455</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5746,7 +5864,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode18492716</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison66996147</TargetNodeName>
+      <TargetNodeName>MultiAssignmentB16157182</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -5795,6 +5913,18 @@
       <SourceNodeName>ConditionalAssignment45726372</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>AssignmentB9528291</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB16157182</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison66996147</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -6575,80 +6705,68 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
-      <TargetVariableName>Comparison66996147AmountDueScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>AmountToChargeFromNum</SourceVariableName>
-      <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
-      <TargetVariableName>Comparison66996147AmountToChargeFromNum</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>OutputDataLayerName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>@OutputDataLayerName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>id</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>id</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>LoanId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>LoanId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Date</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>Date</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>Status</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>Status</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>RepaymentAmount</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>RepaymentAmount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>AmountDue</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>AmountDue</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>LastInstallment</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>LastInstallment</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral55482101</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
       <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -6656,66 +6774,6 @@
       <SourceVariableName>CustomerId</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
       <TargetVariableName>CustomerIdScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>PositionScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Position</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>StatusScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Status</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>DateScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Date</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>LoanIdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>LoanId</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>PaymentScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>Payment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>IdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>id</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>RepaymentAmountScalalr</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>RepaymentAmount</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>AmountDue</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>LastInstallmentScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>LastInstallment</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
-      <SourceVariableName>CustomerIdScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
-      <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
@@ -6860,6 +6918,102 @@
       <SourceVariableName>CustomInstallmentDateScalar</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode46952641</TargetVariableOwnerName>
       <TargetVariableName>CustomInstallmentDate</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>Prev_CustomInstallmentDate</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral34977455</TargetVariableOwnerName>
+      <TargetVariableName>CustomInstallmentDate</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>Prev_CustomInstallmentDate</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Prev_CustomInstallmentDateScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>PositionScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Position</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>StatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Status</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>DateScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Date</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LoanIdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>LoanId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>PaymentScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Payment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>IdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>id</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>RepaymentAmountScalalr</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>RepaymentAmount</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>AmountDueScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>AmountDue</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LastInstallmentScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>LastInstallment</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>CustomerIdScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>CustomerId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>Prev_CustomInstallmentDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode45306373</TargetVariableOwnerName>
+      <TargetVariableName>Prev_CustomInstallmentDate</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>AmountDueScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
+      <TargetVariableName>Comparison66996147AmountDueScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>AmountToChargeFromNum</SourceVariableName>
+      <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
+      <TargetVariableName>Comparison66996147AmountToChargeFromNum</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>Prev_CustomInstallmentDateScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
+      <TargetVariableName>Comparison66996147Prev_CustomInstallmentDateScalar</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -7152,7 +7306,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceBehavioral55482101</OwnerName>
+      <OwnerName>MultiAssignmentB16157182</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -7185,6 +7339,14 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar61392767</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceBehavioral34977455</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
