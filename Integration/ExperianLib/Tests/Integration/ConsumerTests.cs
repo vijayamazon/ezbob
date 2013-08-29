@@ -38,15 +38,15 @@ namespace ExperianLib.Tests.Integration
             var service = new ConsumerService();
             var loc = new InputLocationDetailsMultiLineLocation()
             {
-                LocationLine1 = "196 High Road".ToUpper(),
-                LocationLine2 = "London".ToUpper(),
-                LocationLine3 = "N22 8HH".ToUpper(),
-                LocationLine4 = "".ToUpper(),
-                LocationLine5 = "".ToUpper(),
-                LocationLine6 = "".ToUpper(),
+                LocationLine1 = "Flat".ToUpper(),
+                LocationLine2 = "Gardeners Cottage".ToUpper(),
+                LocationLine3 = "Lugwardine".ToUpper(),
+                LocationLine4 = "Hereford".ToUpper(),
+                LocationLine5 = "Herefordshire".ToUpper(),
+                LocationLine6 = "HR1 4DF".ToUpper(),
             };
-            var dob = new DateTime(1978, 02, 09);
-            var result = service.GetConsumerInfo("Roy", "Loewenberg", "M", dob, null, loc, "PL", 1, 0);
+            var dob = new DateTime(1968, 10, 15);
+            var result = service.GetConsumerInfo("Matt", "Lunt", "M", dob, null, loc, "PL", 1, 0);
             if (result.IsError)
             {
                 Log.Error("Error from consumer service: " + result.Error);

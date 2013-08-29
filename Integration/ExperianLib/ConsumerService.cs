@@ -54,7 +54,7 @@
                 mlLocation = ShifLocation(mlLocation);
                 var cachedResponse = _repo.GetPersonFromCache(firstName, surname, birthDate, postcode);
 
-                if (cachedResponse != null)
+                /*if (cachedResponse != null)
                 {
                     if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
                     {
@@ -64,7 +64,7 @@
                 else if (checkInCacheOnly)
                 {
                     return null;
-                }
+                }*/
 
                 cachedResponse = cachedResponse ?? new MP_ExperianDataCache
                     {
@@ -118,12 +118,13 @@
             {
                 var lines = new List<string>();
 
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine1)) lines.Add(mlLocation.LocationLine1);
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine2)) lines.Add(mlLocation.LocationLine2);
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine3)) lines.Add(mlLocation.LocationLine3);
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine4)) lines.Add(mlLocation.LocationLine4);
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine5)) lines.Add(mlLocation.LocationLine5);
-                if (!string.IsNullOrEmpty(mlLocation.LocationLine6)) lines.Add(mlLocation.LocationLine6);
+                //if one of lines is "Flat"(without numbers) we got an error 'Location not resolved'
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine1) && mlLocation.LocationLine1.ToLower() != "flat") lines.Add(mlLocation.LocationLine1);
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine2) && mlLocation.LocationLine2.ToLower() != "flat") lines.Add(mlLocation.LocationLine2);
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine3) && mlLocation.LocationLine3.ToLower() != "flat") lines.Add(mlLocation.LocationLine3);
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine4) && mlLocation.LocationLine4.ToLower() != "flat") lines.Add(mlLocation.LocationLine4);
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine5) && mlLocation.LocationLine5.ToLower() != "flat") lines.Add(mlLocation.LocationLine5);
+                if (!string.IsNullOrEmpty(mlLocation.LocationLine6) && mlLocation.LocationLine6.ToLower() != "flat") lines.Add(mlLocation.LocationLine6);
 
                 mlLocation = new InputLocationDetailsMultiLineLocation();
 
