@@ -19,6 +19,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         protected Loan _loan;
         protected LoanScheduleCalculator _calculator;
         private Customer _customer;
+        protected IConfigurationVariablesRepository _configurationVariablesRepository;
 
         [SetUp]
         public void Init()
@@ -28,7 +29,8 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             config.Setup(x => x.GetByNameAsDecimal("AmountToChargeFrom")).Returns(GetAmountToChargeFrom());
 
             _loan = new Loan();
-            _facade = new LoanPaymentFacade(null, config.Object);
+            _configurationVariablesRepository = config.Object;
+            _facade = new LoanPaymentFacade(null, _configurationVariablesRepository);
             _calculator = new LoanScheduleCalculator() { Interest = 0.06M };
 
             _customer =new Customer();
