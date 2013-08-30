@@ -3239,7 +3239,7 @@
       <OwnerName>Comparison66996147</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
-      <InitialValue>AmountDueScalar &gt;= AmountToChargeFromNum AND DAYSBETWEEN(Prev_CustomInstallmentDateScalar,TODAY()) &gt; 1</InitialValue>
+      <InitialValue>AmountDueScalar &gt; AmountToChargeFromNum AND DAYSBETWEEN(Prev_CustomInstallmentDateScalar,TODAY()) &gt; 1</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
