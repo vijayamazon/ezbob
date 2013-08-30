@@ -130,6 +130,11 @@ namespace EzBob.Tests.LoanCreatorTests
         {
             throw new NotImplementedException();
         }
+
+        public bool GetIsEnabled(int id)
+        {
+            return id == 0;
+        }
     }
 
 }
