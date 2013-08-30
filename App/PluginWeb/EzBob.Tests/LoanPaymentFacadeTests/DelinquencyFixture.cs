@@ -1,5 +1,7 @@
-﻿using EZBob.DatabaseLib.Model.Database;
+﻿using System;
+using EZBob.DatabaseLib.Model.Database;
 using NUnit.Framework;
+using PaymentServices.Calculators;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
@@ -12,9 +14,48 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(389, Parse("2012-02-15 12:00:00.000"));
 
             Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(14));
-
             Assert.That(_loan.Customer.CreditResult, Is.EqualTo(CreditResultStatus.Late));
 
+        }
+
+        [Test]
+        public void delinquency_for_almost_paid_installment()
+        {
+            CreateLoan(Parse("2013-07-30 00:00:00.000"), 1000);
+            MakePayment(235.0m, Parse("2013-08-30 00:00:00.000"));
+            GetStateAt(_loan, Parse("2013-09-04 00:00:00.000"));
+
+            Console.Write(_loan);
+
+            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(5));
+            Assert.That(_loan.Customer.CreditResult, Is.EqualTo(CreditResultStatus.Late));
+        }
+
+        [Test]
+        public void delinquency_for_almost_paid_installment2()
+        {
+            CreateLoan(Parse("2013-07-25 00:00:00.000"), 1000);
+            MakePayment(235.0m, Parse("2013-08-25 00:00:00.000"));
+            GetStateAt(_loan, Parse("2013-08-30 00:00:00.000"));
+
+            Console.Write(_loan);
+
+            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(5));
+            Assert.That(_loan.Customer.CreditResult, Is.EqualTo(CreditResultStatus.Late));
+        }
+
+        [Test]
+        public void delinquency_for_almost_paid_installment3()
+        {
+            CreateLoan(Parse("2013-07-25 00:00:00.000"), 1000);
+            MakePayment(235.0m, Parse("2013-08-25 00:00:00.000"));
+
+            var p = _loan.NextEarlyPayment(Parse("2013-08-30 00:00:00.000"));
+
+            Console.Write(_loan);
+
+            Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(5));
+            Assert.That(_loan.Customer.CreditResult, Is.EqualTo(CreditResultStatus.Late));
         }
     }
 }
