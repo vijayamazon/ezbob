@@ -69,8 +69,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.blockBtn(false);
             return false;
         }
+
+        var xhr = $.post(that.form.attr("action"), that.form.serialize());
         
-        $.post(that.form.attr("action"), that.form.serialize(), function(result) {
+        xhr.done(function (result) {
             if (result.success) {
                 $('body').addClass('auth');
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
@@ -89,7 +91,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 that.$el.find(':submit').addClass("disabled");
             }
             that.blockBtn(false);
-        }, "json");
+        });
+
+        xhr.fail(function () {
+            EzBob.App.trigger("error", "Something went wrong");
+            that.captcha.reload();
+            that.blockBtn(false);
+        });
 
         return false;
     },
