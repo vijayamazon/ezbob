@@ -373,12 +373,9 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
                 {
                     MaxDelinquencyDays = (int)delinquency;
                 }
-            }
 
-            if (Schedule.Any(s => s.Status == LoanScheduleStatus.Late))
-            {
                 Status = LoanStatus.Late;
-                if(Customer != null) Customer.CreditResult = CreditResultStatus.Late;
+                if (Customer != null) Customer.CreditResult = CreditResultStatus.Late;
                 return;
             }
 

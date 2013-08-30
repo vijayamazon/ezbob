@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using EZBob.DatabaseLib.Model.Database;
+using NUnit.Framework;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {
@@ -11,6 +12,9 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(389, Parse("2012-02-15 12:00:00.000"));
 
             Assert.That(_loan.MaxDelinquencyDays, Is.EqualTo(14));
+
+            Assert.That(_loan.Customer.CreditResult, Is.EqualTo(CreditResultStatus.Late));
+
         }
     }
 }
