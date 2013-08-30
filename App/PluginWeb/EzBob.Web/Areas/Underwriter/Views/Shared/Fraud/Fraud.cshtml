@@ -20,7 +20,7 @@
                 "<b>Email Domains</b>",
                 "<b>Bank Accounts</b> (Bank account, Sort code)",
                 "<b>Companies</b> (Company name, Registration Number)",
-                "<b>Shops</b> (Shop name, Show type)")
+                "<b>Shops</b> (Shop name, Shop type)")
             <%_.each(data, function(val){ %> 
             <%
             function PrepareOutput(data){
@@ -91,7 +91,7 @@
             <button class="btn-mini btn btn-success add" data-type="Companies"><i class="icon-plus"></i></button>
             <hr/>
 
-            <b>Fraud Shops </b><span>(Shop name, Show type)</span>
+            <b>Fraud Shops </b><span>(Shop name, Shop type)</span>
             <div class="Shops"></div>
             <button class="btn-mini btn btn-success add" data-type="Shops"><i class="icon-plus"></i></button>
             <hr/>
@@ -175,7 +175,7 @@
 </script>
 
 <script type="text/template" id="Shops-template">
-    @SimpleValues("Shops", "Shops")
+    @SimpleValues("Shop", "Shops")
 </script>
 
 <script type="text/template" id="add-Addresses-template">
