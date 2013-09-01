@@ -54,7 +54,7 @@
                 mlLocation = ShifLocation(mlLocation);
                 var cachedResponse = _repo.GetPersonFromCache(firstName, surname, birthDate, postcode);
 
-                /*if (cachedResponse != null)
+                if (cachedResponse != null)
                 {
                     if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
                     {
@@ -64,7 +64,7 @@
                 else if (checkInCacheOnly)
                 {
                     return null;
-                }*/
+                }
 
                 cachedResponse = cachedResponse ?? new MP_ExperianDataCache
                     {
