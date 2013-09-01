@@ -198,6 +198,12 @@
 				return;
 			}
 
+			if (dateReceived < DateTime.Today.AddDays(_cfg.AutoRespondCountDays))
+			{
+				_eventLog.WriteEntry("Old Unseen mail", EventLogEntryType.Information);
+				return;
+			}
+
 			oDb.ExecuteNonQuery(Const.InsertAutoresponderLogSpName,
 								new QueryParameter(Const.EmailSpParam, msg.From.Email),
 								new QueryParameter(Const.NameSpParam, msg.From.DisplayName));
