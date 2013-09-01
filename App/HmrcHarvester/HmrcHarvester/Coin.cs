@@ -28,6 +28,14 @@
 
 		#endregion property CurrencyCode
 
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format("{0} {1}", Amount, CurrencyCode);
+		} // ToString
+
+		#endregion method ToString
+
 		#endregion public
 	} // class Coin
 

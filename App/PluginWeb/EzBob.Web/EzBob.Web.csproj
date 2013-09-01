@@ -1093,6 +1093,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_ExperianSettings.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\PayPalCanceled.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Support\_Support.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_details.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_summary.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

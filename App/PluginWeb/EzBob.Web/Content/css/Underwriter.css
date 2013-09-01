@@ -483,10 +483,14 @@ td.no-padding { padding: 0 !important; }
 table.internal-table { border-collapse: collapse; width: 100% !important; }
 
 table.internal-table td {
-	border: 1px solid #dddddd !important;
+	border: 0 !important;
 	background-color: transparent !important;
 	white-space: nowrap !important;
 }
+
+#hmrc-vat-return-summary .r,
+#hmrc-vat-return-details .r
+{ text-align: right !important; }
 
 .fraud-form .control-group {
     margin-bottom: 5px;

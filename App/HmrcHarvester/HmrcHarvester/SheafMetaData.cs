@@ -5,10 +5,8 @@
 	/// Data types fetched from the Field (VAT return, etc).
 	/// </summary>
 	public enum DataType {
-		/// <summary>
-		/// VAT return data type.
-		/// </summary>
 		VatReturn,
+		PayeRtiTaxYears,
 	} // enum DataType
 
 	#endregion enum DataType

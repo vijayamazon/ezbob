@@ -56,45 +56,13 @@
 	case 1: // HMRC behaviour
 		%><div class="tabbable">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#hmrc-vat-return" data-toggle="tab">VAT Return</a></li>
+			<li class="active"><a href="#hmrc-vat-return-summary" data-toggle="tab">VAT Return Summary</a></li>
+			<li><a href="#hmrc-vat-return-details" data-toggle="tab">VAT Return Details</a></li>
 		</ul>
 		<div class="tab-content">
-			<div class="tab-pane active" id="hmrc-vat-return"><table class="table table-bordered table-striped  blue-header centered"><thead><tr>
-				<th>Business &amp; Period</th>
-				<th>Return Details</th></tr></thead><tbody><%
-				if (m.CGData && m.CGData.Entries) {
-					for (var nIdx = 0; nIdx < m.CGData.Entries.length; nIdx++) {
-					var oEntry = m.CGData.Entries[nIdx];
-						%><tr><td class="no-padding"><table class="internal-table">
-							<tr><td>Registration #:</td><td><%= oEntry.RegistrationNo %></td></tr>
-							<tr><td>Period:</td><td><%= oEntry.Period %></td></tr>
-							<tr><td>From:</td><td><%= EzBob.formatDate(oEntry.DateFrom) %></td></tr>
-							<tr><td>To:</td><td><%= EzBob.formatDate(oEntry.DateTo) %></td></tr>
-							<tr><td>Business Details:</td><td><%= oEntry.BusinessName %>
-							<% for (var nAddrIdx = 0; nAddrIdx < oEntry.BusinessAddress.length; nAddrIdx++) {
-								%><div><%= oEntry.BusinessAddress[nAddrIdx] %></div><%
-							} %></td></tr></table></td>
-							<td class="no-padding"><table class="internal-table"><%
-								var oSortable = [];
-								for (var oDetail in oEntry.Data)
-									oSortable.push({ caption: oDetail, amount: oEntry.Data[oDetail].Amount, currency_code: oEntry.Data[oDetail].CurrencyCode });
-
-								oSortable.sort(function(a, b) {
-									var re = /\(Box (\d+)\)$/;
-									var nA = parseInt(re.exec(a.caption)[1]);
-									var nB = parseInt(re.exec(b.caption)[1]);
-									return nA - nB;
-								});
-
-								for (var nRDIdx = 0; nRDIdx < oSortable.length; nRDIdx++) {
-									var oDetail = oSortable[nRDIdx];
-									%><tr><td><%= oDetail.caption %>:</td><td><%= (oDetail.currency_code == 'GBP') ? GBPValues(oDetail.amount, true) : oDetail.amount %></td></tr><%
-								} %></table></td>
-						</tr><%
-					} // for each entry
-				} // if
-				%></tbody></table>
-			</div></div><%
+			<div class="tab-pane active" id="hmrc-vat-return-summary">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_summary"); }</div>
+			<div class="tab-pane" id="hmrc-vat-return-details">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_details"); }</div>
+		</div><%
 		break;
 	} // switch
 })(); %>

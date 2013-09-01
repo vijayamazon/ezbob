@@ -611,6 +611,7 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
 EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999' };
 EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };
 EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '0', vMax: '999999999999999' };
+EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '0', vMax: '999999999999999' };
 EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
 
@@ -626,6 +627,10 @@ EzBob.formatPoundsWidhDash = function (val) {
     return EzBob.formatPounds(val);
 };
 
+EzBob.formatPercents = function (val) {
+    return EzBob.formatPoundsFormat(val, EzBob.percentFormat);
+};
+
 EzBob.formatPounds = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormat);
 };
@@ -636,6 +641,10 @@ EzBob.formatPounds1 = function (val) {
 
 EzBob.formatPoundsNoDecimals = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormatNoDecimals);
+};
+
+EzBob.formatPoundsAsInt = function (val) {
+    return EzBob.formatPoundsFormat(val, EzBob.moneyFormatAsInt);
 };
 
 EzBob.formatPoundsFormat = function (val, format) {
@@ -726,6 +735,11 @@ EzBob.formatDateHumanFull = function (date) {
 EzBob.formatDateShortCard = function (date) {
     if (!date) return "";
     return moment.utc(date).local().format("MM/YYYY");
+};
+
+EzBob.formatDateMY = function (date) {
+    if (!date) return "";
+    return moment.utc(date).local().format("MMM 'YY");
 };
 
 EzBob.formatTimeSpan = function (val) {

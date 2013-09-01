@@ -167,15 +167,9 @@ namespace Ezbob.HmrcHarvester {
 				return false;
 			} // if
 
-			var ci = new CultureInfo("en-GB", false);
-
 			foreach (KeyValuePair<string, string> pair in dlp.Data) {
-				decimal nAmount = 0;
-
-				// Convert unicode pound sign to ascii.
-				string sValue = pair.Value.Replace(Convert.ToChar(65533), Convert.ToChar(163));
-
-				if ((pair.Key.Length > 1) && decimal.TryParse(sValue, NumberStyles.Currency, ci, out nAmount)) {
+				if (pair.Key.Length > 1) {
+					decimal nAmount = AThrasher.ParseGBP(pair.Value);
 					seeds.ReturnDetails[pair.Key.Substring(0, pair.Key.Length - 1)] = new Coin(nAmount, "GBP");
 					Debug("VatReturnSeeds.ReturnDetails[{0}] = {1}", pair.Key, nAmount);
 				} // if

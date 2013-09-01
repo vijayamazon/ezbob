@@ -4,21 +4,30 @@ using System.IO;
 using System.Text;
 using Ezbob.HmrcHarvester;
 using Ezbob.Logger;
+using Integration.ChannelGrabberConfig;
 
 namespace TestHarvester {
 	class Program {
 		static void Main(string[] args) {
-			var oLog = new ConsoleLog(new LegacyLog());
+			var oLog = new LegacyLog(new ConsoleLog());
 
 			FullTest(oLog);
 		} // Main
 
 		#region method FullTest
 
-		private static void FullTest(ASafeLog oLog) {
-			var harvester = new Harvester("829144784260", "18june1974", false, oLog);
+		private static void FullTest(LegacyLog oLog) {
+			var ad = new AccountData(Integration.ChannelGrabberConfig.Configuration.GetInstance(oLog.UnderlyingLog).GetVendorInfo("HMRC")) {
+				Login = "829144784260",
+				Password = "18june1974"
+			};
 
-			if (harvester.Init() && harvester.Run(true) && harvester.Run(false)) {
+			var harvester = new Harvester(ad, oLog.UnderlyingLog);
+
+			if (harvester.Init()) {
+				harvester.Run(true);
+				harvester.Run(false);
+
 				string sBaseDir = Path.Combine(Directory.GetCurrentDirectory(), "files");
 
 				oLog.Info("{0} errors occured", harvester.Hopper.ErrorCount);
@@ -71,31 +80,41 @@ namespace TestHarvester {
 						ISeeds oSeeds = pair.Value;
 
 						switch (nDataType) {
-						case DataType.VatReturn:
-							var oData = (VatReturnSeeds)oSeeds;
+						case DataType.VatReturn: {
+								var oData = (VatReturnSeeds)oSeeds;
 
-							oLog.Debug("Fetched file: {0} -- file content begin", sFileName);
+								oLog.Debug("Fetched file: {0} -- file content begin", sFileName);
 
-							oLog.Debug("Registration #: {0}", oData.RegistrationNo);
+								oLog.Debug("Registration #: {0}", oData.RegistrationNo);
 
-							oLog.Debug("Period:\n\tName: {0}\n\tFrom: {1}\n\tTo: {1}\n\tDue: {2}",
-								oData.Period, oData.DateFrom, oData.DateTo, oData.DateDue
-							);
+								oLog.Debug("Period:\n\tName: {0}\n\tFrom: {1}\n\tTo: {1}\n\tDue: {2}",
+									oData.Period, oData.DateFrom, oData.DateTo, oData.DateDue
+								);
 
-							oLog.Debug("Business name: {0}\nBusiness address:\n\t{1}",
-								oData.BusinessName, string.Join("\n\t", oData.BusinessAddress)
-							);
+								oLog.Debug("Business name: {0}\nBusiness address:\n\t{1}",
+									oData.BusinessName, string.Join("\n\t", oData.BusinessAddress)
+								);
 
-							var sb = new StringBuilder();
+								var sb = new StringBuilder();
 
-							foreach (KeyValuePair<string, decimal> rd in oData.ReturnDetails)
-								sb.AppendFormat("\n\t{0}: {1}", rd.Key, rd.Value);
+								foreach (KeyValuePair<string, Coin> rd in oData.ReturnDetails)
+									sb.AppendFormat("\n\t{0}: {1} {2}", rd.Key, rd.Value.Amount, rd.Value.CurrencyCode);
 
-							oLog.Debug("Return details:{0}", sb.ToString());
+								oLog.Debug("Return details:{0}", sb.ToString());
 
-							oLog.Debug("Fetched file: {0} -- file content end", sFileName);
+								oLog.Debug("Fetched file: {0} -- file content end", sFileName);
+							} break;
 
-							break;
+						case DataType.PayeRtiTaxYears: {
+								var oData = (RtiTaxYearSeeds)oSeeds;
+								oLog.Debug("Fetched file: {0} -- file content begin", sFileName);
+
+								foreach (RtiTaxMonthSeed rtms in oData.Months) {
+									oLog.Debug("{0} - {1} paid {2} due {3}", rtms.DateStart, rtms.DateEnd, rtms.AmountPaid, rtms.AmountDue);
+								} // for each month
+
+								oLog.Debug("Fetched file: {0} -- file content end", sFileName);
+							} break;
 						} // switch
 					} // for each seeds
 				} // for each data type

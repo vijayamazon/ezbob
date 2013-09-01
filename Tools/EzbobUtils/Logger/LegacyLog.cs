@@ -51,6 +51,12 @@ namespace Ezbob.Logger {
 
 		#endregion constructor
 
+		#region property UnderlyingLog
+
+		public virtual ILog UnderlyingLog { get { return ms_oLog; } } // UnderlyingLog
+
+		#endregion property UnderlyingLog
+
 		#region method OwnSay
 
 		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {

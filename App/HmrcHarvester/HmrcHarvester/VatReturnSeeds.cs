@@ -167,9 +167,6 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion public
 
-		#region protected
-		#endregion protected
-
 		#region private
 
 		private readonly SortedDictionary<Field, dynamic> m_oProperties;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Ezbob.Logger;
 using HtmlAgilityPack;
@@ -100,6 +102,7 @@ namespace Ezbob.HmrcHarvester {
 				Debug("Harvester starts downloading data.");
 
 				VatReturns(sUserVatID);
+				FetchRtiTaxYears();
 
 				Debug("Harvester running is complete.");
 			}
@@ -124,6 +127,8 @@ namespace Ezbob.HmrcHarvester {
 		#endregion public
 
 		#region private
+
+		#region infrastructure
 
 		#region property AccountData
 
@@ -225,169 +230,6 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion struct LoginRequestDetails
 
-		#region method VatReturns
-
-		/// <summary>
-		/// Fetches "VAT return" data and stores it in the Hopper.
-		/// Separate files are fetched in parallel.
-		/// </summary>
-		private void VatReturns(string sUserVatID) {
-			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
-
-			m_oVatReturnsMetaData = new SortedDictionary<string, SheafMetaData>();
-
-			if (oSubmittedReturns != null) {
-				var oTasks = new List<Task>();
-
-				foreach (KeyValuePair<string, string> sr in oSubmittedReturns) {
-					string sHtmlUrl = string.Format(
-						"/vat-file/trader/{0}{1}{2}",
-						sUserVatID, 
-						sUserVatID.EndsWith("/") || sr.Key.StartsWith("/") ? "" : "/",
-						sr.Key
-					);
-
-					string sPdfUrl = sHtmlUrl + "?format=pdf";
-
-					string sBaseFileName = sr.Value.Replace(' ', '_');
-
-					Info("VatReturns: requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
-
-					m_oVatReturnsMetaData[sHtmlUrl] = new SheafMetaData {
-						DataType = DataType.VatReturn,
-						FileType = FileType.Html,
-						BaseFileName = sBaseFileName,
-						Thrasher = new VatReturnThrasher(VerboseLogging, this)
-					};
-
-					oTasks.Add(Session.GetAsync(sHtmlUrl).ContinueWith(GetFile));
-
-					Info("VatReturns: requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
-
-					m_oVatReturnsMetaData[sPdfUrl] = new SheafMetaData {
-						DataType = DataType.VatReturn,
-						FileType = FileType.Pdf,
-						BaseFileName = sBaseFileName,
-						Thrasher = null
-					};
-
-					oTasks.Add(Session.GetAsync(sPdfUrl).ContinueWith(GetFile));
-				} // for each file
-
-				Task.WaitAll(oTasks.ToArray());
-			} // if
-		} // VatReturns
-
-		#endregion method VatReturns
-
-		#region method GetFile
-
-		/// <summary>
-		/// Fetches one file from the Field and stores it in the Hopper as byte[].
-		/// Adds HarvesterError to the Hopper in case of error.
-		/// </summary>
-		/// <param name="task">HTTP request result.</param>
-		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
-		private void GetFile(Task<HttpResponseMessage> task) {
-			SheafMetaData fi = null;
-
-			HttpResponseMessage response = task.Result;
-
-			lock (m_oVatReturnsMetaData) {
-				fi = m_oVatReturnsMetaData[response.RequestMessage.RequestUri.PathAndQuery];
-			} // lock
-
-			Info("GetFile: retrieving {0}", response.RequestMessage);
-
-			if (!response.IsSuccessStatusCode) {
-				Error("Not saving because of error. Status code {0}: {1}", response.StatusCode.ToString(), response.ReasonPhrase);
-				Hopper.Add(fi, response);
-				return;
-			} // if
-
-			Stream oInputStream = response.Content.ReadAsStreamAsync().Result;
-
-			var oOutput = new MemoryStream();
-
-			var outputFile = new BinaryWriter(oOutput);
-
-			const int nBufSize = 8192;
-			var buf = new byte[nBufSize];
-
-			int nRead = oInputStream.Read(buf, 0, nBufSize);
-
-			while (nRead > 0) {
-				outputFile.Write(buf, 0, nRead);
-
-				nRead = oInputStream.Read(buf, 0, nBufSize);
-			} // while
-
-			outputFile.Close();
-
-			byte[] oFile = oOutput.ToArray();
-
-			Hopper.Add(fi, oFile);
-
-			if (fi.Thrasher != null)
-				Hopper.Add(fi, fi.Thrasher.Run(fi, oFile));
-		} // GetFile
-
-		#endregion method GetFile
-
-		#region method LoadSubmittedReturnsList
-
-		private Dictionary<string, string> LoadSubmittedReturnsList(string sUserVatID) {
-			Info("Loading list of submitted VAT returns...");
-
-			HtmlDocument doc = GetPage("/vat-file/trader/" + sUserVatID + "/periods");
-
-			HtmlNode oListTable = doc.DocumentNode.SelectSingleNode("//*[@id=\"VAT0011\"]/div[2]/table/tbody");
-
-			if (oListTable == null)
-				throw new HarvesterException("Failed to find list of returns.");
-
-			if (oListTable.ChildNodes == null) {
-				Info("Loading list of submitted VAT returns complete, no files found.");
-				return null;
-			} // if
-
-			var oRes = new Dictionary<string, string>();
-
-			foreach (HtmlNode oTR in oListTable.ChildNodes) {
-				if (oTR.Name.ToUpper() != "TR")
-					continue;
-
-				if (oTR.ChildNodes == null)
-					continue;
-
-				HtmlNode oTD = oTR.SelectSingleNode("td");
-
-				if (oTD == null)
-					continue;
-
-				HtmlNode oLink = oTD.SelectSingleNode("a");
-
-				if (oLink == null)
-					continue;
-
-				if (!oLink.Attributes.Contains("href"))
-					continue;
-
-				string sHref = oLink.Attributes["href"].Value;
-
-				if (string.IsNullOrWhiteSpace(sHref))
-					continue;
-
-				oRes[sHref] = oLink.InnerText;
-			} // for each row
-
-			Info("Loading list of submitted VAT returns complete, {0} file{1} found", oRes.Count, oRes.Count == 1 ? "" : "s");
-
-			return oRes;
-		} // Load
-
-		#endregion method LoadSubmittedReturnsList
-
 		#region method GetUserVatID
 
 		private string GetUserVatID() {
@@ -412,6 +254,8 @@ namespace Ezbob.HmrcHarvester {
 				string sID = sHref.Substring(sHref.LastIndexOf('/') + 1);
 
 				Info("User VAT id is {0}.", sID);
+
+				ExtractTaxOfficeNumber(doc);
 
 				return sID;
 			}
@@ -549,11 +393,330 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion property Session
 
+		#endregion infrastructure
+
+		#region VAT Return
+
 		#region field VatReturnsMetaData
 
 		private SortedDictionary<string, SheafMetaData> m_oVatReturnsMetaData;
 
 		#endregion field VatReturnsMetaData
+
+		#region method VatReturns
+
+		/// <summary>
+		/// Fetches "VAT return" data and stores it in the Hopper.
+		/// Separate files are fetched in parallel.
+		/// </summary>
+		private void VatReturns(string sUserVatID) {
+			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
+
+			m_oVatReturnsMetaData = new SortedDictionary<string, SheafMetaData>();
+
+			if (oSubmittedReturns != null) {
+				var oTasks = new List<Task>();
+
+				foreach (KeyValuePair<string, string> sr in oSubmittedReturns) {
+					string sHtmlUrl = string.Format(
+						"/vat-file/trader/{0}{1}{2}",
+						sUserVatID, 
+						sUserVatID.EndsWith("/") || sr.Key.StartsWith("/") ? "" : "/",
+						sr.Key
+					);
+
+					string sPdfUrl = sHtmlUrl + "?format=pdf";
+
+					string sBaseFileName = sr.Value.Replace(' ', '_');
+
+					Info("VatReturns: requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
+
+					m_oVatReturnsMetaData[sHtmlUrl] = new SheafMetaData {
+						DataType = DataType.VatReturn,
+						FileType = FileType.Html,
+						BaseFileName = sBaseFileName,
+						Thrasher = new VatReturnThrasher(VerboseLogging, this)
+					};
+
+					oTasks.Add(Session.GetAsync(sHtmlUrl).ContinueWith(GetFile));
+
+					Info("VatReturns: requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
+
+					m_oVatReturnsMetaData[sPdfUrl] = new SheafMetaData {
+						DataType = DataType.VatReturn,
+						FileType = FileType.Pdf,
+						BaseFileName = sBaseFileName,
+						Thrasher = null
+					};
+
+					oTasks.Add(Session.GetAsync(sPdfUrl).ContinueWith(GetFile));
+				} // for each file
+
+				Task.WaitAll(oTasks.ToArray());
+			} // if
+		} // VatReturns
+
+		#endregion method VatReturns
+
+		#region method LoadSubmittedReturnsList
+
+		private Dictionary<string, string> LoadSubmittedReturnsList(string sUserVatID) {
+			Info("Loading list of submitted VAT returns...");
+
+			HtmlDocument doc = GetPage("/vat-file/trader/" + sUserVatID + "/periods");
+
+			HtmlNode oListTable = doc.DocumentNode.SelectSingleNode("//*[@id=\"VAT0011\"]/div[2]/table/tbody");
+
+			if (oListTable == null)
+				throw new HarvesterException("Failed to find list of returns.");
+
+			if (oListTable.ChildNodes == null) {
+				Info("Loading list of submitted VAT returns complete, no files found.");
+				return null;
+			} // if
+
+			var oRes = new Dictionary<string, string>();
+
+			foreach (HtmlNode oTR in oListTable.ChildNodes) {
+				if (oTR.Name.ToUpper() != "TR")
+					continue;
+
+				if (oTR.ChildNodes == null)
+					continue;
+
+				HtmlNode oTD = oTR.SelectSingleNode("td");
+
+				if (oTD == null)
+					continue;
+
+				HtmlNode oLink = oTD.SelectSingleNode("a");
+
+				if (oLink == null)
+					continue;
+
+				if (!oLink.Attributes.Contains("href"))
+					continue;
+
+				string sHref = oLink.Attributes["href"].Value;
+
+				if (string.IsNullOrWhiteSpace(sHref))
+					continue;
+
+				oRes[sHref] = oLink.InnerText;
+			} // for each row
+
+			Info("Loading list of submitted VAT returns complete, {0} file{1} found", oRes.Count, oRes.Count == 1 ? "" : "s");
+
+			return oRes;
+		} // Load
+
+		#endregion method LoadSubmittedReturnsList
+
+		#region method GetFile
+
+		/// <summary>
+		/// Fetches one file from the Field and stores it in the Hopper as byte[].
+		/// Adds HarvesterError to the Hopper in case of error.
+		/// </summary>
+		/// <param name="task">HTTP request result.</param>
+		/// <param name="oFileIdentifier">Where to save the file in the Hopper.</param>
+		private void GetFile(Task<HttpResponseMessage> task) {
+			SheafMetaData fi = null;
+
+			HttpResponseMessage response = task.Result;
+
+			lock (m_oVatReturnsMetaData) {
+				fi = m_oVatReturnsMetaData[response.RequestMessage.RequestUri.PathAndQuery];
+			} // lock
+
+			Info("GetFile: retrieving {0}", response.RequestMessage);
+
+			if (!response.IsSuccessStatusCode) {
+				Error("Not saving because of error. Status code {0}: {1}", response.StatusCode.ToString(), response.ReasonPhrase);
+				Hopper.Add(fi, response);
+				return;
+			} // if
+
+			Stream oInputStream = response.Content.ReadAsStreamAsync().Result;
+
+			var oOutput = new MemoryStream();
+
+			var outputFile = new BinaryWriter(oOutput);
+
+			const int nBufSize = 8192;
+			var buf = new byte[nBufSize];
+
+			int nRead = oInputStream.Read(buf, 0, nBufSize);
+
+			while (nRead > 0) {
+				outputFile.Write(buf, 0, nRead);
+
+				nRead = oInputStream.Read(buf, 0, nBufSize);
+			} // while
+
+			outputFile.Close();
+
+			byte[] oFile = oOutput.ToArray();
+
+			Hopper.Add(fi, oFile);
+
+			if (fi.Thrasher != null)
+				Hopper.Add(fi, fi.Thrasher.Run(fi, oFile));
+		} // GetFile
+
+		#endregion method GetFile
+
+		#endregion VAT Return
+
+		#region PAYE
+
+		#region property TaxOfficeNumber
+
+		private string TaxOfficeNumber { get; set; }
+
+		#endregion property TaxOfficeNumber
+
+		#region method ExtractTaxOfficeNumber
+
+		private void ExtractTaxOfficeNumber(HtmlDocument doc) {
+			string sBaseXPath = "//*[@id=\"top\"]/div[3]/div[2]/div/div/ul/li[4]/dl/";
+
+			HtmlNode oDT = doc.DocumentNode.SelectSingleNode(sBaseXPath + "dt");
+
+			if (oDT == null)
+				throw new HarvesterException("Tax Office Number location not found.");
+
+			if (oDT.InnerText != "Tax Office Number:")
+				throw new HarvesterException("Tax Office Number location has unexpected label.");
+
+			HtmlNode oDD = doc.DocumentNode.SelectSingleNode(sBaseXPath + "dd");
+
+			if (oDD == null)
+				throw new HarvesterException("Tax Office Number not found.");
+
+			TaxOfficeNumber = oDD.InnerText.Trim().Replace(" ", "");
+
+			if (TaxOfficeNumber == string.Empty)
+				throw new HarvesterException("Tax Office Number not specified.");
+
+			Info("Tax office number is {0}.", TaxOfficeNumber);
+		} // ExtractTaxOfficeNumber
+
+		#endregion method ExtractTaxOfficeNumber
+
+		#region method FetchRtiTaxYears
+
+		private void FetchRtiTaxYears() {
+			Debug("Fetching RTI Tax Years started...");
+
+			HtmlDocument doc = GetPage("/paye/org/" + TaxOfficeNumber + "/account");
+
+			if ((doc == null) || (doc.DocumentNode == null))
+				throw new HarvesterException("Failed to fetch PAYE account page.");
+
+			var oOutput = new MemoryStream();
+
+			doc.Save(oOutput);
+
+			var smd = new SheafMetaData {
+				BaseFileName = "PAYE RTI Tax Year",
+				DataType = DataType.PayeRtiTaxYears,
+				FileType = FileType.Html,
+				Thrasher = null
+			};
+
+			Hopper.Add(smd, oOutput.ToArray());
+
+			HtmlNode oTBody = doc.DocumentNode.SelectSingleNode("//*[@id=\"top\"]/div[3]/div[2]/div/div[2]/table[1]/tbody");
+
+			if (oTBody == null)
+				throw new HarvesterException("RTI tax years table not found.");
+
+			HtmlNodeCollection oRows = oTBody.SelectNodes("tr");
+
+			if ((oRows == null) || (oRows.Count < 1))
+				throw new HarvesterException("RTI tax years data not found.");
+
+			bool bFirst = true;
+			int nRowNum = -1;
+
+			int nFirstYear = 0;
+			int nLastYear = 0;
+
+			var data = new List<RtiTaxYearRowData>();
+
+			foreach (HtmlNode oTR in oRows) {
+				nRowNum++;
+
+				HtmlNodeCollection oCells = oTR.SelectNodes("th | td");
+
+				if ((oCells == null) || (oCells.Count < 1))
+					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: no cells in row {0}", nRowNum));
+
+				if (bFirst) {
+					HtmlNode oCell = oCells[0];
+
+					if (!oCell.Attributes.Contains("colspan") || (oCell.Attributes["colspan"].Value != "3"))
+						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: incorrect format in row {0}", nRowNum));
+
+					MatchCollection match = Regex.Matches(oCell.InnerText.Trim(), @"^Current tax year (\d\d)(\d\d)-(\d\d)$");
+
+					if (match.Count != 1)
+						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: incorrect content in row {0}", nRowNum));
+
+					GroupCollection grp = match[0].Groups;
+					if (grp.Count != 4)
+						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected content in row {0}", nRowNum));
+
+					nFirstYear = Convert.ToInt32(grp[1].Value) * 100 + Convert.ToInt32(grp[2].Value);
+					nLastYear = Convert.ToInt32(grp[1].Value) * 100 + Convert.ToInt32(grp[3].Value);
+
+					Info("Current tax year: {0} - {1}", nFirstYear, nLastYear);
+
+					bFirst = false;
+					continue;
+				} // if first row
+
+				if (oCells.Count != 3)
+					throw new HarvesterException(string.Format("Failed to fetch RTI tag years: unexpected number of cells in row {0}", nRowNum));
+
+				string sFirstCell = oCells[0].InnerText.Trim();
+
+				if (sFirstCell == "Total")
+					continue;
+
+				try {
+					data.Add(new RtiTaxYearRowData(sFirstCell, oCells[1].InnerText.Trim(), oCells[2].InnerText.Trim())); 
+				}
+				catch (Exception e) {
+					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected format in row {0}", nRowNum), e);
+				} // try
+			} // for each row
+
+			int nCurYear = nFirstYear;
+
+			var rtys = new RtiTaxYearSeeds();
+
+			foreach (RtiTaxYearRowData rd in data.ToArray().Reverse()) {
+				rtys.Months.Add(new RtiTaxMonthSeed {
+					DateStart = new DateTime(nCurYear, rd.MonthStart, rd.DayStart),
+					DateEnd = new DateTime(nCurYear, rd.MonthEnd, rd.DayEnd),
+					AmountPaid = new Coin(rd.AmountPaid, "GBP"),
+					AmountDue = new Coin(rd.AmountDue, "GBP")
+				});
+
+				if (rd.DayStart == 12)
+					nCurYear = nLastYear;
+			} // for each
+
+			Hopper.Add(smd, rtys);
+
+			Debug("Fetching RTI Tax Years complete.");
+		} // FetchRtiTaxYears
+
+		#endregion method FetchRtiTaxYears
+
+		#endregion PAYE
 
 		#endregion private
 	} // class Harvester

@@ -1,0 +1,149 @@
+﻿<% if (m.CGData && m.CGData.Entries) {
+	var oBoxRegEx = /\(Box (\d+)\)$/;
+
+	var nEntryCount = m.CGData.Entries.length;
+
+	var oByBusiness = {};
+
+	for (var nIdx = 0; nIdx < nEntryCount; nIdx++) {
+		var oEntry = m.CGData.Entries[nIdx];
+
+		if (typeof(oEntry.DateFrom) === 'string')
+			oEntry.DateFrom = Date.parse(oEntry.DateFrom);
+
+		if (typeof(oEntry.DateTo) === 'string')
+			oEntry.DateTo = Date.parse(oEntry.DateTo);
+
+		if (typeof(oEntry.DateDue) === 'string')
+			oEntry.DateDue = Date.parse(oEntry.DateDue);
+
+		oEntry.UniqueBusinessID = oEntry.RegistrationNo + '\n' + oEntry.BusinessName + '\n' + oEntry.BusinessAddress.join('\n');
+
+		oEntry.BoxData = [];
+		
+		for (var oDetail in oEntry.Data) {
+			oEntry.BoxData[parseInt(oBoxRegEx.exec(oDetail)[1])] = {
+				amount: oEntry.Data[oDetail].Amount,
+				currency_code: oEntry.Data[oDetail].CurrencyCode
+			};
+		} // for
+
+		if (!oByBusiness[oEntry.UniqueBusinessID])
+			oByBusiness[oEntry.UniqueBusinessID] = [];
+
+		oByBusiness[oEntry.UniqueBusinessID].push(oEntry);
+	} // for each
+
+	for (var sBusinessID in oByBusiness) {
+		var aryBusiness = oByBusiness[sBusinessID];
+
+		aryBusiness.sort(function(a, b) { return a.DateFrom - b.DateFrom; });
+
+		var aryTotals = [];
+
+		// Start index for totals is for last four quarters only.
+		var nStartIdx = (aryBusiness.length <= 4) ? 0 : aryBusiness.length - 4;
+
+		for (var i = nStartIdx; i < aryBusiness.length; i++) {
+			var oEntry = aryBusiness[i];
+
+			for (var j = 0; j < oEntry.BoxData.length; j++) {
+				if (!aryTotals[j])
+					aryTotals[j] = 0;
+
+				if (!oEntry.BoxData[j])
+					continue;
+
+				// TODO: convert to pounds (or whatever) if currency is not pounds.
+
+				aryTotals[j] += oEntry.BoxData[j].amount;
+			} // for each box
+		} // for each quarter
+
+		// Start index for displaying is for up to last five quarters.
+		nStartIdx = (aryBusiness.length <= 5) ? 0 : aryBusiness.length - 5;
+
+		%><table class="table table-bordered table-striped  blue-header centered">
+		<thead><tr>
+			<th>Business Details</th>
+			<th>&nbsp;</th><%
+			for (var i = nStartIdx; i < aryBusiness.length; i++) {
+				%><th><%= EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%= EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
+			} // for each relevant data item
+			%><th>Last Year</th>
+		</tr></thead>
+		<tbody>
+			<tr>
+				<td class="no-padding" rowspan=6>
+					<table class="internal-table">
+						<% var aryDetails = sBusinessID.split('\n'); %>
+						<tr>
+							<td>Registration #:</td>
+							<td><%= aryDetails[0] %></td>
+						</tr>
+						<tr>
+							<td>Business Details:</td>
+							<td>
+								<div><%= aryDetails[1] %></div>
+								<% for (var nAddrIdx = 2; nAddrIdx < aryDetails.length; nAddrIdx++) {
+									%><div><%= aryDetails[nAddrIdx] %></div><%
+								} %>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<th>% of annual</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td class=r><%
+						if ((i >= aryBusiness.length - 4) && (aryTotals[6])) {
+							%><%= EzBob.formatPercents(aryBusiness[i].BoxData[6].amount * 1.0 / aryTotals[6]) %><%
+						}
+						else {
+							%>-<%
+						}
+					%></td><%
+				} // for each relevant data item
+				%><td class=r><%= EzBob.formatPercents(1) %></td>
+			</tr>
+			<tr>
+				<th>Revenues</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount) %></td><%
+				} // for each relevant data item
+				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[6]) %></td>
+			</tr>
+			<tr>
+				<th>Opex</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[7].amount) %></td><%
+				} // for each relevant data item
+				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
+			</tr>
+			<tr>
+				<th>Net Tax to Be Paid</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[5].amount) %></td><%
+				} // for each relevant data item
+				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[5]) %></td>
+			</tr>
+			<tr>
+				<th>Salaries</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+			</tr>
+			<tr>
+				<th>Tax</th><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+			</tr>
+		</tbody></table><%
+	} // for each business
+}
+else {
+	%>No data found.<%
+}
+%>
