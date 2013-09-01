@@ -254,12 +254,12 @@ namespace EZBob.DatabaseLib
 			}
 
 			var mpInventory = new MP_EbayAmazonInventory
-				{
-					CustomerMarketPlace = customerMarketPlace,
-					Created = data.SubmittedDate.ToUniversalTime(),
-					AmazonUseAFN = data.UseAFN,
-					HistoryRecord = updatingHistoryRecord
-				};
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = data.SubmittedDate.ToUniversalTime(),
+				AmazonUseAFN = data.UseAFN,
+				HistoryRecord = updatingHistoryRecord
+			};
 
 			if (data.Count != 0)
 			{
@@ -268,15 +268,15 @@ namespace EZBob.DatabaseLib
 					databaseInventoryItem =>
 					{
 						var mpInventoryItem = new MP_EbayAmazonInventoryItem
-												{
-													Inventory = mpInventory,
-													BidCount = databaseInventoryItem.BidCount,
-													ItemId = databaseInventoryItem.ItemId,
-													Amount = _CurrencyConvertor.ConvertToBaseCurrency(databaseInventoryItem.Amount, data.SubmittedDate),
-													Quantity = databaseInventoryItem.Quantity,
-													Sku = databaseInventoryItem.Sku,
+						{
+							Inventory = mpInventory,
+							BidCount = databaseInventoryItem.BidCount,
+							ItemId = databaseInventoryItem.ItemId,
+							Amount = _CurrencyConvertor.ConvertToBaseCurrency(databaseInventoryItem.Amount, data.SubmittedDate),
+							Quantity = databaseInventoryItem.Quantity,
+							Sku = databaseInventoryItem.Sku,
 
-												};
+						};
 
 						mpInventory.InventoryItems.Add(mpInventoryItem);
 					}
@@ -312,11 +312,11 @@ namespace EZBob.DatabaseLib
 			customerMarketPlace.UpdatingEnd = null;
 
 			historyItem = new MP_CustomerMarketplaceUpdatingHistory
-														{
-															CustomerMarketPlace = customerMarketPlace,
-															UpdatingStart = customerMarketPlace.UpdatingStart,
-															UpdatingEnd = null,
-														};
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				UpdatingStart = customerMarketPlace.UpdatingStart,
+				UpdatingEnd = null,
+			};
 
 			customerMarketPlace.UpdatingHistory.Add(historyItem);
 
@@ -389,63 +389,63 @@ namespace EZBob.DatabaseLib
 					databaseOrder =>
 					{
 						var mpOrderItem = new MP_EbayOrderItem
-							{
-								Order = mpOrder,
-								CreatedTime = databaseOrder.CreatedTime,
-								PaymentTime = databaseOrder.PaymentTime,
-								ShippedTime = databaseOrder.ShippedTime,
-								BuyerName = databaseOrder.BuyerName,
-								AdjustmentAmount = databaseOrder.AdjustmentAmount,
-								AmountPaid = databaseOrder.AmountPaid,
-								SubTotal = databaseOrder.SubTotal,
-								Total = databaseOrder.Total,
-								CheckoutStatus = databaseOrder.CheckoutStatus,
-								OrderStatus = databaseOrder.OrderStatus.ToString(),
-								PaymentStatus = databaseOrder.PaymentStatus,
-								PaymentHoldStatus = databaseOrder.PaymentHoldStatus,
-								PaymentMethod = databaseOrder.PaymentMethod,
-								PaymentMethodsList = databaseOrder.PaymentMethods,
-								ShippingAddress = CreateAddressInDatabase(databaseOrder.ShippingAddressData),
+						{
+							Order = mpOrder,
+							CreatedTime = databaseOrder.CreatedTime,
+							PaymentTime = databaseOrder.PaymentTime,
+							ShippedTime = databaseOrder.ShippedTime,
+							BuyerName = databaseOrder.BuyerName,
+							AdjustmentAmount = databaseOrder.AdjustmentAmount,
+							AmountPaid = databaseOrder.AmountPaid,
+							SubTotal = databaseOrder.SubTotal,
+							Total = databaseOrder.Total,
+							CheckoutStatus = databaseOrder.CheckoutStatus,
+							OrderStatus = databaseOrder.OrderStatus.ToString(),
+							PaymentStatus = databaseOrder.PaymentStatus,
+							PaymentHoldStatus = databaseOrder.PaymentHoldStatus,
+							PaymentMethod = databaseOrder.PaymentMethod,
+							PaymentMethodsList = databaseOrder.PaymentMethods,
+							ShippingAddress = CreateAddressInDatabase(databaseOrder.ShippingAddressData),
 
-							};
+						};
 
 						if (databaseOrder.TransactionData != null && databaseOrder.TransactionData.HasData)
 						{
 							mpOrderItem.Transactions.AddAll(databaseOrder.TransactionData.Select(t =>
+							{
+								var tr = new MP_EbayTransaction
 								{
-									var tr = new MP_EbayTransaction
-									{
-										OrderItem = mpOrderItem,
-										CreatedDate = t.CreatedDate,
-										PaymentHoldStatus = t.PaymentHoldStatus,
-										PaymentMethodUsed = t.PaymentMethodUsed,
-										QuantityPurchased = t.QuantityPurchased,
-										TransactionPrice = t.TransactionPrice,
-										ItemID = t.ItemID,
-										ItemPrivateNotes = t.ItemPrivateNotes,
-										ItemSKU = t.ItemSKU,
-										ItemSellerInventoryID = t.ItemSellerInventoryID,
-										eBayTransactionId = t.eBayTransactionId,
+									OrderItem = mpOrderItem,
+									CreatedDate = t.CreatedDate,
+									PaymentHoldStatus = t.PaymentHoldStatus,
+									PaymentMethodUsed = t.PaymentMethodUsed,
+									QuantityPurchased = t.QuantityPurchased,
+									TransactionPrice = t.TransactionPrice,
+									ItemID = t.ItemID,
+									ItemPrivateNotes = t.ItemPrivateNotes,
+									ItemSKU = t.ItemSKU,
+									ItemSellerInventoryID = t.ItemSellerInventoryID,
+									eBayTransactionId = t.eBayTransactionId,
 
-									};
-									return tr;
-								}).ToArray());
+								};
+								return tr;
+							}).ToArray());
 						}
 
 						if (databaseOrder.ExternalTransactionData != null && databaseOrder.ExternalTransactionData.HasData)
 						{
 							mpOrderItem.ExternalTransactions.AddAll(databaseOrder.ExternalTransactionData.Select(t =>
+							{
+								return new MP_EbayExternalTransaction
 								{
-									return new MP_EbayExternalTransaction
-									{
-										OrderItem = mpOrderItem,
-										TransactionID = t.TransactionID,
-										TransactionTime = t.TransactionTime,
-										FeeOrCreditAmount = t.FeeOrCreditAmount,
-										PaymentOrRefundAmount = t.PaymentOrRefundAmount
-									};
+									OrderItem = mpOrderItem,
+									TransactionID = t.TransactionID,
+									TransactionTime = t.TransactionTime,
+									FeeOrCreditAmount = t.FeeOrCreditAmount,
+									PaymentOrRefundAmount = t.PaymentOrRefundAmount
+								};
 
-								}).ToArray());
+							}).ToArray());
 						}
 						mpOrder.OrderItems.Add(mpOrderItem);
 					}
@@ -529,14 +529,14 @@ namespace EZBob.DatabaseLib
 			else
 			{
 				customerMarketPlace = new MP_CustomerMarketPlace
-					{
-						SecurityData = serializedSecurityData,
-						Customer = customer,
-						Marketplace = _MarketPlaceRepository.Get(marketplaceType.InternalId),
-						DisplayName = displayname,
-						Created = now,
-						AmazonMarketPlace = amazonMarketPlaceId != null ? _amazonMarketPlaceTypeRepository.GetByMarketPlaceId(amazonMarketPlaceId) : null
-					};
+				{
+					SecurityData = serializedSecurityData,
+					Customer = customer,
+					Marketplace = _MarketPlaceRepository.Get(marketplaceType.InternalId),
+					DisplayName = displayname,
+					Created = now,
+					AmazonMarketPlace = amazonMarketPlaceId != null ? _amazonMarketPlaceTypeRepository.GetByMarketPlaceId(amazonMarketPlaceId) : null
+				};
 
 
 				customerMarketPlaceId = (int)_CustomerMarketplaceRepository.Save(customerMarketPlace);
@@ -547,15 +547,15 @@ namespace EZBob.DatabaseLib
 			return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
 		}
 
-		public LoanAgreementTemplate GetIdOrSaveLoanAgreementTemplate(string template)
+		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template)
 		{
-			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template) ?? new LoanAgreementTemplate {Template = template};
+			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template) ?? new LoanAgreementTemplate { Template = template };
 			return loanAgreementTemplate;
 		}
 
-		public string GetLoanAgreementTemplate(LoanAgreementTemplate template)
+		public string GetLoanAgreementTemplate(LoanAgreementTemplate templateid)
 		{
-			return _loanAgreementTemplateRepository.Get(template).Template;
+			return _loanAgreementTemplateRepository.Get(templateid).Template;
 		}
 
 		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
@@ -683,28 +683,28 @@ namespace EZBob.DatabaseLib
 								i =>
 								{
 									var mpAmazonOrderItemDetail = new MP_AmazonOrderItemDetail
-										{
+									{
 
-											OrderItem = mpOrderItem2,
-											SellerSKU = i.SellerSKU,
-											Title = i.Title,
-											ASIN = i.ASIN,
-											CODFee = i.CODFee,
-											CODFeeDiscount = i.CODFeeDiscount,
-											GiftMessageText = i.GiftMessageText,
-											GiftWrapLevel = i.GiftWrapLevel,
-											GiftWrapPrice = i.GiftWrapPrice,
-											GiftWrapTax = i.GiftWrapTax,
-											ItemPrice = i.ItemPrice,
-											ItemTax = i.ItemTax,
-											OrderItemId = i.OrderItemId,
-											PromotionDiscount = i.PromotionDiscount,
-											QuantityOrdered = i.QuantityOrdered,
-											QuantityShipped = i.QuantityShipped,
-											ShippingDiscount = i.ShippingDiscount,
-											ShippingPrice = i.ShippingPrice,
-											ShippingTax = i.ShippingTax
-										};
+										OrderItem = mpOrderItem2,
+										SellerSKU = i.SellerSKU,
+										Title = i.Title,
+										ASIN = i.ASIN,
+										CODFee = i.CODFee,
+										CODFeeDiscount = i.CODFeeDiscount,
+										GiftMessageText = i.GiftMessageText,
+										GiftWrapLevel = i.GiftWrapLevel,
+										GiftWrapPrice = i.GiftWrapPrice,
+										GiftWrapTax = i.GiftWrapTax,
+										ItemPrice = i.ItemPrice,
+										ItemTax = i.ItemTax,
+										OrderItemId = i.OrderItemId,
+										PromotionDiscount = i.PromotionDiscount,
+										QuantityOrdered = i.QuantityOrdered,
+										QuantityShipped = i.QuantityShipped,
+										ShippingDiscount = i.ShippingDiscount,
+										ShippingPrice = i.ShippingPrice,
+										ShippingTax = i.ShippingTax
+									};
 
 									mpAmazonOrderItemDetail.OrderItemCategories = CreateLinkCollection(mpAmazonOrderItemDetail, i.Categories);
 
@@ -1177,259 +1177,259 @@ namespace EZBob.DatabaseLib
 			foreach (var item in ordersData.Data.Keys)
 			{
 				var mpOrderItem = new MP_YodleeOrderItem
-					{
-						Order = mpOrder,
-						isSeidFromDataSource = item.isSeidFromDataSource,
-						isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
-						isSeidMod = item.isSeidMod,
-						isSeidModSpecified = item.isSeidModSpecified,
-						acctTypeId = item.acctTypeId,
-						acctTypeIdSpecified = item.acctTypeIdSpecified,
-						acctType = item.acctType,
-						localizedAcctType = item.localizedAcctType,
-						srcElementId = item.srcElementId,
-						individualInformationId = item.individualInformationId,
-						individualInformationIdSpecified = item.individualInformationIdSpecified,
-						bankAccountId = item.bankAccountId,
-						bankAccountIdSpecified = item.bankAccountIdSpecified,
-						customName = item.customName,
-						customDescription = item.customDescription,
-						isDeleted = item.isDeleted,
-						isDeletedSpecified = item.isDeletedSpecified,
-						lastUpdated = item.lastUpdated,
-						lastUpdatedSpecified = item.lastUpdatedSpecified,
-						hasDetails = item.hasDetails,
-						hasDetailsSpecified = item.hasDetailsSpecified,
-						interestRate = item.interestRate,
-						interestRateSpecified = item.interestRateSpecified,
-						accountNumber = item.accountNumber,
-						link = item.link,
-						accountHolder = item.accountHolder,
-						tranListToDate =
-							(item.tranListToDate != null && item.tranListToDate.dateSpecified) ? item.tranListFromDate.date : null,
-						tranListFromDate =
-							(item.tranListFromDate != null && item.tranListFromDate.dateSpecified)
-								? item.tranListFromDate.date
-								: null,
-						availableBalance =
-							(item.availableBalance != null && item.availableBalance.amountSpecified)
-								? item.availableBalance.amount
-								: null,
-						availableBalanceCurrency =
-							(item.availableBalance != null && item.availableBalance.amountSpecified)
-								? item.availableBalance.currencyCode
-								: null,
-						currentBalance =
-							(item.currentBalance != null && item.currentBalance.amountSpecified)
-								? item.currentBalance.amount
-								: null,
-						currentBalanceCurrency =
-							(item.currentBalance != null && item.currentBalance.amountSpecified)
-								? item.currentBalance.currencyCode
-								: null,
-						interestEarnedYtd =
-							(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
-								? item.interestEarnedYtd.amount
-								: null,
-						interestEarnedYtdCurrency =
-							(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
-								? item.interestEarnedYtd.currencyCode
-								: null,
-						prevYrInterest =
-							(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
-								? item.prevYrInterest.amount
-								: null,
-						prevYrInterestCurrency =
-							(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
-								? item.prevYrInterest.currencyCode
-								: null,
-						overdraftProtection =
-							(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
-								? item.overdraftProtection.amount
-								: null,
-						overdraftProtectionCurrency =
-							(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
-								? item.overdraftProtection.currencyCode
-								: null,
-						term = item.term,
-						accountName = item.accountName,
-						annualPercentYield = item.annualPercentYield,
-						annualPercentYieldSpecified = item.annualPercentYieldSpecified,
-						routingNumber = item.routingNumber,
-						maturityDate =
-							(item.maturityDate != null && item.maturityDate.dateSpecified) ? item.maturityDate.date : null,
-						asOfDate =
-							(item.asOfDate != null && item.asOfDate.dateSpecified) ? item.asOfDate.date : mpOrder.Created,
-						accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
-						isPaperlessStmtOn = item.isPaperlessStmtOn,
-						isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
-						siteAccountStatusSpecified = item.siteAccountStatusSpecified,
-						created = item.created,
-						createdSpecified = item.createdSpecified,
-						nomineeName = item.nomineeName,
-						secondaryAccountHolderName = item.secondaryAccountHolderName,
-						accountOpenDate =
-							(item.accountOpenDate != null && item.accountOpenDate.dateSpecified)
-								? item.accountOpenDate.date
-								: null,
-						accountCloseDate =
-							(item.accountOpenDate != null && item.accountCloseDate.dateSpecified)
-								? item.accountCloseDate.date
-								: null,
-						maturityAmount =
-							(item.maturityAmount != null && item.maturityAmount.amountSpecified)
-								? item.maturityAmount.amount
-								: null,
-						maturityAmountCurrency =
-							(item.maturityAmount != null && item.maturityAmount.amountSpecified)
-								? item.maturityAmount.currencyCode
-								: null,
-						taxesWithheldYtd =
-							(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
-								? item.taxesWithheldYtd.amount
-								: null,
-						taxesWithheldYtdCurrency =
-							(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
-								? item.taxesWithheldYtd.currencyCode
-								: null,
-						taxesPaidYtd =
-							(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified) ? item.taxesPaidYtd.amount : null,
-						taxesPaidYtdCurrency =
-							(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified)
-								? item.taxesPaidYtd.currencyCode
-								: null,
-						budgetBalance =
-							(item.budgetBalance != null && item.budgetBalance.amountSpecified) ? item.budgetBalance.amount : null,
-						budgetBalanceCurrency =
-							(item.budgetBalance != null && item.budgetBalance.amountSpecified)
-								? item.budgetBalance.currencyCode
-								: null,
-						straightBalance =
-							(item.straightBalance != null && item.straightBalance.amountSpecified)
-								? item.straightBalance.amount
-								: null,
-						straightBalanceCurrency =
-							(item.straightBalance != null && item.straightBalance.amountSpecified)
-								? item.straightBalance.currencyCode
-								: null,
-						accountClassificationSpecified = item.accountClassificationSpecified,
-					};
+				{
+					Order = mpOrder,
+					isSeidFromDataSource = item.isSeidFromDataSource,
+					isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
+					isSeidMod = item.isSeidMod,
+					isSeidModSpecified = item.isSeidModSpecified,
+					acctTypeId = item.acctTypeId,
+					acctTypeIdSpecified = item.acctTypeIdSpecified,
+					acctType = item.acctType,
+					localizedAcctType = item.localizedAcctType,
+					srcElementId = item.srcElementId,
+					individualInformationId = item.individualInformationId,
+					individualInformationIdSpecified = item.individualInformationIdSpecified,
+					bankAccountId = item.bankAccountId,
+					bankAccountIdSpecified = item.bankAccountIdSpecified,
+					customName = item.customName,
+					customDescription = item.customDescription,
+					isDeleted = item.isDeleted,
+					isDeletedSpecified = item.isDeletedSpecified,
+					lastUpdated = item.lastUpdated,
+					lastUpdatedSpecified = item.lastUpdatedSpecified,
+					hasDetails = item.hasDetails,
+					hasDetailsSpecified = item.hasDetailsSpecified,
+					interestRate = item.interestRate,
+					interestRateSpecified = item.interestRateSpecified,
+					accountNumber = item.accountNumber,
+					link = item.link,
+					accountHolder = item.accountHolder,
+					tranListToDate =
+						(item.tranListToDate != null && item.tranListToDate.dateSpecified) ? item.tranListFromDate.date : null,
+					tranListFromDate =
+						(item.tranListFromDate != null && item.tranListFromDate.dateSpecified)
+							? item.tranListFromDate.date
+							: null,
+					availableBalance =
+						(item.availableBalance != null && item.availableBalance.amountSpecified)
+							? item.availableBalance.amount
+							: null,
+					availableBalanceCurrency =
+						(item.availableBalance != null && item.availableBalance.amountSpecified)
+							? item.availableBalance.currencyCode
+							: null,
+					currentBalance =
+						(item.currentBalance != null && item.currentBalance.amountSpecified)
+							? item.currentBalance.amount
+							: null,
+					currentBalanceCurrency =
+						(item.currentBalance != null && item.currentBalance.amountSpecified)
+							? item.currentBalance.currencyCode
+							: null,
+					interestEarnedYtd =
+						(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
+							? item.interestEarnedYtd.amount
+							: null,
+					interestEarnedYtdCurrency =
+						(item.interestEarnedYtd != null && item.interestEarnedYtd.amountSpecified)
+							? item.interestEarnedYtd.currencyCode
+							: null,
+					prevYrInterest =
+						(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
+							? item.prevYrInterest.amount
+							: null,
+					prevYrInterestCurrency =
+						(item.prevYrInterest != null && item.prevYrInterest.amountSpecified)
+							? item.prevYrInterest.currencyCode
+							: null,
+					overdraftProtection =
+						(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
+							? item.overdraftProtection.amount
+							: null,
+					overdraftProtectionCurrency =
+						(item.overdraftProtection != null && item.overdraftProtection.amountSpecified)
+							? item.overdraftProtection.currencyCode
+							: null,
+					term = item.term,
+					accountName = item.accountName,
+					annualPercentYield = item.annualPercentYield,
+					annualPercentYieldSpecified = item.annualPercentYieldSpecified,
+					routingNumber = item.routingNumber,
+					maturityDate =
+						(item.maturityDate != null && item.maturityDate.dateSpecified) ? item.maturityDate.date : null,
+					asOfDate =
+						(item.asOfDate != null && item.asOfDate.dateSpecified) ? item.asOfDate.date : mpOrder.Created,
+					accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
+					isPaperlessStmtOn = item.isPaperlessStmtOn,
+					isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
+					siteAccountStatusSpecified = item.siteAccountStatusSpecified,
+					created = item.created,
+					createdSpecified = item.createdSpecified,
+					nomineeName = item.nomineeName,
+					secondaryAccountHolderName = item.secondaryAccountHolderName,
+					accountOpenDate =
+						(item.accountOpenDate != null && item.accountOpenDate.dateSpecified)
+							? item.accountOpenDate.date
+							: null,
+					accountCloseDate =
+						(item.accountOpenDate != null && item.accountCloseDate.dateSpecified)
+							? item.accountCloseDate.date
+							: null,
+					maturityAmount =
+						(item.maturityAmount != null && item.maturityAmount.amountSpecified)
+							? item.maturityAmount.amount
+							: null,
+					maturityAmountCurrency =
+						(item.maturityAmount != null && item.maturityAmount.amountSpecified)
+							? item.maturityAmount.currencyCode
+							: null,
+					taxesWithheldYtd =
+						(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
+							? item.taxesWithheldYtd.amount
+							: null,
+					taxesWithheldYtdCurrency =
+						(item.taxesWithheldYtd != null && item.taxesWithheldYtd.amountSpecified)
+							? item.taxesWithheldYtd.currencyCode
+							: null,
+					taxesPaidYtd =
+						(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified) ? item.taxesPaidYtd.amount : null,
+					taxesPaidYtdCurrency =
+						(item.taxesPaidYtd != null && item.taxesPaidYtd.amountSpecified)
+							? item.taxesPaidYtd.currencyCode
+							: null,
+					budgetBalance =
+						(item.budgetBalance != null && item.budgetBalance.amountSpecified) ? item.budgetBalance.amount : null,
+					budgetBalanceCurrency =
+						(item.budgetBalance != null && item.budgetBalance.amountSpecified)
+							? item.budgetBalance.currencyCode
+							: null,
+					straightBalance =
+						(item.straightBalance != null && item.straightBalance.amountSpecified)
+							? item.straightBalance.amount
+							: null,
+					straightBalanceCurrency =
+						(item.straightBalance != null && item.straightBalance.amountSpecified)
+							? item.straightBalance.currencyCode
+							: null,
+					accountClassificationSpecified = item.accountClassificationSpecified,
+				};
 
 
 				foreach (var bankTransaction in ordersData.Data[item])
 				{
 					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
-						{
-							YodleeOrderItem = mpOrderItem,
-							isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
-							isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
-							isSeidMod = bankTransaction.isSeidMod,
-							isSeidModSpecified = bankTransaction.isSeidModSpecified,
-							srcElementId = bankTransaction.srcElementId,
-							transactionTypeId = bankTransaction.transactionTypeId,
-							transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
-							transactionType = bankTransaction.transactionType,
-							localizedTransactionType = bankTransaction.localizedTransactionType,
-							transactionStatusId = bankTransaction.transactionStatusId,
-							transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
-							transactionStatus = bankTransaction.transactionStatus,
-							localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
-							transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
-							transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
-							transactionBaseType = bankTransaction.transactionBaseType,
-							localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
-							categoryId = bankTransaction.categoryId,
-							categoryIdSpecified = bankTransaction.categoryIdSpecified,
-							bankTransactionId = bankTransaction.bankTransactionId,
-							bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
-							bankAccountId = bankTransaction.bankAccountId,
-							bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
-							bankStatementId = bankTransaction.bankStatementId,
-							bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
-							isDeleted = bankTransaction.isDeleted,
-							isDeletedSpecified = bankTransaction.isDeletedSpecified,
-							lastUpdated = bankTransaction.lastUpdated,
-							lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
-							hasDetails = bankTransaction.hasDetails,
-							hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
-							transactionId = bankTransaction.transactionId,
-							transactionCategory = _MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(bankTransaction.transactionCategoryId),
-							siteCategoryType = bankTransaction.siteCategoryType,
-							siteCategory = bankTransaction.siteCategory,
-							classUpdationSource = bankTransaction.classUpdationSource,
-							lastCategorised = bankTransaction.lastCategorised,
-							transactionDate =
-								(bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified)
-									? bankTransaction.transactionDate.date
-									: null,
-							isReimbursable = bankTransaction.isReimbursable,
-							isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
-							mcCode = bankTransaction.mcCode,
-							prevLastCategorised = bankTransaction.prevLastCategorised,
-							prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
-							naicsCode = bankTransaction.naicsCode,
-							runningBalance =
-								(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
-									? bankTransaction.runningBalance.amount
-									: null,
-							runningBalanceCurrency =
-								(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
-									? bankTransaction.runningBalance.currencyCode
-									: null,
-							userDescription = bankTransaction.userDescription,
-							customCategoryId = bankTransaction.customCategoryId,
-							customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
-							memo = bankTransaction.memo,
-							parentId = bankTransaction.parentId,
-							parentIdSpecified = bankTransaction.parentIdSpecified,
-							isOlbUserDesc = bankTransaction.isOlbUserDesc,
-							isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
-							categorisationSourceId = bankTransaction.categorisationSourceId,
-							plainTextDescription = bankTransaction.plainTextDescription,
-							splitType = bankTransaction.splitType,
-							categoryLevelId = bankTransaction.categoryLevelId,
-							categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
-							calcRunningBalance =
-								(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
-									? bankTransaction.calcRunningBalance.amount
-									: null,
-							calcRunningBalanceCurrency =
-								(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
-									? bankTransaction.calcRunningBalance.currencyCode
-									: null,
-							category = bankTransaction.category,
-							link = bankTransaction.link,
-							postDate =
-								(bankTransaction.postDate != null && bankTransaction.postDate.dateSpecified)
-									? bankTransaction.postDate.date
-									: null,
-							prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
-							prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
-							isBusinessExpense = bankTransaction.isBusinessExpense,
-							isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
-							descriptionViewPref = bankTransaction.descriptionViewPref,
-							descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
-							prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
-							prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
-							transactionAmount =
-								(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
-									? bankTransaction.transactionAmount.amount
-									: null,
-							transactionAmountCurrency =
-								(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
-									? bankTransaction.transactionAmount.currencyCode
-									: null,
-							transactionPostingOrder = bankTransaction.transactionPostingOrder,
-							transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
-							checkNumber = bankTransaction.checkNumber,
-							description = bankTransaction.description,
-							isTaxDeductible = bankTransaction.isTaxDeductible,
-							isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
-							isMedicalExpense = bankTransaction.isMedicalExpense,
-							isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
-							categorizationKeyword = bankTransaction.categorizationKeyword,
-							sourceTransactionType = bankTransaction.sourceTransactionType,
-						};
+					{
+						YodleeOrderItem = mpOrderItem,
+						isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
+						isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
+						isSeidMod = bankTransaction.isSeidMod,
+						isSeidModSpecified = bankTransaction.isSeidModSpecified,
+						srcElementId = bankTransaction.srcElementId,
+						transactionTypeId = bankTransaction.transactionTypeId,
+						transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
+						transactionType = bankTransaction.transactionType,
+						localizedTransactionType = bankTransaction.localizedTransactionType,
+						transactionStatusId = bankTransaction.transactionStatusId,
+						transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
+						transactionStatus = bankTransaction.transactionStatus,
+						localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
+						transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
+						transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
+						transactionBaseType = bankTransaction.transactionBaseType,
+						localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
+						categoryId = bankTransaction.categoryId,
+						categoryIdSpecified = bankTransaction.categoryIdSpecified,
+						bankTransactionId = bankTransaction.bankTransactionId,
+						bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
+						bankAccountId = bankTransaction.bankAccountId,
+						bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
+						bankStatementId = bankTransaction.bankStatementId,
+						bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
+						isDeleted = bankTransaction.isDeleted,
+						isDeletedSpecified = bankTransaction.isDeletedSpecified,
+						lastUpdated = bankTransaction.lastUpdated,
+						lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
+						hasDetails = bankTransaction.hasDetails,
+						hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
+						transactionId = bankTransaction.transactionId,
+						transactionCategory = _MP_YodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(bankTransaction.transactionCategoryId),
+						siteCategoryType = bankTransaction.siteCategoryType,
+						siteCategory = bankTransaction.siteCategory,
+						classUpdationSource = bankTransaction.classUpdationSource,
+						lastCategorised = bankTransaction.lastCategorised,
+						transactionDate =
+							(bankTransaction.transactionDate != null && bankTransaction.transactionDate.dateSpecified)
+								? bankTransaction.transactionDate.date
+								: null,
+						isReimbursable = bankTransaction.isReimbursable,
+						isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
+						mcCode = bankTransaction.mcCode,
+						prevLastCategorised = bankTransaction.prevLastCategorised,
+						prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
+						naicsCode = bankTransaction.naicsCode,
+						runningBalance =
+							(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
+								? bankTransaction.runningBalance.amount
+								: null,
+						runningBalanceCurrency =
+							(bankTransaction.runningBalance != null && bankTransaction.runningBalance.amountSpecified)
+								? bankTransaction.runningBalance.currencyCode
+								: null,
+						userDescription = bankTransaction.userDescription,
+						customCategoryId = bankTransaction.customCategoryId,
+						customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
+						memo = bankTransaction.memo,
+						parentId = bankTransaction.parentId,
+						parentIdSpecified = bankTransaction.parentIdSpecified,
+						isOlbUserDesc = bankTransaction.isOlbUserDesc,
+						isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
+						categorisationSourceId = bankTransaction.categorisationSourceId,
+						plainTextDescription = bankTransaction.plainTextDescription,
+						splitType = bankTransaction.splitType,
+						categoryLevelId = bankTransaction.categoryLevelId,
+						categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
+						calcRunningBalance =
+							(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
+								? bankTransaction.calcRunningBalance.amount
+								: null,
+						calcRunningBalanceCurrency =
+							(bankTransaction.calcRunningBalance != null && bankTransaction.calcRunningBalance.amountSpecified)
+								? bankTransaction.calcRunningBalance.currencyCode
+								: null,
+						category = bankTransaction.category,
+						link = bankTransaction.link,
+						postDate =
+							(bankTransaction.postDate != null && bankTransaction.postDate.dateSpecified)
+								? bankTransaction.postDate.date
+								: null,
+						prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
+						prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
+						isBusinessExpense = bankTransaction.isBusinessExpense,
+						isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
+						descriptionViewPref = bankTransaction.descriptionViewPref,
+						descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
+						prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
+						prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
+						transactionAmount =
+							(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
+								? bankTransaction.transactionAmount.amount
+								: null,
+						transactionAmountCurrency =
+							(bankTransaction.transactionAmount != null && bankTransaction.transactionAmount.amountSpecified)
+								? bankTransaction.transactionAmount.currencyCode
+								: null,
+						transactionPostingOrder = bankTransaction.transactionPostingOrder,
+						transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
+						checkNumber = bankTransaction.checkNumber,
+						description = bankTransaction.description,
+						isTaxDeductible = bankTransaction.isTaxDeductible,
+						isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
+						isMedicalExpense = bankTransaction.isMedicalExpense,
+						isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
+						categorizationKeyword = bankTransaction.categorizationKeyword,
+						sourceTransactionType = bankTransaction.sourceTransactionType,
+					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
 				mpOrder.OrderItems.Add(mpOrderItem);
@@ -1461,9 +1461,9 @@ namespace EZBob.DatabaseLib
 			if (customerMarketPlace.PersonalInfo == null)
 			{
 				customerMarketPlace.PersonalInfo = new MP_PayPalPersonalInfo
-					{
-						CustomerMarketPlace = customerMarketPlace,
-					};
+				{
+					CustomerMarketPlace = customerMarketPlace,
+				};
 
 				_CustomerMarketplaceRepository.Save(customerMarketPlace);
 			}
@@ -1524,18 +1524,18 @@ namespace EZBob.DatabaseLib
 					dataItem =>
 					{
 						var mpTransactionItem = new MP_PayPalTransactionItem2
-							{
-								Transaction = mpTransaction,
-								Created = dataItem.Created,
-								Currency = _CurrencyRateRepository.GetCurrencyOrCreate(dataItem.FeeAmount.CurrencyCode ?? dataItem.GrossAmount.CurrencyCode ?? dataItem.NetAmount.CurrencyCode),
-								FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.FeeAmount, dataItem.Created).Value,
-								GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.GrossAmount, dataItem.Created).Value,
-								NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.NetAmount, dataItem.Created).Value,
-								TimeZone = dataItem.Timezone,
-								Status = dataItem.Status,
-								Type = dataItem.Type,
-								PayPalTransactionId = dataItem.TransactionId
-							};
+						{
+							Transaction = mpTransaction,
+							Created = dataItem.Created,
+							Currency = _CurrencyRateRepository.GetCurrencyOrCreate(dataItem.FeeAmount.CurrencyCode ?? dataItem.GrossAmount.CurrencyCode ?? dataItem.NetAmount.CurrencyCode),
+							FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.FeeAmount, dataItem.Created).Value,
+							GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.GrossAmount, dataItem.Created).Value,
+							NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.NetAmount, dataItem.Created).Value,
+							TimeZone = dataItem.Timezone,
+							Status = dataItem.Status,
+							Type = dataItem.Type,
+							PayPalTransactionId = dataItem.TransactionId
+						};
 
 						mpTransaction.TransactionItems.Add(mpTransactionItem);
 					}
@@ -1588,42 +1588,42 @@ namespace EZBob.DatabaseLib
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var userData = new MP_EbayUserData
-				{
+			{
 
-					CustomerMarketPlace = customerMarketPlace,
-					Created = data.SubmittedDate.ToUniversalTime(),
-					BillingEmail = data.BillingEmail,
-					EIASToken = data.EIASToken,
-					EMail = data.EMail,
-					FeedbackPrivate = data.FeedbackPrivate,
-					FeedbackRatingStar = data.FeedbackRatingStar,
-					FeedbackScore = data.FeedbackScore,
-					IDChanged = data.IDChanged,
-					IDLastChanged = data.IDLastChanged,
-					IDVerified = data.IDVerified,
-					NewUser = data.NewUser,
-					PayPalAccountStatus = data.PayPalAccountStatus,
-					PayPalAccountType = data.PayPalAccountType,
-					QualifiesForSelling = data.QualifiesForSelling,
-					RegistrationAddress = CreateAddressInDatabase(data.RegistrationAddress),
-					RegistrationDate = data.RegistrationDate,
-					SellerInfo = new EbaySellerInfo
-					{
-						SellerInfoQualifiesForB2BVAT = data.QualifiesForB2BVAT,
-						SellerInfoSellerBusinessType = data.SellerBusinessType,
-						SellerInfoStoreOwner = data.StoreOwner,
-						SellerInfoStoreSite = data.StoreSite,
-						SellerInfoStoreURL = data.StoreURL,
-						SellerInfoTopRatedProgram = data.TopRatedProgram,
-						SellerInfoTopRatedSeller = data.TopRatedSeller,
-						SellerPaymentAddress = CreateAddressInDatabase(data.SellerPaymentAddress)
-					},
-					Site = data.Site,
-					SkypeID = data.SkypeID,
-					UserID = data.UserID,
-					eBayGoodStanding = data.eBayGoodStanding,
-					HistoryRecord = historyRecord
-				};
+				CustomerMarketPlace = customerMarketPlace,
+				Created = data.SubmittedDate.ToUniversalTime(),
+				BillingEmail = data.BillingEmail,
+				EIASToken = data.EIASToken,
+				EMail = data.EMail,
+				FeedbackPrivate = data.FeedbackPrivate,
+				FeedbackRatingStar = data.FeedbackRatingStar,
+				FeedbackScore = data.FeedbackScore,
+				IDChanged = data.IDChanged,
+				IDLastChanged = data.IDLastChanged,
+				IDVerified = data.IDVerified,
+				NewUser = data.NewUser,
+				PayPalAccountStatus = data.PayPalAccountStatus,
+				PayPalAccountType = data.PayPalAccountType,
+				QualifiesForSelling = data.QualifiesForSelling,
+				RegistrationAddress = CreateAddressInDatabase(data.RegistrationAddress),
+				RegistrationDate = data.RegistrationDate,
+				SellerInfo = new EbaySellerInfo
+				{
+					SellerInfoQualifiesForB2BVAT = data.QualifiesForB2BVAT,
+					SellerInfoSellerBusinessType = data.SellerBusinessType,
+					SellerInfoStoreOwner = data.StoreOwner,
+					SellerInfoStoreSite = data.StoreSite,
+					SellerInfoStoreURL = data.StoreURL,
+					SellerInfoTopRatedProgram = data.TopRatedProgram,
+					SellerInfoTopRatedSeller = data.TopRatedSeller,
+					SellerPaymentAddress = CreateAddressInDatabase(data.SellerPaymentAddress)
+				},
+				Site = data.Site,
+				SkypeID = data.SkypeID,
+				UserID = data.UserID,
+				eBayGoodStanding = data.eBayGoodStanding,
+				HistoryRecord = historyRecord
+			};
 
 			customerMarketPlace.EbayUserData.Add(userData);
 
@@ -1638,40 +1638,40 @@ namespace EZBob.DatabaseLib
 			}
 
 			var address = new MP_EbayUserAddressData
-				{
-					AddressID = data.AddressID,
-					FirstName = data.FirstName,
-					Phone = data.Phone,
-					Street1 = data.Street1,
-					LastName = data.LastName,
-					CityName = data.CityName,
-					CountryCode = data.CountryCode,
-					CountryName = data.CountryName,
-					PostalCode = data.PostalCode,
-					StateOrProvince = data.StateOrProvince,
-					Street2 = data.Street2,
-					Name = data.Name,
-					Street = data.Street,
-					AddressOwner = data.AddressOwner,
-					AddressRecordType = data.AddressRecordType,
-					AddressStatus = data.AddressStatus,
-					AddressUsage = data.AddressUsage,
-					CompanyName = data.CompanyName,
-					County = data.County,
-					ExternalAddressID = data.ExternalAddressID,
-					InternationalName = data.InternationalName,
-					InternationalStateAndCity = data.InternationalStateAndCity,
-					InternationalStreet = data.InternationalStreet,
-					Phone2 = data.Phone2,
-					Phone2AreaOrCityCode = data.Phone2AreaOrCityCode,
-					Phone2CountryCode = data.Phone2CountryCode,
-					Phone2CountryPrefix = data.Phone2CountryPrefix,
-					Phone2LocalNumber = data.Phone2LocalNumber,
-					PhoneAreaOrCityCode = data.PhoneAreaOrCityCode,
-					PhoneCountryCode = data.PhoneCountryCode,
-					PhoneCountryCodePrefix = data.Phone2CountryPrefix,
-					PhoneLocalNumber = data.Phone2LocalNumber,
-				};
+			{
+				AddressID = data.AddressID,
+				FirstName = data.FirstName,
+				Phone = data.Phone,
+				Street1 = data.Street1,
+				LastName = data.LastName,
+				CityName = data.CityName,
+				CountryCode = data.CountryCode,
+				CountryName = data.CountryName,
+				PostalCode = data.PostalCode,
+				StateOrProvince = data.StateOrProvince,
+				Street2 = data.Street2,
+				Name = data.Name,
+				Street = data.Street,
+				AddressOwner = data.AddressOwner,
+				AddressRecordType = data.AddressRecordType,
+				AddressStatus = data.AddressStatus,
+				AddressUsage = data.AddressUsage,
+				CompanyName = data.CompanyName,
+				County = data.County,
+				ExternalAddressID = data.ExternalAddressID,
+				InternationalName = data.InternationalName,
+				InternationalStateAndCity = data.InternationalStateAndCity,
+				InternationalStreet = data.InternationalStreet,
+				Phone2 = data.Phone2,
+				Phone2AreaOrCityCode = data.Phone2AreaOrCityCode,
+				Phone2CountryCode = data.Phone2CountryCode,
+				Phone2CountryPrefix = data.Phone2CountryPrefix,
+				Phone2LocalNumber = data.Phone2LocalNumber,
+				PhoneAreaOrCityCode = data.PhoneAreaOrCityCode,
+				PhoneCountryCode = data.PhoneCountryCode,
+				PhoneCountryCodePrefix = data.Phone2CountryPrefix,
+				PhoneLocalNumber = data.Phone2LocalNumber,
+			};
 
 			_EbayUserAddressDataRepository.Save(address);
 
@@ -1713,12 +1713,12 @@ namespace EZBob.DatabaseLib
 				data.AdditionalAccount.ForEach(
 						a => accountData.EbayUserAdditionalAccountData.Add(
 							new MP_EbayUserAdditionalAccountData
-								{
-									Currency = a.Currency,
-									AccountCode = a.AccountCode,
-									Balance = a.Balance.Value,
-									EbayUserAccountData = accountData
-								}));
+							{
+								Currency = a.Currency,
+								AccountCode = a.AccountCode,
+								Balance = a.Balance.Value,
+								EbayUserAccountData = accountData
+							}));
 			}
 
 			customerMarketPlace.EbayUserAccountData.Add(accountData);
@@ -1737,43 +1737,43 @@ namespace EZBob.DatabaseLib
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var feedBack = new MP_EbayFeedback
-				{
-					CustomerMarketPlace = customerMarketPlace,
-					Created = data.Submitted,
-					RepeatBuyerCount = data.RepeatBuyerCount,
-					RepeatBuyerPercent = data.RepeatBuyerPercent,
-					TransactionPercent = data.TransactionPercent,
-					UniqueBuyerCount = data.UniqueBuyerCount,
-					UniqueNegativeCount = data.UniqueNegativeCount,
-					UniqueNeutralCount = data.UniqueNeutralCount,
-					UniquePositiveCount = data.UniquePositiveCount,
-					HistoryRecord = historyRecord
-				};
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = data.Submitted,
+				RepeatBuyerCount = data.RepeatBuyerCount,
+				RepeatBuyerPercent = data.RepeatBuyerPercent,
+				TransactionPercent = data.TransactionPercent,
+				UniqueBuyerCount = data.UniqueBuyerCount,
+				UniqueNegativeCount = data.UniqueNegativeCount,
+				UniqueNeutralCount = data.UniqueNeutralCount,
+				UniquePositiveCount = data.UniquePositiveCount,
+				HistoryRecord = historyRecord
+			};
 
 			if (data.FeedbackByPeriod != null && data.FeedbackByPeriod.Count > 0)
 			{
 				feedBack.FeedbackByPeriodItems.AddAll(data.FeedbackByPeriod.Values.Select(f => new MP_EbayFeedbackItem
-					{
-						EbayFeedback = feedBack,
-						Negative = f.Negative,
-						Positive = f.Positive,
-						Neutral = f.Neutral,
-						TimePeriod = GetTimePeriod(TimePeriodFactory.Create(f.TimePeriod))
-					}).ToList());
+				{
+					EbayFeedback = feedBack,
+					Negative = f.Negative,
+					Positive = f.Positive,
+					Neutral = f.Neutral,
+					TimePeriod = GetTimePeriod(TimePeriodFactory.Create(f.TimePeriod))
+				}).ToList());
 			}
 
 			if (data.RaitingByPeriod != null && data.RaitingByPeriod.Count > 0)
 			{
 				feedBack.RaitingByPeriodItems.AddAll(data.RaitingByPeriod.Values.Select(r => new MP_EbayRaitingItem
-					{
-						EbayFeedback = feedBack,
-						Communication = r.Communication,
-						ItemAsDescribed = r.ItemAsDescribed,
-						ShippingAndHandlingCharges = r.ShippingAndHandlingCharges,
-						ShippingTime = r.ShippingTime,
-						TimePeriod = GetTimePeriod(TimePeriodFactory.Create(r.TimePeriod))
+				{
+					EbayFeedback = feedBack,
+					Communication = r.Communication,
+					ItemAsDescribed = r.ItemAsDescribed,
+					ShippingAndHandlingCharges = r.ShippingAndHandlingCharges,
+					ShippingTime = r.ShippingTime,
+					TimePeriod = GetTimePeriod(TimePeriodFactory.Create(r.TimePeriod))
 
-					}).ToList());
+				}).ToList());
 			}
 
 			customerMarketPlace.EbayFeedback.Add(feedBack);
@@ -1792,12 +1792,12 @@ namespace EZBob.DatabaseLib
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var feedBack = new MP_AmazonFeedback
-				{
-					CustomerMarketPlace = customerMarketPlace,
-					Created = data.Submitted,
-					UserRaining = data.UserRaining,
-					HistoryRecord = historyRecord
-				};
+			{
+				CustomerMarketPlace = customerMarketPlace,
+				Created = data.Submitted,
+				UserRaining = data.UserRaining,
+				HistoryRecord = historyRecord
+			};
 
 			if (data.FeedbackByPeriod != null && data.FeedbackByPeriod.Count > 0)
 			{
@@ -1926,13 +1926,13 @@ namespace EZBob.DatabaseLib
 			if (actionData.RequestsCounter != null && actionData.RequestsCounter.Any())
 			{
 				actionData.RequestsCounter.ForEach(r => actionLog.RequestsCounter.Add(new MP_CustomerMarketplaceUpdatingCounter
-						{
-							Action = actionLog,
-							Created = r.Created,
-							Details = r.Details,
-							Method = r.Method
+				{
+					Action = actionLog,
+					Created = r.Created,
+					Details = r.Details,
+					Method = r.Method
 
-						}));
+				}));
 
 
 			}
@@ -1972,27 +1972,27 @@ namespace EZBob.DatabaseLib
 			var orders = new AmazonOrdersList2(submittedDate);
 
 			orders.AddRange(customerMarketPlace.AmazonOrders.SelectMany(amazonOrder => amazonOrder.OrderItems2).Select(o =>
+			{
+				AmazonOrdersList2ItemStatusType orderStatus;
+				Enum.TryParse(o.OrderStatus, out orderStatus);
+				return new AmazonOrderItem2
 				{
-					AmazonOrdersList2ItemStatusType orderStatus;
-					Enum.TryParse(o.OrderStatus, out orderStatus);
-					return new AmazonOrderItem2
+					AmazonOrderId = o.OrderId,
+					OrderStatus = orderStatus,
+					PurchaseDate = o.PurchaseDate,
+					LastUpdateDate = o.LastUpdateDate,
+					NumberOfItemsShipped = o.NumberOfItemsShipped,
+					NumberOfItemsUnshipped = o.NumberOfItemsUnshipped,
+					OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.OrderTotal, o.PurchaseDate),
+					PaymentsInfo =
+						new AmazonOrderItem2PaymentsInfoList(o.PaymentsInfo.Select(pi => new AmazonOrderItem2PaymentInfoListItem
 						{
-							AmazonOrderId = o.OrderId,
-							OrderStatus = orderStatus,
-							PurchaseDate = o.PurchaseDate,
-							LastUpdateDate = o.LastUpdateDate,
-							NumberOfItemsShipped = o.NumberOfItemsShipped,
-							NumberOfItemsUnshipped = o.NumberOfItemsUnshipped,
-							OrderTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.OrderTotal, o.PurchaseDate),
-							PaymentsInfo =
-								new AmazonOrderItem2PaymentsInfoList(o.PaymentsInfo.Select(pi => new AmazonOrderItem2PaymentInfoListItem
-									{
-										MoneyInfo = _CurrencyConvertor.ConvertToBaseCurrency(pi.MoneyInfo, o.PurchaseDate),
-										SubPaymentMethod = pi.SubPaymentMethod
-									})),
-							SellerOrderId = o.SellerOrderId,
-						};
-				}));
+							MoneyInfo = _CurrencyConvertor.ConvertToBaseCurrency(pi.MoneyInfo, o.PurchaseDate),
+							SubPaymentMethod = pi.SubPaymentMethod
+						})),
+					SellerOrderId = o.SellerOrderId,
+				};
+			}));
 
 			return orders;
 		}
@@ -2004,49 +2004,49 @@ namespace EZBob.DatabaseLib
 			var dbOrders = _MP_EbayOrderRepository.GetOrdersItemsByMakretplaceId(databaseCustomerMarketPlace.Id);
 
 			orders.AddRange(dbOrders.Select(o =>
+			{
+				EBayOrderStatusCodeType orderStatus;
+				Enum.TryParse(o.OrderStatus, out orderStatus);
+				return new EbayDatabaseOrderItem
 				{
-					EBayOrderStatusCodeType orderStatus;
-					Enum.TryParse(o.OrderStatus, out orderStatus);
-					return new EbayDatabaseOrderItem
+					PaymentMethod = o.PaymentMethod,
+					AmountPaid = _CurrencyConvertor.ConvertToBaseCurrency(o.AmountPaid, o.CreatedTime),
+					OrderStatus = orderStatus,
+					PaymentHoldStatus = o.PaymentHoldStatus,
+					ShippingAddressData = Convert(o.ShippingAddress),
+					BuyerName = o.BuyerName,
+					CheckoutStatus = o.CheckoutStatus,
+					PaymentMethods = o.PaymentMethod,
+					SubTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.SubTotal, o.CreatedTime),
+					Total = _CurrencyConvertor.ConvertToBaseCurrency(o.Total, o.CreatedTime),
+					AdjustmentAmount = _CurrencyConvertor.ConvertToBaseCurrency(o.AdjustmentAmount, o.CreatedTime),
+					PaymentTime = o.PaymentTime,
+					TransactionData = new EbayDatabaseTransactionDataList(o.Transactions.Select(t => new EbayDatabaseTransactionDataItem
 					{
-						PaymentMethod = o.PaymentMethod,
-						AmountPaid = _CurrencyConvertor.ConvertToBaseCurrency(o.AmountPaid, o.CreatedTime),
-						OrderStatus = orderStatus,
-						PaymentHoldStatus = o.PaymentHoldStatus,
-						ShippingAddressData = Convert(o.ShippingAddress),
-						BuyerName = o.BuyerName,
-						CheckoutStatus = o.CheckoutStatus,
-						PaymentMethods = o.PaymentMethod,
-						SubTotal = _CurrencyConvertor.ConvertToBaseCurrency(o.SubTotal, o.CreatedTime),
-						Total = _CurrencyConvertor.ConvertToBaseCurrency(o.Total, o.CreatedTime),
-						AdjustmentAmount = _CurrencyConvertor.ConvertToBaseCurrency(o.AdjustmentAmount, o.CreatedTime),
-						PaymentTime = o.PaymentTime,
-						TransactionData = new EbayDatabaseTransactionDataList(o.Transactions.Select(t => new EbayDatabaseTransactionDataItem
-							{
-								CreatedDate = t.CreatedDate,
-								PaymentHoldStatus = t.PaymentHoldStatus,
-								QuantityPurchased = t.QuantityPurchased,
-								PaymentMethodUsed = t.PaymentMethodUsed,
-								TransactionPrice = _CurrencyConvertor.ConvertToBaseCurrency(t.TransactionPrice, t.CreatedDate),
-								ItemID = t.ItemID,
-								ItemPrivateNotes = t.ItemPrivateNotes,
-								ItemSKU = t.ItemSKU,
-								ItemSellerInventoryID = t.ItemSellerInventoryID,
-								eBayTransactionId = t.eBayTransactionId,
-								OrderItemDetail = t.OrderItemDetail
-							})),
-						CreatedTime = o.CreatedTime,
-						PaymentStatus = o.PaymentStatus,
-						ShippedTime = o.ShippedTime,
-						ExternalTransactionData = new EBayDatabaseExternalTransactionList(o.ExternalTransactions.Select(t => new EBayDatabaseExternalTransactionItem
-						{
-							FeeOrCreditAmount = t.FeeOrCreditAmount,
-							PaymentOrRefundAmount = t.PaymentOrRefundAmount,
-							TransactionID = t.TransactionID,
-							TransactionTime = t.TransactionTime
-						}))
-					};
-				}));
+						CreatedDate = t.CreatedDate,
+						PaymentHoldStatus = t.PaymentHoldStatus,
+						QuantityPurchased = t.QuantityPurchased,
+						PaymentMethodUsed = t.PaymentMethodUsed,
+						TransactionPrice = _CurrencyConvertor.ConvertToBaseCurrency(t.TransactionPrice, t.CreatedDate),
+						ItemID = t.ItemID,
+						ItemPrivateNotes = t.ItemPrivateNotes,
+						ItemSKU = t.ItemSKU,
+						ItemSellerInventoryID = t.ItemSellerInventoryID,
+						eBayTransactionId = t.eBayTransactionId,
+						OrderItemDetail = t.OrderItemDetail
+					})),
+					CreatedTime = o.CreatedTime,
+					PaymentStatus = o.PaymentStatus,
+					ShippedTime = o.ShippedTime,
+					ExternalTransactionData = new EBayDatabaseExternalTransactionList(o.ExternalTransactions.Select(t => new EBayDatabaseExternalTransactionItem
+					{
+						FeeOrCreditAmount = t.FeeOrCreditAmount,
+						PaymentOrRefundAmount = t.PaymentOrRefundAmount,
+						TransactionID = t.TransactionID,
+						TransactionTime = t.TransactionTime
+					}))
+				};
+			}));
 
 
 			return orders;
@@ -2060,40 +2060,40 @@ namespace EZBob.DatabaseLib
 		private static DatabaseShipingAddress Convert(MP_EbayUserAddressData address)
 		{
 			return new DatabaseShipingAddress
-				{
-					FirstName = address.FirstName,
-					Phone = address.Phone,
-					Street1 = address.Street1,
-					LastName = address.LastName,
-					CityName = address.CityName,
-					CountryName = address.CountryName,
-					PostalCode = address.PostalCode,
-					StateOrProvince = address.StateOrProvince,
-					Street2 = address.Street2,
-					Name = address.Name,
-					Street = address.Street,
-					AddressOwner = address.AddressOwner,
-					AddressRecordType = address.AddressRecordType,
-					AddressStatus = address.AddressStatus,
-					AddressUsage = address.AddressUsage,
-					CompanyName = address.CompanyName,
-					County = address.County,
-					ExternalAddressID = address.ExternalAddressID,
-					InternationalName = address.InternationalName,
-					InternationalStateAndCity = address.InternationalStateAndCity,
-					InternationalStreet = address.InternationalStreet,
-					Phone2 = address.Phone2,
-					Phone2AreaOrCityCode = address.Phone2AreaOrCityCode,
-					Phone2CountryCode = address.Phone2CountryCode,
-					Phone2CountryPrefix = address.Phone2CountryPrefix,
-					Phone2LocalNumber = address.Phone2LocalNumber,
-					PhoneAreaOrCityCode = address.PhoneAreaOrCityCode,
-					PhoneCountryCode = address.PhoneCountryCode,
-					AddressID = address.AddressID,
-					CountryCode = address.CountryCode,
-					PhoneCountryCodePrefix = address.PhoneCountryCodePrefix,
-					PhoneLocalNumber = address.PhoneLocalNumber
-				};
+			{
+				FirstName = address.FirstName,
+				Phone = address.Phone,
+				Street1 = address.Street1,
+				LastName = address.LastName,
+				CityName = address.CityName,
+				CountryName = address.CountryName,
+				PostalCode = address.PostalCode,
+				StateOrProvince = address.StateOrProvince,
+				Street2 = address.Street2,
+				Name = address.Name,
+				Street = address.Street,
+				AddressOwner = address.AddressOwner,
+				AddressRecordType = address.AddressRecordType,
+				AddressStatus = address.AddressStatus,
+				AddressUsage = address.AddressUsage,
+				CompanyName = address.CompanyName,
+				County = address.County,
+				ExternalAddressID = address.ExternalAddressID,
+				InternationalName = address.InternationalName,
+				InternationalStateAndCity = address.InternationalStateAndCity,
+				InternationalStreet = address.InternationalStreet,
+				Phone2 = address.Phone2,
+				Phone2AreaOrCityCode = address.Phone2AreaOrCityCode,
+				Phone2CountryCode = address.Phone2CountryCode,
+				Phone2CountryPrefix = address.Phone2CountryPrefix,
+				Phone2LocalNumber = address.Phone2LocalNumber,
+				PhoneAreaOrCityCode = address.PhoneAreaOrCityCode,
+				PhoneCountryCode = address.PhoneCountryCode,
+				AddressID = address.AddressID,
+				CountryCode = address.CountryCode,
+				PhoneCountryCodePrefix = address.PhoneCountryCodePrefix,
+				PhoneLocalNumber = address.PhoneLocalNumber
+			};
 		}
 
 		public PayPalTransactionsList GetAllPayPalTransactions(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -2103,16 +2103,16 @@ namespace EZBob.DatabaseLib
 			var data = new PayPalTransactionsList(submittedDate);
 
 			customerMarketPlace.PayPalTransactions.ForEach(tr => tr.TransactionItems.ForEach(t => data.Add(new PayPalTransactionItem
-				{
-					Created = t.Created,
-					Type = t.Type,
-					FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
-					GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
-					NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
-					Status = t.Status,
-					Timezone = t.TimeZone,
-					TransactionId = t.PayPalTransactionId
-				})));
+			{
+				Created = t.Created,
+				Type = t.Type,
+				FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
+				GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
+				NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
+				Status = t.Status,
+				Timezone = t.TimeZone,
+				TransactionId = t.PayPalTransactionId
+			})));
 
 			return data;
 
@@ -2682,16 +2682,16 @@ namespace EZBob.DatabaseLib
 			foreach (MP_FreeAgentExpenseCategory dbCategory in _FreeAgentExpenseCategoryRepository.GetAll())
 			{
 				var category = new FreeAgentExpenseCategory
-					{
-						Id = dbCategory.Id,
-						category_group = dbCategory.category_group,
-						url = dbCategory.url,
-						description = dbCategory.description,
-						nominal_code = dbCategory.nominal_code,
-						allowable_for_tax = dbCategory.allowable_for_tax,
-						tax_reporting_name = dbCategory.tax_reporting_name,
-						auto_sales_tax_rate = dbCategory.auto_sales_tax_rate
-					};
+				{
+					Id = dbCategory.Id,
+					category_group = dbCategory.category_group,
+					url = dbCategory.url,
+					description = dbCategory.description,
+					nominal_code = dbCategory.nominal_code,
+					allowable_for_tax = dbCategory.allowable_for_tax,
+					tax_reporting_name = dbCategory.tax_reporting_name,
+					auto_sales_tax_rate = dbCategory.auto_sales_tax_rate
+				};
 
 				categoriesMap.Add(category.url, category);
 			}
@@ -2709,15 +2709,15 @@ namespace EZBob.DatabaseLib
 			}
 
 			dbCategory = new MP_FreeAgentExpenseCategory
-				{
-					category_group = category.category_group,
-					url = category.url,
-					description = category.description,
-					nominal_code = category.nominal_code,
-					allowable_for_tax = category.allowable_for_tax,
-					tax_reporting_name = category.tax_reporting_name,
-					auto_sales_tax_rate = category.auto_sales_tax_rate
-				};
+			{
+				category_group = category.category_group,
+				url = category.url,
+				description = category.description,
+				nominal_code = category.nominal_code,
+				allowable_for_tax = category.allowable_for_tax,
+				tax_reporting_name = category.tax_reporting_name,
+				auto_sales_tax_rate = category.auto_sales_tax_rate
+			};
 			return (int)_FreeAgentExpenseCategoryRepository.Save(dbCategory);
 		}
 
@@ -2732,7 +2732,7 @@ namespace EZBob.DatabaseLib
 			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
 		} // GetAllHmrcVatReturnData
 
-		public static InternalDataList GetAllHmrcData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace)
 		{
 			var orders = new InternalDataList(submittedDate);
 
@@ -2845,12 +2845,16 @@ namespace EZBob.DatabaseLib
 			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
 		} // GetAllHmrcRtiTaxMonthData
 
-		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace)
+		{
 			var orders = new InternalDataList(submittedDate);
 
-			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec => {
-				foreach (var entry in rec.Entries) {
-					orders.Add(new RtiTaxMonthEntry {
+			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec =>
+			{
+				foreach (var entry in rec.Entries)
+				{
+					orders.Add(new RtiTaxMonthEntry
+					{
 						DateStart = entry.DateStart,
 						DateEnd = entry.DateEnd,
 						AmountPaid = new Coin(entry.AmountPaid, entry.CurrencyCode),
@@ -2877,16 +2881,19 @@ namespace EZBob.DatabaseLib
 
 			DateTime submittedDate = DateTime.UtcNow;
 
-			var oRecord = new MP_RtiTaxMonthRecord {
+			var oRecord = new MP_RtiTaxMonthRecord
+			{
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,
 				HistoryRecord = historyRecord,
 			};
 
-			ordersData.ForEach(vx => {
+			ordersData.ForEach(vx =>
+			{
 				var dataItem = (RtiTaxMonthEntry)vx;
 
-				oRecord.Entries.Add(new MP_RtiTaxMonthEntry() {
+				oRecord.Entries.Add(new MP_RtiTaxMonthEntry()
+				{
 					DateStart = dataItem.DateStart,
 					DateEnd = dataItem.DateEnd,
 					AmountPaid = dataItem.AmountPaid.Amount,
