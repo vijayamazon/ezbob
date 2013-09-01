@@ -506,7 +506,7 @@ namespace ZohoCRM
             var agreementModel = JsonConvert.DeserializeObject<AgreementModel>(loan.AgreementModel);
             foreach (var agreement in loan.Agreements.Where(a => string.IsNullOrEmpty(a.ZohoId)))
             {
-                var pdf = _agreementRenderer.RenderAgreementToPdf(_helper.GetLoanAgreementTemplate(agreement.TemplateId), agreementModel);
+                var pdf = _agreementRenderer.RenderAgreementToPdf(_helper.GetLoanAgreementTemplate(agreement.TemplateRef), agreementModel);
                 agreement.ZohoId = _crm.UploadFileToRecord<ZohoSalesOrder>(loan.ZohoId, agreement.LongFilename(), "pdf", pdf);
             }
         }

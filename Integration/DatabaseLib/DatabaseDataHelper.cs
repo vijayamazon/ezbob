@@ -1,4 +1,5 @@
-namespace EZBob.DatabaseLib {
+namespace EZBob.DatabaseLib
+{
 	#region using
 
 	using System;
@@ -46,7 +47,8 @@ namespace EZBob.DatabaseLib {
 
 	#region enum CustomerMarketplaceUpdateActionType
 
-	public enum CustomerMarketplaceUpdateActionType {
+	public enum CustomerMarketplaceUpdateActionType
+	{
 		UpdateInventoryInfo,
 		UpdateOrdersInfo,
 		UpdateFeedbackInfo,
@@ -61,7 +63,8 @@ namespace EZBob.DatabaseLib {
 
 	#region class DatabaseDataHelper
 
-	public class DatabaseDataHelper : IDatabaseDataHelper {
+	public class DatabaseDataHelper : IDatabaseDataHelper
+	{
 		private static readonly ILog _Log = LogManager.GetLogger(typeof(DatabaseDataHelper));
 
 		private ISession _session;
@@ -97,7 +100,7 @@ namespace EZBob.DatabaseLib {
 		private readonly MP_SagePaymentStatusRepository _SagePaymentStatusRepository;
 		private readonly LoanTransactionMethodRepository _loanTransactionMethodRepository;
 		private readonly AmazonMarketPlaceTypeRepository _amazonMarketPlaceTypeRepository;
-	    private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
+		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
 		private readonly BusinessRepository _businessRepository;
 		private readonly MP_VatReturnEntryNameRepositry _vatReturnEntryNameRepositry;
 
@@ -133,7 +136,7 @@ namespace EZBob.DatabaseLib {
 			_SagePaymentStatusRepository = new MP_SagePaymentStatusRepository(session);
 			_loanTransactionMethodRepository = new LoanTransactionMethodRepository(session);
 			_amazonMarketPlaceTypeRepository = new AmazonMarketPlaceTypeRepository(session);
-		    _loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
+			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 			_businessRepository = new BusinessRepository(session);
 			_vatReturnEntryNameRepositry = new MP_VatReturnEntryNameRepositry(session);
 		}
@@ -150,7 +153,8 @@ namespace EZBob.DatabaseLib {
 
 		public Customer GetCustomerInfo(int clientId) { return FindCustomer(clientId); }
 
-		private Customer FindCustomer(int id) {
+		private Customer FindCustomer(int id)
+		{
 			var client = _CustomerRepository.Get(id);
 
 			if (client == null)
@@ -161,7 +165,8 @@ namespace EZBob.DatabaseLib {
 
 		public Customer FindCustomerByEmail(string sEmail) { return _CustomerRepository.TryGetByEmail(sEmail); } // FindCustomerByEmail
 
-		public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+		public void UpdateCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
 			var oldData = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
 			var customer = databaseCustomerMarketPlace.Customer;
@@ -542,23 +547,18 @@ namespace EZBob.DatabaseLib {
 			return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
 		}
 
-	    public int GetIdOrSaveLoanAgreementTemplate(string template)
-        {
-            var id = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template);
-            if (id == null)
-            {
-                id = (LoanAgreementTemplate)_loanAgreementTemplateRepository.Save(new LoanAgreementTemplate() { Template = template });
-                _session.Flush();
-            }
-            return id.Id;
-	    }
+		public LoanAgreementTemplate GetIdOrSaveLoanAgreementTemplate(string template)
+		{
+			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template) ?? new LoanAgreementTemplate {Template = template};
+			return loanAgreementTemplate;
+		}
 
-        public string GetLoanAgreementTemplate(int templateid)
-        {
-            return _loanAgreementTemplateRepository.Get(templateid).Template;
-        }
+		public string GetLoanAgreementTemplate(LoanAgreementTemplate template)
+		{
+			return _loanAgreementTemplateRepository.Get(template).Template;
+		}
 
-	    public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
+		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
 		{
 			return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);
 		}
@@ -2732,11 +2732,14 @@ namespace EZBob.DatabaseLib {
 			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
 		} // GetAllHmrcVatReturnData
 
-		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+		public static InternalDataList GetAllHmrcData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+		{
 			var orders = new InternalDataList(submittedDate);
 
-			customerMarketPlace.VatReturnRecords.ForEach(rec => {
-				var vre = new VatReturnEntry {
+			customerMarketPlace.VatReturnRecords.ForEach(rec =>
+			{
+				var vre = new VatReturnEntry
+				{
 					BusinessAddress = rec.Business.Address.Split('\n'),
 					BusinessName = rec.Business.Name,
 					DateDue = rec.DateDue,
@@ -2770,15 +2773,18 @@ namespace EZBob.DatabaseLib {
 
 			DateTime submittedDate = DateTime.UtcNow;
 
-			ordersData.ForEach(ve => {
+			ordersData.ForEach(ve =>
+			{
 				var dataItem = (VatReturnEntry)ve;
 
 				string sBizAddr = string.Join("\n", dataItem.BusinessAddress);
 
 				Business biz = _businessRepository.GetAll().FirstOrDefault(b => (b.Name == dataItem.BusinessName) && (b.Address == sBizAddr));
 
-				if (biz == null) {
-					biz = new Business {
+				if (biz == null)
+				{
+					biz = new Business
+					{
 						Name = dataItem.BusinessName,
 						Address = sBizAddr
 					};
@@ -2786,7 +2792,8 @@ namespace EZBob.DatabaseLib {
 					_businessRepository.SaveOrUpdate(biz);
 				} // if
 
-				var oRecord = new MP_VatReturnRecord {
+				var oRecord = new MP_VatReturnRecord
+				{
 					CustomerMarketPlace = customerMarketPlace,
 					Created = submittedDate,
 					HistoryRecord = historyRecord,
@@ -2798,20 +2805,24 @@ namespace EZBob.DatabaseLib {
 					RegistrationNo = dataItem.RegistrationNo
 				};
 
-				foreach (KeyValuePair<string, Coin> pair in dataItem.Data) {
+				foreach (KeyValuePair<string, Coin> pair in dataItem.Data)
+				{
 					string sName = pair.Key;
 
 					MP_VatReturnEntryName oVreName = _vatReturnEntryNameRepositry.GetAll().FirstOrDefault(n => n.Name == sName);
 
-					if (oVreName == null) {
-						oVreName = new MP_VatReturnEntryName {
+					if (oVreName == null)
+					{
+						oVreName = new MP_VatReturnEntryName
+						{
 							Name = sName
 						};
 
 						_vatReturnEntryNameRepositry.SaveOrUpdate(oVreName);
 					} // if
 
-					oRecord.Entries.Add(new MP_VatReturnEntry {
+					oRecord.Entries.Add(new MP_VatReturnEntry
+					{
 						Amount = pair.Value.Amount,
 						CurrencyCode = pair.Value.CurrencyCode,
 						Name = oVreName,
@@ -2938,10 +2949,12 @@ namespace EZBob.DatabaseLib {
 				HistoryRecord = historyRecord
 			};
 
-			ordersData.ForEach(di => {
+			ordersData.ForEach(di =>
+			{
 				var dataItem = (ChannelGrabberOrderItem)di;
 
-				var mpOrderItem = new MP_ChannelGrabberOrderItem {
+				var mpOrderItem = new MP_ChannelGrabberOrderItem
+				{
 					Order = mpOrder,
 					NativeOrderId = dataItem.NativeOrderId,
 					TotalCost = dataItem.TotalCost,
@@ -2971,8 +2984,10 @@ namespace EZBob.DatabaseLib {
 
 	#region class eBayFindOrderItemInfoData
 
-	public class eBayFindOrderItemInfoData {
-		public eBayFindOrderItemInfoData(string itemId) {
+	public class eBayFindOrderItemInfoData
+	{
+		public eBayFindOrderItemInfoData(string itemId)
+		{
 			ItemId = itemId;
 		} // constructor
 
@@ -2983,7 +2998,8 @@ namespace EZBob.DatabaseLib {
 
 	#region class eBayCategoryInfo
 
-	public class eBayCategoryInfo {
+	public class eBayCategoryInfo
+	{
 		public string CategoryId { get; set; }
 		public string Name { get; set; }
 		public bool? IsVirtual { get; set; }
