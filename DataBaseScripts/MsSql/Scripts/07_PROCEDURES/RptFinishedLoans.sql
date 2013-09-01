@@ -10,8 +10,9 @@ CREATE PROCEDURE RptFinishedLoans
 @DateEnd   DATETIME
 AS
 BEGIN
-	SET @DateEnd = CONVERT(DATE, @DateStart)
-	SET @DateStart = CONVERT(DATE, @DateEnd)
+
+SET @DateEnd = CONVERT(DATE, @DateEnd)
+SET @DateStart = CONVERT(DATE, @DateStart)
 
 ---------------------------CRM Notes------------------------------ 
  IF OBJECT_ID('tempdb..#CRMNotes') IS NOT NULL DROP TABLE #CRMNotes
@@ -26,7 +27,6 @@ INTO
    ON O.IdCustomer = CR.CustomerId
    AND O.UnderwriterDecision = 'Approved'
   INNER JOIN CRMStatuses sts ON CR.StatusId = sts.Id
- --WHERE @DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
  GROUP BY
   CR.CustomerId
   
@@ -97,18 +97,17 @@ IF OBJECT_ID('tempdb..#MaxApproved') IS NOT NULL DROP TABLE #MaxApproved
     OR Name LIKE '%q@q%'
     OR Name LIKE '%1@1%'
     OR C.IsTest=1)
- --AND @DateStart <= O.CreationDate 
- --AND O.CreationDate < @DateEnd
- GROUP BY C.Id, C.Name, C.FullName,L.NumberOfLoans,C.DaytimePhone, C.MobilePhone, CR.CRMStatus, CR.CRMAction, CR.CRMComment,L.DateClosed
- 
-
+ GROUP BY C.Id, C.Name, C.FullName,L.NumberOfLoans,C.DaytimePhone, C.MobilePhone, CR.CRMStatus, CR.CRMAction, CR.CRMComment
 
 --------------------------Final Merge-------------------------- 
  SELECT Id, Email, Name, MAX(NumberOfLoans) NumberOfLoans, MaxApprovedSum, DayPhone, MobilePhone, CRMStatus, CRMAction, CRMComment
  FROM #MaxApproved
+ WHERE DateClosed >= @DateStart AND DateClosed <= @DateEnd
  GROUP BY Id, Email, Name, NumberOfLoans, MaxApprovedSum, DayPhone, MobilePhone, CRMStatus, CRMAction, CRMComment, DateClosed 
  ORDER BY DateClosed DESC 
- --SELECT * FROM #MaxApproved
+ 
+ 
+ ----------------Drop Temp Tables------------------------------
  DROP TABLE #CRMNotes
  DROP TABLE #CRMFinal
  DROP TABLE #FinishedLoans
