@@ -38,7 +38,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
 		private readonly IZohoFacade _crm;
-		private static readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
+		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
         //-------------------------------------------------------------------------------
         public GetCashController(
@@ -105,7 +105,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return Redirect(url);
         }
 
-        private static void CheckCustomerStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
+        private void CheckCustomerStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             if (
                 !customer.CreditSum.HasValue ||
