@@ -111,7 +111,7 @@ class EzBob.InstallmentEditor extends Backbone.Marionette.ItemView
         false
 
     cancelChanges: ->
-        @model.set @oldValues
+        @model.set('Principal', @oldValues.Principal)
         @close()
         false
 
