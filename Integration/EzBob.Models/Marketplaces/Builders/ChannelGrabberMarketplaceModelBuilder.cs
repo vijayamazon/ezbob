@@ -76,15 +76,25 @@ namespace EzBob.Models.Marketplaces.Builders {
 				break;
 
 			case Behaviour.HMRC:
-				var lst = DatabaseDataHelper
-					.GetAllHmrcData(DateTime.UtcNow, mp)
+				var oVatReturn = DatabaseDataHelper
+					.GetAllHmrcVatReturnData(DateTime.UtcNow, mp)
 					.Distinct(new InternalOrderComparer())
 					.Select(x => (VatReturnEntry)x)
 					.ToList();
 
-				lst.Sort(VatReturnEntry.CompareForSort);
+				var oRtiTaxMonths = DatabaseDataHelper
+					.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
+					.Distinct(new InternalOrderComparer())
+					.Select(x => (RtiTaxMonthEntry)x)
+					.ToList();
 
-				model.CGData = new ChannelGrabberHmrcData { Entries = lst };
+				oVatReturn.Sort(VatReturnEntry.CompareForSort);
+				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
+
+				model.CGData = new ChannelGrabberHmrcData {
+					VatReturn = oVatReturn,
+					RtiTaxMonths = oRtiTaxMonths
+				};
 				break;
 
 			default:

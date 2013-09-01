@@ -1,12 +1,12 @@
-﻿<% if (m.CGData && m.CGData.Entries) {
+﻿<% if (m.CGData && m.CGData.VatReturn) {
 	var oBoxRegEx = /\(Box (\d+)\)$/;
 
-	var nEntryCount = m.CGData.Entries.length;
+	var nEntryCount = m.CGData.VatReturn.length;
 
 	var oByBusiness = {};
 
 	for (var nIdx = 0; nIdx < nEntryCount; nIdx++) {
-		var oEntry = m.CGData.Entries[nIdx];
+		var oEntry = m.CGData.VatReturn[nIdx];
 
 		if (typeof(oEntry.DateFrom) === 'string')
 			oEntry.DateFrom = Date.parse(oEntry.DateFrom);

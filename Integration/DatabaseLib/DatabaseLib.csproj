@@ -78,6 +78,7 @@
     <Compile Include="AnalysisFunctionDataParameterInfo.cs" />
     <Compile Include="Common\Coin.cs" />
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
+    <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
     <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
@@ -94,6 +95,10 @@
     <Compile Include="Model\Marketplaces\ChannelGrabber\Business.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessRepository.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthEntryMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthEntry.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthRecordMap.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthRecord.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameRepository.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnRecordMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryMap.cs" />

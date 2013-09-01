@@ -1,4 +1,5 @@
-﻿using EzBob.CommonLib;
+﻿using System.Linq;
+using EzBob.CommonLib;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.DatabaseWrapper;
@@ -11,6 +12,7 @@ using Ezbob.HmrcHarvester;
 using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using log4net;
+using Coin = EZBob.DatabaseLib.Common.Coin;
 
 namespace Integration.ChannelGrabberFrontend {
 	#region class RetrieveDataHelper
@@ -93,10 +95,20 @@ namespace Integration.ChannelGrabberFrontend {
 							ctr.DataHarvester,
 							databaseCustomerMarketPlace,
 							historyRecord,
-							HmrcConversion,
-							Helper.StoreHmrcData,
-							Helper.GetAllHmrcData
-							);
+							HmrcVatReturnConversion,
+							Helper.StoreHmrcVatReturnData,
+							Helper.GetAllHmrcVatReturnData
+						);
+
+						ProcessRetrieved(
+							ctr.DataHarvester,
+							databaseCustomerMarketPlace,
+							historyRecord,
+							HmrcRtiTaxMonthConversion,
+							Helper.StoreHmrcRtiTaxMonthData,
+							Helper.GetAllHmrcRtiTaxMonthData
+						);
+
 						break;
 
 					default:
@@ -139,7 +151,7 @@ namespace Integration.ChannelGrabberFrontend {
 			Func<DateTime, IDatabaseCustomerMarketPlace, InternalDataList> oLoadAllFromDatabaseFunc
 		) {
 			// Convert orders into internal format.
-			var oChaGraOrders = oConversion(oHarvester);
+			List<AInternalOrderItem> oChaGraOrders = oConversion(oHarvester);
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
@@ -206,9 +218,9 @@ namespace Integration.ChannelGrabberFrontend {
  
 		#endregion method DefaultConversion
 
-		#region method HmrcConversion
+		#region method HmrcVatReturnConversion
 
-		private List<AInternalOrderItem> HmrcConversion(IHarvester oHarvester) {
+		private List<AInternalOrderItem> HmrcVatReturnConversion(IHarvester oHarvester) {
 			var oVatEntries = new List<AInternalOrderItem>();
 
 			foreach (KeyValuePair<string, ISeeds> pair in ((Ezbob.HmrcHarvester.Harvester)oHarvester).Hopper.Seeds[DataType.VatReturn]) {
@@ -236,9 +248,32 @@ namespace Integration.ChannelGrabberFrontend {
 			} // for each file
 
 			return oVatEntries;
-		} // HmrcConversion
+		} // HmrcVatReturnConversion
  
-		#endregion method HmrcConversion
+		#endregion method HmrcVatReturnConversion
+
+		#region method HmrcRtiTaxMonthConversion
+
+		private List<AInternalOrderItem> HmrcRtiTaxMonthConversion(IHarvester oHarvester) {
+			var oOutput = new List<AInternalOrderItem>();
+
+			foreach (KeyValuePair<string, ISeeds> pair in ((Ezbob.HmrcHarvester.Harvester)oHarvester).Hopper.Seeds[DataType.PayeRtiTaxYears]) {
+				var oData = (RtiTaxYearSeeds)pair.Value;
+
+				oOutput.AddRange(
+					oData.Months.Select(rtms => new RtiTaxMonthEntry {
+						DateStart = rtms.DateStart,
+						DateEnd = rtms.DateEnd,
+						AmountPaid = new Coin(rtms.AmountPaid.Amount, rtms.AmountPaid.CurrencyCode),
+						AmountDue = new Coin(rtms.AmountDue.Amount, rtms.AmountDue.CurrencyCode),
+					})
+				);
+			} // for each file
+
+			return oOutput;
+		} // HmrcRtiTaxMonthConversion
+ 
+		#endregion method HmrcVatReturnConversion
 
 		#endregion Orders list: remote to internal conversion
 

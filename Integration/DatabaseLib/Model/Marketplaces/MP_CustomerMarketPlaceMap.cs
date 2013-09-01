@@ -92,6 +92,10 @@ namespace EZBob.DatabaseLib.Model.Database
                 KeyColumn("CustomerMarketPlaceId")
                 .Cascade.All();
 
+            HasMany(x => x.RtiTaxMonthRecords).
+                KeyColumn("CustomerMarketPlaceId")
+                .Cascade.All();
+
             HasMany(x => x.YodleeOrders).
                 KeyColumn("CustomerMarketPlaceId")
                 .Cascade.All();

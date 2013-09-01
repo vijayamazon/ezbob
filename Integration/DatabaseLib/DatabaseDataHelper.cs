@@ -2725,14 +2725,14 @@ namespace EZBob.DatabaseLib {
 
 		#region HMRC
 
-		#region method GetAllHmrcData
+		#region method GetAllHmrcVatReturnData
 
-		public InternalDataList GetAllHmrcData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		public InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
-			return GetAllHmrcData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
-		} // GetAllHmrcData
+			return GetAllHmrcVatReturnData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
+		} // GetAllHmrcVatReturnData
 
-		public static InternalDataList GetAllHmrcData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+		public static InternalDataList GetAllHmrcVatReturnData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
 			var orders = new InternalDataList(submittedDate);
 
 			customerMarketPlace.VatReturnRecords.ForEach(rec => {
@@ -2753,17 +2753,17 @@ namespace EZBob.DatabaseLib {
 			}); // for each record
 
 			return orders;
-		} // GetAllHmrcData
+		} // GetAllHmrcVatReturnData
 
-		#endregion method GetAllHmrcData
+		#endregion method GetAllHmrcVatReturnData
 
-		#region method StoreHmrcData
+		#region method StoreHmrcVatReturnData
 
-		public void StoreHmrcData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		public void StoreHmrcVatReturnData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
-			LogData("HMRC Data", customerMarketPlace, ordersData);
+			LogData("HMRC VAT Return Data", customerMarketPlace, ordersData);
 
 			if (ordersData == null)
 				return;
@@ -2823,9 +2823,73 @@ namespace EZBob.DatabaseLib {
 			});
 
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		} // StoreHmrcData
+		} // StoreHmrcVatReturnData
 
-		#endregion method StoreHmrcData
+		#endregion method StoreHmrcVatReturnData
+
+		#region method GetAllHmrcRtiTaxMonthData
+
+		public InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			return GetAllHmrcRtiTaxMonthData(submittedDate, GetCustomerMarketPlace(databaseCustomerMarketPlace));
+		} // GetAllHmrcRtiTaxMonthData
+
+		public static InternalDataList GetAllHmrcRtiTaxMonthData(DateTime submittedDate, MP_CustomerMarketPlace customerMarketPlace) {
+			var orders = new InternalDataList(submittedDate);
+
+			customerMarketPlace.RtiTaxMonthRecords.ForEach(rec => {
+				foreach (var entry in rec.Entries) {
+					orders.Add(new RtiTaxMonthEntry {
+						DateStart = entry.DateStart,
+						DateEnd = entry.DateEnd,
+						AmountPaid = new Coin(entry.AmountPaid, entry.CurrencyCode),
+						AmountDue = new Coin(entry.AmountDue, entry.CurrencyCode),
+					});
+				} // for each entry
+			}); // for each record
+
+			return orders;
+		} // GetAllHmrcRtiTaxMonthData
+
+		#endregion method GetAllHmrcRtiTaxMonthData
+
+		#region method StoreHmrcRtiTaxMonthData
+
+		public void StoreHmrcRtiTaxMonthData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, InternalDataList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			LogData("HMRC RTI Tax Months Data", customerMarketPlace, ordersData);
+
+			if (ordersData == null)
+				return;
+
+			DateTime submittedDate = DateTime.UtcNow;
+
+			var oRecord = new MP_RtiTaxMonthRecord {
+				CustomerMarketPlace = customerMarketPlace,
+				Created = submittedDate,
+				HistoryRecord = historyRecord,
+			};
+
+			ordersData.ForEach(vx => {
+				var dataItem = (RtiTaxMonthEntry)vx;
+
+				oRecord.Entries.Add(new MP_RtiTaxMonthEntry() {
+					DateStart = dataItem.DateStart,
+					DateEnd = dataItem.DateEnd,
+					AmountPaid = dataItem.AmountPaid.Amount,
+					AmountDue = dataItem.AmountDue.Amount,
+					CurrencyCode = dataItem.AmountPaid.CurrencyCode,
+					Record = oRecord
+				});
+			});
+
+			customerMarketPlace.RtiTaxMonthRecords.Add(oRecord);
+			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		} // StoreHmrcRtiTaxMonthData
+
+		#endregion method StoreHmrcRtiTaxMonthData
 
 		#endregion HMRC
 
