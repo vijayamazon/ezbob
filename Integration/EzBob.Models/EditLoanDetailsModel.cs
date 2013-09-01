@@ -51,7 +51,6 @@ namespace EzBob.Models
             var fees = Items.Where(i => i.Type == "Fee").OrderBy(i => i.Date).ToList();
 
             CheckZeroBalance(installments);
-            CheckBalanceDecreasing(installments);
             CheckMaxBalance(installments);
             CheckInstallmentEarlyDate(installments);
             CheckOnlyOneInstallmentIsZero(installments);
@@ -65,27 +64,6 @@ namespace EzBob.Models
             if (tooEarlyInstallment)
             {
                 Errors.Add("The installment date should be greater than loan date.");
-            }
-        }
-
-        private void CheckBalanceDecreasing(IList<SchedultItemModel> installments)
-        {
-            var descending = false;
-
-            var zipped = installments.Zip(installments.Skip(1), (i1, i2) => new {i1, i2});
-
-            if (LoanType == "Standard")
-            {
-                @descending = zipped.Any(x => x.i1.Balance <= x.i2.Balance);
-            }
-            else
-            {
-                @descending = zipped.Any(x => x.i1.Balance < x.i2.Balance);
-            }
-
-            if (@descending)
-            {
-                Errors.Add("Balance of the next installment should be less then previous.");
             }
         }
 
