@@ -2859,6 +2859,7 @@ namespace EZBob.DatabaseLib
 						DateEnd = entry.DateEnd,
 						AmountPaid = new Coin(entry.AmountPaid, entry.CurrencyCode),
 						AmountDue = new Coin(entry.AmountDue, entry.CurrencyCode),
+						FetchTime = entry.Record.Created
 					});
 				} // for each entry
 			}); // for each record

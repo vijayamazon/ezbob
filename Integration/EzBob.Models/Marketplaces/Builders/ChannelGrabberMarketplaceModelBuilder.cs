@@ -84,8 +84,23 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 				var oRtiTaxMonths = DatabaseDataHelper
 					.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
-					.Distinct(new InternalOrderComparer())
-					.Select(x => (RtiTaxMonthEntry)x)
+					.GroupBy(
+						x => x.NativeOrderId, // key selector - split into groups having the same key
+						x => (RtiTaxMonthEntry)x, // element selector - convert each element in each group
+						(oIgnoredKey, lst) => { // result selector - select one element from each group
+							RtiTaxMonthEntry oResult = null;
+
+							lst.ForEach(o => {
+								if ((oResult == null) || (oResult.FetchTime < o.FetchTime))
+									oResult = o;
+							});
+
+							// At this point oResult should not be null because
+							// at least one element with the oIgnoredKey was found...
+
+							return oResult;
+						} // end of result selector
+					)
 					.ToList();
 
 				oVatReturn.Sort(VatReturnEntry.CompareForSort);
