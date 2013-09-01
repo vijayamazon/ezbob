@@ -256,11 +256,13 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     UpdateNewCreditLineState: ->
         waiting = @personalInfo.get("CreditResult") is "WaitingForDecision"
         currentStatus = @personalInfo.get("Disabled")
-        xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/GetIsStatusEnabled", {status: currentStatus, async:false}
-        xhr.done (result) =>            
-            isStatusEnabled = result
-            disabled =  waiting or !isStatusEnabled
-            @$el.find("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
+        disabled = true
+        if currentStatus != undefined
+            xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/GetIsStatusEnabled", {status: currentStatus, async:false}
+            xhr.done (result) =>            
+                isStatusEnabled = result
+                disabled =  waiting or !isStatusEnabled
+        @$el.find("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
 
     serializeData: ->
         m: @model.toJSON()
