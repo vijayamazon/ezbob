@@ -1,0 +1,19 @@
+﻿<% (function() {
+if (m.CGData && m.CGData.RtiTaxMonths) {
+	%><table class="table table-bordered table-striped  blue-header centered">
+	<thead><tr><th>Month</th><th>Amount Paid</th><th>Amount Due</th></tr></thead><tbody><%
+	for (var i = 0; i < m.CGData.RtiTaxMonths.length; i++) {
+		var oMonth = m.CGData.RtiTaxMonths[i];
+		%><tr>
+			<td><%= EzBob.formatDateMY(oMonth.DateStart) %></td>
+			<td class=right><%= (oMonth.AmountPaid.CurrencyCode == "GBP") ? GBPValues(oMonth.AmountPaid.Amount, true) : oMonth.AmountPaid.Amount %></td>
+			<td class=right><%= (oMonth.AmountDue.CurrencyCode == "GBP") ? GBPValues(oMonth.AmountDue.Amount, true) : oMonth.AmountDue.Amount %></td>
+		</tr><%
+	} // for
+	%></tbody></table><%
+}
+else {
+	%>No data found.<%
+}
+})();
+%>

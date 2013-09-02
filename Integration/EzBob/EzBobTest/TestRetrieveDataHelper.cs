@@ -1,3 +1,4 @@
+using System.IO;
 using Integration.ChannelGrabberFrontend;
 
 namespace EzBobTest
@@ -44,8 +45,18 @@ namespace EzBobTest
         [SetUp]
         public void Init()
         {
-            //EnvironmentConfigurationLoader.AppPathDummy = @"c:\alexbo\src\App\clients\Maven\maven.exe";
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
+			var paths = new string[] {
+				@"c:\alexbo\src\App\clients\Maven\maven.exe",
+				@"c:\EzBob\App\clients\Maven\maven.exe"
+			};
+
+			foreach (string sPath in paths) {
+				if (File.Exists(sPath)) {
+					EnvironmentConfigurationLoader.AppPathDummy = sPath;
+					break;
+				} // if
+			} // foreach
+
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
@@ -104,7 +115,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 11800 };
+			var umis = new[] { 8196 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

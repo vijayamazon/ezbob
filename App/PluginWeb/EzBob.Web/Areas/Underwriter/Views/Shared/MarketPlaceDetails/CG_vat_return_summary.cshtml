@@ -1,4 +1,5 @@
-﻿<% if (m.CGData && m.CGData.VatReturn) {
+﻿<% (function() {
+if (m.CGData && m.CGData.VatReturn) {
 	var oBoxRegEx = /\(Box (\d+)\)$/;
 
 	var nEntryCount = m.CGData.VatReturn.length;
@@ -63,16 +64,42 @@
 		// Start index for displaying is for up to last five quarters.
 		nStartIdx = (aryBusiness.length <= 5) ? 0 : aryBusiness.length - 5;
 
+		var arySalary = [];
+
 		%><table class="table table-bordered table-striped  blue-header centered">
 		<thead><tr>
 			<th>Business Details</th>
 			<th>&nbsp;</th><%
 			for (var i = nStartIdx; i < aryBusiness.length; i++) {
 				%><th><%= EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%= EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
+
+				var oDateFrom = moment.utc(aryBusiness[i].DateFrom).local();
+				var oDateTo = moment.utc(aryBusiness[i].DateTo).local();
+
+				arySalary.push({
+					dateFrom: oDateFrom.year() * 100 + oDateFrom.month(),
+					dateTo: oDateTo.year() * 100 + oDateTo.month(),
+					salary: 0
+				});
 			} // for each relevant data item
 			%><th>Last Year</th>
-		</tr></thead>
-		<tbody>
+		</tr></thead><%
+		if (m.CGData.RtiTaxMonths) {
+			for (var j = 0; j < m.CGData.RtiTaxMonths.length; j++) {
+				var oMonth = m.CGData.RtiTaxMonths[j];
+
+				var oDate = moment.utc(oMonth.DateStart).local();
+				var nDate = oDate.year() * 100 + oDate.month();
+
+				for (var i = 0; i < arySalary.length; i++) {
+					var s = arySalary[i];
+
+					if (s.dateFrom <= nDate && nDate <= s.dateTo)
+						s.salary += oMonth.AmountPaid.Amount;
+				} // for each quarter
+			} // for each RTI month
+		} // if
+		%><tbody>
 			<tr>
 				<td class="no-padding" rowspan=6>
 					<table class="internal-table">
@@ -129,9 +156,15 @@
 			<tr>
 				<th>Salaries</th><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					%><td class=r><%= EzBob.formatPoundsAsInt(arySalary[i].salary) %></td><%
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r><%
+					var nSalarySum = 0;
+
+					for (var i = (arySalary.length <= 4 ? 0 : arySalary.length - 4); i < arySalary.length; i++)
+						nSalarySum += arySalary[i].salary;
+
+				%><%= EzBob.formatPoundsAsInt(nSalarySum) %></td>
 			</tr>
 			<tr>
 				<th>Tax</th><%
@@ -146,4 +179,5 @@
 else {
 	%>No data found.<%
 }
+})();
 %>

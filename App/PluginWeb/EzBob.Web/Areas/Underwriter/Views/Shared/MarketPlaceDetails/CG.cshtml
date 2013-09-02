@@ -35,8 +35,6 @@
 		%></tbody></table><%
 	}; // DrawOneTable
 
-console.log(m);
-
 	switch (aryCGAccounts[marketplaceType].Behaviour) {
 	case 0: // Default behaviour
 		%><div class="tabbable">
@@ -60,10 +58,12 @@ console.log(m);
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#hmrc-vat-return-summary" data-toggle="tab">VAT Return Summary</a></li>
 			<li><a href="#hmrc-vat-return-details" data-toggle="tab">VAT Return Details</a></li>
+			<li><a href="#hmrc-rti-tax-years" data-toggle="tab">RTI Tax Years</a></li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="hmrc-vat-return-summary">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_summary"); }</div>
 			<div class="tab-pane" id="hmrc-vat-return-details">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_details"); }</div>
+			<div class="tab-pane" id="hmrc-rti-tax-years">@{ Html.RenderPartial("MarketPlaceDetails/CG_rti_tax_years"); }</div>
 		</div><%
 		break;
 	} // switch
