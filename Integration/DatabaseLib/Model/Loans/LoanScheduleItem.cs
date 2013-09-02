@@ -155,7 +155,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
     public enum LoanScheduleStatus
     {
-        StillToPay, PaidOnTime, Late, PaidEarly, Paid
+        StillToPay, PaidOnTime, Late, PaidEarly, Paid, AlmostPaid
     }
 
     public class LoanScheduleStatusType : EnumStringType<LoanScheduleStatus>

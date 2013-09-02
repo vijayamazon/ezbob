@@ -15,6 +15,21 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             Console.WriteLine(_loan);
 
             Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Live));
+            Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.AlmostPaid));
+        }
+
+        [Test]
+        [Description("paying almost all installment before due date, and checkin that it is almost paid after due date")]
+        public void after_paying_5_poundsless_than_installment_loan_is_not_late2()
+        {
+            CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
+            MakePayment(389, Parse("2012-01-30 12:00:00.000"));
+            GetStateAt(_loan, Parse("2012-02-02 12:00:00.000"));
+
+            Console.WriteLine(_loan);
+
+            Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Live));
+            Assert.That(_loan.Schedule[0].Status, Is.EqualTo(LoanScheduleStatus.AlmostPaid));
         }
 
         [Test]

@@ -515,13 +515,13 @@ namespace PaymentServices.Calculators
                     {
                         installment.Status = LoanScheduleStatus.Paid;
                     }
-                    else if (installment.Status == LoanScheduleStatus.StillToPay)
+                    else if (installment.Status == LoanScheduleStatus.StillToPay || installment.Status == LoanScheduleStatus.AlmostPaid)
                     {
                         installment.Status = LoanScheduleStatus.PaidOnTime;
                     }
                 } else if (installment.AmountDue <= _amountToChargeFrom)
                 {
-                    installment.Status = LoanScheduleStatus.StillToPay;
+                    installment.Status = LoanScheduleStatus.AlmostPaid;
                 }
             }
         }
@@ -556,10 +556,18 @@ namespace PaymentServices.Calculators
                 _loan.LoanType.BalanceReachedExpected(installment);
                 CloseInstallment(installment);
             }
-            if (installment.Date < _term && installment.Status == LoanScheduleStatus.StillToPay && diff >= _amountToChargeFrom)
+
+            if (installment.Date < _term && (installment.Status == LoanScheduleStatus.StillToPay || installment.Status == LoanScheduleStatus.AlmostPaid))
             {
-                installment.Status = LoanScheduleStatus.Late;
-                _rescentLate.Add(installment);
+                if (diff >= _amountToChargeFrom)
+                {
+                    installment.Status = LoanScheduleStatus.Late;
+                    _rescentLate.Add(installment);
+                }
+                else
+                {
+                    installment.Status = LoanScheduleStatus.AlmostPaid;
+                }
             }
             else
             {
