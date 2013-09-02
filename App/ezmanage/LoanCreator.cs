@@ -18,11 +18,11 @@ namespace ezmanage
         private readonly ICustomerRepository _customerRepository;
         private readonly IUsersRepository _users;
 
-        public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, CustomerStatusesRepository customerStatusesRepository, IPacnetService pacnetService,
+        public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService,
                                    IAppCreator appCreator, IZohoFacade crm, IAgreementsGenerator agreementsGenerator,
                                    EzContext context, ICustomerRepository customerRepository, IUsersRepository users,
                                    LoanBuilder loanBuilder, AvailableFundsValidator validator)
-			: base(loanHistoryRepository, customerStatusesRepository, pacnetService, appCreator, crm, agreementsGenerator, context, loanBuilder, validator)
+			: base(loanHistoryRepository, pacnetService, appCreator, crm, agreementsGenerator, context, loanBuilder, validator)
         {
             _context = context;
             _customerRepository = customerRepository;
