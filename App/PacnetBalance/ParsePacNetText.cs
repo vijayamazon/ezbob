@@ -56,7 +56,7 @@ namespace PacnetBalance {
 
 				if (!DateTime.TryParse(text, out date)) {
 					Logger.Error("Error parsing Date: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing Date: {0}", text));
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Date: {0}", text));
 				} // if
 
 				Logger.Info("Date: {0}", date);
@@ -68,7 +68,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out openingBalance)) {
 					Logger.Error("Error parsing OpeningBalance: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing OpeningBalance: {0}", text));
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing OpeningBalance: {0}", text));
 				} // if
 
 				Logger.Info("OpeningBalance: {0}", openingBalance);
@@ -80,7 +80,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out closingBalance)) {
 					Logger.Error("Error parsing ClosingBalance: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing ClosingBalance: {0}", text)); 
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing ClosingBalance: {0}", text)); 
 				} // if
 
 				Logger.Info("ClosingBalance: {0}", closingBalance);
@@ -92,7 +92,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out credits)) {
 					Logger.Error("Error parsing Credits: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing Credits: {0}", text)); 
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Credits: {0}", text)); 
 				} // if
 
 				Logger.Info("Credits: {0}", credits);
@@ -104,7 +104,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out debits)) {
 					Logger.Error("Error parsing Debits: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing Debits: {0}", text)); 
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Debits: {0}", text)); 
 				} // if
 
 				Logger.Info("Debits: {0}", debits);
@@ -117,7 +117,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out value)) {
 					Logger.Error("Error parsing FasterPayment: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing FasterPayment: {0}", text)); 
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing FasterPayment: {0}", text)); 
 				} // if
 
 				fasterPayment.Add(value);
@@ -131,7 +131,7 @@ namespace PacnetBalance {
 
 				if (!decimal.TryParse(text, out value)) {
 					Logger.Error("Error parsing Fee: {0}", text);
-					throw new Exception(string.Format("PacNet Error parsing Fee: {0}", text)); 
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Fee: {0}", text)); 
 				} // if
 
 				fee.Add(value);

@@ -60,11 +60,13 @@ namespace PacnetBalance {
 					break;
 				} // if
 
-				try {
-					var imap = new Imap {
-						// Enable SSL/TLS if necessary
-						SslMode = MailBee.Security.SslStartupMode.OnConnect
-					};
+				try
+				{
+					var imap = new Imap
+						{
+							// Enable SSL/TLS if necessary
+							SslMode = MailBee.Security.SslStartupMode.OnConnect
+						};
 
 					// Connect to IMAP server
 					imap.Connect(m_oConf.Server, m_oConf.Port);
@@ -77,23 +79,28 @@ namespace PacnetBalance {
 					// Select Inbox folder
 					imap.SelectFolder("Inbox");
 
-					UidCollection uids = (UidCollection)imap.Search(true, "UNSEEN", null);
+					UidCollection uids = (UidCollection) imap.Search(true, "UNSEEN", null);
 
 					Debug("Unseen email count: {0}", uids.Count);
 
-					if (uids.Count > 0) {
+					if (uids.Count > 0)
+					{
 						Debug("Fetching unseen messages...");
 
 						MailMessageCollection msgs = imap.DownloadEntireMessages(uids.ToString(), true);
 
 						bool handledMail = false;
 
-						foreach (MailMessage msg in msgs) {
+						foreach (MailMessage msg in msgs)
+						{
 							Info("Recent message index: {0} Subject: {1}", msg.IndexOnServer, msg.Subject);
 
-							if (msg.HasAttachments) {
-								foreach (Attachment attachment in msg.Attachments) {
-									if (Consts.AttachmentContentTypes.Contains(attachment.ContentType)) {
+							if (msg.HasAttachments)
+							{
+								foreach (Attachment attachment in msg.Attachments)
+								{
+									if (Consts.AttachmentContentTypes.Contains(attachment.ContentType))
+									{
 										Info("Has pdf attachment {0}", attachment.Filename);
 										byte[] data = attachment.GetData();
 										ParsePacNetText.ParsePdf(data);
@@ -114,9 +121,18 @@ namespace PacnetBalance {
 
 					imap.Disconnect();
 				}
+				catch (PacNetBalanceException pex)
+				{
+					Error("PacNetBalanceException: {0}", pex);
+					Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", pex.ToString(),
+					                       "dev@ezbob.com");
+				}
+				catch (MailBeeStreamException mex)
+				{
+					Error("MailBeeStreamException: {0}", mex);
+				}
 				catch (Exception e) {
-					Error("Failed to fetch messages: {0}", e);
-					Mailer.Mailer.SendMail(m_oConf.LoginAddress, m_oConf.LoginPassword, "PacNet Balance Report Error", e.ToString(), "dev@ezbob.com");
+					Error("Some generic Exception: {0}", e);
 				} // try
 
 				Debug("Sleeping...");
@@ -141,8 +157,8 @@ namespace PacnetBalance {
 
 		#region private
 
-		private TimeSpan m_oTotalWaitingTime;
-		private Conf m_oConf;
+		private readonly TimeSpan m_oTotalWaitingTime;
+		private readonly Conf m_oConf;
 
 		#endregion private
 	} // class Processor

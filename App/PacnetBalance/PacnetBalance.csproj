@@ -63,6 +63,7 @@
     <Compile Include="Conf.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="PacNetBalance.cs" />
+    <Compile Include="PacNetBalanceException.cs" />
     <Compile Include="PacNetBalanceRow.cs" />
     <Compile Include="PacNetTestFixture.cs" />
     <Compile Include="ParsePacNetText.cs" />

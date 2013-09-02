@@ -75,7 +75,7 @@ namespace PacnetBalance
 
 			if (sb.Length > 0)
 			{
-				throw new Exception(sb.ToString());
+				throw new PacNetBalanceException(sb.ToString());
 			}
 		} // VerifyCalculatedValues
 
@@ -116,7 +116,7 @@ namespace PacnetBalance
 			catch (Exception e)
 			{
 				Logger.Error("Error inserting row. Error was:{0}", e);
-				throw new Exception(string.Format("Pacnet Error inserting row. Error was:{0}", e));
+				throw new PacNetBalanceException(string.Format("Pacnet Error inserting row. Error was:{0}", e));
 			} // try
 		} // SavePacNetBalanceToDb
 	} // class PacNetBalance
