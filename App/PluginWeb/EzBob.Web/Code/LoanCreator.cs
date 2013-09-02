@@ -32,13 +32,11 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly AvailableFundsValidator _availableFundsValidator;
-		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
 
 		public LoanCreator(
 			ILoanHistoryRepository loanHistoryRepository,
-			ICustomerStatusesRepository customerStatusesRepository,
 			IPacnetService pacnetService,
 			IAppCreator appCreator,
 			IZohoFacade crm,
@@ -55,10 +53,6 @@
 			_context = context;
 			_loanBuilder = loanBuilder;
 			_availableFundsValidator = availableFundsValidator;
-			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-			{
-				statusIndex2Name.Add(status.Id, status.Name);
-			}
 		}
 
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
@@ -214,7 +208,7 @@
 				!cus.CreditSum.HasValue ||
 				!cus.Status.HasValue ||
 				cus.Status.Value != Status.Approved ||
-				!statusIndex2Name.ContainsKey(cus.CollectionStatus.CurrentStatus) || statusIndex2Name[cus.CollectionStatus.CurrentStatus] != "Enabled")
+				cus.CollectionStatus.CurrentStatus.Name != "Enabled")
 			{
 				throw new Exception("Invalid customer state");
 			}

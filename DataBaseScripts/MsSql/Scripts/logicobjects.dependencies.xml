@@ -301,12 +301,6 @@
     <oType>Trigger</oType>
   </DependencyData>
   <DependencyData>
-    <oName>FK_LoanAgreement_LoanAgreementTemplate</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_LoanAgreement_LoanAgreementTemplate.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
     <oName>FK_LoanOptions_Loan</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanOptions_Loan.sql</oFileName>
@@ -772,18 +766,6 @@
     <oName>FK_MP_PlayOrderItem_MP_Order</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_MP_PlayOrderItem_MP_Order.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>FK_RtiTaxMonthEntries_Record</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_RtiTaxMonthEntries_Record.sql</oFileName>
-    <oType>Constraint</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>FK_RtiTaxMonthRecord_MP</oName>
-    <oRank>0</oRank>
-    <oFileName>10_CONSTRAINTS\FK_RtiTaxMonthRecord_MP.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -2674,12 +2656,6 @@
     <oName>RptPaymentsReceived</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptPaymentsReceived.sql</oFileName>
-    <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>RptPaypalEbayPhones</oName>
-    <oRank>1</oRank>
-    <oFileName>07_PROCEDURES\RptPaypalEbayPhones.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>

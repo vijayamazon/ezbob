@@ -38,7 +38,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
 		private readonly IZohoFacade _crm;
-		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
         //-------------------------------------------------------------------------------
         public GetCashController(
@@ -61,10 +60,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _loanCreator = loanCreator;
             _crm = crm;
 			_config = ConfigurationRootBob.GetConfiguration().PayPoint;
-			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-			{
-				statusIndex2Name.Add(status.Id, status.Name);
-			}
         }
 
         [NoCache]
@@ -111,8 +106,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 !customer.CreditSum.HasValue ||
                 !customer.Status.HasValue ||
                 customer.Status.Value != Status.Approved ||
-				!statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) ||
-				statusIndex2Name[customer.CollectionStatus.CurrentStatus] != "Enabled")
+				customer.CollectionStatus.CurrentStatus.Name != "Enabled")
             {
                 throw new Exception("Invalid customer state");
             }

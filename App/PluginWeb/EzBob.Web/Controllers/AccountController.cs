@@ -43,12 +43,10 @@ namespace EzBob.Web.Controllers
         private readonly ICustomerSessionsRepository _sessionIpLog;
 		private readonly ITestCustomerRepository _testCustomers;
 		private readonly IConfigurationVariablesRepository _configurationVariables;
-		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
         //------------------------------------------------------------------------
         public AccountController(
 									MembershipProvider membershipProvider,
-									CustomerStatusesRepository customerStatusesRepository,
                                     IUsersRepository users,
                                     CustomerRepository customers,
                                     IAppCreator appCreator,
@@ -74,10 +72,6 @@ namespace EzBob.Web.Controllers
             _sessionIpLog = sessionIpLog;
 			_testCustomers = testCustomers;
 			_configurationVariables = configurationVariables;
-			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-			{
-				statusIndex2Name.Add(status.Id, status.Name);
-			}
         }
         //------------------------------------------------------------------------
         [IsSuccessfullyRegisteredFilter]
@@ -131,7 +125,7 @@ namespace EzBob.Web.Controllers
                     {
                         var customer = _customers.Get(user.Id);
 						;
-						if (statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) && statusIndex2Name[customer.CollectionStatus.CurrentStatus] == "Disabled")
+						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
                         {
                             ModelState.AddModelError("",
                                                      "This account is closed, please contact EZBOB customer care<br/>customercare@ezbob.com");
@@ -186,7 +180,7 @@ namespace EzBob.Web.Controllers
                     if (!isUnderwriter)
                     {
 						var customer = _customers.Get(user.Id);
-						if (statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) && statusIndex2Name[customer.CollectionStatus.CurrentStatus] == "Disabled")
+						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
                         {
                             errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
                             _sessionIpLog.AddSessionIpLog(new CustomerSession()

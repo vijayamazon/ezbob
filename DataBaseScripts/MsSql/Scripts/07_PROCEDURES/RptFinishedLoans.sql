@@ -97,7 +97,7 @@ IF OBJECT_ID('tempdb..#MaxApproved') IS NOT NULL DROP TABLE #MaxApproved
     OR Name LIKE '%q@q%'
     OR Name LIKE '%1@1%'
     OR C.IsTest=1)
- AND C.CollectionStatus = 0 -- Not Enabled Good (Disabled/Legal/Fraud/FraudSuspect/Risky/Bad)
+ AND C.CollectionStatus <> 0 -- Not Enabled Good (Disabled/Legal/Fraud/FraudSuspect/Risky/Bad)
  GROUP BY C.Id, C.Name, C.FullName,L.NumberOfLoans,C.DaytimePhone, C.MobilePhone, CR.CRMStatus, CR.CRMAction, CR.CRMComment
 
 --------------------------Final Merge-------------------------- 

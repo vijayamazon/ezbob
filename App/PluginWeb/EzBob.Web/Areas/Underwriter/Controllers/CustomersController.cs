@@ -344,7 +344,7 @@
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridCollection, settings)
 			{
-				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.CollectionStatus.CurrentStatus == legalIndex || c.CollectionStatus.CurrentStatus == defaultIndex))
+				CustomizeFilter = crit => crit.Add(Restrictions.Where<Customer>(c => c.CollectionStatus.CurrentStatus.Id == legalIndex || c.CollectionStatus.CurrentStatus.Id == defaultIndex))
 			};
 			return result;
 		}

@@ -16,7 +16,7 @@ namespace EzBob.Tests.LoanCreatorTests
                 PersonalInfo = new PersonalInfo() { FirstName = "Test" },
                 BankAccount = new BankAccount(),
                 Status = Status.Approved,
-                CollectionStatus = new CollectionStatus { CurrentStatus = 0 },
+                CollectionStatus = new CollectionStatus { CurrentStatus = new CustomerStatuses() { Id=0} },
                 CreditSum = 10000,
                 OfferStart = DateTime.UtcNow.AddDays(-1),
                 OfferValidUntil = DateTime.UtcNow.AddDays(1),

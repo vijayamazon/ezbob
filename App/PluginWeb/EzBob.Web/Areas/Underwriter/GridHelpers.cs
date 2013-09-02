@@ -1092,7 +1092,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Sortable = true,
 				Width = 95,
 				DataType = TypeCode.String,
-				Data = x => x.CollectionStatus.CurrentStatus.ToString()
+				Data = x => x.CollectionStatus.CurrentStatus.Name
 			});
 		}
 

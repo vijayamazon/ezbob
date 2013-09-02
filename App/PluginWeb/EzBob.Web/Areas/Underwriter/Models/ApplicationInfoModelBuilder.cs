@@ -1,19 +1,14 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
-	using Configuration;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
 	using Code;
 	using Infrastructure;
-	using MailApi;
 	using StructureMap;
-	using log4net;
 
 	public class ApplicationInfoModelBuilder
 	{
@@ -23,11 +18,9 @@
         private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
-			CustomerStatusesRepository customerStatusesRepository,
 			IPacNetManualBalanceRepository manualFunds, 
             IDiscountPlanRepository discounts, 
             ILoanTypeRepository loanTypes)
@@ -36,10 +29,6 @@
 			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
-			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-			{
-				statusIndex2Name.Add(status.Id, status.Name);
-			}
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -103,7 +92,7 @@
             var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
                                        customer.CreditResult == CreditResultStatus.Escalated;
 
-			var isEnabled = statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) && statusIndex2Name[customer.CollectionStatus.CurrentStatus] == "Enabled";
+			var isEnabled = customer.CollectionStatus.CurrentStatus.Name == "Enabled";
             model.Editable = isWaitingOrEscalated && cr != null && isEnabled;
 
             model.IsModified = !string.IsNullOrEmpty(cr.LoanTemplate);

@@ -219,7 +219,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                     m.Map(x => x.CollectionFee);
                     m.Map(x => x.CollectionDateOfDeclaration).CustomType<UtcDateTimeType>();
                     m.Map(x => x.IsAddCollectionFee);
-                    m.Map(x => x.CurrentStatus).Column("CollectionStatus");
+					m.References(x => x.CurrentStatus, "CollectionStatus").Cascade.All();
                 });
             Map(x => x.WizardStep).CustomType(typeof (WizardStepType));
 
