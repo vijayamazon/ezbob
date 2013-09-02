@@ -1015,25 +1015,46 @@ namespace EzBob.Web.Areas.Underwriter
             });
         }
 
-        public static void CreateLatestCRMstatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-        {
-            gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-            {
+		public static void CreateLatestCRMstatus(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
 				Caption = "CRM status",
 				Name = "LatestCRMstatus",
 				Index = "LatestCRMstatus",
-                Resizable = false,
-                Align = Align.Center,
-                Title = false,
-                Hidden = false,
-                Fixed = false,
-                Search = false,
-                Sortable = true,
-                Width = 65,
-                DataType = TypeCode.String,
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Search = false,
+				Sortable = true,
+				Width = 65,
+				DataType = TypeCode.String,
 				Data = x => x.LatestCRMstatus ?? string.Empty
-                });
-        }
+			});
+		}
+
+		public static void CreateLatestCRMComment(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "CRM Comment",
+				Name = "LatestCRMComment",
+				Index = "LatestCRMComment",
+				Formatter = "withScrollbar",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Search = false,
+				Sortable = true,
+				Width = 100,
+				DataType = TypeCode.String,
+				Data = x => x.LatestCRMComment ?? string.Empty
+			});
+		}
 
 		public static void CreateAmountOfInteractions(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
 		{

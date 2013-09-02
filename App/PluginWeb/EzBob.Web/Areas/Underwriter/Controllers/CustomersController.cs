@@ -466,6 +466,8 @@
 			GridHelpers.CreateLateAmount(gridModel);
 			gridModel.Columns.First(x => x.Index == "OfferValidUntil").Hidden = true;
 			GridHelpers.CreateDelinquencyColumn(gridModel);
+			GridHelpers.CreateLatestCRMstatus(gridModel);
+			GridHelpers.CreateLatestCRMComment(gridModel);
 			return gridModel;
 		}
 
@@ -510,6 +512,7 @@
 			GridHelpers.CreateManualyOfferDate(gridModel);
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreateLatestCRMstatus(gridModel);
+			GridHelpers.CreateLatestCRMComment(gridModel);
 			GridHelpers.CreateAmountOfInteractions(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
 			return gridModel;
@@ -525,6 +528,7 @@
 			GridHelpers.CreateAmountTaken(gridModel);
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreateLatestCRMstatus(gridModel);
+			GridHelpers.CreateLatestCRMComment(gridModel);
 			GridHelpers.CreateCollectionStatusColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
 			return gridModel;

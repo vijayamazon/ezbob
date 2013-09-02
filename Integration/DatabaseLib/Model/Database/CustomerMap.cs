@@ -286,14 +286,19 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Formula(
                     @"(select MAX(l.[UnderwriterDecisionDate])from [CashRequests] l where l.IdCustomer = Id)")
                 .Not.Insert()
-                .Not.Update();
-            Map(x => x.LatestCRMstatus)
-                .Formula(
-                @"(SELECT TOP 1 ST.NAME FROM [CustomerRelations] AS CR LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
+				.Not.Update();
+			Map(x => x.LatestCRMstatus)
+				.Formula(
+				@"(SELECT TOP 1 ST.NAME FROM [CustomerRelations] AS CR LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
                         WHERE CR.CustomerId=Id ORDER BY CR.Timestamp DESC
                     )")
-                .Not.Insert()
-                .Not.Update();
+				.Not.Insert()
+				.Not.Update();
+			Map(x => x.LatestCRMComment)
+				.Formula(
+				@"(SELECT TOP 1 CR.Comment FROM [CustomerRelations] AS CR WHERE CR.CustomerId=Id ORDER BY CR.Timestamp DESC)")
+				.Not.Insert()
+				.Not.Update();
             Map(x => x.AmountOfInteractions)
                 .Formula(
                     @"(SELECT COUNT(*) FROM [CashRequests] cr
