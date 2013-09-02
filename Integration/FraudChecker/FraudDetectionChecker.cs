@@ -96,8 +96,8 @@ namespace FraudChecker
                 InternalPhoneFromMpCheck(fraudDetections, customer);
                 InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
                 InternalBankAccountCheck(fraudDetections, customerPortion, customer);
-                InternalDobLess21(customer, fraudDetections);
             }
+            InternalDobLess21(customer, fraudDetections);
 
             //Director
             var directorCount = _session.QueryOver<Director>().RowCount();
@@ -518,6 +518,7 @@ namespace FraudChecker
                 from c in customerPortion
 				where c.WizardStep == WizardStepType.AllStep
                 where c.BankAccount != null
+                where !string.IsNullOrEmpty(c.BankAccount.AccountNumber) && !string.IsNullOrEmpty(c.BankAccount.SortCode)
                 where
                     c.BankAccount.SortCode == customer.BankAccount.SortCode &&
                     c.BankAccount.AccountNumber == customer.BankAccount.AccountNumber
@@ -643,14 +644,16 @@ namespace FraudChecker
 
         private static string PrepareResultForOutput(IEnumerable<FraudDetection> fraudDetections)
         {
-            return string.Join("\n", fraudDetections.Select(x =>
-                                                            x.CompareField + ",  " +
-                                                            x.CurrentCustomer.Id + ",  " +
-                                                            x.CurrentField + ",  " +
-                                                            (x.ExternalUser != null ? x.ExternalUser.Id.ToString(CultureInfo.InvariantCulture) : "") + ",  " +
-                                                            x.Id + ",  " +
-                                                            (x.InternalCustomer != null ? x.InternalCustomer.Id.ToString(CultureInfo.InvariantCulture) : "") + ",  " +
-                                                            x.Value));
+            return string.Join("\n",
+                fraudDetections.Select(
+                    x =>
+                        string.Format(
+                            "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>",
+                            x.ExternalUser != null ? "External" : "Internal",
+                            x.CurrentField,
+                            x.CompareField,
+                            x.Value,
+                            x.Concurrence)));
         }
 
         private static string ConcurrencePrepare(FraudDetection val)
@@ -663,10 +666,20 @@ namespace FraudChecker
                     val.ExternalUser.Id);
             }
 
-            var fullname = val.InternalCustomer.PersonalInfo != null ? val.InternalCustomer.PersonalInfo.Fullname : "-";
-            return string.Format("{0} (id={1})",
-                    fullname,
-                    val.InternalCustomer.Id);
+            string fullname;
+            int id;
+
+            if (val.InternalCustomer == null) //for own check as DOB<21
+            {
+                fullname = val.CurrentCustomer.PersonalInfo.Fullname;
+                id = val.CurrentCustomer.Id;
+            }
+            else
+            {
+                fullname = val.InternalCustomer.PersonalInfo != null ? val.InternalCustomer.PersonalInfo.Fullname : "-";
+                id = val.InternalCustomer.Id;
+            }
+            return string.Format("{0} (id={1})",fullname,id);
         }
     }
 

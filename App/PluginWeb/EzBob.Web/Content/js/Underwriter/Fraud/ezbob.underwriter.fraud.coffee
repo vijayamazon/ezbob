@@ -149,7 +149,7 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
         xhr.complete (data)=>  @showData data.responseText
 
     showData: (data)->
-        dialog = $('<div/>').html("<textarea wrap='off' class='cais-file-view'>#{data}</textarea>" )
+        dialog = $('<div/>').html("<table class='table table-bordered'><tr><td>Check Type</td><td>Current Field</td><td>Compare Field</td><td>Value</td><td>Concurrence</td></tr>#{data}</table>" )
         dialog.dialog
             width: '75%'
             height: 600
