@@ -829,8 +829,14 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_LoanAgreement_LoanAgreementTemplate</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanAgreement_LoanAgreementTemplate.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>LoanAgreement</oName>
-    <oRank>1</oRank>
+    <oRank>2</oRank>
     <oFileName>02_TABLES\LoanAgreement.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
@@ -1768,6 +1774,30 @@
     <oName>MP_PlayOrderItem</oName>
     <oRank>5</oRank>
     <oFileName>02_TABLES\MP_PlayOrderItem.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_RtiTaxMonthEntries_Record</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_RtiTaxMonthEntries_Record.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_RtiTaxMonthEntries</oName>
+    <oRank>5</oRank>
+    <oFileName>02_TABLES\MP_RtiTaxMonthEntries.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_RtiTaxMonthRecord_MP</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_RtiTaxMonthRecord_MP.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_RtiTaxMonthRecords</oName>
+    <oRank>4</oRank>
+    <oFileName>02_TABLES\MP_RtiTaxMonthRecords.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
