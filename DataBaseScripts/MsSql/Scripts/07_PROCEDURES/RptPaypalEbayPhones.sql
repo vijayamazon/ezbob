@@ -11,30 +11,27 @@ CREATE PROCEDURE RptPaypalEbayPhones
 		@DateEnd   DATETIME
 AS
 BEGIN
-
-SET @DateStart = CONVERT(DATE, @DateStart)
-SET @DateEnd = CONVERT(DATE, @DateEnd)
-
-IF datediff(day, @DateStart, @DateEnd) = 1 SET @DateStart = dateadd(month, -1,@DateEnd)
+	SET @DateStart = CONVERT(DATE, @DateStart)
+	SET @DateEnd = CONVERT(DATE, @DateEnd)
 
 
-IF OBJECT_ID('tempdb..#temp1') IS NOT NULL
+if OBJECT_ID('tempdb..#temp1') is not NULL
 BEGIN
                 DROP TABLE #temp1
 END
  
-IF OBJECT_ID('tempdb..#temp2') IS NOT NULL
+if OBJECT_ID('tempdb..#temp2') is not NULL
 BEGIN
                 DROP TABLE #temp2
 END
 
-IF OBJECT_ID('tempdb..#MP1') IS NOT NULL
+if OBJECT_ID('tempdb..#MP1') is not NULL
 BEGIN
                 DROP TABLE #MP1
 END
 
  
-IF OBJECT_ID('tempdb..#MP_temp1') IS NOT NULL
+if OBJECT_ID('tempdb..#MP_temp1') is not NULL
 BEGIN
                 DROP TABLE #MP_temp1
 END

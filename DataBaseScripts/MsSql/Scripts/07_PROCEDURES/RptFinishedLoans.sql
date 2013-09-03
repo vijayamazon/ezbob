@@ -14,8 +14,6 @@ BEGIN
 SET @DateEnd = CONVERT(DATE, @DateEnd)
 SET @DateStart = CONVERT(DATE, @DateStart)
 
-IF datediff(day, @DateStart, @DateEnd) = 1 SET @DateStart = dateadd(week, -1,@DateEnd)
-
 ---------------------------CRM Notes------------------------------ 
  IF OBJECT_ID('tempdb..#CRMNotes') IS NOT NULL DROP TABLE #CRMNotes
  SELECT

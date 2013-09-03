@@ -175,6 +175,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_Customer_CustomerStatuses</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_Customer_CustomerStatuses.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>TR_CustomerPersonalInfoLoyalty</oName>
     <oRank>1</oRank>
     <oFileName>09_TRIGGERS\TR_CustomerPersonalInfoLoyalty.sql</oFileName>
@@ -1796,7 +1802,7 @@
   </DependencyData>
   <DependencyData>
     <oName>Export_GetTemplates</oName>
-    <oRank>2</oRank>
+    <oRank>1</oRank>
     <oFileName>07_PROCEDURES\Export_GetTemplates.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
@@ -3341,12 +3347,6 @@
     <oRank>2</oRank>
     <oFileName>07_PROCEDURES\Rank_2\UpdateRole.sql</oFileName>
     <oType>StoredProcedure</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>Export_GetEntityLinkSeries</oName>
-    <oRank>1</oRank>
-    <oFileName>08_FUNCTIONS\Export_GetEntityLinkSeries.sql</oFileName>
-    <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
     <oName>fn_GetCustomerAdress</oName>

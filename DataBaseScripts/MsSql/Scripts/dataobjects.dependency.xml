@@ -445,6 +445,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_Customer_CustomerStatuses</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_Customer_CustomerStatuses.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>Customer</oName>
     <oRank>2</oRank>
     <oFileName>02_TABLES\Customer.sql</oFileName>
