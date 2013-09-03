@@ -114,6 +114,10 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				Log.Error(cge);
 				return this.JsonNet(new { error = cge.Message });
 			}
+			catch (InvalidCredentialsException ice) {
+				Log.Info(ice);
+				return this.JsonNet(new { error = ice.Message });
+			}
 			catch (Exception e) {
 				Log.Error(e);
 				return this.JsonNet(new { error = e.Message });
