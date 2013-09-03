@@ -3349,6 +3349,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>Export_GetEntityLinkSeries</oName>
+    <oRank>1</oRank>
+    <oFileName>08_FUNCTIONS\Export_GetEntityLinkSeries.sql</oFileName>
+    <oType>UserDefinedFunction</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>fn_GetCustomerAdress</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\fn_GetCustomerAdress.sql</oFileName>
