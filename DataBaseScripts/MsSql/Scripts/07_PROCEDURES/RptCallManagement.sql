@@ -38,6 +38,7 @@ WHERE c.Id NOT IN
 	 OR Name LIKE '%1@1%'
 	 OR C.IsTest=1
 	 )
+AND c.WizardStep = 4  -- finished wizard only
 
 ----------- GET Loan Count Data---------
 IF OBJECT_ID('tempdb..#temp2') IS NOT NULL DROP TABLE #temp2
