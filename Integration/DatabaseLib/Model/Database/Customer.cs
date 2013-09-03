@@ -726,5 +726,4 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual double CollectionFee { get; set; }
         public virtual string CollectionDescription { get; set; }
     }
-
 }
