@@ -43,38 +43,50 @@ namespace EzBob.Web.Controllers
         private readonly ICustomerSessionsRepository _sessionIpLog;
 		private readonly ITestCustomerRepository _testCustomers;
 		private readonly IConfigurationVariablesRepository _configurationVariables;
+	    private readonly CustomerStatuses enabledStatus;
 
         //------------------------------------------------------------------------
-        public AccountController(
-									MembershipProvider membershipProvider,
-                                    IUsersRepository users,
-                                    CustomerRepository customers,
-                                    IAppCreator appCreator,
-                                    IEzBobConfiguration config,
-                                    ISessionManager sessionManager,
-                                    IEzbobWorkplaceContext context,
-                                    IEmailConfirmation confirmation,
-                                    IZohoFacade zoho,
-                                    ICustomerSessionsRepository sessionIpLog,
-                                    ITestCustomerRepository testCustomers,
-                                    IConfigurationVariablesRepository configurationVariables
-            )
-        {
-            _membershipProvider = membershipProvider;
-            _users = users;
-            _customers = customers;
-            _appCreator = appCreator;
-            _config = config;
-            _sessionManager = sessionManager;
-            _context = context;
-            _confirmation = confirmation;
-            _zoho = zoho;
-            _sessionIpLog = sessionIpLog;
-			_testCustomers = testCustomers;
-			_configurationVariables = configurationVariables;
-        }
-        //------------------------------------------------------------------------
-        [IsSuccessfullyRegisteredFilter]
+	    public AccountController(
+		    MembershipProvider membershipProvider,
+		    IUsersRepository users,
+		    CustomerRepository customers,
+		    IAppCreator appCreator,
+		    IEzBobConfiguration config,
+		    ISessionManager sessionManager,
+		    IEzbobWorkplaceContext context,
+		    IEmailConfirmation confirmation,
+		    IZohoFacade zoho,
+		    ICustomerSessionsRepository sessionIpLog,
+		    ITestCustomerRepository testCustomers,
+		    IConfigurationVariablesRepository configurationVariables,
+		    CustomerStatusesRepository customerStatusesRepository
+		    )
+	    {
+		    _membershipProvider = membershipProvider;
+		    _users = users;
+		    _customers = customers;
+		    _appCreator = appCreator;
+		    _config = config;
+		    _sessionManager = sessionManager;
+		    _context = context;
+		    _confirmation = confirmation;
+		    _zoho = zoho;
+		    _sessionIpLog = sessionIpLog;
+		    _testCustomers = testCustomers;
+		    _configurationVariables = configurationVariables;
+
+		    foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
+		    {
+			    if (status.Name == "Enabled")
+			    {
+				    enabledStatus = status;
+				    break;
+			    }
+		    }
+	    }
+
+	    //------------------------------------------------------------------------
+	    [IsSuccessfullyRegisteredFilter]
         public ActionResult LogOn(string returnUrl)
         {
             return View(new LogOnModel { ReturnUrl = returnUrl });
@@ -377,15 +389,16 @@ namespace EzBob.Web.Controllers
                 var user = _users.GetUserByLogin(model.EMail);
                 var g = new RefNumberGenerator(_customers);
                 var isAutomaticTest = IsAutomaticTest(model.EMail);
-                var customer = new Customer()
-                {
-                    Name = model.EMail,
-                    Id = user.Id,
-                    Status = Status.Registered,
-                    RefNumber = g.GenerateForCustomer(),
-                    WizardStep = WizardStepType.SignUp,
+				var customer = new Customer
+				{
+					Name = model.EMail,
+					Id = user.Id,
+					Status = Status.Registered,
+					RefNumber = g.GenerateForCustomer(),
+					WizardStep = WizardStepType.SignUp,
+					CollectionStatus = new CollectionStatus { CurrentStatus = enabledStatus },
 					IsTest = isAutomaticTest,
-                };
+				};
 
                 var sourceref = Request.Cookies["sourceref"];
                 if (sourceref != null)
