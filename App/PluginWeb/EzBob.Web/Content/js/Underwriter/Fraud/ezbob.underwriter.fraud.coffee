@@ -123,30 +123,16 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
 
     events:
         "click .add":"addButtonClicked"
-        "click .internal":"internalClicked"
-        "click .external":"externalClicked"
         "click .all":"allClicked"
-
-    internalClicked: ->
-        cid = prompt "Customer Id"
-        return unless cid
-        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "internal" }
-        xhr.complete (data)=>  @showData data.responseText
         
     allClicked: ->
         BlockUi "on"
         cid = prompt "Customer Id"
         return unless cid
-        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "all" }
+        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid }
         xhr.complete (data)=>  
             @showData data.responseText
             BlockUi "off"
-
-    externalClicked: ->
-        cid = prompt "Customer Id"
-        return unless cid
-        xhr = $.get "#{gRootPath}Underwriter/Fraud/RunCheck", {id: cid, type: "external" }
-        xhr.complete (data)=>  @showData data.responseText
 
     showData: (data)->
         dialog = $('<div/>').html("<table class='table table-bordered'><tr><td>Check Type</td><td>Current Field</td><td>Compare Field</td><td>Value</td><td>Concurrence</td></tr>#{data}</table>" )

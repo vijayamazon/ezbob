@@ -55,7 +55,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BussinessChecker.cs" />
+    <Compile Include="ExternalChecker.cs" />
     <Compile Include="FraudDetectionChecker.cs" />
+    <Compile Include="FraudDetectionModel.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="InternalChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

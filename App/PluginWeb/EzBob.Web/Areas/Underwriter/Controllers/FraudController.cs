@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
@@ -23,18 +22,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         [Ajax]
         [Transactional]
-        public string RunCheck(int id, string type)
+        public string RunCheck(int id)
         {
             var fraudChecker = new FraudDetectionChecker();
-            switch (type)
-            {
-                case "internal":
-                    return fraudChecker.InternalSystemDecision(id, DateTime.UtcNow);
-                case "external":
-                    return fraudChecker.ExternalSystemDecision(id, DateTime.UtcNow);
-                default:
-                    return fraudChecker.Check(id);
-            }
+            return fraudChecker.Check(id);
         }
 
         [HttpGet]
