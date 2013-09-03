@@ -444,8 +444,6 @@ table.dataTable thead td:active {
 
 #divAdminArea { display: none; }
 
-#divAdminArea h3 { text-align: center; }
-
 #aToggleAdminArea { display: inline-block; margin-right: 5em; }
 
 /*

@@ -202,6 +202,15 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAdminArea;
         
         /// <summary>
+        /// divAdminMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAdminMsg;
+        
+        /// <summary>
         /// edtAdminUserName control.
         /// </summary>
         /// <remarks>
@@ -209,6 +218,24 @@ namespace EzReportsWeb {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox edtAdminUserName;
+        
+        /// <summary>
+        /// btnAdminCreateUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton btnAdminCreateUser;
+        
+        /// <summary>
+        /// selAdminUserResetPass control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList selAdminUserResetPass;
         
         /// <summary>
         /// edtAdminPassword control.
@@ -220,31 +247,40 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.WebControls.TextBox edtAdminPassword;
         
         /// <summary>
-        /// rblAdminAction control.
+        /// btnAdminResetPass control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblAdminAction;
+        protected global::System.Web.UI.WebControls.ImageButton btnAdminResetPass;
         
         /// <summary>
-        /// btnAdminDo control.
+        /// selAdminUserDrop control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton btnAdminDo;
+        protected global::System.Web.UI.WebControls.DropDownList selAdminUserDrop;
         
         /// <summary>
-        /// divAdminMsg control.
+        /// btnAdminDropUser control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divAdminMsg;
+        protected global::System.Web.UI.WebControls.ImageButton btnAdminDropUser;
+        
+        /// <summary>
+        /// tblReportUserMap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Table tblReportUserMap;
         
         /// <summary>
         /// chkIsAdmin control.

@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="EzReportsWeb.Default" %>
+<%@ Import Namespace="EzReportsWeb" %>
 <%@ Import Namespace="Reports" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,7 +10,7 @@
 	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 
 	<link rel="stylesheet" href="css/combined.css" />
-
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"css/admin.css\" />" : "" %>
 	<%= Report.GetStyle().ToString() %>
 
 	<script src="js/jquery.js"></script>
@@ -93,33 +94,25 @@
 		<div id="divReportData" runat="server"></div>
 		<div id="divReportColumnTypes" runat="server"></div>
 		<div id="divAdminArea" runat="server">
-			<h3>Administration</h3>
-			<table class="center">
-				<tr>
-					<td>User name:</td>
-					<td><asp:TextBox runat="server" ID="edtAdminUserName"></asp:TextBox></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><asp:TextBox runat="server" ID="edtAdminPassword"></asp:TextBox></td>
-				</tr>
-				<tr>
-					<td>Action:</td>
-					<td>
-						<asp:RadioButtonList runat="server" ID="rblAdminAction">
-							<asp:ListItem Value="Reset" Text="Reset password" Selected="True"></asp:ListItem>
-							<asp:ListItem Value="Create" Text="Create user"></asp:ListItem>
-						</asp:RadioButtonList>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="center">
-						<asp:ImageButton ID="btnAdminDo" runat="server" OnClick="btnAdminDo_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
-					</td>
-				</tr>
-			</table>
-
+			<h2>Administration</h2>
 			<h3 runat="server" ID="divAdminMsg"></h3>
+
+			<div id="AdminLeftPane">
+				<h3>Create User</h3>
+				<asp:TextBox runat="server" ID="edtAdminUserName"></asp:TextBox>
+				<asp:ImageButton ID="btnAdminCreateUser" runat="server" OnClick="btnAdminCreateUser_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
+
+				<h3>Reset Password</h3>
+				<asp:DropDownList runat="server" ID="selAdminUserResetPass" />
+				<asp:TextBox runat="server" ID="edtAdminPassword"></asp:TextBox>
+				<asp:ImageButton ID="btnAdminResetPass" runat="server" OnClick="btnAdminResetPass_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
+
+				<h3>Drop User</h3>
+				<asp:DropDownList runat="server" ID="selAdminUserDrop"/>
+				<asp:ImageButton ID="btnAdminDropUser" runat="server" OnClick="btnAdminDropUser_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
+			</div>
+
+			<asp:Table runat="server" ID="tblReportUserMap"></asp:Table>
 		</div>
 		<asp:CheckBox runat="server" ID="chkIsAdmin" />
 	</form>

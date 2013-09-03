@@ -1095,6 +1095,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\Support\_Support.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_details.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_summary.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_rti_tax_years.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

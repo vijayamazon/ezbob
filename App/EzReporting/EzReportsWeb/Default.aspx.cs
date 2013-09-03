@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-
+using System.Web.UI.WebControls;
 using Aspose.Cells;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html;
 using Reports;
+using CheckBox = System.Web.UI.WebControls.CheckBox;
 
 namespace EzReportsWeb {
 	public partial class Default : Page {
@@ -18,6 +20,10 @@ namespace EzReportsWeb {
 		private static ASafeLog log;
 		private static AConnection oDB;
 		private static bool bIsAdmin;
+
+		public static bool IsAdmin() {
+			return bIsAdmin;
+		} // IsAdmin
 
 		protected void Page_Load(object sender, EventArgs e) {
 			if (!IsPostBack) {
@@ -40,8 +46,6 @@ namespace EzReportsWeb {
 				ddlReportTypes.DataBind();
 			} // if
 
-			divAdminMsg.InnerText = string.Empty;
-
 			bIsAdmin = oDB.ExecuteScalar<bool>(
 				"SELECT IsAdmin FROM ReportUsers WHERE UserName = @uname",
 				CommandSpecies.Text,
@@ -49,6 +53,11 @@ namespace EzReportsWeb {
 			);
 
 			chkIsAdmin.Checked = bIsAdmin;
+
+			if (bIsAdmin)
+				InitAdminArea(oDB, log, IsPostBack);
+
+			divAdminMsg.InnerText = string.Empty;
 
 			DateTime fDate, tDate;
 			bool isDaily;
@@ -210,7 +219,7 @@ namespace EzReportsWeb {
 			divCustomFilter.Visible = rblFilter.SelectedValue == "Custom";
 		} // rblFilter_SelectedIndexChanged
 
-		protected void btnAdminDo_Click(object sender, EventArgs e) {
+		protected void btnAdminCreateUser_Click(object sender, EventArgs e) {
 			divAdminMsg.InnerText = "Performing task...";
 
 			string sUserName = edtAdminUserName.Text.Trim();
@@ -219,6 +228,29 @@ namespace EzReportsWeb {
 				divAdminMsg.InnerText = "User name too short.";
 				return;
 			} // if
+
+			var rpta = new ReportAuthenticationLib.ReportAuthentication(oDB, log);
+
+			try {
+				rpta.AddUserToDb(sUserName, sUserName);
+				divAdminMsg.InnerText = "User has been created.";
+			}
+			catch (Exception ex) {
+				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
+			}
+
+			InitAdminArea(oDB, log);
+		} // btnAdminCreateUser_Click
+
+		protected void btnAdminResetPass_Click(object sender, EventArgs e) {
+			divAdminMsg.InnerText = "Performing task...";
+
+			if (selAdminUserResetPass.SelectedItem == null) {
+				divAdminMsg.InnerText = "User not selected.";
+				return;
+			} // if
+
+			string sUserName = selAdminUserResetPass.SelectedItem.Value;
 
 			string sPassword = edtAdminPassword.Text.Trim();
 
@@ -230,22 +262,161 @@ namespace EzReportsWeb {
 			var rpta = new ReportAuthenticationLib.ReportAuthentication(oDB, log);
 
 			try {
-				switch (rblAdminAction.SelectedValue) {
-				case "Reset":
-					rpta.ResetPassword(sUserName, sPassword);
-					divAdminMsg.InnerText = "Password has been reset.";
-					break;
-
-				case "Create":
-					rpta.AddUserToDb(sUserName, sUserName);
-					rpta.ResetPassword(sUserName, sPassword);
-					divAdminMsg.InnerText = "User has been created.";
-					break;
-				} // switch
+				rpta.ResetPassword(sUserName, sPassword);
+				divAdminMsg.InnerText = "Password has been reset.";
 			}
 			catch (Exception ex) {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
 			}
-		} // btnAdminDo_Click
+
+			InitAdminArea(oDB, log);
+		} // btnAdminResetPass_Click
+
+		protected void btnAdminDropUser_Click(object sender, EventArgs e) {
+			divAdminMsg.InnerText = "Performing task...";
+
+			if (selAdminUserDrop.SelectedItem == null) {
+				divAdminMsg.InnerText = "User not selected.";
+				return;
+			} // if
+
+			var rpta = new ReportAuthenticationLib.ReportAuthentication(oDB, log);
+
+			try {
+				int nUserID = Convert.ToInt32(selAdminUserDrop.SelectedItem.Value);
+				rpta.DropUser(nUserID);
+				divAdminMsg.InnerText = "User has been dropped.";
+			}
+			catch (Exception ex) {
+				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
+			}
+
+			InitAdminArea(oDB, log);
+		} // btnAdminDropUser_Click
+
+		private void InitAdminArea(AConnection oDB, ASafeLog log, bool bIsPostBack = false) {
+			DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
+
+			var oUsers = new SortedDictionary<string, int>();
+
+			foreach (DataRow row in oDbUsers.Rows) {
+				int nUserID = Convert.ToInt32(row["Id"]);
+				string sUserName = row["Name"].ToString();
+
+				oUsers[sUserName] = nUserID;
+			} // for each user row
+
+			SetReportUserMap(oDB, oUsers);
+
+			if (!bIsPostBack)
+				FillUserDropDowns(oUsers);
+		} // InitAdminArea
+
+		private void FillUserDropDowns(SortedDictionary<string, int> oUsers) {
+			selAdminUserDrop.Items.Clear();
+			selAdminUserResetPass.Items.Clear();
+
+			selAdminUserDrop.Items.Add(new ListItem { Value = "", Text = "" });
+
+			foreach (KeyValuePair<string, int> pair in oUsers) {
+				selAdminUserDrop.Items.Add(new ListItem { Value = pair.Value.ToString(), Text = pair.Key });
+				selAdminUserResetPass.Items.Add(new ListItem { Value = pair.Value.ToString(), Text = pair.Key });
+			} // for each user
+		} // FillUserDropDowns
+
+		private void SetReportUserMap(AConnection oDB, SortedDictionary<string, int> oUsers) {
+			DataTable oDbMap = oDB.ExecuteReader("SELECT UserID, ReportID FROM ReportsUsersMap ORDER BY ReportID", CommandSpecies.Text);
+
+			var oMap = new SortedDictionary<int, SortedDictionary<int, int>>();
+
+			foreach (DataRow row in oDbMap.Rows) {
+				int nUserID = Convert.ToInt32(row["UserID"]);
+				int nReportID = Convert.ToInt32(row["ReportID"]);
+
+				if (!oMap.ContainsKey(nReportID))
+					oMap[nReportID] = new SortedDictionary<int, int>();
+
+				oMap[nReportID][nUserID] = 1;
+			} // for each row
+
+			tblReportUserMap.Caption = "Report - User Map";
+
+			tblReportUserMap.Rows.Clear();
+
+			var oHeaderRow = new TableHeaderRow { TableSection = TableRowSection.TableHeader };
+			tblReportUserMap.Rows.Add(oHeaderRow);
+
+			oHeaderRow.Cells.Add(new TableHeaderCell());
+
+			foreach (KeyValuePair<string, int> pair in oUsers)
+				oHeaderRow.Cells.Add(new TableHeaderCell { Text = pair.Key.Replace(" ", "<br>") });
+
+			DataTable oDbReports = oDB.ExecuteReader("SELECT Id, Title FROM ReportScheduler ORDER BY Title", CommandSpecies.Text);
+
+			string sRowClass = "odd";
+
+			foreach (DataRow row in oDbReports.Rows) {
+				int nReportID = Convert.ToInt32(row["Id"]);
+				string sReportTitle = row["Title"].ToString();
+
+				var oReportRow = new TableRow { TableSection = TableRowSection.TableBody };
+				tblReportUserMap.Rows.Add(oReportRow);
+
+				oReportRow.CssClass = sRowClass;
+
+				sRowClass = (sRowClass == "odd") ? "even" : "odd";
+
+				oReportRow.Cells.Add(new TableHeaderCell { Text = sReportTitle.Replace(" ", "<br>") });
+
+				foreach (KeyValuePair<string, int> pair in oUsers) {
+					int nUserID = pair.Value;
+					string sUserName = pair.Key;
+					bool bAllowed = oMap.ContainsKey(nReportID) && oMap[nReportID].ContainsKey(nUserID);
+
+					var oCell = new TableCell();
+					oReportRow.Cells.Add(oCell);
+
+					var oChk = new CheckBox();
+					oCell.Controls.Add(oChk);
+
+					if (bAllowed)
+						oCell.CssClass = "checked";
+
+					oCell.ToolTip = sReportTitle + " to " + sUserName;
+					oChk.Checked = bAllowed;
+					oChk.AutoPostBack = true;
+
+					oChk.Attributes["userid"] = nUserID.ToString();
+					oChk.Attributes["reportid"] = nReportID.ToString();
+
+					oChk.CheckedChanged += ReportPermissionTrigger;
+				} // for each user
+			} // for each report row
+		} // SetReportUserMap
+
+		protected void ReportPermissionTrigger(object sender, EventArgs args) {
+			var oTarget = (CheckBox)sender;
+
+			int nUserID = Convert.ToInt32(oTarget.Attributes["userid"]);
+			int nReportID = Convert.ToInt32(oTarget.Attributes["reportid"]);
+
+			string sQuery = oTarget.Checked
+				? "INSERT INTO ReportsUsersMap (UserID, ReportID) VALUES (@UserID, @ReportID)"
+				: "DELETE FROM ReportsUsersMap WHERE UserID = @UserID AND ReportID = @ReportID";
+
+			oDB.ExecuteNonQuery(sQuery,
+				CommandSpecies.Text,
+				new QueryParameter("@UserID", nUserID),
+				new QueryParameter("@ReportID", nReportID)
+			);
+
+			divAdminMsg.InnerText = oTarget.Checked
+				? "Permission granted"
+				: "Permission dropped";
+
+			((TableCell)oTarget.Parent).CssClass = oTarget.Checked
+				? "checked"
+				: "";
+		} // ReportPermissionTrigger
 	} // class Default
 } // namespace EzReportsWeb

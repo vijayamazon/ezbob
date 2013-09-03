@@ -6,9 +6,17 @@ using Ezbob.Logger;
 
 namespace ReportAuthenticationLib {
 	public class ReportAuthentication : SafeLog {
+		#region public
+
+		#region constructor
+
 		public ReportAuthentication(AConnection oDB, ASafeLog log = null) : base(log) {
 			m_oDB = oDB;
 		} // constructor
+
+		#endregion constructor
+
+		#region method IsValidPassword
 
 		public bool IsValidPassword(string userName, string inputPassword) {
 			DataTable dt = m_oDB.ExecuteReader(string.Format("select * from ReportUsers WHERE UserName = '{0}'", userName));
@@ -24,6 +32,10 @@ namespace ReportAuthenticationLib {
 				return newKey.SequenceEqual(key);
 			} // using
 		} // IsValidPassword
+
+		#endregion method IsValidPassword
+
+		#region method UpdatePassword
 
 		public bool UpdatePassword(string userName, string oldPassword, string newPassword) {
 			if (IsValidPassword(userName, oldPassword)) {
@@ -44,6 +56,10 @@ namespace ReportAuthenticationLib {
 			return false;
 		} // UpdatePassword
 
+		#endregion method UpdatePassword
+
+		#region method ResetPassword
+
 		public void ResetPassword(string userName, string newPassword) {
 			using (var deriveBytes = new Rfc2898DeriveBytes(newPassword, 20)) {
 				byte[] salt = deriveBytes.Salt;
@@ -57,22 +73,39 @@ namespace ReportAuthenticationLib {
 			} // using
 		} // ResetPassword
 
-		public void AddUserToDb(string userName, string name)
-		{
-			using (var deriveBytes = new Rfc2898DeriveBytes(userName, 20))
-			{
+		#endregion method ResetPassword
+
+		#region method AddUserToDb
+
+		public void AddUserToDb(string userName, string name) {
+			using (var deriveBytes = new Rfc2898DeriveBytes(userName, 20)) {
 				byte[] salt = deriveBytes.Salt;
 				byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
-				m_oDB.ExecuteNonQuery("RptAddReportUser",
-									  new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
-									  new QueryParameter("@Name", name) { Type = SqlDbType.NVarChar, Size = 50 },
-									  new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) },
-									  new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) });
 
-				// save salt and key to database
-			}
-		}
+				m_oDB.ExecuteNonQuery("RptAddReportUser",
+					new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
+					new QueryParameter("@Name", name) { Type = SqlDbType.NVarChar, Size = 50 },
+					new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) },
+					new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) }
+				);
+			} // using
+		} // AddUserToDb
+
+		#endregion method AddUserToDb
+
+		#region method DropUser
+
+		public void DropUser(int nUserID) {
+			m_oDB.ExecuteNonQuery("RptDropReportUser", new QueryParameter("@UserID", nUserID));
+		} // DropUser
+		#endregion method DropUser
+
+		#endregion public
+
+		#region private
 
 		private AConnection m_oDB;
+
+		#endregion private
 	} // class ReportAuthentication
 } // namespace ReportAuthenticationLib

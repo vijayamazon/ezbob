@@ -83,6 +83,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\admin.css" />
     <Content Include="css\combined.css" />
     <Content Include="css\login.css" />
     <Content Include="Default.aspx" />
