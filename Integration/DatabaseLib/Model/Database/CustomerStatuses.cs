@@ -1,9 +1,11 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
+	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using NHibernate;
 
+	[Serializable]
 	public class CustomerStatuses
     {
 		public virtual int Id { get; set; }
