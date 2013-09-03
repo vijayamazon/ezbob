@@ -147,8 +147,9 @@ namespace EzBob.Web.Infrastructure
             For<ICurrencyConvertor>().Use<CurrencyConvertor>();
             For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
             For<IMail>().Use<Mail>();
-            For<ICustomerSessionsRepository>().Use<CustomerSessionsRepository>();
+			For<ICustomerSessionsRepository>().Use<CustomerSessionsRepository>();
 			For<ITestCustomerRepository>().Use<TestCustomerRepository>();
+			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
         }
     }
 }

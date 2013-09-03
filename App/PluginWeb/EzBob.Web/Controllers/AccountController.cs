@@ -43,7 +43,7 @@ namespace EzBob.Web.Controllers
         private readonly ICustomerSessionsRepository _sessionIpLog;
 		private readonly ITestCustomerRepository _testCustomers;
 		private readonly IConfigurationVariablesRepository _configurationVariables;
-	    private readonly CustomerStatuses enabledStatus;
+	    private readonly ICustomerStatusesRepository _customerStatusesRepository;
 
         //------------------------------------------------------------------------
 	    public AccountController(
@@ -59,7 +59,7 @@ namespace EzBob.Web.Controllers
 		    ICustomerSessionsRepository sessionIpLog,
 		    ITestCustomerRepository testCustomers,
 		    IConfigurationVariablesRepository configurationVariables,
-		    CustomerStatusesRepository customerStatusesRepository
+		    ICustomerStatusesRepository customerStatusesRepository
 		    )
 	    {
 		    _membershipProvider = membershipProvider;
@@ -74,15 +74,7 @@ namespace EzBob.Web.Controllers
 		    _sessionIpLog = sessionIpLog;
 		    _testCustomers = testCustomers;
 		    _configurationVariables = configurationVariables;
-
-		    foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-		    {
-			    if (status.Name == "Enabled")
-			    {
-				    enabledStatus = status;
-				    break;
-			    }
-		    }
+		    _customerStatusesRepository = customerStatusesRepository;
 	    }
 
 	    //------------------------------------------------------------------------
@@ -396,7 +388,7 @@ namespace EzBob.Web.Controllers
 					Status = Status.Registered,
 					RefNumber = g.GenerateForCustomer(),
 					WizardStep = WizardStepType.SignUp,
-					CollectionStatus = new CollectionStatus { CurrentStatus = enabledStatus },
+					CollectionStatus = new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
 					IsTest = isAutomaticTest,
 				};
 

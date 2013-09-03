@@ -14,7 +14,8 @@
 	public interface ICustomerStatusesRepository : IRepository<CustomerStatuses>
 	{
 		bool GetIsEnabled(int id);
-    }
+		CustomerStatuses GetByName(string name);
+	}
 
     public class CustomerStatusesRepository : NHibernateRepositoryBase<CustomerStatuses>, ICustomerStatusesRepository
     {
@@ -33,5 +34,10 @@
 
 		    return customerStatus.IsEnabled;
 	    }
-    }
+
+		public CustomerStatuses GetByName(string name)
+		{
+			return GetAll().FirstOrDefault(s => s.Name == name);
+		}
+	}
 }
