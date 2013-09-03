@@ -225,7 +225,6 @@ namespace EzBob.Models
 
         private LoanActivity CreateLoanActivity(Customer customer)
         {
-
             var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
             var currentBalance = customer.Loans.Sum(x => x.Balance);
             var latePayments = customer.Loans.Sum(x => x.PastDues);
@@ -233,7 +232,20 @@ namespace EzBob.Models
             var collection = customer.Loans.Where(x => x.IsDefaulted).Sum(x => x.PastDues);
             var lateStatus = customer.PaymentDemenaor.ToString();
             
-            var avarageLateDays = customer.Loans.Where(l => l.MaxDelinquencyDays > 0).Select(l => l.MaxDelinquencyDays).Average(a => new decimal?(a)) ?? 0;
+            int currentLateDays = 0;
+	        DateTime now = DateTime.UtcNow;
+	        var lateLoans = customer.Loans.Where(l => l.Status == LoanStatus.Late);
+			foreach (Loan l in lateLoans)
+			{
+				foreach (LoanScheduleItem ls in l.Schedule)
+				{
+					int lateInDays = (int)(now - ls.Date).TotalDays;
+					if (lateInDays > currentLateDays)
+					{
+						currentLateDays = lateInDays;
+					}
+				}
+			}
 
             var totalFees =
                 (from l in customer.Loans
@@ -256,7 +268,7 @@ namespace EzBob.Models
                     Collection = Money(collection),
                     LateInterest = Money((decimal) interest),
                     Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection)),
-                    AverageLateDays = Math.Round(avarageLateDays, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture),
+					CurrentLateDays = currentLateDays.ToString(CultureInfo.InvariantCulture),
                     PaymentDemeanor = lateStatus,
                     TotalFees = Money(totalFees),
                     FeesCount = Money(feesCount)
