@@ -58,9 +58,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
             if (result == ChangePasswordStatus.ChangeOk)
             {
                 _context.User.IsPasswordRestored = false;
+				_appCreator.PasswordChanged(_context.User, _context.User.Name, newPassword);
             }
 
-            _appCreator.PasswordChanged(_context.User, _context.User.Name, newPassword);
+            
 
             return this.JsonNet(new { status = result.ToString() }); 
         }
