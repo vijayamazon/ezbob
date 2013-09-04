@@ -29,18 +29,23 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
         if (!window.AlertToken){
             window.AlertToken = function(name) {
                 $.getJSON(window.gRootPath + "Customer/EbayMarketplaces/FetchToken?callback=?", { username: name })
-                    .success(function(result) {
+                    .success(function (result) {
                         if (result.error) {
                             EzBob.App.trigger('error', result.error);
+                            $.colorbox.close();
                             that.trigger('back');
                             return;
                         }
                         EzBob.App.trigger('info', result.msg);
-                        that.trigger('completed');
                         that.trigger('back');
+                        that.trigger('completed');
+                        
                     })
                     .error(function() {
                         EzBob.App.trigger('error', 'Ebay Account Failed to Add');
+                        $.colorbox.close();
+                        that.trigger('back');
+                        
                     });
             };
         };

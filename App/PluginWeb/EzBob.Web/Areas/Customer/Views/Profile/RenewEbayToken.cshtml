@@ -26,6 +26,7 @@
                 .success(function (result) {
                     if (result.error) {
                         EzBob.App.trigger('error', result.error);
+                        $.colorbox.close();
                         return;
                     }
                     $("h2").html(result.msg);
