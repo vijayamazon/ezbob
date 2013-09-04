@@ -553,11 +553,6 @@ namespace EZBob.DatabaseLib
 			return loanAgreementTemplate;
 		}
 
-		public string GetLoanAgreementTemplate(LoanAgreementTemplate templateid)
-		{
-			return _loanAgreementTemplateRepository.Get(templateid).Template;
-		}
-
 		public MP_CustomerMarketPlace GetExistsCustomerMarketPlace(string marketPlaceName, IMarketplaceType marketplaceType, Customer customer)
 		{
 			return _CustomerMarketplaceRepository.Get(customer.Id, marketplaceType.InternalId, marketPlaceName);

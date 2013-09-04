@@ -367,7 +367,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual CollectionStatus CollectionStatus
         {
-            get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus()); }
+            get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus() { CurrentStatus = new CustomerStatuses()}); }
             set { _collectionStatus = value; }
         }
 

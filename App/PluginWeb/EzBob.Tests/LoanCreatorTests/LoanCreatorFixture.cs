@@ -16,7 +16,7 @@ namespace EzBob.Tests.LoanCreatorTests
                 PersonalInfo = new PersonalInfo() { FirstName = "Test" },
                 BankAccount = new BankAccount(),
                 Status = Status.Approved,
-                CollectionStatus = new CollectionStatus { CurrentStatus = new CustomerStatuses() { Id=0} },
+				CollectionStatus = new CollectionStatus { CurrentStatus = new CustomerStatuses { Id = 0, Name = "Enabled", IsEnabled = true } },
                 CreditSum = 10000,
                 OfferStart = DateTime.UtcNow.AddDays(-1),
                 OfferValidUntil = DateTime.UtcNow.AddDays(1),
@@ -37,7 +37,7 @@ namespace EzBob.Tests.LoanCreatorTests
 
             _customer.CashRequests.Add(cr);
             _customer.BankAccount = new BankAccount(){AccountNumber = "111111", SortCode = "222222"};
-			_customer.CollectionStatus.CurrentStatus = new CustomerStatuses() { Id = 0, Name = "Enabled", IsEnabled = true };
+			
             var loan = _lc.CreateLoan(_customer, 10000, null, new DateTime(2013, 10, 21));
 
             Assert.That(loan.Schedule.Count, Is.EqualTo(3));
@@ -62,7 +62,6 @@ namespace EzBob.Tests.LoanCreatorTests
             _customer.CashRequests.Add(cr);
             _customer.BankAccount = new BankAccount(){AccountNumber = "111111", SortCode = "1111111"};
             _customer.CreditSum = 3000;
-			_customer.CollectionStatus.CurrentStatus = new CustomerStatuses() { Id = 0, Name = "Enabled", IsEnabled = true };
 
             var loan2 = _lc.CreateLoan(_customer, 10, null, new DateTime(2013, 10, 21));
 

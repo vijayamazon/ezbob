@@ -44,7 +44,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 //if customer is not found, assume that it is underwriter
             }
 
-            var pdf = _agreementRenderer.RenderAgreementToPdf(_helper.GetLoanAgreementTemplate(agreement.TemplateRef), JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel));
+            var pdf = _agreementRenderer.RenderAgreementToPdf(agreement.TemplateRef.Template, JsonConvert.DeserializeObject<AgreementModel>(agreement.Loan.AgreementModel));
             return File(pdf, "application/pdf", GenerateFileName(agreement));
         }
 
