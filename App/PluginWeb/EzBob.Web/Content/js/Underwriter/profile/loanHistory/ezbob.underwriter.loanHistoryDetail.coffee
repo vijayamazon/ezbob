@@ -17,10 +17,10 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
         that = this
         @$el.dialog
             modal: true
-            resizable: false
+            resizable: true
             title: "Loan Details - #{@options.loan.RefNumber}"
             position: "center"
-            draggable: false
+            draggable: true
             width: "1000"
             height: "600"
             close: ->

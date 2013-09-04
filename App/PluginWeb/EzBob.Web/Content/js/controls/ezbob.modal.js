@@ -2,6 +2,7 @@
 
 EzBob.ModalRegion = Backbone.Marionette.Region.extend({
     el: "#modalRegion",
+    isUnderwriter: document.location.href.indexOf("Underwriter") > -1,
 
     constructor: function(){
       _.bindAll(this);
@@ -28,12 +29,43 @@ EzBob.ModalRegion = Backbone.Marionette.Region.extend({
         
         this.$el.on("hidden", function () {
             view.trigger("hidded");
+            $(this).data('modal', null);
         });
+        this.setDisplayOptions();
+    },
+    
+    setDisplayOptions: function () {
+        if (!this.isUnderwriter) return;
+
+        var $el = $(this.$el),
+            modalHeight = $el.height(),
+            modalWidth = $el.width(),
+            $modalBody = $el.find('.modal-body'),
+            bodyHeight = $modalBody.height(),
+            bodyWidht = $modalBody.width();
+        
+        $el.resizable({
+            minHeight: modalHeight,
+            minWidth: modalWidth,
+            resize: function(e, ui) {
+                $modalBody.height(bodyHeight + ui.size.height - modalHeight);
+                $modalBody.width(bodyWidht + ui.size.width - modalWidth);
+            }
+        }).draggable();
     },
 
-    hideModal: function(){
-      this.$el.modal('hide');
-    }
+    hideModal: function () {
+        this.$el.modal('hide');
+        
+        if (this.isUnderwriter) {
+            $(this.$el).resizable("destroy");
+            $(this.$el).draggable("destroy");
+            $(this.$el).css({                
+                width: '',
+                height:''
+            });
+        }
+    },
 });
 
 EzBob.ModalRegion2 = EzBob.ModalRegion.extend({

@@ -591,8 +591,8 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
         {
             'title': title,
             modal: true,
-            draggable: false,
-            resizable: false,
+            draggable: document.location.href.indexOf("Underwriter") > -1, //enable for underwriter
+            resizable: document.location.href.indexOf("Underwriter") > -1, // -//-
             buttons: buttonModel,
             dialogClass: "confirmationDialog",
             zIndex: 3999,

@@ -68,7 +68,7 @@ a[data-bug-type],
 .role-Underwriter #addNewDoc,
 
 .role-manager #deleteDocs,
-.role-Underwriter #deleteDocs
+.role-Underwriter #deleteDocs,
 
 .role-Underwriter [name="avoidAutomaticDecisionButton"],
 .role-manager [name="avoidAutomaticDecisionButton"],

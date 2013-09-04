@@ -24,10 +24,10 @@ EzBob.Underwriter.IdHubCustomAddressView = Backbone.View.extend({
         var that = this;
         this.content.dialog({
             modal: true,
-            resizable: false,
+            resizable: true,
             title: that.dialogTitle,
             position: "right",
-            draggable: false,
+            draggable: true,
             width: "73%",
             height: "640",
             dialogClass: "idHubCustomAddress",
