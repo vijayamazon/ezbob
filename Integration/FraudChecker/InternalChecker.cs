@@ -248,7 +248,7 @@ namespace FraudChecker
             //Address (any of home, business, directors, previous addresses)
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
             var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
-            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode)).Where(x => x.Customer.IsTest == false || x.Director.Customer.IsTest);
+            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode)).Where(x => x.Customer.IsTest == false || x.Director.Customer.IsTest == false);
 
             fraudDetections.AddRange(
                 from ca in customerAddresses
