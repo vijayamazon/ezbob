@@ -60,6 +60,7 @@ namespace FraudChecker
                 var currentCustomer = _session.Get<Customer>(customerId); //object customer is CustomerProxy so we need customer from DB to update him
                 currentCustomer.FraudStatus = FraudStatus.FraudSuspect;
                 _session.Save(currentCustomer);
+                _session.Flush();
             }
         }
 
