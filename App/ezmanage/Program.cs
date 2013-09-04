@@ -61,7 +61,7 @@ namespace ezmanage
                                              x.AddRegistry<ApplicationMng.Repository.RepositoryRegistry>();
                                          });
 
-            var lConnectionString = ConfigurationManager.AppSettings["DBConnection"];
+			var lConnectionString = ConfigurationManager.AppSettings["DBConnection"]; //DBConnectionLocal
             DbCommon.Init("DBSQLServer.dll", lConnectionString);
 
         }
