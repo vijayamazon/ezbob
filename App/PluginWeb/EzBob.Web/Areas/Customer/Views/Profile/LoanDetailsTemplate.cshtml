@@ -104,7 +104,7 @@
                         <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
                         @*<td><%-EzBob.formatPounds(item.Balance)%></td>*@
                         <td class='<%-styleForLate%>'>
-                            <%-item.StatusDescription%>
+                            <%-item.StatusDescription == 'AlmostPaid' ? 'Open' : item.StatusDescription%>
                             <% if(late){%>
                                 <br/><span class="late-installment-tip">See Late Balance above</span>
                             <%}%>
