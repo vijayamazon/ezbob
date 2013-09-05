@@ -519,7 +519,7 @@ namespace PaymentServices.Calculators
                     {
                         installment.Status = LoanScheduleStatus.PaidOnTime;
                     }
-                } else if (installment.AmountDue <= _amountToChargeFrom)
+                } else if (installment.AmountDue <= _amountToChargeFrom && _schedule.Last().Date != installment.Date)
                 {
                     installment.Status = LoanScheduleStatus.AlmostPaid;
                 }
@@ -559,7 +559,7 @@ namespace PaymentServices.Calculators
 
             if (installment.Date < _term && (installment.Status == LoanScheduleStatus.StillToPay || installment.Status == LoanScheduleStatus.AlmostPaid))
             {
-                if (diff >= _amountToChargeFrom)
+                if (diff >= _amountToChargeFrom || _schedule.Last().Date == installment.Date)
                 {
                     installment.Status = LoanScheduleStatus.Late;
                     _rescentLate.Add(installment);

@@ -7,6 +7,40 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
     public class AmountToChargeFromFixture : LoanPaymentsTestBase
     {
         [Test]
+        public void keep_2pounds_on_last_schedule_status_not_almostPaid()
+        {
+            CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
+
+            MakePayment(394, Parse("2012-02-02 12:00:00.000"));
+            MakePayment(373, Parse("2012-03-02 12:00:00.000"));
+            MakePayment(350, Parse("2012-04-02 12:00:00.000"));
+
+            GetStateAt(_loan, Parse("2012-04-12 12:00:00.000"));
+
+            Console.WriteLine(_loan);
+
+            Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Late));
+            Assert.That(_loan.Schedule[2].Status, Is.Not.EqualTo(LoanScheduleStatus.AlmostPaid));
+        }
+
+        [Test]
+        public void keep_2pounds_on_last_schedule_and_pay_last_schedule_early_status_not_almostPaid()
+        {
+            CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
+
+            MakePayment(394, Parse("2012-02-02 12:00:00.000"));
+            MakePayment(373, Parse("2012-03-02 12:00:00.000"));
+            MakePayment(350, Parse("2012-03-30 12:00:00.000"));
+
+            GetStateAt(_loan, Parse("2012-04-12 12:00:00.000"));
+
+            Console.WriteLine(_loan);
+
+            Assert.That(_loan.Status, Is.EqualTo(LoanStatus.Late));
+            Assert.That(_loan.Schedule[2].Status, Is.Not.EqualTo(LoanScheduleStatus.AlmostPaid));
+        }
+
+        [Test]
         public void after_paying_5_poundsless_than_installment_loan_is_not_late()
         {
             CreateLoan(Parse("2012-01-01 12:00:00.000"), 1000);
