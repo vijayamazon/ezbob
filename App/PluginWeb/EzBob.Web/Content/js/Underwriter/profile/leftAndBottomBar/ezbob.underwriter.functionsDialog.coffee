@@ -28,7 +28,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
             draggable: false
             title: "Are you sure?"
             modal: true
-            resizable: false
+            resizable: true
             width: @dlgWidth or 520
             height: @dlgHeight or 300
             dialogClass: "functionsPopup"
