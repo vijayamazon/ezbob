@@ -25,7 +25,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         @$el.dialog
             autoOpen: true
             position: ["top", 60]
-            draggable: false
+            draggable: true
             title: "Are you sure?"
             modal: true
             resizable: true
