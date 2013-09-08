@@ -19,7 +19,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 		var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
 		var shop = this.model.get(this.options.currentId);
-		drawChart(shop.get("Id"));
+		// drawChart(shop.get("Id"));
 		var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
 
 		var sTargetList = '';

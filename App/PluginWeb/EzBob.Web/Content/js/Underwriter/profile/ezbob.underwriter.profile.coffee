@@ -16,6 +16,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         paymentAccounts = @$el.find("#payment-accounts")
         loanhistorys = @$el.find("#loanhistorys")
         medalCalculations = @$el.find("#medal-calculator")
+        companyScore = @$el.find("#company-score")
         messages = @$el.find("#messages")
         apiChecks = @$el.find("#apiChecks")
         customerRelations = @$el.find("#customerRelations")
@@ -70,6 +71,13 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @medalCalculationModel
         )
         @crossCheckView = new EzBob.Underwriter.CrossCheckView(el: @$el.find("#customer-info"))
+
+        @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()
+        @companyScoreView = new EzBob.Underwriter.CompanyScoreView(
+            el: companyScore,
+            model: @companyScoreModel
+        )
+
         @messagesModel = new EzBob.Underwriter.MessageModel()
         @Message = new EzBob.Underwriter.Message(
             el: messages
@@ -273,6 +281,10 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             Id: id
         ,
             silent: true
+
+        @companyScoreModel.customerId = id
+        @companyScoreModel.fetch().done =>
+            console.log 'company score model', @companyScoreModel
 
         @messagesModel.fetch()
         @alertDocsView.create id

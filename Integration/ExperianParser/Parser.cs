@@ -1,0 +1,158 @@
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using Ezbob.Logger;
+using Newtonsoft.Json;
+
+namespace Ezbob.ExperianParser {
+	#region class Parser
+
+	public class Parser : SafeLog {
+		#region public
+
+		#region constructor
+
+		public Parser(string sConfiguration = "", ASafeLog log = null) : base(log) {
+			m_oGroups = null;
+
+			if (!string.IsNullOrWhiteSpace(sConfiguration))
+				InitConfiguration(sConfiguration);
+		} // constructor
+
+		#endregion constructor
+
+		#region method LoadConfiguration
+
+		public void LoadConfiguration(string sFileName) {
+			Info("Experian parser: request to load configuration from {0}", sFileName ?? "--null--");
+
+			InitConfiguration(ReadFile(sFileName, "configuration file"));
+
+			Info("Experian parser: loading configuration from {0} complete.", sFileName);
+		} // LoadConfiguration
+
+		#endregion method LoadConfiguration
+
+		#region method Parse
+
+		public List<SortedDictionary<string, string>> Parse(string sFileName) {
+			Info("Experian parser: request to read data from {0}", sFileName ?? "--null--");
+
+			var doc = new XmlDocument();
+
+			doc.LoadXml(ReadFile(sFileName, "data file"));
+
+			return Parse(doc.DocumentElement);
+		} // Parse
+
+		public List<SortedDictionary<string, string>> Parse(XmlDocument doc) {
+			return Parse(doc.DocumentElement);
+		} // Parse
+
+		public List<SortedDictionary<string, string>> Parse(XmlNode oRoot) {
+			if (oRoot == null)
+				throw new OwnException("XML root node is not specified.");
+				
+			var oData = new List<SortedDictionary<string, string>>();
+
+			m_oGroups.ForEach(grp => grp.Parse(oRoot, oData, this));
+
+			return oData;
+		} // Parse
+
+		#endregion method Parse
+
+		#region method NamedParse
+
+		public Dictionary<string, List<SortedDictionary<string, string>>> NamedParse(string sFileName) {
+			Info("Experian parser: request to read data from {0}", sFileName ?? "--null--");
+
+			var doc = new XmlDocument();
+
+			doc.LoadXml(ReadFile(sFileName, "data file"));
+
+			return NamedParse(doc.DocumentElement);
+		} // NamedParse
+
+		public Dictionary<string, List<SortedDictionary<string, string>>> NamedParse(XmlDocument doc) {
+			return NamedParse(doc.DocumentElement);
+		} // NamedParse
+
+		public Dictionary<string, List<SortedDictionary<string, string>>> NamedParse(XmlNode oRoot) {
+			if (oRoot == null)
+				throw new OwnException("XML root node is not specified.");
+				
+			var oData = new Dictionary<string, List<SortedDictionary<string, string>>>();
+
+			m_oGroups.ForEach(grp => {
+				var oGroupData = new List<SortedDictionary<string, string>>();
+
+				grp.Parse(oRoot, oGroupData, this);
+
+				oData[grp.Name] = oGroupData;
+			});
+
+			return oData;
+		} // NamedParse
+
+		#endregion method NamedParse
+
+		#endregion public
+
+		#region private
+
+		#region method InitConfiguration
+
+		private void InitConfiguration(string sConfiguration) {
+			if (string.IsNullOrWhiteSpace(sConfiguration))
+				throw new OwnException("Configuration not specified.");
+
+			Debug("Experian parser: parsing configuration...");
+
+			if (m_oGroups != null) {
+				m_oGroups.Clear();
+				m_oGroups = null;
+			} // if
+
+			m_oGroups = JsonConvert.DeserializeObject<List<FieldGroup>>(sConfiguration); 
+
+			m_oGroups.ForEach(g => g.Validate(this));
+
+			Debug("\n***\n*** Experian parser: configuration - begin\n***\n");
+
+			m_oGroups.ForEach(g => g.Log(this));
+
+			Debug("\n***\n*** Experian parser: configuration - end\n***\n");
+
+			Debug("Experian parser: parsing configuration complete.");
+		} // InitConfiguration
+
+		#endregion method InitConfiguration
+
+		#region ReadFile
+
+		private string ReadFile(string sFileName, string sFileTitle) {
+			if (string.IsNullOrWhiteSpace(sFileName))
+				throw new OwnException("Name of {0} not specified.", sFileTitle);
+
+			if (!File.Exists(sFileName))
+				throw new OwnException("Not found {1} {0}.", sFileName, sFileTitle);
+
+			Info("Experian parser: reading from {0}", sFileName);
+
+			string sOutput = File.ReadAllText(sFileName);
+
+			Info("Experian parser: {0} characters read from {1}", sOutput.Length, sFileName);
+
+			return sOutput;
+		} // ReadFile
+
+		#endregion ReadFile
+
+		private List<FieldGroup> m_oGroups;
+
+		#endregion private
+	} // class Parser
+
+	#endregion class Parser
+} // namespace Ezbob.ExperianParser

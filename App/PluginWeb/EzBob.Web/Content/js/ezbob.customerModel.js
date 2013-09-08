@@ -80,19 +80,38 @@ EzBob.CustomerModel = Backbone.Model.extend({
         });
         return liveLoans;
     },
+	serverTimeZone: function() {
+		var ary = $('#current-server-time-zone').text().match(/^([+-])(\d\d):(\d\d)$/);
+
+		if (!ary)
+			return 0;
+
+		var sSign = ary[1];
+		var nHours = parseInt(ary[2]);
+		var nMinutes = parseInt(ary[3]);
+
+		var nOffset = nHours * 60 + nMinutes;
+
+		if ((sSign == '+') && (nOffset > 0))
+			nOffset = -nOffset;
+
+		return nOffset;
+	},
     offerValid: function () {
         var offerStart = this.get('OfferStart'),
             offerValidUntil = this.get('OfferValidUntil');
 
         if (!offerStart || !offerValidUntil) return { S: 0, H: 0, M: 0, TotalSeconds: 0 };
 
-        var start = moment(offerStart),
-            end = moment(offerValidUntil),
-            now = (new Date).getServerTime();
+        var start = moment(offerStart);
+        var end = moment(offerValidUntil);
+
+        var now = moment(new Date());
+        now = moment(now - now.zone() + this.serverTimeZone());
 
         if (start > now && start < end) return { S: 0, H: 0, M: 0, TotalSeconds: 0, NotStarted: true};
         if (now > end) return { S: 0, H: 0, M: 0, TotalSeconds: 0, Expired : true };
-        
+
         var seconds = Math.max(0, end.diff(now, 'seconds')),
             H = Math.max(0, Math.floor(seconds / (60 * 60))),
             M = Math.max(0, Math.floor((seconds / (60)) % (60))),

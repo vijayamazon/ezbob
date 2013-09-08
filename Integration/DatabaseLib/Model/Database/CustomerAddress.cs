@@ -25,6 +25,7 @@ namespace ApplicationMng.Model
         public virtual Customer Customer { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         public virtual Director Director { get; set; }
+
         public virtual int AddressId { get; set; }
         public virtual CustomerAddressType AddressType { get; set; }       
         public virtual string Id { get; set; }

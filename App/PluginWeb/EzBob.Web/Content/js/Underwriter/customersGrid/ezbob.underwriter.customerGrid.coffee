@@ -37,7 +37,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
         shrinkToFit: true
         loadError: (xhr,status,error)->
             BlockUi "off", $(list)
-            console.log status
         loadComplete: (data)->
             BlockUi "off", $(list)
         gridComplete: ->

@@ -255,7 +255,7 @@
 
 <script id="collection-status-items-template" type="text/template">
     <select id="collection-status-items" class="selectheight">
-        <%_.each(statuses, function(status){   console.log(status.attributes);%>
+        <%_.each(statuses, function(status){%>
             <option value="<%=status.Id%>"><%=status.Name%></option>              
         <%});%>
     </select>

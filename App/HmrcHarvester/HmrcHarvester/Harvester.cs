@@ -579,27 +579,37 @@ namespace Ezbob.HmrcHarvester {
 		#region method ExtractTaxOfficeNumber
 
 		private void ExtractTaxOfficeNumber(HtmlDocument doc) {
-			string sBaseXPath = "//*[@id=\"top\"]/div[3]/div[2]/div/div/ul/li[4]/dl/";
+			string sBaseXPath = "//dl[contains(@class, 'known-facts')]";
 
-			HtmlNode oDT = doc.DocumentNode.SelectSingleNode(sBaseXPath + "dt");
+			HtmlNodeCollection oDataLists = doc.DocumentNode.SelectNodes(sBaseXPath);
 
-			if (oDT == null)
-				throw new HarvesterException("Tax Office Number location not found.");
+			if (oDataLists == null)
+				throw new HarvesterException("No suitable location for Tax Office Number found.");
 
-			if (oDT.InnerText != "Tax Office Number:")
-				throw new HarvesterException("Tax Office Number location has unexpected label.");
+			foreach (HtmlNode oDL in oDataLists) {
+				HtmlNode oDT = oDL.SelectSingleNode("./dt");
 
-			HtmlNode oDD = doc.DocumentNode.SelectSingleNode(sBaseXPath + "dd");
+				if (oDT == null)
+					continue;
 
-			if (oDD == null)
-				throw new HarvesterException("Tax Office Number not found.");
+				if (oDT.InnerText != "Tax Office Number:")
+					continue;
+				
+				HtmlNode oDD = oDL.SelectSingleNode("./dd");
 
-			TaxOfficeNumber = oDD.InnerText.Trim().Replace(" ", "");
+				if (oDD == null)
+					throw new HarvesterException("Tax Office Number not found.");
 
-			if (TaxOfficeNumber == string.Empty)
-				throw new HarvesterException("Tax Office Number not specified.");
+				TaxOfficeNumber = oDD.InnerText.Trim().Replace(" ", "");
 
-			Info("Tax office number is {0}.", TaxOfficeNumber);
+				if (TaxOfficeNumber == string.Empty)
+					throw new HarvesterException("Tax Office Number not specified.");
+
+				Info("Tax office number is {0}.", TaxOfficeNumber);
+				return;
+			} // for each data list
+
+			throw new HarvesterException("Tax Office Number location not found.");
 		} // ExtractTaxOfficeNumber
 
 		#endregion method ExtractTaxOfficeNumber

@@ -14,13 +14,18 @@ if (m.CGData && m.CGData.VatReturn) {
 			} %></td></tr></table></td>
 			<td class="no-padding"><table class="internal-table"><%
 				var oSortable = [];
+
 				for (var oDetail in oEntry.Data)
 					oSortable.push({ caption: oDetail, amount: oEntry.Data[oDetail].Amount, currency_code: oEntry.Data[oDetail].CurrencyCode });
 
+				var re = /\(Box (\d+)\)$/;
 				oSortable.sort(function(a, b) {
-					var re = /\(Box (\d+)\)$/;
-					var nA = parseInt(re.exec(a.caption)[1]);
-					var nB = parseInt(re.exec(b.caption)[1]);
+					var oAmatch = re.exec(a.caption);
+					var oBmatch = re.exec(b.caption);
+
+					var nA = parseInt(oAmatch ? oAmatch[1] : Number.MAX_VALUE - 32);
+					var nB = parseInt(oBmatch ? oBmatch[1] : Number.MAX_VALUE - 32);
+
 					return nA - nB;
 				});
 

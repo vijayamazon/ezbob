@@ -20,7 +20,7 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, vendorInfo, _i, _len, _ref1,
+      var acc, accountTypeName, aryCGAccounts, ignore, isOffline, j, lc, vendorInfo, _i, _len, _ref1,
         _this = this;
 
       this.ebayStores = this.model.get("ebayStores");
@@ -38,7 +38,7 @@
       this.amazonMarketplaces.on("reset change", this.marketplacesChanged, this);
       this.amazonMarketplaces.on("sync", this.render, this);
       this.ekmAccounts = new EzBob.EKMAccounts();
-      this.ekmAccounts.fetch().done(function() {
+      this.ekmAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.ekmButtonView = new EzBob.EKMAccountButtonView({
@@ -48,7 +48,7 @@
         model: this.ekmAccounts
       });
       this.freeAgentAccounts = new EzBob.FreeAgentAccounts();
-      this.freeAgentAccounts.fetch().done(function() {
+      this.freeAgentAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.freeAgentButtonView = new EzBob.FreeAgentAccountButtonView({
@@ -58,7 +58,7 @@
         model: this.freeAgentAccounts
       });
       this.sageAccounts = new EzBob.SageAccounts();
-      this.sageAccounts.fetch().done(function() {
+      this.sageAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.sageButtonView = new EzBob.SageAccountButtonView({
@@ -68,7 +68,7 @@
         model: this.sageAccounts
       });
       this.PayPointAccounts = new EzBob.PayPointAccounts();
-      this.PayPointAccounts.fetch().done(function() {
+      this.PayPointAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.PayPointButtonView = new EzBob.PayPointAccountButtonView({
@@ -78,7 +78,7 @@
         model: this.PayPointAccounts
       });
       this.YodleeAccounts = new EzBob.YodleeAccounts();
-      this.YodleeAccounts.fetch().done(function() {
+      this.YodleeAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.YodleeButtonView = new EzBob.YodleeAccountButtonView({
@@ -88,7 +88,7 @@
         model: this.YodleeAccounts
       });
       this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
-      this.payPalAccounts.fetch().done(function() {
+      this.payPalAccounts.safeFetch().done(function() {
         return _this.render();
       });
       this.PayPalButtonView = new EzBob.PayPalButtonView({
@@ -104,7 +104,7 @@
         acc = new EzBob.CGAccounts([], {
           accountType: accountTypeName
         });
-        acc.fetch().done(function() {
+        acc.safeFetch().done(function() {
           return _this.render();
         });
         this[lc + 'Accounts'] = acc;
@@ -133,7 +133,7 @@
         "paypal": {
           view: this.PayPalInfoView,
           button: this.PayPalButtonView,
-          active: 1,
+          active: 0,
           priority: 2
         },
         "EKM": {
@@ -177,10 +177,11 @@
           priority: vendorInfo.ClientSide.SortPriority
         };
       }
+      isOffline = this.model.get('isOffline');
       _ref1 = EzBob.Config.ActiveMarketPlaces;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         j = _ref1[_i];
-        if (this.stores[j]) {
+        if (this.stores[j] && ((!isOffline) || EzBob.isOfflineShopType(j))) {
           this.stores[j].active = 1;
         }
       }

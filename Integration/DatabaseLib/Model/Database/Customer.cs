@@ -357,6 +357,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual bool IsAvoid { get; set; }
         public virtual CardInfo CurrentCard { get; set; }
 		public virtual string ABTesting { get; set; }
+		public virtual bool IsOffline { get; set; }
 
         /// <summary>
         /// Идентификатор записи в системе ZohoCRM

@@ -177,6 +177,7 @@ namespace EzBob.Web.Areas.Customer.Models
             customerdModel.IsLoanDetailsFixed = !_changeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
 	        customerdModel.LoyaltyPoints = customer.LoyaltyPoints();
+	        customerdModel.IsOffline = customer.IsOffline;
 
             return customerdModel;
         }

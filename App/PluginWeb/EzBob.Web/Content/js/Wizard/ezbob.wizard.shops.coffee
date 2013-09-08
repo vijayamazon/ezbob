@@ -6,6 +6,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
     @set
       ebayStores: new EzBob.EbayStoreModels(options.ebayMarketPlaces)
       amazonMarketplaces: new EzBob.AmazonStoreModels(options.amazonMarketPlaces)
+      isOffline: options.isOffline
 
   getStores: ->
     stores = []
@@ -50,7 +51,9 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
       if listOfShops != undefined
         for shop in listOfShops
           stores.push { displayName: shop.displayName, type: accountTypeName }
+
     return stores
+
 
 class EzBob.StoreInfoStepView extends Backbone.View
   initialize: ->

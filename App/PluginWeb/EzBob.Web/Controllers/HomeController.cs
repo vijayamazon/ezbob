@@ -17,7 +17,7 @@ namespace EzBob.Web.Controllers
             _askvilleRepository = askvilleRepository;
         }
 
-        public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "")
+        public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string offline = "")
         {
 
             Session["Shop"] = shop;
@@ -30,6 +30,15 @@ namespace EzBob.Web.Controllers
 
             if (!string.IsNullOrEmpty(ezbobab)) {
                 var cookie = new HttpCookie("ezbobab", ezbobab) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
+                Response.Cookies.Add(cookie);
+            }
+
+            if ((offline ?? "").Trim().ToLower().Equals("yes")) {
+                var cookie = new HttpCookie("isoffline", "yes") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };
+                Response.Cookies.Add(cookie);
+            }
+			else {
+                var cookie = new HttpCookie("isoffline", "no") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };
                 Response.Cookies.Add(cookie);
             }
 

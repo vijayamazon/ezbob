@@ -209,6 +209,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.EmailState).CustomType<EmailConfirmationRequestStateType>();
             Map(x => x.IsTest);
             Map(x => x.IsAvoid, "AvoidAutomaticDescison");
+	        Map(x => x.IsOffline);
             Map(x => x.ZohoId);
             Map(x => x.BankAccountValidationInvalidAttempts);
             Map(x => x.ABTesting).Length(512);

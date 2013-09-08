@@ -1,7 +1,4 @@
 ﻿@using EzBob.Web.Infrastructure
-@using Integration.ChannelGrabberConfig
-@using Integration.ChannelGrabberFrontend
-@using Newtonsoft.Json
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 
@@ -246,9 +243,6 @@
             <%=text%>
         </div>
     </script>
-
-<div class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
-<div class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
 
     @{Html.RenderPartial("EbayStoreInfo");}
     @{Html.RenderPartial("AmazonStoreInfo");}

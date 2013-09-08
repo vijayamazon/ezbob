@@ -23,7 +23,12 @@ if (m.CGData && m.CGData.VatReturn) {
 		oEntry.BoxData = [];
 		
 		for (var oDetail in oEntry.Data) {
-			oEntry.BoxData[parseInt(oBoxRegEx.exec(oDetail)[1])] = {
+			var oMatch = oBoxRegEx.exec(oDetail);
+
+			if (!oMatch)
+				continue;
+
+			oEntry.BoxData[parseInt(oMatch[1])] = {
 				amount: oEntry.Data[oDetail].Amount,
 				currency_code: oEntry.Data[oDetail].CurrencyCode
 			};

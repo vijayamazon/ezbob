@@ -282,11 +282,14 @@ function CheckForActivity() {
     
     if (minute <= 0) return;
 
-    if (EzBob.Config.HeartBeatEnabled) setInterval(heartBeat, 10000);
+	var isUnderWriter = document.location.href.indexOf("Underwriter") > -1;
 
-    var underwriterParam = document.location.href.indexOf("Underwriter") > -1 ? "?isUnderwriterPage=true" : "";
+    if (EzBob.Config.HeartBeatEnabled)
+	    setInterval(heartBeat, 10000);
 
-    //white list
+    var underwriterParam = isUnderWriter ? "?isUnderwriterPage=true" : "";
+
+	//white list
     if (document.location.href.indexOf("Customer/Start") != -1) {
         return;
     }
@@ -769,36 +772,6 @@ EzBob.formatTimeSpan = function (val) {
     return "less than hour";
 };
 
-//Server Date
-var dateDiff = null;
-(function () {
-    var r = new XMLHttpRequest(),
-            start = (new Date).getTime();
-
-    r.open('HEAD', window.gRootPath, false);
-    r.onreadystatechange = function () {
-        if (r.readyState != 4) {
-            return null;
-        }
-        var latency = (new Date).getTime() - start;
-        var timestring = r.getResponseHeader("DATE");
-
-        var systemtime = new Date(timestring);
-        systemtime.setMilliseconds(systemtime.getMilliseconds() + (latency / 2));
-
-        dateDiff = systemtime - (new Date);
-    };
-    r.send(null);
-})();
-
-Date.prototype.getServerTime = function () {
-    var date = new Date();
-
-    date.setTime(date.getTime() + dateDiff);
-
-    return date;
-};
-
 EzBob.validateLoginForm = function (el) {
     var e = el || $(".simple-login");
     var passPolicy = { required: true, minlength: 6, maxlength: 20 };
@@ -1137,4 +1110,17 @@ EzBob.validateCGShopForm = function (el, accountType) {
     } // for each field
 
     return el.validate(v);
+};
+
+EzBob.isOfflineShopType = function(sShopTypeName) {
+	switch (sShopTypeName) {
+	case 'HMRC':
+	case 'Yodlee':
+		return true;
+		break;
+		
+	default:
+		return false;
+		break;
+	} // switch
 };

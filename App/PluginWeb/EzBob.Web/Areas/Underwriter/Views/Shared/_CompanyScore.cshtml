@@ -1,0 +1,32 @@
+﻿<script id="company-score-template" type="text/template">
+<% (function(response) {
+	console.log('serialised:', response);
+
+	if (response.result != 'ok') {
+		print(response.result);
+		return;
+	} // if
+
+	print('<div class=span6>');
+
+	for (var i in response.data) {
+		var ary = response.data[i];
+
+		%><table class="table table-bordered table-striped blue-header centered table-fixed rright">
+			<thead><tr><th colspan=2><%= i %></th></tr></thead>
+			<tbody><%
+			for (var j = 0; j < ary.length; j++) {
+				var obj = ary[j];
+
+				for (var fld in obj) {
+					%><tr><td><%= fld %></td><td><%= obj[fld] %></td></tr><%
+				} // for each field
+			} // for each group output
+			%></tbody>
+		</table><%
+	} // for
+
+	print('</div>');
+})(companyScoreData);
+%>
+</script>

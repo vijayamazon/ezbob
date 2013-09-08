@@ -33,8 +33,8 @@ namespace Ezbob.HmrcHarvester {
 			DayEnd = Convert.ToInt32(grp[3].Value);
 			MonthEnd = DateTime.ParseExact(grp[4].Value, "MMM", ci).Month;
 
-			AmountPaid = AThrasher.ParseGBP(sAmountPaid);
-			AmountDue = AThrasher.ParseGBP(sAmountDue);
+			AmountPaid = AThrasher.ParseGBP(NormaliseAmountStr(sAmountPaid));
+			AmountDue = AThrasher.ParseGBP(NormaliseAmountStr(sAmountDue));
 		} // constructor
 
 		#endregion constructor
@@ -50,10 +50,20 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion public
 
-		#region protected
-		#endregion protected
-
 		#region private
+
+		private string NormaliseAmountStr(string sAmount) {
+			if (string.IsNullOrWhiteSpace(sAmount))
+				return "";
+
+			int nPos = sAmount.IndexOfAny(new char[] { Convert.ToChar(65533), Convert.ToChar(163) });
+
+			if (nPos < 0)
+				return sAmount;
+
+			return sAmount.Substring(nPos);
+		} // NormaliseAmountStr
+
 		#endregion private
 	} // class RtiTaxYearRowData
 

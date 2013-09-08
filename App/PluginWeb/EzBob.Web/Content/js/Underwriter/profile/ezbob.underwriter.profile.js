@@ -20,7 +20,7 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, controlButtons, customerRelations, experianInfo, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo,
+      var alertPassed, apiChecks, companyScore, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo,
         _this = this;
 
       this.$el.html(this.template());
@@ -33,11 +33,13 @@
       paymentAccounts = this.$el.find("#payment-accounts");
       loanhistorys = this.$el.find("#loanhistorys");
       medalCalculations = this.$el.find("#medal-calculator");
+      companyScore = this.$el.find("#company-score");
       messages = this.$el.find("#messages");
       apiChecks = this.$el.find("#apiChecks");
       customerRelations = this.$el.find("#customerRelations");
       alertPassed = this.$el.find("#alerts-passed");
       controlButtons = this.$el.find("#controlButtoons");
+      fraudDetection = this.$el.find("#fraudDetection");
       this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
       this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
         el: profileInfo,
@@ -91,6 +93,11 @@
       this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
         el: this.$el.find("#customer-info")
       });
+      this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
+      this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
+        el: companyScore,
+        model: this.companyScoreModel
+      });
       this.messagesModel = new EzBob.Underwriter.MessageModel();
       this.Message = new EzBob.Underwriter.Message({
         el: messages,
@@ -109,6 +116,11 @@
       this.CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView({
         el: customerRelations,
         model: this.CustomerRelationsData
+      });
+      this.FraudDetectionLogs = new EzBob.Underwriter.FraudDetectionLogs();
+      this.FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView({
+        el: fraudDetection,
+        model: this.FraudDetectionLogs
       });
       this.showed = true;
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({
@@ -192,6 +204,10 @@
       var dialog;
 
       if ($(e.currentTarget).hasClass("disabled")) {
+        return false;
+      }
+      if (this.loanInfoModel.get('InterestRate') <= 0) {
+        EzBob.ShowMessage('Wrong Interest Rate value (' + this.loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error');
         return false;
       }
       if (this.loanInfoModel.get('OfferedCreditLine') <= 0) {
@@ -295,7 +311,8 @@
     };
 
     ProfileView.prototype._show = function(id) {
-      var that;
+      var that,
+        _this = this;
 
       this.hide();
       BlockUi("on");
@@ -365,6 +382,10 @@
       }, {
         silent: true
       });
+      this.companyScoreModel.customerId = id;
+      this.companyScoreModel.fetch().done(function() {
+        return console.log('company score model', _this.companyScoreModel);
+      });
       this.messagesModel.fetch();
       this.alertDocsView.create(id);
       this.ApicCheckLogs.customerId = id;
@@ -373,6 +394,9 @@
       this.CustomerRelationsData.customerId = id;
       this.CustomerRelationsView.idCustomer = id;
       this.CustomerRelationsData.fetch();
+      this.FraudDetectionLogs.customerId = id;
+      this.FraudDetectionLogView.idCustomer = id;
+      this.FraudDetectionLogs.fetch();
       this.controlButtons.model = new Backbone.Model({
         customerId: id
       });

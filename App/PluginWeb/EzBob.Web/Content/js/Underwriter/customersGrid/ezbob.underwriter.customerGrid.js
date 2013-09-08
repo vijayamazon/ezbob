@@ -30,7 +30,7 @@
       sortable: true,
       datatype: "json",
       mtype: "GET",
-      sortname: "Id",
+      sortname: settings.el === "#sales" ? "OfferDate" : "Id",
       sortorder: "desc",
       viewrecords: true,
       hidegrid: false,
@@ -45,15 +45,20 @@
       rowNum: 100,
       shrinkToFit: true,
       loadError: function(xhr, status, error) {
-        BlockUi("off", $(list));
-        return console.log(status);
+        return BlockUi("off", $(list));
       },
       loadComplete: function(data) {
         return BlockUi("off", $(list));
       },
       gridComplete: function() {
+        var coloredCell;
+
         (settings.$el.find("[data-toggle='tooltip']")).tooltip();
-        return BlockUi("off", $(list));
+        BlockUi("off", $(list));
+        coloredCell = settings.$el.find(".coloredCell");
+        return _.each(coloredCell, function(val) {
+          return $(val).closest('tr').find('td').css("background-color", $(val).text());
+        });
       },
       loadBeforeSend: function() {
         return BlockUi("on", $(list));
@@ -212,6 +217,13 @@
 
     text = cellval.text || cellval;
     return "<div style='overflow: auto; width: auto'>" + text + "</div>";
+  };
+
+  $.fn.fmatter.ColorCell = function(cellval) {
+    var color;
+
+    color = cellval.text || cellval;
+    return "<span class='coloredCell'>" + color + "</span>";
   };
 
 }).call(this);

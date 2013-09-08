@@ -228,6 +228,7 @@
     <Compile Include="Areas\Underwriter\Controllers\BugsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CAISController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CollectionStatusController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CompanyScoreController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FraudStatusController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\FraudDetectionLogController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerRelationsController.cs" />
@@ -960,6 +961,7 @@
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
       <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js">
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>
     </Content>
@@ -1096,6 +1098,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_details.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_vat_return_summary.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CG_rti_tax_years.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_CompanyScore.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1388,6 +1391,10 @@
       <Project>{D91F3FD0-9E1B-41FF-AE2E-67F051198F51}</Project>
       <Name>ExperianLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ExperianParser\ExperianParser.csproj">
+      <Project>{002cd56a-ba12-48e2-bb40-663e3bcbff3a}</Project>
+      <Name>ExperianParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
       <Project>{7D1F5CBE-9FF9-4170-862B-AB203D968EF5}</Project>
       <Name>EzBob.Configuration</Name>
@@ -1451,6 +1458,10 @@
     <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
       <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
       <Name>ZohoCRM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Log4NetCustomAppenders\Log4NetCustomAppenders.csproj">
       <Project>{9b99cd18-9414-4842-9792-e33b6605f330}</Project>

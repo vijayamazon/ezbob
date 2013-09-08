@@ -19,6 +19,7 @@
                     <li><a href="#medal-calculator" data-toggle="tab">Medal calculator</a></li>
                     <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
                     <li><a href="#customer-info" data-toggle="tab">Customer info</a></li>
+                    <li><a href="#company-score" data-toggle="tab">Company score</a></li>
                     <li><a href="#messages-tab" data-toggle="tab">Messages</a></li>
                     <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
                     <li><a href="#customerRelations" data-toggle="tab">Customer relations</a></li>
@@ -32,6 +33,7 @@
                     <div class="tab-pane" id="medal-calculator"></div>
                     <div class="tab-pane" id="loanhistorys"></div>
                     <div class="tab-pane" id="customer-info"></div>
+                    <div class="tab-pane" id="company-score"></div>
                     <div class="tab-pane" id="messages-tab">
                         <div id="messages" class="clearfix"></div>
                         <div id="alert-docs"></div>
@@ -72,6 +74,7 @@
 @{Html.RenderPartial("CreditBureau");}
 @{Html.RenderPartial("_MedalCalculationTemplate");}
 @{Html.RenderPartial("_ApiChecksLog");}
+@{Html.RenderPartial("_CompanyScore");}
 @{Html.RenderPartial("_FraudDetectionLog");}
 @{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/_CustomerRelations.cshtml");}
 @{Html.RenderPartial("_DocsTemplate");}

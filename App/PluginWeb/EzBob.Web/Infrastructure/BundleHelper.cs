@@ -185,7 +185,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/lib/mousetrap_1.4.0.js")
                 .Add("~/Content/js/lib/jquery.colorbox-min.js")
                 .AddString(GetDbStrings())
-                .ForceRelease()
+                //.ForceRelease()
                 .MvcRender("~/Content/js/min/jslib_#.js");
         }
 
@@ -281,6 +281,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Underwriter/profile/medalCalculator/ezbob.underwriter.medalCalculations.js")
                 .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
                 .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
+                .Add("~/Content/js/Underwriter/profile/companyScore/ezbob.underwriter.companyScore.js")
                 .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
                 .Add("~/Content/js/Underwriter/profile/CustomerRelations/ezbob.underwriter.customerRelations.js")
                 .Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
