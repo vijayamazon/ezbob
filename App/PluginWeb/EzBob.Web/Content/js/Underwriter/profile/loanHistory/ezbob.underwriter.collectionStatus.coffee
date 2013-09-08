@@ -101,19 +101,12 @@ class EzBob.Underwriter.CollectionStatusView extends Backbone.Marionette.Layout
         @modelBinder = new Backbone.ModelBinder()
     
     events: 
-        'change .isAddCollectionFee' : 'readOnlyCollectionFee'
         "click .uploadFiles" : "upload"
 
     bindings:
         CollectionDescription:
             selector: "#collectionDescription"
      
-    readOnlyCollectionFee: (e) ->
-        number = e.currentTarget.getAttribute('data-items-num')
-        isChecked = $("input[name='items[#{number}].isAddCollectionFee']").prop("checked")
-        @$el.find("input[name='items[#{number}].isAddCollectionFee']").attr("value", isChecked)
-        @$el.find("input[name='items[#{number}].collectionFee']").attr('readonly', !isChecked)
-
     upload: () ->
         $("#addNewDoc").click()
         false

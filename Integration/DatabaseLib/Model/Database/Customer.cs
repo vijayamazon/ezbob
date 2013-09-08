@@ -721,9 +721,6 @@ namespace EZBob.DatabaseLib.Model.Database {
     {
 		[Newtonsoft.Json.JsonIgnore]
         public virtual CustomerStatuses CurrentStatus { get; set; }
-        public virtual DateTime? CollectionDateOfDeclaration { get; set; }
-        public virtual bool IsAddCollectionFee { get; set; }
-        public virtual double CollectionFee { get; set; }
         public virtual string CollectionDescription { get; set; }
     }
 }

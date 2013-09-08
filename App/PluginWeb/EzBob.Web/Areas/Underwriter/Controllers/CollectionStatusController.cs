@@ -45,11 +45,8 @@
                            {
                                CurrentStatus = collectionStatus.CurrentStatus.Id,
                                CollectionDescription = collectionStatus.CollectionDescription,
-                               CollectionDateOfDeclaration = collectionStatus.CollectionDateOfDeclaration !=null ? collectionStatus.CollectionDateOfDeclaration.ToString() : DateTime.UtcNow.ToString(),
-                               Items = loansNonClosed.Select(loan => new CollectionStatusItem()
+                               Items = loansNonClosed.Select(loan => new CollectionStatusItem
                                {
-                                   IsAddCollectionFee = loan.Charge != null || loan.Status == LoanStatus.Late.ToString(),
-                                   CollectionFee = loan.Charge!=null ?  loan.Charge.Amount : (loan.Balance * 10) / 100,
                                    LoanId = loan.Id,
                                    LoanRefNumber = loan.RefNumber
                                }).ToList()
@@ -61,17 +58,7 @@
         private CollectionStatus CreateDefaultCollectionStatusParameter(Customer customer, int currentStatus)
         {
 	        CustomerStatuses status = _customerStatusesRepository.Get(currentStatus);
-            var statParam = new CollectionStatus
-	            {
-		            CurrentStatus = status,
-		            CollectionDateOfDeclaration = DateTime.UtcNow
-	            };
-
-			if (status!= null && (status.Name == "Default" || status.Name == "Legal"))
-            {
-                statParam.IsAddCollectionFee = true;
-            }
-            return statParam;
+	        return new CollectionStatus {CurrentStatus = status};
         }
 
         [HttpPost]

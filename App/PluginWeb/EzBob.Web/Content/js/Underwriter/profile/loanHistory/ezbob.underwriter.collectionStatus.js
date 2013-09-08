@@ -205,7 +205,6 @@
     };
 
     CollectionStatusView.prototype.events = {
-      'change .isAddCollectionFee': 'readOnlyCollectionFee',
       "click .uploadFiles": "upload"
     };
 
@@ -213,15 +212,6 @@
       CollectionDescription: {
         selector: "#collectionDescription"
       }
-    };
-
-    CollectionStatusView.prototype.readOnlyCollectionFee = function(e) {
-      var isChecked, number;
-
-      number = e.currentTarget.getAttribute('data-items-num');
-      isChecked = $("input[name='items[" + number + "].isAddCollectionFee']").prop("checked");
-      this.$el.find("input[name='items[" + number + "].isAddCollectionFee']").attr("value", isChecked);
-      return this.$el.find("input[name='items[" + number + "].collectionFee']").attr('readonly', !isChecked);
     };
 
     CollectionStatusView.prototype.upload = function() {
