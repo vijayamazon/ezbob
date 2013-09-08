@@ -170,7 +170,7 @@ namespace EzBob.Web.Areas.Customer.Models
                             RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
                         });
 
-            customerdModel.CollectionStatus = customer.CollectionStatus;
+			customerdModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
             customerdModel.HasRollovers = customerdModel.ActiveRollovers.Any();
 
             var cr = cus.LastCashRequest;

@@ -109,9 +109,9 @@ EzBob.CustomerModel = Backbone.Model.extend({
             status = this.get('Status'),
             offerValid = this.offerValid(),
             hasFunds = availableCredit >= EzBob.Config.XMinLoan,
-            collectionStatus = this.get('CollectionStatus');
+            customerStatusName = this.get('CustomerStatusName');
         
-        if (collectionStatus && collectionStatus.CurrentStatus) {
+        if (customerStatusName !== 'Enabled') {
             this.set('state', 'disabled');
             return;
         }

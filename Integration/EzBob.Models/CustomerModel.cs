@@ -91,7 +91,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
         public IEnumerable<PaymentRollover> ActiveRollovers { get; set; }
 
-        public CollectionStatus CollectionStatus { get; set; }
+        public string CustomerStatusName { get; set; }
 
         public bool HasRollovers { get; set; }
 
