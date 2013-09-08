@@ -72,9 +72,6 @@ CREATE TABLE [dbo].[Customer](
 	[ZohoId] [nvarchar](100) NULL,
 	[BankAccountType] [nvarchar](50) NULL,
 	[BankAccountValidationInvalidAttempts] [int] NULL,
-	[CollectionDateOfDeclaration] [datetime] NULL,
-	[IsAddCollectionFee] [bit] NULL,
-	[CollectionFee] [decimal](18, 0) NULL,
 	[CollectionDescription] [nvarchar](50) NULL,
 	[WizardStep] [int] NULL,
 	[LastStartedMainStrategyId] [int] NULL,
@@ -91,8 +88,8 @@ CREATE TABLE [dbo].[Customer](
 	[LastLoanDate] [datetime] NULL,
 	[AmountTaken] [decimal](18, 4) NOT NULL,
 	[LastLoanAmount] [decimal](18, 4) NOT NULL,
-	[LastStatus] [nvarchar](100) NOT NULL,
 	[TotalPrincipalRepaid] [decimal](18, 4) NOT NULL,
+	[LastStatus] [nvarchar](100) NULL,
 	[AvoidAutomaticDescison] [bit] NOT NULL,
 	[FraudStatus] [int] NULL,
 	[FinancialAccounts] [int] NOT NULL,
@@ -136,6 +133,8 @@ CREATE NONCLUSTERED INDEX [IX_Customer_RefNumber] ON [dbo].[Customer]
 	[RefNumber] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_Disabled]  DEFAULT ((0)) FOR [CollectionStatus]
+GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_IsLoanType]  DEFAULT ((0)) FOR [IsLoanTypeSelectionAllowed]
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_NumApproves]  DEFAULT ((0)) FOR [NumApproves]
@@ -150,9 +149,9 @@ ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_AmountTaken]  DEFAULT 
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_LastLoanAmount]  DEFAULT ((0)) FOR [LastLoanAmount]
 GO
-ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_LastStatus]  DEFAULT ('N/A') FOR [LastStatus]
-GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_TotalPrincipalRepaid]  DEFAULT ((0)) FOR [TotalPrincipalRepaid]
+GO
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_LastStatus]  DEFAULT ('N/A') FOR [LastStatus]
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_AvoidAutomaticDescison]  DEFAULT ((0)) FOR [AvoidAutomaticDescison]
 GO

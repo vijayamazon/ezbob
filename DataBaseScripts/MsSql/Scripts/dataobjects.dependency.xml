@@ -589,6 +589,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>EkmConnectorConfigs</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\EkmConnectorConfigs.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>EmailAccount</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\EmailAccount.sql</oFileName>
@@ -808,12 +814,6 @@
     <oName>FraudUser</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\FraudUser.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>gsm_numbers_1101_1307</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\gsm_numbers_1101_1307.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -2068,12 +2068,6 @@
     <oName>MP_YodleeTransactionCategories</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\MP_YodleeTransactionCategories.sql</oFileName>
-    <oType>UserTable</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>needed_appId</oName>
-    <oRank>1</oRank>
-    <oFileName>02_TABLES\needed_appId.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
