@@ -29,6 +29,11 @@ namespace Scorto.NHibernate.Repository
 
     	public CurrencyData GetCurrencyOrCreate(string currencyName)
     	{
+			if (string.IsNullOrEmpty(currencyName))
+			{
+				return null;
+			}
+
 			var currency = GetAll().FirstOrDefault( c => c.Name.ToUpper() == currencyName.ToUpper() );
 			
 			if ( currency == null )

@@ -60,10 +60,6 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Transactions
 
 		public AmountInfo NetAmount { get; set; }
 
-		public string Payer { get; set; }
-
-		public string PayerDisplayName { get; set; }
-
 		public string TransactionId { get; set; }
 
 		public override DateTime RecordTime

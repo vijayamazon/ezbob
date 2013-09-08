@@ -230,8 +230,6 @@ namespace EzBob.PayPalServiceLib
 					FeeAmount = ConvertToAmountInfo(p.FeeAmount),
 					GrossAmount = ConvertToAmountInfo(p.GrossAmount),
 					NetAmount = ConvertToAmountInfo(p.NetAmount),
-					Payer = p.Payer,
-					PayerDisplayName = p.PayerDisplayName,
 					TransactionId = p.TransactionID
 				}));
 

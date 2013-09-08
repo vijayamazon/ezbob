@@ -2101,9 +2101,9 @@ namespace EZBob.DatabaseLib
 			{
 				Created = t.Created,
 				Type = t.Type,
-				FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
-				GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
-				NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
+				FeeAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.FeeAmount, t.Created),
+				GrossAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.GrossAmount, t.Created),
+				NetAmount = t.Currency == null ? null : _CurrencyConvertor.ConvertToBaseCurrency(t.Currency.Name, t.NetAmount, t.Created),
 				Status = t.Status,
 				Timezone = t.TimeZone,
 				TransactionId = t.PayPalTransactionId

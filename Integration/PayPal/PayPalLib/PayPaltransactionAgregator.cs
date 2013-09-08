@@ -84,7 +84,7 @@ namespace EzBob.PayPal
 								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
 								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
 			//Serialize<List<PayPalTransactionItem>>(result.ToList(), name, _period.ToString());
-			return result.Sum(t => CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+			return result.Sum(t => t.NetAmount == null ? 0 : CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
 		}
 
 		private object GetCount(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")
@@ -165,12 +165,12 @@ namespace EzBob.PayPal
 
 		private object GetTransactionsNumber(IEnumerable<PayPalTransactionItem> data)
 		{
-			return data.Count(t => t.Status == "Completed" && t.Type == "Payment" && t.NetAmount.Value > 0);
+			return data.Count(t => t.Status == "Completed" && t.Type == "Payment" && t.NetAmount != null && t.NetAmount.Value > 0);
 		}
 
 		private object GetTotalNetOutPayments(IEnumerable<PayPalTransactionItem> data)
 		{
-			return data.Where(t => t.Status == "Completed" && t.Type == "Transfer" && t.NetAmount.Value > 0)
+			return data.Where(t => t.Status == "Completed" && t.Type == "Transfer" && t.NetAmount != null && t.NetAmount.Value > 0)
 					   .Sum(
 						   t =>
 						   CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
@@ -178,7 +178,7 @@ namespace EzBob.PayPal
 
 		private object GetTotalNetInPayments(IEnumerable<PayPalTransactionItem> data)
 		{
-			return data.Where(t => t.Status == "Completed" && t.Type == "Payment" && t.NetAmount.Value > 0)
+			return data.Where(t => t.Status == "Completed" && t.Type == "Payment" && t.NetAmount != null && t.NetAmount.Value > 0)
 					   .Sum(
 						   t =>
 						   CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
