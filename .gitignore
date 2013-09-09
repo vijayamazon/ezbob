@@ -97,3 +97,4 @@ App/Utils/EzEnvironment/bin
 App/Utils/EzEnvironment/obj
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml.user
+*.DotSettings

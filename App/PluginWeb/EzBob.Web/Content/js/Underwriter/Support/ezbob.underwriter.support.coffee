@@ -4,10 +4,9 @@ EzBob.Underwriter = EzBob.Underwriter || {}
 
 class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
     initialize: ->
-        @model = new EzBob.Underwriter.SupportModels()
-        @model.on "change", @render, @
-        @model.fetch().done =>
-            @render()
+        @model = new EzBob.Underwriter.SupportModel()
+        @model.on "change reset", @render, @
+        @model.fetch()
         @preHeight = 20
 
     template: "#support-template"
@@ -15,6 +14,30 @@ class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
     events: 
         "click pre": "preClicked"
         "click .reCheckMP": "recheckClicked"
+        'click [data-sort-type]': 'sortClicked'
+
+    onRender: ->
+        @$el.find("[data-sort-type]").css('cursor', 'pointer')
+        @$el.find("pre").tooltip({title: 'Click to see detail info'}).tooltip('fixTitle')
+        @$el.find("pre").height(@preHeight).css("overflow", "hidden").css('cursor','pointer')
+        (@$el.find '.arrow').hide()
+        arrow = @$el.find "[data-sort-type=#{@model.get('sortField')}] .arrow"
+        arrow.show()
+        arrow.removeClass().addClass(if @model.get('sortType') == 'asc' then 'arrow icon-arrow-up' else 'arrow icon-arrow-down')
+        BlockUi("off")
+
+    sortClicked: (e) ->
+        BlockUi("on")
+        $el = $ e.currentTarget
+        field = $el.data 'sort-type'
+        currentField = @model.get 'sortField'
+        currentSortType = @model.get 'sortType'
+        @model.set
+            'sortField': field
+            'sortType': if field != currentField or currentSortType == 'desc' then 'asc' else 'desc'
+        ,
+            silent: true
+        @model.fetch()
 
     recheckClicked: (e)->
         $el = $(e.currentTarget)
@@ -52,6 +75,7 @@ class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
     hide: ->
         @$el.hide()
         clearInterval(@modelUpdater)
+        BlockUi 'off'
 
     show: ->
         @$el.show()
@@ -60,15 +84,16 @@ class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
         , 2000 )
 
     serializeData: ->
-        model: @model.toJSON()
-
-    onRender: ->
-        @$el.find("pre").tooltip({title: 'Click to see detail info'}).tooltip('fixTitle')
-        @$el.find("pre").height(@preHeight).css("overflow", "hidden").css('cursor','pointer')
+        model: @model.get 'models'
 
 class EzBob.Underwriter.SupportModel extends Backbone.Model
+    initialize:->
+        @set {
+            sortField: 4
+            sortType: 'desc' #desc/asc
+            models: []
+            }, {
+            silent: true
+            }
 
-class EzBob.Underwriter.SupportModels extends Backbone.Collection
-    model: EzBob.Underwriter.SupportModel
-
-    url: "#{gRootPath}Underwriter/Support/Index"
+    urlRoot: -> "#{gRootPath}Underwriter/Support/Index?sortField=#{@get('sortField')}&sortType=#{@get('sortType')}"
