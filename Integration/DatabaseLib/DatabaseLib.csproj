@@ -81,6 +81,8 @@
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
     <Compile Include="Model\CustomerSession.cs" />
+    <Compile Include="Model\Database\ApprovalsWithoutAML.cs" />
+    <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
     <Compile Include="Model\Database\CustomerStatuses.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />

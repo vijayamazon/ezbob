@@ -44,5 +44,8 @@
         public string DiscountPlan { get; set; }
         public string DiscountPlanPercents { get; set; }
         public int DiscountPlanId { get; set; }
+
+		public string AMLResult { get; set; }
+		public bool SkipPopupForApprovalWithoutAML { get; set; }
     }
 }

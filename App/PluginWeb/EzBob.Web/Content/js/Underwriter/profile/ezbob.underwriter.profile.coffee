@@ -51,6 +51,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @loanInfoModel
             personalInfo: @personalInfoModel
         )
+
         @summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel()
         @summaryInfoView = new EzBob.Underwriter.SummaryInfoView(
             el: summaryInfo
@@ -153,7 +154,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         false
 
     ApproveBtnClick: (e) ->
-        return false  if $(e.currentTarget).hasClass("disabled")
+        return false if $(e.currentTarget).hasClass("disabled")
         if @loanInfoModel.get('InterestRate') <= 0
             EzBob.ShowMessage 'Wrong Interest Rate value (' + @loanInfoModel.get('InterestRate') + '), please enter the valid value (above zero)', 'Error'
             return false
@@ -162,10 +163,18 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             return false
         if @loanInfoModel.get("OfferExpired")
             EzBob.ShowMessage "Loan offer has expired. Set new validity date.", "Error"
-            return false
+            return false            
+
         dialog = new EzBob.Underwriter.ApproveDialog(model: @loanInfoModel)
-        dialog.render()
         dialog.on "changedSystemDecision", @changedSystemDecision, this
+        
+        @skipPopupForApprovalWithoutAML = @loanInfoModel.get("SkipPopupForApprovalWithoutAML")
+        if @loanInfoModel.get("AMLResult") != 'Passed' && !@skipPopupForApprovalWithoutAML        
+            approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML(model: @loanInfoModel, approveDialog: dialog, skipPopupForApprovalWithoutAML: @skipPopupForApprovalWithoutAML)
+            EzBob.App.modal.show(approveLoanWithoutAMLDialog);
+            return false
+
+        dialog.render()
         false
 
     EscalateBtnClick: (e) ->

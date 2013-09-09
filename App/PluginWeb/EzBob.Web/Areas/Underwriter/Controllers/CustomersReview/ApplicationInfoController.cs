@@ -30,6 +30,7 @@
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
 		private readonly ICustomerStatusesRepository customerStatusesRepository;
+		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -44,7 +45,8 @@
 		                                 IDiscountPlanRepository discounts,
 		                                 CashRequestBuilder crBuilder,
 		                                 ApplicationInfoModelBuilder infoModelBuilder,
-		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository)
+		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository,
+										 IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -58,6 +60,7 @@
 			_infoModelBuilder = infoModelBuilder;
 			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
+			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 		}
 
 		[Ajax]
@@ -81,24 +84,42 @@
 		}
 
 		[HttpPost]
-        [Transactional]
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [Permission(Name = "CreditLineFields")]
-        public JsonNetResult ChangeCashRequestOpenCreditLine( long id, double amount)
-        {
-            _limit.Check(amount);
-            var cr = _cashRequestsRepository.Get(id);
-	        int step = _config.GetCashSliderStep;
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "CreditLineFields")]
+		public JsonNetResult ChangeCashRequestOpenCreditLine(long id, double amount)
+		{
+			_limit.Check(amount);
+			var cr = _cashRequestsRepository.Get(id);
+			int step = _config.GetCashSliderStep;
 			cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
-            _crm.UpdateCashRequest(cr);
-            cr.LoanTemplate = null;
-            _cashRequestsRepository.SaveOrUpdate(cr);
+			_crm.UpdateCashRequest(cr);
+			cr.LoanTemplate = null;
+			_cashRequestsRepository.SaveOrUpdate(cr);
 
-            Log.DebugFormat("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
+			Log.DebugFormat("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
-	        return this.JsonNet(true);
-        }
+			return this.JsonNet(true);
+		}
+
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		public void SaveApproveWithoutAML(int customerId, bool doNotShowAgain)
+		{
+			Log.DebugFormat("Saving approve without AML. Customer:{0} doNotShowAgain = {1}", customerId, doNotShowAgain);
+			
+			var entry = new ApprovalsWithoutAML
+				{
+					CustomerId = customerId,
+					DoNotShowAgain = doNotShowAgain,
+					Timestamp = DateTime.UtcNow,
+					Username = User.Identity.Name
+				};
+
+			approvalsWithoutAMLRepository.SaveOrUpdate(entry);
+		}
 
 		[HttpPost]
 		[Transactional]

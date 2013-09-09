@@ -15,13 +15,15 @@
 		private readonly IPacNetBalanceRepository _funds;
 		private readonly IPacNetManualBalanceRepository _manualFunds;
         private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
-        private readonly ILoanTypeRepository _loanTypes;
+		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
+		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
-			IPacNetManualBalanceRepository manualFunds, 
+			IPacNetManualBalanceRepository manualFunds,
+			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
             IDiscountPlanRepository discounts, 
             ILoanTypeRepository loanTypes)
 		{
@@ -29,6 +31,7 @@
 			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
+			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -53,6 +56,7 @@
                 cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
 
                 model.RepaymentPerion = _repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+
             }
 
             model.CustomerId = customer.Id;
@@ -108,6 +112,8 @@
             model.Reason = cr.UnderwriterComment;
 
             model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+			model.AMLResult = customer.AMLResult;
+			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
         }
 	}
 }

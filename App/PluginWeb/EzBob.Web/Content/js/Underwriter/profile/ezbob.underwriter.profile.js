@@ -20,7 +20,7 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, companyScore, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo,
+      var alertPassed, apiChecks, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo,
         _this = this;
 
       this.$el.html(this.template());
@@ -33,7 +33,6 @@
       paymentAccounts = this.$el.find("#payment-accounts");
       loanhistorys = this.$el.find("#loanhistorys");
       medalCalculations = this.$el.find("#medal-calculator");
-      companyScore = this.$el.find("#company-score");
       messages = this.$el.find("#messages");
       apiChecks = this.$el.find("#apiChecks");
       customerRelations = this.$el.find("#customerRelations");
@@ -92,11 +91,6 @@
       });
       this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
         el: this.$el.find("#customer-info")
-      });
-      this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
-      this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
-        el: companyScore,
-        model: this.companyScoreModel
       });
       this.messagesModel = new EzBob.Underwriter.MessageModel();
       this.Message = new EzBob.Underwriter.Message({
@@ -201,7 +195,7 @@
     };
 
     ProfileView.prototype.ApproveBtnClick = function(e) {
-      var dialog;
+      var approveLoanWithoutAMLDialog, dialog;
 
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
@@ -221,8 +215,18 @@
       dialog = new EzBob.Underwriter.ApproveDialog({
         model: this.loanInfoModel
       });
-      dialog.render();
       dialog.on("changedSystemDecision", this.changedSystemDecision, this);
+      this.skipPopupForApprovalWithoutAML = this.loanInfoModel.get("SkipPopupForApprovalWithoutAML");
+      if (this.loanInfoModel.get("AMLResult") !== 'Passed' && !this.skipPopupForApprovalWithoutAML) {
+        approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
+          model: this.loanInfoModel,
+          approveDialog: dialog,
+          skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML
+        });
+        EzBob.App.modal.show(approveLoanWithoutAMLDialog);
+        return false;
+      }
+      dialog.render();
       return false;
     };
 
@@ -311,8 +315,7 @@
     };
 
     ProfileView.prototype._show = function(id) {
-      var that,
-        _this = this;
+      var that;
 
       this.hide();
       BlockUi("on");
@@ -381,10 +384,6 @@
         Id: id
       }, {
         silent: true
-      });
-      this.companyScoreModel.customerId = id;
-      this.companyScoreModel.fetch().done(function() {
-        return console.log('company score model', _this.companyScoreModel);
       });
       this.messagesModel.fetch();
       this.alertDocsView.create(id);
