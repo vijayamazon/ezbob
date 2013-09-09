@@ -321,8 +321,7 @@
     };
 
     ProfileView.prototype._show = function(id) {
-      var that,
-        _this = this;
+      var that;
 
       this.hide();
       BlockUi("on");
@@ -393,9 +392,7 @@
         silent: true
       });
       this.companyScoreModel.customerId = id;
-      this.companyScoreModel.fetch().done(function() {
-        return console.log('company score model', _this.companyScoreModel);
-      });
+      this.companyScoreModel.fetch();
       this.messagesModel.fetch();
       this.alertDocsView.create(id);
       this.ApicCheckLogs.customerId = id;

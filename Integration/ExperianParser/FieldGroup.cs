@@ -22,6 +22,7 @@ namespace Ezbob.ExperianParser {
 		public string Name { get; set; }
 		public string PathToParent { get; set; }
 		public List<Field> Fields { get; set; }
+		public Dictionary<string, string> MetaData { get; set; } 
 
 		#endregion configuration
 
@@ -90,6 +91,18 @@ namespace Ezbob.ExperianParser {
 		} // AddOutputFieldBuilder
 
 		#endregion method AddOutputFieldBuilder
+
+		#region method FillParsedData
+
+		public void FillParsedData(ParsedData oData) {
+			oData.GroupName = Name;
+
+			if (MetaData != null)
+				foreach (KeyValuePair<string, string> pair in MetaData)
+					oData.MetaData[pair.Key] = pair.Value;
+		} // FillParsedData
+
+		#endregion method FillParsedData
 
 		#endregion public
 

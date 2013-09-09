@@ -8,6 +8,7 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Configuration;
 using EzBob.Web.Infrastructure.csrf;
+using Ezbob.ExperianParser;
 using Ezbob.Logger;
 using Scorto.Web;
 using StructureMap;
@@ -63,8 +64,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 			} // try
 
 			try {
-				Dictionary<string, List<SortedDictionary<string, string>>> oParsed = parser.NamedParse(doc);
-				return this.JsonNet(new {result = "ok", data = oParsed});
+				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
+				return this.JsonNet(new { result = "ok", dataset = oParsed });
 			}
 			catch (Exception e) {
 				ms_oLog.Error(string.Format("Failed to extract Company Score tab data from Experian response with customer id = {0}", id), e);

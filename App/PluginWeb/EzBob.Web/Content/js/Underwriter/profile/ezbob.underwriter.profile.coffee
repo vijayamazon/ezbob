@@ -292,8 +292,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             silent: true
 
         @companyScoreModel.customerId = id
-        @companyScoreModel.fetch().done =>
-            console.log 'company score model', @companyScoreModel
+        @companyScoreModel.fetch()
 
         @messagesModel.fetch()
         @alertDocsView.create id

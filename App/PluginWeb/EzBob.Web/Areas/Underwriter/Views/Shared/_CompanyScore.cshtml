@@ -1,32 +1,62 @@
 ﻿<script id="company-score-template" type="text/template">
 <% (function(response) {
-	console.log('serialised:', response);
+	// console.log('serialised:', response);
 
 	if (response.result != 'ok') {
 		print(response.result);
 		return;
 	} // if
 
-	print('<div class=span6>');
+	for (var i in response.dataset) {
+		var aryData = response.dataset[i].Data;
+		
+		if (aryData.length > 0) {
+			var oMetaData = response.dataset[i].MetaData || {};
 
-	for (var i in response.data) {
-		var ary = response.data[i];
+			// console.log('i = ', i, 'aryData = ', aryData, 'meta', oMetaData);
 
-		%><table class="table table-bordered table-striped blue-header centered table-fixed rright">
-			<thead><tr><th colspan=2><%= i %></th></tr></thead>
-			<tbody><%
-			for (var j = 0; j < ary.length; j++) {
-				var obj = ary[j];
+			%><table class="table table-bordered table-striped blue-header centered table-fixed rright"><%
+			if (oMetaData.DisplayDirection == 'horizontal') {
+				var nColumnCount = 0;
+			
+				var obj = aryData[0];
 
+				for (var fld in obj)
+					nColumnCount++;
+
+				%><thead><tr><th colspan=<%= nColumnCount %>><%= i %></th></tr><tr><%
 				for (var fld in obj) {
-					%><tr><td><%= fld %></td><td><%= obj[fld] %></td></tr><%
-				} // for each field
-			} // for each group output
-			%></tbody>
-		</table><%
-	} // for
+					%><th><%- fld %></th><%
+				}
+				%></tr></thead><tbody><%
+				for (var j = 0; j < aryData.length; j++) {
+					var obj = aryData[j];
 
-	print('</div>');
+					print('<tr>');
+
+					for (var fld in obj) {
+						%><td><%- obj[fld] %></td><%
+					} // for each field
+
+					print('</tr>');
+				} // for each group output
+				%></tbody><%
+			}
+			else {
+				%><thead><tr><th colspan=2><%= i %></th></tr></thead>
+				<tbody><%
+				for (var j = 0; j < aryData.length; j++) {
+					var obj = aryData[j];
+
+					for (var fld in obj) {
+						%><tr><td><%- fld %></td><td><%- obj[fld] %></td></tr><%
+					} // for each field
+				} // for each group output
+				%></tbody><%
+			}
+			%></table><%
+		} // if
+	} // for
 })(companyScoreData);
 %>
 </script>

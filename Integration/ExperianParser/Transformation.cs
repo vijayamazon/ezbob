@@ -1,9 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Ezbob.Logger;
 
 namespace Ezbob.ExperianParser {
+	#region enum TransformationType
+
+	enum TransformationType {
+		None,
+		Map,
+		MonthName,
+	} // TransformationType
+
+	#endregion enum TransformationType
+
 	#region class Transformation
 
 	class Transformation {
@@ -12,13 +23,13 @@ namespace Ezbob.ExperianParser {
 		#region constructor
 
 		public Transformation() {
-			m_oMap = new SortedDictionary<string, string>();
+			m_oTypes = new List<TransformationType>();
 		} // constructor
 
 		#endregion constructor
 
 		public List<string> Types { get; set; }
-		public List<TransformationMapEntry> Map { get; set; }
+		public SortedDictionary<string, string> Map { get; set; }
 
 		#region method Validate
 
@@ -26,41 +37,19 @@ namespace Ezbob.ExperianParser {
 			if (Types == null)
 				Types = new List<string>();
 
-			var oTypes = new List<string>();
+			m_oTypes.Clear();
 
 			foreach (string sType in Types) {
 				if (string.IsNullOrWhiteSpace(sType))
 					throw new OwnException("Transformation type not specified.");
 
-				string t = sType.Trim().ToLower();
+				TransformationType nType = TransformationType.None;
 
-				switch (t) {
-				case "map":
-					break;
+				if (!TransformationType.TryParse(sType.Trim(), true, out nType))
+					throw new OwnException("Unsupported transformation type: {0}", sType);
 
-				default:
-					throw new OwnException("Unsupported transformation type: {0}", t);
-				} // switch
-
-				oTypes.Add(t);
+				m_oTypes.Add(nType);
 			} // for each type
-
-			Types = oTypes;
-
-			m_oMap.Clear();
-
-			Map.ForEach(e => {
-				e.Validate(log);
-
-				if ((log != null) && m_oMap.ContainsKey(e.From)) {
-					log.Warn(
-						"Duplicate map key, the latter will prevail.\n\tThe key: {0}\n\tFormer: {1}\n\tLatter: {2}",
-						e.From, m_oMap[e.From], e.To
-					);
-				} // if
-
-				m_oMap[e.From] = e.To;
-			});
 		} // Validate
 
 		#endregion method Validate
@@ -70,8 +59,8 @@ namespace Ezbob.ExperianParser {
 		public void Log(StringBuilder sb, string sLinePrefix) {
 			sb.AppendFormat("{0}Types: {1}\n", sLinePrefix, string.Join(", ", Types));
 
-			if (m_oMap.Count > 0) {
-				foreach (KeyValuePair<string, string> pair in m_oMap)
+			if (Map != null) {
+				foreach (KeyValuePair<string, string> pair in Map)
 					sb.AppendFormat("{0}\t{1} --> {2}\n", sLinePrefix, pair.Key, pair.Value);
 			} // if
 		} // Log
@@ -83,11 +72,19 @@ namespace Ezbob.ExperianParser {
 		public string Apply(string sValue) {
 			string sResult = sValue;
 
-			foreach (string sType in Types) {
-				switch (sType) {
-				case "map":
-					if (m_oMap.ContainsKey(sResult))
-						sResult = m_oMap[sResult];
+			foreach (TransformationType nType in m_oTypes) {
+				switch (nType) {
+				case TransformationType.Map:
+					if ((Map != null) && Map.ContainsKey(sResult))
+						sResult = Map[sResult];
+					break;
+
+				case TransformationType.MonthName:
+					DateTime oDate = DateTime.Today;
+
+					if (DateTime.TryParseExact("1976-" + sResult + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out oDate))
+						sResult = oDate.ToString("MMMM", CultureInfo.InvariantCulture);
+
 					break;
 				} // switch
 			} // for each type
@@ -100,7 +97,7 @@ namespace Ezbob.ExperianParser {
 
 		#region private
 
-		private readonly SortedDictionary<string, string> m_oMap;
+		private readonly List<TransformationType> m_oTypes;
 
 		#endregion private
 	} // class Transformation
