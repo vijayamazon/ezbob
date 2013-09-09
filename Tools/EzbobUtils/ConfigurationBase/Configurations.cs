@@ -26,7 +26,8 @@ namespace ConfigurationBase {
 		private enum SupportedTypes {
 			Int32,
 			Int64,
-			String
+			String,
+			Boolean
 		} // enum SupportedTypes
 
 		private const string DefaultKeyFieldName = "CfgKey";
@@ -139,7 +140,14 @@ namespace ConfigurationBase {
 			case SupportedTypes.String:
 				configPropertyInfos[key].SetValue(this, value);
 				break;
+			case SupportedTypes.Boolean:
+				Boolean valueAsBool;
 
+				if (!Boolean.TryParse(value, out valueAsBool))
+					throw new ParseConfigurationBaseException("as bool", key, value);
+
+				configPropertyInfos[key].SetValue(this, valueAsBool);
+				break;
 			default:
 				throw new ParseConfigurationBaseException("type is not implemented", key, value);
 			} // switch

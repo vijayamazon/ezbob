@@ -5,7 +5,6 @@ namespace EzAutoResponder
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.ServiceProcess;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailBee;
@@ -19,6 +18,13 @@ namespace EzAutoResponder
 		private Conf _cfg;
 		private readonly ASafeLog _log = new SafeLog();
 		private Imap _imap;
+
+		[SetUp]
+		public void Init()
+		{
+			_cfg = new Conf(_log);
+			_cfg.Init();
+		}
 
 		[Test]
 		[Ignore]
@@ -123,9 +129,34 @@ namespace EzAutoResponder
 
 		[Test]
 		[Ignore]
+		public void TestWeekend()
+		{
+			Console.WriteLine(_cfg.AutoRespondNightConstraintEnabled);
+			var w = new WeekendMarker((DayOfWeek)Enum.Parse(typeof(DayOfWeek), _cfg.AutoRespondWeekendDayBegin), (DayOfWeek)Enum.Parse(typeof(DayOfWeek), _cfg.AutoRespondWeekendDayEnd));
+			//var dateReceived = (new DateTime(2013, 8, 27, 21, 58, 00)).ToUniversalTime(); //tuesday
+			//var dateReceived = (new DateTime(2013, 9, 13, 21, 58, 00)).ToUniversalTime(); // friday night
+			//var dateReceived = (new DateTime(2013, 9, 14, 11, 58, 00)).ToUniversalTime(); // suturday evening
+			//var dateReceived = (new DateTime(2013, 9, 15, 5, 00, 00)).ToUniversalTime(); // sunday morning
+			var dateReceived = (new DateTime(2013, 9, 15, 22, 00, 00)).ToUniversalTime(); // sunday night
+			var timeReceived = dateReceived.TimeOfDay;
+
+			if ((w.IsWeekendBegin(dateReceived.DayOfWeek) && timeReceived >= new TimeSpan(_cfg.AutoRespondWeekendHourBegin, 0, 0)) || 
+				 w.IsWeekendMiddle(dateReceived.DayOfWeek) ||
+				(w.IsWeekendEnd(dateReceived.DayOfWeek) && timeReceived <= new TimeSpan(_cfg.AutoRespondWeekendHourEnd, 0, 0)))
+			{
+					Console.WriteLine("weekend");
+					return;
+			}
+			
+			Console.WriteLine("not weekend");
+
+		}
+
+		[Test]
+		[Ignore]
 		public void TestMandrill()
 		{
-			var m = new Mandrill(_log, _cfg.MandrillApiKey);
+			var m = new Mandrill(_log, _cfg.AutoRespondMandrillApiKey);
 			var vars = new Dictionary<string, string>
 				{
 					{"FNAME", "Stas Dulman"},

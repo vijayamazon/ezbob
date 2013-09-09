@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailBee;
@@ -18,7 +19,7 @@
 		private readonly TimeSpan _timeout;
 		private DateTime _startTime;
 		private bool _exiting; // Flag. If true, terminating the application is in progress and we should stop idle without attempt to download new messages
-		
+		private readonly SqlConnection _oDb;
 		public ImapIdler(string address, string password, EventLog eventLog)
 		{
 			_log = new SafeLog();
@@ -26,6 +27,7 @@
 			_cfg.Init();
 			_eventLog = eventLog;
 			_timeout = new TimeSpan(0, _cfg.AutoResponderIdleTimeoutMinutes, _cfg.AutoResponderIdleTimeoutSeconds); // 30 sec timeout for idle
+			_oDb = new SqlConnection();
 			InitImap(address, password);
 		}
 
@@ -56,7 +58,7 @@
 				Mailer.Mailer.SendMail(address, password, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
-			_imap = new Imap {SslMode = MailBee.Security.SslStartupMode.OnConnect};
+			_imap = new Imap { SslMode = MailBee.Security.SslStartupMode.OnConnect };
 
 			// Connect to IMAP server
 			_imap.Connect(_cfg.Server, _cfg.Port);
@@ -76,11 +78,11 @@
 				throw ex;
 			}
 			// Log into IMAP account
-			
+
 			_eventLog.WriteEntry("Logged into the server", EventLogEntryType.Information);
 
 			// Select Inbox folder
-			_imap.ExamineFolder("Inbox");
+			_imap.SelectFolder("Inbox");
 
 			// Add message status event handler which will "listen to server" while idling
 			_imap.MessageStatus += new ImapMessageStatusEventHandler(_imap_MessageStatus);
@@ -176,45 +178,101 @@
 
 		private void HandleMessage(MailMessage msg)
 		{
-			_eventLog.WriteEntry("Handle Message begin", EventLogEntryType.Information);
+			//_eventLog.WriteEntry("Handle Message begin", EventLogEntryType.Information);
+			if (IsExcludedMail(msg.From.Email))
+			{
+				return;//Ignore mails from ezbob@ezbob.com and mailer-daemon@googlemail.com
+			}
+
 			var dateReceived = msg.DateReceived.ToUniversalTime();
-			var timeReceived = dateReceived.TimeOfDay;
-			//sending only for mails that where recieved between 19:00 and 06:00
-			if (timeReceived < new TimeSpan(_cfg.AutoRespondAfterHour, 0, 0) &&
-				timeReceived > new TimeSpan(_cfg.AutoRespondBeforeHour, 0, 0))
-			{
-				_eventLog.WriteEntry("Time Constraint", EventLogEntryType.Information);
-				return;
-			}
-
-			var oDb = new SqlConnection();
-			var time = oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
-													new QueryParameter(Const.EmailSpParam, msg.From.Email));
-
-			//sending autoresponse only once in three days 
-			if (time.HasValue && time.Value > dateReceived.AddDays(_cfg.AutoRespondCountDays))
-			{
-				_eventLog.WriteEntry("Count Constraint", EventLogEntryType.Information);
-				return;
-			}
 
 			if (dateReceived < DateTime.Today.AddDays(_cfg.AutoRespondCountDays))
 			{
-				_eventLog.WriteEntry("Old Unseen mail", EventLogEntryType.Information);
+				//_eventLog.WriteEntry("Old Unseen mail", EventLogEntryType.Information);
 				return;
 			}
 
-			oDb.ExecuteNonQuery(Const.InsertAutoresponderLogSpName,
+			if (!IsNotExceededCount(dateReceived, msg.From.Email))
+			{
+				return;
+			}
+
+			if (!IsWeekend(dateReceived) && !IsNight(dateReceived))
+			{
+				return;
+			}
+
+			_oDb.ExecuteNonQuery(Const.InsertAutoresponderLogSpName,
 								new QueryParameter(Const.EmailSpParam, msg.From.Email),
 								new QueryParameter(Const.NameSpParam, msg.From.DisplayName));
 
-			var mandrill = new Mandrill(_log, _cfg.MandrillApiKey);
+			var mandrill = new Mandrill(_log, _cfg.AutoRespondMandrillApiKey);
 			var vars = new Dictionary<string, string>
 				{
 					{"FNAME", msg.From.DisplayName ?? msg.From.AsString},
 				};
 
-			mandrill.Send(vars, msg.From.Email, _cfg.MandrillAutoResponseTemplate);
+			_eventLog.WriteEntry("Autoresponding to " + msg.From.Email, EventLogEntryType.Information);
+			mandrill.Send(vars, msg.From.Email, _cfg.AutoRespondMandrillTemplate);
+		}
+
+		private static bool IsExcludedMail(string from)
+		{
+			return Const.ExcludedSendersEmails.Any(em => @from == em);
+		}
+
+		private bool IsWeekend(DateTime dateReceived)
+		{
+			if (!_cfg.AutoRespondWeekendConstraintEnabled)
+			{
+				return false;
+			}
+			var timeReceived = dateReceived.TimeOfDay;
+			var w = new WeekendMarker((DayOfWeek)Enum.Parse(typeof(DayOfWeek), _cfg.AutoRespondWeekendDayBegin),
+									  (DayOfWeek)Enum.Parse(typeof(DayOfWeek), _cfg.AutoRespondWeekendDayEnd));
+			if ((w.IsWeekendBegin(dateReceived.DayOfWeek) && timeReceived >= new TimeSpan(_cfg.AutoRespondWeekendHourBegin, 0, 0)) ||
+				w.IsWeekendMiddle(dateReceived.DayOfWeek) ||
+				(w.IsWeekendEnd(dateReceived.DayOfWeek) && timeReceived <= new TimeSpan(_cfg.AutoRespondWeekendHourEnd, 0, 0)))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool IsNight(DateTime dateReceived)
+		{
+			if (!_cfg.AutoRespondNightConstraintEnabled)
+			{
+				return false;
+			}
+			var timeReceived = dateReceived.TimeOfDay;
+			if (timeReceived < new TimeSpan(_cfg.AutoRespondAfterHour, 0, 0) &&
+				timeReceived > new TimeSpan(_cfg.AutoRespondBeforeHour, 0, 0))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool IsNotExceededCount(DateTime dateReceived, string email)
+		{
+			if (!_cfg.AutoRespondCountConstraintEnabled)
+			{
+				return false;
+			}
+
+			var time = _oDb.ExecuteScalar<DateTime?>(Const.GetLastAutoresponderDateSpName,
+													new QueryParameter(Const.EmailSpParam, email));
+
+			//sending autoresponse only once in three days 
+			if (time.HasValue && time.Value > dateReceived.AddDays(_cfg.AutoRespondCountDays))
+			{
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

@@ -8,5 +8,7 @@
 		public static string InsertAutoresponderLogSpName = "InsertAutoresponderLog";
 		public static string EmailSpParam = "Email";
 		public static string NameSpParam = "Name";
+
+		public static string[] ExcludedSendersEmails = {"mailer-daemon@googlemail.com", "ezbob@ezbob.com"};
 	}
 }
