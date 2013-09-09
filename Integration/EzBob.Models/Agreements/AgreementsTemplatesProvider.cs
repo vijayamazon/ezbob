@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-
-namespace EzBob.Web.Code.Agreements
+﻿namespace EzBob.Models.Agreements
 {
-    public interface IAgreementsTemplatesProvider
+	using System;
+	using System.IO;
+
+	public interface IAgreementsTemplatesProvider
     {
         string GetTemplateByName(string name);
     }

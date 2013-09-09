@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
-using EzBob.Web.Code.Agreements;
+using EzBob.Models.Agreements;
 
 namespace ezmanage
 {
-    public class EzAgreementsTemplateProvider : IAgreementsTemplatesProvider
+	
+
+	public class EzAgreementsTemplateProvider : IAgreementsTemplatesProvider
     {
         public string GetTemplateByName(string name)
         {

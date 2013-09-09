@@ -4,11 +4,14 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Signals.RenderAgreements;
+using EzBob.Models.Agreements;
 using Newtonsoft.Json;
 
 namespace EzBob.Web.Code.Agreements
 {
-    public interface IAgreementsGenerator
+	
+
+	public interface IAgreementsGenerator
     {
         void RenderAgreements(Loan loan, bool isRebuld);
     }

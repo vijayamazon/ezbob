@@ -6,17 +6,18 @@ using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Infrastructure;
 using StructureMap;
+using EzBob.Models.Agreements;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class AgreementController : Controller
+	public class AgreementController : Controller
     {
         private readonly AgreementRenderer _agreementRenderer;
         private readonly IEzbobWorkplaceContext _context;
         private readonly AgreementsModelBuilder _builder;
         private readonly AgreementsTemplatesProvider _templates;
         private readonly LoanBuilder _loanBuilder;
-        private EZBob.DatabaseLib.Model.Database.Customer _customer;
+        private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
 
         public AgreementController(AgreementRenderer agreementRenderer, IEzbobWorkplaceContext context, AgreementsModelBuilder builder, AgreementsTemplatesProvider templates, LoanBuilder loanBuilder)
         {
@@ -28,7 +29,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _loanBuilder = loanBuilder;
         }
 
-        public FileResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod)
+        public ActionResult Download(decimal amount, string viewName, int loanType, int repaymentPeriod)
         {
             var lastCashRequest = _customer.LastCashRequest;
 
@@ -39,8 +40,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			} // if
 
             var loan = _loanBuilder.CreateLoan(lastCashRequest, amount, DateTime.UtcNow);
+	        string file;
+	        try
+	        {
+				file = _templates.GetTemplateByName(viewName);
+	        }
+	        catch (Exception)
+	        {
+				return RedirectToAction("NotFound", "Error", new { Area = "" });
+	        }
             
-            string file = _templates.GetTemplateByName(viewName);
 
             var model = _builder.Build(_customer, amount, loan);
             var pdf = _agreementRenderer.RenderAgreementToPdf(file, model);

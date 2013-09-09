@@ -14,7 +14,7 @@ using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
 using EzBob.Web.Code.Email;
-using EzBob.Web.Code.MpUniq;
+using EzBob.Models.Agreements;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Models.Repository;
 using NHibernate;
@@ -25,7 +25,9 @@ using ZohoCRM;
 
 namespace ezmanage
 {
-    public class EzRegistry: Registry
+	
+
+	public class EzRegistry: Registry
     {
         public EzRegistry()
         {

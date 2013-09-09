@@ -7,11 +7,12 @@ using EZBob.DatabaseLib.Repository;
 using EzBob.Signals.RenderConcentAgreement;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code.Agreements;
+using EzBob.Models.Agreements;
 using StructureMap;
 
 namespace EzBob.Web.Code
 {
-    public interface IConcentAgreementHelper
+	public interface IConcentAgreementHelper
     {
         byte[] Generate(string fullName, DateTime date);
         byte[] GenerateWidhDataBase(Customer customer);

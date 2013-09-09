@@ -1,33 +1,26 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Exceptions;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using EzBob.Web.Infrastructure;
-using Newtonsoft.Json;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Controllers
 {
-    [Authorize]
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Exceptions;
+	using EZBob.DatabaseLib.Model.Loans;
+	using Areas.Customer.Models;
+	using Code.Agreements;
+	using Infrastructure;
+	using Newtonsoft.Json;
+
+	[Authorize]
     public class AgreementsController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly ILoanAgreementRepository _agreements;
-        private AgreementRenderer _agreementRenderer;
-        private readonly DatabaseDataHelper _helper;
+        private readonly AgreementRenderer _agreementRenderer;
 
-        public AgreementsController(IEzbobWorkplaceContext context, ILoanAgreementRepository agreements, AgreementRenderer agreementRenderer, DatabaseDataHelper helper)
+        public AgreementsController(IEzbobWorkplaceContext context, ILoanAgreementRepository agreements, AgreementRenderer agreementRenderer)
         {
             _agreementRenderer = agreementRenderer;
             _context = context;
             _agreements = agreements;
-            _helper = helper;
-
         }
 
         public ActionResult Download(int id)

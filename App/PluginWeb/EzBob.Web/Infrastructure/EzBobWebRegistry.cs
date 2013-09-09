@@ -14,6 +14,7 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Repository;
 	using AmazonServiceLib.Config;
 	using Configuration;
+	using EzBob.Models.Agreements;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using ApplicationCreator;
