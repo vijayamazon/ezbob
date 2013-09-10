@@ -1111,16 +1111,3 @@ EzBob.validateCGShopForm = function (el, accountType) {
 
     return el.validate(v);
 };
-
-EzBob.isOfflineShopType = function(sShopTypeName) {
-	switch (sShopTypeName) {
-	case 'HMRC':
-	case 'Yodlee':
-		return true;
-		break;
-		
-	default:
-		return false;
-		break;
-	} // switch
-};

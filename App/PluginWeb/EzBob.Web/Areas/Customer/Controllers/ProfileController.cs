@@ -56,6 +56,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 .Select(x => x.Name)
                 .ToArray();
 
+            ViewData["OfflineMarketPlaces"] = _session
+                .Query<MP_MarketplaceType>()
+                .Where(x => x.IsOffline)
+                .Select(x => x.Name)
+                .ToList();
+
             return View("Index", wizardModel);
         }
         

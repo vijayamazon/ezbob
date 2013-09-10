@@ -275,6 +275,7 @@
         EzBob.Config.PayPalEnabled = @Model.Config.PayPalEnabled.ToString().ToLower();
         EzBob.Config.ShowChangePasswordPage = @ViewData["ShowChangePasswordPage"].ToString().ToLower();
         EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
+        EzBob.Config.OfflineMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["OfflineMarketPlaces"]));
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
 
         $(function () {

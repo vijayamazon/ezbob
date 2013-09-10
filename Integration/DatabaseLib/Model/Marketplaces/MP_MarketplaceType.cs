@@ -12,6 +12,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool Active { get; set; }
         public virtual bool IsPaymentAccount { get { return false; } }
         public virtual int UWPriority { get { return 0; } }
+		public virtual bool IsOffline { get; set; }
 	}
 
     public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType>
@@ -27,6 +28,7 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.InternalId).Not.Nullable();
             Map(x => x.Description);
             Map(x => x.Active);
+            Map(x => x.IsOffline);
             DiscriminateSubClassesOnColumn("").Formula(
 				"CASE Name " +
 				Integration.ChannelGrabberConfig.Configuration.Instance.GetMarketplaceDiscriminator() +
