@@ -102,11 +102,8 @@
     <Compile Include="Marketplaces\EBayModel.cs" />
     <Compile Include="Marketplaces\MarketPlaceModel.cs" />
     <Compile Include="Marketplaces\PaymentAccountsModel.cs" />
-    <Compile Include="Marketplaces\PayPalAccountDetailPaymentsInfoModel.cs" />
-    <Compile Include="Marketplaces\PayPalAccountGeneralPaymentsInfoModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountInfoModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountModel.cs" />
-    <Compile Include="Marketplaces\PayPalGeneralDataRowModel.cs" />
     <Compile Include="Marketplaces\YodleeBankModel.cs" />
     <Compile Include="Marketplaces\Builders\YodleeMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\YodleeModel.cs" />

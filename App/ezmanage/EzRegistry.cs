@@ -53,7 +53,6 @@ namespace ezmanage
             For<IPersonalInfoHistoryRepository>().Use<PersonalInfoHistoryRepository>();
             For<IPacnetPaypointServiceLogRepository>().Use<PacnetPaypointServiceLogRepository>();
             For<ICustomerMarketPlaceRepository>().Use<CustomerMarketPlaceRepository>();
-            For<IPayPalDetailsRepository>().Use<PayPalDetailsRepository>();
             For<IMP_WhiteListRepository>().Use<MP_WhiteListRepository>();
             For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
             For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();

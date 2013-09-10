@@ -283,8 +283,6 @@
     <Compile Include="Model\Plain\MarketPlaceModel.cs" />
     <Compile Include="Model\Database\OfferExpiredException.cs" />
     <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />
-    <Compile Include="Model\Database\PayPalGeneralDetailDataRow.cs" />
-    <Compile Include="Model\Database\PayPalGeneralDetailDataRowMap.cs" />
     <Compile Include="Model\Loans\ILoanScheduleRepository.cs" />
     <Compile Include="Model\Loans\ILoanTransactionRepository.cs" />
     <Compile Include="Model\Loans\LoanHistory.cs" />
@@ -298,8 +296,6 @@
     <Compile Include="Model\Marketplaces\MP_CustomerMarketplaceUpdatingActionLogMap.cs" />
     <Compile Include="Model\Marketplaces\MP_WhiteList.cs" />
     <Compile Include="PayPal\IPayPalAggregationFormulaRepository.cs" />
-    <Compile Include="PayPal\PayPalDetailsModel.cs" />
-    <Compile Include="PayPal\IPayPalDetailsRepository.cs" />
     <Compile Include="RepositoryRegistry.cs" />
     <Compile Include="Repository\CaisFlagRepository.cs" />
     <Compile Include="Repository\CaisReportsHistoryRepository.cs" />
@@ -511,31 +507,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Model\Database\DailyReportExecute.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Model\Database\PayPalIncomeDetails.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Model\Database\PayPalExpensesDetails.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Model\Database\PayPalTotalExpenses.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Model\Database\PayPalTotalIncome.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Model\Database\PayPalTotalTransactions.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

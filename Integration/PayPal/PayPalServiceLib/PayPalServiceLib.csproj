@@ -95,13 +95,11 @@
     <Compile Include="PayPalAdaptiveAccountsServiceHelper.cs" />
     <Compile Include="PayPalDatabaseFunctionFactory.cs" />
     <Compile Include="PayPalDatabaseFunctionStorage.cs" />
-    <Compile Include="PayPalDetailsRepository.cs" />
     <Compile Include="PayPalEnvConfig.cs" />
     <Compile Include="PayPalEvnSettings.cs" />
     <Compile Include="PayPalException.cs" />
     <Compile Include="PayPalPermissionServiceHelper.cs" />
     <Compile Include="Common\PayPalRequestInfo.cs" />
-    <Compile Include="PayPalRegistry.cs" />
     <Compile Include="PayPalServiceHelper.cs" />
     <Compile Include="PayPalServiceWrapperBase.cs" />
     <Compile Include="PayPalServiceInfo.cs" />

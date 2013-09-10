@@ -1,28 +1,18 @@
 ﻿<%
     var pi = m.PayPal.PersonalInfo;
-    var p = m.PayPal.Payments;
-    var pdi = m.PayPal.DetailPayments.Income;
-    var pde = m.PayPal.DetailPayments.Expenses;
     var gi = m.PayPal.GeneralInfo;
-    console.log(ai);
 %>
 
 <div class="paypalDetail">
     <div class="tabbable">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#paypal-aggregation" data-toggle="tab">Payment info</a></li>
-            <% if(pdi != null){ %>
-                <li><a href="#categories" data-toggle="tab">Categories info</a></li>
-            <%}%>
             <li><a href="#payPaldetails" data-toggle="tab">Account details</a></li>
             <li><a href="#paypal-report1" data-toggle="tab">Report 1</a></li>
             <li><a href="#paypal-report2" data-toggle="tab">Report 2</a></li>
         </ul>
         <div class="tab-content">
             @PersonalInfo()
-            <% if(pdi != null){%>
-                @Categories()
-            <%}%>
             @Aggregates()
             @ReportOne()
             @ReportTwo()
@@ -85,76 +75,6 @@
                     <td>Country</td>
                     <td><%-pi.Country || ''%></td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-}
-
-@helper Categories()
-{
-    <div class="tab-pane" id="categories">
-        <table class="table table-bordered table-striped marketplace-table">
-            <thead>
-                <tr>
-                    <th>Lifetime income split</th>
-                    <th>1M</th>
-                    <th>3M</th>
-                    <th>6M</th>
-                    <th>12M</th>
-                    <th>15M</th>
-                    <th>18M</th>
-                    <th>24M</th>
-                    <th>24M+</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% _.each(pdi, function(dataRowi, i){
-            %>
-            <tr>
-                <td><%-dataRowi.Type%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M1)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M3)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M6)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M12)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M15)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M18)%></td>
-                <td><%-EzBob.formatPounds(dataRowi.M24)%></td>
-                <td class="bold"><%-EzBob.formatPounds(dataRowi.M24Plus)%></td>
-            </tr>
-                <%}) %>
-       
-            </tbody>
-        </table>
-        <table class="table table-bordered table-striped marketplace-table">
-            <thead>
-                <tr>
-                    <th>Lifetime expenses split</th>
-                    <th>1M</th>
-                    <th>3M</th>
-                    <th>6M</th>
-                    <th>12M</th>
-                    <th>15M</th>
-                    <th>18M</th>
-                    <th>24M</th>
-                    <th>24M+</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% _.each(pde, function(dataRowe, i){
-            %>
-            <tr>
-                <td><%-dataRowe.Type%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M1)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M3)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M6)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M12)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M15)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M18)%></td>
-                <td><%-EzBob.formatPounds(dataRowe.M24)%></td>
-                <td class="bold"><%-EzBob.formatPounds(dataRowe.M24Plus)%></td>
-            </tr>
-                <%}) %>
-       
             </tbody>
         </table>
     </div>
