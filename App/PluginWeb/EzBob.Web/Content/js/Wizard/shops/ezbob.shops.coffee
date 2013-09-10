@@ -114,8 +114,10 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         isOffline = @model.get 'isOffline'
 
         for j in EzBob.Config.ActiveMarketPlaces
-            if @stores[j] and ((not isOffline) or EzBob.isOfflineShopType j)
-                @stores[j].active = 1
+            storeTypeName = if j == "Pay Pal" then "paypal" else j
+
+            if @stores[storeTypeName] and ((not isOffline) or EzBob.isOfflineShopType storeTypeName)
+                @stores[storeTypeName].active = 1
 
         @name = "shops"
         super()

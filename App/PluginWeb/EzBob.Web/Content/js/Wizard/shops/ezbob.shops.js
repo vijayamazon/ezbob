@@ -20,7 +20,7 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, isOffline, j, lc, vendorInfo, _i, _len, _ref1,
+      var acc, accountTypeName, aryCGAccounts, ignore, isOffline, j, lc, storeTypeName, vendorInfo, _i, _len, _ref1,
         _this = this;
 
       this.ebayStores = this.model.get("ebayStores");
@@ -181,8 +181,9 @@
       _ref1 = EzBob.Config.ActiveMarketPlaces;
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         j = _ref1[_i];
-        if (this.stores[j] && ((!isOffline) || EzBob.isOfflineShopType(j))) {
-          this.stores[j].active = 1;
+        storeTypeName = j === "Pay Pal" ? "paypal" : j;
+        if (this.stores[storeTypeName] && ((!isOffline) || EzBob.isOfflineShopType(storeTypeName))) {
+          this.stores[storeTypeName].active = 1;
         }
       }
       this.name = "shops";

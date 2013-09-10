@@ -15,8 +15,8 @@
 
 			// console.log('i = ', i, 'aryData = ', aryData, 'meta', oMetaData);
 
-			%><table class="table table-bordered table-striped blue-header centered table-fixed rright"><%
 			if (oMetaData.DisplayDirection == 'horizontal') {
+				%><table class="table table-striped blue-header table-bordered table-fixed"><%
 				var nColumnCount = 0;
 			
 				var obj = aryData[0];
@@ -43,13 +43,14 @@
 				%></tbody><%
 			}
 			else {
-				%><thead><tr><th colspan=2><%= i %></th></tr></thead>
+				%><table class="table table-striped blue-header">
+				<thead><tr><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];
 
 					for (var fld in obj) {
-						%><tr><td><%- fld %></td><td><%- obj[fld] %></td></tr><%
+						%><tr><td style="width: 1px; white-space: nowrap;"><%- fld %></td><td><%- obj[fld] %></td></tr><%
 					} // for each field
 				} // for each group output
 				%></tbody><%
