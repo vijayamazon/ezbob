@@ -55,79 +55,79 @@
 		public ViewResult Index()
 		{
 			var grids = new LoansGrids
+			{
+				WaitingForDecision = new CustomerGridModel
 				{
-					WaitingForDecision = new CustomerGridModel
-						{
-							Action = "Waiting",
-							ColModel = _gridWaiting.RenderColModel(),
-							ColNames = _gridWaiting.RenderColNames()
-						},
-					Approved = new CustomerGridModel
-						{
-							Action = "Approved",
-							ColModel = _gridApproved.RenderColModel(),
-							ColNames = _gridApproved.RenderColNames()
-						},
-					Late = new CustomerGridModel
-						{
-							Action = "Late",
-							ColModel = _gridLate.RenderColModel(),
-							ColNames = _gridLate.RenderColNames()
-						},
-					Rejected = new CustomerGridModel
-						{
-							Action = "Rejected",
-							ColModel = _gridRejected.RenderColModel(),
-							ColNames = _gridRejected.RenderColNames()
-						},
-					All = new CustomerGridModel
-						{
-							Action = "All",
-							ColModel = _gridAll.RenderColModel(),
-							ColNames = _gridAll.RenderColNames()
-						},
-					RegisteredCustomers = new CustomerGridModel
-						{
-							Action = "RegisteredCustomers",
-							ColModel = _gridRegisteredCustomers.RenderColModel(),
-							ColNames = _gridRegisteredCustomers.RenderColNames()
-						},
-					Pending = new CustomerGridModel
-						{
-							Action = "Pending",
-							ColModel = _gridPending.RenderColModel(),
-							ColNames = _gridPending.RenderColNames()
-						},
-					Loans = new CustomerGridModel
-						{
-							Action = "Loans",
-							ColModel = _gridLoans.RenderColModel(),
-							ColNames = _gridLoans.RenderColNames()
-						},
-					Sales = new CustomerGridModel
-					{
-						Action = "Sales",
-						ColModel = _gridSales.RenderColModel(),
-						ColNames = _gridSales.RenderColNames()
-					},
-					Collection = new CustomerGridModel
-					{
-						Action = "Collection",
-						ColModel = _gridCollection.RenderColModel(),
-						ColNames = _gridCollection.RenderColNames()
-					},
-					Config = _config,
-					MaxLoan = _limit.GetMaxLimit()
-				};
+					Action = "Waiting",
+					ColModel = _gridWaiting.RenderColModel(),
+					ColNames = _gridWaiting.RenderColNames()
+				},
+				Approved = new CustomerGridModel
+				{
+					Action = "Approved",
+					ColModel = _gridApproved.RenderColModel(),
+					ColNames = _gridApproved.RenderColNames()
+				},
+				Late = new CustomerGridModel
+				{
+					Action = "Late",
+					ColModel = _gridLate.RenderColModel(),
+					ColNames = _gridLate.RenderColNames()
+				},
+				Rejected = new CustomerGridModel
+				{
+					Action = "Rejected",
+					ColModel = _gridRejected.RenderColModel(),
+					ColNames = _gridRejected.RenderColNames()
+				},
+				All = new CustomerGridModel
+				{
+					Action = "All",
+					ColModel = _gridAll.RenderColModel(),
+					ColNames = _gridAll.RenderColNames()
+				},
+				RegisteredCustomers = new CustomerGridModel
+				{
+					Action = "RegisteredCustomers",
+					ColModel = _gridRegisteredCustomers.RenderColModel(),
+					ColNames = _gridRegisteredCustomers.RenderColNames()
+				},
+				Pending = new CustomerGridModel
+				{
+					Action = "Pending",
+					ColModel = _gridPending.RenderColModel(),
+					ColNames = _gridPending.RenderColNames()
+				},
+				Loans = new CustomerGridModel
+				{
+					Action = "Loans",
+					ColModel = _gridLoans.RenderColModel(),
+					ColNames = _gridLoans.RenderColNames()
+				},
+				Sales = new CustomerGridModel
+				{
+					Action = "Sales",
+					ColModel = _gridSales.RenderColModel(),
+					ColNames = _gridSales.RenderColNames()
+				},
+				Collection = new CustomerGridModel
+				{
+					Action = "Collection",
+					ColModel = _gridCollection.RenderColModel(),
+					ColNames = _gridCollection.RenderColNames()
+				},
+				Config = _config,
+				MaxLoan = _limit.GetMaxLimit()
+			};
 
 			if (_context.User.Roles.Any(r => r.Name == "manager"))
 			{
 				grids.Escalated = new CustomerGridModel
-					{
-						Action = "Escalated",
-						ColModel = _gridEscalated.RenderColModel(),
-						ColNames = _gridEscalated.RenderColNames()
-					};
+				{
+					Action = "Escalated",
+					ColModel = _gridEscalated.RenderColModel(),
+					ColNames = _gridEscalated.RenderColNames()
+				};
 			}
 
 			grids.MpTypes = _mpType.GetAll().ToList();
@@ -196,10 +196,10 @@
 		public UnderwriterGridResult Waiting(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridWaiting, settings)
-				{
-					CustomizeFilter =
-						crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.WaitingForDecision))
-				};
+			{
+				CustomizeFilter =
+					crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.WaitingForDecision))
+			};
 			return result;
 		}
 
@@ -210,9 +210,9 @@
 		public UnderwriterGridResult Escalated(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridEscalated, settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Escalated))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Escalated))
+			};
 			return result;
 		}
 
@@ -223,9 +223,9 @@
 		public UnderwriterGridResult Approved(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridApproved, settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Approved))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Approved))
+			};
 			return result;
 		}
 
@@ -236,9 +236,9 @@
 		public UnderwriterGridResult Rejected(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridRejected, settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Rejected))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Rejected))
+			};
 			return result;
 		}
 
@@ -249,9 +249,9 @@
 		public UnderwriterGridResult All(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridAll, settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.IsNotNull("CreditResult"))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.IsNotNull("CreditResult"))
+			};
 			return result;
 		}
 
@@ -267,20 +267,20 @@
 				return new GridCriteriaResult<Customer>(_session, null,
 														_gridRegisteredCustomers,
 														settings)
-					{
-						CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
-					};
+				{
+					CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
+				};
 
 			}
 
 			return new GridCriteriaResult<Customer>(_session, null,
 													_gridRegisteredCustomers,
 													settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
-													   Restrictions.IsNull("IsTest")))
-												  .Add(Restrictions.IsNull("CreditResult"))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
+												   Restrictions.IsNull("IsTest")))
+											  .Add(Restrictions.IsNull("CreditResult"))
+			};
 		}
 
 		[ValidateJsonAntiForgeryToken]
@@ -290,9 +290,9 @@
 		public UnderwriterGridResult Late(GridSettings settings)
 		{
 			var result = new UnderwriterGridResult(_session, null, _gridLate, settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Late))
-				};
+			{
+				CustomizeFilter = crit => crit.Add(Restrictions.Eq("CreditResult", CreditResultStatus.Late))
+			};
 			return result;
 		}
 
@@ -732,9 +732,9 @@
 			{
 				e.Save(streamForDoc, FileFormatType.Excel2007Xlsx);
 				var fs = new FileContentResult(streamForDoc.ToArray(), "application/vnd.ms-excel")
-					{
-						FileDownloadName = "AllMarketplaceIdExcel_" + DateTime.UtcNow.ToShortTimeString() + ".xlsx"
-					};
+				{
+					FileDownloadName = "AllMarketplaceIdExcel_" + DateTime.UtcNow.ToShortTimeString() + ".xlsx"
+				};
 				return fs;
 
 			}
