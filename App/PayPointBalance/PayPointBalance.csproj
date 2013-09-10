@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PayPoint">
-      <HintPath>..\..\Integration\PayPoint\bin\Debug\PayPoint.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +44,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj">
       <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
       <Name>ConfigurationBase</Name>
