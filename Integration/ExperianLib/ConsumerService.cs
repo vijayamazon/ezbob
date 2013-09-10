@@ -361,8 +361,8 @@
                     var currentDefBalance = 0;
                     var balance = 0;
                     var reg = new Regex("[^0-9,]");
+                    var tempDetail = detail;
 
-                    OutputFullConsumerDataConsumerDataCAISCAISDetails tempDetail = detail;
                     TryRead(
                         () => int.TryParse(reg.Replace(tempDetail.CurrentDefBalance.Amount, ""), out currentDefBalance));
                     TryRead(() => int.TryParse(reg.Replace(tempDetail.Balance.Amount, ""), out balance));

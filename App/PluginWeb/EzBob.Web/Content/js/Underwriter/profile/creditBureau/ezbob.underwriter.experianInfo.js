@@ -19,6 +19,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         this.$el.html(this.template({ experianInfo: this.model.toJSON() }));
         this.RunCheckBtn = this.$el.find("#RunCheckBtn");
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+        this.$el.find('.check-history tr:not(:eq(0),:eq(1))').css("cursor", "pointer");
     },
     events: {
         "click #RunCheckBtn, #RunReCheckBtn": "RunCheckBtnClick",
@@ -26,8 +27,22 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         "click #RunAMLBWACheckBtn": "RunAMLBWACheckBtn",
         "click #RunBWACheckBtn, #RunBWAReCheckBtn": "RunBWACheckBtn",
         "click .btn-download": "downloadConsent",
+        "click .check-history tr:not(:eq(0),:eq(1))": "CheckHistoryClicked"
     },
 
+    CheckHistoryClicked: function(e) {
+        var $el = $(e.currentTarget);
+        var date = $el.find("td:eq(1)").text();
+        date = date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6');
+        this.model.set({
+            "logDate": date,
+            "getFromLog": true
+        }, {
+            silent: true
+        });
+        this.model.fetch({ data: { logDate: date, getFromLog: true } });
+        this.render();
+    },
     downloadConsent: function (e) {
         var $el = $(e.currentTarget);
         $el.attr("href", window.gRootPath + "Underwriter/CreditBureau/DownloadConsentAgreement/"+this.model.get("Id") );

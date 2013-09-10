@@ -1018,6 +1018,17 @@
                         @RawCell("Existing business loans", "<%- experianInfo.Summary.Existingbusinessloans  %>","")
                     </tbody>
                 </table>
+                <table class="table table-striped blue-header rright check-history">
+                    <thead>
+                        @RawHeaderCell("Check history","","")
+                    </thead>
+                    <tbody>
+                        @EzForm.RawCellBold("#","Date insert","Score")
+                        <% _.each(experianInfo.CheckHistorys, function(val, i){%>
+                        @RawCell("<%-i+1%>","<%-EzBob.formatDateTime(val.Date)%>","<%-val.Score%>")
+                        <%})%>
+                    </tbody>
+                </table>
             </div>
         </div>
     <div class="row-fluid">

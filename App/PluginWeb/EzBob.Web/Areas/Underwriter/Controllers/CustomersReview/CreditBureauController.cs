@@ -1,27 +1,33 @@
-﻿using EZBob.DatabaseLib.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Xml.XPath;
+using ApplicationMng.Model;
+using ApplicationMng.Repository;
+using ExperianLib;
+using ExperianLib.Dictionaries;
+using ExperianLib.Ebusiness;
+using ExperianLib.IdIdentityHub;
+using EZBob.DatabaseLib.Model;
+using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Repository;
+using EzBob.Web.ApplicationCreator;
+using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Web.Code;
+using EzBob.Web.Infrastructure;
+using EzBobIntegration.Web_References.Consumer;
+using NHibernate;
+using NHibernate.Linq;
+using Scorto.Web;
 
-namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
+namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Drawing;
-	using System.Globalization;
-	using System.Linq;
-	using System.Web.Mvc;
-	using ApplicationMng.Model;
-	using ApplicationMng.Repository;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using ExperianLib;
-	using ExperianLib.Dictionaries;
-	using ExperianLib.Ebusiness;
-	using ExperianLib.IdIdentityHub;
-	using ApplicationCreator;
-	using Models;
-	using Code;
-	using Scorto.Web;
-	using Infrastructure;
-
     public class CreditBureauController : Controller
     {
         private readonly CustomerRepository _customers;
@@ -31,9 +37,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
         private readonly IEzBobConfiguration _config;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
         private readonly ConfigurationVariablesRepository _variablesRepository;
+        private readonly ISession _session;
 
         public CreditBureauController(CustomerRepository customers, IAppCreator creator,
-                                        IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config, ConfigurationVariablesRepository variablesRepository)
+                                        IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config, ConfigurationVariablesRepository variablesRepository, ISession session)
         {
             _customers = customers;
             _creator = creator;
@@ -41,130 +48,43 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             _applications = applications;
             _config = config;
             _variablesRepository = variablesRepository;
+            _session = session;
             _concentAgreementHelper = new ConcentAgreementHelper();
         }
 
 
         [HttpPost]
         [Transactional]
-        public JsonNetResult RunCheck(int Id)
+        public JsonNetResult RunCheck(int id)
         {
-            var customer = _customers.Get(Id);
-            var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
+            var customer = _customers.Get(id);
+            var anyApps = _applications.StratagyIsRunning(id, _config.ScoringResultStrategyName);
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
-            _creator.Evaluate(_users.Get(Id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+            _creator.Evaluate(_users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonNetResult Index(int id)
+        public JsonNetResult Index(int id, bool getFromLog = false, DateTime? logDate = null)
         {
             var customer = _customers.Get(id);
-            var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
-
-            var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
-            if (customerMainAddress != null)
-            {
-                loc.LocationLine1 = customerMainAddress.Line1;
-                loc.LocationLine2 = customerMainAddress.Line2;
-                loc.LocationLine3 = customerMainAddress.Line3;
-                loc.LocationLine4 = customerMainAddress.Town;
-                loc.LocationLine5 = customerMainAddress.County;
-                loc.LocationLine6 = customerMainAddress.Postcode;
-            }
-            
             var model = new CreditBureauModel();
+            var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
             try
             {
-                var consumerSrv = new ConsumerService();
-				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
-                                                         customer.PersonalInfo.Gender.ToString(), // should be Gender
-                                                         customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
-
-                model = generateConsumerModel(customer.Id, result);
-                customer.FinancialAccounts = model.AccountsInformation == null ? 0 : model.AccountsInformation.Length;
-                _customers.Update(customer);
-
-                model.Name = customer.PersonalInfo.FirstName;
-                model.MiddleName = customer.PersonalInfo.MiddleInitial;
-                model.Surname = customer.PersonalInfo.Surname;
-                model.FullName = customer.PersonalInfo.Fullname;
-                model.CompanyName = string.Empty;
-
-                model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-                model.ConsumerSummaryCharacteristics.DSRandOwnershipType = customer.PersonalInfo.ResidentialStatus;
-               
-                model.AmlInfo = new AMLInfo
-                                    {
-                                        AMLResult = string.IsNullOrEmpty(customer.AMLResult)
-                                                        ? "Verification was not performed"
-                                                        : customer.AMLResult
-                                    };
-                appendAMLInfo(model.AmlInfo, customer, customerMainAddress);
-
-                model.BavInfo = new BankAccountVerificationInfo
-                                    {
-                                        BankAccountVerificationResult = string.IsNullOrEmpty(customer.BWAResult)
-                                                                            ? "Verification was not performed"
-                                                                            : customer.BWAResult
-                                    };
-                appendBAVInfo(model.BavInfo, customer, customerMainAddress);
-                
-                if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) // limited
-                {
-                    var srv = new EBusinessService();
-                    var limitedInfo = srv.GetLimitedBusinessData(customer.LimitedInfo.LimitedRefNum, customer.Id, true);
-
-                    appendLimitedInfo(model, limitedInfo);
-                    model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-                    model.CompanyName = customer.LimitedInfo.LimitedCompanyName;
-
-                    model.directorsModels = generateDirectorsModels(id, customer.LimitedInfo.Directors);
-                }
-                else if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited) // NonLimited
-                {
-                    var srv = new EBusinessService();
-                    var nonLimitedInfo = srv.GetNotLimitedBusinessData(customer.NonLimitedInfo.NonLimitedRefNum, customer.Id, true);
-                    appendNonLimitedInfo(model, nonLimitedInfo);
-                    model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-                    model.CompanyName = customer.NonLimitedInfo.NonLimitedCompanyName;
-
-                    model.directorsModels = generateDirectorsModels(id, customer.NonLimitedInfo.Directors);
-                }
-
-                model.Summary = new Summary
-                    {
-                        Score = model.Score.ToString(CultureInfo.InvariantCulture),
-                        ConsumerIndebtednessIndex = model.CII,
-                        CheckDate = model.CheckDate,
-                        Validtill = model.CheckValidity,
-                        WorstCurrentstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus,
-                        WorstHistoricalstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M,
-                        Numberofdefaults = model.ConsumerSummaryCharacteristics.NumberOfDefaults,
-                        Accounts = model.ConsumerSummaryCharacteristics.NumberOfAccounts,
-                        CCJs = model.ConsumerSummaryCharacteristics.NumberOfCCJs,
-                        MostrecentCCJ =  model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ,
-                        DSRandownershiptype = model.ConsumerSummaryCharacteristics.DSRandOwnershipType,
-                        Creditcardutilization = model.ConsumerSummaryCharacteristics.CreditCardUtilization,
-                        Enquiriesinlast6months = model.ConsumerSummaryCharacteristics.EnquiriesLast6M,
-                        Enquiriesinlast3months = model.ConsumerSummaryCharacteristics.EnquiriesLast3M,
-                        Totalbalance = model.ConsumerAccountsOverview.Balance_Total,
-
-                        AML = model.AmlInfo.AMLResult,
-                        AMLnum = model.AmlInfo.AuthenticationIndexType.ToString(CultureInfo.InvariantCulture),
-                        BWA = model.BavInfo.BankAccountVerificationResult,
-                        BWAnum = GetBwaScoreInfo(model.BavInfo),
-                        Businesstype = model.BorrowerType,
-                        BusinessScore = GetBusinessScore(model),
-                        RiskLevel = model.LimitedInfo != null ? model.LimitedInfo.RiskLevel : "-",
-                        Existingbusinessloans = GetExistingBusinessLoans(model),
-                        ConsumerAccountsOverview = model.ConsumerAccountsOverview
-                    };
-
+                ConsumerServiceResult result;
+                GetConsumerInfo(customer, getFromLog, logDate, customerMainAddress, out result);
+                model = GenerateConsumerModel(customer.Id, result);
+                CreatePersonalDataModel(model, customer);
+                AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
+                AppendBavInfo(model.BavInfo, customer, customerMainAddress);
+                BuildEBusinessModel(id, customer, model);
+                BuildSummaryModel(model);
+                BuildHistoryModel(model, id);
             }
             catch (Exception e)
             {
@@ -174,7 +94,148 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             return this.JsonNet(model);
         }
 
-        public CreditBureauModel[] generateDirectorsModels(int customerId, IEnumerable<Director> directors)
+        private  void GetConsumerInfo(EZBob.DatabaseLib.Model.Database.Customer customer,
+            bool getFromLog, DateTime? logDate, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
+        {
+            
+            if (getFromLog)
+            {
+                var dob = customer.PersonalInfo.DateOfBirth;
+                var logs = _session.Query<MP_ServiceLog>().Where(x => x.Customer == customer && x.ServiceType == "Consumer Request").ToList();
+                var response = logs.First(x => logDate != null && x.InsertDate == logDate.Value.ToUniversalTime());
+                var serializer = new XmlSerializer(typeof(OutputRoot));
+                using(TextReader sr = new StringReader(response.ResponseData))
+                {
+                    var output = (OutputRoot) serializer.Deserialize(sr);
+                    result = new ConsumerServiceResult(output, dob); 
+                }
+            }
+            else
+            {
+                var loc = MultiLineLocationFromCustomerAddress(customerMainAddress);
+                var consumerSrv = new ConsumerService();
+                result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
+                    customer.PersonalInfo.Gender.ToString(), // should be Gender
+                    customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
+            }
+        }
+
+        private void BuildHistoryModel(CreditBureauModel model, int customerId)
+        {
+            var checkHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+                where s.Customer.Id == customerId
+                where s.ServiceType == "Consumer Request"
+                select new CheckHistoryModel
+                       {
+                           Date = s.InsertDate,
+                           Score = GetScoreFromXml(s.ResponseData)
+                       }).ToList();
+
+            model.CheckHistorys = checkHistoryModels;
+        }
+
+        private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            model.Name = customer.PersonalInfo.FirstName;
+            model.MiddleName = customer.PersonalInfo.MiddleInitial;
+            model.Surname = customer.PersonalInfo.Surname;
+            model.FullName = customer.PersonalInfo.Fullname;
+            model.CompanyName = string.Empty;
+
+            model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
+            model.ConsumerSummaryCharacteristics.DSRandOwnershipType = customer.PersonalInfo.ResidentialStatus;
+
+            model.AmlInfo = new AMLInfo
+                            {
+                                AMLResult = string.IsNullOrEmpty(customer.AMLResult)
+                                    ? "Verification was not performed"
+                                    : customer.AMLResult
+                            };
+
+            model.BavInfo = new BankAccountVerificationInfo
+                            {
+                                BankAccountVerificationResult = string.IsNullOrEmpty(customer.BWAResult)
+                                    ? "Verification was not performed"
+                                    : customer.BWAResult
+                            };
+            customer.FinancialAccounts = model.AccountsInformation == null ? 0 : model.AccountsInformation.Length;
+            _customers.Update(customer);
+        }
+
+        private static InputLocationDetailsMultiLineLocation MultiLineLocationFromCustomerAddress(
+            CustomerAddress customerMainAddress)
+        {
+            var loc = new InputLocationDetailsMultiLineLocation();
+            if (customerMainAddress != null)
+            {
+                loc.LocationLine1 = customerMainAddress.Line1;
+                loc.LocationLine2 = customerMainAddress.Line2;
+                loc.LocationLine3 = customerMainAddress.Line3;
+                loc.LocationLine4 = customerMainAddress.Town;
+                loc.LocationLine5 = customerMainAddress.County;
+                loc.LocationLine6 = customerMainAddress.Postcode;
+            }
+            return loc;
+        }
+
+        private void BuildEBusinessModel(int id, EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModel model)
+        {
+            var srv = new EBusinessService();
+            switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
+            {
+                case TypeOfBusinessReduced.Limited:
+                {
+                    var limitedInfo = srv.GetLimitedBusinessData(customer.LimitedInfo.LimitedRefNum, customer.Id, true);
+                    AppendLimitedInfo(model, limitedInfo);
+                    model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
+                    model.CompanyName = customer.LimitedInfo.LimitedCompanyName;
+                    model.directorsModels = GenerateDirectorsModels(id, customer.LimitedInfo.Directors);
+                }
+                    break;
+                case TypeOfBusinessReduced.NonLimited:
+                {
+                    var nonLimitedInfo = srv.GetNotLimitedBusinessData(customer.NonLimitedInfo.NonLimitedRefNum, customer.Id, true);
+                    AppendNonLimitedInfo(model, nonLimitedInfo);
+                    model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
+                    model.CompanyName = customer.NonLimitedInfo.NonLimitedCompanyName;
+                    model.directorsModels = GenerateDirectorsModels(id, customer.NonLimitedInfo.Directors);
+                }
+                    break;
+            }
+        }
+
+        private static void BuildSummaryModel(CreditBureauModel model)
+        {
+            model.Summary = new Summary
+                            {
+                                Score = model.Score.ToString(CultureInfo.InvariantCulture),
+                                ConsumerIndebtednessIndex = model.CII,
+                                CheckDate = model.CheckDate,
+                                Validtill = model.CheckValidity,
+                                WorstCurrentstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus,
+                                WorstHistoricalstatus = model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M,
+                                Numberofdefaults = model.ConsumerSummaryCharacteristics.NumberOfDefaults,
+                                Accounts = model.ConsumerSummaryCharacteristics.NumberOfAccounts,
+                                CCJs = model.ConsumerSummaryCharacteristics.NumberOfCCJs,
+                                MostrecentCCJ = model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ,
+                                DSRandownershiptype = model.ConsumerSummaryCharacteristics.DSRandOwnershipType,
+                                Creditcardutilization = model.ConsumerSummaryCharacteristics.CreditCardUtilization,
+                                Enquiriesinlast6months = model.ConsumerSummaryCharacteristics.EnquiriesLast6M,
+                                Enquiriesinlast3months = model.ConsumerSummaryCharacteristics.EnquiriesLast3M,
+                                Totalbalance = model.ConsumerAccountsOverview.Balance_Total,
+                                AML = model.AmlInfo.AMLResult,
+                                AMLnum = model.AmlInfo.AuthenticationIndexType.ToString(CultureInfo.InvariantCulture),
+                                BWA = model.BavInfo.BankAccountVerificationResult,
+                                BWAnum = GetBwaScoreInfo(model.BavInfo),
+                                Businesstype = model.BorrowerType,
+                                BusinessScore = GetBusinessScore(model),
+                                RiskLevel = model.LimitedInfo != null ? model.LimitedInfo.RiskLevel : "-",
+                                Existingbusinessloans = GetExistingBusinessLoans(model),
+                                ConsumerAccountsOverview = model.ConsumerAccountsOverview
+                            };
+        }
+
+        public CreditBureauModel[] GenerateDirectorsModels(int customerId, IEnumerable<Director> directors)
         {
             var customer = _customers.Get(customerId);
             var consumerSrv = new ConsumerService();
@@ -187,7 +248,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 var directorMainAddress = directorAddresses != null && directorAddresses.Any()
                                               ? directorAddresses.First()
                                               : null;
-                var dirLoc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
+                var dirLoc = new InputLocationDetailsMultiLineLocation();
                 if (directorMainAddress != null)
                 {
                     dirLoc.LocationLine1 = directorMainAddress.Line1;
@@ -201,7 +262,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 var result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
                                                  director.Gender.ToString(),
                                                  director.DateOfBirth, null, dirLoc, "PL", customer.Id, 0, true);
-                var dirModel = generateConsumerModel(-1, result);
+                var dirModel = GenerateConsumerModel(-1, result);
                 dirModel.Name = director.Name;
                 dirModel.MiddleName = director.Middle;
                 dirModel.Surname = director.Surname;
@@ -224,10 +285,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             const int yellowX = 240;
             const int greenWidth = 240;
 
-            const int ScoreMax = 1400;
-            const int ScoreMin = 120;
+            const int scoreMax = 1400;
+            const int scoreMin = 120;
 
-            var s = (int)((score - ScoreMin) / (ScoreMax - ScoreMin) * barCount);
+            var s = (int)((score - scoreMin) / (scoreMax - scoreMin) * barCount);
             s = (s < 0) ? 0 : s;
             s = (s >= barCount) ? barCount - 1 : s;
 
@@ -237,12 +298,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 c = Color.FromArgb(255, 0, 0);
             else if (virtualX < yellowX)
             {
-                var t = cup(1.0 - 1.0*(virtualX - redWidth)/(yellowX - redWidth));
+                var t = Cup(1.0 - 1.0*(virtualX - redWidth)/(yellowX - redWidth));
                 c = Color.FromArgb(255, (int) (255*t), 0);
             }
             else if (virtualX < w - greenWidth)
             {
-                var t = cup(1.0 - 1.0*(w - greenWidth - virtualX)/(w - greenWidth - yellowX));
+                var t = Cup(1.0 - 1.0*(w - greenWidth - virtualX)/(w - greenWidth - yellowX));
                 c = Color.FromArgb((int) (255*t), 255, 0);
             }
             else if (virtualX >= w - greenWidth)
@@ -259,16 +320,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             color = string.Format("#{0:X2}{1:X2}{2:X2};", c.R, c.G, c.B);
         }
 
-        private static double cup(double x)
+        private static double Cup(double x)
         {
             return ((x <= -1) || (x >= 1)) ? 0.0 : Math.Exp(1.0/(x*x - 1))*Math.E;
         }
 
-        protected CreditBureauModel generateRandomModel(int id)
+        protected CreditBureauModel GenerateRandomModel(int id)
         {
             var r = new Random();
             var score = r.Next(-200, 1600);
-            var odds = Math.Round(Math.Pow(2, (score - 600.0)/80.0), 2);
             string pos;
             string align;
             string valPos;
@@ -289,7 +349,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                        };
         }
 
-        protected CreditBureauModel generateNotQualifiedModel(int id)
+        protected CreditBureauModel GenerateNotQualifiedModel(int id)
         {
             return new CreditBureauModel
                        {
@@ -305,7 +365,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 
         protected const int StatusHistoryMonths = 24;
 
-        protected CreditBureauModel generateConsumerModel(int id, ConsumerServiceResult eInfo)
+        protected CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
         {
             double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
 
@@ -384,15 +444,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                                                            WorstCurrentStatus = string.Empty,
                                                            WorstCurrentStatus3M = string.Empty,
 
-                                                           EnquiriesLast3M = eInfo.EnquiriesLast3Months.ToString(),
-                                                           EnquiriesLast6M = eInfo.EnquiriesLast6Months.ToString(),
+                                                           EnquiriesLast3M = eInfo.EnquiriesLast3Months.ToString(CultureInfo.InvariantCulture),
+                                                           EnquiriesLast6M = eInfo.EnquiriesLast6Months.ToString(CultureInfo.InvariantCulture),
 
                                                            NumberOfDefaults = string.Empty,
                                                            NumberOfCCJs = string.Empty,
                                                            AgeOfMostRecentCCJ = string.Empty,
-                                                           NumberOfCCOverLimit = eInfo.CreditCardOverLimit.ToString(),
+                                                           NumberOfCCOverLimit = eInfo.CreditCardOverLimit.ToString(CultureInfo.InvariantCulture),
                                                            CreditCardUtilization =
-                                                               eInfo.CreditLimitUtilisation.ToString(),
+                                                               eInfo.CreditLimitUtilisation.ToString(CultureInfo.InvariantCulture),
                                                            DSRandOwnershipType = string.Empty,
                                                            NOCsOnCCJ = string.Empty,
                                                            NOCsOnCAIS = string.Empty
@@ -448,17 +508,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             if (string.IsNullOrEmpty(model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag))
                 model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag = "-";
 
-            var NDHAC05 = string.Empty;
-            var NDHAC09 = string.Empty;
-
-            TryRead(() =>
-                    NDHAC05 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC05,
+            var ndhac05 = string.Empty;
+            var ndhac09 = string.Empty;
+            // ReSharper disable ImplicitlyCapturedClosure
+            TryRead(() => ndhac05 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC05,
                     "Current Worst status (fine) on active non revolving CAIS");
-            TryRead(() =>
-                    NDHAC09 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC09,
+            TryRead(() => { ndhac09 = eInfo.Output.Output.ConsumerSummary.Summary.CAIS.NDHAC09; },
                     "Worst status (fine) in last 6m on mortgage accounts");
 
-            var worst = GetWorstStatus((NDHAC05 ?? string.Empty).Trim(), (NDHAC09 ?? string.Empty).Trim());
+            var worst = GetWorstStatus((ndhac05 ?? string.Empty).Trim(), (ndhac09 ?? string.Empty).Trim());
             model.ConsumerSummaryCharacteristics.WorstCurrentStatus = AccountStatusDictionary.GetDetailedAccountStatusString(worst);
 
             TryRead(() =>
@@ -467,7 +525,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                     "Worst Historical Status");
             model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M =
                 AccountStatusDictionary.GetDetailedAccountStatusString(model.ConsumerSummaryCharacteristics.WorstCurrentStatus3M);
-
+            // ReSharper enable ImplicitlyCapturedClosure
 
             var accList = new List<AccountInfo>();
 
@@ -553,7 +611,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             if (accStatus == "F")
                                 numberOfDefaults++;
 
-                            var accType = getAccountType(caisDetails.AccountType);
+                            var accType = GetAccountType(caisDetails.AccountType);
                             if (accType < 0)
                                 continue;
 
@@ -586,7 +644,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                             }
 
                             string statuses = caisDetails.AccountStatusCodes ?? string.Empty;
-                            int mthsCount = 0;
+                            int mthsCount;
                             int.TryParse(caisDetails.NumOfMonthsHistory ?? "0", out mthsCount);
 
                             var sList = new List<AccountStatus>();
@@ -624,7 +682,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 
                             accountInfo.LatestStatuses = sList.ToArray();
 
-                            int repaymentPeriod = 0;
+                            int repaymentPeriod;
                             int.TryParse(caisDetails.RepaymentPeriod ?? string.Empty, out repaymentPeriod);
 
                             accountInfo.TermAndfreq = GetRepaymentPeriodString(repaymentPeriod);
@@ -660,18 +718,18 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 Errors.Add("Can`t read values for Financial Accounts");
             }
 
-            model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts.ToString();
-            model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M.ToString();
-            model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults.ToString();
+            model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts.ToString(CultureInfo.InvariantCulture);
+            model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M.ToString(CultureInfo.InvariantCulture);
+            model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults.ToString(CultureInfo.InvariantCulture);
 
 	        accList.Sort(new AccountInfoComparer());
             model.AccountsInformation = accList.ToArray();
 
-            model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0].ToString();
-            model.ConsumerAccountsOverview.OpenAccounts_Mtg = accounts[1].ToString();
-            model.ConsumerAccountsOverview.OpenAccounts_PL = accounts[2].ToString();
-            model.ConsumerAccountsOverview.OpenAccounts_Other = accounts[3].ToString();
-            model.ConsumerAccountsOverview.OpenAccounts_Total = (accounts[0] + accounts[1] + accounts[2] + accounts[3]).ToString();
+            model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.OpenAccounts_Mtg = accounts[1].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.OpenAccounts_PL = accounts[2].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.OpenAccounts_Other = accounts[3].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.OpenAccounts_Total = (accounts[0] + accounts[1] + accounts[2] + accounts[3]).ToString(CultureInfo.InvariantCulture);
 
             model.ConsumerAccountsOverview.WorstArrears_CC = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[0]);
             model.ConsumerAccountsOverview.WorstArrears_Mtg = AccountStatusDictionary.GetDetailedAccountStatusString(worstStatus[1]);
@@ -684,17 +742,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             totalWorst = GetWorstStatus(totalWorst, worstStatus[3]);
             model.ConsumerAccountsOverview.WorstArrears_Total = AccountStatusDictionary.GetDetailedAccountStatusString(totalWorst);
 
-            model.ConsumerAccountsOverview.TotalCurLimits_CC = limits[0].ToString();
-            model.ConsumerAccountsOverview.TotalCurLimits_Mtg = limits[1].ToString();
-            model.ConsumerAccountsOverview.TotalCurLimits_PL = limits[2].ToString();
-            model.ConsumerAccountsOverview.TotalCurLimits_Other = limits[3].ToString();
-            model.ConsumerAccountsOverview.TotalCurLimits_Total = (limits[0] + limits[1] + limits[2] + limits[3]).ToString();
+            model.ConsumerAccountsOverview.TotalCurLimits_CC = limits[0].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.TotalCurLimits_Mtg = limits[1].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.TotalCurLimits_PL = limits[2].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.TotalCurLimits_Other = limits[3].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.TotalCurLimits_Total = (limits[0] + limits[1] + limits[2] + limits[3]).ToString(CultureInfo.InvariantCulture);
 
-            model.ConsumerAccountsOverview.Balance_CC = balances[0].ToString();
-            model.ConsumerAccountsOverview.Balance_Mtg = balances[1].ToString();
-            model.ConsumerAccountsOverview.Balance_PL = balances[2].ToString();
-            model.ConsumerAccountsOverview.Balance_Other = balances[3].ToString();
-            model.ConsumerAccountsOverview.Balance_Total = (balances[0] + balances[1] + balances[2] + balances[3]).ToString();
+            model.ConsumerAccountsOverview.Balance_CC = balances[0].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.Balance_Mtg = balances[1].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.Balance_PL = balances[2].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.Balance_Other = balances[3].ToString(CultureInfo.InvariantCulture);
+            model.ConsumerAccountsOverview.Balance_Total = (balances[0] + balances[1] + balances[2] + balances[3]).ToString(CultureInfo.InvariantCulture);
 
             var nocList = new List<NOCInfo>();
             try
@@ -719,7 +777,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             return model;
         }
 
-        protected void appendLimitedInfo(CreditBureauModel model, LimitedResults eInfo)
+        protected void AppendLimitedInfo(CreditBureauModel model, LimitedResults eInfo)
         {
             if(eInfo == null)
                 return;
@@ -738,7 +796,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             }
         }
 
-        protected void appendNonLimitedInfo(CreditBureauModel model, NonLimitedResults eInfo)
+        protected void AppendNonLimitedInfo(CreditBureauModel model, NonLimitedResults eInfo)
         {
             if (eInfo == null)
                 return;
@@ -754,7 +812,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             }
         }
 
-        protected void appendAMLInfo(AMLInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
+        protected void AppendAmlInfo(AMLInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
         {
             var srv = new IdHubService();
             var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
@@ -775,7 +833,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             data.StartDateOldestSec = result.StartDateOldestSec;
         }
 
-        protected void appendBAVInfo(BankAccountVerificationInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
+        protected void AppendBavInfo(BankAccountVerificationInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
         {
             var srv = new IdHubService();
 
@@ -815,13 +873,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
             }
         }
 
-        protected static List<string> statusScale = new List<string> 
+        protected static List<string> StatusScale = new List<string> 
         {"D", "U", "S", "?", "0", "1", "2", "3", "4", "5", "6", "8" ,"9" };
 
         protected string GetWorstStatus(string s1, string s2)
         {
-            var idx1 = statusScale.IndexOf(s1);
-            var idx2 = statusScale.IndexOf(s2);
+            var idx1 = StatusScale.IndexOf(s1);
+            var idx2 = StatusScale.IndexOf(s2);
             if (idx1 < 0)
                 return s2;
             if (idx2 < 0)
@@ -830,20 +888,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
         }
 
         // 0 - CC, 1 - Mortgage, 2 - PL, 3 - other
-        protected static string cardsAccounts = "04,05,06,37,38";
-        protected static string mortgageAccounts = "03,16,25,30,31,32,33,34,35,69";
-        protected static string loanAccounts = "00,01,02,17,19,22,26,27,28,29";
-        protected static string otherAccounts = "07,08,12,13,14,15,18,20,21,23,24,36,39,40,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,70";
+        protected static string CardsAccounts = "04,05,06,37,38";
+        protected static string MortgageAccounts = "03,16,25,30,31,32,33,34,35,69";
+        protected static string LoanAccounts = "00,01,02,17,19,22,26,27,28,29";
+        protected static string OtherAccounts = "07,08,12,13,14,15,18,20,21,23,24,36,39,40,41,42,43,44,45,46,47,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,70";
         
-        protected int getAccountType(string accType)
+        protected int GetAccountType(string accType)
         {
-            if (cardsAccounts.IndexOf(accType) >= 0)
+            if (CardsAccounts.IndexOf(accType, StringComparison.Ordinal) >= 0)
                 return 0;
-            if (mortgageAccounts.IndexOf(accType) >= 0)
+            if (MortgageAccounts.IndexOf(accType, StringComparison.Ordinal) >= 0)
                 return 1;
-            if (loanAccounts.IndexOf(accType) >= 0)
+            if (LoanAccounts.IndexOf(accType, StringComparison.Ordinal) >= 0)
                 return 2;
-            if (otherAccounts.IndexOf(accType) >= 0)
+            if (OtherAccounts.IndexOf(accType, StringComparison.Ordinal) >= 0)
                 return 3;
             return -1;
         }
@@ -957,7 +1015,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 
         [HttpPost]
         [Transactional]
-        public JsonNetResult RunAMLBWACheck(int id, int checkType, string houseNumber, string houseName, string street,
+        public JsonNetResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {
             var customer = _customers.Get(id);
@@ -1014,6 +1072,20 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
                 string.IsNullOrEmpty(info.AccountStatus) ? "-" : info.AccountStatus);
 		}
 
+        private static int GetScoreFromXml(String xml)
+        {
+            try
+            {
+                var doc = XDocument.Parse(xml);
+                var score = doc.XPathSelectElement("//PremiumValueData/Scoring/E5S051").Value;
+                return Convert.ToInt32(score);
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
 		private const string DefaultCaisStatusName = "F";
 		private const string DefaultStatusName = "Default";
 		private const string DefaultDateType = "Default Date";
@@ -1034,21 +1106,21 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.ApplicationReview
 
 	    public class AccountInfoComparer : IComparer<AccountInfo>
 		{
-			private static readonly Dictionary<string, int> sortedValues = new Dictionary<string, int> { { DefaultStatusName, 1 }, { DelinquentStatusName, 2 }, { ActiveStatusName, 3 }, { SettledStatusName, 4 } };
+			private static readonly Dictionary<string, int> SortedValues = new Dictionary<string, int> { { DefaultStatusName, 1 }, { DelinquentStatusName, 2 }, { ActiveStatusName, 3 }, { SettledStatusName, 4 } };
 
 			public int Compare(AccountInfo x, AccountInfo y)
 			{
-				if (sortedValues.ContainsKey(x.AccountStatus) && sortedValues.ContainsKey(y.AccountStatus))
+				if (SortedValues.ContainsKey(x.AccountStatus) && SortedValues.ContainsKey(y.AccountStatus))
 				{
-					return sortedValues[x.AccountStatus].CompareTo(sortedValues[y.AccountStatus]);
+					return SortedValues[x.AccountStatus].CompareTo(SortedValues[y.AccountStatus]);
 				}
 
-				if (sortedValues.ContainsKey(x.AccountStatus))
+				if (SortedValues.ContainsKey(x.AccountStatus))
 				{
 					return 1;
 				}
 
-				if (sortedValues.ContainsKey(y.AccountStatus))
+				if (SortedValues.ContainsKey(y.AccountStatus))
 				{
 					return -1;
 				}

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class CreditBureauModel
     {
+        public IList<CheckHistoryModel> CheckHistorys { get; set; }
         private readonly List<string> _errorList = new List<string>();
         public int Id { get; set; }
         public string Name { get; set; }
@@ -202,6 +204,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string RiskLevel { get; set; }
         public string Existingbusinessloans { get; set; }
         public ConsumerAccountsOverview ConsumerAccountsOverview { get; set; }
+    }
+
+    public class CheckHistoryModel
+    {
+        public DateTime Date { get; set; }
+        public int Score { get; set; }
     }
 
     // ReSharper disable  InconsistentNaming

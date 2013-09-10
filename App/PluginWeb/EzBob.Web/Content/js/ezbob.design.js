@@ -677,6 +677,11 @@ EzBob.formatDateTime = function (date) {
     return moment.utc(date).local().format("DD/MM/YYYY HH:mm:ss");
 };
 
+EzBob.datetimeToDate = function (date) {
+    if (!date) return "";
+    return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
+};
+
 //formats date for user from utc asp.net date without time
 EzBob.formatDateWithoutTime = function (date) {
     if (!date) return "";
