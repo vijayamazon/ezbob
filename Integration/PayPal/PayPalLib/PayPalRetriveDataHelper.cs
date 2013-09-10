@@ -150,6 +150,18 @@ namespace EzBob.PayPal
 					PayPalDatabaseFunctionType.NetNumOfRefundsAndReturns,
 					PayPalDatabaseFunctionType.TransferAndWireOut,
 					PayPalDatabaseFunctionType.TransferAndWireIn,
+					
+					PayPalDatabaseFunctionType.GrossIncome,
+					PayPalDatabaseFunctionType.GrossProfitMargin,
+					PayPalDatabaseFunctionType.RevenuePerTrasnaction,
+					PayPalDatabaseFunctionType.NetSumOfRefundsAndReturns,
+					PayPalDatabaseFunctionType.RatioNetSumOfRefundsAndReturnsToNetRevenues,
+					PayPalDatabaseFunctionType.NetTransfersAmount,
+					PayPalDatabaseFunctionType.OutstandingBalance,
+					PayPalDatabaseFunctionType.NumTransfersOut,
+					PayPalDatabaseFunctionType.AmountPerTransferOut,
+					PayPalDatabaseFunctionType.NumTransfersIn,
+					PayPalDatabaseFunctionType.AmountPerTransferIn,
 				};
 
 			var updated = data.SubmittedDate;
@@ -161,7 +173,7 @@ namespace EzBob.PayPal
 
 		}
 
-	    public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode)
+		public PayPalPermissionsGranted GetAccessToken(string requestToken, string verificationCode)
 		{
 			return PayPalServiceHelper.GetAccessToken(_Config, requestToken, verificationCode);
 		}

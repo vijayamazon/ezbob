@@ -45,77 +45,114 @@ namespace EzBob.PayPal
 			{
 				case PayPalDatabaseFunctionType.TotalNetInPayments:
 					return GetTotalNetInPayments(data);
-
 				case PayPalDatabaseFunctionType.TotalNetOutPayments:
 					return GetTotalNetOutPayments(data);
-
 				case PayPalDatabaseFunctionType.TransactionsNumber:
 					return GetTransactionsNumber(data);
-
-				case PayPalDatabaseFunctionType.TotalNetRevenues:
+				case PayPalDatabaseFunctionType.TotalNetRevenues://formula 1
 					return GetTotalNetRevenues(data);
-
-				case PayPalDatabaseFunctionType.TotalNetExpenses:
+				case PayPalDatabaseFunctionType.TotalNetExpenses://formula 2
 					return GetTotalNetExpenses(data);
-
-				case PayPalDatabaseFunctionType.NumOfTotalTransactions:
+				case PayPalDatabaseFunctionType.NumOfTotalTransactions://formula 3
 					return GetNumOfTotalTransactions(data);
-
-				case PayPalDatabaseFunctionType.RevenuesForTransactions:
+				case PayPalDatabaseFunctionType.RevenuesForTransactions://formula 4
 					return GetRevenuesForTransactions(data);
-
-				case PayPalDatabaseFunctionType.NetNumOfRefundsAndReturns:
+				case PayPalDatabaseFunctionType.NetNumOfRefundsAndReturns://formula 5
 					return GetNetNumOfRefundsAndReturns(data);
-
-				case PayPalDatabaseFunctionType.TransferAndWireOut:
+				case PayPalDatabaseFunctionType.TransferAndWireOut://formula 6 sum
 					return GetTransferAndWireOut(data);
-
-				case PayPalDatabaseFunctionType.TransferAndWireIn:
+				case PayPalDatabaseFunctionType.TransferAndWireIn://formula 7 sum
 					return GetTransferAndWireIn(data);
+
+				case PayPalDatabaseFunctionType.GrossIncome://Formula 1 - Formula 2
+					return GetGrossIncome(data);
+				case PayPalDatabaseFunctionType.GrossProfitMargin://Gross income / Formula 1
+					return GetGrossProfitMargin(data);
+				case PayPalDatabaseFunctionType.RevenuePerTrasnaction:// Formula 4 / Formula 3
+					return GetRevenuePerTrasnaction(data);
+				case PayPalDatabaseFunctionType.NetSumOfRefundsAndReturns://formula 5a
+					return GetNetSumOfRefundsAndReturns(data);
+				case PayPalDatabaseFunctionType.RatioNetSumOfRefundsAndReturnsToNetRevenues://Forumla 5a / Formula 1
+					return GetRatioNetSumOfRefundsAndReturnsToNetRevenues(data);
+				case PayPalDatabaseFunctionType.NetTransfersAmount://Formula 6 + Formula 7
+					return GetNetTransfersAmount(data);
+				case PayPalDatabaseFunctionType.OutstandingBalance://Gross Income - Net Transfers amount
+					return GetOutstandingBalance(data);
+				case PayPalDatabaseFunctionType.NumTransfersOut:// Formula 6a
+					return GetNumTransfersOut(data);
+				case PayPalDatabaseFunctionType.AmountPerTransferOut:// Formula 6 / Formual 6a
+					return GetAmountPerTransferOut(data);
+				case PayPalDatabaseFunctionType.NumTransfersIn://formula 7a
+					return GetNumTransfersIn(data);
+				case PayPalDatabaseFunctionType.AmountPerTransferIn://formula 7 / Formula 7a
+					return GetAmountPerTransferIn(data);
 
 				default:
 					throw new NotImplementedException();
 			}
 		}
 
-		private object GetSum(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")
+		private object GetAmountPerTransferIn(IEnumerable<PayPalTransactionItem> data)
 		{
-			var result = data.Join(formula,
-								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
-								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
-			//Serialize<List<PayPalTransactionItem>>(result.ToList(), name, _period.ToString());
-			return result.Sum(t => t.NetAmount == null ? 0 : CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+			var numTransfersIn = (int)GetNumTransfersIn(data);
+			return numTransfersIn == 0 ? 0 : (double)GetTransferAndWireIn(data) / numTransfersIn;
 		}
 
-		private object GetCount(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")
+		private object GetNumTransfersIn(IEnumerable<PayPalTransactionItem> data)
 		{
-			var result = data.Join(formula,
-								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
-								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
-			//Serialize<List<PayPalTransactionItem>>(result.ToList(), name, _period.ToString());
-			return result.Count();
+			var formula = _payPalFormulaRepository.GetByFormulaName("TransferAndWireIn").AsEnumerable();
+			return GetCount(data, formula, "NumTransfersIn");
 		}
 
-		/// <summary>
-		/// XML serializing for formula testing
-		/// </summary>
-		private void Serialize<T>(T formula, string name, string period)
+		private object GetAmountPerTransferOut(IEnumerable<PayPalTransactionItem> data)
 		{
-			try
-			{
-				var serializer = new XmlSerializer(typeof(T));
+			var numTransfersOut = (int)GetNumTransfersOut(data);
+			return numTransfersOut == 0 ? 0 : (double)GetTransferAndWireOut(data) / numTransfersOut;
+		}
 
-				using (var writer = new StreamWriter(name + period + ".xml"))
-				{
-					serializer.Serialize(writer, formula);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.ErrorFormat("Serialize exception {0}", ex);
-				
-			}
-			
+		private object GetNumTransfersOut(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("TransferAndWireOut").AsEnumerable();
+			return GetCount(data, formula, "NumTransfersOut");
+		}
+
+		private object GetOutstandingBalance(IEnumerable<PayPalTransactionItem> data)
+		{
+			return (double)GetGrossIncome(data) - (double)GetNetTransfersAmount(data);
+		}
+
+		private object GetNetTransfersAmount(IEnumerable<PayPalTransactionItem> data)
+		{
+			return (double)GetTransferAndWireOut(data) + (double)GetTransferAndWireIn(data);
+		}
+
+		private object GetRatioNetSumOfRefundsAndReturnsToNetRevenues(IEnumerable<PayPalTransactionItem> data)
+		{
+			var totalNetRevenues = (double)GetTotalNetRevenues(data);
+			return totalNetRevenues == 0 ? 0 : (double)GetNetSumOfRefundsAndReturns(data) / totalNetRevenues;
+		}
+
+		private object GetNetSumOfRefundsAndReturns(IEnumerable<PayPalTransactionItem> data)
+		{
+			var formula = _payPalFormulaRepository.GetByFormulaName("NetNumOfRefundsAndReturns").AsEnumerable();
+			return GetSum(data, formula, "NetSumOfRefundsAndReturns");
+		}
+
+		private object GetRevenuePerTrasnaction(IEnumerable<PayPalTransactionItem> data)
+		{
+			var numOfTotalTransactions = (int)GetNumOfTotalTransactions(data);
+			return numOfTotalTransactions == 0 ? 0 : (double)GetRevenuesForTransactions(data) / (int)GetNumOfTotalTransactions(data);
+		}
+
+		private object GetGrossProfitMargin(IEnumerable<PayPalTransactionItem> data)
+		{
+			var totalNetRevenues = (double) GetTotalNetRevenues(data);
+			return totalNetRevenues == 0 ? 0 : (double)GetGrossIncome(data) / totalNetRevenues;
+		}
+
+		private object GetGrossIncome(IEnumerable<PayPalTransactionItem> data)
+		{
+			return (double)GetTotalNetRevenues(data) - (double)GetTotalNetExpenses(data);
 		}
 
 		private object GetTotalNetRevenues(IEnumerable<PayPalTransactionItem> data)
@@ -182,6 +219,46 @@ namespace EzBob.PayPal
 					   .Sum(
 						   t =>
 						   CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+		}
+
+		private double GetSum(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")
+		{
+			var result = data.Join(formula,
+								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
+								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
+			//Serialize<List<PayPalTransactionItem>>(result.ToList(), name, _period.ToString());
+			return result.Sum(t => t.NetAmount == null ? 0 : CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+		}
+
+		private int GetCount(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")
+		{
+			var result = data.Join(formula,
+								   d => new { status = d.Status, type = d.Type, positive = d.NetAmount != null && d.NetAmount.Value >= 0 },
+								   f => new { status = f.Status, type = f.Type, positive = f.Positive.GetValueOrDefault() }, (d, f) => d);
+			//Serialize<List<PayPalTransactionItem>>(result.ToList(), name, _period.ToString());
+			return result.Count();
+		}
+
+		/// <summary>
+		/// XML serializing for formula testing
+		/// </summary>
+		private void Serialize<T>(T formula, string name, string period)
+		{
+			try
+			{
+				var serializer = new XmlSerializer(typeof(T));
+
+				using (var writer = new StreamWriter(name + period + ".xml"))
+				{
+					serializer.Serialize(writer, formula);
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.ErrorFormat("Serialize exception {0}", ex);
+
+			}
+
 		}
 	}
 }
