@@ -49,7 +49,7 @@
       <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\Reconciliation\bin\Debug\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
