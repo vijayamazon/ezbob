@@ -14,14 +14,19 @@ echo 2. Copy TestData.xls from %testDataXlsPath% into "%publisherPath%"
 xcopy "%testDataXlsPath%" "%publisherPath%" /c /d /e /h /i /k /q /r /s /x /y
 @echo:
 
-IF "%1%"=="" (
-	ECHO  3. Run publisher without parameters
-) ELSE (
-	ECHO 3. Run publisher with parameters %1%
-)
+
+
+
+ECHO 3. Run publisher with parameters (--delete)
+
 cd %publisherPath%
-publisher.exe %1%
+publisher.exe --delete
 @echo:
+
+ECHO  3'. Run publisher without parameters
+publisher.exe
+@echo:
+
 
 echo 4. Delete TestData.xls
 DEL TestData.xls

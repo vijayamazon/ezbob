@@ -20,6 +20,8 @@ robocopy Integration\ChannelGrabberFrontend\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\PayPoint\bin\Debug\ c:\ezbobSrv\ /e
 
+robocopy Integration\PayPal\PayPalLib\bin\Debug\ c:\ezbobSrv\ /e
+
 robocopy Integration\YodleeLib\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy App\service\Servicestarter\bin\Debug\ c:\ezbobSrv\ /e
