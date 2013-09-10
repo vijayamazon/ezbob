@@ -1,124 +1,113 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
-	using Configuration;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
 	using Code;
 	using Infrastructure;
-	using MailApi;
 	using StructureMap;
-	using log4net;
 
 	public class ApplicationInfoModelBuilder
 	{
 		private readonly IPacNetBalanceRepository _funds;
 		private readonly IPacNetManualBalanceRepository _manualFunds;
-        private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
-        private readonly ILoanTypeRepository _loanTypes;
+		private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
+		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-		private readonly Dictionary<int, string> statusIndex2Name = new Dictionary<int, string>();
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
-			CustomerStatusesRepository customerStatusesRepository,
-			IPacNetManualBalanceRepository manualFunds, 
-            IDiscountPlanRepository discounts, 
-            ILoanTypeRepository loanTypes)
+			IPacNetManualBalanceRepository manualFunds,
+			IDiscountPlanRepository discounts,
+			ILoanTypeRepository loanTypes)
 		{
 			_funds = funds;
 			_manualFunds = manualFunds;
-            _discounts = discounts;
-            _loanTypes = loanTypes;
-			foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
-			{
-				statusIndex2Name.Add(status.Id, status.Name);
-			}
+			_discounts = discounts;
+			_loanTypes = loanTypes;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
-        {
-            if (customer == null) return;
+		{
+			if (customer == null) return;
 
-            model.Id = customer.Id;
+			model.Id = customer.Id;
 
-            if (cr != null)
-            {
-                model.InterestRate = cr.InterestRate;
-                model.CashRequestId = cr.Id;
-                model.UseSetupFee = cr.UseSetupFee;
-                model.AllowSendingEmail = !cr.EmailSendingBanned;
+			if (cr != null)
+			{
+				model.InterestRate = cr.InterestRate;
+				model.CashRequestId = cr.Id;
+				model.UseSetupFee = cr.UseSetupFee;
+				model.AllowSendingEmail = !cr.EmailSendingBanned;
 
-                var loanType = cr.LoanType ?? _loanTypes.GetDefault();
+				var loanType = cr.LoanType ?? _loanTypes.GetDefault();
 
-                model.LoanType = loanType.Name;
-                model.LoanTypeId = loanType.Id;
+				model.LoanType = loanType.Name;
+				model.LoanTypeId = loanType.Id;
 
-                cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
-                cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
+				cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
+				cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
 
-                model.RepaymentPerion = _repaymentCalculator.ReCalculateRepaymentPeriod(cr);
-            }
+				model.RepaymentPerion = _repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+			}
 
-            model.CustomerId = customer.Id;
-            model.IsTest = customer.IsTest;
-            model.IsAvoid = customer.IsAvoid;
-            model.SystemDecision = customer.Status.ToString();
+			model.CustomerId = customer.Id;
+			model.IsTest = customer.IsTest;
+			model.IsAvoid = customer.IsAvoid;
+			model.SystemDecision = customer.Status.ToString();
 
-            if (cr.SystemCalculatedSum != null && cr.SystemCalculatedSum.Value != 0)
-            {
-                model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
-            }
+			if (cr.SystemCalculatedSum != null && cr.SystemCalculatedSum.Value != 0)
+			{
+				model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
+			}
 
-            model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
-            model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
-            model.AvaliableAmount = customer.CreditSum ?? 0M;
-            model.OfferExpired = cr.OfferValidUntil <= DateTime.UtcNow;
+			model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
+			model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
+			model.AvaliableAmount = customer.CreditSum ?? 0M;
+			model.OfferExpired = cr.OfferValidUntil <= DateTime.UtcNow;
 
-            model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
-            model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
+			model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
+			model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
 
 			var balance = _funds.GetBalance();
 			var manualBalance = _manualFunds.GetBalance();
-	        var fundsAvailable = balance.Adjusted + manualBalance;
+			var fundsAvailable = balance.Adjusted + manualBalance;
 			model.FundsAvaliable = FormattingUtils.FormatPounds(fundsAvailable);
 
-	        DateTime today = DateTime.UtcNow;
-	        model.FundsAvailableUnderLimitClass = string.Empty;
-	        int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
-	        if (fundsAvailable < relevantLimit)
+			DateTime today = DateTime.UtcNow;
+			model.FundsAvailableUnderLimitClass = string.Empty;
+			int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? config.PacnetBalanceWeekendLimit : config.PacnetBalanceWeekdayLimit;
+			if (fundsAvailable < relevantLimit)
 			{
 				model.FundsAvailableUnderLimitClass = "red_cell";
 			}
 
-	        model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
-            //Status = "Active";
-            model.Details = customer.Details;
-            var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
-                                       customer.CreditResult == CreditResultStatus.Escalated;
+			model.FundsReserved = FormattingUtils.FormatPounds(balance.ReservedAmount);
+			//Status = "Active";
+			model.Details = customer.Details;
+			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
+									   customer.CreditResult == CreditResultStatus.Escalated;
 
-			var isEnabled = statusIndex2Name.ContainsKey(customer.CollectionStatus.CurrentStatus) && statusIndex2Name[customer.CollectionStatus.CurrentStatus] == "Enabled";
-            model.Editable = isWaitingOrEscalated && cr != null && isEnabled;
+			var isEnabled = customer.CollectionStatus.CurrentStatus.Name == "Enabled";
+			model.Editable = isWaitingOrEscalated && cr != null && isEnabled;
 
-            model.IsModified = !string.IsNullOrEmpty(cr.LoanTemplate);
+			model.IsModified = !string.IsNullOrEmpty(cr.LoanTemplate);
 
-            model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
+			model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
 
-            model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
-            var discountPlan = (cr.DiscountPlan ?? _discounts.GetDefault());
-            model.DiscountPlan = discountPlan.Name;
-            model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
-            model.DiscountPlanId = discountPlan.Id;
+			model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
+			var discountPlan = (cr.DiscountPlan ?? _discounts.GetDefault());
+			model.DiscountPlan = discountPlan.Name;
+			model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
+			model.DiscountPlanId = discountPlan.Id;
 
-            model.Reason = cr.UnderwriterComment;
+			model.Reason = cr.UnderwriterComment;
 
-            model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
-        }
+			model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+		}
 	}
 }

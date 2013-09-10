@@ -49,6 +49,8 @@ UPDATE [dbo].[CashRequests]
 
  WHERE Id = (select MAX(id) from CashRequests
 				where IdCustomer=@CustomerId)
+				
+UPDATE Customer SET CreditSum = @ManagerApprovedSum WHERE Id = @CustomerId
 
  SET NOCOUNT ON;
 SELECT @@IDENTITY;
