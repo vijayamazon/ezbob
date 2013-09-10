@@ -228,6 +228,19 @@ namespace Reports {
 
 		#endregion method BuildEarnedInterestReport
 
+
+		public ATag BuildLoanIntegrityReport(Report report, List<string> oColumnTypes = null)
+		{
+			KeyValuePair<ReportQuery, DataTable> oData = CreateLoanIntegrityReport(report);
+
+			Body body = new Body();
+			body.Add<Class>("Body");
+			body.Append(new H1().Append(new Text("Loan integrity")));
+			body.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+
+			return body;
+		}
+
 		#region method BuildLoansIssuedReport
 
 		public ATag BuildLoansIssuedReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
@@ -540,6 +553,29 @@ namespace Reports {
 
 		#endregion class EarnedInterestRow
 
+		private class LoanIntegrityRow
+		{
+			public int LoanId { get; set; }
+			public decimal Diff { get; set; }
+
+			public static int Compare(LoanIntegrityRow a, LoanIntegrityRow b)
+			{
+				if (a.Diff == b.Diff)
+					return 0;
+				if (a.Diff > b.Diff)
+					return 1;
+				return -1;
+			}
+
+			public void ToRow(DataTable tbl)
+			{
+				DataRow row = tbl.NewRow();
+				row["LoanId"] = LoanId;
+				row["Diff"] = Diff;
+				tbl.Rows.Add(row);
+			}
+		}
+
 		#region method CreateEarnedInterestReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, DateTime today, DateTime tomorrow) {
@@ -590,6 +626,34 @@ namespace Reports {
 
 		#endregion method CreateEarnedInterestReport
 
+		private KeyValuePair<ReportQuery, DataTable> CreateLoanIntegrityReport(Report report)
+		{
+			var loanIntegrity = new LoanIntegrity(DB, this);
+			SortedDictionary<int, decimal> diffs = loanIntegrity.Run();
+			
+			var oRows = new List<LoanIntegrityRow>();
+
+			foreach (int loanId in diffs.Keys)
+			{
+				var oNewRow = new LoanIntegrityRow
+				{
+					LoanId = loanId,
+					Diff = diffs[loanId]
+				};
+				oRows.Add(oNewRow);
+			}
+
+			oRows.Sort(LoanIntegrityRow.Compare);
+
+			var oOutput = new DataTable();
+
+			oOutput.Columns.Add("LoanID", typeof(int));
+			oOutput.Columns.Add("Diff", typeof(decimal));
+
+			oRows.ForEach(r => r.ToRow(oOutput));
+
+			return new KeyValuePair<ReportQuery, DataTable>(new ReportQuery(report), oOutput); // qqq - the new repoerQuery here is wrong
+		}
 		#endregion Earned Interest
 
 		#region Loans Issued

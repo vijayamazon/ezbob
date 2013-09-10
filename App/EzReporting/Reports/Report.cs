@@ -19,6 +19,7 @@ namespace Reports {
 		RPT_PLANNED_PAYTMENT,
 		RPT_IN_WIZARD,
 		RPT_EARNED_INTEREST,
+		RPT_LOAN_INTEGRITY,
 		RPT_LOANS_GIVEN,
 	} // enum ReportType
 

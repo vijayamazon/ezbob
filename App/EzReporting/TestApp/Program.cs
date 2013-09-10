@@ -12,7 +12,8 @@ namespace TestApp {
 			var oDB = new SqlConnection(log);
 
 			// TestLoansIssuedReport(oDB, log);
-			TestEarnedInterest(oDB, log);
+			//TestEarnedInterest(oDB, log);
+			TestLoanIntegrity(oDB, log);
 		} // Main
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
@@ -36,5 +37,18 @@ namespace TestApp {
 
 			ea.Run();
 		} // TestEarnedInterest
+
+		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log)
+		{
+			var ea = new LoanIntegrity(
+				oDB,
+				log
+			)
+			{
+				VerboseLogging = true
+			};
+
+			ea.Run();
+		}
 	} // class Program
 } // namespace

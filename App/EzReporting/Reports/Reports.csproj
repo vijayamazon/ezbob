@@ -82,6 +82,7 @@
     <Compile Include="BaseReportHandler.cs" />
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="ColumnInfo.cs" />
+    <Compile Include="LoanIntegrity.cs" />
     <Compile Include="EarnedInterest\EarnedInterest.cs" />
     <Compile Include="EarnedInterest\InterestData.cs" />
     <Compile Include="EarnedInterest\LoanData.cs" />
