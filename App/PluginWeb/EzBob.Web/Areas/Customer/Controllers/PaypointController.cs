@@ -73,7 +73,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [HttpGet]
         [NoCache]
         [Transactional]
-        public ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry)
+        public ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry)
         {
             if (test_status == "true")
             {
@@ -105,6 +105,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 return View("Error");
             }
 
+			if (!amount.HasValue)
+			{
+				Log.ErrorFormat("Paypoint amount is null. Message: {0}", message);
+				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint amount is null. Message: {0}", message));
+				return View("Error");
+			}
+
             //if there is transaction with such id in database,
             //it means that customer refreshes page
             //show in this case cashed result
@@ -115,9 +122,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 return View(TempData.Get<PaymentConfirmationModel>());
             }
 
-            var res = _loanRepaymentFacade.MakePayment(trans_id, amount, ip, type, loanId, customerContext);
+            var res = _loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
 
-            SendEmails(loanId, amount, customerContext);
+            SendEmails(loanId, amount.Value, customerContext);
 
             _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
@@ -138,7 +145,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var confirmation = new PaymentConfirmationModel
                 {
-                    amount = amount.ToString(CultureInfo.InvariantCulture),
+                    amount = amount.Value.ToString(CultureInfo.InvariantCulture),
                     saved = res.Saved,
                     savedPounds = res.SavedPounds,
                     card_no = card_no,
