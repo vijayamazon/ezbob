@@ -6,11 +6,14 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Models.Marketplaces;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class MarketPlacesController : Controller
+	
+
+	public class MarketPlacesController : Controller
     {
         private readonly CustomerRepository _customers;
         private readonly AnalyisisFunctionValueRepository _functions;

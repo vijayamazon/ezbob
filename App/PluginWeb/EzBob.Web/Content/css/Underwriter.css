@@ -120,6 +120,14 @@
     white-space: nowrap;
 }
 
+.yodleeTabTable tr.credit, .yodleeTabTable tr.credit:nth-child(odd) td  {
+    color: #008000 !important;
+}
+
+.yodleeTabTable tr.debit, .yodleeTabTable tr.debit:nth-child(odd) td {
+    color: #FF0000 !important;
+}
+
 
 .nav-tabs { border-bottom: 1px solid #DDDDDD; }
 

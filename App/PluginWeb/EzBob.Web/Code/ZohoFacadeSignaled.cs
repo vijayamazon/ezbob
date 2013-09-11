@@ -3,13 +3,13 @@ using EzBob.Configuration;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Models;
 using EzBob.Signals.ZohoCRM;
-using EzBob.Web.Areas.Underwriter;
+using EzBob.Models.Marketplaces;
 using EzBob.Web.Code.Agreements;
 using ZohoCRM;
 
 namespace EzBob.Web.Code
 {
-    public class ZohoFacadeSignaled : ZohoFacade
+	public class ZohoFacadeSignaled : ZohoFacade
     {
         public ZohoFacadeSignaled(IZohoConfig config, DatabaseDataHelper helper, MarketPlacesFacade marketPlacesFacade,
                                   ProfileSummaryModelBuilder profileSummaryModelBuilder,

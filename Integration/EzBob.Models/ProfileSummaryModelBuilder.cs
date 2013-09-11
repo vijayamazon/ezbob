@@ -7,13 +7,13 @@ using EzBob.CommonLib.TimePeriodLogic;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter;
 using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Models.Marketplaces;
 using log4net;
 
 namespace EzBob.Models
 {
-    public class ProfileSummaryModelBuilder
+	public class ProfileSummaryModelBuilder
     {
         private readonly IDecisionHistoryRepository _decisions;
         private readonly MarketPlacesFacade _mpFacade;

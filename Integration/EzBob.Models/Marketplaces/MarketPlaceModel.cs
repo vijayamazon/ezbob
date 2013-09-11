@@ -1,8 +1,9 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Models.Marketplaces
 {
 	using System.Collections.Generic;
-	using Customer.Models;
-	using EzBob.Models.Marketplaces;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Models.Marketplaces.Yodlee;
+	using Web.Areas.Underwriter.Models;
 
 	public class MarketPlaceModel
     {

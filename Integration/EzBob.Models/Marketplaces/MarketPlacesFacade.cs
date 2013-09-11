@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Models.Marketplaces.Builders;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter {
-	
+﻿namespace EzBob.Models.Marketplaces {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.Models.Marketplaces.Builders;
+	using StructureMap;
 
 	public class MarketPlacesFacade {
 	    public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(EZBob.DatabaseLib.Model.Database.Customer customer) {

@@ -8,7 +8,7 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Configuration;
 using EzBob.Models;
 using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter;
+using EzBob.Models.Marketplaces;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
 using EzBob.Web.Code.Agreements;
@@ -17,7 +17,9 @@ using log4net;
 
 namespace ZohoCRM
 {
-    public class ZohoFacade : IZohoFacade
+	
+
+	public class ZohoFacade : IZohoFacade
     {
         private readonly IZohoConfig _config;
         private readonly MarketPlacesFacade _marketPlacesFacade;

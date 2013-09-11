@@ -987,6 +987,9 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.js">
+      <DependentUpon>ezbob.underwriter.manualPayment.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>

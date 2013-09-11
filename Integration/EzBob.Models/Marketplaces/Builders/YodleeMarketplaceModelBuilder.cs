@@ -6,8 +6,8 @@ namespace EzBob.Models.Marketplaces.Builders
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Web.Areas.Customer.Models;
-	using Web.Areas.Underwriter.Models;
 	using NHibernate.Linq;
+	using Yodlee;
 	using YodleeLib.connector;
 	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
@@ -84,7 +84,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			var model = new YodleeModel();
 			var banks = new List<YodleeBankModel>();
-			var _currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
+			var currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
 			foreach (var bank in yodleeData)
 			{
 				var yodleeBankModel = new YodleeBankModel
@@ -94,7 +94,7 @@ namespace EzBob.Models.Marketplaces.Builders
 											  isDeleted = bank.isDeleted.ToString(),
 											  accountNumber = bank.accountNumber,
 											  accountHolder = bank.accountHolder,
-											  availableBalance = bank.availableBalance.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
+											  availableBalance = bank.availableBalance.HasValue ? currencyConvertor.ConvertToBaseCurrency(
 												  bank.availableBalanceCurrency,
 												  bank.availableBalance.Value,
 												  bank.asOfDate).Value.ToString() : null,
@@ -111,20 +111,11 @@ namespace EzBob.Models.Marketplaces.Builders
 				{
 					var yodleeTransactionModel = new YodleeTransactionModel
 													 {
-														 transactionType = transaction.transactionType,
-														 transactionStatus = transaction.transactionStatus,
 														 transactionBaseType = transaction.transactionBaseType,
-														 isDeleted = transaction.isDeleted.ToString(),
-														 lastUpdated = transaction.lastUpdated.ToString(),
-														 transactionId = transaction.transactionId,
-														 transactionDate = transaction.transactionDate.ToString(),
-														 runningBalance = transaction.runningBalance.ToString(),
-														 userDescription = transaction.userDescription,
-														 memo = transaction.memo,
+														 transactionDate = (transaction.postDate ?? transaction.transactionDate).ToString(),
 														 categoryName = transaction.transactionCategory.Name,
 														 categoryType = transaction.transactionCategory.Type,
-														 postDate = transaction.postDate.ToString(),
-														 transactionAmount = transaction.transactionAmount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
+														 transactionAmount = transaction.transactionAmount.HasValue ? currencyConvertor.ConvertToBaseCurrency(
 															 transaction.transactionAmountCurrency,
 															 transaction.transactionAmount.Value,
 															 transaction.postDate ?? transaction.transactionDate).Value.ToString() : null,
@@ -132,11 +123,30 @@ namespace EzBob.Models.Marketplaces.Builders
 													 };
 					transactions.Add(yodleeTransactionModel);
 				}
-				yodleeBankModel.transactions = transactions;
+				yodleeBankModel.transactions = transactions.OrderByDescending(t => DateTime.Parse(t.transactionDate));
 				banks.Add(yodleeBankModel);
 			}
 			model.banks = banks;
+
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(yodleeData);
 			return model;
+		}
+
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(IEnumerable<MP_YodleeOrderItem> yodleeData)
+		{
+			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
+
+			foreach (var bank in yodleeData)
+			{
+				foreach (var transaction in bank.OrderItemBankTransactions)
+				{
+					yodleeCashFlowReportModel.Add(transaction);
+				}
+			}
+
+			yodleeCashFlowReportModel.AddMissingAndSort();
+
+			return yodleeCashFlowReportModel;
 		}
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)

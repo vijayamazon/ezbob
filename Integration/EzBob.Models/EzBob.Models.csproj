@@ -104,10 +104,11 @@
     <Compile Include="Marketplaces\PaymentAccountsModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountInfoModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountModel.cs" />
-    <Compile Include="Marketplaces\YodleeBankModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeCashFlowReportModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeBankModel.cs" />
     <Compile Include="Marketplaces\Builders\YodleeMarketplaceModelBuilder.cs" />
-    <Compile Include="Marketplaces\YodleeModel.cs" />
-    <Compile Include="Marketplaces\YodleeTransactionModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\AmazonMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\IMarketplaceModelBuilder.cs" />
     <Compile Include="ILoanRepaymentScheduleCalculator.cs" />
