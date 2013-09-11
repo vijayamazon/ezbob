@@ -67,7 +67,7 @@ namespace CustomSchedulers.Providers
 				else
 				{
 					Log.Error( ex );
-					throw;
+					return null;
 				}
 			}
 			catch ( Exception ex )
