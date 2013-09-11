@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Scorto.NHibernate.Repository;
 	using NHibernate;
@@ -11,19 +12,25 @@
 	{
 		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
 		private const int Total = 999999;
+		private const string OtherIncomeCat = "1Other Income";
+		private const string OtherExpensesCat = "3Other Expenses";
 		private readonly CurrencyConvertor _currencyConvertor;
+		private readonly IConfigurationVariablesRepository _configVariables;
 		public YodleeCashFlowReportModel(ISession session)
 		{
 			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
+			_configVariables = new ConfigurationVariablesRepository(session);
 		}
 
 		public void Add(MP_YodleeOrderItemBankTransaction transaction)
 		{
-			var amount = transaction.transactionAmount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
-															 transaction.transactionAmountCurrency,
-															 transaction.transactionAmount.Value,
-															 transaction.postDate ?? transaction.transactionDate).Value : 0;
+			var amount = transaction.transactionAmount.HasValue
+							 ? _currencyConvertor.ConvertToBaseCurrency(
+								 transaction.transactionAmountCurrency,
+								 transaction.transactionAmount.Value,
+								 transaction.postDate ?? transaction.transactionDate).Value
+							 : 0;
 			var catType = transaction.transactionCategory.Type;
 			var catName = transaction.transactionCategory.Name;
 			var baseType = transaction.transactionBaseType;
@@ -33,36 +40,14 @@
 
 
 			Add(cat, amount, yearmonth);
-
 			Add(cat, amount, Total);
 
 		}
 
-
-		private void Add(string cat, double amount, int yearmonth)
-		{
-			if (!YodleeCashFlowReportModelDict.ContainsKey(cat))
-			{
-				YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
-			}
-
-			var x = YodleeCashFlowReportModelDict[cat];
-
-			if (!x.ContainsKey(yearmonth))
-			{
-				x[yearmonth] = amount;
-			}
-			else
-			{
-				x[yearmonth] += amount;
-			}
-		}
-
-
 		public void AddMissingAndSort()
 		{
-
-			CalculateOther();
+			CalculateOther('0', OtherIncomeCat);
+			CalculateOther('2', OtherExpensesCat);
 
 			//retrieving month list
 			var monthList = (from cat in YodleeCashFlowReportModelDict from month in YodleeCashFlowReportModelDict[cat.Key] select month.Key).ToList();
@@ -80,80 +65,61 @@
 			}
 		}
 
-		private void CalculateOther()
+		private void CalculateOther(char credit, string otherCat)
 		{
-			var incomeOtherList = new List<string>();
-			var expensesOtherList = new List<string>();
-			//calculating other (less than 500& in totals
+			var otherList = new List<string>();
+			//calculating other (less than 500 pound in totals (configurable)
+			var maxYodleeOtherCategoryAmount = double.Parse(_configVariables.GetByName("MaxYodleeOtherCategoryAmount").Value);
 
 			foreach (var cat in YodleeCashFlowReportModelDict)
 			{
 				var x = YodleeCashFlowReportModelDict[cat.Key];
-				if (x[Total] < 500 && cat.Key[0] == '0')
+				if (x[Total] < maxYodleeOtherCategoryAmount && cat.Key[0] == credit)
 				{
-					incomeOtherList.Add(cat.Key);
-				}
-
-				if (x[Total] < 500 && cat.Key[0] == '2')
-				{
-					expensesOtherList.Add(cat.Key);
+					otherList.Add(cat.Key);
 				}
 			}
 
-
-			if (incomeOtherList.Count > 0)
+			if (otherList.Count > 0)
 			{
-				Add("1Other Income", 0, Total);
+				Add(otherCat, 0, Total);
 			}
 
-			if (expensesOtherList.Count > 0)
+			foreach (var other in otherList)
 			{
-				Add("3Other Expenses", 0, Total);
-			}
-
-
-			foreach (var incomeOther in incomeOtherList)
-			{
-				foreach (var cat in YodleeCashFlowReportModelDict[incomeOther])
+				foreach (var cat in YodleeCashFlowReportModelDict[other])
 				{
-					var x = YodleeCashFlowReportModelDict["1Other Income"];
-
-					if (!x.ContainsKey(cat.Key))
-					{
-						x[cat.Key] = cat.Value;
-					}
-					else
-					{
-						x[cat.Key] += cat.Value;
-					}
+					Sum(otherCat, cat.Key, cat.Value);
 				}
 			}
 
-			foreach (var expensesOther in expensesOtherList)
+			foreach (var other in otherList)
 			{
-				foreach (var cat in YodleeCashFlowReportModelDict[expensesOther])
-				{
-					var x = YodleeCashFlowReportModelDict["3Other Expenses"];
+				YodleeCashFlowReportModelDict.Remove(other);
+			}
+		}
 
-					if (!x.ContainsKey(cat.Key))
-					{
-						x[cat.Key] = cat.Value;
-					}
-					else
-					{
-						x[cat.Key] += cat.Value;
-					}
-				}
+		private void Add(string cat, double amount, int yearmonth)
+		{
+			if (!YodleeCashFlowReportModelDict.ContainsKey(cat))
+			{
+				YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
 			}
 
-			foreach (var expensesOther in expensesOtherList)
-			{
-				YodleeCashFlowReportModelDict.Remove(expensesOther);
-			}
+			Sum(cat, yearmonth, amount);
+		}
 
-			foreach (var incomeOther in incomeOtherList)
+		private void Sum(string cat, int yearmonth, double amount)
+		{
+			var x = YodleeCashFlowReportModelDict[cat];
+
+			if (!x.ContainsKey(yearmonth))
 			{
-				YodleeCashFlowReportModelDict.Remove(incomeOther);
+				x[yearmonth] = amount;
+			}
+			else
+			{
+				x[yearmonth] += amount;
 			}
 		}
 	}
