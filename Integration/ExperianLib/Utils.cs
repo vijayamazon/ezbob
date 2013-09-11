@@ -12,13 +12,13 @@ namespace ExperianLib
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Utils));
         //-----------------------------------------------------------------------------------
-        public static MP_ServiceLog WriteLog<TX, TY>(TX input, TY output, string type, int customerId)where TX : class where TY : class
+        public static MP_ServiceLog WriteLog<TX, TY>(TX input, TY output, string type, int customerId, int? directorId = null)where TX : class where TY : class
         {
-            return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId);
+            return WriteLog(XSerializer.Serialize(input), XSerializer.Serialize(output), type, customerId, directorId);
         }
 
         //-----------------------------------------------------------------------------------
-        public static MP_ServiceLog WriteLog(string input, string output, string type, int customerId)
+        public static MP_ServiceLog WriteLog(string input, string output, string type, int customerId, int? directorId = null)
         {
             var logEntry = new MP_ServiceLog
                                {
@@ -31,8 +31,10 @@ namespace ExperianLib
             {
                 var repoLog = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
                 var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+                var direcotRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Director>>();
 
                 logEntry.Customer = customerRepo.Get(customerId);
+                logEntry.Director = direcotRepo.Get(directorId);
 
                 Log.DebugFormat("Input data was: {0}", logEntry.RequestData);
                 Log.DebugFormat("Output data was: {0}", logEntry.ResponseData);

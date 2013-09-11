@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual long Id { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual Director Director { get; set; }
 		public virtual DateTime InsertDate { get; set; }
 		public virtual string ServiceType { get; set; }
         public virtual string RequestData { get; set; }
@@ -21,6 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database
             Table("MP_ServiceLog");
             Id(x => x.Id);
             References(x => x.Customer, "CustomerId");
+            References(x => x.Director, "DirectorId");
             Map(x => x.InsertDate);
             Map(x => x.ServiceType);
             Map(x => x.RequestData).CustomType("StringClob");

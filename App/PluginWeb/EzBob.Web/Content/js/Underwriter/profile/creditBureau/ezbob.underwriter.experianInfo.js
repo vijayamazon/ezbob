@@ -40,7 +40,10 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         }, {
             silent: true
         });
-        this.model.fetch({ data: { logDate: date, getFromLog: true } });
+        BlockUi("on");
+        this.model.fetch({ data: { logDate: date, getFromLog: true } }).done(function() {
+            BlockUi("off");
+        });
         this.render();
     },
     downloadConsent: function (e) {

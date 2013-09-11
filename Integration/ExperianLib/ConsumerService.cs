@@ -234,7 +234,7 @@
 
             var output = service.GetOutput(input);
 
-            var serviceLog = Utils.WriteLog(input, output, "Consumer Request", customerId);
+            var serviceLog = Utils.WriteLog(input, output, "Consumer Request", customerId, directorId);
 
             if (output != null && output.Output.Error == null)
             {

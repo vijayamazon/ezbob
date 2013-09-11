@@ -82,7 +82,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 CreatePersonalDataModel(model, customer);
                 AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
                 AppendBavInfo(model.BavInfo, customer, customerMainAddress);
-                BuildEBusinessModel(id, customer, model);
+                BuildEBusinessModel(id, customer, model,getFromLog, logDate);
                 BuildSummaryModel(model);
                 BuildHistoryModel(model, id);
             }
@@ -101,9 +101,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             if (getFromLog)
             {
                 var dob = customer.PersonalInfo.DateOfBirth;
-                var logs = _session.Query<MP_ServiceLog>().Where(x => x.Customer == customer && x.ServiceType == "Consumer Request").ToList();
+                var logs =
+                    _session.Query<MP_ServiceLog>()
+                        .Where(x => x.Customer == customer && x.ServiceType == "Consumer Request")
+                        .ToList();
                 var response = logs.First(x => logDate != null && x.InsertDate == logDate.Value.ToUniversalTime());
-                var serializer = new XmlSerializer(typeof(OutputRoot));
+                var serializer = new XmlSerializer(typeof (OutputRoot));
                 using(TextReader sr = new StringReader(response.ResponseData))
                 {
                     var output = (OutputRoot) serializer.Deserialize(sr);
@@ -123,6 +126,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private void BuildHistoryModel(CreditBureauModel model, int customerId)
         {
             var checkHistoryModels = (from s in _session.Query<MP_ServiceLog>()
+                where s.Director == null
                 where s.Customer.Id == customerId
                 where s.ServiceType == "Consumer Request"
                 select new CheckHistoryModel
@@ -178,7 +182,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             return loc;
         }
 
-        private void BuildEBusinessModel(int id, EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModel model)
+        private void BuildEBusinessModel(int id, EZBob.DatabaseLib.Model.Database.Customer customer,
+            CreditBureauModel model, bool getFromLog = false, DateTime? logDate = null)
         {
             var srv = new EBusinessService();
             switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
@@ -189,7 +194,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                     AppendLimitedInfo(model, limitedInfo);
                     model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
                     model.CompanyName = customer.LimitedInfo.LimitedCompanyName;
-                    model.directorsModels = GenerateDirectorsModels(id, customer.LimitedInfo.Directors);
+                    model.directorsModels = GenerateDirectorsModels(id, customer.LimitedInfo.Directors, getFromLog, logDate);
                 }
                     break;
                 case TypeOfBusinessReduced.NonLimited:
@@ -198,7 +203,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                     AppendNonLimitedInfo(model, nonLimitedInfo);
                     model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
                     model.CompanyName = customer.NonLimitedInfo.NonLimitedCompanyName;
-                    model.directorsModels = GenerateDirectorsModels(id, customer.NonLimitedInfo.Directors);
+                    model.directorsModels = GenerateDirectorsModels(id, customer.NonLimitedInfo.Directors, getFromLog, logDate);
                 }
                     break;
             }
@@ -235,33 +240,58 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                             };
         }
 
-        public CreditBureauModel[] GenerateDirectorsModels(int customerId, IEnumerable<Director> directors)
+        public CreditBureauModel[] GenerateDirectorsModels(int customerId, IEnumerable<Director> directors, bool getFromLog = false, DateTime? logDate = null)
         {
             var customer = _customers.Get(customerId);
             var consumerSrv = new ConsumerService();
             var dirModelList = new List<CreditBureauModel>();
             foreach (var director in directors)
             {
-                var directorAddresses = director.DirectorAddressInfo != null
+                ConsumerServiceResult result = null;
+                if (getFromLog && logDate != null)
+                {
+                    var directorCopy = director;
+                    var logs =
+                        _session.Query<MP_ServiceLog>()
+                            .Where(x => x.Director.Id == directorCopy.Id && x.ServiceType == "Consumer Request")
+                            .ToList();
+                    var logDateWithoutTime = logDate.Value.ToUniversalTime().Date;
+                    var response = logs.FirstOrDefault(x => x.InsertDate >= logDateWithoutTime && x.InsertDate < logDateWithoutTime.AddDays(1));
+                    var serializer = new XmlSerializer(typeof (OutputRoot));
+
+                    if (response != null)
+                    {
+                        using (TextReader sr = new StringReader(response.ResponseData))
+                        {
+                            var output = (OutputRoot)serializer.Deserialize(sr);
+                            result = new ConsumerServiceResult(output, director.DateOfBirth);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    var directorAddresses = director.DirectorAddressInfo != null
                                             ? director.DirectorAddressInfo.AllAddresses
                                             : null;
-                var directorMainAddress = directorAddresses != null && directorAddresses.Any()
-                                              ? directorAddresses.First()
-                                              : null;
-                var dirLoc = new InputLocationDetailsMultiLineLocation();
-                if (directorMainAddress != null)
-                {
-                    dirLoc.LocationLine1 = directorMainAddress.Line1;
-                    dirLoc.LocationLine2 = directorMainAddress.Line2;
-                    dirLoc.LocationLine3 = directorMainAddress.Line3;
-                    dirLoc.LocationLine4 = directorMainAddress.Town;
-                    dirLoc.LocationLine5 = directorMainAddress.County;
-                    dirLoc.LocationLine6 = directorMainAddress.Postcode;
+                    var directorMainAddress = directorAddresses != null && directorAddresses.Any()
+                                                  ? directorAddresses.First()
+                                                  : null;
+                    var dirLoc = new InputLocationDetailsMultiLineLocation();
+                    if (directorMainAddress != null)
+                    {
+                        dirLoc.LocationLine1 = directorMainAddress.Line1;
+                        dirLoc.LocationLine2 = directorMainAddress.Line2;
+                        dirLoc.LocationLine3 = directorMainAddress.Line3;
+                        dirLoc.LocationLine4 = directorMainAddress.Town;
+                        dirLoc.LocationLine5 = directorMainAddress.County;
+                        dirLoc.LocationLine6 = directorMainAddress.Postcode;
+                    }
+                    result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
+                                                director.Gender.ToString(),
+                                                director.DateOfBirth, null, dirLoc, "PL", customer.Id, 0, true);
                 }
 
-                var result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
-                                                 director.Gender.ToString(),
-                                                 director.DateOfBirth, null, dirLoc, "PL", customer.Id, 0, true);
                 var dirModel = GenerateConsumerModel(-1, result);
                 dirModel.Name = director.Name;
                 dirModel.MiddleName = director.Middle;
