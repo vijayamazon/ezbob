@@ -12,7 +12,7 @@ namespace FraudChecker
 {
     public class ExternalChecker
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FraudDetectionChecker));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(ExternalChecker));
         private readonly List<FraudUser> _fu;
         private readonly ISession _session;
 

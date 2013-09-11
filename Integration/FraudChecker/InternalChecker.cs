@@ -15,7 +15,7 @@ namespace FraudChecker
 {
     public class InternalChecker
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FraudDetectionChecker));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(InternalChecker));
         private readonly ISession _session;
 
         public InternalChecker()
