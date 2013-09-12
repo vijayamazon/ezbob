@@ -30,17 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells">
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Words">
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    <Reference Include="EPPlus">
+      <HintPath>..\lib\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Logger">
-      <HintPath>..\..\..\Lib\Ezbob\Logger.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +47,12 @@
   <ItemGroup>
     <Compile Include="Mailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -57,15 +57,20 @@ namespace Ezbob.Logger {
 
 		#endregion property UnderlyingLog
 
+		#endregion public
+
+		#region protected
+
 		#region method OwnSay
 
-		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
+		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			switch (nSeverity) {
 			case Severity.Debug:
 				ms_oLog.Debug(string.Format(format, parameters));
 				break;
 
 			case Severity.Info:
+			case Severity.Msg:
 				ms_oLog.Info(string.Format(format, parameters));
 				break;
 
@@ -74,6 +79,7 @@ namespace Ezbob.Logger {
 				break;
 
 			case Severity.Error:
+			case Severity.Alert:
 				ms_oLog.Error(string.Format(format, parameters));
 				break;
 
@@ -86,9 +92,38 @@ namespace Ezbob.Logger {
 			} // switch
 		} // OwnSay
 
+		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
+			switch (nSeverity) {
+			case Severity.Debug:
+				ms_oLog.Debug(string.Format(format, parameters), ex);
+				break;
+
+			case Severity.Info:
+			case Severity.Msg:
+				ms_oLog.Info(string.Format(format, parameters), ex);
+				break;
+
+			case Severity.Warn:
+				ms_oLog.Warn(string.Format(format, parameters), ex);
+				break;
+
+			case Severity.Error:
+			case Severity.Alert:
+				ms_oLog.Error(string.Format(format, parameters), ex);
+				break;
+
+			case Severity.Fatal:
+				ms_oLog.Fatal(string.Format(format, parameters), ex);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("nSeverity");
+			} // switch
+		} // OwnSay
+
 		#endregion method OwnSay
 
-		#endregion public
+		#endregion protected
 
 		#region private
 

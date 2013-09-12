@@ -15,9 +15,13 @@ namespace Ezbob.Logger {
 
 		#endregion constructor
 
+		#endregion public
+
+		#region protected
+
 		#region method OwnSay
 
-		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
+		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			if (m_oiLog == null)
 				return;
 
@@ -67,9 +71,69 @@ namespace Ezbob.Logger {
 			} // switch
 		} // OwnSay
 
+		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
+			if (m_oiLog == null)
+				return;
+
+			switch (nSeverity) {
+			case Severity.Debug:
+				if ((parameters == null) || (parameters.Length == 0))
+					m_oiLog.Debug(format, ex);
+				else {
+					m_oiLog.DebugFormat(format, parameters);
+					m_oiLog.Debug("", ex);
+				} // if
+
+				break;
+
+			case Severity.Info:
+				if ((parameters == null) || (parameters.Length == 0))
+					m_oiLog.Info(format);
+				else {
+					m_oiLog.InfoFormat(format, parameters);
+					m_oiLog.Info("", ex);
+				} // if
+
+				break;
+
+			case Severity.Warn:
+				if ((parameters == null) || (parameters.Length == 0))
+					m_oiLog.Warn(format);
+				else {
+					m_oiLog.WarnFormat(format, parameters);
+					m_oiLog.Warn("", ex);
+				} // if
+
+				break;
+
+			case Severity.Error:
+				if ((parameters == null) || (parameters.Length == 0))
+					m_oiLog.Error(format);
+				else {
+					m_oiLog.ErrorFormat(format, parameters);
+					m_oiLog.Error("", ex);
+				} // if
+
+				break;
+
+			case Severity.Fatal:
+				if ((parameters == null) || (parameters.Length == 0))
+					m_oiLog.Fatal(format);
+				else {
+					m_oiLog.FatalFormat(format, parameters);
+					m_oiLog.Fatal("", ex);
+				} // if
+
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("nSeverity");
+			} // switch
+		} // OwnSay
+
 		#endregion method OwnSay
 
-		#endregion public
+		#endregion protected
 
 		#region private
 

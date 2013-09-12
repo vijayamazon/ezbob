@@ -47,18 +47,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells, Version=4.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Words">
-      <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    <Reference Include="EPPlus">
+      <HintPath>..\lib\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Logger">
-      <HintPath>..\..\..\Lib\Ezbob\Logger.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -110,6 +103,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
       <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
       <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Reports\Reports.csproj">
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>

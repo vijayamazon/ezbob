@@ -1,4 +1,6 @@
-﻿namespace Ezbob.Logger {
+﻿using System;
+
+namespace Ezbob.Logger {
 	#region class SafeLog
 
 	public class SafeLog : ASafeLog {
@@ -12,7 +14,11 @@
 
 		#region method OwnSay
 
-		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
+		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
+			// nothing here
+		} // OwnSay
+
+		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			// nothing here
 		} // OwnSay
 

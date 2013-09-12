@@ -4,14 +4,14 @@ using System.Linq;
 using Ezbob.Logger;
 using Html;
 using Html.Tags;
+using OfficeOpenXml;
 using Reports;
 using Ezbob.Database;
-using Aspose.Cells;
 
 namespace EzReportsWeb {
 	public class WebReportHandler : BaseReportHandler {
 		public WebReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {
-			reportList = GetReportsList(System.Web.HttpContext.Current.User.Identity.Name);
+			ReportList = Report.GetUserReportsList(oDB, System.Web.HttpContext.Current.User.Identity.Name);
 		} // constructor
 
 		internal ATag GetReportData(System.Web.UI.WebControls.ListItem selectedReport, ReportQuery rptDef, bool isDaily, List<string> oColumnTypes) {
@@ -54,19 +54,13 @@ namespace EzReportsWeb {
 			} // switch
 		} // GetReportData
 
-		internal Workbook GetWorkBook(System.Web.UI.WebControls.ListItem selectedReport, ReportQuery rptDef, bool isDaily) {
-			InitAspose();
+		internal ExcelPackage GetWorkBook(System.Web.UI.WebControls.ListItem selectedReport, ReportQuery rptDef, bool isDaily) {
+			// InitAspose();
 
 			Report report = GetReport(selectedReport.Text);
 
-			if (report == null) {
-				var errBook = new Workbook();
-				errBook.Worksheets.Clear();
-				var se = errBook.Worksheets.Add("Error !!!");
-				se.Cells.Merge(1, 1, 1, 6);
-				se.Cells[1, 1].PutValue("Error: Type reports for this customer cannot be obtained !!!");
-				return errBook;
-			} // if
+			if (report == null)
+				return ErrorXlsReport("Type reports for this customer cannot be obtained !!!");
 
 			rptDef.Report = report;
 			rptDef.StoredProcedure = report.StoredProcedure;
@@ -96,10 +90,10 @@ namespace EzReportsWeb {
 		} // GetWorkBook
 
 		public Report GetReport(string title) {
-			return reportList.Values.FirstOrDefault(report => report.Title.Equals(title));
+			return ReportList.Values.FirstOrDefault(report => report.Title.Equals(title));
 		} // GetReport
 
-		private SortedDictionary<string, Report> reportList;
+		public SortedDictionary<string, Report> ReportList { get; private set; }
 	} // class WebReportHandler
 } // EzReportsWeb
 

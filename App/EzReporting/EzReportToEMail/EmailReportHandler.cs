@@ -1,83 +1,84 @@
 ﻿using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using Html.Tags;
-using Html.Attributes;
 using Reports;
 using Ezbob.Database;
 using Ezbob.Logger;
 
 namespace EzReportToEMail {
+	#region class EmailReportHandler
+
 	public class EmailReportHandler : BaseReportHandler {
-		private const string DailyPerdiod = "Daily";
-		private const string WeeklyPerdiod = "Weekly";
-		private const string MonthlyPerdiod = "Monthly";
-		private const string MonthToDatePerdiod = "Month to Date";
+		#region public
+
+		#region constructor
 
 		public EmailReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {
 		} // constructor
 
-		public void ExecuteReportHandler(DateTime dToday) {
-			DataTable dt = Report.LoadReportList(DB);
+		#endregion constructor
 
-			SortedDictionary<string, Report> reportList = GetReportsList();
+		#region method ExecuteReportHandler
+
+		public void ExecuteReportHandler(DateTime dToday) {
+			SortedDictionary<string, Report> reportList = Report.GetScheduledReportsList(DB);
 
 			DateTime dTomorrow = dToday.AddDays(1);
 
-			var sender = new BaseReportSender(this);
+			var sender = new ReportDispatcher(DB, this);
 
-			Parallel.ForEach<Report>(reportList.Values, (report) => {
+			Parallel.ForEach<Report>(reportList.Values, report => {
 				Debug(report.Title);
 
 				switch (report.Type) {
 				case ReportType.RPT_NEW_CLIENT:
-					sender.Send(
+					sender.Dispatch(
 						report.Title,
+						dToday,
 						BuildNewClientReport(report, dToday),
-						report.ToEmail,
-						"Daily",
-						BuildNewClientXls(report, dToday)
+						BuildNewClientXls(report, dToday),
+						report.ToEmail
 					);
 					break;
 
 				case ReportType.RPT_PLANNED_PAYTMENT:
-					sender.Send(
+					sender.Dispatch(
 						report.Title,
+						dToday,
 						BuildPlainedPaymentReport(report, dToday),
-						report.ToEmail,
-						"Daily",
-						BuildPlainedPaymentXls(report, dToday)
+						BuildPlainedPaymentXls(report, dToday),
+						report.ToEmail
 					);
 					break;
 
 				case ReportType.RPT_IN_WIZARD:
-					sender.Send(
+					sender.Dispatch(
 						report.Title,
+						dToday,
 						BuildInWizardReport(report, dToday, dTomorrow),
-						report.ToEmail,
-						"Daily",
-						BuildInWizardXls(report, dToday, dTomorrow)
+						BuildInWizardXls(report, dToday, dTomorrow),
+						report.ToEmail
 					);
 					break;
 
 				case ReportType.RPT_EARNED_INTEREST:
-					sender.Send(
+					sender.Dispatch(
 						report.Title,
+						dToday,
 						BuildEarnedInterestReport(report, dToday, dTomorrow),
-						report.ToEmail,
-						"Daily",
-						BuildEarnedInterestXls(report, dToday, dTomorrow)
+						BuildEarnedInterestXls(report, dToday, dTomorrow),
+						report.ToEmail
 					);
 					break;
 
 				case ReportType.RPT_LOANS_GIVEN:
-					sender.Send(
+					sender.Dispatch(
 						report.Title,
+						dToday,
 						BuildLoansIssuedReport(report, dToday, dTomorrow),
-						report.ToEmail,
-						"Daily",
-						BuildLoansIssuedXls(report, dToday, dTomorrow)
+						BuildLoansIssuedXls(report, dToday, dTomorrow),
+						report.ToEmail
 					);
 					break;
 
@@ -88,24 +89,36 @@ namespace EzReportToEMail {
 			}); // foreach
 		} // ExecuteReportHandler
 
-		private void HandleGenericReport(Report report, DateTime dToday, BaseReportSender sender) {
+		#endregion method ExecuteReportHandler
+
+		#endregion public
+
+		#region private
+
+		#region method HandleGenericReport
+
+		private void HandleGenericReport(Report report, DateTime dToday, ReportDispatcher sender) {
 			if (report.IsDaily)
-				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender);
+				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday);
 
 			if (IsWeekly(report.IsWeekly, dToday))
-				BuildReport(report, dToday.AddDays(-7), dToday, WeeklyPerdiod, sender);
+				BuildReport(report, dToday.AddDays(-7), dToday, WeeklyPerdiod, sender, dToday);
 
 			if (IsMonthly(report.IsMonthly, dToday))
-				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender);
+				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender, dToday);
 
 			if (report.IsMonthToDate) {
 				DateTime monthStart = (new DateTime(dToday.Year, dToday.Month, 1));
-				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender);
+				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday);
 			} // if month to date
 		} // HandleGenericReport
 
-		private void BuildReport(Report report, DateTime fromDate, DateTime toDate, string period, BaseReportSender sender) {
-			BaseReportSender.MailTemplate email = sender.CreateMailTemplate();
+		#endregion method HandleGenericReport
+
+		#region method BuildReport
+
+		private void BuildReport(Report report, DateTime fromDate, DateTime toDate, string period, ReportDispatcher sender, DateTime oReportGenerationDate) {
+			var email = new ReportEmail();
 
 			switch (period) {
 			case DailyPerdiod:
@@ -133,21 +146,45 @@ namespace EzReportToEMail {
 				email.Title.ToString()
 			));
 
-			sender.Send(
+			sender.Dispatch(
 				report.Title,
+				oReportGenerationDate,
 				email.HtmlBody,
+				XlsReport(rptDef, email.Title.ToString()),
 				report.ToEmail,
-				period,
-				XlsReport(rptDef, email.Title.ToString())
+				period
 			);
 		} // BuildReport
+
+		#endregion method BuildReport
+
+		#region method IsMonthly
 
 		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {
 			return isMonthlyFlag && dToday.Day == 1;
 		} // IsMonthly
 
+		#endregion method IsMonthly
+
+		#region method IsWeekly
+
 		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday) {
 			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Sunday;
 		} // IsWeekly
+
+		#endregion method IsWeekly
+
+		#region const
+
+		private const string DailyPerdiod = "Daily";
+		private const string WeeklyPerdiod = "Weekly";
+		private const string MonthlyPerdiod = "Monthly";
+		private const string MonthToDatePerdiod = "Month to Date";
+
+		#endregion const
+
+		#endregion private
 	} // class EmailReportHandler
+
+	#endregion class EmailReportHandler
 } // namespace EzReportToEMail

@@ -16,11 +16,15 @@ namespace EzReportToEMail {
 			else if ((args.Length > 1) && (args[0] == "--date"))
 				DateTime.TryParseExact(args[1], "yyyy-MM-dd", new CultureInfo("en-GB"), DateTimeStyles.None, out dNow);
 
+			log.Info("Report delivery daemon started...");
+
 			log.Info("Current environment is {0}", env.Context);
 			log.Info("Running with current date {0}", dNow.ToString("MMMM d yyyy H:mm:ss"));
 
 			var reportsHandler = new EmailReportHandler(new SqlConnection(log), log);
 			reportsHandler.ExecuteReportHandler(dNow);
+
+			log.Info("Report delivery daemon completed all the tasks.");
 		} // Main
 	} // class Program
 } // namespace EzReportToEmail

@@ -28,33 +28,45 @@ namespace Reports {
 	#region class Report
 
 	public class Report {
-		public const string ReportListStoredProc = "RptScheduler_GetReportList";
-		public const string ReportArgsStoredProc = "RptScheduler_GetReportArgs";
+		#region public const
 
 		public const string DateRangeArg = "DateRange";
 		public const string CustomerArg = "Customer";
 		public const string ShowNonCashArg = "ShowNonCashTransactions";
 
-		public static DataTable LoadReportList(AConnection oDB, string sReportTypeName = "") {
-			return oDB.ExecuteReader(
-				ReportListStoredProc,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@RptType", sReportTypeName ?? "")
-			);
-		} // LoadReportList
+		#endregion public const
 
-		public static DataTable LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
-			var oParams = new List<QueryParameter>();
+		#region public static
 
-			if (!string.IsNullOrWhiteSpace(sReportTypeName))
-				oParams.Add(new QueryParameter("@RptType", sReportTypeName));
+		#region method GetScheduledReportsList
 
-			return oDB.ExecuteReader(
-				ReportArgsStoredProc,
-				CommandSpecies.StoredProcedure,
-				oParams.ToArray()
-			);
-		} // LoadReportArgs
+		public static SortedDictionary<string, Report> GetScheduledReportsList(AConnection oDB) {
+			if (ms_tblReports == null)
+				LoadReportList(oDB);
+
+			return FillReportArgs(oDB, ms_tblReports);
+		} // GetScheduledReportsList
+
+		#endregion method GetScheduledReportsList
+
+		#region method GetUserReportList
+
+		public static SortedDictionary<string, Report> GetUserReportsList(AConnection oDB, string userName = null) {
+			var users = new List<QueryParameter>();
+
+			userName = (userName ?? "").Trim();
+
+			if (userName != string.Empty)
+				users.Add(new QueryParameter("@UserName", userName));
+
+			DataTable dt = oDB.ExecuteReader("RptGetUserReports", users.ToArray());
+
+			return FillReportArgs(oDB, dt);
+		} // GetUserReportsList
+
+		#endregion method GetUserReportList
+
+		#endregion public static
 
 		#region constructor
 
@@ -62,19 +74,29 @@ namespace Reports {
 			Arguments = new SortedDictionary<string, string>();
 		} // construtor
 
-		public Report(DataRow row, string sDefaultToEmail) : this() {
-			Init(row, sDefaultToEmail);
+		public Report(DataRow row) : this() {
+			Init(row);
 		} // constructor
 
 		public Report(AConnection oDB, string sReportTypeName) : this() {
-			DataTable tbl = LoadReportList(oDB, sReportTypeName);
+			if (ms_tblReports == null)
+				LoadReportList(oDB, sReportTypeName);
 
-			if ((tbl == null) || (tbl.Rows.Count != 1))
+			if ((ms_tblReports == null) || (ms_tblReports.Rows.Count == 0))
+				throw new Exception(string.Format("Failed to load report list from DB while looking for {0}", sReportTypeName));
+
+			bool bFound = false;
+
+			foreach (DataRow row in ms_tblReports.Rows) {
+				if (row["Type"].ToString() == sReportTypeName) {
+					Init(row);
+					bFound = true;
+					break;
+				} // if
+			} // foreach
+
+			if (!bFound)
 				throw new Exception(string.Format("Report cannot be found by name {0}", sReportTypeName));
-
-			Init(tbl.Rows[0], "");
-
-			tbl.Dispose();
 
 			DataTable args = LoadReportArgs(oDB, sReportTypeName);
 
@@ -82,7 +104,11 @@ namespace Reports {
 				AddArgument(row["ArgumentName"].ToString());
 		} // constructor
 
-		private void Init(DataRow row, string sDefaultToEmail) {
+		#endregion constructor
+
+		#region method Init
+
+		private void Init(DataRow row) {
 			ReportType type;
 
 			TypeName = row["Type"].ToString();
@@ -97,11 +123,11 @@ namespace Reports {
 			IsWeekly = (bool)row["IsWeekly"];
 			IsMonthly = (bool)row["IsMonthly"];
 			Columns = Report.ParseHeaderAndFields(row["Header"].ToString(), row["Fields"].ToString());
-			ToEmail = (string.IsNullOrEmpty(row["ToEmail"].ToString()) ? sDefaultToEmail : row["ToEmail"].ToString());
+			ToEmail = (row["ToEmail"] ?? "").ToString().Trim();
 			IsMonthToDate = (bool)row["IsMonthToDate"];
 		} // Init
 
-		#endregion constructor
+		#endregion method Init
 
 		#region method AddArgument
 
@@ -244,6 +270,92 @@ namespace Reports {
 		} // ReadStyle
 
 		#endregion style related
+
+		#region private const
+
+		private const string ReportListStoredProc = "RptScheduler_GetReportList";
+		private const string ReportArgsStoredProc = "RptScheduler_GetReportArgs";
+
+		#endregion private const
+
+		#region private static
+
+		#region method LoadReportList
+
+		private static void LoadReportList(AConnection oDB, string sReportTypeName = "") {
+			if (ms_tblReports != null) {
+				ms_tblReports.Dispose();
+				ms_tblReports = null;
+			} // if
+
+			ms_tblReports = oDB.ExecuteReader(
+				ReportListStoredProc,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@RptType", sReportTypeName ?? "")
+			);
+		} // LoadReportList
+
+		#endregion method LoadReportList
+
+		#region method LoadReportArgs
+
+		private static DataTable LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
+			var oParams = new List<QueryParameter>();
+
+			if (!string.IsNullOrWhiteSpace(sReportTypeName))
+				oParams.Add(new QueryParameter("@RptType", sReportTypeName));
+
+			return oDB.ExecuteReader(
+				ReportArgsStoredProc,
+				CommandSpecies.StoredProcedure,
+				oParams.ToArray()
+			);
+		} // LoadReportArgs
+
+		#endregion method LoadReportArgs
+
+		#region method FillReportArgs
+
+		private static SortedDictionary<string, Report> FillReportArgs(AConnection oDB, DataTable tblRetrievedReports) {
+			var reportList = new SortedDictionary<string, Report>();
+
+			if (tblRetrievedReports != null) {
+				foreach (DataRow row in tblRetrievedReports.Rows) {
+					var rpt = new Report(row);
+
+					reportList[rpt.TypeName] = rpt;
+				} // for each
+
+				DataTable args = LoadReportArgs(oDB);
+
+				Report oLastReport = null;
+				string sLastType = null;
+
+				foreach (DataRow row in args.Rows) {
+					string sTypeName = row["ReportType"].ToString();
+					string sArgName = row["ArgumentName"].ToString();
+
+					if (sLastType != sTypeName) {
+						if (reportList.ContainsKey(sTypeName)) {
+							sLastType = sTypeName;
+							oLastReport = reportList[sLastType];
+						}
+						else
+							continue;
+					} // if
+
+					oLastReport.AddArgument(sArgName);
+				} // for each
+			} // if report list is not null
+
+			return reportList;
+		} // FillReportArgs 
+
+		#endregion method FillReportArgs
+
+		private static DataTable ms_tblReports;
+
+		#endregion private static
 	} // class Report
 
 	#endregion class Report

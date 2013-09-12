@@ -7,7 +7,6 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Aspose.Cells;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Html;
@@ -33,16 +32,14 @@ namespace EzReportsWeb {
 
 				reportHandler = new WebReportHandler(oDB, log);
 
-				SortedDictionary<string, Report> reportsList = reportHandler.GetReportsList(HttpContext.Current.User.Identity.Name);
-
-				if (reportsList.Count == 0) {
+				if (reportHandler.ReportList.Count == 0) {
 					divFilter.Visible = false;
 					return;
 				} // if
 
 				ddlReportTypes.DataTextField = "Title";
 				ddlReportTypes.DataValueField = "Title";
-				ddlReportTypes.DataSource = reportsList.Values;
+				ddlReportTypes.DataSource = reportHandler.ReportList.Values;
 				ddlReportTypes.DataBind();
 			} // if
 
@@ -146,7 +143,7 @@ namespace EzReportsWeb {
 
 			var filename = (ddlReportTypes.SelectedItem + "_" + ((DateTime)rptDef.DateStart).ToString("yyyy-MM-dd") + ".xlsx").Replace(" ", "_");
 			var ostream = new MemoryStream();
-			wb.Save(ostream, FileFormatType.Excel2007Xlsx);
+			wb.SaveAs(ostream);
 
 			Response.Clear();
 			Response.ContentType = "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

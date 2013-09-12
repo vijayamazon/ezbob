@@ -63,35 +63,35 @@ namespace Reconciliation {
 
 			oLog.Debug("Loading Pacnet report metadata from db...");
 
-			Report pacnet = new Report(oDB, "RPT_PACNET_RECONCILIATION");
+			var pacnet = new Report(oDB, "RPT_PACNET_RECONCILIATION");
 
 			oLog.Debug("Loading Paypoint report metadata from db...");
 
-			Report paypoint = new Report(oDB, "RPT_PAYPOINT_RECONCILIATION");
+			var paypoint = new Report(oDB, "RPT_PAYPOINT_RECONCILIATION");
 
 			var rh = new BaseReportHandler(oDB, oLog);
 
-			var sender = new BaseReportSender(oLog);
+			var sender = new ReportDispatcher(oDB, oLog);
 
-			BaseReportSender.MailTemplate template = sender.CreateMailTemplate();
+			var email = new ReportEmail();
 
 			oLog.Debug("Generating Pacnet report...");
 
-			template.ReportBody.Append(new H2().Append(new Text(pacnet.GetTitle(oDate))));
+			email.ReportBody.Append(new H2().Append(new Text(pacnet.GetTitle(oDate))));
 
-			template.ReportBody.Append(
+			email.ReportBody.Append(
 				rh.TableReport(new ReportQuery(pacnet, oDate, oDate))
 			);
 
 			oLog.Debug("Generating Paypoint report...");
 
-			template.ReportBody.Append(new H2().Append(new Text(paypoint.GetTitle(oDate))));
+			email.ReportBody.Append(new H2().Append(new Text(paypoint.GetTitle(oDate))));
 
-			template.ReportBody.Append(
+			email.ReportBody.Append(
 				rh.TableReport(new ReportQuery(paypoint, oDate, oDate))
 			);
 
-			StringBuilder sTo = new StringBuilder();
+			var sTo = new StringBuilder();
 			
 			sTo.Append(pacnet.ToEmail);
 
@@ -102,9 +102,11 @@ namespace Reconciliation {
 
 			oLog.Debug("Sending report...");
 
-			sender.Send(
+			sender.Dispatch(
 				"Reconciliation " + oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture),
-				template.HtmlBody,
+				oDate,
+				email.HtmlBody,
+				null,
 				sTo.ToString()
 			);
 

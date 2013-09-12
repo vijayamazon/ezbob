@@ -12,17 +12,30 @@ namespace Ezbob.Logger{
 
 		#endregion constructor
 
+		#endregion public
+
+		#region protected
+
 		#region method OwnSay
 
-		public override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
+		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
 			Console.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
 
 			Console.WriteLine(format, parameters);
 		} // OwnSay
 
+		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
+			Console.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
+
+			Console.WriteLine(format, parameters);
+
+			Console.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
+			Console.WriteLine(ExceptionToString(ex));
+		} // OwnSay
+
 		#endregion method OwnSay
 
-		#endregion public
+		#endregion protected
 	} // class ConsoleLog
 
 	#endregion class ConsoleLog

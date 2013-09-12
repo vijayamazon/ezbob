@@ -4,8 +4,10 @@
 	public enum Severity {
 		Debug,
 		Info,
+		Msg,
 		Warn,
 		Error,
+		Alert,
 		Fatal
 	} // enum Severity
 

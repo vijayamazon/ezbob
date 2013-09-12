@@ -2,17 +2,17 @@
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
-using Aspose.Cells;
 using System.IO;
 using Ezbob.Logger;
+using OfficeOpenXml;
 
 namespace Mailer {
 	public class Mailer {
-		public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, Workbook wb = null, ASafeLog oLog = null, int retries = 5) {
+		public static void SendMail(string fromAddress, string fromPassword, string subject, string mailBody, string toAddress, ExcelPackage wb = null, ASafeLog oLog = null, int retries = 5) {
 			SendMail(new MailAddress(fromAddress), fromPassword, subject, mailBody, toAddress, wb, oLog, retries);
 		} // SendMail
 
-		public static void SendMail(MailAddress oFrom, string fromPassword, string subject, string mailBody, string toAddress, Workbook wb = null, ASafeLog oLog = null, int retries = 5) {
+		public static void SendMail(MailAddress oFrom, string fromPassword, string subject, string mailBody, string toAddress, ExcelPackage wb = null, ASafeLog oLog = null, int retries = 5) {
 			string body = mailBody;
 			var ostream = new MemoryStream();
 
@@ -36,7 +36,7 @@ namespace Mailer {
 
 				if (wb != null) {
 					message.Attachments.Clear();
-					wb.Save(ostream, FileFormatType.Excel2007Xlsx);
+					wb.SaveAs(ostream);
 					ostream.Position = 0;
 					var attachment = new Attachment(ostream, subject + ".xlsx", "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 					message.Attachments.Add(attachment);

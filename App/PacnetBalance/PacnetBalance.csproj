@@ -35,9 +35,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells, Version=4.7.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
+    <Reference Include="EPPlus">
+      <HintPath>..\EzReporting\lib\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>

@@ -1,32 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Reflection;
 using Ezbob.Database;
 using Ezbob.Logger;
-using Aspose.Cells;
 using Html;
 using Html.Attributes;
 using Html.Tags;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace Reports {
 	public class BaseReportHandler : SafeLog {
 		#region public
-
-		#region method InitAspose
-
-		public static void InitAspose() {
-			var license = new License();
-
-			using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("Reports.Aspose.Total.lic")) {
-				s.Position = 0;
-				license.SetLicense(s);
-			} // using
-		} // InitAspose
-
-		#endregion method InitAspose
 
 		#region constructor
 
@@ -35,52 +21,6 @@ namespace Reports {
 		} // constructor
 
 		#endregion constructor
-
-		#region method GetReportList
-
-		public SortedDictionary<string, Report> GetReportsList(string userName = null) {
-			var users = new List<QueryParameter>();
-
-			userName = (userName ?? "").Trim();
-
-			if (userName != string.Empty)
-				users.Add(new QueryParameter("@UserName", userName));
-
-			DataTable dt = DB.ExecuteReader("RptGetUserReports", users.ToArray());
-
-			var reportList = new SortedDictionary<string, Report>();
-
-			foreach (DataRow row in dt.Rows) {
-				var rpt = new Report(row, BaseReportSender.DefaultToEMail);
-
-				reportList[rpt.TypeName] = rpt;
-			} // for each
-
-			DataTable args = Report.LoadReportArgs(DB);
-
-			Report oLastReport = null;
-			string sLastType = null;
-
-			foreach (DataRow row in args.Rows) {
-				string sTypeName = row["ReportType"].ToString();
-				string sArgName = row["ArgumentName"].ToString();
-
-				if (sLastType != sTypeName) {
-					if (reportList.ContainsKey(sTypeName)) {
-						sLastType = sTypeName;
-						oLastReport = reportList[sLastType];
-					}
-					else
-						continue;
-				} // if
-
-				oLastReport.AddArgument(sArgName);
-			} // for each
-
-			return reportList;
-		} // GetReportsList
-
-		#endregion method GetReportList
 
 		#region HTML generators
 
@@ -91,14 +31,30 @@ namespace Reports {
 		} // TableReport
 
 		public ATag TableReport(ReportQuery rptDef, DataTable oReportData, bool isSharones = false, string sRptTitle = "", List<string> oColumnTypes = null) {
+			int lineCounter = 0;
 			var tbl = new Table().Add<Class>("Report");
+			Tbody oTbody;
+
+			DataTable dt = oReportData;
 
 			try {
-				DataTable dt = oReportData ?? rptDef.Execute(DB);
+				dt = dt ?? rptDef.Execute(DB);
+			}
+			catch (Exception e) {
+				Alert(e, "Failed to fetch data from DB.");
+				return tbl;
+			} // try
 
+			try {
 				if (!isSharones)
 					tbl.Add<ID>("tableReportData");
+			}
+			catch (Exception e) {
+				Alert(e, "Failed to add HTML id to report table.");
+				return tbl;
+			} // try
 
+			try {
 				var tr = new Tr().Add<Class>("HR");
 
 				for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++)
@@ -106,11 +62,15 @@ namespace Reports {
 						tr.Append(new Th().Add<Class>("H").Append(new Text(rptDef.Columns[columnIndex].Caption)));
 
 				tbl.Append(new Thead().Append(tr));
+			}
+			catch (Exception e) {
+				Alert(e, "Failed to initialise table header row.");
+				return tbl;
+			} // try
 
-				var oTbody = new Tbody();
+			try {
+				oTbody = new Tbody();
 				tbl.Append(oTbody);
-
-				int lineCounter = 0;
 
 				if (oColumnTypes != null) {
 					oColumnTypes.Clear();
@@ -118,12 +78,18 @@ namespace Reports {
 					for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++)
 						oColumnTypes.Add("string");
 				} // if
+			}
+			catch (Exception e) {
+				Alert(e, "Failed to initialise report table column types.");
+				return tbl;
+			} // try
 
+			try {
 				foreach (DataRow row in dt.Rows) {
 					var oTr = new Tr().Add<Class>(lineCounter % 2 == 0 ? "Odd" : "Even");
 					oTbody.Append(oTr);
 
-					List<string> oClassesToApply = new List<string>();
+					var oClassesToApply = new List<string>();
 
 					for (int columnIndex = 0; columnIndex < rptDef.Columns.Length; columnIndex++) {
 						ColumnInfo col = rptDef.Columns[columnIndex];
@@ -161,14 +127,20 @@ namespace Reports {
 				AddSheetToExcel(dt, rptDef.StoredProcedure, sRptTitle);
 			}
 			catch (Exception e) {
-				Error(e.ToString());
+				Alert(e, "Failed to create report table body.");
+				return tbl;
 			} // try
 
-			if (oColumnTypes != null) {
-				for (int columnIndex = rptDef.Columns.Length - 1; columnIndex >= 0; columnIndex--)
-					if (!rptDef.Columns[columnIndex].IsVisible)
-						oColumnTypes.RemoveAt(columnIndex);
-			} // if
+			try {
+				if (oColumnTypes != null) {
+					for (int columnIndex = rptDef.Columns.Length - 1; columnIndex >= 0; columnIndex--)
+						if (!rptDef.Columns[columnIndex].IsVisible)
+							oColumnTypes.RemoveAt(columnIndex);
+				} // if
+			}
+			catch (Exception e) {
+				Alert(e, "Failed to finalise report table column types.");
+			} // try
 
 			return tbl;
 		} // TableReport
@@ -269,9 +241,9 @@ namespace Reports {
 
 		#region method BuildNewClientXls
 
-		public Workbook BuildNewClientXls(Report report, DateTime today) {
+		public ExcelPackage BuildNewClientXls(Report report, DateTime today) {
 			var title = report.GetTitle(today);
-			var wb = new Workbook();
+			var wb = new ExcelPackage();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
@@ -296,9 +268,9 @@ namespace Reports {
 
 		#region method BuildPlainedPaymentXls
 
-		public Workbook BuildPlainedPaymentXls(Report report, DateTime today) {
+		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today) {
 			var title = report.GetTitle(today);
-			var wb = new Workbook();
+			var wb = new ExcelPackage();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptPaymentReport",
@@ -319,10 +291,10 @@ namespace Reports {
 
 		#region method BuildInWizardXls
 
-		public Workbook BuildInWizardXls(Report report, DateTime today, DateTime tomorrow) {
+		public ExcelPackage BuildInWizardXls(Report report, DateTime today, DateTime tomorrow) {
 			var title = report.GetTitle(today);
 			var sometext = String.Empty;
-			var wb = new Workbook();
+			var wb = new ExcelPackage();
 
 			try {
 				DataTable dt = DB.ExecuteReader("RptNewClients",
@@ -357,7 +329,7 @@ namespace Reports {
 
 		#region method BuildEarnedInterestXls
 
-		public Workbook BuildEarnedInterestXls(Report report, DateTime today, DateTime tomorrow) {
+		public ExcelPackage BuildEarnedInterestXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateEarnedInterestReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
@@ -367,7 +339,7 @@ namespace Reports {
 
 		#region method BuildLoansIssuedXls
 
-		public Workbook BuildLoansIssuedXls(Report report, DateTime today, DateTime tomorrow) {
+		public ExcelPackage BuildLoansIssuedXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> pair = CreateLoansIssuedReport(report, today, tomorrow);
 
 			return AddSheetToExcel(pair.Value, report.GetTitle(today, oToDate: tomorrow), "RptLoansIssued");
@@ -377,19 +349,27 @@ namespace Reports {
 
 		#region method XlsReport
 
-		public Workbook XlsReport(ReportQuery rptDef, string sRptTitle = "") {
-			var wb = new Workbook();
+		public ExcelPackage XlsReport(ReportQuery rptDef, string sRptTitle = "") {
+			var wb = new ExcelPackage();
 
 			try {
 				DataTable dt = rptDef.Execute(DB);
 				wb = AddSheetToExcel(dt, sRptTitle, rptDef.StoredProcedure, String.Empty);
+				return wb;
 			}
 			catch (Exception e) {
-				Error(e.ToString());
+				Alert(e, "Failed to generate Excel report.");
 			} // try
 
-			return wb;
+			return ErrorXlsReport("Failed to generate report.");
 		} // XlsReport
+
+		public static ExcelPackage ErrorXlsReport(string sMsg) {
+			var errBook = new ExcelPackage();
+			var sheet = errBook.Workbook.Worksheets.Add("Error");
+			sheet.Cells[1, 1].Value = "Error: " + sMsg;
+			return errBook;
+		} // ErrorXlsReport
 
 		#endregion method XlsReport
 
@@ -1142,106 +1122,67 @@ namespace Reports {
 
 		#region method AddSheetToExcel
 
-		private static Workbook AddSheetToExcel(DataTable dt, String title, String sheetName = "", String someText = "", Workbook wb = null) {
-			InitAspose();
-
-			const int fc = 1; // first column
-			const int fr = 4; // first row
-			const int frn = 1; // first row for title
-
+		private static ExcelPackage AddSheetToExcel(DataTable dt, string title, string sheetName = "", string someText = "", ExcelPackage wb = null) {
 			if (wb == null) { // first initialization, if we will use it multimple times.
-				wb = new Workbook();
-				wb.Worksheets.Clear();
+				wb = new ExcelPackage();
 			} // if
 
-			if (String.IsNullOrEmpty(sheetName))
+			if (string.IsNullOrEmpty(sheetName))
 				sheetName = "Report"; // default sheetName
 
-			var sheet = wb.Worksheets.Add(sheetName); // add new specific sheet to document.
+			var sheet = wb.Workbook.Worksheets.Add(sheetName);
 
-			sheet.Cells.Merge(frn, fc, 1, dt.Columns.Count);
-			sheet.Cells[frn, fc].PutValue(title.Replace("<h1>", "").Replace("</h1>", ""));
-			sheet.Cells.Merge(frn + 1, fc, 1, dt.Columns.Count);
-			sheet.Cells[frn + 1, fc].PutValue(someText);
-			sheet.Cells.ImportDataTable(dt, true, fr, fc);
-			sheet.AutoFitColumns();
+			const int nTitleRow = 1; // first row for title
+			const int nFirstColumn = 1; // first column
 
-			sheet.Cells.SetColumnWidth(0, 1);
+			int nHeaderRow = nTitleRow + 1;
 
-			var titleStyle = sheet.Cells[fc, fr].GetStyle();
-			var headerStyle = sheet.Cells[fc, fr].GetStyle();
-			var lightStyle = sheet.Cells[fc, fr].GetStyle();
-			var darkStyle = sheet.Cells[fc, fr].GetStyle();
-			var footerStyle = sheet.Cells[fc, fr].GetStyle();
+			if (!string.IsNullOrWhiteSpace(someText)) {
+				sheet.Cells[nTitleRow + 1, nFirstColumn].Value = someText;
+				nHeaderRow++;
+			} // if
 
-			titleStyle.VerticalAlignment = TextAlignmentType.Center;
-			titleStyle.HorizontalAlignment = TextAlignmentType.Center;
-			titleStyle.Pattern = BackgroundType.Solid;
-			titleStyle.Font.IsBold = true;
-			titleStyle.ForegroundColor = ColorTranslator.FromHtml("#EEEEEE");
-			titleStyle.BackgroundColor = ColorTranslator.FromHtml("#EEEEEE");
-			titleStyle.Font.Color = ColorTranslator.FromHtml("#666666");
-			sheet.Cells[frn, fc].SetStyle(titleStyle);
+			int nFirstDataRow = nHeaderRow + 1;
 
-			headerStyle.VerticalAlignment = TextAlignmentType.Center;
-			headerStyle.HorizontalAlignment = TextAlignmentType.Center;
-			headerStyle.Borders[BorderType.BottomBorder].Color = Color.Black;
-			headerStyle.Borders[BorderType.BottomBorder].LineStyle = CellBorderType.Medium;
-			headerStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
-			headerStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
-			headerStyle.Borders[BorderType.RightBorder].Color = Color.Black;
-			headerStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
-			headerStyle.Borders[BorderType.TopBorder].Color = Color.Black;
-			headerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
-			headerStyle.Pattern = BackgroundType.Solid;
-			headerStyle.Font.IsBold = true;
-			headerStyle.ForegroundColor = ColorTranslator.FromHtml("#9AB1D1");
-			headerStyle.BackgroundColor = ColorTranslator.FromHtml("#9AB1D1");
-			headerStyle.Font.Color = ColorTranslator.FromHtml("#FFFFFF");
+			int nRowCount = dt.Rows.Count;
+			int nColumnCount = dt.Columns.Count;
 
-			lightStyle.VerticalAlignment = TextAlignmentType.Center;
-			lightStyle.HorizontalAlignment = TextAlignmentType.Left;
-			lightStyle.Pattern = BackgroundType.Solid;
-			lightStyle.Font.IsBold = false;
-			lightStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
-			lightStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
-			lightStyle.Borders[BorderType.RightBorder].Color = Color.Black;
-			lightStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
-			lightStyle.ForegroundColor = ColorTranslator.FromHtml("#FFFFFF");
-			lightStyle.BackgroundColor = ColorTranslator.FromHtml("#FFFFFF");
-			lightStyle.Font.Color = ColorTranslator.FromHtml("#000000");
+			if (nColumnCount > 1)
+				sheet.Cells[nTitleRow, nFirstColumn, nTitleRow, nFirstColumn + nColumnCount - 1].Merge = true;
 
-			darkStyle.VerticalAlignment = TextAlignmentType.Center;
-			darkStyle.HorizontalAlignment = TextAlignmentType.Left;
-			darkStyle.Pattern = BackgroundType.Solid;
-			darkStyle.Font.IsBold = false;
-			darkStyle.Borders[BorderType.LeftBorder].Color = Color.Black;
-			darkStyle.Borders[BorderType.LeftBorder].LineStyle = CellBorderType.Medium;
-			darkStyle.Borders[BorderType.RightBorder].Color = Color.Black;
-			darkStyle.Borders[BorderType.RightBorder].LineStyle = CellBorderType.Medium;
-			darkStyle.ForegroundColor = ColorTranslator.FromHtml("#F9F9F9");
-			darkStyle.BackgroundColor = ColorTranslator.FromHtml("#F9F9F9");
-			darkStyle.Font.Color = ColorTranslator.FromHtml("#000000");
+			ExcelRange oTitle = sheet.Cells[nTitleRow, nFirstColumn];
+			oTitle.Value = title.Replace("<h1>", "").Replace("</h1>", "");
+			oTitle.Style.Font.Bold = true;
+			oTitle.Style.Font.Size = 16;
 
-			footerStyle.Borders[BorderType.TopBorder].Color = Color.Black;
-			footerStyle.Borders[BorderType.TopBorder].LineStyle = CellBorderType.Medium;
+			for (int i = 0; i < nRowCount; i++) {
+				DataRow row = dt.Rows[i];
 
-			for (var it = fc; it < dt.Columns.Count + fc; it++)
-				sheet.Cells[fr, it].SetStyle(headerStyle);
+				for (int j = 0; j < nColumnCount; j++) {
+					ExcelRange oCell = sheet.Cells[nFirstDataRow + i, nFirstColumn + j];
+					var oValue = row[j];
 
-			for (var row = fr + 1; row <= dt.Rows.Count + fr; row++) {
-				for (var column = fc; column < dt.Columns.Count + fc; column++)
-					sheet.Cells[row, column].SetStyle(lightStyle);
+					if (IsInt(oValue))
+						oCell.Style.Numberformat.Format = "#,##0";
+					else if (IsFloat(oValue))
+						oCell.Style.Numberformat.Format = "#,##0.00";
+					else if (oValue is DateTime)
+						oCell.Style.Numberformat.Format = "dd-mmm-yyyy hh:mm:ss";
+					else
+						oCell.Style.Numberformat.Format = "@";
 
-				if (++row > (dt.Rows.Count + fr))
-					continue;
+					if (oCell.Style.Numberformat.Format == "@")
+						oCell.Value = oValue.ToString().Replace("&nbsp;", " ");
+					else
+						oCell.Value = oValue;
+				} // for each column
+			} // for each row
 
-				for (var column = fc; column < dt.Columns.Count + fc; column++)
-					sheet.Cells[row, column].SetStyle(darkStyle);
-			} // for
+			for (int i = 0; i < nColumnCount; i++)
+				sheet.Cells[nHeaderRow, nFirstColumn + i].Value = dt.Columns[i].Caption;
 
-			for (var it = fc; it < dt.Columns.Count + fc; it++)
-				sheet.Cells[fr + dt.Rows.Count + 1, it].SetStyle(footerStyle);
+			sheet.Cells.AutoFitColumns();
+			sheet.Row(nHeaderRow).Style.Font.Bold = true;
 
 			return wb;
 		} // AddSheetToExcel
