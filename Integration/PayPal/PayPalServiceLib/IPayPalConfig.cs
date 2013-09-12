@@ -34,5 +34,6 @@ namespace EzBob.PayPalServiceLib
 
 		bool TrustAll { get; }
 		int NumberOfRetries { get; }
+		int MaxAllowedFailures { get; }
     }
 }

@@ -72,5 +72,10 @@ namespace EzBob.PayPalServiceLib
 		{
 			get { return int.Parse(ConfigurationManager.AppSettings["NumberOfRetries"], CultureInfo.InvariantCulture); }
 		}
+
+	    public int MaxAllowedFailures
+	    {
+			get { return int.Parse(ConfigurationManager.AppSettings["MaxAllowedFailures"], CultureInfo.InvariantCulture); }
+	    }
     }
 }

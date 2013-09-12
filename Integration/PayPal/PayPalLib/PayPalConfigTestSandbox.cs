@@ -34,6 +34,11 @@ namespace EzBob.PayPal
 		{
 			get { return 10; }
 		}
+
+		public override int MaxAllowedFailures
+		{
+			get { return 3; }
+		}
 	}
 
 }

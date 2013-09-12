@@ -53,6 +53,11 @@ namespace EzBob.PayPalServiceLib
 		public int NumberOfRetries
 		{
 			get { return GetValue<int>("NumberOfRetries"); }
-		}	
+		}
+
+		public int MaxAllowedFailures
+		{
+			get { return GetValue<int>("MaxAllowedFailures"); }
+		}
     }
 }

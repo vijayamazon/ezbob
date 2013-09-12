@@ -249,6 +249,7 @@
         <property name="TrustAll" value="True" />
         <property name="ServiceType" value="Sandbox" />
         <property name="NumberOfRetries" value="10" />
+		<property name="MaxAllowedFailures" value="3" />
     </module>
     <module id="PayPalDevProduction">
         <property name="ApiAuthenticationMode" value="ThreeToken" />
@@ -261,7 +262,7 @@
         <property name="TrustAll" value="True" />
         <property name="ServiceType" value="Production" />
         <property name="NumberOfRetries" value="10" />
-
+		<property name="MaxAllowedFailures" value="3" />
     </module>
 	<module id="YodleeDev">
 		<property name="cobrandId" value="6910005960" />

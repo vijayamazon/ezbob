@@ -97,6 +97,7 @@ namespace EzBob.PayPalServiceLib
 			var ranges = GetDailyRanges(startDate, endDate);
 			
 			int counter = 0;
+			int daysFailedSoFar = 0;
 
 			foreach (var range in ranges)
 			{
@@ -108,7 +109,7 @@ namespace EzBob.PayPalServiceLib
 				do
 				{
 					WriteLog( string.Format( "Request Transactions {0} of {1} ({2}): [{3} - {4}]", counter, ranges.Count, reqInfo.SecurityInfo.UserId, fromDate, toDate ) );
-					TransactionSearchResponseType resp = GetTransactions(fromDate, toDate, reqInfo, requestsCounter);
+					TransactionSearchResponseType resp = GetTransactions(fromDate, toDate, reqInfo, requestsCounter, ref daysFailedSoFar);
 					WriteLog( string.Format( "Result Request Transactions {0} of {1} ({2}): [{3} - {4}]: {5}", counter, ranges.Count, reqInfo.SecurityInfo.UserId, fromDate, toDate, resp == null || resp.PaymentTransactions == null ? 0 : resp.PaymentTransactions.Length ) );
 
 					if (resp == null)
@@ -153,7 +154,7 @@ namespace EzBob.PayPalServiceLib
 			Debug.WriteLine( message );
 		}
 
-		private TransactionSearchResponseType GetTransactions(DateTime startDate, DateTime endDate, PayPalRequestInfo reqInfo, RequestsCounterData requestsCounter)
+		private TransactionSearchResponseType GetTransactions(DateTime startDate, DateTime endDate, PayPalRequestInfo reqInfo, RequestsCounterData requestsCounter, ref int daysFailedSoFar)
 		{
 			var request = new TransactionSearchReq
 			{
@@ -180,11 +181,10 @@ namespace EzBob.PayPalServiceLib
 				counter++;
 				try
 				{
-					TransactionSearchResponseType resp = null;
 					var cred = CreateCredentials(reqInfo.SecurityInfo);
 					WriteLog(string.Format("PayPalService TransactionSearch Starting ({0})", userId));
 					var service = CreateService(reqInfo);
-					resp = service.TransactionSearch(ref cred, request);
+					TransactionSearchResponseType resp = service.TransactionSearch(ref cred, request);
 
 					WriteLog(string.Format("PayPalService TransactionSearch Request:\n{0}\nResponse:\n{1}", GetLogFor(request.TransactionSearchRequest), GetLogFor(resp)));
 
@@ -209,7 +209,18 @@ namespace EzBob.PayPalServiceLib
 					WriteLog(string.Format("PayPalService TransactionSearch Error ({0}): {1} ", userId, ex.Message), ex);
 				}
 			}
-			throw lastEx;
+
+			WriteLoggerHelper.Write(string.Format("Failed fetching pay pal data from {0} to {1}", request.TransactionSearchRequest.StartDate, request.TransactionSearchRequest.EndDate), WriteLogType.Info, null, lastEx);
+
+			if (daysFailedSoFar == _Config.MaxAllowedFailures)
+			{
+				WriteLoggerHelper.Write(string.Format("Max number of failures:{0} exceeded.", daysFailedSoFar), WriteLogType.Error, null, lastEx);
+				throw lastEx ?? new Exception();
+			}
+
+			daysFailedSoFar++;
+
+			return null;
 		}
 
 		private bool TryParseData(TransactionSearchResponseType resp, out List<PayPalTransactionItem> result )
