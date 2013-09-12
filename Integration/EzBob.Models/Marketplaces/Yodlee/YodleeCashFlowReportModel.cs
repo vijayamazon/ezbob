@@ -12,8 +12,12 @@
 	{
 		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
 		private const int Total = 999999;
-		private const string OtherIncomeCat = "1Other Income";
-		private const string OtherExpensesCat = "3Other Expenses";
+		private const string OtherIncomeCat = "Other Income";
+		private const string OtherExpensesCat = "Other Expenses";
+		private const char Credit = '0';
+		private const char OtherCredit = '1';
+		private const char Dedit = '2';
+		private const char OtherDedit = '3';
 		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly IConfigurationVariablesRepository _configVariables;
 		public YodleeCashFlowReportModel(ISession session)
@@ -31,11 +35,11 @@
 								 transaction.transactionAmount.Value,
 								 transaction.postDate ?? transaction.transactionDate).Value
 							 : 0;
-			var catType = transaction.transactionCategory.Type;
+			//var catType = transaction.transactionCategory.Type;
 			var catName = transaction.transactionCategory.Name;
 			var baseType = transaction.transactionBaseType;
 			var date = transaction.postDate.HasValue ? transaction.postDate.Value : transaction.transactionDate.Value;
-			var cat = string.Format("{2}{0},{1}", catName, catType, baseType == "credit" ? "0" : "2");
+			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
 			var yearmonth = date.Year * 100 + date.Month;
 
 
@@ -46,8 +50,8 @@
 
 		public void AddMissingAndSort()
 		{
-			CalculateOther('0', OtherIncomeCat);
-			CalculateOther('2', OtherExpensesCat);
+			CalculateOther(Credit, string.Format("{0}{1}", OtherCredit, OtherIncomeCat));
+			CalculateOther(Dedit, string.Format("{0}{1}", OtherDedit, OtherExpensesCat));
 
 			//retrieving month list
 			var monthList = (from cat in YodleeCashFlowReportModelDict from month in YodleeCashFlowReportModelDict[cat.Key] select month.Key).ToList();
@@ -65,7 +69,7 @@
 			}
 		}
 
-		private void CalculateOther(char credit, string otherCat)
+		private void CalculateOther(char baseType, string otherCat)
 		{
 			var otherList = new List<string>();
 			//calculating other (less than 500 pound in totals (configurable)
@@ -74,7 +78,7 @@
 			foreach (var cat in YodleeCashFlowReportModelDict)
 			{
 				var x = YodleeCashFlowReportModelDict[cat.Key];
-				if (x[Total] < maxYodleeOtherCategoryAmount && cat.Key[0] == credit)
+				if (x[Total] < maxYodleeOtherCategoryAmount && cat.Key[0] == baseType)
 				{
 					otherList.Add(cat.Key);
 				}

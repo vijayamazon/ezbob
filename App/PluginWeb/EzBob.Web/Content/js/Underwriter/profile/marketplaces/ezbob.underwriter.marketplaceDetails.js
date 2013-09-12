@@ -37,6 +37,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
 		this.$el.html(this.template(data));
 		this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+	    
+		var oDataTableArgs = {
+		    aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
+		    iDisplayLength: 100,
+		    aaSorting: []
+		};
+		this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
+
 
 		return this;
 	},

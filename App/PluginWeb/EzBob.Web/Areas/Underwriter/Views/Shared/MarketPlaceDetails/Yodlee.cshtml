@@ -13,7 +13,7 @@
         @YodleeBankAccounts()
         <%_.each(y.banks, function(bank, i) {%>
         <div class="tab-pane" id="yodleetab<%= (i+3)%>">
-            <table class="table table-bordered table-striped  blue-header centered nowrap">
+            <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable">
                 <thead>
                     <tr>
                         <th>Transaction Base Type</th>
@@ -33,7 +33,7 @@
                             <%}%>
                             <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
                             <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
-                            <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsNoSign(transaction.transactionAmount) : "-"%></td>
+                            <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
                             <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                             <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                             <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
@@ -52,7 +52,7 @@
         <%console.log(y.CashFlowReportModel.YodleeCashFlowReportModelDict);
         (function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
         
-        <table class="table table-bordered table-striped  blue-header centered rright">
+        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
             <thead>
                 <tr>
                     <th>Cash Flow Report</th>
@@ -60,7 +60,7 @@
                     var cat1 = obj[Object.keys(obj)[0]]; 
                     var count = 1; for (k in cat1) if (cat1.hasOwnProperty(k)) count++;
                     for (var month in cat1) { %>
-                    <th><% if(month == '999999') { print('Total');} else { print(month[4] + month[5] + '/' + month[2] + month[3]); } %></th>
+                    <th><% if(month == '999999') { print('Total');} else { print(month.substring(4) + '/' + month.substring(0,4)); } %></th>
                     <%}%>
                 </tr>
             </thead>
@@ -73,7 +73,7 @@
                 <tr>
                     <td><%=cat.substr(1, cat.length-1)%></td>
                     <%for (var month in obj[cat]) { %>
-                    <td><%= EzBob.formatPoundsNoSign(obj[cat][month]) %></td>
+                    <td><%= obj[cat][month] == 0 ? '' : EzBob.formatPoundsAsInt(obj[cat][month]) %></td>
                     <%}%>
                 </tr>
                 <%if(cat[0]=='1'){%>

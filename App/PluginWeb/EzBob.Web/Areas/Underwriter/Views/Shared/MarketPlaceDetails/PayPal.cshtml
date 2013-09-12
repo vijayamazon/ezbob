@@ -235,36 +235,36 @@
             <tbody>
                 <tr>
                     <td>Total Net Revenues (Formula 1)</td>
-                    <td><%-ai.TotalNetRevenues1M!=undefined ? GBPValues(ai.TotalNetRevenues1M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues3M!=undefined ? GBPValues(ai.TotalNetRevenues3M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues6M!=undefined ? GBPValues(ai.TotalNetRevenues6M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues12M!=undefined ? GBPValues(ai.TotalNetRevenues12M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues15M!=undefined ? GBPValues(ai.TotalNetRevenues15M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues18M!=undefined ? GBPValues(ai.TotalNetRevenues18M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenues24M!=undefined ? GBPValues(ai.TotalNetRevenues24M, true): "-"%></td>
-                    <td><%-ai.TotalNetRevenuesLifetime!=undefined ? GBPValues(ai.TotalNetRevenuesLifetime, true): "-"%></td>
+                    <td><%-ai.TotalNetRevenues1M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues1M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues3M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues3M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues6M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues6M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues12M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues12M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues15M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues15M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues18M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues18M): "-"%></td>
+                    <td><%-ai.TotalNetRevenues24M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenues24M): "-"%></td>
+                    <td><%-ai.TotalNetRevenuesLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetRevenuesLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Total Net Expenses (Formula 2)</td>
-                    <td><%-ai.TotalNetExpenses1M!=undefined ? GBPValues(ai.TotalNetExpenses1M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses3M!=undefined ? GBPValues(ai.TotalNetExpenses3M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses6M!=undefined ? GBPValues(ai.TotalNetExpenses6M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses12M!=undefined ? GBPValues(ai.TotalNetExpenses12M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses15M!=undefined ? GBPValues(ai.TotalNetExpenses15M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses18M!=undefined ? GBPValues(ai.TotalNetExpenses18M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpenses24M!=undefined ? GBPValues(ai.TotalNetExpenses24M, true): "-"%></td>
-                    <td><%-ai.TotalNetExpensesLifetime!=undefined ? GBPValues(ai.TotalNetExpensesLifetime, true): "-"%></td>
+                    <td><%-ai.TotalNetExpenses1M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses1M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses3M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses3M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses6M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses6M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses12M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses12M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses15M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses15M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses18M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses18M): "-"%></td>
+                    <td><%-ai.TotalNetExpenses24M!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpenses24M): "-"%></td>
+                    <td><%-ai.TotalNetExpensesLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.TotalNetExpensesLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Gross income (Formula 1 - Formula 2)</td>
-                    <td><%-ai.GrossIncome1M!=undefined ? GBPValues(ai.GrossIncome1M, true): "-"%></td>
-                    <td><%-ai.GrossIncome3M!=undefined ? GBPValues(ai.GrossIncome3M, true): "-"%></td>
-                    <td><%-ai.GrossIncome6M!=undefined ? GBPValues(ai.GrossIncome6M, true): "-"%></td>
-                    <td><%-ai.GrossIncome12M!=undefined ? GBPValues(ai.GrossIncome12M, true): "-"%></td>
-                    <td><%-ai.GrossIncome15M!=undefined ? GBPValues(ai.GrossIncome15M, true): "-"%></td>
-                    <td><%-ai.GrossIncome18M!=undefined ? GBPValues(ai.GrossIncome18M, true): "-"%></td>
-                    <td><%-ai.GrossIncome24M!=undefined ? GBPValues(ai.GrossIncome24M, true): "-"%></td>
-                    <td><%-ai.GrossIncomeLifetime!=undefined ? GBPValues(ai.GrossIncomeLifetime, true): "-"%></td>
+                    <td><%-ai.GrossIncome1M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome1M): "-"%></td>
+                    <td><%-ai.GrossIncome3M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome3M): "-"%></td>
+                    <td><%-ai.GrossIncome6M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome6M): "-"%></td>
+                    <td><%-ai.GrossIncome12M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome12M): "-"%></td>
+                    <td><%-ai.GrossIncome15M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome15M): "-"%></td>
+                    <td><%-ai.GrossIncome18M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome18M): "-"%></td>
+                    <td><%-ai.GrossIncome24M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome24M): "-"%></td>
+                    <td><%-ai.GrossIncomeLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncomeLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Gross profit margin % (Gross income / Formula 1)</td>
@@ -290,25 +290,25 @@
                 </tr>
                 <tr>
                     <td>Revenue per trasnaction (Formula 4 / Formula 3)</td>
-                    <td><%-ai.RevenuePerTrasnaction1M!=undefined ? GBPValues(ai.RevenuePerTrasnaction1M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction3M!=undefined ? GBPValues(ai.RevenuePerTrasnaction3M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction6M!=undefined ? GBPValues(ai.RevenuePerTrasnaction6M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction12M!=undefined ? GBPValues(ai.RevenuePerTrasnaction12M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction15M!=undefined ? GBPValues(ai.RevenuePerTrasnaction15M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction18M!=undefined ? GBPValues(ai.RevenuePerTrasnaction18M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnaction24M!=undefined ? GBPValues(ai.RevenuePerTrasnaction24M, true): "-"%></td>
-                    <td><%-ai.RevenuePerTrasnactionLifetime!=undefined ? GBPValues(ai.RevenuePerTrasnactionLifetime, true): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction1M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction1M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction3M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction3M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction6M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction6M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction12M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction12M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction15M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction15M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction18M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction18M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnaction24M!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnaction24M): "-"%></td>
+                    <td><%-ai.RevenuePerTrasnactionLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.RevenuePerTrasnactionLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Net amount of refunds & returns (Formula 5a (sum of))</td>
-                    <td><%-ai.NetSumOfRefundsAndReturns1M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns1M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns3M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns3M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns6M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns6M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns12M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns12M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns15M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns15M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns18M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns18M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturns24M!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturns24M, true): "-"%></td>
-                    <td><%-ai.NetSumOfRefundsAndReturnsLifetime!=undefined ? GBPValues(ai.NetSumOfRefundsAndReturnsLifetime, true): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns1M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns1M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns3M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns3M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns6M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns6M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns12M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns12M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns15M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns15M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns18M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns18M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturns24M!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturns24M): "-"%></td>
+                    <td><%-ai.NetSumOfRefundsAndReturnsLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.NetSumOfRefundsAndReturnsLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Net # of refunds and returns (Formula 5)</td>
@@ -357,47 +357,47 @@
             <tbody>
                 <tr>
                     <td>Gross Income (Formula 1 - Formula 2)</td>
-                    <td><%-ai.GrossIncome1M!=undefined ? GBPValues(ai.GrossIncome1M, true): "-"%></td>
-                    <td><%-ai.GrossIncome3M!=undefined ? GBPValues(ai.GrossIncome3M, true): "-"%></td>
-                    <td><%-ai.GrossIncome6M!=undefined ? GBPValues(ai.GrossIncome6M, true): "-"%></td>
-                    <td><%-ai.GrossIncome12M!=undefined ? GBPValues(ai.GrossIncome12M, true): "-"%></td>
-                    <td><%-ai.GrossIncome15M!=undefined ? GBPValues(ai.GrossIncome15M, true): "-"%></td>
-                    <td><%-ai.GrossIncome18M!=undefined ? GBPValues(ai.GrossIncome18M, true): "-"%></td>
-                    <td><%-ai.GrossIncome24M!=undefined ? GBPValues(ai.GrossIncome24M, true): "-"%></td>
-                    <td><%-ai.GrossIncomeLifetime!=undefined ? GBPValues(ai.GrossIncomeLifetime, true): "-"%></td>
+                    <td><%-ai.GrossIncome1M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome1M): "-"%></td>
+                    <td><%-ai.GrossIncome3M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome3M): "-"%></td>
+                    <td><%-ai.GrossIncome6M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome6M): "-"%></td>
+                    <td><%-ai.GrossIncome12M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome12M): "-"%></td>
+                    <td><%-ai.GrossIncome15M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome15M): "-"%></td>
+                    <td><%-ai.GrossIncome18M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome18M): "-"%></td>
+                    <td><%-ai.GrossIncome24M!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncome24M): "-"%></td>
+                    <td><%-ai.GrossIncomeLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.GrossIncomeLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Net Transfers amount (Formula 6 + Formula 7)</td>
-                    <td><%-ai.NetTransfersAmount1M!=undefined ? GBPValues(ai.NetTransfersAmount1M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount3M!=undefined ? GBPValues(ai.NetTransfersAmount3M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount6M!=undefined ? GBPValues(ai.NetTransfersAmount6M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount12M!=undefined ? GBPValues(ai.NetTransfersAmount12M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount15M!=undefined ? GBPValues(ai.NetTransfersAmount15M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount18M!=undefined ? GBPValues(ai.NetTransfersAmount18M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmount24M!=undefined ? GBPValues(ai.NetTransfersAmount24M, true): "-"%></td>
-                    <td><%-ai.NetTransfersAmountLifetime!=undefined ? GBPValues(ai.NetTransfersAmountLifetime, true): "-"%></td>
+                    <td><%-ai.NetTransfersAmount1M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount1M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount3M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount3M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount6M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount6M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount12M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount12M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount15M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount15M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount18M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount18M): "-"%></td>
+                    <td><%-ai.NetTransfersAmount24M!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmount24M): "-"%></td>
+                    <td><%-ai.NetTransfersAmountLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.NetTransfersAmountLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Outstanding Balance (Gross Income - Net Transfers amount)</td>
-                    <td><%-ai.OutstandingBalance1M!=undefined ? GBPValues(ai.OutstandingBalance1M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance3M!=undefined ? GBPValues(ai.OutstandingBalance3M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance6M!=undefined ? GBPValues(ai.OutstandingBalance6M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance12M!=undefined ? GBPValues(ai.OutstandingBalance12M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance15M!=undefined ? GBPValues(ai.OutstandingBalance15M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance18M!=undefined ? GBPValues(ai.OutstandingBalance18M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalance24M!=undefined ? GBPValues(ai.OutstandingBalance24M, true): "-"%></td>
-                    <td><%-ai.OutstandingBalanceLifetime!=undefined ? GBPValues(ai.OutstandingBalanceLifetime, true): "-"%></td>
+                    <td><%-ai.OutstandingBalance1M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance1M): "-"%></td>
+                    <td><%-ai.OutstandingBalance3M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance3M): "-"%></td>
+                    <td><%-ai.OutstandingBalance6M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance6M): "-"%></td>
+                    <td><%-ai.OutstandingBalance12M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance12M): "-"%></td>
+                    <td><%-ai.OutstandingBalance15M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance15M): "-"%></td>
+                    <td><%-ai.OutstandingBalance18M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance18M): "-"%></td>
+                    <td><%-ai.OutstandingBalance24M!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalance24M): "-"%></td>
+                    <td><%-ai.OutstandingBalanceLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.OutstandingBalanceLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Amount of Transfers (Out) (Formula 6)</td>
-                    <td><%-ai.TransferAndWireOut1M!=undefined ? GBPValues(ai.TransferAndWireOut1M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut3M!=undefined ? GBPValues(ai.TransferAndWireOut3M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut6M!=undefined ? GBPValues(ai.TransferAndWireOut6M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut12M!=undefined ? GBPValues(ai.TransferAndWireOut12M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut15M!=undefined ? GBPValues(ai.TransferAndWireOut15M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut18M!=undefined ? GBPValues(ai.TransferAndWireOut18M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOut24M!=undefined ? GBPValues(ai.TransferAndWireOut24M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireOutLifetime!=undefined ? GBPValues(ai.TransferAndWireOutLifetime, true): "-"%></td>
+                    <td><%-ai.TransferAndWireOut1M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut1M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut3M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut3M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut6M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut6M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut12M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut12M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut15M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut15M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut18M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut18M): "-"%></td>
+                    <td><%-ai.TransferAndWireOut24M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOut24M): "-"%></td>
+                    <td><%-ai.TransferAndWireOutLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireOutLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td># of Transfers (out) (Formula 6a)</td>
@@ -412,25 +412,25 @@
                 </tr>
                 <tr>
                     <td>Amount per Transfer (Out) (Formula 6 / Formual 6a)</td>
-                    <td><%-ai.AmountPerTransferOut1M!=undefined ? GBPValues(ai.AmountPerTransferOut1M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut3M!=undefined ? GBPValues(ai.AmountPerTransferOut3M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut6M!=undefined ? GBPValues(ai.AmountPerTransferOut6M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut12M!=undefined ? GBPValues(ai.AmountPerTransferOut12M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut15M!=undefined ? GBPValues(ai.AmountPerTransferOut15M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut18M!=undefined ? GBPValues(ai.AmountPerTransferOut18M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOut24M!=undefined ? GBPValues(ai.AmountPerTransferOut24M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferOutLifetime!=undefined ? GBPValues(ai.AmountPerTransferOutLifetime, true): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut1M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut1M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut3M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut3M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut6M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut6M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut12M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut12M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut15M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut15M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut18M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut18M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOut24M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOut24M): "-"%></td>
+                    <td><%-ai.AmountPerTransferOutLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferOutLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td>Amount of Transfers (In) (Formula 7)</td>
-                    <td><%-ai.TransferAndWireIn1M!=undefined ? GBPValues(ai.TransferAndWireIn1M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn3M!=undefined ? GBPValues(ai.TransferAndWireIn3M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn6M!=undefined ? GBPValues(ai.TransferAndWireIn6M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn12M!=undefined ? GBPValues(ai.TransferAndWireIn12M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn15M!=undefined ? GBPValues(ai.TransferAndWireIn15M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn18M!=undefined ? GBPValues(ai.TransferAndWireIn18M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireIn24M!=undefined ? GBPValues(ai.TransferAndWireIn24M, true): "-"%></td>
-                    <td><%-ai.TransferAndWireInLifetime!=undefined ? GBPValues(ai.TransferAndWireInLifetime, true): "-"%></td>
+                    <td><%-ai.TransferAndWireIn1M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn1M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn3M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn3M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn6M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn6M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn12M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn12M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn15M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn15M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn18M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn18M): "-"%></td>
+                    <td><%-ai.TransferAndWireIn24M!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireIn24M): "-"%></td>
+                    <td><%-ai.TransferAndWireInLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.TransferAndWireInLifetime): "-"%></td>
                 </tr>
                 <tr>
                     <td># of Transfers (In) (Formula 7a)</td>
@@ -445,14 +445,14 @@
                 </tr>
                 <tr>
                     <td>Amount per Transfer (In) (Formula 7 / Formula 7a)</td>
-                    <td><%-ai.AmountPerTransferIn1M!=undefined ? GBPValues(ai.AmountPerTransferIn1M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn3M!=undefined ? GBPValues(ai.AmountPerTransferIn3M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn6M!=undefined ? GBPValues(ai.AmountPerTransferIn6M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn12M!=undefined ? GBPValues(ai.AmountPerTransferIn12M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn15M!=undefined ? GBPValues(ai.AmountPerTransferIn15M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn18M!=undefined ? GBPValues(ai.AmountPerTransferIn18M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferIn24M!=undefined ? GBPValues(ai.AmountPerTransferIn24M, true): "-"%></td>
-                    <td><%-ai.AmountPerTransferInLifetime!=undefined ? GBPValues(ai.AmountPerTransferInLifetime, true): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn1M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn1M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn3M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn3M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn6M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn6M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn12M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn12M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn15M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn15M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn18M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn18M): "-"%></td>
+                    <td><%-ai.AmountPerTransferIn24M!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferIn24M): "-"%></td>
+                    <td><%-ai.AmountPerTransferInLifetime!=undefined ? EzBob.formatPoundsAsInt(ai.AmountPerTransferInLifetime): "-"%></td>
                 </tr>
 
             </tbody>
