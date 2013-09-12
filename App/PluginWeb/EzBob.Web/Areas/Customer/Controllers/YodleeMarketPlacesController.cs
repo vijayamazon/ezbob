@@ -72,9 +72,14 @@
 			var banks = repository.GetAll();
 
 			var dict = new Dictionary<string, YodleeParentBankModel>();
+			var yodleeBanksModel = new YodleeBanksModel
+				{
+					DropDownBanks = new List<YodleeSubBankModel>(),
+				};
+
 			foreach (var bank in banks)
 			{
-				if (bank.Active)
+				if (bank.Active && bank.Image)
 				{
 					var sub = new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name};
 					if (!dict.ContainsKey(bank.ParentBank))
@@ -83,11 +88,16 @@
 					}
 					dict[bank.ParentBank].subBanks.Add(sub);
 				}
+
+				if (bank.Active && !bank.Image)
+				{
+					yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel{ csId = bank.ContentServiceId, displayName = bank.Name});
+				}
 			}
 
-			var resultBanks = dict.Values.ToList();
+			yodleeBanksModel.ImageBanks= dict.Values.ToList();
 
-			return this.JsonNet(resultBanks);
+			return this.JsonNet(yodleeBanksModel);
 		}
 
 		[Transactional]
@@ -224,4 +234,12 @@
 		public long csId { get; set; }
 		public string displayName { get; set; }
 	}
+
+	public class YodleeBanksModel
+	{
+		public List<YodleeParentBankModel> ImageBanks;
+		public List<YodleeSubBankModel> DropDownBanks;
+	}
+
+
 }

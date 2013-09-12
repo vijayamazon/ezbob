@@ -55,3 +55,13 @@ Backbone.Collection::safeFetch = ->
     def = $.Deferred()
     setTimeout (-> def.resolve().promise()), 1
     return def
+
+Backbone.Model::safeFetch = ->
+    
+    loggedIn = -> return $('body').hasClass('auth')
+    
+    if loggedIn()
+        return @fetch()
+    def = $.Deferred()
+    setTimeout (-> def.resolve().promise()), 1
+    return def

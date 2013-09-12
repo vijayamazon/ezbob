@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
+  var root, _ref, _ref1, _ref2, _ref3, _ref4,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -46,15 +46,17 @@
     YodleeAccountInfoView.prototype.events = {
       'click a.back': 'back',
       'change input[name="Bank"]': 'bankChanged',
-      'click #yodleeContinueBtn': 'continueClicked',
       'click .radio-fx': 'parentBankSelected',
-      'change .SubBank': 'subBankSelectionChanged'
+      'change .SubBank': 'subBankSelectionChanged',
+      'click #yodleeLinkAccountBtn': 'linkAccountClicked',
+      'click #OtherYodleeBanks': 'OtherYodleeBanksClicked',
+      'change #OtherYodleeBanks': 'OtherYodleeBanksClicked'
     };
 
     YodleeAccountInfoView.prototype.loadBanks = function() {
       var _this = this;
 
-      return this.YodleeBanks.fetch().done(function() {
+      return this.YodleeBanks.safeFetch().done(function() {
         if (_this.YodleeBanks.length > 0) {
           return _this.render;
         }
@@ -65,7 +67,7 @@
       var that;
 
       that = this;
-      this.YodleeBanks = new EzBob.YodleeBanks();
+      this.YodleeBanks = new EzBob.YodleeBanksModel();
       this.loadBanks();
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
@@ -91,6 +93,23 @@
       return false;
     };
 
+    YodleeAccountInfoView.prototype.OtherYodleeBanksClicked = function(el) {
+      var selectedId, selectedName, url;
+
+      selectedId = $(el.currentTarget).find(':selected').val();
+      selectedName = $(el.currentTarget).find(':selected').text();
+      if (selectedId) {
+        this.$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked');
+        this.$el.find(".SubBank:not(.hide)").addClass('hide');
+        this.$el.find("a.radio-fx .on").addClass('off').removeClass('on');
+        url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + selectedId + "&bankName=" + selectedName;
+        this.$el.find("#yodleeContinueBtn").attr("href", url);
+        return this.$el.find("#yodleeLinkAccountBtn").removeClass('disabled');
+      } else {
+        return this.$el.find("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled');
+      }
+    };
+
     YodleeAccountInfoView.prototype.subBankSelectionChanged = function(el) {
       var url;
 
@@ -98,7 +117,8 @@
         return false;
       }
       url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + (this.$el.find("option:selected").val()) + "&bankName=" + (this.$el.find("input[type='radio'][name='Bank']:checked").attr('value'));
-      return this.$el.find("#yodleeContinueBtn").attr("href", url).removeClass('disabled');
+      this.$el.find("#yodleeContinueBtn").attr("href", url);
+      return this.$el.find("#yodleeLinkAccountBtn").removeClass('disabled');
     };
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
@@ -111,13 +131,17 @@
       currentSubBanks.find('option').removeAttr('selected');
       bank = this.$el.find("input[type='radio'][name='Bank']:checked").val();
       this.$el.find("." + bank + "Container").removeClass('hide');
-      return $("#yodleeContinueBtn:not([class*='disabled'])").addClass('disabled');
+      return $("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled');
     };
 
-    YodleeAccountInfoView.prototype.continueClicked = function(e) {
-      if (this.$el.find('#yodleeContinueBtn').hasClass('disabled')) {
+    YodleeAccountInfoView.prototype.linkAccountClicked = function() {
+      if (this.$el.find('#yodleeLinkAccountBtn').hasClass('disabled')) {
         return false;
       }
+      return this.$el.find('.yodlee_help').colorbox({
+        inline: true,
+        transition: 'none'
+      });
     };
 
     YodleeAccountInfoView.prototype.parentBankSelected = function(evt) {
@@ -125,10 +149,14 @@
       this.$el.find('#Bank_' + evt.currentTarget.id).click();
       this.$el.find('span.on').removeClass('on').addClass('off');
       $(evt.currentTarget).find('span.off').removeClass('off').addClass('on');
+      this.$el.find(".SubBank:not(.hide) option:selected").prop('selected', false);
+      this.$el.find("#OtherYodleeBanks option").eq(0).prop('selected', true);
+      this.$el.find("#OtherYodleeBanks").change();
     };
 
     YodleeAccountInfoView.prototype.render = function() {
       YodleeAccountInfoView.__super__.render.call(this);
+      $.colorbox.close();
       return this;
     };
 
@@ -144,6 +172,7 @@
     };
 
     YodleeAccountInfoView.prototype.getDocumentTitle = function() {
+      EzBob.App.trigger('clear');
       return "Link Yodlee Account";
     };
 
@@ -181,34 +210,18 @@
 
   })(Backbone.Collection);
 
-  EzBob.YodleeBankModel = (function(_super) {
-    __extends(YodleeBankModel, _super);
+  EzBob.YodleeBanksModel = (function(_super) {
+    __extends(YodleeBanksModel, _super);
 
-    function YodleeBankModel() {
-      _ref4 = YodleeBankModel.__super__.constructor.apply(this, arguments);
+    function YodleeBanksModel() {
+      _ref4 = YodleeBanksModel.__super__.constructor.apply(this, arguments);
       return _ref4;
     }
 
-    YodleeBankModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
+    YodleeBanksModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
 
-    return YodleeBankModel;
+    return YodleeBanksModel;
 
   })(Backbone.Model);
-
-  EzBob.YodleeBanks = (function(_super) {
-    __extends(YodleeBanks, _super);
-
-    function YodleeBanks() {
-      _ref5 = YodleeBanks.__super__.constructor.apply(this, arguments);
-      return _ref5;
-    }
-
-    YodleeBanks.prototype.model = EzBob.YodleeBankModel;
-
-    YodleeBanks.prototype.url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
-
-    return YodleeBanks;
-
-  })(Backbone.Collection);
 
 }).call(this);

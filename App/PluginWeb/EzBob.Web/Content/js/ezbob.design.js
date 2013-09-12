@@ -56,21 +56,22 @@ $(function () {
         po.not("input[name='UserName']").find(".arrow").css("left", "40%");
         po.has("input[name='UserName']").find(".arrow").css("left", "84%");
     });
-    
-    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-        "formatted-num-pre": function (a) {
-            a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
-            return parseFloat(a);
-        },
+    if ($.fn.dataTableExt) {
+        $.extend(jQuery.fn.dataTableExt.oSort, {
+            "formatted-num-pre": function(a) {
+                a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
+                return parseFloat(a);
+            },
 
-        "formatted-num-asc": function (a, b) {
-            return a - b;
-        },
+            "formatted-num-asc": function(a, b) {
+                return a - b;
+            },
 
-        "formatted-num-desc": function (a, b) {
-            return b - a;
-        }
-    }); // sorting plugin for formatted numbers
+            "formatted-num-desc": function(a, b) {
+                return b - a;
+            }
+        }); // sorting plugin for formatted numbers
+    }
 });
 //-----------  jQuery extended function  -----------  
 (function ($) {

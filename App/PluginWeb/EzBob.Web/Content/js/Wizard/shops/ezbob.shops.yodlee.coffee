@@ -17,6 +17,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'click .radio-fx': 'parentBankSelected'
         'change .SubBank': 'subBankSelectionChanged'
         'click #yodleeLinkAccountBtn': 'linkAccountClicked'
+        'click #OtherYodleeBanks': 'OtherYodleeBanksClicked'
+        'change #OtherYodleeBanks': 'OtherYodleeBanksClicked'
+
 
     loadBanks: () ->
         @YodleeBanks.safeFetch().done =>
@@ -24,8 +27,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
                 @render
                 
     initialize: (options) ->
-        that = this;
-        @YodleeBanks = new EzBob.YodleeBanks()
+        that = @;
+        @YodleeBanks = new EzBob.YodleeBanksModel()
         @loadBanks()
         window.YodleeAccountAdded = (result) ->
             if (result.error)
@@ -46,9 +49,29 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
 
         return false
+
+    OtherYodleeBanksClicked:(el) ->
+        selectedId = $(el.currentTarget).find(':selected').val()
+        selectedName = $(el.currentTarget).find(':selected').text()
+
         
+
+        if (selectedId)
+            @$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked')
+            @$el.find(".SubBank:not(.hide)").addClass('hide')
+            @$el.find("a.radio-fx .on").addClass('off').removeClass('on')
+            url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{selectedId}&bankName=#{selectedName}"
+            @$el.find("#yodleeContinueBtn").attr("href", url)
+            
+            @$el.find("#yodleeLinkAccountBtn").removeClass('disabled')
+        else
+            @$el.find("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled')
+            
+        #return if(el.currentTarget.find(':selected').val()
+
+
     subBankSelectionChanged:(el) ->
-        return false if (this.$el.find(".SubBank option:selected").length == 0) 
+        return false if (@$el.find(".SubBank option:selected").length == 0) 
         url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{@$el.find("option:selected").val()}&bankName=#{this.$el.find("input[type='radio'][name='Bank']:checked").attr('value')}"
         @$el.find("#yodleeContinueBtn").attr("href", url)
         @$el.find("#yodleeLinkAccountBtn").removeClass('disabled')
@@ -62,7 +85,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         bank = @$el.find("input[type='radio'][name='Bank']:checked").val()
         @$el.find("." + bank + "Container").removeClass('hide')
         $("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled')
-    
+
     linkAccountClicked: ->
         return false if @$el.find('#yodleeLinkAccountBtn').hasClass('disabled')
         @$el.find('.yodlee_help').colorbox({ inline:true, transition: 'none' });
@@ -72,6 +95,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find('#Bank_' + evt.currentTarget.id).click()
         @$el.find('span.on').removeClass('on').addClass('off')
         $(evt.currentTarget).find('span.off').removeClass('off').addClass('on')
+        @$el.find(".SubBank:not(.hide) option:selected").prop('selected',false)
+        @$el.find("#OtherYodleeBanks option").eq(0).prop('selected',true)
+        @$el.find("#OtherYodleeBanks").change()
         return
 
     render: ->
@@ -98,11 +124,6 @@ class EzBob.YodleeAccounts extends Backbone.Collection
     model: EzBob.YodleeAccountModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Accounts"
     
-class EzBob.YodleeBankModel extends Backbone.Model
+class EzBob.YodleeBanksModel extends Backbone.Model
     urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
-
-class EzBob.YodleeBanks extends Backbone.Collection
-    model: EzBob.YodleeBankModel
-    url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
-    
 
