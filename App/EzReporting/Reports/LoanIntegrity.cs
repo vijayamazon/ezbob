@@ -31,10 +31,10 @@
 				int loanId = Convert.ToInt32(row[0]);
 				int loanAmount = Convert.ToInt32(row[1]);
 
-				DataTable transactionsTbl = m_oDB.ExecuteReader(string.Format("SELECT sum(Amount) FROM LoanTransaction WHERE LoanId={0} AND Status='Done' AND Type = 'PaypointTransaction'", loanId));
+				DataTable transactionsTbl = m_oDB.ExecuteReader(string.Format("SELECT CASE WHEN sum(Amount) IS NULL THEN 0 ELSE sum(Amount) END FROM LoanTransaction WHERE LoanId={0} AND Status='Done' AND Type = 'PaypointTransaction'", loanId));
 				decimal paidSoFar = Convert.ToDecimal(transactionsTbl.Rows[0][0]);
 
-				DataTable scheduleTbl = m_oDB.ExecuteReader(string.Format("SELECT CASE WHEN sum(AmountDue) IS NULL THEN 0 ELSE sum(AmountDue) END FROM LoanSchedule WHERE LoanId={0} AND Status='StillToPay'", loanId));
+				DataTable scheduleTbl = m_oDB.ExecuteReader(string.Format("SELECT CASE WHEN sum(AmountDue) IS NULL THEN 0 ELSE sum(AmountDue) END FROM LoanSchedule WHERE LoanId={0} AND (Status='StillToPay' OR Status='Late')", loanId));
 				decimal scheduledToPay = Convert.ToDecimal(scheduleTbl.Rows[0][0]);
 
 				decimal simpleDiff = loanAmount - paidSoFar - scheduledToPay;
