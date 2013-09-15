@@ -36,6 +36,7 @@ class EzBob.Underwriter.ProfilePopupView extends Backbone.Marionette.ItemView
 
     events:
         "click .recheck-mp": "recheckMpClicked"
+        "click .recheck-yodlee": "recheckYodleeClicked"
         "click #recheck-main-strat": "recheckMainStrat"
 
     recheckMpClicked: (e)->
@@ -45,6 +46,16 @@ class EzBob.Underwriter.ProfilePopupView extends Backbone.Marionette.ItemView
         model = 
             umi: $(e.currentTarget).data('mp-id')
         xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/ReCheckMarketplaces", model
+
+    recheckYodleeClicked: (e) ->
+        $el = $(e.currentTarget)
+        return if $el.hasClass "disabled"
+        #$el.addClass 'disabled'
+        ###
+        model = 
+            umi: $(e.currentTarget).data('mp-id')
+        xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryRecheckYodlee", model
+        ###
 
     recheckMainStrat: (e)->
         $el = $(e.currentTarget)

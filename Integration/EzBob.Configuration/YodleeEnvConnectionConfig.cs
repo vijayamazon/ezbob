@@ -1,8 +1,8 @@
-using Scorto.Configuration;
-
-namespace YodleeLib.config
+namespace EzBob.Configuration
 {
-    public class YodleeEnvConnectionConfig : ConfigurationRoot, IYodleeMarketPlaceConfig
+	using Scorto.Configuration;
+
+	public class YodleeEnvConnectionConfig : ConfigurationRoot
     {
         public string cobrandId
         {

@@ -3,6 +3,7 @@
 namespace YodleeLib
 {
     using System;
+    using EzBob.Configuration;
     using StructureMap;
     using YodleeLib.config;
 
@@ -14,11 +15,11 @@ namespace YodleeLib
         double COBRAND_CONTEXT_TIME_OUT = 3;
         DateTime created = DateTime.Now;
         CobrandLoginService cobrandLoginService;
-        private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
 
         CobrandContextSingleton()
         {
-            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
             created = created.AddMinutes(-COBRAND_CONTEXT_TIME_OUT);
             string soapServer = _config.soapServer;
             Environment.SetEnvironmentVariable("com.yodlee.soap.services.url", soapServer);

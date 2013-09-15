@@ -41,11 +41,6 @@ namespace EzBob.Configuration
             get { return GetConfiguration<AmazonEvnSettings>("AmazonSetings"); }
         }
 
-		public IYodleeMarketPlaceConfig YodleeConfig
-		{
-			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }
-		}
-
 		public IFreeAgentConfig FreeAgentConfig
 		{
 			get { return GetConfiguration<FreeAgentEnvConnectionConfig>("FreeAgentConfig"); }

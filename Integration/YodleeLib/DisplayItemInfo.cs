@@ -3,7 +3,8 @@ using System.Text;
 
 namespace YodleeLib
 {
-    using StructureMap;
+	using EzBob.Configuration;
+	using StructureMap;
     using config;
 
     /// <summary>
@@ -12,10 +13,10 @@ namespace YodleeLib
     public class DisplayItemInfo
     {
         readonly DataServiceService dataService;
-        private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
         public DisplayItemInfo()
         {
-            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
             dataService = new DataServiceService {Url = _config.soapServer + "/" + "DataService"};
         }
 

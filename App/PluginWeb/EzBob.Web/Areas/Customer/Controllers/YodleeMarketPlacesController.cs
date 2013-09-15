@@ -185,7 +185,7 @@
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
-			string finalUrl = yodleeMain.GetFinalUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			string finalUrl = yodleeMain.GetAddAccountUrl(csId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 
 			Log.InfoFormat("Redirecting to yodlee: {0}", finalUrl);
 			return Redirect(finalUrl);

@@ -1,9 +1,10 @@
 ﻿namespace YodleeLib.config
 {
-    using StructureMap;
+	using EzBob.Configuration;
+	using StructureMap;
 
     public class YodleeConfig
     {
-        public static IYodleeMarketPlaceConfig _Config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+		public static YodleeEnvConnectionConfig _Config = ConfigurationRootBob.GetConfiguration().YodleeConfig;
     }
 }

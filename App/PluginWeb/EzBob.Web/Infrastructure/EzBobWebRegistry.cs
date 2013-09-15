@@ -36,7 +36,6 @@ namespace EzBob.Web.Infrastructure
 	using ZohoCRM;
 	using Sage.Config;
 	using FreeAgent.Config;
-	using YodleeLib.config;
 
     public class PluginWebRegistry : Registry
     {
@@ -68,7 +67,6 @@ namespace EzBob.Web.Infrastructure
             For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
             For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);
 			For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
-			For<IYodleeMarketPlaceConfig>().Singleton().Use(localRoot.YodleeConfig);
 			For<IFreeAgentConfig>().Singleton().Use(localRoot.FreeAgentConfig);
 			For<ISageConfig>().Singleton().Use(localRoot.SageConfig);
             For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());

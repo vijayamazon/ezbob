@@ -70,6 +70,7 @@
     <Compile Include="PacNetConfiguration.cs" />
     <Compile Include="PayPointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YodleeEnvConnectionConfig.cs" />
     <Compile Include="ZohoConfig.cs" />
   </ItemGroup>
   <ItemGroup>

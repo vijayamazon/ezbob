@@ -12,7 +12,6 @@
 	using StructureMap.Configuration.DSL;
 	using FreeAgent.Config;
 	using Sage.Config;
-	using YodleeLib.config;
 
     public class EzBobRegistry : Registry
 	{
@@ -27,7 +26,6 @@
 				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
-				For<IYodleeMarketPlaceConfig>().Singleton().Use(ezBobConfigRoot.YodleeConfig);
 				For<IFreeAgentConfig>().Singleton().Use(ezBobConfigRoot.FreeAgentConfig);
 				For<ISageConfig>().Singleton().Use(ezBobConfigRoot.SageConfig);
 			}

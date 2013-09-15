@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2, _ref3, _ref4,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.YodleeAccountButtonView = (function(_super) {
+
     __extends(YodleeAccountButtonView, _super);
 
     function YodleeAccountButtonView() {
-      _ref = YodleeAccountButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return YodleeAccountButtonView.__super__.constructor.apply(this, arguments);
     }
 
     YodleeAccountButtonView.prototype.initialize = function() {
@@ -34,11 +34,11 @@
   })(EzBob.StoreButtonView);
 
   EzBob.YodleeAccountInfoView = (function(_super) {
+
     __extends(YodleeAccountInfoView, _super);
 
     function YodleeAccountInfoView() {
-      _ref1 = YodleeAccountInfoView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return YodleeAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
     YodleeAccountInfoView.prototype.template = '#YodleeAccoutInfoTemplate';
@@ -55,7 +55,6 @@
 
     YodleeAccountInfoView.prototype.loadBanks = function() {
       var _this = this;
-
       return this.YodleeBanks.safeFetch().done(function() {
         if (_this.YodleeBanks.length > 0) {
           return _this.render;
@@ -65,7 +64,6 @@
 
     YodleeAccountInfoView.prototype.initialize = function(options) {
       var that;
-
       that = this;
       this.YodleeBanks = new EzBob.YodleeBanksModel();
       this.loadBanks();
@@ -83,19 +81,17 @@
         EzBob.App.trigger('error', msg);
         return that.trigger('back');
       };
-      window.YodleeAccountRetry = function() {
+      return window.YodleeAccountRetry = function() {
         that.attemptsLeft = (that.attemptsLeft || 5) - 1;
         return {
           url: that.$el.find('#yodleeContinueBtn').attr('href'),
           attemptsLeft: that.attemptsLeft
         };
       };
-      return false;
     };
 
     YodleeAccountInfoView.prototype.OtherYodleeBanksClicked = function(el) {
       var selectedId, selectedName, url;
-
       selectedId = $(el.currentTarget).find(':selected').val();
       selectedName = $(el.currentTarget).find(':selected').text();
       if (selectedId) {
@@ -112,7 +108,6 @@
 
     YodleeAccountInfoView.prototype.subBankSelectionChanged = function(el) {
       var url;
-
       if (this.$el.find(".SubBank option:selected").length === 0) {
         return false;
       }
@@ -123,7 +118,6 @@
 
     YodleeAccountInfoView.prototype.bankChanged = function() {
       var bank, currentSubBanks;
-
       this.$el.find("input[type='radio'][name!='Bank']:checked").removeAttr('checked');
       currentSubBanks = this.$el.find(".SubBank:not([class*='hide'])");
       currentSubBanks.addClass('hide');
@@ -181,11 +175,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.YodleeAccountModel = (function(_super) {
+
     __extends(YodleeAccountModel, _super);
 
     function YodleeAccountModel() {
-      _ref2 = YodleeAccountModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return YodleeAccountModel.__super__.constructor.apply(this, arguments);
     }
 
     YodleeAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Accounts";
@@ -195,11 +189,11 @@
   })(Backbone.Model);
 
   EzBob.YodleeAccounts = (function(_super) {
+
     __extends(YodleeAccounts, _super);
 
     function YodleeAccounts() {
-      _ref3 = YodleeAccounts.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return YodleeAccounts.__super__.constructor.apply(this, arguments);
     }
 
     YodleeAccounts.prototype.model = EzBob.YodleeAccountModel;
@@ -211,11 +205,11 @@
   })(Backbone.Collection);
 
   EzBob.YodleeBanksModel = (function(_super) {
+
     __extends(YodleeBanksModel, _super);
 
     function YodleeBanksModel() {
-      _ref4 = YodleeBanksModel.__super__.constructor.apply(this, arguments);
-      return _ref4;
+      return YodleeBanksModel.__super__.constructor.apply(this, arguments);
     }
 
     YodleeBanksModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";

@@ -5,6 +5,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using EzBob.CommonLib.Security;
+	using EzBob.Configuration;
 	using StructureMap;
 	using config;
 	using log4net;
@@ -14,7 +15,7 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(YodleeAccountPool));
 		private static readonly List<YodleeAccounts> accounts;
 		private static readonly YodleeMain yodleeMain = new YodleeMain();
-		private static readonly IYodleeMarketPlaceConfig config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+		private static readonly YodleeEnvConnectionConfig config = YodleeConfig._Config;
 		private static readonly object accountsLock = new object();
 		
 		static YodleeAccountPool()

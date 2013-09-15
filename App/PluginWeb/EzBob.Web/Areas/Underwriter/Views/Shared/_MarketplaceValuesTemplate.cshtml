@@ -277,15 +277,18 @@
 							<a href="#" class="btn btn-mini enable-shop %>" umi="<%- m.Id %>"><i class="icon-play"></i>Enable</a>
 						<% }
 						else {
-							if (m.Name.toLowerCase() === 'paypal') {
-								%><a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
-								<a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="icon-tag"></i></a><%
-							} else if (m.Name.toLowerCase() !== 'yodlee') {
-								%><a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-								<a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a><%
-							}
-							%><a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a><%
-						} %>
+					        if (m.Name.toLowerCase() === 'paypal') {%>
+                                <a href="#" class="btn btn-mini reCheck-paypal" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+					            <a href="#" class="btn btn-mini" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="icon-tag"></i></a>
+                            <% } else if (m.Name.toLowerCase() !== 'yodlee') { %>
+					            <a href="#" class="btn btn-mini reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+                                <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+    					    <% } else { %>
+                                <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini %>" data-mp-id="<%-m.id%>"><i class="icon-refresh"></i>Try Recheck</a>
+					            <a href="#" class="btn btn-mini" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="icon-tag"></i></a>
+                            <% } %>
+					        <a href="#" class="btn btn-mini disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a>
+                        <% } %>
 					</td>
 				</tr>
 				<%}); })($.parseJSON($('div#cg-account-list').text()));%>

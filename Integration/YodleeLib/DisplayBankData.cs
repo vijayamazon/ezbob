@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace YodleeLib
 {
-    using StructureMap;
+	using EzBob.Configuration;
+	using StructureMap;
     using config;
 
     /// <summary>
@@ -12,10 +13,10 @@ namespace YodleeLib
     public class DisplayBankData : ApplicationSuper
     {
         DataServiceService dataService;
-        private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
         public DisplayBankData()
         {
-            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
             dataService = new DataServiceService();
             dataService.Url = _config.soapServer + "/" + "DataService";
         }
@@ -53,7 +54,12 @@ namespace YodleeLib
                 };
 
             ItemSummary itemSummary = dataService.getItemSummaryForItem1(userContext, itemId, true, dataExtent);
-            //String containerName = itemSummary.contentServiceInfo.containerInfo.containerName;			
+
+			if (itemSummary == null)
+			{
+				throw new Exception(string.Format("Item for item id {0} not found", itemId));
+			}
+            //String containerName = itemSummary.contentServiceInfo.containerInfo.containerName;
 
             error = "";
             bankTransactionDataList = new Dictionary<BankData, List<BankTransactionData>>();

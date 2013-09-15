@@ -1,6 +1,7 @@
 namespace YodleeLib
 {
-    using StructureMap;
+	using EzBob.Configuration;
+	using StructureMap;
     using config;
 	using System;
     using log4net;
@@ -14,11 +15,11 @@ namespace YodleeLib
 		private static readonly ILog log = LogManager.GetLogger(typeof(LoginUser));
         readonly LoginService loginService;
         OAuthAccessTokenManagementServiceService oAuthAccessTokenManagementService;
-        private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
 
         public LoginUser()
         {
-            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
             loginService = new LoginService();
             loginService.Url = _config.soapServer + "/" + loginService.GetType().FullName;
         }

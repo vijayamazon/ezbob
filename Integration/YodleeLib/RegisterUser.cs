@@ -1,5 +1,6 @@
 ﻿namespace YodleeLib
 {
+	using EzBob.Configuration;
 	using StructureMap;
 	using config;
 
@@ -9,11 +10,11 @@
 	public class RegisterUser : ApplicationSuper
 	{
 		private UserRegistrationService registerService;
-		private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
 
 		public RegisterUser()
 		{
-			_config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
 			registerService = new UserRegistrationService();
             registerService.EnableDecompression = true;
 			registerService.Url = _config.soapServer + "/" + registerService.GetType().FullName;

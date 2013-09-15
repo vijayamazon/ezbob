@@ -26,8 +26,9 @@
 	}
 
 	public interface IYodleeAccountsRepository : IRepository<YodleeAccounts>
-    {
-    }
+	{
+		YodleeAccounts Search(int customerId);
+	}
 
 	public class YodleeAccountsRepository : NHibernateRepositoryBase<YodleeAccounts>, IYodleeAccountsRepository
 	{

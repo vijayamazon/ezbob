@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Threading;
+	using EzBob.Configuration;
 	using StructureMap;
 	using config;
 	using log4net;
@@ -12,13 +13,13 @@
 		public UserContext UserContext = null;
 		private readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
 		private readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
-		private static IYodleeMarketPlaceConfig config;
+		private static YodleeEnvConnectionConfig config;
 		private bool isLoggedIn;
 		private int numOfRetriesForGetItemSummary;
-		
+
 		public YodleeMain()
 		{
-			config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			config = YodleeConfig._Config;
 			contentServieTravelService.Url = config.soapServer + "/" + contentServieTravelService.GetType().FullName;
 			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
@@ -53,7 +54,7 @@
 			}
 		}
 
-		public string GetFinalUrl(int csId, string callback, string username, string password)
+		public string GetAddAccountUrl(int csId, string callback, string username, string password)
 		{
 			try
 			{
@@ -109,6 +110,60 @@
 			}
 		}
 
+		public string GetEditAccountUrl(long itemId, string callback, string username, string password)
+		{
+			try
+			{
+				string url = config.EditAccountURL;
+				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_flowId=editSiteCredentials&_itemid=";
+				var oAuthBase = new OAuthBase();
+
+				LoginUser(username, password);
+				var lu = new LoginUser();
+				OAuthAccessToken token = lu.getAccessTokens(UserContext);
+
+				string signature = null;
+				string normalizedUrl = null;
+				string normalizedRequestParameters = null;
+				string applicationKey = config.ApplicationKey;
+				string applicationToken = config.ApplicationToken;
+
+				while (string.IsNullOrEmpty(signature) || signature.Contains("+"))
+				{
+					string timestamp = oAuthBase.GenerateTimeStamp();
+					string nonce = oAuthBase.GenerateNonce();
+					string signatureBase = oAuthBase.GenerateSignatureBase(
+						new Uri(string.Format("{0}{1}{2}", url, sParams, itemId)),
+						applicationKey,
+						token.token,
+						token.tokenSecret,
+						"GET",
+						timestamp,
+						nonce,
+						OAuthBase.HMACSHA1SignatureType,
+						callback,
+						out normalizedUrl,
+						out normalizedRequestParameters
+						);
+
+					signature = oAuthBase.GenerateSignature(signatureBase, applicationToken, token.tokenSecret);
+				}
+
+				string finalUrl = string.Format("{0}?{1}&oauth_signature={2}",
+					normalizedUrl,
+					normalizedRequestParameters,
+					signature
+				);
+
+				return finalUrl;
+			}
+			catch (Exception e)
+			{
+				Log.ErrorFormat("Exception while generating yodlee redirection url:{0}", e);
+				throw;
+			}
+		}
+
 		public long GetItemId(string username, string password, out string displayname, out long csId)
 		{
 			displayname = string.Empty;
@@ -116,7 +171,7 @@
 			LoginUser(username, password);
 
 			numOfRetriesForGetItemSummary = 5;
-			ItemSummary itemSummary = GetItemSummary(username); 
+			ItemSummary itemSummary = GetItemSummary(username);
 
 			if (itemSummary == null)
 			{
@@ -125,7 +180,7 @@
 
 			csId = itemSummary.contentServiceId;
 			displayname = itemSummary.itemDisplayName;
-			
+
 			Log.InfoFormat("Received yodlee item id: '{0}'", itemSummary.itemId);
 
 			return itemSummary.itemId;
@@ -152,7 +207,7 @@
 				return null;
 			}
 
-			var itemSummary = (ItemSummary)oa[oa.Length - 1];
+			var itemSummary = (ItemSummary)oa[0];
 
 			if (itemSummary.refreshInfo.statusCode != 0)
 			{

@@ -6,7 +6,8 @@ using YodleeLib.datatypes;
 
 namespace YodleeLib
 {
-    using StructureMap;
+	using EzBob.Configuration;
+	using StructureMap;
     using config;
 
     /// <summary>
@@ -19,14 +20,14 @@ namespace YodleeLib
 
         readonly ContentServiceTraversalService _cst;
         readonly ItemManagementService _itemManagement;
-        private static IYodleeMarketPlaceConfig _config;
+		private static YodleeEnvConnectionConfig _config;
         /// <summary>
         /// Constructs an instance of the AddItem class that
         //  provides the functionality to display all content.
         /// </summary>
         public AddItem()
         {
-            _config = ObjectFactory.GetInstance<IYodleeMarketPlaceConfig>();
+			_config = YodleeConfig._Config;
             _cst = new ContentServiceTraversalService {Url = _config.soapServer + "/" + "ContentServiceTraversalService"};
             _itemManagement = new ItemManagementService {Url = _config.soapServer + "/" + "ItemManagementService"};
         }

@@ -43,6 +43,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             @detailView.render()
 
     events:
+        "click .tryRecheckYodlee": "tryRecheckYodlee"
         "click .reCheckMP": "reCheckmarketplaces"
         "click .reCheck-paypal" : "reCheckPaypal"
         "click tbody tr": "rowClick"
@@ -126,6 +127,33 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         umi = $el.attr "umi"
         EzBob.ShowMessage "Enable shop", "Are you sure?", (=> @doEnableShop(umi, true)), "Yes", null, "No"
         return false
+
+    tryRecheckYodlee: (e) ->
+        ###
+        $el = $(e.currentTarget)
+        umi = $el.attr "umi"
+        mpType = $el.attr "marketplaceType"
+        customerId = @model.customerId
+        
+        okFn = =>
+            xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryReCheckYodlee",
+                customerId: customerId
+                umi: umi
+                marketplaceType: mpType
+            xhr.done (response)=>
+                if response and response.error != undefined
+                    EzBob.ShowMessage response.error, "Error occured"
+                else
+                    EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
+                @trigger "rechecked",
+                    umi: umi
+                    el: $el
+            xhr.fail (data) ->
+                console.error data.responseText
+
+        EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
+        ###
+        false
 
     reCheckmarketplaces: (e) ->
         $el = $(e.currentTarget)

@@ -830,6 +830,9 @@
     <Content Include="Content\img\what-ezbob-overview.png" />
     <Content Include="Content\img\yahoonews.png" />
     <Content Include="Content\img\your-profile-picture.jpg" />
+    <Content Include="Content\js\App\ezbob.bindings.js">
+      <DependentUpon>ezbob.bindings.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\App\ezbob.clicktale.js" />
     <Content Include="Content\js\App\ezbob.GA.js">
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
@@ -981,6 +984,9 @@
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
       <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.ProfilePopupView.js">
+      <DependentUpon>ezbob.underwriter.ProfilePopupView.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js">
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>
@@ -1130,6 +1136,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\_CompanyScore.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanWithoutAML.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanForWarningStatusCustomer.cshtml" />
+    <Content Include="Areas\Underwriter\Views\MarketPlaces\YodleeCallback.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
