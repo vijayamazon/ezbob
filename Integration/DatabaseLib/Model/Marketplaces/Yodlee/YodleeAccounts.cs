@@ -7,7 +7,6 @@
 	using Database;
 	using EzBob.CommonLib.Security;
 	using NHibernate;
-	using StructureMap;
 
 	public class YodleeAccounts
 	{
@@ -49,7 +48,7 @@
 
 		public YodleeAccounts CreateAccount(Func<string> generatePassword)
 		{
-			int maxId = GetAll().Max(a => a.Id);
+			decimal maxId = (decimal)_session.CreateSQLQuery("SELECT IDENT_CURRENT('YodleeAccounts')").UniqueResult();
 			var account = new YodleeAccounts
 			{
 				CreationDate = DateTime.UtcNow,
