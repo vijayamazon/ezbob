@@ -1,0 +1,59 @@
+﻿#divAdminArea H2 {
+	text-align: center;
+}
+
+DIV#divAdminArea DIV#AdminLeftPane {
+	float: left;
+	margin-right: 1em;
+}
+
+DIV#divAdminArea DIV#AdminLeftPane INPUT,
+DIV#divAdminArea DIV#AdminLeftPane SELECT {
+	width: 15em;
+	display: block;
+}
+
+DIV#divAdminArea DIV#AdminLeftPane INPUT.ReportButton {
+	width: 48px !important;
+	height: 48px !important;
+}
+
+TABLE#tblReportUserMap { float: left; }
+
+TABLE#tblReportUserMap CAPTION {
+	font-weight: bold;
+	font-size: large;
+	text-align: center;
+	margin-bottom: 0.3.em;
+}
+
+TABLE#tblReportUserMap THEAD TR {
+	background-color: #9ab1d1;
+	color: #fff;
+}
+
+TABLE#tblReportUserMap THEAD TR TH {
+	padding: 0.5em;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+}
+
+TABLE#tblReportUserMap TBODY TR { background-color: white; }
+
+TABLE#tblReportUserMap TBODY TR TH {
+	padding: 0.5em;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+	text-align: left;
+}
+
+TABLE#tblReportUserMap TBODY TR TD {
+	padding: 0.5em;
+	vertical-align: middle;
+	border: 1px solid #ddd;
+	text-align: center;
+}
+
+TABLE#tblReportUserMap TBODY TR TD.checked {
+	background-color: #bfffcf;
+}
