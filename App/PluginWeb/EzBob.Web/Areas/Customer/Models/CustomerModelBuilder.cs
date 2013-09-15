@@ -170,6 +170,8 @@ namespace EzBob.Web.Areas.Customer.Models
                             RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
                         });
 
+
+			customerdModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
 			customerdModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
             customerdModel.HasRollovers = customerdModel.ActiveRollovers.Any();
 

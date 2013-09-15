@@ -96,8 +96,7 @@
             var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
                                        customer.CreditResult == CreditResultStatus.Escalated;
 
-			var isEnabled = customer.CollectionStatus.CurrentStatus.Name == "Enabled";
-            model.Editable = isWaitingOrEscalated && cr != null && isEnabled;
+            model.Editable = isWaitingOrEscalated && cr != null && customer.CollectionStatus.CurrentStatus.IsEnabled;
 
             model.IsModified = !string.IsNullOrEmpty(cr.LoanTemplate);
 

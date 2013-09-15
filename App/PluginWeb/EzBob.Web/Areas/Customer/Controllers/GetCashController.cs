@@ -106,7 +106,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 !customer.CreditSum.HasValue ||
                 !customer.Status.HasValue ||
                 customer.Status.Value != Status.Approved ||
-				customer.CollectionStatus.CurrentStatus.Name != "Enabled")
+				!customer.CollectionStatus.CurrentStatus.IsEnabled)
             {
                 throw new Exception("Invalid customer state");
             }

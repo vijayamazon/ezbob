@@ -78,7 +78,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             CreditResult = customer.CreditResult.ToString();
             CreditScore = customer.ScoringResults.Any() ? customer.ScoringResults.Last().ScoreResult : 0.00;
             Disabled = customer.CollectionStatus.CurrentStatus.Id;
-            Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && (customer.CollectionStatus.CurrentStatus.Name == "Enabled");
+            Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && customer.CollectionStatus.CurrentStatus.IsEnabled;
 
             if (customer.PersonalInfo != null)
             {

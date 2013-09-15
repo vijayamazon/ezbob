@@ -208,7 +208,7 @@
 				!cus.CreditSum.HasValue ||
 				!cus.Status.HasValue ||
 				cus.Status.Value != Status.Approved ||
-				cus.CollectionStatus.CurrentStatus.Name != "Enabled")
+				!cus.CollectionStatus.CurrentStatus.IsEnabled)
 			{
 				throw new Exception("Invalid customer state");
 			}
