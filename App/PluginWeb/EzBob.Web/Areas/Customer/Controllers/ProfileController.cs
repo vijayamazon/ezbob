@@ -1,29 +1,30 @@
-﻿using System;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.Filters;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models;
-using NHibernate;
-using NHibernate.Linq;
-using Scorto.Web;
-using System.Linq;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class ProfileController : Controller
+	using System;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.Filters;
+	using Infrastructure.csrf;
+	using Web.Models;
+	using NHibernate;
+	using NHibernate.Linq;
+	using Scorto.Web;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model;
+
+	public class ProfileController : Controller
     {
         private readonly CustomerModelBuilder _customerModelBuilder;
         private readonly IEzbobWorkplaceContext _context;
         private readonly IAppCreator _creator;
         private readonly IEzBobConfiguration _config;
         private readonly CashRequestBuilder _crBuilder;
-        private readonly ISession _session;
+		private readonly ISession _session;
+		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 
         //----------------------------------------------------------------------
         public ProfileController(
@@ -32,14 +33,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IAppCreator creator, 
             IEzBobConfiguration config,
             CashRequestBuilder crBuilder,
-            ISession session)
+			ISession session,
+			IConfigurationVariablesRepository configurationVariablesRepository)
         {
             _customerModelBuilder = customerModelBuilder;
             _context = context;
             _creator = creator;
             _config = config;
             _crBuilder = crBuilder;
-            _session = session;
+			_session = session;
+			this.configurationVariablesRepository = configurationVariablesRepository;
         }
 
         //----------------------------------------------------------------------
@@ -90,7 +93,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.CreditResult = null;
 
             customer.OfferStart = DateTime.UtcNow;
-            customer.OfferValidUntil = DateTime.UtcNow.AddDays(1);
+			int offerValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+			customer.OfferValidUntil = DateTime.UtcNow.AddHours(offerValidForHours);
 
             customer.ApplyCount = customer.ApplyCount + 1;
 

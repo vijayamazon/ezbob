@@ -291,8 +291,8 @@ namespace ZohoCRM
 
         private void UpdateOffer(ZohoPotential zohoPotential, CashRequest cashRequest)
         {
-            zohoPotential.SetValue("Valid from", cashRequest.OfferStart);
-            zohoPotential.SetValue("Closing Date", cashRequest.OfferValidUntil);
+            zohoPotential.SetValue("Valid from", cashRequest.Customer.OfferStart);
+			zohoPotential.SetValue("Closing Date", cashRequest.Customer.OfferValidUntil);
             zohoPotential.SetValue("Amount", cashRequest.ApprovedSum());
             zohoPotential.SetValue("System decision", cashRequest.SystemDecision.ToString());
             zohoPotential.SetValue("Underwriter decision", cashRequest.UnderwriterDecision.ToString());

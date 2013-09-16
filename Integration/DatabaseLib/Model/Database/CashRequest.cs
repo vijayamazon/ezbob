@@ -49,10 +49,6 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	    public virtual string ZohoId { get; set; }
 
-        public virtual DateTime? OfferStart { get; set; }
-
-        public virtual DateTime? OfferValidUntil { get; set; }
-
         public virtual decimal ApprovedSum()
         {
             return (decimal)(ManagerApprovedSum ?? (SystemCalculatedSum ?? 0));

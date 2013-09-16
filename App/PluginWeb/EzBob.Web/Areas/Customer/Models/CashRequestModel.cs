@@ -26,7 +26,7 @@ namespace EzBob.Web.Areas.Customer.Models
                                    ? (decimal) c.ManagerApprovedSum.Value
                                    : 0,
                            StartDate = c.CreationDate,
-                           EndDate = c.OfferValidUntil,
+                           EndDate = c.Customer.OfferValidUntil,
                            Comments = c.UnderwriterComment,
                            InterestRate = c.InterestRate,
                            SetupFee = c.UseSetupFee,

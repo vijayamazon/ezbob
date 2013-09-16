@@ -23,10 +23,12 @@ BEGIN
 
  if @ApplyForLoan = GETUTCDATE() or @ApplyForLoan is null 
 		SET @ApplyForLoan = GETUTCDATE()
-		
 
-if @ValidFor <  DATEADD(hh,24 ,@ApplyForLoan) or @ValidFor is NULL
-set @ValidFor = DATEADD(hh,24 ,GETUTCDATE())
+DECLARE @ValidForHours INT
+SELECT @ValidForHours = CONVERT(INT, Value) FROM ConfigurationVariables WHERE Name='OfferValidForHours'
+
+if @ValidFor <  DATEADD(hh,@ValidForHours ,@ApplyForLoan) or @ValidFor is NULL
+set @ValidFor = DATEADD(hh,@ValidForHours ,GETUTCDATE())
 
 
 UPDATE [dbo].[Customer]

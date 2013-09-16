@@ -46,8 +46,6 @@ namespace EzBob.Web.Code
                                       RepaymentPeriod = loanType.RepaymentPeriod,
                                       UseSetupFee = false,
                                       DiscountPlan = discount,
-                                      OfferValidUntil = DateTime.UtcNow.AddDays(1),
-                                      OfferStart = DateTime.UtcNow,
 									  IsLoanTypeSelectionAllowed = 1
                                   };
 

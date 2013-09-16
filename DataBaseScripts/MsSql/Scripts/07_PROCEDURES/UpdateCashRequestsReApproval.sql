@@ -27,7 +27,9 @@ BEGIN
 
 declare @OfferStart Datetime, @OfferValidUntil datetime
 set @OfferStart = GETUTCDATE()
-set   @OfferValidUntil = DATEADD(DD, @OfferValidDays ,GETUTCDATE())
+DECLARE @ValidForHours INT
+SELECT @ValidForHours = CONVERT(INT, Value) FROM ConfigurationVariables WHERE Name='OfferValidForHours'
+set   @OfferValidUntil = DATEADD(hh, @ValidForHours ,GETUTCDATE())
 
 UPDATE [dbo].[CashRequests]
    SET  
@@ -38,8 +40,6 @@ UPDATE [dbo].[CashRequests]
  RepaymentPeriod = @RepaymentPeriod, 
  InterestRate = @InterestRate,
  UseSetupFee = @UseSetupFee, 
- OfferStart = @OfferStart, 
- OfferValidUntil = @OfferValidUntil, 
  EmailSendingBanned = @EmailSendingBanned,
  LoanTypeId  = @LoanTypeId,
  UnderwriterComment = @UnderwriterComment,

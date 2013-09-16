@@ -4,6 +4,7 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -31,6 +32,7 @@
 		private readonly IPacNetManualBalanceRepository _pacNetManualBalanceRepository;
 		private readonly ICustomerStatusesRepository customerStatusesRepository;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
+		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -46,7 +48,8 @@
 		                                 CashRequestBuilder crBuilder,
 		                                 ApplicationInfoModelBuilder infoModelBuilder,
 		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository,
-										 IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository)
+										 IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
+										 IConfigurationVariablesRepository configurationVariablesRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -61,6 +64,7 @@
 			_pacNetManualBalanceRepository = pacNetManualBalanceRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
+			this.configurationVariablesRepository = configurationVariablesRepository;
 		}
 
 		[Ajax]
@@ -302,11 +306,10 @@
             Log.DebugFormat("CashRequest({0}).OfferValidUntil = {1}", id, date);
 
             var dt = FormattingUtils.ParseDateWithCurrentTime(date);
+	        cust.OfferValidUntil = dt;
             var cr = cust.LastCashRequest;
-            cr.OfferValidUntil = dt;
             cr.LoanTemplate = null;
             _crm.UpdateCashRequest(cr);
-
         }
 
         [HttpPost]
@@ -324,9 +327,11 @@
 
             var dt = FormattingUtils.ParseDateWithCurrentTime(date);
 
+	        int offerValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+
             var cr = cust.LastCashRequest;
-            cr.OfferStart = dt;
-            cr.OfferValidUntil = dt.AddDays(1);
+	        cust.OfferStart = dt;
+			cust.OfferValidUntil = dt.AddHours(offerValidForHours);
             cr.LoanTemplate = null;
             _crm.UpdateCashRequest(cr);
         }
@@ -350,8 +355,6 @@
 
             _crBuilder.ForceEvaluate(customer, (NewCreditLineOption) newCreditLineOption, false);
 
-            customer.OfferStart = cashRequest.OfferStart;
-            customer.OfferValidUntil = cashRequest.OfferValidUntil;
             customer.CreditResult = null;
 
             _crm.UpdateCashRequest(cashRequest);
@@ -373,13 +376,17 @@
             cr.ManagerApprovedSum = amount;
             cr.InterestRate = interestRate;
             cr.RepaymentPeriod = repaymentPeriod;
-            cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
-            cr.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
+
+
             cr.UseSetupFee = useSetupFee;
             cr.EmailSendingBanned = !allowSendingEmail;
             cr.LoanTemplate = null;
             cr.IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed;
             cr.DiscountPlan = _discounts.Get(discountPlan);
+
+			Customer c = cr.Customer;
+            c.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
+            c.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
 
             _crm.UpdateCashRequest(cr);
        

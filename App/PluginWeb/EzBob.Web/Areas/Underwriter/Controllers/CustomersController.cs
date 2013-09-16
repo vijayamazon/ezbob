@@ -567,8 +567,6 @@
 					customer.CreditSum = sum;
 					customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
 					request.ManagerApprovedSum = (double?)sum;
-					customer.OfferStart = request.OfferStart;
-					customer.OfferValidUntil = request.OfferValidUntil;
 					_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
 					_crm.ApproveOffer(request);
 					if (!request.EmailSendingBanned)
@@ -581,8 +579,6 @@
 					customer.RejectedReason = reason;
 					customer.Status = Status.Rejected;
 					_historyRepository.LogAction(DecisionActions.Reject, reason, user, customer);
-					customer.OfferStart = request.OfferStart;
-					customer.OfferValidUntil = request.OfferValidUntil;
 					request.ManagerApprovedSum = null;
 					_crm.RejectOffer(request);
 					if (!request.EmailSendingBanned)
