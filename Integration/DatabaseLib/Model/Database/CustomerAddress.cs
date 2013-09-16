@@ -70,7 +70,7 @@ namespace ApplicationMng.Model.Mappings
         {
             Table("CustomerAddress");
             Id(x => x.AddressId).Column("addressId").GeneratedBy.Native();
-            Map(x => x.AddressType).Column("addressType").CustomType<AddressType>();
+            Map(x => x.AddressType).Column("addressType").CustomType<CustomerAddressType>();
             Map(x => x.Id).Column("id").Length(50);            
             Map(x => x.Organisation).Column("Organisation").Length(200);
             Map(x => x.Line1).Column("Line1").Length(200);
