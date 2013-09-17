@@ -42,7 +42,7 @@ robocopy Integration\ZohoCRM\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\Deveel\Deveel.ZohoCRM\bin\Debug\ c:\ezbobSrv\ /e
 
-robocopy FraudChecker\bin\Debug\ c:\ezbobSrv\ /e
+robocopy Integration\FraudChecker\bin\Debug\ c:\ezbobSrv\ /e
 
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
 
