@@ -6,7 +6,7 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
     template: "#profile-person-info-template"
     initialize: ->
-        @bindTo @model, "change", @render, this
+        @bindTo @model, "change sync", @render, this
 
     onRender: ->
         @$el.find(".tltp").tooltip()
@@ -133,7 +133,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         for status in @statuses.models
             @StatusesArr[status.get('Id')] = status.get('Name')
 
-    changeDisabled: ->
+    changeDisabled: (silent = false)->
         disabledText = ""
         disabled = @get("Disabled")
         if (disabled == undefined)
@@ -143,7 +143,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         if (disabledText == undefined)
             disabledText = "Enabled"
 
-        @set "DisabledText", disabledText
+        @set {"DisabledText": disabledText}, {silent:true}
 
     changeFraudCheckStatus: ->
         #fraudText = @get("FraudCheckStatus")

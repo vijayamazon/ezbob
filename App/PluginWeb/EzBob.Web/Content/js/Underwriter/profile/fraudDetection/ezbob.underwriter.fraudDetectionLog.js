@@ -15,7 +15,7 @@ EzBob.Underwriter.FraudDetectionLogs = Backbone.Collection.extend({
 EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
     template: '#fraudDetectionLog',
     initialize: function () {
-        this.model.on("reset", this.render, this);
+        this.model.on("reset sync", this.render, this);
     },
     serializeData: function () {
         return { vals: this.model.toJSON() };

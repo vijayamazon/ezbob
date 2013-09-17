@@ -16,7 +16,7 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
     template: "#payment-accounts-template"
 
     initialize: ->
-        @bindTo @model, "change reset", @render, @
+        @bindTo @model, "change reset sync", @render, @
         window.paypointAdded = (amount = 5) =>
             EzBob.ShowMessage "Please deduct the #{amount} pounds from this card using manual payment", "Reminder"
             @model.fetch()

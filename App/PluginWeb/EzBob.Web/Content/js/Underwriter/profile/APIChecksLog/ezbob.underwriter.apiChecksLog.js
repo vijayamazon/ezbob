@@ -15,7 +15,7 @@ EzBob.Underwriter.ApiChecksLogs = Backbone.Collection.extend({
 EzBob.Underwriter.ApiChecksLogView = Backbone.Marionette.ItemView.extend({
     template: '#apiChecksLog',
     initialize: function () {
-        this.model.on("reset", this.render, this);
+        this.model.on("reset sync", this.render, this);
     },
     serializeData: function () {
         return { vals: this.model.toJSON() };

@@ -20,8 +20,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [HttpGet]
         public JsonNetResult Index(int id)
         {
-            var models = new List<FraudDetectionLogModel>(_fraudDetectionLog.GetLastDetections(id).Select(x => new FraudDetectionLogModel(x)));
-            models = new List<FraudDetectionLogModel>(models.OrderByDescending(x => x.Id));
+            var models = _fraudDetectionLog.GetLastDetections(id).Select(x => new FraudDetectionLogModel(x)).OrderByDescending(x => x.Id).ToList();
             return this.JsonNet(models);
         }
     }

@@ -22,24 +22,23 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly IAppCreator _appCreator;
         private readonly CustomerRepository _customersRepository;
         private readonly IWorkplaceContext _workplaceContext;
-        private readonly EzbobMailNodeAttachRelationRepository _ezbobMailNodeAttachRelationRepository;
         private readonly IDecisionHistoryRepository _historyRepository;
+        private readonly MessagesModelBuilder _builder;
         private readonly ExportResultRepository _exportResultRepository;
         private readonly IZohoFacade _crm;
         private readonly AskvilleRepository _askvilleRepository;
 
         public MessagesController(CustomerRepository customers, 
-                                  IAppCreator appCreator,  
-                                  EzbobMailNodeAttachRelationRepository ezbobMailNodeAttachRelationRepository, 
+                                  IAppCreator appCreator,
                                   ExportResultRepository exportResultRepository,
-                                  IZohoFacade crm, AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository)
+                                  IZohoFacade crm, AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository, MessagesModelBuilder builder)
         {
             _appCreator = appCreator;
-            _ezbobMailNodeAttachRelationRepository = ezbobMailNodeAttachRelationRepository;
             _exportResultRepository = exportResultRepository;
             _crm = crm;
             _askvilleRepository = askvilleRepository;
             _historyRepository = historyRepository;
+            _builder = builder;
             _customersRepository = customers;
             _workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
         }
@@ -47,25 +46,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [HttpGet]
         public JsonNetResult Index(int id)
         {
-            var customerName = _customersRepository.Get(id).Name;
-            var atach = _ezbobMailNodeAttachRelationRepository.GetAll().Where(x => x.To == customerName && x.Export.FileType == 0).ToList();
-            var askvilleMessages = _askvilleRepository.GetAskvilleByCustomerId(id).ToList();
-
-            var model = new List<MessagesModel>();
-            model.AddRange(atach.Select(val => new MessagesModel
-            {
-                Id = val.Export.Id.ToString(CultureInfo.InvariantCulture),
-                CreationDate = FormattingUtils.FormatDateTimeToString(val.Export.CreationDate),
-                FileName = val.Export.FileName
-            }));
-
-            model.AddRange(askvilleMessages.Select(x => new MessagesModel
-                                                            {
-                                                                Id = x.Guid,
-                                                                CreationDate = FormattingUtils.FormatDateTimeToStringWithoutSpaces(x.CreationDate),
-                                                                FileName = string.Format("Askville({0}).docx", FormattingUtils.FormatDateTimeToStringWithoutSpaces(x.CreationDate))
-                                                            }));
-            return this.JsonNet(new { attaches = model });
+            var customer = _customersRepository.Get(id);
+            var model = _builder.Create(customer);
+            return this.JsonNet(model);
         }
 
         public FileResult DownloadMessagesDocument(string id)

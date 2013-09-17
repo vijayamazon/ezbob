@@ -6,7 +6,7 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
     template: "#profile-summary-template"
     initialize: ->
-        @bindTo @model, "change", @render, this
+        @bindTo @model, "change sync", @render, this
 
     events:
         "keydown #CommentArea": "CommentAreaChanged"

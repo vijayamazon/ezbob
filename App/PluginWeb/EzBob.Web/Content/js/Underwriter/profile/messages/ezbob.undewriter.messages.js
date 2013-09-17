@@ -8,7 +8,7 @@ EzBob.Underwriter.MessageModel = Backbone.Model.extend({
 
 EzBob.Underwriter.Message = Backbone.View.extend({
     initialize: function () {
-        this.model.on("change", this.render, this);
+        this.model.on("change sync", this.render, this);
         this.template = _.template($('#message-template').html());
     },
     

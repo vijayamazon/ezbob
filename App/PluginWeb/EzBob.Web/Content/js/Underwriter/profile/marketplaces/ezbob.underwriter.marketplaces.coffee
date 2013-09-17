@@ -33,7 +33,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     template: "#marketplace-template"
 
     initialize: ->
-        @model.on "reset change", @render, this
+        @model.on "reset change sync", @render, this
         @rendered = false
 
     onRender: ->

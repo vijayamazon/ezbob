@@ -43,22 +43,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public JsonNetResult Index(int id)
         {
             var customer = _customers.Get(id);
-            var model = new PaymentsAccountModel();
-            
-            if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
-            {
-                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
-            }
-            
-            model.PayPointCards.AddRange(customer.PayPointCards.Select(PayPointCardModel.FromCard));
-
-            model.CurrentBankAccount = BankAccountModel.FromCard(customer.CurrentCard);
-            
-            int currentBankAccountId = 0;
-            if (model.CurrentBankAccount != null) currentBankAccountId = model.CurrentBankAccount.Id;
-
-            model.BankAccounts.AddRange(customer.BankAccounts.Where(a => a.Id != currentBankAccountId).Select(BankAccountModel.FromCard));
-
+            var model = new PaymentsAccountModel(customer);
             return this.JsonNet(model);
         }
 

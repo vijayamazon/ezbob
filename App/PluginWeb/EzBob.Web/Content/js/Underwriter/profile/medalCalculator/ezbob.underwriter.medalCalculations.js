@@ -9,7 +9,7 @@ EzBob.Underwriter.MedalCalculationModel = Backbone.Model.extend({
 EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#medal-calculation-template').html());
-        this.model.on('change reset', this.render, this);
+        this.model.on('change reset sync', this.render, this);
     },
 
     events: {

@@ -11,7 +11,7 @@ class EzBob.Underwriter.LoanHistoryView extends Backbone.Marionette.View
         @template = _.template($("#loanhistory-template").html())
         @templateView = _.template($("#loanhistory-view-template").html())
         @offersTemplate = _.template($("#offrers-template").html())
-        @bindTo @model, "reset fetch change", @render, this
+        @bindTo @model, "reset fetch change sync", @render, this
         @isRejections = true
 
     events:

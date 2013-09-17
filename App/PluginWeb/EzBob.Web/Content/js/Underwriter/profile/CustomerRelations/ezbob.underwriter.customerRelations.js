@@ -22,7 +22,7 @@ EzBob.Underwriter.CustomerRelationsStatuses = Backbone.Collection.extend({
 EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
     template: '#customerRelationsTemplate',
     initialize: function () {
-        this.model.on("reset", this.render, this);
+        this.model.on("reset sync", this.render, this);
         this.actions = new EzBob.Underwriter.CustomerRelationsActions();
         this.actions.fetch();
         this.statuses = new EzBob.Underwriter.CustomerRelationsStatuses();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Models;
 
@@ -21,6 +22,23 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         private readonly List<BankAccountModel> _bankAccounts = new List<BankAccountModel>();
         private readonly List<PayPointCardModel> _paypointCards = new List<PayPointCardModel>();
+
+        public PaymentsAccountModel(EZBob.DatabaseLib.Model.Database.Customer customer)
+        {
+            if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
+            {
+                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
+            }
+
+            PayPointCards.AddRange(customer.PayPointCards.Select(PayPointCardModel.FromCard));
+
+            CurrentBankAccount = BankAccountModel.FromCard(customer.CurrentCard);
+
+            int currentBankAccountId = 0;
+            if (CurrentBankAccount != null) currentBankAccountId = CurrentBankAccount.Id;
+
+            BankAccounts.AddRange(customer.BankAccounts.Where(a => a.Id != currentBankAccountId).Select(BankAccountModel.FromCard));
+        }
     }
 
     public class PaymentAccountModel 

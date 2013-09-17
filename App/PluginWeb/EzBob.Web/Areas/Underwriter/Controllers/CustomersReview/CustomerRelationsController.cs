@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿using System.Linq;
+
+namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
 	using System.Collections.Generic;
@@ -23,33 +25,14 @@
 			this.crmStatusesRepository = crmStatusesRepository;
 		}
 
-		private CustomerRelationsModel GetModel(CustomerRelations customerRelations)
-		{
-			return new CustomerRelationsModel
-				{
-					User = customerRelations.UserName,
-					Action = customerRelations.Action.Name,
-					Status = customerRelations.Status.Name,
-					DateTime = customerRelations.Timestamp,
-					Comment = customerRelations.Comment,
-					Incoming = customerRelations.Incoming
-				};
-		}
-
-		[Ajax]
+	    [Ajax]
 		[HttpGet]
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id)
 		{
-			var models = new List<CustomerRelationsModel>();
-
-			foreach (CustomerRelations customerRelations in customerRelationsRepository.ByCustomer(id))
-			{
-				models.Add(GetModel(customerRelations));
-			}
-
-			return this.JsonNet(models);
+			var models = customerRelationsRepository.ByCustomer(id).Select(customerRelations => CustomerRelationsModel.Create(customerRelations)).ToList();
+		    return this.JsonNet(models);
 		}
 
 		[Ajax]

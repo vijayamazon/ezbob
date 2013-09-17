@@ -6,7 +6,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     template: "#profile-loan-info-template"
 
     initialize: (options) ->
-        @bindTo @model, "change reset", @render, this
+        @bindTo @model, "change reset sync", @render, this
         @personalInfo = options.personalInfo
         @bindTo @personalInfo, "change", @UpdateNewCreditLineState, this
         @bindTo @personalInfo, "change:CreditResult", @changeCreditResult, this

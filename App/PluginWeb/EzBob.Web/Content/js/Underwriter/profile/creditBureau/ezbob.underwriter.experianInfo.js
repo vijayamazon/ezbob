@@ -13,7 +13,7 @@ EzBob.Underwriter.ExperianInfoModel = Backbone.Model.extend({
 EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($('#experian-info-template').html());
-        this.model.on('change', this.render, this);
+        this.model.on('change sync', this.render, this);
     },
     render: function() {
         this.$el.html(this.template({ experianInfo: this.model.toJSON() }));

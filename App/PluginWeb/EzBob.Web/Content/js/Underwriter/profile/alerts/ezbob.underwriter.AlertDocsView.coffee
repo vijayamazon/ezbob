@@ -53,23 +53,21 @@ class EzBob.Underwriter.AlertDocsView extends Backbone.Marionette.ItemView
         "click #addNewDoc": "addClick"
         "click #deleteDocs": "deleteClick"
 
-    initialize: ->
-        @docs = new EzBob.Underwriter.Docs()
-        @bindTo @docs, 'change reset fetch', @render, @
+    initialize: (options) ->
+        @bindTo @model, 'change reset fetch sync', @render, @
 
     create: (customerId) ->
         @customerId = customerId
         @dialogId = "#uploadAlertDocDialog" + customerId
-        @docs.customerId = customerId
-        @docs.fetch()
+        @model.customerId = customerId
 
     serializeData: ->
-        docs: @docs.toJSON()
+        docs: @model.toJSON()
 
     addClick: ->
         view = new EzBob.Underwriter.UploadDocView(customerId: @customerId)
         cb = -> 
-            @docs.fetch()
+            @model.fetch()
             EzBob.ShowMessage "File successfully downloaded to \"Messages\" tab", "Successful"
         view.on('upload:ok', cb, this)
         EzBob.App.modal2.show(view)
@@ -92,7 +90,7 @@ class EzBob.Underwriter.AlertDocsView extends Backbone.Marionette.ItemView
                         docIds: ids
                     dataType: "json"
                 xhr.done =>
-                    @docs.fetch()
+                    @model.fetch()
                     EzBob.ShowMessage  "File successfully deleted", "Successful"
             "OK", null, "Cancel"
         false

@@ -29,7 +29,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         public ActionResult List(int id)
         {
-            var model = (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();            
+            var model = (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
             return this.JsonNet(model);
         }
 

@@ -8,3 +8,5 @@
             data = JSON.parse xhr.responseText
             return unless data.error?
             alertify.error data.error
+            console.log data.error
+            console.log xhr

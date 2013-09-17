@@ -257,6 +257,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Underwriter/customersGrid/ezbob.underwriter.ProfilePopupView.coffee")
 
                 //profile
+                .Add("~/Content/js/underwriter/profile/ezbob.underwriter.customerFullModel.coffee")
                 .Add("~/Content/js/underwriter/profile/ezbob.underwriter.profile.coffee")
                 .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.coffee")
                 .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.coffee")

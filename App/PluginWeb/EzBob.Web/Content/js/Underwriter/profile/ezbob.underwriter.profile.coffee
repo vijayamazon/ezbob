@@ -23,6 +23,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         alertPassed = @$el.find("#alerts-passed")
         controlButtons = @$el.find "#controlButtoons"
         fraudDetection = @$el.find("#fraudDetection")
+
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
         @profileInfoView = new EzBob.Underwriter.PersonInfoView(
             el: profileInfo
@@ -45,6 +46,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: experianInfo
             model: @experianInfoModel
         )
+
         @loanInfoModel = new EzBob.Underwriter.LoanInfoModel()
         @loanInfoView = new EzBob.Underwriter.LoanInfoView(
             el: loanInfo
@@ -85,7 +87,10 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @messagesModel
         )
         @Message.on "creditResultChanged", @changedSystemDecision, @
-        @alertDocsView = new EzBob.Underwriter.AlertDocsView(el: @$el.find("#alert-docs"))
+        
+        @alertDocs = new EzBob.Underwriter.Docs()
+        @alertDocsView = new EzBob.Underwriter.AlertDocsView(el: @$el.find("#alert-docs"), model: @alertDocs)
+        
         @ApicCheckLogs = new EzBob.Underwriter.ApiChecksLogs()
         @ApiChecksLogView = new EzBob.Underwriter.ApiChecksLogView(
             el: apiChecks
@@ -232,80 +237,87 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         scrollTop()
         that = this
         @customerId = id
-        @personalInfoModel.set
-            Id: id
-        ,
-            silent: true
 
-        @personalInfoModel.fetch().done ->
-            that.changeDecisionButtonsState that.personalInfoModel.get("Editable")
+        fullModel = new EzBob.Underwriter.CustomerFullModel(Id: id)
+        fullModel.fetch().done =>
+            @personalInfoModel.set {Id: id}, {silent: true}
+            @personalInfoModel.set fullModel.get("PersonalInfoModel"), silent: true
+            @personalInfoModel.changeDisabled(true)
+            @changeDecisionButtonsState @personalInfoModel.get("Editable")
+            @personalInfoModel.trigger "sync"
 
-        @loanInfoModel.set
-            Id: id
-        ,
-            silent: true
+            @loanInfoModel.set {Id: id}, {silent: true}
+            @loanInfoModel.set fullModel.get("ApplicationInfoModel"), silent: true
+            @loanInfoModel.trigger "sync"
 
-        @loanInfoModel.fetch()
-        @marketPlaces.customerId = id
-        @marketPlaces.fetch()
-        @loanHistory.customerId = id
-        @loanHistoryView.idCustomer = id
-        @loanHistory.fetch()
-        @experianInfoModel.set
-            Id: id
-        ,
-            silent: true
+            @marketPlaces.customerId = id
+            @marketPlaces.reset fullModel.get("Marketplaces"), silent: true
+            @marketPlaces.trigger "sync"
+            
+            @loanHistory.customerId = id
+            @loanHistoryView.idCustomer = id
+            @loanHistory.set fullModel.get("LoansAndOffers"), silent: true
+            @loanHistory.trigger "sync"
 
-        @experianInfoModel.fetch()
-        @summaryInfoModel.set
-            Id: id
-        ,
-            silent: true
+            @summaryInfoModel.set {Id: id, success: true}, {silent: true}
+            @summaryInfoModel.set fullModel.get("SummaryMdodel"), silent: true
+            @summaryInfoModel.trigger "sync"
 
-        @summaryInfoModel.set
-            success: true
-        ,
-            silent: true
-
-        @summaryInfoModel.fetch().complete ->
-            that.checkCustomerAvailability that.summaryInfoModel
-            BlockUi "Off"
-            EzBob.GlobalUpdateBugsIcon(id)
+            @checkCustomerAvailability @summaryInfoModel
+            
+            EzBob.UpdateBugsIcons fullModel.get("Bugs")
+            
             if that.$el.find(".vsplitbar").length is 0
                 $("#spl").splitter
                     minLeft: 280
                     sizeLeft: 300
                     minRight: 600
+        
+            @experianInfoModel.set {Id: id} , {silent: true}
+            @experianInfoModel.set fullModel.get("CreditBureauModel"), silent: true
+            @experianInfoModel.trigger "sync"
 
-        @paymentAccountsModel.customerId = id
-        @paymentAccountsModel.fetch()
-        @medalCalculationModel.set
-            Id: id
-        ,
-            silent: true
+            @paymentAccountsModel.customerId = id
+            @paymentAccountsModel.set fullModel.get("PaymentAccountModel"), silent: true
+            @paymentAccountsModel.trigger "sync"
 
-        @medalCalculationModel.fetch()
+            @medalCalculationModel.set {Id: id}, {silent: true}
+            @medalCalculationModel.set fullModel.get("MedalCalculations"), silent: true
+            @medalCalculationModel.trigger "sync"
+
+            @FraudDetectionLogs.customerId = id
+            @FraudDetectionLogView.idCustomer = id
+            @FraudDetectionLogs.reset fullModel.get("FraudDetectionLog"), silent: true
+            @FraudDetectionLogs.trigger "sync"
+
+            @ApicCheckLogs.customerId = id
+            @ApiChecksLogView.idCustomer = id
+            @ApicCheckLogs.reset fullModel.get("ApiCheckLogs"), silent: true
+            @ApicCheckLogs.trigger "sync"
+
+            @messagesModel.set {Id: id}, {silent: true}
+            @messagesModel.set( attaches: fullModel.get("Messages"), silent: true)
+            @messagesModel.trigger "sync"
+
+            @CustomerRelationsData.customerId = id
+            @CustomerRelationsView.idCustomer = id
+            @CustomerRelationsData.reset fullModel.get("CustomerRelations"), silent: true
+            @CustomerRelationsData.trigger "sync"
+
+            @alertDocs.reset fullModel.get("AlertDocs"), silent: true
+            @alertDocsView.create id
+            @alertDocs.trigger "sync"
+
+            BlockUi "Off"
+
+
         @crossCheckView.render customerId: id
-        @messagesModel.set
-            Id: id
-        ,
-            silent: true
 
         @companyScoreModel.customerId = id
         @companyScoreModel.fetch()
 
-        @messagesModel.fetch()
-        @alertDocsView.create id
-        @ApicCheckLogs.customerId = id
-        @ApiChecksLogView.idCustomer = id
-        @ApicCheckLogs.fetch()
         
-        @CustomerRelationsData.customerId = id
-        @CustomerRelationsView.idCustomer = id
-        @CustomerRelationsData.fetch()
-        @FraudDetectionLogs.customerId = id
-        @FraudDetectionLogView.idCustomer = id
-        @FraudDetectionLogs.fetch()
+
         @controlButtons.model = new Backbone.Model(
             customerId: id
         )

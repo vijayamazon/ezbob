@@ -67,15 +67,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public JsonNetResult Index(int id)
         {
             EZBob.DatabaseLib.Model.Database.Customer customer = _customerRepository.Get(id);
-            List<LoanModel> loans =
-                customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null))).ToList();
-
-            List<CashRequestModel> offers = customer.CashRequests
-                                                    .OrderBy(c => c.CreationDate)
-                                                    .Select(c => CashRequestModel.Create(c))
-                                                    .ToList();
-
-            return this.JsonNet(new {loans, offers});
+            return this.JsonNet(new LoansAndOffers (customer));
         }
 
         [Ajax]

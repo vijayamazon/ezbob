@@ -533,16 +533,20 @@ EzBob.UpdateBugsIcon = function (element, state) {
 EzBob.GlobalUpdateBugsIcon = function (customerId) {
     var req = $.get(window.gRootPath + "Underwriter/Bugs/GetAllForCustomer", { customerId: customerId });
     req.done(function (data) {
-        _.each(data, function (val) {
-            var element = val.MarketPlaceId ?
-                $('a[data-bug-mp={0}]'.f(val.MarketPlaceId)) :
-                (
-                    val.DirectorId ?
+        EzBob.UpdateBugsIcons(data);
+    });
+};
+
+EzBob.UpdateBugsIcons = function(data) {
+    _.each(data, function(val) {
+        var element = val.MarketPlaceId ?
+            $('a[data-bug-mp={0}]'.f(val.MarketPlaceId)) :
+            (
+                val.DirectorId ?
                     $('a[data-credit-bureau-director-id={0}]'.f(val.DirectorId)) :
                     $('a[data-bug-type={0}]'.f(val.Type))
-                );
-            EzBob.UpdateBugsIcon(element, val.State);
-        });
+            );
+        EzBob.UpdateBugsIcon(element, val.State);
     });
 };
 
