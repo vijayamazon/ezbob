@@ -38,7 +38,8 @@
 
         public string Reason { get; set; }
 
-        public int IsLoanTypeSelectionAllowed { get; set; }
+		public int IsLoanTypeSelectionAllowed { get; set; }
+		public int OfferValidForHours { get; set; }
 
         public DiscountPlanModel[] DiscountPlans { get; set; }
         public string DiscountPlan { get; set; }

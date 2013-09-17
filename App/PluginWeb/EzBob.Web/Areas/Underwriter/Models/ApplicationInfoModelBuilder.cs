@@ -3,6 +3,7 @@
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
@@ -18,20 +19,23 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
+		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
 			IPacNetManualBalanceRepository manualFunds,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-            IDiscountPlanRepository discounts, 
-            ILoanTypeRepository loanTypes)
+            IDiscountPlanRepository discounts,
+			ILoanTypeRepository loanTypes, 
+			IConfigurationVariablesRepository configurationVariablesRepository)
 		{
 			_funds = funds;
 			_manualFunds = manualFunds;
             _discounts = discounts;
             _loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
+			this.configurationVariablesRepository = configurationVariablesRepository;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -106,7 +110,9 @@
 
             model.Reason = cr.UnderwriterComment;
 
-            model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+			model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+			model.OfferValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+            
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
         }

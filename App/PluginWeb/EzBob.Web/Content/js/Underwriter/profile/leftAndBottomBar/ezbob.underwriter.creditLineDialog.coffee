@@ -31,7 +31,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     onChangeStartingDate:->
         startingDate =  moment.utc(@cloneModel.get("StartingFromDate"), "DD/MM/YYYY")
         if  startingDate isnt null
-            endDate = startingDate.add('days', 1)
+            endDate = startingDate.add('hours', @cloneModel.get('OfferValidForHours'))
             @cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'))
 
     onChangeLoanType:->
