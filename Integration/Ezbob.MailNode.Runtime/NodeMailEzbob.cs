@@ -1,19 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using Aspose.Words;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using MailApi;
-using NHibernate;
-using StructureMap.Attributes;
-using ExportResult = Scorto.Export.Templates.ExportResult;
-
-namespace WorkflowObjects
+﻿namespace WorkflowObjects
 {
-    public class NodeMailEzbob : NodeMail
+	using System;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using Aspose.Words;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using MailApi;
+	using NHibernate;
+	using StructureMap.Attributes;
+	using ExportResult = Scorto.Export.Templates.ExportResult;
+	using log4net;
+
+	public class NodeMailEzbob : NodeMail
     {
         [SetterProperty]
         public EzbobMailNodeAttachRelationRepository ExportResultsRepo { get; set; }
@@ -28,7 +29,9 @@ namespace WorkflowObjects
         public IMailTemplateRelationRepository MailTemplateRelationRepository { get; set; }
 
         [SetterProperty]
-        public IMail Mail { get; set; }
+		public IMail Mail { get; set; }
+
+		private static readonly ILog log = LogManager.GetLogger(typeof(NodeMailEzbob));
 
 
         public NodeMailEzbob(string initialValue)
@@ -67,16 +70,25 @@ namespace WorkflowObjects
         /// <returns></returns>
         public override string Execute(IWorkflow iworkflow)
         {
-            var isMandrillEnable = VariablesRepository.GetByName("MandrillEnable").Value.ToLower() == "yes";
-            var isGreetingMailSendViaMandrill = VariablesRepository.GetByName("GreetingMailSendViaMandrill").Value.ToLower() == "yes";
+			var isMandrillEnable = VariablesRepository.GetByName("MandrillEnable").Value.ToLower() == "yes";
+			var isGreetingMailSendViaMandrill = VariablesRepository.GetByName("GreetingMailSendViaMandrill").Value.ToLower() == "yes";
+			var isLateBy14DaysMailSendViaMandrill = VariablesRepository.GetByName("LateBy14DaysMailSendViaMandrill").Value.ToLower() == "yes";
 
-            if (isMandrillEnable || (isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx"))
+            if (isMandrillEnable || 
+				(isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx") ||
+				(isLateBy14DaysMailSendViaMandrill && Templates[0].DisplayName == "Late by 14 days.docx"))
             {
                 var variables = (iworkflow.VariableConnectionDescriptors.Where(
                     vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
                     .ToLookup(k => k.SourceVariableName, k => Convert.ToString(_ec[k.SourceVariableName]))
                     .Distinct()
                     .ToDictionary(k => k.Key, v => v.First());
+
+				log.InfoFormat("Going to send template:'{0}' via Mandrill. Will use the following variables:", Templates[0].DisplayName);
+				foreach (var variable in variables)
+				{
+					log.InfoFormat("Key:'{0}' Value:'{1}'", variable.Key, variable.Value);
+				}
 
                 NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key == "Subject").Value ?? "Default Subject";
                 NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" ||x.Key == "email" ).Value;
@@ -106,7 +118,8 @@ namespace WorkflowObjects
                 AddExportresult(exportResult);
                 return "Next";
             }
-            return base.Execute(iworkflow);
+
+	        return base.Execute(iworkflow);
         }
 
         private static byte[] HtmlToDocxBinnary(string html)
