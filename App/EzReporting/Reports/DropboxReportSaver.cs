@@ -99,7 +99,7 @@ namespace Reports {
 		public virtual void Send(string sReportName, DateTime oReportDate, string sFileExtension, byte[] oReportBody) {
 			const int nRetryCount = 5;
 
-			Debug("Sending report to Dropbox...");
+			Debug("Sending {0} report to Dropbox...", sReportName);
 
 			var client = new DropNetClient(m_sAppKey, m_sAppSecret, m_sUserKey, m_sUserSecret);
 
@@ -148,13 +148,13 @@ namespace Reports {
 				sFileExtension
 			);
 
-			Debug("Uploading {0}...", sFileName);
+			Debug("Uploading {0} to {1}...", sFileName, sDir);
 
 			client.UploadFile(sDir, sFileName, oReportBody);
 
-			Debug("Uploading complete.");
+			Debug("Uploading {0} to {1} complete.", sFileName, sDir);
 
-			Debug("Sending report to Dropbox complete.");
+			Debug("Sending {0} report to Dropbox complete.", sReportName);
 		} // Send
 
 		#endregion method Send

@@ -28,8 +28,8 @@ namespace EzReportToEMail {
 
 			var sender = new ReportDispatcher(DB, this);
 
-			Parallel.ForEach<Report>(reportList.Values, report => {
-				Debug(report.Title);
+			Parallel.ForEach(reportList.Values, report => {
+				Debug("Generating {0} report...", report.Title);
 
 				switch (report.Type) {
 				case ReportType.RPT_NEW_CLIENT:
@@ -82,10 +82,22 @@ namespace EzReportToEMail {
 					);
 					break;
 
+				case ReportType.RPT_LOAN_STATS:
+					sender.Dispatch(
+						"loan_stats",
+						dToday,
+						null,
+						new LoanStats(DB, this).Xls(),
+						ReportDispatcher.ToDropbox
+					);
+					break;
+
 				default:
 					HandleGenericReport(report, dToday, sender);
 					break;
 				} // switch
+
+				Debug("Generating {0} report complete.", report.Title);
 			}); // foreach
 		} // ExecuteReportHandler
 

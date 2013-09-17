@@ -85,6 +85,7 @@
     <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
     <Compile Include="Model\Database\CustomerStatuses.cs" />
+    <Compile Include="Model\Database\customer_enums.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Loans\LoanAgreementTemplate.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethod.cs" />

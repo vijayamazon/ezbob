@@ -9,8 +9,10 @@ SELECT
 	r.LoanTypeId AS LoanTypeID,
 	lt.Type AS LoanType,
 	r.IsLoanTypeSelectionAllowed,
-	r.DiscountPlanId AS DiscountPlanID,
-	dp.Name AS DiscountPlanName,
+	CASE dp.IsDefault
+		WHEN 1 THEN '0'
+		ELSE dp.Name
+	END AS DiscountPlanName,
 	c.Id AS CustomerID,
 	c.Fullname AS CustomerName,
 	CASE
@@ -26,10 +28,19 @@ SELECT
 			ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum)
 	END, 0) AS ApprovedSum,
 	r.InterestRate AS ApprovedRate,
+	ISNULL(r.ExpirianRating, 0) AS CreditScore,
+	ISNULL(r.AnualTurnover, 0) AS AnnualTurnover,
+	r.MedalType,
+	c.Gender,
+	c.DateOfBirth,
+	c.MartialStatus,
+	c.ResidentialStatus,
+	c.TypeOfBusiness,
+	c.ReferenceSource,
 	ISNULL(l.Id, 0) AS LoanID,
-	ISNULL(mt.Amount, l.LoanAmount) AS LoanAmount,
-	l.Date AS LoanIssueDate,
-	l.AgreementModel
+	ISNULL(ISNULL(mt.Amount, l.LoanAmount), 0) AS LoanAmount,
+	ISNULL(l.Date, 'Jul 1 1976') AS LoanIssueDate,
+	ISNULL(l.AgreementModel, '{ "Term": 0 }') AS AgreementModel
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
@@ -41,9 +52,14 @@ FROM
 		AND mt.Type = 'PacnetTransaction'
 		AND mt.Type = 'Done'
 WHERE
-	(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved')
-	OR
-	(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
+	(
+		(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved')
+		OR
+		(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
+	)
+	AND
+	r.CreationDate >= 'Sep 4 2012'
+	
 ORDER BY
 	r.IdCustomer,
 	CASE 

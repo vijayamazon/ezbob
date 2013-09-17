@@ -1,0 +1,138 @@
+# source: http://www.summergardenbuildings.co.uk/postcode-areas.html
+
+EAST ANGLIA
+AL = St. Albans, Hertfordshire 
+CB = Cambridge, Cambridgeshire
+CM = Chelmsford, Essex
+CO = Colchester, Essex
+EN = Enfield, Middlesex
+IG = Ilford and Barking, Essex
+IP = Ipswich, Suffolk
+LU = Luton, Bedfordshire
+MK = Milton Keynes, Buckinghamshire
+NR = Norwich, Norfolk
+PE = Peterborough, Cambridgeshire
+RM = Romford, Essex
+SG = Stevenage, Hertfordshire
+SS = Southend-on-Sea, Essex
+WD = Watford, Hertfordshire
+THE MIDLANDS
+B = Birmingham, West Midlands
+CV = Coventry, West Midlands
+DE = Derby, Derbyshire
+DY = Dudley, West Midlands
+LE = Leicester, Leicestershire
+NG = Nottingham, Nottinghamshire
+NN = Northampton, Northamptonshire
+ST = Stoke-on-Trent, Staffordshire
+WS = Walsall, West Midlands
+WV = Wolverhampton, West Midlands
+NORTH EAST ENGLAND
+BD = Bradford, West Yorkshire
+DH = Durham, County Durham
+DL = Darlington, North Yorkshire
+DN = Doncaster, South Yorkshire
+HD = Huddersfield, West Yorkshire
+HG = Harrogate, North Yorkshire
+HU = Hull, North Humberside
+HX = Halifax, West Yorkshire
+LN = Lincoln, Lincolnshire
+LS = Leeds, West Yorkshire
+NE = Newcastle, Tyne and Wear
+S = Sheffield, South Yorkshire
+SR = Sunderland, Tyne and Wear
+TS = Teesside, Cleveland
+WF = Wakefield, West Yorkshire
+YO = York, North Yorkshire
+NORTH WEST ENGLAND
+BB = Blackburn, Lancashire
+BL = Blackpool, Lancashire
+CA = Carlisle, Cumbria
+CW = Crewe, Cheshire
+FY = Blackpool, Lancashire
+L = Liverpool, Merseyside
+LA = Lancaster, Lancashire
+M = Manchester, Lancashire
+OL = Oldham, Lancashire
+PR = Preston, Lancashire
+SK = Stockport, Cheshire
+SY = Shrewsbury, Shropshire
+TF = Telford, Shropshire
+WA = Warrington, Cheshire
+WN = Wigan, Lancashire
+CH = Chester, Cheshire
+LONDON
+E = East London 
+EC = City of London
+N = North London
+NW = North West London
+SE = South East London
+SW = South West London
+W = West End, London
+WC = West Central London
+SOUTH CENTRAL ENGLAND
+GU = Guildford, Surrey
+HA = Harrow, Middlesex
+HP = Hemel Hempstead, Hertfordshire
+OX = Oxford, Oxfordshire
+PO = Portsmouth, Hampshire
+RG = Reading, Berkshire
+SL = Slough, Buckinghamshire
+SN = Swindon, Wiltshire
+SO = Southampton, Hampshire
+SP = Salisbury, Wiltshire
+UB = Southall and Uxbridge, Middlesex
+SOUTH EAST ENGLAND
+BN = Brighton, East Sussex
+BR = Bromley, Kent
+CR = Croydon, Surrey
+CT = Canterbury, Kent
+DA = Dartford, Kent
+KT = Kingston-upon-Thames, Surrey
+ME = Medway, Kent
+RH = Redhill, Surrey
+SM = Sutton, Surrey
+TN = Tonbridge, Kent
+TW = Twickenham, Middlesex
+BA = Bath, Avon
+SOUTH WEST ENGLAND
+BH = Bournemouth, Dorset
+BS = Bristol, Avon
+DT = Dorchester, Dorset
+EX = Exeter, Devon
+GL = Gloucester, Gloucestershire
+HR = Hereford, Herefordshire
+PL = Plymouth, Devon
+TA = Taunton, Somerset
+TQ = Torquay, Devon
+TR = Truro, Cornwall
+WR = Worcester, Worcestershire
+WALES
+CF = Cardiff, South Glamorgan
+LD = Llandrindod Wells, Powys
+LL = Llandudno, Clwyd
+NP = Newport, Gwent
+SA = Swansea, West Glamorgan
+NORTHERN IRELAND
+BT = Belfast
+SCOTLAND
+AB = Aberdeen
+DD = Dundee, Angus
+DG = Dumfries and Galloway
+EH = Edinburgh, Midlothian
+FK = Falkirk, Stirlingshire
+G = Glasgow, Lanarkshire
+HS = Isle Of Lewis, Outer Hebrides
+IV = Inverness
+KA = Kilmarnock and Ayr, Ayrshire
+KW = Kirkwall, Caithness
+KY = Kirkcaldy, Fife
+ML = Motherwell, Lanarkshire
+PA = Paisley, Renfrewshire
+PH = Perth, Perthshire
+TD = Galashiels, Selkirkshire
+ZE = Shetland Islands
+ISLANDS
+GY = Guernsey, Channel Islands
+JE = Jersey, Channel Islands
+IM = Isle Of Man

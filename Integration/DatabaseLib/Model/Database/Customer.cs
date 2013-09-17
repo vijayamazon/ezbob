@@ -90,19 +90,9 @@ namespace EZBob.DatabaseLib.Model.Database {
         IdentityOrDetailsTheft =5
     }
 
-    public enum Gender
-    {
-        M, F
-    }
-
     public class GenderType : EnumStringType<Gender>
     {
         
-    }
-
-    public enum MartialStatus
-    {
-        Married, Single, Divorced, Widower, Other
     }
 
     public class MartialStatusType : EnumStringType<MartialStatus>
@@ -110,27 +100,9 @@ namespace EZBob.DatabaseLib.Model.Database {
         
     }
 
-    public enum TypeOfBusiness
-    {
-        Entrepreneur = 0,
-        LLP = 1, 
-        PShip3P = 2, 
-        PShip = 3, 
-        SoleTrader =4, 
-        Limited = 5
-    }
-
     public class TypeOfBusinessType : EnumStringType<TypeOfBusiness>
     {
         
-    }
-
-    public enum Medal
-    {
-        Silver,
-        Gold,
-        Platinum,
-        Diamond
     }
 
     public class MedalType : CaseInsensitiveEnumStringType<Medal>

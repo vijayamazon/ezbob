@@ -21,6 +21,7 @@ namespace Reports {
 		RPT_EARNED_INTEREST,
 		RPT_LOAN_INTEGRITY,
 		RPT_LOANS_GIVEN,
+		RPT_LOAN_STATS,
 	} // enum ReportType
 
 	#endregion enum ReportType

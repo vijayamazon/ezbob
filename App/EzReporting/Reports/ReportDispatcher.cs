@@ -11,6 +11,8 @@ namespace Reports {
 	public class ReportDispatcher : SafeLog {
 		#region public
 
+		public const string ToDropbox = "dropbox";
+
 		#region constructor
 
 		public ReportDispatcher(AConnection oDB, ASafeLog oLog = null) : base(oLog) {
@@ -25,7 +27,7 @@ namespace Reports {
 		#region method Dispatch
 
 		public void Dispatch(string subject, DateTime oReportDate, ATag mailBody, ExcelPackage wb, string toAddressStr, string period = "Daily") {
-			if ((toAddressStr ?? "").Trim().ToLower() == "dropbox") {
+			if ((toAddressStr ?? "").Trim().ToLower() == ReportDispatcher.ToDropbox) {
 				if (wb != null) {
 					var ostream = new MemoryStream();
 					wb.SaveAs(ostream);

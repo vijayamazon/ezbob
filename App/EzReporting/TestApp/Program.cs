@@ -12,9 +12,16 @@ namespace TestApp {
 			var oDB = new SqlConnection(log);
 
 			// TestLoansIssuedReport(oDB, log);
-			//TestEarnedInterest(oDB, log);
-			TestLoanIntegrity(oDB, log);
+			// TestEarnedInterest(oDB, log);
+			// TestLoanIntegrity(oDB, log);
+
+			TestLoanStats(oDB, log);
 		} // Main
+
+		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
+			var sender = new ReportDispatcher(oDB, log);
+			sender.Dispatch("loan_stats", DateTime.Today, null, new LoanStats(oDB, log).Xls(), ReportDispatcher.ToDropbox);
+		} // TestLoanStats
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
 			var brh = new BaseReportHandler(oDB, log);
@@ -38,17 +45,12 @@ namespace TestApp {
 			ea.Run();
 		} // TestEarnedInterest
 
-		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log)
-		{
-			var ea = new LoanIntegrity(
-				oDB,
-				log
-			)
-			{
+		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log) {
+			var ea = new LoanIntegrity(oDB, log) {
 				VerboseLogging = true
 			};
 
 			ea.Run();
-		}
+		} // TestLoanIntegrity
 	} // class Program
 } // namespace
