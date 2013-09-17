@@ -101,7 +101,7 @@
 				min = relevantValueForMonth;
 			}
 
-			log.InfoFormat("Calculated total sum of orders for loan offer. Year:{0} 3M:{1}({2} * 4) 1M:{3}({4} * 12) Calculated min:{5} Chosen period:{6}", relevantValueForMonth, relevantValueFor3Months, month3, relevantValueForMonth, month, min, periodUsed);
+			log.InfoFormat("Calculated total sum of orders for loan offer. Year:{0} 3M:{1}({2} * 4) 1M:{3}({4} * 12) Calculated min:{5} Chosen period:{6}", relevantValueForYear, relevantValueFor3Months, month3, relevantValueForMonth, month, min, periodUsed);
 
 			return (double)min;
 		}
