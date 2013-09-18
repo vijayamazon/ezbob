@@ -119,7 +119,8 @@ namespace FraudChecker
                 from mp in _session.Query<MP_CustomerMarketPlace>().Fetch(mp => mp.PersonalInfo)
                 where mp.Customer.IsTest == false
                 where mp.Customer != customer
-                where mp.EbayUserData.All(e => e != null) || mp.PersonalInfo != null
+                //Get phone's from ebay and paypal
+                where mp.EbayUserData.All(e => e != null) || (mp.PersonalInfo != null && mp.PersonalInfo.Phone != null && mp.PersonalInfo.Phone != "0")
                 where phonesArray.Contains(mp.PersonalInfo.Phone) ||
                       mp.EbayUserData.Any(
                           x =>
