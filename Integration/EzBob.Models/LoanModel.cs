@@ -49,6 +49,8 @@ namespace EzBob.Models
 
         public decimal? InterestDue { get; set; }
 
+        public List<string> InterestFreeze { get; set; }
+
         public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null)
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
@@ -84,7 +86,8 @@ namespace EzBob.Models
                     LastReportedCaisStatusDate = loan.LastReportedCaisStatusDate,
                     LoanType = loan.LoanType.Name,
                     Modified = loan.Modified || (loan.CashRequest != null && !string.IsNullOrEmpty(loan.CashRequest.LoanTemplate)),
-                    InterestDue = loan.InterestDue
+                    InterestDue = loan.InterestDue,
+                    InterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList()
                 };
 
             if (loan.CashRequest!= null)

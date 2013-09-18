@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+// using System.Globalization;
 using System.Linq;
 using EZBob.DatabaseLib.Model;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.Areas.Customer.Models;
 using StructureMap;
+// using log4net;
 
 namespace PaymentServices.Calculators
 {
     public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
     {
+		// private static readonly ILog _log = LogManager.GetLogger(typeof(LoanRepaymentScheduleCalculator));
         private readonly Loan _loan;
         private DateTime _term;
         private readonly IList<LoanScheduleItem> _schedule;
@@ -355,13 +358,72 @@ namespace PaymentServices.Calculators
             return rate;
         }
 
-        private decimal GetInterestRateOneMonth(DateTime start, DateTime end)
-        {
-            var span = (end.Date - start.Date);
-            var days = (decimal)Math.Floor(span.TotalDays);
+		private decimal GetInterestRateOneMonth(DateTime start, DateTime end) {
+			TimeSpan span = (end.Date - start.Date);
+			decimal days = (decimal)Math.Floor(span.TotalDays);
 
-            return days * InterestRate / _daysInMonth;
-        }
+			decimal nTotalInterest = 0;
+
+			if (!_loan.HasInterestFreeze) {
+				nTotalInterest = days * InterestRate / _daysInMonth;
+
+				/*
+				_log.DebugFormat(
+					"Loan {0}: total interest {5} between {1} and {2} for {3} earning day{4}.",
+					_loan.Id,
+					start.ToString("MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+					end.ToString("MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+					days,
+					(days == 1) ? "" : "s",
+					nTotalInterest
+				);
+				*/
+
+				return nTotalInterest;
+			} // if
+
+			decimal nCurrentInterestRate = InterestRate;
+
+			decimal nStdOneDayInterest = nCurrentInterestRate / _daysInMonth;
+
+			for (DateTime oCurrent = start.Date; oCurrent < end.Date; oCurrent = oCurrent.AddDays(1)) {
+				bool bContains = false;
+
+				foreach (LoanInterestFreeze lif in _loan.ActiveInterestFreeze) {
+					if (lif.Contains(oCurrent)) {
+						nTotalInterest += lif.InterestRate / _daysInMonth;
+
+						bContains = true;
+
+						/*
+						_log.DebugFormat(
+							"Loan {0}: one day frozen interest {1} for {2}",
+							_loan.Id,
+							lif.InterestRate,
+							oCurrent.ToString("MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+						);
+						*/
+
+						break;
+					} // if
+				} // for each freeze period
+
+				if (!bContains) {
+					nTotalInterest += nStdOneDayInterest;
+
+					/*
+					_log.DebugFormat(
+						"Loan {0}: one day standard interest {1} for {2}",
+						_loan.Id,
+						nCurrentInterestRate,
+						oCurrent.ToString("MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+					);
+					*/
+				} // if
+			} // for each day in the month
+
+			return nTotalInterest;
+		} // GetInterestRateOneMonth
 
         private static int DaysInMonth(DateTime date)
         {

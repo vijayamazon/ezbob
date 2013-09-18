@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
@@ -65,6 +67,52 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             var cr = _loans.Get(id).CashRequest;
             return this.JsonNet(RecalculateModel(model, cr, DateTime.UtcNow));
         }
+
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate) {
+			Loan oLoan = _loans.Get(id);
+
+			oLoan.InterestFreeze.Add(new LoanInterestFreeze {
+				Loan = oLoan,
+				StartDate = (startdate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(startdate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+				EndDate = (enddate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(enddate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+				InterestRate = rate,
+				ActivationDate = DateTime.UtcNow,
+				DeactivationDate = null
+			});
+
+			_loans.SaveOrUpdate(oLoan);
+
+			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow);
+			calc.GetState();
+
+			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+
+			return this.JsonNet(model);
+		} // AddFreezeInterval
+
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult RemoveFreezeInterval(int id, int intervalid) {
+			Loan oLoan = _loans.Get(id);
+
+			LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
+
+			if (lif != null)
+				lif.DeactivationDate = DateTime.UtcNow;
+
+			_loans.SaveOrUpdate(oLoan);
+
+			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow);
+			calc.GetState();
+
+			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+
+			return this.JsonNet(model);
+		} // RemoveFreezeInterval
 
         [Ajax]
         [HttpGet]

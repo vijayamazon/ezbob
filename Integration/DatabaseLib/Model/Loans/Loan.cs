@@ -122,6 +122,20 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 			set { _scheduleTransactions = value; }
 		} // ScheduleTransactions
 
+		private IList<LoanInterestFreeze> _interestFreeze = new List<LoanInterestFreeze>();
+		public virtual IList<LoanInterestFreeze> InterestFreeze {
+			get { return _interestFreeze; }
+			set { _interestFreeze = value; }
+		} // InterestFreeze
+
+		public virtual IEnumerable<LoanInterestFreeze> ActiveInterestFreeze {
+			get { return InterestFreeze.Where(lif => !lif.DeactivationDate.HasValue); }
+		} // ActiveInterestFreeze
+
+		public virtual bool HasInterestFreeze {
+			get { return ActiveInterestFreeze.Any(); }
+		} // HasInterestFreeze
+
         /// <summary>
         /// Loan end date of payments, close loan date
         /// Дата окончания выплат по кредиту, т.е. его закрытия.
@@ -644,6 +658,11 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                 .Cascade.AllDeleteOrphan()
                 .Inverse();
             HasMany(x => x.ScheduleTransactions)
+                .AsBag()
+                .KeyColumn("LoanId")
+                .Cascade.AllDeleteOrphan()
+                .Inverse();
+            HasMany(x => x.InterestFreeze)
                 .AsBag()
                 .KeyColumn("LoanId")
                 .Cascade.AllDeleteOrphan()

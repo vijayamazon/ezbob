@@ -510,3 +510,9 @@ table.internal-table td {
 .fraud-form-add-values .error,.fraud-form .error {
     border: 1px solid red;
 }
+
+.new-freeze-interval-error {
+	display: inline-block;
+	color: red;
+	margin-left: 3em;
+}

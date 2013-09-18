@@ -37,6 +37,8 @@ namespace EzBob.Models
 
             model.Items = model.Items.OrderBy(i => i.Date).ToList();
 
+	        model.InterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList();
+
             return model;
         }
 

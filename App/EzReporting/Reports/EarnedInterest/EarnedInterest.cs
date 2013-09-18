@@ -67,6 +67,8 @@ namespace Reports {
 				break;
 			} // switch
 
+			FillFreezeIntervals();
+
 			return ProcessLoans();
 		} // Run
  
@@ -81,6 +83,22 @@ namespace Reports {
 		#endregion public
 
 		#region private
+
+		#region method FillFreezeIntervals
+
+		private void FillFreezeIntervals() {
+			// TODO
+			/*
+			DataTable tbl = m_oDB.ExecuteReader(
+				"RptEarnedInterest_ForPeriod", 
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@DateStart", m_oDateStart),
+				new QueryParameter("@DateEnd", m_oDateEnd)
+			);
+			*/
+		} // FillFreezeIntervals
+
+		#endregion method FillFreezeIntervals
 
 		#region method ProcessLoans
 

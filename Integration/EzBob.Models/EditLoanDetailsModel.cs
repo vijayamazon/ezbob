@@ -43,6 +43,8 @@ namespace EzBob.Models
 
         public bool HasErrors { get { return Errors.Any(); } }
 
+		public List<string> InterestFreeze { get; set; } 
+
         public void Validate()
         {
             Errors.Clear();

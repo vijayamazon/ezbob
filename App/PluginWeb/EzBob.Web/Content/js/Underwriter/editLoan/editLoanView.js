@@ -19,8 +19,10 @@
 
     EditLoanView.prototype.scheduleTemplate = _.template($("#loan_editor_schedule_template").html());
 
+    EditLoanView.prototype.freezeIntervalsTemplate = _.template($("#loan_editor_freeze_intervals_template").html());
+
     EditLoanView.prototype.initialize = function() {
-      this.bindTo(this.model, "change sync", this.renderSchedule, this);
+      this.bindTo(this.model, "change sync", this.renderRegions, this);
       return this.editItemIndex = -1;
     };
 
@@ -34,6 +36,7 @@
 
     EditLoanView.prototype.ui = {
       scheduleEl: ".editloan-schedule-region",
+      freezeEl: ".editloan-freeze-intervals-region",
       ok: ".save",
       buttons: ".buttons"
     };
@@ -49,7 +52,9 @@
       "click .add-installment": "addInstallment",
       "click .add-fee": "addFee",
       "click .save": "onOk",
-      "click .cancel": "onCancel"
+      "click .cancel": "onCancel",
+      "click .add-freeze-interval": "onAddFreezeInterval",
+      "click .remove-freeze-interval": "onRemoveFreezeInterval"
     };
 
     EditLoanView.prototype.addInstallment = function() {
@@ -185,12 +190,79 @@
       this.editRegion = new Backbone.Marionette.Region({
         el: this.$(".editloan-item-editor-region")
       });
-      return this.renderSchedule();
+      return this.renderRegions();
+    };
+
+    EditLoanView.prototype.renderRegions = function() {
+      this.renderSchedule();
+      return this.renderFreeze();
     };
 
     EditLoanView.prototype.renderSchedule = function() {
       this.ui.scheduleEl.html(this.scheduleTemplate(this.serializeData()));
       return this.ui.ok.toggleClass("disabled", this.model.get("HasErrors"));
+    };
+
+    EditLoanView.prototype.renderFreeze = function() {
+      return this.ui.freezeEl.html(this.freezeIntervalsTemplate(this.serializeData()));
+    };
+
+    EditLoanView.prototype.onAddFreezeInterval = function() {
+      var nRate, sEnd, sStart;
+
+      sStart = this.$el.find(".new-freeze-interval-start").val();
+      sEnd = this.$el.find(".new-freeze-interval-end").val();
+      nRate = this.$el.find(".new-freeze-interval-rate").val() / 100.0;
+      this.$el.find('.new-freeze-interval-error').empty();
+      if (this.validateFreezeIntervals(sStart, sEnd)) {
+        return this.model.addFreezeInterval(sStart, sEnd, nRate);
+      } else {
+        return this.$el.find('.new-freeze-interval-error').text('New interval conflicts with one of existing intervals');
+      }
+    };
+
+    EditLoanView.prototype.onRemoveFreezeInterval = function(evt) {
+      return this.model.removeFreezeInterval(evt.currentTarget.getAttribute("data-id"));
+    };
+
+    EditLoanView.prototype.validateFreezeIntervals = function(sStartDate, sEndDate) {
+      var bConflict, oEnd, oStart, tmp,
+        _this = this;
+
+      oStart = moment.utc(sStartDate);
+      oEnd = moment.utc(sEndDate);
+      if (oStart !== null && oEnd !== null && oStart > oEnd) {
+        this.$el.find(".new-freeze-interval-start").val(sEndDate);
+        this.$el.find(".new-freeze-interval-end").val(sStartDate);
+        tmp = oEnd;
+        oEnd = oStart;
+        oStart = tmp;
+      }
+      bConflict = false;
+      _.each(this.model.get('InterestFreeze'), function(item, idx) {
+        var ary, bFirst, bSecond, oLeft, oRight;
+
+        if (bConflict) {
+          return;
+        }
+        ary = item.split('|');
+        if (ary[4] !== '') {
+          return;
+        }
+        oLeft = moment.utc(ary[0]);
+        oRight = moment.utc(ary[1]);
+        bFirst = _this.cmpDates(oStart, oRight);
+        bSecond = _this.cmpDates(oLeft, oEnd);
+        return bConflict = bFirst && bSecond;
+      });
+      return !bConflict;
+    };
+
+    EditLoanView.prototype.cmpDates = function(a, b) {
+      if (a === null || b === null) {
+        return true;
+      }
+      return a <= b;
     };
 
     EditLoanView.prototype.onClose = function() {
@@ -202,7 +274,7 @@
         width: 1000,
         modal: true,
         title: 'Edit Loan Details',
-        resizable: false
+        resizable: true
       };
     };
 

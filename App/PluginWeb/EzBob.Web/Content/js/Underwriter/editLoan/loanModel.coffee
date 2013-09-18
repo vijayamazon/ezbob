@@ -126,6 +126,12 @@ class EzBob.LoanModel extends Backbone.Model
     recalculate: ->
         @save({}, {url: "#{window.gRootPath}Underwriter/LoanEditor/Recalculate/#{@get('Id')}"})
 
+    addFreezeInterval: (sStartDate, sEndDate, nRate) ->
+        @save({}, {url: "#{window.gRootPath}Underwriter/LoanEditor/AddFreezeInterval/#{@get('Id')}?startdate=#{sStartDate}&enddate=#{sEndDate}&rate=#{nRate}"})
+
+    removeFreezeInterval: (intervalId) ->
+        @save({}, {url: "#{window.gRootPath}Underwriter/LoanEditor/RemoveFreezeInterval/#{@get('Id')}?intervalid=#{intervalId}"})
+
     getInstallmentBefore: (date) ->
         date = moment.utc(date).toDate()
         installment = null
