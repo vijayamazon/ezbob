@@ -65,9 +65,22 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var model = new FullCustomerModel();
 
-            var customer = _customers.Get(id);
+            var customer = _customers.TryGet(id);
+
+            if (customer == null)
+            {
+                model.State = "NotFound";
+                return this.JsonNet(model);
+            }
+
+            if (customer.WizardStep != WizardStepType.AllStep)
+            {
+                model.State = "NotSuccesfullyRegistred";
+                return this.JsonNet(model);
+            }
+
             var cr = customer.LastCashRequest;
-            
+
             var pi = new PersonalInfoModel();
             pi.InitFromCustomer(customer, _session);
             model.PersonalInfoModel = pi;
@@ -88,25 +101,34 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
             model.MedalCalculations = new MedalCalculators(customer);
 
-            model.FraudDetectionLog = _fraudDetectionLog.GetLastDetections(id).Select(x => new FraudDetectionLogModel(x)).OrderByDescending(x => x.Id).ToList();
+            model.FraudDetectionLog =
+                _fraudDetectionLog.GetLastDetections(id)
+                    .Select(x => new FraudDetectionLogModel(x))
+                    .OrderByDescending(x => x.Id)
+                    .ToList();
 
             model.ApiCheckLogs = _apiCheckLogBuilder.Create(customer);
 
             model.Messages = _messagesModelBuilder.Create(customer);
 
-            model.CustomerRelations = _customerRelationsRepository.ByCustomer(id).Select(customerRelations => CustomerRelationsModel.Create(customerRelations)).ToList();
+            model.CustomerRelations =
+                _customerRelationsRepository.ByCustomer(id)
+                    .Select(customerRelations => CustomerRelationsModel.Create(customerRelations))
+                    .ToList();
 
-            model.AlertDocs = (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
+            model.AlertDocs =
+                (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
 
             model.Bugs = _bugs.GetAll()
                 .Where(x => x.Customer.Id == customer.Id)
                 .Select(x => BugModel.ToModel(x)).ToList();
+            
+            model.State = "Ok";
 
 
             return this.JsonNet(model);
-
         }
-        
+
 
         private class FullCustomerModel
         {
@@ -124,6 +146,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             public List<CustomerRelationsModel> CustomerRelations { get; set; }
             public AlertDoc[] AlertDocs { get; set; }
             public List<BugModel> Bugs { get; set; }
+            public string State { get; set; }
         }
 
     }

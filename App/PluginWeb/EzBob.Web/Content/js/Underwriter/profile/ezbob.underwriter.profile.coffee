@@ -211,27 +211,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @changeDecisionButtonsState()
 
     show: (id) ->
-        BlockUi "on"
-        xhr = $.get "#{window.gRootPath}Underwriter/Customers/CheckCustomer?customerId=#{id}"
-        xhr.done (res)=>
-            BlockUi "off"
-            if res.error
-                EzBob.ShowMessage res.error,"Something went wrong"
-                @router.navigate("", { trigger: true, replace: true });
-                return true
-            switch res.State
-                when "NotFound" 
-                    EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
-                    @router.navigate("", { trigger: true, replace: true });
-                    break;
-                when "NotSuccesfullyRegistred" 
-                    @trigger "customerNotFull", id
-                    break;
-                when "Ok"
-                    @_show(id)
-                    break;
-
-    _show: (id) ->
         @hide()
         BlockUi "on"
         scrollTop()
@@ -240,6 +219,16 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
         fullModel = new EzBob.Underwriter.CustomerFullModel(Id: id)
         fullModel.fetch().done =>
+
+            switch fullModel.get "State"
+                when "NotFound" 
+                    EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
+                    @router.navigate("", { trigger: true, replace: true });
+                    return
+                when "NotSuccesfullyRegistred" 
+                    @trigger "customerNotFull", id
+                    return
+
             @personalInfoModel.set {Id: id}, {silent: true}
             @personalInfoModel.set fullModel.get("PersonalInfoModel"), silent: true
             @personalInfoModel.changeDisabled(true)
