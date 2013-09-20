@@ -1,4 +1,7 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿using System.Web.Caching;
+using System.Web.UI;
+
+namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
 	using System.Web.Mvc;
@@ -81,6 +84,7 @@
         }
 
 		[Ajax]
+        [OutputCache(VaryByParam = "status", Duration = int.MaxValue)]
 		public JsonNetResult GetIsStatusEnabled(int status)
 		{
 			bool res = customerStatusesRepository.GetIsEnabled(status);
