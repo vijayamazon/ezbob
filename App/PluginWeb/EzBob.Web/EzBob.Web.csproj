@@ -419,6 +419,7 @@
     <Compile Include="Infrastructure\TransactionHelper.cs" />
     <Compile Include="Infrastructure\XFrameOptionsModule.cs" />
     <Compile Include="Models\AllowedEmail.cs" />
+    <Compile Include="Models\CompanyScoreModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\NewsItem.cs" />
     <Compile Include="Models\PaymentConfirmationModel.cs" />

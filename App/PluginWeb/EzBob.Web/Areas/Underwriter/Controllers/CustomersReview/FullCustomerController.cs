@@ -9,6 +9,7 @@ using EZBob.DatabaseLib.Repository;
 using EzBob.Models;
 using EzBob.Models.Marketplaces;
 using EzBob.Web.Areas.Underwriter.Models;
+using EzBob.Web.Models;
 using NHibernate;
 using Scorto.Web;
 
@@ -122,6 +123,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             model.Bugs = _bugs.GetAll()
                 .Where(x => x.Customer.Id == customer.Id)
                 .Select(x => BugModel.ToModel(x)).ToList();
+
+            var builder = new CompanyScoreModelBuilder();
+            model.CompanyScore = builder.Create(customer);
             
             model.State = "Ok";
 
@@ -147,6 +151,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             public AlertDoc[] AlertDocs { get; set; }
             public List<BugModel> Bugs { get; set; }
             public string State { get; set; }
+            public CompanyScoreModel CompanyScore { get; set; }
         }
 
     }

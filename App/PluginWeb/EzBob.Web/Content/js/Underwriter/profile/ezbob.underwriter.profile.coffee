@@ -297,15 +297,14 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @alertDocsView.create id
             @alertDocs.trigger "sync"
 
+            @companyScoreModel.customerId = id
+            @companyScoreModel.set fullModel.get("CompanyScore"), silent: true
+            @companyScoreModel.trigger "sync"
+
             BlockUi "Off"
 
 
         @crossCheckView.render customerId: id
-
-        @companyScoreModel.customerId = id
-        @companyScoreModel.fetch()
-
-        
 
         @controlButtons.model = new Backbone.Model(
             customerId: id

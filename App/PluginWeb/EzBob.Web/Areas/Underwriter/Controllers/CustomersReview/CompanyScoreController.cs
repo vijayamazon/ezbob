@@ -10,6 +10,7 @@ using EzBob.Configuration;
 using EzBob.Web.Infrastructure.csrf;
 using Ezbob.ExperianParser;
 using Ezbob.Logger;
+using EzBob.Web.Models;
 using Scorto.Web;
 using StructureMap;
 using log4net;
@@ -32,51 +33,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id) {
 			var customer = m_oCustomerRepository.Get(id);
-
-			IEnumerable<MP_ServiceLog> oServiceLogEntries =
-				m_oServiceLogRepository
-				.GetBuCustomer(customer)
-				.Where(x => x.ServiceType == "E-SeriesLimitedData")
-			;
-
-			if (!oServiceLogEntries.Any()) {
-				ms_oLog.InfoFormat("No data found for Company Score tab with customer id = {0}", id);
-				return this.JsonNet(new {result = "No data found."});
-			} // if
-
-			List<MP_ServiceLog> lst = oServiceLogEntries.ToList();
-
-			lst.Sort(new ServiceLogComparer());
-
-			var parser = new Ezbob.ExperianParser.Parser(
-				DBConfigurationValues.Instance.CompanyScoreParserConfiguration,
-				new SafeILog(ms_oLog)
-			);
-
-			var doc = new XmlDocument();
-
-			try {
-				doc.LoadXml(lst.Last().ResponseData);
-			}
-			catch (Exception e) {
-				ms_oLog.Error(string.Format("Failed to parse Experian response as XML for Company Score tab with customer id = {0}", id), e);
-				return this.JsonNet(new { result = "Failed to parse Experian response." });
-			} // try
-
-			try {
-				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				return this.JsonNet(new { result = "ok", dataset = oParsed });
-			}
-			catch (Exception e) {
-				ms_oLog.Error(string.Format("Failed to extract Company Score tab data from Experian response with customer id = {0}", id), e);
-				return this.JsonNet(new { result = "Failed to parse Experian response." });
-			} // try
+		    var builder = new CompanyScoreModelBuilder();
+		    return this.JsonNet(builder.Create(customer));
 		} // Index
-
-		private class ServiceLogComparer : IComparer<MP_ServiceLog> {
-			public int Compare(MP_ServiceLog x, MP_ServiceLog y) {
-				return x.InsertDate.CompareTo(y.InsertDate);
-			} // Compare
-		} // class ServiceLogComparer
 	} // CompanyScoreController
 } // namespace

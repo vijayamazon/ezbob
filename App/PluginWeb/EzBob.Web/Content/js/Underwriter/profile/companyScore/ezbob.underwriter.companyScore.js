@@ -10,7 +10,7 @@ EzBob.Underwriter.CompanyScoreModel = Backbone.Model.extend({
 EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 	initialize: function () {
 		this.template = _.template($('#company-score-template').html());
-		this.model.on('change', this.render, this);
+		this.model.on('change sync', this.render, this);
 	},
 	render: function () {
 		this.$el.html(this.template({ companyScoreData: this.model.toJSON() }));
