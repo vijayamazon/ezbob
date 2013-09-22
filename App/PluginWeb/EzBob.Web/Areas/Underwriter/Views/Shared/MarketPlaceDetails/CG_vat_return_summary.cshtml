@@ -74,7 +74,8 @@ if (m.CGData && m.CGData.VatReturn) {
 		%><table class="table table-bordered table-striped  blue-header centered">
 		<thead><tr>
 			<th>Business Details</th>
-			<th>&nbsp;</th><%
+			<th>&nbsp;</th>
+			<th>Last Tax Return</th><%
 			for (var i = nStartIdx; i < aryBusiness.length; i++) {
 				%><th><%= EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%= EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
 
@@ -87,7 +88,7 @@ if (m.CGData && m.CGData.VatReturn) {
 					salary: 0
 				});
 			} // for each relevant data item
-			%><th>Last Year</th>
+			%><th>Last Year</th><th>Bank Statement</th>
 		</tr></thead><%
 		if (m.CGData.RtiTaxMonths) {
 			for (var j = 0; j < m.CGData.RtiTaxMonths.length; j++) {
@@ -106,7 +107,7 @@ if (m.CGData && m.CGData.VatReturn) {
 		} // if
 		%><tbody>
 			<tr>
-				<td class="no-padding" rowspan=6>
+				<td class="no-padding" rowspan=10>
 					<table class="internal-table">
 						<% var aryDetails = sBusinessID.split('\n'); %>
 						<tr>
@@ -124,7 +125,7 @@ if (m.CGData && m.CGData.VatReturn) {
 						</tr>
 					</table>
 				</td>
-				<th>% of annual</th><%
+				<th>% of annual</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%
 						if ((i >= aryBusiness.length - 4) && (aryTotals[6])) {
@@ -136,30 +137,34 @@ if (m.CGData && m.CGData.VatReturn) {
 					%></td><%
 				} // for each relevant data item
 				%><td class=r><%= EzBob.formatPercents(1) %></td>
+				<td></td>
 			</tr>
 			<tr>
-				<th>Revenues</th><%
+				<th>Revenues</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount) %></td><%
 				} // for each relevant data item
 				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[6]) %></td>
+				<td></td>
 			</tr>
 			<tr>
-				<th>Opex</th><%
+				<th>Opex</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[7].amount) %></td><%
 				} // for each relevant data item
 				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
+				<td></td>
 			</tr>
 			<tr>
-				<th>Net Tax to Be Paid</th><%
+				<th>Total Value Added</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[5].amount) %></td><%
 				} // for each relevant data item
 				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[5]) %></td>
+				<td></td>
 			</tr>
 			<tr>
-				<th>Salaries</th><%
+				<th>Salaries</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%= EzBob.formatPoundsAsInt(arySalary[i].salary) %></td><%
 				} // for each relevant data item
@@ -170,13 +175,47 @@ if (m.CGData && m.CGData.VatReturn) {
 						nSalarySum += arySalary[i].salary;
 
 				%><%= EzBob.formatPoundsAsInt(nSalarySum) %></td>
+				<td></td>
 			</tr>
 			<tr>
-				<th>Tax</th><%
+				<th>Tax</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td>&nbsp;</td><%
 				} // for each relevant data item
 				%><td>&nbsp;</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>EBIDA</th><td></td><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>% of annual</th><td></td><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>Actual loans repayment</th><td></td><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>Free Cash Flow</th><td></td><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td>&nbsp;</td><%
+				} // for each relevant data item
+				%><td>&nbsp;</td>
+				<td></td>
 			</tr>
 		</tbody></table><%
 	} // for each business

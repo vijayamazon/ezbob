@@ -70,7 +70,7 @@ namespace Ezbob.ExperianParser {
 		#region method Apply
 
 		public string Apply(string sValue) {
-			string sResult = sValue;
+			string sResult = sValue ?? string.Empty;
 
 			foreach (TransformationType nType in m_oTypes) {
 				switch (nType) {
@@ -87,6 +87,9 @@ namespace Ezbob.ExperianParser {
 
 					break;
 				} // switch
+
+				if (sResult == null)
+					sResult = string.Empty;
 			} // for each type
 			return sResult;
 		} // Apply

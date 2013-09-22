@@ -482,5 +482,173 @@
 		"Fields": [
 			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit" }] }
 		]
+	},
+	{
+		"Name": "Limited Company Instalment CAIS Details",
+
+		"PathToParent": "./REQUEST/DL97",
+
+		"Fields": [
+			{
+				"SourcePath": "./ACCTSTATE",
+				"Targets": [
+					{ "Name": "Account State" },
+					{
+						"Name": "Account State",
+						"Position": 1,
+						"Prefix": " - ",
+						"Transformation": {
+							"Types": [ "map" ],
+							"Map": {
+								"A": "Active",
+								"D": "Defaulted",
+								"S": "Settled"
+							}
+						}
+					}
+				]
+			},
+			{
+				"SourcePath": "./COMPANYTYPE",
+				"Targets": [
+					{ "Name": "Company Type" },
+					{
+						"Name": "Company Type",
+						"Position": 1,
+						"Prefix": " - ",
+						"Transformation": {
+							"Types": [ "map" ],
+							"Map": {
+								"1": "Bank",
+								"2": "Finance House",
+								"3": "Retailer",
+								"4": "Mail Order",
+								"5": "Collection Agency",
+								"6": "TV Rental",
+								"7": "Insurance",
+								"8": "Building Society",
+								"9": "Credit Card"
+							}
+						}
+					}
+				]
+			},
+			{
+				"SourcePath": "./ACCTTYPE",
+				"Targets": [
+					{ "Name": "Account Type" },
+					{
+						"Name": "Account Type",
+						"Position": 1,
+						"Prefix": " - ",
+						"Transformation": {
+							"Types": [ "map" ],
+							"Map": {
+								"1":  "Hire Purchase",
+								"2":  "Loan",
+								"3":  "Mortgage",
+								"4":  "Budget Account",
+								"5":  "Credit Card",
+								"6":  "Charge Card",
+								"7":  "Rental",
+								"8":  "Mail Order Agency",
+								"9":  "Mail Order Direct",
+								"10": "Mail Order Cash",
+								"11": "Overdraft",
+								"15": "Current Account",
+								"16": "Secured Loan",
+								"17": "Credit Sale",
+								"18": "Conditional Sale",
+								"19": "Primary Lease",
+								"20": "Secondary Lease",
+								"21": "Dealer Buy-Back",
+								"22": "Balloon Rental"
+							}
+						}
+					}
+				]
+			},
+			{ "SourcePath": "./DEFAULTDATE-YYYY", "Targets": [{ "Name": "Default Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DEFAULTDATE-MM",   "Targets": [{ "Name": "Default Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DEFAULTDATE-DD",   "Targets": [{ "Name": "Default Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./SETTLEMTDATE-YYYY", "Targets": [{ "Name": "Settlement Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./SETTLEMTDATE-MM",   "Targets": [{ "Name": "Settlement Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./SETTLEMTDATE-DD",   "Targets": [{ "Name": "Settlement Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./DEFAULTBALANCE", "Targets": [{ "Name": "Default Balance" }] },
+			{ "SourcePath": "./CURRBALANCE", "Targets": [{ "Name": "Current Balance" }] },
+			{ "SourcePath": "./STATUS1TO2", "Targets": [{ "Name": "Status 1-2" }] },
+			{ "SourcePath": "./STATUS3TO9", "Targets": [{ "Name": "Status 3-9" }] },
+			{ "SourcePath": "./CAISLASTUPDATED-YYYY", "Targets": [{ "Name": "CAIS Last Updated Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./CAISLASTUPDATED-MM",   "Targets": [{ "Name": "CAIS Last Updated Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./CAISLASTUPDATED-DD",   "Targets": [{ "Name": "CAIS Last Updated Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./ACCTSTATUS12", "Targets": [{ "Name": "Account status (Last 12 Account Statuses" }] },
+			{ "SourcePath": "./AGREEMTNUM", "Targets": [{ "Name": "Agreement Number" }] },
+			{ "SourcePath": "./MONTHSDATA", "Targets": [{ "Name": "Months Data" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Financial Details IFRS & UK GAAP",
+
+		"PathToParent": "./REQUEST/DL99",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
+		"Fields": [
+			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "Total Current Assets" }] },
+			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "Net Assets" }] },
+			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "Total Shareholders Funds" }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "Accounts Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "Accounts Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./CURRENCY", "Targets": [{ "Name": "Currency" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Shareholders Details",
+
+		"PathToParent": "./REQUEST/DLB5",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
+		"Fields": [
+			{ "SourcePath": "./RECORDTYPE", "Targets": [{ "Name": "Record type" }] },
+			{ "SourcePath": "./ISSUINGCOMPANY", "Targets": [{ "Name": "Issue company" }] },
+			{ "SourcePath": "./CURPREVFLAG", "Targets": [{ "Name": "Current/previous indicator" }] },
+			{ "SourcePath": "./EFFECTIVEDATE-YYYY", "Targets": [{ "Name": "Effective Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./EFFECTIVEDATE-MM",   "Targets": [{ "Name": "Effective Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./EFFECTIVEDATE-DD",   "Targets": [{ "Name": "Effective Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./SHARECLASSNUM", "Targets": [{ "Name": "Share class number" }] },
+			{ "SourcePath": "./SHAREHOLDINGNUM", "Targets": [{ "Name": "Shareholding number" }] },
+			{ "SourcePath": "./SHAREHOLDERNUM", "Targets": [{ "Name": "Shareholder number" }] },
+			{ "SourcePath": "./SHAREHOLDERTYPE", "Targets": [{ "Name": "Shareholder type" }] },
+			{ "SourcePath": "./NAMEPREFIX", "Targets": [{ "Name": "Shareholder Name" }] },
+			{ "SourcePath": "./FIRSTNAME",  "Targets": [{ "Name": "Shareholder Name", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./MIDNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./SURNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 3, "Prefix": " " }] },
+			{ "SourcePath": "./NAMESUFFIX", "Targets": [{ "Name": "Shareholder Name", "Position": 4, "Prefix": " " }] },
+			{ "SourcePath": "./QUAL", "Targets": [{ "Name": "Shareholder qualifications" }] },
+			{ "SourcePath": "./TITLE", "Targets": [{ "Name": "Shareholder title" }] },
+			{ "SourcePath": "./COMPANYNAME", "Targets": [{ "Name": "Shareholder company name" }] },
+			{ "SourcePath": "./SHAREHOLDERKGEN", "Targets": [{ "Name": "Kgen name" }] },
+			{ "SourcePath": "./SHAREHOLDERREGNUM", "Targets": [{ "Name": "Shareholder registered number" }] },
+			{ "SourcePath": "./ADDRLINE1", "Targets": [{ "Name": "Shareholder address" }] },
+			{ "SourcePath": "./ADDRLINE2", "Targets": [{ "Name": "Shareholder address", "Position": 1, "Prefix": "\n" }] },
+			{ "SourcePath": "./ADDRLINE3", "Targets": [{ "Name": "Shareholder address", "Position": 2, "Prefix": "\n" }] },
+			{ "SourcePath": "./TOWN",      "Targets": [{ "Name": "Shareholder address", "Position": 3, "Prefix": "\n" }] },
+			{ "SourcePath": "./COUNTY",    "Targets": [{ "Name": "Shareholder address", "Position": 4, "Prefix": "\n" }] },
+			{ "SourcePath": "./POSTCODE",  "Targets": [{ "Name": "Shareholder address", "Position": 5, "Prefix": "\n" }] },
+			{ "SourcePath": "./COUNTRYOFORIGIN", "Targets": [{ "Name": "Shareholder country" }] },
+			{ "SourcePath": "./PUNAPOSTCODE", "Targets": [{ "Name": "Shareholder puna pcode " }] },
+			{ "SourcePath": "./RMC", "Targets": [{ "Name": "Shareholder RMC" }] },
+			{ "SourcePath": "./SUPPRESS", "Targets": [{ "Name": "Suppression flag" }] },
+			{ "SourcePath": "./NOCREF", "Targets": [{ "Name": "NOC ref number" }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-YYYY", "Targets": [{ "Name": "Last Updated", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-MM",   "Targets": [{ "Name": "Last Updated", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-DD",   "Targets": [{ "Name": "Last Updated", "Position": 1, "Prefix": " " }] }
+		]
 	}
 ]

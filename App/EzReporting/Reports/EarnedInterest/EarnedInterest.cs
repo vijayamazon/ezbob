@@ -88,14 +88,7 @@ namespace Reports {
 
 		private void FillFreezeIntervals() {
 			// TODO
-			/*
-			DataTable tbl = m_oDB.ExecuteReader(
-				"RptEarnedInterest_ForPeriod", 
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@DateStart", m_oDateStart),
-				new QueryParameter("@DateEnd", m_oDateEnd)
-			);
-			*/
+			// DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
 		} // FillFreezeIntervals
 
 		#endregion method FillFreezeIntervals
