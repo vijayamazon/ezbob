@@ -104,8 +104,10 @@
         model: this.messagesModel
       });
       this.Message.on("creditResultChanged", this.changedSystemDecision, this);
+      this.alertDocs = new EzBob.Underwriter.Docs();
       this.alertDocsView = new EzBob.Underwriter.AlertDocsView({
-        el: this.$el.find("#alert-docs")
+        el: this.$el.find("#alert-docs"),
+        model: this.alertDocs
       });
       this.ApicCheckLogs = new EzBob.Underwriter.ApiChecksLogs();
       this.ApiChecksLogView = new EzBob.Underwriter.ApiChecksLogView({
@@ -201,7 +203,7 @@
     };
 
     ProfileView.prototype.ApproveBtnClick = function(e) {
-      var approveLoanWithoutAMLDialog, dialog;
+      var approveLoanWithoutAMLDialog;
 
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
@@ -218,20 +220,40 @@
         EzBob.ShowMessage("Loan offer has expired. Set new validity date.", "Error");
         return false;
       }
-      dialog = new EzBob.Underwriter.ApproveDialog({
-        model: this.loanInfoModel
-      });
-      dialog.on("changedSystemDecision", this.changedSystemDecision, this);
       this.skipPopupForApprovalWithoutAML = this.loanInfoModel.get("SkipPopupForApprovalWithoutAML");
       if (this.loanInfoModel.get("AMLResult") !== 'Passed' && !this.skipPopupForApprovalWithoutAML) {
         approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
           model: this.loanInfoModel,
-          approveDialog: dialog,
+          parent: this,
           skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML
         });
         EzBob.App.modal.show(approveLoanWithoutAMLDialog);
         return false;
       }
+      return this.CreateApproveDialog();
+    };
+
+    ProfileView.prototype.CheckCustomerStatusAndCreateApproveDialog = function() {
+      var approveLoanForWarningStatusCustomer;
+
+      if (this.loanInfoModel.get("IsWarning")) {
+        approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
+          model: this.loanInfoModel,
+          parent: this
+        });
+        EzBob.App.modal.show(approveLoanForWarningStatusCustomer);
+        return false;
+      }
+      return this.CreateApproveDialog();
+    };
+
+    ProfileView.prototype.CreateApproveDialog = function() {
+      var dialog;
+
+      dialog = new EzBob.Underwriter.ApproveDialog({
+        model: this.loanInfoModel
+      });
+      dialog.on("changedSystemDecision", this.changedSystemDecision, this);
       dialog.render();
       return false;
     };
@@ -287,123 +309,146 @@
     };
 
     ProfileView.prototype.show = function(id) {
-      var xhr,
+      var fullModel, that,
         _this = this;
-
-      BlockUi("on");
-      xhr = $.get("" + window.gRootPath + "Underwriter/Customers/CheckCustomer?customerId=" + id);
-      return xhr.done(function(res) {
-        BlockUi("off");
-        if (res.error) {
-          EzBob.ShowMessage(res.error, "Something went wrong");
-          _this.router.navigate("", {
-            trigger: true,
-            replace: true
-          });
-          return true;
-        }
-        switch (res.State) {
-          case "NotFound":
-            EzBob.ShowMessage(res.error, "Customer id. #" + id + " was not found");
-            _this.router.navigate("", {
-              trigger: true,
-              replace: true
-            });
-            break;
-          case "NotSuccesfullyRegistred":
-            _this.trigger("customerNotFull", id);
-            break;
-          case "Ok":
-            _this._show(id);
-            break;
-        }
-      });
-    };
-
-    ProfileView.prototype._show = function(id) {
-      var that;
 
       this.hide();
       BlockUi("on");
       scrollTop();
       that = this;
       this.customerId = id;
-      this.personalInfoModel.set({
+      fullModel = new EzBob.Underwriter.CustomerFullModel({
         Id: id
-      }, {
-        silent: true
       });
-      this.personalInfoModel.fetch().done(function() {
-        return that.changeDecisionButtonsState(that.personalInfoModel.get("Editable"));
-      });
-      this.loanInfoModel.set({
-        Id: id
-      }, {
-        silent: true
-      });
-      this.loanInfoModel.fetch();
-      this.marketPlaces.customerId = id;
-      this.marketPlaces.fetch();
-      this.loanHistory.customerId = id;
-      this.loanHistoryView.idCustomer = id;
-      this.loanHistory.fetch();
-      this.experianInfoModel.set({
-        Id: id
-      }, {
-        silent: true
-      });
-      this.experianInfoModel.fetch();
-      this.summaryInfoModel.set({
-        Id: id
-      }, {
-        silent: true
-      });
-      this.summaryInfoModel.set({
-        success: true
-      }, {
-        silent: true
-      });
-      this.summaryInfoModel.fetch().complete(function() {
-        that.checkCustomerAvailability(that.summaryInfoModel);
-        BlockUi("Off");
-        EzBob.GlobalUpdateBugsIcon(id);
+      fullModel.fetch().done(function() {
+        switch (fullModel.get("State")) {
+          case "NotFound":
+            EzBob.ShowMessage(res.error, "Customer id. #" + id + " was not found");
+            _this.router.navigate("", {
+              trigger: true,
+              replace: true
+            });
+            return;
+          case "NotSuccesfullyRegistred":
+            _this.trigger("customerNotFull", id);
+            return;
+        }
+        _this.personalInfoModel.set({
+          Id: id
+        }, {
+          silent: true
+        });
+        _this.personalInfoModel.set(fullModel.get("PersonalInfoModel"), {
+          silent: true
+        });
+        _this.personalInfoModel.changeDisabled(true);
+        _this.changeDecisionButtonsState(_this.personalInfoModel.get("Editable"));
+        _this.personalInfoModel.trigger("sync");
+        _this.loanInfoModel.set({
+          Id: id
+        }, {
+          silent: true
+        });
+        _this.loanInfoModel.set(fullModel.get("ApplicationInfoModel"), {
+          silent: true
+        });
+        _this.loanInfoModel.trigger("sync");
+        _this.marketPlaces.customerId = id;
+        _this.marketPlaces.reset(fullModel.get("Marketplaces"), {
+          silent: true
+        });
+        _this.marketPlaces.trigger("sync");
+        _this.loanHistory.customerId = id;
+        _this.loanHistoryView.idCustomer = id;
+        _this.loanHistory.set(fullModel.get("LoansAndOffers"), {
+          silent: true
+        });
+        _this.loanHistory.trigger("sync");
+        _this.summaryInfoModel.set({
+          Id: id,
+          success: true
+        }, {
+          silent: true
+        });
+        _this.summaryInfoModel.set(fullModel.get("SummaryMdodel"), {
+          silent: true
+        });
+        _this.summaryInfoModel.trigger("sync");
+        _this.checkCustomerAvailability(_this.summaryInfoModel);
+        EzBob.UpdateBugsIcons(fullModel.get("Bugs"));
         if (that.$el.find(".vsplitbar").length === 0) {
-          return $("#spl").splitter({
+          $("#spl").splitter({
             minLeft: 280,
             sizeLeft: 300,
             minRight: 600
           });
         }
+        _this.experianInfoModel.set({
+          Id: id
+        }, {
+          silent: true
+        });
+        _this.experianInfoModel.set(fullModel.get("CreditBureauModel"), {
+          silent: true
+        });
+        _this.experianInfoModel.trigger("sync");
+        _this.paymentAccountsModel.customerId = id;
+        _this.paymentAccountsModel.set(fullModel.get("PaymentAccountModel"), {
+          silent: true
+        });
+        _this.paymentAccountsModel.trigger("sync");
+        _this.medalCalculationModel.set({
+          Id: id
+        }, {
+          silent: true
+        });
+        _this.medalCalculationModel.set(fullModel.get("MedalCalculations"), {
+          silent: true
+        });
+        _this.medalCalculationModel.trigger("sync");
+        _this.FraudDetectionLogs.customerId = id;
+        _this.FraudDetectionLogView.idCustomer = id;
+        _this.FraudDetectionLogs.reset(fullModel.get("FraudDetectionLog"), {
+          silent: true
+        });
+        _this.FraudDetectionLogs.trigger("sync");
+        _this.ApicCheckLogs.customerId = id;
+        _this.ApiChecksLogView.idCustomer = id;
+        _this.ApicCheckLogs.reset(fullModel.get("ApiCheckLogs"), {
+          silent: true
+        });
+        _this.ApicCheckLogs.trigger("sync");
+        _this.messagesModel.set({
+          Id: id
+        }, {
+          silent: true
+        });
+        _this.messagesModel.set({
+          attaches: fullModel.get("Messages"),
+          silent: true
+        });
+        _this.messagesModel.trigger("sync");
+        _this.CustomerRelationsData.customerId = id;
+        _this.CustomerRelationsView.idCustomer = id;
+        _this.CustomerRelationsData.reset(fullModel.get("CustomerRelations"), {
+          silent: true
+        });
+        _this.CustomerRelationsData.trigger("sync");
+        _this.alertDocs.reset(fullModel.get("AlertDocs"), {
+          silent: true
+        });
+        _this.alertDocsView.create(id);
+        _this.alertDocs.trigger("sync");
+        _this.companyScoreModel.customerId = id;
+        _this.companyScoreModel.set(fullModel.get("CompanyScore"), {
+          silent: true
+        });
+        _this.companyScoreModel.trigger("sync");
+        return BlockUi("Off");
       });
-      this.paymentAccountsModel.customerId = id;
-      this.paymentAccountsModel.fetch();
-      this.medalCalculationModel.set({
-        Id: id
-      }, {
-        silent: true
-      });
-      this.medalCalculationModel.fetch();
       this.crossCheckView.render({
         customerId: id
       });
-      this.messagesModel.set({
-        Id: id
-      }, {
-        silent: true
-      });
-      this.companyScoreModel.customerId = id;
-      this.companyScoreModel.fetch();
-      this.messagesModel.fetch();
-      this.alertDocsView.create(id);
-      this.ApicCheckLogs.customerId = id;
-      this.ApiChecksLogView.idCustomer = id;
-      this.ApicCheckLogs.fetch();
-      this.CustomerRelationsData.customerId = id;
-      this.CustomerRelationsView.idCustomer = id;
-      this.CustomerRelationsData.fetch();
-      this.FraudDetectionLogs.customerId = id;
-      this.FraudDetectionLogView.idCustomer = id;
-      this.FraudDetectionLogs.fetch();
       this.controlButtons.model = new Backbone.Model({
         customerId: id
       });

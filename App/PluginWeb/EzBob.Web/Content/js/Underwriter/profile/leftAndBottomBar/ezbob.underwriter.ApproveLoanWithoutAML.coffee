@@ -7,7 +7,7 @@ class EzBob.Underwriter.ApproveLoanWithoutAML extends EzBob.BoundItemView
     
     initialize: (options) ->
         @model = options.model
-        @approveDialog = options.approveDialog
+        @parent = options.parent
         @skipPopupForApprovalWithoutAML = options.skipPopupForApprovalWithoutAML
         super()
         
@@ -24,5 +24,5 @@ class EzBob.Underwriter.ApproveLoanWithoutAML extends EzBob.BoundItemView
         xhr.complete -> 
             BlockUi "off"
             that.close()
-            that.approveDialog.render()
+            that.parent.CheckCustomerStatusAndCreateApproveDialog()
             return false

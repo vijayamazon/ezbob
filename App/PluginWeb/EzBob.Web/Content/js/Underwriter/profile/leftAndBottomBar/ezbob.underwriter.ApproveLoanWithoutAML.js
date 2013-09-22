@@ -21,7 +21,7 @@
 
     ApproveLoanWithoutAML.prototype.initialize = function(options) {
       this.model = options.model;
-      this.approveDialog = options.approveDialog;
+      this.parent = options.parent;
       this.skipPopupForApprovalWithoutAML = options.skipPopupForApprovalWithoutAML;
       return ApproveLoanWithoutAML.__super__.initialize.call(this);
     };
@@ -45,7 +45,7 @@
       return xhr.complete(function() {
         BlockUi("off");
         that.close();
-        that.approveDialog.render();
+        that.parent.CheckCustomerStatusAndCreateApproveDialog();
         return false;
       });
     };

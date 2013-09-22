@@ -170,15 +170,27 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             EzBob.ShowMessage "Loan offer has expired. Set new validity date.", "Error"
             return false            
 
-        dialog = new EzBob.Underwriter.ApproveDialog(model: @loanInfoModel)
-        dialog.on "changedSystemDecision", @changedSystemDecision, this
+        
         
         @skipPopupForApprovalWithoutAML = @loanInfoModel.get("SkipPopupForApprovalWithoutAML")
         if @loanInfoModel.get("AMLResult") != 'Passed' && !@skipPopupForApprovalWithoutAML        
-            approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML(model: @loanInfoModel, approveDialog: dialog, skipPopupForApprovalWithoutAML: @skipPopupForApprovalWithoutAML)
+            approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML(model: @loanInfoModel, parent: this, skipPopupForApprovalWithoutAML: @skipPopupForApprovalWithoutAML)
             EzBob.App.modal.show(approveLoanWithoutAMLDialog);
-            return false
+            return false        
 
+        @CreateApproveDialog()
+
+    CheckCustomerStatusAndCreateApproveDialog: ->
+        if @loanInfoModel.get("IsWarning")        
+            approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer(model: @loanInfoModel, parent: this)
+            EzBob.App.modal.show(approveLoanForWarningStatusCustomer);
+            return false
+        
+        @CreateApproveDialog()
+
+    CreateApproveDialog: ->
+        dialog = new EzBob.Underwriter.ApproveDialog(model: @loanInfoModel)
+        dialog.on "changedSystemDecision", @changedSystemDecision, this
         dialog.render()
         false
 
