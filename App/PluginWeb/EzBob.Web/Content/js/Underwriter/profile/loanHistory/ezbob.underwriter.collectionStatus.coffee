@@ -12,8 +12,7 @@ class EzBob.CollectionStatusItemsView extends Backbone.Marionette.ItemView
     template: '#collection-status-items-template' 
     
     initialize: () ->
-        @statuses = new EzBob.Underwriter.CollectionStatuses()
-        @statuses.fetch({async:false})
+        @statuses = EzBob.Underwriter.StaticData.CollectionStatuses
 
     serializeData: ->
         statuses: @statuses.toJSON()        
@@ -23,8 +22,7 @@ class EzBob.Underwriter.CollectionStatusLayout extends Backbone.Marionette.Layou
     
     initialize: () ->
         @modelBinder = new Backbone.ModelBinder()
-        @statuses = new EzBob.Underwriter.CollectionStatuses()
-        @statuses.fetch({async:false})
+        @statuses = EzBob.Underwriter.StaticData.CollectionStatuses
 
     bindings:
         currentStatus:

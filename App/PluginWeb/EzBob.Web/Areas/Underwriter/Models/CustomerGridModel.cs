@@ -28,5 +28,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public IEzBobConfiguration Config { get; set; }
         public decimal MaxLoan { get; set; }
         public IEnumerable<MP_MarketplaceType> MpTypes { get; set; }
+        public List<CustomerStatuses> CollectionStatuses { get; set; }
     }
 }

@@ -60,6 +60,8 @@
         EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
         EzBob.Config.PacnetBalanceMaxManualChange = @Model.Config.PacnetBalanceMaxManualChange;
+        EzBob.Underwriter.StaticData = {};
+        EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject( @Model.CollectionStatuses)));
 
         $(function() {
 
@@ -73,7 +75,7 @@
                     ,
                     { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
                     </text>
-                    },
+                    } ,
                     { el: '#pending', url: '@Url.Action(@Model.Pending.Action, new {Area = "Underwriter"})', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
                     { el: '#approved', url: '@Url.Action(@Model.Approved.Action, new {Area = "Underwriter"})', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
                     { el: '#late', url: '@Url.Action(@Model.Late.Action, new {Area = "Underwriter"})', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
@@ -259,13 +261,13 @@
 
         });
 
-        @if (Model.Escalated != null)
-        {
-            <text>  var escalatedFlag = 1;  </text>
-        }
-        else
-        {
-            <text>  var escalatedFlag = 0;  </text>
-        }
+    @if (Model.Escalated != null)
+    {
+        <text>  var escalatedFlag = 1;  </text>
+    }
+    else
+    {
+        <text>  var escalatedFlag = 0;  </text>
+    }
     </script>
 }

@@ -125,8 +125,7 @@ class EzBob.Underwriter.PersonalInfoModel extends Backbone.Model
         @changeDisabled()
         @changeFraudCheckStatus()
         if (@StatusesArr == undefined)
-            @statuses = new EzBob.Underwriter.CollectionStatuses()
-            @statuses.fetch({async:false})
+            @statuses = EzBob.Underwriter.StaticData.CollectionStatuses
 
         @StatusesArr = {}
         for status in @statuses.models

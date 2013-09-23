@@ -49,8 +49,9 @@
 		private readonly Dictionary<int, string> statusIndex2Name;
 		private readonly int defaultIndex = -1;
 		private readonly int legalIndex = -1;
+	    private CustomerStatusesRepository _customerStatusesRepository;
 
-		public ViewResult Index()
+	    public ViewResult Index()
 		{
 			var grids = new LoansGrids
 			{
@@ -129,6 +130,7 @@
 			}
 
 			grids.MpTypes = _mpType.GetAll().ToList();
+		    grids.CollectionStatuses = _customerStatusesRepository.GetAll().ToList();
 			return View(grids);
 		}
 
@@ -166,11 +168,14 @@
 			_gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
 			_gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
 
+            _customerStatusesRepository = customerStatusesRepository;
+
 			if (statusIndex2Name == null)
 			{
 				statusIndex2Name = new Dictionary<int, string>();
 
-				foreach (CustomerStatuses status in customerStatusesRepository.GetAll().ToList())
+			    
+			    foreach (CustomerStatuses status in _customerStatusesRepository.GetAll().ToList())
 				{
 					statusIndex2Name.Add(status.Id, status.Name);
 					if (status.Name == "Default")
