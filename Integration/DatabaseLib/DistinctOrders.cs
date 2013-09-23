@@ -3,6 +3,7 @@
 	using DatabaseWrapper.Order;
 	using Model.Marketplaces.FreeAgent;
 	using Model.Marketplaces.Sage;
+	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 
 	#region class AOrderComparer
 
@@ -165,6 +166,23 @@
 			return a.trans_id.GetHashCode() ^ a.date.GetHashCode();
 		} // HashCode
 	} // class PayPointOrderComparer
-
+	
 	#endregion class PayPointOrderComparer
+
+	#region class YodleeOrderComparer
+
+	class YodleeOrderComparer : AOrderComparer<BankTransactionData>
+	{
+		public override bool AreEqual(BankTransactionData a, BankTransactionData b)
+		{
+			return (a.srcElementId == b.srcElementId);
+		} // AreEqual
+
+		public override int HashCode(BankTransactionData a)
+		{
+			return a.srcElementId.GetHashCode();
+		} // HashCode
+	} // class YodleeOrderComparer
+
+	#endregion class YodleeOrderComparer
 } // namespace EZBob.DatabaseLib

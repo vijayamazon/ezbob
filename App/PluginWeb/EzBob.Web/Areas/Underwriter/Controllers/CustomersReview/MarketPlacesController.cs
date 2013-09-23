@@ -118,21 +118,41 @@
 		public ActionResult TryRecheckYodlee(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
-
 			var yodleeMain = new YodleeMain();
-
 			var yodleeAccount = _yodleeAccountsRepository.Search(mp.Customer.Id);
+			
 			if (yodleeAccount == null)
 			{
-				YodleeCallback(-1);
 				return null;
 			}
 
-			var callback = Url.Action("YodleeCallback", "MarketPlaces", new { Area = "Underwriter" }, "https") + "/?umi=" + umi;
-			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
-			string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
+			string displayname;
+			long csId;
 
-			return Redirect(finalUrl);
+			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
+
+			if (!yodleeMain.IsMFA(itemId))
+			{
+				if (yodleeMain.RefreshNotMFAItem(itemId))
+				{
+					var customer = mp.Customer;
+					_customerMarketplaces.ClearUpdatingEnd(umi);
+					_appCreator.CustomerMarketPlaceAdded(customer, umi);
+					return null;
+				}
+			}
+			else
+			{
+				var callback = Url.Action("YodleeCallback", "MarketPlaces", new {Area = "Underwriter"}, "https") + "/?umi=" + umi;
+				var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
+				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username,
+				                                               Encryptor.Decrypt(yodleeAccount.Password));
+
+				return Redirect(finalUrl);
+			}
+
+			return null;
 		} // TryRecheckYodlee
 
 

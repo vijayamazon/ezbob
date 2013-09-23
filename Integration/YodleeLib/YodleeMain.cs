@@ -10,7 +10,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
-		private readonly ContentServiceTraversalService contentServieTravelService = new ContentServiceTraversalService();
+		private readonly ContentServiceTraversalService contentServiceTravelService = new ContentServiceTraversalService();
 		private readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
 		private static YodleeEnvConnectionConfig config;
 		private bool isLoggedIn;
@@ -19,7 +19,7 @@
 		public YodleeMain()
 		{
 			config = YodleeConfig._Config;
-			contentServieTravelService.Url = config.soapServer + "/" + contentServieTravelService.GetType().FullName;
+			contentServiceTravelService.Url = config.soapServer + "/" + contentServiceTravelService.GetType().FullName;
 			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
 
@@ -224,6 +224,21 @@
 			return itemSummary;
 		}
 
+		public bool RefreshNotMFAItem(long itemId, bool forceRefresh = false)
+		{
+			if (IsMFA(itemId))
+			{
+				return false;
+			}
+
+			var refreshItem = new RefreshNotMFAItem();
+			refreshItem.RefreshItem(UserContext, itemId, forceRefresh);
+
+			// Poll for the refresh status and display the item summary if refresh succeeds
+			return refreshItem.PollRefreshStatus(UserContext, itemId);
+		}
+
+
 		public void RemoveItem(long itemId)
 		{
 			try
@@ -240,6 +255,24 @@
 		public string GenerateRandomPassword()
 		{
 			return YodleePasswordGenerator.GenerateRandomPassword();
+		}
+
+		public bool IsMFA(long itemId)
+		{
+			var dataService = new DataServiceService { Url = config.soapServer + "/" + "DataService" };
+			ItemSummary itemSummary = dataService.getItemSummaryForItem(UserContext, itemId, true);
+			if (itemSummary == null)
+			{
+				throw new Exception("The item does not exist");
+			}
+
+			var mfaType = itemSummary.contentServiceInfo.mfaType;
+			if (mfaType != null && mfaType.HasValue) //mfaType.typeId > 0
+			{
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

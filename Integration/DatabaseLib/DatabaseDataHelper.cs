@@ -1268,7 +1268,7 @@ namespace EZBob.DatabaseLib
 							? item.accountOpenDate.date
 							: null,
 					accountCloseDate =
-						(item.accountOpenDate != null && item.accountCloseDate.dateSpecified)
+						(item.accountCloseDate != null && item.accountCloseDate.dateSpecified)
 							? item.accountCloseDate.date
 							: null,
 					maturityAmount =
@@ -1432,6 +1432,174 @@ namespace EZBob.DatabaseLib
 
 			customerMarketPlace.YodleeOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime utcNow, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
+			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
+
+			var orders = new YodleeOrderDictionary {Data = new Dictionary<BankData, List<BankTransactionData>>()};
+
+			var mpYodleeOrder = customerMarketPlace.YodleeOrders.LastOrDefault();
+			if (mpYodleeOrder != null)
+			{
+				var orderItems = mpYodleeOrder.OrderItems;
+				foreach (var item in orderItems)
+				{
+					var bankData = new BankData
+						{
+							isSeidFromDataSource = item.isSeidFromDataSource,
+							isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
+							isSeidMod = item.isSeidMod,
+							isSeidModSpecified = item.isSeidModSpecified,
+							acctTypeId = item.acctTypeId,
+							acctTypeIdSpecified = item.acctTypeIdSpecified,
+							acctType = item.acctType,
+							localizedAcctType = item.localizedAcctType,
+							srcElementId = item.srcElementId,
+							individualInformationId = item.individualInformationId,
+							individualInformationIdSpecified = item.individualInformationIdSpecified,
+							bankAccountId = item.bankAccountId,
+							bankAccountIdSpecified = item.bankAccountIdSpecified,
+							customName = item.customName,
+							customDescription = item.customDescription,
+							isDeleted = item.isDeleted,
+							isDeletedSpecified = item.isDeletedSpecified,
+							lastUpdated = item.lastUpdated,
+							lastUpdatedSpecified = item.lastUpdatedSpecified,
+							hasDetails = item.hasDetails,
+							hasDetailsSpecified = item.hasDetailsSpecified,
+							interestRate = item.interestRate,
+							interestRateSpecified = item.interestRateSpecified,
+							accountNumber = item.accountNumber,
+							link = item.link,
+							accountHolder = item.accountHolder,
+							tranListToDate = new YDate { date = item.tranListToDate },
+							tranListFromDate = new YDate { date = item.tranListFromDate },
+							availableBalance = new YMoney { amount = item.availableBalance, currencyCode = item.availableBalanceCurrency },
+							currentBalance = new YMoney { amount = item.currentBalance, currencyCode = item.currentBalanceCurrency },
+							interestEarnedYtd = new YMoney { amount = item.interestEarnedYtd, currencyCode = item.interestEarnedYtdCurrency },
+							prevYrInterest = new YMoney { amount = item.prevYrInterest, currencyCode = item.prevYrInterestCurrency },
+							overdraftProtection = new YMoney { amount = item.overdraftProtection, currencyCode = item.overdraftProtectionCurrency },
+							term = item.term,
+							accountName = item.accountName,
+							annualPercentYield = item.annualPercentYield,
+							annualPercentYieldSpecified = item.annualPercentYieldSpecified,
+							routingNumber = item.routingNumber,
+							maturityDate = new YDate { date = item.maturityDate },
+							asOfDate = new YDate { date = item.asOfDate },
+							accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
+							isPaperlessStmtOn = item.isPaperlessStmtOn,
+							isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
+							siteAccountStatusSpecified = item.siteAccountStatusSpecified,
+							created = item.created,
+							createdSpecified = item.createdSpecified,
+							nomineeName = item.nomineeName,
+							secondaryAccountHolderName = item.secondaryAccountHolderName,
+							accountOpenDate = new YDate { date = item.accountOpenDate },
+							accountCloseDate = new YDate { date = item.accountCloseDate },
+							maturityAmount = new YMoney { amount = item.maturityAmount, currencyCode = item.maturityAmountCurrency },
+							taxesWithheldYtd = new YMoney { amount = item.taxesWithheldYtd, currencyCode = item.taxesWithheldYtdCurrency },
+							taxesPaidYtd = new YMoney { amount = item.taxesPaidYtd, currencyCode = item.taxesPaidYtdCurrency },
+							budgetBalance = new YMoney { amount = item.budgetBalance, currencyCode = item.budgetBalanceCurrency },
+							straightBalance = new YMoney { amount = item.straightBalance, currencyCode = item.straightBalanceCurrency },
+							accountClassificationSpecified = item.accountClassificationSpecified,
+						};
+
+					var bankTransactionsDataList = customerMarketPlace.YodleeOrders.SelectMany(x => x.OrderItems)
+									   .Where(oi => oi.accountNumber == bankData.accountNumber)
+									   .SelectMany(b => b.OrderItemBankTransactions)
+									   .Select(bankTransaction => new BankTransactionData
+										   {
+											   isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
+											   isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
+											   isSeidMod = bankTransaction.isSeidMod,
+											   isSeidModSpecified = bankTransaction.isSeidModSpecified,
+											   srcElementId = bankTransaction.srcElementId,
+											   transactionTypeId = bankTransaction.transactionTypeId,
+											   transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
+											   transactionType = bankTransaction.transactionType,
+											   localizedTransactionType = bankTransaction.localizedTransactionType,
+											   transactionStatusId = bankTransaction.transactionStatusId,
+											   transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
+											   transactionStatus = bankTransaction.transactionStatus,
+											   localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
+											   transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
+											   transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
+											   transactionBaseType = bankTransaction.transactionBaseType,
+											   localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
+											   categoryId = bankTransaction.categoryId,
+											   categoryIdSpecified = bankTransaction.categoryIdSpecified,
+											   bankTransactionId = bankTransaction.bankTransactionId,
+											   bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
+											   bankAccountId = bankTransaction.bankAccountId,
+											   bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
+											   bankStatementId = bankTransaction.bankStatementId,
+											   bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
+											   isDeleted = bankTransaction.isDeleted,
+											   isDeletedSpecified = bankTransaction.isDeletedSpecified,
+											   lastUpdated = bankTransaction.lastUpdated,
+											   lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
+											   hasDetails = bankTransaction.hasDetails,
+											   hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
+											   transactionId = bankTransaction.transactionId,
+											   transactionCategoryId = bankTransaction.transactionCategory.CategoryId,
+											   siteCategoryType = bankTransaction.siteCategoryType,
+											   siteCategory = bankTransaction.siteCategory,
+											   classUpdationSource = bankTransaction.classUpdationSource,
+											   lastCategorised = bankTransaction.lastCategorised,
+											   transactionDate = new YDate { date = bankTransaction.transactionDate },
+											   isReimbursable = bankTransaction.isReimbursable,
+											   isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
+											   mcCode = bankTransaction.mcCode,
+											   prevLastCategorised = bankTransaction.prevLastCategorised,
+											   prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
+											   naicsCode = bankTransaction.naicsCode,
+											   runningBalance = new YMoney { amount = bankTransaction.runningBalance, currencyCode = bankTransaction.runningBalanceCurrency },
+											   userDescription = bankTransaction.userDescription,
+											   customCategoryId = bankTransaction.customCategoryId,
+											   customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
+											   memo = bankTransaction.memo,
+											   parentId = bankTransaction.parentId,
+											   parentIdSpecified = bankTransaction.parentIdSpecified,
+											   isOlbUserDesc = bankTransaction.isOlbUserDesc,
+											   isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
+											   categorisationSourceId = bankTransaction.categorisationSourceId,
+											   plainTextDescription = bankTransaction.plainTextDescription,
+											   splitType = bankTransaction.splitType,
+											   categoryLevelId = bankTransaction.categoryLevelId,
+											   categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
+											   calcRunningBalance = new YMoney { amount = bankTransaction.calcRunningBalance, currencyCode = bankTransaction.calcRunningBalanceCurrency },
+											   category = bankTransaction.category,
+											   link = bankTransaction.link,
+											   postDate = new YDate { date = bankTransaction.postDate },
+											   prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
+											   prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
+											   isBusinessExpense = bankTransaction.isBusinessExpense,
+											   isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
+											   descriptionViewPref = bankTransaction.descriptionViewPref,
+											   descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
+											   prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
+											   prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
+											   transactionAmount = new YMoney { amount = bankTransaction.transactionAmount, currencyCode = bankTransaction.transactionAmountCurrency },
+											   transactionPostingOrder = bankTransaction.transactionPostingOrder,
+											   transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
+											   checkNumber = bankTransaction.checkNumber,
+											   description = bankTransaction.description,
+											   isTaxDeductible = bankTransaction.isTaxDeductible,
+											   isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
+											   isMedicalExpense = bankTransaction.isMedicalExpense,
+											   isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
+											   categorizationKeyword = bankTransaction.categorizationKeyword,
+											   sourceTransactionType = bankTransaction.sourceTransactionType,
+										   })
+									   .Distinct(new YodleeOrderComparer()).ToList();
+
+					orders.Data.Add(bankData, bankTransactionsDataList);
+				}
+			}
+
+			return orders;
 		}
 
 		private Iesi.Collections.Generic.ISet<MP_AmazonOrderItemDetailCatgory> CreateLinkCollection(MP_AmazonOrderItemDetail orderItemDetail, ICollection<MP_EbayAmazonCategory> categories)

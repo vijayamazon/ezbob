@@ -28,26 +28,27 @@
         }
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, YodleeSecurityInfo securityInfo, ActionAccessType actionAccessType, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
-	        if (Helper.HasYodleeOrders(databaseCustomerMarketPlace))
-		        return; // TODO: remove once Yodlee refresh is supported.
 
             //retreive data from Yodlee api
             var ordersList = YodleeConnector.GetOrders(securityInfo.Name, Encryptor.Decrypt(securityInfo.Password), securityInfo.ItemId);
 
 	        var elapsedTimeInfo = new ElapsedTimeInfo();
 
-			var allOrders = new YodleeOrderDictionary { Data = ordersList };
+			var newOrders = new YodleeOrderDictionary { Data = ordersList };
 
             //save orders data
             ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 				ElapsedDataMemberType.StoreDataToDatabase,
 				() => Helper.StoreYodleeOrdersData(
 					databaseCustomerMarketPlace,
-					allOrders,
+					newOrders,
 					historyRecord)
 				);
 
-            // TODO: support Yodlee refresh
+			// retrieve orders
+			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+									ElapsedDataMemberType.RetrieveDataFromDatabase,
+									() => Helper.GetAllYodleeOrdersData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
             //calculate transactions aggregated data
             var transactionsAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
