@@ -58,14 +58,16 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             collectionStatusLayout.on 'saved', () =>
                 newStatus = collectionStatusModel.get ('currentStatus')
                 that = this
-                xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/GetIsStatusWarning", {status: newStatus, async:false}
-                xhr.done (result) =>            
+                xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/GetIsStatusWarning", {status: newStatus}
+                xhr.done (result) =>    
+                    BlockUi "on"        
                     isWarning = result
                     disabled =  waiting or !isStatusEnabled
                     that.model.set 'Disabled', newStatus
                     that.model.set 'IsWarning', isWarning
-                xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId, async: false}
-        
+                    xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
+                    xhr2.done () =>
+                        BlockUi "off"
 
     isTestEditButton: ->
         d = new EzBob.Dialogs.CheckBoxEdit(

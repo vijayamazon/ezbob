@@ -101,22 +101,24 @@
           newStatus = collectionStatusModel.get('currentStatus');
           that = _this;
           xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
-            status: newStatus,
-            async: false
+            status: newStatus
           });
-          xhr.done(function(result) {
-            var disabled, isWarning;
+          return xhr.done(function(result) {
+            var disabled, isWarning, xhr2;
 
+            BlockUi("on");
             isWarning = result;
             disabled = waiting || !isStatusEnabled;
             that.model.set('Disabled', newStatus);
-            return that.model.set('IsWarning', isWarning);
-          });
-          return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
-            newStatus: newStatus,
-            prevStatus: prevStatus,
-            customerId: customerId,
-            async: false
+            that.model.set('IsWarning', isWarning);
+            xhr2 = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
+              newStatus: newStatus,
+              prevStatus: prevStatus,
+              customerId: customerId
+            });
+            return xhr2.done(function() {
+              return BlockUi("off");
+            });
           });
         });
       });
