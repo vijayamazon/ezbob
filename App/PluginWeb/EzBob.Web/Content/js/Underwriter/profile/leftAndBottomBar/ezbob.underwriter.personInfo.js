@@ -75,13 +75,15 @@
     };
 
     PersonInfoView.prototype.changeDisabledState = function() {
-      var collectionStatusModel, xhr,
+      var collectionStatusModel, customerId, prevStatus, xhr,
         _this = this;
 
       collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('Disabled')
       });
+      prevStatus = this.model.get('Disabled');
+      customerId = this.model.get('Id');
       BlockUi("on");
       xhr = collectionStatusModel.fetch();
       return xhr.done(function() {
@@ -102,13 +104,19 @@
             status: newStatus,
             async: false
           });
-          return xhr.done(function(result) {
+          xhr.done(function(result) {
             var disabled, isWarning;
 
             isWarning = result;
             disabled = waiting || !isStatusEnabled;
             that.model.set('Disabled', newStatus);
             return that.model.set('IsWarning', isWarning);
+          });
+          return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
+            newStatus: newStatus,
+            prevStatus: prevStatus,
+            customerId: customerId,
+            async: false
           });
         });
       });

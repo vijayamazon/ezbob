@@ -46,6 +46,8 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             customerId : @model.get ('Id')
             currentStatus : @model.get('Disabled')
             )
+        prevStatus = @model.get('Disabled')
+        customerId = @model.get('Id')
         BlockUi "on"
         xhr = collectionStatusModel.fetch();
         xhr.done =>
@@ -62,6 +64,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                     disabled =  waiting or !isStatusEnabled
                     that.model.set 'Disabled', newStatus
                     that.model.set 'IsWarning', isWarning
+                xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId, async: false}
         
 
     isTestEditButton: ->

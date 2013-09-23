@@ -83,6 +83,8 @@
     <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Database\ApprovalsWithoutAML.cs" />
     <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
+    <Compile Include="Model\Database\CustomerStatusHistoryMap.cs" />
+    <Compile Include="Model\Database\CustomerStatusHistory.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
     <Compile Include="Model\Database\CustomerStatuses.cs" />
     <Compile Include="Model\Database\customer_enums.cs" />

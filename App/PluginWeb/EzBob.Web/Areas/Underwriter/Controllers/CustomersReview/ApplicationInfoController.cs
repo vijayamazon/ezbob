@@ -36,6 +36,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		private readonly ICustomerStatusesRepository customerStatusesRepository;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
+		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -52,7 +53,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		                                 ApplicationInfoModelBuilder infoModelBuilder,
 		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository,
 										 IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-										 IConfigurationVariablesRepository configurationVariablesRepository)
+										 IConfigurationVariablesRepository configurationVariablesRepository,
+										 ICustomerStatusHistoryRepository customerStatusHistoryRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -68,6 +70,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			this.customerStatusesRepository = customerStatusesRepository;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
+			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 		}
 
 		[Ajax]
@@ -97,6 +100,18 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		{
 			bool res = customerStatusesRepository.GetIsWarning(status);
 			return this.JsonNet(res);
+		}
+
+		[Ajax]
+		public void LogStatusChange(int newStatus, int prevStatus, int customerId)
+		{
+			var newEntry = new CustomerStatusHistory();
+			newEntry.Username = User.Identity.Name;
+			newEntry.Timestamp = DateTime.UtcNow;
+			newEntry.CustomerId = customerId;
+			newEntry.PreviousStatus = prevStatus;
+			newEntry.NewStatus = newStatus;
+			customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 		}
 
 		[HttpPost]

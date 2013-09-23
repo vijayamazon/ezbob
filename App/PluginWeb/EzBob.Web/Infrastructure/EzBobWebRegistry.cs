@@ -150,6 +150,7 @@ namespace EzBob.Web.Infrastructure
 			For<ITestCustomerRepository>().Use<TestCustomerRepository>();
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
+			For<ICustomerStatusHistoryRepository>().Use<CustomerStatusHistoryRepository>();
         }
     }
 }
