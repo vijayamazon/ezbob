@@ -1,35 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.CommonLib;
-using EzBob.Configuration;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using NHibernate;
-using PaymentServices.Calculators;
-using PaymentServices.PacNet;
-using Scorto.Configuration;
-using Scorto.Web;
-using StructureMap;
-using ZohoCRM;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using System.Collections.Generic;
+	using System;
+	using System.Linq;
+	using System.Reflection;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using CommonLib;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using PaymentServices.Calculators;
+	using PaymentServices.PacNet;
+	using Scorto.Web;
+	using StructureMap;
+	using log4net;
 
 	public class GetCashController : Controller
     {
         private readonly IAppCreator _appCreator;
-        private readonly PayPointConfiguration _config;
-
         private readonly IEzbobWorkplaceContext _context;
         private readonly IPayPointFacade _payPointFacade;
         private readonly ICustomerNameValidator _validator;
@@ -37,19 +29,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ILoanCreator _loanCreator;
-		private readonly IZohoFacade _crm;
 
         //-------------------------------------------------------------------------------
         public GetCashController(
             IEzbobWorkplaceContext context,
-			CustomerStatusesRepository customerStatusesRepository, 
 			IPayPointFacade payPointFacade, 
             IAppCreator appCreator,
             ICustomerNameValidator validator,
             IPacnetPaypointServiceLogRepository logRepository,
             ICustomerRepository customerRepository,
-            ILoanCreator loanCreator,
-            IZohoFacade crm)
+            ILoanCreator loanCreator)
         {
             _context = context;
             _payPointFacade = payPointFacade;
@@ -58,14 +47,12 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _logRepository = logRepository;
             _customerRepository = customerRepository;
             _loanCreator = loanCreator;
-            _crm = crm;
-			_config = ConfigurationRootBob.GetConfiguration().PayPoint;
         }
 
         [NoCache]
         public RedirectResult GetTransactionId(decimal loan_amount, int loanType, int repaymentPeriod)
         {
-            EZBob.DatabaseLib.Model.Database.Customer customer = _context.Customer;
+            Customer customer = _context.Customer;
 
             CheckCustomerStatus(customer);
 
@@ -100,7 +87,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return Redirect(url);
         }
 
-        private void CheckCustomerStatus(EZBob.DatabaseLib.Model.Database.Customer customer)
+        private void CheckCustomerStatus(Customer customer)
         {
             if (
                 !customer.CreditSum.HasValue ||
@@ -178,7 +165,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     throw new Exception("check hash failed");
                 }
 
-                EZBob.DatabaseLib.Model.Database.Customer cus = _context.Customer;
+                Customer cus = _context.Customer;
 
                 ValidateCustomerName(customer, cus);
 
@@ -200,7 +187,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 TempData["card_no"] = card_no;
                 
                 _customerRepository.Update(cus);
-                _crm.UpdateOfferOnGetCash(cus.LastCashRequest, cus);
 
                 return RedirectToAction("Index", "PacnetStatus", new {Area = "Customer"});
             }
@@ -239,12 +225,10 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             var url = Url.Action("Index", "PacnetStatus", new {Area = "Customer"}, "https");
 
-            _crm.UpdateOfferOnGetCash(cus.LastCashRequest, cus);
-
             return this.JsonNet(new {url = url});
         }
 
-        private void ValidateCustomerName(string customer, EZBob.DatabaseLib.Model.Database.Customer cus)
+        private void ValidateCustomerName(string customer, Customer cus)
         {
             if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname))
             {

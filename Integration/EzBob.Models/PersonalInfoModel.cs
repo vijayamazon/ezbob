@@ -43,14 +43,13 @@
             StrategyError = "";
         }
 
-        public void InitFromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer, ISession session = null)
+        public void InitFromCustomer(Customer customer, ISession session = null)
         {
             if (customer == null) return;
 
             Id = customer.Id;
             IsTest = customer.IsTest;
             IsAvoid = customer.IsAvoid;
-            ZohoId = customer.ZohoId;
 			FraudCheckStatus = customer.FraudStatus.Description();
 	        FraudCheckStatusId = (int) customer.FraudStatus;
 			if (customer.FraudStatus == FraudStatus.FraudSuspect)
@@ -104,7 +103,6 @@
             }
         }
 
-        public string ZohoId { get; set; }
         public bool IsTest { get; set; }
         public bool IsAvoid { get; set; }
     }

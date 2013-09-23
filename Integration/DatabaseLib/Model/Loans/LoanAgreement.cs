@@ -31,7 +31,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 		
 		public virtual Database.Loans.Loan Loan { get; set; }
 		public virtual string FilePath { get; set; }
-		public virtual string ZohoId { get; set; }
 		public virtual LoanAgreementTemplate TemplateRef { get; set; }
 
 
@@ -87,7 +86,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 			Map(x => x.FilePath).Length(400);
 			Map(x => x.Template).CustomType("StringClob"); // Obsolete line, to be removed.
 			References(x => x.Loan, "LoanId");
-			Map(x => x.ZohoId).Length(100);
 			References(x => x.TemplateRef, "TemplateId").Cascade.SaveUpdate();
 		}
 	}

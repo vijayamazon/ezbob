@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Code
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -14,7 +13,6 @@
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
-	using ZohoCRM;
 	using log4net;
 
 	public interface ILoanCreator
@@ -27,7 +25,6 @@
 		private readonly ILoanHistoryRepository _loanHistoryRepository;
 		private readonly IPacnetService _pacnetService;
 		private readonly IAppCreator _appCreator;
-		private readonly IZohoFacade _crm;
 		private readonly IAgreementsGenerator _agreementsGenerator;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
@@ -39,7 +36,6 @@
 			ILoanHistoryRepository loanHistoryRepository,
 			IPacnetService pacnetService,
 			IAppCreator appCreator,
-			IZohoFacade crm,
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
@@ -48,7 +44,6 @@
 			_loanHistoryRepository = loanHistoryRepository;
 			_pacnetService = pacnetService;
 			_appCreator = appCreator;
-			_crm = crm;
 			_agreementsGenerator = agreementsGenerator;
 			_context = context;
 			_loanBuilder = loanBuilder;
@@ -128,8 +123,6 @@
 			_appCreator.CashTransfered(_context.User, cus.PersonalInfo.FirstName, transfered, fee);
 
 			_agreementsGenerator.RenderAgreements(loan, true);
-
-			_crm.CreateLoan(cus, loan);
 
 			return loan;
 		}

@@ -1,33 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using DB.Security;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using ExperianLib.Ebusiness;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Email;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.Filters;
-using EzBob.Web.Infrastructure.Membership;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models;
-using EzBob.Web.Models.Strings;
-using Scorto.Security.UserManagement.Sessions;
-using Scorto.Web;
-using ZohoCRM;
-using log4net;
-
 namespace EzBob.Web.Controllers
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.Security;
+	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
+	using DB.Security;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using ExperianLib.Ebusiness;
+	using ApplicationCreator;
+	using Code;
+	using Code.Email;
+	using Infrastructure;
+	using Infrastructure.Filters;
+	using Infrastructure.Membership;
+	using Infrastructure.csrf;
+	using Models;
+	using Models.Strings;
+	using Scorto.Security.UserManagement.Sessions;
+	using Scorto.Web;
+	using log4net;
+
     public class AccountController : Controller
     {
         private static readonly ILog _log = LogManager.GetLogger(typeof(AccountController));
@@ -39,7 +38,6 @@ namespace EzBob.Web.Controllers
         private readonly ISessionManager _sessionManager;
         private readonly IEzbobWorkplaceContext _context;
         private readonly IEmailConfirmation _confirmation;
-        private readonly IZohoFacade _zoho;
         private readonly ICustomerSessionsRepository _sessionIpLog;
 		private readonly ITestCustomerRepository _testCustomers;
 		private readonly IConfigurationVariablesRepository _configurationVariables;
@@ -55,7 +53,6 @@ namespace EzBob.Web.Controllers
 		    ISessionManager sessionManager,
 		    IEzbobWorkplaceContext context,
 		    IEmailConfirmation confirmation,
-		    IZohoFacade zoho,
 		    ICustomerSessionsRepository sessionIpLog,
 		    ITestCustomerRepository testCustomers,
 		    IConfigurationVariablesRepository configurationVariables,
@@ -70,7 +67,6 @@ namespace EzBob.Web.Controllers
 		    _sessionManager = sessionManager;
 		    _context = context;
 		    _confirmation = confirmation;
-		    _zoho = zoho;
 		    _sessionIpLog = sessionIpLog;
 		    _testCustomers = testCustomers;
 		    _configurationVariables = configurationVariables;
@@ -418,8 +414,6 @@ namespace EzBob.Web.Controllers
 
 				if (Request.Cookies["isoffline"] != null)
 					customer.IsOffline = Request.Cookies["isoffline"].Value.Trim().ToLower() == "yes";
-
-                _zoho.RegisterLead(customer);
 
                 _customers.Save(customer);
 

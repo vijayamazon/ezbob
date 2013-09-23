@@ -14,7 +14,6 @@ using EzBob.Web.Infrastructure.csrf;
 using Iesi.Collections.Generic;
 using NHibernate;
 using Scorto.Web;
-using ZohoCRM;
 using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
@@ -25,7 +24,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         private readonly IEzbobWorkplaceContext _context;
         private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
-        private readonly IZohoFacade _crm;
         private readonly IAppCreator _creator;
         private readonly ISession _session;
         private readonly CashRequestBuilder _crBuilder;
@@ -33,15 +31,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
         public CustomerDetailsController(
                                             IEzbobWorkplaceContext context, 
-                                            IPersonalInfoHistoryRepository personalInfoHistoryRepository, 
-                                            IZohoFacade crm, 
+                                            IPersonalInfoHistoryRepository personalInfoHistoryRepository,
                                             IAppCreator creator, 
                                             ISession session,
                                             CashRequestBuilder crBuilder)
         {
             _context = context;
             _personalInfoHistoryRepository = personalInfoHistoryRepository;
-            _crm = crm;
             _creator = creator;
             _session = session;
             _crBuilder = crBuilder;
@@ -91,16 +87,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		        _creator.FraudChecker(_context.User);
 	        }
 	        _concentAgreementHelper.Save(customer, DateTime.UtcNow);
-
-            try
-            {
-                _crm.ConvertLead(customer);
-            }
-            catch (Exception e)
-            {
-                Log.Warn("Converting lead failed");
-                Log.Warn(e);
-            }
 
             return this.JsonNet(new {});
         }
@@ -297,16 +283,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             var newPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
 
             SaveEditHistory(oldPersonalInfo, newPersonalInfo);
-
-            try
-            {
-                _crm.UpdateOrCreate(customer);
-            }
-            catch (Exception e)
-            {
-                Log.Warn("CRM: updating customer failed");
-                Log.Warn(e);
-            }
 
             return this.JsonNet(new { });
         }

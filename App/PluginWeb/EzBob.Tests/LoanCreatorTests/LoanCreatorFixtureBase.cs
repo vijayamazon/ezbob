@@ -1,22 +1,15 @@
-﻿using System;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Controllers;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using EzBob.Web.Infrastructure;
-using Moq;
-using NHibernate;
-using NUnit.Framework;
-using PaymentServices.PacNet;
-using ZohoCRM;
-
-namespace EzBob.Tests.LoanCreatorTests
+﻿namespace EzBob.Tests.LoanCreatorTests
 {
+	using EZBob.DatabaseLib.Model.Loans;
+	using Models;
+	using Web.ApplicationCreator;
+	using Web.Code;
+	using Web.Code.Agreements;
+	using Web.Infrastructure;
+	using Moq;
+	using NUnit.Framework;
+	using PaymentServices.PacNet;
+
     [TestFixture]
     public class LoanCreatorFixtureBase
     {
@@ -34,13 +27,12 @@ namespace EzBob.Tests.LoanCreatorTests
              .Returns(new PacnetReturnData());
 
             var appCreator = new Mock<IAppCreator>();
-            var crm = new Mock<IZohoFacade>();
             var agreementsGenerator = new Mock<IAgreementsGenerator>();
             var context = new Mock<IEzbobWorkplaceContext>();
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, crm.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
+            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
             SetUp();
         }
 

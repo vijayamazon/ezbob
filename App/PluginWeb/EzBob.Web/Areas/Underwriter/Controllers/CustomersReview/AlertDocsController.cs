@@ -1,30 +1,26 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-using StructureMap;
-using ZohoCRM;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Models;
+	using Infrastructure;
+	using Scorto.Web;
+	using StructureMap;
+
     public class AlertDocsController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
-        private readonly IZohoFacade _crm;
-
 
         //-----------------------------------------------------------------------------------
-        public AlertDocsController(IEzbobWorkplaceContext context, NHibernateRepositoryBase<MP_AlertDocument> docRepo, IZohoFacade crm)
+        public AlertDocsController(IEzbobWorkplaceContext context, NHibernateRepositoryBase<MP_AlertDocument> docRepo)
         {
             _context = context;
             _docRepo = docRepo;
-            _crm = crm;
         }
 
         public ActionResult List(int id)
@@ -64,15 +60,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                 UploadDate = DateTime.Now,
                 DocName = file.FileName
             };
-
-            try
-            {
-                _crm.AddFile(customer.ZohoId, file.FileName, body);
-            }
-            catch 
-            {
-                
-            }
             
             _docRepo.SaveOrUpdate(doc);
         }

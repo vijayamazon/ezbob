@@ -86,7 +86,6 @@
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
 	<property name="YodleeConfig" value ="YodleeTrunk"/>
-    <property name="ZohoCRM" value="ZohoCRM"/>
 	<property name="MandrillConfig" value="${MandrillConfig}"/>
 
     <module id="MandrillTrunk">
@@ -108,11 +107,6 @@
         <property name="Enable" value="True" />
         <!-- Used in sending messages without a template -->
         <property name="From" value="ezbob@ezbob.com" />
-    </module>
-
-    <module id="ZohoCRM">
-      <property name="Token" value="8bde738c7bc08882bc59b77a985b9dc9"/>
-      <property name="Enabled" value="False"/>
     </module>
 
     <module id="EbaySettingsData">
@@ -576,11 +570,8 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <item name="ScortoFlowSignalCreateOlapCube" value="ScortoFlowSignalCreateOlapCube" />
         <item name="ExternalNodeExecutionResetSignalHandler" value="ExternalNodeExecutionResetSignalHandler" />
         <item name="RenderAgreementsHandler" value="RenderAgreementsHandler" />
-		<item name="ZohoHandler" value="ZohoHandler" />
     </module>
-	
-	<module id="ZohoHandler" path="EzBob.Signals.dll" />
-	
+		
     <module id="RenderAgreementsHandler" path="EzBob.Signals.dll">
       <property name="PdfLoanAgreement" value="${tempDBPath}\pdf1" />
       <property name="PdfLoanAgreement2" value="${tempDBPath}\pdf2" />
@@ -878,9 +869,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 			<logger additivity="false" name="EzBob.AmazonServiceLib.ServiceCalls.AmazonServiceAskville">
                 <level value="ERROR" />
                 <appender-ref ref="MailAppenderWithSSLForAskville" />
-            </logger>
-            <logger name="Deveel.Web.Zoho">
-                <level value="ALL" />
             </logger>
 			<logger name="Integration.ChannelGrabberConfig.Configuration">                
 				<level value="ERROR" />

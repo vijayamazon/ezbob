@@ -17,11 +17,6 @@ namespace EzBob.Configuration
             get { return GetConfiguration<PayPointConfiguration>("PayPoint"); }
         }
 
-        public virtual IZohoConfig ZohoCRM
-        {
-            get { return GetConfiguration<ZohoConfig>("ZohoCRM"); }
-        }
-
         public virtual ExperianIntegrationParams Experian
         {
             get { return GetConfiguration<ExperianIntegrationParams>("Experian"); }

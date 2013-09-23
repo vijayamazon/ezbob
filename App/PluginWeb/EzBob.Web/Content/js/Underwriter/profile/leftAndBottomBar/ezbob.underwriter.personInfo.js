@@ -35,7 +35,6 @@
       "click button[name=\"editEmail\"]": "editEmail",
       "click [name=\"isTestEditButton\"]": "isTestEditButton",
       "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton",
-      "click [name=\"updateCRM\"]": "updateCRM",
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
     };
 
@@ -156,24 +155,6 @@
         }
       });
       d.render();
-    };
-
-    PersonInfoView.prototype.updateCRM = function() {
-      var that, xhr;
-
-      that = this;
-      BlockUi("On");
-      xhr = $.post("" + window.gRootPath + "Underwriter/CustomerInfo/UpdateCrm", {
-        id: this.model.get("Id")
-      });
-      return xhr.done(function() {
-        var xhr2;
-
-        xhr2 = that.model.fetch();
-        return xhr2.done(function() {
-          return BlockUi("Off");
-        });
-      });
     };
 
     PersonInfoView.prototype.disablingChanged = function() {

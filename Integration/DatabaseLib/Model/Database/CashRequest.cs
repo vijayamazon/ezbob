@@ -47,8 +47,6 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	    public virtual bool IsSure { get; set; }
 
-	    public virtual string ZohoId { get; set; }
-
         public virtual decimal ApprovedSum()
         {
             return (decimal)(ManagerApprovedSum ?? (SystemCalculatedSum ?? 0));

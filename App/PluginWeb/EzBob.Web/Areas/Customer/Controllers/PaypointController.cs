@@ -1,42 +1,39 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models;
-using PaymentServices.Calculators;
-using PaymentServices.PayPoint;
-using Scorto.Web;
-using ZohoCRM;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
+	using System.Globalization;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using ApplicationCreator;
+	using Models;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Web.Models;
+	using PaymentServices.Calculators;
+	using PaymentServices.PayPoint;
+	using Scorto.Web;
+	using log4net;
+
     public class PaypointController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly PayPointFacade _payPointFacade;
         private readonly IAppCreator _appCreator;
-        private readonly IZohoFacade _crm;
         private static readonly ILog Log = LogManager.GetLogger("PaypointController");
         private readonly LoanPaymentFacade _loanRepaymentFacade;
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly IPaypointTransactionRepository _paypointTransactionRepository;
         private readonly PayPointApi _paypoint;
 
-        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, IZohoFacade crm, PayPointApi paypoint)
+        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, PayPointApi paypoint)
         {
             _context = context;
             _payPointFacade = payPointFacade;
             _appCreator = appCreator;
             _logRepository = pacnetPaypointServiceLogRepository;
             _paypointTransactionRepository = paypointTransactionRepository;
-            _crm = crm;
             _loanRepaymentFacade = loanPaymentFacade;
             _paypoint = paypoint;
         }
@@ -59,7 +56,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 var url = _payPointFacade.GeneratePaymentUrl(amount, callback);
 
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
-                _crm.UpdateLoans(_context.Customer);
 
                 return Redirect(url);
             }
@@ -158,7 +154,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     isRolloverPaid = res.RolloverWasPaid
                 };
 
-            _crm.UpdateLoans(_context.Customer);
             TempData.Put(confirmation);
             return View(confirmation);
         }
@@ -195,7 +190,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 SendEmails(loanId, realAmount, customer);
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");
-                _crm.UpdateLoans(_context.Customer);
 
                 return this.JsonNet(payFastModel);
             }

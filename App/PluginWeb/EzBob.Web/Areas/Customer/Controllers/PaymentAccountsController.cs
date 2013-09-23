@@ -1,6 +1,4 @@
-﻿using ZohoCRM;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
 	using System.Linq;
@@ -36,7 +34,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly ISortCodeChecker _sortCodeChecker;
         private static readonly ILog Log = LogManager.GetLogger(typeof(PaymentAccountsController));
     	private readonly IPayPalConfig _payPalConfig;
-        private readonly IZohoFacade _crm;
 
     	public PaymentAccountsController(
             DatabaseDataHelper helper,
@@ -45,7 +42,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             IAppCreator creator,
             ISession session,
             IMPUniqChecker mpChecker,
-            ISortCodeChecker sortCodeChecker, IZohoFacade crm)
+            ISortCodeChecker sortCodeChecker)
         {
             _helper = helper;
             _customers = customers;
@@ -54,7 +51,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _session = session;
     	    _mpChecker = mpChecker;
     	    _sortCodeChecker = sortCodeChecker;
-    	    _crm = crm;
     	    _payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();	
         }
 
@@ -109,7 +105,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			var mp = _helper.SaveOrUpdateCustomerMarketplace( personalData.Email, paypal, securityData, customer );
 			_helper.SaveOrUpdateAcctountInfo( mp, personalData );
 			_session.Flush();
-            _crm.ConvertLead(customer);
             _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
             return View(permissionsGranted);
@@ -243,8 +238,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                                                SortCode = sortCode,
                                                Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), BankAccountType)
                                            };
-
-                _crm.ConvertLead(customer);
                 _customers.Update(customer);
 
                 return this.JsonNet(new {msg = "Well done! You've added your bank account!"});

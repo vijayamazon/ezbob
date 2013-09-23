@@ -18,7 +18,6 @@ using EzBob.Web.Infrastructure.csrf;
 using EzBob.Web.Models.Strings;
 using NHibernate;
 using Scorto.Web;
-using ZohoCRM;
 using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
@@ -37,7 +36,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private static readonly ILog Log = LogManager.GetLogger(typeof(AmazonMarketPlacesController));
         private readonly AmazonServiceAskville _askvilleService;
         private readonly CustomerRepository _customerRepository;
-        private readonly IZohoFacade _crm;
 
         public AmazonMarketPlacesController(
             IEzbobWorkplaceContext context, 
@@ -49,8 +47,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             AskvilleRepository askvilleRepository,
             IMPUniqChecker mpChecker,
             AmazonServiceAskville askvilleService,
-            CustomerRepository customerRepository,
-            IZohoFacade crm)
+            CustomerRepository customerRepository)
         {
             _context = context;
             _helper = helper;
@@ -62,7 +59,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _mpChecker = mpChecker;
             _askvilleService = askvilleService;
             _customerRepository = customerRepository;
-            _crm = crm;
         }
         //--------------------------------------------------------
         [Ajax]
@@ -182,9 +178,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 if (customer.WizardStep != WizardStepType.AllStep)
                     customer.WizardStep = WizardStepType.Marketplace;
-
-                _crm.ConvertLead(customer);
-
+				
                 _customerRepository.SaveOrUpdate(customer);
 
                 return Json(new { msg = "Congratulations. Amazon account was linked successfully." });

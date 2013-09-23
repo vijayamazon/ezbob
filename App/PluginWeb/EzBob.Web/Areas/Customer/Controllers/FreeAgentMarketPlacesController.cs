@@ -10,7 +10,6 @@
     using FreeAgent;
 	using Infrastructure;
 	using Scorto.Web;
-	using ZohoCRM;
 	using log4net;
 	using ApplicationCreator;
 
@@ -21,20 +20,17 @@
         private readonly Customer _customer;
         private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
-        private readonly IZohoFacade _crm;
 
 
 		public FreeAgentMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
             IRepository<MP_MarketplaceType> mpTypes,
-            IAppCreator appCreator,
-			IZohoFacade crm)
+            IAppCreator appCreator)
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;
             _appCreator = appCreator;
-            _crm = crm;
             _helper = helper;
         }
 
@@ -102,7 +98,6 @@
 			log.Info("Saving marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
 
-			_crm.ConvertLead(_customer);
 			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
 			return View(FreeAgentAccountModel.ToModel(marketPlace));
 		}

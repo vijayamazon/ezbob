@@ -2,7 +2,6 @@
 [name="editEmail"],
 [name="changeDisabledState"],
 [name="isTestEditButton"],
-[name="updateCRM"],
 [name="newCreditLineBtn"],
 [name="loanType"],
 [name="allowSendingEmail"],
@@ -105,13 +104,6 @@ a[data-bug-type],
 /*Test User*/
 
 .permission-TestUser [name="isTestEditButton"] {
-    display: inline-block;
-    visibility: visible;
-}
-
-/*CRM*/
-
-.permission-CRM [name="updateCRM"] {
     display: inline-block;
     visibility: visible;
 }

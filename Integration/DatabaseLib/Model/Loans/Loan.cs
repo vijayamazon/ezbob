@@ -327,13 +327,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
             get { return _agreements; }
             set { _agreements = value; }
         }
-
-        /// <summary>
-        /// Zoho CRM Id for the loan
-        /// Идентификатор кредита в Zoho CRM
-        /// </summary>
-        public virtual string ZohoId { get; set; }
-
+		
         public virtual string LastReportedCaisStatus { get; set; }
 
         public virtual DateTime? LastReportedCaisStatusDate { get; set; }
@@ -668,7 +662,6 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                 .Cascade.AllDeleteOrphan()
                 .Inverse();
             Map(x => x.AgreementModel).CustomType("StringClob");
-            Map(x => x.ZohoId).Length(100);
             References(x => x.LoanType, "LoanTypeId");
             Map(x => x.LastReportedCaisStatus, "LastReportedCAISStatus");
             Map(x => x.LastReportedCaisStatusDate, "LastReportedCAISStatusDate").CustomType<UtcDateTimeType>();

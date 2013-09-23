@@ -171,8 +171,6 @@
     <Compile Include="SerializeDataHelperFixture.cs" />
     <Compile Include="Terapeak\CategoriesFixture.cs" />
     <Compile Include="TryGetInstanceFixture.cs" />
-    <Compile Include="ZohoCRMTests\RegisterLead.cs" />
-    <Compile Include="ZohoCRMTests\ZohoFixture.cs" />
     <EmbeddedResource Include="CAIS\cais.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>cais.Designer.cs</LastGenOutput>
@@ -273,10 +271,6 @@
     <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</Project>
       <Name>YodleeLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Integration\ZohoCRM\ZohoCRM.csproj">
-      <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
-      <Name>ZohoCRM</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ScheduledServices\ScheduledServices.csproj">
       <Project>{4284AAB9-C033-4F22-B3F3-D4AD74A121C2}</Project>

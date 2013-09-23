@@ -1,17 +1,16 @@
-﻿using System;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using PaymentServices.PacNet;
-using ZohoCRM;
-
-namespace ezmanage
+﻿namespace ezmanage
 {
+	using System;
+	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Web.ApplicationCreator;
+	using EzBob.Web.Code;
+	using EzBob.Web.Code.Agreements;
+	using PaymentServices.PacNet;
+
     public class LoanCreatorNoChecks : LoanCreator
     {
         private readonly EzContext _context;
@@ -19,10 +18,10 @@ namespace ezmanage
         private readonly IUsersRepository _users;
 
         public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService,
-                                   IAppCreator appCreator, IZohoFacade crm, IAgreementsGenerator agreementsGenerator,
+                                   IAppCreator appCreator, IAgreementsGenerator agreementsGenerator,
                                    EzContext context, ICustomerRepository customerRepository, IUsersRepository users,
                                    LoanBuilder loanBuilder, AvailableFundsValidator validator)
-			: base(loanHistoryRepository, pacnetService, appCreator, crm, agreementsGenerator, context, loanBuilder, validator)
+			: base(loanHistoryRepository, pacnetService, appCreator, agreementsGenerator, context, loanBuilder, validator)
         {
             _context = context;
             _customerRepository = customerRepository;

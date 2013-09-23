@@ -14,7 +14,6 @@ using EzBob.eBayLib;
 using EzBob.eBayServiceLib;
 using NHibernate;
 using Scorto.Web;
-using ZohoCRM;
 using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
@@ -29,7 +28,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly eBayServiceHelper _eBayServiceHelper;
         private readonly IAppCreator _creator;
         private readonly IMPUniqChecker _mpChecker;
-        private readonly IZohoFacade _crm;
 
         public EbayMarketPlacesController(
             IEzbobWorkplaceContext context, 
@@ -38,7 +36,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ISession session, 
             eBayServiceHelper eBayServiceHelper, 
             IAppCreator creator,
-            IMPUniqChecker mpChecker, IZohoFacade crm)
+            IMPUniqChecker mpChecker)
         {
             _context = context;
             _helper = helper;
@@ -47,7 +45,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _eBayServiceHelper = eBayServiceHelper;
             _creator = creator;
             _mpChecker = mpChecker;
-            _crm = crm;
         }
 
         [Transactional]
@@ -175,7 +172,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 if (customer.WizardStep != WizardStepType.AllStep)
                     customer.WizardStep = WizardStepType.Marketplace;
 
-                _crm.ConvertLead(customer);
                 _customers.SaveOrUpdate(customer); 
 
                 return Json(new { msg = string.Format("Congratulations. Your shop was {0} successfully.", isUpdate ? "updated" : "added") }, JsonRequestBehavior.AllowGet);

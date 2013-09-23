@@ -331,11 +331,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string ABTesting { get; set; }
 		public virtual bool IsOffline { get; set; }
 
-        /// <summary>
-        /// Идентификатор записи в системе ZohoCRM
-        /// </summary>
-        public virtual string ZohoId { get; set; }
-
         public virtual WizardStepType WizardStep { get; set; }
 
         public virtual CollectionStatus CollectionStatus

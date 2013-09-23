@@ -1,31 +1,27 @@
-﻿using ApplicationMng.Repository;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Email;
-using EZBob.DatabaseLib.Model.Loans;
-using EZBob.DatabaseLib.PayPal;
-using EZBob.DatabaseLib.Repository;
-using EzBob.CommonLib;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Controllers;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using EzBob.Web.Code.Email;
-using EzBob.Models.Agreements;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Models.Repository;
-using NHibernate;
-using PaymentServices.PacNet;
-using Scorto.Web;
-using StructureMap.Configuration.DSL;
-using ZohoCRM;
-
-namespace ezmanage
+﻿namespace ezmanage
 {
-	
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Email;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using EzBob.CommonLib;
+	using EzBob.Web.ApplicationCreator;
+	using EzBob.Web.Areas.Customer.Controllers;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Code.Agreements;
+	using EzBob.Web.Code.Email;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Models.Repository;
+	using NHibernate;
+	using PaymentServices.PacNet;
+	using Scorto.Web;
+	using StructureMap.Configuration.DSL;
 
 	public class EzRegistry: Registry
     {
@@ -69,9 +65,7 @@ namespace ezmanage
             For<IEmailConfirmationRequestRepository>().Use<EmailConfirmationRequestRepository>();
             For<IEmailConfirmation>().Use <EmailConfirmation>();
             For<IDecisionHistoryRepository>().Use<DecisionHistoryRepository>();
-
-            For<IZohoFacade>().Use<ZohoFacadeFake>();
-
+			
             For<ILoanCreator>().Use<LoanCreator>();
 
             For<IPacnetService>().Use<FakePacnetService>();

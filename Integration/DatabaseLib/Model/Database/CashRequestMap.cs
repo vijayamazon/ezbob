@@ -26,7 +26,6 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.APR);
             Map(x => x.RepaymentPeriod);
             Map(x => x.UseSetupFee);
-            Map(x => x.ZohoId).Length(100);
             Map(x => x.EmailSendingBanned);
             Map(x => x.UnderwriterComment).Length(200);
             References(x => x.LoanType, "LoanTypeId");

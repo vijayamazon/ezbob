@@ -1,7 +1,4 @@
-﻿using System.Web.Caching;
-using System.Web.UI;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
 	using System.Web.Mvc;
@@ -17,7 +14,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Scorto.Web;
-	using ZohoCRM;
 	using log4net;
 
 	public class ApplicationInfoController : Controller
@@ -26,7 +22,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly ICashRequestsRepository _cashRequestsRepository;
         private readonly IApplicationRepository _applications;
         private readonly IEzBobConfiguration _config;
-        private readonly IZohoFacade _crm;
         private readonly ILoanTypeRepository _loanTypes;
         private readonly LoanLimit _limit;
         private readonly IDiscountPlanRepository _discounts;
@@ -45,7 +40,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		                                 ICashRequestsRepository cashRequestsRepository,
 		                                 IApplicationRepository applications,
 		                                 IEzBobConfiguration config,
-		                                 IZohoFacade crm,
 		                                 ILoanTypeRepository loanTypes,
 		                                 LoanLimit limit,
 		                                 IDiscountPlanRepository discounts,
@@ -60,7 +54,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			_cashRequestsRepository = cashRequestsRepository;
 			_applications = applications;
 			_config = config;
-			_crm = crm;
 			_loanTypes = loanTypes;
 			_limit = limit;
 			_discounts = discounts;
@@ -125,7 +118,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			var cr = _cashRequestsRepository.Get(id);
 			int step = _config.GetCashSliderStep;
 			cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
-			_crm.UpdateCashRequest(cr);
 			cr.LoanTemplate = null;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
@@ -278,7 +270,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var cust = _customerRepository.Get(id);
             cust.IsTest = enbaled;
-            _crm.UpdateCustomer(cust);
             Log.DebugFormat("Customer({0}).IsTest = {1}", id, enbaled);
         }
 
@@ -291,7 +282,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         {
             var cust = _customerRepository.Get(id);
             cust.IsAvoid = enbaled;
-            _crm.UpdateCustomer(cust);
             Log.DebugFormat("Customer({0}).IsAvoided = {1}", id, enbaled);
         }
 
@@ -336,7 +326,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	        cust.OfferValidUntil = dt;
             var cr = cust.LastCashRequest;
             cr.LoanTemplate = null;
-            _crm.UpdateCashRequest(cr);
         }
 
         [HttpPost]
@@ -360,7 +349,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	        cust.OfferStart = dt;
 			cust.OfferValidUntil = dt.AddHours(offerValidForHours);
             cr.LoanTemplate = null;
-            _crm.UpdateCashRequest(cr);
         }
 
 
@@ -383,10 +371,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _crBuilder.ForceEvaluate(customer, (NewCreditLineOption) newCreditLineOption, false);
 
             customer.CreditResult = null;
-
-            _crm.UpdateCashRequest(cashRequest);
-
-            _crm.CreateOffer(customer, cashRequest);
 
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
@@ -414,8 +398,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			Customer c = cr.Customer;
             c.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
             c.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
-
-            _crm.UpdateCashRequest(cr);
        
             return this.JsonNet(true);
         }

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Globalization;
-using System.Linq;
-using ApplicationMng.Signal;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Signals.ZohoCRM;
 using NDesk.Options;
 using Scorto.DBCommon;
 using StructureMap;
@@ -15,15 +11,12 @@ using log4net.Config;
 
 namespace ezmanage
 {
-	using EZBob.DatabaseLib.Model.Database;
-
 	internal class Program
     {
 
         public static ILog _log = LogManager.GetLogger("ezmanage");
 
         private static bool loan;
-        private static bool _updateCrm;
         private static bool create;
         private static bool recalculate;
         private static int id;
@@ -79,29 +72,9 @@ namespace ezmanage
                     RecalculateLoans();
                 }
             }
-            if (_updateCrm)
-            {
-                UpdateAllCustomersForCrm();
-            }
 
             Console.Write("\nPress any key to exit . . .");
             Console.Read();
-        }
-
-        private static void UpdateAllCustomersForCrm()
-        {
-            Console.WriteLine("Update ZOHO CRM was started");
-            var customerIdsForUpdate =
-                ObjectFactory.GetInstance<CustomerRepository>()
-                             .GetAll()
-                             .Where(x => x.WizardStep == WizardStepType.AllStep && !x.IsTest)
-                             .Select(x=>x.Id);
-
-            foreach (var customerId in customerIdsForUpdate)
-            {
-                _log.InfoFormat("Update for Customer Id={0} was started", customerId);
-                new ZohoSignalClient(customerId).Execute();
-            }
         }
 
         private static void RecalculateLoans()
@@ -164,10 +137,6 @@ namespace ezmanage
                                 "action date\n" +
                                 "this must be an date in format dd/MM/yyyy.",
                                 (string v) => date = DateTime.ParseExact(v, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                            },
-                            {
-                                "u", "update all customer in Zoho CRM",
-                                v => _updateCrm = true
                             },
                         };
 

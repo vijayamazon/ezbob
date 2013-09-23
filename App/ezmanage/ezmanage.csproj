@@ -128,10 +128,6 @@
       <Project>{c519f59f-456a-4c7b-ade8-22ac96d572f3}</Project>
       <Name>PayPalServiceLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Integration\ZohoCRM\ZohoCRM.csproj">
-      <Project>{a3d7cd63-c1d8-41d0-93a7-776c0e6a20d8}</Project>
-      <Name>ZohoCRM</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PluginWeb\EzBob.Web\EzBob.Web.csproj">
       <Project>{829aa60e-cc9f-4be6-95e1-bc7990147d15}</Project>
       <Name>EzBob.Web</Name>

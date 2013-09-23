@@ -38,10 +38,6 @@ robocopy Integration\FreeAgent\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy App\Utils\AgentRegistry\bin\Debug\ c:\ezbobSrv\ /e
 
-robocopy Integration\ZohoCRM\bin\Debug\ c:\ezbobSrv\ /e
-
-robocopy Integration\Deveel\Deveel.ZohoCRM\bin\Debug\ c:\ezbobSrv\ /e
-
 robocopy Integration\FraudChecker\bin\Debug\ c:\ezbobSrv\ /e
 
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 

@@ -12,7 +12,6 @@ using Integration.ChannelGrabberFrontend;
 using Scorto.Web;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
-using ZohoCRM;
 using log4net;
 using EzBob.Web.ApplicationCreator;
 
@@ -28,7 +27,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		private readonly IAppCreator _appCreator;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ISession _session;
-		private readonly IZohoFacade _crm;
 
 		public CGMarketPlacesController(
 			IEzbobWorkplaceContext context,
@@ -36,14 +34,13 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			IRepository<MP_MarketplaceType> mpTypes,
 			CGMPUniqChecker mpChecker,
 			ISession session,
-			IAppCreator appCreator, IZohoFacade crm) {
+			IAppCreator appCreator) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
 			_appCreator = appCreator;
-			_crm = crm;
 			_session = session;
 		} // constructor
 
@@ -133,7 +130,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, mktPlace, model, _context.Customer);
 				_session.Flush();
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
-				_crm.ConvertLead(_context.Customer);
 				return this.JsonNet(AccountModel.ToModel(mp));
 			}
 			catch (Exception e) {

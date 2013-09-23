@@ -88,9 +88,6 @@
     <Compile Include="RenderConcentAgreement\RenderConcentAgreementsMessage.cs" />
     <Compile Include="RenderConcentAgreement\RenderConcentAgreementsSignalClient.cs" />
     <Compile Include="SignalHandlerBase.cs" />
-    <Compile Include="ZohoCRM\ZohoHandler.cs" />
-    <Compile Include="ZohoCRM\ZohoMessage.cs" />
-    <Compile Include="ZohoCRM\ZohoSignalClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
@@ -100,10 +97,6 @@
     <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZohoCRM\ZohoCRM.csproj">
-      <Project>{A3D7CD63-C1D8-41D0-93A7-776C0E6A20D8}</Project>
-      <Name>ZohoCRM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

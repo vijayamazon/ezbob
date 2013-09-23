@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using Aspose.Words;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Signals.RenderAgreements;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using Scorto.Web;
-using StructureMap;
-using ZohoCRM;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System;
+	using System.Web.Mvc;
+	using Aspose.Words;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using Signals.RenderAgreements;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Scorto.Web;
+	using StructureMap;
+
     public class MessagesController : Controller
     {
         private readonly IAppCreator _appCreator;
@@ -25,17 +21,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly IDecisionHistoryRepository _historyRepository;
         private readonly MessagesModelBuilder _builder;
         private readonly ExportResultRepository _exportResultRepository;
-        private readonly IZohoFacade _crm;
         private readonly AskvilleRepository _askvilleRepository;
 
         public MessagesController(CustomerRepository customers, 
                                   IAppCreator appCreator,
                                   ExportResultRepository exportResultRepository,
-                                  IZohoFacade crm, AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository, MessagesModelBuilder builder)
+                                  AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository, MessagesModelBuilder builder)
         {
             _appCreator = appCreator;
             _exportResultRepository = exportResultRepository;
-            _crm = crm;
             _askvilleRepository = askvilleRepository;
             _historyRepository = historyRepository;
             _builder = builder;
@@ -88,7 +82,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public void MoreAMLInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _crm.MoreAMLInformation(customer);
             _appCreator.MoreAMLInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.AML;
@@ -101,8 +94,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public void MoreAMLandBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _crm.MoreAMLInformation(customer);
-            _crm.MoreBWAInformation(customer);
             _appCreator.MoreAMLandBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank_AML;
@@ -115,14 +106,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         public void MoreBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _crm.MoreBWAInformation(customer);
             _appCreator.MoreBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank;
             LogPending(customer, PendingStatus.Bank);
         }
 
-        private void LogPending(EZBob.DatabaseLib.Model.Database.Customer customer, PendingStatus status)
+        private void LogPending(Customer customer, PendingStatus status)
         {
             var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = workplaceContext.User;

@@ -17,7 +17,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click button[name=\"editEmail\"]": "editEmail"
         "click [name=\"isTestEditButton\"]": "isTestEditButton"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
-        "click [name=\"updateCRM\"]": "updateCRM"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
 
     changeFraudStatusManualyClicked: ->
@@ -96,18 +95,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         )
         d.render()
         return
-
-
-    updateCRM: ->
-        that = this
-        BlockUi "On"
-        xhr = $.post("#{window.gRootPath}Underwriter/CustomerInfo/UpdateCrm",
-            id: @model.get("Id")
-        )
-        xhr.done ->
-            xhr2 = that.model.fetch()
-            xhr2.done ->
-                BlockUi "Off"
 
     disablingChanged: ->
         disabled = @$el.find("select[name=\"disabling\"] option:selected").val()

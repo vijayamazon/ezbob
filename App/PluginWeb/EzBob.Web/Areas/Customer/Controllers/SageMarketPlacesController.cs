@@ -9,7 +9,6 @@
     using Infrastructure;
     using Sage;
     using Scorto.Web;
-	using ZohoCRM;
 	using log4net;
 	using ApplicationCreator;
 
@@ -20,19 +19,16 @@
         private readonly Customer _customer;
         private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
-        private readonly IZohoFacade _crm;
 
 		public SageMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
             IRepository<MP_MarketplaceType> mpTypes,
-            IAppCreator appCreator,
-            IZohoFacade crm)
+            IAppCreator appCreator)
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;
             _appCreator = appCreator;
-            _crm = crm;
             _helper = helper;
         }
 
@@ -98,7 +94,6 @@
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
 			log.Info("Saved sage marketplace data...");
 
-			_crm.ConvertLead(_customer);
 			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
 			return View(SageAccountModel.ToModel(marketPlace));
 		}

@@ -33,7 +33,6 @@ namespace EzBob.Web.Infrastructure
 	using Scorto.Configuration;
 	using Scorto.Web;
 	using StructureMap.Configuration.DSL;
-	using ZohoCRM;
 	using Sage.Config;
 	using FreeAgent.Config;
 
@@ -117,18 +116,6 @@ namespace EzBob.Web.Infrastructure
             else
             {
                 For<ISortCodeChecker>().Use<FakeSortCodeChecker>();
-            }
-
-            For<IZohoConfig>().Use(bobconfig.ZohoCRM);
-            if (bobconfig.ZohoCRM.Enabled)
-            {
-                /*For<IZohoFacade>().Use<ZohoFacade>();*/
-                /*For<IZohoFacade>().Use<ZohoFacadeSignaled>();*/
-                For<IZohoFacade>().Use<EzBob.Web.Code.ZohoFacadeSignaled>();
-            }
-            else
-            {
-                For<IZohoFacade>().Use<ZohoFacadeFake>();
             }
 
             For<ILoanCreator>().Use<LoanCreator>();

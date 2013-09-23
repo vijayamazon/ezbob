@@ -1,6 +1,4 @@
-﻿using ZohoCRM;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
     using System;
     using System.Linq;
@@ -27,14 +25,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
         private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
         private readonly int _payPointMarketTypeId;
-        private readonly IZohoFacade _crm;
 
         public PayPointMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper, 
             IRepository<MP_MarketplaceType> mpTypes, 
             IMPUniqChecker mpChecker,
-            IAppCreator appCreator, IZohoFacade crm)
+            IAppCreator appCreator)
         {
             _context = context;
             _helper = helper;
@@ -42,7 +39,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _customer = context.Customer;
             _mpChecker = mpChecker;
             _appCreator = appCreator;
-            _crm = crm;
 
             var payPointServiceInfo = new PayPointServiceInfo();
             _payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
@@ -80,7 +76,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 				if (customer.WizardStep != WizardStepType.AllStep)
 					customer.WizardStep = WizardStepType.Marketplace;
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
-                _crm.ConvertLead(customer);
                 _appCreator.CustomerMarketPlaceAdded(customer, payPoint.Id);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }

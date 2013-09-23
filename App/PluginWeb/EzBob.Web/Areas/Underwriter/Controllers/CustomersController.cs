@@ -22,7 +22,6 @@
 	using Scorto.PluginWeb.Core.jqGrid;
 	using Scorto.Web;
 	using StructureMap;
-	using ZohoCRM;
 
 	public class CustomersController : Controller
 	{
@@ -31,7 +30,6 @@
 		private readonly IAppCreator _appCreator;
 		private readonly IEzBobConfiguration _config;
 		private readonly IDecisionHistoryRepository _historyRepository;
-		private readonly IZohoFacade _crm;
 		private readonly IWorkplaceContext _context;
 		private readonly LoanLimit _limit;
 		private readonly MarketPlaceRepository _mpType;
@@ -141,7 +139,6 @@
 			IAppCreator appCreator,
 			IEzBobConfiguration config,
 			IDecisionHistoryRepository historyRepository,
-			IZohoFacade crm,
 			IWorkplaceContext context, LoanLimit limit, GridModel<Customer> pending,
 			GridModel<Customer> loans, MarketPlaceRepository mpType)
 		{
@@ -150,7 +147,6 @@
 			_appCreator = appCreator;
 			_config = config;
 			_historyRepository = historyRepository;
-			_crm = crm;
 			_context = context;
 			_limit = limit;
 			_gridPending = pending;
@@ -568,7 +564,6 @@
 					customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
 					request.ManagerApprovedSum = (double?)sum;
 					_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
-					_crm.ApproveOffer(request);
 					if (!request.EmailSendingBanned)
 					{
 						_appCreator.ApprovedUser(user, customer, sum);
@@ -580,7 +575,6 @@
 					customer.Status = Status.Rejected;
 					_historyRepository.LogAction(DecisionActions.Reject, reason, user, customer);
 					request.ManagerApprovedSum = null;
-					_crm.RejectOffer(request);
 					if (!request.EmailSendingBanned)
 					{
 						_appCreator.RejectUser(user, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
