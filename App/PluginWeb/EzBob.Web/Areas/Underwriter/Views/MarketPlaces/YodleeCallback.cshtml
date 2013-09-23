@@ -1,6 +1,6 @@
 ﻿@using Newtonsoft.Json
-@model dynamic
 
+@model dynamic
 @{
     ViewBag.Title = "Updating Yodlee";
 }
@@ -10,57 +10,31 @@
 @section Js
 {
     <script type="text/javascript">
-        $(function () {
-            window.YodleeAccountUpdated = function(result) {
-                if (result.error) {
-                    console.log('error', result.error);
-                    EzBob.App.trigger('error', result.error);
-                } else {
-                    console.log('info', 'Congratulations. Bank account was updated successfully.');
-                    EzBob.App.trigger('info', 'Congratulations. Bank account was updated successfully.');
-                }
-                return that.trigger('back');
-            };
-            
-            window.YodleeAccountUpdatingError = function(msg) {
-                EzBob.App.trigger('error', msg);
-                return that.trigger('back');
-            };
-
-            console.log("callback");
-            if (querystring('oauth_error_code').length > 0) {
-                    
-                //var variables = window.opener.YodleeAccountRetry();
-                //var attemptsLeft = variables.attemptsLeft;
-                //var url = variables.url;
-                    
-                //if (attemptsLeft <= 0) {
-                    console.log("1");
-                    window.opener.YodleeAccountUpdatingError("Error occurred while trying to add bank account");
+        $(window).load(function () {
+            $(function () {
+                console.log("callback");
+                if (querystring('oauth_error_code').length > 0) {
+                    console.log(querystring('oauth_error_code'));
+                    //window.opener.YodleeAccountUpdatingError("Error occurred while trying to update yodlee");
+                    alert('Error occurred while trying to update yodlee');
                     self.close();
-                @*} else {
-                    console.log("2");
-                    var model = @Html.Raw(JsonConvert.SerializeObject(Model));
-                    if (model != undefined && model.bankId != undefined) {
-                        console.log("3");
-                        // In here the marketplace was added properly
-                        window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
-                        self.close();
-                    } 
-                }*@
-            } else {
-                console.log("4", @Html.Raw(JsonConvert.SerializeObject(Model));
-                window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
-                self.close();
-            }
 
-            function querystring(key) {
-                var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
-                var r = [], m;
-                while ((m = re.exec(document.location.search)) != null) r.push(m[1]);
-                return r;
-            }
+                } else {
+                    console.log("4", @Html.Raw(JsonConvert.SerializeObject(Model)));
+                    alert('Yodlee updated', @Html.Raw(JsonConvert.SerializeObject(Model)));
+                    //window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
+                    self.close();
+                }
+
+                function querystring(key) {
+                    var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+                    var r = [], m;
+                    while ((m = re.exec(document.location.search)) != null) {
+                        r.push(m[1]);
+                    }
+                    return r;
+                }
         });
+    });
     </script>
 }
-

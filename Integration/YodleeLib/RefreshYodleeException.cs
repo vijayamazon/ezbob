@@ -2,7 +2,7 @@
 
 namespace YodleeLib
 {
-	class RefreshYodleeException : Exception
+	public class RefreshYodleeException : Exception
 	{
 		public RefreshStatus RefreshStatus { get; private set; }
 

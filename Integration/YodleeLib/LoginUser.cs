@@ -1,7 +1,6 @@
 namespace YodleeLib
 {
 	using EzBob.Configuration;
-	using StructureMap;
     using config;
 	using System;
     using log4net;

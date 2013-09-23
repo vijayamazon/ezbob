@@ -152,8 +152,9 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 console.error data.responseText
 
         EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
-        ###
+        
         false
+        ###
 
     reCheckmarketplaces: (e) ->
         $el = $(e.currentTarget)

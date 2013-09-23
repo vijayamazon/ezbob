@@ -126,33 +126,29 @@
 				return null;
 			}
 
-			string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
-			string displayname;
-			long csId;
-
-			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
+			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
+			long itemId = securityInfo.ItemId;
+			yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 
 			if (!yodleeMain.IsMFA(itemId))
 			{
+				
 				if (yodleeMain.RefreshNotMFAItem(itemId))
 				{
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
 					_appCreator.CustomerMarketPlaceAdded(customer, umi);
-					return null;
+					return View();
 				}
 			}
 			else
 			{
 				var callback = Url.Action("YodleeCallback", "MarketPlaces", new {Area = "Underwriter"}, "https") + "/?umi=" + umi;
-				var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
-				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username,
-				                                               Encryptor.Decrypt(yodleeAccount.Password));
-
+				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 				return Redirect(finalUrl);
 			}
 
-			return null;
+			return View();
 		} // TryRecheckYodlee
 
 

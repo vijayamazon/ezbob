@@ -1136,6 +1136,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanWithoutAML.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanForWarningStatusCustomer.cshtml" />
     <Content Include="Areas\Underwriter\Views\MarketPlaces\YodleeCallback.cshtml" />
+    <Content Include="Areas\Underwriter\Views\MarketPlaces\TryRecheckYodlee.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

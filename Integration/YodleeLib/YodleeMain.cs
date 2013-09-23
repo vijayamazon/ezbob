@@ -23,7 +23,7 @@
 			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
 
-		public void LoginUser(string userName, string password)
+		public LoginUser LoginUser(string userName, string password)
 		{
 			try
 			{
@@ -31,11 +31,13 @@
 				UserContext = loginUser.loginUser(userName, password);
 				isLoggedIn = true;
 				Log.InfoFormat("Yodlee user '{0}' logged in successfully", userName);
+				return loginUser;
 			}
 			catch (Exception e)
 			{
 				Log.WarnFormat("Yodlee user '{0}' login failed: {1} ", userName, e.Message);
 			}
+			return null;
 		}
 
 		public void RegisterUser(string userName, string password, string email)
@@ -57,15 +59,15 @@
 		{
 			try
 			{
-				string url = config.AddAccountURL;
+				var url = config.AddAccountURL;
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_csid=";
 				var oAuthBase = new OAuthBase();
+				OAuthAccessToken token = null;
 				if (!isLoggedIn)
 				{
-					LoginUser(username, password);
+					var lu = LoginUser(username, password);
+					token = lu.getAccessTokens(UserContext);
 				}
-				var lu = new LoginUser();
-				OAuthAccessToken token = lu.getAccessTokens(UserContext);
 
 				string signature = null;
 				string normalizedUrl = null;
@@ -116,10 +118,12 @@
 				string url = config.EditAccountURL;
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_flowId=editSiteCredentials&_itemid=";
 				var oAuthBase = new OAuthBase();
-
-				LoginUser(username, password);
-				var lu = new LoginUser();
-				OAuthAccessToken token = lu.getAccessTokens(UserContext);
+				OAuthAccessToken token = null;
+				if (UserContext == null)
+				{
+					var lu = LoginUser(username, password);
+					token = lu.getAccessTokens(UserContext);
+				}
 
 				string signature = null;
 				string normalizedUrl = null;
@@ -167,7 +171,10 @@
 		{
 			displayname = string.Empty;
 			csId = -1;
-			LoginUser(username, password);
+			if (UserContext == null)
+			{
+				LoginUser(username, password);
+			}
 
 			numOfRetriesForGetItemSummary = 5;
 			ItemSummary itemSummary = GetItemSummary(username);
@@ -243,12 +250,12 @@
 		{
 			try
 			{
-				var itemManagement = new ItemManagementService();
-				itemManagement.Url = config.soapServer + "/" + "ItemManagementService";
+				var itemManagement = new ItemManagementService { Url = config.soapServer + "/" + "ItemManagementService" };
 				itemManagement.removeItem(UserContext, itemId, true);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Log.Error(ex);
 			}
 		}
 

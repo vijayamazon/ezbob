@@ -81,7 +81,7 @@
     MarketPlacesView.prototype.template = "#marketplace-template";
 
     MarketPlacesView.prototype.initialize = function() {
-      this.model.on("reset change", this.render, this);
+      this.model.on("reset change sync", this.render, this);
       return this.rendered = false;
     };
 
@@ -255,8 +255,10 @@
               console.error data.responseText
       
       EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
+      
+      false
       */
-      return false;
+
     };
 
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
