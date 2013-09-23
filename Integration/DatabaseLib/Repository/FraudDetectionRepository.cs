@@ -3,6 +3,7 @@ using System.Linq;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Repository
 {
@@ -19,7 +20,11 @@ namespace EZBob.DatabaseLib.Repository
 
         public IEnumerable<FraudDetection> GetLastDetections(int customerId)
         {
-            var lastCheckDate = GetByCustomerId(customerId).Max(x => x.DateOfCheck);
+            var lastCheckDate =
+                _session.Query<FraudDetection>()
+                .Where(x => x.CurrentCustomer.Id == customerId)
+                .Max(x => x.DateOfCheck);
+
             return GetByCustomerId(customerId).Where(x => x.DateOfCheck == lastCheckDate);
         }
     }
