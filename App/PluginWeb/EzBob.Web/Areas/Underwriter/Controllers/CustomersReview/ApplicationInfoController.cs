@@ -91,6 +91,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			return this.JsonNet(res);
 		}
 
+		[Ajax]
+        [OutputCache(VaryByParam = "status", Duration = int.MaxValue)]
+		public JsonNetResult GetIsStatusWarning(int status)
+		{
+			bool res = customerStatusesRepository.GetIsWarning(status);
+			return this.JsonNet(res);
+		}
+
 		[HttpPost]
 		[Transactional]
 		[Ajax]

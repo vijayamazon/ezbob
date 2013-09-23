@@ -48,7 +48,5 @@
 
 		public string AMLResult { get; set; }
 		public bool SkipPopupForApprovalWithoutAML { get; set; }
-
-		public bool IsWarning { get; set; }
     }
 }

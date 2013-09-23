@@ -20,7 +20,7 @@
     PersonInfoView.prototype.template = "#profile-person-info-template";
 
     PersonInfoView.prototype.initialize = function() {
-      return this.bindTo(this.model, "change", this.render, this);
+      return this.bindTo(this.model, "change sync", this.render, this);
     };
 
     PersonInfoView.prototype.onRender = function() {
@@ -94,7 +94,22 @@
         EzBob.App.jqmodal.show(collectionStatusLayout);
         BlockUi("off");
         return collectionStatusLayout.on('saved', function() {
-          return _this.model.set('Disabled', collectionStatusModel.get('currentStatus'));
+          var newStatus, that;
+
+          newStatus = collectionStatusModel.get('currentStatus');
+          that = _this;
+          xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
+            status: newStatus,
+            async: false
+          });
+          return xhr.done(function(result) {
+            var disabled, isWarning;
+
+            isWarning = result;
+            disabled = waiting || !isStatusEnabled;
+            that.model.set('Disabled', newStatus);
+            return that.model.set('IsWarning', isWarning);
+          });
         });
       });
     };
@@ -218,9 +233,12 @@
       return _results;
     };
 
-    PersonalInfoModel.prototype.changeDisabled = function() {
+    PersonalInfoModel.prototype.changeDisabled = function(silent) {
       var disabled, disabledText;
 
+      if (silent == null) {
+        silent = false;
+      }
       disabledText = "";
       disabled = this.get("Disabled");
       if (disabled === void 0) {
@@ -230,7 +248,11 @@
       if (disabledText === void 0) {
         disabledText = "Enabled";
       }
-      return this.set("DisabledText", disabledText);
+      return this.set({
+        "DisabledText": disabledText
+      }, {
+        silent: true
+      });
     };
 
     PersonalInfoModel.prototype.changeFraudCheckStatus = function() {

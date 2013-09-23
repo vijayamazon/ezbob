@@ -54,7 +54,14 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             EzBob.App.jqmodal.show(collectionStatusLayout)
             BlockUi "off"
             collectionStatusLayout.on 'saved', () =>
-                @model.set 'Disabled', collectionStatusModel.get ('currentStatus')
+                newStatus = collectionStatusModel.get ('currentStatus')
+                that = this
+                xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/GetIsStatusWarning", {status: newStatus, async:false}
+                xhr.done (result) =>            
+                    isWarning = result
+                    disabled =  waiting or !isStatusEnabled
+                    that.model.set 'Disabled', newStatus
+                    that.model.set 'IsWarning', isWarning
         
 
     isTestEditButton: ->

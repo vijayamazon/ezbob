@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using NHibernate;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using NHibernate;
 	using CommonLib;
 
 	public class PersonalInfoModel
@@ -26,9 +22,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public List<string> IndustryFields { get; set; }
         public string UserStatus { get; set; }
         public string CreditResult { get; set; }
-        public double CreditScore { get; set; }
-        public int Disabled { get; set; }
-        public bool Editable { get; set; }
+		public double CreditScore { get; set; }
+		public int Disabled { get; set; }
+		public bool Editable { get; set; }
         public List<string> TopCategories { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
         public decimal? OverallTurnOver { get; set; }
@@ -39,6 +35,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string FraudCheckStatus { get; set; }
 		public int FraudCheckStatusId { get; set; }
 		public string FraudHighlightCss { get; set; }
+		public bool IsWarning { get; set; }
+
         public PersonalInfoModel()
         {
             IndustryFields = new List<string>();
@@ -78,7 +76,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
             CreditResult = customer.CreditResult.ToString();
             CreditScore = customer.ScoringResults.Any() ? customer.ScoringResults.Last().ScoreResult : 0.00;
             Disabled = customer.CollectionStatus.CurrentStatus.Id;
-            Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && customer.CollectionStatus.CurrentStatus.IsEnabled;
+			Editable = customer.CreditResult == CreditResultStatus.WaitingForDecision && customer.CollectionStatus.CurrentStatus.IsEnabled;
+			IsWarning = customer.CollectionStatus.CurrentStatus.IsWarning;
 
             if (customer.PersonalInfo != null)
             {

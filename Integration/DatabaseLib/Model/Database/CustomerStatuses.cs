@@ -17,6 +17,7 @@
 	public interface ICustomerStatusesRepository : IRepository<CustomerStatuses>
 	{
 		bool GetIsEnabled(int id);
+		bool GetIsWarning(int id);
 		CustomerStatuses GetByName(string name);
 	}
 
@@ -28,15 +29,26 @@
         }
 
 		public bool GetIsEnabled(int id)
-	    {
+		{
 			var customerStatus = GetAll().FirstOrDefault(s => s.Id == id);
 			if (customerStatus == null)
 			{
 				return false;
 			}
 
-		    return customerStatus.IsEnabled;
-	    }
+			return customerStatus.IsEnabled;
+		}
+
+		public bool GetIsWarning(int id)
+		{
+			var customerStatus = GetAll().FirstOrDefault(s => s.Id == id);
+			if (customerStatus == null)
+			{
+				return false;
+			}
+
+			return customerStatus.IsWarning;
+		}
 
 		public CustomerStatuses GetByName(string name)
 		{

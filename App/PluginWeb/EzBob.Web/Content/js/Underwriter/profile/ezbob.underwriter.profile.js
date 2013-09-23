@@ -236,9 +236,9 @@
     ProfileView.prototype.CheckCustomerStatusAndCreateApproveDialog = function() {
       var approveLoanForWarningStatusCustomer;
 
-      if (this.loanInfoModel.get("IsWarning")) {
+      if (this.personalInfoModel.get("IsWarning")) {
         approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
-          model: this.loanInfoModel,
+          model: this.personalInfoModel,
           parent: this
         });
         EzBob.App.modal.show(approveLoanForWarningStatusCustomer);
