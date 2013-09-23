@@ -4,12 +4,12 @@
   <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
     <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Comparison" NodeId="Comparison16159142" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
@@ -20,7 +20,7 @@
     <NodeElement Name="File Path, Name and Type" NodeId="MultiAssignmentB23018869" />
     <NodeElement Name="Folder Creation" NodeId="ScriptNode20822872" />
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode4733890" />
-    <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral61244824" />
+    <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral60876920" />
     <NodeElement Name="GET_CAIS_File_Data" NodeId="DataSourceNodeScalar64892033" />
     <NodeElement Name="Get_CAIS_Folders_Paths" NodeId="DataSourceNodeScalar37560342" />
     <NodeElement Name="Mail Node" NodeId="MailNode14931696" />
@@ -99,8 +99,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Conditional Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true //set 0 to CAIS flag&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := NULL&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;SceduledRepaymentsScalar &amp;lt;&amp;gt; 0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := LoanAmountScalar / SceduledRepaymentsScalar&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus &amp;lt;&amp;gt; "8" AND CloseDateScalar &amp;gt; StartDateScalar&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CurrentBalanceScalar := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CustomerStatusScalar = "Collection"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := "Y"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := ""&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CollectionStatusScalar = 3 AND (CompanyType = "PShip3P" OR CompanyType = "PShip" OR CompanyType = "SoleTrader") 
- &lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := "T"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;//Manual CAIS Flag selected
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true //set 0 to CAIS flag&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := NULL&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;SceduledRepaymentsScalar &amp;lt;&amp;gt; 0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := LoanAmountScalar / SceduledRepaymentsScalar&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus &amp;lt;&amp;gt; "8" AND CloseDateScalar &amp;gt; StartDateScalar&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CurrentBalanceScalar := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CustomerStatusScalar = "Collection"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := "Y"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := ""&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;//Manual CAIS Flag selected
 ManualCaisFlagScalar &amp;lt;&amp;gt; NULL AND ManualCaisFlagScalar &amp;lt;&amp;gt; "Calculated value"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := ManualCaisFlagScalar&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
@@ -293,12 +292,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <DisplayName>Status Codes</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;gt; StartDateScalar
 //AND DAYSBETWEEN(CloseDateScalar,NOW()) &amp;gt; 60
-&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;lt;= 30&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 30 AND DaysBetween &amp;lt;= 60&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "1"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 60 AND DaysBetween &amp;lt;= 90&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "2"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 90  AND DaysBetween &amp;lt;= 120&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "3"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 120 AND DaysBetween &amp;lt;= 150&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "4"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 150 AND DaysBetween &amp;lt;= 180&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "5"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 180 &lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "6"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND IsDefaultedScalar = 1&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND (CollectionStatusScalar = 3 OR CollectionStatusScalar = 4)
-
-
-//CloseDateScalar &amp;lt; StartDateScalar AND MaxDelinquencyDaysScalar &amp;gt;= CP_DefaultDays
-
-&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := CurrentBalanceScalar&lt;/assignment&gt;&lt;assignment&gt;CloseDateScalar := NOW()&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;lt;= 30&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 30 AND DaysBetween &amp;lt;= 60&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "1"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 60 AND DaysBetween &amp;lt;= 90&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "2"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 90  AND DaysBetween &amp;lt;= 120&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "3"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 120 AND DaysBetween &amp;lt;= 150&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "4"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 150 AND DaysBetween &amp;lt;= 180&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "5"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 180 &lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "6"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND IsDefaultedScalar = 1&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND CustomerStatusIsEnabledScalar=0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := CurrentBalanceScalar&lt;/assignment&gt;&lt;assignment&gt;CloseDateScalar := NOW()&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment6295723</Name>
@@ -365,10 +359,391 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <AssemblyString />
       <DefaultPinName>Next</DefaultPinName>
       <Description />
+      <DisplayName>UpdateLastReportedCAISstatus</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;UpdateLastReportedCAISstatuskckpuRe2gZ3XD8WO0JmM6A==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;StoredProcedure&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;RETURN_VALUE&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString&gt;Number&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;ReturnValue&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LoanId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString&gt;Number&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISStatus&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString&gt;String&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar17642997</Name>
+      <PointF>
+        <X>457.56</X>
+        <Y>416</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Folder Creation</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode20822872</Name>
+      <PointF>
+        <X>499.132233</X>
+        <Y>136</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Subject &amp; Current Date</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;CurrDate := NOW()&lt;/assignment&gt;&lt;assignment&gt;Subject := "CAIS Report generated"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB57354364</Name>
+      <PointF>
+        <X>320.099762</X>
+        <Y>356</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>File Path, Name and Type</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;BusinessPath := dir_path+"\\PIF1160a.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerPath := dir_path+"\\PIF1160B.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerCompanyType := 1&lt;/assignment&gt;&lt;assignment&gt;BusinessCompanyType := 2&lt;/assignment&gt;&lt;assignment&gt;BusinessFileName := "PIF1160a"&lt;/assignment&gt;&lt;assignment&gt;ConsumerFilename := "PIF1160B"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB23018869</Name>
+      <PointF>
+        <X>312.5749</X>
+        <Y>536</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Business Counter</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true
+//Total accounts&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessCounter := BusinessCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "0"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessGoodCounter := BusinessGoodCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessDefaultsCounter := BusinessDefaultsCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ConditionalAssignment9785067</Name>
+      <PointF>
+        <X>653.4926</X>
+        <Y>416</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Consumer Counter</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true
+//Total accounts&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerCounter := ConsumerCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "0"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerGoodCounter := ConsumerGoodCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerDefaultsCounter := ConsumerDefaultsCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ConditionalAssignment44657822</Name>
+      <PointF>
+        <X>650.385437</X>
+        <Y>536</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;CAIS report.docxk1nsUQ8lPRqVBiAi3Gqgfg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;CAIS report.docxk1nsUQ8lPRqVBiAi3Gqgfg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode14931696</Name>
+      <PointF>
+        <X>352.670074</X>
+        <Y>456</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>Get_CAIS_Folders_Paths</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;Get_CAIS_Folders_Paths1gHDq/K//UV1P/nG8lTPgA==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISPath&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISPath2&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar37560342</Name>
+      <PointF>
+        <X>473.028748</X>
+        <Y>16</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>StratSatartDate</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>AssignmentB951548</Name>
+      <PointF>
+        <X>619.1296</X>
+        <Y>16</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>GET_CAIS_File_Data</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;GET_CAIS_File_Data7M4CJTlH71yb/OmtNfOdaQ==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;FileName&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;DirName&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CAISID&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString /&gt;
+      &lt;DatasourceTypeString /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar64892033</Name>
+      <PointF>
+        <X>62.7611542</X>
+        <Y>236</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Comparison</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison16159142</Name>
+      <PointF>
+        <X>107.597092</X>
+        <Y>136</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Close Files</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode38605574</Name>
+      <PointF>
+        <X>90.11882</X>
+        <Y>356</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Close Files</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode62435929</Name>
+      <PointF>
+        <X>210.11882</X>
+        <Y>536</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
       <DisplayName>Get_CAIS_data</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;Get_CAIS_dataioLdHajYgahYLAp0SMTWag==&lt;/DataSourceName&gt;
+  &lt;DataSourceName&gt;Get_CAIS_datanG0qCIdcIWTKDWFNFg2zpQ==&lt;/DataSourceName&gt;
   &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
   &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
   &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
@@ -841,7 +1216,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       &lt;Id&gt;0&lt;/Id&gt;
       &lt;ParentId&gt;0&lt;/ParentId&gt;
       &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CollectionStatus&lt;/Name&gt;
+      &lt;Name&gt;CustomerStatusIsEnabled&lt;/Name&gt;
       &lt;Description /&gt;
       &lt;TypeString&gt;Number&lt;/TypeString&gt;
       &lt;ConstraintString /&gt;
@@ -891,394 +1266,13 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
 &lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceBehavioral61244824</Name>
+      <Name>DataSourceBehavioral60876920</Name>
       <PointF>
         <X>218.538742</X>
         <Y>16</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSource</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>UpdateLastReportedCAISstatus</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;UpdateLastReportedCAISstatuskckpuRe2gZ3XD8WO0JmM6A==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;StoredProcedure&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;RETURN_VALUE&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString /&gt;
-      &lt;DatasourceTypeString&gt;Number&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;ReturnValue&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;LoanId&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString /&gt;
-      &lt;DatasourceTypeString&gt;Number&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Input&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CAISStatus&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString /&gt;
-      &lt;DatasourceTypeString&gt;String&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Input&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar17642997</Name>
-      <PointF>
-        <X>457.56</X>
-        <Y>416</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Folder Creation</DisplayName>
-      <InitialValue />
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>ScriptNode20822872</Name>
-      <PointF>
-        <X>499.132233</X>
-        <Y>136</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeScript</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Subject &amp; Current Date</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;CurrDate := NOW()&lt;/assignment&gt;&lt;assignment&gt;Subject := "CAIS Report generated"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MultiAssignmentB57354364</Name>
-      <PointF>
-        <X>320.099762</X>
-        <Y>356</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>File Path, Name and Type</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;BusinessPath := dir_path+"\\PIF1160a.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerPath := dir_path+"\\PIF1160B.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerCompanyType := 1&lt;/assignment&gt;&lt;assignment&gt;BusinessCompanyType := 2&lt;/assignment&gt;&lt;assignment&gt;BusinessFileName := "PIF1160a"&lt;/assignment&gt;&lt;assignment&gt;ConsumerFilename := "PIF1160B"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MultiAssignmentB23018869</Name>
-      <PointF>
-        <X>312.5749</X>
-        <Y>536</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Business Counter</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true
-//Total accounts&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessCounter := BusinessCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "0"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessGoodCounter := BusinessGoodCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;BusinessDefaultsCounter := BusinessDefaultsCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>ConditionalAssignment9785067</Name>
-      <PointF>
-        <X>653.4926</X>
-        <Y>416</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Consumer Counter</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true
-//Total accounts&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerCounter := ConsumerCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "0"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerGoodCounter := ConsumerGoodCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;ConsumerDefaultsCounter := ConsumerDefaultsCounter +1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>ConditionalAssignment44657822</Name>
-      <PointF>
-        <X>650.385437</X>
-        <Y>536</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;CAIS report.docxk1nsUQ8lPRqVBiAi3Gqgfg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;CAIS report.docxk1nsUQ8lPRqVBiAi3Gqgfg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode14931696</Name>
-      <PointF>
-        <X>352.670074</X>
-        <Y>456</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>Get_CAIS_Folders_Paths</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;Get_CAIS_Folders_Paths1gHDq/K//UV1P/nG8lTPgA==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CAISPath&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CAISPath2&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar37560342</Name>
-      <PointF>
-        <X>473.028748</X>
-        <Y>16</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>StratSatartDate</DisplayName>
-      <InitialValue />
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>AssignmentB951548</Name>
-      <PointF>
-        <X>619.1296</X>
-        <Y>16</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeExpressionBehavioral</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName>Next</DefaultPinName>
-      <Description />
-      <DisplayName>GET_CAIS_File_Data</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;GET_CAIS_File_Data7M4CJTlH71yb/OmtNfOdaQ==&lt;/DataSourceName&gt;
-  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
-  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
-  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
-  &lt;Fields&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;FileName&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;DirName&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;String&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
-      &lt;Direction&gt;Output&lt;/Direction&gt;
-      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-    &lt;DataSourceParam&gt;
-      &lt;Id&gt;0&lt;/Id&gt;
-      &lt;ParentId&gt;0&lt;/ParentId&gt;
-      &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;CAISID&lt;/Name&gt;
-      &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
-      &lt;DictionaryId xsi:nil="true" /&gt;
-      &lt;DefaultValue /&gt;
-      &lt;DataTypeString /&gt;
-      &lt;DatasourceTypeString /&gt;
-      &lt;Direction&gt;Input&lt;/Direction&gt;
-      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
-      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
-    &lt;/DataSourceParam&gt;
-  &lt;/Fields&gt;
-  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
-  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
-&lt;/NodeParameters&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceNodeScalar64892033</Name>
-      <PointF>
-        <X>62.7611542</X>
-        <Y>236</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Comparison</DisplayName>
-      <InitialValue />
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>Comparison16159142</Name>
-      <PointF>
-        <X>107.597092</X>
-        <Y>136</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeComparer</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Close Files</DisplayName>
-      <InitialValue />
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>ScriptNode38605574</Name>
-      <PointF>
-        <X>90.11882</X>
-        <Y>356</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeScript</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Close Files</DisplayName>
-      <InitialValue />
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>ScriptNode62435929</Name>
-      <PointF>
-        <X>210.11882</X>
-        <Y>536</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeScript</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -2209,30 +2203,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
-      <Name>CollectionStatusScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>CAIS_NO_Upload</OwnerName>
-      <Name>CollectionStatus</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>CAISflag</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -2676,6 +2646,30 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>CAIS_NO_Upload</OwnerName>
+      <Name>CustomerStatusIsEnabled</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CAIS_NO_Upload</OwnerName>
+      <Name>CustomerStatusIsEnabledScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>ReadNextNode20166237</OwnerName>
       <Name>@InputDataLayerName</Name>
       <TypeName>System.String</TypeName>
@@ -3073,18 +3067,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
-      <Name>CollectionStatusScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>MartialStatusScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -3112,6 +3094,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>MinLSDateScalar</Name>
       <TypeName>System.DateTime</TypeName>
       <InitialValue>1/1/1900 12:00:00 AM</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode4733890</OwnerName>
+      <Name>CustomerStatusIsEnabledScalar</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -3469,18 +3463,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
-      <Name>CollectionStatus</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>MartialStatus</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -3508,6 +3490,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>MinLSDate</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode4733890</OwnerName>
+      <Name>CustomerStatusIsEnabled</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -3602,426 +3596,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>CreditProduct27789888</OwnerName>
       <Name>CP_AddressCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>loanID</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CustomerId</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>StartDate</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>DateClose</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>MaxDelinquencyDays</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>RepaymentPeriod</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CurrentBalance</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Gender</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>FirstName</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>MiddleInitial</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Surname</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>RefNumber</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Line1</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Line2</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Line3</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Town</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>County</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>Postcode</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>DateOfBirth</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>MinLSDate</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>LoanAmount</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>SceduledRepayments</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CompanyType</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>LimitedRefNum</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>NonLimitedRefNum</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CustomerState</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>SortCode</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>IsDefaulted</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CaisAccountStatus</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>CollectionStatus</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>MartialStatus</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>ManualCaisFlag</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>@OutputDataLayerName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>DataSourceName</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description>Variable for setting name of Data Source that will be used in current node</Description>
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -4295,6 +3869,426 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>loanID</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CustomerId</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>StartDate</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>DateClose</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>MaxDelinquencyDays</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>RepaymentPeriod</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CurrentBalance</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Gender</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>FirstName</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>MiddleInitial</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Surname</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>RefNumber</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Line1</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Line2</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Line3</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Town</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>County</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>Postcode</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>DateOfBirth</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>MinLSDate</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>LoanAmount</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>SceduledRepayments</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CompanyType</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>LimitedRefNum</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>NonLimitedRefNum</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CustomerState</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>SortCode</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>IsDefaulted</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CaisAccountStatus</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>CustomerStatusIsEnabled</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>MartialStatus</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>ManualCaisFlag</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>@OutputDataLayerName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -4311,14 +4305,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceBehavioral61244824</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB12268704</TargetNodeName>
+      <SourceNodeName>Comparison16159142</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>DataSourceBehavioral60876920</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -4688,14 +4682,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison16159142</SourceNodeName>
-      <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>DataSourceBehavioral61244824</TargetNodeName>
+      <SourceNodeName>DataSourceBehavioral60876920</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB12268704</TargetNodeName>
       <SuperNodeName />
-      <Caption>No</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-65536</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -4728,103 +4722,103 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>StartDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>StartDate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CurrentBalance</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>CurrentBalance</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Gender</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Gender</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>FirstName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MiddleInitial</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>MiddleInitial</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Surname</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Surname</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>RefNumber</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>RefNumber</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line1</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Line1</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line2</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Line2</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line3</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Line3</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Town</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Town</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>County</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>County</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Postcode</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>Postcode</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>DateOfBirth</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>DateOfBirth</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -4938,25 +4932,25 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>loanID</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>loanID</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CloseDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>DateClose</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MaxDelinquencyDays</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>MaxDelinquencyDays</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>LoanAmount</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>LoanAmount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -4980,37 +4974,37 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>SceduledRepayments</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>SceduledRepayments</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CompanyTypeColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>CompanyType</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>LimitedRefNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>LimitedRefNum</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>NonLimitedRefNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>NonLimitedRefNum</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CustomerState</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>CustomerState</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>SortCode</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>SortCode</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5046,13 +5040,13 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>RepaymentPeriod</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>RepaymentPeriod</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>IsDefaulted</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>IsDefaulted</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5064,7 +5058,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ManualCaisAccountStatus</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>CaisAccountStatus</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5072,18 +5066,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SourceVariableName>SceduledRepayments</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>SceduledRepaymentsScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>CollectionStatus</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
-      <TargetVariableName>CollectionStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>CollectionStatus</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>CollectionStatusScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5106,7 +5088,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>new_OutputDataLayerName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>@OutputDataLayerName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5124,7 +5106,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MartialStatus</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>MartialStatus</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5136,7 +5118,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ManualCaisFlag</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>ManualCaisFlag</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5148,7 +5130,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MinLSDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral61244824</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
       <TargetVariableName>MinLSDate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5258,6 +5240,60 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SourceVariableName>ManualCaisAccountStatus</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>ManualCaisAccountStatusScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ManualCaisAccountStatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>Comparison28830314</TargetVariableOwnerName>
+      <TargetVariableName>Comparison28830314ManualCaisAccountStatusScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>caisId</SourceVariableName>
+      <TargetVariableOwnerName>Comparison16159142</TargetVariableOwnerName>
+      <TargetVariableName>Comparison16159142caisId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>caisId</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
+      <TargetVariableName>CAISID</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DB_FileName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
+      <TargetVariableName>FileName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>DB_DirName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
+      <TargetVariableName>DirName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>CustomerStatusIsEnabled</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral60876920</TargetVariableOwnerName>
+      <TargetVariableName>CustomerStatusIsEnabled</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>CustomerStatusIsEnabled</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>CustomerStatusIsEnabledScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5429,12 +5465,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>CollectionStatusScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>CollectionStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MartialStatusScalar</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>MartialStatus</TargetVariableName>
@@ -5459,45 +5489,9 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ManualCaisAccountStatusScalar</SourceVariableName>
-      <TargetVariableOwnerName>Comparison28830314</TargetVariableOwnerName>
-      <TargetVariableName>Comparison28830314ManualCaisAccountStatusScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>caisId</SourceVariableName>
-      <TargetVariableOwnerName>Comparison16159142</TargetVariableOwnerName>
-      <TargetVariableName>Comparison16159142caisId</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
-      <TargetVariableName>DataSourceName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>caisId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
-      <TargetVariableName>CAISID</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
-      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DB_FileName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
-      <TargetVariableName>FileName</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>DB_DirName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceNodeScalar64892033</TargetVariableOwnerName>
-      <TargetVariableName>DirName</TargetVariableName>
+      <SourceVariableName>CustomerStatusIsEnabledScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>CustomerStatusIsEnabled</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -5646,14 +5640,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceBehavioral61244824</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar17642997</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -5751,6 +5737,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>ScriptNode62435929</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceBehavioral60876920</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

@@ -37,7 +37,7 @@ SELECT l.Id AS loanID
 , c.SortCode
 , l.IsDefaulted
 , lo.CaisAccountStatus
-, c.CollectionStatus
+, convert(INT, cs.IsEnabled) AS CustomerStatusIsEnabled
 , c.MartialStatus
 , lo.ManualCaisFlag
 
@@ -60,6 +60,7 @@ FROM
 --LEFT OUTER JOIN dbo.CustomerAddressRelation AS car ON car.customerId = c.Id 
 LEFT OUTER JOIN dbo.CustomerAddress AS ca ON ca.customerId = c.Id
 LEFT OUTER JOIN dbo.LoanOptions AS lo ON lo.LoanId = l.Id
+LEFT JOIN CustomerStatuses AS cs ON cs.Id = c.CollectionStatus
 WHERE c.IsTest <> 1 and 
  (
  ((c.TypeOfBusiness = 'PShip3P' OR c.TypeOfBusiness = 'SoleTrader') AND ca.addressType = 5) OR 
