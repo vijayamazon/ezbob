@@ -48,7 +48,8 @@
 		}
 
 		[Test]
-		public void test_get_itemId()
+		[Ignore]
+		public long test_get_itemId()
 		{
 			var m = new YodleeMain();
 			string dName;
@@ -56,6 +57,15 @@
 			long itemId = m.GetItemId("EZBOB+2013@ezbob.com", Encryptor.Decrypt("qcw25++Ggp8/yi4bNkeB2Q64ABGU5YL+r7DPAZDrkkE="), out dName, out csId);
 			Console.WriteLine("{0} {1}", dName, itemId);
 			Assert.That(itemId != -1);
+			return itemId;
+		}
+
+		[Test]
+		[Ignore]
+		public void test_remove_item()
+		{
+			var m = new YodleeMain();
+			m.RemoveItem(test_get_itemId());
 		}
 	}
 }

@@ -85,7 +85,7 @@ namespace YodleeLib
 
         protected Random random = new Random();
 
-        protected string unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+		protected static string unreservedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
         /// <summary>
         /// Helper function to compute a hash value
@@ -154,7 +154,7 @@ namespace YodleeLib
         /// </summary>
         /// <param name="value">The value to Url encode</param>
         /// <returns>Returns a Url encoded string</returns>
-        protected string UrlEncode(string value)
+        public static string UrlEncode(string value)
         {
             var result = new StringBuilder();
 
@@ -243,7 +243,7 @@ namespace YodleeLib
             parameters.Add(new QueryParameter(OAuthTimestampKey, timeStamp));
             parameters.Add(new QueryParameter(OAuthSignatureMethodKey, signatureType));
             parameters.Add(new QueryParameter(OAuthConsumerKeyKey, consumerKey));
-            parameters.Add(new QueryParameter(OAuthCallbackKey, callback));
+			parameters.Add(new QueryParameter(OAuthCallbackKey, callback));
             if (!string.IsNullOrEmpty(token))
             {
                 parameters.Add(new QueryParameter(OAuthTokenKey, token));

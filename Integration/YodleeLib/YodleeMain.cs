@@ -3,7 +3,6 @@
 	using System;
 	using System.Threading;
 	using EzBob.Configuration;
-	using StructureMap;
 	using config;
 	using log4net;
 
@@ -87,7 +86,7 @@
 						timestamp,
 						nonce,
 						OAuthBase.HMACSHA1SignatureType,
-						callback,
+						OAuthBase.UrlEncode(callback),
 						out normalizedUrl,
 						out normalizedRequestParameters
 						);
@@ -141,7 +140,7 @@
 						timestamp,
 						nonce,
 						OAuthBase.HMACSHA1SignatureType,
-						callback,
+						OAuthBase.UrlEncode(callback),
 						out normalizedUrl,
 						out normalizedRequestParameters
 						);
@@ -225,7 +224,7 @@
 			return itemSummary;
 		}
 
-		private void RemoveItem(long itemId)
+		public void RemoveItem(long itemId)
 		{
 			try
 			{
