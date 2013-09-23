@@ -459,7 +459,10 @@
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
-				"Notes": [],
+				"Notes": [
+					"<h2 class=form_start>Or Upload VAT Return Reports</h2>",
+					"<div><button class=\"upload-files button orange\">Upload</button></div>"
+				],
 				"OnBeforeLink": [
 					"accountModel.name = 'HMRC as ' + accountModel.login;",
 					"return accountModel;"

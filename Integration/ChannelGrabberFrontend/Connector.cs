@@ -26,7 +26,6 @@ namespace Integration.ChannelGrabberFrontend {
 
 			default:
 				throw new ApiException("Unsupported behaviour for CG flavour: " + oAccountData.VendorInfo.Behaviour.ToString());
-				break;
 			} // switch
 		} // constructor
 

@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\Scorto.Core\log4net.dll</HintPath>
     </Reference>
@@ -64,6 +67,7 @@
     <Compile Include="RtiTaxYearRowData.cs" />
     <Compile Include="RtiTaxYearSeeds.cs" />
     <Compile Include="SheafMetaData.cs" />
+    <Compile Include="VatReturnPdfThrasher.cs" />
     <Compile Include="VatReturnSeeds.cs" />
     <Compile Include="VatReturnThrasher.cs" />
   </ItemGroup>

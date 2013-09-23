@@ -35,6 +35,7 @@ namespace Ezbob.Logger {
 				break;
 
 			case Severity.Info:
+			case Severity.Msg:
 				if ((parameters == null) || (parameters.Length == 0))
 					m_oiLog.Info(format);
 				else
@@ -51,6 +52,7 @@ namespace Ezbob.Logger {
 				break;
 
 			case Severity.Error:
+			case Severity.Alert:
 				if ((parameters == null) || (parameters.Length == 0))
 					m_oiLog.Error(format);
 				else

@@ -11,6 +11,7 @@ namespace Ezbob.ExperianParser {
 		None,
 		Map,
 		MonthName,
+		Money,
 	} // TransformationType
 
 	#endregion enum TransformationType
@@ -82,8 +83,16 @@ namespace Ezbob.ExperianParser {
 				case TransformationType.MonthName:
 					DateTime oDate = DateTime.Today;
 
-					if (DateTime.TryParseExact("1976-" + sResult + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out oDate))
-						sResult = oDate.ToString("MMMM", CultureInfo.InvariantCulture);
+					if (DateTime.TryParseExact("1976-" + sResult + "-01", "yyyy-MM-dd", Culture, DateTimeStyles.None, out oDate))
+						sResult = oDate.ToString("MMMM", Culture);
+
+					break;
+
+				case TransformationType.Money:
+					decimal nValue;
+
+					if (decimal.TryParse(sResult, NumberStyles.Currency, Culture, out nValue))
+						sResult = nValue.ToString("C2", Culture);
 
 					break;
 				} // switch
@@ -101,6 +110,21 @@ namespace Ezbob.ExperianParser {
 		#region private
 
 		private readonly List<TransformationType> m_oTypes;
+
+		#region property Culture
+
+		private static CultureInfo Culture {
+			get {
+				if (ms_oCulture == null)
+					ms_oCulture = new CultureInfo("en-GB", false);
+
+				return ms_oCulture;
+			} // get
+		} // Culture
+
+		private static CultureInfo ms_oCulture;
+
+		#endregion property Culture
 
 		#endregion private
 	} // class Transformation

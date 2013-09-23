@@ -596,9 +596,9 @@
 		},
 
 		"Fields": [
-			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "Total Current Assets" }] },
-			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "Net Assets" }] },
-			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "Total Shareholders Funds" }] },
+			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "Total Current Assets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "Net Assets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "Total Shareholders Funds", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "Accounts Date", "Position": 2, "Prefix": " " }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "Accounts Date", "Position": 1, "Prefix": " " }] },

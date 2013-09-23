@@ -1,4 +1,6 @@
 using System.IO;
+using Ezbob.HmrcHarvester;
+using Ezbob.Logger;
 using Integration.ChannelGrabberFrontend;
 
 namespace EzBobTest
@@ -97,6 +99,27 @@ namespace EzBobTest
             var a = payPalSettings.ErrorRetryingInfo;
         }
 
+		[Test]
+		public void TestHmrcPdfThrasher() {
+			var oLog = new SafeILog(LogManager.GetLogger(typeof(TestRetrieveDataHelper)));
+
+			var p = new VatReturnPdfThrasher(true, oLog);
+
+			foreach (string sFilePah in Directory.GetFiles(@"c:\ezbob\test-data\vat-return", "vat*.pdf")) {
+				oLog.Msg("Processing file {0} started...", sFilePah);
+
+				var smd = new SheafMetaData {
+					BaseFileName = sFilePah,
+					DataType = DataType.VatReturn,
+					FileType = FileType.Pdf,
+					Thrasher = p
+				};
+				
+				ISeeds s = p.Run(smd, File.ReadAllBytes(sFilePah));
+
+				oLog.Msg("Processing file {0} complete.", sFilePah);
+			} // for each
+		} // TestHmrcPdfThrasher
 
         [Test]
         public void GetAnalysisValuesByCustomerMarketPlace()

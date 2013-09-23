@@ -13,8 +13,7 @@ namespace Ezbob.HmrcHarvester {
 
 		#region constructor
 
-		public VatReturnThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(oLog) {
-			VerboseLogging = bVerboseLogging;
+		public VatReturnThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(bVerboseLogging, oLog) {
 		} // constructor
 
 		#endregion constructor
@@ -60,12 +59,6 @@ namespace Ezbob.HmrcHarvester {
 
 		#region private
 
-		#region property VerboseLogging
-
-		private bool VerboseLogging { get; set; }
-
-		#endregion property VerboseLogging
-
 		#region method VatPeriod
 
 		private bool VatPeriod(HtmlNode oNode, VatReturnSeeds seeds) {
@@ -91,15 +84,13 @@ namespace Ezbob.HmrcHarvester {
 			kv["Date to:"] = VatReturnSeeds.Field.DateTo;
 			kv["Due date:"] = VatReturnSeeds.Field.DateDue;
 
-			var ci = new CultureInfo("en-GB");
-
 			foreach (KeyValuePair<string, VatReturnSeeds.Field> pair in kv) {
 				if (!dlp.Data.ContainsKey(pair.Key))
 					continue;
 
 				DateTime d;
 
-				if (DateTime.TryParseExact(dlp.Data[pair.Key], "dd MMM yyyy", ci, DateTimeStyles.None, out d))
+				if (DateTime.TryParseExact(dlp.Data[pair.Key], "dd MMM yyyy", Culture, DateTimeStyles.None, out d))
 					seeds.Set(pair.Value, d, this);
 			} // for each
 
@@ -145,7 +136,7 @@ namespace Ezbob.HmrcHarvester {
 				);
 			} // if
 
-			return true;
+			return seeds.AreBusinessDetailsValid();
 		} // BusinessDetails
 
 		#endregion method BusinessDetails

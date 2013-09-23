@@ -74,7 +74,8 @@
       var acc, accountModel, elm, fi, func, propName, propVal, vendorInfo, xhr, _i, _len, _ref2,
         _this = this;
 
-      if (!this.validator.form()) {
+      if (!EzBob.Validation.checkForm(this.validator)) {
+        this.validator.form();
         return false;
       }
       if (this.$el.find('a.connect-account').hasClass('disabled')) {
@@ -167,6 +168,7 @@
     };
 
     CGAccountInfoView.prototype.getDocumentTitle = function() {
+      EzBob.App.trigger('clear');
       return 'Link ' + this.getVendorInfo().DisplayName + ' Account';
     };
 

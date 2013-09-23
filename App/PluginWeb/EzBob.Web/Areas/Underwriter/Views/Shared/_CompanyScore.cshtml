@@ -15,7 +15,118 @@
 
 			// console.log('i = ', i, 'aryData = ', aryData, 'meta', oMetaData);
 
-			if (oMetaData.DisplayDirection == 'horizontal') {
+			if (i == 'Limited Company Payment Performance Details') {
+				%><table class="table table-striped blue-header table-bordered">
+					<thead><tr><th colspan=4><%- i %></th></tr><tr><th></th><th>Company</th><th>Industry</th><th></th></thead>
+					<tbody><%
+						var aryCompany = {};
+						var aryIndustry = {};
+
+						var sSupplierPaymentPattern = '';
+
+						var obj = aryData[0];
+
+						for (var fld in obj) {
+							if (fld == 'Supplier Payment Pattern') {
+								sSupplierPaymentPattern = obj[fld];
+								continue;
+							} // if
+
+							var nFirstSpace = fld.indexOf(' ');
+
+							var aryTarget = (fld.substr(0, nFirstSpace) == 'Company') ? aryCompany : aryIndustry;
+
+							var sSuffix = fld.substr(nFirstSpace + 1);
+
+							if (sSuffix == 'Payment Pattern') {
+								aryTarget[sSuffix] = obj[fld];
+								continue;
+							} // if
+
+							var bIsAverage = (sSuffix.substr(0, 3) == '- A');
+
+							var sKey, sNeedle, sNeedleLen;
+
+							if (bIsAverage) {
+								sKey = 'Average DBT';
+								sNeedle = ' - ';
+								sNeedleLen = 3;
+							}
+							else {
+								sKey = 'Number of DBT';
+								sNeedle = '(';
+								sNeedleLen = 0;
+							} // if
+
+							if (!aryTarget[sKey])
+								aryTarget[sKey] = {};
+
+							aryTarget[sKey][sSuffix.substr(sSuffix.indexOf(sNeedle) + sNeedleLen)] = obj[fld];
+						} // for each field
+
+						var sGroup = 'Average DBT';
+
+						%><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
+							<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
+							<td></td>
+						</tr>
+						<tr><th class=narrow-as-possible>Payment Pattern</th>
+							<td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
+							<td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
+							<td></td>
+						</tr>
+						<tr>
+							<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+							<td></td>
+						</tr><%
+
+						var aryMonths = { 3: 0, 6: 0, 12: 0 };
+
+						for (var j in aryMonths) {
+							var sKey = j + ' Months';
+							%><tr><td class=narrow-as-possible><%- sKey %></th>
+							<td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
+							<td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
+							<td></td>
+						</tr><%
+						} // for
+
+						sGroup = 'Number of DBT';
+
+						%><tr>
+							<th colspan=3 class=narrow-as-possible><%- sGroup %></th>
+							<td></td>
+						</tr><%
+
+						var aryIntervals = {};
+
+						if (aryCompany[sGroup])
+							for (var j in aryCompany[sGroup])
+								aryIntervals[j] = 0;
+
+						if (aryIndustry[sGroup])
+							for (var j in aryIndustry[sGroup])
+								aryIntervals[j] = 0;
+
+						var arySortedIntervals = [];
+
+						for (var j in aryIntervals)
+							arySortedIntervals.push(j);
+
+						arySortedIntervals.sort();
+
+						for (var j = 0; j < arySortedIntervals.length; j++) {
+							var sKey = arySortedIntervals[j];
+							%><tr><td class=narrow-as-possible><%- sKey.substr(1, sKey.length - 2) %></th>
+							<td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
+							<td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
+							<td></td>
+						</tr><%
+						} // for
+					%></tbody><%
+				%></table><%
+			}
+			else if (oMetaData.DisplayDirection == 'horizontal') {
 				%><table class="table table-striped blue-header table-bordered table-fixed"><%
 				var nColumnCount = 0;
 			
@@ -50,7 +161,7 @@
 					var obj = aryData[j];
 
 					for (var fld in obj) {
-						%><tr><td style="width: 1px; white-space: nowrap;"><%- fld %></td><td><%- obj[fld] %></td></tr><%
+						%><tr><td class=narrow-as-possible><%- fld %></td><td><%- obj[fld] %></td></tr><%
 					} // for each field
 				} // for each group output
 				%></tbody><%

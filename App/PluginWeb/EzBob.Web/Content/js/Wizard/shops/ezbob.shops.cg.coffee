@@ -22,7 +22,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         @template = '#' + @accountType + 'AccountInfoTemplate'
 
     inputChanged: =>
-        enabled =  EzBob.Validation.checkForm(@validator) 
+        enabled = EzBob.Validation.checkForm(@validator) 
         @$el.find('a.connect-account').toggleClass('disabled', !enabled)
 
     getVendorInfo: ->

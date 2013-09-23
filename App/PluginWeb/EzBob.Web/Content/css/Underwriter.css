@@ -516,3 +516,5 @@ table.internal-table td {
 	color: red;
 	margin-left: 3em;
 }
+
+.narrow-as-possible { width: 1px !important; white-space: nowrap !important; }

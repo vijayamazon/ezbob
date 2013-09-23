@@ -11,12 +11,10 @@ namespace Ezbob.HmrcHarvester {
 		#region method ParseGBP
 
 		public static decimal ParseGBP(string sMoney) {
-			var ci = new CultureInfo("en-GB", false);
-			
 			// Convert unicode pound sign to ascii.
 			string sValue = sMoney.Replace(Convert.ToChar(65533), Convert.ToChar(163));
 
-			return decimal.Parse(sValue, NumberStyles.Currency, ci);
+			return decimal.Parse(sValue, NumberStyles.Currency, Culture);
 		} // ParseGBP
 
 		#endregion method ParseGBP
@@ -29,12 +27,38 @@ namespace Ezbob.HmrcHarvester {
 
 		#region constructor
 
-		protected AThrasher(ASafeLog oLog = null) : base(oLog) {
+		protected AThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(oLog) {
+			VerboseLogging = bVerboseLogging;
 		} // constructor
 
 		#endregion constructor
 
+		#region property VerboseLogging
+
+		protected bool VerboseLogging { get; private set; }
+
+		#endregion property VerboseLogging
+
+		#region property Culture
+
+		protected static CultureInfo Culture {
+			get {
+				if (ms_oCulture == null)
+					ms_oCulture = new CultureInfo("en-GB", false);
+
+				return ms_oCulture;
+			} // get
+		} // Culture
+
+		private static CultureInfo ms_oCulture;
+
+		#endregion property Culture
+
 		#endregion protected
+
+		#region private
+
+		#endregion private
 	} // class AThrasher
 
 	#endregion class AThrasher
