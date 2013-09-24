@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.DatabaseWrapper.AmazonFeedbackData;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
-using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
-using EZBob.DatabaseLib.DatabaseWrapper.Order;
-using EZBob.DatabaseLib.DatabaseWrapper.Products;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
-using EzBob.AmazonDbLib;
-using EzBob.AmazonServiceLib;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Config;
-using EzBob.AmazonServiceLib.Inventory.Model;
-using EzBob.AmazonServiceLib.MarketWebService.Model;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic;
-using MarketplaceWebServiceProducts;
-using StructureMap;
-using EZBob.DatabaseLib.Model.Database;
-namespace EzBob.AmazonLib
+﻿namespace EzBob.AmazonLib
 {
-    public class AmazonRetriveDataHelper : MarketplaceRetrieveDataHelperBase<AmazonDatabaseFunctionType>
-    {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.DatabaseWrapper.AmazonFeedbackData;
+	using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
+	using EZBob.DatabaseLib.DatabaseWrapper.Inventory;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
+	using EZBob.DatabaseLib.DatabaseWrapper.Products;
+	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+	using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
+	using AmazonDbLib;
+	using AmazonServiceLib;
+	using AmazonServiceLib.Common;
+	using AmazonServiceLib.Config;
+	using AmazonServiceLib.Inventory.Model;
+	using AmazonServiceLib.MarketWebService.Model;
+	using AmazonServiceLib.Orders.Model;
+	using AmazonServiceLib.UserInfo;
+	using CommonLib;
+	using CommonLib.TimePeriodLogic;
+	using MarketplaceWebServiceProducts;
+	using StructureMap;
+	using EZBob.DatabaseLib.Model.Database;
+	using log4net;
+
+	public class AmazonRetriveDataHelper : MarketplaceRetrieveDataHelperBase<AmazonDatabaseFunctionType>
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(AmazonRetriveDataHelper));
         private readonly AmazonServiceConnectionInfo _ConnectionInfo;
 		private readonly IAmazonMarketplaceSettings _AmazonSettings;
         public AmazonRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<AmazonDatabaseFunctionType> marketplace)
@@ -109,8 +111,6 @@ namespace EzBob.AmazonLib
 		{
 			return RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( GetDatabaseCustomerMarketPlace( customerMarketPlaceId ) );
 		}
-    	
-        
 
         /*public void UpdateClientInventoryInfo( IDatabaseCustomer databaseCustomer, ActionAccessType access )
         {
@@ -197,10 +197,8 @@ namespace EzBob.AmazonLib
 													ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
 												};
 
-					//var orderReportConfigurator = CreateServiceReportsConfigurator( connectionInfo );
-					//AmazonOrdersList ordersList = AmazonServiceHelper.GetOrdersReport(orderReportConfigurator , amazonOrdersRequestInfo, access );
-
 					DateTime submittedDate;
+					log.InfoFormat("Fetching amazon orders for customer:{0} marketplace:{1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
 					var orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetListOrders( _ConnectionInfo, amazonOrdersRequestInfo, access ) );
