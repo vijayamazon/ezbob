@@ -66,11 +66,7 @@
 
 						var sGroup = 'Average DBT';
 
-						%><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
-							<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
-							<td></td>
-						</tr>
-						<tr><th class=narrow-as-possible>Payment Pattern</th>
+						%><tr><th class=narrow-as-possible>Payment Pattern</th>
 							<td class=narrow-as-possible><%- aryCompany['Payment Pattern'] || '' %></td>
 							<td class=narrow-as-possible><%- aryIndustry['Payment Pattern'] || '' %></td>
 							<td></td>
@@ -80,13 +76,58 @@
 							<td></td>
 						</tr><%
 
-						var aryMonths = { 3: 0, 6: 0, 12: 0 };
+						var aryMonths = [ 12, 6, 3 ];
+						aryMonths.sort(function(a, b) { return b - a; });
+						
+						var aryOutput = [];
+						var aryLast = null;
 
-						for (var j in aryMonths) {
-							var sKey = j + ' Months';
-							%><tr><td class=narrow-as-possible><%- sKey %></th>
-							<td class=narrow-as-possible><%- aryCompany[sGroup]  ? (aryCompany[sGroup][sKey] || '') : '' %></td>
-							<td class=narrow-as-possible><%- aryIndustry[sGroup] ? (aryIndustry[sGroup][sKey] || '') : '' %></td>
+						for (var j = 0; j < aryMonths.length; j++) {
+							var sKey = aryMonths[j] + ' Months';
+						
+							var bHasCompany  = aryCompany[sGroup]  && (typeof aryCompany[sGroup][sKey] !== 'undefined');
+							var bHasIndustry = aryIndustry[sGroup] && (typeof aryIndustry[sGroup][sKey] !== 'undefined');
+
+							var aryThis = {
+								caption: sKey,
+
+								has_company: bHasCompany,
+								company: (bHasCompany  ? aryCompany[sGroup][sKey]  : ''),
+
+								has_industry: bHasIndustry,
+								industry: (bHasIndustry ? aryIndustry[sGroup][sKey] : ''),
+
+								company_trend: '',
+								company_to_industry_trend: '',
+								industry_trend: ''
+							};
+						
+							if (bHasCompany && bHasIndustry)
+								aryThis.company_to_industry_trend = aryThis.company <= aryThis.industry ? 'positive-trend' : 'negative-trend';
+
+							aryOutput.push(aryThis);
+
+							if (aryLast == null) {
+								aryLast = aryThis;
+								continue;
+							} // if
+
+							if (bHasCompany && aryLast.has_company)
+								aryThis.company_trend = aryThis.company <= aryLast.company ? 'positive-trend' : 'negative-trend';
+
+							if (bHasIndustry && aryLast.has_industry)
+								aryThis.industry_trend = aryThis.industry <= aryLast.industry ? 'positive-trend' : 'negative-trend';
+						} // for
+
+						for (var j = aryOutput.length - 1; j >= 0; j--) {
+							var oCurrent = aryOutput[j];
+
+							%><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
+							<td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
+								<span class="<%- oCurrent.company_trend %>"><%- oCurrent.company_trend ? '[self]' : '' %></span>
+								<span class="<%- oCurrent.company_to_industry_trend %>"><%- oCurrent.company_to_industry_trend ? '[industry]' : '' %></span>
+							</div></td>
+							<td class="narrow-as-possible <%- oCurrent.industry_trend %>"><%- oCurrent.industry %></td>
 							<td></td>
 						</tr><%
 						} // for
@@ -123,7 +164,11 @@
 							<td></td>
 						</tr><%
 						} // for
-					%></tbody><%
+					%></tbody>
+					<tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
+						<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
+						<td></td>
+					</tr></tfoot><%
 				%></table><%
 			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {

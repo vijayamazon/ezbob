@@ -16,8 +16,10 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         'click a.back': 'back'
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
+        'click .upload-files': 'uploadFiles'
 
     initialize: (options) ->
+        @uploadFilesDlg = null
         @accountType = options.accountType
         @template = '#' + @accountType + 'AccountInfoTemplate'
 
@@ -40,11 +42,11 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         accountModel = $.parseJSON $('div#cg-account-model-template').text()
 
-        vendorInfo = @getVendorInfo()
+        oVendorInfo = @getVendorInfo()
 
         accountModel.accountTypeName = @accountType
 
-        for fi in vendorInfo.SecurityData.Fields
+        for fi in oVendorInfo.SecurityData.Fields
             accountModel[fi.NodeName] = fi.Default if fi.Default
 
         for propName, propVal of accountModel
@@ -53,12 +55,12 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             if elm.length > 0
                 accountModel[propName] = elm.val()
 
-        if vendorInfo.ClientSide.LinkForm.OnBeforeLink.length
-             func = new Function 'accountModel', vendorInfo.ClientSide.LinkForm.OnBeforeLink.join "\n"
+        if oVendorInfo.ClientSide.LinkForm.OnBeforeLink.length
+             func = new Function 'accountModel', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join "\n"
              accountModel = func.call null, accountModel
 
              if not accountModel
-                 EzBob.App.trigger 'error', vendorInfo.DisplayName + ' Account Data Validation Error'
+                 EzBob.App.trigger 'error', oVendorInfo.DisplayName + ' Account Data Validation Error'
                  return false
 
         delete accountModel.id
@@ -67,7 +69,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         xhr = acc.save()
         if not xhr
-            EzBob.App.trigger 'error', vendorInfo.DisplayName + ' Account Saving Error'
+            EzBob.App.trigger 'error', oVendorInfo.DisplayName + ' Account Saving Error'
             return false
 
         BlockUi 'on'
@@ -75,7 +77,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             BlockUi 'off'
 
         xhr.fail (jqXHR, textStatus, errorThrown) =>
-            EzBob.App.trigger 'error', 'Failed to Save ' + vendorInfo.DisplayName + ' Account'
+            EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account'
 
         xhr.done (res) =>
             if res.error
@@ -85,7 +87,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             try
                 @model.add(acc)
 
-            EzBob.App.trigger 'info', vendorInfo.DisplayName + ' Account Added Successfully'
+            EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
 
             for propName, propVal of accountModel
                 elm = @$el.find '#' + @accountType.toLowerCase() + '_' + propName.toLowerCase()
@@ -98,6 +100,43 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             @trigger 'back'
 
         false
+
+    uploadFiles: =>
+        sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
+
+        while window[sKey]
+            sKey += Math.floor(Math.random() * 1000)
+
+        oVendorInfo = @getVendorInfo()
+
+        window[sKey] = (nAcceptedCount) =>
+            delete window[sKey]
+
+            @uploadFileDlg.dialog 'close'
+            @uploadFileDlg = null
+
+            if nAcceptedCount < 1
+                EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account'
+            else
+                EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
+
+            @trigger 'completed'
+            @trigger 'back'
+
+        $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
+            iframe.setAttribute 'width', 570
+            iframe.setAttribute 'height', 515
+            iframe.setAttribute 'src', "#{window.gRootPath}Customer/CGMarketPlaces/UploadFilesDialog?key=" + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler
+
+        @uploadFileDlg = @$el.find('div#upload-files-form').dialog(
+            height: 600,
+            width: 600,
+            modal: true,
+            title: 'Upload VAT Return Files'
+            resizable: false
+            dialogClass: 'upload-files-dialog'
+            closeOnEscape: false
+        )
 
     render: =>
         super()

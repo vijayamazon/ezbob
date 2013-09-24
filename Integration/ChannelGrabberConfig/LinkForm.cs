@@ -12,6 +12,8 @@ namespace Integration.ChannelGrabberConfig {
 		public LinkForm() {
 			Fields = new List<FieldInfo>();
 			Notes = new List<string>();
+			HasUploadFiles = false;
+			UploadFilesHandler = "";
 			OnBeforeLink = new List<string>();
 			SourceLabel = new List<Stylesheet>();
 			SourceLabelOn = new List<Stylesheet>();
@@ -23,6 +25,8 @@ namespace Integration.ChannelGrabberConfig {
 
 		public List<FieldInfo> Fields { get; set; }
 		public List<string> Notes { get; set; }
+		public bool HasUploadFiles { get; set; }
+		public string UploadFilesHandler { get; set; }
 		public List<string> OnBeforeLink { get; set; }
 		public List<Stylesheet> SourceLabel { get; set; }
 		public List<Stylesheet> SourceLabelOn { get; set; }
@@ -53,7 +57,12 @@ namespace Integration.ChannelGrabberConfig {
 		#region method ToString
 
 		public override string ToString() {
-			return Fields.ToString();
+			return string.Format(
+				"Has upload files: {0}{2}\n{1}",
+				HasUploadFiles ? "yes" : "no",
+				Fields,
+				HasUploadFiles ? " to " + UploadFilesHandler : ""
+			);
 		} // ToString
 
 		#endregion method ToString
@@ -66,6 +75,10 @@ namespace Integration.ChannelGrabberConfig {
 			Fields.ForEach( fi => oRes.Fields.Add((FieldInfo)fi.Clone()) );
 
 			Notes.ForEach( s => oRes.Notes.Add((string)s.Clone()) );
+
+			oRes.HasUploadFiles = HasUploadFiles;
+
+			oRes.UploadFilesHandler = UploadFilesHandler;
 
 			OnBeforeLink.ForEach( s => oRes.OnBeforeLink.Add((string)s.Clone()) );
 

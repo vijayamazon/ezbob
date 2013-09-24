@@ -1164,3 +1164,7 @@ a.amazonscreenshot:hover {
 #credit-line-form .error {
     border: 1px solid red;
 }
+
+DIV#upload-files-form { display: none; }
+
+.upload-files-dialog .ui-dialog-titlebar-close { display: none; }

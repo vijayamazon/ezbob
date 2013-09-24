@@ -37,6 +37,7 @@
 
     function CGAccountInfoView() {
       this.render = __bind(this.render, this);
+      this.uploadFiles = __bind(this.uploadFiles, this);
       this.connect = __bind(this.connect, this);
       this.inputChanged = __bind(this.inputChanged, this);      _ref1 = CGAccountInfoView.__super__.constructor.apply(this, arguments);
       return _ref1;
@@ -45,10 +46,12 @@
     CGAccountInfoView.prototype.events = {
       'click a.back': 'back',
       'change input': 'inputChanged',
-      'keyup input': 'inputChanged'
+      'keyup input': 'inputChanged',
+      'click .upload-files': 'uploadFiles'
     };
 
     CGAccountInfoView.prototype.initialize = function(options) {
+      this.uploadFilesDlg = null;
       this.accountType = options.accountType;
       return this.template = '#' + this.accountType + 'AccountInfoTemplate';
     };
@@ -71,7 +74,7 @@
     };
 
     CGAccountInfoView.prototype.connect = function() {
-      var acc, accountModel, elm, fi, func, propName, propVal, vendorInfo, xhr, _i, _len, _ref2,
+      var acc, accountModel, elm, fi, func, oVendorInfo, propName, propVal, xhr, _i, _len, _ref2,
         _this = this;
 
       if (!EzBob.Validation.checkForm(this.validator)) {
@@ -82,9 +85,9 @@
         return false;
       }
       accountModel = $.parseJSON($('div#cg-account-model-template').text());
-      vendorInfo = this.getVendorInfo();
+      oVendorInfo = this.getVendorInfo();
       accountModel.accountTypeName = this.accountType;
-      _ref2 = vendorInfo.SecurityData.Fields;
+      _ref2 = oVendorInfo.SecurityData.Fields;
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         fi = _ref2[_i];
         if (fi.Default) {
@@ -98,11 +101,11 @@
           accountModel[propName] = elm.val();
         }
       }
-      if (vendorInfo.ClientSide.LinkForm.OnBeforeLink.length) {
-        func = new Function('accountModel', vendorInfo.ClientSide.LinkForm.OnBeforeLink.join("\n"));
+      if (oVendorInfo.ClientSide.LinkForm.OnBeforeLink.length) {
+        func = new Function('accountModel', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join("\n"));
         accountModel = func.call(null, accountModel);
         if (!accountModel) {
-          EzBob.App.trigger('error', vendorInfo.DisplayName + ' Account Data Validation Error');
+          EzBob.App.trigger('error', oVendorInfo.DisplayName + ' Account Data Validation Error');
           return false;
         }
       }
@@ -110,7 +113,7 @@
       acc = new EzBob.CGAccountModel(accountModel);
       xhr = acc.save();
       if (!xhr) {
-        EzBob.App.trigger('error', vendorInfo.DisplayName + ' Account Saving Error');
+        EzBob.App.trigger('error', oVendorInfo.DisplayName + ' Account Saving Error');
         return false;
       }
       BlockUi('on');
@@ -118,7 +121,7 @@
         return BlockUi('off');
       });
       xhr.fail(function(jqXHR, textStatus, errorThrown) {
-        return EzBob.App.trigger('error', 'Failed to Save ' + vendorInfo.DisplayName + ' Account');
+        return EzBob.App.trigger('error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account');
       });
       xhr.done(function(res) {
         if (res.error) {
@@ -128,7 +131,7 @@
         try {
           _this.model.add(acc);
         } catch (_error) {}
-        EzBob.App.trigger('info', vendorInfo.DisplayName + ' Account Added Successfully');
+        EzBob.App.trigger('info', oVendorInfo.DisplayName + ' Account Added Successfully');
         for (propName in accountModel) {
           propVal = accountModel[propName];
           elm = _this.$el.find('#' + _this.accountType.toLowerCase() + '_' + propName.toLowerCase());
@@ -141,6 +144,43 @@
         return _this.trigger('back');
       });
       return false;
+    };
+
+    CGAccountInfoView.prototype.uploadFiles = function() {
+      var oVendorInfo, sKey,
+        _this = this;
+
+      sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
+      while (window[sKey]) {
+        sKey += Math.floor(Math.random() * 1000);
+      }
+      oVendorInfo = this.getVendorInfo();
+      window[sKey] = function(nAcceptedCount) {
+        delete window[sKey];
+        _this.uploadFileDlg.dialog('close');
+        _this.uploadFileDlg = null;
+        if (nAcceptedCount < 1) {
+          EzBob.App.trigger('error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account');
+        } else {
+          EzBob.App.trigger('info', oVendorInfo.DisplayName + ' Account Added Successfully');
+        }
+        _this.trigger('completed');
+        return _this.trigger('back');
+      };
+      $('iframe', this.$el.find('div#upload-files-form')).each(function(idx, iframe) {
+        iframe.setAttribute('width', 570);
+        iframe.setAttribute('height', 515);
+        return iframe.setAttribute('src', ("" + window.gRootPath + "Customer/CGMarketPlaces/UploadFilesDialog?key=") + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler);
+      });
+      return this.uploadFileDlg = this.$el.find('div#upload-files-form').dialog({
+        height: 600,
+        width: 600,
+        modal: true,
+        title: 'Upload VAT Return Files',
+        resizable: false,
+        dialogClass: 'upload-files-dialog',
+        closeOnEscape: false
+      });
     };
 
     CGAccountInfoView.prototype.render = function() {

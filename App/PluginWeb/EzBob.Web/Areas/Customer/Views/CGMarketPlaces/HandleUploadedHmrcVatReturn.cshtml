@@ -1,0 +1,11 @@
+﻿@{ Layout = ""; }
+
+@ViewData["accepted_count"] files accepted
+
+<button id=close class="button orange">Continue</button>
+
+<script>
+	document.getElementById('close').onclick = function() {
+		window.parent.@{ WriteLiteral(ViewData["key"]); }(@{ WriteLiteral(ViewData["accepted_count"]); });
+	};
+</script>

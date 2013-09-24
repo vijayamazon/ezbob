@@ -459,6 +459,8 @@
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
+				"HasUploadFiles": true,
+				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
 				"Notes": [
 					"<h2 class=form_start>Or Upload VAT Return Reports</h2>",
 					"<div><button class=\"upload-files button orange\">Upload</button></div>"

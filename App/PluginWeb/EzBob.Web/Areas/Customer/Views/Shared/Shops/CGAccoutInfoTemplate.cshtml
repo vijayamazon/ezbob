@@ -3,8 +3,9 @@
 @foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.Vendors) {
 	VendorInfo vi = vip.Value;
 
-	HtmlString sTemplateID = new HtmlString(vi.Name + "AccountInfoTemplate");
-	HtmlString sFormID = new HtmlString(vi.Name.ToLower() + "Account");
+	var sTemplateID = new HtmlString(vi.Name + "AccountInfoTemplate");
+	var sFormID = new HtmlString(vi.Name.ToLower() + "Account");
+
 
 	<script id="@sTemplateID" type="text/template">
 	<div class="row-fluid">
@@ -35,6 +36,12 @@
 					</div>
 				</div>
 			</div>
+
+			@if (vi.ClientSide.LinkForm.HasUploadFiles) {
+				<div id="upload-files-form">
+					<iframe></iframe>
+				</div>
+			}
 		</form>
 	</div>
 	</script>

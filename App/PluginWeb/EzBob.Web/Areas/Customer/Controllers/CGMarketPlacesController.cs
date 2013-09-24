@@ -1,19 +1,23 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Configuration;
+using Ezbob.HmrcHarvester;
 using EzBob.Web.Infrastructure;
-using Integration.ChannelGrabberConfig;
-using Integration.ChannelGrabberFrontend;
-using Scorto.Web;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
-using log4net;
 using EzBob.Web.ApplicationCreator;
+using Ezbob.Logger;
+using Integration.ChannelGrabberConfig;
+using Integration.ChannelGrabberFrontend;
+using log4net;
+using Scorto.Web;
 
 namespace EzBob.Web.Areas.Customer.Controllers {
 	using NHibernate;
@@ -43,6 +47,69 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			_appCreator = appCreator;
 			_session = session;
 		} // constructor
+
+		public ActionResult UploadFilesDialog(string key, string handler) {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+			ViewData["key"] = key;
+			ViewData["handler"] = handler;
+			return View();
+		} // UploadFilesDialog
+
+		[HttpPost]
+		public ActionResult HandleUploadedHmrcVatReturn() {
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+
+			int nAcceptedCount = 0;
+
+			if (Request["action"] == "ok") {
+				for (int i = 0; i < Request.Files.Count; i++) {
+					HttpPostedFileBase oFile = Request.Files[i];
+
+					if (oFile == null)
+						continue;
+
+					var oBuffer = new MemoryStream();
+
+					var buf = new byte[32768];
+
+					int nRead = oFile.InputStream.Read(buf, 0, buf.Count());
+
+					while (nRead > 0) {
+						oBuffer.Write(buf, 0, nRead);
+						nRead = oFile.InputStream.Read(buf, 0, buf.Count());
+					} // while
+
+					var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
+
+					var smd = new SheafMetaData {
+						BaseFileName = oFile.FileName,
+						DataType = DataType.VatReturn,
+						FileType = FileType.Pdf,
+						Thrasher = null
+					};
+
+					ISeeds oResult = null;
+
+					try {
+						oResult = vrpt.Run(smd, oBuffer.ToArray());
+					}
+					catch (Exception e) {
+						Log.WarnFormat("Failed to parse uploaded file {0}", oFile.FileName);
+						Log.Warn(e);
+						continue;
+					} // try
+
+					if (oResult != null) {
+						VatReturnSeeds vrs = (VatReturnSeeds)oResult;
+						nAcceptedCount++;
+					} // if
+				} // for
+			} // if action is ok
+
+			ViewData["accepted_count"] = nAcceptedCount;
+			ViewData["key"] = Request["key"];
+			return View();
+		} // HandleUploadedHmrcVatReturn
 
 		[Transactional]
 		public JsonNetResult Accounts(string atn) {

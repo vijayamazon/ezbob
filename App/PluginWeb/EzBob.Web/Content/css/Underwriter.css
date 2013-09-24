@@ -518,3 +518,9 @@ table.internal-table td {
 }
 
 .narrow-as-possible { width: 1px !important; white-space: nowrap !important; }
+
+.trend-container { float: right; display: inline-block; }
+.trend-container span { margin-right: 0.5em; }
+
+.positive-trend { color: blue; }
+.negative-trend { color: red; }
