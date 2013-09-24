@@ -57,10 +57,18 @@
                 <tr>
                     <th>Cash Flow Report</th>
                     <% var obj = y.CashFlowReportModel.YodleeCashFlowReportModelDict;
+                    var minDay = y.CashFlowReportModel.MinDateDict;
+                    var maxDay = y.CashFlowReportModel.MaxDateDict;
                     var cat1 = obj[Object.keys(obj)[0]]; 
                     var count = 1; for (k in cat1) if (cat1.hasOwnProperty(k)) count++;
                     for (var month in cat1) { %>
-                    <th><% if(month == '999999') { print('Total');} else { print(month.substring(4) + '/' + month.substring(0,4)); } %></th>
+                    <th>
+                        <% if(month == '999999') { 
+                            print('Total');
+                        } else { 
+                            print(minDay[month] + '-' + maxDay[month] + '/' + month.substring(4) + '/' + month.substring(0,4));
+                        } %>
+                    </th>
                     <%}%>
                 </tr>
             </thead>
@@ -69,17 +77,19 @@
                     <td colspan="<%=count%>"><b>Income</b></td>
                 </tr>
                 <%for(var cat in obj){%>
-                
-                <tr>
+                <% var style = '';
+                   if(cat[0] == '3' || cat[0] == '8') {style = 'font-style: italic;';}
+                   if(cat[0] == '2' || cat[0] == '7') {style = 'font-weight: bold;';} %>
+                <tr style="<%=style%>">
                     <td><%=cat.substr(1, cat.length-1)%></td>
                     <%for (var month in obj[cat]) { %>
                     <td><%= obj[cat][month] == 0 ? '' : EzBob.formatPoundsAsInt(obj[cat][month]) %></td>
                     <%}%>
                 </tr>
-                <%if(cat[0]=='1'){%>
+                <%if(cat[0]=='4'){%>
                     <tr>
                         <td colspan="<%=count%>"><b>Expenses</b></td>
-                </tr>
+                    </tr>
                 <%}}%>
             </tbody>
         </table>

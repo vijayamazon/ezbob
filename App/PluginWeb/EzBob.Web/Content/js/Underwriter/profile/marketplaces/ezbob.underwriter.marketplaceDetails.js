@@ -40,7 +40,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 	    
 		var oDataTableArgs = {
 		    aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
-		    iDisplayLength: 100,
+		    iDisplayLength: -1,
 		    asSorting: [],
 		    aoColumns:[{ sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
 		};

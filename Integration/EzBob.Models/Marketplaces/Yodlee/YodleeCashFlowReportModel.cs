@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Models.Marketplaces.Yodlee
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib;
@@ -11,18 +12,36 @@
 	public class YodleeCashFlowReportModel
 	{
 		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
-		private const int Total = 999999;
+
+		public SortedDictionary<int/*yearmonth*/, int/*minday*/ > MinDateDict { get; set; }
+		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
+		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
 		private const string OtherExpensesCat = "Other Expenses";
+		private const string TotalIncomeCat = "Total Income";
+		private const string TotalExpensesCat = "Total Expenses";
+		private const string NumOfTransactionsCat = "Num Of Transactions";
+		private const string AverageIncomeCat = "Average Income";
+		private const string AverageExpensesCat = "Average Expenses";
+
 		private const char Credit = '0';
 		private const char OtherCredit = '1';
-		private const char Dedit = '2';
-		private const char OtherDedit = '3';
+		private const char TotalCredit = '2';
+		private const char NumTransCredit = '3';
+		private const char AverageCredit = '4';
+		private const char Dedit = '5';
+		private const char OtherDedit = '6';
+		private const char TotalDedit = '7';
+		private const char NumTransDedit = '8';
+		private const char AverageDedit = '9';
+
 		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly IConfigurationVariablesRepository _configVariables;
 		public YodleeCashFlowReportModel(ISession session)
 		{
 			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
+			MinDateDict = new SortedDictionary<int, int>();
+			MaxDateDict = new SortedDictionary<int, int>();
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
 			_configVariables = new ConfigurationVariablesRepository(session);
 		}
@@ -38,14 +57,61 @@
 			//var catType = transaction.transactionCategory.Type;
 			var catName = transaction.transactionCategory.Name;
 			var baseType = transaction.transactionBaseType;
-			var date = transaction.postDate.HasValue ? transaction.postDate.Value : transaction.transactionDate.Value;
+			var date = (transaction.postDate ?? transaction.transactionDate);
 			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
-			var yearmonth = date.Year * 100 + date.Month;
+			var yearmonth = date.HasValue ? date.Value.Year * 100 + date.Value.Month : 0;
 
 
 			Add(cat, amount, yearmonth);
-			Add(cat, amount, Total);
+			UpdateMinMaxDay(yearmonth, date);
+			Add(cat, amount, TotalColumn);
 
+
+			//Calc Total Row
+			Add(baseType == "credit"
+					? string.Format("{0}{1}", TotalCredit, TotalIncomeCat)
+					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, yearmonth);
+			Add(baseType == "credit"
+					? string.Format("{0}{1}", TotalCredit, TotalIncomeCat)
+					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, TotalColumn);
+
+			//Calc Num Of Transactions Row
+			Add(baseType == "credit"
+					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
+					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, yearmonth);
+			Add(baseType == "credit"
+					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
+					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, TotalColumn);
+		}
+
+		private void UpdateMinMaxDay(int yearmonth, DateTime? date)
+		{
+			if (!date.HasValue) return;
+
+			if (!MinDateDict.ContainsKey(yearmonth))
+			{
+				MinDateDict[yearmonth] = date.Value.Day;
+			}
+			else
+			{
+				if (MinDateDict[yearmonth] > date.Value.Day)
+				{
+					MinDateDict[yearmonth] = date.Value.Day;
+				}
+			}
+
+
+			if (!MaxDateDict.ContainsKey(yearmonth))
+			{
+				MaxDateDict[yearmonth] = date.Value.Day;
+			}
+			else
+			{
+				if (MaxDateDict[yearmonth] < date.Value.Day)
+				{
+					MaxDateDict[yearmonth] = date.Value.Day;
+				}
+			}
 		}
 
 		public void AddMissingAndSort()
@@ -67,6 +133,25 @@
 					}
 				}
 			}
+
+			//Calc Avarage Rows
+			CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
+			                 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+			                 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
+			CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
+							 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
+							 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
+		}
+
+		private void CalculateAverage(string averageCat, string totalCat, string numOfTransCat)
+		{
+			var totalRow = YodleeCashFlowReportModelDict[totalCat];
+			var numOfTransRow = YodleeCashFlowReportModelDict[numOfTransCat];
+
+			foreach (var yearmonth in totalRow.Keys)
+			{
+				Add(averageCat, totalRow[yearmonth] / numOfTransRow[yearmonth], yearmonth);
+			}
 		}
 
 		private void CalculateOther(char baseType, string otherCat)
@@ -78,7 +163,7 @@
 			foreach (var cat in YodleeCashFlowReportModelDict)
 			{
 				var x = YodleeCashFlowReportModelDict[cat.Key];
-				if (x[Total] < maxYodleeOtherCategoryAmount && cat.Key[0] == baseType)
+				if (cat.Key[0] == baseType && x[TotalColumn] < maxYodleeOtherCategoryAmount)
 				{
 					otherList.Add(cat.Key);
 				}
@@ -86,7 +171,7 @@
 
 			if (otherList.Count > 0)
 			{
-				Add(otherCat, 0, Total);
+				Add(otherCat, 0, TotalColumn);
 			}
 
 			foreach (var other in otherList)

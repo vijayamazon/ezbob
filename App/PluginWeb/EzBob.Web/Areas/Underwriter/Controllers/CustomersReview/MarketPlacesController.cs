@@ -132,8 +132,16 @@
 
 			if (!yodleeMain.IsMFA(itemId))
 			{
-				
-				if (yodleeMain.RefreshNotMFAItem(itemId))
+				bool isRefreshed = false;
+				try
+				{
+					yodleeMain.RefreshNotMFAItem(itemId);
+				}
+				catch (RefreshYodleeException ex)
+				{
+					return View(new {error = ex.ToString()});
+				}
+				if (isRefreshed)
 				{
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
