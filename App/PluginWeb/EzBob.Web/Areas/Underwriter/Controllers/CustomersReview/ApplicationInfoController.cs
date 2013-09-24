@@ -96,6 +96,7 @@
 		}
 
 		[Ajax]
+		[Transactional]
 		public void LogStatusChange(int newStatus, int prevStatus, int customerId)
 		{
 			var newEntry = new CustomerStatusHistory();
