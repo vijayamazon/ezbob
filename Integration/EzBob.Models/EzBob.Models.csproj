@@ -108,6 +108,7 @@
     <Compile Include="Marketplaces\Yodlee\YodleeBankModel.cs" />
     <Compile Include="Marketplaces\Builders\YodleeMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeSearchWordsModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeTransactionModel.cs" />
     <Compile Include="Marketplaces\Builders\AmazonMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\IMarketplaceModelBuilder.cs" />

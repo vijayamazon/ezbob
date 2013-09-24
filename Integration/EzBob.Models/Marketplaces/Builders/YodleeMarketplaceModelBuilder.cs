@@ -127,24 +127,27 @@ namespace EzBob.Models.Marketplaces.Builders
 				banks.Add(yodleeBankModel);
 			}
 			model.banks = banks;
-
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(yodleeData);
+			YodleeSearchWordsModel yodleeSearchWordsModel;
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(yodleeData, out yodleeSearchWordsModel);
+			model.SearchWordsModel = yodleeSearchWordsModel;
 			return model;
 		}
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(IEnumerable<MP_YodleeOrderItem> yodleeData)
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(IEnumerable<MP_YodleeOrderItem> yodleeData, out YodleeSearchWordsModel yodleeSearchWordsModel)
 		{
 			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
-
+			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session);
 			foreach (var bank in yodleeData)
 			{
 				foreach (var transaction in bank.OrderItemBankTransactions)
 				{
 					yodleeCashFlowReportModel.Add(transaction);
+					yodleeSearchWordsModel.Add(transaction);
 				}
 			}
 
 			yodleeCashFlowReportModel.AddMissingAndSort();
+			yodleeSearchWordsModel.AddMissing();
 
 			return yodleeCashFlowReportModel;
 		}

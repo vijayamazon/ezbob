@@ -23,7 +23,7 @@
 		private const string NumOfTransactionsCat = "Num Of Transactions";
 		private const string AverageIncomeCat = "Average Income";
 		private const string AverageExpensesCat = "Average Expenses";
-
+		private const string NetCashFlowCat = "Net Cash Flow";
 		private const char Credit = '0';
 		private const char OtherCredit = '1';
 		private const char TotalCredit = '2';
@@ -34,6 +34,7 @@
 		private const char TotalDedit = '7';
 		private const char NumTransDedit = '8';
 		private const char AverageDedit = '9';
+		private const char NetCashFlow = 'a';
 
 		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly IConfigurationVariablesRepository _configVariables;
@@ -141,6 +142,22 @@
 			CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
 							 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
 							 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
+
+			CalculateNetCashFlow(string.Format("{0}{1}", NetCashFlow, NetCashFlowCat),
+			                     string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+			                     string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+		}
+
+		private void CalculateNetCashFlow(string netCashFlowCat, string totalIncomeCat, string totalExpensesCat)
+		{
+			var totalIncomeRow = YodleeCashFlowReportModelDict[totalIncomeCat];
+			var totalExpensesRow = YodleeCashFlowReportModelDict[totalExpensesCat];
+
+			foreach (var yearmonth in totalIncomeRow.Keys)
+			{
+				Add(netCashFlowCat, totalIncomeRow[yearmonth] - totalExpensesRow[yearmonth], yearmonth);
+			}
+			
 		}
 
 		private void CalculateAverage(string averageCat, string totalCat, string numOfTransCat)

@@ -218,12 +218,17 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.trendline.js")
-                .Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
-                .Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
-                .Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
+				.Add("~/Content/js/lib/jqBarGraph.1.1.js")
 
-                //Underwriter
+				// HighCharts
+				.Add("~/Content/js/lib/highcharts/highcharts.js")
+				.Add("~/Content/js/lib/highcharts/exporting.js")
+				.Add("~/Content/js/lib/highcharts/highcharts-more.js")
+				.Add("~/Content/js/lib/highcharts/makeChart.js")
+
+				//Underwriter
+				.Add("~/Content/js/underwriter/ezbob.underwriter.app.coffee")
                 .Add("~/Content/js/underwriter/bugs/ezbob.underwriter.bugs.reporter.coffee")
                 .Add("~/Content/js/underwriter/ezbob.underwriter.goToCustomer.coffee")
 
@@ -244,13 +249,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.approval.coffee")
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.general.coffee")
                 .Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.rejection.coffee")
-
-                // HighCharts
-                .Add("~/Content/js/lib/highcharts/highcharts.js")
-                .Add("~/Content/js/lib/highcharts/exporting.js")
-                .Add("~/Content/js/lib/highcharts/highcharts-more.js")
-                .Add("~/Content/js/lib/highcharts/makeChart.js")
-
+				
                 //Customer grid
                 .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")
                 .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customers.js")
@@ -298,7 +297,11 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Underwriter/editLoan/editFee.coffee")
                 .Add("~/Content/js/Underwriter/editLoan/editLoanView.coffee")
                 .Add("~/Content/js/Underwriter/CAIS/ezbob.underwriter.CAIS.caisManage.coffee")
-                .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+                
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+				.Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
+				.Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
+
                 .MvcRender("~/Content/js/min/underwriter_#.js");
         }
 

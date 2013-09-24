@@ -115,6 +115,7 @@
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryName.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeSearchWords.cs" />
     <Compile Include="PacNetManualBalance.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\InternalDataList.cs" />

@@ -1,18 +1,22 @@
 ﻿<div class="tabbable yodleeTabTable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#yodleetab0" data-toggle="tab">Cash Flow Report</a></li>
-        <li><a href="#yodleetab1" data-toggle="tab">Aggregates</a></li>
-        <li><a href="#yodleetab2" data-toggle="tab">Bank Account Details</a></li>
-        <%console.log(y); _.each(y.banks, function(bank, i) {%>
-        <li><a href="#yodleetab<%= (i + 3) %>" id="yodleeTabLink<%= (i + 3) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
+        <li><a href="#yodleetab1" data-toggle="tab">Search Words Report</a></li>
+        <li><a href="#yodleetab2" data-toggle="tab">Charts</a></li>
+        <li><a href="#yodleetab3" data-toggle="tab">Aggregates</a></li>
+        <li><a href="#yodleetab4" data-toggle="tab">Bank Account Details</a></li>
+        <% _.each(y.banks, function(bank, i) {%>
+        <li><a href="#yodleetab<%= (i + 5) %>" id="yodleeTabLink<%= (i + 5) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
         <%});%>
     </ul>
     <div class="tab-content">
         @YodleeCashFlowReport()
+        @YodleeSearchWordsReport()
+        @YodleeCharts()
         @YodleeAggregates()
         @YodleeBankAccounts()
         <%_.each(y.banks, function(bank, i) {%>
-        <div class="tab-pane" id="yodleetab<%= (i+3)%>">
+        <div class="tab-pane" id="yodleetab<%= (i+5)%>">
             <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable">
                 <thead>
                     <tr>
@@ -49,9 +53,7 @@
 @helper YodleeCashFlowReport()
 {
     <div class="tab-pane active" id="yodleetab0">
-        <%console.log(y.CashFlowReportModel.YodleeCashFlowReportModelDict);
-        (function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        
+        <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
         <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
             <thead>
                 <tr>
@@ -90,16 +92,78 @@
                     <tr>
                         <td colspan="<%=count%>"><b>Expenses</b></td>
                     </tr>
+                <%}%>
+                <%if(cat[0]=='9'){%>
+                    <tr>
+                        <td colspan="<%=count%>"><b>Net Cash Flow</b></td>
+                    </tr>
                 <%}}%>
             </tbody>
         </table>
-        <%} else { console.log('e'); } })();%>
+        <%} else { print('No data to show'); } })();%>
     </div>
 }
 
-@helper YodleeAggregates()
+@helper YodleeSearchWordsReport()
 {
     <div class="tab-pane" id="yodleetab1">
+        <%(function() { if (y.SearchWordsModel && y.SearchWordsModel.YodleeSearchWordModelDict) { %>
+        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
+            <thead>
+                <tr>
+                    <th>Search Words Report</th>
+                    <% var obj = y.SearchWordsModel.YodleeSearchWordModelDict;
+                    var word1 = obj[Object.keys(obj)[0]]; 
+                    for (var type in word1) { %>
+                    <th>
+                        <%= type %>
+                    </th>
+                    <%}%>
+                </tr>
+            </thead>
+            <tbody>
+                <%for(var word in obj){%>
+                <tr class="yodleeSearchWordsRow">
+                    <td><%=word%></td>
+                    <%for (var type in obj[word]) { %>
+                    <td><%= obj[word][type] == 0 ? '' : EzBob.formatPoundsAsInt(obj[word][type]) %></td>
+                    <%}%>
+                </tr>
+                <%}%>
+            </tbody>
+        </table>
+        <hr/>
+        <div class="well">
+            <span>Add Remove Search Words For Yodlee Transactions</span>
+            <label for="yodleeSearchWordsDdl">Search Words</label>
+            <select id="yodleeSearchWordsDdl" class="selectheight" style="margin-bottom: 0">
+                <option></option>
+                <%for(var word in y.SearchWordsModel.WordsDict) { %>
+                <option value="<%=word%>"><%=y.SearchWordsModel.WordsDict[word]%></option>
+                <%}%>
+            </select>
+            
+            <button class="btn " id="addYodleeSearchWord">Add</button>
+            <button class="btn " id="removeYodleeSearchWord">Remove</button>
+        </div>
+        <%} else {print('No match was found to the search words');} })();%>
+    </div>
+}
+
+@helper YodleeCharts()
+{
+    <div class="tab-pane" id="yodleetab2">
+        <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
+        <div id="yodleeBarGraph" class="well"></div>
+        <div id="yodleeDots"></div>
+        <%} else {print('No match was found to the search words');} })();%>
+    </div>
+}
+
+
+@helper YodleeAggregates()
+{
+    <div class="tab-pane" id="yodleetab3">
         <table class="table table-bordered table-striped  blue-header centered nowrap rright">
             <thead>
                 <tr>
@@ -166,7 +230,7 @@
 
 @helper YodleeBankAccounts()
 {
-    <div class="tab-pane" id="yodleetab2">
+    <div class="tab-pane" id="yodleetab4">
         <table class="table table-bordered table-striped  blue-header centered nowrap">
             <thead>
                 <tr>
