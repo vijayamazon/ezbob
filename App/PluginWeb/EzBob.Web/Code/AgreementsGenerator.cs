@@ -43,24 +43,24 @@ namespace EzBob.Web.Code.Agreements
             if (isConsumer)
             {
                 var preContract = _templates.GetTemplateByName("Pre-Contract-Agreement");
-                var preContractAgreement = new LoanAgreement("precontract", loan, _helper.GetOrCreateLoanAgreementTemplate(preContract)) ;
+                var preContractAgreement = new LoanAgreement("precontract", loan, _helper.GetOrCreateLoanAgreementTemplate(preContract, 2)) ;
                 loan.Agreements.Add(preContractAgreement);
                 client.AddAgreement("precontract", preContract, preContractAgreement.FilePath);
 
                 var contract = _templates.GetTemplateByName("CreditActAgreement");
-                var contractAgreement = new LoanAgreement("Contract", loan, _helper.GetOrCreateLoanAgreementTemplate(contract));
+                var contractAgreement = new LoanAgreement("Contract", loan, _helper.GetOrCreateLoanAgreementTemplate(contract, 3));
                 loan.Agreements.Add(contractAgreement);
                 client.AddAgreement("Contract", contract, contractAgreement.FilePath);
             }
             else
             {
                 var guarantee = _templates.GetTemplateByName("GuarantyAgreement");
-                var guaranteeAgreement = new LoanAgreement("guarantee", loan, _helper.GetOrCreateLoanAgreementTemplate(guarantee));
+                var guaranteeAgreement = new LoanAgreement("guarantee", loan, _helper.GetOrCreateLoanAgreementTemplate(guarantee, 1));
                 loan.Agreements.Add(guaranteeAgreement);
                 client.AddAgreement("guarantee", guarantee, guaranteeAgreement.FilePath);
 
                 var agreement = _templates.GetTemplateByName("PrivateCompanyLoanAgreement");
-                var agreementAgreement = new LoanAgreement("agreement", loan, _helper.GetOrCreateLoanAgreementTemplate(agreement));
+                var agreementAgreement = new LoanAgreement("agreement", loan, _helper.GetOrCreateLoanAgreementTemplate(agreement, 4));
                 loan.Agreements.Add(agreementAgreement);
                 client.AddAgreement("agreement", agreement, agreementAgreement.FilePath);
             }

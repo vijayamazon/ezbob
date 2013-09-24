@@ -17,6 +17,7 @@
 
 		public virtual int Id { get; set; }
 		public virtual string Template { get; set; }
+		public virtual int TemplateType { get; set; }
 	}
 
 	public class LoanAgreementTemplateMap : ClassMap<LoanAgreementTemplate>
@@ -26,6 +27,7 @@
 			Table("LoanAgreementTemplate");
 			Id(x => x.Id);
 			Map(x => x.Template).CustomType("StringClob");
+			Map(x => x.TemplateType);
 		}
 	}
 

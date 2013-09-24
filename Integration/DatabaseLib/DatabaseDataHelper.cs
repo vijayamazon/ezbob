@@ -547,9 +547,9 @@ namespace EZBob.DatabaseLib
 			return CreateDatabaseCustomerMarketPlace(customer, marketplaceType, customerMarketPlace, customerMarketPlaceId);
 		}
 
-		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template)
+		public LoanAgreementTemplate GetOrCreateLoanAgreementTemplate(string template, int type)
 		{
-			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template) ?? new LoanAgreementTemplate { Template = template };
+			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll().FirstOrDefault(x => x.Template == template && x.TemplateType == type) ?? new LoanAgreementTemplate { Template = template, TemplateType = type};
 			return loanAgreementTemplate;
 		}
 
