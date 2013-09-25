@@ -1,28 +1,40 @@
 ﻿@{ Layout = ""; }
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Upload</title>
 
-<form id=upload action="@{ WriteLiteral(ViewData["handler"]); }" method="POST" enctype="multipart/form-data">
-	<input type=file name=file0 class=upload-file-name />
-	<input type=file name=file1 class=upload-file-name />
-	<input type=file name=file2 class=upload-file-name />
-	<input type=file name=file3 class=upload-file-name />
-	
-	<input type=hidden name=action id=action />
-	<input type=hidden name=key id=key value="@ViewData["key"]" />
-	
-	<button id=ok>Submit files</button>
-	<button id=cancel>Cancel</button>
-</form>
+	<script>
+		function Body_OnLoad() {
+			document.getElementById('ok').onclick = function () {
+				document.getElementById('model').value = JSON.stringify(window.parent[document.getElementById('modelkey').value]());
+				document.getElementById('upload').submit();
+			};
 
-<script>
-	(function() {
-		function SubmitForm(evt) {
-			var oSrc = evt.target || evt.srcElement;
+			document.getElementById('cancel').onclick = function() {
+				var oResult = { error: '' };
 
-			document.getElementById('action').value = oSrc.id;
-			document.getElementById('upload').submit();
-		}; // SubmitForm
+				window.parent.@{ WriteLiteral(ViewData["key"]); }(JSON.stringify(oResult));
+			};
+		} // Body_OnLoad
+	</script>
+</head>
 
-		document.getElementById('ok').onclick = SubmitForm;
-		document.getElementById('cancel').onclick = SubmitForm;
-	})();
-</script>
+<body onload="Body_OnLoad()">
+	<input type="hidden" id="modelkey" value="@{ WriteLiteral(ViewData["modelkey"]); }" />
+
+	<form id=upload action="@{ WriteLiteral(ViewData["handler"]); }" method="POST" enctype="multipart/form-data">
+		<input type="file" name="file0" class="upload-file-name" />
+		<input type="file" name="file1" class="upload-file-name" />
+		<input type="file" name="file2" class="upload-file-name" />
+		<input type="file" name="file3" class="upload-file-name" />
+
+		<input type=hidden name=key id=key value="@ViewData["key"]" />
+
+		<input type="hidden" name="model" id="model" />
+
+		<button id="ok">Submit files</button>
+		<button id="cancel">Cancel</button>
+	</form>
+</body>
+</html>

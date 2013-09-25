@@ -287,7 +287,7 @@
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
-            var html = decodeURIComponent(getCallbackValue('username') || "") + '<a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
+            var html = '<span id="logged-in-user-name">' + decodeURIComponent(getCallbackValue('username') || "") + '</span><a href="/Account/LogOff" class="button grey medium_btn">Log off</a>';
             $("#header_description").html(html);
 
             //set url for back button

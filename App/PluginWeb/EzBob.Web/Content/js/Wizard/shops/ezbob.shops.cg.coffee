@@ -34,12 +34,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         @vendorInfo
 
-    connect: =>
-        if not EzBob.Validation.checkForm(@validator)
-            @validator.form()
-            return false
-        return false if @$el.find('a.connect-account').hasClass('disabled')
-
+    buildModel: =>
         accountModel = $.parseJSON $('div#cg-account-model-template').text()
 
         oVendorInfo = @getVendorInfo()
@@ -60,10 +55,25 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
              accountModel = func.call null, accountModel
 
              if not accountModel
-                 EzBob.App.trigger 'error', oVendorInfo.DisplayName + ' Account Data Validation Error'
-                 return false
+                 return null
 
         delete accountModel.id
+
+        return accountModel
+
+    connect: =>
+        if not EzBob.Validation.checkForm(@validator)
+            @validator.form()
+            return false
+        return false if @$el.find('a.connect-account').hasClass('disabled')
+
+        accountModel = @buildModel()
+
+        oVendorInfo = @getVendorInfo()
+
+        if not accountModel
+            EzBob.App.trigger 'error', oVendorInfo.DisplayName + ' Account Data Validation Error'
+            return false
 
         acc = new EzBob.CGAccountModel accountModel
 
@@ -103,22 +113,36 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
     uploadFiles: =>
         sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
+        sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
 
         while window[sKey]
             sKey += Math.floor(Math.random() * 1000)
 
+        while window[sModelKey]
+            sModelKey += Math.floor(Math.random() * 1000)
+
         oVendorInfo = @getVendorInfo()
 
-        window[sKey] = (nAcceptedCount) =>
+        window[sModelKey] = =>
+            return @buildModel()
+
+        window[sKey] = (sResult) =>
             delete window[sKey]
+            delete window[sModelKey]
 
             @uploadFileDlg.dialog 'close'
             @uploadFileDlg = null
 
-            if nAcceptedCount < 1
-                EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account'
+            oResult = JSON.parse sResult
+
+            if oResult.error
+                EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error
             else
-                EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
+                if oResult.submitted
+                    if oResult.accepted < 1
+                        EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account: no files accepted'
+                    else
+                        EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
 
             @trigger 'completed'
             @trigger 'back'
@@ -126,7 +150,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
             iframe.setAttribute 'width', 570
             iframe.setAttribute 'height', 515
-            iframe.setAttribute 'src', "#{window.gRootPath}Customer/CGMarketPlaces/UploadFilesDialog?key=" + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler
+            iframe.setAttribute 'src', "#{window.gRootPath}Customer/CGMarketPlaces/UploadFilesDialog?key=" + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler + '&modelkey=' + sModelKey
 
         @uploadFileDlg = @$el.find('div#upload-files-form').dialog(
             height: 600,

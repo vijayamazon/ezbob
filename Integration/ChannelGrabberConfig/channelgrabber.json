@@ -466,7 +466,9 @@
 					"<div><button class=\"upload-files button orange\">Upload</button></div>"
 				],
 				"OnBeforeLink": [
-					"accountModel.name = 'HMRC as ' + accountModel.login;",
+					"accountModel.name = $.trim($('#logged-in-user-name').text());",
+					"accountModel.login = accountModel.name;",
+					"accountModel.password = '';",
 					"return accountModel;"
 				],
 				"SourceLabel": [

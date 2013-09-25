@@ -1,11 +1,28 @@
 ﻿@{ Layout = ""; }
+<!DOCTYPE html>
+<html>
+<head>
+	<title>On Upload</title>
 
-@ViewData["accepted_count"] files accepted
+	<script>
+		function Body_OnLoad() {
+			document.getElementById('close').onclick = function() {
+				var oResult = {
+					accepted: @{ WriteLiteral(ViewData["accepted_count"]); },
+					submitted: true,
+					error: '',
+					model: @{ WriteLiteral(ViewData["model"]); }
+				};
 
-<button id=close class="button orange">Continue</button>
+				window.parent.@{ WriteLiteral(ViewData["key"]); }(JSON.stringify(oResult));
+			};
+		} // Body_OnLoad
+	</script>
+</head>
 
-<script>
-	document.getElementById('close').onclick = function() {
-		window.parent.@{ WriteLiteral(ViewData["key"]); }(@{ WriteLiteral(ViewData["accepted_count"]); });
-	};
-</script>
+<body onload="Body_OnLoad()">
+	@ViewData["accepted_count"] files accepted
+
+	<button id="close" class="button orange">Continue</button>
+</body>
+</html>

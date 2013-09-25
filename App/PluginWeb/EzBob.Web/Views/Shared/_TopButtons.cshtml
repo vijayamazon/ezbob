@@ -9,7 +9,7 @@
         <div id="header_description">
             @if (isAuth)
             {
-                @User.Identity.Name
+	            <span id="logged-in-user-name">@User.Identity.Name</span>
                 <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log Off</a>
             }
             else
