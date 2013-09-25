@@ -28,8 +28,9 @@
 		private readonly IAppCreator _appCreator;
 		private readonly MP_TeraPeakOrderItemRepository _teraPeakOrderItems;
 		private readonly YodleeAccountsRepository _yodleeAccountsRepository;
+		private readonly YodleeSearchWordsRepository _yodleeSearchWordsRepository;
 
-		public MarketPlacesController(CustomerRepository customers, AnalyisisFunctionValueRepository functions, CustomerMarketPlaceRepository customerMarketplaces, MarketPlacesFacade marketPlaces, IAppCreator appCreator, MP_TeraPeakOrderItemRepository teraPeakOrderItems, YodleeAccountsRepository yodleeAccountsRepository)
+		public MarketPlacesController(CustomerRepository customers, AnalyisisFunctionValueRepository functions, CustomerMarketPlaceRepository customerMarketplaces, MarketPlacesFacade marketPlaces, IAppCreator appCreator, MP_TeraPeakOrderItemRepository teraPeakOrderItems, YodleeAccountsRepository yodleeAccountsRepository, YodleeSearchWordsRepository yodleeSearchWordsRepository)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -38,6 +39,7 @@
 			_customers = customers;
 			_teraPeakOrderItems = teraPeakOrderItems;
 			_yodleeAccountsRepository = yodleeAccountsRepository;
+			_yodleeSearchWordsRepository = yodleeSearchWordsRepository;
 		}
 
 		[Ajax]
@@ -252,6 +254,20 @@
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = false;
 			return this.JsonNet(new { });
+		}
+
+		[Transactional]
+		[Ajax]
+		public void AddSearchWord(string word)
+		{
+			_yodleeSearchWordsRepository.AddWord(word);
+		}
+
+		[Transactional]
+		[Ajax]
+		public void DeleteSearchWord(string word)
+		{
+			_yodleeSearchWordsRepository.DeleteWord(word);
 		}
 	}
 }

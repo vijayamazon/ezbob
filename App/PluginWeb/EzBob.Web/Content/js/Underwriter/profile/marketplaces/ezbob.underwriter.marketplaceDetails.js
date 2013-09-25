@@ -50,7 +50,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .renew-token": "renewTokenClicked",
         "click .disable-shop": "diShop",
         "click .enable-shop": "enShop",
-        "click .yodleeSearchWordsRow": "searchYodleeWordsRowClicked"
+        "click .yodleeSearchWordsRow": "searchYodleeWordsRowClicked",
+        "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
+        "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked"
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -103,7 +105,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             dialogClass: "marketplaceDetail"
         };
     },
-    renderYodlee: function(shop) {
+    renderYodlee: function (shop) {
         var oDataTableArgs = {
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
@@ -112,22 +114,21 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         };
         this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
 
-        
+
         var cashModel = shop.get("Yodlee").CashFlowReportModel;
         var cashFlow = cashModel.YodleeCashFlowReportModelDict;
         var minDay = cashModel.MinDateDict;
         var maxDay = cashModel.MaxDateDict;
-        
+
         var income = cashFlow["2Total Income"];
         var expenses = cashFlow["7Total Expenses"];
-        console.log(cashFlow);
         var numOfTransactionsIncome = cashFlow["3Num Of Transactions"];
         var numOfTransactionsExpenses = cashFlow["8Num Of Transactions"];
         var averageIncome = cashFlow["4Average Income"];
         var averageExpenses = cashFlow["9Average Expenses"];
-        
+
         var arrayOfData = [];
-        
+
         for (var i in income) {
             if (!income.hasOwnProperty(i)) continue;
             arrayOfData.push(
@@ -140,7 +141,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             console.log(i, income[i], expenses[i]);
         }
         console.log(arrayOfData);
-        
+
         $("#yodleeBarGraph").jqBarGraph({
             data: arrayOfData,
             colors: ['#FF0000', '#008000'],
@@ -158,8 +159,51 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     },
     searchYodleeWordsRowClicked: function (el) {
         var searchWord = $(el.currentTarget).children("td:first").text();
-        $('#yodleeTabLink4').click();
-        $('#yodleetab4 .dataTables_filter input').val(searchWord).change();
+        $('#yodleeTabLink5').click();
+        $('#yodleetab5 .dataTables_filter input').val(searchWord).change();
         $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, null);
+    },
+
+    searchYodleeWordsAddClicked: function () {
+        var that = this;
+        var word = this.$el.find("#yodleeAddSearchWordTxt").val();
+        if (!word) return false;
+        EzBob.ShowMessage(
+            "", "Are you sure you whant to add word " + word + "?",
+            function () {
+                BlockUi('on');
+
+                $.post(window.gRootPath + "Underwriter/MarketPlaces/AddSearchWord", { word: word })
+                .done(function () {
+                    EzBob.ShowMessage("Successfully Added", "The word added successfully. ", null, "OK");
+                })
+                .done(function () {
+                    BlockUi('off');
+                    $("#yodleeSearchWordsDdl").append("<option>" + word + "</option>");
+                    return false;
+                });
+            }, "Yes", null, "No");
+        return false;
+    },
+
+    searchYodleeWordsDeleteClicked: function () {
+        var word = this.$el.find("#yodleeSearchWordsDdl option:selected").text();
+        var that = this;
+        if (!word) return false;
+        EzBob.ShowMessage(
+            "", "Are you sure you want to remove"+ word +"?",
+            function () {
+                BlockUi('on');
+                $.post(window.gRootPath + "Underwriter/MarketPlaces/DeleteSearchWord", { word: word })
+                .done(function () {
+                    EzBob.ShowMessage("Successfully Removed", "The word deleted successfully. ", null, "OK");
+                })
+                .done(function () {
+                    BlockUi('off');
+                    $("#yodleeSearchWordsDdl option:selected").remove();
+                    return false;
+                });
+            }, "Yes", null, "No");
+        return false;
     }
 });

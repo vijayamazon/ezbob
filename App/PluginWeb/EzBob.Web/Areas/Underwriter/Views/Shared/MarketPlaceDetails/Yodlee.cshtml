@@ -134,7 +134,7 @@
         </table>
         <hr/>
         <div class="well">
-            <span>Add Remove Search Words For Yodlee Transactions</span>
+            <span>Add/Remove Search Words For Yodlee Transactions</span>
             <label for="yodleeSearchWordsDdl">Search Words</label>
             <select id="yodleeSearchWordsDdl" class="selectheight" style="margin-bottom: 0">
                 <option></option>
@@ -142,9 +142,11 @@
                 <option value="<%=word%>"><%=y.SearchWordsModel.WordsDict[word]%></option>
                 <%}%>
             </select>
+            <button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>
+            <hr/>
+            <input type="text" id="yodleeAddSearchWordTxt" style="margin-bottom: 0"/>
+            <button class="btn yodleeSearchWordsAdd" id="addYodleeSearchWord">Add</button>
             
-            <button class="btn " id="addYodleeSearchWord">Add</button>
-            <button class="btn " id="removeYodleeSearchWord">Remove</button>
         </div>
         <%} else {print('No match was found to the search words');} })();%>
     </div>

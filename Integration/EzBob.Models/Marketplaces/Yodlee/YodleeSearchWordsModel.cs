@@ -14,7 +14,7 @@
 		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly List<string> _yodleeSearchWords;
 
-		public YodleeSearchWordsModel(ISession session)
+		public YodleeSearchWordsModel(ISession session, string customerSurName)
 		{
 			YodleeSearchWordModelDict = new SortedDictionary<string, SortedDictionary<string, double>>();
 			WordsDict = new Dictionary<int, string>();
@@ -27,6 +27,7 @@
 			}
 
 			_yodleeSearchWords = words.Select(x => x.SearchWords).ToList();
+			_yodleeSearchWords.Add(customerSurName);
 		}
 
 
@@ -34,7 +35,7 @@
 		{
 			foreach (var word in _yodleeSearchWords)
 			{
-				if (transaction.description.ToLowerInvariant().Contains(word))
+				if (transaction.description.ToLowerInvariant().Contains(word.ToLowerInvariant()))
 				{
 					var amount = transaction.transactionAmount.HasValue
 							 ? _currencyConvertor.ConvertToBaseCurrency(
