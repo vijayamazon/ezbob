@@ -112,8 +112,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         };
         this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
 
-        console.log(shop);
-        console.log(shop.get("Yodlee"));
+        
         var cashModel = shop.get("Yodlee").CashFlowReportModel;
         var cashFlow = cashModel.YodleeCashFlowReportModelDict;
         var minDay = cashModel.MinDateDict;
@@ -121,11 +120,23 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         
         var income = cashFlow["2Total Income"];
         var expenses = cashFlow["7Total Expenses"];
+        console.log(cashFlow);
+        var numOfTransactionsIncome = cashFlow["3Num Of Transactions"];
+        var numOfTransactionsExpenses = cashFlow["8Num Of Transactions"];
+        var averageIncome = cashFlow["4Average Income"];
+        var averageExpenses = cashFlow["9Average Expenses"];
+        
         var arrayOfData = [];
         
         for (var i in income) {
             if (!income.hasOwnProperty(i)) continue;
-            arrayOfData.push([[parseInt(expenses[i], 10), parseInt(income[i], 10)], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)]);
+            arrayOfData.push(
+            [
+                [
+                    [parseInt(expenses[i], 10), parseInt(averageExpenses[i], 10), parseInt(numOfTransactionsExpenses[i], 10)],
+                    [parseInt(income[i], 10), parseInt(averageIncome[i], 10), parseInt(numOfTransactionsIncome[i], 10)]
+                ], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)
+            ]);
             console.log(i, income[i], expenses[i]);
         }
         console.log(arrayOfData);
@@ -138,7 +149,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             width: 800,
             //color: '#ffffff',
             type: 'multi',
-            postfix: ' £',
+            postfix: '£',
             title: '<h3>Cash Flow<br /><small>monthly income/expenses</small></h3>',
             showValues: true,
             showValuesColor: "#000000",

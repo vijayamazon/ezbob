@@ -50,13 +50,13 @@
 
         // sum of array elements
         sum = function (ar) {
-            var totalS = 0;
-
+            var total = 0;
             for (var val in ar) {
-                if (ar.hasOwnProperty(val))
-                    totalS += ar[val];
+                if (!ar.hasOwnProperty(val)) continue;
+                total += ar[val][0];
             }
-            return totalS.toFixed(2);
+            console.log(total);
+            return total.toFixed(2);
         };
 
         // count max value of array
@@ -82,7 +82,7 @@
 
                 for (var val2 in ar2) {
                     if (!ar2.hasOwnProperty(val2)) continue;
-                    if (ar2[val2] > maxvalue2) maxvalue2 = ar2[val2];
+                    if (ar2[val2][0] > maxvalue2) maxvalue2 = ar2[val2][0];
                 }
 
                 if (maxvalue2 > maxvalue) maxvalue = maxvalue2;
@@ -95,7 +95,6 @@
 
             arr = opts[el.id];
             data = arr.data;
-
             //check if array is bad or empty
             if (data == undefined) {
                 $(el).html('There is not enought data for graph');
@@ -121,9 +120,9 @@
 
             for (var val in data) {
                 if (!data.hasOwnProperty(val)) continue;
-                valueData = data[val][0];
+                valueData = data[val];
                 if (valueData instanceof Array)
-                    value = sum(valueData);
+                    value = sum(valueData[0]);
                 else
                     value = valueData;
 
@@ -177,23 +176,30 @@
                         maxe = max;
                     }
 
-                    for (i in valueData) {
+                    for (i in valueData[0]) {
                         if (!valueData.hasOwnProperty(i)) continue;
-                        heig = totalHeightBar * valueData[i] / maxe;
+                        heig = totalHeightBar * valueData[0][i][0] / maxe;
                         wid = parseInt((fieldWidth - space) / valueData.length);
-                        sv = ''; // show values
-                        fs = 0; // font size
+                        var sv = ''; // show values
+                        var tr = '';
+                        var av = '';
+                        var fs = 0; // font size
                         if (arr.showValues) {
-                            sv = arr.prefix + valueData[i] + arr.postfix;
+                            sv = arr.prefix + GBPValues(valueData[0][i][0], false) + arr.postfix;
+                            av = arr.prefix + GBPValues(valueData[0][i][1], false) + arr.postfix;
+                            tr = arr.prefix + GBPValues(valueData[0][i][2], false);
                             fs = 12; // font-size is 0 if showValues = false
                         }
-                        o = "<div class='subBars" + el.id + "' style='height:" + heig + "px; background-color: " + arr.colors[i] + "; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' >" + sv + "</div>";
+                        var o = "<div class='subBarValue" + el.id + "' style='position: absolute; bottom: " + heig + "px; width: "+ wid +"px; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' >" + sv + "</div>" +
+                            "<div class='subBars" + el.id + "' style='height:" + heig + "px; background-color: " + arr.colors[i] + "; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' ></div>" + 
+                            "<div class='rotate' style='position: absolute; bottom: " + 50 + "%; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px'>av:" + av + "<br />tr#:" + tr + "</div>";
                         $('#graphFieldBar' + unique).prepend(o);
                     }
                 }
 
-                if (arr.type == 'multi')
+                if (arr.type == 'multi') {
                     $('.subBars' + el.id).css({ 'width': wid, 'position': 'absolute', 'bottom': 0 });
+                }
 
                 //position of bars
                 if (arr.position == 'bottom') $('.graphField' + el.id).css('bottom', 0);
@@ -205,9 +211,9 @@
                 // animated apearing
                 if (arr.animate) {
                     $('#graphFieldBar' + unique).css({ 'height': 0 });
-                    $('#graphFieldBar' + unique).animate({ 'height': fieldHeight }, arr.speed * 1000);
+                    $('#graphFieldBar' + unique).animate({ 'height': fieldHeight + 20 }, arr.speed * 1000);
                 } else {
-                    $('#graphFieldBar' + unique).css({ 'height': fieldHeight });
+                    $('#graphFieldBar' + unique).css({ 'height': fieldHeight + 20 });
                 }
 
             }
