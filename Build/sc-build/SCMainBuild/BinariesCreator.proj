@@ -57,12 +57,18 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\Ezbob.MailNode.Runtime\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\FraudChecker\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		
-		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		
+		<Copy SourceFiles="$(Src)Integration\EzBob.Models\bin\(BuildConfiguration)\EzBob.Models.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\Amazon\AmazonLib\bin\(BuildConfiguration)\Amazon.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\Amazon\AmazonDbLib\bin\(BuildConfiguration)\AmazonDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\CommonLib\bin\(BuildConfiguration)\CommonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\eBay\eBayLib\bin\(BuildConfiguration)\eBayLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\eBay\eBayDbLib\bin\(BuildConfiguration)\eBayDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\PaymentServices\bin\(BuildConfiguration)\PaymentServices.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\PayPal\PayPalLib\bin\(BuildConfiguration)\PayPalLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Integration\PayPal\PayPalServiceLib\(BuildConfiguration)\PayPalServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Lib\Scorto.Core\DefaultSigningProvider.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Lib\Scorto.Core\Scorto.Maven.Mixed.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+<Copy SourceFiles="$(Src)Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		
 		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
 
