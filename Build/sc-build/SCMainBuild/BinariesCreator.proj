@@ -58,7 +58,7 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\FraudChecker\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		
 		<Copy SourceFiles="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\Amazon.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\CommonLib\bin\$(BuildConfiguration)\CommonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\eBayLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
