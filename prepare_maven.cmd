@@ -20,8 +20,8 @@ set p=%p%, Lib\Scorto.Core\Scorto.Maven.Application.dll
 
 for %%f in ( %p%) do xcopy /s/y %%f "%mavenPath%" 
 
-@echo:
+rem @echo:
 
-cd %mavenPath%
-Maven.exe
-cd ..\..\..
+rem cd %mavenPath%
+rem Maven.exe
+rem cd ..\..\..
