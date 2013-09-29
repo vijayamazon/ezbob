@@ -118,12 +118,12 @@ namespace EzBob.PayPal
 
 		private object GetOutstandingBalance(IEnumerable<PayPalTransactionItem> data)
 		{
-			return (double)GetGrossIncome(data) - (double)GetNetTransfersAmount(data);
+			return (double)GetGrossIncome(data) - Math.Abs((double)GetNetTransfersAmount(data));
 		}
 
 		private object GetNetTransfersAmount(IEnumerable<PayPalTransactionItem> data)
 		{
-			return (double)GetTransferAndWireOut(data) + (double)GetTransferAndWireIn(data);
+			return Math.Abs((double)GetTransferAndWireOut(data)) + Math.Abs((double)GetTransferAndWireIn(data));
 		}
 
 		private object GetRatioNetSumOfRefundsAndReturnsToNetRevenues(IEnumerable<PayPalTransactionItem> data)
@@ -152,7 +152,7 @@ namespace EzBob.PayPal
 
 		private object GetGrossIncome(IEnumerable<PayPalTransactionItem> data)
 		{
-			return (double)GetTotalNetRevenues(data) - (double)GetTotalNetExpenses(data);
+			return (double)GetTotalNetRevenues(data) - Math.Abs((double)GetTotalNetExpenses(data));
 		}
 
 		private object GetTotalNetRevenues(IEnumerable<PayPalTransactionItem> data)
