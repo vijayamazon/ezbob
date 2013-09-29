@@ -99,3 +99,12 @@ App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml.user
 *.DotSettings
 App/EzReporting/EzReportsWeb/bin/*
+App/clients/Maven/AmazonDbLib.dll
+App/clients/Maven/AmazonLib.dll
+App/clients/Maven/CommonLib.dll
+App/clients/Maven/eBayDbLib.dll
+App/clients/Maven/eBayLib.dll
+App/clients/Maven/EzBob.Models.dll
+App/clients/Maven/PaymentServices.dll
+App/clients/Maven/PayPalLib.dll
+App/clients/Maven/PayPalServiceLib.dll
