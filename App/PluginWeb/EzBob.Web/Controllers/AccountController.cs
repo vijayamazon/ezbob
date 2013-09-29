@@ -306,7 +306,7 @@ namespace EzBob.Web.Controllers
         [ActionName("SignUp")]
         [ValidateJsonAntiForgeryToken]
         [CaptchaValidationFilter]
-        public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion)
+        public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
         {
             if (!ModelState.IsValid)
             {
@@ -319,7 +319,7 @@ namespace EzBob.Web.Controllers
             try
             {
                 var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-                SignUpInternal(model, signupPass1, signupPass2, securityQuestion);
+                SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode);
                 FormsAuthentication.SetAuthCookie(model.EMail, false);
 
                 var user = _users.GetUserByLogin(model.EMail);
@@ -347,19 +347,19 @@ namespace EzBob.Web.Controllers
         [Transactional]
         [Ajax(false)]
         [CaptchaValidationFilter]
-        public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion)
+		public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
         {
             if (!ModelState.IsValid)
             {
                 return GetModelStateErrors(ModelState);
             }
 
-            SignUpInternal(model, signupPass1, signupPass2, securityQuestion);
+			SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode);
 
             return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
         }
 
-        private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion)
+		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
         {
             MembershipCreateStatus status;
 
@@ -372,7 +372,7 @@ namespace EzBob.Web.Controllers
                 throw new Exception(DbStrings.NotValidEmailAddress);
             }
 
-            _membershipProvider.CreateUser(model.EMail, signupPass1, model.EMail, securityQuestion, model.SecurityAnswer, false, null, out status);
+			_membershipProvider.CreateUser(model.EMail, signupPass1, model.EMail, securityQuestion, model.SecurityAnswer, false, null, out status);
             if (status == MembershipCreateStatus.Success)
             {
                 var user = _users.GetUserByLogin(model.EMail);
@@ -388,6 +388,7 @@ namespace EzBob.Web.Controllers
 					CollectionStatus = new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
 					IsTest = isAutomaticTest,
 					IsOffline = false,
+					PromoCode = promoCode
 				};
 
                 var sourceref = Request.Cookies["sourceref"];

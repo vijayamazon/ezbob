@@ -45,11 +45,19 @@
 	</div>
 
 	<div class="form_field_container">
+		<label class ="attardi-input">
+			<span>Promo Code</span>
+			<input type="text" tabindex="4" class="form_field" name="promoCode" id="promoCode"/>
+		</label>
+		<img id="promoCodeImage" class="field_status"/>
+	</div>
+
+	<div class="form_field_container">
 		<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
 		<span class="inform">
 			<label class="attardi-input">
 				<span>Secret Question</span>
-				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field">
+				<select name="securityQuestion" id="securityQuestion" tabindex="5" class="form_field">
 					<option value=""></option>
 					@if (securityQuestions != null) {
 						foreach (SecurityQuestion item in securityQuestions) {
@@ -65,7 +73,7 @@
 	<div class="form_field_container">
 		<label class="attardi-input">
 			<span>Secret Answer</span>
-			<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field"/>
+			<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="6" class="form_field"/>
 		</label>
 		<img id="SecretAnswerImage" class="field_status required"/>
 	</div>
@@ -74,5 +82,5 @@
 		@EzForm.Captcha(captchamode)
 	</div>
 
-	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="7"></div>
+	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="8"></div>
 }

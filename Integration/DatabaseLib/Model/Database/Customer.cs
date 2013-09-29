@@ -514,6 +514,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
 			return p == null? (DateTime?)null : p.LastActionDate;
 		} // LastLoyaltyProgramActionDate
+
+		public virtual string PromoCode { get; set; }
     }
 
 

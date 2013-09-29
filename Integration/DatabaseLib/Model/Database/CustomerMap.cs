@@ -313,6 +313,8 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Formula("CreditResult")
                 .Not.Insert()
                 .Not.Update();
+
+			Map(x => x.PromoCode);
         }
 	}
 }
