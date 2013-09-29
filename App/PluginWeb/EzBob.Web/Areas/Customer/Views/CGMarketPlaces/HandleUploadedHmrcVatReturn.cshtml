@@ -5,24 +5,15 @@
 	<title>On Upload</title>
 
 	<script>
-		function Body_OnLoad() {
-			document.getElementById('close').onclick = function() {
-				var oResult = {
-					accepted: @{ WriteLiteral(ViewData["accepted_count"]); },
-					submitted: true,
-					error: '',
-					model: @{ WriteLiteral(ViewData["model"]); }
-				};
-
-				window.parent.@{ WriteLiteral(ViewData["key"]); }(JSON.stringify(oResult));
-			};
-		} // Body_OnLoad
+		(function() {
+			window.parent.@{ WriteLiteral(ViewData["key"]); }(JSON.stringify({
+				submitted: true,
+				error: @{ WriteLiteral(ViewData["error"]); },
+				model: @{ WriteLiteral(ViewData["model"]); }
+			}));
+		})();
 	</script>
 </head>
 
-<body onload="Body_OnLoad()">
-	@ViewData["accepted_count"] files accepted
-
-	<button id="close" class="button orange">Continue</button>
-</body>
+<body></body>
 </html>

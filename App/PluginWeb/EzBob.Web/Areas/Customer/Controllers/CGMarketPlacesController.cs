@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -72,37 +72,45 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			AddAccountState oState = ValidateModel(model);
 
 			if (oState.Error != null) {
-				ViewData["error"] = JsonConvert.SerializeObject(oState.Error);
-				ViewData["model"] = "";
+				ViewError = oState.Error;
+				ViewModel = null;
 				return View();
 			} // if
 
-			List<VatReturnSeeds> oSeeds = ValidateFiles(Request.Files, oState);
+			Hopper oSeeds = ValidateFiles(Request.Files, oState);
 
 			if (oState.Error != null) {
-				ViewData["error"] = JsonConvert.SerializeObject(oState.Error);
-				ViewData["model"] = "";
+				ViewError = oState.Error;
+				ViewModel = null;
 				return View();
 			} // if
 
-			if (oSeeds.Count < 1) {
-				ViewData["error"] = JsonConvert.SerializeObject(new { error = "No files accepted." });
-				ViewData["model"] = "";
+			if (oSeeds == null) {
+				ViewError = CreateError("No files accepted.");
+				ViewModel = null;
 				return View();
 			} // if
 
 			SaveMarketplace(oState, model);
 
 			if (oState.Error != null) {
-				ViewData["error"] = JsonConvert.SerializeObject(oState.Error);
-				ViewData["model"] = "";
+				ViewError = oState.Error;
+				ViewModel = null;
 				return View();
 			} // if
 
-			// TODO: save file data to DB (as if connector fetched it from remote source)
+			ViewModel = JsonConvert.SerializeObject(oState.Model);
+			ViewError = null;
 
-			ViewData["error"] = "";
-			ViewData["model"] = JsonConvert.SerializeObject(oState.Model);
+			Integration.ChannelGrabberFrontend.Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
+
+			try {
+				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e) {
+				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+			} // try
+
 			return View();
 		} // HandleUploadedHmrcVatReturn
 
@@ -162,6 +170,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			public IMarketplaceType Marketplace;
 			public JsonNetResult Error;
 			public JsonNetResult Model;
+			public IDatabaseCustomerMarketPlace CustomerMarketPlace;
 
 			public AddAccountState() {
 				VendorInfo = null;
@@ -169,6 +178,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				Marketplace = null;
 				Error = null;
 				Model = null;
+				CustomerMarketPlace = null;
 			} // constructor
 		} // class AddAccountState
 
@@ -184,7 +194,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			if (oResult.VendorInfo == null) {
 				var sError = "Unsupported account type: " + model.accountTypeName;
 				Log.Error(sError);
-				oResult.Error = this.JsonNet(new { error = sError });
+				oResult.Error = CreateError(sError);
 				return oResult;
 			} // try
 
@@ -196,16 +206,16 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				_mpChecker.Check(oResult.Marketplace.InternalId, _context.Customer, oResult.AccountData.UniqueID());
 			}
 			catch (MarketPlaceAddedByThisCustomerException ) {
-				oResult.Error = this.JsonNet(new { error = DbStrings.StoreAddedByYou });
+				oResult.Error = CreateError(DbStrings.StoreAddedByYou);
 				return oResult;
 			}
 			catch (MarketPlaceIsAlreadyAddedException ) {
-				oResult.Error = this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
+				oResult.Error = CreateError(DbStrings.StoreAlreadyExistsInDb);
 				return oResult;
 			}
 			catch (Exception e) {
 				Log.Error(e);
-				oResult.Error = this.JsonNet(new { error = e.Message });
+				oResult.Error = CreateError(e);
 				return oResult;
 			} // try
 
@@ -228,7 +238,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			catch (ConnectionFailException cge) {
 				if (DBConfigurationValues.Instance.ChannelGrabberRejectPolicy == ChannelGrabberRejectPolicy.ConnectionFail) {
 					Log.Error(cge);
-					oState.Error = this.JsonNet(new { error = cge.Message });
+					oState.Error = CreateError(cge);
 				} // if
 
 				Log.ErrorFormat("Failed to validate {0} account, continuing with registration.", model.accountTypeName);
@@ -239,15 +249,15 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			catch (ApiException cge) {
 				Log.ErrorFormat("Failed to validate {0} account.", model.accountTypeName);
 				Log.Error(cge);
-				oState.Error = this.JsonNet(new { error = cge.Message });
+				oState.Error = CreateError(cge);
 			}
 			catch (InvalidCredentialsException ice) {
 				Log.Info(ice);
-				oState.Error = this.JsonNet(new { error = ice.Message });
+				oState.Error = CreateError(ice);
 			}
 			catch (Exception e) {
 				Log.Error(e);
-				oState.Error = this.JsonNet(new { error = e.Message });
+				oState.Error = CreateError(e);
 			} // try
 		} // ValidateAccount
 
@@ -268,10 +278,11 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
 				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
+				oState.CustomerMarketPlace = mp;
 			}
 			catch (Exception e) {
 				Log.Error(e);
-				oState.Error = this.JsonNet(new { error = e.Message });
+				oState.Error = CreateError(e);
 			} // try
 		} // SaveMarketplace
 
@@ -279,27 +290,41 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 		#region method ValidateFiles
 
-		private List<VatReturnSeeds> ValidateFiles(HttpFileCollectionBase oFiles, AddAccountState oState) {
-			var oOutput = new List<VatReturnSeeds>();
+		private Hopper ValidateFiles(HttpFileCollectionBase oFiles, AddAccountState oState) {
+			var oOutput = new Hopper();
+
+			long? nRegistrationNo = null;
+			var oDateIntervals = new List<DateInterval>();
+			int nAddedCount = 0;
 
 			for (int i = 0; i < oFiles.Count; i++) {
 				HttpPostedFileBase oFile = oFiles[i];
 
-				if (oFile == null)
+				if (oFile == null) {
+					Log.DebugFormat("File {0}: not found, ignoring.", i);
 					continue;
+				} // if
 
-				var oBuffer = new MemoryStream();
+				Log.DebugFormat("File {0}, name: {1}", i, oFile.FileName);
 
-				var buf = new byte[32768];
+				if (oFile.ContentLength == 0) {
+					Log.DebugFormat("File {0}: is empty, ignoring.", i);
+					continue;
+				} // if
 
-				int nRead = oFile.InputStream.Read(buf, 0, buf.Count());
+				if (oFile.ContentType.Trim().ToLower() != "application/pdf") {
+					Log.DebugFormat("File {0}: is not PDF content type, ignoring.", i);
+					continue;
+				} // if
 
-				while (nRead > 0) {
-					oBuffer.Write(buf, 0, nRead);
-					nRead = oFile.InputStream.Read(buf, 0, buf.Count());
-				} // while
+				var oFileContents = new byte[oFile.ContentLength];
 
-				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
+				int nRead = oFile.InputStream.Read(oFileContents, 0, oFile.ContentLength);
+
+				if (nRead != oFile.ContentLength) {
+					Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+					continue;
+				} // if
 
 				var smd = new SheafMetaData {
 					BaseFileName = oFile.FileName,
@@ -308,32 +333,178 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					Thrasher = null
 				};
 
+				oOutput.Add(smd, oFileContents);
+
+				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
 				ISeeds oResult = null;
 
 				try {
-					oResult = vrpt.Run(smd, oBuffer.ToArray());
+					oResult = vrpt.Run(smd, oFileContents);
 				}
 				catch (Exception e) {
-					Log.WarnFormat("Failed to parse uploaded file {0}", oFile.FileName);
+					Log.WarnFormat("Failed to parse file {0} named {1}:", i, oFile.FileName);
 					Log.Warn(e);
 					continue;
 				} // try
 
-				if (oResult != null)
-					oOutput.Add((VatReturnSeeds)oResult);
+				if (oResult == null)
+					continue;
+
+				var oSeeds = (VatReturnSeeds)oResult;
+
+				if (nRegistrationNo.HasValue) {
+					if (nRegistrationNo.Value != oSeeds.RegistrationNo) {
+						oState.Error = CreateError("Inconsistent business registration number.");
+						return null;
+					} // if
+				}
+				else
+					nRegistrationNo = oSeeds.RegistrationNo;
+
+				var di = new DateInterval(oSeeds.DateFrom, oSeeds.DateTo);
+
+				foreach (DateInterval oInterval in oDateIntervals) {
+					if (oInterval.Intersects(di)) {
+						oState.Error = CreateError("Inconsistent date ranges: " + oInterval + " and " + di);
+						return null;
+					} // if
+				} // for each
+
+				oDateIntervals.Add(di);
+				oOutput.Add(smd, oResult);
+				nAddedCount++;
 			} // for
 
-			if (oOutput.Count < 1)
+			switch (nAddedCount) {
+			case 0:
+				return null;
+
+			case 1:
 				return oOutput;
 
-			// TODO: validate registration number and dates
-			// return new List<> if something goes wrong
-			// it is possible to use oState.Error if needed
-			
-			return oOutput;
+			default:
+				oDateIntervals.Sort(DateInterval.CompareForSort);
+
+				DateInterval next = null;
+
+				foreach (DateInterval cur in oDateIntervals) {
+					if (next == null) {
+						next = cur;
+						continue;
+					} // if
+
+					DateInterval prev = next;
+					next = cur;
+
+					if (!prev.Follows(next)) {
+						oState.Error = CreateError("Inconsequent date ranges: " + prev + " and " + next);
+						return null;
+					} // if
+				} // for each interval
+
+				return oOutput;
+			} // switch
 		} // ValidateFiles
 
 		#endregion method ValidateFiles
+
+		#region class DateInterval
+
+		private class DateInterval : Tuple<DateTime, DateTime> {
+			#region public
+
+			#region method CompareForSort
+
+			public static int CompareForSort(DateInterval a, DateInterval b) { return a.Start.CompareTo(b.Start); } // CompareForSort
+
+			#endregion method CompareForSort
+
+			#region constructor
+
+			public DateInterval(DateTime oStart, DateTime oEnd) : base(Min(oStart, oEnd), Max(oStart, oEnd)) {} // constructor
+
+			#endregion constructor
+
+			#region method Intersects
+
+			public bool Intersects(DateInterval di) {
+				if ((Start <= di.Start) && (di.End <= End))
+					return true;
+
+				if ((di.Start <= Start) && (End <= di.End))
+					return true;
+
+				if ((Start <= di.Start) && (di.Start <= End))
+					return true;
+
+				if ((Start <= di.End) && (di.End <= End))
+					return true;
+
+				return false;
+			} // Intersects
+
+			#endregion method Intersects
+
+			#region method Follows
+
+			public bool Follows(DateInterval di) {
+				return End.Date.AddDays(1) == di.Start.Date;
+			} // Follows
+
+			#endregion method Follows
+
+			#region method ToString
+
+			public override string ToString() {
+				return string.Format(
+					"{0} - {1}",
+					Start.ToString("MMM d yyyy", CultureInfo.InvariantCulture),
+					End.ToString("MMM d yyyy", CultureInfo.InvariantCulture)
+				);
+			} // ToString
+
+			#endregion method ToString
+
+			#endregion public
+
+			#region private
+
+			private DateTime Start { get { return Item1; } } // Start
+			private DateTime End { get { return Item2; } } // End
+
+			private static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
+			private static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
+
+			#endregion private
+		} // class DateInterval
+
+		#endregion class DateInterval
+
+		#region method CreateError
+
+		private JsonNetResult CreateError(Exception ex) {
+			return CreateError(ex.Message);
+		} // CreateError
+
+		private JsonNetResult CreateError(string sErrorMsg) {
+			return this.JsonNet(new { error = sErrorMsg });
+		} // CreateError
+
+		#endregion method CreateError
+
+		#region property ViewError
+
+		private JsonNetResult ViewError { set {
+			ViewData["error"] = JsonConvert.SerializeObject(value);
+		} } // ViewError
+
+		#endregion property ViewError
+
+		#region property ViewModel
+
+		private string ViewModel { set { ViewData["model"] = value ?? "null"; } } // ViewModel
+
+		#endregion property ViewModel
 
 		#region fields
 

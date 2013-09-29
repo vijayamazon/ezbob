@@ -127,6 +127,8 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             return @buildModel()
 
         window[sKey] = (sResult) =>
+            console.log 'raw result is', sResult
+
             delete window[sKey]
             delete window[sModelKey]
 
@@ -135,17 +137,18 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
             oResult = JSON.parse sResult
 
+            console.log 'result is', oResult
+
             if oResult.error
-                EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error
+                EzBob.App.trigger 'error', 'Problem Linking ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error.Data.error
             else
                 if oResult.submitted
-                    if oResult.accepted < 1
-                        EzBob.App.trigger 'error', 'Failed to Save ' + oVendorInfo.DisplayName + ' Account: no files accepted'
-                    else
-                        EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
+                    EzBob.App.trigger 'info', oVendorInfo.DisplayName + ' Account Added Successfully'
 
             @trigger 'completed'
             @trigger 'back'
+
+        console.log 'sKey =', sKey, 'window[sKey] =', window[sKey]
 
         $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
             iframe.setAttribute 'width', 570

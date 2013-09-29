@@ -17,6 +17,8 @@
 	/// File types fetched from the Field.
 	/// </summary>
 	public enum FileType {
+		Unknown,
+
 		/// <summary>
 		/// HTML file
 		/// </summary>

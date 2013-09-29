@@ -17,22 +17,7 @@ namespace Ezbob.HmrcHarvester {
 		/// Creates a Hopper object.
 		/// </summary>
 		public Hopper() {
-			Errors = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>>();
-			Files = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, byte[]>>>();
-			Seeds = new SortedDictionary<DataType, SortedDictionary<string, ISeeds>>();
-
-			ErrorCount = 0;
-
-			foreach (DataType dt in Enum.GetValues(typeof (DataType))) {
-				Errors[dt] = new SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>();
-				Files[dt] = new SortedDictionary<FileType, SortedDictionary<string, byte[]>>();
-				Seeds[dt] = new SortedDictionary<string, ISeeds>();
-
-				foreach (FileType ft in Enum.GetValues(typeof (FileType))) {
-					Errors[dt][ft] = new SortedDictionary<string, HarvesterError>();
-					Files[dt][ft] = new SortedDictionary<string, byte[]>();
-				} // for each file type
-			} // for each data type
+			Clean();
 		} // constructor
 
 		#endregion constructor
@@ -83,6 +68,59 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion method Add
 
+		#region method ForEachFile
+
+		/// <summary>
+		/// Performs specified action on every file of specific data type and file type.
+		/// </summary>
+		/// <param name="dt">Data type to process.</param>
+		/// <param name="ft">File type to process.</param>
+		/// <param name="action">Action to take. Does nothing if the action is null. Action arguments:
+		/// data type, file type, file name, file data.
+		/// </param>
+		public void ForEachFile(DataType dt, FileType ft, Action<DataType, FileType, string, byte[]> action) {
+			if (action == null)
+				return;
+
+			foreach (KeyValuePair<string, byte[]> f in Files[dt][ft])
+				action(dt, ft, f.Key, f.Value);
+		} // ForEachFile
+
+		#endregion method ForEachFile
+
+		#region method FetchBackdoorData
+
+		public void FetchBackdoorData(Hopper oHopper) {
+			lock(this) {
+				Clean();
+
+				if (oHopper == null)
+					return;
+
+				ErrorCount = oHopper.ErrorCount;
+
+				var aryDataTypes = (DataType[])Enum.GetValues(typeof (DataType));
+
+				var oFileTypes = new List<FileType>((FileType[])Enum.GetValues(typeof (FileType)));
+				oFileTypes.Remove(FileType.Unknown);
+
+				foreach (DataType dt in aryDataTypes) {
+					foreach (FileType ft in oFileTypes) {
+						foreach (KeyValuePair<string, HarvesterError> pair in oHopper.Errors[dt][ft])
+							Errors[dt][ft][pair.Key] = pair.Value;
+
+						foreach (KeyValuePair<string, byte[]> pair in oHopper.Files[dt][ft])
+							Files[dt][ft][pair.Key] = pair.Value;
+					} // for each file type
+
+					foreach (KeyValuePair<string, ISeeds> pair in oHopper.Seeds[dt])
+						Seeds[dt][pair.Key] = pair.Value;
+				} // for each data type
+			} // lock
+		} // FetchBackdoorData
+
+		#endregion method FetchBackdoorData
+
 		#region property Errors
 
 		/// <summary>
@@ -119,27 +157,37 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion property Seeds
 
-		#region property ForEachFile
-
-		/// <summary>
-		/// Performs specified action on every file of specific data type and file type.
-		/// </summary>
-		/// <param name="dt">Data type to process.</param>
-		/// <param name="ft">File type to process.</param>
-		/// <param name="action">Action to take. Does nothing if the action is null. Action arguments:
-		/// data type, file type, file name, file data.
-		/// </param>
-		public void ForEachFile(DataType dt, FileType ft, Action<DataType, FileType, string, byte[]> action) {
-			if (action == null)
-				return;
-
-			foreach (KeyValuePair<string, byte[]> f in Files[dt][ft])
-				action(dt, ft, f.Key, f.Value);
-		} // ForEachFile
-
-		#endregion property ForEachFile
-
 		#endregion public
+
+		#region private
+
+		#region method Clean
+
+		private void Clean() {
+			Errors = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>>();
+			Files = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, byte[]>>>();
+			Seeds = new SortedDictionary<DataType, SortedDictionary<string, ISeeds>>();
+
+			ErrorCount = 0;
+
+			foreach (DataType dt in Enum.GetValues(typeof (DataType))) {
+				Errors[dt] = new SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>();
+				Files[dt] = new SortedDictionary<FileType, SortedDictionary<string, byte[]>>();
+				Seeds[dt] = new SortedDictionary<string, ISeeds>();
+
+				foreach (FileType ft in Enum.GetValues(typeof (FileType))) {
+					if (ft == FileType.Unknown)
+						continue;
+
+					Errors[dt][ft] = new SortedDictionary<string, HarvesterError>();
+					Files[dt][ft] = new SortedDictionary<string, byte[]>();
+				} // for each file type
+			} // for each data type
+		} // Clean
+
+		#endregion method Clean
+
+		#endregion private
 	} // class Hopper
 
 	#endregion class Hopper

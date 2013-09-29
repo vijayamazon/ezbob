@@ -66,6 +66,10 @@ namespace Integration.ChannelGrabberAPI {
 
 		#region method Run
 
+		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
+			Run(bValidateCredentialsOnly);
+		} // Run
+
 		public virtual void Run(bool bValidateCredentialsOnly) {
 			if (bValidateCredentialsOnly)
 				Validate();

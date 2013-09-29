@@ -1,4 +1,6 @@
-﻿using Integration.ChannelGrabberAPI;
+﻿using System;
+using Ezbob.HmrcHarvester;
+using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using log4net;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
@@ -8,6 +10,30 @@ namespace Integration.ChannelGrabberFrontend {
 
 	public class Connector : IHarvester {
 		#region public
+
+		#region method SetBackdoorData
+
+		public static void SetBackdoorData(string sAccountTypeName, int nCustomerMarketplaceID, Hopper oHopper) {
+			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(sAccountTypeName);
+
+			if (vi == null)
+				return;
+
+			switch (vi.Behaviour) {
+			case Behaviour.Default:
+				// nothing to do here
+				break;
+
+			case Behaviour.HMRC:
+				Ezbob.HmrcHarvester.Harvester.SetBackdoorData(nCustomerMarketplaceID, oHopper);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // SetBackdoorData
+
+		#endregion method SetBackdoorData
 
 		#region constructor
 
@@ -52,6 +78,18 @@ namespace Integration.ChannelGrabberFrontend {
 		public virtual void Run(bool bValidateCredentialsOnly) {
 			try {
 				DataHarvester.Run(bValidateCredentialsOnly);
+			}
+			catch (Integration.ChannelGrabberAPI.ConnectionFailException cfe) {
+				throw new ConnectionFailException(cfe.Message, cfe);
+			}
+			catch (Integration.ChannelGrabberAPI.ApiException ae) {
+				throw new ApiException(ae.Message, ae);
+			} // try
+		} // Run
+
+		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
+			try {
+				DataHarvester.Run(bValidateCredentialsOnly, nCustomerMarketplaceID);
 			}
 			catch (Integration.ChannelGrabberAPI.ConnectionFailException cfe) {
 				throw new ConnectionFailException(cfe.Message, cfe);

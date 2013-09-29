@@ -36,6 +36,53 @@ namespace Ezbob.HmrcHarvester {
 	public class Harvester : SafeILog, Integration.ChannelGrabberAPI.IHarvester {
 		#region public
 
+		#region static
+
+		#region method SetBackdoorData
+
+		public static void SetBackdoorData(int nCustomerMarketplaceID, Hopper oHopper) {
+			if (oHopper == null)
+				return;
+
+			lock (typeof (Harvester)) {
+				if (ms_oBackdoorData == null)
+					ms_oBackdoorData = new SortedDictionary<int, Hopper>();
+
+				ms_oBackdoorData[nCustomerMarketplaceID] = oHopper;
+			} // lock
+		} // SetBackdoorData
+
+		private static SortedDictionary<int, Hopper> ms_oBackdoorData;
+
+		#endregion method SetBackdoorData
+
+		#region method FetchBackdoorData
+
+		private static Hopper FetchBackdoorData(int nCustomerMarketplaceID, ASafeLog log) {
+			log.Debug("Harvester: fetching backdoor data for marketplace {0}...", nCustomerMarketplaceID);
+
+			Hopper oBackdoorData = null;
+
+			lock (typeof(Harvester)) {
+				if ((ms_oBackdoorData == null) || !ms_oBackdoorData.ContainsKey(nCustomerMarketplaceID)) {
+					log.Debug("Harvester: no backdoor data found for marketplace {0}.", nCustomerMarketplaceID);
+					log.Debug("Harvester: fetching backdoor data for marketplace {0} complete.", nCustomerMarketplaceID);
+					return null;
+				} // if
+
+				oBackdoorData = ms_oBackdoorData[nCustomerMarketplaceID];
+
+				ms_oBackdoorData.Remove(nCustomerMarketplaceID);
+			} // lock
+
+			log.Debug("Harvester: fetching backdoor data for marketplace {0} complete.", nCustomerMarketplaceID);
+			return oBackdoorData;
+		} // FetchBackdoorData
+
+		#endregion method FetchBackdoorData
+
+		#endregion static
+
 		#region constructor
 
 		/// <summary>
@@ -77,13 +124,28 @@ namespace Ezbob.HmrcHarvester {
 
 		#region method Run
 
+		public virtual void Run(bool bValidateCredentialsOnly) {
+			Run(bValidateCredentialsOnly, 0);
+		} // Run
+
 		/// <summary>
 		/// Main harvest function. Logs in to hmrc.gov.uk and fetches data.
 		/// </summary>
 		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
-		public virtual void Run(bool bValidateCredentialsOnly) {
+		/// <param name="nCustomerMarketplaceID">Customer marketplace id for fetching backdoor data.</param>
+		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
 			try {
 				Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
+
+				if (!bValidateCredentialsOnly) {
+					Hopper oBackdoorData = FetchBackdoorData(nCustomerMarketplaceID, this);
+
+					if (oBackdoorData != null) {
+						Hopper.FetchBackdoorData(oBackdoorData);
+						Debug("Harvester running is complete.");
+						return;
+					} // if
+				} // if
 
 				if (!IsLoggedIn)
 					Login(GetLoginRequestDetails(GetPage("")));

@@ -76,7 +76,7 @@ namespace Integration.ChannelGrabberFrontend {
 
 			if (ctr.Init()) {
 				try {
-					ctr.Run(false);
+					ctr.Run(false, databaseCustomerMarketPlace.Id);
 
 					switch (ad.VendorInfo.Behaviour) {
 					case Behaviour.Default:
