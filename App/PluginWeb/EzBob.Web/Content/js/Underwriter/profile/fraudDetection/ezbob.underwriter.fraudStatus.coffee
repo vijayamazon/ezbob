@@ -36,14 +36,8 @@ class EzBob.Underwriter.FraudStatusLayout extends Backbone.Marionette.Layout
         @
 
     renderStatusValue: =>
-        #currentStatus = @model.get "CurrentStatus"
-        #if currentStatus == 3 or currentStatus == 4
         @model.fetch().done =>
             @$el.find('#fraud-view').show()
-        #    FraudStatusView = new EzBob.Underwriter.FraudStatusView model:@model
-        #    @content.show(FraudStatusView)
-        #else
-        #    @$el.find('#fraud-view').hide()
         false
 
     save : =>
