@@ -32,9 +32,13 @@
 
 	public class YodleeAccountsRepository : NHibernateRepositoryBase<YodleeAccounts>, IYodleeAccountsRepository
 	{
+		private readonly string accountPrefix;
+
 		public YodleeAccountsRepository(ISession session)
 			: base(session)
 		{
+			var configurationVariables = new ConfigurationVariablesRepository(session);
+			accountPrefix = configurationVariables.GetByName("YodleeAccountPrefix").Value;
 		}
 
 		public YodleeAccounts Search(int customerId)
@@ -54,7 +58,7 @@
 			{
 				CreationDate = DateTime.UtcNow,
 				Customer = null,
-				Username = string.Format("EZBOB+{0}@ezbob.com", maxId + 1),
+				Username = string.Format("{0}+{1}@ezbob.com", accountPrefix, maxId + 1),
 				Password = Encryptor.Encrypt(generatePassword()),
 				Bank = null
 			};
