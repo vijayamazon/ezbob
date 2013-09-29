@@ -12,24 +12,24 @@
 
 @section Js
 {
-<script language="javascript">
-    $.jqplot.config.enablePlugins = true;
-    (function () {
-        var data = @Html.Raw(JsonConvert.SerializeObject(Model, new JavaScriptDateTimeConverter()));
-        var plot1 = $.jqplot('LoanAmountPerDayChart', [data], {
-            title:'Loan amount by day',
-            axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
-            series:[
-                {
-                    lineWidth:4,
-                    markerOptions:{style:'square'},
-                    trendline: {
-                        show:true,
-                        color: "#00E9F5"
-                    }
-                }]
-        });
-    })();
-</script>    
+    <script type="text/javascript">
+        $.jqplot.config.enablePlugins = true;
+        (function () {
+            var data = @Html.Raw(JsonConvert.SerializeObject(Model, new JavaScriptDateTimeConverter()));
+            var plot1 = $.jqplot('LoanAmountPerDayChart', [data], {
+                title:'Loan amount by day',
+                axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
+                series:[
+                    {
+                        lineWidth:4,
+                        markerOptions:{style:'square'},
+                        trendline: {
+                            show:true,
+                            color: "#00E9F5"
+                        }
+                    }]
+            });
+        })();
+    </script>
 }
 

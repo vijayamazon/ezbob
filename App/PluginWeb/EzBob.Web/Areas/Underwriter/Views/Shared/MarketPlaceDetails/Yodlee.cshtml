@@ -23,6 +23,7 @@
                         <th>Transaction Base Type</th>
                         <th>Transaction/Post Date</th>
                         <th>Transaction Amount £</th>
+                        <th>Running Balance(calculated) £</th>
                         <th>Category</th>
                         <th>Category Type</th>
                         <th>Description</th>
@@ -38,9 +39,11 @@
                             <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
                             <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
                             <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
+                            <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
                             <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                             <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                             <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+
                         </tr>
                     <%});%>
                 </tbody>
@@ -115,9 +118,10 @@
                     <% var obj = y.SearchWordsModel.YodleeSearchWordModelDict;
                     var word1 = obj[Object.keys(obj)[0]]; 
                     for (var type in word1) { %>
-                    <th>
-                        <%= type %>
-                    </th>
+                    <th><%= type %></th>
+                    <%}
+                    if(!word1){%>
+                    <th>No matches to search words</th>
                     <%}%>
                 </tr>
             </thead>
@@ -155,13 +159,16 @@
 @helper YodleeCharts()
 {
     <div class="tab-pane" id="yodleetab2">
+        
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
         <div id="yodleeBarGraph" class="well"></div>
-        <div id="yodleeDots"></div>
+        <hr />
+        <button class="yodleeShowGraph btn">Show Graph</button><button class="yodleeReplotGraph btn">Replot Graph</button>
+        <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br/><small>monthly</small></h3>
+        <div id="yodleeRunningBalanceChart" class="jqplot-target well" style="width: 800px; height: 300px; position: relative;"></div>
         <%} else {print('No data to show charts');} })();%>
     </div>
 }
-
 
 @helper YodleeAggregates()
 {
@@ -239,6 +246,7 @@
                     <th>Account Name</th>
                     <th>Account Number</th>
                     <th>Available Balance</th>
+                    <th>Current Balance</th>
                     <th>Account Holder</th>
                     <th>Account Open Date</th>
                     <th>Custom Name</th>
@@ -257,6 +265,7 @@
                                     <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                                     <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
                                     <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
+                                    <td><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
                                     <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
                                     <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
                                     <td><%-bank.customName!=undefined ? bank.customName : "-"%></td>

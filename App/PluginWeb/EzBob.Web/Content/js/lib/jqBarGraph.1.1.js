@@ -55,7 +55,6 @@
                 if (!ar.hasOwnProperty(val)) continue;
                 total += ar[val][0];
             }
-            console.log(total);
             return total.toFixed(2);
         };
 

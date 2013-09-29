@@ -8,109 +8,108 @@ namespace EzBob.Models.Marketplaces.Builders
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Web.Areas.Customer.Models;
-	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Code;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
 
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder
-    {
-        protected readonly ISession _session;
+	{
+		protected readonly ISession _session;
 
-        public MarketplaceModelBuilder(ISession session)
-        {
-            _session = session;
-        }
+		public MarketplaceModelBuilder(ISession session)
+		{
+			_session = session;
+		}
 
-        public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
-        {
-            return null;
-        }
+		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		{
+			return null;
+		}
 
-        public virtual string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo)
-        {
-            return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
-        }
+		public virtual string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo)
+		{
+			return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
+		}
 
-        public MarketPlaceModel Create(MP_CustomerMarketPlace mp)
-        {
-            var data = GetAnalysisFunctionValues(mp);
+		public MarketPlaceModel Create(MP_CustomerMarketPlace mp)
+		{
+			var data = GetAnalysisFunctionValues(mp);
 
-            var eluminatingStatus = mp.EliminationPassed ? "Pass" : "Fail";
+			var eluminatingStatus = mp.EliminationPassed ? "Pass" : "Fail";
 
-            var model = new MarketPlaceModel
-            {
-                Id = mp.Id,
-                Type = mp.DisplayName,
-                Name = mp.Marketplace.Name,
-                LastChecked = FormattingUtils.FormatDateToString(mp.Updated, "-"),
-                EluminatingStatus = eluminatingStatus,
-                UpdatingStatus = mp.GetUpdatingStatus(),
-                UpdateError = mp.UpdateError,
-                AnalysisDataInfo = data,
-                AccountAge = GetAccountAge(mp),
-                PositiveFeedbacks = 0,
-                NegativeFeedbacks = 0,
-                NeutralFeedbacks = 0,
-                RaitingPercent = "-",
-                SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
-                IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-                UWPriority = mp.Marketplace.UWPriority,
-                Disabled = mp.Disabled,
-                IsNew = mp.IsNew
-            };
+			var model = new MarketPlaceModel
+			{
+				Id = mp.Id,
+				Type = mp.DisplayName,
+				Name = mp.Marketplace.Name,
+				LastChecked = FormattingUtils.FormatDateToString(mp.Updated, "-"),
+				EluminatingStatus = eluminatingStatus,
+				UpdatingStatus = mp.GetUpdatingStatus(),
+				UpdateError = mp.UpdateError,
+				AnalysisDataInfo = data,
+				AccountAge = GetAccountAge(mp),
+				PositiveFeedbacks = 0,
+				NegativeFeedbacks = 0,
+				NeutralFeedbacks = 0,
+				RaitingPercent = "-",
+				SellerInfoStoreURL = GetUrl(mp, RetrieveDataHelper.RetrieveCustomerSecurityInfo(mp.Id)),
+				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
+				UWPriority = mp.Marketplace.UWPriority,
+				Disabled = mp.Disabled,
+				IsNew = mp.IsNew
+			};
 
-            InitializeSpecificData(mp, model);
+			InitializeSpecificData(mp, model);
 
-            return model;
-        }
+			return model;
+		}
 
-        public string GetAccountAge(MP_CustomerMarketPlace mp)
-        {
-            UpdateOriginationDate(mp);
-            return mp.OriginationDate == null
-                       ? "-"
-                       : Convert.ToString(Math.Round((DateTime.UtcNow - mp.OriginationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
-        }
+		public string GetAccountAge(MP_CustomerMarketPlace mp)
+		{
+			UpdateOriginationDate(mp);
+			return mp.OriginationDate == null
+					   ? "-"
+					   : Convert.ToString(Math.Round((DateTime.UtcNow - mp.OriginationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
+		}
 
-        public void UpdateOriginationDate(MP_CustomerMarketPlace mp)
-        {
-            mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
-        }
+		public void UpdateOriginationDate(MP_CustomerMarketPlace mp)
+		{
+			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
+		}
 
-        public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
-        {
-            return null;
-        }
+		public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+		{
+			return null;
+		}
 
-        private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)
-        {
-            var data = new Dictionary<string, string>();
+		private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)
+		{
+			var data = new Dictionary<string, string>();
 
-            var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-            var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+			var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 
-            if (av != null)
-            {
-                foreach (var info in av)
-                {
-                    var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
-                    string temp;
-                    data.TryGetValue(val, out temp);
-                    if (temp == null)
-                    {
-                        data.Add(val, info.Value.ToString());
-                    }
-                }
-            }
+			if (av != null)
+			{
+				foreach (var info in av)
+				{
+					var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
+					string temp;
+					data.TryGetValue(val, out temp);
+					if (temp == null)
+					{
+						data.Add(val, info.Value.ToString());
+					}
+				}
+			}
 
-            return data;
-        }
+			return data;
+		}
 
-        protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
-        {
-        }
+		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		{
+		}
 
 		protected MP_AnalyisisFunctionValue GetEarliestValueFor(MP_CustomerMarketPlace mp, string functionName)
 		{
@@ -135,7 +134,6 @@ namespace EzBob.Models.Marketplaces.Builders
 					latest = mpAnalyisisFunctionValue;
 				}
 			}
-
 			return latest;
 		}
 
@@ -151,9 +149,7 @@ namespace EzBob.Models.Marketplaces.Builders
 					month = mpAnalyisisFunctionValue;
 				}
 			}
-
 			return month;
-
 		}
 
 		public IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
@@ -168,8 +164,6 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
 			return null;
 		}
-
-
 
 		public IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
 		{
@@ -201,8 +195,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						break;
 				}
 			}
-
 			return closestSoFar;
 		}
-    }
+	}
 }

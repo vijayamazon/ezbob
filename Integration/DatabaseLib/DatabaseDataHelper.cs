@@ -1427,11 +1427,53 @@ namespace EZBob.DatabaseLib
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
+
+				if (mpOrderItem.currentBalance.HasValue)
+				{
+					CalculateYodleeRunningBalance(mpOrderItem.OrderItemBankTransactions,
+					                              _CurrencyConvertor.ConvertToBaseCurrency(
+						                              mpOrderItem.currentBalanceCurrency, mpOrderItem.currentBalance.Value,
+						                              mpOrderItem.asOfDate));
+				}
+
 				mpOrder.OrderItems.Add(mpOrderItem);
+
 			}
 
 			customerMarketPlace.YodleeOrders.Add(mpOrder);
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+		}
+
+		public void CalculateYodleeRunningBalance(IEnumerable<MP_YodleeOrderItemBankTransaction> orderItemBankTransactions, AmountInfo currentBalance)
+		{
+			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ToList();
+			if (!transactions[0].runningBalance.HasValue)
+			{
+				transactions[0].runningBalance = currentBalance.Value;
+				transactions[0].runningBalanceCurrency = currentBalance.CurrencyCode;
+			}
+
+			for (int i = 1; i < transactions.Count; ++i)
+			{
+				if (transactions[i].runningBalance.HasValue) continue;
+
+				var amount = transactions[i].transactionAmount.HasValue
+							 ? _CurrencyConvertor.ConvertToBaseCurrency(
+								 transactions[i].transactionAmountCurrency,
+								 transactions[i].transactionAmount.Value,
+								 transactions[i].postDate ?? transactions[i].transactionDate).Value
+							 : 0;
+				if (transactions[i].transactionBaseType == "credit")
+				{
+					transactions[i].runningBalance = transactions[i - 1].runningBalance + amount;
+				}
+				else//debit
+				{
+					transactions[i].runningBalance = transactions[i - 1].runningBalance - amount;
+				}
+
+				transactions[i].runningBalanceCurrency = currentBalance.CurrencyCode;
+			}
 		}
 
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime utcNow, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)

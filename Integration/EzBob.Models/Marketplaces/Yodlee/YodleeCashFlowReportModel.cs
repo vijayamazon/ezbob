@@ -9,12 +9,21 @@
 	using Scorto.NHibernate.Repository;
 	using NHibernate;
 
+	[Serializable]
+	public class RunningBalance
+	{
+		public DateTime Date { get; set; }
+		public double Balance { get; set; }
+	}
+
 	public class YodleeCashFlowReportModel
 	{
 		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
-
 		public SortedDictionary<int/*yearmonth*/, int/*minday*/ > MinDateDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
+		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
+		public SortedDictionary<int/*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
+
 		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
 		private const string OtherExpensesCat = "Other Expenses";
@@ -41,6 +50,8 @@
 		public YodleeCashFlowReportModel(ISession session)
 		{
 			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
+			LowRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
+			HighRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
 			MinDateDict = new SortedDictionary<int, int>();
 			MaxDateDict = new SortedDictionary<int, int>();
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
@@ -62,11 +73,18 @@
 			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
 			var yearmonth = date.HasValue ? date.Value.Year * 100 + date.Value.Month : 0;
 
+			var runningBalance = transaction.runningBalance.HasValue
+									 ? _currencyConvertor.ConvertToBaseCurrency(
+										 transaction.runningBalanceCurrency,
+										 transaction.runningBalance.Value,
+										 transaction.postDate ?? transaction.transactionDate).Value
+									 : 0;
 
 			Add(cat, amount, yearmonth);
 			UpdateMinMaxDay(yearmonth, date);
 			Add(cat, amount, TotalColumn);
 
+			AddRunningBalance(yearmonth, runningBalance, date.HasValue? date.Value : new DateTime());
 
 			//Calc Total Row
 			Add(baseType == "credit"
@@ -83,6 +101,35 @@
 			Add(baseType == "credit"
 					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
 					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, TotalColumn);
+		}
+
+		private void AddRunningBalance(int yearmonth, double runningBalance, DateTime date)
+		{
+			if (!LowRunningBalanceDict.ContainsKey(yearmonth))
+			{
+				LowRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = runningBalance };
+			}
+			else
+			{
+				if (LowRunningBalanceDict[yearmonth].Balance > runningBalance)
+				{
+					LowRunningBalanceDict[yearmonth].Balance = runningBalance;
+					LowRunningBalanceDict[yearmonth].Date = date;
+				}
+			}
+
+			if (!HighRunningBalanceDict.ContainsKey(yearmonth))
+			{
+				HighRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = runningBalance };
+			}
+			else
+			{
+				if (HighRunningBalanceDict[yearmonth].Balance < runningBalance)
+				{
+					HighRunningBalanceDict[yearmonth].Balance = runningBalance;
+					HighRunningBalanceDict[yearmonth].Date = date;
+				}
+			}
 		}
 
 		private void UpdateMinMaxDay(int yearmonth, DateTime? date)
@@ -137,15 +184,15 @@
 
 			//Calc Avarage Rows
 			CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
-			                 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-			                 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
+							 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+							 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
 			CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
 							 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
 							 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
 
 			CalculateNetCashFlow(string.Format("{0}{1}", NetCashFlow, NetCashFlowCat),
-			                     string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-			                     string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+								 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+								 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
 		}
 
 		private void CalculateNetCashFlow(string netCashFlowCat, string totalIncomeCat, string totalExpensesCat)
@@ -157,7 +204,7 @@
 			{
 				Add(netCashFlowCat, totalIncomeRow[yearmonth] - totalExpensesRow[yearmonth], yearmonth);
 			}
-			
+
 		}
 
 		private void CalculateAverage(string averageCat, string totalCat, string numOfTransCat)

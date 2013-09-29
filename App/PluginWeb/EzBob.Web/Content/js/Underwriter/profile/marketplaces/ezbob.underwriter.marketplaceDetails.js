@@ -14,23 +14,33 @@ EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
 EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     initialize: function () {
         this.template = _.template($('#marketplace-values-template').html());
+        //this.on('render', this.afterRender);
+        _.bindAll(this, 'beforeRender', 'render', 'afterRender');
+        var that = this;
+        this.render = _.wrap(this.render, function (render) {
+            that.beforeRender();
+            render();
+            that.afterRender();
+            return that;
+        });
     },
+    beforeRender: function () { },
     render: function () {
         var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
-        var shop = this.model.get(this.options.currentId);
+        this.shop = this.model.get(this.options.currentId);
         // drawChart(shop.get("Id"));
         var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
 
         var sTargetList = '';
 
-        var cg = aryCGAccounts[shop.get('Name')];
+        var cg = aryCGAccounts[this.shop.get('Name')];
         if (cg)
             sTargetList = ((cg.Behaviour == 0) && !cg.HasExpenses) ? 'marketplaces' : 'accounts';
         else
-            sTargetList = shop.get('IsPaymentAccount') ? 'accounts' : 'marketplaces';
+            sTargetList = this.shop.get('IsPaymentAccount') ? 'accounts' : 'marketplaces';
 
-        data[sTargetList].push(shop.toJSON());
+        data[sTargetList].push(this.shop.toJSON());
 
         data.hideAccounts = data.accounts.length == 0;
         data.hideMarketplaces = data.marketplaces == 0;
@@ -38,12 +48,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.html(this.template(data));
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
 
-        if (shop.get('Name') == 'Yodlee') {
-            this.renderYodlee(shop);
+        if (this.shop.get('Name') == 'Yodlee') {
+            this.renderYodlee();
         }
 
         return this;
     },
+    afterRender: function () { },
+
     events: {
         "click .reCheckMP": "reCheck",
         "click .reCheck-paypal": "reCheckPayPal",
@@ -52,7 +64,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .enable-shop": "enShop",
         "click .yodleeSearchWordsRow": "searchYodleeWordsRowClicked",
         "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
-        "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked"
+        "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked",
+        "click .yodleeShowGraph": "yodleeShowGraphClicked",
+        "click .yodleeReplotGraph": "replotYodleeGraphClicked"
+
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -105,17 +120,17 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             dialogClass: "marketplaceDetail"
         };
     },
-    renderYodlee: function (shop) {
+    renderYodlee: function () {
         var oDataTableArgs = {
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
+            aoColumns: [{ sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
         };
         this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
 
 
-        var cashModel = shop.get("Yodlee").CashFlowReportModel;
+        var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
         var cashFlow = cashModel.YodleeCashFlowReportModelDict;
         var minDay = cashModel.MinDateDict;
         var maxDay = cashModel.MaxDateDict;
@@ -138,11 +153,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     [parseInt(income[i], 10), parseInt(averageIncome[i], 10), parseInt(numOfTransactionsIncome[i], 10)]
                 ], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)
             ]);
-            console.log(i, income[i], expenses[i]);
         }
-        console.log(arrayOfData);
-
-        $("#yodleeBarGraph").jqBarGraph({
+        
+        this.$el.find("#yodleeBarGraph").jqBarGraph({
             data: arrayOfData,
             colors: ['#FF0000', '#008000'],
             legends: ['Expenses', 'Income'],
@@ -155,7 +168,78 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             showValues: true,
             showValuesColor: "#000000",
         });
+    },
+    yodleeShowGraphClicked: function () {
+        var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
+        var lowRunningBalance = cashModel.LowRunningBalanceDict;
+        var highRunningBalance = cashModel.HighRunningBalanceDict;
 
+        $.jqplot.config.enablePlugins = true;
+
+        var lowBalanceLine = [];
+        var highBalanceLine = [];
+        for (var monthYear1 in lowRunningBalance) {
+            lowBalanceLine.push([new Date(Date.parse(lowRunningBalance[monthYear1].Date)), parseInt(lowRunningBalance[monthYear1].Balance, 10)]);
+        }
+
+        for (var monthYear2 in highRunningBalance) {
+            highBalanceLine.push([new Date(Date.parse(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
+        }
+        
+        this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine], {
+            animateReplot: true,
+            cursor: {
+                show: true,
+                zoom: true,
+                looseZoom: true,
+                showTooltip: false
+            },
+            seriesColors: ['#008000', '#FF0000'],
+            series: [{label: 'High'}, {label: 'Low'}],
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.DateAxisRenderer,
+                    label: 'Date',
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                    tickOptions: {
+                        labelPosition: 'middle',
+                        angle: 15
+                    },
+                },
+                yaxis: {
+                    label: 'Balance',
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    tickOptions: {
+                        formatString: "%'d £"
+                    },
+                }
+            },
+            highlighter: {
+                show: true,
+                sizeAdjust: 1,
+                tooltipOffset: 0
+            },
+            legend: {
+                show: true,
+                renderer: $.jqplot.EnhancedLegendRenderer,
+                border: 'none',
+                marginRight: '-5px',
+                background: 'rgba(0,0,0,0)',
+                //placement: 'outside',
+                location: 'e',
+            },
+            grid: {
+                drawBorder: false,
+                shadow: false,
+                background: 'rgba(0,0,0,0)'
+            }
+        });
+        
+        $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
+    },
+    replotYodleeGraphClicked: function() {
+        this.runningBalancePlot.replot({ resetAxes: true });
     },
     searchYodleeWordsRowClicked: function (el) {
         var searchWord = $(el.currentTarget).children("td:first").text();
@@ -191,7 +275,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var that = this;
         if (!word) return false;
         EzBob.ShowMessage(
-            "", "Are you sure you want to remove"+ word +"?",
+            "", "Are you sure you want to remove" + word + "?",
             function () {
                 BlockUi('on');
                 $.post(window.gRootPath + "Underwriter/MarketPlaces/DeleteSearchWord", { word: word })

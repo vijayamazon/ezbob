@@ -870,7 +870,6 @@
     <Content Include="Content\js\lib\html5shiv.js" />
     <Content Include="Content\js\lib\attardi.labels.js" />
     <Content Include="Content\js\lib\jqBarGraph.1.1.js" />
-    <Content Include="Content\js\lib\jqBarGraph.1.1.min.js" />
     <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.barRenderer.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.BezierCurveRenderer.js" />
@@ -1139,9 +1138,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanForWarningStatusCustomer.cshtml" />
     <Content Include="Areas\Underwriter\Views\MarketPlaces\YodleeCallback.cshtml" />
     <Content Include="Areas\Underwriter\Views\MarketPlaces\TryRecheckYodlee.cshtml" />
-    <Content Include="Content\js\lib\jqBarGraph.1.1.min.js.map">
-      <DependentUpon>jqBarGraph.1.1.js</DependentUpon>
-    </Content>
     <Content Include="Areas\Customer\Views\CGMarketPlaces\UploadFilesDialog.cshtml" />
     <Content Include="Areas\Customer\Views\CGMarketPlaces\HandleUploadedHmrcVatReturn.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />

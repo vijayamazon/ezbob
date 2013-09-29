@@ -12,6 +12,7 @@
 			accountNumber = "-";
 			accountHolder = "-";
 			availableBalance = "-";
+			currentBalance = "-";
 			term = "-";
 			accountName = "-";
 			routingNumber = "-";
@@ -34,5 +35,6 @@
 		public string accountOpenDate { get; set; }
 		public string taxesWithheldYtd { get; set; }
 		public IEnumerable<YodleeTransactionModel> transactions { get; set; }
+		public string currentBalance { get; set; }
 	}
 }

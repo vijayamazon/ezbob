@@ -218,6 +218,12 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.trendline.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.categoryAxisRenderer.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.logAxisRenderer.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasAxisTickRenderer.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.highlighter.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.enhancedLegendRenderer.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.cursor.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
 				.Add("~/Content/js/lib/jqBarGraph.1.1.js")
 
