@@ -123,7 +123,7 @@ namespace EzBob.PayPal
 
 		private object GetNetTransfersAmount(IEnumerable<PayPalTransactionItem> data)
 		{
-			return Math.Abs((double)GetTransferAndWireOut(data)) + Math.Abs((double)GetTransferAndWireIn(data));
+			return (double)GetTransferAndWireOut(data) + (double)GetTransferAndWireIn(data);
 		}
 
 		private object GetRatioNetSumOfRefundsAndReturnsToNetRevenues(IEnumerable<PayPalTransactionItem> data)
