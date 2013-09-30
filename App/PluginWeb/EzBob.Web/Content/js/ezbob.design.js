@@ -1142,3 +1142,7 @@ EzBob.validateCGShopForm = function (el, accountType) {
 
     return el.validate(v);
 };
+
+EzBob.poundToInt = function(sNumWithPounds) {
+	return parseInt(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
+};

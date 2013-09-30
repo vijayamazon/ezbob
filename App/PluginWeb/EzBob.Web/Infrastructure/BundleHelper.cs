@@ -224,6 +224,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.highlighter.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.enhancedLegendRenderer.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.cursor.js")
+				.Add("~/Content/js/lib/jqplot/plugins/jqplot.barRenderer.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
 				.Add("~/Content/js/lib/jqBarGraph.1.1.js")
 

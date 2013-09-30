@@ -74,6 +74,24 @@
 		]
 	},
 	{
+		"Name": "Previous Company Registered Office Address",
+
+		"PathToParent": "./REQUEST/DL15/PREVCOMPNAMES",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
+		"Fields": [
+			{ "SourcePath": "./DATECHANGED", "Targets": [{ "Name": "Date Changed" }] },
+			{ "SourcePath": "./PREVREGADDR1", "Targets": [{ "Name": "Office Address", "Position": 1 }] },
+			{ "SourcePath": "./PREVREGADDR2", "Targets": [{ "Name": "Office Address", "Position": 2, "Prefix": "\n" }] },
+			{ "SourcePath": "./PREVREGADDR3", "Targets": [{ "Name": "Office Address", "Position": 3, "Prefix": "\n" }] },
+			{ "SourcePath": "./PREVREGADDR4", "Targets": [{ "Name": "Office Address", "Position": 4, "Prefix": "\n" }] },
+			{ "SourcePath": "./PREVREGPOSTCODE", "Targets": [{ "Name": "Office Address", "Position": 5, "Prefix": "\n" }] }
+		]
+	},
+	{
 		"Name": "Limited Company Details",
 
 		"PathToParent": "./REQUEST/DL13",
@@ -96,6 +114,22 @@
 			{ "SourcePath": "./TRADPHONENUM", "Targets": [{ "Name": "Trading Phone Number" }] },
 			{ "SourcePath": "./PRINACTIVITIES", "Targets": [{ "Name": "Principal Activities" }] },
 			{ "SourcePath": "./SIC1992DESC1", "Targets": [{ "Name": "First 1992 SIC Code Description" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Bank Details",
+
+		"PathToParent": "./REQUEST/DL17",
+
+		"Fields": [
+			{ "SourcePath": "./BANKSORTCODE", "Targets": [{ "Name": "Bank Sortcode" }] },
+			{ "SourcePath": "./BANKNAME", "Targets": [{ "Name": "Bank Name" }] },
+
+			{ "SourcePath": "./BANKADDR1", "Targets": [{ "Name": "Bank Address", "Position": 1 }] },
+			{ "SourcePath": "./BANKADDR2", "Targets": [{ "Name": "Bank Address", "Position": 2, "Prefix": "\n" }] },
+			{ "SourcePath": "./BANKADDR3", "Targets": [{ "Name": "Bank Address", "Position": 3, "Prefix": "\n" }] },
+			{ "SourcePath": "./BANKADDR4", "Targets": [{ "Name": "Bank Address", "Position": 4, "Prefix": "\n" }] },
+			{ "SourcePath": "./BANKPOSTCODE", "Targets": [{ "Name": "Bank Address", "Position": 5, "Prefix": "\n" }] }
 		]
 	},
 	{
@@ -199,6 +233,10 @@
 		"Name": "Limited Company Payment Performance Details",
 
 		"PathToParent": "./REQUEST/DL41",
+
+		"MetaData": {
+			"ID": "DL41"
+		},
 
 		"Fields": [
 			{ "SourcePath": "./COMPAVGDBT-3MTH", "Targets": [{ "Name": "Company - Average DBT - 3 Months" }] },
@@ -448,7 +486,12 @@
 				}
 			]},
 			{ "SourcePath": "./DIRNUMBER", "Targets": [{ "Name": "Director number" }] },
-			{ "SourcePath": "./DIRSHIPLEN", "Targets": [{ "Name": "Length of directorship (Months)" }] },
+			{ "SourcePath": "./DIRSHIPLEN", "Targets": [{
+				"Name": "Length of directorship",
+				"Transformation": {
+					"Types": [ "monthsandyears" ]
+				}
+			}] },
 			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "Director’s age (Years)" }] },
 			{ "SourcePath": "./NUMCONVICTIONS", "Targets": [{ "Name": "Number of convictions" }] },
 			{ "SourcePath": "./DIRNAMEPREFIX", "Targets": [{ "Name": "Name" }] },
@@ -480,7 +523,9 @@
 		"PathToParent": "./REQUEST/DL78",
 
 		"Fields": [
-			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit" }] }
+			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit",
+				"Transformation": { "Types": [ "money" ] }
+			}] }
 		]
 	},
 	{
@@ -592,16 +637,20 @@
 		"PathToParent": "./REQUEST/DL99",
 
 		"MetaData": {
-			"DisplayDirection": "horizontal"
+			"ID": "DL99"
 		},
 
 		"Fields": [
-			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "Total Current Assets", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "Net Assets", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "Total Shareholders Funds", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "Accounts Date", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "Accounts Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "chart-Total Current Assets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "chart-Net Assets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "chart-Total Shareholders Funds", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./BANKOVERDRAFT", "Targets": [{ "Name": "chart-Bank Overdraft", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./FINOTHLOANS", "Targets": [{ "Name": "chart-Other Short-Term Loans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALCURRLBLTS", "Targets": [{ "Name": "chart-Total Current Liabilities", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./FINLBLTSOTHLOANS", "Targets": [{ "Name": "chart-Other Long-Term Loans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "ticks-Accounts Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 1, "Prefix": " " }] },
 			{ "SourcePath": "./CURRENCY", "Targets": [{ "Name": "Currency" }] }
 		]
 	},
@@ -611,7 +660,8 @@
 		"PathToParent": "./REQUEST/DLB5",
 
 		"MetaData": {
-			"DisplayDirection": "horizontal"
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true
 		},
 
 		"Fields": [
@@ -649,6 +699,61 @@
 			{ "SourcePath": "./LASTUPDATEDDATE-YYYY", "Targets": [{ "Name": "Last Updated", "Position": 2, "Prefix": " " }] },
 			{ "SourcePath": "./LASTUPDATEDDATE-MM",   "Targets": [{ "Name": "Last Updated", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
 			{ "SourcePath": "./LASTUPDATEDDATE-DD",   "Targets": [{ "Name": "Last Updated", "Position": 1, "Prefix": " " }] }
+		]
+	},
+	{
+		"Name": "Limited Company Mortages",
+
+		"PathToParent": "./REQUEST/DL65",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true
+		},
+
+		"Fields": [
+			{ "SourcePath": "./CHARGENUMBER", "Targets": [{ "Name": "Charge Number" }] },
+			{ "SourcePath": "./FORMNUMBERFLAG", "Targets": [
+				{ "Name": "Form Number" },
+				{ "Name": "Form Number", "Position": 1, "Prefix": " - ", "Transformation": {
+					"Types": [ "map" ],
+					"Map": {
+						"04": "‘A’ – Mortgage extracted from credit master file: All charges until autumn 1994",
+						"08": "‘B’ – Satisfaction of a mortgage originally extracted from the credit master file as record type ‘A’",
+						"12": "‘9999’ – Correction to charge details",
+						"16": "‘395’ – Mortgage or charge registration",
+						"20": "‘400’ – Mortgage or charge subject to which property has been acquired",
+						"24": "‘397’ – Charge securing a series of debentures",
+						"28": "‘397A’ – Issue of secured debentures in a series",
+						"32": "‘403A’ – Satisfaction in full or part of a charge",
+						"36": "‘403B’ – Part of property or undertaking charged has been released from the charge or no longer part of the company’s property/undertaking",
+						"40": "‘4051’ – Appointment of receiver or manager",
+						"44": "‘4052’ – Cessation of receiver or manager",
+						"48": "‘410’ – Scottish mortgage/charge registration",
+						"52": "‘413’ – Charge securing a series of debentures",
+						"56": "‘413A’ – Issue of secured debentures in a series",
+						"60": "‘416’ – Mortgage or charge subject to which property has been acquired",
+						"64": "‘419A’ – Satisfaction in full or part of a mortgage or charge",
+						"68": "‘419B’ – Declaration that part of the property or undertaking has been released from the charge or no longer forms part of the company’s property or undertaking",
+						"72": "‘1SC’ – Appointment of a receiver by the holder of a floating charge",
+						"76": "‘2SC’ – Appointment of a receiver by the court",
+						"80": "‘3SC’ – Cessation of a receiver",
+						"84": "‘33SC’ – Death of a receiver",
+						"88": "‘466’ – Instrument of alteration to a floating charge"
+					}
+				}}
+			]},
+			{ "SourcePath": "./CURRENCYINDICATOR", "Targets": [{ "Name": "Currency Indicator" }] },
+			{ "SourcePath": "./TOTAMTDEBENTURESECD", "Targets": [{ "Name": "Total Amount of Debenture Secured" }] },
+			{ "SourcePath": "./CHARGETYPE", "Targets": [{ "Name": "Charge type" }] },
+			{ "SourcePath": "./AMTSECURED", "Targets": [{ "Name": "Amount secured" }] },
+			{ "SourcePath": "./PROPERTYDETAILS", "Targets": [{ "Name": "Property details" }] },
+			{ "SourcePath": "./CHARGEETEXT", "Targets": [{ "Name": "Chargee text" }] },
+			{ "SourcePath": "./RESTRICTINGPROVNS", "Targets": [{ "Name": "Restricting provisions" }] },
+			{ "SourcePath": "./REGULATINGPROVNS", "Targets": [{ "Name": "Regulating provisions" }] },
+			{ "SourcePath": "./ALTERATIONSTOORDER", "Targets": [{ "Name": "Alterations to the order" }] },
+			{ "SourcePath": "./PROPERTYRELDFROMCHGE", "Targets": [{ "Name": "Property released from the charge" }] },
+			{ "SourcePath": "./AMTCHARGEINCRD", "Targets": [{ "Name": "Amount charge increased" }] }
 		]
 	}
 ]

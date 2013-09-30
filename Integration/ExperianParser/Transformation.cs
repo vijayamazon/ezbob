@@ -12,6 +12,7 @@ namespace Ezbob.ExperianParser {
 		Map,
 		MonthName,
 		Money,
+		MonthsAndYears
 	} // TransformationType
 
 	#endregion enum TransformationType
@@ -88,13 +89,32 @@ namespace Ezbob.ExperianParser {
 
 					break;
 
-				case TransformationType.Money:
+				case TransformationType.Money: {
 					decimal nValue;
 
 					if (decimal.TryParse(sResult, NumberStyles.Currency, Culture, out nValue))
 						sResult = nValue.ToString("C2", Culture);
 
-					break;
+					} break;
+
+				case TransformationType.MonthsAndYears: {
+					decimal nValue;
+
+					if (decimal.TryParse(sResult, NumberStyles.Any, Culture, out nValue)) {
+						decimal nYears = Math.Floor(nValue / 12);
+						decimal nMonths = nValue - nYears * 12;
+
+						var os = new StringBuilder();
+						if (nYears > 0)
+							os.AppendFormat("{0} year{1}", nYears, nYears == 1 ? "" : "s");
+
+						if (nMonths > 0)
+							os.AppendFormat(" {0} month{1}", nMonths, nMonths == 1 ? "" : "s");
+
+						sResult = os.ToString().Trim();
+					} // if
+
+					} break;
 				} // switch
 
 				if (sResult == null)

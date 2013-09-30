@@ -541,3 +541,9 @@ table.internal-table td {
   /* Should be unset in IE9+ I think. */
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
+
+table.unlimited-width { margin-bottom: 20px; }
+
+table.unlimited-width th { text-align: left; }
+
+table.unlimited-width th, table.unlimited-width td { padding: 8px; }

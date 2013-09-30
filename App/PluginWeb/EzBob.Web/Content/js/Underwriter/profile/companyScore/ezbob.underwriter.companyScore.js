@@ -13,6 +13,11 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 		this.model.on('change sync', this.render, this);
 	},
 	render: function () {
-		this.$el.html(this.template({ companyScoreData: this.model.toJSON() }));
+		var onAfterRender = [];
+
+		this.$el.html(this.template({ companyScoreData: this.model.toJSON(), onAfterRender: onAfterRender }));
+
+		for (var i = 0; i < onAfterRender.length; i++)
+			onAfterRender[i].call(undefined);
 	}
 });

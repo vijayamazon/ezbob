@@ -1,5 +1,5 @@
 ﻿<script id="company-score-template" type="text/template">
-<% (function(response) {
+<% (function(response, onAfterRender) {
 	// console.log('serialised:', response);
 
 	if (response.result != 'ok') {
@@ -13,10 +13,12 @@
 		if (aryData.length > 0) {
 			var oMetaData = response.dataset[i].MetaData || {};
 
-			// console.log('i = ', i, 'aryData = ', aryData, 'meta', oMetaData);
+			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
 
-			if (i == 'Limited Company Payment Performance Details') {
-				%><table class="table table-striped blue-header table-bordered">
+			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width' : 'table';
+
+			if (oMetaData.ID == 'DL41') {
+				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered">
 					<thead><tr><th colspan=4><%- i %></th></tr><tr><th></th><th>Company</th><th>Industry</th><th></th></thead>
 					<tbody><%
 						var aryCompany = {};
@@ -164,15 +166,119 @@
 							<td></td>
 						</tr><%
 						} // for
-					%></tbody>
+					%></tbody></table>
 					<tfoot><tr><th class=narrow-as-possible>Supplier Payment Pattern</th>
 						<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
 						<td></td>
 					</tr></tfoot><%
 				%></table><%
 			}
+			else if (oMetaData.ID == 'DL99') {
+				aryData.sort(function(a, b) {
+					var oA = Date.parse(a['ticks-Accounts Date']);
+					var oB = Date.parse(b['ticks-Accounts Date']);
+					return oA - oB;
+				});
+
+				var oChartData = [];
+				var oSeriesKeys = {};
+				var nSeriesKeyCount = 1;
+
+				var sDivChartID = 'chart' + oMetaData.ID;
+				var sParentDivChartID = 'parent_' + sDivChartID;
+
+				%><table class="<%- sTableWidthClass %> table-striped blue-header table-fixed">
+					<thead><tr><th><%- i %></th></tr></thead>
+					<tbody><tr><td id="<%- sParentDivChartID %>"></td></tr></tbody>
+				</table><%
+
+				for (var j = 0; j < aryData.length; j++) {
+					var obj = aryData[j];
+	
+					var oDataItem = { tick: null, data: {} };
+
+					for (var k in obj) {
+						if (k.indexOf('ticks-') == 0)
+							oDataItem.tick = obj[k];
+						else if (k.indexOf('chart-') == 0) {
+							var sKey = k.substr(6);
+							oDataItem.data[sKey] = EzBob.poundToInt(obj[k]);
+							if (!oSeriesKeys[sKey]) {
+								oSeriesKeys[sKey] = nSeriesKeyCount;
+								nSeriesKeyCount++;
+							} // if
+						} // if
+					} // for
+
+					oChartData.push(oDataItem);
+				} // for each group output
+	
+				$('body').append(
+					$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
+				);
+
+				onAfterRender.push(function() {
+					var aryLabels = [];
+					for (var sSeriesName in oSeriesKeys)
+						aryLabels[oSeriesKeys[sSeriesName] - 1] = { label: sSeriesName };
+
+					var aryTicks = [];
+					var arySeries = [];
+
+					for (var i = 0; i < oChartData.length; i++) {
+						var oItem = oChartData[i];
+
+						aryTicks[i] = oItem.tick;
+
+						for (var sSeriesName in oSeriesKeys) {
+							var nSeriesIdx = oSeriesKeys[sSeriesName] - 1;
+
+							if (!arySeries[nSeriesIdx])
+								arySeries[nSeriesIdx] = [];
+
+							if (!isNaN(oItem.data[sSeriesName]))
+								arySeries[nSeriesIdx][i] = oItem.data[sSeriesName];
+						} // for
+					} // for each chart data item
+
+					$.jqplot(sDivChartID, arySeries, {
+						seriesDefaults:{
+							renderer:$.jqplot.BarRenderer,
+							rendererOptions: {fillToZero: true}
+						},
+						series: aryLabels,
+						legend: {
+							show: true,
+							location: 'n',
+							renderer: $.jqplot.EnhancedLegendRenderer,
+							rendererOptions: {
+								numberRows: 1,
+								numberColumns: null
+							},
+							placement: 'outsideGrid'
+						},
+						axes: {
+							xaxis: {
+								show: true,
+								Label: 'Date',
+								labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+								renderer: $.jqplot.CategoryAxisRenderer,
+								tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+								ticks: aryTicks
+							},
+							yaxis: {
+								show: true,
+								pad: 1.05,
+								tickOptions: { formatString: "£ %'d" }
+							}
+						}
+					}); // jqplot
+	
+					$('#' + sDivChartID).appendTo('#' + sParentDivChartID);
+				});
+			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {
-				%><table class="table table-striped blue-header table-bordered table-fixed"><%
+				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed"><%
 				var nColumnCount = 0;
 			
 				var obj = aryData[0];
@@ -196,10 +302,10 @@
 
 					print('</tr>');
 				} // for each group output
-				%></tbody><%
+				%></tbody></table><%
 			}
 			else {
-				%><table class="table table-striped blue-header">
+				%><table class="<%- sTableWidthClass %> table-striped blue-header">
 				<thead><tr><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
@@ -209,11 +315,10 @@
 						%><tr><td class=narrow-as-possible><%- fld %></td><td><%- obj[fld] %></td></tr><%
 					} // for each field
 				} // for each group output
-				%></tbody><%
+				%></tbody></table><%
 			}
-			%></table><%
 		} // if
 	} // for
-})(companyScoreData);
+})(companyScoreData, onAfterRender);
 %>
 </script>
