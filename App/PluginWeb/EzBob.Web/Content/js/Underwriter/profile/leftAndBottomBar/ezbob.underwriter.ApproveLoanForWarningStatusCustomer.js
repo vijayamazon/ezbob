@@ -30,6 +30,12 @@
       return this;
     };
 
+    ApproveLoanForWarningStatusCustomer.prototype.serializeData = function() {
+      return {
+        m: this.model.toJSON()
+      };
+    };
+
     ApproveLoanForWarningStatusCustomer.prototype.onSave = function() {
       this.close();
       this.parent.CreateApproveDialog();

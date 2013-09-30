@@ -13,6 +13,9 @@ class EzBob.Underwriter.ApproveLoanForWarningStatusCustomer extends EzBob.BoundI
     render: ->
         super()
         return @
+
+    serializeData: ->
+        m: @model.toJSON()
         
     onSave: ->
         @close()
