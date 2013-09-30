@@ -14,23 +14,14 @@ EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
 EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     initialize: function () {
         this.template = _.template($('#marketplace-values-template').html());
-        //this.on('render', this.afterRender);
-        _.bindAll(this, 'beforeRender', 'render', 'afterRender');
-        var that = this;
-        this.render = _.wrap(this.render, function (render) {
-            that.beforeRender();
-            render();
-            that.afterRender();
-            return that;
-        });
     },
-    beforeRender: function () { },
+
     render: function () {
         var that = this;
         var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
         this.shop = this.model.get(this.options.currentId);
-        // drawChart(shop.get("Id"));
+
         var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
 
         var sTargetList = '';
@@ -54,12 +45,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         }
 
         $('a[data-toggle="tab"]').on('shown', function (e) {
-            if ($(e.target).text() == "Chart") that.yodleeShowGraphClicked();
+            if ($(e.target).text() == "Charts") {
+                that.yodleeShowGraph();
+            } 
         });
 
         return this;
-    },
-    afterRender: function () {
     },
 
     events: {
@@ -71,7 +62,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeSearchWordsRow": "searchYodleeWordsRowClicked",
         "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
         "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked",
-        "click .yodleeShowGraph": "yodleeShowGraphClicked",
         "click .yodleeReplotGraph": "replotYodleeGraphClicked"
 
     },
@@ -175,7 +165,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             showValuesColor: "#000000",
         });
     },
-    yodleeShowGraphClicked: function () {
+    yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
         var lowRunningBalance = cashModel.LowRunningBalanceDict;
         var highRunningBalance = cashModel.HighRunningBalanceDict;

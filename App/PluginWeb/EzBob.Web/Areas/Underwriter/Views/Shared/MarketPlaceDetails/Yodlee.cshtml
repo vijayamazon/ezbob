@@ -163,9 +163,12 @@
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
         <div id="yodleeBarGraph" class="well"></div>
         <hr />
-        <button class="yodleeShowGraph btn">Show Graph</button><button class="yodleeReplotGraph btn">Replot Graph</button>
+        
         <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br/><small>monthly</small></h3>
-        <div id="yodleeRunningBalanceChart" class="jqplot-target well" style="width: 800px; height: 300px; position: relative;"></div>
+        <div class="well" style="width: 800px; height: 300px; position: relative;">
+            <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="icon-refresh"></i></button>
+            <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
+        </div>
         <%} else {print('No data to show charts');} })();%>
     </div>
 }
