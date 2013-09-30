@@ -26,6 +26,7 @@ set p=%p%, Integration\PayPal\PayPalServiceLib\bin\Debug\PayPalServiceLib.dll
 set p=%p%, Lib\Scorto.Core\DefaultSigningProvider.dll
 set p=%p%, Lib\Scorto.Core\Scorto.Maven.Mixed.dll
 set p=%p%, Lib\Scorto.Core\Scorto.Maven.Application.dll
+set p=%p%, Integration\DatabaseLib\bin\Debug\DatabaseLib.dll
 
 @echo:
 

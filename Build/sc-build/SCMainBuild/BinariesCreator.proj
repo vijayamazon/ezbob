@@ -66,6 +66,7 @@
 		<Copy SourceFiles="$(Src)\Integration\PaymentServices\bin\$(BuildConfiguration)\PaymentServices.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\PayPalLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPalServiceLib\bin\$(BuildConfiguration)\PayPalServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\DatabaseLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DefaultSigningProvider.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Mixed.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
