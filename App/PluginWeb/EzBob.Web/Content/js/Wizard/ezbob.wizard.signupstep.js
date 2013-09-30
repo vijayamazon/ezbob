@@ -46,9 +46,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         return this;
     },
-    inputChanged: function () {
-        if (event.target.id == 'promoCode' && event.target.value == '') {
-            var img = $(event.target).closest('div').find('.field_status');
+    inputChanged: function (evt) {
+        if (evt && evt.target.id == 'promoCode' && evt.target.value == '') {
+            var img = $(evt.target).closest('div').find('.field_status');
             img.field_status('set', 'empty', 2);
         }
         var enabled = EzBob.Validation.checkForm(this.validator);

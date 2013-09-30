@@ -25,7 +25,9 @@
     };
 
     CGAccountButtonView.prototype.update = function() {
-      return this.model.fetch();
+      return this.model.fetch().done(function() {
+        return EzBob.App.trigger('ct:storebase.shop.connected');
+      });
     };
 
     return CGAccountButtonView;
@@ -179,13 +181,11 @@
       window[sKey] = function(sResult) {
         var oResult;
 
-        console.log('raw result is', sResult);
         delete window[sKey];
         delete window[sModelKey];
         _this.uploadFileDlg.dialog('close');
         _this.uploadFileDlg = null;
         oResult = JSON.parse(sResult);
-        console.log('result is', oResult);
         if (oResult.error) {
           EzBob.App.trigger('error', 'Problem Linking ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error.Data.error);
         } else {
@@ -196,7 +196,6 @@
         _this.trigger('completed');
         return _this.trigger('back');
       };
-      console.log('sKey =', sKey, 'window[sKey] =', window[sKey]);
       $('iframe', this.$el.find('div#upload-files-form')).each(function(idx, iframe) {
         iframe.setAttribute('width', 570);
         iframe.setAttribute('height', 515);

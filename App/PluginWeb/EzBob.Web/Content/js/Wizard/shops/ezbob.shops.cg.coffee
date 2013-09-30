@@ -9,7 +9,7 @@ class EzBob.CGAccountButtonView extends EzBob.StoreButtonView
             shops: @model
 
     update: ->
-        @model.fetch()
+        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
 
 class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
     events:
@@ -127,8 +127,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             return @buildModel()
 
         window[sKey] = (sResult) =>
-            console.log 'raw result is', sResult
-
             delete window[sKey]
             delete window[sModelKey]
 
@@ -136,8 +134,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             @uploadFileDlg = null
 
             oResult = JSON.parse sResult
-
-            console.log 'result is', oResult
 
             if oResult.error
                 EzBob.App.trigger 'error', 'Problem Linking ' + oVendorInfo.DisplayName + ' Account: ' + oResult.error.Data.error
@@ -147,8 +143,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
             @trigger 'completed'
             @trigger 'back'
-
-        console.log 'sKey =', sKey, 'window[sKey] =', window[sKey]
 
         $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
             iframe.setAttribute 'width', 570
