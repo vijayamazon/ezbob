@@ -108,3 +108,13 @@ App/clients/Maven/EzBob.Models.dll
 App/clients/Maven/PaymentServices.dll
 App/clients/Maven/PayPalLib.dll
 App/clients/Maven/PayPalServiceLib.dll
+App/clients/Maven/AmazonServiceLib.dll
+App/clients/Maven/DatabaseLib.dll
+App/clients/Maven/eBayServiceLib.dll
+App/clients/Maven/ExperianLib.dll
+App/clients/Maven/EzBob.Configuration.dll
+App/clients/Maven/GuiNodeEzBobLib.dll
+App/clients/Maven/NodeEzBobLib.dll
+App/clients/Maven/PayPal.Base.dll
+App/clients/Maven/PayPal.Permissions.dll
+App/clients/Maven/TeraPeakServiceLib.dll
