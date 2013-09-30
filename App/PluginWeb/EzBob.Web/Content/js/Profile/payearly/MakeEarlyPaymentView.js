@@ -144,7 +144,7 @@
         hadRollover = _this.model.get("currentRollover");
         _this.$el.html(_this.infoPage({
           amount: res.PaymentAmount,
-          card_no: _this.customerModel.get("CreditCardNo"),
+          card_no: res.CardNo,
           email: _this.customerModel.get("Email"),
           name: _this.customerModel.get("CustomerPersonalInfo").FirstName,
           surname: _this.customerModel.get("CustomerPersonalInfo").Surname,
@@ -153,7 +153,8 @@
           saved: res.Saved,
           savedPounds: res.SavedPounds,
           hasLateLoans: _this.customerModel.get("hasLateLoans"),
-          isRolloverPaid: res.RolloverWasPaid
+          isRolloverPaid: res.RolloverWasPaid,
+          IsEarly: res.IsEarly
         }));
         return EzBob.App.trigger("clear");
       }).complete(function() {

@@ -209,7 +209,7 @@
                     var hasRolover = rollovers && rollovers.length > 0;
                     if(hasRolover){
                         payButtonName = "Pay Roll Over";
-                    } else if(loan.Status == 'Live'){
+                    } else if(loan.Status == 'Live' && loan.IsEarly){
                         payButtonName = "Pay Early";
                     } else if(isLate && !hasRolover ){
                         payButtonName = "Pay Now";

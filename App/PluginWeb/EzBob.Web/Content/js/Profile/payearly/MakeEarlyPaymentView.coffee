@@ -108,6 +108,7 @@ class EzBob.Profile.MakeEarlyPayment extends Backbone.Marionette.ItemView
           savedPounds: res.SavedPounds
           hasLateLoans: @customerModel.get("hasLateLoans")
           isRolloverPaid: res.RolloverWasPaid
+          IsEarly: res.IsEarly
         )
         EzBob.App.trigger "clear"
       ).complete =>

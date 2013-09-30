@@ -125,20 +125,35 @@
             _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
             var refNumber = "";
-
+	        bool isEarly = false;
             if(loanId > 0)
             {
                 var loan = customerContext.GetLoan(loanId);
                 if(loan != null)
                 {
                     refNumber = loan.RefNumber;
+	                if (loan.Schedule != null)
+					{
+						var scheduledPayments = loan.Schedule.Where(x => x.Status == LoanScheduleStatus.StillToPay ||
+																		 x.Status == LoanScheduleStatus.Late ||
+																		 x.Status == LoanScheduleStatus.AlmostPaid);
+
+						if (scheduledPayments.Any())
+						{
+							DateTime earliestSchedule = scheduledPayments.Min(x => x.Date);
+							if (earliestSchedule.Date >= DateTime.UtcNow && (earliestSchedule.Date.Year != DateTime.UtcNow.Year || earliestSchedule.Date.Month != DateTime.UtcNow.Month || earliestSchedule.Date.Day != DateTime.UtcNow.Day))
+							{
+								isEarly = true;
+							}
+						}
+					}
                 }
             }
             
             if (string.IsNullOrEmpty(customer)) customer = customerContext.PersonalInfo.Fullname;
 
             customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer);
-
+			
             var confirmation = new PaymentConfirmationModel
                 {
                     amount = amount.Value.ToString(CultureInfo.InvariantCulture),
@@ -151,7 +166,8 @@
                     refnum = refNumber,
                     transRefnums = res.TransactionRefNumbersFormatted,
                     hasLateLoans = customerContext.HasLateLoans,
-                    isRolloverPaid = res.RolloverWasPaid
+                    isRolloverPaid = res.RolloverWasPaid,
+					IsEarly = isEarly
                 };
 
             TempData.Put(confirmation);

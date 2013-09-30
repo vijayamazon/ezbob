@@ -8,8 +8,8 @@
         <h1>Confirmation</h1>
         <%if (hasLateLoans){%>
             <h2 style="margin-bottom: 35px">Thank You for Your Payment</h2>
-        <%} else {%>
-            <h2 style="margin-bottom: 35px">Thank You for Making an Early Payment</h2>
+        <%} else { var paymentPrefix = this.model.get('loan').get('IsEarly') ? "an Early" : "a" %>
+            <h2 style="margin-bottom: 35px">Thank You for Making <%=paymentPrefix%> Payment</h2>
         <%}%>
         <%if(isRolloverPaid){%>
             <h3>Your loan has been rolled over</h3>
@@ -24,7 +24,7 @@
         <p style="margin-top: 25px">
             A confirmation email is being sent to <%- email %>
         </p>
-        <% if (savedPounds > 0 && !hasLateLoans){%>
+        <% if (savedPounds > 0 && !hasLateLoans && this.model.get('loan').get('IsEarly')){%>
             <p align="left" class="by-paying-early">
                 <strong>By paying early you saved <%= EzBob.formatPounds(savedPounds)%></strong>
             </p>

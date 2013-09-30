@@ -102,6 +102,7 @@ namespace EzBob.Web.Areas.Customer.Models
             {
                 customerModel.NextPayment = nextPayment.AmountDue;
                 customerModel.NextPaymentDate = nextPayment.Date;
+				customerModel.IsEarly = nextPayment.Date > DateTime.UtcNow && (nextPayment.Date.Year != DateTime.UtcNow.Year || nextPayment.Date.Month != DateTime.UtcNow.Month || nextPayment.Date.Day != DateTime.UtcNow.Day);
             }
 
             customerModel.TotalPayEarlySavings = _facade.CalculateSavings(customer, DateTime.UtcNow);

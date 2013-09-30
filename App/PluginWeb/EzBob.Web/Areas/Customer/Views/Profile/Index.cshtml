@@ -88,7 +88,8 @@
                     <%-EzBob.formatPounds(NextPayment)%> <i><%-EzBob.formatDate(NextPaymentDate)%></i>
                 </dd>
             </dl>
-            <button class="button orange">Pay Early</button>
+            <% var paymentSuffix = IsEarly ? "Early" : "Now" %>
+            <button class="button orange">Pay <%=paymentSuffix%></button>
     </script>
     
     <script id="d-lateLoan-template" type="text/template">

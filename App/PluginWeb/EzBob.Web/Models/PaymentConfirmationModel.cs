@@ -1,9 +1,8 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-
-namespace EzBob.Web.Models
+﻿namespace EzBob.Web.Models
 {
+	using System.Web.Mvc;
+	using Newtonsoft.Json;
+
     public class PaymentConfirmationModel
     {
         public string amount { get; set; }
@@ -27,6 +26,8 @@ namespace EzBob.Web.Models
         public bool hasLateLoans { get; set; }
 
         public bool isRolloverPaid { get; set; }
+
+		public bool IsEarly { get; set; }
 
         public MvcHtmlString ToJSON()
         {

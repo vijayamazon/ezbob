@@ -51,6 +51,8 @@ namespace EzBob.Models
 
         public List<string> InterestFreeze { get; set; }
 
+		public bool IsEarly { get; set; }
+
         public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null)
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
@@ -89,6 +91,22 @@ namespace EzBob.Models
                     InterestDue = loan.InterestDue,
                     InterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList()
                 };
+
+			if (loan.Schedule != null)
+			{
+				var scheduledPayments = loan.Schedule.Where(x => x.Status == LoanScheduleStatus.StillToPay ||
+				                                                 x.Status == LoanScheduleStatus.Late ||
+				                                                 x.Status == LoanScheduleStatus.AlmostPaid);
+
+				if (scheduledPayments.Any())
+				{
+					DateTime earliestSchedule = scheduledPayments.Min(x => x.Date);
+					if (earliestSchedule.Date >= DateTime.UtcNow && (earliestSchedule.Date.Year != DateTime.UtcNow.Year || earliestSchedule.Date.Month != DateTime.UtcNow.Month || earliestSchedule.Date.Day != DateTime.UtcNow.Day))
+					{
+						loanModel.IsEarly = true;
+					}
+				}
+			}
 
             if (loan.CashRequest!= null)
             {
