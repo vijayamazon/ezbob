@@ -1,6 +1,7 @@
 ﻿namespace YodleeLib
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Threading;
 	using EzBob.Configuration;
 	using config;
@@ -10,17 +11,12 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMain));
 		public UserContext UserContext = null;
-		private readonly ContentServiceTraversalService contentServiceTravelService = new ContentServiceTraversalService();
-		private readonly ServerVersionManagementService serverVersionManagementService = new ServerVersionManagementService();
 		private static YodleeEnvConnectionConfig config;
-		private bool isLoggedIn;
 		private int numOfRetriesForGetItemSummary;
 
 		public YodleeMain()
 		{
 			config = YodleeConfig._Config;
-			contentServiceTravelService.Url = config.soapServer + "/" + contentServiceTravelService.GetType().FullName;
-			serverVersionManagementService.Url = config.soapServer + "/" + serverVersionManagementService.GetType().FullName;
 		}
 
 		public LoginUser LoginUser(string userName, string password)
@@ -29,7 +25,6 @@
 			{
 				var loginUser = new LoginUser();
 				UserContext = loginUser.loginUser(userName, password);
-				isLoggedIn = true;
 				Log.InfoFormat("Yodlee user '{0}' logged in successfully", userName);
 				return loginUser;
 			}
@@ -46,7 +41,6 @@
 			try
 			{
 				UserContext = registerUser.DoRegisterUser(userName, password, email);
-				isLoggedIn = true;
 				Log.InfoFormat("Yodlee user '{0}' registered successfully", userName);
 			}
 			catch (Exception e)
@@ -63,11 +57,9 @@
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_csid=";
 				var oAuthBase = new OAuthBase();
 				OAuthAccessToken token = null;
-				if (!isLoggedIn)
-				{
-					var lu = LoginUser(username, password);
-					token = lu.getAccessTokens(UserContext);
-				}
+				var lu = new LoginUser();
+				UserContext = lu.loginUser(username, password);
+				token = lu.getAccessTokens(UserContext);
 
 				string signature = null;
 				string normalizedUrl = null;
@@ -102,6 +94,7 @@
 					signature
 				);
 
+				lu.logoutUser(UserContext);
 				return finalUrl;
 			}
 			catch (Exception e)
@@ -119,11 +112,9 @@
 				const string sParams = "?access_type=oauthdeeplink&displayMode=desktop&_flowId=editSiteCredentials&_itemid=";
 				var oAuthBase = new OAuthBase();
 				OAuthAccessToken token = null;
-				if (UserContext == null)
-				{
-					var lu = LoginUser(username, password);
-					token = lu.getAccessTokens(UserContext);
-				}
+				var lu = new LoginUser();
+				UserContext = lu.loginUser(username, password);
+				token = lu.getAccessTokens(UserContext);
 
 				string signature = null;
 				string normalizedUrl = null;
@@ -157,7 +148,7 @@
 					normalizedRequestParameters,
 					signature
 				);
-
+				lu.logoutUser(UserContext);
 				return finalUrl;
 			}
 			catch (Exception e)
@@ -167,17 +158,15 @@
 			}
 		}
 
-		public long GetItemId(string username, string password, out string displayname, out long csId)
+		public long GetItemId(string username, string password, List<long> customerItems, out string displayname, out long csId)
 		{
 			displayname = string.Empty;
 			csId = -1;
-			if (UserContext == null)
-			{
-				LoginUser(username, password);
-			}
+			var lu = new LoginUser();
+			UserContext = lu.loginUser(username, password);
 
 			numOfRetriesForGetItemSummary = 5;
-			ItemSummary itemSummary = GetItemSummary(username);
+			ItemSummary itemSummary = GetItemSummary(username, customerItems);
 
 			if (itemSummary == null)
 			{
@@ -187,12 +176,14 @@
 			csId = itemSummary.contentServiceId;
 			displayname = itemSummary.itemDisplayName;
 
-			Log.InfoFormat("Received yodlee item id: '{0}'", itemSummary.itemId);
+			Log.InfoFormat("Received yodlee item id: '{0}' display name: {1}", itemSummary.itemId, displayname);
+			
+			lu.logoutUser(UserContext);
 
 			return itemSummary.itemId;
 		}
 
-		private ItemSummary GetItemSummary(string username)
+		private ItemSummary GetItemSummary(string username, List<long> customerItems)
 		{
 			var di = new DisplayItemInfo();
 			object[] oa;
@@ -213,22 +204,37 @@
 				return null;
 			}
 
-			var itemSummary = (ItemSummary)oa[0];
-
-			if (itemSummary.refreshInfo.statusCode != 0)
+			foreach (ItemSummary item in oa)
 			{
-				Log.WarnFormat("Item status code is not '0' but '{0}' for user {1}", itemSummary.refreshInfo.statusCode, username);
-				numOfRetriesForGetItemSummary--;
-				if (numOfRetriesForGetItemSummary > 0)
+				if(customerItems.Contains(item.itemId)){ continue; }
+				Log.DebugFormat("item {0} {1} added {2} status {3}", item.itemId, item.itemDisplayName, item.refreshInfo.itemCreateDate, item.refreshInfo.statusCode);
+				if (item.refreshInfo.statusCode == 801)
 				{
-					Log.InfoFormat("Will retry {0} more time\\s", numOfRetriesForGetItemSummary);
-					Thread.Sleep(5000);
-					return GetItemSummary(username);
-				}
-				return null;
-			}
+					Log.WarnFormat("Item status code is not '0' but '{0}' for user {1}", item.refreshInfo.statusCode, username);
+					numOfRetriesForGetItemSummary--;
+					if (numOfRetriesForGetItemSummary > 0)
+					{
+						Log.InfoFormat("Will retry {0} more time\\s", numOfRetriesForGetItemSummary);
+						Thread.Sleep(5000);
+						return GetItemSummary(username, customerItems);
+					}
 
-			return itemSummary;
+					if (item.refreshInfo.statusCode == 801) //REFRESH_NEVER_DONE
+					{
+						return item;
+					}
+				}
+				else if (item.refreshInfo.statusCode == 0)//STATUS_OK
+				{
+					return item;
+				}
+				else
+				{
+					Log.WarnFormat("Item status code is not '0' but '{0}' for user {1}", item.refreshInfo.statusCode, username);
+					return null;
+				}
+			}
+			return null;
 		}
 
 		public bool RefreshNotMFAItem(long itemId, bool forceRefresh = false)
@@ -239,6 +245,7 @@
 			}
 
 			var refreshItem = new RefreshNotMFAItem();
+
 			refreshItem.RefreshItem(UserContext, itemId, forceRefresh);
 
 			// Poll for the refresh status and display the item summary if refresh succeeds

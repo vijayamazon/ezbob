@@ -182,17 +182,20 @@
 				}
 			}
 
-			//Calc Avarage Rows
-			CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
-							 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-							 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
-			CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
-							 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
-							 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
+			if (YodleeCashFlowReportModelDict.Count > 0)
+			{
+				//Calc Avarage Rows
+				CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
+				                 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+				                 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
+				CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
+				                 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
+				                 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
 
-			CalculateNetCashFlow(string.Format("{0}{1}", NetCashFlow, NetCashFlowCat),
-								 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-								 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+				CalculateNetCashFlow(string.Format("{0}{1}", NetCashFlow, NetCashFlowCat),
+				                     string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+				                     string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+			}
 		}
 
 		private void CalculateNetCashFlow(string netCashFlowCat, string totalIncomeCat, string totalExpensesCat)

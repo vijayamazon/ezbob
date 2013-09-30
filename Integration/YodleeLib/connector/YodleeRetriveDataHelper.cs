@@ -35,17 +35,19 @@
 
 			var elapsedTimeInfo = new ElapsedTimeInfo();
 
-			var newOrders = new YodleeOrderDictionary { Data = ordersList };
+			if (ordersList != null)
+			{
+				var newOrders = new YodleeOrderDictionary {Data = ordersList};
 
-			//save orders data
-			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-				ElapsedDataMemberType.StoreDataToDatabase,
-				() => Helper.StoreYodleeOrdersData(
-					databaseCustomerMarketPlace,
-					newOrders,
-					historyRecord)
-				);
-
+				//save orders data
+				ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+				                                                               ElapsedDataMemberType.StoreDataToDatabase,
+				                                                               () => Helper.StoreYodleeOrdersData(
+					                                                               databaseCustomerMarketPlace,
+					                                                               newOrders,
+					                                                               historyRecord)
+					);
+			}
 			// retrieve orders
 			var allOrders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromDatabase,

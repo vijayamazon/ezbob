@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Collections.Generic;
+	using System.Threading;
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
@@ -120,14 +121,23 @@
 			long csId;
 
 			var yodleeMain = new YodleeMain();
-			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
+			var oEsi = new YodleeServiceInfo();
+
+			var items = _session
+				.QueryOver<MP_CustomerMarketPlace>()
+				.Where(m => m.Customer.Id == customer.Id)
+				.JoinQueryOver(m => m.Marketplace)
+				.Where(m => m.InternalId == oEsi.InternalId)
+				.List()
+				.Select(m => SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(m.SecurityData).ItemId).ToList();
+				
+			long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, items, out displayname, out csId);
 
 			if (itemId == -1)
 			{
 				return View(new { error = "Failure linking account" });
 			}
 
-			var oEsi = new YodleeServiceInfo();
 			int marketPlaceId = _mpTypes
 				.GetAll()
 				.First(a => a.InternalId == oEsi.InternalId)
@@ -150,8 +160,9 @@
 				                                                        securityData, customer);
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
-
+			
 			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
+
 			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
 		}
 

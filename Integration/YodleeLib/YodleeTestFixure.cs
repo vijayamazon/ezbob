@@ -47,7 +47,7 @@
 			// halifax "EZBOB+2012@ezbob.com", Encryptor.Decrypt("D61Ggo7aGrQTD/ZNsnqUfteq4mlqW00xAG1yL8wpfBA="  10321216 WBkLy450 
 			// dag "EZBOB+2014@ezbob.com", Encryptor.Decrypt("sykuYcJcd+ShmykTY/pi0qBpRJK0a9HBiiw9NN0Dgjg="
 			// mfa "EZBOB+2013@ezbob.com", Encryptor.Decrypt("qcw25++Ggp8/yi4bNkeB2Q64ABGU5YL+r7DPAZDrkkE="
-			long itemId = m.GetItemId("EZBOB+2012@ezbob.com", Encryptor.Decrypt("D61Ggo7aGrQTD/ZNsnqUfteq4mlqW00xAG1yL8wpfBA="), out dName, out csId);
+			long itemId = m.GetItemId("EZBOB+2012@ezbob.com", Encryptor.Decrypt("D61Ggo7aGrQTD/ZNsnqUfteq4mlqW00xAG1yL8wpfBA="),null, out dName, out csId);
 			Console.WriteLine("{0} {1}", dName, itemId);
 			Assert.That(itemId != -1);
 			return itemId;

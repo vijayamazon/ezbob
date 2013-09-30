@@ -4,9 +4,9 @@ namespace EzBob.Configuration
 
 	public class YodleeEnvConnectionConfig : ConfigurationRoot
     {
-        public string cobrandId
+        public long cobrandId
         {
-            get { return GetValue<string>("cobrandId"); }
+            get { return GetValue<long>("cobrandId"); }
         }
 
         public string applicationId

@@ -134,10 +134,10 @@
 
 			if (!yodleeMain.IsMFA(itemId))
 			{
-				bool isRefreshed = false;
+				bool isRefreshed;
 				try
 				{
-					yodleeMain.RefreshNotMFAItem(itemId);
+					isRefreshed = yodleeMain.RefreshNotMFAItem(itemId);
 				}
 				catch (RefreshYodleeException ex)
 				{

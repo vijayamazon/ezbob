@@ -20,12 +20,17 @@
 			Log.Debug("Begin retrieve yodlee orders");
 			var yodlee = new YodleeMain();
 			var lu = yodlee.LoginUser(userName, password);
-			var displayBankData = new DisplayBankData();
+			if (lu == null)
+			{
+				Log.Error("Login To Yodlee Account Failed No Data Can Be Retrieved");
+				return null;
+			}
+			var displayBankData = new GetBankData();
 			string itemSummaryInfo;
 			string error;
 			Dictionary<BankData, List<BankTransactionData>> orders;
-			displayBankData.displayBankDataForItem(yodlee.UserContext, itemId, out itemSummaryInfo, out error, out orders);
-
+			displayBankData.GetBankDataForItem(yodlee.UserContext, itemId, out itemSummaryInfo, out error, out orders);
+			lu.logoutUser(yodlee.UserContext);
 			if (!string.IsNullOrEmpty(error))
 			{
 				Log.ErrorFormat("Yodlee GetOrders error: {0}", error);
