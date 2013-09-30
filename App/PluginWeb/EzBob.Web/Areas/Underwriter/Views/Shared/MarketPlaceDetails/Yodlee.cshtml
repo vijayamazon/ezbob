@@ -82,13 +82,13 @@
                     <td colspan="<%=count%>"><b>Income</b></td>
                 </tr>
                 <%for(var cat in obj){%>
-                <% var style = '';
-                   if(cat[0] == '3' || cat[0] == '8') {style = 'font-style: italic;';}
-                   if(cat[0] == '2' || cat[0] == '7') {style = 'font-weight: bold;';} %>
+                <% var style = '', isPound = true; console.log(cat,cat.substr(0,2));
+                   if(cat[0] == '3' || cat[0] == '8') {style = 'font-style: italic;'; isPound = false; }
+                   if(cat[0] == '2' || cat[0] == '7' || cat[0] == 'a') {style = 'font-weight: bold;';} %>
                 <tr style="<%=style%>">
                     <td><%=cat.substr(1, cat.length-1)%></td>
                     <%for (var month in obj[cat]) { %>
-                    <td><%= obj[cat][month] == 0 ? '' : EzBob.formatPoundsAsInt(obj[cat][month]) %></td>
+                    <td><%= obj[cat][month] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
                     <%}%>
                 </tr>
                 <%if(cat[0]=='4'){%>
@@ -129,8 +129,8 @@
                 <%for(var word in obj){%>
                 <tr class="yodleeSearchWordsRow">
                     <td><%=word%></td>
-                    <%for (var type in obj[word]) { %>
-                    <td><%= obj[word][type] == 0 ? '' : EzBob.formatPoundsAsInt(obj[word][type]) %></td>
+                    <%for (var type in obj[word]) { var isPound = type.indexOf('#') == -1;%>
+                    <td><%= obj[word][type] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[word][type]) : parseInt(obj[word][type])) %></td>
                     <%}%>
                 </tr>
                 <%}%>

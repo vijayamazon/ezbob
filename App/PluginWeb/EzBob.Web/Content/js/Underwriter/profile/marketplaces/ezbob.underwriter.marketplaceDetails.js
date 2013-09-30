@@ -201,7 +201,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     tickOptions: {
                         labelPosition: 'middle',
-                        angle: 15
+                        angle: 15,
+                        formatString: '%d-%m-%y'
                     },
                 },
                 yaxis: {
