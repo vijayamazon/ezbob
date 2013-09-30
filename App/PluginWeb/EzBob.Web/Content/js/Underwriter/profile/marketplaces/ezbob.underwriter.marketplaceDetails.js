@@ -26,6 +26,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     },
     beforeRender: function () { },
     render: function () {
+        var that = this;
         var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
         this.shop = this.model.get(this.options.currentId);
@@ -52,9 +53,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             this.renderYodlee();
         }
 
+        $('a[data-toggle="tab"]').on('shown', function (e) {
+            if ($(e.target).text() == "Chart") that.yodleeShowGraphClicked();
+        });
+
         return this;
     },
-    afterRender: function () { },
+    afterRender: function () {
+    },
 
     events: {
         "click .reCheckMP": "reCheck",
@@ -188,6 +194,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         
         this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine], {
             animateReplot: true,
+            drawIfHidden: true,
             cursor: {
                 show: true,
                 zoom: true,

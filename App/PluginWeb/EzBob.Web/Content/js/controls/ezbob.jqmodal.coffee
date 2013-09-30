@@ -24,6 +24,8 @@ class EzBob.JqModalRegion extends  Backbone.Marionette.Region
         @dialog.one 'dialogclose', =>
             @close()
         @dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn')
+        if view.onAfterShow
+            view.onAfterShow.call(view)
 
     hideModal: ->
         @dialog.dialog('destroy')
