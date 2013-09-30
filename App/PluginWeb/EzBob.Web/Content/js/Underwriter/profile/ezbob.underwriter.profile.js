@@ -230,7 +230,7 @@
         EzBob.App.modal.show(approveLoanWithoutAMLDialog);
         return false;
       }
-      return this.CreateApproveDialog();
+      return this.CheckCustomerStatusAndCreateApproveDialog();
     };
 
     ProfileView.prototype.CheckCustomerStatusAndCreateApproveDialog = function() {

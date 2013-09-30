@@ -178,7 +178,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             EzBob.App.modal.show(approveLoanWithoutAMLDialog);
             return false        
 
-        @CreateApproveDialog()
+        @CheckCustomerStatusAndCreateApproveDialog()
 
     CheckCustomerStatusAndCreateApproveDialog: ->
         if @personalInfoModel.get("IsWarning")        
