@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptFinancialStats]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptFinancialStats]
 GO
 SET ANSI_NULLS ON
@@ -144,8 +144,8 @@ BEGIN
 		Loan l
 		INNER JOIN LoanTransaction t
 			ON l.Id = t.LoanId
-			AND t.Status = 'Done'
-			AND t.Type = 'PacnetTransaction'
+			AND t.Status = @DONE
+			AND t.Type = @PACNET
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0 AND c.CollectionStatus = 4
 	WHERE
 		@DateStart <= l.Date AND l.Date < @DateEnd
@@ -161,6 +161,63 @@ BEGIN
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	WHERE
 		@DateStart <= l.Date AND l.Date < @DateEnd
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	CREATE TABLE #known_tran_time_status (
+		TransactionID INT,
+		Status INT
+	)
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO #known_tran_time_status
+	SELECT DISTINCT
+		TransactionID,
+		CASE StatusBefore
+			WHEN 'Late' THEN 1
+			WHEN 'Paid' THEN 1
+			WHEN 'PaidEarly' THEN 2
+			ELSE 3
+		END
+	FROM
+		LoanScheduleTransaction
+	UNION
+	SELECT DISTINCT
+		TransactionID,
+		CASE StatusAfter
+			WHEN 'Late' THEN 1
+			WHEN 'Paid' THEN 1
+			WHEN 'PaidEarly' THEN 2
+			ELSE 3
+		END
+	FROM
+		LoanScheduleTransaction
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		TransactionID,
+		MIN(Status) AS Status
+	INTO
+		#grouped_tran_time_status
+	FROM
+		#known_tran_time_status
+	GROUP BY
+		TransactionID
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		t.Id AS TransactionID,
+		ISNULL(g.Status, 3) AS Status
+	INTO
+		#tran_time_status
+	FROM
+		LoanTransaction t
+		LEFT JOIN #grouped_tran_time_status g ON t.Id = g.TransactionID
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -214,24 +271,6 @@ BEGIN
 
 	INSERT INTO #output
 	SELECT
-		3,
-		'Principal Repaid',
-		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
-	FROM
-		LoanTransaction t
-		INNER JOIN Loan l ON t.LoanId = l.Id
-		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
-	WHERE
-		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
-		AND
-		t.Type = @PAYPOINT AND t.Status = @DONE
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	INSERT INTO #output
-	SELECT
 		3.1,
 		@Indent + 'Principal Repaid Early',
 		ISNULL( SUM(ISNULL(LoanRepayment, 0)), 0)
@@ -239,12 +278,11 @@ BEGIN
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+		INNER JOIN #tran_time_status s ON t.Id = s.TransactionID AND s.Status = 2
 	WHERE
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 		AND
 		t.Type = @PAYPOINT AND t.Status = @DONE
-		AND
-		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Early'
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -259,12 +297,11 @@ BEGIN
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+		INNER JOIN #tran_time_status s ON t.Id = s.TransactionID AND s.Status = 3
 	WHERE
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 		AND
 		t.Type = @PAYPOINT AND t.Status = @DONE
-		AND
-		dbo.udfLoanTransactionTimeStatus(t.Id) = 'OnTime'
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -279,12 +316,25 @@ BEGIN
 		LoanTransaction t
 		INNER JOIN Loan l ON t.LoanId = l.Id
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+		INNER JOIN #tran_time_status s ON t.Id = s.TransactionID AND s.Status = 1
 	WHERE
 		@DateStart <= t.PostDate AND t.PostDate < @DateEnd
 		AND
 		t.Type = @PAYPOINT AND t.Status = @DONE
-		AND
-		dbo.udfLoanTransactionTimeStatus(t.Id) = 'Late'
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO #output
+	SELECT
+		3,
+		'Principal Repaid',
+		SUM(Value)
+	FROM
+		#output
+	WHERE
+		SortOrder IN (3.1, 3.2, 3.3)
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
@@ -465,6 +515,9 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	DROP TABLE #tran_time_status
+	DROP TABLE #grouped_tran_time_status
+	DROP TABLE #known_tran_time_status
 	DROP TABLE #output
 END
 GO
