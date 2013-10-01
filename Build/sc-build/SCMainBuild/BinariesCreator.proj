@@ -69,7 +69,16 @@
 		<Copy SourceFiles="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\DatabaseLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DefaultSigningProvider.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Mixed.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>		
+		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\AmazonServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\eBayServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\ExperianLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\EzBob.Configuration.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\GuiNodeEzBobLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\NodeEzBobLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPal.Base\bin\$(BuildConfiguration)\PayPal.Base.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPal.Permissions\bin\$(BuildConfiguration)\PayPal.Permissions.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
+		<Copy SourceFiles="$(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\$(BuildConfiguration)\TeraPeakServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		
 		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
 
