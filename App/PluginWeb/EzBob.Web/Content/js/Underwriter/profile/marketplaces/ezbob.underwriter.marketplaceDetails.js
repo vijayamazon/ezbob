@@ -121,10 +121,63 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
-        };
-        this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
+            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
+            "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
+                //calculate totals per selection
+                //var iTotalMarket = 0;
+                //for (var i = 0 ; i < aaData.length ; i++) {
+                //    iTotalMarket += EzBob.poundToInt(aaData[i][3]) * 1;
+                //}
 
+                //calculate totals per page
+                var iPageAmountCredit = 0;
+                var iPageAmountDebit = 0;
+                var iPageCountCredit = 0;
+                var iPageCountDebit = 0;
+                for (var i = iStart ; i < iEnd ; i++) {
+                    if (aaData[aiDisplay[i]][1] == 'credit') {
+                        iPageAmountCredit += EzBob.poundToInt(aaData[aiDisplay[i]][3]) * 1;
+                        iPageCountCredit++;
+                    } else {
+                        iPageAmountDebit += EzBob.poundToInt(aaData[aiDisplay[i]][3]) * 1;
+                        iPageCountDebit++;
+                    }
+                }
+
+                /* Modify the footer row to match what we want */
+                var nCells = nRow.getElementsByTagName('th');
+                nCells[1].innerHTML = "#Credit <i>" + parseInt(iPageCountCredit) + "</i>";
+                nCells[3].innerHTML = EzBob.formatPoundsAsInt(iPageAmountCredit);
+                nCells[4].innerHTML = "#Debit <i>" + parseInt(iPageCountDebit) + "</i>";
+                nCells[6].innerHTML = EzBob.formatPoundsAsInt(iPageAmountDebit);
+            },
+            "oLanguage": {
+                "sSearch": "Filter all columns:"
+            }
+        };
+        var oTable = this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
+        
+        this.$el.find(".YodleeTransactionsTable tfoot input").keyup(function () {
+            /* Filter on the column (the index) of this element */
+            oTable.fnFilter(this.value, $("tfoot input").index(this));
+        });
+        
+        var asInitVals = new Array();
+        this.$el.find(".YodleeTransactionsTable tfoot input").each(function (i) {
+            asInitVals[i] = this.value;
+        });
+
+        this.$el.find(".YodleeTransactionsTable tfoot input").focus(function () {
+            if (this.className == "search_init") {
+                this.value = "";
+            }
+        });
+
+        this.$el.find(".YodleeTransactionsTable tfoot input").blur(function (i) {
+            if (this.value == "") {
+                this.value = asInitVals[$("tfoot input").index(this)];
+            }
+        });
 
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
         var cashFlow = cashModel.YodleeCashFlowReportModelDict;
@@ -254,7 +307,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var word = this.$el.find("#yodleeAddSearchWordTxt").val();
         if (!word) return false;
         EzBob.ShowMessage(
-            "", "Are you sure you whant to add word " + word + "?",
+            "", "Are you sure you want to add word " + word + "?",
             function () {
                 BlockUi('on');
 
@@ -276,7 +329,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var that = this;
         if (!word) return false;
         EzBob.ShowMessage(
-            "", "Are you sure you want to remove" + word + "?",
+            "", "Are you sure you want to remove " + word + "?",
             function () {
                 BlockUi('on');
                 $.post(window.gRootPath + "Underwriter/MarketPlaces/DeleteSearchWord", { word: word })

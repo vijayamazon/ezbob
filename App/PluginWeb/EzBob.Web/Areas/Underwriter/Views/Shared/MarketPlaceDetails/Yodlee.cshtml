@@ -29,8 +29,7 @@
                     var cat1 = obj[Object.keys(obj)[0]]; 
                     var count = 1; for (k in cat1) if (cat1.hasOwnProperty(k)) count++;
                     for (var month in cat1) { %>
-                    <th>
-                        <% if(month == '999999') { 
+                    <th><% if(month == '999999') { 
                             print('Total');
                         } else { 
                             print(minDay[month] + '-' + maxDay[month] + '/' + month.substring(4) + '/' + month.substring(0,4));
@@ -98,7 +97,7 @@
                 <%}%>
             </tbody>
         </table>
-        <hr/>
+        <hr />
         <div class="well">
             <span>Add/Remove Search Words For Yodlee Transactions</span>
             <label for="yodleeSearchWordsDdl">Search Words</label>
@@ -109,10 +108,10 @@
                 <%}%>
             </select>
             <button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>
-            <hr/>
-            <input type="text" id="yodleeAddSearchWordTxt" style="margin-bottom: 0"/>
+            <hr />
+            <input type="text" id="yodleeAddSearchWordTxt" style="margin-bottom: 0" />
             <button class="btn yodleeSearchWordsAdd" id="addYodleeSearchWord">Add</button>
-            
+
         </div>
         <%} else {print('No match was found to the search words');} })();%>
     </div>
@@ -121,12 +120,12 @@
 @helper YodleeCharts()
 {
     <div class="tab-pane" id="yodleetab2">
-        
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <div id="yodleeBarGraph" class="well" style="width: 800px;height: 300px;"></div>
+        <div id="yodleeBarGraph" class="well" style="width: 800px; height: 300px;"></div>
         <hr />
-        
-        <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br/><small>monthly</small></h3>
+
+        <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br />
+            <small>monthly</small></h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="icon-refresh"></i></button>
             <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
@@ -191,7 +190,7 @@
                     <th>Tr Type</th>
                     <th>Tr/Post Date</th>
                     <th>Tr Amount £</th>
-                    <th>Running Balance(calculated) £</th>
+                    <th>Running Balance £ (calculated)</th>
                     <th>Category</th>
                     <th>Category Type</th>
                     <th>Description</th>
@@ -199,25 +198,49 @@
             </thead>
             <tbody>
                 <%_.each(y.banks, function(bank, i) {%>
-                    <%_.each(bank.transactions, function(transaction, j) {%>
-                        <%if(transaction.transactionBaseType=='credit'){ %>
-                            <tr class="credit">
-                        <%}else{%>
-                            <tr class="debit">
-                        <%}%>
-                            <td><%=i+1%></td>
-                            <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
-                            <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
-                            <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
-                            <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
-                            <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
-                            <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
-                            <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
-                        </tr>
-                    <%});%>
+                <%_.each(bank.transactions, function(transaction, j) {%>
+                <%if(transaction.transactionBaseType=='credit'){ %>
+                <tr class="credit">
+                    <%}else{%>
+                <tr class="debit">
+                    <%}%>
+                    <td><%=i+1%></td>
+                    <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
+                    <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
+                    <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
+                    <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
+                    <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
+                    <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
+                    <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                </tr>
+                <%});%>
                 <%});%>
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total:</th>
+                    <th></th>
+                    <th>Sum Credit:</th>
+                    <th style="text-align: right"></th>
+                    <th></th>
+                    <th>Sum Debit:</th>
+                    <th style="text-align: right"></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_acct" value="Search Acct #" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_trtype" value="Search Tr Type" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_date" value="Search Tr Date" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_amount" value="Search Tr Amount" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_runningbalance" value="Search Running Balance" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_category" value="Search Category" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_categorytype" value="Search Category Type" class="search_init"></th>
+                    <th rowspan="1" colspan="1"><input type="text" name="search_description" value="Search Description" class="search_init"></th>
+                    
+                </tr>
+
+            </tfoot>
         </table>
-     </div>
+    </div>
 }
 

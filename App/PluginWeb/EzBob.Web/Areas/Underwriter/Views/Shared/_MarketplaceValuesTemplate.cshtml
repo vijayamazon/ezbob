@@ -261,11 +261,11 @@
 						<div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
 					</td>
 					<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
-					<td><%- m.age %></td>
-					<td><%- ll(m, 'TransactionsNumber', nBehaviour) %></td>
-					<td><%- ll(m, 'MonthInPayments', nBehaviour) %></td>
-					<td><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
-					<td><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
+					<td class="centered"><%- m.age %></td>
+					<td class="centered"><%- ll(m, 'TransactionsNumber', nBehaviour) %></td>
+					<td class="centered"><%- ll(m, 'MonthInPayments', nBehaviour) %></td>
+					<td class="centered"><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
+					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
 					<td><%- m.UpdatingStatus %>
 						<% if(m.UpdateError){%>
 							<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>

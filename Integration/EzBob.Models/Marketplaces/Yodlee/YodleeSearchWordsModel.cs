@@ -46,13 +46,13 @@
 
 					if (transaction.transactionBaseType == "credit")
 					{
-						Add(word, "Income", amount);
-						Add(word, "Income #", 1);
+						Add(word, "Trans Income", amount);
+						Add(word, "Trans Income #", 1);
 					}
 					else
 					{
-						Add(word, "Expense", amount); 
-						Add(word, "Expense #", 1);
+						Add(word, "Trans Expense", amount);
+						Add(word, "Trans Expense #", 1);
 					}
 				}
 			}
