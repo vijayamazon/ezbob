@@ -9,20 +9,24 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Web.Code
 {
-    public class CashRequestBuilder
+	using EZBob.DatabaseLib.Model;
+
+	public class CashRequestBuilder
     {
         private readonly ILoanTypeRepository _loanTypes;
         private readonly IDiscountPlanRepository _discounts;
         private readonly IAppCreator _creator;
         private readonly IUsersRepository _users;
-        private readonly IEzBobConfiguration _config;
+		private readonly IEzBobConfiguration _config;
+		private readonly IConfigurationVariablesRepository configurationVariables;
 
         public CashRequestBuilder(
                                     ILoanTypeRepository loanTypes, 
                                     IDiscountPlanRepository discounts, 
                                     IAppCreator creator,
                                     IUsersRepository users,
-                                    IEzBobConfiguration config
+                                    IEzBobConfiguration config,
+									IConfigurationVariablesRepository configurationVariables
             )
         {
             _loanTypes = loanTypes;
@@ -30,6 +34,7 @@ namespace EzBob.Web.Code
             _creator = creator;
             _users = users;
             _config = config;
+	        this.configurationVariables = configurationVariables;
         }
 
         public CashRequest CreateCashRequest(Customer customer)
@@ -44,7 +49,7 @@ namespace EzBob.Web.Code
                                       InterestRate = 0.06M,
                                       LoanType = loanType,
                                       RepaymentPeriod = loanType.RepaymentPeriod,
-                                      UseSetupFee = false,
+									  UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
                                       DiscountPlan = discount,
 									  IsLoanTypeSelectionAllowed = 1
                                   };

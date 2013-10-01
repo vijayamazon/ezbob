@@ -1,27 +1,32 @@
-﻿using System;
-
-namespace PaymentServices.Calculators
+﻿namespace PaymentServices.Calculators
 {
-    public class SetupFeeCalculator
-    {
-        private int _maxFee = 30;
-        private decimal _feePercent = 0.008M;
+	using System;
+	using EZBob.DatabaseLib.Model;
+	using StructureMap;
 
-        public int MaxFee
-        {
-            get { return _maxFee; }
-            set { _maxFee = value; }
-        }
+	public class SetupFeeCalculator
+	{
+		private readonly int setupFeeFixed;
+		private readonly decimal setupFeePercent;
+	    private readonly bool useMax;
 
-        public decimal FeePercent
-        {
-            get { return _feePercent; }
-            set { _feePercent = value; }
-        }
+		public SetupFeeCalculator()
+		{
+			var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
 
-        public decimal Calculate(decimal amount)
-        {
-            return Math.Max(Math.Floor(amount * FeePercent), MaxFee);
-        }
+			setupFeeFixed = configVariables.GetByNameAsInt("SetupFeeFixed");
+			setupFeePercent = configVariables.GetByNameAsDecimal("SetupFeePercent");
+			useMax = configVariables.GetByNameAsBool("SetupFeeMaxFixedPercent");
+		}
+
+		public decimal Calculate(decimal amount)
+		{
+			if (useMax)
+			{
+				return Math.Max(Math.Floor(amount * setupFeePercent * 0.01m), setupFeeFixed);
+			}
+
+			return Math.Min(Math.Floor(amount * setupFeePercent * 0.01m), setupFeeFixed);
+		}
     }
 }
