@@ -661,7 +661,8 @@
 
 		"MetaData": {
 			"DisplayDirection": "horizontal",
-			"UnlimitedWidth": true
+			"UnlimitedWidth": true,
+			"ID": "DLB5"
 		},
 
 		"Fields": [

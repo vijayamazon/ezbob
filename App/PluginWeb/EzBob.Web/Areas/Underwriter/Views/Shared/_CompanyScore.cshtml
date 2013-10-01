@@ -1,5 +1,29 @@
 ﻿<script id="company-score-template" type="text/template">
 <% (function(response, onAfterRender) {
+	function DrawFormatted(sValue, sValueTitle, sTableID) {
+		if ((sTableID == 'DLB5') && (sValueTitle == 'Issue company')) {
+			var sFormID = 'frm' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
+
+			while (window[sFormID])
+				sFormID += Math.floor(Math.random() * 1000);
+
+			%><form id="<%- sFormID %>" style="display: none;" action="http://wck2.companieshouse.gov.uk/companysearch" method="post" target="_blank">
+				<input name="cname" type="text" value="">
+				<input name="cnumb" type="text" value="<%- sValue %>">
+				<input name="stype" type="radio" value="A" checked="">
+				<input name="live" type="checkbox" checked="">
+				<input name="dissolved" type="checkbox">
+				<input name="former" type="checkbox">
+				<input name="proposed" type="checkbox">
+				<input name="cosearch" type="image">
+				<input name="cosearch" type="hidden" value="1">
+			</form><a href="javascript:document.getElementById('<%- sFormID %>').submit()" title="Search this company at Companies House"><%- sValue %></a><%
+			return;
+		} // if
+
+		%><%- sValue %><%;
+	} // DrawFormatted
+
 	// console.log('serialised:', response);
 
 	if (response.result != 'ok') {
@@ -297,7 +321,7 @@
 					print('<tr>');
 
 					for (var fld in obj) {
-						%><td><%- obj[fld] %></td><%
+						%><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
 					} // for each field
 
 					print('</tr>');
@@ -312,7 +336,7 @@
 					var obj = aryData[j];
 
 					for (var fld in obj) {
-						%><tr><td class=narrow-as-possible><%- fld %></td><td><%- obj[fld] %></td></tr><%
+						%><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
 					} // for each field
 				} // for each group output
 				%></tbody></table><%
