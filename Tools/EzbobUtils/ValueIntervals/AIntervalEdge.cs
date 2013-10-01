@@ -8,32 +8,6 @@ namespace Ezbob.ValueIntervals {
 
 		#region comparison operators
 
-		#region method CompareTo
-
-		public virtual int CompareTo(AIntervalEdge<TFinite> other) {
-			if (other == null)
-				throw new ValueIntervalException("Cannot compare to null.");
-
-			if (Type == other.Type)
-				return Type == EdgeType.Finite ? Value.CompareTo(other.Value) : 0;
-
-			switch (Type) {
-			case EdgeType.NegativeInfinity:
-				return -1;
-
-			case EdgeType.Finite:
-				return other.Type == EdgeType.NegativeInfinity ? 1 : -1;
-
-			case EdgeType.PositiveInfinity:
-				return 1;
-
-			default:
-				throw new ArgumentOutOfRangeException();
-			} // switch
-		} // CompareTo
-
-		#endregion method CompareTo
-
 		#region operator ==
 
 		public static bool operator ==(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
@@ -62,7 +36,10 @@ namespace Ezbob.ValueIntervals {
 		#region operator <
 
 		public static bool operator <(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
-			if ((a == null) || (b == null))
+			if (ReferenceEquals(a, b))
+				return false;
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
 				throw new ValueIntervalException("One of operands is null.");
 
 			if ((a.Type == EdgeType.NegativeInfinity) && (b.Type != EdgeType.NegativeInfinity))
@@ -105,6 +82,28 @@ namespace Ezbob.ValueIntervals {
 
 		#endregion comparison operators
 
+		#region method Min
+
+		public virtual AIntervalEdge<TFinite> Min(AIntervalEdge<TFinite> other) {
+			if (ReferenceEquals(other, null))
+				throw new ArgumentNullException();
+
+			return this < other ? this : other;
+		} // Min
+
+		#endregion method Min
+
+		#region method Max
+
+		public virtual AIntervalEdge<TFinite> Max(AIntervalEdge<TFinite> other) {
+			if (ReferenceEquals(other, null))
+				throw new ArgumentNullException();
+
+			return this > other ? this : other;
+		} // Max
+
+		#endregion method Max
+
 		#region enum EdgeType
 
 		public enum EdgeType {
@@ -117,13 +116,19 @@ namespace Ezbob.ValueIntervals {
 
 		#region property Type
 
-		public EdgeType Type { get; protected set; }
+		public virtual EdgeType Type { get; protected set; }
 
 		#endregion property Type
 
+		#region property IsFinite
+
+		public virtual bool IsFinite { get { return Type == EdgeType.Finite; } } // IsFinite
+
+		#endregion property IsFinite
+
 		#region property Value
 
-		public TFinite Value { get; protected set; }
+		public virtual TFinite Value { get; protected set; }
 
 		#endregion property Value
 
@@ -152,6 +157,32 @@ namespace Ezbob.ValueIntervals {
 		} // GetHashCode
 
 		#endregion method GetHashCode
+
+		#region method CompareTo
+
+		public virtual int CompareTo(AIntervalEdge<TFinite> other) {
+			if (other == null)
+				throw new ValueIntervalException("Cannot compare to null.");
+
+			if (Type == other.Type)
+				return Type == EdgeType.Finite ? Value.CompareTo(other.Value) : 0;
+
+			switch (Type) {
+			case EdgeType.NegativeInfinity:
+				return -1;
+
+			case EdgeType.Finite:
+				return other.Type == EdgeType.NegativeInfinity ? 1 : -1;
+
+			case EdgeType.PositiveInfinity:
+				return 1;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // CompareTo
+
+		#endregion method CompareTo
 
 		#endregion public
 

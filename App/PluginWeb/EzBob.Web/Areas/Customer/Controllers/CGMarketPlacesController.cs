@@ -384,7 +384,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return oOutput;
 
 			default:
-				oDateIntervals.Sort(DateInterval.CompareForSort);
+				oDateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
 
 				DateInterval next = null;
 
@@ -397,7 +397,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					DateInterval prev = next;
 					next = cur;
 
-					if (!prev.Follows(next)) {
+					if (!prev.IsJustBefore(next)) {
 						oState.Error = CreateError("Inconsequent date ranges: " + prev + " and " + next);
 						return null;
 					} // if

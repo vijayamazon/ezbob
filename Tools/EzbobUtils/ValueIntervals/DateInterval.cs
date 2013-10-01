@@ -5,82 +5,72 @@ using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
 namespace Ezbob.ValueIntervals {
 	#region class DateInterval
 
-	public class DateInterval {
+	public class DateInterval : TInterval<DateTime> {
 		#region public
-
-		#region method CompareForSort
-
-		public static int CompareForSort(DateInterval a, DateInterval b) { return a.Left.CompareTo(b.Left); } // CompareForSort
-
-		#endregion method CompareForSort
 
 		#region constructor
 
-		public DateInterval(DateTime? oLeft, DateTime? oRight) {
-			if (oLeft.HasValue && oRight.HasValue) {
-				Left = new DateIntervalEdge(Min(oLeft.Value, oRight.Value), EdgeType.Finite);
-				Right = new DateIntervalEdge(Max(oLeft.Value, oRight.Value), EdgeType.Finite);
-				return;
-			} // if
-
-			Left = new DateIntervalEdge(oLeft, EdgeType.NegativeInfinity);
-			Right = new DateIntervalEdge(oRight, EdgeType.PositiveInfinity);
+		public DateInterval(DateTime? oLeft, DateTime? oRight) : base(InitEdges(oLeft, oRight)) {
 		} // constructor
 
 		#endregion constructor
 
-		#region method Intersects
+		#region method Intersection
 
-		public bool Intersects(DateInterval di) {
-			if ((Left <= di.Left) && (di.Right <= Right))
-				return true;
+		public virtual DateInterval Intersection(DateInterval other) {
+			if (other == null)
+				return null;
 
-			if ((di.Left <= Left) && (Right <= di.Right))
-				return true;
+			TInterval<DateTime> oEdges = base.Intersection(other);
 
-			if ((Left <= di.Left) && (di.Left <= Right))
-				return true;
+			if (oEdges == null)
+				return null;
 
-			if ((Left <= di.Right) && (di.Right <= Right))
-				return true;
+			return new DateInterval(oEdges);
+		} // Intersection
 
-			return false;
-		} // Intersects
+		#endregion method Intersection
 
-		#endregion method Intersects
+		#region method IsJustBefore
 
-		#region method Follows
+		public virtual bool IsJustBefore(DateInterval other) {
+			return Right.IsFinite && other.Left.IsFinite && (Right.Value.AddDays(1) == other.Left.Value);
+		} // IsJustBefore
 
-		public bool Follows(DateInterval di) {
-			if ((Right.Type != EdgeType.Finite) || (di.Left.Type != EdgeType.Finite))
-				return false;
-
-			return Right.Value.AddDays(1) == di.Left.Value;
-		} // Follows
-
-		#endregion method Follows
-
-		#region method ToString
-
-		public override string ToString() { return string.Format("[ {0} - {1} ]", Left, Right); } // ToString
-
-		#endregion method ToString
-
-		#region property Left
-
-		public DateIntervalEdge Left { get; private set; }
-
-		#endregion property Left
-
-		#region property Right
-
-		public DateIntervalEdge Right { get; private set; }
-
-		#endregion property Right
+		#endregion method IsJustBefore
 
 		#endregion public
 
+		#region protected
+
+		#region constructor
+
+		protected DateInterval(TInterval<DateTime> other) : base(other.Left, other.Right) {
+		} // constructor
+
+		#endregion constructor
+
+		#endregion protected
+
 		#region private
+
+		#region method InitEdges
+
+		private static Tuple<AIntervalEdge<DateTime>, AIntervalEdge<DateTime>> InitEdges(DateTime? oLeft, DateTime? oRight) {
+			if (oLeft.HasValue && oRight.HasValue) {
+				var l = new DateIntervalEdge(Min(oLeft.Value, oRight.Value), EdgeType.Finite);
+				var r = new DateIntervalEdge(Max(oLeft.Value, oRight.Value), EdgeType.Finite);
+
+				return new Tuple<AIntervalEdge<DateTime>, AIntervalEdge<DateTime>>(l, r);
+			} // if
+
+			return new Tuple<AIntervalEdge<DateTime>, AIntervalEdge<DateTime>>(
+				new DateIntervalEdge(oLeft, EdgeType.NegativeInfinity),
+				new DateIntervalEdge(oRight, EdgeType.PositiveInfinity)
+			);
+		} // InitEdges
+
+		#endregion method InitEdges
 
 		private static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
 		private static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max

@@ -1,10 +1,20 @@
 ﻿using System;
 using Ezbob.Database;
 using Ezbob.Logger;
+using Ezbob.ValueIntervals;
 using Html;
 using Reports;
 
 namespace TestApp {
+
+	class A { public static string func() {
+		return "this is A";
+	} }
+
+	class B : A { public static string func() {
+		return "this is B";
+	} }
+
 	class Program {
 		static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
@@ -15,7 +25,20 @@ namespace TestApp {
 			// TestEarnedInterest(oDB, log);
 			// TestLoanIntegrity(oDB, log);
 
-			TestLoanStats(oDB, log);
+			// TestLoanStats(oDB, log);
+
+			var di2 = new DateInterval(new DateTime(1976, 7, 1), null);
+			var di = new DateInterval(null, new DateTime(1982, 9, 1));
+
+			Console.WriteLine("{0} ^ {1} = {2}: {3}", di, di2, di.Intersects(di2) ? "yes" : "no", di.Intersection(di2));
+
+			var e1 = new DateIntervalEdge(null, AIntervalEdge<DateTime>.EdgeType.NegativeInfinity);
+			var e2 = new DateIntervalEdge(new DateTime(1976, 7, 1), AIntervalEdge<DateTime>.EdgeType.Finite);
+
+			Console.WriteLine("{0} > {1} = {2}", e1, e2, e1 > e2);
+
+			Console.WriteLine("A.func() = {0}", A.func());
+			Console.WriteLine("B.func() = {0}", B.func());
 		} // Main
 
 		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
