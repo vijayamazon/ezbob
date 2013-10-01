@@ -23,6 +23,7 @@
 		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
+		public double MonthInPayments = 0;
 
 		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
@@ -84,7 +85,7 @@
 			UpdateMinMaxDay(yearmonth, date);
 			Add(cat, amount, TotalColumn);
 
-			AddRunningBalance(yearmonth, runningBalance, date.HasValue? date.Value : new DateTime());
+			AddRunningBalance(yearmonth, runningBalance, date.HasValue ? date.Value : new DateTime());
 
 			//Calc Total Row
 			Add(baseType == "credit"
@@ -101,6 +102,12 @@
 			Add(baseType == "credit"
 					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
 					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, TotalColumn);
+
+			var monthAgo = DateTime.Today.AddMonths(-1);
+			if (date.HasValue && date.Value >= monthAgo)
+			{
+				MonthInPayments += amount;
+			}
 		}
 
 		private void AddRunningBalance(int yearmonth, double runningBalance, DateTime date)
@@ -170,6 +177,12 @@
 			//retrieving month list
 			var monthList = (from cat in YodleeCashFlowReportModelDict from month in YodleeCashFlowReportModelDict[cat.Key] select month.Key).ToList();
 
+			//adding missing categories
+			AddIfMissing(TotalCredit, TotalIncomeCat);
+			AddIfMissing(TotalDedit, TotalExpensesCat);
+			AddIfMissing(NumTransCredit, NumOfTransactionsCat);
+			AddIfMissing(NumTransDedit, NumOfTransactionsCat);
+
 			//adding amount 0 for missing month/categories
 			foreach (var cat in YodleeCashFlowReportModelDict)
 			{
@@ -186,15 +199,23 @@
 			{
 				//Calc Avarage Rows
 				CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
-				                 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-				                 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
+								 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+								 string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat));
 				CalculateAverage(string.Format("{0}{1}", AverageDedit, AverageExpensesCat),
-				                 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
-				                 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
+								 string.Format("{0}{1}", TotalDedit, TotalExpensesCat),
+								 string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat));
 
 				CalculateNetCashFlow(string.Format("{0}{1}", NetCashFlow, NetCashFlowCat),
-				                     string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
-				                     string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+									 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
+									 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
+			}
+		}
+
+		private void AddIfMissing(char catPrefix, string cat)
+		{
+			if (!YodleeCashFlowReportModelDict.ContainsKey(string.Format("{0}{1}", catPrefix, cat)))
+			{
+				YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = new SortedDictionary<int, double>();
 			}
 		}
 
@@ -207,7 +228,6 @@
 			{
 				Add(netCashFlowCat, totalIncomeRow[yearmonth] - totalExpensesRow[yearmonth], yearmonth);
 			}
-
 		}
 
 		private void CalculateAverage(string averageCat, string totalCat, string numOfTransCat)
@@ -217,7 +237,14 @@
 
 			foreach (var yearmonth in totalRow.Keys)
 			{
-				Add(averageCat, totalRow[yearmonth] / numOfTransRow[yearmonth], yearmonth);
+				if (numOfTransRow[yearmonth] != 0)
+				{
+					Add(averageCat, totalRow[yearmonth] / numOfTransRow[yearmonth], yearmonth);
+				}
+				else
+				{
+					Add(averageCat, 0, yearmonth);
+				}
 			}
 		}
 

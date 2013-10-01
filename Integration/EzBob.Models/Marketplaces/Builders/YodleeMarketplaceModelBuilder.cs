@@ -9,7 +9,6 @@ namespace EzBob.Models.Marketplaces.Builders
 	using NHibernate.Linq;
 	using Yodlee;
 	using YodleeLib.connector;
-	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using NHibernate;
 	using Scorto.NHibernate.Repository;
@@ -18,7 +17,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	{
 		private readonly MP_YodleeOrderRepository _yodleeOrderRepository;
 		private readonly CurrencyConvertor _currencyConvertor;
-
+		private YodleeModel _yodleeModel;
 		public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, ISession session)
 			: base(session)
 		{
@@ -28,42 +27,22 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
 		{
-			return CreateYodleeAccountModelModel(mp);
-		}
-
-		public PaymentAccountsModel CreateYodleeAccountModelModel(MP_CustomerMarketPlace m)
-		{
-			var values = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(m.Id);
-			var analisysFunction = values;
-			var av = values.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-
-			var tnop = 0.0;
-			var tnip = 0.0;
-			var mip = 0.0;
-			if (av != null)
+			if (_yodleeModel == null)
 			{
-				var tnipN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Income"));
-				var tnopN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Expense"));
-				var mipN = GetMonth(av.Where(x => x.ParameterName == "Total Income"));
-
-				if (mipN != null) mip = Math.Abs(Convert.ToDouble(mipN.Value, CultureInfo.InvariantCulture));
-				if (tnipN != null) tnip = Math.Abs(Convert.ToDouble(tnipN.Value, CultureInfo.InvariantCulture));
-				if (tnopN != null) tnop = Math.Abs(Convert.ToDouble(tnopN.Value, CultureInfo.InvariantCulture));
-
+				_yodleeModel = BuildYodlee(mp);
 			}
 
-			var tc = m.YodleeOrders.SelectMany(o => o.OrderItems).Sum(i => i.OrderItemBankTransactions.Count());
-
-			var status = m.GetUpdatingStatus();
+			var status = mp.GetUpdatingStatus();
 
 			var yodleeModel = new PaymentAccountsModel
 			{
-				displayName = m.DisplayName,
-				TotalNetInPayments = tnip,
-				MonthInPayments = mip,
-				TotalNetOutPayments = tnop,
-				TransactionsNumber = tc,
-				id = m.Id,
+				displayName = mp.DisplayName,
+				TotalNetInPayments = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["2Total Income"][999999],
+				MonthInPayments = _yodleeModel.CashFlowReportModel.MonthInPayments,
+				TotalNetOutPayments = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7Total Expenses"][999999],
+				TransactionsNumber = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["3Num Of Transactions"][999999] +
+									 _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["8Num Of Transactions"][999999],
+				id = mp.Id,
 				Status = status,
 			};
 			return yodleeModel;
@@ -71,7 +50,11 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
 		{
-			model.Yodlee = BuildYodlee(mp);
+			if (_yodleeModel == null)
+			{
+				_yodleeModel = BuildYodlee(mp);
+			}
+			model.Yodlee = _yodleeModel;
 		}
 
 		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp)
@@ -116,9 +99,9 @@ namespace EzBob.Models.Marketplaces.Builders
 				if (bank.currentBalance.HasValue)
 				{
 					dataBaseDataHelper.CalculateYodleeRunningBalance(bank.OrderItemBankTransactions,
-					                                                 _currencyConvertor.ConvertToBaseCurrency(
-						                                                 bank.currentBalanceCurrency, bank.currentBalance.Value,
-						                                                 bank.asOfDate));
+																	 _currencyConvertor.ConvertToBaseCurrency(
+																		 bank.currentBalanceCurrency, bank.currentBalance.Value,
+																		 bank.asOfDate));
 				}
 				foreach (var transaction in bank.OrderItemBankTransactions)
 				{
@@ -160,9 +143,9 @@ namespace EzBob.Models.Marketplaces.Builders
 				if (bank.currentBalance.HasValue)
 				{
 					databaseDataHelper.CalculateYodleeRunningBalance(bank.OrderItemBankTransactions,
-					                                                 _currencyConvertor.ConvertToBaseCurrency(
-						                                                 bank.currentBalanceCurrency, bank.currentBalance.Value,
-						                                                 bank.asOfDate));
+																	 _currencyConvertor.ConvertToBaseCurrency(
+																		 bank.currentBalanceCurrency, bank.currentBalance.Value,
+																		 bank.asOfDate));
 				}
 				foreach (var transaction in bank.OrderItemBankTransactions)
 				{
@@ -179,10 +162,9 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
 		{
-			var s = _session.Query<MP_YodleeOrderItem>()
-				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.accountOpenDate != null)
-				.Select(oi => oi.accountOpenDate);
+			var s = _session.Query<MP_YodleeOrderItemBankTransaction>().Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace.Id == mp.Id)
+				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue)
+				.Select(oi => oi.postDate ?? oi.transactionDate);
 			return !s.Any() ? (DateTime?)null : s.Min();
 		}
 	}

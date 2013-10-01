@@ -21,7 +21,7 @@
 
                 } else {
                     console.log("4", @Html.Raw(JsonConvert.SerializeObject(Model)));
-                    alert('Yodlee updated', @Html.Raw(JsonConvert.SerializeObject(Model)));
+                    alert('Yodlee updated ' + @Html.Raw(JsonConvert.SerializeObject(Model)));
                     //window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
                     self.close();
                 }
@@ -34,7 +34,7 @@
                     }
                     return r;
                 }
+            });
         });
-    });
     </script>
 }

@@ -153,7 +153,7 @@
 			}
 			else
 			{
-				var callback = Url.Action("YodleeCallback", "MarketPlaces", new {Area = "Underwriter"}, "https") + "/?umi=" + umi;
+				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new {Area = "Underwriter"}, "https") + "/" + umi;
 				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 				return Redirect(finalUrl);
 			}
@@ -161,62 +161,7 @@
 			return View();
 		} // TryRecheckYodlee
 
-
-		[Transactional]
-		public ViewResult YodleeCallback(int umi, string oauth_token = "", string oauth_error_problem = "", string oauth_error_code = "")
-		{
-			if (umi == -1)
-			{
-				return View(new { error = "Error occured (umi not found)" });
-			}
-
-			foreach (string key in HttpContext.Request.Params.Keys)
-			{
-				Log.InfoFormat("{0} {1}", key, HttpContext.Request.Params[key]);
-				if (key == "oauth_error_code")
-				{
-					if (HttpContext.Request.Params["oauth_error_code"] == "407")
-					{
-						return View(new { error = "Error occured" });
-					}
-				}
-			}
-			//var customer = _context.Customer;
-			//var repository = new YodleeAccountsRepository(_session);
-			//var yodleeAccount = repository.Search(customer.Id);
-
-			//string decryptedPassword = Encryptor.Decrypt(yodleeAccount.Password);
-			//string displayname;
-			//long csId;
-
-			//var yodleeMain = new YodleeMain();
-			//long itemId = yodleeMain.GetItemId(yodleeAccount.Username, decryptedPassword, out displayname, out csId);
-
-			//if (itemId == -1)
-			//{
-			//	return View(new { error = "Failure linking account" });
-			//}
-
-			//var oEsi = new YodleeServiceInfo();
-			//int marketPlaceId = _mpTypes
-			//	.GetAll()
-			//	.First(a => a.InternalId == oEsi.InternalId)
-			//	.Id;
-
-			//var securityData = new YodleeSecurityInfo
-			//{
-			//	ItemId = itemId,
-			//	Name = yodleeAccount.Username,
-			//	Password = yodleeAccount.Password,
-			//	MarketplaceId = marketPlaceId,
-			//	CsId = csId
-			//};
-
-			//var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
-
-			//_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
-			return View(new { error = "test" });
-		}
+		
 
 		[Ajax]
 		[HttpGet]

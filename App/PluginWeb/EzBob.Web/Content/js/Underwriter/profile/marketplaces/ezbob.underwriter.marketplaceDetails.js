@@ -121,7 +121,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
+            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }]
         };
         this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
 
@@ -142,6 +142,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         for (var i in income) {
             if (!income.hasOwnProperty(i)) continue;
+            if (i == '999999') continue; //skipping total
             arrayOfData.push(
             [
                 [
@@ -150,20 +151,21 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 ], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)
             ]);
         }
-        
-        this.$el.find("#yodleeBarGraph").jqBarGraph({
-            data: arrayOfData,
-            colors: ['#FF0000', '#008000'],
-            legends: ['Expenses', 'Income'],
-            legend: true,
-            width: 800,
-            //color: '#ffffff',
-            type: 'multi',
-            postfix: '£',
-            title: '<h3>Cash Flow<br /><small>monthly income/expenses</small></h3>',
-            showValues: true,
-            showValuesColor: "#000000",
-        });
+        if (arrayOfData.length) {
+            this.$el.find("#yodleeBarGraph").jqBarGraph({
+                data: arrayOfData,
+                colors: ['#FF0000', '#008000'],
+                legends: ['Expenses', 'Income'],
+                legend: true,
+                width: 800,
+                //color: '#ffffff',
+                type: 'multi',
+                postfix: '£',
+                title: '<h3>Cash Flow<br /><small>monthly income/expenses</small></h3>',
+                showValues: true,
+                showValuesColor: "#000000",
+            });
+        }
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
@@ -181,68 +183,69 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         for (var monthYear2 in highRunningBalance) {
             highBalanceLine.push([new Date(Date.parse(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
         }
-        
-        this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine], {
-            animateReplot: true,
-            drawIfHidden: true,
-            cursor: {
-                show: true,
-                zoom: true,
-                looseZoom: true,
-                showTooltip: false
-            },
-            seriesColors: ['#008000', '#FF0000'],
-            series: [{label: 'High'}, {label: 'Low'}],
-            axes: {
-                xaxis: {
-                    renderer: $.jqplot.DateAxisRenderer,
-                    label: 'Date',
-                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
-                    tickOptions: {
-                        labelPosition: 'middle',
-                        angle: 15,
-                        formatString: '%d-%m-%y'
-                    },
+        if (lowBalanceLine.length && highBalanceLine.length) {
+            this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine], {
+                animateReplot: true,
+                drawIfHidden: true,
+                cursor: {
+                    show: true,
+                    zoom: true,
+                    looseZoom: true,
+                    showTooltip: false
                 },
-                yaxis: {
-                    label: 'Balance',
-                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickOptions: {
-                        formatString: "%'d £"
+                seriesColors: ['#008000', '#FF0000'],
+                series: [{ label: 'High' }, { label: 'Low' }],
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.DateAxisRenderer,
+                        label: 'Date',
+                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            labelPosition: 'middle',
+                            angle: 15,
+                            formatString: '%d-%m-%y'
+                        },
                     },
+                    yaxis: {
+                        label: 'Balance',
+                        labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                        tickOptions: {
+                            formatString: "%'d £"
+                        },
+                    }
+                },
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 1,
+                    tooltipOffset: 0
+                },
+                legend: {
+                    show: true,
+                    renderer: $.jqplot.EnhancedLegendRenderer,
+                    border: 'none',
+                    marginRight: '-5px',
+                    background: 'rgba(0,0,0,0)',
+                    //placement: 'outside',
+                    location: 'e',
+                },
+                grid: {
+                    drawBorder: false,
+                    shadow: false,
+                    background: 'rgba(0,0,0,0)'
                 }
-            },
-            highlighter: {
-                show: true,
-                sizeAdjust: 1,
-                tooltipOffset: 0
-            },
-            legend: {
-                show: true,
-                renderer: $.jqplot.EnhancedLegendRenderer,
-                border: 'none',
-                marginRight: '-5px',
-                background: 'rgba(0,0,0,0)',
-                //placement: 'outside',
-                location: 'e',
-            },
-            grid: {
-                drawBorder: false,
-                shadow: false,
-                background: 'rgba(0,0,0,0)'
-            }
-        });
-        
-        $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
+            });
+
+            $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
+        }
     },
     replotYodleeGraphClicked: function() {
         this.runningBalancePlot.replot({ resetAxes: true });
     },
     searchYodleeWordsRowClicked: function (el) {
         var searchWord = $(el.currentTarget).children("td:first").text();
-        $('#yodleeTabLink5').click();
-        $('#yodleetab5 .dataTables_filter input').val(searchWord).change();
+        $('#yodleeTransactionsTabLink').click();
+        $('#yodleetab4 .dataTables_filter input').val(searchWord).change();
         $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, null);
     },
 

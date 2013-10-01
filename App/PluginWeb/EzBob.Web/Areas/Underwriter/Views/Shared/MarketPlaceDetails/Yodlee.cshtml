@@ -3,53 +3,15 @@
         <li class="active"><a href="#yodleetab0" data-toggle="tab">Cash Flow Report</a></li>
         <li><a href="#yodleetab1" data-toggle="tab">Search Words Report</a></li>
         <li><a href="#yodleetab2" data-toggle="tab">Charts</a></li>
-        <li><a href="#yodleetab3" data-toggle="tab">Aggregates</a></li>
-        <li><a href="#yodleetab4" data-toggle="tab">Bank Account Details</a></li>
-        <% _.each(y.banks, function(bank, i) {%>
-        <li><a href="#yodleetab<%= (i + 5) %>" id="yodleeTabLink<%= (i + 5) %>" data-toggle="tab">Account <%= (i+1) %> Transactions</a></li>
-        <%});%>
+        <li><a href="#yodleetab3" data-toggle="tab">Bank Account Details</a></li>
+        <li><a href="#yodleetab4" id="yodleeTransactionsTabLink" data-toggle="tab">Bank Accounts Transactions</a></li>
     </ul>
     <div class="tab-content">
         @YodleeCashFlowReport()
         @YodleeSearchWordsReport()
         @YodleeCharts()
-        @YodleeAggregates()
         @YodleeBankAccounts()
-        <%_.each(y.banks, function(bank, i) {%>
-        <div class="tab-pane" id="yodleetab<%= (i+5)%>">
-            <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable">
-                <thead>
-                    <tr>
-                        <th>Transaction Base Type</th>
-                        <th>Transaction/Post Date</th>
-                        <th>Transaction Amount £</th>
-                        <th>Running Balance(calculated) £</th>
-                        <th>Category</th>
-                        <th>Category Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%_.each(bank.transactions, function(transaction, j) {%>
-                    <%if(transaction.transactionBaseType=='credit'){ %>
-                        <tr class="credit">
-                            <%}else{%>
-                        <tr class="debit">
-                            <%}%>
-                            <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
-                            <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
-                            <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
-                            <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
-                            <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
-                            <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
-                            <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
-
-                        </tr>
-                    <%});%>
-                </tbody>
-            </table>
-        </div>
-        <%});%>
+        @YodleeBankAccountsTransactions()
     </div>
 </div>
 
@@ -161,7 +123,7 @@
     <div class="tab-pane" id="yodleetab2">
         
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <div id="yodleeBarGraph" class="well"></div>
+        <div id="yodleeBarGraph" class="well" style="width: 800px;height: 300px;"></div>
         <hr />
         
         <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br/><small>monthly</small></h3>
@@ -173,76 +135,9 @@
     </div>
 }
 
-@helper YodleeAggregates()
-{
-    <div class="tab-pane" id="yodleetab3">
-        <table class="table table-bordered table-striped  blue-header centered nowrap rright">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>1M</th>
-                    <th>3M</th>
-                    <th>6M</th>
-                    <th>12M</th>
-                    <th>15M</th>
-                    <th>18M</th>
-                    <th>24M</th>
-                    <th>24M+</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Total Income</td>
-                    <td><%-ai.TotalIncome1M!=undefined ? GBPValues(ai.TotalIncome1M, true): "-"%></td>
-                    <td><%-ai.TotalIncome3M!=undefined ? GBPValues(ai.TotalIncome3M, true): "-"%></td>
-                    <td><%-ai.TotalIncome6M!=undefined ? GBPValues(ai.TotalIncome6M, true): "-"%></td>
-                    <td><%-ai.TotalIncome12M!=undefined ? GBPValues(ai.TotalIncome12M, true): "-"%></td>
-                    <td><%-ai.TotalIncome15M!=undefined ? GBPValues(ai.TotalIncome15M, true): "-"%></td>
-                    <td><%-ai.TotalIncome18M!=undefined ? GBPValues(ai.TotalIncome18M, true): "-"%></td>
-                    <td><%-ai.TotalIncome24M!=undefined ? GBPValues(ai.TotalIncome24M, true): "-"%></td>
-                    <td><%-ai.TotalIncomeLifetime!=undefined ? GBPValues(ai.TotalIncomeLifetime, true): "-"%></td>
-                </tr>
-                <tr>
-                    <td>Total Expense</td>
-                    <td><%-ai.TotalExpense1M!=undefined ? GBPValues(ai.TotalExpense1M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense3M!=undefined ? GBPValues(ai.TotalExpense3M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense6M!=undefined ? GBPValues(ai.TotalExpense6M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense12M!=undefined ? GBPValues(ai.TotalExpense12M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense15M!=undefined ? GBPValues(ai.TotalExpense15M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense18M!=undefined ? GBPValues(ai.TotalExpense18M, true) : "-"%></td>
-                    <td><%-ai.TotalExpense24M!=undefined ? GBPValues(ai.TotalExpense24M, true) : "-"%></td>
-                    <td><%-ai.TotalExpenseLifetime!=undefined ? GBPValues(ai.TotalExpenseLifetime, true) : "-"%></td>
-                </tr>
-                <tr>
-                    <td>Current Balance</td>
-                    <td><%-ai.CurrentBalance1M!=undefined ? GBPValues(ai.CurrentBalance1M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance3M!=undefined ? GBPValues(ai.CurrentBalance3M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance6M!=undefined ? GBPValues(ai.CurrentBalance6M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance12M!=undefined ? GBPValues(ai.CurrentBalance12M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance15M!=undefined ? GBPValues(ai.CurrentBalance15M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance18M!=undefined ? GBPValues(ai.CurrentBalance18M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalance24M!=undefined ? GBPValues(ai.CurrentBalance24M, true) : "-"%></td>
-                    <td><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) : "-"%></td>
-                </tr>
-                <tr>
-                    <td>Available Balance</td>
-                    <td><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance12M!=undefined ? GBPValues(ai.AvailableBalance12M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance15M!=undefined ? GBPValues(ai.AvailableBalance15M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance18M!=undefined ? GBPValues(ai.AvailableBalance18M, true): "-"%></td>
-                    <td><%-ai.AvailableBalance24M!=undefined ? GBPValues(ai.AvailableBalance24M, true): "-"%></td>
-                    <td><%-ai.AvailableBalanceLifetime!=undefined ? GBPValues(ai.AvailableBalanceLifetime, true): "-"%></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-}
-
 @helper YodleeBankAccounts()
 {
-    <div class="tab-pane" id="yodleetab4">
+    <div class="tab-pane" id="yodleetab3">
         <table class="table table-bordered table-striped  blue-header centered nowrap">
             <thead>
                 <tr>
@@ -284,5 +179,45 @@
             </tbody>
         </table>
     </div>
+}
+
+@helper YodleeBankAccountsTransactions()
+{
+    <div class="tab-pane" id="yodleetab4">
+        <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable">
+            <thead>
+                <tr>
+                    <th>Acct #</th>
+                    <th>Tr Type</th>
+                    <th>Tr/Post Date</th>
+                    <th>Tr Amount £</th>
+                    <th>Running Balance(calculated) £</th>
+                    <th>Category</th>
+                    <th>Category Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%_.each(y.banks, function(bank, i) {%>
+                    <%_.each(bank.transactions, function(transaction, j) {%>
+                        <%if(transaction.transactionBaseType=='credit'){ %>
+                            <tr class="credit">
+                        <%}else{%>
+                            <tr class="debit">
+                        <%}%>
+                            <td><%=i+1%></td>
+                            <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
+                            <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
+                            <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
+                            <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
+                            <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
+                            <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
+                            <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                        </tr>
+                    <%});%>
+                <%});%>
+            </tbody>
+        </table>
+     </div>
 }
 

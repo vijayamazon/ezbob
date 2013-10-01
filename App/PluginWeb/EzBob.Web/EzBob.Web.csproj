@@ -231,6 +231,7 @@
     <Compile Include="Areas\Underwriter\Controllers\CollectionStatusController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CompanyScoreController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\FullCustomerController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\YodleeRecheckController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FraudStatusController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\FraudDetectionLogController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\CustomersReview\CustomerRelationsController.cs" />
@@ -1137,10 +1138,10 @@
     <Content Include="Areas\Underwriter\Views\Shared\_CompanyScore.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanWithoutAML.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\ApproveLoanForWarningStatusCustomer.cshtml" />
-    <Content Include="Areas\Underwriter\Views\MarketPlaces\YodleeCallback.cshtml" />
     <Content Include="Areas\Underwriter\Views\MarketPlaces\TryRecheckYodlee.cshtml" />
     <Content Include="Areas\Customer\Views\CGMarketPlaces\UploadFilesDialog.cshtml" />
     <Content Include="Areas\Customer\Views\CGMarketPlaces\HandleUploadedHmrcVatReturn.cshtml" />
+    <Content Include="Areas\Underwriter\Views\YodleeRecheck\YodleeCallback.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
