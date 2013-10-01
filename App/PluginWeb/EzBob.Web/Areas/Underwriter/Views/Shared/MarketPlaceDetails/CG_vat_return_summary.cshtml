@@ -77,7 +77,7 @@ if (m.CGData && m.CGData.VatReturn) {
 			<th>&nbsp;</th>
 			<th>Last Tax Return</th><%
 			for (var i = nStartIdx; i < aryBusiness.length; i++) {
-				%><th><%= EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%= EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
+				%><th><%- EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%- EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
 
 				var oDateFrom = moment.utc(aryBusiness[i].DateFrom).local();
 				var oDateTo = moment.utc(aryBusiness[i].DateTo).local();
@@ -107,19 +107,19 @@ if (m.CGData && m.CGData.VatReturn) {
 		} // if
 		%><tbody>
 			<tr>
-				<td class="no-padding" rowspan=10>
+				<td class="no-padding" rowspan=11>
 					<table class="internal-table">
 						<% var aryDetails = sBusinessID.split('\n'); %>
 						<tr>
 							<td>Registration #:</td>
-							<td><%= aryDetails[0] %></td>
+							<td><%- aryDetails[0] %></td>
 						</tr>
 						<tr>
 							<td>Business Details:</td>
 							<td>
-								<div><%= aryDetails[1] %></div>
+								<div><%- aryDetails[1] %></div>
 								<% for (var nAddrIdx = 2; nAddrIdx < aryDetails.length; nAddrIdx++) {
-									%><div><%= aryDetails[nAddrIdx] %></div><%
+									%><div><%- aryDetails[nAddrIdx] %></div><%
 								} %>
 							</td>
 						</tr>
@@ -129,44 +129,56 @@ if (m.CGData && m.CGData.VatReturn) {
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%
 						if ((i >= aryBusiness.length - 4) && (aryTotals[6])) {
-							%><%= EzBob.formatPercents(aryBusiness[i].BoxData[6].amount * 1.0 / aryTotals[6]) %><%
+							%><%- EzBob.formatPercents(aryBusiness[i].BoxData[6].amount * 1.0 / aryTotals[6]) %><%
 						}
 						else {
 							%>-<%
 						}
 					%></td><%
 				} // for each relevant data item
-				%><td class=r><%= EzBob.formatPercents(1) %></td>
+				%><td class=r><%- EzBob.formatPercents(1) %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>Revenues</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount) %></td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount) %></td><%
 				} // for each relevant data item
-				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[6]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[6]) %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>Opex</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[7].amount) %></td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[7].amount) %></td><%
 				} // for each relevant data item
-				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>Total Value Added</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%= EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[5].amount) %></td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[5].amount) %></td><%
 				} // for each relevant data item
-				%><td class=r><%= EzBob.formatPoundsAsInt(aryTotals[5]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[5]) %></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th>% of Revenues</th><td></td><%
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
+					%><td class=r><%
+						var nRevenue = aryBusiness[i].BoxData[6].amount;
+						if (nRevenue)
+							print(EzBob.formatPercents(aryBusiness[i].BoxData[5].amount / nRevenue));
+					%></td><%
+				} // for each relevant data item
+				%><td class=r><%- aryTotals[6] ? EzBob.formatPercents(aryTotals[5] / aryTotals[6]) : '' %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>Salaries</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%= EzBob.formatPoundsAsInt(arySalary[i].salary) %></td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(arySalary[i].salary) %></td><%
 				} // for each relevant data item
 				%><td class=r><%
 					var nSalarySum = 0;
@@ -174,7 +186,7 @@ if (m.CGData && m.CGData.VatReturn) {
 					for (var i = (arySalary.length <= 4 ? 0 : arySalary.length - 4); i < arySalary.length; i++)
 						nSalarySum += arySalary[i].salary;
 
-				%><%= EzBob.formatPoundsAsInt(nSalarySum) %></td>
+				%><%- EzBob.formatPoundsAsInt(nSalarySum) %></td>
 				<td></td>
 			</tr>
 			<tr>
