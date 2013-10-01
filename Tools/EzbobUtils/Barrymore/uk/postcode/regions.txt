@@ -1,6 +1,6 @@
 # source: http://www.summergardenbuildings.co.uk/postcode-areas.html
 
-EAST ANGLIA
+EAST ENGLAND
 AL = St. Albans, Hertfordshire 
 CB = Cambridge, Cambridgeshire
 CM = Chelmsford, Essex

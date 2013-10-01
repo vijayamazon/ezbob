@@ -1502,6 +1502,10 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
+      <Name>ValueIntervals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">
       <Project>{dfc5b190-afa4-40a7-8237-8404687b4513}</Project>
       <Name>HmrcHarvester</Name>

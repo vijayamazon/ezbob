@@ -3,16 +3,45 @@
 namespace Ezbob.ValueIntervals {
 	#region class AIntervalEdge
 
-	public abstract class AIntervalEdge<TFinite> {
+	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
 		#region public
 
 		#region comparison operators
 
+		#region method CompareTo
+
+		public virtual int CompareTo(AIntervalEdge<TFinite> other) {
+			if (other == null)
+				throw new ValueIntervalException("Cannot compare to null.");
+
+			if (Type == other.Type)
+				return Type == EdgeType.Finite ? Value.CompareTo(other.Value) : 0;
+
+			switch (Type) {
+			case EdgeType.NegativeInfinity:
+				return -1;
+
+			case EdgeType.Finite:
+				return other.Type == EdgeType.NegativeInfinity ? 1 : -1;
+
+			case EdgeType.PositiveInfinity:
+				return 1;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // CompareTo
+
+		#endregion method CompareTo
+
 		#region operator ==
 
 		public static bool operator ==(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
-			if ((a == null) || (b == null))
-				throw new ValueIntervalException("One of operands is null.");
+			if (ReferenceEquals(a, b))
+				return true;
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+				return false;
 
 			if (a.Type == b.Type)
 				return (a.Type != EdgeType.Finite) || a.IsValueEqualTo(b);

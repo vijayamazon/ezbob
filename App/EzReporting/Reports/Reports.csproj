@@ -128,6 +128,10 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
+      <Name>ValueIntervals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mailer\Mailer.csproj">
       <Project>{68180204-5112-43af-9d83-e5cdd39f93a0}</Project>
       <Name>Mailer</Name>

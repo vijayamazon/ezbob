@@ -15,6 +15,7 @@ using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
 using EzBob.Web.ApplicationCreator;
 using Ezbob.Logger;
+using Ezbob.ValueIntervals;
 using Integration.ChannelGrabberConfig;
 using Integration.ChannelGrabberFrontend;
 using Newtonsoft.Json;
@@ -407,78 +408,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		} // ValidateFiles
 
 		#endregion method ValidateFiles
-
-		#region class DateInterval
-
-		private class DateInterval : Tuple<DateTime, DateTime> {
-			#region public
-
-			#region method CompareForSort
-
-			public static int CompareForSort(DateInterval a, DateInterval b) { return a.Start.CompareTo(b.Start); } // CompareForSort
-
-			#endregion method CompareForSort
-
-			#region constructor
-
-			public DateInterval(DateTime oStart, DateTime oEnd) : base(Min(oStart, oEnd), Max(oStart, oEnd)) {} // constructor
-
-			#endregion constructor
-
-			#region method Intersects
-
-			public bool Intersects(DateInterval di) {
-				if ((Start <= di.Start) && (di.End <= End))
-					return true;
-
-				if ((di.Start <= Start) && (End <= di.End))
-					return true;
-
-				if ((Start <= di.Start) && (di.Start <= End))
-					return true;
-
-				if ((Start <= di.End) && (di.End <= End))
-					return true;
-
-				return false;
-			} // Intersects
-
-			#endregion method Intersects
-
-			#region method Follows
-
-			public bool Follows(DateInterval di) {
-				return End.Date.AddDays(1) == di.Start.Date;
-			} // Follows
-
-			#endregion method Follows
-
-			#region method ToString
-
-			public override string ToString() {
-				return string.Format(
-					"{0} - {1}",
-					Start.ToString("MMM d yyyy", CultureInfo.InvariantCulture),
-					End.ToString("MMM d yyyy", CultureInfo.InvariantCulture)
-				);
-			} // ToString
-
-			#endregion method ToString
-
-			#endregion public
-
-			#region private
-
-			private DateTime Start { get { return Item1; } } // Start
-			private DateTime End { get { return Item2; } } // End
-
-			private static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
-			private static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
-
-			#endregion private
-		} // class DateInterval
-
-		#endregion class DateInterval
 
 		#region method CreateError
 

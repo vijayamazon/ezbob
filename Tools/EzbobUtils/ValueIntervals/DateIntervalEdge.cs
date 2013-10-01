@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Ezbob.ValueIntervals {
-	#region class FreezeIntervalEdge
+	#region class DateIntervalEdge
 
-	public class FreezeIntervalEdge : AIntervalEdge<DateTime> {
+	public class DateIntervalEdge : AIntervalEdge<DateTime> {
 		#region public
 
 		#region constructor
 
-		public FreezeIntervalEdge(DateTime? oDate, EdgeType nDefaultInfinityType) {
+		public DateIntervalEdge(DateTime? oDate, EdgeType nDefaultInfinityType) {
 			if (oDate.HasValue) {
 				Type = EdgeType.Finite;
-				Value = oDate.Value;
+				Value = oDate.Value.Date;
 			}
 			else {
 				Type = nDefaultInfinityType;
@@ -20,6 +21,30 @@ namespace Ezbob.ValueIntervals {
 		} // constructor
 
 		#endregion constructor
+
+		#region method ToString
+
+		public override string ToString() {
+			return ToString("MMM d yyyy", CultureInfo.InvariantCulture);
+		} // ToString
+
+		public virtual string ToString(string sFormat, CultureInfo ci) {
+			switch (Type) {
+			case EdgeType.NegativeInfinity:
+				return "-inf";
+
+			case EdgeType.Finite:
+				return Value.ToString(sFormat, ci);
+
+			case EdgeType.PositiveInfinity:
+				return "+inf";
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // ToString
+
+		#endregion method ToString
 
 		#endregion public
 
@@ -42,7 +67,7 @@ namespace Ezbob.ValueIntervals {
 		#endregion method IsValueLessThan
 
 		#endregion protected
-	} // class FreezeIntervalEdge
+	} // class DateIntervalEdge
 
-	#endregion class FreezeIntervalEdge
+	#endregion class DateIntervalEdge
 } // namespace Ezbob.ValueIntervals
