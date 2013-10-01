@@ -854,7 +854,7 @@ EzBob.validateSignUpForm = function (el) {
             "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
             "signupPass1": { required: passPolicyText, regex: passPolicyText },
             "signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
-            "promoCode": { maxlength: "Maximum answer length is 30 characters" },
+            "promoCode": { maxlength: "Maximum promo code length is 30 characters" },
             "securityQuestion": { required: "This field is required" },
             "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" },
             "CaptchaInputText": { required: "This field is required" }
