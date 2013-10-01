@@ -215,7 +215,8 @@
 		{
 			if (!YodleeCashFlowReportModelDict.ContainsKey(string.Format("{0}{1}", catPrefix, cat)))
 			{
-				YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = new SortedDictionary<int, double>();
+				var total = new SortedDictionary<int, double> {{TotalColumn, 0}};
+				YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = total;
 			}
 		}
 

@@ -1447,6 +1447,8 @@ namespace EZBob.DatabaseLib
 		public void CalculateYodleeRunningBalance(IEnumerable<MP_YodleeOrderItemBankTransaction> orderItemBankTransactions, AmountInfo currentBalance)
 		{
 			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ToList();
+			if (transactions.Count == 0) return;
+			
 			if (!transactions[0].runningBalance.HasValue)
 			{
 				transactions[0].runningBalance = currentBalance.Value;
