@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Ezbob.Logger;
 
 namespace Reports {
@@ -33,8 +34,9 @@ namespace Reports {
 		/// </summary>
 		/// <param name="oDateStart">Requested period start date, inclusive.</param>
 		/// <param name="oDateEnd">Requested period end date, exclusive.</param>
+		/// <param name="ifp">Interest rate freeze periods.</param>
 		/// <returns>Earned interest for the period.</returns>
-		public decimal Calculate(DateTime oDateStart, DateTime oDateEnd, bool bVerboseLogging) {
+		public decimal Calculate(DateTime oDateStart, DateTime oDateEnd, InterestFreezePeriods ifp, bool bVerboseLogging) {
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
@@ -72,7 +74,7 @@ namespace Reports {
 			InterestData oCurDayData = aryDates[nDayDataPtr];
 			
 			foreach (PrInterest pri in days) {
-				if (pri.Update(oCurDayData)) {
+				if (pri.Update(oCurDayData, ifp)) {
 					nDayDataPtr++;
 
 					if (nDayDataPtr < aryDates.Length)
@@ -83,14 +85,26 @@ namespace Reports {
 			decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
 
 			if (bVerboseLogging) {
-				Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}\nSchedule ({7}):\n\t{3}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
+				string sIfp = "none";
+
+				if (ifp != null) {
+					var os = new StringBuilder();
+
+					ifp.ForEach(i => os.AppendFormat("\n\t{0}", i));
+
+					sIfp = os.ToString().Trim();
+				} // if
+
+				Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}\nSchedule ({7}):\n\t{3}\nFreeze periods ({10}):\n\t{9}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
 					LoanID, Amount, IssueDate,
 					string.Join("\n\t", Schedule.Values.Select(v => v.ToString()).ToArray()),
 					string.Join("\n\t", Repayments.Values.Select(v => v.ToString()).ToArray()),
 					string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray()),
 					nEarnedInterest,
 					Schedule.Count,
-					Repayments.Count
+					Repayments.Count,
+					sIfp,
+					ifp == null ? 0 : ifp.Count
 				);
 			} // if
 

@@ -9,16 +9,18 @@ namespace Ezbob.ValueIntervals {
 		#region operator * (intersection)
 
 		public static FreezeInterval operator *(FreezeInterval a, FreezeInterval b) {
-			if (ReferenceEquals(a, b))
-				return b;
-
-			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
-				return null;
-
-			return a.Intersection(b);
+			return ReferenceEquals(a, null) ? null : a.Intersection(b);
 		} // operator *
 
 		#endregion operator * (intersection)
+
+		#region operator -
+
+		public static TDisjointIntervals<DateTime> operator -(FreezeInterval a, FreezeInterval b) {
+			return ReferenceEquals(a, null) ? null : a.Difference(b);
+		} // operator -
+
+		#endregion operator -
 
 		#region constructor
 
@@ -34,21 +36,11 @@ namespace Ezbob.ValueIntervals {
 
 		#endregion property InterestRate
 
-		#region method Intersection
+		#region method ToString
 
-		public virtual FreezeInterval Intersection(FreezeInterval other) {
-			if (other == null)
-				return null;
+		public override string ToString() { return string.Format("[ {0} - {1} ({2:P2})]", Left, Right, InterestRate); } // ToString
 
-			DateInterval oEdges = base.Intersection(other);
-
-			if (oEdges == null)
-				return null;
-
-			return new FreezeInterval(oEdges, other.InterestRate);
-		} // Intersection
-
-		#endregion method Intersection
+		#endregion method ToString
 
 		#endregion public
 
@@ -61,6 +53,34 @@ namespace Ezbob.ValueIntervals {
 		} // constructor
 
 		#endregion constructor
+
+		#region method Intersection
+
+		protected virtual FreezeInterval Intersection(FreezeInterval other) {
+			DateInterval oEdges = base.Intersection(other);
+
+			return oEdges == null ? null : new FreezeInterval(oEdges, InterestRate);
+		} // Intersection
+
+		#endregion method Intersection
+
+		#region method Difference
+
+		protected virtual TDisjointIntervals<DateTime> Difference(FreezeInterval other) {
+			TDisjointIntervals<DateTime> oDiff = base.Difference(other);
+
+			if (oDiff == null)
+				return null;
+
+			var oResult = new TDisjointIntervals<DateTime>();
+
+			foreach (TInterval<DateTime> i in oDiff)
+				oResult.Add(new FreezeInterval(i as DateInterval, InterestRate));
+
+			return oResult;
+		} // Difference
+
+		#endregion method Difference
 
 		#endregion protected
 	} // class FreezeInterval

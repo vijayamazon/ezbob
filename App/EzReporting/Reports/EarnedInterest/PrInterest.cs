@@ -22,8 +22,11 @@ namespace Reports {
 			return string.Format("{0}: {1} * {2} = {3}", Date, Principal, Interest, Principal * Interest);
 		} // ToString
 
-		public bool Update(InterestData oDelta) {
-			Interest = oDelta.Interest;
+		public bool Update(InterestData oDelta, InterestFreezePeriods ifp) {
+			if (ifp == null)
+				Interest = oDelta.Interest;
+			else
+				Interest = ifp.GetInterest(Date) ?? oDelta.Interest;
 
 			return Date == oDelta.Date;
 		} // Update

@@ -5,12 +5,34 @@ using EdgeType = Ezbob.ValueIntervals.AIntervalEdge<System.DateTime>.EdgeType;
 namespace Ezbob.ValueIntervals {
 	#region class TInterval
 
-	public class TInterval<TFinite> where TFinite : IComparable<TFinite> {
+	public class TInterval<TFinite> : IComparable<TInterval<TFinite>> where TFinite : IComparable<TFinite> {
 		#region public
+
+		#region operator *
+
+		public static TInterval<TFinite> operator *(TInterval<TFinite> a, TInterval<TFinite> b) {
+			return ReferenceEquals(a, null) ? null : a.Intersection(b);
+		} // operator *
+
+		#endregion operator *
+
+		#region operator -
+
+		public static TDisjointIntervals<TFinite> operator -(TInterval<TFinite> a, TInterval<TFinite> b) {
+			return ReferenceEquals(a, null) ? null : a.Difference(b);
+		} // operator -
+
+		#endregion operator -
 
 		#region method Intersects
 
 		public virtual bool Intersects(TInterval<TFinite> other) {
+			if (ReferenceEquals(this, other))
+				return true;
+
+			if (ReferenceEquals(other, null))
+				return false;
+
 			return Contains(other.Left) || Contains(other.Right) || other.Contains(this);
 		} // Intersects
 
@@ -33,6 +55,17 @@ namespace Ezbob.ValueIntervals {
 		public override string ToString() { return string.Format("[ {0} - {1} ]", Left, Right); } // ToString
 
 		#endregion method ToString
+
+		#region method CompareTo
+
+		public int CompareTo(TInterval<TFinite> other) {
+			if (ReferenceEquals(other, null))
+				throw new ArgumentNullException();
+
+			return Left.CompareTo(other.Left);
+		} // CompareTo
+
+		#endregion method CompareTo
 
 		#region property Left
 
@@ -77,6 +110,38 @@ namespace Ezbob.ValueIntervals {
 		} // Intersection
 
 		#endregion method Intersection
+
+		#region method Difference
+
+		protected virtual TDisjointIntervals<TFinite> Difference(TInterval<TFinite> other) {
+			if (ReferenceEquals(this, other))
+				return null;
+
+			if (!Intersects(other))
+				return new TDisjointIntervals<TFinite>(new TInterval<TFinite>(this));
+
+			if (other.Contains(this))
+				return null;
+
+			if (Contains(other)) {
+				return new TDisjointIntervals<TFinite>(
+					new TInterval<TFinite>(Left, other.Left.Previous()),
+					new TInterval<TFinite>(other.Right.Next(), Right)
+				);
+			} // if
+
+			if (Contains(other.Left)) {
+				return new TDisjointIntervals<TFinite>(
+					new TInterval<TFinite>(Left, other.Left.Previous())
+				);
+			} // if
+
+			return new TDisjointIntervals<TFinite>(
+				new TInterval<TFinite>(other.Right.Next(), Right)
+			);
+		} // Difference
+
+		#endregion method Difference
 
 		#endregion protected
 	} // class TInterval

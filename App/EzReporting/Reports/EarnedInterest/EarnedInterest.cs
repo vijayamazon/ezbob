@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Ezbob.Database;
 using Ezbob.Logger;
+using Ezbob.ValueIntervals;
 
 namespace Reports {
 	#region class EarnedInterest
@@ -48,6 +49,7 @@ namespace Reports {
 			m_oDateEnd = oDateTwo;
 
 			m_oLoans = new SortedDictionary<int, LoanData>();
+			m_oFreezePeriods = new SortedDictionary<int, InterestFreezePeriods>();
 
 			m_nMode = nMode;
 		} // constructor
@@ -87,8 +89,24 @@ namespace Reports {
 		#region method FillFreezeIntervals
 
 		private void FillFreezeIntervals() {
-			// TODO
-			// DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
+			DataTable tbl = m_oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
+			
+			foreach (DataRow row in tbl.Rows) {
+				int nLoanID = Convert.ToInt32(row["LoanId"]);
+				DateTime? oStart = row["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["StartDate"]);
+				DateTime? oEnd = row["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["EndDate"]);
+				decimal nRate = Convert.ToDecimal(row["InterestRate"]);
+				DateTime? oDeactivation = row["DeactivationDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["DeactivationDate"]);
+
+				DateTime? oTo = oDeactivation.HasValue
+					? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
+					: oEnd;
+
+				if (!m_oFreezePeriods.ContainsKey(nLoanID))
+					m_oFreezePeriods[nLoanID] = new InterestFreezePeriods();
+
+				m_oFreezePeriods[nLoanID].Add(oStart, oTo, nRate);
+			} // for each
 		} // FillFreezeIntervals
 
 		#endregion method FillFreezeIntervals
@@ -127,7 +145,9 @@ namespace Reports {
 			var oRes = new SortedDictionary<int, decimal>();
 
 			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
-				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, VerboseLogging);
+				InterestFreezePeriods ifp = m_oFreezePeriods.ContainsKey(pair.Key) ? m_oFreezePeriods[pair.Key] : null;
+
+				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging);
 
 				if (nInterest > 0)
 					oRes[pair.Key] = nInterest;
@@ -199,6 +219,7 @@ namespace Reports {
 		#region fields
 
 		private readonly SortedDictionary<int, LoanData> m_oLoans;
+		private readonly SortedDictionary<int, InterestFreezePeriods> m_oFreezePeriods;
 
 		private DateTime m_oDateStart;
 		private DateTime m_oDateEnd;

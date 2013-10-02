@@ -3,7 +3,7 @@
 namespace Ezbob.ValueIntervals {
 	#region class AIntervalEdge
 
-	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
+	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>>, IOrdinal<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
 		#region public
 
 		#region comparison operators
@@ -162,7 +162,7 @@ namespace Ezbob.ValueIntervals {
 
 		public virtual int CompareTo(AIntervalEdge<TFinite> other) {
 			if (other == null)
-				throw new ValueIntervalException("Cannot compare to null.");
+				throw new ArgumentNullException();
 
 			if (Type == other.Type)
 				return Type == EdgeType.Finite ? Value.CompareTo(other.Value) : 0;
@@ -183,6 +183,9 @@ namespace Ezbob.ValueIntervals {
 		} // CompareTo
 
 		#endregion method CompareTo
+
+		public abstract AIntervalEdge<TFinite> Previous();
+		public abstract AIntervalEdge<TFinite> Next();
 
 		#endregion public
 

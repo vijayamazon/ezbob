@@ -85,6 +85,7 @@
     <Compile Include="BaseReportSender.cs" />
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="DropboxReportSaver.cs" />
+    <Compile Include="EarnedInterest\InterestFreezePeriods.cs" />
     <Compile Include="LoanIntegrity.cs" />
     <Compile Include="EarnedInterest\EarnedInterest.cs" />
     <Compile Include="EarnedInterest\InterestData.cs" />

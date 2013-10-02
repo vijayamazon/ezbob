@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Ezbob.ValueIntervals;
@@ -7,14 +9,6 @@ using Reports;
 
 namespace TestApp {
 
-	class A { public static string func() {
-		return "this is A";
-	} }
-
-	class B : A { public static string func() {
-		return "this is B";
-	} }
-
 	class Program {
 		static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
@@ -22,24 +16,72 @@ namespace TestApp {
 			var oDB = new SqlConnection(log);
 
 			// TestLoansIssuedReport(oDB, log);
-			// TestEarnedInterest(oDB, log);
+			TestEarnedInterest(oDB, log);
 			// TestLoanIntegrity(oDB, log);
 
 			// TestLoanStats(oDB, log);
 
-			var di2 = new DateInterval(new DateTime(1976, 7, 1), null);
-			var di = new DateInterval(null, new DateTime(1982, 9, 1));
+			// TestIntervalsOperations();
 
-			Console.WriteLine("{0} ^ {1} = {2}: {3}", di, di2, di.Intersects(di2) ? "yes" : "no", di.Intersection(di2));
-
-			var e1 = new DateIntervalEdge(null, AIntervalEdge<DateTime>.EdgeType.NegativeInfinity);
-			var e2 = new DateIntervalEdge(new DateTime(1976, 7, 1), AIntervalEdge<DateTime>.EdgeType.Finite);
-
-			Console.WriteLine("{0} > {1} = {2}", e1, e2, e1 > e2);
-
-			Console.WriteLine("A.func() = {0}", A.func());
-			Console.WriteLine("B.func() = {0}", B.func());
+			// TestInterestFreeze(oDB, log);
 		} // Main
+
+		private static void TestInterestFreeze(AConnection oDB, ASafeLog log) {
+			DataTable tbl = oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
+			
+			var oPeriods = new SortedDictionary<int, InterestFreezePeriods>();
+
+			foreach (DataRow row in tbl.Rows) {
+				int nLoanID = Convert.ToInt32(row["LoanId"]);
+				DateTime? oStart = row["StartDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["StartDate"]);
+				DateTime? oEnd = row["EndDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["EndDate"]);
+				decimal nRate = Convert.ToDecimal(row["InterestRate"]);
+				DateTime? oDeactivation = row["DeactivationDate"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["DeactivationDate"]);
+
+				DateTime? oTo = oDeactivation.HasValue
+					? (oEnd.HasValue ? DateInterval.Min(oEnd.Value, oDeactivation.Value) : oDeactivation)
+					: oEnd;
+
+				if (!oPeriods.ContainsKey(nLoanID))
+					oPeriods[nLoanID] = new InterestFreezePeriods();
+
+				oPeriods[nLoanID].Add(oStart, oTo, nRate);
+			} // for each
+
+			foreach (var pair in oPeriods)
+				log.Msg("LoanID: {0} Freeze Periods: {1}", pair.Key, pair.Value);
+		} // TestInerestFreeze
+
+		private static void TestIntervalsOperations() {
+			TestIntervalsOperations(
+				new FreezeInterval(new DateTime(1976, 7, 1), null, 0.3m),
+				new FreezeInterval(null, new DateTime(1982, 9, 1), 0.6m)
+			);
+
+			TestIntervalsOperations(
+				new FreezeInterval(new DateTime(1976, 7, 1), new DateTime(1982, 9, 1), 0.3m),
+				new FreezeInterval(new DateTime(1979, 5, 9), new DateTime(1979, 11, 14), 0.6m)
+			);
+
+			TestIntervalsOperations(
+				new FreezeInterval(new DateTime(1976, 7, 1), new DateTime(1982, 9, 1), 0.3m),
+				new FreezeInterval(new DateTime(1979, 5, 9), new DateTime(1979, 5, 9), 0.6m)
+			);
+		} // TestIntervalOperations
+
+		private static void TestIntervalsOperations(FreezeInterval di, FreezeInterval di2) {
+			Console.WriteLine("\n***\n\n");
+
+			Console.WriteLine("{0} ^ {1} = {2}", di, di2, di * di2);
+			Console.WriteLine("{0} - {1} = {2}", di, di2, di - di2);
+
+			Console.WriteLine("---");
+
+			Console.WriteLine("{0} ^ {1} = {2}", di2, di, di2 * di);
+			Console.WriteLine("{0} - {1} = {2}", di2, di, di2 - di);
+
+			Console.WriteLine("\n***\n\n");
+		} // TestIntervalOperations
 
 		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
 			var sender = new ReportDispatcher(oDB, log);

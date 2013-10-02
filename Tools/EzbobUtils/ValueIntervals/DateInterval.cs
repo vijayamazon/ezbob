@@ -8,28 +8,31 @@ namespace Ezbob.ValueIntervals {
 	public class DateInterval : TInterval<DateTime> {
 		#region public
 
+		public static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
+		public static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
+
+		#region operator *
+
+		public static DateInterval operator *(DateInterval a, DateInterval b) {
+			return ReferenceEquals(a, null) ? null : a.Intersection(b);
+		} // operator *
+
+		#endregion operator *
+
+		#region operator -
+
+		public static TDisjointIntervals<DateTime> operator -(DateInterval a, DateInterval b) {
+			return ReferenceEquals(a, null) ? null : a.Difference(b);
+		} // operator -
+
+		#endregion operator -
+
 		#region constructor
 
 		public DateInterval(DateTime? oLeft, DateTime? oRight) : base(InitEdges(oLeft, oRight)) {
 		} // constructor
 
 		#endregion constructor
-
-		#region method Intersection
-
-		public virtual DateInterval Intersection(DateInterval other) {
-			if (other == null)
-				return null;
-
-			TInterval<DateTime> oEdges = base.Intersection(other);
-
-			if (oEdges == null)
-				return null;
-
-			return new DateInterval(oEdges);
-		} // Intersection
-
-		#endregion method Intersection
 
 		#region method IsJustBefore
 
@@ -48,7 +51,38 @@ namespace Ezbob.ValueIntervals {
 		protected DateInterval(TInterval<DateTime> other) : base(other.Left, other.Right) {
 		} // constructor
 
+		protected DateInterval(AIntervalEdge<DateTime> oLeft, AIntervalEdge<DateTime> oRight) : base(oLeft, oRight) {
+		} // constructor
+
 		#endregion constructor
+
+		#region method Intersection
+
+		protected virtual DateInterval Intersection(DateInterval other) {
+			TInterval<DateTime> oEdges = base.Intersection(other);
+
+			return oEdges == null ? null : new DateInterval(oEdges);
+		} // Intersection
+
+		#endregion method Intersection
+
+		#region method Difference
+
+		protected virtual TDisjointIntervals<DateTime> Difference(DateInterval other) {
+			TDisjointIntervals<DateTime> oDiff = base.Difference(other);
+
+			if (oDiff == null)
+				return null;
+
+			var oResult = new TDisjointIntervals<DateTime>();
+
+			foreach (TInterval<DateTime> i in oDiff)
+				oResult.Add(new DateInterval(i));
+
+			return oResult;
+		} // Difference
+
+		#endregion method Difference
 
 		#endregion protected
 
@@ -71,9 +105,6 @@ namespace Ezbob.ValueIntervals {
 		} // InitEdges
 
 		#endregion method InitEdges
-
-		private static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
-		private static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
 
 		#endregion private
 	} // class DateInterval

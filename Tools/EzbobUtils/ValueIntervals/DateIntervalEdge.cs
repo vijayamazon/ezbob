@@ -25,19 +25,19 @@ namespace Ezbob.ValueIntervals {
 		#region method ToString
 
 		public override string ToString() {
-			return ToString("MMM d yyyy", CultureInfo.InvariantCulture);
+			return ToString("MMM dd yyyy", CultureInfo.InvariantCulture);
 		} // ToString
 
 		public virtual string ToString(string sFormat, CultureInfo ci) {
 			switch (Type) {
 			case EdgeType.NegativeInfinity:
-				return "-inf";
+				return "   never   ";
 
 			case EdgeType.Finite:
 				return Value.ToString(sFormat, ci);
 
 			case EdgeType.PositiveInfinity:
-				return "+inf";
+				return "  forever  ";
 
 			default:
 				throw new ArgumentOutOfRangeException();
@@ -45,6 +45,28 @@ namespace Ezbob.ValueIntervals {
 		} // ToString
 
 		#endregion method ToString
+
+		#region method Previous
+
+		public override AIntervalEdge<DateTime> Previous() {
+			if (!IsFinite)
+				return new DateIntervalEdge(Value, Type);
+
+			return new DateIntervalEdge(Value.AddDays(-1), EdgeType.Finite);
+		} // Previous
+
+		#endregion method Previous
+
+		#region method Next
+
+		public override AIntervalEdge<DateTime> Next() {
+			if (!IsFinite)
+				return new DateIntervalEdge(Value, Type);
+
+			return new DateIntervalEdge(Value.AddDays(1), EdgeType.Finite);
+		} // Next
+
+		#endregion method Next
 
 		#endregion public
 
