@@ -5,95 +5,96 @@ using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 {
-    using System.Linq;
+	using System.Linq;
 
-    public class YodleeOrderDictionary
-    {
-        public Dictionary<BankData, List<BankTransactionData>> Data { get; set; }
-    }
+	public class YodleeOrderDictionary
+	{
+		public Dictionary<BankData, List<BankTransactionData>> Data { get; set; }
+	}
 
-    public class YodleeTransactionItem : TimeDependentRangedDataBase
-    {
-        public BankTransactionData _Data { get; private set; }
-        public YodleeTransactionItem(BankTransactionData data)
-        {
-            _Data = data;
-        }
+	public class YodleeTransactionItem : TimeDependentRangedDataBase
+	{
+		public BankTransactionData _Data { get; private set; }
+		public YodleeTransactionItem(BankTransactionData data)
+		{
+			_Data = data;
+		}
 
-        public override DateTime RecordTime
-        {
-            get
-            {
-                DateTime date;
-                if (_Data.transactionDate != null && _Data.transactionDate.dateSpecified && _Data.transactionDate.date != null)
-                {
-                    date = _Data.transactionDate.date.Value;
-                }
-                else if (_Data.postDate != null && _Data.postDate.dateSpecified && _Data.postDate.date != null)
-                {
-                    date = _Data.postDate.date.Value;
-                }
-                else
-                {
-                    date = DateTime.Today;
-                }
-                return date;
-            }
-        }
-    }
+		public override DateTime RecordTime
+		{
+			get
+			{
+				DateTime date;
+				if (_Data.postDate != null && _Data.postDate.date.HasValue)
+				{
+					date = _Data.postDate.date.Value;
+				}
+				else if (_Data.transactionDate != null && _Data.transactionDate.date.HasValue)
+				{
+					date = _Data.transactionDate.date.Value;
+				}
+				else
+				{
+					date = DateTime.Today;
+				}
+				return date;
+			}
+		}
+	}
 
-    public class YodleeTransactionList : ReceivedDataListTimeMarketTimeDependentBase<YodleeTransactionItem>
-    {
-        public YodleeTransactionList(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection = null)
-            : base(submittedDate, collection)
-        {
-        }
+	public class YodleeTransactionList : ReceivedDataListTimeMarketTimeDependentBase<YodleeTransactionItem>
+	{
+		public YodleeTransactionList(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection = null)
+			: base(submittedDate, collection)
+		{
+		}
 
-        public static YodleeTransactionList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
-        {
-            List<YodleeTransactionItem> list = (from item in dictionary.Data.Keys from bankTransaction in dictionary.Data[item] select new YodleeTransactionItem(bankTransaction)).ToList();
-            return new YodleeTransactionList(submittedDate, list);
-        }
+		public static YodleeTransactionList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
+		{
+			List<YodleeTransactionItem> list = (from item in dictionary.Data.Keys from bankTransaction in dictionary.Data[item] select new YodleeTransactionItem(bankTransaction)).ToList();
+			return new YodleeTransactionList(submittedDate, list);
+		}
 
-        public override ReceivedDataListTimeDependentBase<YodleeTransactionItem> Create(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection)
-        {
-            return new YodleeTransactionList(submittedDate, collection);
-        }
-    }
+		public override ReceivedDataListTimeDependentBase<YodleeTransactionItem> Create(DateTime submittedDate, IEnumerable<YodleeTransactionItem> collection)
+		{
+			return new YodleeTransactionList(submittedDate, collection);
+		}
+	}
 
-    public class YodleeAccountItem : TimeDependentRangedDataBase
-    {
-        public BankData _Data { get; private set; }
-        public YodleeAccountItem(BankData data)
-        {
-            _Data = data;
-        }
+	public class YodleeAccountItem : TimeDependentRangedDataBase
+	{
+		public BankData _Data { get; private set; }
+		public YodleeAccountItem(BankData data)
+		{
+			_Data = data;
+		}
 
-        public override DateTime RecordTime
-        {
-            get {
-	            return _Data.asOfDate != null && _Data.asOfDate.dateSpecified ? _Data.asOfDate.date.Value : DateTime.Today;
-            }
-        }
-    }
+		public override DateTime RecordTime
+		{
+			get
+			{
+				return (_Data.asOfDate != null && _Data.asOfDate.date.HasValue) ? _Data.asOfDate.date.Value : DateTime.Today;
+			}
+		}
+	}
 
-    public class YodleeAccountList : ReceivedDataListTimeMarketTimeDependentBase<YodleeAccountItem>
-    {
-        public YodleeAccountList(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection = null)
-            : base(submittedDate, collection)
-        {
-        }
+	public class YodleeAccountList : ReceivedDataListTimeMarketTimeDependentBase<YodleeAccountItem>
+	{
+		public YodleeAccountList(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection = null)
+			: base(submittedDate, collection)
+		{
+		}
 
-        public static YodleeAccountList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
-        {
-            List<YodleeAccountItem> list = dictionary.Data.Keys.Select(yodleeAccountItem => new YodleeAccountItem(yodleeAccountItem)).ToList();
-            return new YodleeAccountList(submittedDate, list);
-        }
+		public static YodleeAccountList Create(DateTime submittedDate, YodleeOrderDictionary dictionary)
+		{
+			List<YodleeAccountItem> list = dictionary.Data.Keys.Select(yodleeAccountItem => new YodleeAccountItem(yodleeAccountItem)).ToList();
+			return new YodleeAccountList(submittedDate, list);
+		}
 
-        public override ReceivedDataListTimeDependentBase<YodleeAccountItem> Create(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection)
-        {
-            return new YodleeAccountList(submittedDate, collection);
-        }
-    }
+		public override ReceivedDataListTimeDependentBase<YodleeAccountItem> Create(DateTime submittedDate, IEnumerable<YodleeAccountItem> collection)
+		{
+			return new YodleeAccountList(submittedDate, collection);
+		}
+	}
 
 }

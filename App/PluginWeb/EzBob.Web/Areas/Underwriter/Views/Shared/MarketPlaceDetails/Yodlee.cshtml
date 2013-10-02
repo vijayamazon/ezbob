@@ -5,6 +5,7 @@
         <li><a href="#yodleetab2" data-toggle="tab">Charts</a></li>
         <li><a href="#yodleetab3" data-toggle="tab">Bank Account Details</a></li>
         <li><a href="#yodleetab4" id="yodleeTransactionsTabLink" data-toggle="tab">Bank Accounts Transactions</a></li>
+        <li><a href="#yodleetab5" data-toggle="tab">Aggregates</a></li>
     </ul>
     <div class="tab-content">
         @YodleeCashFlowReport()
@@ -12,6 +13,7 @@
         @YodleeCharts()
         @YodleeBankAccounts()
         @YodleeBankAccountsTransactions()
+        @YodleeAggregates()
     </div>
 </div>
 
@@ -244,3 +246,81 @@
     </div>
 }
 
+@helper YodleeAggregates()
+{
+    <div class="tab-pane" id="yodleetab5">
+        <%console.log(ai);%>
+        <table class="table table-bordered table-striped  blue-header centered nowrap rright">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>1M</th>
+                    <th>3M</th>
+                    <th>6M</th>
+                    <th>12M</th>
+                    <th>15M</th>
+                    <th>18M</th>
+                    <th>24M</th>
+                    <th>24M+</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Income</td>
+                    <td><%-ai.TotalIncome1M!=undefined ? GBPValues(ai.TotalIncome1M, true): "-"%></td>
+                    <td><%-ai.TotalIncome3M!=undefined ? GBPValues(ai.TotalIncome3M, true): "-"%></td>
+                    <td><%-ai.TotalIncome6M!=undefined ? GBPValues(ai.TotalIncome6M, true): "-"%></td>
+                    <td><%-ai.TotalIncome12M!=undefined ? GBPValues(ai.TotalIncome12M, true): "-"%></td>
+                    <td><%-ai.TotalIncome15M!=undefined ? GBPValues(ai.TotalIncome15M, true): "-"%></td>
+                    <td><%-ai.TotalIncome18M!=undefined ? GBPValues(ai.TotalIncome18M, true): "-"%></td>
+                    <td><%-ai.TotalIncome24M!=undefined ? GBPValues(ai.TotalIncome24M, true): "-"%></td>
+                    <td><%-ai.TotalIncomeLifetime!=undefined ? GBPValues(ai.TotalIncomeLifetime, true): "-"%></td>
+                </tr>
+                <tr>
+                    <td>Total Expense</td>
+                    <td><%-ai.TotalExpense1M!=undefined ? GBPValues(ai.TotalExpense1M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense3M!=undefined ? GBPValues(ai.TotalExpense3M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense6M!=undefined ? GBPValues(ai.TotalExpense6M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense12M!=undefined ? GBPValues(ai.TotalExpense12M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense15M!=undefined ? GBPValues(ai.TotalExpense15M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense18M!=undefined ? GBPValues(ai.TotalExpense18M, true) : "-"%></td>
+                    <td><%-ai.TotalExpense24M!=undefined ? GBPValues(ai.TotalExpense24M, true) : "-"%></td>
+                    <td><%-ai.TotalExpenseLifetime!=undefined ? GBPValues(ai.TotalExpenseLifetime, true) : "-"%></td>
+                </tr>
+                <tr>
+                    <td>Number Of Transactions</td>
+                    <td><%-ai.NumberOfTransactions1M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions1M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions3M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions3M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions6M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions6M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions12M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions12M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions15M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions15M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions18M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions18M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactions24M!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactions24M) : "-"%></td>
+                    <td><%-ai.NumberOfTransactionsLifetime!=undefined ? EzBob.formatIntWithCommas(ai.NumberOfTransactionsLifetime) : "-"%></td>
+                </tr>
+                <tr>
+                    <td>Current Balance</td>
+                    <td><%-ai.CurrentBalance1M!=undefined ? GBPValues(ai.CurrentBalance1M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance3M!=undefined ? GBPValues(ai.CurrentBalance3M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance6M!=undefined ? GBPValues(ai.CurrentBalance6M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance12M!=undefined ? GBPValues(ai.CurrentBalance12M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance15M!=undefined ? GBPValues(ai.CurrentBalance15M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance18M!=undefined ? GBPValues(ai.CurrentBalance18M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalance24M!=undefined ? GBPValues(ai.CurrentBalance24M, true) : "-"%></td>
+                    <td><%-ai.CurrentBalanceLifetime!=undefined ? GBPValues(ai.CurrentBalanceLifetime, true) : "-"%></td>
+                </tr>
+                <tr>
+                    <td>Available Balance</td>
+                    <td><%-ai.AvailableBalance1M!=undefined ? GBPValues(ai.AvailableBalance1M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance3M!=undefined ? GBPValues(ai.AvailableBalance3M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance6M!=undefined ? GBPValues(ai.AvailableBalance6M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance12M!=undefined ? GBPValues(ai.AvailableBalance12M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance15M!=undefined ? GBPValues(ai.AvailableBalance15M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance18M!=undefined ? GBPValues(ai.AvailableBalance18M, true): "-"%></td>
+                    <td><%-ai.AvailableBalance24M!=undefined ? GBPValues(ai.AvailableBalance24M, true): "-"%></td>
+                    <td><%-ai.AvailableBalanceLifetime!=undefined ? GBPValues(ai.AvailableBalanceLifetime, true): "-"%></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

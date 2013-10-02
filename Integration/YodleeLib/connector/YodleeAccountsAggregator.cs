@@ -46,14 +46,14 @@ namespace YodleeLib.connector
             var availableBalance = orders
                                          .Where(
                                              x =>
-                                             x._Data.availableBalance != null && x._Data.availableBalance.amountSpecified)
+                                             x._Data.availableBalance != null && x._Data.availableBalance.amount.HasValue)
                                          .Sum(
                                              x =>
                                              CurrencyConverter.ConvertToBaseCurrency(
                                                  x._Data.availableBalance.currencyCode,
                                                  x._Data.availableBalance.amount.Value,
                                                  (x._Data.asOfDate != null &&
-                                                  x._Data.asOfDate.dateSpecified)
+                                                  x._Data.asOfDate.date.HasValue)
                                                      ? x._Data.asOfDate.date
                                                      : null).Value);
             return availableBalance;
@@ -62,13 +62,13 @@ namespace YodleeLib.connector
         private double GetCurrentBalance(IEnumerable<YodleeAccountItem> orders)
         {
             var currentBalance = orders
-                                       .Where(x => x._Data.currentBalance != null && x._Data.currentBalance.amountSpecified)
+                                       .Where(x => x._Data.currentBalance != null && x._Data.currentBalance.amount.HasValue)
                                        .Sum(
                                            x =>
                                            CurrencyConverter.ConvertToBaseCurrency(x._Data.currentBalance.currencyCode,
                                                                                    x._Data.currentBalance.amount.Value,
                                                                                    (x._Data.asOfDate != null &&
-                                                                                    x._Data.asOfDate.dateSpecified)
+                                                                                    x._Data.asOfDate.date.HasValue)
                                                                                        ? x._Data.asOfDate.date
                                                                                        : null).Value);
             return currentBalance;

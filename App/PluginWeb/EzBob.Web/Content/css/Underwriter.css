@@ -134,6 +134,10 @@ tfoot input.search_init {
     padding: 0;
 }
 
+tr.yodleeSearchWordsRow td{
+    cursor: pointer !important;
+}
+
 .nav-tabs { border-bottom: 1px solid #DDDDDD; }
 
 .reportTableHeader {
