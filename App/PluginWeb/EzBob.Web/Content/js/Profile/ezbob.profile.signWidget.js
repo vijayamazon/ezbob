@@ -41,7 +41,8 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
             hasLoans = this.customerModel.get('hasLoans'),
             isNew = hasLoans == 0,
             hasRollOver = this.customerModel.get('HasRollovers'),
-            name = this.customerModel.get('CustomerPersonalInfo') != null ? this.customerModel.get('CustomerPersonalInfo').FirstName : "";
+            name = this.customerModel.get('CustomerPersonalInfo') != null ? this.customerModel.get('CustomerPersonalInfo').FirstName : "",
+            isEarly = this.customerModel.get('IsEarly');
 
         if (!hasRollOver && state == "late") {
             this.model.set({
@@ -62,9 +63,15 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         }
 
         if (balance > 0) {
+            var valueOfText;
+            if (isEarly) {
+                valueOfText = '<span><a href="#" class="pay-early">Pay Early &amp; Save</a></span>';
+            } else {
+                valueOfText = '<span><a href="#" class="pay-early">' + name + ',<br/>Payment is Required</a></span>';
+            }
             this.model.set({
                 color: 'green',
-                text: '<span><a href="#" class="pay-early">Pay Early &amp; Save</a></span>',
+                text: valueOfText,
                 signTemplate: "welcome"
             });
             return;

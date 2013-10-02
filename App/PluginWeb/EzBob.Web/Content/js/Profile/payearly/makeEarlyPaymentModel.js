@@ -59,7 +59,8 @@
         currentRollover: currentRollover,
         hasLateLoans: customer.get("hasLateLoans"),
         totalLatePayment: customer.get("TotalLatePayment"),
-        paymentType: liveRollovers.length > 0 ? "rollover" : "loan"
+        paymentType: liveRollovers.length > 0 ? "rollover" : "loan",
+        isEarly: customer.get("IsEarly")
       });
     };
 

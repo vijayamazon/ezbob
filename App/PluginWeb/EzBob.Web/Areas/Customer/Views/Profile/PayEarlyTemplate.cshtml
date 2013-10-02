@@ -22,10 +22,10 @@
     <div class="row-fluid profile-screen">
     <div class="span7">
         
-        <%if(hasLateLoans){%>
+        <%if(hasLateLoans || !isEarly){%>
             <h1>Make a Payment:</h1>
             <h2>Always good to pay ontime!</h2>
-        <%} else{%>
+        <%} else {%>
             <h1>Pay Early:</h1>
             <h2>Save & Increase Your Rating!</h2>
         <%}%>

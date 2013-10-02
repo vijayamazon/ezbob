@@ -211,7 +211,7 @@
                         payButtonName = "Pay Roll Over";
                     } else if(loan.Status == 'Live' && loan.IsEarly){
                         payButtonName = "Pay Early";
-                    } else if(isLate && !hasRolover ){
+                    } else if((isLate && !hasRolover) || !loan.IsEarly){
                         payButtonName = "Pay Now";
                     }
                 %>

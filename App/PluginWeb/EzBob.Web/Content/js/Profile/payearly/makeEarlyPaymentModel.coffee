@@ -44,6 +44,7 @@ class EzBob.Profile.MakeEarlyPaymentModel extends Backbone.Model
       hasLateLoans: customer.get("hasLateLoans")
       totalLatePayment: customer.get("TotalLatePayment")
       paymentType: if liveRollovers.length>0 then "rollover" else "loan"
+      isEarly: customer.get("IsEarly")
 
   calcCurrentRollover: (loan)->
     rollovers = @get("customer").get("ActiveRollovers").toJSON()
