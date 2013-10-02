@@ -2,6 +2,7 @@
 {
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -76,7 +77,8 @@
             For<IAgreementsTemplatesProvider>().Use<EzAgreementsTemplateProvider>();
             For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
             For<IUsersRepository>().Use<UsersRepository>();
-            For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
+			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
+			For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
         }
     }
 }
