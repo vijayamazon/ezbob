@@ -1,11 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Repository;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EZBob.DatabaseLib.Model.Database.Repository
+namespace EZBob.DatabaseLib.Repository
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using Model.Database;
+	using NHibernate;
+	using NHibernate.Linq;
+
 	public class AnalyisisFunctionValueRepository : NHibernateRepositoryBase<MP_AnalyisisFunctionValue>
 	{
 		public AnalyisisFunctionValueRepository(ISession session)

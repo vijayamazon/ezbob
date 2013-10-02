@@ -208,17 +208,20 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 //color: '#ffffff',
                 type: 'multi',
                 postfix: '£',
-                title: '<h3>Cash Flow<br /><small>monthly income/expenses</small></h3>',
+                title: '<h3>Cash Flow<br /><small>monthly income/expenses as of date ' + EzBob.formatDate(new Date(Date.parse(cashModel.AsOfDate))) + '</small></h3>',
                 showValues: true,
                 showValuesColor: "#000000",
             });
+
+            this.$el.find("#yodleeBarGraph").css({ height: '340px' });
         }
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
         var lowRunningBalance = cashModel.LowRunningBalanceDict;
         var highRunningBalance = cashModel.HighRunningBalanceDict;
-
+        var bankFrame = cashModel.BankFrame;
+        var formatedBankFrame = EzBob.formatPoundsAsInt(bankFrame);
         $.jqplot.config.enablePlugins = true;
 
         var lowBalanceLine = [];
@@ -238,7 +241,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     show: true,
                     zoom: true,
                     looseZoom: true,
-                    showTooltip: false
+                    showTooltip: true
                 },
                 seriesColors: ['#008000', '#FF0000'],
                 series: [{ label: 'High' }, { label: 'Low' }],
@@ -260,6 +263,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                         tickOptions: {
                             formatString: "%'d £"
                         },
+                        rendererOptions: { forceTickAt0: true }
                     }
                 },
                 highlighter: {
@@ -268,25 +272,54 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     tooltipOffset: 0
                 },
                 legend: {
-                    show: true,
-                    renderer: $.jqplot.EnhancedLegendRenderer,
-                    border: 'none',
-                    marginRight: '-5px',
-                    background: 'rgba(0,0,0,0)',
-                    //placement: 'outside',
-                    location: 'e',
+                    show: false,
+                    //renderer: $.jqplot.EnhancedLegendRenderer,
+                    //border: 'none',
+                    //marginRight: '-5px',
+                    //background: 'rgba(0,0,0,0)',
+                    ////placement: 'outside',
+                    //location: 'e',
                 },
                 grid: {
                     drawBorder: false,
                     shadow: false,
                     background: 'rgba(0,0,0,0)'
+                },
+                seriesDefaults: {
+                    trendline: {
+                        linePattern: '-.',
+                        showMarker: false,
+                        shadow: false,
+                        rendererOptions: {
+                            smooth: true
+                        }
+                    }
+                },
+                canvasOverlay: {
+                    show: true,
+                    objects: [
+                      {
+                          horizontalLine: {
+                              name: 'bankFrame',
+                              y: bankFrame,
+                              lineWidth: 3,
+                              color: '#000000',
+                              shadow: false,
+                              lineCap: 'butt',
+                              xOffset: 0,
+                              showTooltip: true,
+                              tooltipFormatString: 'Credit Limit ' + formatedBankFrame
+                          }
+                      }
+                    ]
                 }
             });
-
+            
             $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
         }
     },
     replotYodleeGraphClicked: function () {
+        $.jqplot.config.enablePlugins = true;
         this.runningBalancePlot.replot({ resetAxes: true });
     },
     searchYodleeWordsRowClicked: function (el) {

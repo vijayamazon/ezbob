@@ -189,9 +189,9 @@
                             tr = arr.prefix + GBPValues(valueData[0][i][2], false);
                             fs = 12; // font-size is 0 if showValues = false
                         }
-                        var o = "<div class='subBarValue" + el.id + "' style='position: absolute; bottom: " + heig + "px; width: "+ wid +"px; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' >" + sv + "</div>" +
-                            "<div class='subBars" + el.id + "' style='height:" + heig + "px; background-color: " + arr.colors[i] + "; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' ></div>" + 
-                            "<div class='rotate' style='position: absolute; bottom: " + 50 + "%; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px'>av:" + av + "<br />tr#:" + tr + "</div>";
+                        var o = "<div class='subBarValue" + el.id + "' style='position: absolute; bottom: " + heig + "px; width: " + wid + "px; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' >" + sv + "<br />av:" + av + "<br />tr#:" + tr + "</div>" +
+                            "<div class='subBars" + el.id + "' style='height:" + heig + "px; background-color: " + arr.colors[i] + "; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px' ></div>";
+                            //+ "<div class='rotate' style='position: absolute; bottom: " + 50 + "%; left:" + wid * i + "px; color:" + arr.showValuesColor + "; font-size:" + fs + "px'>av:" + av + "<br />tr#:" + tr + "</div>";
                         $('#graphFieldBar' + unique).prepend(o);
                     }
                 }
@@ -210,9 +210,9 @@
                 // animated apearing
                 if (arr.animate) {
                     $('#graphFieldBar' + unique).css({ 'height': 0 });
-                    $('#graphFieldBar' + unique).animate({ 'height': fieldHeight + 20 }, arr.speed * 1000);
+                    $('#graphFieldBar' + unique).animate({ 'height': fieldHeight + 60 }, arr.speed * 1000);
                 } else {
-                    $('#graphFieldBar' + unique).css({ 'height': fieldHeight + 20 });
+                    $('#graphFieldBar' + unique).css({ 'height': fieldHeight + 60 });
                 }
 
             }

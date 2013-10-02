@@ -146,7 +146,23 @@ namespace EzBob.Models.Marketplaces.Builders
 																	 _currencyConvertor.ConvertToBaseCurrency(
 																		 bank.currentBalanceCurrency, bank.currentBalance.Value,
 																		 bank.asOfDate));
+
+					
 				}
+
+				if (bank.overdraftProtection.HasValue)
+				{
+					yodleeCashFlowReportModel.BankFrame -= _currencyConvertor.ConvertToBaseCurrency(
+						bank.overdraftProtectionCurrency, bank.overdraftProtection.Value,
+						bank.asOfDate).Value;
+				}else if (bank.availableBalance.HasValue && bank.currentBalance.HasValue)
+				{
+					yodleeCashFlowReportModel.BankFrame -= _currencyConvertor.ConvertToBaseCurrency(
+						bank.availableBalanceCurrency, (bank.currentBalance.Value - bank.availableBalance.Value),
+						bank.asOfDate).Value;
+				}
+				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900,1,1);
+
 				foreach (var transaction in bank.OrderItemBankTransactions)
 				{
 					yodleeCashFlowReportModel.Add(transaction);

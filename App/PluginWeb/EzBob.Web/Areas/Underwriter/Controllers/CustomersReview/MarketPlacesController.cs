@@ -6,6 +6,7 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
 	using EzBob.Web.ApplicationCreator;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Models.Marketplaces;

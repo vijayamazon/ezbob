@@ -10,7 +10,9 @@ using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.FunctionValues
 {
-    class DatabaseFunctionValuesWriterHelper
+	using Repository;
+
+	class DatabaseFunctionValuesWriterHelper
 	{
     	private readonly DatabaseDataHelper _Helper;
     	private readonly AnalyisisFunctionValueRepository _AnalyisisFunctionValueRepository;

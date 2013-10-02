@@ -24,7 +24,8 @@
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
 		public double MonthInPayments = 0;
-
+		public double BankFrame = 0;
+		public DateTime AsOfDate;
 		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
 		private const string OtherExpensesCat = "Other Expenses";

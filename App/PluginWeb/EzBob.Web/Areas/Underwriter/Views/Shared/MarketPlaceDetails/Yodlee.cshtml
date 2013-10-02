@@ -43,7 +43,7 @@
                     <td colspan="<%=count%>"><b>Income</b></td>
                 </tr>
                 <%for(var cat in obj){%>
-                <% var style = '', isPound = true; console.log(cat,cat.substr(0,2));
+                <% var style = '', isPound = true;
                    if(cat[0] == '3' || cat[0] == '8') {style = 'font-style: italic;'; isPound = false; }
                    if(cat[0] == '2' || cat[0] == '7' || cat[0] == 'a') {style = 'font-weight: bold;';} %>
                 <tr style="<%=style%>">
@@ -125,7 +125,7 @@
         <hr />
 
         <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br />
-            <small>monthly</small></h3>
+            <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small></h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="icon-refresh"></i></button>
             <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
