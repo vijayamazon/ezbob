@@ -348,8 +348,13 @@ namespace PaymentServices.Calculators
 
             for (var start2 = start.AddMonths(1); start2 <= end; )
             {
-                rate += GetInterestRateOneMonth(start, start2);
-                _daysInMonth = DaysInMonth(start2);
+	            if (start2.Year == end.Year && start2.Month == end.Month)
+	            {
+		            start2 = end;
+	            }
+
+	            rate += GetInterestRateOneMonth(start, start2);
+	            _daysInMonth = DaysInMonth(start2);
                 start = start2;
                 start2 = start2.AddMonths(1);
             }
