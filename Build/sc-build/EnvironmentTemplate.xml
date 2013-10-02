@@ -89,14 +89,14 @@
 	<property name="MandrillConfig" value="${MandrillConfig}"/>
 
     <module id="MandrillTrunk">
-        <property name="Key" value="Z95NpOsNNMy4LMLMH9mUjw" />
+        <property name="Key" value="nNAb_KZhxEqLCyzEGOWvlg" />
         <property name="Enable" value="True" />
         <!-- Used in sending messages without a template -->
         <property name="From" value="ezbob@ezbob.com" />
     </module>
 	
 	<module id="MandrillUATConfig">
-        <property name="Key" value="jIfj1qsUFBbqK6kfMVR_Qg" />
+        <property name="Key" value="J3SGjITr1NZL-hWzUKqZJw" />
         <property name="Enable" value="True" />
         <!-- Used in sending messages without a template -->
         <property name="From" value="ezbob@ezbob.com" />

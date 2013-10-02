@@ -17,11 +17,11 @@ namespace MailApi
         public void StartUp()
         {
             var config = new Mock<IMandrillConfig>();
-            config.SetupGet(x => x.Key).Returns("Z95NpOsNNMy4LMLMH9mUjw");
+            config.SetupGet(x => x.Key).Returns("nNAb_KZhxEqLCyzEGOWvlg");
             config.SetupGet(x => x.Enable).Returns(true);
-            config.SetupGet(x => x.From).Returns("ezbob-fixture@ezbob.com");
+            config.SetupGet(x => x.From).Returns("yulys@ezbob.com");
             _mail = new Mail(config.Object);
-            _to = "fgkzpwms@ukr.net"; //login 'fgkzpwms' password 'fgkzpwms'
+            _to = "yulys@ezbob.com";
             _subject = "Thank you for registering with EZBOB!";
         }
 
@@ -45,12 +45,12 @@ namespace MailApi
         {
             var vars = new Dictionary<string, string>
                 {
-                    {"email", "fgkzpwms@ukr.net"}, 
+                    {"email", "yulys@ezbob.com"}, 
                     {"EmailSubject", _subject}, 
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
 
-            var result = _mail.Send(vars, "fgkzpwms@ukr.net;fgkzpwms2@ukr.net", "Greeting", "Thank you for registering with EZBOB!");
+            var result = _mail.Send(vars, "yulys@ezbob.com;yulys+01@ezbob.com", "Greeting", "Thank you for registering with EZBOB!");
             Assert.That(result == "OK");
         }
 
