@@ -21,7 +21,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
         this.shop = this.model.get(this.options.currentId);
-
+        if (!this.shop) return false;
         var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
 
         var sTargetList = '';
@@ -47,9 +47,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         $('a[data-toggle="tab"]').on('shown', function (e) {
             if ($(e.target).text() == "Charts") {
                 that.yodleeShowGraph();
-            } 
+            }
         });
-
         return this;
     },
 
@@ -63,7 +62,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
         "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked",
         "click .yodleeReplotGraph": "replotYodleeGraphClicked"
-
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -156,27 +154,23 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             }
         };
         var oTable = this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
-        
-        this.$el.find(".YodleeTransactionsTable tfoot input").keyup(function () {
-            /* Filter on the column (the index) of this element */
+
+        this.$el.find(".YodleeTransactionsTable tfoot input").click(function () {
             oTable.fnFilter(this.value, $("tfoot input").index(this));
         });
-        
-        var asInitVals = new Array();
-        this.$el.find(".YodleeTransactionsTable tfoot input").each(function (i) {
-            asInitVals[i] = this.value;
+        this.$el.find(".YodleeTransactionsTable tfoot input").keyup(function () {
+            oTable.fnFilter(this.value, $("tfoot input").index(this));
         });
 
+        var asInitVals = new Array();
+        this.$el.find(".YodleeTransactionsTable tfoot input").each(function (i) { asInitVals[i] = this.value; });
+
         this.$el.find(".YodleeTransactionsTable tfoot input").focus(function () {
-            if (this.className == "search_init") {
-                this.value = "";
-            }
+            if (this.className == "search_init") { this.value = ""; }
         });
 
         this.$el.find(".YodleeTransactionsTable tfoot input").blur(function (i) {
-            if (this.value == "") {
-                this.value = asInitVals[$("tfoot input").index(this)];
-            }
+            if (this.value == "") { this.value = asInitVals[$("tfoot input").index(this)]; }
         });
 
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
@@ -292,14 +286,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
         }
     },
-    replotYodleeGraphClicked: function() {
+    replotYodleeGraphClicked: function () {
         this.runningBalancePlot.replot({ resetAxes: true });
     },
     searchYodleeWordsRowClicked: function (el) {
         var searchWord = $(el.currentTarget).children("td:first").text();
         $('#yodleeTransactionsTabLink').click();
-        $('#yodleetab4 .dataTables_filter input').val(searchWord).change();
-        $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, null);
+        $('#yodleetab4 .YodleeTransactionsTable [name="search_description"]').val(searchWord).change();
+        $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, 7); //description id
     },
 
     searchYodleeWordsAddClicked: function () {
@@ -313,12 +307,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
                 $.post(window.gRootPath + "Underwriter/MarketPlaces/AddSearchWord", { word: word })
                 .done(function () {
-                    EzBob.ShowMessage("Successfully Added", "The word added successfully. ", null, "OK");
-                })
-                .done(function () {
-                    BlockUi('off');
-                    $("#yodleeSearchWordsDdl").append("<option>" + word + "</option>");
-                    return false;
+                    that.model.fetch().done(function () {
+                        that.render();
+                        $('#yodleeSearchWordsTab').click();
+                        BlockUi('off');
+                        EzBob.ShowMessage("Successfully Added", "The word added successfully. ", null, "OK");
+                    });
                 });
             }, "Yes", null, "No");
         return false;
@@ -334,12 +328,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 BlockUi('on');
                 $.post(window.gRootPath + "Underwriter/MarketPlaces/DeleteSearchWord", { word: word })
                 .done(function () {
-                    EzBob.ShowMessage("Successfully Removed", "The word deleted successfully. ", null, "OK");
-                })
-                .done(function () {
-                    BlockUi('off');
-                    $("#yodleeSearchWordsDdl option:selected").remove();
-                    return false;
+                    that.model.fetch().done(function () {
+                        that.render();
+                        $('#yodleeSearchWordsTab').click();
+                        BlockUi('off');
+                        EzBob.ShowMessage("Successfully Removed", "The word deleted successfully. ", null, "OK");
+                    });
                 });
             }, "Yes", null, "No");
         return false;
