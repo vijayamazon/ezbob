@@ -1,20 +1,23 @@
 ﻿namespace EzBob.Models
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
+	using Marketplaces.Builders;
+	using NHibernate;
 	using Web.Areas.Customer.Models;
 	using Web.Areas.Underwriter.Models;
-	using CommonLib.TimePeriodLogic;
-	using EZBob.DatabaseLib;
-	
-	public class PayPalModelBuilder
+
+	public class PayPalModelBuilder : MarketplaceModelBuilder
 	{
-		public static PayPalAccountModel Create(MP_CustomerMarketPlace mp)
+		public PayPalModelBuilder(ISession session) : base(session)
 		{
-			var generalInfo = CreatePayPalAccountModelModel(mp);
+		}
+
+		public static PayPalAccountModel CreatePayPal(MP_CustomerMarketPlace mp, DateTime? history)
+		{
+			var generalInfo = CreatePayPalAccountModel(mp, history);
 
 			var model = new PayPalAccountModel
 			{
@@ -25,11 +28,9 @@
 			return model;
 		}
 
-		public static PaymentAccountsModel CreatePayPalAccountModelModel(MP_CustomerMarketPlace m)
+		public static PaymentAccountsModel CreatePayPalAccountModel(MP_CustomerMarketPlace m, DateTime? history = null)
 		{
-			var values = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(m.Id);
-			var analisysFunction = values;
-			var av = values.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+			var av = GetAnalysisFunctionValues(m, history);
 
 			var tnop = 0.0;
 			var tnip = 0.0;
@@ -64,53 +65,6 @@
 			return payPalModel;
 		}
 
-		private static IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
-		{
-			foreach (var x in firstOrDefault)
-			{
-				switch (x.TimePeriod.TimePeriodType)
-				{
-					case TimePeriodEnum.Month:
-						return x;
-				}
-			}
-			return null;
-		}
-
-
-
-		private static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
-		{
-			int closestTime = 0;
-			IAnalysisDataParameterInfo closestSoFar = null;
-			foreach (var x in firstOrDefault)
-			{
-				switch (x.TimePeriod.TimePeriodType)
-				{
-					case TimePeriodEnum.Year:
-						return x;
-					case TimePeriodEnum.Month6:
-						closestSoFar = x;
-						closestTime = 6;
-						break;
-					case TimePeriodEnum.Month3:
-						if (closestTime < 6)
-						{
-							closestSoFar = x;
-							closestTime = 3;
-						}
-						break;
-					case TimePeriodEnum.Month:
-						if (closestTime < 3)
-						{
-							closestSoFar = x;
-							closestTime = 1;
-						}
-						break;
-				}
-			}
-
-			return closestSoFar;
-		}
+		
 	}
 }

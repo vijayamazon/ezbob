@@ -35,12 +35,29 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     initialize: ->
         @model.on "reset change sync", @render, this
         @rendered = false
+        window.YodleeTryRecheck = (result) ->
+            if (result.error)
+                EzBob.ShowMessage result.error, "Yodlee Recheck Error", "OK"
+            else
+                EzBob.ShowMessage 'Yodlee recheked successfully, refresh the page', null, "OK"
+        @
 
     onRender: ->
         @$el.find('.mp-error-description').tooltip(({placement: "bottom"}));
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
         if @detailView!= undefined
             @detailView.render()
+
+        marketplacesHistoryDiv = @$el.find("#marketplaces-history")
+        @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
+        @marketPlacesHistory.customerId = @model.customerId
+        @marketPlacesHistory.silent = true
+        @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
+            model: @marketPlacesHistory
+            el: marketplacesHistoryDiv
+            customerId: @model.customerId
+        )
+        return this
 
     events:
         "click .tryRecheckYodlee": "tryRecheckYodlee"

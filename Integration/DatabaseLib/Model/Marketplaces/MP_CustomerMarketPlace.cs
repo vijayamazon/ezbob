@@ -1,5 +1,6 @@
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System.Linq;
 	using DatabaseWrapper;
 	using Marketplaces.Amazon;
 	using Marketplaces.FreeAgent;
@@ -8,11 +9,11 @@ namespace EZBob.DatabaseLib.Model.Database
 	using System;
 	using Iesi.Collections.Generic;
 
-    public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace
+	public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace
 	{
-        private IMarketplaceType _mpType;
+		private IMarketplaceType _mpType;
 
-        public MP_CustomerMarketPlace() 
+		public MP_CustomerMarketPlace()
 		{
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
 			EbayOrders = new HashedSet<MP_EbayOrder>();
@@ -31,35 +32,35 @@ namespace EZBob.DatabaseLib.Model.Database
 			ChannelGrabberOrders = new HashedSet<MP_ChannelGrabberOrder>();
 			VatReturnRecords = new HashedSet<MP_VatReturnRecord>();
 			RtiTaxMonthRecords = new HashedSet<MP_RtiTaxMonthRecord>();
-            PayPointOrders = new HashedSet<MP_PayPointOrder>();
-            YodleeOrders = new HashedSet<MP_YodleeOrder>();
+			PayPointOrders = new HashedSet<MP_PayPointOrder>();
+			YodleeOrders = new HashedSet<MP_YodleeOrder>();
 		}
-        public virtual int Id { get; set; }
-        
-        public virtual MP_MarketplaceType Marketplace { get; set; }
+		public virtual int Id { get; set; }
 
-        IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace
-        {
-            get
-            {
-                return _mpType;
-            }
-        }
+		public virtual MP_MarketplaceType Marketplace { get; set; }
 
-        public virtual Customer Customer { get; set; }
-        public virtual byte[] SecurityData { get; set; }
-        public virtual string DisplayName { get; set; }
+		IMarketplaceType IDatabaseCustomerMarketPlace.Marketplace
+		{
+			get
+			{
+				return _mpType;
+			}
+		}
+
+		public virtual Customer Customer { get; set; }
+		public virtual byte[] SecurityData { get; set; }
+		public virtual string DisplayName { get; set; }
 		public virtual MP_PayPalPersonalInfo PersonalInfo { get; set; }
 
 		public virtual DateTime? Created { get; set; }
 		public virtual DateTime? Updated { get; set; }
 		public virtual DateTime? UpdatingStart { get; set; }
 		public virtual DateTime? UpdatingEnd { get; set; }
-        public virtual string UpdateError { get; set; }
+		public virtual string UpdateError { get; set; }
 
-        public virtual bool EliminationPassed { get; set; }
+		public virtual bool EliminationPassed { get; set; }
 
-    	public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
+		public virtual ISet<MP_PayPalTransaction> PayPalTransactions { get; set; }
 		public virtual ISet<MP_EbayOrder> EbayOrders { get; set; }
 		public virtual ISet<MP_AmazonOrder> AmazonOrders { get; set; }
 		public virtual ISet<MP_EbayAmazonInventory> Inventory { get; set; }
@@ -74,45 +75,79 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual ISet<MP_EkmOrder> EkmOrders { get; set; }
 		public virtual ISet<MP_FreeAgentRequest> FreeAgentRequests { get; set; }
 		public virtual ISet<MP_SageRequest> SageRequests { get; set; }
-        public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
-        public virtual ISet<MP_VatReturnRecord> VatReturnRecords { get; set; }
-        public virtual ISet<MP_RtiTaxMonthRecord> RtiTaxMonthRecords { get; set; }
-        public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
-        public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
+		public virtual ISet<MP_ChannelGrabberOrder> ChannelGrabberOrders { get; set; }
+		public virtual ISet<MP_VatReturnRecord> VatReturnRecords { get; set; }
+		public virtual ISet<MP_RtiTaxMonthRecord> RtiTaxMonthRecords { get; set; }
+		public virtual ISet<MP_PayPointOrder> PayPointOrders { get; set; }
+		public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 
-        /// <summary>
-        /// Date of the first order/transaction for marketplace
-        /// </summary>
-        public virtual DateTime? OriginationDate { get; set; }
+		/// <summary>
+		/// Date of the first order/transaction for marketplace
+		/// </summary>
+		public virtual DateTime? OriginationDate { get; set; }
 
-        public virtual string GetUpdatingStatus()
-        {
-            return (UpdatingStart != null && UpdatingEnd == null)
-                       ? "In progress"
-                       : (!String.IsNullOrEmpty(UpdateError))
-                             ? "Error"
-                             : "Done";
-        }
+		public virtual string GetUpdatingStatus(DateTime? history = null)
+		{
+			string status = "Done";
+			if (history.HasValue)
+			{
+				var mpCustomerMarketplaceUpdatingHistory =
+					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
+				if (mpCustomerMarketplaceUpdatingHistory != null &&
+					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
+				{
+					status = "Error";
+				}
+			}
+			else
+			{
 
-        public virtual bool IsNew
-        {
-            get
-            {
-                return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
-            }
-        }
+				status = (UpdatingStart != null && UpdatingEnd == null)
+							 ? "In progress"
+							 : (!String.IsNullOrEmpty(UpdateError))
+								   ? "Error"
+								   : "Done";
+			}
+			return status;
 
-        /// <summary>
-        /// True if marketplace is disabled. Do not show totals, seniority and other
-        /// stuff for such marketplaces.
-        /// </summary>
-        public virtual bool Disabled { get; set; }
+		}
+
+		public virtual bool IsNew
+		{
+			get
+			{
+				return Customer.CashRequests.Count > 0 && Created > Customer.LastCashRequest.CreationDate;
+			}
+		}
+
+		/// <summary>
+		/// True if marketplace is disabled. Do not show totals, seniority and other
+		/// stuff for such marketplaces.
+		/// </summary>
+		public virtual bool Disabled { get; set; }
 
 		public virtual MP_AmazonMarketplaceType AmazonMarketPlace { get; set; }
 
-        public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType)
-        {
-            _mpType = marketplaceType;
-        }
+		public virtual void SetIMarketplaceType(IMarketplaceType marketplaceType)
+		{
+			_mpType = marketplaceType;
+		}
+
+		public virtual string GetUpdatingError(DateTime? history)
+		{
+			string error = null;
+			if (history.HasValue)
+			{
+				var mpCustomerMarketplaceUpdatingHistory =
+					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
+				if (mpCustomerMarketplaceUpdatingHistory != null &&
+				    !string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
+				{
+					error = mpCustomerMarketplaceUpdatingHistory.Error;
+				}
+			}
+			else {error = UpdateError;}
+			return error;
+		}
 	}
 }

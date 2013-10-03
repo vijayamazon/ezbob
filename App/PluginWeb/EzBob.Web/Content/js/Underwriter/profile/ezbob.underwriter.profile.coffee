@@ -21,7 +21,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         apiChecks = @$el.find("#apiChecks")
         customerRelations = @$el.find("#customerRelations")
         alertPassed = @$el.find("#alerts-passed")
-        controlButtons = @$el.find "#controlButtoons"
+        controlButtons = @$el.find "#controlButtons"
         fraudDetection = @$el.find("#fraudDetection")
 
         @personalInfoModel = new EzBob.Underwriter.PersonalInfoModel()
@@ -35,6 +35,15 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: marketplaces
             model: @marketPlaces
         )
+
+        ###
+        @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
+        @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
+            el: marketplaces
+            model: @marketPlacesHistory
+        )
+        ###
+
         @marketPlaceView.on "rechecked", @mpRechecked, @marketPlaces
         @loanHistory = new EzBob.Underwriter.LoanHistoryModel()
         @loanHistoryView = new EzBob.Underwriter.LoanHistoryView(
@@ -254,6 +263,12 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @marketPlaces.customerId = id
             @marketPlaces.reset fullModel.get("Marketplaces"), silent: true
             @marketPlaces.trigger "sync"
+
+            ###
+            @marketPlacesHistory.customerId = id
+            @marketPlacesHistory.reset fullModel.get("MarketplacesHistory"), silent: true
+            @marketPlacesHistory.trigger "sync"
+            ###
             
             @loanHistory.customerId = id
             @loanHistoryView.idCustomer = id

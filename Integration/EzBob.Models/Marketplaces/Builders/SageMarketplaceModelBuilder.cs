@@ -27,7 +27,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
         }
 
-        public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+        public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
         {
 			var paymentAccountModel = new PaymentAccountsModel();
 			MP_AnalyisisFunctionValue earliestNumOfSalesInvoices = GetEarliestValueFor(mp, "NumOfOrders");
@@ -93,7 +93,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	        return paymentAccountModel;
         }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
         {
             model.Sage = BuildSage(mp);
         }

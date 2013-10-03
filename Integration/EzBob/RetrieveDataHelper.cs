@@ -1,14 +1,9 @@
 ﻿using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.Exceptions;
-using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.CommonLib;
 using EzBob.CommonLib.TrapForThrottlingLogic;
 using EzBob.RequestsQueueCore;
 using EzBob.RequestsQueueCore.RequestStates;
-using StructureMap;
 
 namespace EzBob
 {

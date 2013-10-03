@@ -22,7 +22,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			_session = session;
 		}
 
-		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
 		{
 			return null;
 		}
@@ -32,9 +32,9 @@ namespace EzBob.Models.Marketplaces.Builders
 			return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
 		}
 
-		public MarketPlaceModel Create(MP_CustomerMarketPlace mp)
+		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history)
 		{
-			var data = GetAnalysisFunctionValues(mp);
+			var data = GetAnalysisFunctionValuesModel(GetAnalysisFunctionValues(mp, history));
 
 			var eluminatingStatus = mp.EliminationPassed ? "Pass" : "Fail";
 
@@ -45,8 +45,8 @@ namespace EzBob.Models.Marketplaces.Builders
 				Name = mp.Marketplace.Name,
 				LastChecked = FormattingUtils.FormatDateToString(mp.Updated, "-"),
 				EluminatingStatus = eluminatingStatus,
-				UpdatingStatus = mp.GetUpdatingStatus(),
-				UpdateError = mp.UpdateError,
+				UpdatingStatus = mp.GetUpdatingStatus(history),
+				UpdateError = mp.GetUpdatingError(history),
 				AnalysisDataInfo = data,
 				AccountAge = GetAccountAge(mp),
 				PositiveFeedbacks = 0,
@@ -60,7 +60,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				IsNew = mp.IsNew
 			};
 
-			InitializeSpecificData(mp, model);
+			InitializeSpecificData(mp, model, history);
 
 			return model;
 		}
@@ -83,13 +83,21 @@ namespace EzBob.Models.Marketplaces.Builders
 			return null;
 		}
 
-		private static Dictionary<string, string> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp)
+		protected static List<IAnalysisDataParameterInfo> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp, DateTime? history = null)
+		{
+			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+
+			List<IAnalysisDataParameterInfo> av;
+			av = history.HasValue
+				     ? analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Where(pair => pair.Key <= history).Max(pair => pair.Key)).Value
+				     : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+
+			return av;
+		}
+
+		private static Dictionary<string, string> GetAnalysisFunctionValuesModel(IEnumerable<IAnalysisDataParameterInfo> av)
 		{
 			var data = new Dictionary<string, string>();
-
-			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-			var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-
 			if (av != null)
 			{
 				foreach (var info in av)
@@ -107,7 +115,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			return data;
 		}
 
-		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
 		}
 
@@ -152,7 +160,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			return month;
 		}
 
-		public IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
+		public static IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
 		{
 			foreach (var x in firstOrDefault)
 			{
@@ -165,7 +173,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			return null;
 		}
 
-		public IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
+		public static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault)
 		{
 			int closestTime = 0;
 			IAnalysisDataParameterInfo closestSoFar = null;

@@ -1024,6 +1024,9 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
+      <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
@@ -1142,6 +1145,7 @@
     <Content Include="Areas\Customer\Views\CGMarketPlaces\UploadFilesDialog.cshtml" />
     <Content Include="Areas\Customer\Views\CGMarketPlaces\HandleUploadedHmrcVatReturn.cshtml" />
     <Content Include="Areas\Underwriter\Views\YodleeRecheck\YodleeCallback.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlacesHistory.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
@@ -1643,6 +1647,7 @@
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanWithoutAML.coffee" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee" />
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />

@@ -12,6 +12,7 @@ using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Models;
 using NHibernate;
 using Scorto.Web;
+using System;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
@@ -62,7 +63,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         //[Ajax]
         [Transactional]
         [HttpGet]
-        public JsonNetResult Index(int id)
+        public JsonNetResult Index(int id, DateTime? history = null)
         {
             var model = new FullCustomerModel();
 
@@ -90,7 +91,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _infoModelBuilder.InitApplicationInfo(m, customer, cr);
             model.ApplicationInfoModel = m;
 
-            model.Marketplaces = _marketPlaces.GetMarketPlaceModels(customer).ToList();
+            model.Marketplaces = _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
 
             model.LoansAndOffers = new LoansAndOffers(customer);
 
@@ -129,7 +130,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             
             model.State = "Ok";
 
-
+			model.MarketplacesHistory = _marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
             return this.JsonNet(model);
         }
 
@@ -139,6 +140,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             public PersonalInfoModel PersonalInfoModel { get; set; }
             public ApplicationInfoModel ApplicationInfoModel { get; set; }
             public List<MarketPlaceModel> Marketplaces { get; set; }
+			public List<MarketPlaceHistoryModel> MarketplacesHistory { get; set; }
             public LoansAndOffers LoansAndOffers { get; set; }
             public CreditBureauModel CreditBureauModel { get; set; }
             public ProfileSummaryModel SummaryMdodel { get; set; }

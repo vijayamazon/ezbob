@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper.FunctionValues;
 using EzBob.RequestsQueueCore.RequestStates;
 
 namespace EzBob.RequestsQueueCore

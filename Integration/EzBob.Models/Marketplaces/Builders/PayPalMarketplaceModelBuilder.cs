@@ -3,7 +3,6 @@ using System.Linq;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -15,7 +14,7 @@ namespace EzBob.Models.Marketplaces.Builders
         {
         }
 
-        public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+        public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
         {
             return model.PayPal.GeneralInfo;
         }
@@ -42,9 +41,9 @@ namespace EzBob.Models.Marketplaces.Builders
             return transactionsMinDate;
         }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
         {
-            model.PayPal = PayPalModelBuilder.Create(mp);
+            model.PayPal = PayPalModelBuilder.CreatePayPal(mp, history);
         }
     }
 }

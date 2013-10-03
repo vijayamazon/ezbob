@@ -1,7 +1,6 @@
 ﻿@model dynamic
-
 @helper ProfileTemplateMain()
-    {
+{
     <div id="spl">
         <div class="left-underwriter-pane">
             <div class="profile-person-info">
@@ -13,7 +12,9 @@
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#profile-summary" data-toggle="tab">Profile Summary</a></li>
-                    <li><a href="#marketplaces" data-toggle="tab"><div class="source-labels new-ribbon" id="new-ribbon-marketplaces"></div>Marketplaces</a></li>
+                    <li><a href="#marketplaces" data-toggle="tab">
+                        <div class="source-labels new-ribbon" id="new-ribbon-marketplaces"></div>
+                        Marketplaces</a></li>
                     <li><a href="#payment-accounts" data-toggle="tab">Payment Accounts</a></li>
                     <li><a href="#credit-bureau" data-toggle="tab">Credit bureau</a></li>
                     <li><a href="#medal-calculator" data-toggle="tab">Medal calculator</a></li>
@@ -43,20 +44,20 @@
                     <div class="tab-pane" id="fraudDetection"></div>
                 </div>
             </div>
-            <div id="controlButtoons" class="well" style="margin-top:10px;">
+            <div id="controlButtons" class="well" style="margin-top: 10px;">
             </div>
         </div>
     </div>
 }
 
 <script id="controls-button-template" type="text/template">
-    <a  class="btn back" href="#"><i class="icon-arrow-left"/>Go back</a> 
-    <a href="#" class="btn" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="icon-tag" />Report Bug</a> 
+    <a class="btn back" href="#"><i class="icon-arrow-left" />Go back</a>
+    <a href="#" class="btn" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="icon-tag" />Report Bug</a>
     <div class="pull-right">
-        <button class="btn" id="ReturnBtn"><i class="icon-repeat" />Return</button> 
-        <button class="btn" id="SuspendBtn"><i class="icon-pause" />Suspend</button> 
-        <button class="btn" id="RejectBtn"><i class="icon-remove-sign" />Reject</button> 
-        <button class="btn" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button> 
+        <button class="btn" id="ReturnBtn"><i class="icon-repeat" />Return</button>
+        <button class="btn" id="SuspendBtn"><i class="icon-pause" />Suspend</button>
+        <button class="btn" id="RejectBtn"><i class="icon-remove-sign" />Reject</button>
+        <button class="btn" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button>
         <button class="btn" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
     </div>
 </script>
@@ -65,26 +66,29 @@
     @ProfileTemplateMain()
 </script>
 
-@{Html.RenderPartial("_MarketplaceValuesTemplate");}
-@{Html.RenderPartial("_LoanhistoryViewTemplate");}
-@{Html.RenderPartial("LoanDetails/LoanDetails");}
-@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/PaymentAccounts/_PaymentAccountsTemplate.cshtml");}
-@{Html.RenderPartial("ProfileLoanInfoTemplate");}
-@{Html.RenderPartial("ProfileSummary");}
-@{Html.RenderPartial("CreditBureau");}
-@{Html.RenderPartial("_MedalCalculationTemplate");}
-@{Html.RenderPartial("_ApiChecksLog");}
-@{Html.RenderPartial("_CompanyScore");}
-@{Html.RenderPartial("_FraudDetectionLog");}
-@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/_CustomerRelations.cshtml");}
-@{Html.RenderPartial("_DocsTemplate");}
-@{Html.RenderPartial("LoanEditor/_loan_editor");}
-@{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
-@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/Bugs/_ReportBug.cshtml"); }
-@{Html.RenderPartial("_CaisReportsHistory"); }
-@{Html.RenderPartial("_CreditLineDialog"); }
-@{Html.RenderPartial("ApproveLoanWithoutAML"); }
-@{Html.RenderPartial("ApproveLoanForWarningStatusCustomer"); }
+@{
+    Html.RenderPartial("_MarketplaceValuesTemplate");
+    Html.RenderPartial("MarketPlacesHistory");
+    Html.RenderPartial("_LoanhistoryViewTemplate");
+    Html.RenderPartial("LoanDetails/LoanDetails");
+    Html.RenderPartial("~/Areas/Underwriter/Views/Shared/PaymentAccounts/_PaymentAccountsTemplate.cshtml");
+    Html.RenderPartial("ProfileLoanInfoTemplate");
+    Html.RenderPartial("ProfileSummary");
+    Html.RenderPartial("CreditBureau");
+    Html.RenderPartial("_MedalCalculationTemplate");
+    Html.RenderPartial("_ApiChecksLog");
+    Html.RenderPartial("_CompanyScore");
+    Html.RenderPartial("_FraudDetectionLog");
+    Html.RenderPartial("~/Areas/Underwriter/Views/Shared/_CustomerRelations.cshtml");
+    Html.RenderPartial("_DocsTemplate");
+    Html.RenderPartial("LoanEditor/_loan_editor");
+    Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml");
+    Html.RenderPartial("~/Areas/Underwriter/Views/Shared/Bugs/_ReportBug.cshtml");
+    Html.RenderPartial("_CaisReportsHistory");
+    Html.RenderPartial("_CreditLineDialog");
+    Html.RenderPartial("ApproveLoanWithoutAML");
+    Html.RenderPartial("ApproveLoanForWarningStatusCustomer"); 
+}
 
 
 @helper FunctionsDialog()
@@ -107,19 +111,19 @@
 <script id="approve-details" type="text/template">
     <div id="loan-schedule"></div>
     <div>
-        <button class="btn btn-danger change-offer-details"><i class="icon-pencil"></i> Edit</button>
+        <button class="btn btn-danger change-offer-details"><i class="icon-pencil"></i>Edit</button>
         <a href="#" class="pull-right print-link excel-link">Export to Excel</a>
-	<a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
+        <a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
     </div>
-    
+
 </script>
 
 <script id="message-template" type="text/template">
     @{Html.RenderPartial("_Messages");}
     <div class="pull-right" style="margin-bottom: 10px;">
-        <button class="btn" id="btnAMLInformation" >AML</button> 
-        <button class="btn" id="btnAMLandBWAInformation">AML and BWA</button> 
-        <button class="btn"  id="btnBWAInformation">BWA</button>
+        <button class="btn" id="btnAMLInformation">AML</button>
+        <button class="btn" id="btnAMLandBWAInformation">AML and BWA</button>
+        <button class="btn" id="btnBWAInformation">BWA</button>
     </div>
 </script>
 

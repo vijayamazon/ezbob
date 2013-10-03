@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
 using NHibernate;
 using NHibernate.Linq;
 using System.Globalization;
@@ -16,16 +15,14 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
 		{
-			return CreatePayPointAccountModelModel(mp);
+			return CreatePayPointAccountModelModel(mp, history);
 		}
 
-		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m)
+		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m, DateTime? history)
 		{
-			var values = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(m.Id);
-			var analisysFunction = values;
-			var av = values.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+			var av = GetAnalysisFunctionValues(m, history);
 
 			var tnop = 0.0;
 			var tnip = 0.0;
@@ -42,7 +39,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
 			}
 
-			var status = m.GetUpdatingStatus();
+			var status = m.GetUpdatingStatus(history);
 
 			var payPointModel = new PaymentAccountsModel
 			{

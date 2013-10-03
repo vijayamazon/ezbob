@@ -20,7 +20,7 @@ namespace EzBob.Models.Marketplaces.Builders
             _ebayAmazonCategoryRepository = ebayAmazonCategoryRepository;
         }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
         {
             var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
 

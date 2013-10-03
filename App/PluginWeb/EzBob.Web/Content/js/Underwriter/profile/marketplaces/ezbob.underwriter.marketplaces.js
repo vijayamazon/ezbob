@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.MarketPlaceModel = (function(_super) {
+
     __extends(MarketPlaceModel, _super);
 
     function MarketPlaceModel() {
-      _ref = MarketPlaceModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return MarketPlaceModel.__super__.constructor.apply(this, arguments);
     }
 
     MarketPlaceModel.prototype.idAttribute = "Id";
@@ -26,7 +26,6 @@
 
     MarketPlaceModel.prototype.recalculate = function() {
       var accountAge, age, ai, anualSales, inventory, monthSales, pp;
-
       ai = this.get('AnalysisDataInfo');
       accountAge = this.get('AccountAge');
       monthSales = ai ? (ai.TotalSumofOrders1M || 0) * 1 : 0;
@@ -53,11 +52,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.MarketPlaces = (function(_super) {
+
     __extends(MarketPlaces, _super);
 
     function MarketPlaces() {
-      _ref1 = MarketPlaces.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return MarketPlaces.__super__.constructor.apply(this, arguments);
     }
 
     MarketPlaces.prototype.model = EzBob.Underwriter.MarketPlaceModel;
@@ -71,21 +70,30 @@
   })(Backbone.Collection);
 
   EzBob.Underwriter.MarketPlacesView = (function(_super) {
+
     __extends(MarketPlacesView, _super);
 
     function MarketPlacesView() {
-      _ref2 = MarketPlacesView.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return MarketPlacesView.__super__.constructor.apply(this, arguments);
     }
 
     MarketPlacesView.prototype.template = "#marketplace-template";
 
     MarketPlacesView.prototype.initialize = function() {
       this.model.on("reset change sync", this.render, this);
-      return this.rendered = false;
+      this.rendered = false;
+      window.YodleeTryRecheck = function(result) {
+        if (result.error) {
+          return EzBob.ShowMessage(result.error, "Yodlee Recheck Error", "OK");
+        } else {
+          return EzBob.ShowMessage('Yodlee recheked successfully, refresh the page', null, "OK");
+        }
+      };
+      return this;
     };
 
     MarketPlacesView.prototype.onRender = function() {
+      var marketplacesHistoryDiv;
       this.$el.find('.mp-error-description').tooltip({
         placement: "bottom"
       });
@@ -93,8 +101,18 @@
         title: 'Report bug'
       });
       if (this.detailView !== void 0) {
-        return this.detailView.render();
+        this.detailView.render();
       }
+      marketplacesHistoryDiv = this.$el.find("#marketplaces-history");
+      this.marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory();
+      this.marketPlacesHistory.customerId = this.model.customerId;
+      this.marketPlacesHistory.silent = true;
+      this.marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView({
+        model: this.marketPlacesHistory,
+        el: marketplacesHistoryDiv,
+        customerId: this.model.customerId
+      });
+      return this;
     };
 
     MarketPlacesView.prototype.events = {
@@ -110,7 +128,6 @@
 
     MarketPlacesView.prototype.rowClick = function(e) {
       var id, shop;
-
       if (e.target.getAttribute('href')) {
         return;
       }
@@ -142,12 +159,10 @@
     };
 
     MarketPlacesView.prototype.serializeData = function() {
-      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref3;
-
+      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref;
       aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
       isMarketplace = function(x) {
         var cg;
-
         if (!aryCGAccounts[x.get('Name')]) {
           return !x.get('IsPaymentAccount');
         }
@@ -173,9 +188,9 @@
           neutral: 0
         }
       };
-      _ref3 = data.marketplaces;
-      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
-        m = _ref3[_i];
+      _ref = data.marketplaces;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
         if (m.Disabled === false) {
           data.summary.monthSales += m.monthSales;
         }
@@ -197,7 +212,6 @@
     MarketPlacesView.prototype.disableShop = function(e) {
       var $el, umi,
         _this = this;
-
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       EzBob.ShowMessage("Disable shop", "Are you sure?", (function() {
@@ -209,7 +223,6 @@
     MarketPlacesView.prototype.doEnableShop = function(umi, enabled) {
       var url, xhr,
         _this = this;
-
       url = enabled ? "" + window.gRootPath + "Underwriter/MarketPlaces/Enable" : "" + window.gRootPath + "Underwriter/MarketPlaces/Disable";
       xhr = $.post(url, {
         umi: umi
@@ -222,7 +235,6 @@
     MarketPlacesView.prototype.enableShop = function(e) {
       var $el, umi,
         _this = this;
-
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       EzBob.ShowMessage("Enable shop", "Are you sure?", (function() {
@@ -233,30 +245,30 @@
 
     MarketPlacesView.prototype.tryRecheckYodlee = function(e) {
       /*
-      $el = $(e.currentTarget)
-      umi = $el.attr "umi"
-      mpType = $el.attr "marketplaceType"
-      customerId = @model.customerId
+              $el = $(e.currentTarget)
+              umi = $el.attr "umi"
+              mpType = $el.attr "marketplaceType"
+              customerId = @model.customerId
+              
+              okFn = =>
+                  xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryReCheckYodlee",
+                      customerId: customerId
+                      umi: umi
+                      marketplaceType: mpType
+                  xhr.done (response)=>
+                      if response and response.error != undefined
+                          EzBob.ShowMessage response.error, "Error occured"
+                      else
+                          EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
+                      @trigger "rechecked",
+                          umi: umi
+                          el: $el
+                  xhr.fail (data) ->
+                      console.error data.responseText
       
-      okFn = =>
-          xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryReCheckYodlee",
-              customerId: customerId
-              umi: umi
-              marketplaceType: mpType
-          xhr.done (response)=>
-              if response and response.error != undefined
-                  EzBob.ShowMessage response.error, "Error occured"
-              else
-                  EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
-              @trigger "rechecked",
-                  umi: umi
-                  el: $el
-          xhr.fail (data) ->
-              console.error data.responseText
-      
-      EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
-      
-      false
+              EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
+              
+              false
       */
 
     };
@@ -264,14 +276,12 @@
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
       var $el, customerId, mpType, okFn, umi,
         _this = this;
-
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       mpType = $el.attr("marketplaceType");
       customerId = this.model.customerId;
       okFn = function() {
         var xhr;
-
         xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
           customerId: customerId,
           umi: umi,
@@ -299,7 +309,6 @@
     MarketPlacesView.prototype.reCheckPaypal = function(e) {
       var el, umi,
         _this = this;
-
       el = $(e.currentTarget);
       umi = el.attr("umi");
       EzBob.ShowMessage("", "Are you sure?", (function() {
@@ -311,7 +320,6 @@
     MarketPlacesView.prototype.doReCheck = function(umi, el) {
       var xhr,
         _this = this;
-
       xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/ReCheckPaypal", {
         customerId: this.model.customerId,
         umi: umi
@@ -330,7 +338,6 @@
 
     MarketPlacesView.prototype.renewTokenClicked = function(e) {
       var umi;
-
       umi = $(e.currentTarget).data("umi");
       this.renewToken(umi);
       return false;
@@ -338,7 +345,6 @@
 
     MarketPlacesView.prototype.renewToken = function(umi) {
       var xhr;
-
       xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/RenewEbayToken", {
         umi: umi
       });

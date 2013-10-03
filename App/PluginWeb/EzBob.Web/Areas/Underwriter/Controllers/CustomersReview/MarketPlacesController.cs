@@ -70,9 +70,19 @@
 		}
 
 
-		public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(EZBob.DatabaseLib.Model.Database.Customer customer)
+		public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(Customer customer, DateTime? history = null)
 		{
-			return _marketPlaces.GetMarketPlaceModels(customer).ToList();
+			return _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
+		}
+
+		//[Ajax]
+		[HttpGet]
+		//[Transactional]
+		public JsonNetResult GetCustomerMarketplacesHistory(int customerId)
+		{
+			var customer = _customers.Get(customerId);
+			var models = _marketPlaces.GetMarketPlaceHistoryModel(customer);
+			return this.JsonNet(models);
 		}
 
 
@@ -123,15 +133,19 @@
 			var mp = _customerMarketplaces.Get(umi);
 			var yodleeMain = new YodleeMain();
 			var yodleeAccount = _yodleeAccountsRepository.Search(mp.Customer.Id);
-			
+
 			if (yodleeAccount == null)
 			{
-				return null;
+				return View(new {error = "Yodlee Account was not found"});
 			}
 
 			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
 			long itemId = securityInfo.ItemId;
-			yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			if (lu == null)
+			{
+				return View(new { error = "Error Loging to Yodlee Account" });
+			}
 
 			if (!yodleeMain.IsMFA(itemId))
 			{
@@ -142,27 +156,28 @@
 				}
 				catch (RefreshYodleeException ex)
 				{
-					return View(new {error = ex.ToString()});
+					Log.WarnFormat("TryRecheckYodlee exception {0}", ex);
+					return View(new { error = ex.ToString() });
 				}
 				if (isRefreshed)
 				{
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
 					_appCreator.CustomerMarketPlaceAdded(customer, umi);
-					return View();
+					return View(new {success = true});
 				}
+				
+				return View(new { error = "Account wasn't refreshed successfully" });
 			}
-			else
+			else //MFA Account for testing redirecting to Yodlee LAW
 			{
-				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new {Area = "Underwriter"}, "https") + "/" + umi;
+				var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
 				string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
 				return Redirect(finalUrl);
 			}
-
-			return View();
 		} // TryRecheckYodlee
 
-		
+
 
 		[Ajax]
 		[HttpGet]

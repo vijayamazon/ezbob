@@ -41,14 +41,14 @@
         public static IEnumerable<PaymentAccountsModel> GetPayPalAccounts(this Customer customer)
         {
             var marketpalces = GetPayPalCustomerMarketPlaces(customer);
-            return marketpalces.Select(PayPalModelBuilder.CreatePayPalAccountModelModel).ToList();
+            return marketpalces.Select(m => PayPalModelBuilder.CreatePayPalAccountModel(m)).ToList();
         }
 
         public static List<PaymentAccountsModel> GetPaymentAccounts(this Customer customer)
         {
             return
                 customer.CustomerMarketPlaces.Where(m => m.Marketplace.IsPaymentAccount)
-                    .Select(PayPalModelBuilder.CreatePayPalAccountModelModel)
+                    .Select(m => PayPalModelBuilder.CreatePayPalAccountModel(m))
                     .ToList();
         }
 

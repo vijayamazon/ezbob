@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
 using Integration.ChannelGrabberConfig;
 using NHibernate;
 using NHibernate.Linq;
@@ -22,7 +20,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		#region method GetPaymentAccountModel
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			if (!vi.HasExpenses && (vi.Behaviour == Behaviour.Default))
@@ -68,7 +66,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		#region method InitializeSpecificData
 
-		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			switch (vi.Behaviour) {

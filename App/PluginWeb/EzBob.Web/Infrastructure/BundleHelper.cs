@@ -283,6 +283,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.coffee")
                 .Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
                 .Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.coffee")
+				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplacesHistory.coffee")
                 .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.experianInfo.js")
                 .Add("~/Content/js/underwriter/profile/creditBureau/ezbob.underwriter.idHubCustomAddress.js")
                 .Add("~/Content/js/underwriter/profile/paymentAccounts/ezbob.underwriter.addPayPointCardView.coffee")

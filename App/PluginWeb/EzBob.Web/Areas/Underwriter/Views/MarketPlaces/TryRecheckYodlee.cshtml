@@ -1,7 +1,14 @@
-﻿@model dynamic
-
+﻿@using Newtonsoft.Json
+@model dynamic
+@{
+}
 <h2>Rechecking Yodlee</h2>
 
-<script>
-    window.close();
-</script>
+@section Js
+{
+    <script type="text/javascript">
+        var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+        window.opener.YodleeTryRecheck(model);
+        self.close();
+    </script>
+}

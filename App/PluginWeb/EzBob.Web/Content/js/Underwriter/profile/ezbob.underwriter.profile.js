@@ -38,7 +38,7 @@
       apiChecks = this.$el.find("#apiChecks");
       customerRelations = this.$el.find("#customerRelations");
       alertPassed = this.$el.find("#alerts-passed");
-      controlButtons = this.$el.find("#controlButtoons");
+      controlButtons = this.$el.find("#controlButtons");
       fraudDetection = this.$el.find("#fraudDetection");
       this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
       this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
@@ -51,6 +51,14 @@
         el: marketplaces,
         model: this.marketPlaces
       });
+      /*
+      @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
+      @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
+          el: marketplaces
+          model: @marketPlacesHistory
+      )
+      */
+
       this.marketPlaceView.on("rechecked", this.mpRechecked, this.marketPlaces);
       this.loanHistory = new EzBob.Underwriter.LoanHistoryModel();
       this.loanHistoryView = new EzBob.Underwriter.LoanHistoryView({
@@ -358,6 +366,12 @@
           silent: true
         });
         _this.marketPlaces.trigger("sync");
+        /*
+        @marketPlacesHistory.customerId = id
+        @marketPlacesHistory.reset fullModel.get("MarketplacesHistory"), silent: true
+        @marketPlacesHistory.trigger "sync"
+        */
+
         _this.loanHistory.customerId = id;
         _this.loanHistoryView.idCustomer = id;
         _this.loanHistory.set(fullModel.get("LoansAndOffers"), {

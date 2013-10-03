@@ -42,7 +42,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                                ErrorMessage = mp.UpdateError,
                                Name = mp.DisplayName,
                                UpdateStartDate = mp.UpdatingStart,
-                               Status = mp.GetUpdatingStatus()
+                               Status = mp.GetUpdatingStatus(null)
                            }).ToList();
 
             switch (sortField)

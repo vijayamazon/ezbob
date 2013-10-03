@@ -27,7 +27,7 @@ namespace EzBob.Models.Marketplaces.Builders
             return string.Format("http://www.amazon.co.uk/gp/aag/main?ie=UTF8&seller={0}", ((AmazonSecurityInfo)securityInfo).MerchantId);
         }
 
-        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model) {
+        protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
 			MP_AmazonFeedback amazonFeedback = null;
 
 			if ((mp.AmazonFeedback != null) && !mp.AmazonFeedback.IsEmpty)

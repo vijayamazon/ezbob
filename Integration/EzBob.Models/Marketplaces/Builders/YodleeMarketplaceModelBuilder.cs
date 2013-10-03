@@ -25,14 +25,14 @@ namespace EzBob.Models.Marketplaces.Builders
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
 		{
 			if (_yodleeModel == null)
 			{
-				_yodleeModel = BuildYodlee(mp);
+				_yodleeModel = BuildYodlee(mp, history);
 			}
 
-			var status = mp.GetUpdatingStatus();
+			var status = mp.GetUpdatingStatus(history);
 
 			var yodleeModel = new PaymentAccountsModel
 			{
@@ -48,7 +48,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			return yodleeModel;
 		}
 
-		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model)
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
 			if (_yodleeModel == null)
 			{
@@ -57,7 +57,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			model.Yodlee = _yodleeModel;
 		}
 
-		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp)
+		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history = null)
 		{
 			List<MP_YodleeOrderItem> yodleeData = null;
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
