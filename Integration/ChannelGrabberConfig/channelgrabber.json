@@ -466,9 +466,13 @@
 					"<div><button class=\"upload-files button orange\">Upload</button></div>"
 				],
 				"OnBeforeLink": [
-					"accountModel.name = $.trim($('#logged-in-user-name').text());",
-					"accountModel.login = accountModel.name;",
-					"accountModel.password = '';",
+					"if (bUploadMode) {",
+						"accountModel.name = $.trim($('#logged-in-user-name').text());",
+						"accountModel.login = accountModel.name;",
+						"accountModel.password = '';",
+					"}",
+					"else",
+						"accountModel.name = accountModel.login;",
 					"return accountModel;"
 				],
 				"SourceLabel": [

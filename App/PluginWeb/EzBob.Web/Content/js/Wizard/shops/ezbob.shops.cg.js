@@ -76,7 +76,7 @@
       return this.vendorInfo;
     };
 
-    CGAccountInfoView.prototype.buildModel = function() {
+    CGAccountInfoView.prototype.buildModel = function(bUploadMode) {
       var accountModel, elm, fi, func, oVendorInfo, propName, propVal, _i, _len, _ref2;
 
       accountModel = $.parseJSON($('div#cg-account-model-template').text());
@@ -97,8 +97,8 @@
         }
       }
       if (oVendorInfo.ClientSide.LinkForm.OnBeforeLink.length) {
-        func = new Function('accountModel', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join("\n"));
-        accountModel = func.call(null, accountModel);
+        func = new Function('accountModel', 'bUploadMode', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join("\n"));
+        accountModel = func.call(null, accountModel, bUploadMode);
         if (!accountModel) {
           return null;
         }
@@ -118,7 +118,7 @@
       if (this.$el.find('a.connect-account').hasClass('disabled')) {
         return false;
       }
-      accountModel = this.buildModel();
+      accountModel = this.buildModel(false);
       oVendorInfo = this.getVendorInfo();
       if (!accountModel) {
         EzBob.App.trigger('error', oVendorInfo.DisplayName + ' Account Data Validation Error');
@@ -176,7 +176,7 @@
       }
       oVendorInfo = this.getVendorInfo();
       window[sModelKey] = function() {
-        return _this.buildModel();
+        return _this.buildModel(true);
       };
       window[sKey] = function(sResult) {
         var oResult;

@@ -34,7 +34,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         @vendorInfo
 
-    buildModel: =>
+    buildModel: (bUploadMode) =>
         accountModel = $.parseJSON $('div#cg-account-model-template').text()
 
         oVendorInfo = @getVendorInfo()
@@ -51,8 +51,8 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
                 accountModel[propName] = elm.val()
 
         if oVendorInfo.ClientSide.LinkForm.OnBeforeLink.length
-             func = new Function 'accountModel', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join "\n"
-             accountModel = func.call null, accountModel
+             func = new Function 'accountModel', 'bUploadMode', oVendorInfo.ClientSide.LinkForm.OnBeforeLink.join "\n"
+             accountModel = func.call null, accountModel, bUploadMode
 
              if not accountModel
                  return null
@@ -67,7 +67,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             return false
         return false if @$el.find('a.connect-account').hasClass('disabled')
 
-        accountModel = @buildModel()
+        accountModel = @buildModel false
 
         oVendorInfo = @getVendorInfo()
 
@@ -124,7 +124,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         oVendorInfo = @getVendorInfo()
 
         window[sModelKey] = =>
-            return @buildModel()
+            return @buildModel true
 
         window[sKey] = (sResult) =>
             delete window[sKey]
