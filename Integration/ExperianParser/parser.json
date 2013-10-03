@@ -4,6 +4,10 @@
 
 		"PathToParent": "./REQUEST/DL12",
 
+		"MetaData": {
+			"ID": "DL12"
+		},
+
 		"Fields": [
 			{ "SourcePath": "./REGNUMBER", "Targets": [{ "Name": "Registered Number" }] },
 			{
@@ -37,14 +41,7 @@
 				"SourcePath": "./DATEINCORP-YYYY", "Targets": [{ "Name": "Incorporation Date", "Position": 2, "Prefix": " " }]
 			},
 			{
-				"SourcePath": "./DATEINCORP-MM",
-				"Targets": [{
-					"Name": "Incorporation Date",
-					"Position": 0,
-					"Transformation": {
-						"Types": [ "monthname" ]
-					}
-				}]
+				"SourcePath": "./DATEINCORP-MM", "Targets": [{ "Name": "Incorporation Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }]
 			},
 			{
 				"SourcePath": "./DATEINCORP-DD", "Targets": [{ "Name": "Incorporation Date", "Position": 1, "Prefix": " " }]
@@ -53,14 +50,7 @@
 				"SourcePath": "./DATEDISSVD-YYYY", "Targets": [{ "Name": "Dissolution Date", "Position": 2, "Prefix": " " }]
 			},
 			{
-				"SourcePath": "./DATEDISSVD-MM",
-				"Targets": [{
-					"Name": "Dissolution Date",
-					"Position": 0,
-					"Transformation": {
-						"Types": [ "monthname" ]
-					}
-				}]
+				"SourcePath": "./DATEDISSVD-MM", "Targets": [{ "Name": "Dissolution Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }]
 			},
 			{
 				"SourcePath": "./DATEDISSVD-DD", "Targets": [{ "Name": "Dissolution Date", "Position": 1, "Prefix": " " }]
@@ -71,6 +61,28 @@
 			{ "SourcePath": "./REGADDR3", "Targets": [{ "Name": "Office Address", "Position": 3, "Prefix": "\n" }] },
 			{ "SourcePath": "./REGADDR4", "Targets": [{ "Name": "Office Address", "Position": 4, "Prefix": "\n" }] },
 			{ "SourcePath": "./REGPOSTCODE", "Targets": [{ "Name": "Office Address", "Position": 5, "Prefix": "\n" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Commerical Delphi Score",
+
+		"PathToParent": "./REQUEST/DL76",
+
+		"Fields": [
+			{ "SourcePath": "./RISKSCORE", "Targets": [{ "Name": "Commercial Delphi Score" }] },
+			{ "SourcePath": "./STABILITYODDS", "Targets": [{ "Name": "Stability Odds" }] },
+			{ "SourcePath": "./RISKBANDTEXT", "Targets": [{ "Name": "Commercial Delphi Band Text" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Commerical Delphi Credit Limit",
+
+		"PathToParent": "./REQUEST/DL78",
+
+		"Fields": [
+			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit",
+				"Transformation": { "Types": [ "money" ] }
+			}] }
 		]
 	},
 	{
@@ -153,9 +165,137 @@
 
 		"PathToParent": "./REQUEST/DL23/SHAREHLDS",
 
+		"MetaData": {
+			"ID": "DL23SHAREHOLDING",
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true,
+			"Sorting": "Description of Shareholder,Description of Shareholding,% of Shareholding"
+		},
+
 		"Fields": [
 			{ "SourcePath": "./SHLDNAME", "Targets": [{ "Name": "Description of Shareholder" }] },
-			{ "SourcePath": "./SHLDHOLDING", "Targets": [{ "Name": "Description of Shareholding" }] }
+			{ "SourcePath": "./SHLDHOLDING", "Targets": [{ "Name": "Description of Shareholding", "Transformation": { "types": [ "shares" ] } }] }
+		]
+	},
+	{
+		"Name": "Limited Company Shareholders Details",
+
+		"PathToParent": "./REQUEST/DLB5",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true,
+			"ID": "DLB5"
+		},
+
+		"Fields": [
+			{ "SourcePath": "./RECORDTYPE", "Targets": [{ "Name": "Record type" }] },
+			{ "SourcePath": "./ISSUINGCOMPANY", "Targets": [{ "Name": "Issue company" }] },
+			{ "SourcePath": "./CURPREVFLAG", "Targets": [{ "Name": "Current/previous indicator" }] },
+			{ "SourcePath": "./EFFECTIVEDATE-YYYY", "Targets": [{ "Name": "Effective Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./EFFECTIVEDATE-MM",   "Targets": [{ "Name": "Effective Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./EFFECTIVEDATE-DD",   "Targets": [{ "Name": "Effective Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./SHARECLASSNUM", "Targets": [{ "Name": "Share class number" }] },
+			{ "SourcePath": "./SHAREHOLDINGNUM", "Targets": [{ "Name": "Shareholding number" }] },
+			{ "SourcePath": "./SHAREHOLDERNUM", "Targets": [{ "Name": "Shareholder number" }] },
+			{ "SourcePath": "./SHAREHOLDERTYPE", "Targets": [{ "Name": "Shareholder type" }] },
+			{ "SourcePath": "./NAMEPREFIX", "Targets": [{ "Name": "Shareholder Name" }] },
+			{ "SourcePath": "./FIRSTNAME",  "Targets": [{ "Name": "Shareholder Name", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./MIDNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./SURNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 3, "Prefix": " " }] },
+			{ "SourcePath": "./NAMESUFFIX", "Targets": [{ "Name": "Shareholder Name", "Position": 4, "Prefix": " " }] },
+			{ "SourcePath": "./QUAL", "Targets": [{ "Name": "Shareholder qualifications" }] },
+			{ "SourcePath": "./TITLE", "Targets": [{ "Name": "Shareholder title" }] },
+			{ "SourcePath": "./COMPANYNAME", "Targets": [{ "Name": "Shareholder company name" }] },
+			{ "SourcePath": "./SHAREHOLDERKGEN", "Targets": [{ "Name": "Kgen name" }] },
+			{ "SourcePath": "./SHAREHOLDERREGNUM", "Targets": [{ "Name": "Shareholder registered number" }] },
+			{ "SourcePath": "./ADDRLINE1", "Targets": [{ "Name": "Shareholder address" }] },
+			{ "SourcePath": "./ADDRLINE2", "Targets": [{ "Name": "Shareholder address", "Position": 1, "Prefix": "\n" }] },
+			{ "SourcePath": "./ADDRLINE3", "Targets": [{ "Name": "Shareholder address", "Position": 2, "Prefix": "\n" }] },
+			{ "SourcePath": "./TOWN",      "Targets": [{ "Name": "Shareholder address", "Position": 3, "Prefix": "\n" }] },
+			{ "SourcePath": "./COUNTY",    "Targets": [{ "Name": "Shareholder address", "Position": 4, "Prefix": "\n" }] },
+			{ "SourcePath": "./POSTCODE",  "Targets": [{ "Name": "Shareholder address", "Position": 5, "Prefix": "\n" }] },
+			{ "SourcePath": "./COUNTRYOFORIGIN", "Targets": [{ "Name": "Shareholder country" }] },
+			{ "SourcePath": "./PUNAPOSTCODE", "Targets": [{ "Name": "Shareholder puna pcode " }] },
+			{ "SourcePath": "./RMC", "Targets": [{ "Name": "Shareholder RMC" }] },
+			{ "SourcePath": "./SUPPRESS", "Targets": [{ "Name": "Suppression flag" }] },
+			{ "SourcePath": "./NOCREF", "Targets": [{ "Name": "NOC ref number" }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-YYYY", "Targets": [{ "Name": "Last Updated", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-MM",   "Targets": [{ "Name": "Last Updated", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./LASTUPDATEDDATE-DD",   "Targets": [{ "Name": "Last Updated", "Position": 1, "Prefix": " " }] }
+		]
+	},
+	{
+		"Name": "Limited Company Current Directorship Details",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
+		"PathToParent": "./REQUEST/DL72",
+
+		"Fields": [
+			{ "SourcePath": "./FOREIGNFLAG", "Targets": [
+				{ "Name": "Foreign Address Flag" },
+				{
+					"Name": "Foreign Address Flag",
+					"Position": 1,
+					"Prefix": " - ",
+					"Transformation": {
+						"Types": [ "map" ],
+						"Map": {
+							"Y": "Foreign",
+							"N": "Not foreign"
+						}
+					}
+				}
+			]},
+			{ "SourcePath": "./DIRCOMPFLAG", "Targets": [
+				{ "Name": "Director Is a Company Flag" },
+				{
+					"Name": "Director Is a Company Flag",
+					"Position": 1,
+					"Prefix": " - ",
+					"Transformation": {
+						"Types": [ "map" ],
+						"Map": {
+							"Y": "Director is a company",
+							"N": "Director is not a company"
+						}
+					}
+				}
+			]},
+			{ "SourcePath": "./DIRNUMBER", "Targets": [{ "Name": "Director number" }] },
+			{ "SourcePath": "./DIRSHIPLEN", "Targets": [{
+				"Name": "Length of directorship",
+				"Transformation": {
+					"Types": [ "monthsandyears" ]
+				}
+			}] },
+			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "Director’s age (Years)" }] },
+			{ "SourcePath": "./NUMCONVICTIONS", "Targets": [{ "Name": "Number of convictions" }] },
+			{ "SourcePath": "./DIRNAMEPREFIX", "Targets": [{ "Name": "Name" }] },
+			{ "SourcePath": "./DIRFORENAME", "Targets": [{ "Name": "Name", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./DIRMIDNAME1", "Targets": [{ "Name": "Name", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DIRMIDNAME2", "Targets": [{ "Name": "Name", "Position": 3, "Prefix": " " }] },
+			{ "SourcePath": "./DIRSURNAME", "Targets": [{ "Name": "Name", "Position": 4, "Prefix": " " }] },
+			{ "SourcePath": "./DIRNAMESUFFIX", "Targets": [{ "Name": "Name", "Position": 5, "Prefix": " " }] },
+			{ "SourcePath": "./DIRQUALS", "Targets": [{ "Name": "Qualifications" }] },
+			{ "SourcePath": "./DIRTITLE", "Targets": [{ "Name": "Director title" }] },
+			{ "SourcePath": "./DIRCOMPNAME", "Targets": [{ "Name": "Company name" }] },
+			{ "SourcePath": "./DIRCOMPNUM", "Targets": [{ "Name": "Company number" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Directorship Summary",
+
+		"PathToParent": "./REQUEST/DL42",
+
+		"Fields": [
+			{ "SourcePath": "./TOTCURRDIRS", "Targets": [{ "Name": "Total Number of Current Directors" }] },
+			{ "SourcePath": "./CURRDIRSHIPSLAST12", "Targets": [{ "Name": "Number of Current Directorships Less Than 12 Months" }] },
+			{ "SourcePath": "./APPTSLAST12", "Targets": [{ "Name": "Number of Appointments in the Last 12 Months" }] },
+			{ "SourcePath": "./RESNSLAST12", "Targets": [{ "Name": "Number of Resignations in the Last 12 Months" }] }
 		]
 	},
 	{
@@ -308,18 +448,6 @@
 		]
 	},
 	{
-		"Name": "Limited Company Directorship Summary",
-
-		"PathToParent": "./REQUEST/DL42",
-
-		"Fields": [
-			{ "SourcePath": "./TOTCURRDIRS", "Targets": [{ "Name": "Total Number of Current Directors" }] },
-			{ "SourcePath": "./CURRDIRSHIPSLAST12", "Targets": [{ "Name": "Number of Current Directorships Less Than 12 Months" }] },
-			{ "SourcePath": "./APPTSLAST12", "Targets": [{ "Name": "Number of Appointments in the Last 12 Months" }] },
-			{ "SourcePath": "./RESNSLAST12", "Targets": [{ "Name": "Number of Resignations in the Last 12 Months" }] }
-		]
-	},
-	{
 		"Name": "Limited Company CIFAS Details",
 
 		"PathToParent": "./REQUEST/DL48",
@@ -446,89 +574,6 @@
 		]
 	},
 	{
-		"Name": "Limited Company Current Directorship Details",
-
-		"MetaData": {
-			"DisplayDirection": "horizontal"
-		},
-
-		"PathToParent": "./REQUEST/DL72",
-
-		"Fields": [
-			{ "SourcePath": "./FOREIGNFLAG", "Targets": [
-				{ "Name": "Foreign Address Flag" },
-				{
-					"Name": "Foreign Address Flag",
-					"Position": 1,
-					"Prefix": " - ",
-					"Transformation": {
-						"Types": [ "map" ],
-						"Map": {
-							"Y": "Foreign",
-							"N": "Not foreign"
-						}
-					}
-				}
-			]},
-			{ "SourcePath": "./DIRCOMPFLAG", "Targets": [
-				{ "Name": "Director Is a Company Flag" },
-				{
-					"Name": "Director Is a Company Flag",
-					"Position": 1,
-					"Prefix": " - ",
-					"Transformation": {
-						"Types": [ "map" ],
-						"Map": {
-							"Y": "Director is a company",
-							"N": "Director is not a company"
-						}
-					}
-				}
-			]},
-			{ "SourcePath": "./DIRNUMBER", "Targets": [{ "Name": "Director number" }] },
-			{ "SourcePath": "./DIRSHIPLEN", "Targets": [{
-				"Name": "Length of directorship",
-				"Transformation": {
-					"Types": [ "monthsandyears" ]
-				}
-			}] },
-			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "Director’s age (Years)" }] },
-			{ "SourcePath": "./NUMCONVICTIONS", "Targets": [{ "Name": "Number of convictions" }] },
-			{ "SourcePath": "./DIRNAMEPREFIX", "Targets": [{ "Name": "Name" }] },
-			{ "SourcePath": "./DIRFORENAME", "Targets": [{ "Name": "Name", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./DIRMIDNAME1", "Targets": [{ "Name": "Name", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./DIRMIDNAME2", "Targets": [{ "Name": "Name", "Position": 3, "Prefix": " " }] },
-			{ "SourcePath": "./DIRSURNAME", "Targets": [{ "Name": "Name", "Position": 4, "Prefix": " " }] },
-			{ "SourcePath": "./DIRNAMESUFFIX", "Targets": [{ "Name": "Name", "Position": 5, "Prefix": " " }] },
-			{ "SourcePath": "./DIRQUALS", "Targets": [{ "Name": "Qualifications" }] },
-			{ "SourcePath": "./DIRTITLE", "Targets": [{ "Name": "Director title" }] },
-			{ "SourcePath": "./DIRCOMPNAME", "Targets": [{ "Name": "Company name" }] },
-			{ "SourcePath": "./DIRCOMPNUM", "Targets": [{ "Name": "Company number" }] }
-		]
-	},
-	{
-		"Name": "Limited Company Commerical Delphi Score",
-
-		"PathToParent": "./REQUEST/DL76",
-
-		"Fields": [
-			{ "SourcePath": "./RISKSCORE", "Targets": [{ "Name": "Commercial Delphi Score" }] },
-			{ "SourcePath": "./STABILITYODDS", "Targets": [{ "Name": "Stability Odds" }] },
-			{ "SourcePath": "./RISKBANDTEXT", "Targets": [{ "Name": "Commercial Delphi Band Text" }] }
-		]
-	},
-	{
-		"Name": "Limited Company Commerical Delphi Credit Limit",
-
-		"PathToParent": "./REQUEST/DL78",
-
-		"Fields": [
-			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit",
-				"Transformation": { "Types": [ "money" ] }
-			}] }
-		]
-	},
-	{
 		"Name": "Limited Company Instalment CAIS Details",
 
 		"PathToParent": "./REQUEST/DL97",
@@ -637,7 +682,8 @@
 		"PathToParent": "./REQUEST/DL99",
 
 		"MetaData": {
-			"ID": "DL99"
+			"ID": "DL99",
+			"Sorting": "chart-Total Current Assets,chart-Net Assets,chart-Bank Overdraft,chart-Other Short-Term Loans,chart-Total Current Liabilities,chart-Other Long-Term Loans,chart-Total Shareholders Funds"
 		},
 
 		"Fields": [
@@ -655,61 +701,14 @@
 		]
 	},
 	{
-		"Name": "Limited Company Shareholders Details",
-
-		"PathToParent": "./REQUEST/DLB5",
-
-		"MetaData": {
-			"DisplayDirection": "horizontal",
-			"UnlimitedWidth": true,
-			"ID": "DLB5"
-		},
-
-		"Fields": [
-			{ "SourcePath": "./RECORDTYPE", "Targets": [{ "Name": "Record type" }] },
-			{ "SourcePath": "./ISSUINGCOMPANY", "Targets": [{ "Name": "Issue company" }] },
-			{ "SourcePath": "./CURPREVFLAG", "Targets": [{ "Name": "Current/previous indicator" }] },
-			{ "SourcePath": "./EFFECTIVEDATE-YYYY", "Targets": [{ "Name": "Effective Date", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./EFFECTIVEDATE-MM",   "Targets": [{ "Name": "Effective Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
-			{ "SourcePath": "./EFFECTIVEDATE-DD",   "Targets": [{ "Name": "Effective Date", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./SHARECLASSNUM", "Targets": [{ "Name": "Share class number" }] },
-			{ "SourcePath": "./SHAREHOLDINGNUM", "Targets": [{ "Name": "Shareholding number" }] },
-			{ "SourcePath": "./SHAREHOLDERNUM", "Targets": [{ "Name": "Shareholder number" }] },
-			{ "SourcePath": "./SHAREHOLDERTYPE", "Targets": [{ "Name": "Shareholder type" }] },
-			{ "SourcePath": "./NAMEPREFIX", "Targets": [{ "Name": "Shareholder Name" }] },
-			{ "SourcePath": "./FIRSTNAME",  "Targets": [{ "Name": "Shareholder Name", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./MIDNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./SURNAME",    "Targets": [{ "Name": "Shareholder Name", "Position": 3, "Prefix": " " }] },
-			{ "SourcePath": "./NAMESUFFIX", "Targets": [{ "Name": "Shareholder Name", "Position": 4, "Prefix": " " }] },
-			{ "SourcePath": "./QUAL", "Targets": [{ "Name": "Shareholder qualifications" }] },
-			{ "SourcePath": "./TITLE", "Targets": [{ "Name": "Shareholder title" }] },
-			{ "SourcePath": "./COMPANYNAME", "Targets": [{ "Name": "Shareholder company name" }] },
-			{ "SourcePath": "./SHAREHOLDERKGEN", "Targets": [{ "Name": "Kgen name" }] },
-			{ "SourcePath": "./SHAREHOLDERREGNUM", "Targets": [{ "Name": "Shareholder registered number" }] },
-			{ "SourcePath": "./ADDRLINE1", "Targets": [{ "Name": "Shareholder address" }] },
-			{ "SourcePath": "./ADDRLINE2", "Targets": [{ "Name": "Shareholder address", "Position": 1, "Prefix": "\n" }] },
-			{ "SourcePath": "./ADDRLINE3", "Targets": [{ "Name": "Shareholder address", "Position": 2, "Prefix": "\n" }] },
-			{ "SourcePath": "./TOWN",      "Targets": [{ "Name": "Shareholder address", "Position": 3, "Prefix": "\n" }] },
-			{ "SourcePath": "./COUNTY",    "Targets": [{ "Name": "Shareholder address", "Position": 4, "Prefix": "\n" }] },
-			{ "SourcePath": "./POSTCODE",  "Targets": [{ "Name": "Shareholder address", "Position": 5, "Prefix": "\n" }] },
-			{ "SourcePath": "./COUNTRYOFORIGIN", "Targets": [{ "Name": "Shareholder country" }] },
-			{ "SourcePath": "./PUNAPOSTCODE", "Targets": [{ "Name": "Shareholder puna pcode " }] },
-			{ "SourcePath": "./RMC", "Targets": [{ "Name": "Shareholder RMC" }] },
-			{ "SourcePath": "./SUPPRESS", "Targets": [{ "Name": "Suppression flag" }] },
-			{ "SourcePath": "./NOCREF", "Targets": [{ "Name": "NOC ref number" }] },
-			{ "SourcePath": "./LASTUPDATEDDATE-YYYY", "Targets": [{ "Name": "Last Updated", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./LASTUPDATEDDATE-MM",   "Targets": [{ "Name": "Last Updated", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
-			{ "SourcePath": "./LASTUPDATEDDATE-DD",   "Targets": [{ "Name": "Last Updated", "Position": 1, "Prefix": " " }] }
-		]
-	},
-	{
 		"Name": "Limited Company Mortages",
 
 		"PathToParent": "./REQUEST/DL65",
 
 		"MetaData": {
 			"DisplayDirection": "horizontal",
-			"UnlimitedWidth": true
+			"UnlimitedWidth": true,
+			"Sorting": "Alterations to the order,Total Amount of Debenture Secured,*"
 		},
 
 		"Fields": [

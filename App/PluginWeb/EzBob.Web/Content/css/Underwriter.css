@@ -529,10 +529,31 @@ table.internal-table td {
 .narrow-as-possible { width: 1px !important; white-space: nowrap !important; }
 
 .trend-container { float: right; display: inline-block; }
-.trend-container span { margin-right: 0.5em; }
+.trend-container span { margin-left: 0.5em; display: inline-block; width: 16px; height: 16px; }
 
-.positive-trend { color: blue; }
-.negative-trend { color: red; }
+.positive-trend {
+	background-image: url(images/ui-icons_2e83ff_256x240.png);
+	background-position: -160px -192px;
+}
+
+.negative-trend {
+	background-image: url(images/ui-icons_cd0a0a_256x240.png);
+	background-position: -128px -192px;
+}
+
+.stable-trend {
+	background-image: url(images/ui-icons_222222_256x240.png);
+	background-position: -208px -192px;
+}
+
+.company-score-alert {
+	display: inline-block;
+	padding: 0.2em;
+	color: yellow;
+	background-color: red;
+	font-weight: bold;
+}
+
 .rotate {
   -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);

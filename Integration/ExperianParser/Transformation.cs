@@ -12,7 +12,8 @@ namespace Ezbob.ExperianParser {
 		Map,
 		MonthName,
 		Money,
-		MonthsAndYears
+		MonthsAndYears,
+		Shares
 	} // TransformationType
 
 	#endregion enum TransformationType
@@ -113,6 +114,43 @@ namespace Ezbob.ExperianParser {
 
 						sResult = os.ToString().Trim();
 					} // if
+
+					} break;
+
+				case TransformationType.Shares: {
+					decimal nValue = 0;
+					bool bFound = false;
+
+					foreach (char c in sResult) {
+						bool bGood = false;
+
+						switch (c) {
+						case '0':
+						case '1':
+						case '2':
+						case '3':
+						case '4':
+						case '5':
+						case '6':
+						case '7':
+						case '8':
+						case '9':
+							bFound = true;
+							nValue = nValue * 10m + (c - '0');
+							goto case ' '; // !!! fall through !!!
+
+						case ' ':
+						case '\t':
+							bGood = true;
+							break;
+						} // switch
+
+						if (!bGood)
+							break;
+					} // for each char
+
+					if (bFound)
+						sResult = nValue.ToString();
 
 					} break;
 				} // switch

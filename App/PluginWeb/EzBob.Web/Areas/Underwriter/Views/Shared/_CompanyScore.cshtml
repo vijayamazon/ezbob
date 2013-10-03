@@ -1,5 +1,53 @@
 ﻿<script id="company-score-template" type="text/template">
 <% (function(response, onAfterRender) {
+	function ExtractSortingOrder(sSortingInfo) {
+		if (!sSortingInfo)
+			return {};
+
+		var ary = sSortingInfo.split(',');
+
+		var oResult = {};
+
+		for (var i = 0; i < ary.length; i++)
+			if (ary[i].trim())
+				oResult[ary[i]] = i;
+
+		return oResult;
+	} // ExtractSortingOrder
+
+	function OrderFieldsForSorting(oNameHolder, sSortingInfo) {
+		var oSortingInfo = ExtractSortingOrder(sSortingInfo);
+
+		console.log('order fields for sorting: asi =', oSortingInfo);
+
+		var aryResult = [];
+
+		for (var sName in oNameHolder)
+			aryResult.push(sName);
+
+		aryResult.sort(function(a, b) {
+			var nStarPos = oSortingInfo.hasOwnProperty('*') ? oSortingInfo['*'] : 0;
+
+			var aPos = oSortingInfo.hasOwnProperty(a) ? oSortingInfo[a] : nStarPos;
+			var bPos = oSortingInfo.hasOwnProperty(b) ? oSortingInfo[b] : nStarPos;
+
+			if (aPos != bPos)
+				return aPos - bPos;
+
+			if (a == b)
+				return 0;
+
+			if (a < b)
+				return -1;
+
+			return 1;
+		});
+
+		console.log('order fields for sorting', aryResult);
+
+		return aryResult;
+	} // OrderFieldsForSorting
+
 	function DrawFormatted(sValue, sValueTitle, sTableID) {
 		if ((sTableID == 'DLB5') && (sValueTitle == 'Issue company')) {
 			var sFormID = 'frm' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
@@ -21,6 +69,14 @@
 			return;
 		} // if
 
+		if ((sTableID == 'DL12') && (sValueTitle == 'Dissolution Date')) {
+			if (!sValue)
+				return;
+
+			%><span class=company-score-alert><%- sValue %></span><%
+			return;
+		} // if
+
 		%><%- sValue %><%;
 	} // DrawFormatted
 
@@ -37,9 +93,23 @@
 		if (aryData.length > 0) {
 			var oMetaData = response.dataset[i].MetaData || {};
 
-			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
+			console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
 
 			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width' : 'table';
+
+			if (oMetaData.ID == 'DL23SHAREHOLDING') {
+				var nTotal = 0;
+
+				for (var j = 0; j < aryData.length; j++)
+					nTotal +=  parseInt(aryData[j]['Description of Shareholding']);
+
+				console.log('total =', nTotal);
+
+				if (nTotal != 0) {
+					for (var j = 0; j < aryData.length; j++)
+						aryData[j]['% of Shareholding'] = EzBob.formatPercents(aryData[j]['Description of Shareholding'] / nTotal);
+				} // if total
+			} // if
 
 			if (oMetaData.ID == 'DL41') {
 				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered">
@@ -102,11 +172,14 @@
 							<td></td>
 						</tr><%
 
+
 						var aryMonths = [ 12, 6, 3 ];
 						aryMonths.sort(function(a, b) { return b - a; });
 						
 						var aryOutput = [];
 						var aryLast = null;
+
+						function Trend(a, b) { if (a < b) return 'positive-trend'; if (a > b) return 'negative-trend'; return 'stable-trend'; } // Trend
 
 						for (var j = 0; j < aryMonths.length; j++) {
 							var sKey = aryMonths[j] + ' Months';
@@ -129,7 +202,7 @@
 							};
 						
 							if (bHasCompany && bHasIndustry)
-								aryThis.company_to_industry_trend = aryThis.company <= aryThis.industry ? 'positive-trend' : 'negative-trend';
+								aryThis.company_to_industry_trend = Trend(aryThis.company, aryThis.industry);
 
 							aryOutput.push(aryThis);
 
@@ -139,10 +212,10 @@
 							} // if
 
 							if (bHasCompany && aryLast.has_company)
-								aryThis.company_trend = aryThis.company <= aryLast.company ? 'positive-trend' : 'negative-trend';
+								aryThis.company_trend = Trend(aryThis.company, aryLast.company);
 
 							if (bHasIndustry && aryLast.has_industry)
-								aryThis.industry_trend = aryThis.industry <= aryLast.industry ? 'positive-trend' : 'negative-trend';
+								aryThis.industry_trend = Trend(aryThis.industry, aryLast.industry);
 						} // for
 
 						for (var j = aryOutput.length - 1; j >= 0; j--) {
@@ -150,10 +223,10 @@
 
 							%><tr><td class=narrow-as-possible><%- oCurrent.caption %></td>
 							<td class=narrow-as-possible><%- oCurrent.company %><div class="trend-container">
-								<span class="<%- oCurrent.company_trend %>"><%- oCurrent.company_trend ? '[self]' : '' %></span>
-								<span class="<%- oCurrent.company_to_industry_trend %>"><%- oCurrent.company_to_industry_trend ? '[industry]' : '' %></span>
+								<span class="<%- oCurrent.company_trend %>" title="<%- oCurrent.company_trend ? 'Self' : '' %>"></span>
+								<span class="<%- oCurrent.company_to_industry_trend %>" title="<%- oCurrent.company_to_industry_trend ? 'Industry' : '' %>"></span>
 							</div></td>
-							<td class="narrow-as-possible <%- oCurrent.industry_trend %>"><%- oCurrent.industry %></td>
+							<td class=narrow-as-possible><%- oCurrent.industry %><div class=trend-container><span class="<%- oCurrent.industry_trend %>"></span></div></td>
 							<td></td>
 						</tr><%
 						} // for
@@ -206,7 +279,6 @@
 
 				var oChartData = [];
 				var oSeriesKeys = {};
-				var nSeriesKeyCount = 1;
 
 				var sDivChartID = 'chart' + oMetaData.ID;
 				var sParentDivChartID = 'parent_' + sDivChartID;
@@ -215,6 +287,9 @@
 					<thead><tr><th><%- i %></th></tr></thead>
 					<tbody><tr><td id="<%- sParentDivChartID %>"></td></tr></tbody>
 				</table><%
+
+				var oSortingOrder = ExtractSortingOrder(oMetaData.Sorting);
+				console.log('sorting order', oSortingOrder);
 
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];
@@ -228,8 +303,10 @@
 							var sKey = k.substr(6);
 							oDataItem.data[sKey] = EzBob.poundToInt(obj[k]);
 							if (!oSeriesKeys[sKey]) {
-								oSeriesKeys[sKey] = nSeriesKeyCount;
-								nSeriesKeyCount++;
+								if (!oSortingOrder.hasOwnProperty(k))
+									throw 'No sorting order specified for ' + k;
+
+								oSeriesKeys[sKey] = oSortingOrder[k] + 1;
 							} // if
 						} // if
 					} // for
@@ -240,6 +317,8 @@
 				$('body').append(
 					$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
 				);
+
+				console.log(oChartData);
 
 				onAfterRender.push(function() {
 					var aryLabels = [];
@@ -271,6 +350,12 @@
 							rendererOptions: {fillToZero: true}
 						},
 						series: aryLabels,
+						grid: {
+							gridLineColor: 'black',
+							gridLineWidth: 2.0,
+							borderColor: 'black',
+							borderWidth: 2.0
+						},
 						legend: {
 							show: true,
 							location: 'n',
@@ -295,6 +380,14 @@
 								pad: 1.05,
 								tickOptions: { formatString: "£ %'d" }
 							}
+						},
+						highlighter: {
+							show: true,
+							showTooltip: true,
+							tooltipLocation: 'n',
+							tooltipOffset: 0,
+							tooltipAxes: 'y',
+							showMarker: true
 						}
 					}); // jqplot
 	
@@ -302,17 +395,12 @@
 				});
 			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {
-				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed"><%
-				var nColumnCount = 0;
-			
-				var obj = aryData[0];
+				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
 
-				for (var fld in obj)
-					nColumnCount++;
-
-				%><thead><tr><th colspan=<%= nColumnCount %>><%= i %></th></tr><tr><%
-				for (var fld in obj) {
-					%><th><%- fld %></th><%
+				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed">
+				<thead><tr><th colspan=<%= arySortOrder.length %>><%= i %></th></tr><tr><%
+				for (var j = 0; j < arySortOrder.length; j++) {
+					%><th><%- arySortOrder[j] %></th><%
 				}
 				%></tr></thead><tbody><%
 				for (var j = 0; j < aryData.length; j++) {
@@ -320,7 +408,8 @@
 
 					print('<tr>');
 
-					for (var fld in obj) {
+					for (var t = 0; t < arySortOrder.length; t++) {
+						var fld = arySortOrder[t];
 						%><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
 					} // for each field
 
@@ -329,13 +418,16 @@
 				%></tbody></table><%
 			}
 			else {
+				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
+
 				%><table class="<%- sTableWidthClass %> table-striped blue-header">
 				<thead><tr><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];
 
-					for (var fld in obj) {
+					for (var t = 0; t < arySortOrder.length; t++) {
+						var fld = arySortOrder[t];
 						%><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
 					} // for each field
 				} // for each group output
