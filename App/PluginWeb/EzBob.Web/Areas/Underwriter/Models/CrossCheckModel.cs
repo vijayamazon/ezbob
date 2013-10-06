@@ -18,6 +18,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public PersonalInfo PayPal { get; set; }
         public CustomerAddress CurrentAddress { get; set; }
         public CustomerAddress PrevAddress { get; set; }
+        public CustomerAddress OtherPropertyAddress { get; set; }
         public CustomerAddress EBayAddress { get; set; }
         public CustomerAddress PayPalAddress { get; set; }
         public CustomerAddress SellerAddress { get; set; }
@@ -93,6 +94,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				} // for each group
 			} // if
 
+			OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.OtherPropertyAddress);
+
             var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
             var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
             if (current != null)CurrentAddress = current;
@@ -163,6 +166,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		} // IsExperianDirector
 
 		private string DetailsToName(PersonalInfo oInfo) {
+			if (oInfo == null)
+				return "";
+
 			var os = new StringBuilder();
 
 			os.Append(oInfo.FirstName.Trim().ToLower());
@@ -173,6 +179,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		} // DetailsToName
 
 		private string DetailsToName(Director oInfo) {
+			if (oInfo == null)
+				return "";
+
 			var os = new StringBuilder();
 
 			os.Append(oInfo.Name.Trim().ToLower());

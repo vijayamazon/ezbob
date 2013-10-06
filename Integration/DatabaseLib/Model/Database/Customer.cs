@@ -679,6 +679,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             get { return _allAddresses; }
             set { _allAddresses = value; }
         }
+
+        private Iesi.Collections.Generic.ISet<CustomerAddress> _otherPropertyAddress =  new HashedSet<CustomerAddress>();
+        public virtual Iesi.Collections.Generic.ISet<CustomerAddress> OtherPropertyAddress
+        {
+            get { return _otherPropertyAddress; }
+            set { _otherPropertyAddress = value; }
+        }
     }
 
     public class ScoringResult

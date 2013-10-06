@@ -28,6 +28,7 @@ EzBob.CustomerModel = Backbone.Model.extend({
 
         this.set('PersonalAddress', new EzBob.AddressModels(this.get('PersonalAddress')));
         this.set('PrevPersonAddresses', new EzBob.AddressModels(this.get('PrevPersonAddresses')));
+        this.set('OtherPropertyAddress', new EzBob.AddressModels(this.get('OtherPropertyAddress')));
         this.set('LimitedCompanyAddress', new EzBob.AddressModels(this.get('LimitedAddress')));
         this.set('NonLimitedCompanyAddress', new EzBob.AddressModels(this.get('NonLimitedAddress')));
 

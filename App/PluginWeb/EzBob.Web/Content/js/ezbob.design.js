@@ -923,12 +923,14 @@ EzBob.validatePersonalDetailsForm = function (el) {
             OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
             WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
             TimeAtAddress: { required: true },
-            ConsentToSearch: { required: true }
+            ConsentToSearch: { required: true },
+            OwnOtherProperty: { required: true }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
             ResidentialStatus: { required: "This field is required" },
             TimeAtAddress: { regex: "This field is required" },
+            OwnOtherProperty: { regex: "This field is required" },
             MartialStatus: { required: "This field is required" },
             MobilePhone: { regex: "Please enter a valid UK number" },
             DayTimePhone: { regex: "Please enter a valid UK number" },

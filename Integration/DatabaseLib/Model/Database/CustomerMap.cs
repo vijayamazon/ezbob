@@ -158,6 +158,14 @@ namespace EZBob.DatabaseLib.Model.Database {
                      .Cascade.All()
                      .Inverse()
                      .Cache.ReadWrite().Region("LongTerm").ReadWrite();
+
+                    m.HasMany(x => x.OtherPropertyAddress)
+                     .AsSet()
+                     .KeyColumn("customerId")
+                     .Where("addressType=" + Convert.ToInt32(CustomerAddressType.OtherPropertyAddress))
+                     .Cascade.All()
+                     .Inverse()
+                     .Cache.ReadWrite().Region("LongTerm").ReadWrite();
                 });
 
             Component(x => x.BankAccount, m =>

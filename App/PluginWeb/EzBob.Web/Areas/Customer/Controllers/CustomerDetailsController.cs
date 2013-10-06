@@ -58,12 +58,13 @@ namespace EzBob.Web.Areas.Customer.Controllers
             List<CustomerAddress> nonLimitedCompanyAddress,
             List<DirectorModel> limitedDirectors,
             List<DirectorModel> nonLimitedDirectors,
-            string dateOfBirth
+            string dateOfBirth,
+            List<CustomerAddress> otherPropertyAddress
         )
         {
             var customer = _context.Customer;
 
-            ProcessPersonal(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth, customer);
+            ProcessPersonal(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth, otherPropertyAddress, customer);
 
             switch (personalInfo.TypeOfBusiness.Reduce())
             {
@@ -92,7 +93,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         }
 
         private static void ProcessPersonal(PersonalInfo personalInfo, List<CustomerAddress> personalAddress, List<CustomerAddress> prevPersonAddresses, string dateOfBirth,
-                                            EZBob.DatabaseLib.Model.Database.Customer customer)
+			List<CustomerAddress> otherPropertyAddress, EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             ValidatePersonalInfo(personalInfo);
 
@@ -122,6 +123,16 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     val.Customer = customer;
                 }
                customer.AddressInfo.PrevPersonAddresses = new HashedSet<CustomerAddress>(prevPersonAddresses);
+            }
+
+            if (otherPropertyAddress != null)
+            {
+                foreach (var val in otherPropertyAddress)
+                {
+                    val.AddressType = CustomerAddressType.OtherPropertyAddress;
+                    val.Customer = customer;
+                }
+                customer.AddressInfo.OtherPropertyAddress = new HashedSet<CustomerAddress>(otherPropertyAddress);
             }
         }
 
@@ -216,7 +227,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
         [Transactional]
-        public JsonNetResult Edit(string dayTimePhone, string mobilePhone, string businessPhone, decimal? overallTurnOver, decimal? webSiteTurnOver, List<CustomerAddress> personalAddress, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<DirectorAddressModel>[] directorAddress)
+        public JsonNetResult Edit(
+			string dayTimePhone,
+			string mobilePhone,
+			string businessPhone,
+			decimal? overallTurnOver,
+			decimal? webSiteTurnOver,
+			List<CustomerAddress> personalAddress,
+			List<CustomerAddress> limitedCompanyAddress,
+			List<CustomerAddress> nonLimitedCompanyAddress,
+			List<DirectorAddressModel>[] directorAddress,
+			List<CustomerAddress> otherPropertyAddress 
+		)
         {
             var customer = _context.Customer;
 
@@ -228,8 +250,22 @@ namespace EzBob.Web.Areas.Customer.Controllers
             customer.PersonalInfo.WebSiteTurnOver = webSiteTurnOver;
 
             var addressInfo = customer.AddressInfo;
-            MakeAddress(personalAddress, addressInfo.PrevPersonAddresses, CustomerAddressType.PrevPersonAddresses, addressInfo.PersonalAddress, CustomerAddressType.PersonalAddress);
-            
+            MakeAddress(
+				personalAddress,
+				addressInfo.PrevPersonAddresses,
+				CustomerAddressType.PrevPersonAddresses,
+				addressInfo.PersonalAddress,
+				CustomerAddressType.PersonalAddress
+			);
+
+			MakeAddress(
+				otherPropertyAddress,
+				addressInfo.OtherPropertyAddress,
+				CustomerAddressType.OtherPropertyAddressPrev,
+				addressInfo.OtherPropertyAddress,
+				CustomerAddressType.OtherPropertyAddress
+			);
+
             if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
             {
                 customer.LimitedInfo.LimitedBusinessPhone = businessPhone;

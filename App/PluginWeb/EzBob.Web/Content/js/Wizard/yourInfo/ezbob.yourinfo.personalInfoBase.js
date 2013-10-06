@@ -7,9 +7,14 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
     },
 
     render: function () {
+	    console.log('EzBob.YourInformationStepViewBase', this.model);
+
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('form');
         this.validator = this.getValidator()(this.form);
+
+        if (!this.model.get('IsOffline'))
+            this.$el.find(".offline").remove();
 
         this.$el.find(".ezDateTime").splittedDateTime();
         this.$el.find('.phonenumber').numericOnly(11);
@@ -58,13 +63,13 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 
     PrevModelChange: function (el, model) {
         this.PrevAddressValidator = model.collection && model.collection.length > 0;
+
         if (this.PrevAddressValidator) {
             this.clearAddressError("#PrevPersonAddresses");
             $("#PrevPersonAddresses .field_status").hide();
-        } else {
-            $("#PrevPersonAddresses .field_status").show();
         }
-
+        else
+            $("#PrevPersonAddresses .field_status").show();
     },
     clickBack: function () {
         this.trigger('back');
@@ -73,7 +78,7 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
     },
     TimeAtAddressChanged: function (buttonContainer, select) {
         var button = buttonContainer + " .btn";
-        this.clearAddressError("#PrevPersonAddresses");
+        this.clearAddressError(buttonContainer);
         var currentVal = this.$el.find(select).val();
 
         if (currentVal == 3 || !currentVal) {

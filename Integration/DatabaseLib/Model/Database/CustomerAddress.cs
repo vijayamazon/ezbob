@@ -15,7 +15,9 @@ namespace ApplicationMng.Model
         LimitedCompanyAddressPrev = 7,
         LimitedDirectorHomeAddressPrev = 8,
         NonLimitedCompanyAddressPrev = 9,
-        NonLimitedDirectorHomeAddressPrev = 10
+        NonLimitedDirectorHomeAddressPrev = 10,
+		OtherPropertyAddress = 11,
+		OtherPropertyAddressPrev = 12
     }
 
     [Serializable]

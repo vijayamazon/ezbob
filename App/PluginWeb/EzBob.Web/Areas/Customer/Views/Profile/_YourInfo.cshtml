@@ -58,7 +58,7 @@
             </div>
         </div>
             <div class="controls">
-                    <div class="addressEdit" display:"none">
+                    <div class="addressEdit">
                         @EzForm.AddressInput("PersonalAddress", "Address:")
                     </div>
             </div>
@@ -67,6 +67,12 @@
             <label class="control-label">Time at Address:</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years"  readonly="readonly"/>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="addressEdit">
+                @EzForm.AddressInput("OtherPropertyAddress", "Other Property Address:")
             </div>
         </div>
 

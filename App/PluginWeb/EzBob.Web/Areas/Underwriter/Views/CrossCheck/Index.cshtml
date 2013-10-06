@@ -225,7 +225,47 @@
         @copyAddress("Ebay", @Model.EBayAddress)
     </div>
 
-   @{
+@if (Model.Customer.IsOffline) {
+	<table class="table table-striped table-bordered blue-header centered squeezed"><thead>
+	<tr><th colspan="2">Other Property Ownership</th></tr>
+	</thead><tbody>
+	@if (Model.OtherPropertyAddress == null) {
+		<tr><td colspan=2>Does not own another property</td></tr>
+	}
+	else {
+		<tr>
+			<td><b>Line1</b></td>
+			<td>@Model.OtherPropertyAddress.Line1</td>
+		</tr>
+		<tr>
+			<td><b>Line2</b></td>
+			<td>@Model.OtherPropertyAddress.Line2</td>
+		</tr>
+		<tr>
+			<td><b>Line3</b></td>
+			<td>@Model.OtherPropertyAddress.Line3</td>
+		</tr>
+		<tr>
+			<td><b>Town</b></td>
+			<td>@Model.OtherPropertyAddress.Town</td>
+		</tr>
+		<tr>
+			<td><b>County</b></td>
+			<td>@Model.OtherPropertyAddress.County</td>
+		</tr>
+		<tr>
+			<td><b>Postcode</b></td>
+			<td>@Model.OtherPropertyAddress.Postcode</td>
+		</tr>
+		<tr>
+			<td><b>Country</b></td>
+			<td>@Model.OtherPropertyAddress.Country</td>
+		</tr>
+	}
+	</tbody></table>
+}
+
+@{
         var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
         var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
         var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);

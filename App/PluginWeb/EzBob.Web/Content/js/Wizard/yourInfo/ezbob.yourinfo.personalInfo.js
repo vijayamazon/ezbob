@@ -11,6 +11,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
+            "change #OwnOtherProperty": "OwnOtherPropertyChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'click label[for="ConsentToSearch"] a': 'showConsent',
             'focus #OverallTurnOver': "overallTurnOverFocus",
@@ -35,7 +36,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             var img = el.closest('div').find('.field_status');
             img.field_status('set', 'empty', 2);
         }
-        var enabled = EzBob.Validation.checkForm(this.validator) && this.PrevAddressValidator && this.AddressValidator;
+
+        var enabled = EzBob.Validation.checkForm(this.validator) &&
+            this.PrevAddressValidator && this.AddressValidator
+            && this.OwnOtherPropertyIsValid();
+
         $('.continue').toggleClass('disabled', !enabled);
     },
     
@@ -49,7 +54,28 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
     },
+	OwnOtherPropertyChanged: function(evt) {
+        if (this.$el.find('#OwnOtherProperty').val() == 'Yes')
+            this.$el.find('#OtherPropertyAddress').parents('div.control-group').show();
+        else
+            this.$el.find('#OtherPropertyAddress').parents('div.control-group').hide();
 
+        this.inputChanged();
+    },
+	OwnOtherPropertyIsValid: function() {
+		switch (this.$el.find('#OwnOtherProperty').val()) {
+		case 'Yes': {
+			var oModel = this.model.get('OtherPropertyAddress');
+			return oModel && (oModel.length > 0);
+		}
+
+		case 'No':
+			return true;
+
+		default:
+			return false;
+		} // switch
+	},
     render: function () {
         this.constructor.__super__.render.call(this);
         var that = this;
@@ -63,8 +89,13 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter Previous Postcode');
         this.addressErrorPlacement(prevPersonAddressesView.$el, prevPersonAddressesView.model);
 
+        var otherPropertyAddressView = new EzBob.AddressView({ model: this.model.get('OtherPropertyAddress'), name: "OtherPropertyAddress", max: 1 });
+        otherPropertyAddressView.render().$el.appendTo(this.$el.find('#OtherPropertyAddress'));
+        this.addressErrorPlacement(otherPropertyAddressView.$el, otherPropertyAddressView.model);
+
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
+        this.model.get('OtherPropertyAddress').on("all", this.OtherPropertyAddressModelChange, this);
         this.$el.find("#WebSiteTurnOver").moneyFormat();
         this.$el.find("#OverallTurnOver").moneyFormat();
         this.inputChanged();
@@ -86,6 +117,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.AddressValidator = el.collection && el.collection.length > 0;
         this.inputChanged();
         this.clearAddressError("#PersonalAddress");
+    },
+    OtherPropertyAddressModelChange: function (e, el) {
+        this.AddressValidator = el.collection && el.collection.length > 0;
+        this.inputChanged();
+        this.clearAddressError("#OtherPropertyAddress");
     },
     typeChanged: function (e) {
         this.type = e.target.value;

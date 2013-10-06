@@ -145,6 +145,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 customerModel.PersonalAddress = customer.AddressInfo.PersonalAddress.ToArray();
                 customerModel.LimitedAddress = customer.AddressInfo.LimitedCompanyAddress.ToArray();
                 customerModel.NonLimitedAddress = customer.AddressInfo.NonLimitedCompanyAddress.ToArray();
+	            customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();
             }               
 
             customerModel.ApplyCount = customer.ApplyCount;
