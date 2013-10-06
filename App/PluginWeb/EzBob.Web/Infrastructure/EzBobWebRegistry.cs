@@ -138,6 +138,9 @@ namespace EzBob.Web.Infrastructure
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
 			For<ICustomerStatusHistoryRepository>().Use<CustomerStatusHistoryRepository>();
+
+			For<ICustomerReasonRepository>().Use<CustomerReasonRepository>();
+			For<ICustomerSourceOfRepaymentRepository>().Use<CustomerSourceOfRepaymentRepository>();
         }
     }
 }

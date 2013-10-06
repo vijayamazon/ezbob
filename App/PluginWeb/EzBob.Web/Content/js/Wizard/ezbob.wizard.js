@@ -214,7 +214,7 @@ EzBob.Wizard = Backbone.View.extend({
             view.$el.hide().appendTo(ul);
             view.$el.find(".chzn-select").chosen({ disable_search_threshold: 10 });
             if (view.$el.find('#captcha').length > 0) {
-                view.captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 6 });
+                view.captcha = new EzBob.Captcha({ elementId: "captcha", tabindex: 10 });
                 view.captcha.render();
             }
         });

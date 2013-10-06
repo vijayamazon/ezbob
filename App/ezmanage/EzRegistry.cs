@@ -76,6 +76,8 @@
             For<IEzBobConfiguration>().Singleton().Use(config);
             For<IAgreementsTemplatesProvider>().Use<EzAgreementsTemplateProvider>();
             For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
+			For<ICustomerReasonRepository>().Use<CustomerReasonRepository>();
+			For<ICustomerSourceOfRepaymentRepository>().Use<CustomerSourceOfRepaymentRepository>();
             For<IUsersRepository>().Use<UsersRepository>();
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
 			For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();

@@ -1,57 +1,49 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Security;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Loans;
 using EzBob.CommonLib;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.Filters;
 using EzBob.Web.Infrastructure.csrf;
 using Scorto.Web;
 using StructureMap;
-using log4net;
 using NHibernate;
 using NHibernate.Linq;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class WizardController : Controller
+	using EZBob.DatabaseLib.Model.Database.Repository;
+
+	public class WizardController : Controller
     {
-        private readonly IAppCreator _creator;
         private readonly IEzbobWorkplaceContext _context;
         private readonly ISecurityQuestionRepository _questions;
         private readonly CustomerModelBuilder _customerModelBuilder;
         private readonly IEzBobConfiguration _config;
-        private readonly ILoanTypeRepository _loanTypes;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(WizardController));
-        private readonly MembershipProvider _membershipProvider;
 		private readonly ISession _session;
+		private readonly ICustomerReasonRepository _reasons;
+		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
 
         //-------------------------------------------------------------------
         public WizardController(
-			IAppCreator creator,
 			IEzbobWorkplaceContext context,
 			ISecurityQuestionRepository questions,
 			CustomerModelBuilder customerModelBuilder,
 			IEzBobConfiguration config,
-			ILoanTypeRepository loanTypes,
-			MembershipProvider membershipProvider,
-			ISession session
-		)
+			ISession session, 
+			ICustomerReasonRepository customerReasonRepository, 
+			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository)
         {
             _context = context;
-            _creator = creator;
             _questions = questions;
             _customerModelBuilder = customerModelBuilder;
             _config = config;
-            _loanTypes = loanTypes;
-            _membershipProvider = membershipProvider;
 			_session = session;
+	        _reasons = customerReasonRepository;
+	        _sourcesOfRepayment = customerSourceOfRepaymentRepository;
         }
 
         //-------------------------------------------------------------------
@@ -60,6 +52,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public ActionResult Index()
         {
             ViewData["Questions"] = _questions.GetAll().ToList();
+			ViewData["Reasons"] = _reasons.GetAll().ToList();
+			ViewData["Sources"] = _sourcesOfRepayment.GetAll().ToList();
             ViewData["CaptchaMode"] = _config.CaptchaMode;
             ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
             ViewData["TargetsEnabled"] = _config.TargetsEnabled;

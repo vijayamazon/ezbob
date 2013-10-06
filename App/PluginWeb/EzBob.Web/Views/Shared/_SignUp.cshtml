@@ -1,9 +1,12 @@
 ﻿@using EzBob.Web.Infrastructure
 @using Scorto.NHibernate.Model
 @using StructureMap
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
     var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+    var customerReason = @ViewData["Reasons"] as List<CustomerReason>;
+    var customerSourceOfRepayment = @ViewData["Sources"] as List<CustomerSourceOfRepayment>;
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     string captchamode = config.CaptchaMode;
     bool ebayPixelEnabled = config.EbayPixelEnabled;
@@ -60,7 +63,7 @@
 				<select name="securityQuestion" id="securityQuestion" tabindex="5" class="form_field">
 					<option value=""></option>
 					@if (securityQuestions != null) {
-						foreach (SecurityQuestion item in securityQuestions) {
+						foreach (var item in securityQuestions) {
 							<option value="@item.Id">@item.Name</option>
 						} // foreach
 					} // if
@@ -78,9 +81,54 @@
 		<img id="SecretAnswerImage" class="field_status required"/>
 	</div>
 
+    <div class="form_field_container">
+        <label class="attardi-input">
+            <span>Amount</span>
+            <input type="text" name="Amount" id="Amount" tabindex="7" class="form_field"/>
+        </label>
+        <img id="AmountImage" class="field_status"/>
+    </div>
+    
+    <div class="form_field_container">
+        <span class="inform">
+            <label class="attardi-input">
+                <span>Reason</span>
+                <select name="customerReason" id="customerReason" tabindex="8" class="form_field">
+                    <option value=""></option>
+                    @if (customerReason != null)
+                    {
+                        foreach (var item in customerReason)
+                        {
+                            <option value="@item.Id">@item.Reason</option>
+                        } // foreach
+                    } // if
+                </select>
+            </label>
+        </span>
+        <img id="customerReasonImage" class="field_status required" />
+    </div>
+    
+    <div class="form_field_container">
+        <span class="inform">
+            <label class="attardi-input">
+                <span>Source Of Repayment</span>
+                <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="9" class="form_field">
+                    <option value=""></option>
+                    @if (customerSourceOfRepayment != null)
+                    {
+                        foreach (var item in customerSourceOfRepayment)
+                        {
+                            <option value="@item.Id">@item.SourceOfRepayment</option>
+                        } // foreach
+                    } // if
+                </select>
+            </label>
+        </span>
+        <img id="customerSourceOfRepaymentImage" class="field_status required" />
+    </div>
 	<div class="form_field_container">
 		@EzForm.Captcha(captchamode)
 	</div>
 
-	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="8"></div>
+	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="11"></div>
 }

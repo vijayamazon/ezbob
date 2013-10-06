@@ -87,6 +87,8 @@
     <Compile Include="Model\Database\CustomerStatusHistory.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
     <Compile Include="Model\Database\CustomerStatuses.cs" />
+    <Compile Include="Model\Database\Customer\CustomerReason.cs" />
+    <Compile Include="Model\Database\Customer\CustomerSourceOfRepayment.cs" />
     <Compile Include="Model\Database\customer_enums.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Loans\LoanInterestFreeze.cs" />
