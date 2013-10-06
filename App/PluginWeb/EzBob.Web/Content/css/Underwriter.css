@@ -577,3 +577,7 @@ table.unlimited-width { margin-bottom: 20px; }
 table.unlimited-width th { text-align: left; }
 
 table.unlimited-width th, table.unlimited-width td { padding: 8px; }
+
+.unknown-as-experian-director { color: red; font-weight: bold; }
+
+.known-as-experian-director { color: #008000; font-weight: bold; }

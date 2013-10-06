@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using ApplicationMng.Model;
 using AutoMapper;
 using EZBob.DatabaseLib.Model.Database;
 using System.Linq;
+using EzBob.Configuration;
 using EzBob.Web.Areas.Customer.Models;
+using Ezbob.ExperianParser;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
@@ -22,7 +25,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public List<Director> Directors { get; set; }
         public EZBob.DatabaseLib.Model.Database.Customer Customer { get; set; }
-
+        public SortedDictionary<string, int> ExperianDirectors { get; set; }
 
         static CrossCheckModel()
         {
@@ -60,6 +63,35 @@ namespace EzBob.Web.Areas.Underwriter.Models
             PrevAddress = new CustomerAddress();
             Directors = new List<Director>();
             CrossCheckStatus =new CrossCheckStatus();
+
+	        ExperianDirectors = null;
+			Tuple<Dictionary<string, ParsedData>, ParsingResult, string> oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
+
+			if (oParseResult.Item2 == ParsingResult.Ok) {
+				string[] aryFieldNames = new[] {"FirstName", "MidName1", "MidName2", "LastName"};
+
+				foreach (var pair in oParseResult.Item1) {
+					foreach (SortedDictionary<string, string> di in pair.Value.Data) {
+						var os = new StringBuilder();
+
+						foreach (string sFieldName in aryFieldNames) {
+							string s = di[sFieldName].Trim().ToLower();
+
+							if (s != string.Empty)
+								os.AppendFormat(" {0}", s);
+						} // for each field
+
+						string sFullName = os.ToString().Trim();
+
+						if (sFullName != string.Empty) {
+							if (ExperianDirectors == null)
+								ExperianDirectors = new SortedDictionary<string, int>();
+
+							ExperianDirectors.Add(sFullName, 1);
+						} // if
+					} // for each director
+				} // for each group
+			} // if
 
             var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
             var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
@@ -113,6 +145,42 @@ namespace EzBob.Web.Areas.Underwriter.Models
             CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application,  PayPal, EBay);
             CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
         }
+
+		public enum TriState { NoData, No, Yes }
+
+		public TriState IsExperianDirector(PersonalInfo oInfo) {
+			if (ExperianDirectors == null)
+				return TriState.NoData;
+
+			return ExperianDirectors.ContainsKey(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
+		} // IsExperianDirector
+
+		public TriState IsExperianDirector(Director oInfo) {
+			if (ExperianDirectors == null)
+				return TriState.NoData;
+
+			return ExperianDirectors.ContainsKey(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
+		} // IsExperianDirector
+
+		private string DetailsToName(PersonalInfo oInfo) {
+			var os = new StringBuilder();
+
+			os.Append(oInfo.FirstName.Trim().ToLower());
+			os.AppendFormat(" {0}", oInfo.MiddleInitial.Trim().ToLower());
+			os.AppendFormat(" {0}", oInfo.Surname.Trim().ToLower());
+
+			return os.ToString().Trim();
+		} // DetailsToName
+
+		private string DetailsToName(Director oInfo) {
+			var os = new StringBuilder();
+
+			os.Append(oInfo.Name.Trim().ToLower());
+			os.AppendFormat(" {0}", oInfo.Middle.Trim().ToLower());
+			os.AppendFormat(" {0}", oInfo.Surname.Trim().ToLower());
+
+			return os.ToString().Trim();
+		} // DetailsToName
     }
 
     public class PersonalInfo : EZBob.DatabaseLib.Model.Database.PersonalInfo

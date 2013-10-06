@@ -18,7 +18,7 @@
 	function OrderFieldsForSorting(oNameHolder, sSortingInfo) {
 		var oSortingInfo = ExtractSortingOrder(sSortingInfo);
 
-		console.log('order fields for sorting: asi =', oSortingInfo);
+		// console.log('order fields for sorting: asi =', oSortingInfo);
 
 		var aryResult = [];
 
@@ -43,7 +43,7 @@
 			return 1;
 		});
 
-		console.log('order fields for sorting', aryResult);
+		// console.log('order fields for sorting', aryResult);
 
 		return aryResult;
 	} // OrderFieldsForSorting
@@ -70,7 +70,7 @@
 		} // if
 
 		if ((sTableID == 'DL12') && (sValueTitle == 'Dissolution Date')) {
-			if (!sValue)
+			if (!sValue.trim())
 				return;
 
 			%><span class=company-score-alert><%- sValue %></span><%
@@ -93,7 +93,7 @@
 		if (aryData.length > 0) {
 			var oMetaData = response.dataset[i].MetaData || {};
 
-			console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
+			// console.log('i =', i, 'aryData =', aryData, 'meta =', oMetaData);
 
 			var sTableWidthClass = oMetaData.UnlimitedWidth ? 'unlimited-width' : 'table';
 
@@ -103,7 +103,7 @@
 				for (var j = 0; j < aryData.length; j++)
 					nTotal +=  parseInt(aryData[j]['Description of Shareholding']);
 
-				console.log('total =', nTotal);
+				// console.log('total =', nTotal);
 
 				if (nTotal != 0) {
 					for (var j = 0; j < aryData.length; j++)
@@ -289,7 +289,7 @@
 				</table><%
 
 				var oSortingOrder = ExtractSortingOrder(oMetaData.Sorting);
-				console.log('sorting order', oSortingOrder);
+				// console.log('sorting order', oSortingOrder);
 
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];
@@ -318,7 +318,7 @@
 					$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
 				);
 
-				console.log(oChartData);
+				// console.log(oChartData);
 
 				onAfterRender.push(function() {
 					var aryLabels = [];

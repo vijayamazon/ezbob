@@ -2,14 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Xml;
 using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
+using EZBob.DatabaseLib.Repository;
 using EzBob.CommonLib;
+using Ezbob.ExperianParser;
+using Ezbob.Logger;
 using Iesi.Collections.Generic;
 using NHibernate.Type;
 using Scorto.NHibernate.Types;
 using StructureMap;
+using log4net;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
@@ -516,6 +521,51 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // LastLoyaltyProgramActionDate
 
 		public virtual string PromoCode { get; set; }
+
+		public virtual Tuple<Dictionary<string, ParsedData>, ParsingResult, string> ParseExperian(string sParserConfiguration, string sServiceType = "E-SeriesLimitedData") {
+			var oLog = LogManager.GetLogger(typeof(Customer));
+
+			ServiceLogRepository oServiceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
+
+			IEnumerable<MP_ServiceLog> oServiceLogEntries =
+				oServiceLogRepository
+				.GetBuCustomer(this)
+				.Where(x => x.ServiceType == sServiceType)
+			;
+
+			if (!oServiceLogEntries.Any()) {
+				string sErrMsg = string.Format("No data found for Company Score tab with customer id = {0}", Id);
+				oLog.Info(sErrMsg);
+				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.NotFound, sErrMsg);
+			} // if
+
+			List<MP_ServiceLog> lst = oServiceLogEntries.ToList();
+
+			lst.Sort((a, b) => a.InsertDate.CompareTo(b.InsertDate));
+
+			var parser = new Ezbob.ExperianParser.Parser(sParserConfiguration, new SafeILog(oLog));
+
+			var doc = new XmlDocument();
+
+			try {
+				doc.LoadXml(lst.Last().ResponseData);
+			}
+			catch (Exception e) {
+				string sErrMsg = string.Format("Failed to parse Experian response as XML for Company Score tab with customer id = {0}", Id);
+				oLog.Error(sErrMsg, e);
+				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.Fail, sErrMsg);
+			} // try
+
+			try {
+				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
+				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(oParsed, ParsingResult.Ok, null);
+			}
+			catch (Exception e) {
+				string sErrMsg = string.Format("Failed to extract Company Score tab data from Experian response with customer id = {0}", Id);
+				oLog.Error(sErrMsg, e);
+				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.Fail, sErrMsg);
+			} // try	
+		} // ParseExperian
     }
 
 

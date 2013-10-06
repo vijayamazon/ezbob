@@ -21,6 +21,7 @@ namespace EzBob.Configuration {
 		DisplayEarnedPoints,
 		ChannelGrabberRejectPolicy,
 		CompanyScoreParserConfiguration,
+		DirectorInfoParserConfiguration,
 	} // enum Variables
 
 	public enum ChannelGrabberRejectPolicy {
@@ -65,6 +66,7 @@ namespace EzBob.Configuration {
 		} // ChannelGrabberRejectPolicy
 
 		public string CompanyScoreParserConfiguration { get { return RawCompanyScoreParserConfiguration; } }
+		public string DirectorInfoParserConfiguration { get { return RawDirectorInfoParserConfiguration; } }
 
 		#endregion properties
 
@@ -84,6 +86,7 @@ namespace EzBob.Configuration {
 		public string RawDisplayEarnedPoints { get { return this[Variables.DisplayEarnedPoints]; } }
 		public string RawChannelGrabberRejectPolicy { get { return this[Variables.ChannelGrabberRejectPolicy]; } }
 		public string RawCompanyScoreParserConfiguration { get { return this[Variables.CompanyScoreParserConfiguration]; } }
+		public string RawDirectorInfoParserConfiguration { get { return this[Variables.DirectorInfoParserConfiguration]; } }
 
 		#endregion raw properties
 

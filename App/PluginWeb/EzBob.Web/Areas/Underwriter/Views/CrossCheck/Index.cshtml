@@ -2,8 +2,9 @@
 @using System.Globalization
 @using ApplicationMng.Model
 @using EZBob.DatabaseLib.Model.Database
+@using EzBob.Web.Areas.Underwriter.Models
 @using EzBob.Web.Code
-@model EzBob.Web.Areas.Underwriter.Models.CrossCheckModel
+@model CrossCheckModel
 
 @{
     Layout = null;
@@ -12,6 +13,27 @@
     Model.PayPalAddress = Model.PayPalAddress ?? new CustomerAddress();
     Model.EBay.SellerInfo = Model.EBay.SellerInfo ?? new EbaySellerInfo();
     Model.EBay.SellerInfo.SellerPaymentAddress = Model.EBay.SellerInfo.SellerPaymentAddress ?? new MP_EbayUserAddressData();
+
+	CrossCheckModel.TriState nIsKnownToExperian = Model.IsExperianDirector(Model.Application);
+
+	string sNameClass = "";
+	string sNameTitle = "";
+
+	switch (nIsKnownToExperian) {
+	case CrossCheckModel.TriState.No:
+		sNameClass = "unknown-as-experian-director";
+		sNameTitle = "Not found in Experian directors list.";
+		break;
+
+	case CrossCheckModel.TriState.Yes:
+		sNameClass = "known-as-experian-director";
+		sNameTitle = "Found in Experian directors list.";
+		break;
+
+	default:
+		sNameTitle = "No data in Experian directors list.";
+		break;
+	} // switch
 }
 
     <table class="table table-bordered blue-header centered squeezed" >
@@ -38,19 +60,19 @@
             </tr>
             <tr>
                 <td><b>FirstName</b><b class="marking pull-right  @Model.CrossCheckStatus.FirstName"></b></td>
-                <td>@Model.Application.FirstName</td>
+                <td class="@sNameClass" title="@sNameTitle">@Model.Application.FirstName</td>
                 <td>@Model.EBay.FirstName</td>
                 <td>@Model.PayPal.FirstName</td>
             </tr>            
             <tr>
                 <td><b>MiddleInitial</b><b class="marking pull-right  @Model.CrossCheckStatus.MiddleInitial"></b> </td>
-                <td>@Model.Application.MiddleInitial</td>
+                <td class="@sNameClass" title="@sNameTitle">@Model.Application.MiddleInitial</td>
                 <td>@Model.EBay.MiddleInitial</td>
                 <td>@Model.PayPal.MiddleInitial</td>
             </tr>            
             <tr>
                 <td><b>Surname</b><b class="marking pull-right  @Model.CrossCheckStatus.Surname"></b></td>
-                <td>@Model.Application.Surname</td>
+                <td class="@sNameClass" title="@sNameTitle">@Model.Application.Surname</td>
                 <td>@Model.EBay.Surname</td>
                 <td>@Model.PayPal.Surname</td>
             </tr>            
@@ -290,42 +312,64 @@
     var d = Model.Directors[i];
     var addressInfo = d.DirectorAddressInfo;
     var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress();
+
+	CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
+
+	string sDirNameClass = "";
+	string sDirNameTitle = "";
+
+	switch (nIsKnownToExperian) {
+	case CrossCheckModel.TriState.No:
+		sDirNameClass = "unknown-as-experian-director";
+		sDirNameTitle = "Not found in Experian directors list.";
+		break;
+
+	case CrossCheckModel.TriState.Yes:
+		sDirNameClass = "known-as-experian-director";
+		sDirNameTitle = "Found in Experian directors list.";
+		break;
+
+	default:
+		sDirNameTitle = "No data in Experian directors list.";
+		break;
+	} // switch
+
     <fieldset>
         <legend>Director #@(i + 1) Info</legend>
         <table class="table table-bordered">
             <tbody>
                 <tr>
                     <td><b>Name</b></td>
-                    <td>@d.Name</td>
-                </tr> 
+                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Name</td>
+                </tr>
                 <tr>
                     <td><b>Middle</b></td>
-                    <td>@d.Middle</td>
-                </tr> 
+                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Middle</td>
+                </tr>
                 <tr>
                     <td><b>Surname</b></td>
-                    <td>@d.Surname</td>
-                </tr>            
+                    <td class="@sDirNameClass" title="@sDirNameTitle">@d.Surname</td>
+                </tr>
                 <tr>
                     <td><b>Gender</b></td>
                     <td>@d.Gender</td>
-                </tr>            
+                </tr>
                 <tr>
                     <td><b>Date Of Birth</b></td>
                     <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (d.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
-                </tr>            
+                </tr>
                 <tr>
                     <td><b>Organisation</b></td>
                     <td>@address.Organisation</td>
-                </tr>  
+                </tr>
                 <tr>
                     <td><b>Line1</b></td>
                     <td>@address.Line1</td>
-                </tr>            
+                </tr>
                 <tr>
                     <td><b>Line2</b></td>
                     <td>@address.Line2</td>
-                </tr>            
+                </tr>
                 <tr>
                     <td><b>Line3</b></td>
                     <td>@address.Line3</td>

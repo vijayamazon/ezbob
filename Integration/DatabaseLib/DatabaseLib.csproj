@@ -484,6 +484,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
       <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
       <Name>ChannelGrabberConfig</Name>
@@ -491,6 +495,10 @@
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExperianParser\ExperianParser.csproj">
+      <Project>{002cd56a-ba12-48e2-bb40-663e3bcbff3a}</Project>
+      <Name>ExperianParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
