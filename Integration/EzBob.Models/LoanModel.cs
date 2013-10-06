@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Mapping;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.Areas.Customer.Models;
-
-namespace EzBob.Models
+﻿namespace EzBob.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Web.Areas.Customer.Models;
+
     [Serializable]
     public class LoanModel
     {

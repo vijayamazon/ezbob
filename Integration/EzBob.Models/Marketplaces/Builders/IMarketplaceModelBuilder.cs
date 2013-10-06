@@ -8,9 +8,9 @@ namespace EzBob.Models.Marketplaces.Builders
 
 	public interface IMarketplaceModelBuilder
     {
-		PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null);
+		PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history);
         string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo);
-        MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history = null);
+        MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history);
         void UpdateOriginationDate(MP_CustomerMarketPlace mp);
     }
 }

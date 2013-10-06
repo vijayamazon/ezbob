@@ -144,38 +144,28 @@
                 <tr>
                     <th>Account Name</th>
                     <th>Account Number</th>
-                    <th>Available Balance</th>
                     <th>Current Balance</th>
+                    <th>Available Balance</th>
                     <th>Account Holder</th>
-                    <th>Account Open Date</th>
-                    <th>Custom Name</th>
-                    <th>Custom Description</th>
-                    <th>Is Deleted</th>
-                    <th>Term</th>
+                    <th>As Of Date</th>
+                    <th>Overdraft Protection</th>
                     <th>Routing Number</th>
-                    <th>Account Nickname At SrcSite</th>
-                    <th>Secondary Account Holder Name</th>
-                    <th>Taxes Withheld Ytd</th>
+                    <th>Is Deleted</th>
                 </tr>
             </thead>
             <tbody>
                 <%_.each(y.banks, function(bank, i) {%>
-                                <tr onclick="$('#yodleeTabLink<%= (i + 3) %>').click();">
-                                    <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
-                                    <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
-                                    <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
-                                    <td><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
-                                    <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
-                                    <td><%-bank.accountOpenDate!=undefined ? bank.accountOpenDate : "-"%></td>
-                                    <td><%-bank.customName!=undefined ? bank.customName : "-"%></td>
-                                    <td><%-bank.customDescription!=undefined ? bank.customDescription : "-"%></td>
-                                    <td><%-bank.isDeleted!=undefined ? bank.isDeleted : "-"%></td>
-                                    <td><%-bank.term!=undefined ? bank.term : "-"%></td>
-                                    <td><%-bank.routingNumber!=undefined ? bank.routingNumber : "-"%></td>
-                                    <td><%-bank.accountNicknameAtSrcSite!=undefined ? bank.accountNicknameAtSrcSite : "-"%></td>
-                                    <td><%-bank.secondaryAccountHolderName!=undefined ? bank.secondaryAccountHolderName : "-"%></td>
-                                    <td><%-bank.taxesWithheldYtd!=undefined ? bank.taxesWithheldYtd : "-"%></td>
-                                </tr>
+                        <tr class="yodleeAccountsRow">
+                            <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
+                            <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
+                            <td><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
+                            <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
+                            <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>
+                            <td><%-bank.asOfDate!=undefined ? EzBob.formatDateWithoutTime(bank.asOfDate) : "-"%></td>
+                            <td><%-bank.overdraftProtection!=undefined ? GBPValues(bank.overdraftProtection) : "-"%></td>
+                            <td><%-bank.routingNumber!=undefined ? bank.routingNumber : "-"%></td>
+                            <td><%-bank.isDeleted!=undefined ? bank.isDeleted : "-"%></td>
+                        </tr>
                 <%});%>
             </tbody>
         </table>

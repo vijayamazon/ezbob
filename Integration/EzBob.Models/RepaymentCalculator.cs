@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-
-namespace EzBob.Models
+﻿namespace EzBob.Models
 {
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+
     public class RepaymentCalculator
     {
         private readonly ChangeLoanDetailsModelBuilder _builder;

@@ -60,27 +60,17 @@
 			_configVariables = new ConfigurationVariablesRepository(session);
 		}
 
-		public void Add(MP_YodleeOrderItemBankTransaction transaction)
+		public void Add(YodleeTransactionModel transaction)
 		{
-			var amount = transaction.transactionAmount.HasValue
-							 ? _currencyConvertor.ConvertToBaseCurrency(
-								 transaction.transactionAmountCurrency,
-								 transaction.transactionAmount.Value,
-								 transaction.postDate ?? transaction.transactionDate).Value
-							 : 0;
+			var amount = transaction.transactionAmount.HasValue ? transaction.transactionAmount.Value : 0;
 			//var catType = transaction.transactionCategory.Type;
-			var catName = transaction.transactionCategory.Name;
+			var catName = transaction.categoryName;
 			var baseType = transaction.transactionBaseType;
-			var date = (transaction.postDate ?? transaction.transactionDate);
+			var date = transaction.transactionDate;
 			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
 			var yearmonth = date.HasValue ? date.Value.Year * 100 + date.Value.Month : 0;
 
-			var runningBalance = transaction.runningBalance.HasValue
-									 ? _currencyConvertor.ConvertToBaseCurrency(
-										 transaction.runningBalanceCurrency,
-										 transaction.runningBalance.Value,
-										 transaction.postDate ?? transaction.transactionDate).Value
-									 : 0;
+			var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value: 0;
 
 			Add(cat, amount, yearmonth);
 			UpdateMinMaxDay(yearmonth, date);

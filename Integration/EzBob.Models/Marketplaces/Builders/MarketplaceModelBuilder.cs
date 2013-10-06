@@ -22,7 +22,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			_session = session;
 		}
 
-		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
+		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
 			return null;
 		}
@@ -85,7 +85,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			return null;
 		}
 
-		protected static List<IAnalysisDataParameterInfo> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp, DateTime? history = null)
+		protected static List<IAnalysisDataParameterInfo> GetAnalysisFunctionValues(MP_CustomerMarketPlace mp, DateTime? history)
 		{
 			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 

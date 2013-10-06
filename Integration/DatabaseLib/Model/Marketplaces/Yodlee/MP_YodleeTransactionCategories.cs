@@ -17,6 +17,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
     public interface IMP_YodleeTransactionCategoriesRepository : IRepository<MP_YodleeTransactionCategories>
     {
         MP_YodleeTransactionCategories GetYodleeTransactionCategoryByCategoryId(string categoryId);
+		MP_YodleeTransactionCategories GetYodleeTransactionCategoryByCategoryId(long? categoryId);
     }
 
     public class MP_YodleeTransactionCategoriesRepository : NHibernateRepositoryBase<MP_YodleeTransactionCategories>,
@@ -25,19 +26,19 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public MP_YodleeTransactionCategoriesRepository(ISession session)
             : base(session)
         {
+			
         }
 
         public MP_YodleeTransactionCategories GetYodleeTransactionCategoryByCategoryId(string categoryId)
         {
             MP_YodleeTransactionCategories category;
-            try
-            {
+            
                 category = _session
                 .Query<MP_YodleeTransactionCategories>()
-                .First(t => t.CategoryId == categoryId);
-            }
-            catch (Exception)
-            {
+                .FirstOrDefault(t => t.CategoryId == categoryId);
+            
+			if(category == null)
+			{
                 category = _session
                 .Query<MP_YodleeTransactionCategories>()
                 .FirstOrDefault(t => t.CategoryId == "1");
@@ -45,6 +46,12 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 
             return category;
         }
+
+		public MP_YodleeTransactionCategories GetYodleeTransactionCategoryByCategoryId(long? categoryId)
+		{
+			return GetYodleeTransactionCategoryByCategoryId(categoryId.ToString());
+		}
+
     }
 
    

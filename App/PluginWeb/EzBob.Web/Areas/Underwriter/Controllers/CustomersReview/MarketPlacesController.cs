@@ -70,7 +70,7 @@
 		}
 
 
-		public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(Customer customer, DateTime? history = null)
+		public IEnumerable<MarketPlaceModel> GetCustomerMarketplaces(Customer customer, DateTime? history)
 		{
 			return _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
 		}

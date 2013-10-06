@@ -48,26 +48,6 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 				.FetchMany(oi => oi.OrderItemBankTransactions)
 				.ToList();
         }
-
-
     }
 
-    public class MP_YodleeBankTransactionsRepository : NHibernateRepositoryBase<MP_YodleeOrderItemBankTransaction>, IMP_YodleeBankTransactionsRepository
-    {
-        public MP_YodleeBankTransactionsRepository(ISession session)
-            : base(session)
-        {
-        }
-
-        public List<MP_YodleeOrderItemBankTransaction> GetAllItemsWithItemsID(string itemID)
-        {
-            return _session
-                .Query<MP_YodleeOrderItemBankTransaction>()
-                .Where(t => t.transactionId == itemID).ToList();
-        }
-    }
-
-    public interface IMP_YodleeBankTransactionsRepository : IRepository<MP_YodleeOrderItemBankTransaction>
-    {
-    }
 }

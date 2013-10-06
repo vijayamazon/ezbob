@@ -61,7 +61,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeSearchWordsRow": "searchYodleeWordsRowClicked",
         "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
         "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked",
-        "click .yodleeReplotGraph": "replotYodleeGraphClicked"
+        "click .yodleeReplotGraph": "replotYodleeGraphClicked",
+        "click .yodleeAccountsRow": "yodleeAccountsRowClicked"
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -328,7 +329,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         $('#yodleetab4 .YodleeTransactionsTable [name="search_description"]').val(searchWord).change();
         $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, 7); //description id
     },
-
+    yodleeAccountsRowClicked: function (el) {
+        var accountId = $(el.currentTarget).index()+1;
+        $('#yodleeTransactionsTabLink').click();
+        $('#yodleetab4 .YodleeTransactionsTable [name="search_acct"]').val(accountId).change();
+        $('.YodleeTransactionsTable').dataTable().fnFilter(accountId, 0); //account num id
+    },
     searchYodleeWordsAddClicked: function () {
         var that = this;
         var word = this.$el.find("#yodleeAddSearchWordTxt").val();

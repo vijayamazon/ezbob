@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using ExperianLib;
-using EzBob.CommonLib.TimePeriodLogic;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Models.Marketplaces;
-using log4net;
-
-namespace EzBob.Models
+﻿namespace EzBob.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using ExperianLib;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Models.Marketplaces;
+	using log4net;
+
 	public class ProfileSummaryModelBuilder
     {
         private readonly IDecisionHistoryRepository _decisions;

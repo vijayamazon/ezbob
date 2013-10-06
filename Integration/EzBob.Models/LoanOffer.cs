@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Web.Areas.Customer.Models;
-
-namespace EzBob.Models
+﻿namespace EzBob.Models
 {
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzBob.Web.Areas.Customer.Models;
+
     public class LoanOfferDetails
     {
         public decimal OfferedCreditLine { get; set; }

@@ -1,40 +1,32 @@
 ﻿namespace EzBob.Models.Marketplaces.Yodlee
 {
+	using System;
 	using System.Collections.Generic;
 
 	public class YodleeBankModel
 	{
 		public YodleeBankModel()
 		{
-			customName = "-";
-			customDescription = "-";
-			isDeleted = "-";
+			accountName = "-";
 			accountNumber = "-";
 			accountHolder = "-";
-			availableBalance = "-";
-			currentBalance = "-";
-			term = "-";
-			accountName = "-";
+			currentBalance = null;
+			availableBalance = null;
+			overdraftProtection = null;
 			routingNumber = "-";
-			accountNicknameAtSrcSite = "-";
-			secondaryAccountHolderName = "-";
-			accountOpenDate = "-";
-			taxesWithheldYtd = "-";
+			asOfDate = null;
+			isDeleted = false;
 		}
-		public string customName { get; set; }
-		public string customDescription { get; set; }
-		public string isDeleted { get; set; }
+		public string accountName { get; set; }
 		public string accountNumber { get; set; }
 		public string accountHolder { get; set; }
-		public string availableBalance { get; set; }
-		public string term { get; set; }
-		public string accountName { get; set; }
+		public double? currentBalance { get; set; }
+		public double? availableBalance { get; set; }
 		public string routingNumber { get; set; }
-		public string accountNicknameAtSrcSite { get; set; }
-		public string secondaryAccountHolderName { get; set; }
-		public string accountOpenDate { get; set; }
-		public string taxesWithheldYtd { get; set; }
+		public double? overdraftProtection { get; set; }
+		public DateTime? asOfDate { get; set; }
+		public bool isDeleted { get; set; }
+
 		public IEnumerable<YodleeTransactionModel> transactions { get; set; }
-		public string currentBalance { get; set; }
 	}
 }

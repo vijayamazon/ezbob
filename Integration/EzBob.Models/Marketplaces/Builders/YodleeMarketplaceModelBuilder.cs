@@ -2,8 +2,10 @@ namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
 	using Web.Areas.Customer.Models;
 	using NHibernate.Linq;
@@ -15,33 +17,45 @@ namespace EzBob.Models.Marketplaces.Builders
 
 	class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
-		private readonly MP_YodleeOrderRepository _yodleeOrderRepository;
+		private readonly MP_YodleeTransactionCategoriesRepository _mpYodleeTransactionCategoriesRepository;
 		private readonly CurrencyConvertor _currencyConvertor;
 		private YodleeModel _yodleeModel;
-		public YodleeMarketplaceModelBuilder(MP_YodleeOrderRepository yodleeOrderRepository, ISession session)
+		public YodleeMarketplaceModelBuilder(ISession session)
 			: base(session)
 		{
-			_yodleeOrderRepository = yodleeOrderRepository;
+			_mpYodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(_session);
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history = null)
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
-			if (_yodleeModel == null)
+			var av =  GetAnalysisFunctionValues(mp, history);
+
+			var tnop = 0.0;
+			var tnip = 0.0;
+			var mip = 0.0;
+			var tn = 0;
+			if (av != null)
 			{
-				_yodleeModel = BuildYodlee(mp, history);
+				var tnipN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Income"));
+				var tnopN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Expense"));
+				var mipN = GetMonth(av.Where(x => x.ParameterName == "Total Income"));
+				var tnN = GetClosestToYear(av.Where(x => x.ParameterName == "Number Of Transactions"));
+
+				if (mipN != null) mip = Math.Abs(Convert.ToDouble(mipN.Value, CultureInfo.InvariantCulture));
+				if (tnipN != null) tnip = Math.Abs(Convert.ToDouble(tnipN.Value, CultureInfo.InvariantCulture));
+				if (tnopN != null) tnop = Math.Abs(Convert.ToDouble(tnopN.Value, CultureInfo.InvariantCulture));
+				if (tnN != null) tn = Math.Abs(Convert.ToInt32(tnN.Value, CultureInfo.InvariantCulture));
 			}
-
 			var status = mp.GetUpdatingStatus(history);
-
+			
 			var yodleeModel = new PaymentAccountsModel
 			{
 				displayName = mp.DisplayName,
-				TotalNetInPayments = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["2Total Income"][999999],
-				MonthInPayments = _yodleeModel.CashFlowReportModel.MonthInPayments,
-				TotalNetOutPayments = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7Total Expenses"][999999],
-				TransactionsNumber = _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["3Num Of Transactions"][999999] +
-									 _yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["8Num Of Transactions"][999999],
+				TotalNetInPayments = tnip,
+				MonthInPayments = mip,
+				TotalNetOutPayments = tnop,
+				TransactionsNumber = tn,
 				id = mp.Id,
 				Status = status,
 			};
@@ -52,17 +66,18 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			if (_yodleeModel == null)
 			{
-				_yodleeModel = BuildYodlee(mp);
+				_yodleeModel = BuildYodlee(mp, history);
 			}
 			model.Yodlee = _yodleeModel;
 		}
 
-		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history = null)
+		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history)
 		{
-			List<MP_YodleeOrderItem> yodleeData = null;
+			YodleeOrderDictionary yodleeData = null;
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
 			{
-				yodleeData = _yodleeOrderRepository.GetOrdersItemsByMakretplaceId(mp.Id);
+				var ddh = new DatabaseDataHelper(_session);
+				yodleeData = ddh.GetAllYodleeOrdersData(history.HasValue ? history.Value : DateTime.UtcNow, mp);
 			}
 
 			if (yodleeData == null) return null;
@@ -70,100 +85,90 @@ namespace EzBob.Models.Marketplaces.Builders
 			var model = new YodleeModel();
 			var banks = new List<YodleeBankModel>();
 			var dataBaseDataHelper = new DatabaseDataHelper(_session);
-			foreach (var bank in yodleeData)
+			foreach (var bank in yodleeData.Data.Keys)
 			{
 				var yodleeBankModel = new YodleeBankModel
-										  {
-											  customName = bank.customName,
-											  customDescription = bank.customDescription,
-											  isDeleted = bank.isDeleted.ToString(),
-											  accountNumber = bank.accountNumber,
-											  accountHolder = bank.accountHolder,
-											  availableBalance = bank.availableBalance.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
-												  bank.availableBalanceCurrency,
-												  bank.availableBalance.Value,
-												  bank.asOfDate).Value.ToString() : null,
-											  currentBalance = bank.currentBalance.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
-											  bank.currentBalanceCurrency,
-											  bank.currentBalance.Value,
-											  bank.asOfDate).Value.ToString() : null,
-											  term = bank.term,
-											  accountName = bank.accountName,
-											  routingNumber = bank.routingNumber,
-											  accountNicknameAtSrcSite = bank.accountNicknameAtSrcSite,
-											  secondaryAccountHolderName = bank.secondaryAccountHolderName,
-											  accountOpenDate = bank.accountOpenDate.ToString(),
-											  taxesWithheldYtd = bank.taxesWithheldYtd.ToString(),
-										  };
+					{
+						isDeleted = bank.isDeleted != 0,
+						accountNumber = bank.accountNumber,
+						accountHolder = bank.accountHolder,
+						availableBalance = bank.availableBalance.amount.HasValue
+							                   ? _currencyConvertor.ConvertToBaseCurrency(
+								                   bank.availableBalance.currencyCode,
+								                   bank.availableBalance.amount.Value,
+								                   bank.asOfDate.date).Value
+							                   : (double?) null,
+						currentBalance = bank.currentBalance.amount.HasValue
+							                 ? _currencyConvertor.ConvertToBaseCurrency(
+								                 bank.currentBalance.currencyCode,
+								                 bank.currentBalance.amount.Value,
+								                 bank.asOfDate.date).Value
+							                 : (double?) null,
+						accountName = bank.accountName,
+						routingNumber = bank.routingNumber,
+						asOfDate = bank.asOfDate.date,
+						overdraftProtection = bank.overdraftProtection.amount.HasValue
+							                      ? _currencyConvertor.ConvertToBaseCurrency(
+								                      bank.overdraftProtection.currencyCode,
+								                      bank.overdraftProtection.amount.Value,
+								                      bank.asOfDate.date).Value
+							                      : (double?) null,
+					};
 				var transactions = new List<YodleeTransactionModel>();
-				if (bank.currentBalance.HasValue)
+				if (bank.currentBalance.amount.HasValue)
 				{
-					dataBaseDataHelper.CalculateYodleeRunningBalance(bank.OrderItemBankTransactions,
+					dataBaseDataHelper.CalculateYodleeRunningBalance(mp,bank.srcElementId,
 																	 _currencyConvertor.ConvertToBaseCurrency(
-																		 bank.currentBalanceCurrency, bank.currentBalance.Value,
-																		 bank.asOfDate));
+																		 bank.currentBalance.currencyCode, bank.currentBalance.amount.Value,
+																		 bank.asOfDate.date));
 				}
-				foreach (var transaction in bank.OrderItemBankTransactions)
+				foreach (var transaction in yodleeData.Data[bank])
 				{
 					var yodleeTransactionModel = new YodleeTransactionModel
 													 {
 														 transactionBaseType = transaction.transactionBaseType,
-														 transactionDate = (transaction.postDate ?? transaction.transactionDate).ToString(),
-														 categoryName = transaction.transactionCategory.Name,
-														 categoryType = transaction.transactionCategory.Type,
-														 transactionAmount = transaction.transactionAmount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
-															 transaction.transactionAmountCurrency,
-															 transaction.transactionAmount.Value,
-															 transaction.postDate ?? transaction.transactionDate).Value.ToString() : null,
+														 transactionDate = (transaction.postDate ?? transaction.transactionDate).date,
+														 categoryName = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.categoryId).Name,
+														 categoryType = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.categoryId).Type,
+														 transactionAmount = transaction.transactionAmount.amount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
+															 transaction.transactionAmount.currencyCode,
+															 transaction.transactionAmount.amount.Value,
+															 transaction.postDate.date ?? transaction.transactionDate.date).Value : (double?)null,
 														 description = transaction.description,
-														 runningBalance = transaction.runningBalance.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
-															 transaction.runningBalanceCurrency,
-															 transaction.runningBalance.Value,
-															 transaction.postDate ?? transaction.transactionDate).Value.ToString() : null,
+														 runningBalance = transaction.runningBalance.amount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
+															 transaction.runningBalance.currencyCode,
+															 transaction.runningBalance.amount.Value,
+															 transaction.postDate.date ?? transaction.transactionDate.date).Value : (double?)null,
 													 };
 					transactions.Add(yodleeTransactionModel);
 				}
-				yodleeBankModel.transactions = transactions.OrderByDescending(t => DateTime.Parse(t.transactionDate));
+				yodleeBankModel.transactions = transactions.Where(t => t.transactionDate.HasValue).OrderByDescending(t => t.transactionDate.Value);
 				banks.Add(yodleeBankModel);
 			}
 			model.banks = banks;
 			YodleeSearchWordsModel yodleeSearchWordsModel;
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(yodleeData, mp.Customer.PersonalInfo.Surname, out yodleeSearchWordsModel);
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer.PersonalInfo.Surname, out yodleeSearchWordsModel);
 			model.SearchWordsModel = yodleeSearchWordsModel;
 			return model;
 		}
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(IEnumerable<MP_YodleeOrderItem> yodleeData, string customerSurName, out YodleeSearchWordsModel yodleeSearchWordsModel)
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, string customerSurName, out YodleeSearchWordsModel yodleeSearchWordsModel)
 		{
 			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
 			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session, customerSurName);
-			var databaseDataHelper = new DatabaseDataHelper(_session);
-			foreach (var bank in yodleeData)
+			foreach (var bank in model.banks)
 			{
-				if (bank.currentBalance.HasValue)
-				{
-					databaseDataHelper.CalculateYodleeRunningBalance(bank.OrderItemBankTransactions,
-																	 _currencyConvertor.ConvertToBaseCurrency(
-																		 bank.currentBalanceCurrency, bank.currentBalance.Value,
-																		 bank.asOfDate));
-
-					
-				}
-
 				if (bank.overdraftProtection.HasValue)
 				{
-					yodleeCashFlowReportModel.BankFrame -= _currencyConvertor.ConvertToBaseCurrency(
-						bank.overdraftProtectionCurrency, bank.overdraftProtection.Value,
-						bank.asOfDate).Value;
+					yodleeCashFlowReportModel.BankFrame -= bank.overdraftProtection.Value;
 				}else if (bank.availableBalance.HasValue && bank.currentBalance.HasValue)
 				{
-					yodleeCashFlowReportModel.BankFrame -= _currencyConvertor.ConvertToBaseCurrency(
-						bank.availableBalanceCurrency, (bank.currentBalance.Value - bank.availableBalance.Value),
-						bank.asOfDate).Value;
+					yodleeCashFlowReportModel.BankFrame -= (bank.currentBalance.Value - bank.availableBalance.Value);
+
 				}
 				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900,1,1);
 
-				foreach (var transaction in bank.OrderItemBankTransactions)
+				foreach (var transaction in bank.transactions)
 				{
 					yodleeCashFlowReportModel.Add(transaction);
 					yodleeSearchWordsModel.Add(transaction);

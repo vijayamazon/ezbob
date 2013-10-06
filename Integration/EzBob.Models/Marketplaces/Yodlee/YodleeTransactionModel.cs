@@ -1,24 +1,25 @@
-﻿namespace EzBob.Models.Marketplaces
+﻿using System;
+namespace EzBob.Models.Marketplaces
 {
 	public class YodleeTransactionModel
 	{
 		public YodleeTransactionModel()
 		{
 			transactionBaseType = "-";
-			transactionDate = "-";
+			transactionDate = null;
 			categoryName = "-";
 			categoryType = "-";
-			transactionAmount = "-";
+			transactionAmount = null;
 			description = "-";
-			runningBalance = "-";
+			runningBalance = null;
 		}
 
 		public string transactionBaseType { get; set; }
-		public string transactionDate { get; set; }
+		public DateTime? transactionDate { get; set; }
 		public string categoryName { get; set; }
 		public string categoryType { get; set; }
-		public string transactionAmount { get; set; }
+		public double? transactionAmount { get; set; }
 		public string description { get; set; }
-		public string runningBalance { get; set; }
+		public double? runningBalance { get; set; }
 	}
 }

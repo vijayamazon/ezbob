@@ -49,7 +49,7 @@
 				if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
 			}
 
-			var status = m.GetUpdatingStatus();
+			var status = m.GetUpdatingStatus(history);
 
 			var payPalModel = new PaymentAccountsModel
 			{

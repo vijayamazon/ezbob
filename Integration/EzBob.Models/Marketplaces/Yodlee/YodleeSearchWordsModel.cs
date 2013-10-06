@@ -31,18 +31,13 @@
 		}
 
 
-		public void Add(MP_YodleeOrderItemBankTransaction transaction)
+		public void Add(YodleeTransactionModel transaction)
 		{
 			foreach (var word in _yodleeSearchWords)
 			{
 				if (transaction.description.ToLowerInvariant().Contains(word.ToLowerInvariant()))
 				{
-					var amount = transaction.transactionAmount.HasValue
-							 ? _currencyConvertor.ConvertToBaseCurrency(
-								 transaction.transactionAmountCurrency,
-								 transaction.transactionAmount.Value,
-								 transaction.postDate ?? transaction.transactionDate).Value
-							 : 0;
+					var amount = transaction.transactionAmount.HasValue ? transaction.transactionAmount.Value : 0;
 
 					if (transaction.transactionBaseType == "credit")
 					{
