@@ -20,7 +20,7 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, companyScore, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo,
+      var alertPassed, apiChecks, companyScore, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo, that,
         _this = this;
 
       this.$el.html(this.template());
@@ -51,15 +51,11 @@
         el: marketplaces,
         model: this.marketPlaces
       });
-      /*
-      @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
-      @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
-          el: marketplaces
-          model: @marketPlacesHistory
-      )
-      */
-
+      that = this;
       this.marketPlaceView.on("rechecked", this.mpRechecked, this.marketPlaces);
+      EzBob.App.vent.on('ct:marketplaces.history', function(history) {
+        return that.show(that.marketPlaces.customerId, true, history);
+      });
       this.loanHistory = new EzBob.Underwriter.LoanHistoryModel();
       this.loanHistoryView = new EzBob.Underwriter.LoanHistoryView({
         el: loanhistorys,
@@ -193,7 +189,7 @@
     };
 
     ProfileView.prototype.disableChange = function(id) {
-      return this.show(id);
+      return this.show(id, false);
     };
 
     ProfileView.prototype.RejectBtnClick = function(e) {
@@ -316,8 +312,8 @@
       return this.changeDecisionButtonsState();
     };
 
-    ProfileView.prototype.show = function(id) {
-      var fullModel, that,
+    ProfileView.prototype.show = function(id, isHistory, history) {
+      var fullModel, that, _ref1,
         _this = this;
 
       this.hide();
@@ -326,7 +322,10 @@
       that = this;
       this.customerId = id;
       fullModel = new EzBob.Underwriter.CustomerFullModel({
-        Id: id
+        customerId: id,
+        history: (_ref1 = EzBob.parseDate(history)) != null ? _ref1 : {
+          history: null
+        }
       });
       fullModel.fetch().done(function() {
         switch (fullModel.get("State")) {
@@ -362,16 +361,11 @@
         });
         _this.loanInfoModel.trigger("sync");
         _this.marketPlaces.customerId = id;
+        _this.marketPlaces.history = history;
         _this.marketPlaces.reset(fullModel.get("Marketplaces"), {
           silent: true
         });
         _this.marketPlaces.trigger("sync");
-        /*
-        @marketPlacesHistory.customerId = id
-        @marketPlacesHistory.reset fullModel.get("MarketplacesHistory"), silent: true
-        @marketPlacesHistory.trigger "sync"
-        */
-
         _this.loanHistory.customerId = id;
         _this.loanHistoryView.idCustomer = id;
         _this.loanHistory.set(fullModel.get("LoansAndOffers"), {
@@ -384,7 +378,7 @@
         }, {
           silent: true
         });
-        _this.summaryInfoModel.set(fullModel.get("SummaryMdodel"), {
+        _this.summaryInfoModel.set(fullModel.get("SummaryModel"), {
           silent: true
         });
         _this.summaryInfoModel.trigger("sync");
@@ -458,6 +452,9 @@
           silent: true
         });
         _this.companyScoreModel.trigger("sync");
+        if (isHistory) {
+          $('a[href=#marketplaces]').click();
+        }
         return BlockUi("Off");
       });
       this.crossCheckView.render({

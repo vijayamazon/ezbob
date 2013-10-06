@@ -994,6 +994,9 @@
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.customerRelations.js" />
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js">
+      <DependentUpon>ezbob.underwriter.customerFullModel.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js">
       <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
     </Content>
@@ -1025,6 +1028,9 @@
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
+      <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.min.js">
       <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">

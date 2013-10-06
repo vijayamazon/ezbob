@@ -62,7 +62,7 @@
     MarketPlaces.prototype.model = EzBob.Underwriter.MarketPlaceModel;
 
     MarketPlaces.prototype.url = function() {
-      return "" + window.gRootPath + "Underwriter/MarketPlaces/Index/" + this.customerId;
+      return "" + window.gRootPath + "Underwriter/MarketPlaces/Index/?id=" + this.customerId + "&history=" + this.history;
     };
 
     return MarketPlaces;
@@ -243,35 +243,7 @@
       return false;
     };
 
-    MarketPlacesView.prototype.tryRecheckYodlee = function(e) {
-      /*
-              $el = $(e.currentTarget)
-              umi = $el.attr "umi"
-              mpType = $el.attr "marketplaceType"
-              customerId = @model.customerId
-              
-              okFn = =>
-                  xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryReCheckYodlee",
-                      customerId: customerId
-                      umi: umi
-                      marketplaceType: mpType
-                  xhr.done (response)=>
-                      if response and response.error != undefined
-                          EzBob.ShowMessage response.error, "Error occured"
-                      else
-                          EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
-                      @trigger "rechecked",
-                          umi: umi
-                          el: $el
-                  xhr.fail (data) ->
-                      console.error data.responseText
-      
-              EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
-              
-              false
-      */
-
-    };
+    MarketPlacesView.prototype.tryRecheckYodlee = function(e) {};
 
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
       var $el, customerId, mpType, okFn, umi,

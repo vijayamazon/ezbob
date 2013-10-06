@@ -46,10 +46,10 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public JsonNetResult Index(int id)
+		public JsonNetResult Index(int id, DateTime? history = null)
 		{
 			var customer = _customers.Get(id);
-			var models = GetCustomerMarketplaces(customer);
+			var models = GetCustomerMarketplaces(customer, history);
 			return this.JsonNet(models);
 		}
 

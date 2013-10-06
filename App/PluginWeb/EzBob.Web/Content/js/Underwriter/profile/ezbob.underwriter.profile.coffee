@@ -36,15 +36,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @marketPlaces
         )
 
-        ###
-        @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
-        @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
-            el: marketplaces
-            model: @marketPlacesHistory
-        )
-        ###
-
+        that = @
         @marketPlaceView.on "rechecked", @mpRechecked, @marketPlaces
+        EzBob.App.vent.on 'ct:marketplaces.history', (history) =>
+            that.show that.marketPlaces.customerId, true, history
+
         @loanHistory = new EzBob.Underwriter.LoanHistoryModel()
         @loanHistoryView = new EzBob.Underwriter.LoanHistoryView(
             el: loanhistorys
@@ -158,7 +154,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             , 1000)
 
     disableChange: (id) ->
-        @show id
+        @show id, false
 
     RejectBtnClick: (e) ->
         return false  if $(e.currentTarget).hasClass("disabled")
@@ -231,14 +227,13 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @loanHistory.fetch()
         @changeDecisionButtonsState()
 
-    show: (id) ->
+    show: (id, isHistory, history) ->
         @hide()
         BlockUi "on"
         scrollTop()
         that = this
         @customerId = id
-
-        fullModel = new EzBob.Underwriter.CustomerFullModel(Id: id)
+        fullModel = new EzBob.Underwriter.CustomerFullModel(customerId: id, history: (EzBob.parseDate(history) ? history : null))
         fullModel.fetch().done =>
 
             switch fullModel.get "State"
@@ -261,22 +256,17 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @loanInfoModel.trigger "sync"
 
             @marketPlaces.customerId = id
+            @marketPlaces.history = history
             @marketPlaces.reset fullModel.get("Marketplaces"), silent: true
             @marketPlaces.trigger "sync"
 
-            ###
-            @marketPlacesHistory.customerId = id
-            @marketPlacesHistory.reset fullModel.get("MarketplacesHistory"), silent: true
-            @marketPlacesHistory.trigger "sync"
-            ###
-            
             @loanHistory.customerId = id
             @loanHistoryView.idCustomer = id
             @loanHistory.set fullModel.get("LoansAndOffers"), silent: true
             @loanHistory.trigger "sync"
 
             @summaryInfoModel.set {Id: id, success: true}, {silent: true}
-            @summaryInfoModel.set fullModel.get("SummaryMdodel"), silent: true
+            @summaryInfoModel.set fullModel.get("SummaryModel"), silent: true
             @summaryInfoModel.trigger "sync"
 
             @checkCustomerAvailability @summaryInfoModel
@@ -328,6 +318,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @companyScoreModel.set fullModel.get("CompanyScore"), silent: true
             @companyScoreModel.trigger "sync"
 
+            $('a[href=#marketplaces]').click() if isHistory
             BlockUi "Off"
 
 

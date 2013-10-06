@@ -711,6 +711,11 @@ EzBob.formatDateWithoutTime = function (date) {
     if (!date) return "";
     return moment.utc(date).local().format("DD/MM/YYYY");
 };
+//parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
+EzBob.parseDate = function(dateString) {
+    if (!dateString) return "";
+    return dateString.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1');
+};
 
 EzBob.formatPercents = function (num, precision) {
     if (num == null || num === "") return "";

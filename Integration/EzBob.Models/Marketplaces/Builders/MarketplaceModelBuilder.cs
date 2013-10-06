@@ -57,7 +57,9 @@ namespace EzBob.Models.Marketplaces.Builders
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 				UWPriority = mp.Marketplace.UWPriority,
 				Disabled = mp.Disabled,
-				IsNew = mp.IsNew
+				IsNew = mp.IsNew,
+				IsHistory = history.HasValue,
+				History = history.HasValue ? history.Value : (DateTime?) null
 			};
 
 			InitializeSpecificData(mp, model, history);
@@ -87,11 +89,19 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 
-			List<IAnalysisDataParameterInfo> av;
-			av = history.HasValue
-				     ? analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Where(pair => pair.Key <= history).Max(pair => pair.Key)).Value
-				     : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
-
+			List<IAnalysisDataParameterInfo> av = null;
+			try
+			{
+				av = history.HasValue
+					     ? analisysFunction.Data.FirstOrDefault(
+							 x => x.Key == analisysFunction.Data.Where(pair => pair.Key.Date <= history.Value.Date).DefaultIfEmpty().Max(pair => pair.Key))
+					                       .Value
+					     : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+			}
+			catch (Exception ex)
+			{
+				
+			}
 			return av;
 		}
 

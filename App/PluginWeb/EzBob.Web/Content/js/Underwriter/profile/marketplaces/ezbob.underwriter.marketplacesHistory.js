@@ -34,7 +34,6 @@
     MarketPlacesHistory.prototype.model = EzBob.Underwriter.MarketPlacesHistoryModel;
 
     MarketPlacesHistory.prototype.url = function() {
-      console.log("url", this, this.customerId);
       return "" + window.gRootPath + "Underwriter/MarketPlaces/GetCustomerMarketplacesHistory/?customerId=" + this.customerId;
     };
 
@@ -69,7 +68,8 @@
     };
 
     MarketPlacesHistoryView.prototype.events = {
-      "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked"
+      "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
+      "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
     };
 
     MarketPlacesHistoryView.prototype.serializeData = function() {
@@ -80,8 +80,12 @@
 
     MarketPlacesHistoryView.prototype.showHistoryMarketPlacesClicked = function() {
       var date;
-      date = this.$el.find("#mpHistoryDdl :selected").text();
-      return console.log('show history', date);
+      date = this.$el.find("#mpHistoryDdl :selected").val();
+      return EzBob.App.vent.trigger('ct:marketplaces.history', date);
+    };
+
+    MarketPlacesHistoryView.prototype.showCurrentMarketPlacesClicked = function() {
+      return EzBob.App.vent.trigger('ct:marketplaces.history', null);
     };
 
     return MarketPlacesHistoryView;

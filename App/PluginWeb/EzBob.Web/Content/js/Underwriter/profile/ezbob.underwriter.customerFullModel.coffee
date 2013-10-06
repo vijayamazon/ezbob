@@ -2,5 +2,4 @@
 root.EzBob = root.EzBob or {}
 
 class EzBob.Underwriter.CustomerFullModel extends Backbone.Model
-    idAttribute: "Id"
-    urlRoot: "#{window.gRootPath}Underwriter/FullCustomer/Index"
+    url: -> "#{window.gRootPath}Underwriter/FullCustomer/Index/?id=#{@get("customerId")}&history=#{@get("history")}"

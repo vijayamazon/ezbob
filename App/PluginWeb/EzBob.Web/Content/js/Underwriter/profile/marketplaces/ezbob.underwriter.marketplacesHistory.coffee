@@ -7,9 +7,7 @@ class EzBob.Underwriter.MarketPlacesHistoryModel extends Backbone.Model
 
 class EzBob.Underwriter.MarketPlacesHistory extends Backbone.Collection
     model: EzBob.Underwriter.MarketPlacesHistoryModel
-    url: -> 
-        console.log "url", @, @customerId
-        "#{window.gRootPath}Underwriter/MarketPlaces/GetCustomerMarketplacesHistory/?customerId=#{@customerId}"
+    url: -> "#{window.gRootPath}Underwriter/MarketPlaces/GetCustomerMarketplacesHistory/?customerId=#{@customerId}"
 
 class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.ItemView
     template: "#marketplace-history-template"
@@ -26,10 +24,14 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
 
     events:
         "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked"
+        "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
 
     serializeData: ->
         return {MarketPlacesHistory: @model}
 
     showHistoryMarketPlacesClicked: ->
-        date = @$el.find("#mpHistoryDdl :selected").text()
-        console.log('show history', date)
+        date = @$el.find("#mpHistoryDdl :selected").val()
+        EzBob.App.vent.trigger 'ct:marketplaces.history', date
+
+    showCurrentMarketPlacesClicked: ->
+        EzBob.App.vent.trigger 'ct:marketplaces.history', null

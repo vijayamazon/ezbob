@@ -11,13 +11,16 @@
 	{
 		public IEnumerable<MarketPlaceModel> GetMarketPlaceModels(Customer customer, DateTime? history)
 		{
-			var marketplaces = customer.CustomerMarketPlaces.ToList();
+			var marketplaces = history.HasValue
+								   ? customer.CustomerMarketPlaces.Where(mp => mp.Created.HasValue && mp.Created.Value.Date <= history.Value.Date).ToList()
+								   : customer.CustomerMarketPlaces.ToList();
+
 
 			var models = marketplaces.Select(mp =>
 			{
 				var builder = GetBuilder(mp);
 
-				var model = builder.Create(mp);
+				var model = builder.Create(mp, history);
 
 				model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
 
@@ -54,20 +57,33 @@
 
 		public IEnumerable<MarketPlaceHistoryModel> GetMarketPlaceHistoryModel(Customer customer)
 		{
-			var models = customer
+			var modelsMpUpdates = customer
 				.CustomerMarketPlaces
-				.ToList()
 				.Where(mp => mp.Customer == customer)
 				.SelectMany(mp => mp.UpdatingHistory)
-				.ToList()
 				.Where(x => x.UpdatingEnd.HasValue)
+				.ToList()
+				.Select(h => h.UpdatingEnd.Value.Date)
+				.Distinct()
 				.Select(x => new MarketPlaceHistoryModel
 					{
-						HistoryDate = x.UpdatingEnd.Value,
-						HistoryId = x.Id
+						HistoryDate = x,
+						HistoryType = "MP Update"
 					});
 
+			var modelsCashRequests =
+				customer.CashRequests.Where(cr => cr.CreationDate.HasValue)
+						.Select(cr => cr.CreationDate.Value.Date)
+						.Distinct()
+						.Select(x => new MarketPlaceHistoryModel
+							{
+								HistoryDate = x,
+								HistoryType = "Cash Request"
+							});
 
+			var models = new List<MarketPlaceHistoryModel>();
+			models.AddRange(modelsMpUpdates);
+			models.AddRange(modelsCashRequests);
 			return models;
 		}
 

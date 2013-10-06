@@ -6,6 +6,6 @@ namespace EzBob.Models.Marketplaces
 	public class MarketPlaceHistoryModel
 	{
 		public DateTime HistoryDate { get; set; }
-		public int HistoryId { get; set; }
+		public string HistoryType { get; set; }
 	}
 }

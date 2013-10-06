@@ -27,7 +27,7 @@ class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
 
 class EzBob.Underwriter.MarketPlaces extends Backbone.Collection
     model: EzBob.Underwriter.MarketPlaceModel
-    url: -> "#{window.gRootPath}Underwriter/MarketPlaces/Index/#{@customerId}"
+    url: -> "#{window.gRootPath}Underwriter/MarketPlaces/Index/?id=#{@customerId}&history=#{@history}"
 
 class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     template: "#marketplace-template"
@@ -57,6 +57,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             el: marketplacesHistoryDiv
             customerId: @model.customerId
         )
+
         return this
 
     events:
@@ -69,6 +70,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         "click .disable-shop": "disableShop"
         "click .enable-shop": "enableShop"
         
+
     rowClick: (e) ->
         return if e.target.getAttribute('href')
         return if e.target.tagName is 'I'
@@ -146,32 +148,6 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return false
 
     tryRecheckYodlee: (e) ->
-        ###
-        $el = $(e.currentTarget)
-        umi = $el.attr "umi"
-        mpType = $el.attr "marketplaceType"
-        customerId = @model.customerId
-        
-        okFn = =>
-            xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryReCheckYodlee",
-                customerId: customerId
-                umi: umi
-                marketplaceType: mpType
-            xhr.done (response)=>
-                if response and response.error != undefined
-                    EzBob.ShowMessage response.error, "Error occured"
-                else
-                    EzBob.ShowMessage "Wait a few minutes", "The marketplace recheck is running. ", null, "OK"
-                @trigger "rechecked",
-                    umi: umi
-                    el: $el
-            xhr.fail (data) ->
-                console.error data.responseText
-
-        EzBob.ShowMessage "", "Are you sure?", okFn, "Yes", null, "No"
-        
-        false
-        ###
 
     reCheckmarketplaces: (e) ->
         $el = $(e.currentTarget)

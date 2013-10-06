@@ -37,7 +37,7 @@ class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
         @CommentArea = @$el.find("#CommentArea")
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
         #added new label into MPs tab
-        isNew = @model.get("MarketPlaces").IsNew
+        isNew = @model.get("MarketPlaces") and @model.get("MarketPlaces").IsNew
         $("#new-ribbon-marketplaces").toggle Convert.toBool isNew
 
 class EzBob.Underwriter.SummaryInfoModel extends Backbone.Model

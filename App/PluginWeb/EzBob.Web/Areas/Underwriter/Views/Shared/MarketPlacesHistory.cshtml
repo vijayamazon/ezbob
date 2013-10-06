@@ -4,11 +4,12 @@
     <select class="selectheight" style="margin-bottom: 0px" id="mpHistoryDdl">
         <option></option>
         <%_.each(MarketPlacesHistory.models, function(history, i) {
-            var hId = history.get("HistoryId");
-            var hDate = EzBob.formatDateWithoutTime(history.get("HistoryDate"));
+            var hId = EzBob.formatDateWithoutTime(history.get("HistoryDate"));
+            var hDate = EzBob.formatDateWithoutTime(history.get("HistoryDate")) + ' ' + history.get("HistoryType");
         %>    
         <option value="<%-hId%>"><%-hDate%></option>
         <%});%>
     </select>
     <button class="btn showHistoryMarketPlaces">Show History</button>
+    <button class="btn showCurrentMarketPlaces">Show Current</button>
 </script>
