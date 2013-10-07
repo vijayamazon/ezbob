@@ -34,6 +34,7 @@
             BuildCreditBureau(customer, summary);
             BuildPaymentAccounts(customer, summary);
             AddDecisionHistory(summary, customer);
+			summary.RequestedLoan = GetRequestedLoan(customer.CustomerRequestedLoan.FirstOrDefault());
             summary.AffordabilityAnalysis =
                     new AffordabilityAnalysis
                     {
@@ -59,6 +60,20 @@
             return summary;
         }
 
+		private CustomerRequestedLoanModel GetRequestedLoan(CustomerRequestedLoan requestedLoan)
+		{
+			var rl = new CustomerRequestedLoanModel();
+			if (requestedLoan != null)
+			{
+				rl.Amount = requestedLoan.Amount;
+				rl.Created = requestedLoan.Created;
+				rl.CustomerReason = requestedLoan.CustomerReason.Reason;
+				rl.CustomerSourceOfRepayment = requestedLoan.CustomerSourceOfRepayment.SourceOfRepayment;
+				rl.OtherReason = requestedLoan.OtherReason;
+				rl.OtherSourceOfRepayment = requestedLoan.OtherSourceOfRepayment;
+			}
+			return rl;
+		}
         private static void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
         {
             var creditBureau = new CreditBureau();

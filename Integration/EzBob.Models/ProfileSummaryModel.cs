@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class BaseProfileSummaryModel
+	public class BaseProfileSummaryModel
     {
         public Lighter Lighter { get; set; }
     }
@@ -64,6 +64,16 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string ThinFile { get; set; }
     }
 
+	public class CustomerRequestedLoanModel
+	{
+		public DateTime Created { get; set; }
+		public string CustomerReason { get; set; }
+		public string CustomerSourceOfRepayment { get; set; }
+		public double? Amount { get; set; }
+		public string OtherReason { get; set; }
+		public string OtherSourceOfRepayment { get; set; }
+	}
+
     public class ProfileSummaryModel
     {
         public MarketPlaces MarketPlaces { get; set; }
@@ -82,6 +92,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public decimal? OverallTurnOver { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
+
+		public CustomerRequestedLoanModel RequestedLoan { get; set; } 
     }
 
     public class FraudCheck

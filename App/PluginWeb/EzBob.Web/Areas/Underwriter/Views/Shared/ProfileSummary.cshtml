@@ -18,7 +18,8 @@
         aa = m.AffordabilityAnalysis || {}, 
         la = m.LoanActivity || {}, 
         ab = m.AmlBwa || {}, 
-        cb = m.CreditBureau || {};
+        cb = m.CreditBureau || {},
+        rl = m.RequestedLoan;
 
         mp.Lighter = mp.Lighter || {};
         pa.Lighter = pa.Lighter || {};
@@ -26,7 +27,6 @@
         la.Lighter =la.Lighter || {};
         ab.Lighter = ab.Lighter || {};
         cb.Lighter = cb.Lighter || {};
-
         %>
     </text>
     <div class="row-fluid">
@@ -127,7 +127,7 @@
             </table>
         </div>
     </div>
-        <div class="row-fluid">
+    <div class="row-fluid">
         <div class="span6">
             <table class="table table-striped blue-header rright">
                 <thead>
@@ -300,12 +300,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <b>Payment demeanor:</b>
-                        </td>
-                        <td>
-                            <%-la!=null ? la.PaymentDemeanor : "-"%>
-                        </td>
+                    <td>
+                        <b>Payment demeanor:</b>
+                    </td>
+                    <td>
+                        <%-la!=null ? la.PaymentDemeanor : "-"%>
+                    </td>
                     <tr>
                         <td>
                             <b>Current late days:</b>
@@ -320,6 +320,41 @@
                         </td>
                         <td>
                             <%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees, true) : "-"%>)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="span6">
+            <table class="table table-striped blue-header rright">
+                <thead>
+                    <tr>
+                        <th colspan="2">Offline Requested Loan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <b>Requested Amount:</b>
+                        </td>
+                        <td width="65%">
+                            <%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Reason <%if(rl && rl.OtherReason) print("(Other)");%>:</b>
+                        </td>
+                        <td>
+                            <%if(rl) {print(rl.CustomerReason); if(rl.OtherReason) {print("(" + rl.OtherReason + ")");}}else{print("-");}%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Source Of Repayment <%if(rl && rl.OtherSourceOfRepayment) print("(Other)");%>:</b>
+                        </td>
+                        <td>
+                            <%if(rl) {print(rl.CustomerSourceOfRepayment); if(rl.OtherSourceOfRepayment) {print("(" + rl.OtherSourceOfRepayment + ")");}}else{print("-");}%>
                         </td>
                     </tr>
                 </tbody>
