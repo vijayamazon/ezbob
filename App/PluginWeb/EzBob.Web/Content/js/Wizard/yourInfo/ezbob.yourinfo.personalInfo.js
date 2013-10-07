@@ -11,6 +11,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
+            "change #ResidentialStatus": "ResidentialStatusChanged",
             "change #OwnOtherProperty": "OwnOtherPropertyChanged",
             'change select[name="TypeOfBusiness"]': "typeChanged",
             'click label[for="ConsentToSearch"] a': 'showConsent',
@@ -50,6 +51,26 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     webSiteTurnOverFocus: function () {
         $("#WebSiteTurnOver").change();
     },
+	ResidentialStatusChanged: function() {
+		var oCombo = this.$el.find('#OwnOtherProperty');
+
+		if (oCombo.length < 1)
+			return;
+
+		switch(this.$el.find('#ResidentialStatus').val()) {
+		case 'Home owner':
+			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own other property?');
+			oCombo.find('option[value="Yes"]').text('Yes, I own other property.');
+			oCombo.find('option[value="No"]').text('No, I don\'t own other property.');
+			break;
+
+		default:
+			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own a property?');
+			oCombo.find('option[value="Yes"]').text('Yes, I own a property.');
+			oCombo.find('option[value="No"]').text('No, I don\'t own a property.');
+			break;
+		} // switch
+	},
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
@@ -63,6 +84,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.inputChanged();
     },
 	OwnOtherPropertyIsValid: function() {
+		if (!this.model.get('IsOffline'))
+			return true;
+
 		switch (this.$el.find('#OwnOtherProperty').val()) {
 		case 'Yes': {
 			var oModel = this.model.get('OtherPropertyAddress');

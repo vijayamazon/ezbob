@@ -146,8 +146,6 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         if @model.get('IsOffline')
             otherAddress = new EzBob.AddressView({ model: @model.get('OtherPropertyAddress'), name: "OtherPropertyAddress", max: 1, isShowClear:true })
             @otherPropertyAddress.show(otherAddress)
-        else
-            @otherPropertyAddress.hide()
 
         @
 

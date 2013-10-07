@@ -100,24 +100,6 @@
 
 				@EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
 
-				<div class="offline">
-					<div class="control-group form_field_container">
-						<div class="controls">
-							<label class="control-label attardi-input">
-								<span>Do you own other property?</span>
-									<select id="OwnOtherProperty" name="OwnOtherProperty" class="select form_field">
-										<option value=""></option>
-										<option value="No">No, I don't own other property</option>
-										<option value="Yes">Yes, I own other property</option>
-									</select>
-							</label>
-							<img id="OwnOtherPropertyImage" class="field_status required"/>
-						</div>
-					</div>
-
-					@EzForm.AddressInput("OtherPropertyAddress", "Other Property Address", "canDisabledAddress")
-				</div>
-
 				<div class="control-group form_field_container">
 					<div class="controls">
 						<label class="control-label attardi-input">
@@ -131,6 +113,26 @@
 						</label>
 						<img id="ResidentialStatusImage" class="field_status required"/>
 					</div>
+				</div>
+
+				<div class="offline">
+					<h2 class="form_section">Property Ownership</h2>
+
+					<div class="control-group form_field_container">
+						<div class="controls">
+							<label class="control-label attardi-input">
+								<span id="OwnOtherPropertyQuestion">Do you own a property?</span>
+									<select id="OwnOtherProperty" name="OwnOtherProperty" class="select form_field">
+										<option value=""></option>
+										<option value="Yes">Yes, I own a property.</option>
+										<option value="No">No, I don't own a property.</option>
+									</select>
+							</label>
+							<img id="OwnOtherPropertyImage" class="field_status required"/>
+						</div>
+					</div>
+
+					@EzForm.AddressInput("OtherPropertyAddress", "Other Property Address", "canDisabledAddress")
 				</div>
 
 				<h2 class="form_section">Contact Details</h2>

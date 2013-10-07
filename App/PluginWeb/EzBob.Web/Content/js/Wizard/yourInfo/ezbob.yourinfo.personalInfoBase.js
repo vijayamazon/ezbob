@@ -14,7 +14,7 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         this.validator = this.getValidator()(this.form);
 
         if (!this.model.get('IsOffline'))
-            this.$el.find(".offline").remove();
+            this.$el.find('.offline').remove();
 
         this.$el.find(".ezDateTime").splittedDateTime();
         this.$el.find('.phonenumber').numericOnly(11);

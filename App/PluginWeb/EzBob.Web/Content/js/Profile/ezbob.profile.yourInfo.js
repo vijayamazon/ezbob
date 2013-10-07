@@ -224,8 +224,6 @@
           isShowClear: true
         });
         this.otherPropertyAddress.show(otherAddress);
-      } else {
-        this.otherPropertyAddress.hide();
       }
       return this;
     };

@@ -915,6 +915,9 @@ EzBob.validateRestorePasswordForm = function (el) {
 
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
+
+	var oIsOffline = e.find('.offline');
+
     return e.validate({
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
@@ -930,7 +933,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
             WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
             TimeAtAddress: { required: true },
             ConsentToSearch: { required: true },
-            OwnOtherProperty: { required: true }
+            OwnOtherProperty: { required: oIsOffline.length > 0 }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
