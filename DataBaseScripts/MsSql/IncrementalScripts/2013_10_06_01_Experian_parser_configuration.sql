@@ -820,4 +820,6 @@ INSERT INTO ConfigurationVariables (Name,Value,Description) VALUES ('DirectorInf
 		]
 	}
 ]
-','Experian parser configuration for extracting director information') GO
+','Experian parser configuration for extracting director information') 
+GO
+
