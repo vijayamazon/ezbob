@@ -244,7 +244,7 @@
 
     NonLimitedInfoView.prototype.regions = {
       nonlimitedAddress: '#NonLimitedAddress',
-      director: '.director-conteiner'
+      director: '.director-container'
     };
 
     NonLimitedInfoView.prototype.onRender = function() {
@@ -283,7 +283,7 @@
 
     LimitedInfoView.prototype.regions = {
       limitedAddress: '#LimitedCompanyAddress',
-      director: '.director-conteiner'
+      director: '.director-container'
     };
 
     LimitedInfoView.prototype.onRender = function() {

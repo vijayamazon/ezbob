@@ -61,12 +61,14 @@ EzBob.DirectorMainView = Backbone.View.extend({
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
         this.$el.find('.alphaOnly').alphaOnly();
+        this.$el.find('.phonenumber').numericOnly(11);
         this.$el.find(".addressCaption").hide();
         $.each(this.model.models, function(i, val) {
             var addressElem = that.preffix + 'Address' + i,
                 name = that.preffix + "[" + i + "]." + that.name,
                 addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
-                dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth';
+                dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth',
+                phoneName = that.preffix + "[" + i + "]." + 'Phone';
 
             val.get('Address').on("all", function() {
                 that.trigger("director:addressChanged");
@@ -80,30 +82,38 @@ EzBob.DirectorMainView = Backbone.View.extend({
             that.validator.settings.rules[dateOfBirthValName] = { yearLimit: 18 };
             that.validator.settings.messages[dateOfBirthValName] = { yearLimit: "The number of full year should be more then 18 year" };
 
+            that.validator.settings.rules[phoneName] = { required: true, regex: "^0[0-9]{10}$" };
+            that.validator.settings.messages[phoneName] = { regex: "Please enter a valid UK number" };
         });
         this.$el.attardi_labels('toggle_all');
         this.trigger("director:change");
     },
 
-    updateStatuses: function(val, i){
-        var dateStatus = val.get('DateOfBirthImage'),
-                genderStatus = val.get('GenderImage'),
-                nameStatus = val.get('NameImage'),
-                middleStatus = val.get('MiddleImage'),
-                surenameStasus = val.get('SurnameImage');
-        
-        $("[name='" + this.preffix + "[" + i + "].DateOfBirthImage']").val(dateStatus);
-        $("[name='" + this.preffix + "[" + i + "].GenderImage']").val(genderStatus);
-        $("[name='" + this.preffix + "[" + i + "].NameImage']").val(nameStatus);
-        $("[name='" + this.preffix + "[" + i + "].MiddleImage']").val(middleStatus);
-        $("[name='" + this.preffix + "[" + i + "].SurnameImage']").val(surenameStasus);
-        
-        if (dateStatus) $("[id='" + this.preffix + "[" + i + "].DateOfBirthImage']").field_status('set', dateStatus, 2);
-        if (genderStatus) $("[id='" + this.preffix + "[" + i + "].GenderImage']").field_status('set', genderStatus, 2);
-        if (nameStatus) $("[id='" + this.preffix + "[" + i + "].NameImage']").field_status('set', nameStatus, 2);
-        if (middleStatus) $("[id='" + this.preffix + "[" + i + "].MiddleImage']").field_status('set', middleStatus, 2);
-        if (surenameStasus) $("[id='" + this.preffix + "[" + i + "].SurnameImage']").field_status('set', surenameStasus, 2);
-    },
+	updateStatuses: function(val, i) {
+		var dateStatus = val.get('DateOfBirthImage'),
+			genderStatus = val.get('GenderImage'),
+			nameStatus = val.get('NameImage'),
+			middleStatus = val.get('MiddleImage'),
+			surenameStasus = val.get('SurnameImage'),
+			emailStatus = val.get('EmailImage'),
+			phoneStatus = val.get('PhoneImage');
+
+		$("[name='" + this.preffix + "[" + i + "].DateOfBirthImage']").val(dateStatus);
+		$("[name='" + this.preffix + "[" + i + "].GenderImage']").val(genderStatus);
+		$("[name='" + this.preffix + "[" + i + "].NameImage']").val(nameStatus);
+		$("[name='" + this.preffix + "[" + i + "].MiddleImage']").val(middleStatus);
+		$("[name='" + this.preffix + "[" + i + "].SurnameImage']").val(surenameStasus);
+		$("[name='" + this.preffix + "[" + i + "].EmailImage']").val(emailStatus);
+		$("[name='" + this.preffix + "[" + i + "].PhoneImage']").val(phoneStatus);
+
+		if (dateStatus) $("[id='" + this.preffix + "[" + i + "].DateOfBirthImage']").field_status('set', dateStatus, 2);
+		if (genderStatus) $("[id='" + this.preffix + "[" + i + "].GenderImage']").field_status('set', genderStatus, 2);
+		if (nameStatus) $("[id='" + this.preffix + "[" + i + "].NameImage']").field_status('set', nameStatus, 2);
+		if (middleStatus) $("[id='" + this.preffix + "[" + i + "].MiddleImage']").field_status('set', middleStatus, 2);
+		if (surenameStasus) $("[id='" + this.preffix + "[" + i + "].SurnameImage']").field_status('set', surenameStasus, 2);
+		if (emailStatus) $("[id='" + this.preffix + "[" + i + "].EmailImage']").field_status('set', emailStatus, 2);
+		if (phoneStatus) $("[id='" + this.preffix + "[" + i + "].PhoneImage']").field_status('set', phoneStatus, 2);
+	},
     validateAddresses: function() {
         var result = true;
         $.each(this.model.models, function(i, val) {

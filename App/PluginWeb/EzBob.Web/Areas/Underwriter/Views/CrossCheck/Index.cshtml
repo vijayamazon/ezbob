@@ -399,6 +399,14 @@
                     <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (d.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
                 </tr>
                 <tr>
+                    <td><b>Email</b></td>
+                    <td>@d.Email</td>
+                </tr>
+                <tr>
+                    <td><b>Phone</b></td>
+                    <td>@d.Phone</td>
+                </tr>
+                <tr>
                     <td><b>Organisation</b></td>
                     <td>@address.Organisation</td>
                 </tr>

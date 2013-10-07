@@ -15,6 +15,8 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual Customer Customer { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual DirectorAddressInfo DirectorAddressInfo { get; set; }
+		public virtual string Email { get; set; }
+		public virtual string Phone { get; set; }
     }
 
     public class DirectorAddressInfo
@@ -72,6 +74,8 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.DateOfBirth);
             Map(x => x.Gender).CustomType<GenderType>();
             References(x => x.Customer, "CustomerId");
+	        Map(x => x.Email);
+	        Map(x => x.Phone);
 
             Component(x => x.DirectorAddressInfo, m =>
                 {

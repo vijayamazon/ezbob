@@ -155,7 +155,7 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
 
     regions: 
         nonlimitedAddress: '#NonLimitedAddress'
-        director: '.director-conteiner' 
+        director: '.director-container' 
 
     onRender: ->
         address = new EzBob.AddressView({ model: @model.get('NonLimitedCompanyAddress'), name: "NonLimitedCompanyAddress", max: 10, isShowClear:true })
@@ -174,7 +174,7 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
 
     regions: 
         limitedAddress: '#LimitedCompanyAddress'
-        director: '.director-conteiner' 
+        director: '.director-container' 
 
     onRender: ->
         address = new EzBob.AddressView({ model: @model.get('LimitedCompanyAddress'), name: "LimitedCompanyAddress", max: 10, isShowClear:true })

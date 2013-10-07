@@ -161,7 +161,7 @@
                 <input class ="personEditInput phonenumber" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
-        <div class="control-group director-conteiner">
+        <div class="control-group director-container">
             
         </div>
     </fieldset>
@@ -204,7 +204,7 @@
                 <input class ="personEditInput phonenumber" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
-        <div class="control-group director-conteiner">
+        <div class="control-group director-container">
             
         </div>
     </fieldset>
@@ -212,21 +212,23 @@
 </script> 
 
 <script id="director-info-template" type="text/template">
-                <div class="accordion-group">
-                    <div class="accordion-heading faq-accordion-head">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-Id%>">
-                            <b class="play"></b>Director</a>
-                    </div>
-                    <div id="colapse<%-Id%>" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <p>Name:<b><%-Name%> <%-Middle%> <%-Surname%></b></p>
-                            <p> Date Of Birth:<b><%-DateOfBirth%></b></p>
-                            <div class="addressEdit" >
-                                @EzForm.AddressInput("DirectorAddress", "Address")
-                            </div>
-                        </div>
-                    </div>
-                </div>
+	<div class="accordion-group">
+		<div class="accordion-heading faq-accordion-head">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-Id%>">
+				<b class="play"></b>Director</a>
+		</div>
+		<div id="colapse<%-Id%>" class="accordion-body collapse">
+			<div class="accordion-inner">
+				<p>Name:<b><%-Name%> <%-Middle%> <%-Surname%></b></p>
+				<p>Date Of Birth:<b><%-DateOfBirth%></b></p>
+				<p>Email: <b><%- Email %></b></p>
+				<p>Phone: <b><%- Phone %></b></p>
+				<div class="addressEdit" >
+					@EzForm.AddressInput("DirectorAddress", "Address")
+				</div>
+			</div>
+		</div>
+	</div>
 </script> 
 
 <script id="directors-info" type="text/template">

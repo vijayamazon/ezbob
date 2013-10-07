@@ -23,6 +23,9 @@ namespace EzBob.Web.Areas.Customer.Models {
 		public CustomerAddress[] DirectorAddress { get; set; }
         public CustomerAddress[] PrevDirectorAddress { get; set; }
 
+		public string Email { get; set; }
+		public string Phone { get; set; }
+
 		public Director FromModel() {
 			Director director = null;
 
@@ -36,7 +39,9 @@ namespace EzBob.Web.Areas.Customer.Models {
 					DirectorAddressInfo = new DirectorAddressInfo{
                         AllAddresses = DirectorAddress == null ? null : new HashedSet<CustomerAddress>(DirectorAddress)
                     },
-					Gender = (Gender)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Gender), Gender.ToString())
+					Gender = (Gender)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Gender), Gender.ToString()),
+					Email = Email,
+					Phone = Phone
 				};
 			}
 			catch (Exception e) {
@@ -60,7 +65,9 @@ namespace EzBob.Web.Areas.Customer.Models {
 			            x.AddressType == CustomerAddressType.LimitedDirectorHomeAddress ||
 			            x.AddressType == CustomerAddressType.NonLimitedDirectorHomeAddress).ToArray(),
                 PrevDirectorAddress = director.DirectorAddressInfo.AllAddresses.ToArray(),
-				Gender = director.Gender.ToString()[0]
+				Gender = director.Gender.ToString()[0],
+				Email = director.Email,
+				Phone = director.Phone
 			};
 		} // FromDirector
 	} // class DirectorModel
