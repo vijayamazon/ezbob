@@ -522,7 +522,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual string PromoCode { get; set; }
 
-		public virtual Tuple<Dictionary<string, ParsedData>, ParsingResult, string> ParseExperian(string sParserConfiguration, string sServiceType = "E-SeriesLimitedData") {
+	    public virtual RequestedLoan RequestedLoan{get;set;}
+
+	    public virtual Tuple<Dictionary<string, ParsedData>, ParsingResult, string> ParseExperian(string sParserConfiguration, string sServiceType = "E-SeriesLimitedData") {
 			var oLog = LogManager.GetLogger(typeof(Customer));
 
 			ServiceLogRepository oServiceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
@@ -567,9 +569,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			} // try	
 		} // ParseExperian
     }
-
-
-
 
     public class LimitedInfo
     {
@@ -627,6 +626,13 @@ namespace EZBob.DatabaseLib.Model.Database {
         public decimal? OverallTurnOver { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
     }
+
+	public class RequestedLoan
+	{
+		public string Amount{get;set;}
+		public string Reason{get;set;}
+		public string SourceOfRepayment{get;set;}
+	}
 
     public class AddressInfo
     {

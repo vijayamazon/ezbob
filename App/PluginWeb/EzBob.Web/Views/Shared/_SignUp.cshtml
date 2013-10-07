@@ -84,9 +84,9 @@
     <div class="form_field_container">
         <label class="attardi-input">
             <span>Amount</span>
-            <input type="text" name="Amount" id="Amount" tabindex="7" class="form_field"/>
+            <input type="text" name="amount" id="amount" tabindex="7" class="form_field"/>
         </label>
-        <img id="AmountImage" class="field_status"/>
+        <img id="amountImage" class="field_status"/>
     </div>
     
     <div class="form_field_container">
@@ -108,11 +108,19 @@
         <img id="customerReasonImage" class="field_status required" />
     </div>
     
+    <div class="form_field_container hide" id="otherReasonDiv">
+        <label class="attardi-input">
+            <span>Other Reason</span>
+            <input type="text" name="otherCustomerReason" id="otherCustomerReason" tabindex="9" class="form_field"/>
+        </label>
+        <img id="otherReasonImage" class="field_status required"/>
+    </div>
+    
     <div class="form_field_container">
         <span class="inform">
             <label class="attardi-input">
                 <span>Source Of Repayment</span>
-                <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="9" class="form_field">
+                <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="10" class="form_field">
                     <option value=""></option>
                     @if (customerSourceOfRepayment != null)
                     {
@@ -126,9 +134,18 @@
         </span>
         <img id="customerSourceOfRepaymentImage" class="field_status required" />
     </div>
+    
+    <div class="form_field_container hide" id="otherSourceDiv">
+        <label class="attardi-input">
+            <span>Other Source Of Repayment</span>
+            <input type="text" name="otherCustomerSourceOfRepayment" id="otherCustomerSourceOfRepayment" tabindex="11" class="form_field"/>
+        </label>
+        <img id="otherCustomerSourceOfRepaymentImage" class="field_status required"/>
+    </div>
+    
 	<div class="form_field_container">
 		@EzForm.Captcha(captchamode)
 	</div>
 
-	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="11"></div>
+	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="13"></div>
 }

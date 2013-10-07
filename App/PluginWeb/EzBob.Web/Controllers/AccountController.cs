@@ -306,7 +306,7 @@ namespace EzBob.Web.Controllers
         [ActionName("SignUp")]
         [ValidateJsonAntiForgeryToken]
         [CaptchaValidationFilter]
-        public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
+		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, string amount, string customerReason, string customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
         {
             if (!ModelState.IsValid)
             {
@@ -319,7 +319,7 @@ namespace EzBob.Web.Controllers
             try
             {
                 var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-                SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode);
+				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
                 FormsAuthentication.SetAuthCookie(model.EMail, false);
 
                 var user = _users.GetUserByLogin(model.EMail);
@@ -347,19 +347,19 @@ namespace EzBob.Web.Controllers
         [Transactional]
         [Ajax(false)]
         [CaptchaValidationFilter]
-		public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
+		public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, string amount, string customerReason, string customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
         {
             if (!ModelState.IsValid)
             {
                 return GetModelStateErrors(ModelState);
             }
 
-			SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode);
+			SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
 
             return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
         }
 
-		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode)
+		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, string amount, string customerReason, string customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
         {
             MembershipCreateStatus status;
 
@@ -388,7 +388,8 @@ namespace EzBob.Web.Controllers
 					CollectionStatus = new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
 					IsTest = isAutomaticTest,
 					IsOffline = false,
-					PromoCode = promoCode
+					PromoCode = promoCode,
+					RequestedLoan = new RequestedLoan { Amount = amount, Reason = customerReason, SourceOfRepayment = customerSourceOfRepayment}
 				};
 
                 var sourceref = Request.Cookies["sourceref"];
@@ -433,7 +434,7 @@ namespace EzBob.Web.Controllers
 			if (isAutomaticTestCustomerMark.Value == "1")
 			{
 				var patterns = _testCustomers.GetAllPatterns();
-				if (patterns.Any(pattern => email.Contains(pattern)))
+				if (patterns.Any(email.Contains))
 				{
 					isAutomaticTest = true;
 				}
@@ -570,5 +571,4 @@ namespace EzBob.Web.Controllers
                     });
         }
     }
-
 }

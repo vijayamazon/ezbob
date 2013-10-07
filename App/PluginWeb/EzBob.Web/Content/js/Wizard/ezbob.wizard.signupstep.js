@@ -47,12 +47,31 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         return this;
     },
     inputChanged: function (evt) {
-        if (evt && evt.target.id == 'promoCode' && evt.target.value == '') {
+        this.setFieldStatusNotRequired(evt,'promoCode');
+        this.setFieldStatusNotRequired(evt, 'amount');
+
+        this.toggleOtherSelect(evt, 'customerReason', '#otherReasonDiv');
+        this.toggleOtherSelect(evt, 'customerSourceOfRepayment', '#otherSourceDiv');
+
+        var enabled = EzBob.Validation.checkForm(this.validator);
+        $("#signupSubmitButton").toggleClass('disabled', !enabled);
+    },
+    setFieldStatusNotRequired: function(evt, el){
+        if (evt && evt.target.id == el && evt.target.value == '') {
             var img = $(evt.target).closest('div').find('.field_status');
             img.field_status('set', 'empty', 2);
         }
-        var enabled = EzBob.Validation.checkForm(this.validator);
-        $("#signupSubmitButton").toggleClass('disabled', !enabled);
+    },
+    toggleOtherSelect: function(evt, el, div) {
+        if (evt && evt.target.id == el) {
+            var other = false;
+            if ($(evt.target).find('option:selected').text() == 'Other') {
+                other = true;
+            } 
+            $(div).toggleClass('hide', !other);
+        } 
+        
+        return false;
     },
     submit: function () {
         if (this.$el.find(':submit').hasClass("disabled")) {

@@ -58,16 +58,16 @@ $(function () {
     });
     if ($.fn.dataTableExt) {
         $.extend(jQuery.fn.dataTableExt.oSort, {
-            "formatted-num-pre": function(a) {
+            "formatted-num-pre": function (a) {
                 a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
                 return parseFloat(a);
             },
 
-            "formatted-num-asc": function(a, b) {
+            "formatted-num-asc": function (a, b) {
                 return a - b;
             },
 
-            "formatted-num-desc": function(a, b) {
+            "formatted-num-desc": function (a, b) {
                 return b - a;
             }
         }); // sorting plugin for formatted numbers
@@ -274,9 +274,9 @@ $(function () {
 Convert = {};
 
 //small fix for validation select in firefox
-var fixSelectValidate = function(el) {
+var fixSelectValidate = function (el) {
     if ($.browser.mozilla) {
-        $(el).on("change", function() {
+        $(el).on("change", function () {
             $(el).trigger("click");
         });
     }
@@ -295,17 +295,17 @@ function CheckForActivity() {
     var minute = EzBob.Config.SessionTimeout;
     var timer;
     var timeoutValue = 1000 * 60 * minute;
-    
+
     if (minute <= 0) return;
 
-	var isUnderWriter = document.location.href.indexOf("Underwriter") > -1;
+    var isUnderWriter = document.location.href.indexOf("Underwriter") > -1;
 
     if (EzBob.Config.HeartBeatEnabled)
-	    setInterval(heartBeat, 10000);
+        setInterval(heartBeat, 10000);
 
     var underwriterParam = isUnderWriter ? "?isUnderwriterPage=true" : "";
 
-	//white list
+    //white list
     if (document.location.href.indexOf("Customer/Start") != -1) {
         return;
     }
@@ -537,8 +537,8 @@ EzBob.GlobalUpdateBugsIcon = function (customerId) {
     });
 };
 
-EzBob.UpdateBugsIcons = function(data) {
-    _.each(data, function(val) {
+EzBob.UpdateBugsIcons = function (data) {
+    _.each(data, function (val) {
         var element = val.MarketPlaceId ?
             $('a[data-bug-mp={0}]'.f(val.MarketPlaceId)) :
             (
@@ -639,7 +639,7 @@ EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, '
 EzBob.percentFormat = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '2', vMax: '9999999', pSign: 's' };
 EzBob.percentFormat1 = { 'aSep': '', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '% ', mDec: '1', vMax: '9999999', pSign: 's' };
 
-EzBob.formatPoundsNoSign = function(val) {
+EzBob.formatPoundsNoSign = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormatNoSign);
 };
 
@@ -712,7 +712,7 @@ EzBob.formatDateWithoutTime = function (date) {
     return moment.utc(date).local().format("DD/MM/YYYY");
 };
 //parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
-EzBob.parseDate = function(dateString) {
+EzBob.parseDate = function (dateString) {
     if (!dateString) return "";
     return dateString.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1');
 };
@@ -853,7 +853,12 @@ EzBob.validateSignUpForm = function (el) {
             Email: { required: true, email: true },
             securityQuestion: { required: true },
             SecurityAnswer: { required: true, maxlength: 199 },
-            CaptchaInputText: { required: true, minlength: 6, maxlength: 6 }
+            CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },
+            //amount: { numericOnly: true },
+            customerReason: { required: true },
+            customerSourceOfRepayment: { required: true },
+            otherCustomerReason: { required: true },
+            otherCustomerSourceOfRepayment: { required: true }
         },
         messages: {
             "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
@@ -866,7 +871,8 @@ EzBob.validateSignUpForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
+        highlight: EzBob.Validation.highlightFS,
+        ignore: ":not(:visible)" 
     });
 };
 
@@ -1150,6 +1156,6 @@ EzBob.validateCGShopForm = function (el, accountType) {
     return el.validate(v);
 };
 
-EzBob.poundToInt = function(sNumWithPounds) {
-	return parseInt(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
+EzBob.poundToInt = function (sNumWithPounds) {
+    return parseInt(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
 };
