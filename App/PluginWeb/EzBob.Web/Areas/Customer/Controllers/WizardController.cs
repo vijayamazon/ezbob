@@ -52,8 +52,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
         public ActionResult Index()
         {
             ViewData["Questions"] = _questions.GetAll().ToList();
-			ViewData["Reasons"] = _reasons.GetAll().ToList();
-			ViewData["Sources"] = _sourcesOfRepayment.GetAll().ToList();
+			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
+			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
             ViewData["CaptchaMode"] = _config.CaptchaMode;
             ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
             ViewData["TargetsEnabled"] = _config.TargetsEnabled;

@@ -323,6 +323,20 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
 
 			Map(x => x.PromoCode);
+
+
+			HasMany(x => x.CustomerRequestedLoan)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.AllDeleteOrphan()
+				.Inverse();
+			/*
+	        HasOne(x => x.CustomerRequestedLoan)
+		        .Cascade.SaveUpdate()
+		        .Constrained()
+		        .PropertyRef(x => x.Customer)
+		        .Fetch.Join();
+			*/
         }
 	}
 }

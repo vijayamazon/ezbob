@@ -1,0 +1,58 @@
+namespace EZBob.DatabaseLib.Model.Database
+{
+	using System;
+
+	public class CustomerRequestedLoan
+	{
+		public virtual int Id { get; set; }
+		public virtual DateTime Created { get; set; }
+		public virtual Customer Customer { get; set; }
+		public virtual CustomerReason CustomerReason { get; set; }
+		public virtual CustomerSourceOfRepayment CustomerSourceOfRepayment { get; set; }
+		public virtual double? Amount { get; set; }
+		public virtual string OtherReason { get; set; }
+		public virtual string OtherSourceOfRepayment { get; set; }
+	}
+}
+
+namespace EZBob.DatabaseLib.Model.Database.Mapping
+{
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+
+	public class CustomerRequestedLoanMap : ClassMap<CustomerRequestedLoan>
+	{
+		public CustomerRequestedLoanMap()
+		{
+			Table("CustomerRequestedLoan");
+			Id(x => x.Id);
+			Map(x => x.Created).CustomType<UtcDateTimeType>();
+			Map(x => x.Amount);
+			Map(x => x.OtherReason).Length(300);
+			Map(x => x.OtherSourceOfRepayment).Length(300);
+
+			References(x => x.Customer, "CustomerId");
+			References(x => x.CustomerReason, "ReasonId");
+			References(x => x.CustomerSourceOfRepayment, "SourceOfRepaymentId");
+		}
+	}
+}
+
+namespace EZBob.DatabaseLib.Model.Database.Repository
+{
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public interface ICustomerRequestedLoanRepository : IRepository<CustomerRequestedLoan>
+	{
+	}
+
+	public class CustomerRequestedLoanRepository : NHibernateRepositoryBase<CustomerRequestedLoan>, ICustomerRequestedLoanRepository
+	{
+		public CustomerRequestedLoanRepository(ISession session)
+			: base(session)
+		{
+		}
+
+	}
+}

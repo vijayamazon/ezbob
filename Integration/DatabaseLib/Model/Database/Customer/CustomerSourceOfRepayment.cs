@@ -31,7 +31,6 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 {
 	public interface ICustomerSourceOfRepaymentRepository : IRepository<CustomerSourceOfRepayment>
 	{
-		IEnumerable<string> GetAllPatterns();
 	}
 
 	public class CustomerSourceOfRepaymentRepository : NHibernateRepositoryBase<CustomerSourceOfRepayment>,
@@ -42,9 +41,5 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		{
 		}
 
-		public IEnumerable<string> GetAllPatterns()
-		{
-			return GetAll().Select(t => t.SourceOfRepayment).ToList();
-		}
 	}
 }

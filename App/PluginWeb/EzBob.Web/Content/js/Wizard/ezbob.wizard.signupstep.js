@@ -40,6 +40,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('img[rel]').setPopover("left");
         this.$el.find('li[rel]').setPopover("left");
 
+        this.$el.find('#amount').numericOnly(15);
         this.inputChanged();
 
         fixSelectValidate(this.$el.find('select'));
