@@ -8,17 +8,14 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.companyAddressValidator = false;
 		this.events = _.extend({}, this.events, {
 			'change   input': 'inputChanged',
-            'change select': 'inputChanged',
 			'keyup    input': 'inputChanged',
             'focusout input': 'inputChanged',
-            'change #NonLimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged'
-			'focusout input': 'inputChanged',
+            'change #NonLimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged',
 			'click    input': 'inputChanged',
-
 			'change   select': 'inputChanged',
 			'keyup    select': 'inputChanged',
 			'focusout select': 'inputChanged',
-			'click    select': 'inputChanged',
+			'click    select': 'inputChanged'
 		});
 	},
 
