@@ -59,14 +59,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
             List<DirectorModel> limitedDirectors,
             List<DirectorModel> nonLimitedDirectors,
             string dateOfBirth,
-            List<CustomerAddress> otherPropertyAddress
+            List<CustomerAddress> otherPropertyAddress,
+			CompanyEmployeeCountInfo companyEmployeeCountInfo
         )
         {
             var customer = _context.Customer;
 
             ProcessPersonal(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth, otherPropertyAddress, customer);
 
-            switch (personalInfo.TypeOfBusiness.Reduce())
+	        switch (personalInfo.TypeOfBusiness.Reduce())
             {
                 case TypeOfBusinessReduced.Limited:
                     ProcessLimited(limitedInfo, limitedCompanyAddress, limitedDirectors, customer);
@@ -79,6 +80,17 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _crBuilder.CreateCashRequest(customer);
 
             customer.WizardStep = WizardStepType.AllStep;
+
+			if (customer.IsOffline) {
+				customer.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
+					BottomEarningEmployeeCount = companyEmployeeCountInfo.BottomEarningEmployeeCount,
+					Created = DateTime.UtcNow,
+					Customer = customer,
+					EmployeeCount = companyEmployeeCountInfo.EmployeeCount,
+					EmployeeCountChange = companyEmployeeCountInfo.EmployeeCountChange,
+					TopEarningEmployeeCount = companyEmployeeCountInfo.TopEarningEmployeeCount
+				});
+			} // if
 
             _session.Flush();
             _creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);

@@ -19,7 +19,8 @@
         la = m.LoanActivity || {}, 
         ab = m.AmlBwa || {}, 
         cb = m.CreditBureau || {},
-        rl = m.RequestedLoan;
+        rl = m.RequestedLoan,
+        cec = m.CompanyEmployeeCountInfo || {};
 
         mp.Lighter = mp.Lighter || {};
         pa.Lighter = pa.Lighter || {};
@@ -325,8 +326,7 @@
                 </tbody>
             </table>
         </div>
-        <%console.log(m); if(m.IsOffline){%>
-        <div class="span6">
+        <div class="span6 offline">
             <table class="table table-striped blue-header rright">
                 <thead>
                     <tr>
@@ -360,9 +360,40 @@
                     </tr>
                 </tbody>
             </table>
+		<div class="span6 offline">
+			<table class="table table-striped blue-header rright">
+				<thead>
+					<tr>
+						<th colspan="2">Company Employee Count</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td><b>Reported on:</b></td><td><%- EzBob.formatDate(cec.Created) %></td></tr>
+
+					<tr>
+						<td><b>Current Number of Employees:</b></td>
+						<td><%- cec.EmployeeCount %></td>
+					</tr>
+
+					<tr>
+						<td><b>Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</b></td>
+						<td><%- cec.TopEarningEmployeeCount %></td>
+					</tr>
+
+					<tr>
+						<td><b>Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</b></td>
+						<td><%- cec.BottomEarningEmployeeCount %></td>
+					</tr>
+
+					<tr>
+						<td><b>Change in the Number of Employees in Last 12 Months:</b></td>
+						<td><%- cec.EmployeeCountChange %></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
         </div>
-        <%}%>
-    </div>
+	</div>
     @ShowDecisionsHistory()
 }
 

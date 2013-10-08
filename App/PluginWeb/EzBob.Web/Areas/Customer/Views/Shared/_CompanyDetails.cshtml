@@ -6,8 +6,7 @@
     bool ebayPixelEnabled = config.EbayPixelEnabled;
 }
 
-@helper PersonalInfo()
-{
+<script id="personinfo-template" type="text/template">
 	<div class="row-fluid">
 	    <h2 class="form_start">Personal Information</h2>
         
@@ -211,9 +210,9 @@
 			<a href="#" class="btn-continue button orange btn-next disabled continue">Complete</a>
 		</div>
 	</div>
-}
-@helper Director()
-{
+</script>
+
+<script id="director-edit-template" type="text/template">
 	<div>
 		<h2 class="form_section">Additional Directors (Optional)</h2>
 
@@ -226,67 +225,71 @@
 			<input id="addDirector" class="btn green" type="button" value="Add directors" />
 		</div>
 	</div>
-}
+</script>
 
-@helper LimitedInfo()
-{
-	<div class="row-fluid">
-		<h2 class="form_start">Company Information</h2> 
-		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" }))
-   {
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input"><span>Registration #</span>
-							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNumberImage" class="field_status required"/>
-					</div>
-				</div>
+<script id="employee-count-template" type="text/template">
+	<h2 class="form_section">Payroll Information</h2>
 
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Name</span>
-							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNameImage" class="field_status required"/>
-					</div>
-				</div>
-
-				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Business Phone</span>
-							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
-						</label>
-						<img id="LimitedBusinessPhoneImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<input type="hidden" name="LimitedRefNum" class="RefNum" />
-
-				<div class="directors">
-				</div>
-   }
-		</div>
-
-		<div class="form_buttons_container">
-			<a href="#" class="next btn-continue button orange continue disabled">Complete</a>
-			<a href="#" class="back btn-back button grey">Back</a>
+	<div class="control-group">
+		<div class="controls">
+			<label class="control-label attardi-input">
+				<span>Current # of employees</span>
+				<input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" />
+			</label>
+			<img id="EmployeeCountImage" class="field_status required"/>
 		</div>
 	</div>
-}
 
-@helper Nonlimitedinfo()
-{
+	<div class="control-group">
+		<div class="controls">
+			<label class="control-label attardi-input">
+				<span># of earning (gross salary) over £41,450 per annum</span>
+				<input id="TopEarningEmployeeCount" name="TopEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
+			</label>
+			<img id="TopEarningEmployeeCountImage" class="field_status required"/>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<div class="controls">
+			<label class="control-label attardi-input">
+				<span># of earning (gross salary) less than £9,440 per annum</span>
+				<input id="BottomEarningEmployeeCount" name="BottomEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
+			</label>
+			<img id="BottomEarningEmployeeCountImage" class="field_status required"/>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<div class="controls">
+			<label class="control-label attardi-input">
+				<span>Change in the # of employees in last 12 months</span>
+				<select id="EmployeeCountChange" name="EmployeeCountChange" class="form_field select">
+					<option value=""></option>
+					<option value="-5">Reduced by 5 or more</option>
+					<option value="-4">Reduced by 4</option>
+					<option value="-3">Reduced by 3</option>
+					<option value="-2">Reduced by 2</option>
+					<option value="-1">Reduced by 1</option>
+					<option value="0">No change</option>
+					<option value="1">Increased by 1</option>
+					<option value="2">Increased by 2</option>
+					<option value="3">Increased by 3</option>
+					<option value="4">Increased by 4</option>
+					<option value="5">Increased by 5 or more</option>
+				</select>
+			</label>
+			<img id="EmployeeCountChangeImage" class="field_status required"/>
+		</div>
+	</div>
+
+</script>
+
+<script id="nonlimitededinfo-template" type="text/template">
 	<div class="row-fluid">
 		<h2 class="form_start">Company Information</h2>
 		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" }))
-   {
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" })) {
 				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
 				<div class="control-group">
@@ -348,9 +351,10 @@
 					</div>
 				</div>
 
-				<div class="directors">
-				</div>
-   }
+				<div class="offline employee-count"></div>
+
+				<div class="directors"></div>
+		}
 		</div>
 
 		<div class="form_buttons_container">
@@ -358,18 +362,57 @@
 			<a href="#" class="back btn-back button grey">Back</a>
 		</div>
 	</div>
-}
-
-<script id="personinfo-template" type="text/template">
-	@PersonalInfo()
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-	@LimitedInfo()
-</script>
+	<div class="row-fluid">
+		<h2 class="form_start">Company Information</h2> 
+		<div>
+			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" })) {
+				<div class="control-group">
+					<div class="controls">
+						<label class="control-label attardi-input"><span>Registration #</span>
+							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
+						</label>
+						<img id="LimitedCompanyNumberImage" class="field_status required"/>
+					</div>
+				</div>
 
-<script id="nonlimitededinfo-template" type="text/template">
-	@Nonlimitedinfo()
+				<div class="control-group">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span>Name</span>
+							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
+						</label>
+						<img id="LimitedCompanyNameImage" class="field_status required"/>
+					</div>
+				</div>
+
+				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
+
+				<div class="control-group">
+					<div class="controls">
+						<label class="control-label attardi-input">
+							<span>Business Phone</span>
+							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
+						</label>
+						<img id="LimitedBusinessPhoneImage" class="field_status required"/>
+					</div>
+				</div>
+
+				<input type="hidden" name="LimitedRefNum" class="RefNum" />
+
+				<div class="offline employee-count"></div>
+
+				<div class="directors"></div>
+			}
+		</div>
+
+		<div class="form_buttons_container">
+			<a href="#" class="next btn-continue button orange continue disabled">Complete</a>
+			<a href="#" class="back btn-back button grey">Back</a>
+		</div>
+	</div>
 </script>
 
 <script id="address-popup-template" type="text/template">
@@ -378,10 +421,6 @@
 
 <script id="address-template" type="text/template">
 	@{Html.RenderPartial("_AddressTemplate");}
-</script>
-
-<script id="director-edit-template" type="text/template">
-	@Director()
 </script>
 
 <script id="oneDirector" type="text/template">

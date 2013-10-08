@@ -62,6 +62,10 @@
             summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
             summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
             summary.Comment = customer.Comment;
+
+			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer);
+			summary.IsOffline = customer.IsOffline;
+
             return summary;
         }
 

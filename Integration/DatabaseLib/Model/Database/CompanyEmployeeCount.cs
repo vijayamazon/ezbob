@@ -1,0 +1,52 @@
+using System;
+using System.Linq;
+
+namespace EZBob.DatabaseLib.Model.Database {
+	#region class CompanyEmployeeCount
+
+	public class CompanyEmployeeCount {
+		public static DateTime LongAgo() {
+			return new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
+		} // LongAgo
+
+		public CompanyEmployeeCount() {
+			Created = LongAgo();
+		} // constructor
+
+		public virtual int Id { get; set; }
+		public virtual Customer Customer { get; set; }
+		public virtual DateTime Created { get; set; }
+		public virtual int EmployeeCount { get; set; }
+		public virtual int TopEarningEmployeeCount { get; set; }
+		public virtual int BottomEarningEmployeeCount { get; set; }
+		public virtual int EmployeeCountChange { get; set; }
+	} // class CompanyEmployeeCount
+
+	#endregion class CompanyEmployeeCount
+
+	#region class CompanyEmployeeCountInfo
+
+	public class CompanyEmployeeCountInfo {
+		public CompanyEmployeeCountInfo() {} // constructor
+
+		public CompanyEmployeeCountInfo(Customer oCustomer) {
+			var cec =
+				oCustomer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault()
+				?? new CompanyEmployeeCount();
+
+			Created                    = cec.Created;
+			BottomEarningEmployeeCount = cec.BottomEarningEmployeeCount;
+			EmployeeCount              = cec.EmployeeCount;
+			EmployeeCountChange        = cec.EmployeeCountChange;
+			TopEarningEmployeeCount    = cec.TopEarningEmployeeCount;
+		} // constructor
+
+		public int EmployeeCount { get; set; }
+		public int TopEarningEmployeeCount { get; set; }
+		public int BottomEarningEmployeeCount { get; set; }
+		public int EmployeeCountChange { get; set; }
+		public DateTime Created { get; set; }
+	} // class CompanyEmployeeCountInfo 
+
+	#endregion class CompanyEmployeeCountInfo
+} // namespace

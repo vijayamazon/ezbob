@@ -110,6 +110,8 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsOffline { get; set; }
 
 		public bool IsEarly { get; set; }
+
+		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
     }
 
     public class LimitedInfoMap

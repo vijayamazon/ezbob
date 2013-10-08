@@ -146,6 +146,8 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         if @model.get('IsOffline')
             otherAddress = new EzBob.AddressView({ model: @model.get('OtherPropertyAddress'), name: "OtherPropertyAddress", max: 1, isShowClear:true })
             @otherPropertyAddress.show(otherAddress)
+        else
+            @$el.find('.offline').remove()
 
         @
 
@@ -166,6 +168,10 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
         if directors isnt null and directors.length isnt 0
             directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
             @director.show (directorView)
+
+        if not @model.get('IsOffline')
+            @$el.find('.offline').remove()
+
         @
 
 ##############
@@ -185,6 +191,10 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         if directors isnt null and directors.length isnt 0
             directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
             @director.show (directorView)
+
+        if not @model.get('IsOffline')
+            @$el.find('.offline').remove()
+
         @
 
 class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout

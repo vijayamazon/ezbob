@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
@@ -95,6 +96,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public bool IsOffline { get; set; }
 		public CustomerRequestedLoanModel RequestedLoan { get; set; } 
+		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
     }
 
     public class FraudCheck

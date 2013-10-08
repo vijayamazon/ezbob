@@ -363,6 +363,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfo.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.steps.personinfo.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
+                .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.employeeCount.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
                 .Add("~/Content/js/controls/ezbob.address.js")
                 .Add("~/Content/js/Wizard/ezbob.signupwizard.js")

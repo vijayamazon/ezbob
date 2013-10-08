@@ -1102,6 +1102,7 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
       <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>

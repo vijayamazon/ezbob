@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <div class="controls">
+        <div class="controls offline">
             <div class="addressEdit">
                 @EzForm.AddressInput("OtherPropertyAddress", "Other Property Address:")
             </div>
@@ -152,7 +152,6 @@
                     @EzForm.AddressInput("LimitedCompanyAddress", "Address")
                 </div>
         </div>    
-        
 
         <div class="control-group">
             <label class="control-label">
@@ -161,8 +160,42 @@
                 <input class ="personEditInput phonenumber" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
+
         <div class="control-group director-container">
-            
+
+		<div class="offline">
+			<fieldset>
+				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
+				<div class="control-group">
+					<label class="control-label">Current Number of Employees:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>"  readonly="readonly"/>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
         </div>
     </fieldset>
         
@@ -204,8 +237,42 @@
                 <input class ="personEditInput phonenumber" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
+
         <div class="control-group director-container">
-            
+
+		<div class="offline">
+			<fieldset>
+				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
+				<div class="control-group">
+					<label class="control-label">Current Number of Employees:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>"  readonly="readonly"/>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
+					<div class="controls">
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>"  readonly="readonly"/>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+
         </div>
     </fieldset>
         

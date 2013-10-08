@@ -40,6 +40,9 @@ class EzBob.Underwriter.SummaryInfoView extends Backbone.Marionette.ItemView
         isNew = @model.get("MarketPlaces") and @model.get("MarketPlaces").IsNew
         $("#new-ribbon-marketplaces").toggle Convert.toBool isNew
 
+        if not @model.get('IsOffline')
+            @$el.find('.offline').remove()
+
 class EzBob.Underwriter.SummaryInfoModel extends Backbone.Model
     idAttribute: "Id"
     urlRoot: window.gRootPath + "Underwriter/Profile/Index"

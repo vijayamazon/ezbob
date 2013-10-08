@@ -166,6 +166,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             set { _cashRequests = value; }
         }
 
+		private Iesi.Collections.Generic.ISet<CompanyEmployeeCount> _companyEmployeeCount = new HashedSet<CompanyEmployeeCount>();
+		public virtual Iesi.Collections.Generic.ISet<CompanyEmployeeCount> CompanyEmployeeCount {
+			get { return _companyEmployeeCount; }
+			set { _companyEmployeeCount = value; }
+		} // CompanyEmployeeCount
+
+
         public virtual bool IsWasLate { get; set; }
         public virtual PaymentdemeanorType PaymentDemenaor
         {

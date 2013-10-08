@@ -224,6 +224,8 @@
           isShowClear: true
         });
         this.otherPropertyAddress.show(otherAddress);
+      } else {
+        this.$el.find('.offline').remove();
       }
       return this;
     };
@@ -264,6 +266,9 @@
         });
         this.director.show(directorView);
       }
+      if (!this.model.get('IsOffline')) {
+        this.$el.find('.offline').remove();
+      }
       return this;
     };
 
@@ -302,6 +307,9 @@
           collection: new EzBob.Directors(directors)
         });
         this.director.show(directorView);
+      }
+      if (!this.model.get('IsOffline')) {
+        this.$el.find('.offline').remove();
       }
       return this;
     };
