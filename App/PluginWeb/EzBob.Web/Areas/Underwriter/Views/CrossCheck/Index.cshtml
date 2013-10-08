@@ -1,11 +1,9 @@
-﻿
-@using System.Globalization
+﻿@using System.Globalization
 @using ApplicationMng.Model
 @using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Areas.Underwriter.Models
 @using EzBob.Web.Code
 @model CrossCheckModel
-
 @{
     Layout = null;
     Model.PayPal = Model.PayPal ?? new EzBob.Web.Areas.Underwriter.Models.PersonalInfo();
@@ -14,338 +12,370 @@
     Model.EBay.SellerInfo = Model.EBay.SellerInfo ?? new EbaySellerInfo();
     Model.EBay.SellerInfo.SellerPaymentAddress = Model.EBay.SellerInfo.SellerPaymentAddress ?? new MP_EbayUserAddressData();
 
-	CrossCheckModel.TriState nIsKnownToExperian = Model.IsExperianDirector(Model.Application);
+    CrossCheckModel.TriState nIsKnownToExperian = Model.IsExperianDirector(Model.Application);
 
-	string sNameClass = "";
-	string sNameTitle = "";
+    string sNameClass = "";
+    string sNameTitle = "";
 
-	switch (nIsKnownToExperian) {
-	case CrossCheckModel.TriState.No:
-		sNameClass = "unknown-as-experian-director";
-		sNameTitle = "Not found in Experian directors list.";
-		break;
+    switch (nIsKnownToExperian)
+    {
+        case CrossCheckModel.TriState.No:
+            sNameClass = "unknown-as-experian-director";
+            sNameTitle = "Not found in Experian directors list.";
+            break;
 
-	case CrossCheckModel.TriState.Yes:
-		sNameClass = "known-as-experian-director";
-		sNameTitle = "Found in Experian directors list.";
-		break;
+        case CrossCheckModel.TriState.Yes:
+            sNameClass = "known-as-experian-director";
+            sNameTitle = "Found in Experian directors list.";
+            break;
 
-	default:
-		sNameTitle = "No data in Experian directors list.";
-		break;
-	} // switch
+        default:
+            sNameTitle = "No data in Experian directors list.";
+            break;
+    } // switch
 }
 
-    <table class="table table-bordered blue-header centered squeezed" >
-        <thead>
-            <tr>
-                <th style="width: 20%;">Personal Info</th>
-                <th style="width: 20%;">Application</th>
-                <th style="width: 30%;">eBay</th>
-                <th style="width: 30%;">PayPal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><b>E-Mail</b><b class="marking pull-right @Model.CrossCheckStatus.Email"></b></td>
-                <td>@Model.Application.Email</td>
-                <td>@Model.EBay.Email</td>
-                <td>@Model.PayPal.Email</td>
-            </tr>
-            <tr>
-                <td><b>Billing Email</b></td>
-                <td></td>
-                <td>@Model.EBay.BillingEmail</td>
-                <td></td>
-            </tr>
-            <tr>
-                <td><b>FirstName</b><b class="marking pull-right  @Model.CrossCheckStatus.FirstName"></b></td>
-                <td class="@sNameClass" title="@sNameTitle">@Model.Application.FirstName</td>
-                <td>@Model.EBay.FirstName</td>
-                <td>@Model.PayPal.FirstName</td>
-            </tr>            
-            <tr>
-                <td><b>MiddleInitial</b><b class="marking pull-right  @Model.CrossCheckStatus.MiddleInitial"></b> </td>
-                <td class="@sNameClass" title="@sNameTitle">@Model.Application.MiddleInitial</td>
-                <td>@Model.EBay.MiddleInitial</td>
-                <td>@Model.PayPal.MiddleInitial</td>
-            </tr>            
-            <tr>
-                <td><b>Surname</b><b class="marking pull-right  @Model.CrossCheckStatus.Surname"></b></td>
-                <td class="@sNameClass" title="@sNameTitle">@Model.Application.Surname</td>
-                <td>@Model.EBay.Surname</td>
-                <td>@Model.PayPal.Surname</td>
-            </tr>            
-            <tr>
-                <td><b>Fullname</b><b class="marking pull-right  @Model.CrossCheckStatus.FullName"></b></td>
-                <td>@Model.Application.Fullname</td>
-                <td>@Model.EBay.Fullname</td>
-                <td>@Model.PayPal.Fullname</td>
-            </tr>            
-            <tr>
-                <td><b>Date Of Birth</b><b class="marking pull-right  @Model.CrossCheckStatus.DateOfBirth"></b></td>
-                <td>@GetDate(Model.Application.DateOfBirth) @( Model.Application.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.Application.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
-                <td>@GetDate(Model.EBay.DateOfBirth) @( Model.EBay.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.EBay.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
-                <td>@GetDate(Model.PayPal.DateOfBirth) @( Model.PayPal.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (Model.PayPal.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
-            </tr>            
-            <tr>
-                <td><b>Mobile Phone</b></td>
-                <td>@Model.Application.MobilePhone</td>
-                <td>@Model.EBay.MobilePhone</td>
-                <td>@Model.PayPal.MobilePhone</td>
-            </tr>            
-            <tr>
-                <td><b>Residential Status</b></td>
-                <td>@Model.Application.ResidentialStatus</td>
-                <td>@Model.EBay.ResidentialStatus</td>
-                <td>@Model.PayPal.ResidentialStatus</td>
-            </tr>            
-            <tr>
-                <td><b>Gender</b></td>
-                <td>@Model.Application.Gender</td>
-                <td></td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td><b>Martial Status</b></td>
-                <td>@Model.Application.MartialStatus</td>
-                <td></td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td><b>Type Of Business</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
-                <td>@Model.Customer.PersonalInfo.TypeOfBusiness</td>
-                <td>@Model.EBay.SellerInfo.SellerInfoSellerBusinessType</td>
-                <td></td>
-            </tr>            
-            <tr>
-                <td><b>Daytime Phone</b><b class="marking pull-right  @Model.CrossCheckStatus.DaytimePhone"></b></td>
-                <td>@Model.Application.DaytimePhone</td>
-                <td>@Model.EBay.DaytimePhone</td>
-                <td>@Model.PayPal.DaytimePhone</td>
-            </tr>
-            <tr>
-                <td><b>Business Name</b><b class="marking pull-right  @Model.CrossCheckStatus.BusinessName"></b></td>
-                <td></td>
-                <td></td>
-                <td>@Model.PayPal.BusinessName</td>
-            </tr>                                              
-            <tr>
-                <td><b>SkypeID</b></td>
-                <td></td>
-                <td>@Model.EBay.SkypeID</td>
-                <td></td>
-            </tr>
+<table class="table table-bordered blue-header centered squeezed">
+    <thead>
+        <tr>
+            <th style="width: 20%;">Personal Info</th>
+            <th style="width: 20%;">Application</th>
+            <th style="width: 30%;">eBay</th>
+            <th style="width: 30%;">PayPal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>E-Mail</b><b class="marking pull-right @Model.CrossCheckStatus.Email"></b></td>
+            <td>@Model.Application.Email</td>
+            <td>@Model.EBay.Email</td>
+            <td>@Model.PayPal.Email</td>
+        </tr>
+        <tr>
+            <td><b>Billing Email</b></td>
+            <td></td>
+            <td>@Model.EBay.BillingEmail</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>FirstName</b><b class="marking pull-right  @Model.CrossCheckStatus.FirstName"></b></td>
+            <td class="@sNameClass" title="@sNameTitle">@Model.Application.FirstName</td>
+            <td>@Model.EBay.FirstName</td>
+            <td>@Model.PayPal.FirstName</td>
+        </tr>
+        <tr>
+            <td><b>MiddleInitial</b><b class="marking pull-right  @Model.CrossCheckStatus.MiddleInitial"></b> </td>
+            <td class="@sNameClass" title="@sNameTitle">@Model.Application.MiddleInitial</td>
+            <td>@Model.EBay.MiddleInitial</td>
+            <td>@Model.PayPal.MiddleInitial</td>
+        </tr>
+        <tr>
+            <td><b>Surname</b><b class="marking pull-right  @Model.CrossCheckStatus.Surname"></b></td>
+            <td class="@sNameClass" title="@sNameTitle">@Model.Application.Surname</td>
+            <td>@Model.EBay.Surname</td>
+            <td>@Model.PayPal.Surname</td>
+        </tr>
+        <tr>
+            <td><b>Fullname</b><b class="marking pull-right  @Model.CrossCheckStatus.FullName"></b></td>
+            <td>@Model.Application.Fullname</td>
+            <td>@Model.EBay.Fullname</td>
+            <td>@Model.PayPal.Fullname</td>
+        </tr>
+        <tr>
+            <td><b>Date Of Birth</b><b class="marking pull-right  @Model.CrossCheckStatus.DateOfBirth"></b></td>
+            <td>@GetDate(Model.Application.DateOfBirth) @( Model.Application.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.Application.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+            <td>@GetDate(Model.EBay.DateOfBirth) @( Model.EBay.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.EBay.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+            <td>@GetDate(Model.PayPal.DateOfBirth) @( Model.PayPal.DateOfBirth != null ? "(" + (DateTime.Now.Year - (Model.PayPal.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
+        </tr>
+        <tr>
+            <td><b>Mobile Phone</b></td>
+            <td>@Model.Application.MobilePhone</td>
+            <td>@Model.EBay.MobilePhone</td>
+            <td>@Model.PayPal.MobilePhone</td>
+        </tr>
+        <tr>
+            <td><b>Residential Status</b></td>
+            <td>@Model.Application.ResidentialStatus</td>
+            <td>@Model.EBay.ResidentialStatus</td>
+            <td>@Model.PayPal.ResidentialStatus</td>
+        </tr>
+        <tr>
+            <td><b>Gender</b></td>
+            <td>@Model.Application.Gender</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Martial Status</b></td>
+            <td>@Model.Application.MartialStatus</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Type Of Business</b><b class="marking pull-right  @Model.CrossCheckStatus.TypeOfBussnes"></b></td>
+            <td>@Model.Customer.PersonalInfo.TypeOfBusiness</td>
+            <td>@Model.EBay.SellerInfo.SellerInfoSellerBusinessType</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Daytime Phone</b><b class="marking pull-right  @Model.CrossCheckStatus.DaytimePhone"></b></td>
+            <td>@Model.Application.DaytimePhone</td>
+            <td>@Model.EBay.DaytimePhone</td>
+            <td>@Model.PayPal.DaytimePhone</td>
+        </tr>
+        <tr>
+            <td><b>Business Name</b><b class="marking pull-right  @Model.CrossCheckStatus.BusinessName"></b></td>
+            <td></td>
+            <td></td>
+            <td>@Model.PayPal.BusinessName</td>
+        </tr>
+        <tr>
+            <td><b>SkypeID</b></td>
+            <td></td>
+            <td>@Model.EBay.SkypeID</td>
+            <td></td>
+        </tr>
 
-            @if (@Model.Customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur)
-            {
-                <tr>
-                    <td><b>Overall TurnOver</b></td>
-                    <td>@Model.Customer.PersonalInfo.OverallTurnOver</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>WebSite TurnOver</b></td>
-                    <td>@Model.Customer.PersonalInfo.WebSiteTurnOver</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <table class="table table-bordered  blue-header centered squeezed">
-        <thead>
+        @if (@Model.Customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur)
+        {
             <tr>
-                <th style="width: 20%;">Address</th>
-                <th style="width: 20%;">Current</th>
-                <th style="width: 20%;">Previous</th>
-                <th style="width: 20%;">eBay seller</th>
-                <th style="width: 20%;">PayPal</th>                
+                <td><b>Overall TurnOver</b></td>
+                <td>@Model.Customer.PersonalInfo.OverallTurnOver</td>
+                <td></td>
+                <td></td>
             </tr>
-        </thead>
-        <tbody>
             <tr>
-                <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
-                <td>@Model.CurrentAddress.Line1</td>
-                <td>@Model.PrevAddress.Line1</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
-                <td>@Model.PayPalAddress.Line1</td>
-            </tr>            
-            <tr>
-                <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
-                <td>@Model.CurrentAddress.Line2</td>
-                <td>@Model.PrevAddress.Line2</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
-                <td>@Model.PayPalAddress.Line2</td>                
-            </tr>            
-            <tr>
-                <td><b>Line3</b></td>
-                <td>@Model.CurrentAddress.Line3</td>
-                <td>@Model.PrevAddress.Line3</td>                
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
-                <td>@Model.PayPalAddress.Line3</td>                               
-            </tr>            
-            <tr>
-                <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
-                <td>@Model.CurrentAddress.Town</td>
-                <td>@Model.PrevAddress.Town</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
-                <td>@Model.PayPalAddress.Town</td>                
-            </tr>            
-            <tr>
-                <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
-                <td>@Model.CurrentAddress.County</td>
-                <td>@Model.PrevAddress.County</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
-                <td>@Model.PayPalAddress.County</td>                
-            </tr>            
-            <tr>
-                <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
-                <td>@Model.CurrentAddress.Postcode</td>
-                <td>@Model.PrevAddress.Postcode</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
-                <td>@Model.PayPalAddress.Postcode</td>                
-            </tr>            
-            <tr>
-                <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
-                <td>@Model.CurrentAddress.Country</td>
-                <td>@Model.PrevAddress.Country</td>
-                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
-                <td>@Model.PayPalAddress.Country</td>                
+                <td><b>WebSite TurnOver</b></td>
+                <td>@Model.Customer.PersonalInfo.WebSiteTurnOver</td>
+                <td></td>
+                <td></td>
             </tr>
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
-        <div style="margin-bottom: 20px;" class="copy-buttons">
-        @copyAddress("Current", @Model.CurrentAddress)
-        @copyAddress("Previous", @Model.PrevAddress)
-        @copyAddress("PayPal", @Model.PayPalAddress)
-        @copyAddress("Ebay", @Model.EBayAddress)
-    </div>
+<table class="table table-bordered  blue-header centered squeezed">
+    <thead>
+        <tr>
+            <th style="width: 20%;">Address</th>
+            <th style="width: 20%;">Current</th>
+            <th style="width: 20%;">Previous</th>
+            <th style="width: 20%;">eBay seller</th>
+            <th style="width: 20%;">PayPal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
+            <td>@Model.CurrentAddress.Line1</td>
+            <td>@Model.PrevAddress.Line1</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
+            <td>@Model.PayPalAddress.Line1</td>
+        </tr>
+        <tr>
+            <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
+            <td>@Model.CurrentAddress.Line2</td>
+            <td>@Model.PrevAddress.Line2</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
+            <td>@Model.PayPalAddress.Line2</td>
+        </tr>
+        <tr>
+            <td><b>Line3</b></td>
+            <td>@Model.CurrentAddress.Line3</td>
+            <td>@Model.PrevAddress.Line3</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
+            <td>@Model.PayPalAddress.Line3</td>
+        </tr>
+        <tr>
+            <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
+            <td>@Model.CurrentAddress.Town</td>
+            <td>@Model.PrevAddress.Town</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
+            <td>@Model.PayPalAddress.Town</td>
+        </tr>
+        <tr>
+            <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
+            <td>@Model.CurrentAddress.County</td>
+            <td>@Model.PrevAddress.County</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
+            <td>@Model.PayPalAddress.County</td>
+        </tr>
+        <tr>
+            <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
+            <td>@Model.CurrentAddress.Postcode</td>
+            <td>@Model.PrevAddress.Postcode</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
+            <td>@Model.PayPalAddress.Postcode</td>
+        </tr>
+        <tr>
+            <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
+            <td>@Model.CurrentAddress.Country</td>
+            <td>@Model.PrevAddress.Country</td>
+            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
+            <td>@Model.PayPalAddress.Country</td>
+        </tr>
+    </tbody>
+</table>
 
-@if (Model.Customer.IsOffline) {
-	<table class="table table-striped table-bordered blue-header centered squeezed"><thead>
-	<tr><th colspan="2">Other Property Ownership</th></tr>
-	</thead><tbody>
-	@if (Model.OtherPropertyAddress == null) {
-		<tr><td colspan=2>Does not own another property</td></tr>
-	}
-	else {
-		<tr>
-			<td><b>Line1</b></td>
-			<td>@Model.OtherPropertyAddress.Line1</td>
-		</tr>
-		<tr>
-			<td><b>Line2</b></td>
-			<td>@Model.OtherPropertyAddress.Line2</td>
-		</tr>
-		<tr>
-			<td><b>Line3</b></td>
-			<td>@Model.OtherPropertyAddress.Line3</td>
-		</tr>
-		<tr>
-			<td><b>Town</b></td>
-			<td>@Model.OtherPropertyAddress.Town</td>
-		</tr>
-		<tr>
-			<td><b>County</b></td>
-			<td>@Model.OtherPropertyAddress.County</td>
-		</tr>
-		<tr>
-			<td><b>Postcode</b></td>
-			<td>@Model.OtherPropertyAddress.Postcode</td>
-		</tr>
-		<tr>
-			<td><b>Country</b></td>
-			<td>@Model.OtherPropertyAddress.Country</td>
-		</tr>
-	}
-	</tbody></table>
-}
+<div style="margin-bottom: 20px;" class="copy-buttons">
+    @copyAddress("Current", @Model.CurrentAddress)
+    @copyAddress("Previous", @Model.PrevAddress)
+    @copyAddress("PayPal", @Model.PayPalAddress)
+    @copyAddress("Ebay", @Model.EBayAddress)
+</div>
 
-@{
-        var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
-        var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
-        var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);
-    }
-    
+@if (Model.Customer.IsOffline)
+{
     <table class="table table-striped table-bordered blue-header centered squeezed">
         <thead>
             <tr>
-                <th colspan="2">Business Info</th>
+                <th colspan="2">Other Property Ownership</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td  style="width: 50%;"><b>Business Type</b></td>
-                <td style="width: 50%;">@Model.Customer.PersonalInfo.TypeOfBusinessName</td>
-            </tr>
-
-            @if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal){
+            @if (Model.OtherPropertyAddress == null)
+            {
                 <tr>
-                    <td><b>Targeting Status</b></td>
-                    <td>
-                        <a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-danger" : "btn-success") disabled" style="margin-left: 10px;">
-                            <i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-remove-sign" : "icon-ok-sign")"></i>
-                            @(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed" )
-                        </a>
-                        <a id="recheck-targeting" 
-                           class="btn btn-mini pull-right" 
-                           href="#" 
-                           data-postcode="@postcode.Select(x=>x.Postcode).FirstOrDefault()"
-                           data-company-name="@companyName">Recheck
-                        </a>
-                    </td>
+                    <td colspan="2">Does not own another property</td>
                 </tr>
-            
-                <tr>
-                    <td><b>Ref Number</b></td>
-                    <td>@companyRefNum</td>
-                </tr> 
-             
-                if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
-                {
-                    <tr>
-                        <td><b>Time In Business</b></td>
-                        <td>@Model.Customer.NonLimitedInfo.NonLimitedTimeInBusiness</td>
-                    </tr>
-                }
-                if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
-                {
-                    <tr>
-                        <td><b>Company Number</b></td>
-                        <td>@Model.Customer.LimitedInfo.LimitedCompanyNumber</td>
-                    </tr>
-                }  
-                <tr>
-                    <td><b>Company Name</b></td>
-                    <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName)</td>
-                </tr>            
-                <tr>
-                    <td><b>Time At Address</b></td>
-                    <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedTimeAtAddress : Model.Customer.NonLimitedInfo.NonLimitedTimeAtAddress)</td>
-                </tr>            
-                <tr>
-                    <td><b>Consent To Search</b></td>
-                    <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedConsentToSearch : Model.Customer.NonLimitedInfo.NonLimitedConsentToSearch)</td>
-                </tr>            
-                <tr>
-                    <td><b>Business Phone</b></td>
-                    <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedBusinessPhone : Model.Customer.NonLimitedInfo.NonLimitedBusinessPhone)</td>
-                </tr>                       
             }
-
+            else
+            {
+                <tr>
+                    <td><b>Line1</b></td>
+                    <td>@Model.OtherPropertyAddress.Line1</td>
+                </tr>
+                <tr>
+                    <td><b>Line2</b></td>
+                    <td>@Model.OtherPropertyAddress.Line2</td>
+                </tr>
+                <tr>
+                    <td><b>Line3</b></td>
+                    <td>@Model.OtherPropertyAddress.Line3</td>
+                </tr>
+                <tr>
+                    <td><b>Town</b></td>
+                    <td>@Model.OtherPropertyAddress.Town</td>
+                </tr>
+                <tr>
+                    <td><b>County</b></td>
+                    <td>@Model.OtherPropertyAddress.County</td>
+                </tr>
+                <tr>
+                    <td><b>Postcode</b></td>
+                    <td>@Model.OtherPropertyAddress.Postcode</td>
+                </tr>
+                <tr>
+                    <td><b>Country</b></td>
+                    <td>@Model.OtherPropertyAddress.Country</td>
+                </tr>
+            }
         </tbody>
     </table>
+}
+
+@{
+    var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
+    var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
+    var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);
+    bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.HasValue && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.Value;
+}
+
+<table class="table table-striped table-bordered blue-header centered squeezed">
+    <thead>
+        <tr>
+            <th colspan="2">Business Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="width: 50%;"><b>Business Type</b></td>
+            <td style="width: 50%;">@Model.Customer.PersonalInfo.TypeOfBusinessName</td>
+        </tr>
+
+        @if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() != TypeOfBusinessReduced.Personal)
+        {
+            <tr>
+                <td><b>Targeting Status</b></td>
+                <td>
+                    <a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-danger" : "btn-success") disabled" style="margin-left: 10px;">
+                        <i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-remove-sign" : "icon-ok-sign")"></i>
+                        @(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
+                    </a>
+                    <a id="recheck-targeting" 
+                           class="btn btn-mini pull-right" 
+                           href="#" 
+                           data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
+                           data-company-name="@companyName">Recheck
+                    </a>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><b>Ref Number</b></td>
+                <td>@companyRefNum</td>
+            </tr> 
+             
+            if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
+            {
+            <tr>
+                <td><b>Time In Business</b></td>
+                <td>@Model.Customer.NonLimitedInfo.NonLimitedTimeInBusiness</td>
+            </tr>
+            }
+            if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
+            {
+            <tr>
+                <td><b>Company Number</b></td>
+                <td>@Model.Customer.LimitedInfo.LimitedCompanyNumber</td>
+            </tr>
+            }  
+            <tr>
+                <td><b>Company Name</b></td>
+                <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName)</td>
+            </tr>            
+            <tr>
+                <td><b>Time At Address</b></td>
+                <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedTimeAtAddress : Model.Customer.NonLimitedInfo.NonLimitedTimeAtAddress)</td>
+            </tr>            
+            <tr>
+                <td><b>Consent To Search</b></td>
+                <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedConsentToSearch : Model.Customer.NonLimitedInfo.NonLimitedConsentToSearch)</td>
+            </tr>            
+            <tr>
+                <td><b>Business Phone</b></td>
+                <td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedBusinessPhone : Model.Customer.NonLimitedInfo.NonLimitedBusinessPhone)</td>
+            </tr> 
+            if (Model.Customer.IsOffline)
+            {
+            <tr>
+                <td><b>Property owned by company</b></td>
+                <td>@(propertyOwnedByCompany ? "Yes" : "No")</td>
+            </tr>
+                if (!propertyOwnedByCompany)
+                {
+                <tr>
+                    <td><b>How many years in the property</b></td>
+                    <td>@(Model.Customer.CompanyAdditionalInfo.YearsInCompany)</td>
+                </tr>
+                <tr>
+                    <td><b>How many month are left for the rent contract</b></td>
+                    <td>@(Model.Customer.CompanyAdditionalInfo.RentMonthsLeft)</td>
+                </tr>
+                }
+
+            }
+        }
+
+    </tbody>
+</table>
 
 @if (Model.Directors.Count == 0)
 {
     <fieldset>
         <legend>No directors data found.</legend>
     </fieldset>
-}   
+}
 
 @for (int i = 0; i < Model.Directors.Count; i++)
 {
@@ -353,26 +383,27 @@
     var addressInfo = d.DirectorAddressInfo;
     var address = addressInfo != null && addressInfo.AllAddresses.Any() ? addressInfo.AllAddresses.First() : new CustomerAddress();
 
-	CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
+    CrossCheckModel.TriState nIsKnownDirector = Model.IsExperianDirector(d);
 
-	string sDirNameClass = "";
-	string sDirNameTitle = "";
+    string sDirNameClass = "";
+    string sDirNameTitle = "";
 
-	switch (nIsKnownToExperian) {
-	case CrossCheckModel.TriState.No:
-		sDirNameClass = "unknown-as-experian-director";
-		sDirNameTitle = "Not found in Experian directors list.";
-		break;
+    switch (nIsKnownToExperian)
+    {
+        case CrossCheckModel.TriState.No:
+            sDirNameClass = "unknown-as-experian-director";
+            sDirNameTitle = "Not found in Experian directors list.";
+            break;
 
-	case CrossCheckModel.TriState.Yes:
-		sDirNameClass = "known-as-experian-director";
-		sDirNameTitle = "Found in Experian directors list.";
-		break;
+        case CrossCheckModel.TriState.Yes:
+            sDirNameClass = "known-as-experian-director";
+            sDirNameTitle = "Found in Experian directors list.";
+            break;
 
-	default:
-		sDirNameTitle = "No data in Experian directors list.";
-		break;
-	} // switch
+        default:
+            sDirNameTitle = "No data in Experian directors list.";
+            break;
+    } // switch
 
     <fieldset>
         <legend>Director #@(i + 1) Info</legend>
@@ -396,7 +427,7 @@
                 </tr>
                 <tr>
                     <td><b>Date Of Birth</b></td>
-                    <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth!=null ? "(" + (DateTime.Now.Year - (d.DateOfBirth??DateTime.Now).Year) + " years)":"")</td>
+                    <td>@GetDate(d.DateOfBirth) @( d.DateOfBirth != null ? "(" + (DateTime.Now.Year - (d.DateOfBirth ?? DateTime.Now).Year) + " years)" : "")</td>
                 </tr>
                 <tr>
                     <td><b>Email</b></td>
@@ -444,9 +475,9 @@
 }
 
 @helper GetDate(DateTime? d)
-    {
-    if (d.HasValue)
-    {@FormattingUtils.FormatDateToString(d.Value)}
+{
+        if (d.HasValue)
+        {@FormattingUtils.FormatDateToString(d.Value)}
 }
 
 
@@ -454,11 +485,12 @@
     Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
 }
 
-@helper copyAddress(string name, CustomerAddress currentAddress){
-     if (currentAddress != null)
-     {
-        <div style="position: relative; display: inline-block;">
-            <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >Copy @name</button>
-        </div>
-     }
+@helper copyAddress(string name, CustomerAddress currentAddress)
+{
+    if (currentAddress != null)
+    {
+    <div style="position: relative; display: inline-block;">
+        <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >Copy @name</button>
+    </div>
+    }
 }
