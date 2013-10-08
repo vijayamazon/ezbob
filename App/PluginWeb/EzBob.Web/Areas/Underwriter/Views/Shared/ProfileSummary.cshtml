@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
 <script id="profile-summary-template" type="text/template">
     @ProfileSummary()
 </script>
@@ -22,7 +23,10 @@
         rl = m.RequestedLoan,
         cec = m.CompanyEmployeeCountInfo || {};
 
-        mp.Lighter = mp.Lighter || {};
+		if (cec.Created == '@{ WriteLiteral(CompanyEmployeeCount.LongAgo().ToString("yyyy-MM-dd'T'HH:mm:ssK")); }')
+			cec = {};
+
+		mp.Lighter = mp.Lighter || {};
         pa.Lighter = pa.Lighter || {};
         aa.Lighter = aa.Lighter || {};
         la.Lighter =la.Lighter || {};

@@ -111,7 +111,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 active: 0
                 priority: vendorInfo.ClientSide.SortPriority
 
-        isOffline = @model.get 'isOffline'
+        @isOffline = @model.get 'isOffline'
 
         offlineMarketPlaces = {}
 
@@ -121,7 +121,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         for j in EzBob.Config.ActiveMarketPlaces
             storeTypeName = if j == "Pay Pal" then "paypal" else j
 
-            if @stores[storeTypeName] and ((not isOffline) or offlineMarketPlaces[storeTypeName])
+            if @stores[storeTypeName] and ((not @isOffline) or offlineMarketPlaces[storeTypeName])
                 @stores[storeTypeName].active = 1
 
         @name = "shops"

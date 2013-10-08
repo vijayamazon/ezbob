@@ -15,6 +15,8 @@
       return _ref;
     }
 
+    StoreInfoBaseView.prototype.isOffline = false;
+
     StoreInfoBaseView.prototype.initialize = function() {
       var name, ordpi, store, _ref1;
 
@@ -85,6 +87,18 @@
       var accountsList, hasEbay, hasFilledShops, hasOnlyYodleeAndFreeAgentAndSage, hasOtherThanYodleeAndFreeAgentAndSage, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
 
       $.colorbox.close();
+      if (this.isOffline) {
+        _.each(this.stores, function(s, sShopName) {
+          switch (sShopName) {
+            case "HMRC":
+              return s.priority = 1;
+            case "Yodlee":
+              return s.priority = 2;
+            default:
+              return s.priority += 4;
+          }
+        });
+      }
       that = this;
       accountsList = this.storeList.find(".accounts-list");
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {

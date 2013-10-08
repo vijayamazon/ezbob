@@ -2,6 +2,8 @@
 root.EzBob = root.EzBob or {}
 
 class EzBob.StoreInfoBaseView extends Backbone.View
+    isOffline: false
+
     initialize: ->
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
@@ -53,6 +55,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     render: ->
         $.colorbox.close()
+
+        if @isOffline
+            _.each @stores, (s, sShopName) ->
+                switch sShopName
+                    when "HMRC" then s.priority = 1
+                    when "Yodlee" then s.priority = 2
+                    else s.priority += 4
 
         that = this
         accountsList = @storeList.find(".accounts-list")
