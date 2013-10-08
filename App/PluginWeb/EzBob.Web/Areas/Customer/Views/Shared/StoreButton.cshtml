@@ -28,11 +28,7 @@
 
 									var sRibbon = '';
 
-									if (shopClass == 'Yodlee')
-										sRibbon = 'new';
-									else if (shopClass == 'FreeAgent' || shopClass == 'Sage')
-										sRibbon = 'beta';
-									else if (oCG)
+									if (oCG)
 										sRibbon = oCG.ClientSide.Ribbon.toLowerCase();
 
 									if (sRibbon != '') {

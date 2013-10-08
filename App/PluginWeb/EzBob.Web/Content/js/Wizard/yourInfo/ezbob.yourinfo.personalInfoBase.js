@@ -7,8 +7,6 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
     },
 
     render: function () {
-	    console.log('EzBob.YourInformationStepViewBase', this.model);
-
         this.$el.html(this.template(this.model.toJSON()));
         this.form = this.$el.find('form');
         this.validator = this.getValidator()(this.form);
