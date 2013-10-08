@@ -183,6 +183,10 @@ EzBob.DirectorsModel = Backbone.Model.extend({
         SurnameImage: "",
         GenderImage: "",
         DateOfBirthImage: "",
+        Email: "",
+        EmailImage: "",
+        Phone: "",
+        PhoneImage: "",
     }
 });
 
