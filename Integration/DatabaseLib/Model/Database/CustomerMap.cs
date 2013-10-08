@@ -86,6 +86,12 @@ namespace EZBob.DatabaseLib.Model.Database {
                      .Cache.ReadWrite().Region("LongTerm").ReadWrite();
                     m.Map(x => x.NonLimitedRefNum).Length(250);
                 });
+			Component(x => x.CompanyAdditionalInfo, m =>
+			{
+				m.Map(x => x.PropertyOwnedByCompany);
+				m.Map(x => x.YearsInCompany).Length(50);
+				m.Map(x => x.RentMonthsLeft).Length(50);
+			});
             Component(x => x.PersonalInfo, m =>
                 {
                     m.Map(x => x.FirstName).Length(255);

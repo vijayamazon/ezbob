@@ -310,7 +310,7 @@
     <Compile Include="Repository\CaisFlagRepository.cs" />
     <Compile Include="Repository\CaisReportsHistoryRepository.cs" />
     <Compile Include="Repository\AmazonMarketPlaceTypeRepository.cs" />
-    <Compile Include="Repository\CustomerSessionRepository.cs" />
+    <Compile Include="Repository\CustomerSessionsRepository.cs" />
     <Compile Include="Repository\CustomerAddressRepository.cs" />
     <Compile Include="Repository\DailyReportRepository.cs" />
     <Compile Include="Repository\AskvilleRepository.cs" />

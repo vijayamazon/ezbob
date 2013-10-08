@@ -8,7 +8,10 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.companyAddressValidator = false;
 		this.events = _.extend({}, this.events, {
 			'change   input': 'inputChanged',
+            'change select': 'inputChanged',
 			'keyup    input': 'inputChanged',
+            'focusout input': 'inputChanged',
+            'change #NonLimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged'
 			'focusout input': 'inputChanged',
 			'click    input': 'inputChanged',
 
@@ -37,6 +40,11 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 			((this.employeeCountView == null) || this.employeeCountView.isValid());
 
 		$('.continue').toggleClass('disabled', !enabled);
+    },
+    propertyOwnedByCompanyChanged: function (event) {
+        var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() == 'true';
+        this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
+        this.inputChanged(event);
 	},
 
 	next: function (e) {

@@ -51,6 +51,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             bool? noCompany,
             LimitedInfo limitedInfo,
             NonLimitedInfo nonLimitedInfo,
+			CompanyAdditionalInfo companyAdditionalInfo,
             PersonalInfo personalInfo,
             List<CustomerAddress> personalAddress,
             List<CustomerAddress> prevPersonAddresses,
@@ -76,6 +77,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     ProcessNonLimited(nonLimitedInfo, nonLimitedCompanyAddress, nonLimitedDirectors, customer);
                     break;
             }
+
+            customer.CompanyAdditionalInfo = companyAdditionalInfo;
 
             _crBuilder.CreateCashRequest(customer);
 

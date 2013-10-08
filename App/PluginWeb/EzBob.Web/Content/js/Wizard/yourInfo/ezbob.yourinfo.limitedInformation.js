@@ -9,9 +9,12 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		this.events = _.extend({}, this.events, {
 			'change   input': 'inputChanged',
+            'change select': 'inputChanged',
 			'keyup    input': 'inputChanged',
 			'focusout input': 'inputChanged',
 			'click    input': 'inputChanged',
+            'focusout input': 'inputChanged',
+            'change #LimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged'
 
 			'change   select': 'inputChanged',
 			'keyup    select': 'inputChanged',
@@ -39,7 +42,13 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		$('.continue').toggleClass('disabled', !enabled);
 	},
-
+    
+    propertyOwnedByCompanyChanged: function (event) {
+        var toToggle = this.$el.find('#LimitedPropertyOwnedByCompany').val() == 'true';
+        this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
+        this.inputChanged(event);
+    },
+    
 	render: function () {
 		this.constructor.__super__.render.call(this);
 

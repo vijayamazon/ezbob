@@ -395,7 +395,6 @@ namespace EzBob.Web.Controllers
 						IsTest = isAutomaticTest,
 						IsOffline = false,
 						PromoCode = promoCode,
-						CustomerRequestedLoan = new List<CustomerRequestedLoan>()
 					};
 
 
@@ -429,6 +428,7 @@ namespace EzBob.Web.Controllers
 
 				if (customer.IsOffline)
 				{
+					customer.CustomerRequestedLoan = new List<CustomerRequestedLoan>();
 					customer.CustomerRequestedLoan.Add(new CustomerRequestedLoan
 						{
 							Customer = customer,

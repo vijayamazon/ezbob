@@ -203,6 +203,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
         public virtual LimitedInfo LimitedInfo { get; set; }
         public virtual NonLimitedInfo NonLimitedInfo { get; set; }
+		public virtual CompanyAdditionalInfo CompanyAdditionalInfo { get; set; }
         public virtual PersonalInfo PersonalInfo { get; set; }
 
         public virtual AddressInfo AddressInfo { get; set; }
@@ -580,7 +581,7 @@ namespace EZBob.DatabaseLib.Model.Database {
     public class LimitedInfo
     {
         public string     LimitedRefNum { get; set; }
-        public string       LimitedCompanyNumber { get; set; }
+        public string     LimitedCompanyNumber { get; set; }
         public string     LimitedCompanyName { get; set; }
         public int?       LimitedTimeAtAddress { get; set; }
         public bool?      LimitedConsentToSearch { get; set; }
@@ -603,14 +604,21 @@ namespace EZBob.DatabaseLib.Model.Database {
         public int?       NonLimitedTimeAtAddress { get; set; }
         public bool?      NonLimitedConsentToSearch { get; set; }
         public string     NonLimitedBusinessPhone { get; set; }
-        
-        private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
+
+		private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
         public virtual Iesi.Collections.Generic.ISet<Director> Directors
         {
             get { return _directors; }
             set { _directors = value; }
         }
     }
+
+	public class CompanyAdditionalInfo
+	{
+		public bool? PropertyOwnedByCompany { get; set; }
+		public string YearsInCompany { get; set; }
+		public string RentMonthsLeft { get; set; }
+	}
 
     public class PersonalInfo
     {

@@ -960,6 +960,9 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
             LimitedCompanyName: { required: true, minlength: 2 },
             LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
+            PropertyOwnedByCompany: { required: true },
+            YearsInCompany: { required: true },
+            RentMonthsLeft: { required: true },
         },
         messages: {
             LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
@@ -967,8 +970,8 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-
+        highlight: EzBob.Validation.highlightFS,
+        ignore: ":not(:visible)"
     });
 };
 
@@ -980,7 +983,10 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
             NonLimitedCompanyName: { required: true, minlength: 2 },
             NonLimitedTimeInBusiness: { required: true },
             NonLimitedTimeAtAddress: { required: true, digits: true },
-            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
+            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
+            PropertyOwnedByCompany: { required: true },
+            YearsInCompany: { required: true },
+            RentMonthsLeft: { required: true },
         },
         messages: {
             NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
@@ -988,7 +994,8 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
 
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
+        highlight: EzBob.Validation.highlightFS,
+        ignore: ":not(:visible)"
     });
 };
 

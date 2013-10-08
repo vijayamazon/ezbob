@@ -6,18 +6,11 @@
     bool ebayPixelEnabled = config.EbayPixelEnabled;
 }
 
-<<<<<<< HEAD
-<script id="personinfo-template" type="text/template">
-	<div class="row-fluid">
-	    <h2 class="form_start">Personal Information</h2>
-        
-=======
 @helper PersonalInfo()
 {
     <div class="row-fluid">
         <h2 class="form_start">Personal Information</h2>
 
->>>>>>> EZ-1034 Additional Company Details
         @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 	    @{
             var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
@@ -217,17 +210,6 @@
             }
         </div>
 
-<<<<<<< HEAD
-		<div class="form_buttons_container">
-			<a href="#" class="btn-continue button orange btn-next disabled continue">Complete</a>
-		</div>
-	</div>
-</script>
-
-<script id="director-edit-template" type="text/template">
-	<div>
-		<h2 class="form_section">Additional Directors (Optional)</h2>
-=======
         <div class="form_buttons_container">
             <a href="#" class="btn-continue button orange btn-next disabled continue">Complete</a>
         </div>
@@ -237,7 +219,6 @@
 {
     <div>
         <h2 class="form_section">Additional Directors (Optional)</h2>
->>>>>>> EZ-1034 Additional Company Details
 
         <div class="directorArea"></div>
 
@@ -245,199 +226,6 @@
             <div class="wizard-director-text">EZBOB assumes that you are a director in the Company.</div>
             <div class="wizard-director-text">Adding additional directors can improve your chances of getting an offer.</div>
 
-<<<<<<< HEAD
-			<input id="addDirector" class="btn green" type="button" value="Add directors" />
-		</div>
-	</div>
-</script>
-
-<script id="employee-count-template" type="text/template">
-	<h2 class="form_section">Payroll Information</h2>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span>Current # of employees</span>
-				<input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="EmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span># of earning (gross salary) over £41,450 per annum</span>
-				<input id="TopEarningEmployeeCount" name="TopEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="TopEarningEmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span># of earning (gross salary) less than £9,440 per annum</span>
-				<input id="BottomEarningEmployeeCount" name="BottomEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="BottomEarningEmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span>Change in the # of employees in last 12 months</span>
-				<select id="EmployeeCountChange" name="EmployeeCountChange" class="form_field select">
-					<option value=""></option>
-					<option value="-5">Reduced by 5 or more</option>
-					<option value="-4">Reduced by 4</option>
-					<option value="-3">Reduced by 3</option>
-					<option value="-2">Reduced by 2</option>
-					<option value="-1">Reduced by 1</option>
-					<option value="0">No change</option>
-					<option value="1">Increased by 1</option>
-					<option value="2">Increased by 2</option>
-					<option value="3">Increased by 3</option>
-					<option value="4">Increased by 4</option>
-					<option value="5">Increased by 5 or more</option>
-				</select>
-			</label>
-			<img id="EmployeeCountChangeImage" class="field_status required"/>
-		</div>
-	</div>
-
-</script>
-
-<script id="nonlimitededinfo-template" type="text/template">
-	<div class="row-fluid">
-		<h2 class="form_start">Company Information</h2>
-		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" })) {
-				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Name</span>
-							<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
-						</label>
-						<img id="NonLimitedCompanyNameImage" class="field_status required"/>
-					</div>
-				</div>
-
-				@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Resided at Address</span>
-							<select id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">More than 3 years</option>
-							</select>
-						</label>
-						<img id="NonLimitedTimeAtAddressImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Time in Business</span>
-							<select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">3 years</option>
-								<option value="4">4 years</option>
-								<option value="5">5 years</option>
-								<option value="6">6 years</option>
-								<option value="7">7 years</option>
-								<option value="8">8 years</option>
-								<option value="9">9 years</option>
-								<option value="101">More than 10 years</option>
-							</select>
-						</label>
-						<img id="NonLimitedTimeInBusinessImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Business Phone</span>
-							<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
-						</label>
-						<img id="NonLimitedBusinessPhoneImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<div class="offline employee-count"></div>
-
-				<div class="directors"></div>
-		}
-		</div>
-
-		<div class="form_buttons_container">
-			<a href="#" class="continue btn-continue next button orange disabled">Complete</a>
-			<a href="#" class="back btn-back button grey">Back</a>
-		</div>
-	</div>
-</script>
-
-<script id="limitedinfo-template" type="text/template">
-	<div class="row-fluid">
-		<h2 class="form_start">Company Information</h2> 
-		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" })) {
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input"><span>Registration #</span>
-							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNumberImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Name</span>
-							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNameImage" class="field_status required"/>
-					</div>
-				</div>
-
-				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
-
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Business Phone</span>
-							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
-						</label>
-						<img id="LimitedBusinessPhoneImage" class="field_status required"/>
-					</div>
-				</div>
-
-				<input type="hidden" name="LimitedRefNum" class="RefNum" />
-
-				<div class="offline employee-count"></div>
-
-				<div class="directors"></div>
-			}
-		</div>
-
-		<div class="form_buttons_container">
-			<a href="#" class="next btn-continue button orange continue disabled">Complete</a>
-			<a href="#" class="back btn-back button grey">Back</a>
-		</div>
-	</div>
-=======
             <input id="addDirector" class="btn green" type="button" value="Add directors" />
         </div>
     </div>
@@ -639,7 +427,6 @@
 
 <script id="nonlimitededinfo-template" type="text/template">
     @Nonlimitedinfo()
->>>>>>> EZ-1034 Additional Company Details
 </script>
 
 <script id="address-popup-template" type="text/template">
@@ -650,85 +437,6 @@
     @{Html.RenderPartial("_AddressTemplate");}
 </script>
 
-<<<<<<< HEAD
-<script id="oneDirector" type="text/template">
-	<%_.each(directors, function(director, i){%>
-		<div class="Directors">	
-			<h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
-
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Name</span>
-						<input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Middle Initial</span>
-						<input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status"  />
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Surname</span>
-						<input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
-				</div>
-			</div>
-
-			<div class="form_field_container FormRadioCtrl">
-				<span>
-					Gender
-					<input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
-					<input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
-				</span>
-				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image" />
-			</div>
-
-			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
-
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Email</span>
-						<input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Best Contact Number</span>
-						<input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
-				</div>
-			</div>
-
-			<div class="director_address">
-			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
-			</div>
-
-			<input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].MiddleImage" value="<%- director.MiddleStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
-		</div>
-	<%
-=======
 <script id="director-edit-template" type="text/template">
     @Director()
 </script>
@@ -810,7 +518,6 @@
             <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
         </div>
     <%
->>>>>>> EZ-1034 Additional Company Details
 	})
 	%>
 </script>
