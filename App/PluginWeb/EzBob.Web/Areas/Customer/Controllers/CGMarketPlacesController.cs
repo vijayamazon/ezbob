@@ -68,7 +68,19 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 			ViewData["key"] = Request["key"];
 
+			if (Request["model"] == string.Empty) {
+				ViewModel = null;
+				ViewError = null;
+				return View();
+			} // if
+
 			AccountModel model = JsonConvert.DeserializeObject<AccountModel>(Request["model"]);
+
+			if (model == null) {
+				ViewModel = null;
+				ViewError = null;
+				return View();
+			} // if
 
 			AddAccountState oState = ValidateModel(model);
 
@@ -103,6 +115,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			ViewModel = JsonConvert.SerializeObject(oState.Model);
 			ViewError = null;
 
+			Integration.ChannelGrabberFrontend.Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
 			Integration.ChannelGrabberFrontend.Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
 
 			try {

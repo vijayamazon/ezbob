@@ -469,7 +469,7 @@
 					"if (bUploadMode) {",
 						"accountModel.name = $.trim($('#logged-in-user-name').text());",
 						"accountModel.login = accountModel.name;",
-						"accountModel.password = '';",
+						"accountModel.password = 'topsecret';",
 					"}",
 					"else",
 						"accountModel.name = accountModel.login;",

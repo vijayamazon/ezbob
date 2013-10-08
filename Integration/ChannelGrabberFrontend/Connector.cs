@@ -1,5 +1,6 @@
 ﻿using System;
 using Ezbob.HmrcHarvester;
+using Ezbob.Logger;
 using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using log4net;
@@ -34,6 +35,52 @@ namespace Integration.ChannelGrabberFrontend {
 		} // SetBackdoorData
 
 		#endregion method SetBackdoorData
+
+		#region method SetRunningInWebEnvFlag
+
+		public static void SetRunningInWebEnvFlag(string sAccountTypeName, int nCustomerMarketplaceID) {
+			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(sAccountTypeName);
+
+			if (vi == null)
+				return;
+
+			switch (vi.Behaviour) {
+			case Behaviour.Default:
+				// nothing to do here
+				break;
+
+			case Behaviour.HMRC:
+				Ezbob.HmrcHarvester.Harvester.SetRunningInWebEnvFlag(nCustomerMarketplaceID);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // SetRunningInWebEnvFlag
+
+		#endregion method SetRunningInWebEnvFlag
+
+		#region method FetchRunningInWebEnvFlag
+
+		public static bool FetchRunningInWebEnvFlag(string sAccountTypeName, int nCustomerMarketplaceID, ASafeLog log) {
+			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(sAccountTypeName);
+
+			if (vi == null)
+				return false;
+
+			switch (vi.Behaviour) {
+			case Behaviour.Default:
+				return false;
+
+			case Behaviour.HMRC:
+				return Ezbob.HmrcHarvester.Harvester.FetchRunningInWebEnvFlag(nCustomerMarketplaceID, log);
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // FetchRunningInWebEnvFlag
+
+		#endregion method FetchRunningInWebEnvFlag
 
 		#region constructor
 

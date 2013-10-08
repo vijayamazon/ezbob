@@ -39,6 +39,8 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		var oTopCount = this.$el.find('#TopEarningEmployeeCount');
 		var oBottomCount = this.$el.find('#BottomEarningEmployeeCount');
 
+		oEmployeeCount.tooltip('destroy');
+
 		var self = this;
 
 		var oIcons = {
@@ -50,8 +52,8 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		var nEmployeeCount = oEmployeeCount.val();
 
 		if (nEmployeeCount == '') {
-			oTopCount.val('');
-			oBottomCount.val('');
+			oTopCount.val('').change();
+			oBottomCount.val('').change();
 
 			for (var o in oIcons)
 				oIcons[o].field_status('clear');
@@ -64,12 +66,10 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 
 		if (nEmployeeCount < 0) {
 			oIcons.Count.field_status('set', 'fail');
+			oEmployeeCount.tooltip({ title: 'This field cannot contain negative value.' }).tooltip('enable').tooltip('fixTitle');
 
-			oTopCount.val('');
-			oBottomCount.val('');
-
-			oIcons.Top.field_status('clear');
-			oIcons.Bottom.field_status('clear');
+			oTopCount.val('').change();
+			oBottomCount.val('').change();
 
 			this.onChangeCallback.call(this.parentView);
 			return;
@@ -100,6 +100,8 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 	}, // bottomCountChanged
 
 	someCountChanged: function (oMe, oMyIcon, oOther) {
+		oMe.tooltip('destroy');
+
 		if (oMe.val() == '') {
 			oMyIcon.field_status('clear');
 			return;
@@ -109,10 +111,12 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 
 		if (nMyCount < 0) {
 			oMyIcon.field_status('set', 'fail');
+			oMe.tooltip({ title: 'This field cannot contain negative value.' }).tooltip('enable').tooltip('fixTitle');
 			return;
 		} // if
 
-		var nTotalCount = this.$el.find('#EmployeeCount').val();
+		var oEmployeeCount = this.$el.find('#EmployeeCount');
+		var nTotalCount = oEmployeeCount.val();
 
 		if (nTotalCount == '') {
 			oMyIcon.field_status('set', 'fail');
@@ -123,6 +127,8 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		
 		if (nTotalCount < 0) {
 			oMyIcon.field_status('set', 'fail');
+			oEmployeeCount.tooltip({ title: 'This field cannot contain negative value.' }).tooltip('enable').tooltip('fixTitle');
+			oMe.tooltip({ title: 'Please fix employee count first.' }).tooltip('enable').tooltip('fixTitle');
 			return;
 		} // if
 
@@ -133,7 +139,12 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		if (nOtherCount < 0)
 			nOtherCount = 0;
 
-		oMyIcon.field_status('set', (nMyCount + nOtherCount <= nTotalCount) ? 'ok' : 'fail');
+		if (nMyCount + nOtherCount <= nTotalCount)
+			oMyIcon.field_status('set', 'ok');
+		else {
+			oMyIcon.field_status('set', 'fail');
+			oMe.tooltip({ title: 'Sum of top earning and bottom earning employees cannot be greater than employee count.' }).tooltip('enable').tooltip('fixTitle');
+		} // if
 	}, // someCountChanged
 
 	isValid: function() {

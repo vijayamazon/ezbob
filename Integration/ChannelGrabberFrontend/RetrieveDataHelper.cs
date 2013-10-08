@@ -9,6 +9,7 @@ using EZBob.DatabaseLib.Model.Database;
 using System;
 using System.Collections.Generic;
 using Ezbob.HmrcHarvester;
+using Ezbob.Logger;
 using Integration.ChannelGrabberAPI;
 using Integration.ChannelGrabberConfig;
 using log4net;
@@ -72,6 +73,36 @@ namespace Integration.ChannelGrabberFrontend {
 
 			AccountData ad = oSecInfo.Fill();
 
+			bool bRunningInWebEnv = Connector.FetchRunningInWebEnvFlag(ad.AccountTypeName(), databaseCustomerMarketPlace.Id, new SafeILog(ms_oLog));
+
+			ms_oLog.DebugFormat(
+				"{0} marketplace with id {1} is {2}running in web env now.",
+				ad.AccountTypeName(), databaseCustomerMarketPlace.Id, bRunningInWebEnv ? "" : "not "
+			);
+
+			switch (ad.VendorInfo.Behaviour) {
+			case Behaviour.Default:
+				// nothing to do here
+				break;
+
+			case Behaviour.HMRC:
+				if (!bRunningInWebEnv) {
+					if ((ad.Login == databaseCustomerMarketPlace.Customer.Name) && (ad.Password == "topsecret")) {
+						ms_oLog.DebugFormat(
+							"{0} account with id {1} was created by uploading files, nothing to update, bailing out.",
+							ad.AccountTypeName(), databaseCustomerMarketPlace.Id
+						);
+
+						return;
+					} // if account was created by uploading files
+				} // if not in web env
+
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+
 			var ctr = new Connector(ad, ms_oLog, databaseCustomerMarketPlace.Customer);
 
 			if (ctr.Init()) {
@@ -87,7 +118,7 @@ namespace Integration.ChannelGrabberFrontend {
 							DefaultConversion,
 							Helper.StoreChannelGrabberOrdersData,
 							Helper.GetAllChannelGrabberOrdersData
-							);
+						);
 						break;
 
 					case Behaviour.HMRC:

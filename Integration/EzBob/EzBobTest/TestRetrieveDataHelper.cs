@@ -138,7 +138,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 11190 };
+			var umis = new[] { 8226 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

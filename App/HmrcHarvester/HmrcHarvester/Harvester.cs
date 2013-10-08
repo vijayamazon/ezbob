@@ -38,6 +38,8 @@ namespace Ezbob.HmrcHarvester {
 
 		#region static
 
+		#region backdoor data
+
 		#region method SetBackdoorData
 
 		public static void SetBackdoorData(int nCustomerMarketplaceID, Hopper oHopper) {
@@ -80,6 +82,49 @@ namespace Ezbob.HmrcHarvester {
 		} // FetchBackdoorData
 
 		#endregion method FetchBackdoorData
+
+		#endregion backdoor data
+
+		#region environment notification flag
+
+		#region method SetRunningInWebEnvFlag
+
+		public static void SetRunningInWebEnvFlag(int nCustomerMarketplaceID) {
+			lock (typeof (Harvester)) {
+				if (ms_oWebEnvFlag == null)
+					ms_oWebEnvFlag = new SortedSet<int>();
+
+				ms_oWebEnvFlag.Add(nCustomerMarketplaceID);
+			}// lock
+		} // SetRunningInWebEnvFlag
+
+		private static SortedSet<int> ms_oWebEnvFlag; 
+
+		#endregion method SetRunningInWebEnvFlag
+
+		#region method FetchRunningInWebEnvFlag
+
+		public static bool FetchRunningInWebEnvFlag(int nCustomerMarketplaceID, ASafeLog log) {
+			log.Debug("Harvester: fetching running in web env flag for marketplace {0}...", nCustomerMarketplaceID);
+
+			lock (typeof(Harvester)) {
+				if ((ms_oWebEnvFlag == null) || !ms_oWebEnvFlag.Contains(nCustomerMarketplaceID)) {
+					log.Debug("Harvester: running in web env flag is false for marketplace {0}.", nCustomerMarketplaceID);
+					log.Debug("Harvester: fetching running in web env flag for marketplace {0} complete.", nCustomerMarketplaceID);
+					return false;
+				} // if
+
+				ms_oWebEnvFlag.Remove(nCustomerMarketplaceID);
+			} // lock
+
+			log.Debug("Harvester: running in web env flag is true for marketplace {0}.", nCustomerMarketplaceID);
+			log.Debug("Harvester: fetching running in web env flag for marketplace {0} complete.", nCustomerMarketplaceID);
+			return true;
+		} // FetchRunningInWebEnvFlag
+
+		#endregion method FetchRunningInWebEnvFlag
+
+		#endregion environment notification flag
 
 		#endregion static
 
