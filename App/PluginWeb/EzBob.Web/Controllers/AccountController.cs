@@ -427,17 +427,19 @@ namespace EzBob.Web.Controllers
 
 				_customers.Save(customer);
 
-				customer.CustomerRequestedLoan.Add(new CustomerRequestedLoan
-					{
-						Customer = customer,
-						Amount = amount,
-						Created = DateTime.UtcNow,
-						CustomerReason = _reasons.Get(customerReason),
-						CustomerSourceOfRepayment = _sources.Get(customerSourceOfRepayment),
-						OtherReason = otherCustomerReason,
-						OtherSourceOfRepayment = otherCustomerSourceOfRepayment
-					});
-
+				if (customer.IsOffline)
+				{
+					customer.CustomerRequestedLoan.Add(new CustomerRequestedLoan
+						{
+							Customer = customer,
+							Amount = amount,
+							Created = DateTime.UtcNow,
+							CustomerReason = _reasons.Get(customerReason),
+							CustomerSourceOfRepayment = _sources.Get(customerSourceOfRepayment),
+							OtherReason = otherCustomerReason,
+							OtherSourceOfRepayment = otherCustomerSourceOfRepayment
+						});
+				}
 
 				_appCreator.AfterSignup(user, link);
 			}

@@ -29,13 +29,18 @@
 
         public ProfileSummaryModel CreateProfile(Customer customer)
         {
-            var summary = new ProfileSummaryModel {Id = customer.Id};
+            var summary = new ProfileSummaryModel {Id = customer.Id, IsOffline = customer.IsOffline};
             BuildMarketplaces(customer, summary);
             BuildCreditBureau(customer, summary);
             BuildPaymentAccounts(customer, summary);
             AddDecisionHistory(summary, customer);
-			summary.RequestedLoan = GetRequestedLoan(customer.CustomerRequestedLoan.FirstOrDefault());
-            summary.AffordabilityAnalysis =
+
+	        if (summary.IsOffline)
+	        {
+		        BuildRequestedLoan(summary, customer);
+	        }
+	        
+			summary.AffordabilityAnalysis =
                     new AffordabilityAnalysis
                     {
                         CashAvailabilityOrDeficits = "Not implemented now",
@@ -60,9 +65,10 @@
             return summary;
         }
 
-		private CustomerRequestedLoanModel GetRequestedLoan(CustomerRequestedLoan requestedLoan)
+		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)
 		{
 			var rl = new CustomerRequestedLoanModel();
+			var requestedLoan = customer.CustomerRequestedLoan.FirstOrDefault();
 			if (requestedLoan != null)
 			{
 				rl.Amount = requestedLoan.Amount;
@@ -72,7 +78,7 @@
 				rl.OtherReason = requestedLoan.OtherReason;
 				rl.OtherSourceOfRepayment = requestedLoan.OtherSourceOfRepayment;
 			}
-			return rl;
+			summary.RequestedLoan = rl;
 		}
         private static void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
         {

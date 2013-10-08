@@ -325,6 +325,7 @@
                 </tbody>
             </table>
         </div>
+        <%console.log(m); if(m.IsOffline){%>
         <div class="span6">
             <table class="table table-striped blue-header rright">
                 <thead>
@@ -360,8 +361,9 @@
                 </tbody>
             </table>
         </div>
+        <%}%>
     </div>
-    @ShowDecisionsHistory()    
+    @ShowDecisionsHistory()
 }
 
 @helper ShowDecisionsHistory(){

@@ -87,12 +87,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string Comment { get; set; }
 
         public int Id { get; set; }
-
+		
         public List<DecisionHistoryModel> DecisionHistory { get; set; }
 
         public decimal? OverallTurnOver { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
 
+		public bool IsOffline { get; set; }
 		public CustomerRequestedLoanModel RequestedLoan { get; set; } 
     }
 
