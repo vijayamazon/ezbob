@@ -142,10 +142,8 @@ namespace EzBob.Models.Marketplaces.Builders
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {
-            var s = _session.Query<MP_TeraPeakOrderItem>()
-                .Where(tp => tp.Order.CustomerMarketPlace.Id == mp.Id)
-                .Select(tp => tp.StartDate);
-            return !s.Any() ? (DateTime?)null : s.Min();
+	        var mpEbayUserData = mp.EbayUserData.FirstOrDefault(e => e.CustomerMarketPlace == mp);
+	        return mpEbayUserData != null ? mpEbayUserData.RegistrationDate : null;
         }
     }
 }

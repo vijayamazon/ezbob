@@ -375,7 +375,7 @@
 
                     <%_.each(m.Categories, function(val, i){%>
                     <tr>
-                        <td><%-val != null ? val.replace(/:/g, " -> "): "-"%></td>
+                        <td><%=val != null ? val.replace(/:/g, " -> "): "-"%></td>
                     </tr>
                     <%});%>
                 </tbody>
