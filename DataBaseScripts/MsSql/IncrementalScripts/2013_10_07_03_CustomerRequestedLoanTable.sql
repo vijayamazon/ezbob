@@ -4,7 +4,9 @@ GO
 
 CREATE TABLE dbo.CustomerRequestedLoan
 	(
-	  CustomerId                                                    INT NOT NULL
+	  Id                                                            INT IDENTITY(1,1) NOT NULL
+	, Created                                                       DATETIME NOT NULL DEFAULT getdate()
+	, CustomerId                                                    INT NOT NULL
 	, Amount                                                        DECIMAL(18)
 	, ReasonId                                                      INT
 	, OtherReason                                                   NVARCHAR(300)   
