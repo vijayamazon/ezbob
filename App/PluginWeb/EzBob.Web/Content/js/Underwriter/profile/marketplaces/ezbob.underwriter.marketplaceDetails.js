@@ -145,10 +145,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
                 /* Modify the footer row to match what we want */
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[1].innerHTML = "#Credit <i>" + parseInt(iPageCountCredit) + "</i>";
-                nCells[3].innerHTML = EzBob.formatPoundsAsInt(iPageAmountCredit);
-                nCells[4].innerHTML = "#Debit <i>" + parseInt(iPageCountDebit) + "</i>";
-                nCells[6].innerHTML = EzBob.formatPoundsAsInt(iPageAmountDebit);
+                nCells[0].innerHTML = "|Total #Credit: <i>" + parseInt(iPageCountCredit) + "</i> |Sum Credit: " + EzBob.formatPoundsAsInt(iPageAmountCredit) + " |Total #Debit: <i>" + parseInt(iPageCountDebit) + "</i> |Sum Debit: "+ EzBob.formatPoundsAsInt(iPageAmountDebit);
             },
             "oLanguage": {
                 "sSearch": "Filter all columns:"
@@ -172,6 +169,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         this.$el.find(".YodleeTransactionsTable tfoot input").blur(function (i) {
             if (this.value == "") { this.value = asInitVals[$("tfoot input").index(this)]; }
+        });
+        var that = this;
+        this.$el.find("div.dataTables_filter input").focus(function() {
+            that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
 
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;

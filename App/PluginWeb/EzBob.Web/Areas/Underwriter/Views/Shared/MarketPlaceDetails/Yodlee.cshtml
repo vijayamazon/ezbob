@@ -210,16 +210,9 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th>Total:</th>
-                    <th></th>
-                    <th>Sum Credit:</th>
-                    <th style="text-align: right"></th>
-                    <th></th>
-                    <th>Sum Debit:</th>
-                    <th style="text-align: right"></th>
-                    <th></th>
+                    <th colspan="8">Total:</th>
                 </tr>
-                <tr>
+                <tr class="hide">
                     <th><input type="text" name="search_acct" value="Search Acct #" class="search_init"></th>
                     <th><input type="text" name="search_trtype" value="Search Tr Type" class="search_init"></th>
                     <th><input type="text" name="search_date" value="Search Tr Date" class="search_init"></th>
@@ -239,7 +232,6 @@
 @helper YodleeAggregates()
 {
     <div class="tab-pane" id="yodleetab5">
-        <%console.log(ai);%>
         <table class="table table-bordered table-striped  blue-header centered nowrap rright">
             <thead>
                 <tr>
