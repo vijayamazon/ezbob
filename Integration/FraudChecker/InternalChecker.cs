@@ -120,14 +120,15 @@ namespace FraudChecker
                 where mp.Customer.IsTest == false
                 where mp.Customer != customer
                 //Get phone's from ebay and paypal
-                where mp.EbayUserData.All(e => e != null) || (mp.PersonalInfo != null && mp.PersonalInfo.Phone != null && mp.PersonalInfo.Phone != "0")
-                where phonesArray.Contains(mp.PersonalInfo.Phone) ||
-                      mp.EbayUserData.Any(
-                          x =>
-                          phonesArray.Contains(x.RegistrationAddress.Phone) ||
-                          phonesArray.Contains(x.RegistrationAddress.Phone2))
+				where (mp.EbayUserData.All(e => e != null) && 
+					   mp.EbayUserData.Any(x =>
+						  phonesArray.Contains(x.RegistrationAddress.Phone) ||
+						  phonesArray.Contains(x.RegistrationAddress.Phone2)))
+						  || 
+					  ((mp.PersonalInfo != null && mp.PersonalInfo.Phone != null && mp.PersonalInfo.Phone != "0") && 
+					   phonesArray.Contains(mp.PersonalInfo.Phone))
                 select mp;
-
+			
             foreach (var mpDetection in customerMpDetections)
             {
                 foreach (var customerPhone in customerPhones)
