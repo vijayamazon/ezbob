@@ -142,7 +142,6 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
     onRender: ->
         address = new EzBob.AddressView({ model: @model.get('PersonalAddress'), name: "PersonalAddress", max: 10, isShowClear:true })
         @personAddress.show(address)
-
         if @model.get('IsOffline')
             otherAddress = new EzBob.AddressView({ model: @model.get('OtherPropertyAddress'), name: "OtherPropertyAddress", max: 1, isShowClear:true })
             @otherPropertyAddress.show(otherAddress)
@@ -171,6 +170,8 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
 
         if not @model.get('IsOffline')
             @$el.find('.offline').remove()
+        else
+            @$el.find('.notoffline').remove()
 
         @
 

@@ -39,7 +39,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		$('.continue').toggleClass('disabled', !enabled);
     },
     propertyOwnedByCompanyChanged: function (event) {
-        var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() == 'true';
+        var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() != 'false';
         this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
         this.inputChanged(event);
 	},

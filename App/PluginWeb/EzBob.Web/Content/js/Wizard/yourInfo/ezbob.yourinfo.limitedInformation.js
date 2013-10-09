@@ -41,7 +41,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
     },
 
     propertyOwnedByCompanyChanged: function (event) {
-        var toToggle = this.$el.find('#LimitedPropertyOwnedByCompany').val() == 'true';
+        var toToggle = this.$el.find('#LimitedPropertyOwnedByCompany').val() != 'false';
         this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
         this.inputChanged(event);
     },
