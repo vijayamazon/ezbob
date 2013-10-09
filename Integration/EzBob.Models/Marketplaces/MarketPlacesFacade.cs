@@ -84,7 +84,8 @@
 			var models = new List<MarketPlaceHistoryModel>();
 			models.AddRange(modelsMpUpdates);
 			models.AddRange(modelsCashRequests);
-			return models;
+			
+			return models.OrderByDescending(m => m.HistoryDate);
 		}
 
 		private static IMarketplaceModelBuilder GetBuilder(MP_CustomerMarketPlace mp)

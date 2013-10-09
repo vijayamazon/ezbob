@@ -883,7 +883,7 @@
             <div class="accordion-inner">
                 <div class="row-fluid">
                     <div class="span12 control-group form-horizontal">
-                        <%
+                        <%if(experianInfo.AccountsInformation) {
                         _.each(experianInfo.AccountsInformation, function(ai, index){
                         %>
                         <div style="overflow: scroll;">
@@ -950,7 +950,8 @@
                         </div>
                         <hr/>
                         <%
-                        });
+                        }); //each
+                        }//if
                         %>
                     </div>
                 </div>
@@ -993,7 +994,7 @@
                         @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
                         @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
                         @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
-                        @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
+                        @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation && experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
                         @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
                         @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
                         @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")

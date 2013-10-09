@@ -22,11 +22,15 @@ using NHibernate.Linq;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class CreditBureauModelBuilder
+	using System.Text;
+	using log4net;
+
+	public class CreditBureauModelBuilder
     {
         private readonly ISession _session;
         private readonly ICustomerRepository _customers;
         private readonly ConfigurationVariablesRepository _variablesRepository;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 
         public CreditBureauModelBuilder(ISession session, ICustomerRepository customers, ConfigurationVariablesRepository variablesRepository)
         {
@@ -37,6 +41,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public CreditBureauModel Create(EZBob.DatabaseLib.Model.Database.Customer customer, bool getFromLog = false, DateTime? logDate = null)
         {
+			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histDate: {2}", customer.Id, getFromLog, logDate);
             var model = new CreditBureauModel();
             var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
             try
@@ -53,6 +58,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
             }
             catch (Exception e)
             {
+				Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
                 model.ErrorList.Add(e.Message);
             }
             return model;
@@ -62,14 +68,20 @@ namespace EzBob.Web.Areas.Underwriter.Models
             bool getFromLog, DateTime? logDate, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
         {
 
-            if (getFromLog)
+            if (getFromLog && logDate.HasValue)
             {
                 var dob = customer.PersonalInfo.DateOfBirth;
                 var logs =
                     _session.Query<MP_ServiceLog>()
                         .Where(x => x.Customer == customer && x.ServiceType == "Consumer Request")
                         .ToList();
-                var response = logs.First(x => logDate != null && x.InsertDate == logDate.Value.ToUniversalTime());
+                var response = logs.FirstOrDefault(x => x.InsertDate == logDate.Value.ToUniversalTime());
+				if (response == null)
+				{
+					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} date: {1}", customer.Id, logDate);
+					result = null;
+					return;
+				}
                 var serializer = new XmlSerializer(typeof(OutputRoot));
                 using (TextReader sr = new StringReader(response.ResponseData))
                 {
@@ -478,16 +490,19 @@ namespace EzBob.Web.Areas.Underwriter.Models
                         }
                     }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Errors.Add("Can`t read values for Financial Accounts");
+				Log.DebugFormat("Can`t read values for Financial Accounts {0}", e);
             }
 
             model.ConsumerSummaryCharacteristics.NumberOfAccounts = numberOfAccounts.ToString(CultureInfo.InvariantCulture);
             model.ConsumerSummaryCharacteristics.NumberOfAccounts3M = numberOfAcc3M.ToString(CultureInfo.InvariantCulture);
             model.ConsumerSummaryCharacteristics.NumberOfDefaults = numberOfDefaults.ToString(CultureInfo.InvariantCulture);
 
+			Log.DebugFormat("Accounts List length: {0}", accList.Count);
             accList.Sort(new AccountInfoComparer());
+
             model.AccountsInformation = accList.ToArray();
 
             model.ConsumerAccountsOverview.OpenAccounts_CC = accounts[0].ToString(CultureInfo.InvariantCulture);
@@ -538,10 +553,21 @@ namespace EzBob.Web.Areas.Underwriter.Models
             {
                 model.ErrorList.AddRange(Errors);
             }
-
+			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
             return model;
         }
-        protected void AppendAmlInfo(AMLInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
+
+		private static string PrintErrorList(IEnumerable<string> errorList)
+		{
+			var sb = new StringBuilder();
+			foreach (var error in errorList)
+			{
+				sb.Append(error);
+			}
+			return sb.ToString();
+		}
+
+		protected void AppendAmlInfo(AMLInfo data, EZBob.DatabaseLib.Model.Database.Customer customer, CustomerAddress customerAddress)
         {
             var srv = new IdHubService();
             var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,

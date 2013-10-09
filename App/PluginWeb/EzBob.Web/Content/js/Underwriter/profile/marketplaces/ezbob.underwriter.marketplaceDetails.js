@@ -145,7 +145,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
                 /* Modify the footer row to match what we want */
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[0].innerHTML = "|Total #Credit: <i>" + parseInt(iPageCountCredit) + "</i> |Sum Credit: " + EzBob.formatPoundsAsInt(iPageAmountCredit) + " |Total #Debit: <i>" + parseInt(iPageCountDebit) + "</i> |Sum Debit: "+ EzBob.formatPoundsAsInt(iPageAmountDebit);
+                nCells[0].innerHTML = "|Total #Credit: <i>" + parseInt(iPageCountCredit) + "</i> | Sum Credit: " + EzBob.formatPoundsAsInt(iPageAmountCredit) + " | Total #Debit: <i>" + parseInt(iPageCountDebit) + "</i> | Sum Debit: "+ EzBob.formatPoundsAsInt(iPageAmountDebit);
             },
             "oLanguage": {
                 "sSearch": "Filter all columns:"
