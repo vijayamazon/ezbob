@@ -38,7 +38,13 @@ SELECT
 	c.TypeOfBusiness,
 	c.ReferenceSource,
 	ISNULL(l.Id, 0) AS LoanID,
-	ISNULL(ISNULL(mt.Amount, l.LoanAmount), 0) AS LoanAmount,
+	ISNULL(
+		CASE
+			WHEN mt.Description LIKE 'Non-cash.%' THEN 0
+			ELSE ISNULL(mt.Amount, l.LoanAmount)
+		END,
+		0
+	) AS LoanAmount,
 	ISNULL(l.Date, 'Jul 1 1976') AS LoanIssueDate,
 	ISNULL(l.AgreementModel, '{ "Term": 0 }') AS AgreementModel
 FROM
