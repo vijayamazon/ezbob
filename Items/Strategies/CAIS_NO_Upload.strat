@@ -4,12 +4,12 @@
   <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Comparison" NodeId="Comparison16159142" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
@@ -469,7 +469,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <DefaultPinName />
       <Description />
       <DisplayName>File Path, Name and Type</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;BusinessPath := dir_path+"\\PIF1160a.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerPath := dir_path+"\\PIF1160B.txt"&lt;/assignment&gt;&lt;assignment&gt;ConsumerCompanyType := 1&lt;/assignment&gt;&lt;assignment&gt;BusinessCompanyType := 2&lt;/assignment&gt;&lt;assignment&gt;BusinessFileName := "PIF1160a"&lt;/assignment&gt;&lt;assignment&gt;ConsumerFilename := "PIF1160B"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;BusinessPath := dir_path+"\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT"&lt;/assignment&gt;&lt;assignment&gt;ConsumerPath := dir_path+"\\F530.E.OMO.MSTEI49.XMIT"&lt;/assignment&gt;&lt;assignment&gt;ConsumerCompanyType := 1&lt;/assignment&gt;&lt;assignment&gt;BusinessCompanyType := 2&lt;/assignment&gt;&lt;assignment&gt;BusinessFileName := "F1364.D.COMCAIS.ORMO.DI55CUST"&lt;/assignment&gt;&lt;assignment&gt;ConsumerFilename := "F530.E.OMO.MSTEI49"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB23018869</Name>
@@ -5935,8 +5935,8 @@ from ExperianLib.CaisFile import *
 
 #Upload to server
 sending = CaisFileSender()
-sending .UploadFile("c:\\CAIS\\PIF1160a.txt")
-sending .UploadFile("c:\\CAIS\PIF1160B.txt")
+sending .UploadFile("c:\\CAIS\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT")
+sending .UploadFile("c:\\CAIS\F530.E.OMO.MSTEI49.XMIT")
 
 </Script>
       <ScriptType>IronPython</ScriptType>
@@ -5949,8 +5949,8 @@ from ExperianLib.CaisFile import *
 
 #Upload to server
 sending = CaisFileSender()
-sending .UploadFile("c:\\CAIS\\PIF1160a.txt")
-sending .UploadFile("c:\\CAIS\PIF1160B.txt")
+sending .UploadFile("c:\\CAIS\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT")
+sending .UploadFile("c:\\CAIS\F530.E.OMO.MSTEI49.XMIT")
 
 </Script>
       <ScriptType>IronPython</ScriptType>
@@ -5963,8 +5963,8 @@ from ExperianLib.CaisFile import *
 
 #Upload to server
 sending = CaisFileSender()
-sending .UploadFile(dir_path+"\\PIF1160a.txt")
-sending .UploadFile(dir_path+"\\PIF1160B.txt")
+sending .UploadFile(dir_path+"\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT")
+sending .UploadFile(dir_path+"\\F530.E.OMO.MSTEI49.XMIT")
 
 </Script>
       <ScriptType>IronPython</ScriptType>
@@ -5998,20 +5998,20 @@ api = StrategyHelper()
 
 b = CaisFileManager.GetBusinessCaisFileData()
 CAISstring = b.WriteToString()
-b.WriteToFile(dir_path+"\\PIF1160a.txt")
-b.WriteToFile(dir_path2+"\\PIF1160a.txt")
-#with open(dir_path+"\\PIF1160a.txt", 'r') as content_file:
+b.WriteToFile(dir_path+"\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT")
+b.WriteToFile(dir_path2+"\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT")
+#with open(dir_path+"\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT", 'r') as content_file:
 #    content = content_file.read()
-api.SaveCAISFile(CAISstring, "PIF1160a.txt", dir_path, 2, BusinessCounter, BusinessGoodCounter, BusinessDefaultsCounter)
+api.SaveCAISFile(CAISstring, "F1364.D.COMCAIS.ORMO.DI55CUST.INPUT", dir_path, 2, BusinessCounter, BusinessGoodCounter, BusinessDefaultsCounter)
 CaisFileManager.RemoveBusinessCaisFileData()
 
 c = CaisFileManager.GetCaisFileData()
 CAISstring = c.WriteToString()
-c.WriteToFile(dir_path+"\\PIF1160B.txt")
-c.WriteToFile(dir_path2+"\\PIF1160B.txt")
-#with open(dir_path+"\\PIF1160B.txt", 'r') as content_file:
+c.WriteToFile(dir_path+"\\F530.E.OMO.MSTEI49.XMIT")
+c.WriteToFile(dir_path2+"\\F530.E.OMO.MSTEI49.XMIT")
+#with open(dir_path+"\\F530.E.OMO.MSTEI49.XMIT", 'r') as content_file:
 #    content = content_file.read()
-api.SaveCAISFile(CAISstring , "PIF1160B.txt", dir_path, 1, ConsumerCounter, ConsumerGoodCounter, ConsumerDefaultsCounter)
+api.SaveCAISFile(CAISstring , "F530.E.OMO.MSTEI49.XMIT", dir_path, 1, ConsumerCounter, ConsumerGoodCounter, ConsumerDefaultsCounter)
 CaisFileManager.RemoveCaisFileData()
 
 
