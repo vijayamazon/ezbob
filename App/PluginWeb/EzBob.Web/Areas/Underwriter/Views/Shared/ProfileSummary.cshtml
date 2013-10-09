@@ -348,7 +348,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <b>Reason <%if(rl && rl.OtherReason) print("(Other)");%>:</b>
+                            <b>Reason:</b>
                         </td>
                         <td>
                             <%if(rl) {print(rl.CustomerReason); if(rl.OtherReason) {print("(" + rl.OtherReason + ")");}}else{print("-");}%>
@@ -356,7 +356,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <b>Source Of Repayment <%if(rl && rl.OtherSourceOfRepayment) print("(Other)");%>:</b>
+                            <b>Source Of Repayment:</b>
                         </td>
                         <td>
                             <%if(rl) {print(rl.CustomerSourceOfRepayment); if(rl.OtherSourceOfRepayment) {print("(" + rl.OtherSourceOfRepayment + ")");}}else{print("-");}%>

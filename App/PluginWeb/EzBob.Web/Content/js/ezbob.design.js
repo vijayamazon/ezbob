@@ -854,7 +854,7 @@ EzBob.validateSignUpForm = function (el) {
             securityQuestion: { required: true },
             SecurityAnswer: { required: true, maxlength: 199 },
             CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },
-            //amount: { numericOnly: true },
+            amount: { defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
             customerReason: { required: true },
             customerSourceOfRepayment: { required: true },
             otherCustomerReason: { required: true },

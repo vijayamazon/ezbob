@@ -63,7 +63,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         this.PersonalView.$el.hide();
         this.thankYouPage.render();
     },
-    next: function nextStep(name) {       
+    next: function nextStep(name) {
         if (name.toLowerCase() == 'entrepreneur') {
             this.saveData();
             return false;

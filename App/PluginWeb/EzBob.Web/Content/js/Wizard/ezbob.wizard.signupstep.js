@@ -25,6 +25,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         'change input': 'inputChanged',
         'keyup input': 'inputChanged',
         'change select': 'inputChanged',
+        'focus #amount': "amountFocused",
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
@@ -40,7 +41,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('img[rel]').setPopover("left");
         this.$el.find('li[rel]').setPopover("left");
 
-        this.$el.find('#amount').numericOnly(15);
+        this.$el.find('#amount').moneyFormat();
         this.inputChanged();
 
         fixSelectValidate(this.$el.find('select'));
@@ -56,6 +57,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         var enabled = EzBob.Validation.checkForm(this.validator);
         $("#signupSubmitButton").toggleClass('disabled', !enabled);
+    },
+    amountFocused: function() {
+        this.$el.find("#amount").change();
     },
     setFieldStatusNotRequired: function(evt, el){
         if (evt && evt.target.id == el && evt.target.value == '') {
@@ -92,8 +96,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.blockBtn(false);
             return false;
         }
-
-        var xhr = $.post(that.form.attr("action"), that.form.serialize());
+        var data = that.form.serializeArray();
+        _.find(data, function (d) { return d.name == "amount"; }).value = this.$el.find("#amount").autoNumericGet();
+        
+        var xhr = $.post(that.form.attr("action"), data);
         
         xhr.done(function (result) {
             if (result.success) {
