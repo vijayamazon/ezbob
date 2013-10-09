@@ -322,8 +322,13 @@
 
 				onAfterRender.push(function() {
 					var aryLabels = [];
-					for (var sSeriesName in oSeriesKeys)
-						aryLabels[oSeriesKeys[sSeriesName] - 1] = { label: sSeriesName };
+					for (var sSeriesName in oSeriesKeys) {
+						aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
+							label: sSeriesName,
+							renderer:$.jqplot.BarRenderer,
+							rendererOptions: { fillToZero: true }
+						};
+					} // for
 
 					var aryTicks = [];
 					var arySeries = [];
@@ -345,10 +350,6 @@
 					} // for each chart data item
 
 					$.jqplot(sDivChartID, arySeries, {
-						seriesDefaults:{
-							renderer:$.jqplot.BarRenderer,
-							rendererOptions: {fillToZero: true}
-						},
 						series: aryLabels,
 						grid: {
 							gridLineColor: 'black',

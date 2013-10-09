@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLibRusSupport">
+      <HintPath>..\..\Lib\3rdparty\ICSharpCode.SharpZipLibRusSupport\ICSharpCode.SharpZipLibRusSupport.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>

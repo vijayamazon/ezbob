@@ -697,7 +697,25 @@
 			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "ticks-Accounts Date", "Position": 2, "Prefix": " " }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./CURRENCY", "Targets": [{ "Name": "Currency" }] }
+			{ "SourcePath": "./CURRENCY", "Targets": [{ "Name": "Currency" }] },
+			{ "SourcePath": "./DISCNOEMPLOYEES", "Targets": [{ "Name": "Number of Employees" }] }
+		]
+	},
+	{
+		"Name": "Limited Company Standard Ratios Details",
+
+		"PathToParent": "./REQUEST/DLA2",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true
+		},
+
+		"Fields": [
+			{ "SourcePath": "./DATEACCS-YYYY", "Targets": [{ "Name": "Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DATEACCS-MM",   "Targets": [{ "Name": "Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DATEACCS-DD",   "Targets": [{ "Name": "Date", "Position": 1, "Prefix": " " }] },
+			{ "SourcePath": "./NUMEMPS", "Targets": [{ "Name": "Number of Employees" }] }
 		]
 	},
 	{

@@ -140,6 +140,7 @@ namespace Ezbob.ExperianParser {
 							goto case ' '; // !!! fall through !!!
 
 						case ' ':
+						case ',':
 						case '\t':
 							bGood = true;
 							break;

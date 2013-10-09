@@ -57,6 +57,14 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         $.colorbox.close()
 
         if @isOffline
+            @$el.find('.entry_message').empty()
+                .append('You must link your ')
+                .append('<span class=green>HM Revenue & Customs</span>')
+                .append(' account to be approved for a loan.')
+                .append('<div>Please note, the more accounts you link, the more funds you can get.</div>')
+
+            @$el.find('.importantnumber').text '£200,000'
+
             _.each @stores, (s, sShopName) ->
                 switch sShopName
                     when "HMRC" then s.priority = 1
@@ -87,7 +95,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
         @$el.find(".YodleeAndFreeAgentAndSageRule").toggleClass("hide", not hasOnlyYodleeAndFreeAgentAndSage)
 
-        @$el.find(".next").toggleClass("disabled", !hasFilledShops or hasOnlyYodleeAndFreeAgentAndSage or (hasEbay and not hasPaypal))
+        if @isOffline
+            hasHmrc = @stores.HMRC.button.model.length > 0
+            @$el.find(".next").toggleClass("disabled", !hasHmrc)
+        else
+            @$el.find(".next").toggleClass("disabled", !hasFilledShops or hasOnlyYodleeAndFreeAgentAndSage or (hasEbay and not hasPaypal))
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList

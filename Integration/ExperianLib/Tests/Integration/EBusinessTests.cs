@@ -12,7 +12,7 @@ namespace ExperianLib.Tests.Integration
         public void GetLimitedCompanyTest()
         {
             var service = new EBusinessService();
-            const string refNum = "05860211";
+            const string refNum = "07051457";
             var result = service.GetLimitedBusinessData(refNum, 1);
             Debug.WriteLine("Limited business with ref number = {0} results: {1}", refNum,
                 JsonConvert.SerializeObject(result));

@@ -84,10 +84,12 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasEbay, hasFilledShops, hasOnlyYodleeAndFreeAgentAndSage, hasOtherThanYodleeAndFreeAgentAndSage, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
+      var accountsList, hasEbay, hasFilledShops, hasHmrc, hasOnlyYodleeAndFreeAgentAndSage, hasOtherThanYodleeAndFreeAgentAndSage, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
 
       $.colorbox.close();
       if (this.isOffline) {
+        this.$el.find('.entry_message').empty().append('You must link your ').append('<span class=green>HM Revenue & Customs</span>').append(' account to be approved for a loan.').append('<div>Please note, the more accounts you link, the more funds you can get.</div>');
+        this.$el.find('.importantnumber').text('£200,000');
         _.each(this.stores, function(s, sShopName) {
           switch (sShopName) {
             case "HMRC":
@@ -125,7 +127,12 @@
       hasOnlyYodleeAndFreeAgentAndSage = (this.stores.Yodlee.button.model.length > 0 || this.stores.FreeAgent.button.model.length > 0 || this.stores.Sage.button.model.length > 0) && !hasOtherThanYodleeAndFreeAgentAndSage;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
       this.$el.find(".YodleeAndFreeAgentAndSageRule").toggleClass("hide", !hasOnlyYodleeAndFreeAgentAndSage);
-      this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodleeAndFreeAgentAndSage || (hasEbay && !hasPaypal));
+      if (this.isOffline) {
+        hasHmrc = this.stores.HMRC.button.model.length > 0;
+        this.$el.find(".next").toggleClass("disabled", !hasHmrc);
+      } else {
+        this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodleeAndFreeAgentAndSage || (hasEbay && !hasPaypal));
+      }
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
         if (!shop.active) {
