@@ -164,7 +164,7 @@
 							<span>Type of Business</span>
 							<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
 								<option value=""></option>
-								<option value="Entrepreneur">Sole Trader (not Inc.)</option>
+								<option class="notoffline" value="Entrepreneur">Sole Trader (not Inc.)</option>
 								<option value="SoleTrader">Sole Trader (Inc.)</option>
 								<option value="PShip3P">Partnership (Up to 3)</option>
 								<option value="PShip">Partnership (More than 3)</option>
@@ -439,12 +439,12 @@
         <div class="control-group form_field_container hide additionalCompanyAddressQuestions">
             <div class="controls">
                 <label class="control-label attardi-input">
-                    <span>How many years in the property</span>
+                    <span>Resided at Property</span>
                     <select id="@string.Format("{0}{1}", prefix, "YearsInCompany")" name="YearsInCompany" class="select form_field">
                         <option></option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3+</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">More than 3 years</option>
                     </select>
                 </label>
                 <img id="@string.Format("{0}{1}", prefix, "YearsInCompanyImage")" class="field_status required" />
@@ -457,10 +457,10 @@
                     <span>How many month are left for the rent contract</span>
                     <select id="@string.Format("{0}{1}", prefix, "RentMonthsLeft")" name="RentMonthsLeft" class="select form_field">
                         <option></option>
-                        <option value="0-6">0-6</option>
-                        <option value="6-12">6-12</option>
-                        <option value="12-24">12-24</option>
-                        <option value="24+">24+</option>
+                        <option value="0-6">0-6 months</option>
+                        <option value="6-12">6-12 months</option>
+                        <option value="12-24">12-24 months</option>
+                        <option value="24+">More than 24 months</option>
                     </select>
                 </label>
                 <img id="@string.Format("{0}{1}", prefix, "RentMonthsLeftImage")" class="field_status required" />
