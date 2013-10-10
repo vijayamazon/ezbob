@@ -4,6 +4,8 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+    bool taboolaPixelEnabled = config.TaboolaPixelEnabled;
 }
 
 @section css {
@@ -293,5 +295,25 @@
 
         });
     </script>
+    
     @BundleHelper.RenderProfileJs()
+
+
 }
+
+@section head
+{
+    @if(taboolaPixelEnabled)
+    {
+        @TaboolaPixel()
+    }
+}
+
+    @helper TaboolaPixel()
+    {
+        <script>
+            window._tfa = window._tfa || [];
+            _tfa.push({ notify: "action", name: " successful_ conversion" });
+        </script>
+        <script src="//cdn.taboola.com/libtrc/ezbobsc/tfa.js"></script>
+    }
