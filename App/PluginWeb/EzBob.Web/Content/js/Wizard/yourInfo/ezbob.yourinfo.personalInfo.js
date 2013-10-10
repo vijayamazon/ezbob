@@ -103,7 +103,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
     render: function () {
         this.constructor.__super__.render.call(this);
         var that = this;
-        
+
         var personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: "PersonalAddress", max: 1 });
         personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
         this.addressErrorPlacement(personalAddressView.$el, personalAddressView.model);
@@ -122,6 +122,9 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('OtherPropertyAddress').on("all", this.OtherPropertyAddressModelChange, this);
         this.$el.find("#WebSiteTurnOver").moneyFormat();
         this.$el.find("#OverallTurnOver").moneyFormat();
+
+        if (!this.model.get('IsOffline'))
+            this.$el.find('.offline').remove();
         this.inputChanged();
     },
 

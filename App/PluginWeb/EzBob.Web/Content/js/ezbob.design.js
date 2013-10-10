@@ -927,8 +927,12 @@ EzBob.validateRestorePasswordForm = function (el) {
 
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
-
-	var oIsOffline = e.find('.offline');
+    var oIsOffline = e.find('.offline');
+    var isOffline = oIsOffline.length > 0;
+    var turnoverRegex = "^(?!£ 0.00$)";
+    if (isOffline) {
+        turnoverRegex = "";
+    }
 
     return e.validate({
         rules: {
@@ -941,11 +945,11 @@ EzBob.validatePersonalDetailsForm = function (el) {
             ResidentialStatus: { required: true },
             Gender: { required: true },
             MartialStatus: { required: true },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
-            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
+            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
             TimeAtAddress: { required: true },
             ConsentToSearch: { required: true },
-            OwnOtherProperty: { required: oIsOffline.length > 0 }
+            OwnOtherProperty: { required: isOffline }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
