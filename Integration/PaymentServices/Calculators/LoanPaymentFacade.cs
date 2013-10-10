@@ -247,36 +247,6 @@ namespace PaymentServices.Calculators
             return payFastModel;
         }
 
-        public void PayInstallment(LoanScheduleItem installment, decimal amount, string transId, string ip, DateTime date)
-        {
-            var oldInstallment = installment.Clone();
-            var loan = installment.Loan;
-
-            var transactionItem = new PaypointTransaction()
-            {
-                Amount = amount,
-                Description = "payment from customer",
-                PostDate = date,
-                Status = LoanTransactionStatus.Done,
-                PaypointId = transId,
-                IP = ip,
-            };
-
-            loan.AddTransaction(transactionItem);
-
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, date, _configVariables);
-            payEarlyCalc.RecalculateSchedule();
-
-            loan.UpdateStatus(date);
-            loan.UpdateBalance();
-
-            if (_historyRepository != null)
-            {
-                var historyRecord = new LoanHistory(loan, oldInstallment, date);
-                _historyRepository.Save(historyRecord);
-            }
-        }
-
         public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime)
         {
             var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, _configVariables);

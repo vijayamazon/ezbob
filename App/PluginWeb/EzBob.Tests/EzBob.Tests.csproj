@@ -148,7 +148,6 @@
     <Compile Include="LoanScheduleCalculatorTests\LoanNextEarlyPaymentsFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\MakePaymentFixture.cs" />
     <Compile Include="LoanPaymentFacadeTests\PayingEarlyMakesHistoryRecordFixture.cs" />
-    <Compile Include="LoanPaymentFacadeTests\PayInstallmentFixture.cs" />
     <Compile Include="LoanScheduleCalculatorTests\LoanTotalEarlyPaymentsFixture.cs" />
     <Compile Include="LoanPersistenceFixture.cs" />
     <Compile Include="LoanScheduleCalculatorTests\PaymentCalculatorFixture.cs" />
