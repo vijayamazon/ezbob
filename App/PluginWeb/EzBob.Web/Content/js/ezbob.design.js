@@ -704,7 +704,7 @@ EzBob.formatDateTime = function (date) {
 //formats date for user from asp.net date + time as is
 EzBob.formatDateTimeAsIs = function (date) {
     if (!date) return "";
-    return new Date(Date.parse(date)).format("DD/MM/YYYY HH:mm:ss");
+    return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
 };
 
 
