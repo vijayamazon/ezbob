@@ -1,0 +1,3 @@
+ALTER TABLE CaisReportsHistory
+ALTER COLUMN FileName NVARCHAR(300)
+
