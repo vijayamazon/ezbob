@@ -69,20 +69,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			Tuple<Dictionary<string, ParsedData>, ParsingResult, string> oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
 
 			if (oParseResult.Item2 == ParsingResult.Ok) {
-				string[] aryFieldNames = new[] {"FirstName", "MidName1", "MidName2", "LastName"};
-
 				foreach (var pair in oParseResult.Item1) {
 					foreach (SortedDictionary<string, string> di in pair.Value.Data) {
-						var os = new StringBuilder();
-
-						foreach (string sFieldName in aryFieldNames) {
-							string s = di[sFieldName].Trim().ToLower();
-
-							if (s != string.Empty)
-								os.AppendFormat(" {0}", s);
-						} // for each field
-
-						string sFullName = os.ToString().Trim();
+						string sFullName = DetailsToName(di["FirstName"], di["MidName1"], di["MidName2"], di["LastName"]);
 
 						if (sFullName != string.Empty) {
 							if (ExperianDirectors == null)
@@ -166,27 +155,22 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		} // IsExperianDirector
 
 		private string DetailsToName(PersonalInfo oInfo) {
-			if (oInfo == null)
-				return "";
-
-			var os = new StringBuilder();
-
-			os.Append(oInfo.FirstName.Trim().ToLower());
-			os.AppendFormat(" {0}", oInfo.MiddleInitial.Trim().ToLower());
-			os.AppendFormat(" {0}", oInfo.Surname.Trim().ToLower());
-
-			return os.ToString().Trim();
+			return oInfo == null ? "" : DetailsToName(oInfo.FirstName, oInfo.MiddleInitial, oInfo.Surname);
 		} // DetailsToName
 
 		private string DetailsToName(Director oInfo) {
-			if (oInfo == null)
-				return "";
+			return oInfo == null ? "" : DetailsToName(oInfo.Name, oInfo.Middle, oInfo.Surname);
+		} // DetailsToName
 
+		private string DetailsToName(params string[] aryNames) {
 			var os = new StringBuilder();
 
-			os.Append(oInfo.Name.Trim().ToLower());
-			os.AppendFormat(" {0}", oInfo.Middle.Trim().ToLower());
-			os.AppendFormat(" {0}", oInfo.Surname.Trim().ToLower());
+			foreach (string sName in aryNames) {
+				string s = (sName ?? string.Empty).Trim().ToLower();
+
+				if (s != string.Empty)
+					os.AppendFormat(" {0}", s);
+			} // for each
 
 			return os.ToString().Trim();
 		} // DetailsToName
