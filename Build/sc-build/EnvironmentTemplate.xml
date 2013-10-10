@@ -51,6 +51,8 @@
 	</module>
 	
     <property name="EbayPixelEnabled" value="False" />	
+	<property name="TaboolaPixelEnabled" value="False" />	
+	<property name="TradeTrackerPixelEnabled" value="False" />	
     <property name="FreeAgentConfig" value ="FreeAgent"/>		
 	<module id="FreeAgent">
 		<property name="OAuthIdentifier" value="1BQ5Np7Wjmiq0YEl3Gn-tw" />

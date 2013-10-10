@@ -46,6 +46,8 @@ namespace EzBob.Web.Infrastructure
         string RecheckEbayTokenStrategyName { get; }
         bool GetSatisfactionEnabled { get; }
 		bool EbayPixelEnabled { get; }
+		bool TaboolaPixelEnabled { get; }
+		bool TradeTrackerPixelEnabled { get; }
         string CustomerEscalatedStrategyName { get; }
         string ReneweBayTokenStrategyName { get; }
         string PasswordPolicyType { get; }
@@ -209,6 +211,16 @@ namespace EzBob.Web.Infrastructure
         {
             get { return GetValueWithDefault<bool>("EbayPixelEnabled", "False"); }
         }
+
+		public bool TaboolaPixelEnabled
+		{
+			get { return GetValueWithDefault<bool>("TaboolaPixelEnabled", "False"); }
+		}
+
+		public bool TradeTrackerPixelEnabled
+		{
+			get { return GetValueWithDefault<bool>("TradeTrackerPixelEnabled", "False"); }
+		}
 
         public int SessionTimeout
 		{
