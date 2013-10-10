@@ -21,7 +21,12 @@
 	var oDataTableArgs = {
 		aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
 		iDisplayLength: 100,
-		aaSorting: []
+		aaSorting: [],
+		fnRowCallback: function(nRow, aData, iDataIndex, iDataIndexFull) {
+			var ary = /^(\d\d)\/(\d\d)\/(\d\d\d\d) (\d\d):(\d\d):(\d\d)$/.exec(aData[0]);
+			if (ary)
+				aData[0] = new Date(ary[3], ary[2] - 1, ary[1], ary[4], ary[5], ary[6]);
+		}
 	};
 
 	var aoColumns = [];
