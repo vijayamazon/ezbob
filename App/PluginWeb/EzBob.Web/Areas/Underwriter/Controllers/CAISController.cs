@@ -87,6 +87,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _appCreator.CAISUpdate(_context.User, id);
         }
 
+		[Ajax]
+        [HttpPost]
+        [Transactional]
+		public void UpdateStatus(int id)
+		{
+			_caisReportsHistoryRepository.Get(id).UploadStatus = CaisUploadStatus.Uploaded;
+		}
+
         [Ajax]
         [HttpPost]
         [Transactional]

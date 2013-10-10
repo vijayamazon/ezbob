@@ -122,7 +122,13 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                     { 
                         text: "Save file changes"
                         click: (e)-> self.saveFileChange(e)
-                        class:'btn btn-primary save-change disabled',
+                        class:'btn btn-primary save-change disabled'
+                        'data-id': id 
+                    }
+                    {
+                        html: "<i class='icon-refresh'></i>Set Status Uploaded"
+                        click: (e)-> self.fileUploaded(e)
+                        class:'btn btn-primary save-change'
                         'data-id': id 
                     }
                     {
@@ -133,6 +139,25 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                 ]
             (dialog.find ".cais-file-view").on("keypress keyup keydown", @fileViewChanged)
         .always =>BlockUi "off"
+
+    fileUploaded: (e) ->
+        self = @
+        $el = $(e.currentTarget)
+        id = $el.data "id"
+        
+        BlockUi "on"
+        xhr = $.post "#{gRootPath}CAIS/UpdateStatus", { id: id }
+        xhr.done (response)->
+            if response.error 
+                EzBob.ShowMessage response.error, "Something went wrong"
+                return false
+            EzBob.ShowMessage "Status Updated ", "Successful"
+            self.resetFileView()
+        xhr.fail ->
+            EzBob.ShowMessage "Error occured", "Something went wrong"
+        xhr.always ->
+            console.log 'clicked always', 
+            BlockUi "off"
 
     saveFileChange: (e)->
         self = @
