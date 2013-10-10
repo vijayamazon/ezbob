@@ -95,7 +95,7 @@
 		},
 
 		"Fields": [
-			{ "SourcePath": "./DATECHANGED", "Targets": [{ "Name": "Date Changed" }] },
+			{ "SourcePath": "./DATECHANGED", "Targets": [{ "Name": "Date Changed", "Transformation": { "Types": [ "yyyymmdd" ] } }] },
 			{ "SourcePath": "./PREVREGADDR1", "Targets": [{ "Name": "Office Address", "Position": 1 }] },
 			{ "SourcePath": "./PREVREGADDR2", "Targets": [{ "Name": "Office Address", "Position": 2, "Prefix": "\n" }] },
 			{ "SourcePath": "./PREVREGADDR3", "Targets": [{ "Name": "Office Address", "Position": 3, "Prefix": "\n" }] },
@@ -316,6 +316,10 @@
 
 		"PathToParent": "./REQUEST/DL27/SUMMARYLINE",
 
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
 		"Fields": [
 			{
 				"SourcePath": "./CREDTYPE",
@@ -452,6 +456,10 @@
 
 		"PathToParent": "./REQUEST/DL48",
 
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
+
 		"Fields": [
 			{
 				"SourcePath": "./FRAUDCATEGORY",
@@ -482,6 +490,10 @@
 		"Name": "Limited Company 652/3 Notices",
 
 		"PathToParent": "./REQUEST/DL52",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
 
 		"Fields": [
 			{
@@ -521,6 +533,10 @@
 		"Name": "Limited Company UK Subsidiaries",
 
 		"PathToParent": "./REQUEST/DL68",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
 
 		"Fields": [
 			{ "SourcePath": "./SUBSIDREGNUM", "Targets": [{ "Name": "Subsidiary registered number" }] },
@@ -577,6 +593,10 @@
 		"Name": "Limited Company Instalment CAIS Details",
 
 		"PathToParent": "./REQUEST/DL97",
+
+		"MetaData": {
+			"DisplayDirection": "horizontal"
+		},
 
 		"Fields": [
 			{

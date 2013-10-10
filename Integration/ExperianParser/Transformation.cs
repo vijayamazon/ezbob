@@ -13,7 +13,8 @@ namespace Ezbob.ExperianParser {
 		MonthName,
 		Money,
 		MonthsAndYears,
-		Shares
+		Shares,
+		YyyyMmDd
 	} // TransformationType
 
 	#endregion enum TransformationType
@@ -82,13 +83,13 @@ namespace Ezbob.ExperianParser {
 						sResult = Map[sResult];
 					break;
 
-				case TransformationType.MonthName:
+				case TransformationType.MonthName: {
 					DateTime oDate = DateTime.Today;
 
 					if (DateTime.TryParseExact("1976-" + sResult + "-01", "yyyy-MM-dd", Culture, DateTimeStyles.None, out oDate))
 						sResult = oDate.ToString("MMMM", Culture);
 
-					break;
+					} break;
 
 				case TransformationType.Money: {
 					decimal nValue;
@@ -152,6 +153,14 @@ namespace Ezbob.ExperianParser {
 
 					if (bFound)
 						sResult = nValue.ToString();
+
+					} break;
+
+				case TransformationType.YyyyMmDd: {
+					DateTime oDate = DateTime.Today;
+
+					if (DateTime.TryParseExact(sResult, "yyyyMMdd", Culture, DateTimeStyles.None, out oDate))
+						sResult = oDate.ToString("MMMM d yyyy", Culture);
 
 					} break;
 				} // switch
