@@ -37,7 +37,7 @@ namespace EzBob.Tests
 
             Console.WriteLine(_loan);
 
-            PayInstallment(amountDue, installment, installment.Date);
+            CallPayLoan(amountDue, installment, installment.Date);
 
             Console.WriteLine(_loan);
 
@@ -53,7 +53,7 @@ namespace EzBob.Tests
             Assert.That(_loan.Repayments, Is.EqualTo(amountDue));
         }
 
-        private void PayInstallment(decimal amountDue, LoanScheduleItem installment, DateTime date)
+        private void CallPayLoan(decimal amountDue, LoanScheduleItem installment, DateTime date)
         {
             _facade.PayLoan(_loan, "", amountDue, "", date);
         }
@@ -66,8 +66,8 @@ namespace EzBob.Tests
 
             var amountDue = installment.AmountDue;
 
-            PayInstallment(amountDue / 2, installment, installment.Date);
-            PayInstallment(amountDue / 2, installment, installment.Date);
+            CallPayLoan(amountDue / 2, installment, installment.Date);
+            CallPayLoan(amountDue / 2, installment, installment.Date);
 
             AssertInstallmentIsClosed(installment);
 
@@ -94,8 +94,8 @@ namespace EzBob.Tests
 
             var amountDue = installment.AmountDue;
 
-            PayInstallment(amountDue * 0.8M, installment, installment.Date);
-            PayInstallment(amountDue * 0.2M, installment, installment.Date);
+            CallPayLoan(amountDue * 0.8M, installment, installment.Date);
+            CallPayLoan(amountDue * 0.2M, installment, installment.Date);
 
             AssertInstallmentIsClosed(installment);
 
@@ -112,7 +112,7 @@ namespace EzBob.Tests
             var installment = _schedule.First();
             var oldItem = installment.Clone();
 
-            PayInstallment(0, installment, installment.Date);
+            CallPayLoan(0, installment, installment.Date);
 
             Assert.That(installment.AmountDue, Is.EqualTo(oldItem.AmountDue));
             Assert.That(installment.Interest, Is.EqualTo(oldItem.Interest));
@@ -129,7 +129,7 @@ namespace EzBob.Tests
             var oldItem = installment.Clone();
 
             var amount = installment.Interest/2;
-            PayInstallment(amount, installment, installment.Date);
+            CallPayLoan(amount, installment, installment.Date);
 
             Assert.That(installment.AmountDue, Is.EqualTo(oldItem.AmountDue - amount));
             Assert.That(installment.Interest, Is.EqualTo(oldItem.Interest / 2));
