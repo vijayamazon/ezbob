@@ -186,7 +186,7 @@ namespace EzReportsWeb {
 				break;
 
 			case "Lifetime":
-				fDate = new DateTime(2012, 5, 1);
+				fDate = new DateTime(2012, 9, 1);
 				break;
 
 			case "Custom":
