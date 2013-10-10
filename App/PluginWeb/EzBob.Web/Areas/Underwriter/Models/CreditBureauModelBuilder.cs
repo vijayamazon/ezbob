@@ -78,7 +78,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				var response = logs.FirstOrDefault(x => x.InsertDate.ToUniversalTime() == logDate.Value.ToUniversalTime());
 				if (response == null)
 				{
-					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} date: {1}", customer.Id, logDate);
+					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} date: {1} existing dates are: {2}", customer.Id, logDate.Value.ToUniversalTime().ToString(CultureInfo.InvariantCulture), PrintDates(logs));
 					result = null;
 					return;
 				}
@@ -99,7 +99,17 @@ namespace EzBob.Web.Areas.Underwriter.Models
             }
         }
 
-        private void BuildHistoryModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
+		private static string PrintDates(IEnumerable<MP_ServiceLog> logs)
+		{
+			var sb = new StringBuilder();
+			foreach (var mpServiceLog in logs)
+			{
+				sb.AppendLine(mpServiceLog.InsertDate.ToUniversalTime().ToString(CultureInfo.InvariantCulture));
+			}
+			return sb.ToString();
+		}
+
+		private void BuildHistoryModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             var checkHistoryModels = (from s in _session.Query<MP_ServiceLog>()
                                       where s.Director == null

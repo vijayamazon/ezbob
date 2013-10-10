@@ -983,6 +983,12 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js">
+      <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.min.js">
+      <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
       <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
     </Content>
