@@ -97,7 +97,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             return false;
         }
         var data = that.form.serializeArray();
-        _.find(data, function (d) { return d.name == "amount"; }).value = this.$el.find("#amount").autoNumericGet();
+        var amount = _.find(data, function(d) { return d.name == "amount"; });
+        if (amount) { amount.value = this.$el.find("#amount").autoNumericGet(); }
         
         var xhr = $.post(that.form.attr("action"), data);
         
