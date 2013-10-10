@@ -59,7 +59,9 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         hasHmrc = @stores.HMRC.button.model.length > 0
 
         if @isOffline
-            unless hasHmrc
+            if hasHmrc
+                @$el.find('.entry_message').empty().append 'The more you link, the more funds you can get.'
+            else
                 @$el.find('.entry_message').empty()
                     .append('You must <strong>link</strong> or <strong>upload</strong> your ')
                     .append(

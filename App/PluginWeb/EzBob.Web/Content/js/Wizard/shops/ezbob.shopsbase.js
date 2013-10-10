@@ -89,7 +89,9 @@
       $.colorbox.close();
       hasHmrc = this.stores.HMRC.button.model.length > 0;
       if (this.isOffline) {
-        if (!hasHmrc) {
+        if (hasHmrc) {
+          this.$el.find('.entry_message').empty().append('The more you link, the more funds you can get.');
+        } else {
           this.$el.find('.entry_message').empty().append('You must <strong>link</strong> or <strong>upload</strong> your ').append($('<span class="green btn">HM Revenue & Customs</span>').click(function() {
             return EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC');
           })).append(' account data').append('<br />').append('to be approved for a loan.');
