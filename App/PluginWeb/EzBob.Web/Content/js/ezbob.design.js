@@ -701,6 +701,13 @@ EzBob.formatDateTime = function (date) {
     return moment.utc(date).local().format("DD/MM/YYYY HH:mm:ss");
 };
 
+//formats date for user from asp.net date + time as is
+EzBob.formatDateTimeAsIs = function (date) {
+    if (!date) return "";
+    return new Date(Date.parse(date)).format("DD/MM/YYYY HH:mm:ss");
+};
+
+
 EzBob.datetimeToDate = function (date) {
     if (!date) return "";
     return new Date(date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6'));
@@ -715,6 +722,11 @@ EzBob.formatDateWithoutTime = function (date) {
 EzBob.parseDate = function (dateString) {
     if (!dateString) return "";
     return dateString.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1');
+};
+//parses dateString "DD/MM/YYYY" to date "yyyy-MM-dd"
+EzBob.parseDateTime = function (dateString) {
+    if (!dateString) return "";
+    return dateString.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6');
 };
 
 EzBob.formatPercents = function (num, precision) {

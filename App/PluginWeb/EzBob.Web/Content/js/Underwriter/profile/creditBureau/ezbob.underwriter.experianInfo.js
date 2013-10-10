@@ -32,8 +32,9 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
     CheckHistoryClicked: function(e) {
         var $el = $(e.currentTarget);
-        var date = $el.find("td:eq(1)").text();
-        date = date.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/, '$3-$2-$1T$4:$5:$6');
+        var dateTxt = $el.find("td:eq(1)").text();
+        var date = EzBob.parseDateTime(dateTxt);
+        console.log('date', date);
         this.model.set({
             "logDate": date,
             "getFromLog": true
