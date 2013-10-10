@@ -99,7 +99,7 @@
                         <td class="hm_black"><%- moment.utc(item.Date).local().format("MMM DD YYYY")  %></td>
                         <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LoanRepayment)%></td>
                         <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Interest)%></td>
-                        <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.LateCharges)%></td>
+                        <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.Fees + item.LateCharges)%></td>
                         <td class='right <%-styleForLate%>'><%- EzBob.formatPoundsWidhDash(0) %></td>
                         <td class='right <%-styleForLate%>'><%-EzBob.formatPoundsWidhDash(item.AmountDue)%></td>
                         @*<td><%-EzBob.formatPounds(item.Balance)%></td>*@

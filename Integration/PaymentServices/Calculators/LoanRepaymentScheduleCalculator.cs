@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-// using System.Globalization;
-using System.Linq;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.Areas.Customer.Models;
-using StructureMap;
-// using log4net;
-
-namespace PaymentServices.Calculators
+﻿namespace PaymentServices.Calculators
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Web.Areas.Customer.Models;
+	using StructureMap;
+
     public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
     {
 		// private static readonly ILog _log = LogManager.GetLogger(typeof(LoanRepaymentScheduleCalculator));
@@ -19,7 +17,7 @@ namespace PaymentServices.Calculators
         private readonly IList<LoanScheduleItem> _schedule;
         private readonly List<PaypointTransaction> _payments;
         private readonly List<LoanCharge> _charges;
-        private decimal _interestRate;
+		private decimal futureCharge;
 
 
         //state variables
@@ -115,8 +113,6 @@ namespace PaymentServices.Calculators
 
             _chargesToPay.Clear();
             _rescentLate.Clear();
-
-            _interestRate = _loan.InterestRate;
 
             _principal = _loan.LoanAmount;
             _expectedPrincipal = _loan.LoanAmount;
@@ -297,11 +293,12 @@ namespace PaymentServices.Calculators
             }         
 
             var lastInstallment = _processed.Where(i => i.Status == LoanScheduleStatus.Late || i.Status == LoanScheduleStatus.StillToPay).LastOrDefault();
-
+	        futureCharge += charge.Amount;
             if (lastInstallment != null)
             {
                 if (lastInstallment.Status == LoanScheduleStatus.Late || (lastInstallment.Status == LoanScheduleStatus.StillToPay && _schedule.Count == _processed.Count))
                 {
+	                futureCharge = 0;
                     lastInstallment.AmountDue += charge.Amount;
                     lastInstallment.Fees += charge.Amount;
                 }
@@ -607,8 +604,8 @@ namespace PaymentServices.Calculators
             //сколько должны заплатить по телу кредита в рамках этого installment
             var principalToPay = _principal - _expectedPrincipal - _rescentLate.Where(x => x.Status == LoanScheduleStatus.Late).Sum(x => x.LoanRepayment);
             var interestToPay = _totalInterestToPay - _paidInterest - _processed.Sum(x => x.Interest);
-            var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees);
-
+			var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees) + futureCharge;
+	        futureCharge = 0;
             installment.Interest = Math.Max(0, Math.Round(interestToPay, 2));
             installment.Fees = Math.Round(feesToPay, 2);
 
