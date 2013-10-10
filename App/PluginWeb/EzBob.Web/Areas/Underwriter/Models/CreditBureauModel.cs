@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class CreditBureauModel
     {
-        public IList<CheckHistoryModel> CheckHistorys { get; set; }
+        public IOrderedEnumerable<CheckHistoryModel> CheckHistorys { get; set; }
         private readonly List<string> _errorList = new List<string>();
         public int Id { get; set; }
         public string Name { get; set; }

@@ -75,7 +75,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                     _session.Query<MP_ServiceLog>()
                         .Where(x => x.Customer == customer && x.ServiceType == "Consumer Request")
                         .ToList();
-                var response = logs.FirstOrDefault(x => x.InsertDate == logDate.Value.ToUniversalTime());
+				var response = logs.FirstOrDefault(x => x.InsertDate.ToUniversalTime() == logDate.Value.ToUniversalTime());
 				if (response == null)
 				{
 					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} date: {1}", customer.Id, logDate);
@@ -107,11 +107,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
                                       where s.ServiceType == "Consumer Request"
                                       select new CheckHistoryModel
                                       {
-                                          Date = s.InsertDate,
+                                          Date = s.InsertDate.ToUniversalTime(),
                                           Score = GetScoreFromXml(s.ResponseData)
                                       }).ToList();
 
-            model.CheckHistorys = checkHistoryModels;
+            model.CheckHistorys = checkHistoryModels.OrderByDescending(h => h.Date);
         }
 
         private void CreatePersonalDataModel(CreditBureauModel model, EZBob.DatabaseLib.Model.Database.Customer customer)
