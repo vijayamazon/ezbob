@@ -56,12 +56,19 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     render: ->
         $.colorbox.close()
 
+        hasHmrc = @stores.HMRC.button.model.length > 0
+
         if @isOffline
-            @$el.find('.entry_message').empty()
-                .append('You must link your ')
-                .append('<span class=green>HM Revenue & Customs</span>')
-                .append(' account to be approved for a loan.')
-                .append('<div>Please note, the more accounts you link, the more funds you can get.</div>')
+            unless hasHmrc
+                @$el.find('.entry_message').empty()
+                    .append('You must <strong>link</strong> or <strong>upload</strong> your ')
+                    .append(
+                        $('<span class="green btn">HM Revenue & Customs</span>')
+                        .click(-> EzBob.App.trigger 'ct:storebase.shops.connect', 'HMRC' )
+                    )
+                    .append(' account data')
+                    .append('<br />')
+                    .append('to be approved for a loan.')
 
             @$el.find('.importantnumber').text '£200,000'
 
@@ -90,16 +97,20 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 hasOtherThanYodleeAndFreeAgentAndSage = true
                 break
 
-        hasOnlyYodleeAndFreeAgentAndSage = (@stores.Yodlee.button.model.length > 0 or @stores.FreeAgent.button.model.length > 0 or @stores.Sage.button.model.length > 0) and not hasOtherThanYodleeAndFreeAgentAndSage
+        hasOnlyYodleeAndFreeAgentAndSage = (
+            @stores.Yodlee.button.model.length > 0 or
+            @stores.FreeAgent.button.model.length > 0 or
+            @stores.Sage.button.model.length > 0
+        ) and not hasOtherThanYodleeAndFreeAgentAndSage
 
         @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
-        @$el.find(".YodleeAndFreeAgentAndSageRule").toggleClass("hide", not hasOnlyYodleeAndFreeAgentAndSage)
 
         if @isOffline
-            hasHmrc = @stores.HMRC.button.model.length > 0
-            @$el.find(".next").toggleClass("disabled", !hasHmrc)
+            @$el.find('.next').toggleClass 'disabled', not hasHmrc
+            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or hasHmrc
         else
-            @$el.find(".next").toggleClass("disabled", !hasFilledShops or hasOnlyYodleeAndFreeAgentAndSage or (hasEbay and not hasPaypal))
+            @$el.find(".next").toggleClass "disabled", !hasFilledShops or hasOnlyYodleeAndFreeAgentAndSage or (hasEbay and not hasPaypal)
+            @$el.find(".AddMoreRule").toggleClass "hide", not hasOnlyYodleeAndFreeAgentAndSage
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList

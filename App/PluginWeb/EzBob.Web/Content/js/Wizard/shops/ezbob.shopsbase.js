@@ -87,8 +87,13 @@
       var accountsList, hasEbay, hasFilledShops, hasHmrc, hasOnlyYodleeAndFreeAgentAndSage, hasOtherThanYodleeAndFreeAgentAndSage, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
 
       $.colorbox.close();
+      hasHmrc = this.stores.HMRC.button.model.length > 0;
       if (this.isOffline) {
-        this.$el.find('.entry_message').empty().append('You must link your ').append('<span class=green>HM Revenue & Customs</span>').append(' account to be approved for a loan.').append('<div>Please note, the more accounts you link, the more funds you can get.</div>');
+        if (!hasHmrc) {
+          this.$el.find('.entry_message').empty().append('You must <strong>link</strong> or <strong>upload</strong> your ').append($('<span class="green btn">HM Revenue & Customs</span>').click(function() {
+            return EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC');
+          })).append(' account data').append('<br />').append('to be approved for a loan.');
+        }
         this.$el.find('.importantnumber').text('£200,000');
         _.each(this.stores, function(s, sShopName) {
           switch (sShopName) {
@@ -126,12 +131,12 @@
       }
       hasOnlyYodleeAndFreeAgentAndSage = (this.stores.Yodlee.button.model.length > 0 || this.stores.FreeAgent.button.model.length > 0 || this.stores.Sage.button.model.length > 0) && !hasOtherThanYodleeAndFreeAgentAndSage;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
-      this.$el.find(".YodleeAndFreeAgentAndSageRule").toggleClass("hide", !hasOnlyYodleeAndFreeAgentAndSage);
       if (this.isOffline) {
-        hasHmrc = this.stores.HMRC.button.model.length > 0;
-        this.$el.find(".next").toggleClass("disabled", !hasHmrc);
+        this.$el.find('.next').toggleClass('disabled', !hasHmrc);
+        this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || hasHmrc);
       } else {
         this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodleeAndFreeAgentAndSage || (hasEbay && !hasPaypal));
+        this.$el.find(".AddMoreRule").toggleClass("hide", !hasOnlyYodleeAndFreeAgentAndSage);
       }
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];

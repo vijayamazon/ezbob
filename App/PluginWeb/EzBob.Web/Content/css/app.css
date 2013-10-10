@@ -1114,10 +1114,10 @@ input[type="color"],
 	margin-top: 20px;
 }
 
-.eBayPaypalRule, .YodleeAndFreeAgentAndSageRule { font-weight: bold; color: red; margin-top: 0.6em; }
+.eBayPaypalRule, .AddMoreRule { font-weight: bold; color: red; margin-top: 0.6em; }
 
 .cont-button .eBayPaypalRule,
-.cont-button .YodleeAndFreeAgentAndSageRule { float: left; }
+.cont-button .AddMoreRule { float: left; }
 
 div.full_width { width: 581px; }
 
